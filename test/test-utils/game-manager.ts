@@ -1,10 +1,8 @@
-// -- start tsdoc imports --
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { CommandPhase } from "#phases/command-phase";
 import type { TurnEndPhase } from "#phases/turn-end-phase";
 import type { TurnStartPhase } from "#phases/turn-start-phase";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-// -- end tsdoc imports --
 
 import { updateUserInfo } from "#app/account";
 import BattleScene from "#app/battle-scene";
@@ -49,16 +47,16 @@ import type { InputsHandler } from "#test/test-utils/inputs-handler";
 import { MockFetch } from "#test/test-utils/mocks/mock-fetch";
 import { PhaseInterceptor } from "#test/test-utils/phase-interceptor";
 import { TextInterceptor } from "#test/test-utils/text-interceptor";
+import type { PhaseKey } from "#types/phase-types";
 import type { BattleMessageUiHandler } from "#ui/battle-message-ui-handler";
 import type { CommandUiHandler } from "#ui/command-ui-handler";
 import type { ModifierSelectUiHandler } from "#ui/modifier-select-ui-handler";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
 import type { UiHandler } from "#ui/ui-handler";
 import { isNil } from "#utils/common-utils";
-import { AES, enc } from "crypto-js";
 import fs from "node:fs";
+import { AES, enc } from "crypto-js";
 import { expect, vi } from "vitest";
-import type { PhaseKey } from "#types/phase-types";
 
 /**
  * Class to manage the game state and transitions between phases.

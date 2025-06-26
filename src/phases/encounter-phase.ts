@@ -1,9 +1,7 @@
-// -- start tsdoc imports --
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { NewBiomeEncounterPhase } from "#phases/new-biome-encounter-phase";
 import type { NextEncounterPhase } from "#phases/next-encounter-phase";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-// -- end tsdoc imports --
 
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { SyncEncounterNatureAbAttr } from "#abilities/sync-encounter-nature-ab-attr";
@@ -44,10 +42,10 @@ import { getGoldenBugNetSpecies } from "#mystery-encounters/encounter-pokemon-ut
 import { BattlePhase } from "#phases/base/battle-phase";
 import { achvs } from "#system/achievements";
 import { settings } from "#system/settings-manager";
+import type { PhaseKey } from "#types/phase-types";
 import { loadEncounterAnimAssets } from "#utils/anim-utils";
 import { randSeedInt, randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
-import type { PhaseKey } from "#types/phase-types";
 
 /**
  * Starts the first encounter (wave 1) of a new run.

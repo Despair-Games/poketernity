@@ -20,11 +20,11 @@ import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#data/pokemon-species";
 import { starterColors } from "#data/starter-colors";
 import {
-  POKERUS_STARTER_COUNT,
   getCandyProgressRequirement,
   getPassiveCandyCount,
   getSameSpeciesEggCandyCounts,
   getValueReductionCandyCounts,
+  POKERUS_STARTER_COUNT,
   speciesStarterCosts,
 } from "#data/starters";
 import type { Variant } from "#data/variant";
@@ -74,7 +74,7 @@ import { addBBCodeTextObject, addTextObject, setTextColor } from "#ui/text-utils
 import { addWindow } from "#ui/ui-theme";
 import { applyChallenges } from "#utils/challenge-utils";
 import { rgbHexToRgba } from "#utils/color-utils";
-import { BooleanHolder, NumberHolder, enumValueToKey, fixedNumber, isNil } from "#utils/common-utils";
+import { BooleanHolder, enumValueToKey, fixedNumber, isNil, NumberHolder } from "#utils/common-utils";
 import { getPokemonSpeciesForm, getPokerusStarters } from "#utils/pokemon-utils";
 import { capitalizeString, leftPad, toReadableString } from "#utils/string-utils";
 import { argbFromRgba } from "@material/material-color-utilities";

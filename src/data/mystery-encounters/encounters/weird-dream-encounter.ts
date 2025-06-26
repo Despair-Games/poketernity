@@ -28,12 +28,12 @@ import type { PokemonHeldItemModifierType } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
 import { showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import {
+  type EnemyPartyConfig,
+  type EnemyPokemonConfig,
   generateModifierType,
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
   setEncounterRewards,
-  type EnemyPartyConfig,
-  type EnemyPokemonConfig,
 } from "#mystery-encounters/encounter-phase-utils";
 import { addPokemonDataToDexAndValidateAchievements } from "#mystery-encounters/encounter-pokemon-utils";
 import { doPokemonTransformationSequence } from "#mystery-encounters/encounter-transformation-sequence";
@@ -44,7 +44,7 @@ import PokemonData from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import type { HeldModifierConfig } from "#types/held-modifier-config";
-import { NumberHolder, isNil } from "#utils/common-utils";
+import { isNil, NumberHolder } from "#utils/common-utils";
 import { getPokemonSpecies, getRandomElementalType, getSpecialSpeciesList } from "#utils/pokemon-utils";
 import { randSeedInt, randSeedShuffle } from "#utils/random-utils";
 

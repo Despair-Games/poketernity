@@ -16,11 +16,11 @@ import {
   EVIL_GRUNT_2_WAVE,
   EVIL_GRUNT_3_WAVE,
   EVIL_GRUNT_4_WAVE,
+  RIVAL_WAVE,
   RIVAL2_WAVE,
   RIVAL3_WAVE,
   RIVAL4_WAVE,
   RIVAL5_WAVE,
-  RIVAL_WAVE,
   TUTORIAL_BATTLE_WAVE,
 } from "#constants/wave-constants";
 import { getLevelForWaveFunc } from "#data/exp";

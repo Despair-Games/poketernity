@@ -1,10 +1,8 @@
-// -- start tsdoc imports --
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type Battle from "#app/battle";
 import type BattleScene from "#app/battle-scene";
 import type { FaintPhase } from "#phases/faint-phase";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-// -- end tsdoc imports --
 
 import type { AbAttr } from "#abilities/ab-attr";
 import type { Ability } from "#abilities/ability";
@@ -32,11 +30,11 @@ import type { MoveTypeChangeAbAttr } from "#abilities/move-type-change-ab-attr";
 import type { MultCritAbAttr } from "#abilities/mult-crit-ab-attr";
 import type { PostDamageAbAttr } from "#abilities/post-damage-ab-attr";
 import type { PostItemLostAbAttr } from "#abilities/post-item-lost-ab-attr";
-import type { SturdyAbAttr } from "#abilities/sturdy-ab-attr";
 import type { ReceivedMoveDamageMultiplierAbAttr } from "#abilities/received-move-damage-multiplier-ab-attr";
 import type { StabBoostAbAttr } from "#abilities/stab-boost-ab-attr";
 import type { StatMultiplierAbAttr } from "#abilities/stat-multiplier-ab-attr";
 import type { StatusEffectImmunityAbAttr } from "#abilities/status-effect-immunity-ab-attr";
+import type { SturdyAbAttr } from "#abilities/sturdy-ab-attr";
 import type { SynchronizeStatusAbAttr } from "#abilities/synchronize-status-ab-attr";
 import type { TypeImmunityAbAttr } from "#abilities/type-immunity-ab-attr";
 import type { UserFieldBattlerTagImmunityAbAttr } from "#abilities/user-field-battler-tag-immunity-ab-attr";
@@ -89,15 +87,15 @@ import { getLevelTotalExp } from "#data/exp";
 import { getNatureStatMultiplier } from "#data/nature";
 import { starterPassiveAbilities } from "#data/passives";
 import type { SpeciesEvolutionCondition, SpeciesFormEvolution } from "#data/pokemon-evolutions";
-import { SpeciesFormChangeLapseTeraTrigger, type SpeciesFormChange } from "#data/pokemon-forms";
-import { EVOLVE_MOVE, RELEARN_MOVE, type LevelMoves } from "#data/pokemon-level-moves";
+import { type SpeciesFormChange, SpeciesFormChangeLapseTeraTrigger } from "#data/pokemon-forms";
+import { EVOLVE_MOVE, type LevelMoves, RELEARN_MOVE } from "#data/pokemon-level-moves";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#data/pokemon-species";
 import type { PokemonSpeciesForm } from "#data/pokemon-species-form";
 import { BASE_HIDDEN_ABILITY_CHANCE, BASE_SHINY_CHANCE, SHINY_EPIC_CHANCE, SHINY_VARIANT_CHANCE } from "#data/rates";
 import { tmPoolTiers, tmSpecies } from "#data/tms";
 import { getTypeDamageMultiplier, getTypeRgb, type TypeDamageMultiplier } from "#data/type";
-import { variantData, type Variant } from "#data/variant";
+import { type Variant, variantData } from "#data/variant";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { AbilityId } from "#enums/ability-id";
@@ -123,11 +121,11 @@ import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesId } from "#enums/species-id";
 import {
   BATTLE_STATS,
-  PERMANENT_STATS,
-  Stat,
   type BattleStat,
   type EffectiveStat,
+  PERMANENT_STATS,
   type PermanentStat,
+  Stat,
 } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
@@ -146,6 +144,7 @@ import {
   HiddenAbilityRateBoosterModifier,
   PokemonBaseStatFlatModifier,
   PokemonBaseStatTotalModifier,
+  type PokemonHeldItemModifier,
   PokemonIncrementingStatModifier,
   PokemonNatureWeightModifier,
   ShinyRateBoosterModifier,
@@ -153,7 +152,6 @@ import {
   SurviveDamageModifier,
   TempCritBoosterModifier,
   TempStatStageBoosterModifier,
-  type PokemonHeldItemModifier,
 } from "#modifier/modifier";
 import { BypassBurnDamageReductionAttr } from "#moves/bypass-burn-damage-reduction-attr";
 import { CombinedPledgeStabBoostAttr } from "#moves/combined-pledge-stab-boost-attr";
@@ -193,13 +191,13 @@ import type { BattleInfo } from "#ui/battle-info";
 import { applyChallenges } from "#utils/challenge-utils";
 import {
   BooleanHolder,
-  NumberHolder,
   calcAccuracyMultiplier,
   clamp,
   coerceArray,
   fixedNumber,
   getTSEnumValues,
   isNil,
+  NumberHolder,
   toDmgValue,
 } from "#utils/common-utils";
 import { loadMoveAnimAssets } from "#utils/move-anim-utils";

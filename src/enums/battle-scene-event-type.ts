@@ -1,6 +1,5 @@
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type BattleScene from "#app/battle-scene";
-import type { Arena } from "#field/arena";
 import type {
   BerryUsedEvent,
   EncounterPhaseEvent,
@@ -10,6 +9,7 @@ import type {
   TurnEndEvent,
   TurnInitEvent,
 } from "#events/battle-scene";
+import type { Arena } from "#field/arena";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import type { EnumValues } from "#types/enum-values";

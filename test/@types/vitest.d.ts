@@ -1,8 +1,8 @@
-// -- start tsdoc imports --
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { Pokemon } from "#field/pokemon";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-// -- end tsdoc imports --
+
+import "vitest";
 
 import type { AbilityId } from "#enums/ability-id";
 import type { BattlerTagType } from "#enums/battler-tag-type";
@@ -17,7 +17,6 @@ import type { ToHaveMoveResultMatcherOptions } from "#test/test-utils/matchers/t
 import type { ToHaveStatMatcherOptions } from "#test/test-utils/matchers/to-have-stat-matcher";
 import type { ToHaveStatusEffectMatcherOptions } from "#test/test-utils/matchers/to-have-status-effect-matcher";
 import type { ToHaveUsedMoveMatcherOptions } from "#test/test-utils/matchers/to-have-used-move-matcher";
-import "vitest";
 import type { ToHaveTakenDamageMatcherOptions } from "#test/test-utils/matchers/to-have-taken-damage-matcher";
 
 declare module "vitest" {

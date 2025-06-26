@@ -4,7 +4,7 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { MoveId } from "#enums/move-id";
 import type { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#field/pokemon";
-import { type Move, getMoveTargets } from "#moves/move";
+import { getMoveTargets, type Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
 import { getStatusEffectHealText } from "#utils/status-effect-utils";
 

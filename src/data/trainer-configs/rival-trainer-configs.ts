@@ -4,8 +4,8 @@ import {
   getRandomPartyMemberFunc,
   getSpeciesFilterRandomPartyMemberFunc,
   TrainerConfig,
-  trainerPartyTemplates,
   type TrainerConfigs,
+  trainerPartyTemplates,
 } from "#data/trainer-config";
 import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";

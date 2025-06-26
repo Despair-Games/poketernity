@@ -23,10 +23,10 @@ import { starterPassiveAbilities } from "#data/passives";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#data/pokemon-species";
 import {
+  getCandyGainMultiplierForShinies,
   STARTER_CANDY_GAIN_FROM_CATCH,
   STARTER_CANDY_MULIPLIER_FOR_BOSS,
   STARTER_CANDY_MULIPLIER_FOR_EGG,
-  getCandyGainMultiplierForShinies,
   speciesStarterCosts,
 } from "#data/starters";
 import type { Variant } from "#data/variant";
@@ -74,7 +74,7 @@ import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlock
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { applyChallenges } from "#utils/challenge-utils";
-import { NumberHolder, executeIf, fixedNumber, getTSEnumKeys, isNil } from "#utils/common-utils";
+import { executeIf, fixedNumber, getTSEnumKeys, isNil, NumberHolder } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randInt } from "#utils/random-utils";
 import { AES, enc } from "crypto-js";

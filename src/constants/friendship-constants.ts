@@ -1,4 +1,3 @@
-// -- start tsdoc imports --
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { PokemonLevelIncrementModifier } from "#modifier/modifier";
@@ -6,7 +5,6 @@ import type { FaintPhase } from "#phases/faint-phase";
 import type { LevelUpPhase } from "#phases/level-up-phase";
 import type { NextEncounterPhase } from "#phases/next-encounter-phase";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-// -- end tsdoc imports --
 
 /** Each wave, all unfainted Pokemon gain this much happiness. Used in {@linkcode NextEncounterPhase} */
 export const FRIENDSHIP_GAIN_PER_WAVE = 1;

@@ -1,5 +1,5 @@
-import chalk from "chalk";
 import { execSync } from "node:child_process";
+import chalk from "chalk";
 import type { Plugin } from "vite";
 
 //#region Constants

@@ -1,10 +1,8 @@
-// -- start tsdoc imports --
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { FORM_CHANGE_MOVE } from "#data/pokemon-level-moves";
 import type { FormChangePhase } from "#phases/form-change-phase";
 import type { QuietFormChangePhase } from "#phases/quiet-form-change-phase";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-// -- end tsdoc imports --
 
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";

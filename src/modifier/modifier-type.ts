@@ -41,6 +41,7 @@ import {
   GigantamaxAccessModifier,
   LevelIncrementBoosterModifier,
   MegaEvolutionAccessModifier,
+  type Modifier,
   MoneyMultiplierModifier,
   MoneyRewardModifier,
   PokemonAllMovePpRestoreModifier,
@@ -49,6 +50,7 @@ import {
   PokemonExpBoosterModifier,
   PokemonFormChangeItemModifier,
   PokemonFriendshipBoosterModifier,
+  type PokemonHeldItemModifier,
   PokemonHpRestoreModifier,
   PokemonLevelIncrementModifier,
   PokemonNatureChangeModifier,
@@ -60,8 +62,6 @@ import {
   TempStatStageBoosterModifier,
   TmModifier,
   TurnHeldItemTransferModifier,
-  type Modifier,
-  type PokemonHeldItemModifier,
 } from "#modifier/modifier";
 import { modifierPool } from "#modifier/modifier-pools";
 import { modifierTypes } from "#modifier/modifier-types";

@@ -1,8 +1,6 @@
-// -- start tsdoc imports --
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { IMysteryEncounter } from "#mystery-encounters/mystery-encounter";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-// -- end tsdoc imports --
 
 import type Battle from "#app/battle";
 import { globalScene } from "#app/global-scene";
@@ -43,11 +41,11 @@ import { PokemonMove } from "#field/pokemon-move";
 import Trainer from "#field/trainer";
 import { initMoveAnim } from "#init/init-move-anim";
 import {
+  type CustomModifierSettings,
+  type ModifierType,
   ModifierTypeGenerator,
   ModifierTypeOption,
   regenerateModifierPoolThresholds,
-  type CustomModifierSettings,
-  type ModifierType,
 } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
 import { showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";

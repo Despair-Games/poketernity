@@ -1,8 +1,6 @@
-// -- start tsdoc imports --
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { SpeciesFormChange } from "#data/pokemon-forms";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-// -- end tsdoc imports --
 
 import type { PokemonSpeciesFormLevelMoves } from "#data/pokemon-level-moves";
 import { EVOLVE_MOVE, FORM_CHANGE_MOVE } from "#data/pokemon-level-moves";

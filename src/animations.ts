@@ -6,7 +6,7 @@ import type BattleScene from "#app/battle-scene";
 import type { Variant } from "#data/variant";
 import { PokeballType } from "#enums/pokeball-type";
 import { settings } from "#system/settings-manager";
-import { getFrameMs, type BooleanHolder } from "#utils/common-utils";
+import { type BooleanHolder, getFrameMs } from "#utils/common-utils";
 import { randGauss, randInt } from "#utils/random-utils";
 
 /**

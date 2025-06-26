@@ -3,7 +3,7 @@ import type { PostTeraFormChangeClearWeatherTerrainAbAttr } from "#abilities/pos
 import type { PostTeraFormChangeStatChangeAbAttr } from "#abilities/post-tera-form-change-stat-change-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { getSpeciesFormChangeMessage, SpeciesFormChangeTeraTrigger, type SpeciesFormChange } from "#data/pokemon-forms";
+import { getSpeciesFormChangeMessage, type SpeciesFormChange, SpeciesFormChangeTeraTrigger } from "#data/pokemon-forms";
 import { getTypeRgb } from "#data/type";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
