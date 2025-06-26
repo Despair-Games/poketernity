@@ -13,7 +13,6 @@ import { TrainerSlot } from "#enums/trainer-slot";
 import { IvScannerModifier } from "#modifier/modifier";
 import { randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
-import { RecallPhase } from "#phases/recall-phase";
 import { BattlerIndex } from "#enums/battler-index";
 
 /**

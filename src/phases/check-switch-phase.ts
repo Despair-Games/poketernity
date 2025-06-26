@@ -11,10 +11,7 @@ import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import i18next from "i18next";
 import { PartyUiMode } from "#enums/party-ui-mode";
-import { RecallPhase } from "#phases/recall-phase";
-import { SwitchPhase } from "#phases/switch-phase";
 import { PartyOption } from "#enums/party-option";
-import { SummonPhase } from "#phases/summon-phase";
 
 /**
  * Handles the prompt to switch pokemon at the start of a battle when the player is playing in Switch mode
@@ -89,7 +86,12 @@ export class CheckSwitchPhase extends BattlePhase {
                 if (option !== PartyOption.CANCEL) {
                   globalScene.phaseManager.unshiftPhase(
                     phaseManager.createPhase("RecallPhase", pokemon.getBattlerIndex(), SwitchType.INITIAL_SWITCH),
-                    phaseManager.createPhase("SwitchPhase", pokemon.getBattlerIndex(), SwitchType.INITIAL_SWITCH, cursor),
+                    phaseManager.createPhase(
+                      "SwitchPhase",
+                      pokemon.getBattlerIndex(),
+                      SwitchType.INITIAL_SWITCH,
+                      cursor,
+                    ),
                   );
                   this.end();
                 } else {

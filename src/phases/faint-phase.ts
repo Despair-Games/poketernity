@@ -33,7 +33,6 @@ import { PostVictoryStatStageChangeAttr } from "#moves/post-victory-stat-stage-c
 import { PokemonPhase } from "#phases/base/pokemon-phase";
 import { isNil } from "#utils/common-utils";
 import i18next from "i18next";
-import { SwitchPhase } from "#phases/switch-phase";
 
 /**
  * Handles the effects of a pokemon fainting:
