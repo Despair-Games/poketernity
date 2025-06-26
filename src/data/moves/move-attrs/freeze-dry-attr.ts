@@ -7,7 +7,6 @@ import type { NumberHolder } from "#utils/common-utils";
 /**
  * Attribute to make a move super effective against the Water type.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Freeze-Dry_(move) | Freeze-Dry}.
- * @extends VariableMoveTypeChartAttr
  */
 export class FreezeDryAttr extends VariableMoveTypeChartAttr {
   override apply(

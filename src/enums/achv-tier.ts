@@ -1,3 +1,5 @@
+import type { EnumValues } from "#types/enum-values";
+
 export const AchvTier = {
   COMMON: 1,
   GREAT: 2,
@@ -6,4 +8,4 @@ export const AchvTier = {
   MASTER: 5,
 } as const;
 
-export type AchvTier = (typeof AchvTier)[keyof typeof AchvTier];
+export type AchvTier = EnumValues<typeof AchvTier>;

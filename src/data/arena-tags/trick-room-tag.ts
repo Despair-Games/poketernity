@@ -10,7 +10,6 @@ import i18next from "i18next";
 /**
  * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Trick_Room_(move) Trick Room}.
  * Reverses the Speed calculation for all Pokémon on the field as long as this arena tag is up.
- * @extends ArenaRoomTag
  */
 export class TrickRoomTag extends ArenaRoomTag {
   constructor(turnCount: number, sourceId: number) {
@@ -30,13 +29,14 @@ export class TrickRoomTag extends ArenaRoomTag {
   override onAdd(_arena: Arena): void {
     const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
     if (source) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("arenaTag:trickRoomOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(source) }),
       );
     }
   }
 
   override onRemove(_arena: Arena): void {
-    globalScene.phaseManager.queueMessagePhase(i18next.t("arenaTag:trickRoomOnRemove"));
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("arenaTag:trickRoomOnRemove"));
   }
 }

@@ -24,7 +24,6 @@ import { ElementalType } from "#enums/elemental-type";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
-import { PhaseId } from "#enums/phase-id";
 import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
 import { MoveUsedEvent } from "#events/battle-scene";
@@ -38,10 +37,7 @@ import { HealStatusEffectAttr } from "#moves/heal-status-effect-attr";
 import { getMoveTargets, SelfStatusMove } from "#moves/move";
 import { PreMoveMessageAttr } from "#moves/pre-move-message-attr";
 import { VariableMoveMessageAttr } from "#moves/variable-move-message-attr";
-import { BattlePhase } from "#phases/abstract-battle-phase";
-import { CommonAnimPhase } from "#phases/common-anim-phase";
-import { MoveEffectPhase } from "#phases/move-effect-phase";
-import { ShowAbilityPhase } from "#phases/show-ability-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
 import { BooleanHolder, isNil, NumberHolder } from "#utils/common-utils";
 import { applyMoveAttrs, isFieldTargeted } from "#utils/move-utils";
 import { getStatusEffectActivationText, getStatusEffectHealText } from "#utils/status-effect-utils";
@@ -61,10 +57,9 @@ import i18next from "i18next";
  * - Handles the Dancer ability
  *
  * If the move is successful, then a {@linkcode MoveEffectPhase} is queued.
- * @extends BattlePhase
  */
 export class MovePhase extends BattlePhase {
-  override readonly id = PhaseId.MOVE;
+  public override readonly phaseName = "MovePhase";
 
   protected _pokemon: Pokemon;
   protected _move: PokemonMove;
@@ -288,14 +283,18 @@ export class MovePhase extends BattlePhase {
 
       if (activated) {
         this.cancel();
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           getStatusEffectActivationText(statusEffect, getPokemonNameWithAffix(this.pokemon)),
         );
-        globalScene.phaseManager.unshiftPhase(
-          new CommonAnimPhase(CommonAnim.POISON + (statusEffect - 1), this.pokemon.getBattlerIndex()),
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "CommonAnimPhase",
+          CommonAnim.POISON + (statusEffect - 1) as CommonAnim,
+          this.pokemon.getBattlerIndex(),
         );
       } else if (healed) {
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           getStatusEffectHealText(statusEffect, getPokemonNameWithAffix(this.pokemon)),
         );
         this.pokemon.resetStatus();
@@ -546,8 +545,11 @@ export class MovePhase extends BattlePhase {
     if (success) {
       applyAbAttrs<PokemonTypeChangeAbAttr>(AbAttrFlag.POKEMON_TYPE_CHANGE, this.pokemon, false, this.move.getMove());
       this.showPreMoveMessages();
-      globalScene.phaseManager.unshiftPhase(
-        new MoveEffectPhase(this.pokemon.getBattlerIndex(), this.targets, this.move),
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MoveEffectPhase",
+        this.pokemon.getBattlerIndex(),
+        this.targets,
+        this.move,
       );
     } else {
       if ([MoveId.ROAR, MoveId.WHIRLWIND, MoveId.TRICK_OR_TREAT, MoveId.FORESTS_CURSE].includes(this.move.moveId)) {
@@ -612,7 +614,12 @@ export class MovePhase extends BattlePhase {
       // Protean and Libero apply on the charging turn of charge moves
       applyAbAttrs<PokemonTypeChangeAbAttr>(AbAttrFlag.POKEMON_TYPE_CHANGE, this.pokemon, false, this.move.getMove());
 
-      globalScene.phaseManager.queueMoveChargePhase(this.pokemon.getBattlerIndex(), this.targets, this.move);
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MoveChargePhase",
+        this.pokemon.getBattlerIndex(),
+        this.targets,
+        this.move,
+      );
     } else {
       this.pokemon.pushMoveHistory({
         move: this.move.getMove(),
@@ -710,11 +717,10 @@ export class MovePhase extends BattlePhase {
 
         if (this.pokemon.hasAbilityWithAttr(AbAttrFlag.BLOCK_REDIRECT)) {
           redirectTarget.value = currentTarget;
-          globalScene.phaseManager.unshiftPhase(
-            new ShowAbilityPhase(
-              this.pokemon.getBattlerIndex(),
-              this.pokemon.getPassiveAbility().hasAttrFlag(AbAttrFlag.BLOCK_REDIRECT),
-            ),
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "ShowAbilityPhase",
+            this.pokemon.getBattlerIndex(),
+            this.pokemon.getPassiveAbility().hasAttrFlag(AbAttrFlag.BLOCK_REDIRECT),
           );
         }
 
@@ -809,7 +815,7 @@ export class MovePhase extends BattlePhase {
       return;
     }
 
-    globalScene.phaseManager.queueMessagePhase(this.getMoveText(), 500);
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", this.getMoveText(), 500);
   }
 
   /**
@@ -832,7 +838,7 @@ export class MovePhase extends BattlePhase {
   }
 
   public showFailedText(failedText?: string): void {
-    globalScene.phaseManager.queueMessagePhase(failedText ?? i18next.t("battle:attackFailed"));
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", failedText ?? i18next.t("battle:attackFailed"));
   }
 
   /**

@@ -8,7 +8,6 @@ type MoveIncrementFunc = (pokemon: Pokemon) => boolean;
 /**
  * Attribute used for moves that change priority in a turn given a condition.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Grassy_Glide_(move) | Grassy Glide}.
- * @extends MoveAttr
  */
 export class IncrementMovePriorityAttr extends MoveAttr {
   /** The condition for a move's priority being incremented */

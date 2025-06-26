@@ -10,7 +10,6 @@ import i18next from "i18next";
  * Attribute to add an effect that prevents the user from missing
  * its moves for the next 2 turns.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Lock-On_(move) | Lock-On}.
- * @extends AddBattlerTagAttr
  */
 export class IgnoreAccuracyAttr extends AddBattlerTagAttr {
   constructor() {
@@ -22,7 +21,8 @@ export class IgnoreAccuracyAttr extends AddBattlerTagAttr {
       return false;
     }
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("moveTriggers:tookAimAtTarget", {
         pokemonName: getPokemonNameWithAffix(user),
         targetName: getPokemonNameWithAffix(target),

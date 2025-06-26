@@ -1,7 +1,7 @@
 import { LegacyAnimConfig } from "#animations/anim-config";
 import { encounterAnims } from "#animations/encounter-anims";
 import { globalScene } from "#app/global-scene";
-import { EncounterAnim } from "#enums/encounter-anims";
+import { EncounterAnim } from "#enums/encounter-anim";
 import { coerceArray, getTSEnumKeys, isNil } from "#utils/common-utils";
 
 /**
@@ -18,7 +18,7 @@ export async function initEncounterAnims(encounterAnim: EncounterAnim | Encounte
     }
     encounterAnimFetches.push(
       globalScene
-        .cachedFetch(`./battle-anims/encounter-${encounterAnimNames[anim].toLowerCase().replace(/\_/g, "-")}.json`)
+        .cachedFetch(`./battle-anims/encounter-${encounterAnimNames[anim].toLowerCase().replace(/_/g, "-")}.json`)
         .then((response) => response.json())
         .then((cas) => encounterAnims.set(anim, new LegacyAnimConfig(cas))),
     );

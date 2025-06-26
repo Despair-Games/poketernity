@@ -8,8 +8,6 @@ import type { NumberHolder } from "#utils/common-utils";
 /**
  * Reduces the accuracy of status moves used against the Pokémon with this ability to 50%.
  * Used by Wonder Skin.
- *
- * @extends PreDefendAbAttr
  */
 export class WonderSkinAbAttr extends PreDefendAbAttr {
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {

@@ -9,7 +9,6 @@ import type { NumberHolder } from "#utils/common-utils";
  * Attribute to change move type according to the form
  * of the Paldean Tauros using it.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Raging_Bull_(move) | Raging Bull}.
- * @extends VariableMoveTypeAttr
  */
 export class RagingBullTypeAttr extends VariableMoveTypeAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {

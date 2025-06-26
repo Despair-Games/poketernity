@@ -1,27 +1,26 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import { PhaseId } from "#enums/phase-id";
 
 export class MessagePhase extends Phase {
-  override readonly id = PhaseId.MESSAGE;
+  public override readonly phaseName = "MessagePhase";
 
   private text: string;
-  private readonly callbackDelay: number | null;
-  private readonly prompt: boolean | null;
-  private readonly promptDelay: number | null;
+  private readonly callbackDelay?: number;
+  private readonly prompt: boolean;
+  private readonly promptDelay: number;
   private readonly speaker?: string;
 
   constructor(
     text: string,
-    callbackDelay: number | null = null,
-    prompt: boolean | null = null,
-    promptDelay: number | null = null,
+    callbackDelay?: number,
+    prompt: boolean = false,
+    promptDelay: number = 0,
     speaker?: string,
   ) {
     super();
 
     this.text = text;
-    this.callbackDelay = callbackDelay;
+    this.callbackDelay = callbackDelay ?? (prompt ? 0 : 1500);
     this.prompt = prompt;
     this.promptDelay = promptDelay;
     this.speaker = speaker;
@@ -50,18 +49,11 @@ export class MessagePhase extends Phase {
         this.speaker,
         null,
         () => this.end(),
-        this.callbackDelay ?? (this.prompt ? 0 : 1500),
+        this.callbackDelay,
         this.promptDelay ?? 0,
       );
     } else {
-      globalScene.ui.showText(
-        this.text,
-        null,
-        () => this.end(),
-        this.callbackDelay ?? (this.prompt ? 0 : 1500),
-        this.prompt,
-        this.promptDelay,
-      );
+      globalScene.ui.showText(this.text, null, () => this.end(), this.callbackDelay, this.prompt, this.promptDelay);
     }
   }
 

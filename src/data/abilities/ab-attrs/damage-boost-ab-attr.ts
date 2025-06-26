@@ -1,6 +1,7 @@
 // -- start tsdoc imports --
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { VariableMovePowerAbAttr } from "#abilities/variable-move-power-ab-attr";
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 // -- end tsdoc imports --
 
 import { PreAttackAbAttr } from "#abilities/pre-attack-ab-attr";

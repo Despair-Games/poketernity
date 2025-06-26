@@ -10,7 +10,6 @@ import i18next from "i18next";
 /**
  * Attribute to swap the user and target's abilities (if both are swappable).
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Skill_Swap_(move) | Skill Swap}.
- * @extends MoveEffectAttr
  */
 export class SwitchAbilitiesAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
@@ -18,7 +17,8 @@ export class SwitchAbilitiesAttr extends MoveEffectAttr {
     user.summonData.ability = target.getAbility().id;
     target.summonData.ability = tempAbilityId;
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("moveTriggers:swappedAbilitiesWithTarget", { pokemonName: getPokemonNameWithAffix(user) }),
     );
     // Swaps Forecast/Flower Gift from Castform/Cherrim

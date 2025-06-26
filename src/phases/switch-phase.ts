@@ -1,24 +1,23 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { RecallPhase } from "#phases/recall-phase";
 import type BattleScene from "#app/battle-scene";
+import type { RecallPhase } from "#phases/recall-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import { globalScene } from "#app/global-scene";
-import { PartyOption } from "#enums/party-option";
-import { PartyUiMode } from "#enums/party-ui-mode";
-import { PhaseId } from "#enums/phase-id";
-import { SwitchType } from "#enums/switch-type";
-import { TrainerSlot } from "#enums/trainer-slot";
-import { PokemonPhase } from "#phases/abstract-pokemon-phase";
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { PreSwitchOutAbAttr } from "#abilities/pre-switch-out-ab-attr";
+import { globalScene } from "#app/global-scene";
+import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { PartyOption } from "#enums/party-option";
+import { PartyUiMode } from "#enums/party-ui-mode";
+import { SwitchType } from "#enums/switch-type";
+import { TrainerSlot } from "#enums/trainer-slot";
 import type { Pokemon } from "#field/pokemon";
 import type { SwitchEffectTransferModifier } from "#modifier/modifier";
-import { BattlerTagType } from "#enums/battler-tag-type";
-import type { SubstituteTag } from "#battler-tags/substitute-tag";
+import { PokemonPhase } from "#phases/base/pokemon-phase";
 import { SummonPhase } from "#phases/summon-phase";
 
 /**
@@ -26,7 +25,7 @@ import { SummonPhase } from "#phases/summon-phase";
  * @extends PokemonPhase
  */
 export class SwitchPhase extends PokemonPhase {
-  override readonly id = PhaseId.SWITCH;
+  public override readonly phaseName = "SwitchPhase";
 
   private switchType: SwitchType;
   private switchInIndex: number;
@@ -53,7 +52,7 @@ export class SwitchPhase extends PokemonPhase {
 
   public override end(): void {
     if (this.withSummon) {
-      globalScene.phaseManager.unshiftPhase(new SummonPhase(this.battlerIndex, false));
+      globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", this.battlerIndex, false);
     }
     super.end();
   }

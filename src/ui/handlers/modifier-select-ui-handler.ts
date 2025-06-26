@@ -535,7 +535,7 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
       }
 
       const type = options[this.cursor].modifierTypeOption.type;
-      type && ui.showText(type.getDescription());
+      type && ui.showText(type.description);
       if (type instanceof TmModifierType) {
         // prepare the move overlay to be shown with the toggle
         this.moveInfoOverlay.show(allMoves.get(type.moveId));

@@ -4,7 +4,6 @@ import type { BattleStat } from "#enums/stat";
 import { Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 
 /**
  * Attribute that prompts a stat stage change after the ability holder received a critical hit
@@ -31,8 +30,12 @@ export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {
       && pokemon.getStatStage(Stat.ATK) < 6
     ) {
       if (!simulated) {
-        globalScene.phaseManager.unshiftPhase(
-          new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [this.stat], this.stages),
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "StatStageChangePhase",
+          pokemon.getBattlerIndex(),
+          pokemon,
+          [this.stat],
+          this.stages,
         );
       }
       return true;

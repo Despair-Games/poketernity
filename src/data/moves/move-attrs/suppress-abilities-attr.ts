@@ -11,14 +11,14 @@ import i18next from "i18next";
  * Attribute used for moves that suppress abilities like {@linkcode MoveId.GASTRO_ACID}.
  * A suppressed ability cannot be activated.
  *
- * @extends MoveEffectAttr
  */
 export class SuppressAbilitiesAttr extends MoveEffectAttr {
   override applyEffect(_user: Pokemon, target: Pokemon, _move: Move): boolean {
     target.summonData.abilitySuppressed = true;
     globalScene.arena.triggerWeatherBasedFormChangesToNormal();
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("moveTriggers:suppressAbilities", { pokemonName: getPokemonNameWithAffix(target) }),
     );
 

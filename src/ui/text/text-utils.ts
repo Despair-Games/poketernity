@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { TEXT_SCALE } from "#constants/ui-constants";
-import { EggTier } from "#enums/egg-type";
+import { EggTier } from "#enums/egg-tier";
 import { ModifierTier } from "#enums/modifier-tier";
 import { TextStyle } from "#enums/text-style";
 import { getTextStyle } from "#ui/text-style";
@@ -104,7 +104,7 @@ function getTextStyleOptions(
 ): CustomTextStyleOptions {
   const textStyleOptions = getTextStyle(style);
   const { mainColor, shadowColor } = textStyleOptions.color;
-  const { fontFamily, fontSize, shadow, strokeThickness } = textStyleOptions.fontStyle;
+  const { fontFamily, fontSize, shadow, strokeThickness, lineSpacing } = textStyleOptions.fontStyle;
 
   let styleOptions: Phaser.Types.GameObjects.Text.TextStyle = {
     fontFamily: fontFamily,
@@ -114,6 +114,9 @@ function getTextStyleOptions(
       bottom: 6,
     },
   };
+  if (lineSpacing) {
+    styleOptions.lineSpacing = lineSpacing;
+  }
 
   if (extraStyleOptions) {
     if (extraStyleOptions.fontSize) {
@@ -176,7 +179,7 @@ export function getBBCodeFragment(
 export function getTextWithColors(content: string, primaryStyle: TextStyle, forWindow?: boolean): string {
   // Apply primary styling before anything else
   let text = getBBCodeFragment(content, primaryStyle, true);
-  const primaryStyleString = [...text.match(new RegExp(/\[color=[^\[]*\]\[shadow=[^\[]*\]/i))!][0];
+  const primaryStyleString = [...text.match(new RegExp(/\[color=[^[]*\]\[shadow=[^[]*\]/i))!][0];
 
   /* For money text displayed in game windows, we can't use the default {@linkcode TextStyle.MONEY}
    * or it will look wrong in light mode because of the different window background color
@@ -191,7 +194,7 @@ export function getTextWithColors(content: string, primaryStyle: TextStyle, forW
   });
 
   // Remove extra style block at the end
-  return text.replace(/\[color=[^\[]*\]\[shadow=[^\[]*\]\[\/color\]\[\/shadow\]/gi, "");
+  return text.replace(/\[color=[^[]*\]\[shadow=[^[]*\]\[\/color\]\[\/shadow\]/gi, "");
 }
 
 export function getModifierTierTextTint(tier: ModifierTier): number {

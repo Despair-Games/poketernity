@@ -1,7 +1,7 @@
 // -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { LoadingScene } from "#app/loading-scene";
-/* eslint-enable @typescript-eslint/no-unused-vars */
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 // -- end tsdoc imports --
 
 export type LanguageEvent = "language/change";

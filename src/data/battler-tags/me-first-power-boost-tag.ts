@@ -8,7 +8,6 @@ import type { NumberHolder } from "#utils/common-utils";
 /**
  * Tag to boost the power of moves invoked by
  * {@link https://bulbapedia.bulbagarden.net/wiki/Me_First_(move) | Me First} by 50%
- * @extends BattlerTag
  */
 export class MeFirstPowerBoostTag extends BattlerTag {
   constructor() {

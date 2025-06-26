@@ -1,9 +1,9 @@
 // -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { NewArenaEvent } from "#events/battle-scene";
 import type { Arena } from "#field/arena";
 import type { GameManager } from "#test/test-utils/game-manager";
-/* eslint-enable @typescript-eslint/no-unused-vars */
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 // -- end tsdoc imports --
 
 import type { BattleStyle } from "#app/overrides";
@@ -636,7 +636,7 @@ export class OverridesHelper extends GameManagerHelper {
     if (type === ElementalType.UNKNOWN) {
       this.log("Disabled override for player Tera type!");
     } else {
-      this.log(`Player Tera type set to ${ElementalType[type]} (=${type})!`);
+      this.log(`Player Tera type set to ${enumValueToKey(ElementalType, type)} (=${type})!`);
     }
     return this;
   }
@@ -650,7 +650,7 @@ export class OverridesHelper extends GameManagerHelper {
     if (type === ElementalType.UNKNOWN) {
       this.log("Disabled override for enemy Tera type!");
     } else {
-      this.log(`Enemy Tera type set to ${ElementalType[type]} (=${type})!`);
+      this.log(`Enemy Tera type set to ${enumValueToKey(ElementalType, type)} (=${type})!`);
     }
     return this;
   }

@@ -32,16 +32,16 @@ import { getVariantTierForVariant, getVariantTint } from "#data/variant";
 import { AbilityId } from "#enums/ability-id";
 import { Button } from "#enums/button";
 import { ChallengeType } from "#enums/challenge-type";
-import { Device } from "#enums/devices";
+import { Device } from "#enums/device";
 import { DropDownColumn } from "#enums/drop-down-column";
 import { DropDownState } from "#enums/drop-down-state";
 import { DropDownType } from "#enums/drop-down-type";
-import { EggSourceType } from "#enums/egg-source-types";
+import { EggSourceType } from "#enums/egg-source-type";
 import { ElementalType } from "#enums/elemental-type";
 import { GameDataType } from "#enums/game-data-type";
 import { GameModes } from "#enums/game-modes";
 import { Gender } from "#enums/gender";
-import { GrowthRate } from "#enums/growth-rates";
+import { GrowthRate } from "#enums/growth-rate";
 import type { MoveId } from "#enums/move-id";
 import type { Nature } from "#enums/nature";
 import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
@@ -51,11 +51,10 @@ import { SpeciesId } from "#enums/species-id";
 import { TextStyle } from "#enums/text-style";
 import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
-import { EncounterPhase } from "#phases/encounter-phase";
-import { SelectChallengePhase } from "#phases/select-challenge-phase";
 import type { DexAttrProps, StarterAttributes, StarterPreferences } from "#system/game-data";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
 import type { DexEntry } from "#types/dex-data";
+import type { EnumValues } from "#types/enum-values";
 import type { StarterConfig } from "#types/starter-config";
 import type { StarterDataEntry, StarterMoveset } from "#types/starter-data";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
@@ -75,7 +74,7 @@ import { addBBCodeTextObject, addTextObject, setTextColor } from "#ui/text-utils
 import { addWindow } from "#ui/ui-theme";
 import { applyChallenges } from "#utils/challenge-utils";
 import { rgbHexToRgba } from "#utils/color-utils";
-import { BooleanHolder, NumberHolder, fixedNumber, isNil } from "#utils/common-utils";
+import { BooleanHolder, NumberHolder, enumValueToKey, fixedNumber, isNil } from "#utils/common-utils";
 import { getPokemonSpeciesForm, getPokerusStarters } from "#utils/pokemon-utils";
 import { capitalizeString, leftPad, toReadableString } from "#utils/string-utils";
 import { argbFromRgba } from "@material/material-color-utilities";
@@ -104,7 +103,7 @@ const StarterSelectMode = {
   START: 4,
 } as const;
 
-type StarterSelectMode = (typeof StarterSelectMode)[keyof typeof StarterSelectMode];
+type StarterSelectMode = EnumValues<typeof StarterSelectMode>;
 
 const languageSettings: { [key: string]: LanguageSetting } = {
   pt_BR: {
@@ -203,10 +202,9 @@ let StarterPrefers_private_latest: string = StarterPrefers_DEFAULT;
 
 /** called on starter selection show once */
 function loadStarterPrefs(): StarterPreferences {
-  return JSON.parse(
-    (StarterPrefers_private_latest =
-      localStorage.getItem(getLocalStorageKey(GameDataType.STARTER_PREFS)) ?? StarterPrefers_DEFAULT),
-  );
+  StarterPrefers_private_latest =
+    localStorage.getItem(getLocalStorageKey(GameDataType.STARTER_PREFS)) ?? StarterPrefers_DEFAULT;
+  return JSON.parse(StarterPrefers_private_latest);
 }
 
 /** called on starter selection clear, always */
@@ -427,7 +425,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     this.filterBar.addFilter(DropDownColumn.GEN, i18next.t("filterBar:genFilter"), genDropDown);
 
     // type filter
-    const typeKeys = Object.keys(ElementalType).filter((v) => Number.isNaN(Number(v)));
+    const typeKeys = Object.keys(ElementalType);
     const typeOptions: DropDownOption[] = [];
     typeKeys.forEach((type, index) => {
       if (index === 0 || index === 19) {
@@ -1884,7 +1882,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
                     // update the passive background
                     if (starterContainer) {
-                      starterContainer.starterPassiveBgs.setVisible(
+                      starterContainer.starterPassiveBg.setVisible(
                         globalScene.gameData.isPassiveUnlocked(this.lastSpecies.speciesId),
                       );
                     }
@@ -2044,8 +2042,9 @@ export class StarterSelectUiHandler extends MessageUiHandler {
             break;
           case Button.CYCLE_GENDER:
             if (this.canCycleGender) {
-              starterAttributes.female = !props.female;
-              this.setSpeciesDetails(this.lastSpecies, { female: !props.female });
+              const female = props.gender !== Gender.FEMALE;
+              starterAttributes.female = female;
+              this.setSpeciesDetails(this.lastSpecies, { female });
               success = true;
             }
             break;
@@ -2341,20 +2340,13 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     teraType: ElementalType,
   ): void {
     const props = globalScene.gameData.getSpeciesDexAttrProps(species, dexAttr);
-    this.starterIcons[this.starterSpecies.length].setTexture(
-      species.getIconAtlasKey(props.formIndex, props.shiny, props.variant),
-    );
-    this.starterIcons[this.starterSpecies.length].setFrame(
-      species.getIconId(props.female, props.formIndex, props.shiny, props.variant),
-    );
-    this.checkIconId(
-      this.starterIcons[this.starterSpecies.length],
-      species,
-      props.female,
-      props.formIndex,
-      props.shiny,
-      props.variant,
-    );
+    const { formIndex, shiny, variant } = props;
+    const female = props.gender === Gender.FEMALE;
+
+    const textureKey = species.getIconAtlasKey(formIndex, shiny, variant);
+    const frameKey = species.getIconId(female, formIndex, shiny, variant);
+    const icon = this.starterIcons[this.starterSpecies.length].setTexture(textureKey, frameKey);
+    this.checkIconId(icon, species, female, formIndex, shiny, variant);
 
     this.starterSpecies.push(species);
     this.starterAttr.push(dexAttr);
@@ -2364,16 +2356,20 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     this.starterMovesets.push(moveset);
     this.starterTeras.push(teraType);
     if (this.speciesLoaded.get(species.speciesId)) {
-      getPokemonSpeciesForm(species.speciesId, props.formIndex).cry();
+      getPokemonSpeciesForm(species.speciesId, formIndex).cry();
     }
     this.updateInstructions();
   }
 
   updatePartyIcon(species: PokemonSpecies, index: number) {
     const props = globalScene.gameData.getSpeciesDexAttrProps(species, this.getCurrentDexProps(species.speciesId));
-    this.starterIcons[index].setTexture(species.getIconAtlasKey(props.formIndex, props.shiny, props.variant));
-    this.starterIcons[index].setFrame(species.getIconId(props.female, props.formIndex, props.shiny, props.variant));
-    this.checkIconId(this.starterIcons[index], species, props.female, props.formIndex, props.shiny, props.variant);
+    const { formIndex, shiny, variant } = props;
+    const female = props.gender === Gender.FEMALE;
+    const textureKey = species.getIconAtlasKey(formIndex, shiny, variant);
+    const frameKey = species.getIconId(female, formIndex, shiny, variant);
+
+    const icon = this.starterIcons[index].setTexture(textureKey, frameKey);
+    this.checkIconId(icon, species, female, formIndex, shiny, variant);
   }
 
   /**
@@ -2653,12 +2649,14 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
       const currentDexAttr = this.getCurrentDexProps(currentFilteredContainer.species.speciesId);
       const props = globalScene.gameData.getSpeciesDexAttrProps(currentFilteredContainer.species, currentDexAttr);
+      const { formIndex, shiny, variant } = props;
+      const female = props.gender === Gender.FEMALE;
 
       starterSprite.setTexture(
-        currentFilteredContainer.species.getIconAtlasKey(props.formIndex, props.shiny, props.variant),
-        currentFilteredContainer.species.getIconId(props.female!, props.formIndex, props.shiny, props.variant),
+        currentFilteredContainer.species.getIconAtlasKey(formIndex, shiny, variant),
+        currentFilteredContainer.species.getIconId(female, formIndex, shiny, variant),
       );
-      currentFilteredContainer.checkIconId(props.female, props.formIndex, props.shiny, props.variant);
+      currentFilteredContainer.checkIconId(female, formIndex, shiny, variant);
     }
 
     // filter
@@ -2678,7 +2676,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       // Type filter
       const fitsType = this.filterBar
         .getVals(DropDownColumn.TYPES)
-        .some((type) => container.species.isOfType((type as number) - 1));
+        .some((type) => container.species.isOfType(type as number));
 
       // Caught / Shiny filter
       const isNonShinyCaught: boolean = (caughtAttr & DexAttr.NON_SHINY) > 0;
@@ -2933,7 +2931,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         }
       }
 
-      container.starterPassiveBgs.setVisible(caughtAttr > 0 && globalScene.gameData.isPassiveUnlocked(speciesId));
+      container.starterPassiveBg.setVisible(caughtAttr > 0 && globalScene.gameData.isPassiveUnlocked(speciesId));
       container.hiddenAbilityIcon.setVisible(caughtAttr > 0 && (abilityAttr & AbilityAttr.ABILITY_HIDDEN) > 0);
       container.classicWinIcon.setVisible(globalScene.gameData.starterData[speciesId].classicWinCount > 0);
       container.favoriteIcon.setVisible(this.starterPreferences[speciesId]?.favorite ?? false);
@@ -3118,9 +3116,11 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     if (this.lastSpecies) {
       const dexAttr = this.getCurrentDexProps(this.lastSpecies.speciesId);
       const props = globalScene.gameData.getSpeciesDexAttrProps(this.lastSpecies, dexAttr);
+      const { formIndex, shiny, variant } = props;
+      const female = props.gender === Gender.FEMALE;
       const speciesIndex = this.allSpecies.indexOf(this.lastSpecies);
       const lastSpeciesIcon = this.starterContainers[speciesIndex].icon;
-      this.checkIconId(lastSpeciesIcon, this.lastSpecies, props.female, props.formIndex, props.shiny, props.variant);
+      this.checkIconId(lastSpeciesIcon, this.lastSpecies, female, formIndex, shiny, variant);
       this.iconAnimHandler.addOrUpdate(lastSpeciesIcon, PokemonIconAnimMode.NONE);
 
       // Resume the animation for the previously selected species
@@ -3230,7 +3230,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           this.setSpeciesDetails(species, {
             shiny: props.shiny,
             formIndex: props.formIndex,
-            female: props.female,
+            female: props.gender === Gender.FEMALE,
             variant: props.variant,
             abilityIndex: this.starterAbilityIndexes[starterIndex],
             passiveEnabled: this.starterPassives[starterIndex],
@@ -3252,12 +3252,13 @@ export class StarterSelectUiHandler extends MessageUiHandler {
             }
           }
           props.formIndex = starterAttributes?.form ?? props.formIndex;
-          props.female = starterAttributes?.female ?? props.female;
+          const female = starterAttributes?.female ?? props.gender === Gender.FEMALE;
+          props.gender = female ? Gender.FEMALE : !isNil(species.malePercent) ? Gender.MALE : Gender.GENDERLESS;
 
           this.setSpeciesDetails(species, {
             shiny: props.shiny,
             formIndex: props.formIndex,
-            female: props.female,
+            female: female,
             variant: props.variant,
             abilityIndex: defaultAbilityIndex,
             passiveEnabled: passiveEnabled,
@@ -3297,7 +3298,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         this.setSpeciesDetails(species, {
           shiny: props.shiny,
           formIndex: props.formIndex,
-          female: props.female,
+          female: props.gender === Gender.FEMALE,
           variant: props.variant,
           abilityIndex: defaultAbilityIndex,
           passiveEnabled: false,
@@ -3393,9 +3394,14 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           this.dexAttrCursor |= DexAttr.SHINY_BASE_VARIANT;
         }
       }
-      this.dexAttrCursor |= (female !== undefined ? !female : !(female = oldProps?.female))
-        ? DexAttr.MALE
-        : DexAttr.FEMALE;
+
+      female = female ?? oldProps?.gender === Gender.FEMALE;
+      if (female) {
+        this.dexAttrCursor |= DexAttr.FEMALE;
+      } else if (species.malePercent !== null) {
+        this.dexAttrCursor |= DexAttr.MALE;
+      }
+
       this.dexAttrCursor |= globalScene.gameData.getFormAttr(
         formIndex !== undefined ? formIndex : (formIndex = oldProps!.formIndex),
       );
@@ -3442,8 +3448,8 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         if (formIndex === undefined || formIndex !== props.formIndex) {
           formIndex = props.formIndex;
         }
-        if (female === undefined || female !== props.female) {
-          female = props.female;
+        if (female === undefined || female !== (props.gender === Gender.FEMALE)) {
+          female = props.gender === Gender.FEMALE;
         }
         if (variant === undefined || variant !== props.variant) {
           variant = props.variant;
@@ -3692,7 +3698,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
         this.setTypeIcons(speciesForm.type1, speciesForm.type2);
 
-        this.teraIcon.setFrame(ElementalType[this.teraCursor].toLowerCase());
+        this.teraIcon.setFrame(enumValueToKey(ElementalType, this.teraCursor).toLowerCase());
         this.teraIcon.setVisible(
           !this.statsMode /*
             && Object.hasOwn(globalScene.gameData.achvUnlocks, achvs.TERASTALLIZE.id) */,
@@ -3721,7 +3727,9 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
     for (let m = 0; m < 4; m++) {
       const move = m < this.starterMoveset.length ? allMoves.get(this.starterMoveset[m]) : null;
-      this.pokemonMoveBgs[m].setFrame(ElementalType[move ? move.type : ElementalType.UNKNOWN].toString().toLowerCase());
+      this.pokemonMoveBgs[m].setFrame(
+        enumValueToKey(ElementalType, move ? move.type : ElementalType.UNKNOWN).toLowerCase(),
+      );
       this.pokemonMoveLabels[m].setText(move ? move.name : "-");
       this.pokemonMoveContainers[m].setVisible(!!move);
     }
@@ -3732,7 +3740,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       const eggMove = hasEggMoves ? allMoves.get(speciesEggMoves[species.speciesId][em]) : null;
       const eggMoveUnlocked = eggMove && globalScene.gameData.starterData[species.speciesId].eggMoves & (1 << em);
       this.pokemonEggMoveBgs[em].setFrame(
-        ElementalType[eggMove ? eggMove.type : ElementalType.UNKNOWN].toString().toLowerCase(),
+        enumValueToKey(ElementalType, eggMove ? eggMove.type : ElementalType.UNKNOWN).toLowerCase(),
       );
       this.pokemonEggMoveLabels[em].setText(eggMove && eggMoveUnlocked ? eggMove.name : "???");
     }
@@ -3750,13 +3758,13 @@ export class StarterSelectUiHandler extends MessageUiHandler {
   setTypeIcons(type1: ElementalType | null, type2: ElementalType | null): void {
     if (type1 !== null) {
       this.type1Icon.setVisible(true);
-      this.type1Icon.setFrame(ElementalType[type1].toLowerCase());
+      this.type1Icon.setFrame(enumValueToKey(ElementalType, type1).toLowerCase());
     } else {
       this.type1Icon.setVisible(false);
     }
     if (type2 !== null) {
       this.type2Icon.setVisible(true);
-      this.type2Icon.setFrame(ElementalType[type2].toLowerCase());
+      this.type2Icon.setFrame(enumValueToKey(ElementalType, type2).toLowerCase());
     } else {
       this.type2Icon.setVisible(false);
     }
@@ -3772,20 +3780,14 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     this.starterMovesets.splice(index, 1);
 
     for (let s = 0; s < this.starterSpecies.length; s++) {
-      const species = this.starterSpecies[s];
-      const currentDexAttr = this.getCurrentDexProps(species.speciesId);
-      const props = globalScene.gameData.getSpeciesDexAttrProps(species, currentDexAttr);
-      this.starterIcons[s].setTexture(species.getIconAtlasKey(props.formIndex, props.shiny, props.variant));
-      this.starterIcons[s].setFrame(species.getIconId(props.female, props.formIndex, props.shiny, props.variant));
-      this.checkIconId(this.starterIcons[s], species, props.female, props.formIndex, props.shiny, props.variant);
+      this.updatePartyIcon(this.starterSpecies[s], s);
       if (s >= index) {
         this.starterCursorObjs[s].setPosition(this.starterCursorObjs[s + 1].x, this.starterCursorObjs[s + 1].y);
         this.starterCursorObjs[s].setVisible(this.starterCursorObjs[s + 1].visible);
       }
     }
     this.starterCursorObjs[this.starterSpecies.length].setVisible(false);
-    this.starterIcons[this.starterSpecies.length].setTexture("pokemon_icons_0");
-    this.starterIcons[this.starterSpecies.length].setFrame("unknown");
+    this.starterIcons[this.starterSpecies.length].setTexture("pokemon_icons_0", "unknown");
 
     if (this.currentMode === StarterSelectMode.PARTY) {
       if (this.starterIconsCursorIndex === this.starterSpecies.length) {
@@ -3943,7 +3945,10 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       ui.setMode<StarterSelectUiHandler>(UiMode.STARTER_SELECT);
       globalScene.phaseManager.clearPhaseQueue();
       if (globalScene.gameMode.isChallenge) {
-        globalScene.phaseManager.pushPhase(new SelectChallengePhase(), new EncounterPhase());
+        globalScene.phaseManager.pushPhase(
+          globalScene.phaseManager.createPhase("SelectChallengePhase"),
+          globalScene.phaseManager.createPhase("EncounterPhase"),
+        );
       } else {
         globalScene.phaseManager.toTitleScreen();
       }
@@ -4187,8 +4192,9 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       console.log(
         `${species.name}'s icon ${icon.frame.name} does not match getIconId with female: ${female}, formIndex: ${formIndex}, shiny: ${shiny}, variant: ${variant}`,
       );
-      icon.setTexture(species.getIconAtlasKey(formIndex, false, variant));
-      icon.setFrame(species.getIconId(female, formIndex, false, variant));
+      const textureKey = species.getIconAtlasKey(formIndex, false, variant);
+      const frameKey = species.getIconId(female, formIndex, false, variant);
+      icon.setTexture(textureKey, frameKey);
     }
   }
 

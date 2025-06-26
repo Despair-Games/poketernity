@@ -11,7 +11,6 @@ import { getStatusEffectHealText } from "#utils/status-effect-utils";
 /**
  * Move attribute to cure a set of {@linkcode StatusEffect | status effects}
  * from the user or target, depending on if the effect is {@linkcode selfTarget | self-targeted}.
- * @extends MoveEffectAttr
  */
 export class HealStatusEffectAttr extends MoveEffectAttr {
   /** List of Status Effects to cure */
@@ -39,7 +38,8 @@ export class HealStatusEffectAttr extends MoveEffectAttr {
 
     const pokemon = this.selfTarget ? user : target;
     if (pokemon.hasStatusEffect(this.effects, false, true)) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         getStatusEffectHealText(pokemon.getStatusEffect(true), getPokemonNameWithAffix(pokemon)),
       );
       pokemon.resetStatus();

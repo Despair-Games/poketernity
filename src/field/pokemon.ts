@@ -1,9 +1,9 @@
 // -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type Battle from "#app/battle";
 import type BattleScene from "#app/battle-scene";
 import type { FaintPhase } from "#phases/faint-phase";
-/* eslint-enable @typescript-eslint/no-unused-vars */
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 // -- end tsdoc imports --
 
 import type { AbAttr } from "#abilities/ab-attr";
@@ -32,7 +32,7 @@ import type { MoveTypeChangeAbAttr } from "#abilities/move-type-change-ab-attr";
 import type { MultCritAbAttr } from "#abilities/mult-crit-ab-attr";
 import type { PostDamageAbAttr } from "#abilities/post-damage-ab-attr";
 import type { PostItemLostAbAttr } from "#abilities/post-item-lost-ab-attr";
-import type { PreDefendFullHpEndureAbAttr } from "#abilities/pre-defend-full-hp-endure-ab-attr";
+import type { SturdyAbAttr } from "#abilities/sturdy-ab-attr";
 import type { ReceivedMoveDamageMultiplierAbAttr } from "#abilities/received-move-damage-multiplier-ab-attr";
 import type { StabBoostAbAttr } from "#abilities/stab-boost-ab-attr";
 import type { StatMultiplierAbAttr } from "#abilities/stat-multiplier-ab-attr";
@@ -75,6 +75,8 @@ import {
   DEFAULT_MAX_SLEEP_DURATION,
   DEFAULT_MIN_SLEEP_DURATION,
   DYNAMAX_DAMAGE_TAKEN_FACTOR,
+  IV_MAX,
+  IV_MIN,
   MAX_STAT_STAGE,
   MIN_STAT_STAGE,
   NON_VOLATILE_STATUS_EFFECTS,
@@ -101,7 +103,7 @@ import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import { BattlerIndex } from "#enums/battler-index";
+import { BattlerIndex, type FieldBattlerIndex } from "#enums/battler-index";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BiomeId } from "#enums/biome-id";
@@ -115,7 +117,6 @@ import { ModifierTier } from "#enums/modifier-tier";
 import { MoveCategory } from "#enums/move-category";
 import { MoveId } from "#enums/move-id";
 import { Nature } from "#enums/nature";
-import { PhaseId } from "#enums/phase-id";
 import { PokeballType } from "#enums/pokeball-type";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { SpeciesFormKey } from "#enums/species-form-key";
@@ -178,9 +179,6 @@ import { VariableMoveCategoryAttr } from "#moves/variable-move-category-attr";
 import { VariableMoveTypeAttr } from "#moves/variable-move-type-attr";
 import { VariableMoveTypeChartAttr } from "#moves/variable-move-type-chart-attr";
 import { VariableMoveTypeMultiplierAttr } from "#moves/variable-move-type-multiplier-attr";
-import { DamageAnimPhase } from "#phases/damage-anim-phase";
-import type { MoveEffectPhase } from "#phases/move-effect-phase";
-import { ObtainStatusEffectPhase } from "#phases/obtain-status-effect-phase";
 import type PokemonData from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
 import type { AbilityFilterOptions } from "#types/ability-filter-options";
@@ -206,7 +204,7 @@ import {
 } from "#utils/common-utils";
 import { loadMoveAnimAssets } from "#utils/move-anim-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
-import { getIvsFromId, getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
+import { getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
 import { randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
 import { playTween } from "#utils/anim-utils";
@@ -350,7 +348,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.stellarTypesBoosted = dataSource.stellarTypesBoosted ?? [];
     } else {
       this.generateId();
-      this.ivs = ivs || getIvsFromId(this.id);
+      this.ivs = ivs || this.generateIvs();
 
       if (this.gender === undefined) {
         this.generateGender();
@@ -477,9 +475,15 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   /**
    * Sets this Pokemon's ID to be a random integer from 0 to 2^32 - 1, inclusive.
+   * @todo This should be `protected` or `private` but MEs currently call it
    */
-  generateId(): void {
-    this.id = randSeedInt(4294967296);
+  public generateId(): void {
+    this.id = randSeedInt(4294967295);
+  }
+
+  /** @returns An array of 6 random numbers, each between `0-31` inclusive */
+  public generateIvs(): number[] {
+    return new Array(6).fill(null).map(() => this.randSeedIntRange(IV_MIN, IV_MAX));
   }
 
   /**
@@ -622,7 +626,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    */
   public getDexAttr(): bigint {
     let ret = 0n;
-    ret |= this.gender !== Gender.FEMALE ? DexAttr.MALE : DexAttr.FEMALE;
+    if (this.gender === Gender.FEMALE) {
+      ret |= DexAttr.FEMALE;
+    } else if (this.gender === Gender.MALE) {
+      ret |= DexAttr.MALE;
+    }
     if (!this.shiny) {
       ret |= DexAttr.NON_SHINY;
     } else if (this.variant >= 2) {
@@ -679,7 +687,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   abstract getFieldIndex(): number;
 
-  abstract getBattlerIndex(): BattlerIndex;
+  abstract getBattlerIndex(): FieldBattlerIndex;
 
   loadAssets(bypassSummonData: boolean = true): Promise<void> {
     return new Promise((resolve) => {
@@ -736,12 +744,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   getSpriteAtlasPath(bypassSummonData?: boolean): string {
-    const spriteId = this.getSpriteId(bypassSummonData).replace(/\_{2}/g, "/");
+    const spriteId = this.getSpriteId(bypassSummonData).replace(/_{2}/g, "/");
     return `${/_[1-3]$/.test(spriteId) ? "variant/" : ""}${spriteId}`;
   }
 
   getBattleSpriteAtlasPath(back?: boolean, bypassSummonData?: boolean): string {
-    const spriteId = this.getBattleSpriteId(back, bypassSummonData).replace(/\_{2}/g, "/");
+    const spriteId = this.getBattleSpriteId(back, bypassSummonData).replace(/_{2}/g, "/");
     return `${/_[1-3]$/.test(spriteId) ? "variant/" : ""}${spriteId}`;
   }
 
@@ -930,7 +938,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
       // During the Pokemon's MoveEffect phase, the offset is removed to put the Pokemon "in focus"
       const currentPhase = globalScene.phaseManager.getCurrentPhase();
-      if (currentPhase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT) && currentPhase.getPokemon() === this) {
+      if (currentPhase?.is("MoveEffectPhase") && currentPhase.getPokemon() === this) {
         return false;
       }
       return true;
@@ -2043,7 +2051,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     ) {
       multiplier /= 2;
       if (!simulated) {
-        globalScene.phaseManager.queueMessagePhase(i18next.t("weather:strongWindsEffectMessage"));
+        globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("weather:strongWindsEffectMessage"));
       }
     }
     return multiplier as TypeDamageMultiplier;
@@ -3266,14 +3274,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     applyMoveAttrs(ModifiedDamageAttr, source, this, move, damage);
 
     if (this.isFullHp()) {
-      applyAbFunc<PreDefendFullHpEndureAbAttr>(
-        AbAttrFlag.PRE_DEFEND_FULL_HP_ENDURE,
-        this,
-        simulated,
-        source,
-        move,
-        damage,
-      );
+      applyAbFunc<SturdyAbAttr>(AbAttrFlag.STURDY, this, simulated, source, move, damage);
     }
 
     // debug message for when damage is applied (i.e. not simulated)
@@ -3410,7 +3411,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       source,
     }: DamageFunctionOptions = {},
   ): number {
-    const damagePhase = new DamageAnimPhase(this.getBattlerIndex(), amount, result, isCritical);
+    const damagePhase = globalScene.phaseManager.createPhase(
+      "DamageAnimPhase",
+      this.getBattlerIndex(),
+      amount,
+      result,
+      isCritical,
+    );
     globalScene.phaseManager.unshiftPhase(damagePhase);
     if (this.switchOutStatus && source) {
       amount = 0;
@@ -4073,14 +4080,19 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
      */
     if (effect === StatusEffect.SLEEP || effect === StatusEffect.FREEZE) {
       const currentPhase = globalScene.phaseManager.getCurrentPhase();
-      if (currentPhase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT) && currentPhase.getUserPokemon() === this) {
+      if (currentPhase?.is("MoveEffectPhase") && currentPhase.getUserPokemon() === this) {
         this.stopMultiHit();
       }
     }
 
     if (asPhase) {
-      globalScene.phaseManager.unshiftPhase(
-        new ObtainStatusEffectPhase(this.getBattlerIndex(), effect, turnsRemaining, sourceText, sourcePokemon),
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "ObtainStatusEffectPhase",
+        this.getBattlerIndex(),
+        effect,
+        turnsRemaining,
+        sourceText,
+        sourcePokemon,
       );
       return true;
     }

@@ -1,6 +1,7 @@
 // -- start tsdoc imports --
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { Stat } from "#enums/stat";
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 // -- end tsdoc imports --
 
 import type { Pokemon } from "#field/pokemon";
@@ -10,7 +11,6 @@ import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute to change the defensive stat to be used in a move's damage calculations.
- * @extends MoveAttr
  */
 export abstract class VariableDefAttr extends MoveAttr {
   /**

@@ -13,7 +13,6 @@ import i18next from "i18next";
 /**
  * Attribute to add a non-volatile status condition to
  * the user or target, depending on {@linkcode selfTarget}.
- * @extends ChanceBasedMoveEffectAttr
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Status_condition#Non-volatile_status | Non-volatile status conditions}
  */
 export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
@@ -38,7 +37,8 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
   override canApply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (user !== target && target.isSafeguarded(user)) {
       if (move.category === MoveCategory.STATUS) {
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           i18next.t("moveTriggers:safeguard", { targetName: getPokemonNameWithAffix(target) }),
         );
       }

@@ -1,7 +1,9 @@
 import { globalScene } from "#app/global-scene";
+import { logUiDebug, logUiVerbose } from "#app/loggers";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
+import { BattleSceneEventType } from "#enums/battle-scene-event-type";
 import type { Button } from "#enums/button";
-import { Device } from "#enums/devices";
+import { Device } from "#enums/device";
 import { PlayerGender } from "#enums/player-gender";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
@@ -13,7 +15,7 @@ import { AudioSettingsUiHandler } from "#ui/audio-settings-ui-handler";
 import { AutoCompleteUiHandler } from "#ui/autocomplete-ui-handler";
 import { BallUiHandler } from "#ui/ball-ui-handler";
 import { BattleMessageUiHandler } from "#ui/battle-message-ui-handler";
-import type { BgmBar } from "#ui/bgm-bar";
+import { BgmBar } from "#ui/bgm-bar";
 import { ChallengeSelectUiHandler } from "#ui/challenges-select-ui-handler";
 import { CommandUiHandler } from "#ui/command-ui-handler";
 import { ConfirmUiHandler } from "#ui/confirm-ui-handler";
@@ -69,19 +71,28 @@ export const settingsUiModes = [
   UiMode.GAMEPAD_BINDING,
 ];
 
+/** Modes for which animations should play when changing to/from the mode. */
 const transitionModes = [
   UiMode.SAVE_SLOT,
   UiMode.PARTY,
   UiMode.SUMMARY,
+  UiMode.CHALLENGE_SELECT,
   UiMode.STARTER_SELECT,
   UiMode.FORM_CHANGE_SCENE,
   UiMode.EGG_HATCH_SCENE,
   UiMode.EGG_LIST,
   UiMode.EGG_GACHA,
-  UiMode.CHALLENGE_SELECT,
   UiMode.RUN_HISTORY,
 ];
 
+/**
+ * Modes for which animations should **not** play when changing to/from the mode.
+ *
+ * Note: this list is not strictly the opposite of `transitionModes`,
+ * as some UIs that are not in this list or transitionModes will still get animated
+ * TODO: Figure out whether that is intended. If not, only keep a single list of the two.
+ * If yes, clarify the different between the two.
+ */
 const noTransitionModes = [
   UiMode.TITLE,
   UiMode.CONFIRM,
@@ -110,16 +121,50 @@ const noTransitionModes = [
   UiMode.RUN_INFO,
 ];
 
+/** List of ui modes that can always be destroyed after use. */
+const alwaysDestroyModes = [UiMode.UNAVAILABLE, UiMode.SESSION_RELOAD];
+/** List of ui modes used during run preparation that can be destroyed when in a run. */
+const runPrepModes = [UiMode.TITLE, UiMode.STARTER_SELECT, UiMode.CHALLENGE_SELECT, UiMode.SAVE_SLOT, UiMode.RUN_INFO];
+/** List of ui battle modes that should always stay loaded when in a run. */
+const permanentBattleModes = [
+  UiMode.COMMAND,
+  UiMode.BALL,
+  UiMode.FIGHT,
+  UiMode.TARGET_SELECT,
+  UiMode.PARTY,
+  UiMode.SUMMARY,
+  UiMode.MODIFIER_SELECT,
+];
+/** List of ui battle modes that can be destroyed after each wave. */
+const temporaryBattleModes = [
+  UiMode.MYSTERY_ENCOUNTER,
+  UiMode.FORM_CHANGE_SCENE,
+  UiMode.EGG_HATCH_SCENE,
+  UiMode.EGG_HATCH_SUMMARY,
+];
+/** List of ui modes accessed only from the main menu, that can be destroyed once the menu is closed. */
+const mainMenuAccessedModes = [
+  UiMode.ACHIEVEMENTS,
+  UiMode.GAME_STATS,
+  UiMode.EGG_GACHA,
+  UiMode.EGG_LIST,
+  UiMode.RUN_HISTORY,
+  UiMode.RUN_INFO,
+  UiMode.ADMIN,
+  UiMode.TEST_DIALOGUE,
+];
+
+/** Mode that will be set by default when initializing the UI. */
 const DEFAULT_MODE = UiMode.MESSAGE;
 
 export class UI extends Phaser.GameObjects.Container {
   private mode: UiMode;
   private modeChain: UiMode[];
-  private handlers: UiHandler[];
+  private handlers: Map<UiMode, UiHandler>;
   private overlay: Phaser.GameObjects.Rectangle;
-  public achvBar: AchvBar;
-  public bgmBar: BgmBar;
-  public savingIcon: SavingIcon;
+  public achvBar: AchvBar; // TODO: make private and add helper functions
+  public bgmBar: BgmBar; // TODO: make private and add helper functions
+  public savingIcon: SavingIcon; // TODO: make private and add helper functions
 
   private tooltipContainer: Phaser.GameObjects.Container;
   private tooltipBg: Phaser.GameObjects.NineSlice;
@@ -128,113 +173,72 @@ export class UI extends Phaser.GameObjects.Container {
 
   private overlayActive: boolean;
 
+  /** Callback used to destroy no longer needed handlers on new encounters. */
+  private readonly onNextEncounterEvent = () => this.deleteUiHandlers(...runPrepModes, ...temporaryBattleModes);
+  /** Callback used to destroy no longer needed handlers on run end (win or loss). */
+  private readonly onGameOverEvent = () => this.deleteUiHandlers(...permanentBattleModes, ...temporaryBattleModes);
+
   constructor() {
     super(globalScene, 0, GAME_HEIGHT);
 
     this.mode = DEFAULT_MODE;
     this.modeChain = [];
-    this.handlers = [
-      new BattleMessageUiHandler(),
-      new TitleUiHandler(),
-      new CommandUiHandler(),
-      new FightUiHandler(),
-      new BallUiHandler(),
-      new TargetSelectUiHandler(),
-      new ModifierSelectUiHandler(),
-      new SaveSlotSelectUiHandler(),
-      new PartyUiHandler(),
-      new SummaryUiHandler(),
-      new StarterSelectUiHandler(),
-      new FormChangeSceneUiHandler(),
-      new EggHatchSceneUiHandler(),
-      new EggHatchSummaryUiHandler(),
-      new ConfirmUiHandler(),
-      new OptionSelectUiHandler(),
-      new MenuUiHandler(),
-      new OptionSelectUiHandler(UiMode.MENU_OPTION_SELECT),
-      // settings
-      new GeneralSettingsUiHandler(),
-      new DisplaySettingsUiHandler(),
-      new AudioSettingsUiHandler(),
-      new GamepadSettingsUiHandler(),
-      new GamepadBindingUiHandler(),
-      new KeyboardSettingsUiHandler(),
-      new KeyboardBindingUiHandler(),
-      new AchievementsUiHandler(),
-      new GameStatsUiHandler(),
-      new EggListUiHandler(),
-      new EggGachaUiHandler(),
-      new LoginFormUiHandler(),
-      new RegistrationFormUiHandler(),
-      new LoadingModalUiHandler(),
-      new SessionReloadModalUiHandler(),
-      new UnavailableModalUiHandler(),
-      new ChallengeSelectUiHandler(),
-      new RenamePokemonUiHandler(),
-      new RunHistoryUiHandler(),
-      new RunInfoUiHandler(),
-      new TestDialogueUiHandler(),
-      new AutoCompleteUiHandler(),
-      new AdminUiHandler(),
-      new MysteryEncounterUiHandler(),
-    ];
+    this.handlers = new Map<UiMode, UiHandler>();
   }
 
-  setup(): void {
-    this.setName(`ui-${UiMode[this.mode]}`);
-    for (const handler of this.handlers) {
-      handler.initialize();
+  public setup(): void {
+    if (this.handlers.size > 0) {
+      return; // Only setup once
     }
+
+    logUiVerbose("Initializing UI and default handlers");
+
+    this.setName(`ui-${UiMode[this.mode]}`);
+
+    // Initialize the default handler
+    this.addUiHandler(this.mode);
+    // The settings Ui handlers are inefficient and take a while to initialize
+    // so for now we initialize them all during loading and never stop them.
+    for (const mode of settingsUiModes) {
+      this.addUiHandler(mode);
+    }
+    // If this handler gets initialized just before being shown the input text flashes
+    // so for now we initialize it during loading and never stop it.
+    // note: all form modals that use 'inputText.setText' have this issue, but this is the only one players can see
+    this.addUiHandler(UiMode.RENAME_POKEMON);
+
+    // Init UI overlay
     this.overlay = globalScene.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0);
     this.overlay.setName("rect-ui-overlay");
     this.overlay.setOrigin(0, 0);
-    globalScene.uiContainer.add(this.overlay);
     this.overlay.setVisible(false);
+    globalScene.uiContainer.add(this.overlay);
+
+    // Init tooltip window
     this.setupTooltip();
 
+    // Init achievement bar
     this.achvBar = new AchvBar();
     this.achvBar.setup();
-
     globalScene.uiContainer.add(this.achvBar);
 
+    // Init bgm bar (it will be added to the UI by the menu handler)
+    this.bgmBar = new BgmBar();
+    this.bgmBar.setup();
+
+    // Init saving icon
     this.savingIcon = new SavingIcon();
     this.savingIcon.setup();
-
     globalScene.uiContainer.add(this.savingIcon);
+
+    // Register listener to new encounter events and post game over events
+    globalScene.eventTarget.addEventListener(BattleSceneEventType.ENCOUNTER_PHASE, this.onNextEncounterEvent);
+    globalScene.eventTarget.addEventListener(BattleSceneEventType.POST_GAME_OVER, this.onGameOverEvent);
   }
 
   /**
-   * Stop any active handler, clear the mode chain and go back to the default MESSAGE ui mode.
-   *
-   * For now, only used to reset all handlers between tests.
+   * Initialize the tooltip window.
    */
-  public resetHandlers(): void {
-    this.mode = DEFAULT_MODE;
-    const currentHandler = this.getCurrentHandler();
-    for (const handler of this.handlers.filter((h) => h.active && h !== currentHandler)) {
-      handler.stop();
-    }
-    (this.handlers[UiMode.STARTER_SELECT] as StarterSelectUiHandler).clearStarterPreferences();
-    this.resetModeChain();
-  }
-
-  public resetModeChain(): void {
-    this.modeChain = [];
-    globalScene.updateGameInfo();
-  }
-
-  public override destroy(fromScene?: boolean): void {
-    // Clear references to current handlers in the NavigationManager
-    NavigationManager.getInstance().clearMenus();
-
-    // Destroy all handlers
-    for (const handler of this.handlers) {
-      handler.destroy();
-    }
-
-    super.destroy(fromScene);
-  }
-
   private setupTooltip() {
     this.tooltipContainer = globalScene.add.container(0, 0);
     this.tooltipContainer.setName("tooltip");
@@ -259,23 +263,212 @@ export class UI extends Phaser.GameObjects.Container {
     globalScene.uiContainer.add(this.tooltipContainer);
   }
 
-  getCurrentHandler<H extends UiHandler = UiHandler>(): H {
-    return this.handlers[this.mode] as H;
+  /**
+   * Instantiate a new UiHandler corresponding to the given mode.
+   * @param mode - The {@linkcode UiMode} to consider
+   * @returns the {@linkcode UiHandler} for that mode
+   */
+  private createUiHandler(mode: UiMode): UiHandler {
+    switch (mode) {
+      case UiMode.MESSAGE:
+        return new BattleMessageUiHandler();
+      case UiMode.TITLE:
+        return new TitleUiHandler();
+      case UiMode.COMMAND:
+        return new CommandUiHandler();
+      case UiMode.FIGHT:
+        return new FightUiHandler();
+      case UiMode.BALL:
+        return new BallUiHandler();
+      case UiMode.TARGET_SELECT:
+        return new TargetSelectUiHandler();
+      case UiMode.MODIFIER_SELECT:
+        return new ModifierSelectUiHandler();
+      case UiMode.SAVE_SLOT:
+        return new SaveSlotSelectUiHandler();
+      case UiMode.PARTY:
+        return new PartyUiHandler();
+      case UiMode.SUMMARY:
+        return new SummaryUiHandler();
+      case UiMode.STARTER_SELECT:
+        return new StarterSelectUiHandler();
+      case UiMode.FORM_CHANGE_SCENE:
+        return new FormChangeSceneUiHandler();
+      case UiMode.EGG_HATCH_SCENE:
+        return new EggHatchSceneUiHandler();
+      case UiMode.EGG_HATCH_SUMMARY:
+        return new EggHatchSummaryUiHandler();
+      case UiMode.CONFIRM:
+        return new ConfirmUiHandler();
+      case UiMode.OPTION_SELECT:
+        return new OptionSelectUiHandler();
+      case UiMode.MENU:
+        return new MenuUiHandler();
+      case UiMode.MENU_OPTION_SELECT:
+        return new OptionSelectUiHandler(UiMode.MENU_OPTION_SELECT);
+      // settings
+      case UiMode.SETTINGS:
+        return new GeneralSettingsUiHandler();
+      case UiMode.SETTINGS_DISPLAY:
+        return new DisplaySettingsUiHandler();
+      case UiMode.SETTINGS_AUDIO:
+        return new AudioSettingsUiHandler();
+      case UiMode.SETTINGS_GAMEPAD:
+        return new GamepadSettingsUiHandler();
+      case UiMode.GAMEPAD_BINDING:
+        return new GamepadBindingUiHandler();
+      case UiMode.SETTINGS_KEYBOARD:
+        return new KeyboardSettingsUiHandler();
+      case UiMode.KEYBOARD_BINDING:
+        return new KeyboardBindingUiHandler();
+      case UiMode.ACHIEVEMENTS:
+        return new AchievementsUiHandler();
+      case UiMode.GAME_STATS:
+        return new GameStatsUiHandler();
+      case UiMode.EGG_LIST:
+        return new EggListUiHandler();
+      case UiMode.EGG_GACHA:
+        return new EggGachaUiHandler();
+      case UiMode.LOGIN_FORM:
+        return new LoginFormUiHandler();
+      case UiMode.REGISTRATION_FORM:
+        return new RegistrationFormUiHandler();
+      case UiMode.LOADING:
+        return new LoadingModalUiHandler();
+      case UiMode.SESSION_RELOAD:
+        return new SessionReloadModalUiHandler();
+      case UiMode.UNAVAILABLE:
+        return new UnavailableModalUiHandler();
+      case UiMode.CHALLENGE_SELECT:
+        return new ChallengeSelectUiHandler();
+      case UiMode.RENAME_POKEMON:
+        return new RenamePokemonUiHandler();
+      case UiMode.RUN_HISTORY:
+        return new RunHistoryUiHandler();
+      case UiMode.RUN_INFO:
+        return new RunInfoUiHandler();
+      case UiMode.TEST_DIALOGUE:
+        return new TestDialogueUiHandler();
+      case UiMode.AUTO_COMPLETE:
+        return new AutoCompleteUiHandler();
+      case UiMode.ADMIN:
+        return new AdminUiHandler();
+      case UiMode.MYSTERY_ENCOUNTER:
+        return new MysteryEncounterUiHandler();
+    }
   }
 
-  getMessageHandler(): BattleMessageUiHandler {
-    return this.handlers[UiMode.MESSAGE] as BattleMessageUiHandler;
+  /**
+   * Initialize a new UiHandler for the given mode, and add it the handlers list.
+   * @param mode - The {@linkcode UiMode} to a create handler for
+   * @returns a ready to use {@linkcode UiHandler} for that mode
+   */
+  private addUiHandler(mode: UiMode): UiHandler {
+    const handler = this.createUiHandler(mode);
+    logUiVerbose(`Initializing Handler for mode: ${UiMode[mode]} (${mode})`);
+    this.handlers.set(mode, handler);
+    handler.initialize();
+    return handler;
   }
 
-  getCurrentMessageHandler(): MessageUiHandler {
+  /**
+   * Destroy the handlers for the given modes if they exist, and remove them from the handlers list.
+   * @param modes - one or more {@linkcode UiMode}s
+   */
+  private deleteUiHandlers(...modes: UiMode[]): void {
+    for (const mode of modes) {
+      const handler = this.handlers.get(mode);
+      if (handler && !handler.active) {
+        logUiVerbose(`Destroying Handler for mode: ${UiMode[mode]} (${mode})`);
+        this.handlers.delete(mode);
+        if (handler.ready) {
+          handler.destroy();
+        }
+      }
+    }
+  }
+
+  /**
+   * Get a handler from the list of active handlers if it exists, otherwise initialize it.
+   * @param mode - The {@linkcode UiMode} we need the handler for
+   * @returns an initialized {@linkcode UiHandler} for that mode
+   */
+  private getUiHandler(mode: UiMode): UiHandler {
+    if (this.handlers.has(mode)) {
+      return this.handlers.get(mode)!;
+    }
+    return this.addUiHandler(mode);
+  }
+
+  /**
+   * Stop any active handler, clear the mode chain and go back to the default MESSAGE ui mode.
+   */
+  public resetHandlers(): void {
+    this.mode = DEFAULT_MODE;
+    const currentHandler = this.getCurrentHandler();
+
+    for (const handler of this.handlers.values()) {
+      if (handler.active && handler !== currentHandler) {
+        handler.stop();
+      }
+    }
+
+    if (this.handlers.has(UiMode.STARTER_SELECT)) {
+      (this.handlers.get(UiMode.STARTER_SELECT) as StarterSelectUiHandler).clearStarterPreferences();
+    }
+
+    this.resetModeChain();
+  }
+
+  private resetModeChain(): void {
+    this.modeChain = [];
+    globalScene.updateGameInfo();
+  }
+
+  public override destroy(fromScene?: boolean): void {
+    logUiVerbose("Destroying UI and all handlers");
+    // Clear references to current handlers in the NavigationManager
+    NavigationManager.getInstance().clearMenus();
+
+    // Destroy all handlers
+    for (const [uiMode, handler] of this.handlers.entries()) {
+      handler.destroy();
+      this.handlers.delete(uiMode);
+    }
+
+    globalScene.eventTarget.removeEventListener(BattleSceneEventType.POST_GAME_OVER, this.onGameOverEvent);
+    globalScene.eventTarget.removeEventListener(BattleSceneEventType.ENCOUNTER_PHASE, this.onNextEncounterEvent);
+
+    super.destroy(fromScene);
+  }
+
+  /**
+   * @returns The currently active {@linkcode UiHandler}.
+   */
+  public getCurrentHandler<H extends UiHandler = UiHandler>(): H {
+    return this.handlers.get(this.mode) as H;
+  }
+
+  /**
+   * @returns The {@linkcode BattleMessageUiHandler} to use to display messages during gameplay.
+   * @todo refactor message/dialogue handling to not require this.
+   */
+  public getMessageHandler(): BattleMessageUiHandler | undefined {
+    return this.handlers.get(UiMode.MESSAGE) as BattleMessageUiHandler;
+  }
+
+  private getCurrentMessageHandler(): MessageUiHandler {
     const handler = this.getCurrentHandler();
     if (handler instanceof MessageUiHandler && handler.message) {
       return handler;
     }
-    return this.getMessageHandler();
+    if (!this.handlers.get(UiMode.MESSAGE)) {
+      this.addUiHandler(UiMode.MESSAGE);
+    }
+    return this.getMessageHandler()!;
   }
 
-  processInfoButton(pressed: boolean) {
+  public processInfoButton(pressed: boolean) {
     if (this.overlayActive) {
       return false;
     }
@@ -288,7 +481,7 @@ export class UI extends Phaser.GameObjects.Container {
     return true;
   }
 
-  processInput(button: Button): boolean {
+  public processInput(button: Button): boolean {
     if (this.overlayActive) {
       return false;
     }
@@ -302,7 +495,7 @@ export class UI extends Phaser.GameObjects.Container {
     return handler.processInput(button);
   }
 
-  showTextPromise(
+  public showTextPromise(
     text: string,
     callbackDelay: number = 0,
     prompt: boolean = true,
@@ -313,7 +506,7 @@ export class UI extends Phaser.GameObjects.Container {
     });
   }
 
-  showText(
+  public showText(
     text: string,
     delay?: number | null,
     callback?: VoidFunction | null,
@@ -330,11 +523,11 @@ export class UI extends Phaser.GameObjects.Container {
       }
       showMessageAndCallback();
     } else {
-      this.getCurrentMessageHandler().showText(text, delay, callback, callbackDelay, prompt, promptDelay);
+      this.getCurrentMessageHandler()!.showText(text, delay, callback, callbackDelay, prompt, promptDelay);
     }
   }
 
-  showDialogue(
+  public showDialogue(
     keyOrText: string,
     name: string | undefined,
     delay: number | null,
@@ -386,7 +579,13 @@ export class UI extends Phaser.GameObjects.Container {
     }
   }
 
-  shouldSkipDialogue(i18nKey: string): boolean {
+  /**
+   * Check whether a dialogue should be shown or not, based on the "skip seen dialogues" setting.
+   * @param i18nKey - The dialogue key
+   * @returns `true` if the dialogue should be skipped.
+   * @todo why is this here?
+   */
+  public shouldSkipDialogue(i18nKey: string): boolean {
     if (i18next.exists(i18nKey)) {
       if (settings.general.skipSeenDialogues && globalScene.gameData.getSeenDialogues()[i18nKey] === true) {
         return true;
@@ -395,21 +594,35 @@ export class UI extends Phaser.GameObjects.Container {
     return false;
   }
 
-  getTooltip(): { visible: boolean; title: string; content: string } {
+  /**
+   * @returns the current state and contents of the tooltip window.
+   */
+  public getTooltip(): { visible: boolean; title: string; content: string } {
     return { visible: this.tooltipContainer.visible, title: this.tooltipTitle.text, content: this.tooltipContent.text };
   }
 
-  showTooltip(title: string, content: string, overlap?: boolean): void {
+  /**
+   * Make the tooltip window visible (it will be placed based on the mouse/touch cursor until hidden).
+   * @param title - Header text for the tooltip. Can be empty.
+   * @param content - The main content of the tooltip
+   * @param overlap - `true` if the tooltip should be moved above the rest of the UI. Default: `false`
+   */
+  public showTooltip(title: string, content: string, overlap: boolean = false): void {
     this.tooltipContainer.setVisible(true);
     this.editTooltip(title, content);
-    if (overlap) {
+    if (!overlap) {
       globalScene.uiContainer.moveAbove(this.tooltipContainer, this);
     } else {
       globalScene.uiContainer.moveBelow(this.tooltipContainer, this);
     }
   }
 
-  editTooltip(title: string, content: string): void {
+  /**
+   * Edit the tooltip window contents (assuming it is already being displayed)
+   * @param title - Header text for the tooltip. Can be empty.
+   * @param content - The main content of the tooltip
+   */
+  public editTooltip(title: string, content: string): void {
     this.tooltipTitle.setText(title || "");
     const wrappedContent = this.tooltipContent.runWordWrap(content);
     this.tooltipContent.setText(wrappedContent);
@@ -422,7 +635,8 @@ export class UI extends Phaser.GameObjects.Container {
     this.tooltipTitle.x = this.tooltipBg.width / 2;
   }
 
-  hideTooltip(): void {
+  /** Hide the tooltip window. */
+  public hideTooltip(): void {
     this.tooltipContainer.setVisible(false);
     this.tooltipTitle.clearTint();
   }
@@ -460,28 +674,33 @@ export class UI extends Phaser.GameObjects.Container {
     }
   }
 
-  clearText(): void {
+  /**
+   * Clear text in the currently active message handler.
+   */
+  public clearText(): void {
     this.getCurrentMessageHandler().clearText();
   }
 
-  setCursor(cursor: number): boolean {
-    const changed = this.getCurrentHandler().setCursor(cursor);
-    if (changed) {
-      this.playSelect();
-    }
-
-    return changed;
-  }
-
-  playSelect(): void {
+  /**
+   * Play the 'select' sound effect.
+   */
+  public playSelect(): void {
     globalScene.audioManager.playSound("ui/select");
   }
 
-  playError(): void {
+  /**
+   * Play the 'error' sound effect.
+   */
+  public playError(): void {
     globalScene.audioManager.playSound("ui/error");
   }
 
-  fadeOut(duration: number): Promise<void> {
+  /**
+   * Fade out the Ui container to make it appear black.
+   * @param duration - duration of the fading animation, in ms.
+   * @returns Promise that resolves after the animation is done.
+   */
+  public fadeOut(duration: number): Promise<void> {
     return new Promise((resolve) => {
       if (this.overlayActive) {
         return resolve();
@@ -499,7 +718,12 @@ export class UI extends Phaser.GameObjects.Container {
     });
   }
 
-  fadeIn(duration: number): Promise<void> {
+  /**
+   * Fade in the Ui container to make it visible.
+   * @param duration - duration of the fading animation, in ms.
+   * @returns Promise that resolves after the animation is done.
+   */
+  public fadeIn(duration: number): Promise<void> {
     return new Promise((resolve) => {
       if (!this.overlayActive) {
         return resolve();
@@ -518,39 +742,90 @@ export class UI extends Phaser.GameObjects.Container {
     });
   }
 
-  getMode(): UiMode {
+  /**
+   * @returns the currently active {@linkcode UiMode}
+   */
+  public getMode(): UiMode {
     return this.mode;
   }
 
-  setMessageMode(): Promise<void> {
+  /**
+   * Set the current ui mode to {@linkcode UiMode.MESSAGE}
+   * @returns Promise that resolves once the mode is set.
+   */
+  public setMessageMode(): Promise<void> {
     return this.setMode<MessageUiHandler>(UiMode.MESSAGE);
   }
 
-  setMode<THandler extends UiHandler = never>(mode: UiMode, ...args: Parameters<THandler["show"]>): Promise<void> {
+  /**
+   * Change the current ui mode, clearing the current handler.
+   * Won't have any effect if the requested mode is already active.
+   * @param mode - The {@linkcode UiMode} to switch to.
+   * @param args - Parameters for the UiMode's handler 'show' function
+   * @returns Promise that resolves once the mode is set.
+   */
+  public setMode<THandler extends UiHandler = never>(
+    mode: UiMode,
+    ...args: Parameters<THandler["show"]>
+  ): Promise<void> {
     return this.setModeInternal<THandler>(mode, true, false, false, ...args);
   }
 
-  setModeForceTransition<THandler extends UiHandler = never>(
+  /**
+   * Change the current ui mode, clearing the current handler.
+   * This will take effect even if the requested mode is already active.
+   * @param mode - The {@linkcode UiMode} to switch to.
+   * @param args - Parameters for the requested UiMode's handler 'show' function
+   * @returns Promise that resolves once the mode is set.
+   */
+  public setModeForceTransition<THandler extends UiHandler = never>(
     mode: UiMode,
     ...args: Parameters<THandler["show"]>
   ): Promise<void> {
     return this.setModeInternal<THandler>(mode, true, true, false, ...args);
   }
 
-  setModeWithoutClear<THandler extends UiHandler = never>(
+  /**
+   * Change the current ui mode, without clearing the current handler.
+   * This should be used carefully as it means the previous handler will not be cleared from memory.
+   * @param mode - The {@linkcode UiMode} to switch to.
+   * @param args - Parameters for the requested UiMode's handler 'show' function
+   * @returns Promise that resolves once the mode is set.
+   */
+  public setModeWithoutClear<THandler extends UiHandler = never>(
     mode: UiMode,
     ...args: Parameters<THandler["show"]>
   ): Promise<void> {
     return this.setModeInternal<THandler>(mode, false, false, false, ...args);
   }
 
-  setOverlayMode<THandler extends UiHandler = never>(
+  /**
+   * Change the current ui mode, showing the new mode handler above the current one, which is added to the mode chain.
+   * Modes set in this way should be stopped through {@linkcode revertMode}, which will restore the previous mode.
+   * @param mode - The {@linkcode UiMode} to switch to.
+   * @param args - Parameters for the requested UiMode's handler 'show' function
+   * @returns Promise that resolves once the mode is set.
+   */
+  public setOverlayMode<THandler extends UiHandler = never>(
     mode: UiMode,
     ...args: Parameters<THandler["show"]>
   ): Promise<void> {
     return this.setModeInternal<THandler>(mode, false, false, true, ...args);
   }
 
+  /**
+   * Change the current Ui Mode, clearing and destroying previous handlers if needed.
+   * By default doesn't do anything if the requested mode is already active, but can be forced.
+   * If not already initialized, create the UiHandler for this mode, then displays it,
+   * playing a transition animation or not, depending on the source and target mode.
+   *
+   * @param mode - The {@linkcode UiMode} to switch to.
+   * @param clear - Whether the clear the handler for the current mode.
+   * @param forceTransition - Whether to force the switch to happen, even if the mode is the same as before.
+   * @param chainMode - Whether to add the current mode to the mode chain, to be able to revert back to it.
+   * @param params - Parameters for the requested UiMode's handler 'show' function.
+   * @returns Promise that resolves once the mode is set.
+   */
   private setModeInternal<THandler extends UiHandler = never>(
     mode: UiMode,
     clear: boolean,
@@ -558,6 +833,10 @@ export class UI extends Phaser.GameObjects.Container {
     chainMode: boolean,
     ...params: Parameters<THandler["show"]>
   ): Promise<void> {
+    logUiDebug(
+      `Set ${UiMode[mode]} (${mode}) Mode${chainMode ? " as overlay" : ""}`,
+      `(${clear ? "" : "not "}clearing ${UiMode[this.mode]})`,
+    );
     return new Promise((resolve) => {
       if (this.mode === mode && !forceTransition) {
         resolve();
@@ -566,7 +845,7 @@ export class UI extends Phaser.GameObjects.Container {
       const doSetMode = () => {
         if (this.mode !== mode) {
           if (clear && this.getCurrentHandler().active) {
-            this.getCurrentHandler().stop();
+            this.stopCurrentHandler();
           }
           if (chainMode && this.mode && !clear) {
             this.modeChain.push(this.mode);
@@ -577,18 +856,23 @@ export class UI extends Phaser.GameObjects.Container {
           if (touchControls) {
             touchControls.dataset.uiMode = UiMode[mode];
           }
-          this.getCurrentHandler().start(...params);
+          this.getUiHandler(mode).start(...params);
+          // Arriving on title screen, remove login handlers from memory
+          if (mode === UiMode.TITLE) {
+            this.deleteUiHandlers(UiMode.LOGIN_FORM, UiMode.REGISTRATION_FORM);
+          }
         } else if (!this.getCurrentHandler().active) {
-          this.getCurrentHandler().start(...params);
+          this.getUiHandler(mode).start(...params);
         }
         resolve();
       };
+
       if (
         (!chainMode
-          && (transitionModes.indexOf(this.mode) > -1 || transitionModes.indexOf(mode) > -1)
-          && noTransitionModes.indexOf(this.mode) === -1
-          && noTransitionModes.indexOf(mode) === -1)
-        || (chainMode && noTransitionModes.indexOf(mode) === -1)
+          && (transitionModes.includes(this.mode) || transitionModes.includes(mode))
+          && !noTransitionModes.includes(this.mode)
+          && !noTransitionModes.includes(mode))
+        || (chainMode && !noTransitionModes.includes(mode))
       ) {
         this.fadeOut(250).then(() => {
           globalScene.time.delayedCall(100, () => {
@@ -602,7 +886,13 @@ export class UI extends Phaser.GameObjects.Container {
     });
   }
 
-  revertMode(): Promise<boolean> {
+  /**
+   * Revert back to the previous mode in the mode chain and clears the current handler.
+   * Should only be called if the current mode was set through {@linkcode setOverlayMode}.
+   *
+   * @returns Promise returning `true` if the mode was reverted, `false` if not (because the mode chain was empty).
+   */
+  public revertMode(): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
       if (!this?.modeChain?.length) {
         return resolve(false);
@@ -611,9 +901,10 @@ export class UI extends Phaser.GameObjects.Container {
       const lastMode = this.mode;
 
       const doRevertMode = () => {
-        this.getCurrentHandler().stop();
-        this.mode = this.modeChain.pop()!; // TODO: is this bang correct?
+        this.stopCurrentHandler();
+        this.mode = this.modeChain.pop()!;
         globalScene.updateGameInfo();
+        logUiDebug(`Set ${UiMode[this.mode]} (${this.mode}) Mode (reverting from ${UiMode[lastMode]})`);
         const touchControls = document.getElementById("touchControls");
         if (touchControls) {
           touchControls.dataset.uiMode = UiMode[this.mode];
@@ -621,7 +912,7 @@ export class UI extends Phaser.GameObjects.Container {
         resolve(true);
       };
 
-      if (noTransitionModes.indexOf(lastMode) === -1) {
+      if (!noTransitionModes.includes(lastMode)) {
         this.fadeOut(250).then(() => {
           globalScene.time.delayedCall(100, () => {
             doRevertMode();
@@ -634,7 +925,25 @@ export class UI extends Phaser.GameObjects.Container {
     });
   }
 
-  revertModes(): Promise<void> {
+  /**
+   * Stop the current Ui Handler, potentially destroying it to free it from memory.
+   * If the stopped handler was the menu hanlder, destroy all handlers that depended on it.
+   */
+  private stopCurrentHandler() {
+    this.getCurrentHandler().stop();
+    if (alwaysDestroyModes.includes(this.mode)) {
+      this.deleteUiHandlers(this.mode);
+    } else if (this.mode === UiMode.MENU) {
+      // When stopping the menu destroy all handlers that depend on it
+      this.deleteUiHandlers(...mainMenuAccessedModes);
+    }
+  }
+
+  /**
+   * Revert through all the modes currently in the mode chain.
+   * @returns Promise that resolves when the mode chain is empty.
+   */
+  public revertModes(): Promise<void> {
     return new Promise<void>((resolve) => {
       if (!this?.modeChain?.length) {
         return resolve();
@@ -643,6 +952,9 @@ export class UI extends Phaser.GameObjects.Container {
     });
   }
 
+  /**
+   * @returns the array of {@linkcode UiMode}s currently in the modeChain, with the oldest mode first.
+   */
   public getModeChain(): UiMode[] {
     return this.modeChain;
   }
@@ -653,6 +965,7 @@ export class UI extends Phaser.GameObjects.Container {
    * if inputMethod is "keyboard" or "touch", then the inputMethod is returned
    * if inputMethod is "gamepad", then the gamepad type is returned it could be "xbox" or "dualshock"
    * @returns gamepad type
+   * @todo why is this here?
    */
   public getGamepadType(): string {
     if (globalScene.inputMethod === "gamepad") {

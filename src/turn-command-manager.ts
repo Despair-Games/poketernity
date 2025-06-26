@@ -1,8 +1,8 @@
 // -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { Phase } from "#app/phase";
 import type { MovePhase } from "#phases/move-phase";
-/* eslint-enable @typescript-eslint/no-unused-vars */
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 // -- end tsdoc imports --
 
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
@@ -14,24 +14,12 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleCommand } from "#enums/battle-command";
 import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { PhaseId } from "#enums/phase-id";
 import { Stat } from "#enums/stat";
 import { SwitchType } from "#enums/switch-type";
 import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
 import { BypassSpeedChanceModifier } from "#modifier/modifier";
 import { MoveHeaderAttr } from "#moves/move-header-attr";
-import { AttemptCapturePhase } from "#phases/attempt-capture-phase";
-import { AttemptRunPhase } from "#phases/attempt-run-phase";
-import { BerryPhase } from "#phases/berry-phase";
-import { CheckStatusEffectPhase } from "#phases/check-status-effect-phase";
-import { MoveHeaderPhase } from "#phases/move-header-phase";
-import { PostActionPhase } from "#phases/post-action-phase";
-import { RecallPhase } from "#phases/recall-phase";
-import { SwitchPhase } from "#phases/switch-phase";
-import { TerastallizationPhase } from "#phases/terastallization-phase";
-import { TurnEndPhase } from "#phases/turn-end-phase";
-import { WeatherEffectPhase } from "#phases/weather-effect-phase";
 import type { TurnCommandFilter } from "#types/turn-command-filter";
 import type { TurnMove } from "#types/turn-move";
 import { BooleanHolder, isNil } from "#utils/common-utils";
@@ -76,18 +64,12 @@ export interface TurnCommand {
 }
 
 export class TurnCommandManager {
-  /**
-   * The internal {@linkcode TurnCommand} queue.
-   *
-   * NOTE: This is only `public` to facilitate unit tests that override turn order.
-   * Please use this class's API to access and modify turn commands instead
-   * of accessing this array directly.
-   */
-  public turnCommands: TurnCommand[] = [];
-  /** Tracks how many pending turn commands are currently in the phase queue */
-  public commandsInProgress: number = 0;
+  /** The internal {@linkcode TurnCommand} queue. */
+  private turnCommands: TurnCommand[] = [];
   private orderIndex: number = 0;
   private appliedMoveHeaders = false;
+  /** Tracks how many pending turn commands are currently in the phase queue */
+  public commandsInProgress: number = 0;
 
   // #region Public Methods
 
@@ -215,8 +197,9 @@ export class TurnCommandManager {
    */
   public preemptCommand(commandFilter: TurnCommandFilter): boolean {
     const turnCommand = this.tryRemoveCommand(commandFilter);
-    if (!!turnCommand && this.handleCommand(turnCommand)) {
-      turnCommand.pokemon.turnData.order === this.orderIndex++;
+    if (turnCommand && this.handleCommand(turnCommand)) {
+      turnCommand.pokemon.turnData.order = this.orderIndex++;
+      this.commandsInProgress++;
       return true;
     }
     return false;
@@ -252,10 +235,10 @@ export class TurnCommandManager {
   public endTurn(): void {
     const { phaseManager } = globalScene;
     phaseManager.unshiftPhase(
-      new WeatherEffectPhase(),
-      new BerryPhase(),
-      new CheckStatusEffectPhase(),
-      new TurnEndPhase(),
+      phaseManager.createPhase("WeatherEffectPhase"),
+      phaseManager.createPhase("BerryPhase"),
+      phaseManager.createPhase("CheckStatusEffectPhase"),
+      phaseManager.createPhase("TurnEndPhase"),
     );
   }
 
@@ -370,8 +353,9 @@ export class TurnCommandManager {
    */
   private shiftNextCommand(): boolean {
     const nextCommand = this.turnCommands.shift();
-    if (!!nextCommand && this.handleCommand(nextCommand)) {
-      nextCommand.pokemon.turnData.order === this.orderIndex++;
+    if (nextCommand && this.handleCommand(nextCommand)) {
+      nextCommand.pokemon.turnData.order = this.orderIndex++;
+      this.commandsInProgress++;
       return true;
     }
     return false;
@@ -408,14 +392,15 @@ export class TurnCommandManager {
    */
   private handleTeraCommand(turnCommand: TurnCommand): boolean {
     const { pokemon } = turnCommand;
+    const { phaseManager } = globalScene;
     if (!pokemon.isActive(true)) {
       return false;
     }
 
-    globalScene.phaseManager.appendToPhase(
-      PhaseId.POST_ACTION,
-      new TerastallizationPhase(pokemon),
-      new PostActionPhase(pokemon.getBattlerIndex()),
+    phaseManager.appendToPhase(
+      "PostActionPhase",
+      phaseManager.createPhase("TerastallizationPhase", pokemon),
+      phaseManager.createPhase("PostActionPhase", pokemon.getBattlerIndex()),
     );
 
     const newCommand = turnCommand;
@@ -433,6 +418,7 @@ export class TurnCommandManager {
    */
   private handleFightCommand(turnCommand: TurnCommand): boolean {
     const { pokemon, cursor, turnMove, targets } = turnCommand;
+    const { phaseManager } = globalScene;
     if (!pokemon.isActive(true) || !turnMove) {
       return false;
     }
@@ -441,16 +427,18 @@ export class TurnCommandManager {
       pokemon.getMoveset().find((m) => m.moveId === turnMove.move.id && m.ppUsed < m.getMovePp())
       ?? new PokemonMove(turnMove.move.id);
 
-    globalScene.phaseManager.queueMovePhase({
-      pokemon,
-      targets: targets ?? turnMove.targets,
-      move,
-      ignorePp: cursor !== -1 && turnMove.ignorePP,
-      when: "after",
-      phaseId: PhaseId.POST_ACTION,
-    });
-
-    globalScene.phaseManager.appendToPhase(PhaseId.MOVE, new PostActionPhase(pokemon.getBattlerIndex(), true));
+    phaseManager.appendToPhase(
+      "PostActionPhase",
+      phaseManager.createPhase(
+        "MovePhase",
+        pokemon,
+        targets ?? turnMove.targets,
+        move,
+        undefined,
+        cursor !== -1 && turnMove.ignorePP,
+      ),
+      phaseManager.createPhase("PostActionPhase", pokemon.getBattlerIndex(), true),
+    );
 
     return true;
   }
@@ -463,6 +451,7 @@ export class TurnCommandManager {
    */
   private handleBallCommand(turnCommand: TurnCommand): boolean {
     const { pokemon, cursor, targets } = turnCommand;
+    const { phaseManager } = globalScene;
 
     if (isNil(cursor) || isNil(targets)) {
       console.error("Error encountered when trying to throw Pokeball!");
@@ -470,11 +459,12 @@ export class TurnCommandManager {
       return false;
     }
 
-    globalScene.phaseManager.appendToPhase(
-      PhaseId.POST_ACTION,
-      new AttemptCapturePhase(targets[0] % 2, cursor),
-      new PostActionPhase(pokemon.getBattlerIndex()),
+    phaseManager.appendToPhase(
+      "PostActionPhase",
+      phaseManager.createPhase("AttemptCapturePhase", targets[0] % 2, cursor),
+      phaseManager.createPhase("PostActionPhase", pokemon.getBattlerIndex()),
     );
+
     return true;
   }
 
@@ -486,6 +476,7 @@ export class TurnCommandManager {
    */
   private handlePokemonCommand(turnCommand: TurnCommand): boolean {
     const { pokemon, cursor, args } = turnCommand;
+    const { phaseManager } = globalScene;
     if (isNil(cursor)) {
       console.error("Error encountered when trying to switch Pokemon!");
       console.error(turnCommand);
@@ -493,12 +484,14 @@ export class TurnCommandManager {
     }
 
     const switchType = args?.[0] ? SwitchType.BATON_PASS : SwitchType.SWITCH;
-    globalScene.phaseManager.appendToPhase(
-      PhaseId.POST_ACTION,
-      new RecallPhase(pokemon.getBattlerIndex(), switchType),
-      new SwitchPhase(pokemon.getBattlerIndex(), switchType, cursor),
-      new PostActionPhase(pokemon.getBattlerIndex()),
+
+    phaseManager.appendToPhase(
+      "PostActionPhase",
+      phaseManager.createPhase("RecallPhase", pokemon.getBattlerIndex(), switchType),
+      phaseManager.createPhase("SwitchPhase", pokemon.getBattlerIndex(), switchType, cursor),
+      phaseManager.createPhase("PostActionPhase", pokemon.getBattlerIndex()),
     );
+
     return true;
   }
 
@@ -509,6 +502,8 @@ export class TurnCommandManager {
    * @returns `true` if the turn command is scheduled successfully
    */
   private handleRunCommand(turnCommand: TurnCommand): boolean {
+    const { phaseManager } = globalScene;
+
     let runningPokemon = turnCommand.pokemon;
     if (globalScene.currentBattle.double) {
       const playerActivePokemon = globalScene.getField(true).filter((pokemon) => pokemon.isPlayer());
@@ -520,11 +515,13 @@ export class TurnCommandManager {
         runningPokemon = hasRunAway ?? fasterPokemon;
       }
     }
-    globalScene.phaseManager.appendToPhase(
-      PhaseId.POST_ACTION,
-      new AttemptRunPhase(runningPokemon.getFieldIndex()),
-      new PostActionPhase(runningPokemon.getBattlerIndex()),
+
+    phaseManager.appendToPhase(
+      "PostActionPhase",
+      phaseManager.createPhase("AttemptRunPhase", runningPokemon.getFieldIndex()),
+      phaseManager.createPhase("PostActionPhase", runningPokemon.getBattlerIndex()),
     );
+
     return true;
   }
 
@@ -568,7 +565,7 @@ export class TurnCommandManager {
         pokemon.getMoveset().find((mv) => mv.moveId === turnMove.move.id) ?? new PokemonMove(turnMove.move.id);
 
       if (pokemonMove.getMove().hasAttr(MoveHeaderAttr)) {
-        globalScene.phaseManager.unshiftPhase(new MoveHeaderPhase(pokemon, pokemonMove));
+        globalScene.phaseManager.createAndUnshiftPhase("MoveHeaderPhase", pokemon, pokemonMove);
       }
     });
 

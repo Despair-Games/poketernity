@@ -36,25 +36,6 @@ describe("Achv", () => {
     expect(achv.validate(10)).toBe(true);
     expect(conditionFunc).toHaveBeenCalledTimes(2);
   });
-});
-
-describe("MoneyAchv", () => {
-  let phaserGame: Phaser.Game;
-  let game: GameManager;
-
-  beforeAll(() => {
-    phaserGame = new Phaser.Game({
-      type: Phaser.HEADLESS,
-    });
-  });
-
-  afterEach(() => {
-    game.phaseInterceptor.restoreOg();
-  });
-
-  beforeEach(() => {
-    game = new GameManager(phaserGame);
-  });
 
   describe("RibbonAchv", () => {
     let phaserGame: Phaser.Game;

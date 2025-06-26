@@ -1,3 +1,5 @@
+import type { EnumValues } from "#types/enum-values";
+
 export const BiomePoolTier = {
   COMMON: 1,
   UNCOMMON: 2,
@@ -10,4 +12,4 @@ export const BiomePoolTier = {
   BOSS_ULTRA_RARE: 9,
 } as const;
 
-export type BiomePoolTier = (typeof BiomePoolTier)[keyof typeof BiomePoolTier];
+export type BiomePoolTier = EnumValues<typeof BiomePoolTier>;

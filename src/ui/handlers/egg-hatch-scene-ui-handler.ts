@@ -60,7 +60,7 @@ export class EggHatchSceneUiHandler extends UiHandler {
       }
     }
 
-    return globalScene.ui.getMessageHandler().processInput(button);
+    return globalScene.ui.getMessageHandler()?.processInput(button) ?? false;
   }
 
   public override setCursor(_cursor: number): boolean {

@@ -10,7 +10,6 @@ import i18next from "i18next";
 /**
  * Attribute to {@link https://bulbapedia.bulbagarden.net/wiki/Confusion_(status_condition) | confuse}
  * the user or target.
- * @extends AddBattlerTagAttr
  */
 export class ConfuseAttr extends AddBattlerTagAttr {
   constructor(axeKick?: boolean) {
@@ -22,7 +21,8 @@ export class ConfuseAttr extends AddBattlerTagAttr {
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!this.selfTarget && target.isSafeguarded(user)) {
       if (move.category === MoveCategory.STATUS) {
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           i18next.t("moveTriggers:safeguard", { targetName: getPokemonNameWithAffix(target) }),
         );
       }

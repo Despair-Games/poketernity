@@ -11,7 +11,6 @@ import i18next from "i18next";
  * Attribute to copy the target's stat stages onto the user.
  * This also copies critical hit stages from Focus Energy or Lansat Berries.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Psych_Up_(move) | Psych Up}.
- * @extends MoveEffectAttr
  */
 export class CopyStatsAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
@@ -26,7 +25,8 @@ export class CopyStatsAttr extends MoveEffectAttr {
     }
     target.updateInfo();
     user.updateInfo();
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("moveTriggers:copiedStatChanges", {
         pokemonName: getPokemonNameWithAffix(user),
         targetName: getPokemonNameWithAffix(target),

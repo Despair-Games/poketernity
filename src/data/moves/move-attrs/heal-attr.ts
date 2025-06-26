@@ -11,7 +11,6 @@ import i18next from "i18next";
 
 /**
  * Heals the user or target by {@linkcode healRatio} depending on the value of {@linkcode selfTarget}
- * @extends MoveEffectAttr
  */
 export class HealAttr extends MoveEffectAttr {
   /** The percentage of {@linkcode Stat.HP} to heal */
@@ -46,7 +45,8 @@ export class HealAttr extends MoveEffectAttr {
    * This heals the target and shows the appropriate message.
    */
   addHealPhase(target: Pokemon, healRatio: number) {
-    globalScene.phaseManager.queuePokemonHealPhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "PokemonHealPhase",
       target.getBattlerIndex(),
       toDmgValue(target.getMaxHp() * healRatio),
       {

@@ -91,6 +91,7 @@ const namespaceMap = {
   battleSpecDialogue: "dialogue-final-boss",
   splashMessages: "splash-texts",
   mysteryEncounterMessages: "mystery-encounter-texts",
+  biome: "biomes",
 };
 
 //#region Functions

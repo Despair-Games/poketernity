@@ -1,7 +1,7 @@
 // -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { IMysteryEncounter } from "#mystery-encounters/mystery-encounter";
-/* eslint-enable @typescript-eslint/no-unused-vars */
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 // -- end tsdoc imports --
 
 import type Battle from "#app/battle";
@@ -20,7 +20,6 @@ import type { TrainerConfig } from "#data/trainer-config";
 import type { Variant } from "#data/variant";
 import type { AiType } from "#enums/ai-type";
 import { BattleType } from "#enums/battle-type";
-import { BattlerIndex } from "#enums/battler-index";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import { BiomeId } from "#enums/biome-id";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
@@ -33,7 +32,6 @@ import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import type { Nature } from "#enums/nature";
 import type { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
-import { PhaseId } from "#enums/phase-id";
 import { StatusEffect } from "#enums/status-effect";
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { TrainerType } from "#enums/trainer-type";
@@ -54,15 +52,6 @@ import {
 import { modifierTypes } from "#modifier/modifier-types";
 import { showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import type MysteryEncounterOption from "#mystery-encounters/mystery-encounter-option";
-import { BattleEndPhase } from "#phases/battle-end-phase";
-import { EggLapsePhase } from "#phases/egg-lapse-phase";
-import { MysteryEncounterBattlePhase } from "#phases/mystery-encounter-phases/battle-phase";
-import { MysteryEncounterBattleStartCleanupPhase } from "#phases/mystery-encounter-phases/battle-start-cleanup-phase";
-import { MysteryEncounterPhase } from "#phases/mystery-encounter-phases/mystery-encounter-phase";
-import { MysteryEncounterRewardsPhase } from "#phases/mystery-encounter-phases/rewards-phase";
-import { PartyExpPhase } from "#phases/party-exp-phase";
-import { SelectModifierPhase } from "#phases/select-modifier-phase";
-import { TrainerVictoryPhase } from "#phases/trainer-victory-phase";
 import type PokemonData from "#system/pokemon-data";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import type { HeldModifierConfig } from "#types/held-modifier-config";
@@ -443,7 +432,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
     console.log("Moveset:", moveset);
   });
 
-  globalScene.phaseManager.pushPhase(new MysteryEncounterBattlePhase(partyConfig.disableSwitch));
+  globalScene.phaseManager.createAndPushPhase("MysteryEncounterBattlePhase", partyConfig.disableSwitch);
 
   await Promise.all(loadEnemyAssets);
   battle.enemyParty.forEach((enemyPokemon_2, e_1) => {
@@ -495,15 +484,17 @@ export function updatePlayerMoney(changeValue: number, playSound: boolean = true
   }
   if (showMessage) {
     if (changeValue < 0) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("mysteryEncounterMessages:paid_money", { amount: -changeValue }),
-        null,
+        undefined,
         true,
       );
     } else {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("mysteryEncounterMessages:receive_money", { amount: changeValue }),
-        null,
+        undefined,
         true,
       );
     }
@@ -790,9 +781,11 @@ export function setEncounterRewards(
     }
 
     if (customShopRewards) {
-      globalScene.phaseManager.unshiftPhase(new SelectModifierPhase({ customModifierSettings: customShopRewards }));
+      globalScene.phaseManager.createAndUnshiftPhase("SelectModifierPhase", {
+        customModifierSettings: customShopRewards,
+      });
     } else {
-      globalScene.phaseManager.tryRemovePhase((p) => p.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER));
+      globalScene.phaseManager.tryRemovePhase((p) => p.is("SelectModifierPhase"));
     }
 
     if (eggRewards) {
@@ -830,7 +823,12 @@ export function setEncounterExp(participantId: number | number[], baseExpValue: 
   const participantIds = coerceArray(participantId);
 
   globalScene.currentBattle.mysteryEncounter!.doEncounterExp = () => {
-    globalScene.phaseManager.unshiftPhase(new PartyExpPhase(baseExpValue, useWaveIndex, new Set(participantIds)));
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "PartyExpPhase",
+      baseExpValue,
+      useWaveIndex,
+      new Set(participantIds),
+    );
 
     return true;
   };
@@ -852,7 +850,7 @@ export class OptionSelectSettings {
  * @param optionSelectSettings - The initial OptionSelectSettings being passed to the new ME
  */
 export function initSubsequentOptionSelect(optionSelectSettings: OptionSelectSettings) {
-  globalScene.phaseManager.pushPhase(new MysteryEncounterPhase(optionSelectSettings));
+  globalScene.phaseManager.createAndPushPhase("MysteryEncounterPhase", optionSelectSettings);
 }
 
 /**
@@ -878,9 +876,10 @@ export function leaveEncounterWithoutBattle(
  */
 export function handleMysteryEncounterVictory(addHealPhase: boolean = false, doNotContinue: boolean = false) {
   const allowedPkm = globalScene.getPlayerParty().filter((pkm) => pkm.isAllowedInBattle());
+  const { phaseManager } = globalScene;
 
   if (allowedPkm.length === 0) {
-    globalScene.phaseManager.queueGameOverPhase({ clearPhaseQueue: true });
+    phaseManager.queueGameOverPhase({ clearPhaseQueue: true });
     return;
   }
 
@@ -891,7 +890,10 @@ export function handleMysteryEncounterVictory(addHealPhase: boolean = false, doN
     return;
   }
   if (encounter.encounterMode === MysteryEncounterMode.NO_BATTLE) {
-    globalScene.phaseManager.pushPhase(new MysteryEncounterRewardsPhase(addHealPhase), new EggLapsePhase());
+    phaseManager.pushPhase(
+      phaseManager.createPhase("MysteryEncounterRewardsPhase", addHealPhase),
+      phaseManager.createPhase("EggLapsePhase"),
+    );
   } else if (
     // If any enemy Pokemon are still alive on the field or waiting for its fainting animation, do not advance a wave.
     // Also, if the enemy is a Trainer with other Pokemon alive in their party backline, do not advance a wave.
@@ -902,15 +904,15 @@ export function handleMysteryEncounterVictory(addHealPhase: boolean = false, doN
           p && (p.isOnField() || (encounter.encounterMode === MysteryEncounterMode.TRAINER_BATTLE && !p.isFainted())),
       )
   ) {
-    globalScene.phaseManager.pushPhase(new BattleEndPhase(true));
+    globalScene.phaseManager.createAndPushPhase("BattleEndPhase", true);
     if (encounter.encounterMode === MysteryEncounterMode.TRAINER_BATTLE) {
-      globalScene.phaseManager.pushPhase(new TrainerVictoryPhase());
+      globalScene.phaseManager.createAndPushPhase("TrainerVictoryPhase");
     }
     if (globalScene.gameMode.isEndless || !globalScene.gameMode.isWaveFinal(globalScene.currentBattle.waveIndex)) {
-      globalScene.phaseManager.pushPhase(new MysteryEncounterRewardsPhase(addHealPhase));
+      globalScene.phaseManager.createAndPushPhase("MysteryEncounterRewardsPhase", addHealPhase);
       if (!encounter.doContinueEncounter) {
         // Only lapse eggs once for multi-battle encounters
-        globalScene.phaseManager.pushPhase(new EggLapsePhase());
+        globalScene.phaseManager.createAndPushPhase("EggLapsePhase");
       }
     }
   }
@@ -936,14 +938,14 @@ export function handleMysteryEncounterBattleFailed(addHealPhase: boolean = false
     return;
   }
   if (encounter.encounterMode !== MysteryEncounterMode.NO_BATTLE) {
-    globalScene.phaseManager.pushPhase(new BattleEndPhase(false));
+    globalScene.phaseManager.createAndPushPhase("BattleEndPhase", false);
   }
 
-  globalScene.phaseManager.pushPhase(new MysteryEncounterRewardsPhase(addHealPhase));
+  globalScene.phaseManager.createAndPushPhase("MysteryEncounterRewardsPhase", addHealPhase);
 
   if (!encounter.doContinueEncounter) {
     // Only lapse eggs once for multi-battle encounters
-    globalScene.phaseManager.pushPhase(new EggLapsePhase());
+    globalScene.phaseManager.createAndPushPhase("EggLapsePhase");
   }
 }
 
@@ -961,21 +963,11 @@ export function handleMysteryEncounterBattleStartEffects() {
   ) {
     const effects = encounter.startOfBattleEffects;
     effects.forEach((effect) => {
-      let source;
+      let source: Pokemon;
       if (effect.sourcePokemon) {
         source = effect.sourcePokemon;
       } else if (!isNil(effect.sourceBattlerIndex)) {
-        if (effect.sourceBattlerIndex === BattlerIndex.ATTACKER) {
-          source = globalScene.getEnemyField()[0];
-        } else if (effect.sourceBattlerIndex === BattlerIndex.ENEMY) {
-          source = globalScene.getEnemyField()[0];
-        } else if (effect.sourceBattlerIndex === BattlerIndex.ENEMY_2) {
-          source = globalScene.getEnemyField()[1];
-        } else if (effect.sourceBattlerIndex === BattlerIndex.PLAYER) {
-          source = globalScene.getPlayerField()[0];
-        } else if (effect.sourceBattlerIndex === BattlerIndex.PLAYER_2) {
-          source = globalScene.getPlayerField()[1];
-        }
+        source = globalScene.getPokemonByBattlerIndex(effect.sourceBattlerIndex) ?? globalScene.getEnemyField()[0];
       } else {
         source = globalScene.getEnemyField()[0];
       }
@@ -990,7 +982,7 @@ export function handleMysteryEncounterBattleStartEffects() {
     });
 
     // Pseudo turn end phase to reset flinch states, Endure, etc.
-    globalScene.phaseManager.pushPhase(new MysteryEncounterBattleStartCleanupPhase());
+    globalScene.phaseManager.createAndPushPhase("MysteryEncounterBattleStartCleanupPhase");
 
     encounter.startOfBattleEffectsComplete = true;
   }

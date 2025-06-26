@@ -4,9 +4,6 @@ import { SwitchType } from "#enums/switch-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import { RevivalBlessingPhase } from "#phases/revival-blessing-phase";
-import { SummonPhase } from "#phases/summon-phase";
-import { SwitchPhase } from "#phases/switch-phase";
 import type { MoveConditionFunc } from "#types/move-condition-func";
 import { toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
@@ -14,7 +11,6 @@ import i18next from "i18next";
 /**
  * Attribute to revive a Pokemon in the user's party to 50% HP.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Revival_Blessing_(move) | Revival Blessing}
- * @extends MoveEffectAttr
  */
 export class RevivalBlessingAttr extends MoveEffectAttr {
   constructor() {
@@ -24,7 +20,7 @@ export class RevivalBlessingAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
     // If user is player, checks if the user has fainted pokemon
     if (user.isPlayer()) {
-      globalScene.phaseManager.unshiftPhase(new RevivalBlessingPhase(user));
+      globalScene.phaseManager.createAndUnshiftPhase("RevivalBlessingPhase", user);
       return true;
     }
     if (user.isEnemy()) {
@@ -33,23 +29,26 @@ export class RevivalBlessingAttr extends MoveEffectAttr {
       const faintedPokemon = globalScene.getEnemyParty().filter((p) => p.isFainted() && !p.isBoss());
       const pokemon = faintedPokemon[user.randSeedInt(faintedPokemon.length)];
       const slotIndex = globalScene.getEnemyParty().findIndex((p) => pokemon.id === p.id);
+      const { currentBattle, phaseManager } = globalScene;
+
       pokemon.resetStatus();
       pokemon.heal(Math.min(toDmgValue(0.5 * pokemon.getMaxHp()), pokemon.getMaxHp()));
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("moveTriggers:revivalBlessing", { pokemonName: getPokemonNameWithAffix(pokemon) }),
         0,
         true,
       );
 
-      if (globalScene.currentBattle.double && globalScene.getEnemyParty().length > 1) {
+      if (currentBattle.double && globalScene.getEnemyParty().length > 1) {
         const allyPokemon = user.getAlly();
         if (slotIndex <= 1) {
-          globalScene.phaseManager.unshiftPhase(new SummonPhase(pokemon.getBattlerIndex()));
+          phaseManager.createAndUnshiftPhase("SummonPhase", pokemon.getBattlerIndex());
         } else if (allyPokemon?.isFainted()) {
           globalScene.phaseManager.unshiftPhase(
             // SummonPhase is queued separately from SwitchPhase to disable the Enemy Trainer anim
-            new SwitchPhase(allyPokemon.getBattlerIndex(), SwitchType.SWITCH, slotIndex, false),
-            new SummonPhase(allyPokemon.getBattlerIndex(), false, false),
+            phaseManager.createPhase("SwitchPhase", allyPokemon.getBattlerIndex(), SwitchType.SWITCH, slotIndex, false),
+            phaseManager.createPhase("SummonPhase", allyPokemon.getBattlerIndex(), false, false),
           );
         }
       }

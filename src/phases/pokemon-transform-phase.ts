@@ -1,24 +1,21 @@
 import { globalScene } from "#app/global-scene";
-import type { BattlerIndex } from "#enums/battler-index";
+import type { FieldBattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { PhaseId } from "#enums/phase-id";
 import { BATTLE_STATS, EFFECTIVE_STATS } from "#enums/stat";
 import { PokemonMove } from "#field/pokemon-move";
-import { PokemonPhase } from "#phases/abstract-pokemon-phase";
+import { PokemonPhase } from "#phases/base/pokemon-phase";
 
 /**
  * Transforms a Pokemon into another Pokemon on the field.
- * Used for Transform (move) and Imposter (ability)
- *
- * @extends PokemonPhase
+ * Used for Transform (move) and Imposter (ability).
  */
 export class PokemonTransformPhase extends PokemonPhase {
-  override readonly id = PhaseId.POKEMON_TRANSFORM;
+  public override readonly phaseName = "PokemonTransformPhase";
 
-  protected readonly targetIndex: BattlerIndex;
+  protected readonly targetIndex: FieldBattlerIndex;
   private readonly playSound: boolean;
 
-  constructor(userIndex: BattlerIndex, targetIndex: BattlerIndex, playSound: boolean = false) {
+  constructor(userIndex: FieldBattlerIndex, targetIndex: FieldBattlerIndex, playSound: boolean = false) {
     super(userIndex);
 
     this.targetIndex = targetIndex;
@@ -30,7 +27,8 @@ export class PokemonTransformPhase extends PokemonPhase {
     const target = globalScene.getField(true).find((p) => p.getBattlerIndex() === this.targetIndex);
 
     if (!target) {
-      return this.end();
+      this.end();
+      return;
     }
 
     user.summonData.speciesForm = target.getSpeciesForm();

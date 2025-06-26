@@ -3,10 +3,9 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { MOVE_LOCK_TAG_TYPES } from "#constants/battler-tag-constants";
 import { BattleStyle } from "#enums/battle-style";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import { UiMode } from "#enums/ui-mode";
-import { BattlePhase } from "#phases/abstract-battle-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
 import { settings } from "#system/settings-manager";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
@@ -19,10 +18,9 @@ import { SummonPhase } from "#phases/summon-phase";
 
 /**
  * Handles the prompt to switch pokemon at the start of a battle when the player is playing in Switch mode
- * @extends BattlePhase
  */
 export class CheckSwitchPhase extends BattlePhase {
-  override readonly id = PhaseId.CHECK_SWITCH;
+  public override readonly phaseName = "CheckSwitchPhase";
 
   protected readonly fieldIndex: number;
   /** Whether to use the pokemon's name or "Pokemon" when displaying the dialog box */
@@ -39,6 +37,7 @@ export class CheckSwitchPhase extends BattlePhase {
     super.start();
 
     const pokemon = globalScene.getPlayerField()[this.fieldIndex];
+    const { field, phaseManager, ui } = globalScene;
 
     // End this phase early...
 
@@ -49,8 +48,8 @@ export class CheckSwitchPhase extends BattlePhase {
     }
 
     // ...if the checked Pokemon is somehow not on the field
-    if (globalScene.field.getAll().indexOf(pokemon) === -1) {
-      globalScene.phaseManager.unshiftPhase(new SummonPhase(pokemon.getBattlerIndex()));
+    if (field.getAll().indexOf(pokemon) === -1) {
+      phaseManager.createAndUnshiftPhase("SummonPhase", pokemon.getBattlerIndex());
       this.end();
       return;
     }
@@ -76,7 +75,7 @@ export class CheckSwitchPhase extends BattlePhase {
       return;
     }
 
-    globalScene.ui.showText(
+    ui.showText(
       i18next.t("battle:switchQuestion", {
         pokemonName: this.useName ? getPokemonNameWithAffix(pokemon) : i18next.t("battle:pokemon"),
       }),
@@ -89,8 +88,8 @@ export class CheckSwitchPhase extends BattlePhase {
               .then(([cursor, option]) => {
                 if (option !== PartyOption.CANCEL) {
                   globalScene.phaseManager.unshiftPhase(
-                    new RecallPhase(pokemon.getBattlerIndex(), SwitchType.INITIAL_SWITCH),
-                    new SwitchPhase(pokemon.getBattlerIndex(), SwitchType.INITIAL_SWITCH, cursor),
+                    phaseManager.createPhase("RecallPhase", pokemon.getBattlerIndex(), SwitchType.INITIAL_SWITCH),
+                    phaseManager.createPhase("SwitchPhase", pokemon.getBattlerIndex(), SwitchType.INITIAL_SWITCH, cursor),
                   );
                   this.end();
                 } else {

@@ -1,7 +1,7 @@
 // -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { TYPE_IMMUNE_TAG_TYPES } from "#constants/battler-tag-constants";
-/* eslint-enable @typescript-eslint/no-unused-vars */
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 // -- end tsdoc imports --
 
 import { globalScene } from "#app/global-scene";
@@ -30,7 +30,8 @@ export class FloatingTag extends TypeImmuneTag {
     super.onAdd(pokemon);
 
     if (this.sourceMoveId === MoveId.MAGNET_RISE) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("battlerTags:magnetRisenOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
     }
@@ -39,7 +40,8 @@ export class FloatingTag extends TypeImmuneTag {
   override onRemove(pokemon: Pokemon): void {
     super.onRemove(pokemon);
     if (this.sourceMoveId === MoveId.MAGNET_RISE) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("battlerTags:magnetRisenOnRemove", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
     }

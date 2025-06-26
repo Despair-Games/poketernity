@@ -6,14 +6,12 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
-import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import i18next from "i18next";
 
 /**
  * Tag that applies the effects of Syrup Bomb to the target Pokemon.
  * For three turns, starting from the turn of hit, at the end of each turn, the target Pokemon's speed will decrease by 1.
  * The tag can also expire by taking the target Pokemon off the field, or the Pokemon that originally used the move.
- * @extends BattlerTag
  */
 export class SyrupBombTag extends BattlerTag {
   constructor(sourceId: number) {
@@ -26,7 +24,8 @@ export class SyrupBombTag extends BattlerTag {
    */
   override onAdd(pokemon: Pokemon) {
     super.onAdd(pokemon);
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:syrupBombOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }
@@ -42,13 +41,19 @@ export class SyrupBombTag extends BattlerTag {
       return false;
     }
     // Custom message in lieu of an animation in mainline
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:syrupBombLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
-    globalScene.phaseManager.unshiftPhase(
-      new StatStageChangePhase(pokemon.getBattlerIndex(), this.getSourcePokemon(), [Stat.SPD], -1, {
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "StatStageChangePhase",
+      pokemon.getBattlerIndex(),
+      this.getSourcePokemon(),
+      [Stat.SPD],
+      -1,
+      {
         bypassReflect: true,
-      }),
+      },
     );
     return --this.turnCount > 0;
   }

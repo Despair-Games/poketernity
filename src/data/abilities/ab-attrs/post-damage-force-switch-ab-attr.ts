@@ -9,12 +9,10 @@ import { AbilityId } from "#enums/ability-id";
 import { BattleType } from "#enums/battle-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
-import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import { SwitchPhase } from "#phases/switch-phase";
 import { BooleanHolder, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
@@ -25,7 +23,6 @@ import i18next from "i18next";
  *
  * Used by Wimp Out and Emergency Exit
  *
- * @extends PostDamageAbAttr
  * @see {@linkcode applyPostDamage}
  */
 export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
@@ -149,9 +146,11 @@ class ForceSwitchOutHelper {
 
       if (switchOutTarget.hp > 0) {
         switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
-        globalScene.phaseManager.prependToPhase(
-          PhaseId.POST_ACTION,
-          new SwitchPhase(switchOutTarget.getBattlerIndex(), this.switchType),
+        globalScene.phaseManager.createAndPrependPhase(
+          "PostActionPhase",
+          "SwitchPhase",
+          switchOutTarget.getBattlerIndex(),
+          this.switchType,
         );
         return true;
       }
@@ -168,7 +167,7 @@ class ForceSwitchOutHelper {
         globalScene.phaseManager.queueBattlerSwitchOut(switchOutTarget.getBattlerIndex(), {
           switchType: this.switchType,
           when: "before",
-          phaseId: PhaseId.POST_ACTION,
+          phaseKey: "PostActionPhase",
         });
         return true;
       }
@@ -185,9 +184,10 @@ class ForceSwitchOutHelper {
 
       if (switchOutTarget.hp > 0) {
         switchOutTarget.leaveField(false);
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           i18next.t("moveTriggers:fled", { pokemonName: getPokemonNameWithAffix(switchOutTarget) }),
-          null,
+          undefined,
           true,
           500,
         );

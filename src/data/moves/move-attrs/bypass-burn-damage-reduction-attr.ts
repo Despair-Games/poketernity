@@ -6,7 +6,6 @@ import type { BooleanHolder } from "#utils/common-utils";
 /**
  * Attribute used for moves that bypass the burn damage reduction of physical moves when calculating damage.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Facade_(move) | Facade}.
- * @extends MoveAttr
  */
 export class BypassBurnDamageReductionAttr extends MoveAttr {
   /** Prevents the move's damage from being reduced by burn

@@ -1,5 +1,5 @@
 import { SpeciesId } from "#enums/species-id";
-import { EggTier } from "#enums/egg-type";
+import { EggTier } from "#enums/egg-tier";
 
 /**
  * Map of all starters and their respective {@linkcode EggTier}, which determines the type of egg the starter hatches from.

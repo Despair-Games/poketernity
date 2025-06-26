@@ -8,19 +8,15 @@ import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitResult } from "#enums/hit-result";
 import { MoveId } from "#enums/move-id";
-import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeManualTrigger } from "#form-change-triggers/species-form-change-manual-trigger";
-import type { MoveEffectPhase } from "#phases/move-effect-phase";
-import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import { BooleanHolder, toDmgValue } from "#utils/common-utils";
 
 /**
  * Battler tag for Gulp Missile used by Cramorant.
- * @extends BattlerTag
  */
 export class GulpMissileTag extends BattlerTag {
   constructor(tagType: BattlerTagType, sourceMoveId: MoveId) {
@@ -33,7 +29,7 @@ export class GulpMissileTag extends BattlerTag {
     }
 
     const moveEffectPhase = globalScene.phaseManager.getCurrentPhase();
-    if (moveEffectPhase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT)) {
+    if (moveEffectPhase?.is("MoveEffectPhase")) {
       const attacker = moveEffectPhase.getUserPokemon();
 
       if (!attacker) {
@@ -54,8 +50,12 @@ export class GulpMissileTag extends BattlerTag {
       }
 
       if (this.tagType === BattlerTagType.GULP_MISSILE_ARROKUDA) {
-        globalScene.phaseManager.unshiftPhase(
-          new StatStageChangePhase(attacker.getBattlerIndex(), pokemon, [Stat.DEF], -1),
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "StatStageChangePhase",
+          attacker.getBattlerIndex(),
+          pokemon,
+          [Stat.DEF],
+          -1,
         );
       } else {
         attacker.trySetStatus(StatusEffect.PARALYSIS, true, pokemon);

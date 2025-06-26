@@ -3,11 +3,9 @@ import { globalScene } from "#app/global-scene";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { BattleStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
-import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 
 /**
  * Used by Ogerpon's Embody Aspect ability.
- * @extends AbAttr
  */
 export class PostTeraFormChangeStatChangeAbAttr extends AbAttr {
   private readonly stats: BattleStat[];
@@ -23,8 +21,12 @@ export class PostTeraFormChangeStatChangeAbAttr extends AbAttr {
 
   public override apply(pokemon: Pokemon, simulated: boolean): boolean {
     if (!simulated) {
-      globalScene.phaseManager.unshiftPhase(
-        new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, this.stats, this.stages),
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "StatStageChangePhase",
+        pokemon.getBattlerIndex(),
+        pokemon,
+        this.stats,
+        this.stages,
       );
     }
 

@@ -1,5 +1,5 @@
 import { AbilityId } from "#enums/ability-id";
-import { BattlerIndex } from "#enums/battler-index";
+import { BattlerIndex, type FieldBattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
@@ -78,7 +78,9 @@ describe("Moves - Encore", () => {
 
       game.move.select(MoveId.ENCORE);
 
-      const turnOrder = delay ? [BattlerIndex.PLAYER, BattlerIndex.ENEMY] : [BattlerIndex.ENEMY, BattlerIndex.PLAYER];
+      const turnOrder: FieldBattlerIndex[] = delay
+        ? [BattlerIndex.PLAYER, BattlerIndex.ENEMY]
+        : [BattlerIndex.ENEMY, BattlerIndex.PLAYER];
       game.setTurnOrder(turnOrder);
 
       await game.toEndOfTurn();
@@ -88,7 +90,7 @@ describe("Moves - Encore", () => {
   });
 
   it("Pokemon under both Encore and Torment should alternate between Struggle and restricted move", async () => {
-    const turnOrder = [BattlerIndex.ENEMY, BattlerIndex.PLAYER];
+    const turnOrder: FieldBattlerIndex[] = [BattlerIndex.ENEMY, BattlerIndex.PLAYER];
     game.override.moveset([MoveId.ENCORE, MoveId.TORMENT, MoveId.SPLASH]);
     await game.classicMode.startBattle(SpeciesId.FEEBAS);
 

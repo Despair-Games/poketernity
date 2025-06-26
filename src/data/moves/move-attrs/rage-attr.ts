@@ -10,7 +10,6 @@ import i18next from "i18next";
 /**
  * Attribute to apply the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Rage_(move) | Rage}.
  * If the user is attacked while rage is active they will gain +1 atk boost.
- * @extends MoveEffectAttr
  */
 export class RageAttr extends MoveEffectAttr {
   constructor() {
@@ -18,7 +17,8 @@ export class RageAttr extends MoveEffectAttr {
   }
 
   override applyEffect(user: Pokemon, _target: Pokemon, move: Move): boolean {
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       `${i18next.t("moveTriggers:rageIsBuilding", { pokemonName: getPokemonNameWithAffix(user) })}`,
     );
     user.addTag(BattlerTagType.RAGE, undefined, move.id, user.id);

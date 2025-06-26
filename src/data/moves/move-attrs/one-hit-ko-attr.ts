@@ -10,7 +10,6 @@ import { BooleanHolder } from "#utils/common-utils";
 /**
  * Attribute to mark a move as a {@link https://bulbapedia.bulbagarden.net/wiki/One-hit_knockout_move | one-hit knockout}
  * if the target is not a Boss Pokemon.
- * @extends MoveAttr
  */
 export class OneHitKOAttr extends MoveAttr {
   /**

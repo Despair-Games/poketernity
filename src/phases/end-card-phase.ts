@@ -1,7 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
-import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
 import { TextStyle } from "#enums/text-style";
 import { settings } from "#system/settings-manager";
@@ -10,11 +9,10 @@ import i18next from "i18next";
 
 /**
  * Displays the End Card after a classic run ends in victory.
- *
- * @extends Phase
  */
 export class EndCardPhase extends Phase {
-  override readonly id = PhaseId.END_CARD;
+  public override readonly phaseName = "EndCardPhase";
+
   public endCard: Phaser.GameObjects.Image;
   public text: Phaser.GameObjects.Text;
 
@@ -22,9 +20,10 @@ export class EndCardPhase extends Phase {
     super.start();
 
     const { field, ui } = globalScene;
+    const messageHandler = ui.getMessageHandler();
 
-    ui.getMessageHandler().bg.setVisible(false);
-    ui.getMessageHandler().nameBoxContainer.setVisible(false);
+    messageHandler?.bg.setVisible(false);
+    messageHandler?.nameBoxContainer.setVisible(false);
 
     this.endCard = globalScene.add.image(
       0,
@@ -50,7 +49,7 @@ export class EndCardPhase extends Phase {
         "",
         null,
         () => {
-          ui.getMessageHandler().bg.setVisible(true);
+          messageHandler?.bg.setVisible(true);
           this.end();
         },
         null,

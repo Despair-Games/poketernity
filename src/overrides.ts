@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { PokeballCounts } from "#app/battle-scene";
 import { Variant } from "#data/variant";
 import { AbilityId } from "#enums/ability-id";
 import { BerryType } from "#enums/berry-type";
 import { BiomeId } from "#enums/biome-id";
-import { EggTier } from "#enums/egg-type";
+import { EggTier } from "#enums/egg-tier";
 import { ElementalType } from "#enums/elemental-type";
 import { EvolutionItem } from "#enums/evolution-item";
 import { FormChangeItem } from "#enums/form-change-item";
@@ -28,8 +27,7 @@ import type { ModifierOverride } from "#modifier/modifier-type";
 
 /**
  * This comment block exists to prevent IDEs from automatically removing unused imports
- * {@linkcode BerryType}, {@linkcode ElementalType}, {@linkcode EvolutionItem}
- * {@linkcode FormChangeItem}, {@linkcode Stat}, {@linkcode Arena}
+ * {@linkcode BerryType}, {@linkcode EvolutionItem} {@linkcode FormChangeItem}, {@linkcode Stat}
  */
 /**
  * Overrides that are used to test different in game situations

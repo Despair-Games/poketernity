@@ -33,7 +33,6 @@ import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import { MoveRequirement } from "#mystery-encounters/mystery-encounter-requirements";
 import { STEALING_MOVES } from "#mystery-encounters/requirement-groups";
-import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import PokemonData from "#system/pokemon-data";
 import { randSeedInt } from "#utils/random-utils";
 
@@ -83,8 +82,12 @@ export const FightOrFlightEncounter: MysteryEncounter = MysteryEncounterBuilder.
             queueEncounterMessage(`${namespace}:option.1.stat_boost`);
             // Randomly boost 1 stat 2 stages
             // Cannot boost Spd, Acc, or Evasion
-            globalScene.phaseManager.unshiftPhase(
-              new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [randSeedInt(4, 1)], 2),
+            globalScene.phaseManager.createAndUnshiftPhase(
+              "StatStageChangePhase",
+              pokemon.getBattlerIndex(),
+              pokemon,
+              [randSeedInt(4, 1)],
+              2,
             );
           },
         },

@@ -1,15 +1,15 @@
 // -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { initCommonAnims } from "#init/init-common-anims";
 import type { initEncounterAnims } from "#init/init-encounter-anims";
-/* eslint-enable @typescript-eslint/no-unused-vars */
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 // -- end tsdoc imports --
 
 import type { LegacyAnimConfig } from "#animations/anim-config";
 import { commonAnims } from "#animations/common-anims";
 import { encounterAnims } from "#animations/encounter-anims";
 import { globalScene } from "#app/global-scene";
-import { ImagesFolder } from "#enums/images-folders";
+import { ImagesFolder } from "#enums/images-folder";
 import type { SceneBase } from "#app/scene-base";
 
 export function loadAnimAssets(anims: LegacyAnimConfig[], startLoad?: boolean): Promise<void> {

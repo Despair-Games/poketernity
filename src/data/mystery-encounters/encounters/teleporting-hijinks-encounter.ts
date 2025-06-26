@@ -33,7 +33,6 @@ import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import { MoneyRequirement, WaveModulusRequirement } from "#mystery-encounters/mystery-encounter-requirements";
-import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import PokemonData from "#system/pokemon-data";
 import { randSeedInt } from "#utils/random-utils";
 
@@ -215,8 +214,12 @@ async function doBiomeTransitionDialogueAndBattleInit() {
         tags: [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON],
         mysteryEncounterBattleEffects: (pokemon: Pokemon) => {
           queueEncounterMessage(`${namespace}:boss_enraged`);
-          globalScene.phaseManager.unshiftPhase(
-            new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, statChangesForBattle, 1),
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "StatStageChangePhase",
+            pokemon.getBattlerIndex(),
+            pokemon,
+            statChangesForBattle,
+            1,
           );
         },
       },

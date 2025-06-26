@@ -1,9 +1,12 @@
+import { ReceivedTypeDamageMultiplierAbAttr } from "#abilities/received-type-damage-multiplier-ab-attr";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/test-utils/game-manager";
+import { toDmgValue } from "#utils/common-utils";
 import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("Abilities - Dry Skin", () => {
   let phaserGame: Phaser.Game;
@@ -27,131 +30,126 @@ describe("Abilities - Dry Skin", () => {
       .enemyAbility(AbilityId.DRY_SKIN)
       .enemyMoveset(MoveId.SPLASH)
       .enemySpecies(SpeciesId.CHARMANDER)
-      .ability(AbilityId.BALL_FETCH)
-      .moveset([MoveId.SUNNY_DAY, MoveId.RAIN_DANCE, MoveId.SPLASH, MoveId.WATER_GUN]);
+      .ability(AbilityId.BALL_FETCH);
   });
 
-  it("during sunlight, lose 1/8 of maximum health at the end of each turn", async () => {
-    await game.classicMode.startBattle(SpeciesId.CHANDELURE);
+  it.each([
+    ["Harsh Sunlight", WeatherType.SUNNY],
+    ["Extremely Harsh Sunlight", WeatherType.HARSH_SUN],
+  ])("loses 1/8 of max health in '%s' weather, at the end of each turn", async (_name, weather) => {
+    const { override, classicMode, field, move } = game;
+    override.weather(weather);
 
-    const enemy = game.scene.getEnemyPokemon()!;
-
-    // first turn
-    game.move.select(MoveId.SUNNY_DAY);
+    await classicMode.startBattle(SpeciesId.CHANDELURE);
+    const enemy = field.getEnemyPokemon();
+    move.use(MoveId.SPLASH);
     await game.toEndOfTurn();
-    expect(enemy.hp).toBeLessThan(enemy.getMaxHp());
 
-    // second turn
-    enemy.hp = enemy.getMaxHp();
-    game.move.select(MoveId.SPLASH);
-    await game.toEndOfTurn();
-    expect(enemy.hp).toBeLessThan(enemy.getMaxHp());
+    expect(enemy).toHaveTakenDamage(enemy.getMaxHp() / 8);
   });
 
-  it("during rain, gain 1/8 of maximum health at the end of each turn", async () => {
-    await game.classicMode.startBattle(SpeciesId.CHANDELURE);
+  it.each([
+    ["Rain", WeatherType.RAIN],
+    ["Heavy Rain", WeatherType.HEAVY_RAIN],
+  ])("gains 1/8 of max health in '%s' weather, at the end of each turn", async (_name, weather) => {
+    const { override, classicMode, field, move } = game;
+    override.weather(weather);
 
-    const enemy = game.scene.getEnemyPokemon()!;
-
+    await classicMode.startBattle(SpeciesId.CHANDELURE);
+    const enemy = field.getEnemyPokemon();
     enemy.hp = 1;
-
-    // first turn
-    game.move.select(MoveId.RAIN_DANCE);
+    move.use(MoveId.SPLASH);
     await game.toEndOfTurn();
-    expect(enemy.hp).toBeGreaterThan(1);
 
-    // second turn
-    enemy.hp = 1;
-    game.move.select(MoveId.SPLASH);
-    await game.toEndOfTurn();
-    expect(enemy.hp).toBeGreaterThan(1);
+    expect(enemy).toHaveHp(toDmgValue(enemy.getMaxHp() / 8) + 1);
   });
 
   it("opposing fire attacks do 25% more damage", async () => {
-    game.override.moveset([MoveId.FLAMETHROWER]);
-    await game.classicMode.startBattle(SpeciesId.CHANDELURE);
-
-    const enemy = game.scene.getEnemyPokemon()!;
     const initialHP = 1000;
-    enemy.hp = initialHP;
+    const { override, classicMode, field, move } = game;
+    vi.spyOn(ReceivedTypeDamageMultiplierAbAttr.prototype, "apply");
+
+    await classicMode.startBattle(SpeciesId.CHANDELURE);
+    const enemy = field.getEnemyPokemon();
 
     // first turn
-    game.move.select(MoveId.FLAMETHROWER);
+    enemy.hp = initialHP;
+    move.use(MoveId.FLAMETHROWER);
     await game.toEndOfTurn();
     const fireDamageTakenWithDrySkin = initialHP - enemy.hp;
 
-    enemy.hp = initialHP;
-    game.override.enemyAbility(AbilityId.NONE);
-
     // second turn
-    game.move.select(MoveId.FLAMETHROWER);
+    enemy.hp = initialHP;
+    override.enemyAbility(AbilityId.NONE);
+    move.use(MoveId.FLAMETHROWER);
     await game.toEndOfTurn();
     const fireDamageTakenWithoutDrySkin = initialHP - enemy.hp;
+    const expectedPreToDmgValue = fireDamageTakenWithoutDrySkin * 1.25;
+    const expectedDamage = toDmgValue(expectedPreToDmgValue);
 
-    expect(fireDamageTakenWithDrySkin).toBeGreaterThan(fireDamageTakenWithoutDrySkin);
+    // Allow for ±1 tolerance
+    expect(fireDamageTakenWithDrySkin).toBeGreaterThanOrEqual(expectedDamage - 1);
+    expect(fireDamageTakenWithDrySkin).toBeLessThanOrEqual(expectedDamage + 1);
+    expect(ReceivedTypeDamageMultiplierAbAttr.prototype.apply).toHaveLastReturnedWith(true);
   });
 
-  it("opposing water attacks heal 1/4 of maximum health and deal no damage", async () => {
-    await game.classicMode.startBattle(SpeciesId.CHANDELURE);
+  it("should heal 1/4 of max HP instead of receiving damage if hit by a Water-type move", async () => {
+    const { classicMode, field, move } = game;
 
-    const enemy = game.scene.getEnemyPokemon()!;
-
+    await classicMode.startBattle(SpeciesId.CHANDELURE);
+    const enemy = field.getEnemyPokemon();
     enemy.hp = 1;
-
-    game.move.select(MoveId.WATER_GUN);
+    move.use(MoveId.WATER_GUN);
     await game.toEndOfTurn();
-    expect(enemy.hp).toBeGreaterThan(1);
+
+    expect(enemy).toHaveHp(toDmgValue(enemy.getMaxHp() / 4) + 1);
   });
 
-  it("opposing water attacks do not heal if they were protected from", async () => {
-    game.override.enemyMoveset([MoveId.PROTECT]);
+  it("should not absorb incoming Water-type moves if the ability source is protected", async () => {
+    const { override, classicMode, field, move } = game;
+    override.enemyMoveset([MoveId.PROTECT]);
 
-    await game.classicMode.startBattle(SpeciesId.CHANDELURE);
-
-    const enemy = game.scene.getEnemyPokemon()!;
-
+    await classicMode.startBattle(SpeciesId.CHANDELURE);
+    const enemy = field.getEnemyPokemon();
     enemy.hp = 1;
-
-    game.move.select(MoveId.WATER_GUN);
+    move.use(MoveId.WATER_GUN);
     await game.toEndOfTurn();
-    expect(enemy.hp).toBe(1);
+
+    expect(enemy).toHaveHp(1);
   });
 
-  it("multi-strike water attacks only heal once", async () => {
-    game.override.moveset([MoveId.WATER_GUN, MoveId.WATER_SHURIKEN]);
+  it("should only heal once from multi-strike Water-type attacks", async () => {
+    const { override, classicMode, field, move } = game;
+    override.moveset([MoveId.WATER_GUN, MoveId.WATER_SHURIKEN]);
 
-    await game.classicMode.startBattle(SpeciesId.CHANDELURE);
-
-    const enemy = game.scene.getEnemyPokemon()!;
-
-    enemy.hp = 1;
-
+    await classicMode.startBattle(SpeciesId.CHANDELURE);
+    const enemy = field.getEnemyPokemon();
     // first turn
-    game.move.select(MoveId.WATER_SHURIKEN);
+    enemy.hp = 1;
+    move.use(MoveId.WATER_SHURIKEN);
     await game.toEndOfTurn();
     const healthGainedFromWaterShuriken = enemy.hp - 1;
 
-    enemy.hp = 1;
-
     // second turn
-    game.move.select(MoveId.WATER_GUN);
+    enemy.hp = 1;
+    move.use(MoveId.WATER_GUN);
     await game.toEndOfTurn();
     const healthGainedFromWaterGun = enemy.hp - 1;
 
     expect(healthGainedFromWaterShuriken).toBe(healthGainedFromWaterGun);
   });
 
-  it("opposing water moves still heal regardless of accuracy check", async () => {
-    await game.classicMode.startBattle(SpeciesId.CHANDELURE);
+  it("should absorb incoming Water-type moves regardless of accuracy check", async () => {
+    const { classicMode, field, move, phaseInterceptor } = game;
 
-    const enemy = game.scene.getEnemyPokemon()!;
-
-    game.move.select(MoveId.WATER_GUN);
+    await classicMode.startBattle(SpeciesId.CHANDELURE);
+    const enemy = field.getEnemyPokemon();
+    move.use(MoveId.WATER_GUN);
     enemy.hp = enemy.hp - 1;
-    await game.phaseInterceptor.to("MoveEffectPhase");
-
-    await game.move.forceMiss();
+    await phaseInterceptor.to("MoveEffectPhase");
+    await move.forceMiss();
     await game.toEndOfTurn();
-    expect(enemy.hp).toBe(enemy.getMaxHp());
+
+    expect(enemy).toHaveFullHp();
   });
 });

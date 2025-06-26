@@ -8,7 +8,6 @@ import i18next from "i18next";
 
 /**
  * Provides immunity to BattlerTags {@linkcode BattlerTag} to specified targets.
- * @extends PreApplyBattlerTagAbAttr
  */
 export class PreApplyBattlerTagImmunityAbAttr extends PreApplyBattlerTagAbAttr {
   private readonly immuneTagTypes: BattlerTagType[];

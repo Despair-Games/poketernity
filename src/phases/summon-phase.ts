@@ -11,16 +11,14 @@ import { BattleType } from "#enums/battle-type";
 import type { BattlerIndex } from "#enums/battler-index";
 import { FieldPosition } from "#enums/field-position";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
-import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
 import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
-import { PokemonPhase } from "#phases/abstract-pokemon-phase";
-import { PostSummonPhase } from "#phases/post-summon-phase";
-import { ShinySparklePhase } from "#phases/shiny-sparkle-phase";
 import { settings } from "#system/settings-manager";
+import type { PhaseKey } from "#types/phase-types";
 import { playTween } from "#utils/anim-utils";
 import i18next from "i18next";
+import { PokemonPhase } from "#phases/base/pokemon-phase";
 
 /**
  * Phase to visually summon the Pokemon at the given {@linkcode fieldIndex} onto the field.
@@ -28,7 +26,7 @@ import i18next from "i18next";
  */
 export class SummonPhase extends PokemonPhase {
   /** @override */
-  override readonly id: PhaseId = PhaseId.SUMMON;
+  public override readonly phaseName: PhaseKey = "SummonPhase";
 
   /** If `true`, summons the Pokemon as if loading into a wave */
   private readonly loaded: boolean;

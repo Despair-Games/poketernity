@@ -1,7 +1,7 @@
 // -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { HIGHEST_STAT_BOOST_TAG_TYPES } from "#constants/battler-tag-constants";
-/* eslint-enable @typescript-eslint/no-unused-vars */
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 // -- end tsdoc imports --
 
 import { globalScene } from "#app/global-scene";
@@ -67,22 +67,20 @@ export abstract class HighestStatBoostTag extends AbilityBattlerTag {
         break;
     }
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndPushPhase(
+      "MessagePhase",
       i18next.t("battlerTags:highestStatBoostOnAdd", {
         pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
         statName: i18next.t(getStatKey(highestStat)),
       }),
-      null,
-      false,
-      null,
-      true,
     );
   }
 
   override onRemove(pokemon: Pokemon): void {
     super.onRemove(pokemon);
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:highestStatBoostOnRemove", {
         pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
         abilityName: allAbilities[this.ability].name,

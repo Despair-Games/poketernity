@@ -3,7 +3,6 @@ import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { GameModes } from "#enums/game-modes";
 import { MoveId } from "#enums/move-id";
-import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { GameManager } from "#test/test-utils/game-manager";
@@ -120,7 +119,7 @@ describe("Double Battles", () => {
 
       expect(game.scene.currentBattle.waveIndex).toBe(13);
       expect(game.phaseInterceptor.log.filter((phase) => phase === "SelectModifierPhase").length).toBe(1);
-      expect(game.scene.phaseManager.hasPhase((phase) => phase.is(PhaseId.SELECT_MODIFIER), true)).toBe(false);
+      expect(game.scene.phaseManager.hasPhase((phase) => phase.is("SelectModifierPhase"), true)).toBe(false);
     });
 
     it("should advance exactly one wave if the left opponent is defeated first", async () => {
@@ -133,7 +132,7 @@ describe("Double Battles", () => {
 
       expect(game.scene.currentBattle.waveIndex).toBe(13);
       expect(game.phaseInterceptor.log.filter((phase) => phase === "SelectModifierPhase").length).toBe(1);
-      expect(game.scene.phaseManager.hasPhase((phase) => phase.is(PhaseId.SELECT_MODIFIER), true)).toBe(false);
+      expect(game.scene.phaseManager.hasPhase((phase) => phase.is("SelectModifierPhase"), true)).toBe(false);
     });
 
     it("should advance exactly one wave if the right opponent is defeated first", async () => {
@@ -146,7 +145,7 @@ describe("Double Battles", () => {
 
       expect(game.scene.currentBattle.waveIndex).toBe(13);
       expect(game.phaseInterceptor.log.filter((phase) => phase === "SelectModifierPhase").length).toBe(1);
-      expect(game.scene.phaseManager.hasPhase((phase) => phase.is(PhaseId.SELECT_MODIFIER), true)).toBe(false);
+      expect(game.scene.phaseManager.hasPhase((phase) => phase.is("SelectModifierPhase"), true)).toBe(false);
     });
   });
 });

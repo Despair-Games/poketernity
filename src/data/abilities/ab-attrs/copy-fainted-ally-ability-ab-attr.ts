@@ -16,7 +16,8 @@ export class CopyFaintedAllyAbilityAbAttr extends PostKnockOutAbAttr {
         const knockedOutAllyAb = knockedOutPokemon.getAbility().id;
         pokemon.summonData.ability = knockedOutAllyAb;
         pokemon.waveData.abilitiesRevealed.push(knockedOutAllyAb);
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           i18next.t("abilityTriggers:copyFaintedAllyAbility", {
             pokemonNameWithAffix: getPokemonNameWithAffix(knockedOutPokemon),
             abilityName: allAbilities[knockedOutPokemon.getAbility().id].name,

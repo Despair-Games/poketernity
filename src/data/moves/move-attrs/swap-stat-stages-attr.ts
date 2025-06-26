@@ -10,7 +10,6 @@ import i18next from "i18next";
 /**
  * Attribute used for status moves, specifically Heart, Guard, and Power Swap,
  * that swaps the user's and target's corresponding stat stages.
- * @extends MoveEffectAttr
  * @see {@linkcode apply}
  */
 export class SwapStatStagesAttr extends MoveEffectAttr {
@@ -34,11 +33,13 @@ export class SwapStatStagesAttr extends MoveEffectAttr {
     user.updateInfo();
 
     if (this.stats.length === 7) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("moveTriggers:switchedStatChanges", { pokemonName: getPokemonNameWithAffix(user) }),
       );
     } else if (this.stats.length === 2) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("moveTriggers:switchedTwoStatChanges", {
           pokemonName: getPokemonNameWithAffix(user),
           firstStat: i18next.t(getStatKey(this.stats[0])),

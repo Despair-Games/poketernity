@@ -3,25 +3,23 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { PLAYER_PARTY_MAX_SIZE } from "#constants/game-constants";
 import {
-  doPokeballBounceAnim,
-  getCriticalCaptureChance,
-  getPokeballAtlasKey,
-  getPokeballCatchMultiplier,
-  getPokeballTintColor,
+    doPokeballBounceAnim,
+    getCriticalCaptureChance,
+    getPokeballAtlasKey,
+    getPokeballCatchMultiplier,
+    getPokeballTintColor,
 } from "#data/pokeball";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
-import { PhaseId } from "#enums/phase-id";
 import type { PokeballType } from "#enums/pokeball-type";
 import { StatusEffect } from "#enums/status-effect";
 import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { SummaryUiPage } from "#enums/summary-ui-page";
 import { UiMode } from "#enums/ui-mode";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
-import { PokemonPhase } from "#phases/abstract-pokemon-phase";
-import { PostKnockoutPhase } from "#phases/post-knockout-phase";
+import { PokemonPhase } from "#phases/base/pokemon-phase";
 import { achvs } from "#system/achievements";
 import type { OptionSelectModeConfig } from "#ui/option-select-config";
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
@@ -32,10 +30,9 @@ import i18next from "i18next";
 
 /**
  * Handles catching a pokemon after the player throws a ball
- * @extends PokemonPhase
  */
 export class AttemptCapturePhase extends PokemonPhase {
-  override readonly id = PhaseId.ATTEMPT_CAPTURE;
+  public override readonly phaseName = "AttemptCapturePhase";
 
   private readonly pokeballType: PokeballType;
   private pokeball: Phaser.GameObjects.Sprite;
@@ -55,7 +52,8 @@ export class AttemptCapturePhase extends PokemonPhase {
     const pokemon = this.getPokemon() as EnemyPokemon;
 
     if (!pokemon?.hp) {
-      return this.end();
+      this.end();
+      return;
     }
 
     const substitute = pokemon.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
@@ -266,7 +264,7 @@ export class AttemptCapturePhase extends PokemonPhase {
       null,
       () => {
         const end = (): void => {
-          globalScene.phaseManager.unshiftPhase(new PostKnockoutPhase(this.battlerIndex));
+          globalScene.phaseManager.createAndUnshiftPhase("PostKnockoutPhase", this.battlerIndex);
           pokemonInfoContainer.hide();
           this.removePb();
           this.end();

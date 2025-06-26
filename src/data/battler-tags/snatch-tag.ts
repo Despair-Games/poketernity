@@ -9,7 +9,6 @@ import i18next from "i18next";
 /**
  * Tag to indicate the owner can steal a beneficial self-status move's effects
  * with {@link https://bulbapedia.bulbagarden.net/wiki/Snatch_(move) | Snatch}.
- * @extends BattlerTag
  */
 export class SnatchingTag extends BattlerTag {
   constructor() {
@@ -18,7 +17,8 @@ export class SnatchingTag extends BattlerTag {
 
   override onAdd(pokemon: Pokemon) {
     // "{pokemonNameWithAffix" waits for a target to make a move!"
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:snatchOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }
@@ -26,7 +26,8 @@ export class SnatchingTag extends BattlerTag {
   override apply(pokemon: Pokemon, simulated: boolean, target: Pokemon): boolean {
     if (!simulated) {
       // "{sourceNameWithAffix} snatched {targetNameWithAffix}'s move!"
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("battlerTags:snatchOnApply", {
           sourceNameWithAffix: getPokemonNameWithAffix(pokemon),
           targetNameWithAffix: getPokemonNameWithAffix(target),

@@ -4,10 +4,8 @@ import { globalScene } from "#app/global-scene";
 import * as appConstants from "#constants/app-constants";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
-import { PhaseId } from "#enums/phase-id";
 import { Pokemon } from "#field/pokemon";
 import { version } from "#package.json";
-import type { MoveEffectPhase } from "#phases/move-effect-phase";
 import { MockClock } from "#test/test-utils/mocks/mock-clock";
 import { MockConsole } from "#test/test-utils/mocks/mock-console";
 import { MockGameObjectCreator } from "#test/test-utils/mocks/mock-game-object-creator";
@@ -54,7 +52,7 @@ export class GameWrapper {
       const currentPhase = globalScene.phaseManager.getCurrentPhase();
       let moveName = "N/A";
       let moveId = MoveId.NONE;
-      if (currentPhase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT)) {
+      if (currentPhase?.is("MoveEffectPhase")) {
         const move = currentPhase.move;
         moveName = move.getName();
         moveId = move.moveId;

@@ -8,7 +8,6 @@ import { MoveId } from "#enums/move-id";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import * as InitMoveAnim from "#init/init-move-anim";
@@ -16,10 +15,8 @@ import type { PokemonHeldItemModifier } from "#modifier/modifier";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import { FieryFalloutEncounter } from "#mystery-encounters/fiery-fallout-encounter";
 import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
-import { CommandPhase } from "#phases/command-phase";
 import type { MovePhase } from "#phases/move-phase";
-import { MysteryEncounterPhase } from "#phases/mystery-encounter-phases/mystery-encounter-phase";
-import { SelectModifierPhase } from "#phases/select-modifier-phase";
+import type { MysteryEncounterPhase } from "#phases/mystery-encounter-phases/mystery-encounter-phase";
 import {
   runMysteryEncounterToEnd,
   runSelectMysteryEncounterOption,
@@ -164,13 +161,13 @@ describe("Fiery Fallout - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
       const enemyField = scene.getEnemyField();
-      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
       expect(enemyField.length).toBe(2);
       expect(enemyField[0].species.speciesId).toBe(SpeciesId.VOLCARONA);
       expect(enemyField[1].species.speciesId).toBe(SpeciesId.VOLCARONA);
       expect(enemyField[0].gender).not.toEqual(enemyField[1].gender); // Should be opposite gender
 
-      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is<MovePhase>(PhaseId.MOVE)).map((p) => p[0]);
+      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is("MovePhase")).map((p) => p[0]);
       expect(movePhases.length).toBe(2);
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.FIRE_SPIN).length).toBe(2); // Fire spin used twice before battle
     });
@@ -180,7 +177,7 @@ describe("Fiery Fallout - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
       await skipBattleRunMysteryEncounterRewardsPhase(game);
       await game.phaseInterceptor.to("SelectModifierPhase", false);
-      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SelectModifierPhase");
 
       const leadPokemonId = scene.getPlayerParty()?.[0].id;
       const leadPokemonItems = scene.findModifiers<PokemonHeldItemModifier>(
@@ -270,7 +267,7 @@ describe("Fiery Fallout - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.FIERY_FALLOUT, defaultParty);
       await runMysteryEncounterToEnd(game, 3);
       await game.phaseInterceptor.to("SelectModifierPhase", false);
-      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SelectModifierPhase");
 
       const leadPokemonItems = scene.getPlayerParty()?.[0].getHeldItems();
       const item = leadPokemonItems.find((i) => i.isAttackTypeBoosterModifier());
@@ -291,12 +288,12 @@ describe("Fiery Fallout - Mystery Encounter", () => {
       await game.phaseInterceptor.to("MysteryEncounterPhase", false);
 
       const encounterPhase = scene.phaseManager.getCurrentPhase();
-      expect(encounterPhase?.constructor.name).toBe(MysteryEncounterPhase.name);
+      expect(encounterPhase?.phaseName).toBe("MysteryEncounterPhase");
       const continueEncounterSpy = vi.spyOn(encounterPhase as MysteryEncounterPhase, "continueEncounter");
 
       await runSelectMysteryEncounterOption(game, 3);
 
-      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(MysteryEncounterPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("MysteryEncounterPhase");
       expect(continueEncounterSpy).not.toHaveBeenCalled();
     });
   });

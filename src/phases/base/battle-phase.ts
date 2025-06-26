@@ -5,7 +5,6 @@ import { playTween } from "#utils/anim-utils";
 
 /**
  * Adds functions to display and hide the enemy trainer
- * @extends Phase
  */
 export abstract class BattlePhase extends Phase {
   public async showEnemyTrainer(trainerSlot: TrainerSlot = TrainerSlot.NONE): Promise<void> {

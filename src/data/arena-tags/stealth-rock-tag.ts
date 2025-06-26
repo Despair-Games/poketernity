@@ -9,7 +9,6 @@ import { MoveId } from "#enums/move-id";
  * Deals damage to Pokemon entering the afflicted {@linkcode ArenaTagSide | side}
  * of the field based on the effectiveness of {@linkcode ElementalType.STEEL | Rock}
  * against them.
- * @extends TypeHazardTag
  */
 export class StealthRockTag extends TypeHazardTag {
   constructor(sourceId: number, side: ArenaTagSide) {

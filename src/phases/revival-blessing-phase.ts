@@ -1,13 +1,9 @@
 import { globalScene } from "#app/global-scene";
 import { PartyUiMode } from "#enums/party-ui-mode";
-import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import { UiMode } from "#enums/ui-mode";
 import type { PlayerPokemon } from "#field/player-pokemon";
-import { BattlePhase } from "#phases/abstract-battle-phase";
-import { SummonPhase } from "#phases/summon-phase";
-import { SwitchPhase } from "#phases/switch-phase";
-import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
 import { toDmgValue } from "#utils/common-utils";
 import { PartyFilterFainted } from "#utils/party-ui-utils";
@@ -16,11 +12,9 @@ import i18next from "i18next";
 /**
  * Sets the Party UI and handles the effect of Revival Blessing
  * when used by one of the player's Pokemon.
- *
- * @extends BattlePhase
  */
 export class RevivalBlessingPhase extends BattlePhase {
-  override readonly id = PhaseId.REVIVAL_BLESSING;
+  public override readonly phaseName = "RevivalBlessingPhase";
 
   protected readonly user: PlayerPokemon;
 
@@ -31,7 +25,8 @@ export class RevivalBlessingPhase extends BattlePhase {
   }
 
   public override start(): void {
-    globalScene.ui.setMode<PartyUiHandler>(
+    const { currentBattle, phaseManager, ui } = globalScene;
+    ui.setMode<PartyUiHandler>(
       UiMode.PARTY,
       PartyUiMode.REVIVAL_BLESSING,
       this.user.getFieldIndex(),
@@ -45,30 +40,31 @@ export class RevivalBlessingPhase extends BattlePhase {
           pokemon.resetTurnData();
           pokemon.resetStatus();
           pokemon.heal(Math.min(toDmgValue(0.5 * pokemon.getMaxHp()), pokemon.getMaxHp()));
-          globalScene.phaseManager.queueMessagePhase(
+          phaseManager.createAndUnshiftPhase(
+            "MessagePhase",
             i18next.t("moveTriggers:revivalBlessing", { pokemonName: pokemon.name }),
             0,
             true,
           );
 
-          if (globalScene.currentBattle.double && globalScene.getPlayerParty().length > 1) {
+          if (currentBattle.double && globalScene.getPlayerParty().length > 1) {
             const allyPokemon = this.user.getAlly();
             if (allyPokemon && slotIndex <= 1) {
               // Revived ally pokemon
-              globalScene.phaseManager.unshiftPhase(
-                new ToggleDoublePositionPhase(true),
-                new SummonPhase(allyPokemon.getBattlerIndex(), false, false),
+              phaseManager.unshiftPhase(
+                phaseManager.createPhase("ToggleDoublePositionPhase", true),
+                phaseManager.createPhase("SummonPhase", allyPokemon.getBattlerIndex(), false, false),
               );
             } else if (allyPokemon?.isFainted()) {
               // Revived party pokemon, and ally pokemon is fainted
-              globalScene.phaseManager.unshiftPhase(
-                new ToggleDoublePositionPhase(true),
-                new SwitchPhase(allyPokemon.getBattlerIndex(), SwitchType.SWITCH, slotIndex),
+              phaseManager.unshiftPhase(
+                phaseManager.createPhase("ToggleDoublePositionPhase", true),
+                phaseManager.createPhase("SwitchPhase", allyPokemon.getBattlerIndex(), SwitchType.SWITCH, slotIndex),
               );
             }
           }
         }
-        globalScene.ui.setMessageMode().then(() => this.end());
+        ui.setMessageMode().then(() => this.end());
       },
       PartyFilterFainted,
     );

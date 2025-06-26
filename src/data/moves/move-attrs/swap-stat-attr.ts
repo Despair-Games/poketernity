@@ -9,7 +9,6 @@ import i18next from "i18next";
 /**
  * Attribute used for status moves, namely Speed Swap,
  * that swaps the user's and target's corresponding stats.
- * @extends MoveEffectAttr
  */
 export class SwapStatAttr extends MoveEffectAttr {
   /** The stat to be swapped between the user and the target */
@@ -26,7 +25,8 @@ export class SwapStatAttr extends MoveEffectAttr {
     user.setStat(this.stat, target.getStat(this.stat, false), false);
     target.setStat(this.stat, temp, false);
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("moveTriggers:switchedStat", {
         pokemonName: getPokemonNameWithAffix(user),
         stat: i18next.t(getStatKey(this.stat)),

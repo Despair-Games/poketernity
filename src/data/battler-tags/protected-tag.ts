@@ -1,7 +1,7 @@
 // -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { PROTECTION_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
-/* eslint-enable @typescript-eslint/no-unused-vars */
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 // -- end tsdoc imports --
 
 import { CommonBattleAnim } from "#animations/common-battle-anim";
@@ -33,7 +33,8 @@ export class ProtectedTag extends BattlerTag {
   override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:protectedOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }
@@ -45,7 +46,8 @@ export class ProtectedTag extends BattlerTag {
 
     if (!simulated) {
       new CommonBattleAnim(CommonAnim.PROTECT, pokemon).play();
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("battlerTags:protectedLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
     }

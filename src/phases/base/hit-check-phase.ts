@@ -18,7 +18,7 @@ import { BideEffectAttr } from "#moves/bide-effect-attr";
 import { HitsTagAttr } from "#moves/hits-tag-attr";
 import { OneHitKOAttr } from "#moves/one-hit-ko-attr";
 import { ToxicAccuracyAttr } from "#moves/toxic-accuracy-attr";
-import { PokemonPhase } from "#phases/abstract-pokemon-phase";
+import { PokemonPhase } from "#phases/base/pokemon-phase";
 import { BooleanHolder } from "#utils/common-utils";
 
 //#region Types

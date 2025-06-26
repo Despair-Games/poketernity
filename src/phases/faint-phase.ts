@@ -1,9 +1,9 @@
 // -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { BattlerTag } from "#battler-tags/battler-tag";
 import type { GameOverPhase } from "#phases/game-over-phase";
 import type { MovePhase } from "#phases/move-phase";
-/* eslint-enable @typescript-eslint/no-unused-vars */
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 // -- end tsdoc imports --
 
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
@@ -20,21 +20,17 @@ import { allMoves } from "#data/data-lists";
 import { classicFinalBossDialogue } from "#data/dialogue";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattleType } from "#enums/battle-type";
-import type { BattlerIndex } from "#enums/battler-index";
+import type { FieldBattlerIndex } from "#enums/battler-index";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitResult } from "#enums/hit-result";
-import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
 import { PokemonInstantReviveModifier } from "#modifier/modifier";
 import { PostVictoryStatStageChangeAttr } from "#moves/post-victory-stat-stage-change-attr";
-import { PokemonPhase } from "#phases/abstract-pokemon-phase";
-import { DamageAnimPhase } from "#phases/damage-anim-phase";
-import { PostKnockoutPhase } from "#phases/post-knockout-phase";
-import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase";
+import { PokemonPhase } from "#phases/base/pokemon-phase";
 import { isNil } from "#utils/common-utils";
 import i18next from "i18next";
 import { SwitchPhase } from "#phases/switch-phase";
@@ -61,11 +57,9 @@ import { SwitchPhase } from "#phases/switch-phase";
  * - Handle friendship loss for player pokemon
  * - Lapse {@linkcode BattlerTagLapseType.FAINT} tags
  * - Clear {@linkcode BattlerTag}s from the fainted pokemon
- *
- * @extends PokemonPhase
  */
 export class FaintPhase extends PokemonPhase {
-  override readonly id = PhaseId.FAINT;
+  public override readonly phaseName = "FaintPhase";
 
   /** Whether or not enduring (for this phase's purposes, Reviver Seed) should be prevented */
   private readonly preventEndure: boolean;
@@ -80,7 +74,7 @@ export class FaintPhase extends PokemonPhase {
   private readonly source?: Pokemon;
 
   constructor(
-    battlerIndex: BattlerIndex,
+    battlerIndex: FieldBattlerIndex,
     preventEndure: boolean = false,
     destinyTag?: DestinyBondTag | null,
     grudgeTag?: GrudgeTag | null,
@@ -124,7 +118,8 @@ export class FaintPhase extends PokemonPhase {
       if (instantReviveModifier) {
         faintPokemon.loseHeldItem(instantReviveModifier);
         globalScene.updateModifiers(this.isPlayer);
-        return this.end();
+        this.end();
+        return;
       }
     }
 
@@ -156,9 +151,10 @@ export class FaintPhase extends PokemonPhase {
       enemyFaintsHistory.push({ pokemon: pokemon, turn: turn });
     }
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battle:fainted", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
-      null,
+      undefined,
       true,
     );
     globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeActiveTrigger, true);
@@ -206,22 +202,22 @@ export class FaintPhase extends PokemonPhase {
          * If the player has exactly one Pokemon in total at this point in a double battle, and that Pokemon
          * is already on the field, push a phase that moves that Pokemon to center position.
          */
-        globalScene.phaseManager.pushPhase(new ToggleDoublePositionPhase(true));
+        globalScene.phaseManager.createAndPushPhase("ToggleDoublePositionPhase", true);
       } else if (legalPlayerPartyPokemon.length > 0) {
         /**
          * If previous conditions weren't met, and the player has at least 1 legal Pokemon off the field,
          * push a phase that prompts the player to summon a Pokemon from their party.
          */
-        globalScene.phaseManager.pushPhase(new SwitchPhase(this.fieldIndex, SwitchType.SWITCH));
+        globalScene.phaseManager.createAndPushPhase("SwitchPhase", this.fieldIndex, SwitchType.SWITCH);
       }
     } else {
-      globalScene.phaseManager.unshiftPhase(new PostKnockoutPhase(this.battlerIndex));
+      globalScene.phaseManager.createAndUnshiftPhase("PostKnockoutPhase", this.battlerIndex);
       if (battleType === BattleType.TRAINER || battleType === BattleType.MYSTERY_ENCOUNTER) {
         const hasReservePartyMember: boolean = globalScene
           .getEnemyParty()
           .some((p) => p.isActive() && !p.isOnField() && p.trainerSlot === (pokemon as EnemyPokemon).trainerSlot);
         if (hasReservePartyMember) {
-          globalScene.phaseManager.pushPhase(new SwitchPhase(this.battlerIndex, SwitchType.SWITCH));
+          globalScene.phaseManager.createAndPushPhase("SwitchPhase", this.battlerIndex, SwitchType.SWITCH);
         }
       }
     }
@@ -275,7 +271,7 @@ export class FaintPhase extends PokemonPhase {
     } else {
       // Final boss' HP threshold has been bypassed; cancel faint and force check for 2nd phase
       enemy.hp++;
-      globalScene.phaseManager.unshiftPhase(new DamageAnimPhase(enemy.getBattlerIndex(), 0, HitResult.OTHER));
+      globalScene.phaseManager.createAndUnshiftPhase("DamageAnimPhase", enemy.getBattlerIndex(), 0, HitResult.OTHER);
       this.end();
     }
   }

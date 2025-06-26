@@ -8,7 +8,6 @@ import type { NumberHolder } from "#utils/common-utils";
 /**
  * Attribute used for moves which ignore type-based debuffs from weather, namely Hydro Steam.
  * Called during damage calculation after getting said debuff from getAttackTypeMultiplier in the Pokemon class.
- * @extends MoveAttr
  * @see {@linkcode apply}
  */
 export class IgnoreWeatherTypeDebuffAttr extends MoveAttr {

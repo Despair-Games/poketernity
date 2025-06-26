@@ -6,7 +6,6 @@ import type { BooleanHolder } from "#utils/common-utils";
 /**
  * Attribute to apply effects that cancel the standard
  * move effect chain in {@linkcode MoveEffectPhase}.
- * @extends MoveAttr
  */
 export abstract class OverrideMoveEffectAttr extends MoveAttr {
   /**

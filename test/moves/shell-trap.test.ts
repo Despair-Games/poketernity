@@ -2,7 +2,6 @@ import { allMoves } from "#data/data-lists";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
-import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
 import type { MovePhase } from "#phases/move-phase";
 import { GameManager } from "#test/test-utils/game-manager";
@@ -50,7 +49,7 @@ describe("Moves - Shell Trap", () => {
     await game.phaseInterceptor.to("PostActionPhase");
 
     const movePhase = game.scene.phaseManager.getCurrentPhase();
-    expect(movePhase?.id).toBe(PhaseId.MOVE);
+    expect(movePhase?.phaseName).toBe("MovePhase");
     expect((movePhase as MovePhase).pokemon).toBe(playerPokemon[1]);
 
     await game.phaseInterceptor.to("PostActionPhase");
@@ -73,7 +72,7 @@ describe("Moves - Shell Trap", () => {
     await game.phaseInterceptor.to("PostActionPhase");
 
     const movePhase = game.scene.phaseManager.getCurrentPhase();
-    expect(movePhase?.is<MovePhase>(PhaseId.MOVE)).toBeTruthy();
+    expect(movePhase?.phaseName).toBe("MovePhase");
     expect((movePhase as MovePhase).pokemon).not.toBe(playerPokemon[1]);
 
     await game.toEndOfTurn();
@@ -96,7 +95,7 @@ describe("Moves - Shell Trap", () => {
     await game.phaseInterceptor.to("PostActionPhase");
 
     const movePhase = game.scene.phaseManager.getCurrentPhase();
-    expect(movePhase?.is<MovePhase>(PhaseId.MOVE)).toBeTruthy();
+    expect(movePhase?.phaseName).toBe("MovePhase");
     expect((movePhase as MovePhase).pokemon).not.toBe(playerPokemon[1]);
 
     await game.toEndOfTurn();
@@ -117,7 +116,7 @@ describe("Moves - Shell Trap", () => {
     await game.phaseInterceptor.to("PostActionPhase");
 
     const movePhase = game.scene.phaseManager.getCurrentPhase();
-    expect(movePhase?.is<MovePhase>(PhaseId.MOVE)).toBeTruthy();
+    expect(movePhase?.phaseName).toBe("MovePhase");
     expect((movePhase as MovePhase).pokemon).not.toBe(playerPokemon[1]);
 
     const enemyStartingHp = enemyPokemon.map((p) => p.hp);

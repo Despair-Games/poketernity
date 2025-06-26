@@ -10,7 +10,6 @@ import i18next from "i18next";
  * Attribute to temporarily set certain stats of the user and target to the average between the two.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Power_Split_(move) | Power Split}
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Guard_Split_(move) | Guard Split}.
- * @extends MoveEffectAttr
  */
 export class AverageStatsAttr extends MoveEffectAttr {
   /** The stats to be averaged individually between the user and the target */
@@ -33,7 +32,10 @@ export class AverageStatsAttr extends MoveEffectAttr {
       target.setStat(s, avg, false);
     }
 
-    globalScene.phaseManager.queueMessagePhase(i18next.t(this.msgKey, { pokemonName: getPokemonNameWithAffix(user) }));
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
+      i18next.t(this.msgKey, { pokemonName: getPokemonNameWithAffix(user) }),
+    );
 
     return true;
   }

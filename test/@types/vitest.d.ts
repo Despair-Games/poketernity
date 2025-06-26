@@ -1,7 +1,7 @@
 // -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { Pokemon } from "#field/pokemon";
-/* eslint-enable @typescript-eslint/no-unused-vars */
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 // -- end tsdoc imports --
 
 import type { AbilityId } from "#enums/ability-id";
@@ -119,5 +119,17 @@ declare module "vitest" {
      * @param expectedAbilityId - The expected {@linkcode AbilityId}.
      */
     toHaveAbilityApplied(expectedAbilityId: AbilityId): void;
+
+    /**
+     * Matcher to check if a {@linkcode Pokemon} has a specific amount of HP.
+     */
+    toHaveHp(expectedHp: number): void;
+
+    /**
+     * Matcher to check if a {@linkcode Pokemon} has fainted.
+     *
+     * _Includes a check for hp being `0`._
+     */
+    toHaveFainted(): void;
   }
 }

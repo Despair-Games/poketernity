@@ -1,3 +1,5 @@
+import type { EnumValues } from "#types/enum-values";
+
 export const AbilityApplyMode = {
   /** Applies abilities as normal, without restrictions */
   DEFAULT: 1,
@@ -7,4 +9,4 @@ export const AbilityApplyMode = {
   IGNORE: 3,
 } as const;
 
-export type AbilityApplyMode = (typeof AbilityApplyMode)[keyof typeof AbilityApplyMode];
+export type AbilityApplyMode = EnumValues<typeof AbilityApplyMode>;

@@ -2,13 +2,11 @@ import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { Pokemon } from "#field/pokemon";
-import { PokemonTransformPhase } from "#phases/pokemon-transform-phase";
 import { randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
 /**
  * Used by Imposter
- * @extends PostSummonAbAttr
  */
 export class PostSummonTransformAbAttr extends PostSummonAbAttr {
   public override apply(pokemon: Pokemon, simulated: boolean): boolean {
@@ -27,11 +25,15 @@ export class PostSummonTransformAbAttr extends PostSummonAbAttr {
     }
     target = target!;
 
-    globalScene.phaseManager.unshiftPhase(
-      new PokemonTransformPhase(pokemon.getBattlerIndex(), target.getBattlerIndex(), true),
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "PokemonTransformPhase",
+      pokemon.getBattlerIndex(),
+      target.getBattlerIndex(),
+      true,
     );
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("abilityTriggers:postSummonTransform", {
         pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
         targetName: target.name,

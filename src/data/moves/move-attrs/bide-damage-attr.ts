@@ -8,7 +8,6 @@ import type { Move } from "#moves/move";
  * Attribute to modify damage according to Bide's "stored energy."
  * On the last turn of execution, Bide deals damage equal to double the
  * attack damage received during the storing turns.
- * @extends FixedDamageAttr
  * @see {@linkcode BideTag}
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Bide_(move) | Bide}
  */

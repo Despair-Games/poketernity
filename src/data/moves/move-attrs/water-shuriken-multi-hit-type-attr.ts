@@ -9,7 +9,6 @@ import type { NumberHolder } from "#utils/common-utils";
 /**
  * Attribute implementing {@link https://bulbapedia.bulbagarden.net/wiki/Water_Shuriken_(move) | Water Shuriken}'s
  * effect of always hitting 3 times when used by Battle Bond Ash Greninja.
- * @extends ChangeMultiHitTypeAttrs
  */
 export class WaterShurikenMultiHitTypeAttr extends ChangeMultiHitTypeAttr {
   /** Changes the move's multi-hit type to always hit 3 times if used by Battle Bond Ash Greninja */

@@ -11,7 +11,6 @@ import i18next from "i18next";
  * Tag representing the weight reduction effect of
  * {@link https://bulbapedia.bulbagarden.net/wiki/Autotomize_(move) | Autotomize}.
  * Each count of Autotomization reduces the owner's weight by 100kg
- * @extends BattlerTag
  */
 export class AutotomizedTag extends BattlerTag {
   public autotomizeCount: number = 0;
@@ -27,7 +26,8 @@ export class AutotomizedTag extends BattlerTag {
   override onAdd(pokemon: Pokemon): void {
     const minWeight = 0.1;
     if (pokemon.getWeight() > minWeight) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("battlerTags:autotomizeOnAdd", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
         }),

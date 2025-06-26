@@ -7,7 +7,6 @@ import { getStatusEffectHealText } from "#utils/status-effect-utils";
 
 /**
  * Removes supplied status effects from the user's field. Used by Pastel Veil.
- * @extends PostSummonAbAttr
  */
 export class PostSummonUserFieldRemoveStatusEffectAbAttr extends PostSummonAbAttr {
   private readonly statusEffects: StatusEffect[];
@@ -31,7 +30,8 @@ export class PostSummonUserFieldRemoveStatusEffectAbAttr extends PostSummonAbAtt
     if (!simulated) {
       for (const pokemon of allowedPokemon) {
         if (pokemon.hasStatusEffect(this.statusEffects, false, true)) {
-          globalScene.phaseManager.queueMessagePhase(
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "MessagePhase",
             getStatusEffectHealText(pokemon.getStatusEffect(true), getPokemonNameWithAffix(pokemon)),
           );
           pokemon.resetStatus();
