@@ -31,7 +31,7 @@ export class RecallPhase extends PokemonPhase {
   // #region Public methods
 
   public override start(): void {
-    this.recall().then(this.end);
+    this.recall().then(() => this.end());
   }
 
   // #endregion
@@ -58,8 +58,9 @@ export class RecallPhase extends PokemonPhase {
               trainerName: globalScene.currentBattle.trainer?.getName(this.getTrainerSlot()),
               pokemonName: this.pokemon.getNameToRender(),
             }),
-        250, // TODO: check and adjust this delay if needed
+        null, // TODO: check and adjust this delay if needed
         resolve,
+        250,
       ),
     );
   }

@@ -72,6 +72,8 @@ export class SummonPhase extends PokemonPhase {
       globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeActiveTrigger, true);
       this.queuePostSummon();
     }
+
+    super.end();
   }
 
   // #endregion
@@ -80,7 +82,6 @@ export class SummonPhase extends PokemonPhase {
   /**
    * Plays animations for the Trainer summoning the Pokemon, then plays
    * summon animations for the Pokemon.
-   * @async
    */
   private async playSummonSequence(): Promise<void> {
     const { currentBattle, pbTrayEnemy, trainer } = globalScene;
@@ -140,7 +141,6 @@ export class SummonPhase extends PokemonPhase {
    * Plays all animations targeting the Enemy Trainer during the summon
    * sequence. The Trainer first enters the field while showing its Poke Ball tray,
    * then hides itself as it announces the Pokemon entering the field.
-   * @async
    */
   private async playEnemyTrainerThrowSequence(): Promise<void> {
     const { currentBattle, pbTrayEnemy, ui } = globalScene;
@@ -166,19 +166,17 @@ export class SummonPhase extends PokemonPhase {
   /**
    * Plays an animation to move the enemy Trainer onto the field.
    * This, of course, assumes the Pokemon to switch in is an enemy
-   * @async
    */
   private async playEnemyTrainerEntranceAnim(): Promise<void> {
     await this.showEnemyTrainer(this.getTrainerSlot());
     await globalScene.pbTrayEnemy.showPbTray(globalScene.getEnemyParty());
-    await new Promise((resolve) => globalScene.time.delayedCall(1000, resolve));
+    await new Promise<void>((resolve) => globalScene.time.delayedCall(1000, resolve));
   }
 
   /**
    * Plays animations to summon this phase's Pokemon from its Poke Ball.
    * More specifically, this animates the Poke Ball's movement to the Pokemon's field position,
    * the Pokemon exiting from the Poke Ball, and the Pokemon's entrance animation and cry.
-   * @async
    */
   private async playPokeBallSummonFX(): Promise<void> {
     const { add, currentBattle, field, time, animations } = globalScene;
@@ -273,7 +271,7 @@ export class SummonPhase extends PokemonPhase {
       pokemon.loadAssets(false);
     }
 
-    await new Promise((resolve) => time.delayedCall(1000, resolve));
+    await new Promise<void>((resolve) => time.delayedCall(1000, resolve));
   }
 
   /**

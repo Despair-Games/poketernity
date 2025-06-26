@@ -80,8 +80,8 @@ export class CheckSwitchPhase extends BattlePhase {
       null,
       () => {
         const options: ConfirmModeConfig = {
-          yesHandler: this.onConfirm,
-          noHandler: this.onCancel,
+          yesHandler: () => this.onConfirm(),
+          noHandler: () => this.onCancel(),
         };
         globalScene.ui.setMode<ConfirmUiHandler>(UiMode.CONFIRM, options);
       },
@@ -93,18 +93,17 @@ export class CheckSwitchPhase extends BattlePhase {
       UiMode.PARTY,
       PartyUiMode.SWITCH,
       this.fieldIndex,
-      this.onPartyModeSelection,
+      (cursor: number, option: PartyOption) => this.onPartyModeSelection(cursor, option),
     );
   }
 
   private onCancel(): void {
-    globalScene.ui.setMessageMode();
-    this.end();
+    globalScene.ui.setMessageMode().then(() => this.end());
   }
 
   private onPartyModeSelection(cursor: number, option: PartyOption) {
     if (option === PartyOption.CANCEL) {
-      this.start();
+      globalScene.ui.setMessageMode().then(() => this.start());
       return;
     }
 
@@ -114,6 +113,6 @@ export class CheckSwitchPhase extends BattlePhase {
       phaseManager.createPhase("SwitchPhase", this.fieldIndex, SwitchType.INITIAL_SWITCH, cursor),
     );
 
-    this.end();
+    globalScene.ui.setMessageMode().then(() => this.end());
   }
 }
