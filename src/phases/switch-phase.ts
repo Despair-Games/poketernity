@@ -18,6 +18,8 @@ import { TrainerSlot } from "#enums/trainer-slot";
 import type { Pokemon } from "#field/pokemon";
 import type { SwitchEffectTransferModifier } from "#modifier/modifier";
 import { PokemonPhase } from "#phases/base/pokemon-phase";
+import type { PartyUiHandler } from "#ui/party-ui-handler";
+import { UiMode } from "#enums/ui-mode";
 
 /**
  * Phase to handle all logical elements of switching a Pokemon.
@@ -43,10 +45,17 @@ export class SwitchPhase extends PokemonPhase {
   }
 
   public override start(): void {
-    // prettier-ignore
-    this.resolveSwitchInIndex()
-      .then(this.updatePokemonData)
-      .then(this.end);
+    if (this.switchInIndex !== -1) {
+      this.updatePokemonData();
+      this.end();
+      return;
+    }
+
+    if (this.isPlayer) {
+      this.resolvePlayerSwitchInIndex();
+    } else {
+      this.resolveEnemySwitchInIndex();
+    }
   }
 
   public override end(): void {
@@ -56,39 +65,37 @@ export class SwitchPhase extends PokemonPhase {
     super.end();
   }
 
-  /**
-   * Finalizes the party slot to switch in if it isn't already defined.
-   * - If a Player Pokemon is switching, this prompts the Player to select a Pokemon
-   * from the {@linkcode BattleScene.promptSelectPlayerPokemon | Party UI} to switch in.
-   * - If an Enemy (Trainer) Pokemon is switching, this directs the Trainer AI to select
-   * a Pokemon to switch in.
-   * @async
-   */
-  private async resolveSwitchInIndex(): Promise<void> {
-    if (this.switchInIndex !== -1) {
-      return;
+  private resolvePlayerSwitchInIndex(): void {
+    globalScene.ui.setMode<PartyUiHandler>(
+      UiMode.PARTY,
+      PartyUiMode.FAINT_SWITCH,
+      this.fieldIndex,
+      this.onPartyModeSelection,
+    );
+  }
+
+  private onPartyModeSelection(cursor: number, option: PartyOption): void {
+    this.switchInIndex = cursor;
+    if (option === PartyOption.PASS_BATON) {
+      this.switchType = SwitchType.BATON_PASS;
+    }
+    this.updatePokemonData();
+    this.end();
+  }
+
+  private resolveEnemySwitchInIndex(): void {
+    const { trainer } = globalScene.currentBattle;
+
+    if (!trainer) {
+      throw new Error("SwitchPhase: Enemy Pokemon does not have a trainer!");
     }
 
-    if (this.isPlayer) {
-      await globalScene
-        .promptSelectPlayerPokemon(PartyUiMode.FAINT_SWITCH, this.fieldIndex)
-        .then(([cursor, option]) => {
-          this.switchInIndex = cursor;
-          if (option === PartyOption.PASS_BATON) {
-            this.switchType = SwitchType.BATON_PASS;
-          }
-        });
-    } else {
-      const { trainer } = globalScene.currentBattle;
+    this.switchInIndex = trainer.getNextSummonIndex(
+      !this.fieldIndex ? TrainerSlot.TRAINER : TrainerSlot.TRAINER_PARTNER,
+    );
 
-      if (!trainer) {
-        throw new Error("SwitchPhase: Enemy Pokemon does not have a trainer!");
-      }
-
-      this.switchInIndex = trainer.getNextSummonIndex(
-        !this.fieldIndex ? TrainerSlot.TRAINER : TrainerSlot.TRAINER_PARTNER,
-      );
-    }
+    this.updatePokemonData();
+    this.end();
   }
 
   /**

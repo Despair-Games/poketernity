@@ -50,7 +50,7 @@ export class SummonPhase extends PokemonPhase {
   public override start(): void {
     super.start();
 
-    this.playSummonSequence().then(this.end);
+    this.playSummonSequence().then(() => this.end());
   }
 
   public override end(): void {
@@ -207,73 +207,73 @@ export class SummonPhase extends PokemonPhase {
 
     pokeball.setVisible(true);
 
-    await Promise.allSettled([
-      playTween({
+    const pokeBallXAnimation = playTween({
+      targets: pokeball,
+      duration: 650,
+      x: (this.isPlayer ? 100 : 236) + fpOffset[0],
+    });
+
+    const pokeBallYAnimation = async () => {
+      await playTween({
         targets: pokeball,
-        duration: 650,
-        x: (this.isPlayer ? 100 : 236) + fpOffset[0],
-      }),
-      async () => {
-        await playTween({
-          targets: pokeball,
-          duration: 150,
-          ease: "Cubic.easeOut",
-          y: (this.isPlayer ? 70 : 34) + fpOffset[1],
-        });
+        duration: 150,
+        ease: "Cubic.easeOut",
+        y: (this.isPlayer ? 70 : 34) + fpOffset[1],
+      });
 
-        await playTween({
-          targets: pokeball,
-          duration: 500,
-          ease: "Cubic.easeIn",
-          angle: 1440,
-          y: (this.isPlayer ? 132 : 86) + fpOffset[1],
-        });
+      await playTween({
+        targets: pokeball,
+        duration: 500,
+        ease: "Cubic.easeIn",
+        y: (this.isPlayer ? 132 : 86) + fpOffset[1],
+      });
+    };
 
-        globalScene.audioManager.playSound("se/pb_rel");
-        pokeball.destroy();
-        add.existing(pokemon);
-        field.add(pokemon);
+    await Promise.allSettled([pokeBallXAnimation, pokeBallYAnimation()]);
 
-        if (!this.isPlayer) {
-          const playerPokemon = globalScene.getPlayerPokemon() as Pokemon;
-          if (playerPokemon?.isOnField()) {
-            field.moveBelow(pokemon, playerPokemon);
-          }
-          currentBattle.seenEnemyPartyMemberIds.add(pokemon.id);
-        }
+    globalScene.audioManager.playSound("se/pb_rel");
+    pokeball.destroy();
+    add.existing(pokemon);
+    field.add(pokemon);
 
-        animations.addPokeballOpenParticles(pokemon.x, pokemon.y - 16, pokemon.pokeball);
-        globalScene.updateModifiers(this.isPlayer);
-        globalScene.updateFieldScale();
+    if (!this.isPlayer) {
+      const playerPokemon = globalScene.getPlayerPokemon() as Pokemon;
+      if (playerPokemon?.isOnField()) {
+        field.moveBelow(pokemon, playerPokemon);
+      }
+      currentBattle.seenEnemyPartyMemberIds.add(pokemon.id);
+    }
 
-        pokemon.showInfo();
-        pokemon.playAnim();
-        pokemon.setVisible(true);
-        pokemon.getSprite().setVisible(true);
-        pokemon.setScale(0.5);
-        pokemon.tint(getPokeballTintColor(pokemon.pokeball));
-        pokemon.untint(250, "Sine.easeIn");
+    animations.addPokeballOpenParticles(pokemon.x, pokemon.y - 16, pokemon.pokeball);
+    globalScene.updateModifiers(this.isPlayer);
+    globalScene.updateFieldScale();
 
-        globalScene.updateFieldScale();
+    pokemon.showInfo();
+    pokemon.playAnim();
+    pokemon.setVisible(true);
+    pokemon.getSprite().setVisible(true);
+    pokemon.setScale(0.5);
+    pokemon.tint(getPokeballTintColor(pokemon.pokeball));
+    pokemon.untint(250, "Sine.easeIn");
 
-        await playTween({
-          targets: pokemon,
-          duration: 250,
-          ease: "Sine.easeIn",
-          scale: pokemon.getSpriteScale(),
-        });
+    globalScene.updateFieldScale();
 
-        pokemon.cry(pokemon.getHpRatio() > 0.25 ? undefined : { rate: 0.85 });
-        pokemon.getSprite().clearTint();
-        pokemon.resetSummonData();
-        // required to load the proper assets when loading from save data
-        if (pokemon.summonData.speciesForm) {
-          pokemon.loadAssets(false);
-        }
+    await playTween({
+      targets: pokemon,
+      duration: 250,
+      ease: "Sine.easeIn",
+      scale: pokemon.getSpriteScale(),
+    });
 
-        await new Promise((resolve) => time.delayedCall(1000, resolve));
-      },
-    ]);
+    pokemon.cry(pokemon.getHpRatio() > 0.25 ? undefined : { rate: 0.85 });
+    pokemon.getSprite().clearTint();
+    pokemon.resetSummonData();
+    // required to load the proper assets when loading from save data
+    if (pokemon.summonData.speciesForm) {
+      pokemon.loadAssets(false);
+    }
+
+    await new Promise((resolve) => time.delayedCall(1000, resolve));
   }
 
   /**

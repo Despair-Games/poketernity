@@ -12,6 +12,7 @@ import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import i18next from "i18next";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { PartyOption } from "#enums/party-option";
+import type { PartyUiHandler } from "#ui/party-ui-handler";
 
 /**
  * Handles the prompt to switch pokemon at the start of a battle when the player is playing in Switch mode
@@ -79,33 +80,40 @@ export class CheckSwitchPhase extends BattlePhase {
       null,
       () => {
         const options: ConfirmModeConfig = {
-          yesHandler: () => {
-            globalScene
-              .promptSelectPlayerPokemon(PartyUiMode.SWITCH, pokemon.getFieldIndex())
-              .then(([cursor, option]) => {
-                if (option !== PartyOption.CANCEL) {
-                  globalScene.phaseManager.unshiftPhase(
-                    phaseManager.createPhase("RecallPhase", pokemon.getBattlerIndex(), SwitchType.INITIAL_SWITCH),
-                    phaseManager.createPhase(
-                      "SwitchPhase",
-                      pokemon.getBattlerIndex(),
-                      SwitchType.INITIAL_SWITCH,
-                      cursor,
-                    ),
-                  );
-                  this.end();
-                } else {
-                  this.start();
-                }
-              });
-          },
-          noHandler: () => {
-            globalScene.ui.setMessageMode();
-            this.end();
-          },
+          yesHandler: this.onConfirm,
+          noHandler: this.onCancel,
         };
         globalScene.ui.setMode<ConfirmUiHandler>(UiMode.CONFIRM, options);
       },
     );
+  }
+
+  private onConfirm(): void {
+    globalScene.ui.setMode<PartyUiHandler>(
+      UiMode.PARTY,
+      PartyUiMode.SWITCH,
+      this.fieldIndex,
+      this.onPartyModeSelection,
+    );
+  }
+
+  private onCancel(): void {
+    globalScene.ui.setMessageMode();
+    this.end();
+  }
+
+  private onPartyModeSelection(cursor: number, option: PartyOption) {
+    if (option === PartyOption.CANCEL) {
+      this.start();
+      return;
+    }
+
+    const { phaseManager } = globalScene;
+    phaseManager.unshiftPhase(
+      phaseManager.createPhase("RecallPhase", this.fieldIndex, SwitchType.INITIAL_SWITCH),
+      phaseManager.createPhase("SwitchPhase", this.fieldIndex, SwitchType.INITIAL_SWITCH, cursor),
+    );
+
+    this.end();
   }
 }
