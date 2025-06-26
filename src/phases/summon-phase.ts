@@ -1,6 +1,7 @@
 // -- start tsdoc imports --
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { EncounterPhase } from "#phases/encounter-phase";
+import type { PostSummonPhase } from "#phases/post-summon-phase";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 // -- end tsdoc imports --
 
@@ -20,6 +21,12 @@ import { playTween } from "#utils/anim-utils";
 import i18next from "i18next";
 import { PokemonPhase } from "#phases/base/pokemon-phase";
 
+interface SummonPhaseOptions {
+  loaded?: boolean;
+  playTrainerAnim?: boolean;
+  delayPostSummon?: boolean;
+}
+
 /**
  * Phase to visually summon the Pokemon at the given {@linkcode fieldIndex} onto the field.
  * @extends PokemonPhase
@@ -28,21 +35,38 @@ export class SummonPhase extends PokemonPhase {
   /** @override */
   public override readonly phaseName: PhaseKey = "SummonPhase";
 
-  /** If `true`, summons the Pokemon as if loading into a wave */
+  /**
+   * If `true`, summons the Pokemon as if loading into a wave
+   * @defaultValue `false`
+   */
   private readonly loaded: boolean;
   /**
    * If `true` for an enemy Trainer's switch, this phase will play
    * an animation on the Trainer before the "thrown Poke Ball" animation.
    * This does not affect summons on the Player's side since part of the
    * Player Trainer's animation is implemented in {@linkcode EncounterPhase}.
+   * @defaultValue `true`
    */
-  private readonly playsTrainerAnim: boolean;
+  private readonly playTrainerAnim: boolean;
+  /**
+   * If `true`, this phase will push its corresponding {@linkcode PostSummonPhase}
+   * to the phase manager instead of unshifting it.
+   * @defaultValue `false`
+   * @privateRemarks
+   * This should be enabled whenever multiple Pokemon are summoned at the same
+   * time outside of a turn in battle, e.g. at the start of a Trainer battle.
+   */
+  private readonly delayPostSummon: boolean;
 
-  constructor(battlerIndex: BattlerIndex, loaded: boolean = false, playsTrainerAnim: boolean = true) {
+  constructor(
+    battlerIndex: BattlerIndex,
+    { loaded = false, playTrainerAnim = true, delayPostSummon = false }: SummonPhaseOptions = {},
+  ) {
     super(battlerIndex);
 
     this.loaded = loaded;
-    this.playsTrainerAnim = playsTrainerAnim;
+    this.playTrainerAnim = playTrainerAnim;
+    this.delayPostSummon = delayPostSummon;
   }
 
   // #region Public Methods
@@ -54,7 +78,7 @@ export class SummonPhase extends PokemonPhase {
   }
 
   public override end(): void {
-    const { battleType, waveIndex } = globalScene.currentBattle;
+    const { waveIndex } = globalScene.currentBattle;
     const pokemon = this.getPokemon();
 
     if (pokemon.isShiny()) {
@@ -63,12 +87,8 @@ export class SummonPhase extends PokemonPhase {
 
     pokemon.resetTurnData();
 
-    if (
-      !this.loaded
-      || battleType === BattleType.TRAINER
-      || battleType === BattleType.MYSTERY_ENCOUNTER
-      || waveIndex % 10 === 1
-    ) {
+    // TODO: The conditions to apply post-summon effects here are inaccurate
+    if (!this.loaded || waveIndex % 10 === 1) {
       globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeActiveTrigger, true);
       this.queuePostSummon();
     }
@@ -94,7 +114,7 @@ export class SummonPhase extends PokemonPhase {
       currentBattle.battleType === BattleType.TRAINER
       || currentBattle.mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE
     ) {
-      if (this.playsTrainerAnim) {
+      if (this.playTrainerAnim) {
         await this.playEnemyTrainerThrowSequence();
       }
       await this.playPokeBallSummonFX();
@@ -341,7 +361,12 @@ export class SummonPhase extends PokemonPhase {
   }
 
   private queuePostSummon(): void {
-    globalScene.phaseManager.createAndPushPhase("PostSummonPhase", this.getPokemon().getBattlerIndex());
+    const { phaseManager } = globalScene;
+    if (this.delayPostSummon) {
+      phaseManager.createAndPushPhase("PostSummonPhase", this.battlerIndex);
+    } else {
+      phaseManager.createAndUnshiftPhase("PostSummonPhase", this.battlerIndex);
+    }
   }
 
   // #endregion

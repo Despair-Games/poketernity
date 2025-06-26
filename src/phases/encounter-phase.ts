@@ -440,9 +440,11 @@ export class EncounterPhase extends BattlePhase {
         const doTrainerSummon = (): void => {
           this.hideEnemyTrainer();
           const availablePartyMembers = globalScene.getEnemyParty().filter((p) => !p.isFainted()).length;
-          globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.ENEMY);
+          globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.ENEMY, { delayPostSummon: true });
           if (double && availablePartyMembers > 1) {
-            globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.ENEMY_2);
+            globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.ENEMY_2, {
+              delayPostSummon: true,
+            });
           }
           this.end();
         };

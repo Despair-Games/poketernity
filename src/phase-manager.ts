@@ -646,7 +646,7 @@ export class PhaseManager {
   ): void {
     const phases = [
       this.createPhase("RecallPhase", battlerIndex, switchType),
-      this.createPhase("SwitchPhase", switchType, switchInIndex),
+      this.createPhase("SwitchPhase", battlerIndex, switchType, switchInIndex),
     ] as const;
 
     const validatePhaseId = () => {

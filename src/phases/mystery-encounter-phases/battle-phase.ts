@@ -77,9 +77,9 @@ export class MysteryEncounterBattlePhase extends Phase {
         globalScene.audioManager.playBgm();
       }
       const availablePartyMembers = globalScene.getEnemyParty().filter((p) => !p.isFainted()).length;
-      globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.ENEMY);
+      globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.ENEMY, { delayPostSummon: true });
       if (double && availablePartyMembers > 1) {
-        globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.ENEMY_2);
+        globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.ENEMY_2, { delayPostSummon: true });
       }
 
       if (!mysteryEncounter?.hideBattleIntroMessage) {
@@ -97,9 +97,11 @@ export class MysteryEncounterBattlePhase extends Phase {
         const doTrainerSummon = (): void => {
           this.hideEnemyTrainer();
           const availablePartyMembers = globalScene.getEnemyParty().filter((p) => !p.isFainted()).length;
-          globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.ENEMY);
+          globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.ENEMY, { delayPostSummon: true });
           if (double && availablePartyMembers > 1) {
-            globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.ENEMY_2);
+            globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.ENEMY_2, {
+              delayPostSummon: true,
+            });
           }
           this.endBattleSetup();
         };
@@ -167,14 +169,14 @@ export class MysteryEncounterBattlePhase extends Phase {
     const availablePartyMembers = globalScene.getPlayerParty().filter((p) => p.isAllowedInBattle());
 
     if (!availablePartyMembers[0].isOnField()) {
-      globalScene.phaseManager.createAndPushPhase("SummonPhase", BattlerIndex.PLAYER);
+      globalScene.phaseManager.createAndPushPhase("SummonPhase", BattlerIndex.PLAYER, { delayPostSummon: true });
     }
 
     if (double) {
       if (availablePartyMembers.length > 1) {
         globalScene.phaseManager.createAndPushPhase("ToggleDoublePositionPhase", true);
         if (!availablePartyMembers[1].isOnField()) {
-          globalScene.phaseManager.createAndPushPhase("SummonPhase", BattlerIndex.PLAYER_2);
+          globalScene.phaseManager.createAndPushPhase("SummonPhase", BattlerIndex.PLAYER_2, { delayPostSummon: true });
         }
       }
     } else {

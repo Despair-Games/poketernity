@@ -47,7 +47,7 @@ export class CheckSwitchPhase extends BattlePhase {
 
     // ...if the checked Pokemon is somehow not on the field
     if (field.getAll().indexOf(pokemon) === -1) {
-      phaseManager.createAndUnshiftPhase("SummonPhase", pokemon.getBattlerIndex());
+      phaseManager.createAndUnshiftPhase("SummonPhase", pokemon.getBattlerIndex(), { delayPostSummon: true });
       this.end();
       return;
     }

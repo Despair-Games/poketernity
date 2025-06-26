@@ -60,7 +60,7 @@ export class SwitchPhase extends PokemonPhase {
 
   public override end(): void {
     if (this.withSummon) {
-      globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", this.battlerIndex, false);
+      globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", this.battlerIndex);
     }
     super.end();
   }

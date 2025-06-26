@@ -48,7 +48,7 @@ export class RevivalBlessingAttr extends MoveEffectAttr {
           globalScene.phaseManager.unshiftPhase(
             // SummonPhase is queued separately from SwitchPhase to disable the Enemy Trainer anim
             phaseManager.createPhase("SwitchPhase", allyPokemon.getBattlerIndex(), SwitchType.SWITCH, slotIndex, false),
-            phaseManager.createPhase("SummonPhase", allyPokemon.getBattlerIndex(), false, false),
+            phaseManager.createPhase("SummonPhase", allyPokemon.getBattlerIndex(), { playTrainerAnim: false }),
           );
         }
       }

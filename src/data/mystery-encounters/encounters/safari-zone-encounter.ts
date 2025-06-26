@@ -328,7 +328,7 @@ async function summonSafariPokemon() {
   encounter.misc.pokemon = pokemon;
   encounter.misc.safariPokemonRemaining -= 1;
 
-  globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.ENEMY);
+  globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.ENEMY, { delayPostSummon: true });
 
   encounter.setDialogueToken("pokemonName", getPokemonNameWithAffix(pokemon));
 
