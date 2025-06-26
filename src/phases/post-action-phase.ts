@@ -1,8 +1,6 @@
-// -- start tsdoc imports --
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { TurnCommand } from "#app/turn-command-manager";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-// -- end tsdoc imports --
 
 import { globalScene } from "#app/global-scene";
 import type { FieldBattlerIndex } from "#enums/battler-index";

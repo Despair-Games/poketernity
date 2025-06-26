@@ -1,8 +1,6 @@
-// -- start tsdoc imports --
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { GameOverPhase } from "#phases/game-over-phase";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-// -- end tsdoc imports--
 
 import { globalScene } from "#app/global-scene";
 import { EVIL_BOSS_2_WAVE } from "#constants/wave-constants";

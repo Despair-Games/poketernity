@@ -1,8 +1,6 @@
-// -- start tsdoc imports --
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { IMysteryEncounter } from "#mystery-encounters/mystery-encounter";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-// -- end tsdoc imports --
 
 import type Battle from "#app/battle";
 import { globalScene } from "#app/global-scene";

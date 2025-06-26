@@ -1,8 +1,6 @@
-// -- start tsdoc imports
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { MovePhase } from "#phases/move-phase";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-// -- end tsdoc imports
 
 import { PreDefendAbAttr } from "#abilities/pre-defend-ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";

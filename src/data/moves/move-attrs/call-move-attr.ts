@@ -1,11 +1,9 @@
-// -- start tsdoc imports --
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { CopycatAttr } from "#moves/copycat-attr";
 import type { MetronomeAttr } from "#moves/metronome-attr";
 import type { NaturePowerAttr } from "#moves/nature-power-attr";
 import type { RandomMovesetMoveAttr } from "#moves/random-moveset-move-attr";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-// -- end tsdoc imports --
 
 import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#enums/battler-index";

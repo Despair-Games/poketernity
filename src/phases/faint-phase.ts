@@ -1,10 +1,8 @@
-// -- start tsdoc imports --
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { BattlerTag } from "#battler-tags/battler-tag";
 import type { GameOverPhase } from "#phases/game-over-phase";
 import type { MovePhase } from "#phases/move-phase";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-// -- end tsdoc imports --
 
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { PostFaintAbAttr } from "#abilities/post-faint-ab-attr";

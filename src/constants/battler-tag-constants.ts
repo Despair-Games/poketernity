@@ -1,4 +1,3 @@
-// -- start tsdoc imports --
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { CritBoostTag } from "#battler-tags/crit-boost-tag";
 import type { DamagingTrapTag } from "#battler-tags/damaging-trap-tag";
@@ -15,7 +14,6 @@ import type { TrappedTag } from "#battler-tags/trapped-tag";
 import type { TypeBoostTag } from "#battler-tags/type-boost-tag";
 import type { ElementalType } from "#enums/elemental-type";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-// -- end tsdoc imports --
 
 import { BattlerTagType } from "#enums/battler-tag-type";
 

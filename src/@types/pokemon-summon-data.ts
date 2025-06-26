@@ -1,9 +1,7 @@
-// -- start tsdoc imports --
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-// -- end tsdoc imports
 
 import type { BattlerTag } from "#battler-tags/battler-tag";
 import type { PokemonSpeciesForm } from "#data/pokemon-species-form";

@@ -1,8 +1,6 @@
-// -- start tsdoc imports --
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { ShowAbilityPhase } from "#phases/show-ability-phase";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-// -- end tsdoc imports --
 
 import type { Ability } from "#abilities/ability";
 import { AbAttrFlag } from "#enums/ab-attr-flag";

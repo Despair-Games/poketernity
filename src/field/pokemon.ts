@@ -1,10 +1,8 @@
-// -- start tsdoc imports --
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type Battle from "#app/battle";
 import type BattleScene from "#app/battle-scene";
 import type { FaintPhase } from "#phases/faint-phase";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-// -- end tsdoc imports --
 
 import type { AbAttr } from "#abilities/ab-attr";
 import type { Ability } from "#abilities/ability";

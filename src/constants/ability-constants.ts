@@ -1,9 +1,7 @@
-// -- start tsdoc imports --
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { Ability } from "#abilities/ability";
 import type { SuppressWeatherEffectAbAttr } from "#abilities/suppress-weather-effect-ab-attr";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-// -- end tsdoc imports --
 
 import { AbilityId } from "#enums/ability-id";
 

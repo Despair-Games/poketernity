@@ -1,8 +1,6 @@
-// -- start tsdoc imports --
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { Pokemon } from "#field/pokemon";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-// -- end tsdoc imports --
 
 import type { BattleAnim } from "#animations/battle-anims";
 import type { easeFunctions } from "#animations/ease-functions";

@@ -1,10 +1,8 @@
-// -- start tsdoc imports --
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { CommandPhase } from "#phases/command-phase";
 import type { TurnEndPhase } from "#phases/turn-end-phase";
 import type { TurnStartPhase } from "#phases/turn-start-phase";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-// -- end tsdoc imports --
 
 import { updateUserInfo } from "#app/account";
 import BattleScene from "#app/battle-scene";

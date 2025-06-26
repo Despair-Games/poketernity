@@ -1,9 +1,7 @@
-// -- start tsdoc imports --
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { ElementalType } from "#enums/elemental-type";
 import type { Move } from "#moves/move";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-// -- end tsdoc imports --
 
 import { ArenaTagType } from "#enums/arena-tag-type";
 

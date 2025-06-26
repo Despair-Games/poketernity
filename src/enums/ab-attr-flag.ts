@@ -1,4 +1,3 @@
-// -- start tsdoc imports --
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { AbAttr } from "#abilities/ab-attr";
 import type { AddSecondStrikeAbAttr } from "#abilities/add-second-strike-ab-attr";
@@ -109,7 +108,6 @@ import type { WeightMultiplierAbAttr } from "#abilities/weight-multiplier-ab-att
 import type { WonderSkinAbAttr } from "#abilities/wonder-skin-ab-attr";
 import type { BadDreamsAbAttr } from "#abilities/bad-dreams-ab-attr";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-// -- end tsdoc imports --
 
 import type { EnumValues } from "#types/enum-values";
 
