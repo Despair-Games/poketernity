@@ -18,17 +18,14 @@ export class GameOverModifierRewardPhase extends ModifierRewardPhase {
       globalScene.audioManager.playSound("level_up_fanfare");
       ui.setMessageMode();
       ui.fadeIn(250).then(() => {
-        ui.showText(
-          i18next.t("battle:rewardGain", { modifierName: newModifier?.type.name }),
-          null,
-          () => {
+        ui.showText(i18next.t("battle:rewardGain", { modifierName: newModifier?.type.name }), {
+          callback: () => {
             time.delayedCall(1500, () => arenaBg.setVisible(true));
             resolve();
           },
-          null,
-          true,
-          1500,
-        );
+          prompt: true,
+          promptDelay: 1500,
+        });
       });
     });
   }

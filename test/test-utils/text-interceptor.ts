@@ -12,7 +12,7 @@ export class TextInterceptor {
   showText(
     text: string,
     _delay?: number,
-    _callback?: Function,
+    _callback?: VoidFunction,
     _callbackDelay?: number,
     _prompt?: boolean,
     _promptDelay?: number,
@@ -25,7 +25,7 @@ export class TextInterceptor {
     text: string,
     name: string,
     _delay?: number,
-    _callback?: Function,
+    _callback?: VoidFunction,
     _callbackDelay?: number,
     _promptDelay?: number,
   ): void {

@@ -57,16 +57,23 @@ export function queueEncounterMessage(contentKey: string): void {
  * @param prompt whether or not to use the promptDelay
  * @param promptDelay the delay of the prompt in milliseconds
  */
-export function showEncounterText(
+export async function showEncounterText(
   contentKey: string,
-  delay: number | null = null,
-  callbackDelay: number = 0,
-  prompt: boolean = true,
-  promptDelay: number | null = null,
+  {
+    delay,
+    callbackDelay = 0,
+    prompt = true,
+    promptDelay,
+  }: {
+    delay?: number;
+    callbackDelay?: number;
+    prompt?: boolean;
+    promptDelay?: number;
+  } = {},
 ): Promise<void> {
   return new Promise<void>((resolve) => {
-    const text: string | null = getEncounterText(contentKey);
-    globalScene.ui.showText(text ?? "", delay, () => resolve(), callbackDelay, prompt, promptDelay);
+    const text = getEncounterText(contentKey) ?? "";
+    globalScene.ui.showText(text, { delay, callback: () => resolve(), callbackDelay, prompt, promptDelay });
   });
 }
 

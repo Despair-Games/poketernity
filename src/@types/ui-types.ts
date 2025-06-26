@@ -5,6 +5,14 @@ import type { PlayerPokemon } from "#field/player-pokemon";
 import type { PokemonMove } from "#field/pokemon-move";
 import type { PokemonHeldItemModifier } from "#modifier/modifier";
 
+export interface ShowTextOptions {
+  delay?: number;
+  callback?: VoidFunction;
+  callbackDelay?: number;
+  prompt?: boolean;
+  promptDelay?: number;
+}
+
 // #region Party UI
 
 export type PartyModifierTransferSelectCallback = (

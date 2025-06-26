@@ -205,9 +205,15 @@ const safariZoneGameOptions: MysteryEncounterOption[] = [
       // 80% chance to increase flee stage +1
       const fleeChangeResult = tryChangeFleeStage(1, 8);
       if (!fleeChangeResult) {
-        await showEncounterText(getEncounterText(`${namespace}:safari.busy_eating`) ?? "", null, 1000, false);
+        await showEncounterText(getEncounterText(`${namespace}:safari.busy_eating`) ?? "", {
+          callbackDelay: 1000,
+          prompt: false,
+        });
       } else {
-        await showEncounterText(getEncounterText(`${namespace}:safari.eating`) ?? "", null, 1000, false);
+        await showEncounterText(getEncounterText(`${namespace}:safari.eating`) ?? "", {
+          callbackDelay: 1000,
+          prompt: false,
+        });
       }
 
       await doEndTurn(1);
@@ -232,11 +238,11 @@ const safariZoneGameOptions: MysteryEncounterOption[] = [
       tryChangeFleeStage(-2);
       // 80% chance to decrease catch stage -1
       const catchChangeResult = tryChangeCatchStage(-1, 8);
-      if (!catchChangeResult) {
-        await showEncounterText(getEncounterText(`${namespace}:safari.beside_itself_angry`) ?? "", null, 1000, false);
-      } else {
-        await showEncounterText(getEncounterText(`${namespace}:safari.angry`) ?? "", null, 1000, false);
-      }
+      await showEncounterText(
+        getEncounterText(catchChangeResult ? `${namespace}:safari.angry` : `${namespace}:safari.beside_itself_angry`)
+          ?? "",
+        { callbackDelay: 1000, prompt: false },
+      );
 
       await doEndTurn(2);
       return true;
@@ -517,8 +523,14 @@ function isPokemonFlee(pokemon: EnemyPokemon, fleeStage: number): boolean {
   return roll < fleeRate;
 }
 
-function tryChangeFleeStage(change: number, chance?: number): boolean {
-  if (chance && randSeedInt(10) >= chance) {
+/**
+ * TODO: confirm function description (it probably changes how likely the pokemon is to flee?)
+ * @param change - How many stages to change by
+ * @param chance - (Optional) The % chance for the change to occur. Must be between `0-10` (`10` = `100%`, `5` = `50%`, etc)
+ * @returns Whether the change occurred
+ */
+function tryChangeFleeStage(change: number, chance: number = 0): boolean {
+  if (randSeedInt(10) >= chance) {
     return false;
   }
   const currentFleeStage = globalScene.currentBattle.mysteryEncounter!.misc.fleeStage ?? 0;
@@ -526,8 +538,14 @@ function tryChangeFleeStage(change: number, chance?: number): boolean {
   return true;
 }
 
-function tryChangeCatchStage(change: number, chance?: number): boolean {
-  if (chance && randSeedInt(10) >= chance) {
+/**
+ * TODO: confirm function description (it probably changes how likely you are to catch the pokemon?)
+ * @param change - How many stages to change by
+ * @param chance - (Optional) The % chance for the change to occur. Must be between `0-10` (`10` = `100%`, `5` = `50%`, etc)
+ * @returns Whether the change occurred
+ */
+function tryChangeCatchStage(change: number, chance: number = 0): boolean {
+  if (randSeedInt(10) >= chance) {
     return false;
   }
   const currentCatchStage = globalScene.currentBattle.mysteryEncounter!.misc.catchStage ?? 0;

@@ -1,6 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
+import type { ShowTextOptions } from "#types/ui-types";
 import { AwaitableUiHandler } from "#ui/awaitable-ui-handler";
 import { addTextObject } from "#ui/text-utils";
 import { getFrameMs, isNil } from "#utils/common-utils";
@@ -46,18 +47,11 @@ export abstract class MessageUiHandler extends AwaitableUiHandler {
    * @param prompt - (Optional) Whether to display the prompt icon at the end of the textbox.
    * @param promptDelay - (Optional) The delay in milliseconds before showing the prompt. Defaults to `null` for no delay.
    */
-  public showText(
-    text: string,
-    delay?: number | null,
-    callback?: Function | null,
-    callbackDelay?: number | null,
-    prompt?: boolean | null,
-    promptDelay?: number | null,
-  ) {
+  public showText(text: string, { delay, callback, callbackDelay, prompt, promptDelay }: ShowTextOptions = {}) {
     if (isNil(text)) {
-      console.error(`Missing text parameter in ${this.constructor.name}#showText(), please report this`);
+      console.error(`Missing text parameter in "${this.constructor.name}#showText()"!`);
     }
-    this.showTextInternal(text, delay, callback, callbackDelay, prompt, promptDelay);
+    this.showTextInternal(text, { delay, callback, callbackDelay, prompt, promptDelay });
   }
 
   /**
@@ -74,35 +68,27 @@ export abstract class MessageUiHandler extends AwaitableUiHandler {
   public showDialogue(
     text: string,
     _name?: string,
-    delay?: number | null,
-    callback?: Function | null,
-    callbackDelay?: number | null,
-    prompt?: boolean | null,
-    promptDelay?: number | null,
+    delay?: number,
+    callback?: VoidFunction,
+    callbackDelay?: number,
+    prompt?: boolean,
+    promptDelay?: number,
   ) {
-    this.showTextInternal(text, delay, callback, callbackDelay, prompt, promptDelay);
+    this.showTextInternal(text, { delay, callback, callbackDelay, prompt, promptDelay });
   }
 
   private showTextInternal(
     text: string,
-    delay?: number | null,
-    callback?: Function | null,
-    callbackDelay?: number | null,
-    prompt?: boolean | null,
-    promptDelay?: number | null,
+    { delay = 20, callback, callbackDelay, prompt, promptDelay }: ShowTextOptions = {},
   ) {
-    if (delay === null || delay === undefined) {
-      delay = 20;
-    }
-
     // Pattern matching regex that checks for @c{}, @f{}, @s{}, and @f{} patterns within message text and parses them to their respective behaviors.
     const charVarMap = new Map<number, string>();
     const delayMap = new Map<number, number>();
     const soundMap = new Map<number, string>();
     const fadeMap = new Map<number, number>();
     const actionPattern = /@(c|d|s|f)\{(.*?)\}/;
-    let actionMatch: RegExpExecArray | null;
-    while ((actionMatch = actionPattern.exec(text))) {
+    let actionMatch: RegExpExecArray | null = actionPattern.exec(text);
+    while (actionMatch) {
       switch (actionMatch[1]) {
         case "c":
           charVarMap.set(actionMatch.index, actionMatch[2]);
@@ -118,6 +104,7 @@ export abstract class MessageUiHandler extends AwaitableUiHandler {
           break;
       }
       text = text.slice(0, actionMatch.index) + text.slice(actionMatch.index + actionMatch[2].length + 4);
+      actionMatch = actionPattern.exec(text);
     }
 
     if (text) {

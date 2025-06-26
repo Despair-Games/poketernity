@@ -53,7 +53,12 @@ export class MessagePhase extends Phase {
         this.promptDelay ?? 0,
       );
     } else {
-      globalScene.ui.showText(this.text, null, () => this.end(), this.callbackDelay, this.prompt, this.promptDelay);
+      globalScene.ui.showText(this.text, {
+        callback: () => this.end(),
+        callbackDelay: this.callbackDelay,
+        prompt: this.prompt,
+        promptDelay: this.promptDelay,
+      });
     }
   }
 

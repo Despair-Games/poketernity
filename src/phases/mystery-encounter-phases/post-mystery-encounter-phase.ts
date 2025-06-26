@@ -74,7 +74,11 @@ export class PostMysteryEncounterPhase extends Phase {
         if (title) {
           ui.showDialogue(text ?? "", title, null, nextAction, 0, i === 1 ? this.FIRST_DIALOGUE_PROMPT_DELAY : 0);
         } else {
-          ui.showText(text ?? "", null, nextAction, i === 1 ? this.FIRST_DIALOGUE_PROMPT_DELAY : 0, true);
+          ui.showText(text ?? "", {
+            callback: nextAction,
+            callbackDelay: i === 1 ? this.FIRST_DIALOGUE_PROMPT_DELAY : 0,
+            prompt: true,
+          });
         }
       };
 

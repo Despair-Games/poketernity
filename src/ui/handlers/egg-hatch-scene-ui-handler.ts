@@ -40,7 +40,7 @@ export class EggHatchSceneUiHandler extends UiHandler {
   }
 
   public override show(): boolean {
-    this.getUi().showText("", 0);
+    globalScene.ui.showText("", { delay: 0 });
 
     globalScene.setModifiersVisible(false);
 

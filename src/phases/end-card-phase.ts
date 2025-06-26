@@ -45,16 +45,13 @@ export class EndCardPhase extends Phase {
     ui.clearText();
 
     ui.fadeIn(1000).then(() => {
-      ui.showText(
-        "",
-        null,
-        () => {
+      ui.showText("", {
+        callback: () => {
           messageHandler?.bg.setVisible(true);
           this.end();
         },
-        null,
-        true,
-      );
+        prompt: true,
+      });
     });
   }
 }

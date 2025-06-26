@@ -66,10 +66,8 @@ export class ScanIvsPhase extends PokemonPhase {
     }
 
     if (!settings.general.hideIvScanner) {
-      ui.showText(
-        i18next.t("battle:ivScannerUseQuestion", { pokemonName: getPokemonNameWithAffix(pokemon) }),
-        null,
-        () => {
+      ui.showText(i18next.t("battle:ivScannerUseQuestion", { pokemonName: getPokemonNameWithAffix(pokemon) }), {
+        callback: () => {
           const options: ConfirmModeConfig = {
             yesHandler: () => {
               ui.setMessageMode();
@@ -86,7 +84,7 @@ export class ScanIvsPhase extends PokemonPhase {
           };
           ui.setMode<ConfirmUiHandler>(UiMode.CONFIRM, options);
         },
-      );
+      });
     } else {
       this.end();
     }

@@ -99,15 +99,17 @@ export class GameOverPhase extends BattlePhase {
         });
       };
 
-      ui.showText(i18next.t("battle:retryBattle"), null, () => {
-        const retryOptions: ConfirmModeConfig = {
-          yesHandler: reloadGame,
-          noHandler: () => {
-            this.handleGameOver();
-          },
-          inputDelay: 1000,
-        };
-        ui.setMode<ConfirmUiHandler>(UiMode.CONFIRM, retryOptions);
+      ui.showText(i18next.t("battle:retryBattle"), {
+        callback: () => {
+          const retryOptions: ConfirmModeConfig = {
+            yesHandler: reloadGame,
+            noHandler: () => {
+              this.handleGameOver();
+            },
+            inputDelay: 1000,
+          };
+          ui.setMode<ConfirmUiHandler>(UiMode.CONFIRM, retryOptions);
+        },
       });
     }
   }

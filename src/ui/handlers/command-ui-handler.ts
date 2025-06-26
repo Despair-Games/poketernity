@@ -99,7 +99,7 @@ export class CommandUiHandler extends UiHandler {
         i18next.t("commandUiHandler:actionMessage", {
           pokemonName: getPokemonNameWithAffix(commandPhase.getPokemon()),
         }),
-        0,
+        { delay: 0 },
       );
     }
 

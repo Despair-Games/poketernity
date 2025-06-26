@@ -28,18 +28,18 @@ export class ExpPhase extends PlayerPartyMemberPokemonPhase {
     exp.value = Math.floor(exp.value);
     globalScene.ui.showText(
       i18next.t("battle:expGain", { pokemonName: getPokemonNameWithAffix(pokemon), exp: exp.value }),
-      null,
-      () => {
-        const lastLevel = pokemon.level;
-        pokemon.addExp(exp.value);
-        const newLevel = pokemon.level;
-        if (newLevel > lastLevel) {
-          globalScene.phaseManager.createAndUnshiftPhase("LevelUpPhase", this.partyMemberIndex, lastLevel, newLevel);
-        }
-        pokemon.updateInfo().then(() => this.end());
+      {
+        callback: () => {
+          const lastLevel = pokemon.level;
+          pokemon.addExp(exp.value);
+          const newLevel = pokemon.level;
+          if (newLevel > lastLevel) {
+            globalScene.phaseManager.createAndUnshiftPhase("LevelUpPhase", this.partyMemberIndex, lastLevel, newLevel);
+          }
+          pokemon.updateInfo().then(() => this.end());
+        },
+        prompt: true,
       },
-      null,
-      true,
     );
   }
 }
