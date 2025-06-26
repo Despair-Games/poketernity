@@ -268,10 +268,9 @@ export class FaintPhase extends PokemonPhase {
 
   protected handleFinalBossFaint(): void {
     const enemy = this.getPokemon();
+    const text = classicFinalBossDialogue.secondStageWin;
     if (enemy.formIndex > 0) {
-      globalScene.ui.showDialogue(classicFinalBossDialogue.secondStageWin, enemy.species.name, null, () =>
-        this.doFaint(),
-      );
+      globalScene.ui.showDialogue(text, enemy.species.name, () => this.doFaint());
     } else {
       // Final boss' HP threshold has been bypassed; cancel faint and force check for 2nd phase
       enemy.hp++;

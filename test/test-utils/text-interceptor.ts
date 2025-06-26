@@ -24,8 +24,8 @@ export class TextInterceptor {
   showDialogue(
     text: string,
     name: string,
-    _delay?: number,
     _callback?: VoidFunction,
+    _delay?: number,
     _callbackDelay?: number,
     _promptDelay?: number,
   ): void {

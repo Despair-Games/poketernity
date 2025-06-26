@@ -67,7 +67,7 @@ export class TrainerVictoryPhase extends BattlePhase {
           const showMessage = (): void => {
             const originalFunc = showMessageOrEnd;
             showMessageOrEnd = (): void =>
-              ui.showDialogue(message, trainer.getName(TrainerSlot.TRAINER, true), null, originalFunc);
+              ui.showDialogue(message, trainer.getName(TrainerSlot.TRAINER, true), originalFunc);
 
             showMessageOrEnd();
           };

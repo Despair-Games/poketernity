@@ -118,7 +118,7 @@ export class MysteryEncounterBattlePhase extends Phase {
         }, mysteryEncounter?.getSeedOffset() ?? 0);
         message = message!; // tell TS compiler it's defined now
         const showDialogueAndSummon = (): void => {
-          ui.showDialogue(message, trainer?.getName(TrainerSlot.NONE, true), null, () => {
+          ui.showDialogue(message, trainer?.getName(TrainerSlot.NONE, true) ?? "", () => {
             globalScene.charSprite.hide().then(() => globalScene.hideFieldOverlay(250).then(() => doSummon()));
           });
         };

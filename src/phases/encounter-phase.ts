@@ -462,7 +462,7 @@ export class EncounterPhase extends BattlePhase {
         }, waveIndex);
         message = message!; // tell TS compiler it's defined now
         const showDialogueAndSummon = (): void => {
-          ui.showDialogue(message, trainer.getName(TrainerSlot.NONE, true), null, () => {
+          ui.showDialogue(message, trainer.getName(TrainerSlot.NONE, true), () => {
             charSprite.hide().then(() => globalScene.hideFieldOverlay(250).then(() => doSummon()));
           });
         };
@@ -512,7 +512,7 @@ export class EncounterPhase extends BattlePhase {
               const text = getEncounterText(dialogue.text)!;
               i++;
               if (title) {
-                ui.showDialogue(text, title, null, nextAction, 0, i === 1 ? FIRST_DIALOGUE_PROMPT_DELAY : 0);
+                ui.showDialogue(text, title, nextAction, undefined, 0, i === 1 ? FIRST_DIALOGUE_PROMPT_DELAY : 0);
               } else {
                 ui.showText(text, {
                   callback: nextAction,
@@ -537,7 +537,7 @@ export class EncounterPhase extends BattlePhase {
         doEncounter();
       } else {
         doTrainerExclamation();
-        ui.showDialogue(encounterMessage, "???", null, () => {
+        ui.showDialogue(encounterMessage, "???", () => {
           charSprite.hide().then(() => globalScene.hideFieldOverlay(250).then(() => doEncounter()));
         });
       }
@@ -658,7 +658,7 @@ export class EncounterPhase extends BattlePhase {
           if (!gameData.getSeenDialogues()[localizationKey]) {
             gameData.saveSeenDialogue(localizationKey);
           }
-          ui.showDialogue(encounterDialogue, enemy?.species.name, null, () => {
+          ui.showDialogue(encounterDialogue, enemy?.species.name ?? "something broke", () => {
             this.doEncounterCommon(false);
           });
         }

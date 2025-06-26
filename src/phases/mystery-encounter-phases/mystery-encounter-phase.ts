@@ -137,7 +137,7 @@ export class MysteryEncounterPhase extends Phase {
 
         i++;
         if (title) {
-          ui.showDialogue(text ?? "", title, null, nextAction, 0, i === 1 ? this.FIRST_DIALOGUE_PROMPT_DELAY : 0);
+          ui.showDialogue(text ?? "", title, nextAction, undefined, 0, i === 1 ? this.FIRST_DIALOGUE_PROMPT_DELAY : 0);
         } else {
           ui.showText(text ?? "", {
             callback: nextAction,

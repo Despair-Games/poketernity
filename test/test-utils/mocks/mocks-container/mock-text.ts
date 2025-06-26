@@ -26,7 +26,6 @@ export class MockText implements MockGameObject {
     // Phaser.GameObjects.Text.prototype.updateText = () => null;
     // Phaser.Textures.TextureManager.prototype.addCanvas = () => {};
     UI.prototype.showText = this.showText;
-    // @ts-expect-error - temporary
     UI.prototype.showDialogue = this.showDialogue;
     this.text = "";
     this.phaserText = "";
@@ -94,9 +93,9 @@ export class MockText implements MockGameObject {
 
   showDialogue(
     keyOrText: string,
-    name: string = "",
+    name: string,
+    callback: VoidFunction,
     delay?: number,
-    callback?: VoidFunction,
     callbackDelay?: number,
     promptDelay?: number,
   ) {
@@ -104,8 +103,8 @@ export class MockText implements MockGameObject {
     (this.scene.messageWrapper as TextInterceptor).showDialogue(
       keyOrText,
       name,
-      delay,
       callback,
+      delay,
       callbackDelay,
       promptDelay,
     );

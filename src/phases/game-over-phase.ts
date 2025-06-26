@@ -66,8 +66,8 @@ export class GameOverPhase extends BattlePhase {
       ui.showDialogue(
         i18next.t("miscDialogue:ending_endless", { context: genderStr }),
         i18next.t("miscDialogue:ending_name"),
-        0,
         () => this.handleGameOver(),
+        0,
       );
     } else if (this.isVictory || !settings.general.enableRetries) {
       this.handleGameOver();
@@ -207,7 +207,7 @@ export class GameOverPhase extends BattlePhase {
                     getCharVariantFromDialogue(dialogue),
                   )
                   .then(() => {
-                    ui.showDialogue(dialogueKey, rivalName, null, () => {
+                    ui.showDialogue(dialogueKey, rivalName, () => {
                       ui.fadeOut(500).then(() => {
                         globalScene.charSprite.hide().then(() => {
                           displayEndCard();

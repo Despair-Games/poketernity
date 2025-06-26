@@ -87,12 +87,12 @@ export async function showEncounterText(
 export function showEncounterDialogue(
   textContentKey: string,
   speakerContentKey: string,
-  delay: number | null = null,
+  delay?: number,
   callbackDelay: number = 0,
 ): Promise<void> {
   return new Promise<void>((resolve) => {
     const text: string | null = getEncounterText(textContentKey);
     const speaker: string | null = getEncounterText(speakerContentKey);
-    globalScene.ui.showDialogue(text ?? "", speaker ?? "", delay, () => resolve(), callbackDelay);
+    globalScene.ui.showDialogue(text ?? "", speaker ?? "", () => resolve(), delay, callbackDelay);
   });
 }

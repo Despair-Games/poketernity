@@ -526,11 +526,11 @@ function isPokemonFlee(pokemon: EnemyPokemon, fleeStage: number): boolean {
 /**
  * TODO: confirm function description (it probably changes how likely the pokemon is to flee?)
  * @param change - How many stages to change by
- * @param chance - (Optional) The % chance for the change to occur. Must be between `0-10` (`10` = `100%`, `5` = `50%`, etc)
+ * @param chance - (Optional) The % chance for the change to occur. Must be between `1-10` (`10` = `100%`, `5` = `50%`, etc)
  * @returns Whether the change occurred
  */
-function tryChangeFleeStage(change: number, chance: number = 0): boolean {
-  if (randSeedInt(10) >= chance) {
+function tryChangeFleeStage(change: number, chance?: number): boolean {
+  if (chance && randSeedInt(10) >= chance) {
     return false;
   }
   const currentFleeStage = globalScene.currentBattle.mysteryEncounter!.misc.fleeStage ?? 0;
@@ -541,11 +541,11 @@ function tryChangeFleeStage(change: number, chance: number = 0): boolean {
 /**
  * TODO: confirm function description (it probably changes how likely you are to catch the pokemon?)
  * @param change - How many stages to change by
- * @param chance - (Optional) The % chance for the change to occur. Must be between `0-10` (`10` = `100%`, `5` = `50%`, etc)
+ * @param chance - (Optional) The % chance for the change to occur. Must be between `1-10` (`10` = `100%`, `5` = `50%`, etc)
  * @returns Whether the change occurred
  */
-function tryChangeCatchStage(change: number, chance: number = 0): boolean {
-  if (randSeedInt(10) >= chance) {
+function tryChangeCatchStage(change: number, chance?: number): boolean {
+  if (chance && randSeedInt(10) >= chance) {
     return false;
   }
   const currentCatchStage = globalScene.currentBattle.mysteryEncounter!.misc.catchStage ?? 0;

@@ -47,8 +47,8 @@ export class MessagePhase extends Phase {
       globalScene.ui.showDialogue(
         this.text,
         this.speaker,
-        null,
         () => this.end(),
+        undefined,
         this.callbackDelay,
         this.promptDelay ?? 0,
       );

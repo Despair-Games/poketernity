@@ -525,12 +525,11 @@ export class UI extends Phaser.GameObjects.Container {
     }
   }
 
-  // TODO: next; ShowDialogueOptions
   public showDialogue(
     keyOrText: string,
-    name: string | undefined,
-    delay: number | null,
+    name: string,
     callback: VoidFunction,
+    delay?: number,
     callbackDelay?: number,
     promptDelay?: number,
   ): void {
@@ -562,7 +561,7 @@ export class UI extends Phaser.GameObjects.Container {
       const messagePages = text.split(/\$/g).map((m) => m.trim());
       for (let p = messagePages.length - 1; p >= 0; p--) {
         const originalFunc = showMessageAndCallback;
-        showMessageAndCallback = () => this.showDialogue(messagePages[p], name, null, originalFunc);
+        showMessageAndCallback = () => this.showDialogue(messagePages[p], name, originalFunc);
       }
       showMessageAndCallback();
     } else {
