@@ -17,7 +17,7 @@ import { ModifierPoolType } from "#enums/modifier-pool-type";
 import type { Nature } from "#enums/nature";
 import type { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
-import { type PermanentStat, type TempBattleStat, BATTLE_STATS, Stat, TEMP_BATTLE_STATS } from "#enums/stat";
+import { BATTLE_STATS, type PermanentStat, Stat, TEMP_BATTLE_STATS, type TempBattleStat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { TextStyle } from "#enums/text-style";
 import type { VoucherType } from "#enums/voucher-type";

@@ -30,7 +30,7 @@ import type PokemonData from "#system/pokemon-data";
 import type { StarterMoveset } from "#types/starter-data";
 import { PlayerBattleInfo } from "#ui/battle-info";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
-import { NumberHolder, isNil } from "#utils/common-utils";
+import { isNil, NumberHolder } from "#utils/common-utils";
 import { PartyFilterNonFainted } from "#utils/party-ui-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 

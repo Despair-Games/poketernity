@@ -8,23 +8,23 @@ import { UiMode } from "#enums/ui-mode";
 import {
   ExtraModifierModifier,
   HealShopCostModifier,
-  TempExtraModifierModifier,
   type Modifier,
   type PokemonHeldItemModifier,
+  TempExtraModifierModifier,
 } from "#modifier/modifier";
 import {
+  type CustomModifierSettings,
   getPlayerModifierTypeOptions,
   getPlayerShopModifierTypeOptionsForWave,
+  type ModifierType,
+  type ModifierTypeOption,
   PokemonModifierType,
   PokemonMoveModifierType,
   PokemonPpRestoreModifierType,
   PokemonPpUpModifierType,
-  regenerateModifierPoolThresholds,
   RememberMoveModifierType,
+  regenerateModifierPoolThresholds,
   TmModifierType,
-  type CustomModifierSettings,
-  type ModifierType,
-  type ModifierTypeOption,
 } from "#modifier/modifier-type";
 import { BattlePhase } from "#phases/base/battle-phase";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";

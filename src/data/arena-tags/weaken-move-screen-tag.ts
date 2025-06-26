@@ -10,7 +10,7 @@ import type { MoveCategory } from "#enums/move-category";
 import type { MoveId } from "#enums/move-id";
 import type { Arena } from "#field/arena";
 import type { Pokemon } from "#field/pokemon";
-import { type NumberHolder, BooleanHolder } from "#utils/common-utils";
+import { BooleanHolder, type NumberHolder } from "#utils/common-utils";
 
 /**
  * Reduces the damage of specific move categories in the arena.

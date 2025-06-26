@@ -14,12 +14,13 @@ import { MockTextureManager } from "#test/test-utils/mocks/mock-texture-manager"
 import fs from "node:fs";
 import Phaser from "phaser";
 import { vi } from "vitest";
-import InputManager = Phaser.Input.InputManager;
-import KeyboardManager = Phaser.Input.Keyboard.KeyboardManager;
-import KeyboardPlugin = Phaser.Input.Keyboard.KeyboardPlugin;
-import GamepadPlugin = Phaser.Input.Gamepad.GamepadPlugin;
-import EventEmitter = Phaser.Events.EventEmitter;
-import UpdateList = Phaser.GameObjects.UpdateList;
+
+const InputManager = Phaser.Input.InputManager;
+const KeyboardManager = Phaser.Input.Keyboard.KeyboardManager;
+const KeyboardPlugin = Phaser.Input.Keyboard.KeyboardPlugin;
+const GamepadPlugin = Phaser.Input.Gamepad.GamepadPlugin;
+const EventEmitter = Phaser.Events.EventEmitter;
+const UpdateList = Phaser.GameObjects.UpdateList;
 
 export class GameWrapper {
   public game: Phaser.Game;

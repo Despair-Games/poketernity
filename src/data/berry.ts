@@ -8,7 +8,7 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
 import { HitResult } from "#enums/hit-result";
-import { Stat, type BattleStat } from "#enums/stat";
+import { type BattleStat, Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import { getBerryName } from "#utils/berry-utils";
 import { NumberHolder, toDmgValue } from "#utils/common-utils";

@@ -5,6 +5,7 @@ import type { AlliedFieldDamageReductionAbAttr } from "#abilities/allied-field-d
 import type { AllyMoveCategoryPowerBoostAbAttr } from "#abilities/ally-move-category-power-boost-ab-attr";
 import type { AlwaysHitAbAttr } from "#abilities/always-hit-ab-attr";
 import type { ArenaTrapAbAttr } from "#abilities/arena-trap-ab-attr";
+import type { BadDreamsAbAttr } from "#abilities/bad-dreams-ab-attr";
 import type { BattlerTagImmunityAbAttr } from "#abilities/battler-tag-immunity-ab-attr";
 import type { BlockCritAbAttr } from "#abilities/block-crit-ab-attr";
 import type { BlockItemTheftAbAttr } from "#abilities/block-item-theft-ab-attr";
@@ -70,7 +71,6 @@ import type { PostTurnAbAttr } from "#abilities/post-turn-ab-attr";
 import type { PostVictoryAbAttr } from "#abilities/post-victory-ab-attr";
 import type { PostWeatherChangeAbAttr } from "#abilities/post-weather-change-ab-attr";
 import type { PostWeatherLapseAbAttr } from "#abilities/post-weather-lapse-ab-attr";
-import type { SturdyAbAttr } from "#abilities/sturdy-ab-attr";
 import type { PreSwitchOutAbAttr } from "#abilities/pre-switch-out-ab-attr";
 import type { PreWeatherDamageAbAttr } from "#abilities/pre-weather-damage-ab-attr";
 import type { PreventBerryUseAbAttr } from "#abilities/prevent-berry-use-ab-attr";
@@ -91,6 +91,7 @@ import type { StatMultiplierAbAttr } from "#abilities/stat-multiplier-ab-attr";
 import type { StatStageChangeCopyAbAttr } from "#abilities/stat-stage-change-copy-ab-attr";
 import type { StatStageChangeMultiplierAbAttr } from "#abilities/stat-stage-change-multiplier-ab-attr";
 import type { StatusEffectImmunityAbAttr } from "#abilities/status-effect-immunity-ab-attr";
+import type { SturdyAbAttr } from "#abilities/sturdy-ab-attr";
 import type { SuppressFieldAbilitiesAbAttr } from "#abilities/suppress-field-abilities-ab-attr";
 import type { SuppressWeatherEffectAbAttr } from "#abilities/suppress-weather-effect-ab-attr";
 import type { SyncEncounterNatureAbAttr } from "#abilities/sync-encounter-nature-ab-attr";
@@ -106,7 +107,6 @@ import type { UserFieldStatusEffectImmunityAbAttr } from "#abilities/user-field-
 import type { VariableMovePowerAbAttr } from "#abilities/variable-move-power-ab-attr";
 import type { WeightMultiplierAbAttr } from "#abilities/weight-multiplier-ab-attr";
 import type { WonderSkinAbAttr } from "#abilities/wonder-skin-ab-attr";
-import type { BadDreamsAbAttr } from "#abilities/bad-dreams-ab-attr";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import type { EnumValues } from "#types/enum-values";

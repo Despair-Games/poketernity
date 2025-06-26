@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import type { PhaseMap, PhaseKey } from "#types/phase-types";
+import type { PhaseKey, PhaseMap } from "#types/phase-types";
 
 export abstract class Phase {
   public abstract readonly phaseName: PhaseKey;

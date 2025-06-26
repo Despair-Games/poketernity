@@ -7,7 +7,7 @@ import { pokemonFormLevelMoves } from "#data/pokemon-form-level-moves";
 import { type LevelMoves, pokemonSpeciesLevelMoves } from "#data/pokemon-level-moves";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import { speciesStarterCosts } from "#data/starters";
-import { type Variant, variantData, type VariantSet } from "#data/variant";
+import { type Variant, type VariantSet, variantData } from "#data/variant";
 import { AbilityId } from "#enums/ability-id";
 import type { ElementalType } from "#enums/elemental-type";
 import { PokemonRegion } from "#enums/pokemon-region";

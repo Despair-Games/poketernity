@@ -12,7 +12,7 @@ import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 import { MoveTarget } from "#enums/move-target";
 import type { Pokemon } from "#field/pokemon";
-import { type Move, getMoveTargets } from "#moves/move";
+import { getMoveTargets, type Move } from "#moves/move";
 
 /**
  * Locks the source into using a move consecutively for `turnCount - 1` turns.

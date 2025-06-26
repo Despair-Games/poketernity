@@ -11,7 +11,7 @@ import { CANVAS_SCALE } from "#constants/ui-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import type { FieldBattlerIndex } from "#enums/battler-index";
-import { getStatKey, getStatStageChangeDescriptionKey, Stat, type BattleStat } from "#enums/stat";
+import { type BattleStat, getStatKey, getStatStageChangeDescriptionKey, Stat } from "#enums/stat";
 import { Tutorial } from "#enums/tutorial";
 import type { Pokemon } from "#field/pokemon";
 import { ResetNegativeStatStageModifier } from "#modifier/modifier";

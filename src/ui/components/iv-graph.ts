@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { PERMANENT_STATS, getStatKey } from "#enums/stat";
+import { getStatKey, PERMANENT_STATS } from "#enums/stat";
 import { TextStyle } from "#enums/text-style";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#ui/text-utils";
 import i18next from "i18next";

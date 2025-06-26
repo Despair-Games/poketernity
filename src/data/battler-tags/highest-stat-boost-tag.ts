@@ -10,7 +10,7 @@ import { allAbilities } from "#data/data-lists";
 import type { AbilityId } from "#enums/ability-id";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";
-import { EFFECTIVE_STATS, getStatKey, Stat, type EffectiveStat } from "#enums/stat";
+import { EFFECTIVE_STATS, type EffectiveStat, getStatKey, Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import i18next from "i18next";
 

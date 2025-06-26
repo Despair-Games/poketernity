@@ -10,7 +10,7 @@ import type { BattlerIndex } from "#enums/battler-index";
 import type { MoveId } from "#enums/move-id";
 import { MoveTarget } from "#enums/move-target";
 import type { Pokemon } from "#field/pokemon";
-import { type Move, getMoveTargets } from "#moves/move";
+import { getMoveTargets, type Move } from "#moves/move";
 import { OverrideMoveEffectAttr } from "#moves/override-move-effect-attr";
 import type { BooleanHolder } from "#utils/common-utils";
 

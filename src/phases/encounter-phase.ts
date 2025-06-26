@@ -42,10 +42,10 @@ import { getGoldenBugNetSpecies } from "#mystery-encounters/encounter-pokemon-ut
 import { BattlePhase } from "#phases/base/battle-phase";
 import { achvs } from "#system/achievements";
 import { settings } from "#system/settings-manager";
+import type { PhaseKey } from "#types/phase-types";
 import { loadEncounterAnimAssets } from "#utils/anim-utils";
 import { randSeedInt, randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
-import type { PhaseKey } from "#types/phase-types";
 
 /**
  * Starts the first encounter (wave 1) of a new run.
