@@ -350,8 +350,6 @@ export class SummonPhase extends PokemonPhase {
 
     pokemon.cry(pokemon.getHpRatio() > 0.25 ? undefined : { rate: 0.85 });
     pokemon.getSprite().clearTint();
-    /** @todo Should this be removed? */
-    pokemon.resetSummonData();
     globalScene.updateFieldScale();
 
     await new Promise((resolve) => time.delayedCall(1000, resolve));

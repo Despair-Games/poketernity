@@ -2724,7 +2724,7 @@ export default class BattleScene extends SceneBase {
         if (availablePartyMembers.length > 1) {
           this.phaseManager.createAndPushPhase("ToggleDoublePositionPhase", true);
           if (!availablePartyMembers[1].isOnField()) {
-            this.phaseManager.createAndPushPhase("SummonPhase", BattlerIndex.PLAYER_2);
+            this.phaseManager.createAndPushPhase("SummonPhase", BattlerIndex.PLAYER_2, { delayPostSummon: true });
           }
         }
 

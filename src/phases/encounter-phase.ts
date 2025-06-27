@@ -599,14 +599,16 @@ export class EncounterPhase extends BattlePhase {
       const availablePartyMembers = globalScene.getPokemonAllowedInBattle();
 
       if (!availablePartyMembers[0].isOnField()) {
-        globalScene.phaseManager.createAndPushPhase("SummonPhase", 0);
+        globalScene.phaseManager.createAndPushPhase("SummonPhase", BattlerIndex.PLAYER, { delayPostSummon: true });
       }
 
       if (double) {
         if (availablePartyMembers.length > 1) {
           globalScene.phaseManager.createAndPushPhase("ToggleDoublePositionPhase", true);
           if (!availablePartyMembers[1].isOnField()) {
-            globalScene.phaseManager.createAndPushPhase("SummonPhase", BattlerIndex.PLAYER_2);
+            globalScene.phaseManager.createAndPushPhase("SummonPhase", BattlerIndex.PLAYER_2, {
+              delayPostSummon: true,
+            });
           }
         }
       } else {

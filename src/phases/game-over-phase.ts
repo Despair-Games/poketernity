@@ -82,9 +82,15 @@ export class GameOverPhase extends BattlePhase {
 
             const availablePartyMembers = globalScene.getPokemonAllowedInBattle().length;
 
-            globalScene.phaseManager.createAndPushPhase("SummonPhase", BattlerIndex.PLAYER, { loaded: true });
+            globalScene.phaseManager.createAndPushPhase("SummonPhase", BattlerIndex.PLAYER, {
+              loaded: true,
+              delayPostSummon: true,
+            });
             if (currentBattle.double && availablePartyMembers > 1) {
-              globalScene.phaseManager.createAndPushPhase("SummonPhase", BattlerIndex.PLAYER_2, { loaded: true });
+              globalScene.phaseManager.createAndPushPhase("SummonPhase", BattlerIndex.PLAYER_2, {
+                loaded: true,
+                delayPostSummon: true,
+              });
             }
             // TODO: Should this also check `!gameMode.isDaily` like in `TitlePhase.end()`?
             if (currentBattle.waveIndex > 1 && currentBattle.battleType !== BattleType.TRAINER) {
