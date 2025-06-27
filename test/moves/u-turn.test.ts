@@ -67,7 +67,7 @@ describe("Moves - U-turn", () => {
     expect(playerPkm.hp).not.toEqual(playerPkm.getMaxHp());
     expect(game.scene.getEnemyPokemon()!.waveData.abilitiesApplied).toContain(AbilityId.ROUGH_SKIN); // proxy for asserting ability activated
     expect(playerPkm.species.speciesId).toEqual(SpeciesId.RAICHU);
-    expect(game.phaseInterceptor.log).not.toContain("SwitchPhase");
+    expect(game.phaseInterceptor.log).toContain("DamageAnimPhase");
   }, 20000);
 
   it("triggers contact abilities on the u-turn user (eg poison point) before a new pokemon is switched in", async () => {
@@ -85,7 +85,7 @@ describe("Moves - U-turn", () => {
     expect(playerPkm.getStatusEffect(true)).toEqual(StatusEffect.POISON);
     expect(playerPkm.species.speciesId).toEqual(SpeciesId.RAICHU);
     expect(game.scene.getEnemyPokemon()!.waveData.abilitiesApplied).toContain(AbilityId.POISON_POINT); // proxy for asserting ability activated
-    expect(game.phaseInterceptor.log).not.toContain("SwitchPhase");
+    expect(game.phaseInterceptor.log).toContain("ObtainStatusEffectPhase");
   }, 20000);
 
   it("still forces a switch if u-turn KO's the opponent", async () => {

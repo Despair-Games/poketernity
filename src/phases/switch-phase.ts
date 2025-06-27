@@ -114,6 +114,10 @@ export class SwitchPhase extends PokemonPhase {
     // Apply pre-switch effects from abilities (e.g. Regenerator)
     applyAbAttrs<PreSwitchOutAbAttr>(AbAttrFlag.PRE_SWITCH_OUT, activePokemon, false);
 
+    // Remove all tags applied to the active Pokemon's opponents by the active Pokemon
+    // (e.g. the "binding" effect from Bind, Fire Spin, etc.)
+    activePokemon.getOpponents().forEach((opp) => opp.removeTagsBySourceId(activePokemon.id));
+
     // If this switch is the result of Baton, Baton Pass, or Shed Tail, transfer all
     // relevant effects from the active Pokemon to the switched in Pokemon
     if (this.switchType === SwitchType.BATON_PASS) {
@@ -125,7 +129,7 @@ export class SwitchPhase extends PokemonPhase {
       }
     }
 
-    // If a Substitute was transferred, update the switched in Pokemon's position
+    // If a Substitute was transferred, update the switched in Pokemon's sprite
     // to a "behind Substitute" state
     const transferredSubTag = switchedInPokemon.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
     if (transferredSubTag) {
@@ -138,7 +142,7 @@ export class SwitchPhase extends PokemonPhase {
     party[this.switchInIndex] = activePokemon;
     party[this.fieldIndex] = switchedInPokemon;
 
-    // Reset the switched out Pokemon's summon data and turn data
+    // Reset the switched out Pokemon's summon and turn data
     activePokemon.resetSummonData();
     activePokemon.resetTurnData();
     // Mark the switched in Pokemon as having switched in this turn
