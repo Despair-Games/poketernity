@@ -110,7 +110,7 @@ class DefaultOverrides {
   /** Overrides the level cap to the number specified if greater than `0`. Negative numbers will disable the cap entirely. */
   readonly LEVEL_CAP_OVERRIDE: number = 0;
   readonly NEVER_CRIT_OVERRIDE: boolean = false;
-  /** default 1000 */
+  /** @defaultValue `1000` */
   readonly STARTING_MONEY_OVERRIDE: number = 0;
   /** Sets all shop item prices and reroll cost to 0 */
   readonly WAIVE_SHOP_FEES_OVERRIDE: boolean = false;
@@ -145,8 +145,8 @@ class DefaultOverrides {
   // ----------------
 
   /**
-   * Set the form index of any starter in the party whose `speciesId` is inside this override
-   * @see {@link allSpecies} in `src/data/pokemon-species.ts` for form indexes
+   * Set the form index of any starter in the party whose {@linkcode SpeciesId} is inside this override
+   * @see `src/data/pokemon-species.ts` for form indexes
    * @example
    * ```
    * const STARTER_FORM_OVERRIDES = {
@@ -156,15 +156,10 @@ class DefaultOverrides {
    */
   readonly STARTER_FORM_OVERRIDES: Partial<Record<SpeciesId, number>> = {};
 
-  /** default 5 or 20 for Daily */
+  /** @defaultValue `20` for Daily and `5` for all other modes */
   readonly STARTING_LEVEL_OVERRIDE: number = 0;
-  /**
-   * SPECIES OVERRIDE
-   * will only apply to the first starter in your party or each enemy pokemon
-   * default is 0 to not override
-   * @example SPECIES_OVERRIDE = SpeciesId.Bulbasaur;
-   */
-  readonly STARTER_SPECIES_OVERRIDE: SpeciesId | number = 0;
+  /** Will override the species of your pokemon when starting a new run */
+  readonly STARTER_SPECIES_OVERRIDE: SpeciesId | 0 = 0;
   readonly ABILITY_OVERRIDE: AbilityId = AbilityId.NONE;
   readonly PASSIVE_ABILITY_OVERRIDE: AbilityId = AbilityId.NONE;
   readonly STATUS_OVERRIDE: StatusEffect = StatusEffect.NONE;
@@ -213,9 +208,9 @@ class DefaultOverrides {
   /**
    * Override to give the enemy Pokemon a given amount of health segments
    *
-   * 0 (default): the health segments will be handled normally based on wave, level and species
-   * 1: the Pokemon will have a single health segment and therefore will not be a boss
-   * 2+: the Pokemon will be a boss with the given number of health segments
+   * - `0` (default): the health segments will be handled normally based on wave, level and species
+   * - `1`: the Pokemon will have a single health segment and therefore will not be a boss
+   * - `2+`: the Pokemon will be a boss with the given number of health segments
    */
   readonly ENEMY_HEALTH_SEGMENTS_OVERRIDE: number = 0;
   /**
