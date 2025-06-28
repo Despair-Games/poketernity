@@ -178,7 +178,7 @@ export class PlayerPokemon extends Pokemon {
 
       globalScene.ui.setMode<PartyUiHandler>(
         UiMode.PARTY,
-        PartyUiMode.FAINT_SWITCH,
+        PartyUiMode.MODAL_SWITCH,
         this.getFieldIndex(),
         (slotIndex: number, _option: PartyOption) => {
           if (slotIndex >= globalScene.currentBattle.getBattlerCount() && slotIndex < 6) {

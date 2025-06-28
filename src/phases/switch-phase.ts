@@ -47,8 +47,14 @@ export class SwitchPhase extends PokemonPhase {
   public override start(): void {
     if (this.switchInIndex !== -1) {
       this.updatePokemonData();
-      this.end();
-      return;
+      return this.end();
+    }
+
+    // If this is a faint-triggered switch, and the target Pokemon is somehow not fainted,
+    // end this phase (and resummon the target Pokemon)
+    // TODO: This is a bandaid fix that can be avoided if `TurnEndPhase` is responsible for scheduling faint switches
+    if (this.switchType === SwitchType.FAINT_SWITCH && this.getPokemon().isAllowedInBattle()) {
+      return this.end();
     }
 
     if (this.isPlayer) {
@@ -68,7 +74,7 @@ export class SwitchPhase extends PokemonPhase {
   private resolvePlayerSwitchInIndex(): void {
     globalScene.ui.setMode<PartyUiHandler>(
       UiMode.PARTY,
-      PartyUiMode.FAINT_SWITCH,
+      PartyUiMode.MODAL_SWITCH,
       this.fieldIndex,
       (cursor: number, option: PartyOption) => this.onPartyModeSelection(cursor, option),
     );
