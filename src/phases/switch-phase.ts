@@ -146,7 +146,9 @@ export class SwitchPhase extends PokemonPhase {
     activePokemon.resetSummonData();
     activePokemon.resetTurnData();
     // Mark the switched in Pokemon as having switched in this turn
-    switchedInPokemon.turnData.switchedInThisTurn = true;
+    if (this.switchType !== SwitchType.INITIAL_SWITCH) {
+      switchedInPokemon.turnData.switchedInThisTurn = true;
+    }
   }
 
   /**

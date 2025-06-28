@@ -45,7 +45,7 @@ export class RecallPhase extends PokemonPhase {
   private async recall(): Promise<void> {
     await this.playRecallMessage();
     await this.playRecallAnimation();
-    this.pokemon.leaveField(this.switchType === SwitchType.SWITCH, false);
+    this.pokemon.leaveField(![SwitchType.BATON_PASS, SwitchType.SHED_TAIL].includes(this.switchType), false);
   }
 
   /** Plays a message before this phase's target {@linkcode Pokemon} is recalled */

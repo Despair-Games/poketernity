@@ -4209,9 +4209,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Resets {@linkcode Pokemon.summonData} to the default values.
+   * Resets {@linkcode summonData} to the default values.
    *
-   * @todo This currently checks for the existence of {@linkcode Pokemon.summonDataPrimer} and
+   * @todo This currently checks for the existence of {@linkcode summonDataPrimer} and
    * applies its values to `summonData` if it exists. `summonDataPrimer` should be removed.
    */
   public resetSummonData(): void {

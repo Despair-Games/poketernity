@@ -145,13 +145,11 @@ class ForceSwitchOutHelper {
       }
 
       if (switchOutTarget.hp > 0) {
-        switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
-        globalScene.phaseManager.createAndPrependPhase(
-          "PostActionPhase",
-          "SwitchPhase",
-          switchOutTarget.getBattlerIndex(),
-          this.switchType,
-        );
+        globalScene.phaseManager.queueBattlerSwitchOut(switchOutTarget.getBattlerIndex(), {
+          switchType: this.switchType,
+          when: "before",
+          phaseKey: "PostActionPhase",
+        });
         return true;
       }
       /**

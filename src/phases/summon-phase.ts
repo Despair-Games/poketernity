@@ -74,6 +74,17 @@ export class SummonPhase extends PokemonPhase {
   public override start(): void {
     super.start();
 
+    /**
+     * If this summon is from loading into a wave, load the Pokemon's
+     * saved summon data.
+     * @todo This only uses `resetSummonData` to push data from a
+     * {@linkcode Pokemon.summonDataPrimer | primer}. This should use a
+     * separate dedicated method instead or risk side effects
+     */
+    if (this.loaded) {
+      this.getPokemon().resetSummonData();
+    }
+
     this.playSummonSequence().then(() => this.end());
   }
 
@@ -102,8 +113,10 @@ export class SummonPhase extends PokemonPhase {
    * summon animations for the Pokemon.
    */
   private async playSummonSequence(): Promise<void> {
-    const { currentBattle, pbTrayEnemy, trainer } = globalScene;
+    const { currentBattle, pbTray, pbTrayEnemy, trainer, ui } = globalScene;
     if (this.isPlayer) {
+      ui.showText(i18next.t("battle:playerGo", { pokemonName: getPokemonNameWithAffix(this.getPokemon()) }));
+      pbTray.hide();
       if (trainer.visible) {
         await this.playPlayerTrainerThrowSequence();
       }
@@ -131,10 +144,8 @@ export class SummonPhase extends PokemonPhase {
    * on the field, e.g. after the animation sequence in {@linkcode EncounterPhase}
    */
   private async playPlayerTrainerThrowSequence(): Promise<void> {
-    const { pbTray, time, trainer, tweens, ui } = globalScene;
+    const { time, trainer, tweens } = globalScene;
 
-    ui.showText(i18next.t("battle:playerGo", { pokemonName: getPokemonNameWithAffix(this.getPokemon()) }));
-    pbTray.hide();
     trainer.setTexture(`trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`);
 
     time.delayedCall(562, () => {
@@ -172,7 +183,7 @@ export class SummonPhase extends PokemonPhase {
       await this.playEnemyTrainerEntranceAnim();
     }
 
-    await Promise.allSettled([this.hideEnemyTrainer, pbTrayEnemy.hide]);
+    await Promise.allSettled([this.hideEnemyTrainer(), pbTrayEnemy.hide()]);
 
     const trainerName = trainer.getName(this.getTrainerSlot());
     const pokemonName = this.getPokemon().getNameToRender();
