@@ -74,6 +74,12 @@ export class SummonPhase extends PokemonPhase {
   public override start(): void {
     super.start();
 
+    // If the Pokemon about to be summoned is fainted or illegal under active challenges,
+    // try to reorganize the Pokemon's party such that a legal inactive Pokemon is summoned instead.
+    if (!this.getPokemon().isAllowedInBattle() && !this.handleIllegalSummon()) {
+      return super.end();
+    }
+
     /**
      * If this summon is from loading into a wave, load the Pokemon's
      * saved summon data.
@@ -111,6 +117,38 @@ export class SummonPhase extends PokemonPhase {
 
   // #endregion
   // #region Private Methods
+
+  /**
+   * Handles edge cases where the Pokemon to be summoned by this phase is somehow not allowed in battle.
+   * This will attempt to swap the party index of the illegal Pokemon with that of the first inactive legal
+   * Pokemon in the same party. If no legal Pokemon can be summoned, this ends the game.
+   * @returns `true` if this phase should continue after error handling.
+   */
+  private handleIllegalSummon(): boolean {
+    console.warn(
+      "The Pokemon about to be sent out is fainted or illegal under the current challenge(s). Attempting to resolve...",
+    );
+
+    const illegalPokemon = this.getPokemon();
+
+    const party = this.getAlliedParty();
+    const legalIndex = party.findIndex((p, i) => i > this.fieldIndex && p.isAllowedInBattle());
+
+    if (legalIndex > -1) {
+      // Swap positions of illegal and legal Pokemon in the party
+      [party[this.fieldIndex], party[legalIndex]] = [party[legalIndex], party[this.fieldIndex]];
+      console.warn(
+        `Swapped ${illegalPokemon.name} (index ${this.fieldIndex}) with ${this.getPokemon().name} (index ${legalIndex})`,
+      );
+      return true;
+    }
+
+    if (this.getAlliedField().every((p) => !p.isAllowedInBattle())) {
+      console.warn("All Pokemon in the Player's party cannot be summoned!");
+      globalScene.phaseManager.queueGameOverPhase({ clearPhaseQueue: true });
+    }
+    return false;
+  }
 
   /**
    * Plays animations for the Trainer summoning the Pokemon, then plays
