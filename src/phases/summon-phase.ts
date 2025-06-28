@@ -79,7 +79,7 @@ export class SummonPhase extends PokemonPhase {
      * saved summon data.
      * @todo This only uses `resetSummonData` to push data from a
      * {@linkcode Pokemon.summonDataPrimer | primer}. This should use a
-     * separate dedicated method instead or risk side effects
+     * separate dedicated method instead to avoid the risk of side effects
      */
     if (this.loaded) {
       this.getPokemon().resetSummonData();
@@ -91,6 +91,10 @@ export class SummonPhase extends PokemonPhase {
   public override end(): void {
     const { waveIndex } = globalScene.currentBattle;
     const pokemon = this.getPokemon();
+
+    // If the Pokemon summoned was recalled earlier without switching (e.g. on arena reset),
+    // its `switchOutStatus` may need to be adjusted to reflect it being active again.
+    pokemon.setSwitchOutStatus(false);
 
     if (pokemon.isShiny()) {
       globalScene.phaseManager.createAndUnshiftPhase("ShinySparklePhase", pokemon.getBattlerIndex());
