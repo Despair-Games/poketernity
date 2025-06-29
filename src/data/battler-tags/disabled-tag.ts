@@ -51,7 +51,7 @@ export class DisabledTag extends MoveRestrictionBattlerTag {
     }
 
     this.moveId = lastValidMove.id;
-    const moveName = pokemon.getMove(this.moveId)?.name ?? "";
+    const moveName = pokemon.getMove(this.moveId)?.name ?? allMoves.get(this.moveId).name;
 
     globalScene.phaseManager.createAndUnshiftPhase(
       "MessagePhase",

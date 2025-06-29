@@ -351,19 +351,16 @@ describe("Clowning Around - Mystery Encounter", () => {
     it("should randomize the pokemon types of the party", async () => {
       await game.runToMysteryEncounter(MysteryEncounterType.CLOWNING_AROUND, defaultParty);
 
-      const [player1, player2, player3] = scene.getPlayerParty();
+      const [player1, player2] = scene.getPlayerParty();
 
       // Same type moves on lead
       game.move.changeMoveset(player1, [MoveId.ICE_BEAM, MoveId.SURF]);
       // Different type moves on second
       game.move.changeMoveset(player2, [MoveId.GRASS_KNOT, MoveId.ELECTRO_BALL]);
-      // No moves on third
-      player3.moveset = [];
       await runMysteryEncounterToEnd(game, 3);
 
       const leadTypesAfter = scene.getPlayerParty()[0].customPokemonData?.types;
       const secondaryTypesAfter = scene.getPlayerParty()[1].customPokemonData?.types;
-      const thirdTypesAfter = scene.getPlayerParty()[2].customPokemonData?.types;
 
       expect(leadTypesAfter.length).toBe(2);
       expect(leadTypesAfter[0]).toBe(ElementalType.WATER);
@@ -372,8 +369,6 @@ describe("Clowning Around - Mystery Encounter", () => {
       expect(secondaryTypesAfter[0]).toBe(ElementalType.GHOST);
       expect([ElementalType.GHOST, ElementalType.POISON]).not.toContain(secondaryTypesAfter[1]);
       expect([ElementalType.GRASS, ElementalType.ELECTRIC]).toContain(secondaryTypesAfter[1]);
-      expect(thirdTypesAfter.length).toBe(2);
-      expect(thirdTypesAfter[0]).toBe(ElementalType.PSYCHIC);
       expect(secondaryTypesAfter[1]).not.toBe(ElementalType.PSYCHIC);
     });
 

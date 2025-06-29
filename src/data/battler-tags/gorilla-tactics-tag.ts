@@ -1,6 +1,7 @@
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { BattlerTag } from "#battler-tags/battler-tag";
 import { MoveRestrictionBattlerTag } from "#battler-tags/move-restriction-battler-tag";
+import { allMoves } from "#data/data-lists";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
@@ -67,7 +68,7 @@ export class GorillaTacticsTag extends MoveRestrictionBattlerTag {
    * @returns text to display when the move is denied
    */
   override getSelectionDeniedText(pokemon: Pokemon, _moveId: MoveId): string {
-    const moveName = pokemon.getMove(this.moveId)?.name ?? "";
+    const moveName = pokemon.getMove(this.moveId)?.name ?? allMoves.get(this.moveId).name;
     return i18next.t("battle:canOnlyUseMove", {
       moveName,
       pokemonName: getPokemonNameWithAffix(pokemon),
