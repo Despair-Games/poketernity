@@ -50,7 +50,7 @@ export class PokemonTransformPhase extends PokemonPhase {
 
     user.summonData.moveset = target.getMoveset().map((m) => {
       // If PP value is less than 5, do nothing. If greater, we need to reduce the value to 5.
-      return new PokemonMove(user, m.moveId, 0, 0, false, Math.min(m.getMove().pp, 5));
+      return new PokemonMove(m.moveId, { pokemon: user, maxPpOverride: Math.min(m.getMove().pp, 5) });
     });
     user.summonData.types = target.getTypes();
 

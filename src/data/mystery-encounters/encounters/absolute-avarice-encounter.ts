@@ -306,7 +306,7 @@ export const AbsoluteAvariceEncounter: MysteryEncounter = MysteryEncounterBuilde
         encounter.startOfBattleEffects.push({
           sourceBattlerIndex: BattlerIndex.ENEMY,
           targets: [BattlerIndex.ENEMY],
-          move: new PokemonMove(null, MoveId.STUFF_CHEEKS),
+          move: new PokemonMove(MoveId.STUFF_CHEEKS),
           ignorePp: true,
         });
 
@@ -379,10 +379,10 @@ export const AbsoluteAvariceEncounter: MysteryEncounter = MysteryEncounterBuilde
         const level = getHighestLevelPlayerPokemon(false, true).level - 2;
         const greedent = new EnemyPokemon(getPokemonSpecies(SpeciesId.GREEDENT), level, TrainerSlot.NONE, false, true);
         greedent.moveset = [
-          new PokemonMove(greedent, MoveId.THRASH),
-          new PokemonMove(greedent, MoveId.BODY_PRESS),
-          new PokemonMove(greedent, MoveId.STUFF_CHEEKS),
-          new PokemonMove(greedent, MoveId.SLACK_OFF),
+          new PokemonMove(MoveId.THRASH, { pokemon: greedent }),
+          new PokemonMove(MoveId.BODY_PRESS, { pokemon: greedent }),
+          new PokemonMove(MoveId.STUFF_CHEEKS, { pokemon: greedent }),
+          new PokemonMove(MoveId.SLACK_OFF, { pokemon: greedent }),
         ];
         greedent.passive = true;
 

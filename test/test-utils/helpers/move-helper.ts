@@ -114,7 +114,7 @@ export class MoveHelper extends GameManagerHelper {
     }
 
     const pokemon = this.game.scene.getPlayerField()[pkmIndex];
-    pokemon.moveset = [new PokemonMove(pokemon, moveId)];
+    pokemon.moveset = [new PokemonMove(moveId, { pokemon })];
 
     this.select(moveId, pkmIndex, targetIndex, useTera);
   }
@@ -155,7 +155,7 @@ export class MoveHelper extends GameManagerHelper {
     moveset = coerceArray(moveset);
     pokemon.moveset = [];
     moveset.forEach((moveId) => {
-      pokemon.moveset.push(new PokemonMove(pokemon, moveId));
+      pokemon.moveset.push(new PokemonMove(moveId, { pokemon }));
     });
     const movesetStr = moveset.map((moveId) => MoveId[moveId]).join(", ");
     console.log(`Pokemon ${pokemon.species.name}'s moveset manually set to ${movesetStr} (=[${moveset.join(", ")}])!`);
@@ -213,7 +213,7 @@ export class MoveHelper extends GameManagerHelper {
         "Warning: `forceEnemyMove` overwrites the Pokemon's moveset and disables the enemy moveset override!",
       );
     }
-    enemy.moveset = [new PokemonMove(enemy, moveId)];
+    enemy.moveset = [new PokemonMove(moveId, { pokemon: enemy })];
     const legalTargets = getMoveTargets(enemy, moveId);
 
     vi.spyOn(enemy, "getNextMove").mockReturnValueOnce({

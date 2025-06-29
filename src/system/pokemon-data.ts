@@ -118,8 +118,8 @@ export default class PokemonData {
 
     // This is required because the full class object doesn't exist in save data
     this.moveset = source.moveset.map((m) => PokemonMove.loadMove(m)) ?? [
-      new PokemonMove(null, MoveId.TACKLE),
-      new PokemonMove(null, MoveId.GROWL),
+      new PokemonMove(MoveId.TACKLE),
+      new PokemonMove(MoveId.GROWL),
     ];
 
     this.summonData = source.summonData;

@@ -198,13 +198,13 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
         {
           sourceBattlerIndex: BattlerIndex.ENEMY,
           targets: [BattlerIndex.PLAYER],
-          move: new PokemonMove(null, MoveId.FIRE_SPIN),
+          move: new PokemonMove(MoveId.FIRE_SPIN),
           ignorePp: true,
         },
         {
           sourceBattlerIndex: BattlerIndex.ENEMY_2,
           targets: [BattlerIndex.PLAYER_2],
-          move: new PokemonMove(null, MoveId.FIRE_SPIN),
+          move: new PokemonMove(MoveId.FIRE_SPIN),
           ignorePp: true,
         },
       );

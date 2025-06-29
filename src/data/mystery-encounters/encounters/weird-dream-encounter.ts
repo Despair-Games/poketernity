@@ -720,10 +720,10 @@ async function addEggMoveToNewPokemonMoveset(
     if (randomEggMove) {
       if (!newPokemon.moveset.some((m) => m.moveId === randomEggMove)) {
         if (newPokemon.moveset.length < 4) {
-          newPokemon.moveset.push(new PokemonMove(newPokemon, randomEggMove));
+          newPokemon.moveset.push(new PokemonMove(randomEggMove, { pokemon: newPokemon }));
         } else {
           eggMoveIndex = randSeedInt(4);
-          newPokemon.moveset[eggMoveIndex] = new PokemonMove(newPokemon, randomEggMove);
+          newPokemon.moveset[eggMoveIndex] = new PokemonMove(randomEggMove, { pokemon: newPokemon });
         }
       }
 

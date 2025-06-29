@@ -88,7 +88,7 @@ export class MovePhase extends BattlePhase {
 
     this.pokemon = pokemon;
     this.targets = targets;
-    this.move = typeof move === "number" ? new PokemonMove(pokemon, move, 0, 0, true) : move;
+    this.move = typeof move === "number" ? new PokemonMove(move, { pokemon, virtual: true }) : move;
     this.followUp = followUp;
     this.ignorePp = ignorePp;
     this.reflected = reflected;
@@ -289,7 +289,7 @@ export class MovePhase extends BattlePhase {
         );
         globalScene.phaseManager.createAndUnshiftPhase(
           "CommonAnimPhase",
-          CommonAnim.POISON + (statusEffect - 1) as CommonAnim,
+          (CommonAnim.POISON + (statusEffect - 1)) as CommonAnim,
           this.pokemon.getBattlerIndex(),
         );
       } else if (healed) {

@@ -121,13 +121,13 @@ export const SlumberingSnorlaxEncounter: MysteryEncounter = MysteryEncounterBuil
         {
           sourceBattlerIndex: BattlerIndex.ENEMY,
           targets: [BattlerIndex.PLAYER],
-          move: new PokemonMove(null, MoveId.SNORE),
+          move: new PokemonMove(MoveId.SNORE),
           ignorePp: true,
         },
         {
           sourceBattlerIndex: BattlerIndex.ENEMY,
           targets: [BattlerIndex.PLAYER],
-          move: new PokemonMove(null, MoveId.SNORE),
+          move: new PokemonMove(MoveId.SNORE),
           ignorePp: true,
         },
       );

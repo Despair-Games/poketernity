@@ -256,10 +256,10 @@ export const GlobalTradeSystemEncounter: MysteryEncounter = MysteryEncounterBuil
               const eggMove = eggMoves[randSeedInt(3)];
               if (!tradePokemon.moveset.some((m) => m.moveId === eggMove)) {
                 if (tradePokemon.moveset.length < 4) {
-                  tradePokemon.moveset.push(new PokemonMove(tradePokemon, eggMove));
+                  tradePokemon.moveset.push(new PokemonMove(eggMove, { pokemon: tradePokemon }));
                 } else {
                   const eggMoveIndex = randSeedInt(4);
-                  tradePokemon.moveset[eggMoveIndex] = new PokemonMove(tradePokemon, eggMove);
+                  tradePokemon.moveset[eggMoveIndex] = new PokemonMove(eggMove, { pokemon: tradePokemon });
                 }
               }
             }

@@ -3,7 +3,7 @@ import { MoveFlags } from "#enums/move-flags";
 import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import { toDmgValue } from "#utils/common-utils";
+import { isNil, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -20,7 +20,8 @@ import i18next from "i18next";
  * @see {@linkcode getName} - returns name of the {@linkcode Move}.
  **/
 export class PokemonMove {
-  public pokemon: Pokemon | null;
+  /** The {@linkcode Pokemon} whose moveset this move is part of. Used for localization of the move name. */
+  public pokemon?: Pokemon;
   public moveId: MoveId;
   public ppUsed: number;
   public ppUp: number;
@@ -33,12 +34,20 @@ export class PokemonMove {
   public maxPpOverride?: number;
 
   constructor(
-    pokemon: Pokemon | null,
     moveId: MoveId,
-    ppUsed: number = 0,
-    ppUp: number = 0,
-    virtual: boolean = false,
-    maxPpOverride?: number,
+    {
+      pokemon,
+      ppUsed = 0,
+      ppUp = 0,
+      virtual = false,
+      maxPpOverride,
+    }: {
+      pokemon?: Pokemon;
+      ppUsed?: number;
+      ppUp?: number;
+      virtual?: boolean;
+      maxPpOverride?: number;
+    } = {},
   ) {
     this.pokemon = pokemon;
     this.moveId = moveId;
@@ -49,7 +58,7 @@ export class PokemonMove {
   }
 
   public get name(): string {
-    if (this.pokemon === null) {
+    if (isNil(this.pokemon)) {
       return this.getMove().name;
     }
     const gMaxDescriptor =
@@ -108,6 +117,7 @@ export class PokemonMove {
    * @returns A valid {@linkcode PokemonMove} object
    */
   static loadMove(source: PokemonMove | any): PokemonMove {
-    return new PokemonMove(null, source.moveId, source.ppUsed, source.ppUp, source.virtual, source.maxPpOverride);
+    const { moveId, ppUsed, ppUp, virtual, maxPpOverride } = source;
+    return new PokemonMove(moveId, { ppUsed, ppUp, virtual, maxPpOverride });
   }
 }

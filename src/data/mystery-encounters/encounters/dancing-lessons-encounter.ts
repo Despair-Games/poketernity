@@ -86,9 +86,9 @@ export const DancingLessonsEncounter: MysteryEncounter = MysteryEncounterBuilder
     const enemyPokemon = new EnemyPokemon(species, level, TrainerSlot.NONE, false);
     if (!enemyPokemon.moveset.some((m) => m && m.getMove().id === MoveId.REVELATION_DANCE)) {
       if (enemyPokemon.moveset.length < 4) {
-        enemyPokemon.moveset.push(new PokemonMove(enemyPokemon, MoveId.REVELATION_DANCE));
+        enemyPokemon.moveset.push(new PokemonMove(MoveId.REVELATION_DANCE, { pokemon: enemyPokemon }));
       } else {
-        enemyPokemon.moveset[0] = new PokemonMove(enemyPokemon, MoveId.REVELATION_DANCE);
+        enemyPokemon.moveset[0] = new PokemonMove(MoveId.REVELATION_DANCE, { pokemon: enemyPokemon });
       }
     }
 
@@ -156,7 +156,7 @@ export const DancingLessonsEncounter: MysteryEncounter = MysteryEncounterBuilder
         encounter.startOfBattleEffects.push({
           sourceBattlerIndex: BattlerIndex.ENEMY,
           targets: [BattlerIndex.PLAYER],
-          move: new PokemonMove(null, MoveId.REVELATION_DANCE),
+          move: new PokemonMove(MoveId.REVELATION_DANCE),
           ignorePp: true,
         });
 

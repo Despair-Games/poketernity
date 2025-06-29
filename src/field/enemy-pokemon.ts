@@ -160,28 +160,28 @@ export class EnemyPokemon extends Pokemon {
     switch (this.species.speciesId) {
       case SpeciesId.SMEARGLE:
         this.moveset = [
-          new PokemonMove(this, MoveId.SKETCH),
-          new PokemonMove(this, MoveId.SKETCH),
-          new PokemonMove(this, MoveId.SKETCH),
-          new PokemonMove(this, MoveId.SKETCH),
+          new PokemonMove(MoveId.SKETCH, { pokemon: this }),
+          new PokemonMove(MoveId.SKETCH, { pokemon: this }),
+          new PokemonMove(MoveId.SKETCH, { pokemon: this }),
+          new PokemonMove(MoveId.SKETCH, { pokemon: this }),
         ];
         break;
       case SpeciesId.ETERNATUS:
         this.moveset = (formIndex !== undefined ? formIndex : this.formIndex)
           ? [
-              new PokemonMove(this, MoveId.DYNAMAX_CANNON),
-              new PokemonMove(this, MoveId.CROSS_POISON),
-              new PokemonMove(this, MoveId.FLAMETHROWER),
-              new PokemonMove(this, MoveId.RECOVER, 0, -4),
+              new PokemonMove(MoveId.DYNAMAX_CANNON, { pokemon: this }),
+              new PokemonMove(MoveId.CROSS_POISON, { pokemon: this }),
+              new PokemonMove(MoveId.FLAMETHROWER, { pokemon: this }),
+              new PokemonMove(MoveId.RECOVER, { pokemon: this, ppUp: -4 }),
             ]
           : [
-              new PokemonMove(this, MoveId.ETERNABEAM),
-              new PokemonMove(this, MoveId.SLUDGE_BOMB),
-              new PokemonMove(this, MoveId.FLAMETHROWER),
-              new PokemonMove(this, MoveId.COSMIC_POWER),
+              new PokemonMove(MoveId.ETERNABEAM, { pokemon: this }),
+              new PokemonMove(MoveId.SLUDGE_BOMB, { pokemon: this }),
+              new PokemonMove(MoveId.FLAMETHROWER, { pokemon: this }),
+              new PokemonMove(MoveId.COSMIC_POWER, { pokemon: this }),
             ];
         if (globalScene.gameMode.hasChallenge(Challenges.INVERSE_BATTLE)) {
-          this.moveset[2] = new PokemonMove(this, MoveId.THUNDERBOLT);
+          this.moveset[2] = new PokemonMove(MoveId.THUNDERBOLT, { pokemon: this });
         }
         break;
       default:

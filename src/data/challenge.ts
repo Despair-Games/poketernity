@@ -674,7 +674,7 @@ export class FreshStartChallenge extends Challenge {
       .filter((m) => m[0] <= 5)
       .map((lm) => lm[1])
       .slice(0, 4)
-      .map((m) => new PokemonMove(pokemon, m)); // No egg moves
+      .map((m) => new PokemonMove(m, { pokemon })); // No egg moves
     pokemon.luck = 0; // No luck
     pokemon.shiny = false; // Not shiny
     pokemon.variant = 0; // Not shiny

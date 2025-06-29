@@ -57,7 +57,10 @@ export class DelayedAttackTag extends ArenaTag {
             "MoveEffectPhase",
             attack.sourceId,
             [attack.targetIndex],
-            new PokemonMove(attacker, attack.moveId, 0, 0, true),
+            new PokemonMove(attack.moveId, {
+              pokemon: attacker,
+              virtual: true,
+            }),
           );
         } else if (globalScene.currentBattle.double) {
           const redirectIndex = attack.targetIndex + (attack.targetIndex % 2 === 0 ? 1 : -1);
@@ -65,7 +68,10 @@ export class DelayedAttackTag extends ArenaTag {
             "MoveEffectPhase",
             attack.sourceId,
             [redirectIndex],
-            new PokemonMove(attacker, attack.moveId, 0, 0, true),
+            new PokemonMove(attack.moveId, {
+              pokemon: attacker,
+              virtual: true,
+            }),
           );
         }
       }
