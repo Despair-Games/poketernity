@@ -7,7 +7,6 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
-import { PokemonMove } from "#field/pokemon-move";
 import * as InitMoveAnim from "#init/init-move-anim";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
@@ -168,14 +167,14 @@ describe("Trash to Treasure - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.TRASH_TO_TREASURE, defaultParty);
       await runMysteryEncounterToEnd(game, 2, undefined, true);
 
-      const [enemy] = scene.getEnemyField();
+      const enemy = game.field.getEnemyPokemon();
       expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
       expect(enemy.species.speciesId).toBe(SpeciesId.GARBODOR);
-      expect(enemy.moveset).toEqual([
-        new PokemonMove(enemy, MoveId.PAYBACK),
-        new PokemonMove(enemy, MoveId.GUNK_SHOT),
-        new PokemonMove(enemy, MoveId.STOMPING_TANTRUM),
-        new PokemonMove(enemy, MoveId.DRAIN_PUNCH),
+      expect(enemy.moveset.map((m) => m.moveId)).toEqual([
+        MoveId.PAYBACK,
+        MoveId.GUNK_SHOT,
+        MoveId.STOMPING_TANTRUM,
+        MoveId.DRAIN_PUNCH,
       ]);
 
       // Should have used moves pre-battle

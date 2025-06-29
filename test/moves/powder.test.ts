@@ -5,7 +5,6 @@ import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
-import { PokemonMove } from "#field/pokemon-move";
 import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -43,7 +42,7 @@ describe("Moves - Powder", () => {
     await game.classicMode.startBattle(SpeciesId.CHARIZARD);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
-    enemyPokemon.moveset = [new PokemonMove(enemyPokemon, MoveId.EMBER)];
+    game.move.changeMoveset(enemyPokemon, MoveId.EMBER);
 
     game.move.select(MoveId.POWDER);
 
