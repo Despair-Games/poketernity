@@ -31,8 +31,8 @@ import type {
   PokemonModifierTransferSelectFilter,
   PokemonMoveSelectFilter,
   PokemonSelectFilter,
+  ShowTextOptions,
 } from "#types/ui-types";
-import type { ShowTextOptions } from "#types/ui-types";
 import type { CommandUiHandler } from "#ui/command-ui-handler";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
