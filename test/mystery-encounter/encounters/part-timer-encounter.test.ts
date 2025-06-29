@@ -6,7 +6,6 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
-import { PokemonMove } from "#field/pokemon-move";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
 import { PartTimerEncounter } from "#mystery-encounters/part-timer-encounter";
@@ -256,8 +255,8 @@ describe("Part-Timer - Mystery Encounter", () => {
 
       await game.runToMysteryEncounter(MysteryEncounterType.PART_TIMER, defaultParty);
       // Mock moveset
-      const [player] = scene.getPlayerParty();
-      player.moveset = [new PokemonMove(player, MoveId.ATTRACT)];
+      const player = game.field.getPlayerPokemon();
+      game.move.changeMoveset(player, MoveId.ATTRACT);
       await runMysteryEncounterToEnd(game, 3);
 
       expect(EncounterPhaseUtils.updatePlayerMoney).toHaveBeenCalledWith(scene.getWaveMoneyAmount(2.5), true, false);

@@ -11,7 +11,6 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Nature } from "#enums/nature";
 import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
-import { PokemonMove } from "#field/pokemon-move";
 import * as InitMoveAnim from "#init/init-move-anim";
 import { PokemonBaseStatTotalModifier } from "#modifier/modifier";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
@@ -193,7 +192,7 @@ describe("The Strong Stuff - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.THE_STRONG_STUFF, defaultParty);
       await runMysteryEncounterToEnd(game, 2, undefined, true);
 
-      const [enemy] = scene.getEnemyField();
+      const enemy = game.field.getEnemyPokemon();
       expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
       expect(enemy.species.speciesId).toBe(SpeciesId.SHUCKLE);
       expect(enemy.summonData.statStages).toEqual([0, 2, 0, 2, 0, 0, 0]);
@@ -204,11 +203,11 @@ describe("The Strong Stuff - Mystery Encounter", () => {
       expect(shuckleItems.find((m) => m.isBerryModifier() && m.berryType === BerryType.GANLON)?.stackCount).toBe(1);
       expect(shuckleItems.find((m) => m.isBerryModifier() && m.berryType === BerryType.APICOT)?.stackCount).toBe(1);
       expect(shuckleItems.find((m) => m.isBerryModifier() && m.berryType === BerryType.LUM)?.stackCount).toBe(2);
-      expect(enemy.moveset).toEqual([
-        new PokemonMove(enemy, MoveId.INFESTATION),
-        new PokemonMove(enemy, MoveId.SALT_CURE),
-        new PokemonMove(enemy, MoveId.GASTRO_ACID),
-        new PokemonMove(enemy, MoveId.HEAL_ORDER),
+      expect(enemy.moveset.map((m) => m.moveId)).toEqual([
+        MoveId.INFESTATION,
+        MoveId.SALT_CURE,
+        MoveId.GASTRO_ACID,
+        MoveId.HEAL_ORDER,
       ]);
 
       // Should have used moves pre-battle

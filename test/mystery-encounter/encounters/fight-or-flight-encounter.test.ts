@@ -6,7 +6,6 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
-import { PokemonMove } from "#field/pokemon-move";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import { FightOrFlightEncounter } from "#mystery-encounters/fight-or-flight-encounter";
 import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
@@ -172,8 +171,8 @@ describe("Fight or Flight - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.FIGHT_OR_FLIGHT, defaultParty);
 
       // Mock moveset
-      const [player] = scene.getPlayerParty();
-      player.moveset = [new PokemonMove(player, MoveId.KNOCK_OFF)];
+      const player = game.field.getPlayerPokemon();
+      game.move.changeMoveset(player, MoveId.KNOCK_OFF);
       const item = game.scene.currentBattle.mysteryEncounter!.misc;
 
       await runMysteryEncounterToEnd(game, 2);

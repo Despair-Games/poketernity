@@ -102,10 +102,6 @@ export class PokemonMove {
     return 1 - this.ppUsed / this.getMovePp();
   }
 
-  getName(): string {
-    return this.getMove().name;
-  }
-
   /**
    * Copies an existing move or creates a valid PokemonMove object from json representing one
    * @param source The data for the {@linkcode PokemonMove | move} to copy

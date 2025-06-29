@@ -9,7 +9,6 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
-import { PokemonMove } from "#field/pokemon-move";
 import type { BerryModifier } from "#modifier/modifier";
 import { modifierTypes } from "#modifier/modifier-types";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
@@ -270,8 +269,8 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       const leaveEncounterWithoutBattleSpy = vi.spyOn(EncounterPhaseUtils, "leaveEncounterWithoutBattle");
       await game.runToMysteryEncounter(MysteryEncounterType.UNCOMMON_BREED, defaultParty);
       // Mock moveset
-      const [player] = scene.getPlayerParty();
-      player.moveset = [new PokemonMove(player, MoveId.CHARM)];
+      const player = game.field.getPlayerPokemon();
+      game.move.changeMoveset(player, MoveId.CHARM);
       await runMysteryEncounterToEnd(game, 3);
 
       expect(leaveEncounterWithoutBattleSpy).toBeCalled();
