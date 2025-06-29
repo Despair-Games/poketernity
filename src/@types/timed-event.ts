@@ -1,8 +1,6 @@
-// -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { SupportedLanguage } from "#types/language";
-/* eslint-enable @typescript-eslint/no-unused-vars */
-// -- end tsdoc imports --
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 export interface EventBanner {
   /** The base filename of the banner (without any language key or the extension). e.g. `welcome-event` */

@@ -24,7 +24,8 @@ export class PostDefendApplyBattlerTagAbAttr extends PostDefendAbAttr {
 
         const pokemonName = getPokemonNameWithAffix(pokemon);
         const moveName = pokemon.getMove(move.id)?.name ?? "";
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           i18next.t("abilityTriggers:windPowerCharged", {
             pokemonName,
             moveName,

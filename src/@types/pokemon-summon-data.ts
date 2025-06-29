@@ -1,9 +1,7 @@
-// -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
-/* eslint-enable @typescript-eslint/no-unused-vars */
-// -- end tsdoc imports
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import type { BattlerTag } from "#battler-tags/battler-tag";
 import type { PokemonSpeciesForm } from "#data/pokemon-species-form";

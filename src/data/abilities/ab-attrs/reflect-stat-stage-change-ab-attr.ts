@@ -3,7 +3,6 @@ import { globalScene } from "#app/global-scene";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { BattleStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
-import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import type { BooleanHolder } from "#utils/common-utils";
 
 /**
@@ -48,8 +47,13 @@ export class ReflectStatStageChangeAbAttr extends AbAttr {
     }
 
     if (!simulated && source) {
-      globalScene.phaseManager.unshiftPhase(
-        new StatStageChangePhase(source.id, pokemon, reflectedStats, stages, { bypassReflect: true }),
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "StatStageChangePhase",
+        source.id,
+        pokemon,
+        reflectedStats,
+        stages,
+        { bypassReflect: true },
       );
     }
     reflected.value = true;

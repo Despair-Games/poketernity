@@ -1,5 +1,4 @@
-// -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { CritBoostTag } from "#battler-tags/crit-boost-tag";
 import type { DamagingTrapTag } from "#battler-tags/damaging-trap-tag";
 import type { ExposedTag } from "#battler-tags/exposed-tag";
@@ -14,8 +13,7 @@ import type { SemiInvulnerableTag } from "#battler-tags/semi-invulnerable-tag";
 import type { TrappedTag } from "#battler-tags/trapped-tag";
 import type { TypeBoostTag } from "#battler-tags/type-boost-tag";
 import type { ElementalType } from "#enums/elemental-type";
-/* eslint-enable @typescript-eslint/no-unused-vars */
-// -- end tsdoc imports --
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { BattlerTagType } from "#enums/battler-tag-type";
 

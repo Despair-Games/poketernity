@@ -1,34 +1,200 @@
-// -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import type { ChargeAnim } from "#enums/charge-anim";
-import type { MoveEffectPhase } from "#phases/move-effect-phase";
-import type { VictoryPhase } from "#phases/victory-phase";
-/* eslint-enable @typescript-eslint/no-unused-vars */
-// -- end tsdoc imports --
-
-import { MoveChargeAnim } from "#animations/move-charge-anim";
 import type { Phase } from "#app/phase";
 import type { DestinyBondTag } from "#battler-tags/destiny-bond-tag";
 import type { GrudgeTag } from "#battler-tags/grudge-tag";
-import type { BattlerIndex } from "#enums/battler-index";
+import type { BattlerIndex, FieldBattlerIndex } from "#enums/battler-index";
 import type { MoveId } from "#enums/move-id";
-import type { PhaseId } from "#enums/phase-id";
 import type { Pokemon } from "#field/pokemon";
 import type { PokemonMove } from "#field/pokemon-move";
+import { AttemptCapturePhase } from "#phases/attempt-capture-phase";
+import { AttemptRunPhase } from "#phases/attempt-run-phase";
 import { BattleEndPhase } from "#phases/battle-end-phase";
+import { BerryPhase } from "#phases/berry-phase";
+import { CheckStatusEffectPhase } from "#phases/check-status-effect-phase";
+import { CheckSwitchPhase } from "#phases/check-switch-phase";
+import { CommandPhase } from "#phases/command-phase";
+import { CommonAnimPhase } from "#phases/common-anim-phase";
+import { DamageAnimPhase } from "#phases/damage-anim-phase";
+import { EggHatchPhase } from "#phases/egg-hatch-phase";
+import { EggLapsePhase } from "#phases/egg-lapse-phase";
+import { EggSummaryPhase } from "#phases/egg-summary-phase";
+import { EncounterPhase } from "#phases/encounter-phase";
+import { EndCardPhase } from "#phases/end-card-phase";
+import { EndEvolutionPhase } from "#phases/end-evolution-phase";
+import { EnemyCommandPhase } from "#phases/enemy-command-phase";
+import { EvolutionPhase } from "#phases/evolution-phase";
+import { ExpPhase } from "#phases/exp-phase";
 import { FaintPhase } from "#phases/faint-phase";
+import { FormChangePhase } from "#phases/form-change-phase";
+import { GameOverModifierRewardPhase } from "#phases/game-over-modifier-reward-phase";
 import { GameOverPhase } from "#phases/game-over-phase";
+import { LearnMovePhase } from "#phases/learn-move-phase";
+import { LevelCapPhase } from "#phases/level-cap-phase";
+import { LevelUpPhase } from "#phases/level-up-phase";
+import { LoadMoveAnimPhase } from "#phases/load-move-anim-phase";
 import { LoginPhase } from "#phases/login-phase";
 import { MessagePhase } from "#phases/message-phase";
+import { ModifierRewardPhase } from "#phases/modifier-reward-phase";
+import { MoneyRewardPhase } from "#phases/money-reward-phase";
 import { MoveAnimPhase } from "#phases/move-anim-phase";
 import { MoveChargePhase } from "#phases/move-charge-phase";
+import { MoveEffectPhase } from "#phases/move-effect-phase";
+import { MoveHeaderPhase } from "#phases/move-header-phase";
 import { MovePhase } from "#phases/move-phase";
+import { MysteryEncounterBattlePhase } from "#phases/mystery-encounter-phases/battle-phase";
+import { MysteryEncounterBattleStartCleanupPhase } from "#phases/mystery-encounter-phases/battle-start-cleanup-phase";
+import { MysteryEncounterPhase } from "#phases/mystery-encounter-phases/mystery-encounter-phase";
+import { MysteryEncounterOptionSelectedPhase } from "#phases/mystery-encounter-phases/option-selected-phase";
+import { PostMysteryEncounterPhase } from "#phases/mystery-encounter-phases/post-mystery-encounter-phase";
+import { MysteryEncounterRewardsPhase } from "#phases/mystery-encounter-phases/rewards-phase";
 import { NewBattlePhase } from "#phases/new-battle-phase";
+import { NewBiomeEncounterPhase } from "#phases/new-biome-encounter-phase";
+import { NextEncounterPhase } from "#phases/next-encounter-phase";
+import { ObtainStatusEffectPhase } from "#phases/obtain-status-effect-phase";
+import { PartyExpPhase } from "#phases/party-exp-phase";
+import { PartyHealPhase } from "#phases/party-heal-phase";
+import { PokemonAnimPhase } from "#phases/pokemon-anim-phase";
 import { PokemonHealPhase } from "#phases/pokemon-heal-phase";
+import { PokemonTransformPhase } from "#phases/pokemon-transform-phase";
+import { PostActionPhase } from "#phases/post-action-phase";
+import { PostGameOverPhase } from "#phases/post-game-over-phase";
+import { PostKnockoutPhase } from "#phases/post-knockout-phase";
+import { PostSummonPhase } from "#phases/post-summon-phase";
+import { PostTurnStatusEffectPhase } from "#phases/post-turn-status-effect-phase";
+import { QuietFormChangePhase } from "#phases/quiet-form-change-phase";
+import { ReloadSessionPhase } from "#phases/reload-session-phase";
+import { ReturnPhase } from "#phases/return-phase";
+import { RevivalBlessingPhase } from "#phases/revival-blessing-phase";
+import { RibbonModifierRewardPhase } from "#phases/ribbon-modifier-reward-phase";
+import { ScanIvsPhase } from "#phases/scan-ivs-phase";
+import { SelectBiomePhase } from "#phases/select-biome-phase";
+import { SelectChallengePhase } from "#phases/select-challenge-phase";
+import { SelectGenderPhase } from "#phases/select-gender-phase";
+import { SelectModifierPhase } from "#phases/select-modifier-phase";
+import { SelectStarterPhase } from "#phases/select-starter-phase";
 import { SelectTargetPhase } from "#phases/select-target-phase";
+import { ShinySparklePhase } from "#phases/shiny-sparkle-phase";
+import { ShowAbilityPhase } from "#phases/show-ability-phase";
+import { ShowPartyExpBarPhase } from "#phases/show-party-exp-bar-phase";
+import { ShowTrainerPhase } from "#phases/show-trainer-phase";
 import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
+import { SummonMissingPhase } from "#phases/summon-missing-phase";
+import { SummonPhase } from "#phases/summon-phase";
+import { SwitchBiomePhase } from "#phases/switch-biome-phase";
+import { SwitchPhase } from "#phases/switch-phase";
+import { SwitchSummonPhase } from "#phases/switch-summon-phase";
+import { TerastallizationPhase } from "#phases/terastallization-phase";
 import { TitlePhase } from "#phases/title-phase";
+import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase";
+import { TrainerVictoryPhase } from "#phases/trainer-victory-phase";
+import { TurnEndPhase } from "#phases/turn-end-phase";
 import { TurnInitPhase } from "#phases/turn-init-phase";
+import { TurnStartPhase } from "#phases/turn-start-phase";
+import { UnavailablePhase } from "#phases/unavailable-phase";
+import { UnlockPhase } from "#phases/unlock-phase";
+import { VictoryPhase } from "#phases/victory-phase";
+import { WeatherEffectPhase } from "#phases/weather-effect-phase";
+import type { PhaseKey, PhaseMap, PhaseParameterMap } from "#types/phase-types";
+
+/**
+ * A map of all {@linkcode Phase | Phases} that can be generated by
+ * a {@linkcode PhaseManager | PhaseManager's} factory methods.
+ *
+ * @remarks
+ * The keys of this object are the names of the phases (e.g. `"MovePhase"`).
+ * This allows for easy creation of new phases without needing to import each phase individually.
+ */
+const PHASES = {
+  AttemptCapturePhase,
+  AttemptRunPhase,
+  BattleEndPhase,
+  BerryPhase,
+  CheckStatusEffectPhase,
+  CheckSwitchPhase,
+  CommandPhase,
+  CommonAnimPhase,
+  DamageAnimPhase,
+  EggHatchPhase,
+  EggLapsePhase,
+  EggSummaryPhase,
+  EncounterPhase,
+  EndCardPhase,
+  EndEvolutionPhase,
+  EnemyCommandPhase,
+  EvolutionPhase,
+  ExpPhase,
+  FaintPhase,
+  FormChangePhase,
+  GameOverModifierRewardPhase,
+  GameOverPhase,
+  LearnMovePhase,
+  LevelCapPhase,
+  LevelUpPhase,
+  LoadMoveAnimPhase,
+  LoginPhase,
+  MessagePhase,
+  ModifierRewardPhase,
+  MoneyRewardPhase,
+  MoveAnimPhase,
+  MoveChargePhase,
+  MoveEffectPhase,
+  MoveHeaderPhase,
+  MovePhase,
+  MysteryEncounterBattlePhase,
+  MysteryEncounterBattleStartCleanupPhase,
+  MysteryEncounterOptionSelectedPhase,
+  MysteryEncounterPhase,
+  MysteryEncounterRewardsPhase,
+  NewBattlePhase,
+  NewBiomeEncounterPhase,
+  NextEncounterPhase,
+  ObtainStatusEffectPhase,
+  PartyExpPhase,
+  PartyHealPhase,
+  PokemonAnimPhase,
+  PokemonHealPhase,
+  PokemonTransformPhase,
+  PostActionPhase,
+  PostGameOverPhase,
+  PostKnockoutPhase,
+  PostMysteryEncounterPhase,
+  PostSummonPhase,
+  PostTurnStatusEffectPhase,
+  QuietFormChangePhase,
+  ReloadSessionPhase,
+  ReturnPhase,
+  RevivalBlessingPhase,
+  RibbonModifierRewardPhase,
+  ScanIvsPhase,
+  SelectBiomePhase,
+  SelectChallengePhase,
+  SelectGenderPhase,
+  SelectModifierPhase,
+  SelectStarterPhase,
+  SelectTargetPhase,
+  ShinySparklePhase,
+  ShowAbilityPhase,
+  ShowPartyExpBarPhase,
+  ShowTrainerPhase,
+  StatStageChangePhase,
+  SummonMissingPhase,
+  SummonPhase,
+  SwitchBiomePhase,
+  SwitchPhase,
+  SwitchSummonPhase,
+  TerastallizationPhase,
+  TitlePhase,
+  ToggleDoublePositionPhase,
+  TrainerVictoryPhase,
+  TurnEndPhase,
+  TurnInitPhase,
+  TurnStartPhase,
+  UnavailablePhase,
+  UnlockPhase,
+  VictoryPhase,
+  WeatherEffectPhase,
+} as const;
+
+export type PhaseConstructorMap = typeof PHASES;
 
 interface UseMoveInit {
   pokemon: Pokemon;
@@ -36,7 +202,7 @@ interface UseMoveInit {
   move: PokemonMove | MoveId;
   /** Whether to add the {@linkcode MovePhase} to the front of the phase queue or defer it. */
   when: "eager" | "defer" | "before" | "after";
-  phaseId?: PhaseId;
+  targetPhaseKey?: PhaseKey;
   followUp?: boolean;
   ignorePp?: boolean;
   reflected?: boolean;
@@ -55,13 +221,6 @@ interface ToTitleScreenInit {
   eager?: boolean;
 }
 
-interface ToLoginScreenInit {
-  /** Whether to show text. @defaultValue `true` */
-  showText?: boolean;
-  /** Whether to add the {@linkcode LoginPhase} to the front of the phase queue or defer it. */
-  eager?: boolean;
-}
-
 interface PokemonFaintInit {
   preventEndure?: boolean;
   destinyTag?: DestinyBondTag | null;
@@ -73,15 +232,27 @@ interface PokemonFaintInit {
  * This is responsible for managing the game's {@linkcode Phase | phases}.
  */
 export class PhaseManager {
-  /** dequeue/remove the first element to get the next phase */
+  /**
+   * The main queue where {@linkcode Phase | Phases} are scheduled.
+   * The first Phase in this queue is {@linkcode Phase.start | run} whenever
+   * {@linkcode shiftPhase} is called.
+   */
   private phaseQueue: Phase[] = [];
-  /** A temporary storage of what will be added to the front of {@linkcode phaseQueue} */
+  /**
+   * When {@linkcode shiftPhase} is called, the Phases in this queue are inserted
+   * in queue order to the front of {@linkcode phaseQueue}.
+   */
   private phaseQueuePrepend: Phase[] = [];
   /** overrides default of inserting phases to end of phaseQueuePrepend array, useful for inserting Phases "out of order" */
   private phaseQueuePrependSpliceIndex: number = -1;
+  /** @deprecated see {@link https://github.com/Despair-Games/poketernity/pull/910#discussion_r2029764830} */
   private conditionalQueue: [() => boolean, Phase][] = [];
 
   private currentPhase: Phase | null = null;
+  /**
+   * Stores an {@linkcode overridePhase | overridden} {@linkcode Phase}
+   * to restart once the overriding Phase finishes running
+   */
   private standbyPhase: Phase | null = null;
 
   public getCurrentPhase<P extends Phase = Phase>(): P | null {
@@ -100,34 +271,94 @@ export class PhaseManager {
    *
    * @param phase - The {@linkcode Phase} to be added to the conditional queue.
    * @param condition - A function that returns a boolean indicating whether the phase should be executed.
-   * @todo conditional queue in general should be deprecated, see {@link https://github.com/Despair-Games/poketernity/pull/910#discussion_r2029764830}
-   *
+   * @deprecated see {@link https://github.com/Despair-Games/poketernity/pull/910#discussion_r2029764830}
    */
   public pushConditionalPhase(phase: Phase, condition: () => boolean): void {
     this.conditionalQueue.push([condition, phase]);
   }
 
   /**
-   * Queues a phase to be run at a future point in time.
-   * @param phase - The {@linkcode Phase} to add
-   * @param defer - If `false`, adds the phase to `phaseQueue`. If `true`, adds the phase to `nextCommandPhaseQueue`. Default `false`.
-   * @todo replace with a factory function for Phases based on `PhaseId`, ex: `public pushPhase<P extends Phase>(phase: PhaseId, ...params: ConstructorParameters<P>)`
+   * Constructs a phase from the given parameters.
+   * @param phase - The {@linkcode PhaseKey} for the {@linkcode Phase} to construct, e.g. `"MovePhase"`
+   * @param params - The inferred constructor parameters for the Phase specified
+   * by {@linkcode phase}
+   * @returns The newly constructed {@linkcode Phase}
    */
-  public pushPhase(phase: Phase): void {
-    this.phaseQueue.push(phase);
+  public createPhase<P extends PhaseKey>(phase: P, ...params: PhaseParameterMap[P]): PhaseMap[P] {
+    const PhaseClass = PHASES[phase];
+    if (!PhaseClass) {
+      throw new Error(`${phase} does not exist in PHASES!`);
+    }
+
+    // @ts-expect-error: Typescript does not support narrowing the type of operands in generic methods (see https://stackoverflow.com/a/72891234)
+    return new PhaseClass(...params);
   }
 
   /**
-   * Adds a phase to the end of {@linkcode phaseQueuePrepend},
-   * or at {@linkcode phaseQueuePrependSpliceIndex} if it's set.
-   * @param phase - The {@linkcode Phase} to add
+   * Queues one or more phases to be run at a future point in time.
+   * @param phase - The {@linkcode Phase | Phases} to push to the {@link phaseQueue | main queue}.
+   * This requires at least one Phase as input.
    */
-  public unshiftPhase(phase: Phase): void {
+  public pushPhase(...phases: [Phase, ...Phase[]]): void {
+    this.phaseQueue.push(...phases);
+  }
+
+  /**
+   * Creates a {@linkcode Phase} from the given parameters, then pushes
+   * that Phase to {@linkcode phaseQueue}. This is equivalent to calling
+   * {@linkcode createPhase}, then {@linkcode pushPhase} for the created Phase.
+   *
+   * Note that this only supports pushing one Phase at a time. The best practice
+   * to push multiple Phases at once is to construct each phase with {@linkcode createPhase}, e.g.
+   *
+   * ```
+   * pushPhase(
+   *   createPhase("MovePhase", ...),
+   *   createPhase("MoveEffectPhase", ...),
+   * );
+   * ```
+   * @param phase - The {@linkcode PhaseKey} for the {@linkcode Phase} to construct, e.g. `"MovePhase"`
+   * @param params - The inferred constructor parameters for the Phase specified
+   * by {@linkcode phase}
+   */
+  public createAndPushPhase<P extends PhaseKey>(phase: P, ...params: PhaseParameterMap[P]): void {
+    this.pushPhase(this.createPhase(phase, ...params));
+  }
+
+  /**
+   * Adds one or more phases to the end of {@linkcode phaseQueuePrepend},
+   * or at {@linkcode phaseQueuePrependSpliceIndex} if it's set.
+   * @param phases - The {@linkcode Phases} to push to {@linkcode phaseQueuePrepend}.
+   * This requires at least one Phase as input.
+   */
+  public unshiftPhase(...phases: [Phase, ...Phase[]]): void {
     if (this.phaseQueuePrependSpliceIndex === -1) {
-      this.phaseQueuePrepend.push(phase);
+      this.phaseQueuePrepend.push(...phases);
     } else {
-      this.phaseQueuePrepend.splice(this.phaseQueuePrependSpliceIndex, 0, phase);
+      this.phaseQueuePrepend.splice(this.phaseQueuePrependSpliceIndex, 0, ...phases);
     }
+  }
+
+  /**
+   * Creates a {@linkcode Phase} from the given parameters, then adds
+   * that Phase to {@linkcode phaseQueuePrepend}. This is equivalent to calling
+   * {@linkcode createPhase}, then {@linkcode unshiftPhase} for the created Phase.
+   *
+   * Note that this only supports unshifting one Phase at a time. The best practice
+   * to push multiple Phases at once is to construct each phase with {@linkcode createPhase}, e.g.
+   *
+   * ```
+   * unshiftPhase(
+   *   createPhase("MovePhase", ...),
+   *   createPhase("MoveEffectPhase", ...),
+   * );
+   * ```
+   * @param phase - The {@linkcode PhaseKey} for the {@linkcode Phase} to construct, e.g. `"MovePhase"`
+   * @param params - The inferred constructor parameters for the Phase specified
+   * by {@linkcode phase}
+   */
+  public createAndUnshiftPhase<P extends PhaseKey>(phase: P, ...params: PhaseParameterMap[P]): void {
+    this.unshiftPhase(this.createPhase<P>(phase, ...params));
   }
 
   /**
@@ -197,7 +428,7 @@ export class PhaseManager {
     }
 
     if (!this.phaseQueue.length) {
-      this.populatePhaseQueue();
+      this.createAndPushPhase("TurnInitPhase");
       // Clear the conditionalQueue if there are no phases left in the phaseQueue
       this.conditionalQueue = [];
     }
@@ -226,6 +457,13 @@ export class PhaseManager {
     }
   }
 
+  /**
+   * Cancels the {@link currentPhase | current Phase} to run another {@linkcode Phase}.
+   * The overridden Phase will restart after the overriding Phase finishes running.
+   * If a Phase is already on {@link standbyPhase | standby}, this does nothing.
+   * @param phase - The {@linkcode Phase} overriding the current Phase
+   * @returns `true` if the overriding Phase
+   */
   public overridePhase(phase: Phase): boolean {
     if (this.standbyPhase) {
       return false;
@@ -296,115 +534,79 @@ export class PhaseManager {
   /**
    * Tries to add the input phase to the index before the target phase in the {@linkcode phaseQueue},
    * otherwise it calls {@linkcode unshiftPhase} instead
-   * @param phase - The {@linkcode Phase} to be added
-   * @param targetPhaseId - The {@linkcode PhaseId | id} of the phase to search for in the {@linkcode phaseQueue}
+   * @param targetPhaseKey - The {@linkcode PhaseKey} of the phase to search for in the {@linkcode phaseQueue}
+   * @param phases - The {@linkcode Phases} to be added. This requires at least one Phase as input.
    * @returns `true` if the phase was successfully added to the queue before the target phase,
    *   `false` if the target phase wasn't found and {@linkcode unshiftPhase} was called instead
    */
-  public prependToPhase(phase: Phase, targetPhaseId: PhaseId): boolean {
-    const targetIndex = this.phaseQueue.findIndex(({ id }) => id === targetPhaseId);
+  public prependToPhase(targetPhaseKey: PhaseKey, ...phases: [Phase, ...Phase[]]): boolean {
+    const targetIndex = this.phaseQueue.findIndex((phase) => phase.is(targetPhaseKey));
 
     if (targetIndex !== -1) {
-      this.phaseQueue.splice(targetIndex, 0, phase);
+      this.phaseQueue.splice(targetIndex, 0, ...phases);
       return true;
     }
-    this.unshiftPhase(phase);
+    this.unshiftPhase(...phases);
     return false;
+  }
+
+  /**
+   * Creates a {@linkcode Phase} from the given parameters, then prepends it to the first Phase
+   * in {@linkcode phaseQueue} of the given key.
+   * @param targetPhaseKey - The {@linkcode PhaseKey} of the Phase on which the created Phase is prepended
+   * @param phase - The {@linkcode PhaseKey} of the Phase to create and add
+   * @param params - The inferred constructor parameters according to {@linkcode phase}
+   */
+  public createAndPrependPhase<P extends PhaseKey>(
+    targetPhaseKey: PhaseKey,
+    phase: P,
+    ...params: PhaseParameterMap[P]
+  ): boolean {
+    return this.prependToPhase(targetPhaseKey, this.createPhase(phase, ...params));
   }
 
   /**
    * Tries to add the input phase to the index after the target phase in the {@linkcode phaseQueue},
    * otherwise it calls {@linkcode unshiftPhase} instead
-   * @param phase - The {@linkcode Phase} to be added
-   * @param targetPhaseId - The {@linkcode PhaseId | id} of the phase to search for in the {@linkcode phaseQueue}
+   * @param targetPhaseKey - The {@linkcode PhaseKey} of the Phase on which the created Phase is appended
+   * @param phases - The {@linkcode Phases} to be added. This requires at least one Phase as input.
    * @returns `true` if the phase was successfully added to the queue after the target phase,
    *   `false` if the target phase wasn't found and {@linkcode unshiftPhase} was called instead
    */
-  public appendToPhase(phase: Phase, targetPhaseId: PhaseId): boolean {
-    const targetIndex = this.phaseQueue.findIndex(({ id }) => id === targetPhaseId);
+  public appendToPhase(targetPhaseKey: PhaseKey, ...phases: [Phase, ...Phase[]]): boolean {
+    const targetIndex = this.phaseQueue.findIndex((phase) => phase.is(targetPhaseKey));
 
     if (targetIndex !== -1 && this.phaseQueue.length > targetIndex) {
-      this.phaseQueue.splice(targetIndex + 1, 0, phase);
+      this.phaseQueue.splice(targetIndex + 1, 0, ...phases);
       return true;
     }
-    this.unshiftPhase(phase);
+    this.unshiftPhase(...phases);
     return false;
   }
 
   /**
-   * Moves everything from the {@linkcode nextCommandPhaseQueue} to the {@linkcode phaseQueue} (keeping order)
+   * Creates a {@linkcode Phase} from the given parameters, then appends it to the first Phase
+   * in {@linkcode phaseQueue} of the given key.
+   * @param targetPhaseKey - The {@linkcode PhaseKey} of the Phase on which the created Phase is prepended
+   * @param phase - The {@linkcode PhaseKey} of the Phase to create and add
+   * @param params - The inferred constructor parameters according to {@linkcode phase}
    */
-  public populatePhaseQueue(): void {
-    this.phaseQueue.push(new TurnInitPhase());
+  public createAndAppendPhase<P extends PhaseKey>(
+    targetPhaseKey: PhaseKey,
+    phase: P,
+    ...params: PhaseParameterMap[P]
+  ): boolean {
+    return this.appendToPhase(targetPhaseKey, this.createPhase(phase, ...params));
   }
 
-  /**
-   * Adds a {@linkcode MessagePhase}, either to {@linkcode phaseQueuePrepend} or {@linkcode phaseQueue}
-   * @param message - The message to display (passed to `MessagePhase`)
-   * @param callbackDelay - (Optional) (passed to `MessagePhase`)
-   * @param prompt - (Optional) (passed to `MessagePhase`)
-   * @param promptDelay - (Optional) (passed to `MessagePhase`)
-   * @param defer - (Optional, default `false`)
-   *   Whether to use {@linkcode unshiftPhase} (`false`) or {@linkcode pushPhase} (`true`)
-   */
-  public queueMessagePhase(
-    message: string,
-    callbackDelay?: number | null,
-    prompt?: boolean | null,
-    promptDelay?: number | null,
-    defer: boolean = false,
-  ) {
-    const phase = new MessagePhase(message, callbackDelay, prompt, promptDelay);
-    if (!defer) {
-      this.unshiftPhase(phase);
-    } else {
-      this.pushPhase(phase);
-    }
-  }
+  // #region Phase-Specific Utils
 
-  /**
-   * Queues a new {@linkcode PokemonHealPhase} for the given {@linkcode BattlerIndex}.
-   * @param battlerIndex - The {@linkcode BattlerIndex} of the pokemon to heal
-   * @param hpHealed - The amount of HP to heal
-   * @param params_2 - The various {@linkcode PokemonHealPhaseOptions | optional parameters} of `PokemonHealPhase`
-   */
-  public queuePokemonHealPhase(...params: ConstructorParameters<typeof PokemonHealPhase>) {
-    const pokemonHealPhase = new PokemonHealPhase(...params);
-    this.unshiftPhase(pokemonHealPhase);
-  }
-
-  /**
-   * Adds a new {@linkcode MoveChargePhase} to the phase queue.
-   * @param battlerIndex - The user's {@linkcode BattlerIndex}
-   * @param targets - Array of target `BattlerIndex`es
-   * @param move - The {@linkcode PokemonMove} being used
-   */
-  public queueMoveChargePhase(...params: ConstructorParameters<typeof MoveChargePhase>): void {
-    this.unshiftPhase(new MoveChargePhase(...params));
-  }
-
-  /**
-   * Inserts a new {@linkcode SelectTargetPhase} to the phase queue.
-   * @param fieldIndex - The selected target's {@linkcode BattlerIndex}
-   */
-  public queueSelectTargetPhase(...params: ConstructorParameters<typeof SelectTargetPhase>): void {
-    this.unshiftPhase(new SelectTargetPhase(...params));
-  }
-
-  /**
-   * Adds a new {@linkcode MoveAnimPhase} to the phase queue.
-   * @param chargeAnim - The {@linkcode ChargeAnim} to be used
-   * @param moveId - The {@linkcode MoveId} to be used
-   * @param user - The {@linkcode Pokemon} using the move
-   */
-  public queueMoveAnimPhase(...params: ConstructorParameters<typeof MoveChargeAnim>): void {
-    this.unshiftPhase(new MoveAnimPhase(new MoveChargeAnim(...params)));
-  }
+  /**  @todo Are these utils still necessary? */
 
   /**
    * Unshifts a new {@linkcode FaintPhase} for the given {@linkcode BattlerIndex} to faint.
    *
-   * @param battlerIndex - The {@linkcode BattlerIndex} to faint
+   * @param battlerIndex - The {@linkcode FieldBattlerIndex} to faint
    * @param preventEndure - (Optional, default `false`) Whether or not enduring (Reviver Seed) should be prevented
    * @param destinyTag - (Optional) Destiny Bond tag belonging to the currently fainting Pokemon, if applicable
    * @param grudgeTag - (Optional) Grudge tag belonging to the currently fainting Pokemon, if applicable
@@ -419,11 +621,11 @@ export class PhaseManager {
    * {@linkcode shiftPhase} will reset the {@linkcode phaseQueuePrependSpliceIndex} via {@linkcode clearPhaseQueueSplice}_
    */
   public queueBattlerFaintPhase(
-    battlerIndex: BattlerIndex,
+    battlerIndex: FieldBattlerIndex,
     { preventEndure = false, destinyTag = null, grudgeTag = null, source }: PokemonFaintInit,
   ): void {
     this.setPhaseQueueSplice();
-    this.unshiftPhase(new FaintPhase(battlerIndex, preventEndure, destinyTag, grudgeTag, source));
+    this.createAndUnshiftPhase("FaintPhase", battlerIndex, preventEndure, destinyTag, grudgeTag, source);
   }
 
   public queueMovePhase({
@@ -435,26 +637,31 @@ export class PhaseManager {
     reflected = false,
     snatched = false,
     when,
-    phaseId,
+    targetPhaseKey,
   }: UseMoveInit) {
-    const movePhase = new MovePhase(pokemon, targets, move, followUp, ignorePp, reflected, snatched);
+    const builderParams = ["MovePhase", pokemon, targets, move, followUp, ignorePp, reflected, snatched] as const;
 
-    if ((when === "before" || when === "after") && !phaseId) {
-      throw new Error("phaseId is required for useMove.when === 'before' or 'after'");
-    }
+    const validateTargetPhaseKey = () => {
+      if (!targetPhaseKey) {
+        throw new Error("targetPhaseKey is required for useMove.when === 'before' or 'after'");
+      }
+      return true;
+    };
 
     switch (when) {
       case "eager":
-        this.unshiftPhase(movePhase);
+        this.createAndUnshiftPhase(...builderParams);
         break;
       case "defer":
-        this.pushPhase(movePhase);
+        this.createAndPushPhase(...builderParams);
         break;
       case "before":
-        this.prependToPhase(movePhase, phaseId!);
+        validateTargetPhaseKey();
+        this.createAndPrependPhase(targetPhaseKey!, ...builderParams);
         break;
       case "after":
-        this.appendToPhase(movePhase, phaseId!);
+        validateTargetPhaseKey();
+        this.createAndAppendPhase(targetPhaseKey!, ...builderParams);
         break;
       default:
         throw new Error(`Unknown useMove.when: ${when}`);
@@ -466,8 +673,7 @@ export class PhaseManager {
    * @param isVictory - Whether the player won the battle
    */
   public queueNextBattle(isVictory: boolean): void {
-    this.pushPhase(new BattleEndPhase(isVictory));
-    this.pushPhase(new NewBattlePhase());
+    this.pushPhase(this.createPhase("BattleEndPhase", isVictory), this.createPhase("NewBattlePhase"));
   }
 
   /**
@@ -479,7 +685,7 @@ export class PhaseManager {
     if (clearPhaseQueue) {
       this.clearPhaseQueue();
     }
-    this.pushPhase(new GameOverPhase(isVictory));
+    this.createAndPushPhase("GameOverPhase", isVictory);
   }
 
   /**
@@ -492,43 +698,9 @@ export class PhaseManager {
     }
 
     if (eager) {
-      this.unshiftPhase(new TitlePhase());
+      this.createAndUnshiftPhase("TitlePhase");
     } else {
-      this.pushPhase(new TitlePhase());
-    }
-  }
-
-  /**
-   * @param eager - (Optional) `true` to use {@linkcode unshiftPhase}, `false` for {@linkcode pushPhase}
-   * @param showText - (Optional, default `true`) Whether to show text
-   */
-  public toLoginScreen({ eager, showText = true }: ToLoginScreenInit = {}): void {
-    const loginPhase = new LoginPhase(showText);
-
-    if (eager) {
-      this.unshiftPhase(loginPhase);
-    } else {
-      this.pushPhase(loginPhase);
-    }
-  }
-
-  /**
-   * @param eager - `true` to use {@linkcode unshiftPhase}, `false` for {@linkcode pushPhase}
-   * @param battlerIndex - The {@linkcode BattlerIndex} of the affected {@linkcode Pokemon}
-   * @param source - The {@linkcode Pokemon} that caused the stat stage change
-   * @param stats - The {@linkcode BattleStat | stats} modified by this phase
-   * @param stages - The change in each affected stat stage
-   * @param params_4 - (Optional) The {@linkcode SSCPhaseOptions} for the generated phase
-   */
-  public queueStatStageChangePhase(
-    eager: boolean,
-    ...params: ConstructorParameters<typeof StatStageChangePhase>
-  ): void {
-    const statStageChangePhase = new StatStageChangePhase(...params);
-    if (eager) {
-      this.unshiftPhase(statStageChangePhase);
-    } else {
-      this.pushPhase(statStageChangePhase);
+      this.createAndPushPhase("TitlePhase");
     }
   }
 }

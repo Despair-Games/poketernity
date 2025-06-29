@@ -37,7 +37,8 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
   override canApply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (user !== target && target.isSafeguarded(user)) {
       if (move.category === MoveCategory.STATUS) {
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           i18next.t("moveTriggers:safeguard", { targetName: getPokemonNameWithAffix(target) }),
         );
       }

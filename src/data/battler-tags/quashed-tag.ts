@@ -17,7 +17,8 @@ export class QuashedTag extends BattlerTag {
 
   override onAdd(pokemon: Pokemon) {
     // "{pokemonNameWithAffix}'s move was postponed!"
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:quashOnAdd", {
         pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       }),

@@ -1,13 +1,9 @@
-// -- start tsdoc imports --
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
-// -- end tsdoc imports --
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import { PhaseId } from "#enums/phase-id";
-import { PostMysteryEncounterPhase } from "#phases/mystery-encounter-phases/post-mystery-encounter-phase";
-import { SelectModifierPhase } from "#phases/select-modifier-phase";
 
 /**
  * Will handle (in order):
@@ -21,7 +17,7 @@ import { SelectModifierPhase } from "#phases/select-modifier-phase";
  * - Queuing of the {@linkcode PostMysteryEncounterPhase}
  */
 export class MysteryEncounterRewardsPhase extends Phase {
-  override readonly id: PhaseId.ME_REWARDS = PhaseId.ME_REWARDS;
+  public override readonly phaseName = "MysteryEncounterRewardsPhase";
 
   protected addHealPhase: boolean;
 
@@ -69,13 +65,13 @@ export class MysteryEncounterRewardsPhase extends Phase {
     if (encounter.doEncounterRewards) {
       encounter.doEncounterRewards();
     } else if (this.addHealPhase) {
-      globalScene.phaseManager.tryRemovePhase((p) => p.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER));
-      globalScene.phaseManager.unshiftPhase(
-        new SelectModifierPhase({ customModifierSettings: { fillRemaining: false, rerollMultiplier: -1 } }),
-      );
+      globalScene.phaseManager.tryRemovePhase((p) => p.is("SelectModifierPhase"));
+      globalScene.phaseManager.createAndUnshiftPhase("SelectModifierPhase", {
+        customModifierSettings: { fillRemaining: false, rerollMultiplier: -1 },
+      });
     }
 
-    globalScene.phaseManager.pushPhase(new PostMysteryEncounterPhase());
+    globalScene.phaseManager.createAndPushPhase("PostMysteryEncounterPhase");
     this.end();
   }
 }

@@ -9,7 +9,6 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
 import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
-import { CommonAnimPhase } from "#phases/common-anim-phase";
 import { BooleanHolder, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
@@ -25,7 +24,8 @@ export class NightmareTag extends BattlerTag {
   override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:nightmareOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }
@@ -33,7 +33,8 @@ export class NightmareTag extends BattlerTag {
   override onOverlap(pokemon: Pokemon): void {
     super.onOverlap(pokemon);
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:nightmareOnOverlap", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }
@@ -42,11 +43,12 @@ export class NightmareTag extends BattlerTag {
     const ret = lapseType !== BattlerTagLapseType.CUSTOM || super.lapse(pokemon, lapseType);
 
     if (ret) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("battlerTags:nightmareLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
       // TODO: Update animation type
-      globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.CURSE, pokemon.getBattlerIndex()));
+      globalScene.phaseManager.createAndUnshiftPhase("CommonAnimPhase", CommonAnim.CURSE, pokemon.getBattlerIndex());
 
       const cancelled = new BooleanHolder(false);
       applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);

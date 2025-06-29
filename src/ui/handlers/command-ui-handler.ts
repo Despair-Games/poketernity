@@ -10,7 +10,7 @@ import { SpeciesId } from "#enums/species-id";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { TerastallizeAccessModifier } from "#modifier/modifier";
-import { CommandPhase } from "#phases/command-phase";
+import type { CommandPhase } from "#phases/command-phase";
 import type { BallUiHandler } from "#ui/ball-ui-handler";
 import type { FightUiHandler } from "#ui/fight-ui-handler";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
@@ -285,7 +285,7 @@ export class CommandUiHandler extends UiHandler {
   private getCommandPhase(): CommandPhase {
     let commandPhase: CommandPhase;
     const currentPhase = globalScene.phaseManager.getCurrentPhase();
-    if (currentPhase instanceof CommandPhase) {
+    if (currentPhase?.is("CommandPhase")) {
       commandPhase = currentPhase;
     } else {
       commandPhase = globalScene.phaseManager.getStandbyPhase() as CommandPhase;

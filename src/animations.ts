@@ -1,14 +1,12 @@
-// -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { BattleAnim } from "#animations/battle-anims";
-/* eslint-enable @typescript-eslint/no-unused-vars */
-// -- end tsdoc imports --
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import type BattleScene from "#app/battle-scene";
 import type { Variant } from "#data/variant";
 import { PokeballType } from "#enums/pokeball-type";
 import { settings } from "#system/settings-manager";
-import { getFrameMs, type BooleanHolder } from "#utils/common-utils";
+import { type BooleanHolder, getFrameMs } from "#utils/common-utils";
 import { randGauss, randInt } from "#utils/random-utils";
 
 /**

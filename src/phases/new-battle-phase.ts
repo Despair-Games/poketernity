@@ -1,12 +1,11 @@
 import { globalScene } from "#app/global-scene";
-import { PhaseId } from "#enums/phase-id";
-import { BattlePhase } from "#phases/abstract-battle-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
 
 /**
  * Triggers a new battle
  */
 export class NewBattlePhase extends BattlePhase {
-  override readonly id = PhaseId.NEW_BATTLE;
+  public override readonly phaseName = "NewBattlePhase";
 
   public override start(): void {
     super.start();

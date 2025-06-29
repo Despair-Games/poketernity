@@ -1,8 +1,6 @@
-// -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { DAMAGING_TRAPPED_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
-/* eslint-enable @typescript-eslint/no-unused-vars */
-// -- end tsdoc imports --
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
@@ -17,7 +15,6 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import type { CommonAnim } from "#enums/common-anim";
 import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
-import { CommonAnimPhase } from "#phases/common-anim-phase";
 import { BooleanHolder, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
@@ -59,13 +56,14 @@ export abstract class DamagingTrapTag extends TrappedTag {
     const ret = super.lapse(pokemon, lapseType);
 
     if (ret) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("battlerTags:damagingTrapLapse", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
           moveName: this.getMoveName(),
         }),
       );
-      globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(this.commonAnim, pokemon.getBattlerIndex()));
+      globalScene.phaseManager.createAndUnshiftPhase("CommonAnimPhase", this.commonAnim, pokemon.getBattlerIndex());
 
       const cancelled = new BooleanHolder(false);
       applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);

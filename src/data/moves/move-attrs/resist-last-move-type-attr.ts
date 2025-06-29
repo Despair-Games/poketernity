@@ -35,7 +35,8 @@ export class ResistLastMoveTypeAttr extends MoveEffectAttr {
 
     const modifiedType = validTypes[user.randSeedInt(validTypes.length)];
     user.setTemporaryTypes(modifiedType);
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battle:transformedIntoType", {
         pokemonName: getPokemonNameWithAffix(user),
         type: i18next.t(`pokemonInfo:Type.${enumValueToKey(ElementalType, modifiedType)}`),

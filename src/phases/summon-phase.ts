@@ -4,20 +4,17 @@ import { getPokeballAtlasKey, getPokeballTintColor } from "#data/pokeball";
 import { BattleType } from "#enums/battle-type";
 import { FieldPosition } from "#enums/field-position";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
-import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
-import { PartyMemberPokemonPhase } from "#phases/abstract-party-member-pokemon-phase";
-import { PostSummonPhase } from "#phases/post-summon-phase";
-import { ShinySparklePhase } from "#phases/shiny-sparkle-phase";
+import { PartyMemberPokemonPhase } from "#phases/base/party-member-pokemon-phase";
 import { settings } from "#system/settings-manager";
+import type { PhaseKey } from "#types/phase-types";
 import i18next from "i18next";
 
 export class SummonPhase extends PartyMemberPokemonPhase {
-  /** @override **Must** use generic {@linkcode PhaseId} since {@linkcode SummonPhase} is extended by other phases */
-  override readonly id: PhaseId = PhaseId.SUMMON;
+  public override readonly phaseName: PhaseKey = "SummonPhase";
 
   private readonly loaded: boolean;
 
@@ -62,7 +59,8 @@ export class SummonPhase extends PartyMemberPokemonPhase {
         console.error("Party Details:\n", party);
         console.error("All available Pokemon were fainted or illegal!");
         globalScene.phaseManager.queueGameOverPhase({ clearPhaseQueue: true });
-        return this.end();
+        this.end();
+        return;
       }
 
       // Swaps the fainted Pokemon and the first non-fainted legal Pokemon in the party
@@ -277,7 +275,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
     const pokemon = this.getPokemon();
 
     if (pokemon.isShiny()) {
-      globalScene.phaseManager.unshiftPhase(new ShinySparklePhase(pokemon.getBattlerIndex()));
+      globalScene.phaseManager.createAndUnshiftPhase("ShinySparklePhase", pokemon.getBattlerIndex());
     }
 
     pokemon.resetTurnData();
@@ -294,7 +292,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
   }
 
   protected queuePostSummon(): void {
-    globalScene.phaseManager.pushPhase(new PostSummonPhase(this.getPokemon().getBattlerIndex()));
+    globalScene.phaseManager.createAndPushPhase("PostSummonPhase", this.getPokemon().getBattlerIndex());
   }
 
   public getTrainerSlot(): TrainerSlot {

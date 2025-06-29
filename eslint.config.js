@@ -22,27 +22,10 @@ export default tseslint.config(
     },
     rules: {
       "no-undef": "off", // Disables the rule that disallows the use of undeclared variables (TypeScript handles this)
-      "@typescript-eslint/no-unused-vars": [
-        // Handled by ESLint for imports until Biome 2.0
-        "error",
-        {
-          args: "all", // Disallows unused variables
-          ignoreRestSiblings: true, // Allows unused variables that are part of a rest property in object destructuring. Useful for excluding certain properties from an object while using the others.
-          argsIgnorePattern: "^_", // Allows unused variables that start with an underscore
-        },
-      ],
       "@stylistic/ts/semi": ["error", "always"], // Requires semicolons for TypeScript-specific syntax
       semi: "off", // Disables the general semi rule for TypeScript files
       "no-extra-semi": "error", // Disallows unnecessary semicolons for TypeScript-specific syntax
       "import-x/extensions": ["error", "never", { json: "always" }], // Enforces no extension for imports unless json
-      "@typescript-eslint/ban-ts-comment": [
-        // Require `@ts-expect-error` instead of `@ts-ignore`
-        "error",
-        {
-          "ts-check": false,
-          "ts-expect-error": "allow-with-description",
-        },
-      ],
       "no-relative-import-paths/no-relative-import-paths": [
         // Enforces absolute paths only (for example, converts "./data/moves/move-attrs/call-move-attr" to "#app/data/moves/move-attrs/call-move-attr")
         "error",
@@ -83,15 +66,6 @@ export default tseslint.config(
     rules: {
       indent: ["error", 2, { SwitchCase: 1 }], // Enforces a 2-space indentation, enforces indentation of `case ...:` statements
       "no-undef": "off", // Disables the rule that disallows the use of undeclared variables (TypeScript handles this)
-      "@typescript-eslint/no-unused-vars": [
-        // Handled by ESLint for imports until Biome 2.0
-        "error",
-        {
-          args: "all", // Disallows unused variables
-          ignoreRestSiblings: true, // Allows unused variables that are part of a rest property in object destructuring. Useful for excluding certain properties from an object while using the others.
-          argsIgnorePattern: "^_", // Allows unused variables that start with an underscore
-        },
-      ],
       "eol-last": ["error", "always"], // Enforces at least one newline at the end of files
       "@stylistic/ts/semi": ["error", "always"], // Requires semicolons for TypeScript-specific syntax
       semi: "off", // Disables the general semi rule for TypeScript files
@@ -115,14 +89,6 @@ export default tseslint.config(
       "computed-property-spacing": ["error", "never"], // Enforces consistent spacing inside computed property brackets
       "space-infix-ops": ["error", { int32Hint: false }], // Enforces spacing around infix operators
       "no-multiple-empty-lines": ["error", { max: 2, maxEOF: 1, maxBOF: 0 }], // Disallows multiple empty lines
-      "@typescript-eslint/ban-ts-comment": [
-        // Require `@ts-expect-error` instead of `@ts-ignore`
-        "error",
-        {
-          "ts-check": false,
-          "ts-expect-error": "allow-with-description",
-        },
-      ],
     },
   },
 );

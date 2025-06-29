@@ -1,9 +1,7 @@
-// -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { initCommonAnims } from "#init/init-common-anims";
 import type { initEncounterAnims } from "#init/init-encounter-anims";
-/* eslint-enable @typescript-eslint/no-unused-vars */
-// -- end tsdoc imports --
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import type { LegacyAnimConfig } from "#animations/anim-config";
 import { commonAnims } from "#animations/common-anims";

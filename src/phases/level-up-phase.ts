@@ -2,11 +2,8 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { FRIENDSHIP_GAIN_PER_LEVEL_UP } from "#constants/friendship-constants";
 import { ExpNotification } from "#enums/exp-notification";
-import { PhaseId } from "#enums/phase-id";
 import type { PlayerPokemon } from "#field/player-pokemon";
-import { PlayerPartyMemberPokemonPhase } from "#phases/abstract-player-party-member-pokemon-phase";
-import { EvolutionPhase } from "#phases/evolution-phase";
-import { LearnMovePhase } from "#phases/learn-move-phase";
+import { PlayerPartyMemberPokemonPhase } from "#phases/base/player-party-member-pokemon-phase";
 import { settings } from "#system/settings-manager";
 import i18next from "i18next";
 
@@ -20,7 +17,7 @@ import i18next from "i18next";
  * - Pushes an {@linkcode EvolutionPhase} if the pokemon should evolve
  */
 export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
-  override readonly id = PhaseId.LEVEL_UP;
+  public override readonly phaseName = "LevelUpPhase";
 
   protected readonly lastLevel: number;
   protected readonly level: number;
@@ -77,17 +74,17 @@ export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
     if (this.lastLevel < 100) {
       const levelMoves = this.getPokemon().getLevelMoves(this.lastLevel + 1);
       for (const [, learnMoveId] of levelMoves) {
-        globalScene.phaseManager.unshiftPhase(new LearnMovePhase(this.partyMemberIndex, learnMoveId));
+        globalScene.phaseManager.createAndUnshiftPhase("LearnMovePhase", this.partyMemberIndex, learnMoveId);
       }
     }
 
     if (!this.pokemon.pauseEvolutions) {
       const evolution = this.pokemon.getEvolution();
       if (evolution) {
-        globalScene.phaseManager.unshiftPhase(new EvolutionPhase(this.pokemon, evolution, this.lastLevel));
+        globalScene.phaseManager.createAndUnshiftPhase("EvolutionPhase", this.pokemon, evolution, this.lastLevel);
       }
     }
 
-    return super.end();
+    super.end();
   }
 }

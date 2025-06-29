@@ -3,10 +3,10 @@ import {
   GholdengoEvoCondition,
   MaleEvolutionCondition,
   NightEvolutionCondition,
+  type PokemonEvolutions,
   RngFormEvoCondition,
   SpeciesEvolution,
   SpeciesFormEvolution,
-  type PokemonEvolutions,
 } from "#data/pokemon-evolutions";
 import {
   BRAMBLEGHAST_EVO_LEVEL,

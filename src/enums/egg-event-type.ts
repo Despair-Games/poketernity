@@ -1,8 +1,8 @@
-// -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { MoveUsedEvent } from "#events/battle-scene";
-/* eslint-enable @typescript-eslint/no-unused-vars */
-// -- end tsdoc imports --
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
+
+import type { EnumValues } from "#types/enum-values";
 
 export const EggEventType = {
   /**
@@ -12,4 +12,4 @@ export const EggEventType = {
   EGG_COUNT_CHANGED: "onEggCountChanged",
 } as const;
 
-export type EggEventType = (typeof EggEventType)[keyof typeof EggEventType];
+export type EggEventType = EnumValues<typeof EggEventType>;

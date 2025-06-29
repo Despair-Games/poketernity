@@ -1,3 +1,5 @@
+import type { EnumValues } from "#types/enum-values";
+
 /** Defines the preference of egg skipping */
 export const EggSkipPreference = {
   /** Never skip eggs hatching. */
@@ -8,4 +10,4 @@ export const EggSkipPreference = {
   ALWAYS: 3,
 } as const;
 
-export type EggSkipPreference = (typeof EggSkipPreference)[keyof typeof EggSkipPreference];
+export type EggSkipPreference = EnumValues<typeof EggSkipPreference>;

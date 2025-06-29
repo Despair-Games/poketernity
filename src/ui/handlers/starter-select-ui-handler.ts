@@ -20,11 +20,11 @@ import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#data/pokemon-species";
 import { starterColors } from "#data/starter-colors";
 import {
-  POKERUS_STARTER_COUNT,
   getCandyProgressRequirement,
   getPassiveCandyCount,
   getSameSpeciesEggCandyCounts,
   getValueReductionCandyCounts,
+  POKERUS_STARTER_COUNT,
   speciesStarterCosts,
 } from "#data/starters";
 import type { Variant } from "#data/variant";
@@ -51,11 +51,10 @@ import { SpeciesId } from "#enums/species-id";
 import { TextStyle } from "#enums/text-style";
 import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
-import { EncounterPhase } from "#phases/encounter-phase";
-import { SelectChallengePhase } from "#phases/select-challenge-phase";
 import type { DexAttrProps, StarterAttributes, StarterPreferences } from "#system/game-data";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
 import type { DexEntry } from "#types/dex-data";
+import type { EnumValues } from "#types/enum-values";
 import type { StarterConfig } from "#types/starter-config";
 import type { StarterDataEntry, StarterMoveset } from "#types/starter-data";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
@@ -75,7 +74,7 @@ import { addBBCodeTextObject, addTextObject, setTextColor } from "#ui/text-utils
 import { addWindow } from "#ui/ui-theme";
 import { applyChallenges } from "#utils/challenge-utils";
 import { rgbHexToRgba } from "#utils/color-utils";
-import { BooleanHolder, NumberHolder, enumValueToKey, fixedNumber, isNil } from "#utils/common-utils";
+import { BooleanHolder, enumValueToKey, fixedNumber, isNil, NumberHolder } from "#utils/common-utils";
 import { getPokemonSpeciesForm, getPokerusStarters } from "#utils/pokemon-utils";
 import { capitalizeString, leftPad, toReadableString } from "#utils/string-utils";
 import { argbFromRgba } from "@material/material-color-utilities";
@@ -104,7 +103,7 @@ const StarterSelectMode = {
   START: 4,
 } as const;
 
-type StarterSelectMode = (typeof StarterSelectMode)[keyof typeof StarterSelectMode];
+type StarterSelectMode = EnumValues<typeof StarterSelectMode>;
 
 const languageSettings: { [key: string]: LanguageSetting } = {
   pt_BR: {
@@ -3946,8 +3945,10 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       ui.setMode<StarterSelectUiHandler>(UiMode.STARTER_SELECT);
       globalScene.phaseManager.clearPhaseQueue();
       if (globalScene.gameMode.isChallenge) {
-        globalScene.phaseManager.pushPhase(new SelectChallengePhase());
-        globalScene.phaseManager.pushPhase(new EncounterPhase());
+        globalScene.phaseManager.pushPhase(
+          globalScene.phaseManager.createPhase("SelectChallengePhase"),
+          globalScene.phaseManager.createPhase("EncounterPhase"),
+        );
       } else {
         globalScene.phaseManager.toTitleScreen();
       }

@@ -17,12 +17,11 @@ import { BiomeId } from "#enums/biome-id";
 import { FieldPosition } from "#enums/field-position";
 import { MoveId } from "#enums/move-id";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
-import { PhaseId } from "#enums/phase-id";
 import { PokeballType } from "#enums/pokeball-type";
 import { UiMode } from "#enums/ui-mode";
 import type { Pokemon } from "#field/pokemon";
 import { getMoveTargets, type MoveTargetSet } from "#moves/move";
-import { FieldPhase } from "#phases/abstract-field-phase";
+import { FieldPhase } from "#phases/base/field-phase";
 import type { FightCommand } from "#types/fight-command";
 import type { TurnMove } from "#types/turn-move";
 import type { CommandUiHandler } from "#ui/command-ui-handler";
@@ -36,7 +35,7 @@ import i18next from "i18next";
  * @see {@linkcode handleCommand}
  */
 export class CommandPhase extends FieldPhase {
-  override readonly id = PhaseId.COMMAND;
+  public override readonly phaseName = "CommandPhase";
 
   /** TODO: Is this supposed to be a {@linkcode FieldPosition} or a {@linkcode BattlerIndex}? */
   protected fieldIndex: number;
@@ -209,7 +208,7 @@ export class CommandPhase extends FieldPhase {
             (isFieldTargeted(moveTargets.targets) && double)
             || (moveTargets.targets.length > 1 && moveTargets.multiple)
           ) {
-            globalScene.phaseManager.queueSelectTargetPhase(this.fieldIndex);
+            globalScene.phaseManager.createAndUnshiftPhase("SelectTargetPhase", this.fieldIndex);
           }
           if (turnCommand.turnMove && (moveTargets.targets.length <= 1 || moveTargets.multiple)) {
             turnCommand.turnMove.targets = moveTargets.targets;
@@ -220,7 +219,7 @@ export class CommandPhase extends FieldPhase {
           ) {
             turnCommand.turnMove.targets = pokemon.getMoveQueue()[0].targets;
           } else {
-            globalScene.phaseManager.queueSelectTargetPhase(this.fieldIndex);
+            globalScene.phaseManager.createAndUnshiftPhase("SelectTargetPhase", this.fieldIndex);
           }
 
           turnManager.addCommand(turnCommand);
@@ -392,8 +391,7 @@ export class CommandPhase extends FieldPhase {
 
   public cancel(): void {
     if (this.fieldIndex) {
-      globalScene.phaseManager.unshiftPhase(new CommandPhase(0));
-      globalScene.phaseManager.unshiftPhase(new CommandPhase(1));
+      globalScene.phaseManager.unshiftPhase(new CommandPhase(0), new CommandPhase(1));
       this.end();
     }
   }

@@ -4,15 +4,13 @@ import Overrides from "#app/overrides";
 import { allMoves } from "#data/data-lists";
 import { LearnMoveType } from "#enums/learn-move-type";
 import { MoveId } from "#enums/move-id";
-import { PhaseId } from "#enums/phase-id";
 import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { UiMode } from "#enums/ui-mode";
 import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeMoveLearnedTrigger } from "#form-change-triggers/species-form-change-move-learned-trigger";
 import { initMoveAnim } from "#init/init-move-anim";
 import type { Move } from "#moves/move";
-import { PlayerPartyMemberPokemonPhase } from "#phases/abstract-player-party-member-pokemon-phase";
-import type { SelectModifierPhase } from "#phases/select-modifier-phase";
+import { PlayerPartyMemberPokemonPhase } from "#phases/base/player-party-member-pokemon-phase";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { FormChangeSceneUiHandler } from "#ui/form-change-scene-ui-handler";
@@ -22,7 +20,7 @@ import { loadMoveAnimAssets } from "#utils/move-anim-utils";
 import i18next from "i18next";
 
 export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
-  override readonly id = PhaseId.LEARN_MOVE;
+  public override readonly phaseName = "LearnMovePhase";
 
   private readonly moveId: MoveId;
   private messageMode: UiMode;
@@ -51,7 +49,8 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
     // This should never happen, but if there is no Pokemon learning the move, exit now to avoid crashes.
     if (!pokemon) {
       console.error("Pokemon is missing from LearnMovePhase!");
-      return this.end();
+      this.end();
+      return;
     }
 
     const move = allMoves.get(this.moveId);
@@ -60,7 +59,8 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
     // The game first checks if the Pokemon already has the move and ends the phase if it does.
     const hasMoveAlready = currentMoveset.some((m) => m.moveId === move.id) && this.moveId !== MoveId.SKETCH;
     if (hasMoveAlready) {
-      return this.end();
+      this.end();
+      return;
     }
 
     const uiHandler = ui.getCurrentHandler();
@@ -222,7 +222,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
         pokemon.usedTMs = [];
       }
       pokemon.usedTMs.push(this.moveId);
-      globalScene.phaseManager.tryRemovePhase((phase) => phase.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER));
+      globalScene.phaseManager.tryRemovePhase((phase) => phase.is("SelectModifierPhase"));
     } else if (this.learnMoveType === LearnMoveType.MEMORY) {
       if (this.cost !== -1) {
         if (!Overrides.WAIVE_SHOP_FEES_OVERRIDE) {
@@ -232,7 +232,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
         }
         globalScene.audioManager.playSound("se/buy");
       } else {
-        globalScene.phaseManager.tryRemovePhase((phase) => phase.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER));
+        globalScene.phaseManager.tryRemovePhase((phase) => phase.is("SelectModifierPhase"));
       }
     }
 

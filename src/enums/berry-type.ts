@@ -1,3 +1,5 @@
+import type { EnumValues } from "#types/enum-values";
+
 export const BerryType = {
   SITRUS: 1,
   LUM: 2,
@@ -12,4 +14,4 @@ export const BerryType = {
   LEPPA: 11,
 } as const;
 
-export type BerryType = (typeof BerryType)[keyof typeof BerryType];
+export type BerryType = EnumValues<typeof BerryType>;

@@ -21,7 +21,8 @@ export class IgnoreAccuracyAttr extends AddBattlerTagAttr {
       return false;
     }
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("moveTriggers:tookAimAtTarget", {
         pokemonName: getPokemonNameWithAffix(user),
         targetName: getPokemonNameWithAffix(target),

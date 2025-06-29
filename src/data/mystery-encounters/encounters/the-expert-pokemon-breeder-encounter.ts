@@ -19,10 +19,10 @@ import type { PokemonHeldItemModifier } from "#modifier/modifier";
 import { modifierTypes } from "#modifier/modifier-types";
 import { getEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import {
+  type EnemyPartyConfig,
   handleMysteryEncounterBattleFailed,
   initBattleWithEnemyConfig,
   setEncounterRewards,
-  type EnemyPartyConfig,
 } from "#mystery-encounters/encounter-phase-utils";
 import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";

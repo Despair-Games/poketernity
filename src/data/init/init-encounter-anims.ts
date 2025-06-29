@@ -18,7 +18,7 @@ export async function initEncounterAnims(encounterAnim: EncounterAnim | Encounte
     }
     encounterAnimFetches.push(
       globalScene
-        .cachedFetch(`./battle-anims/encounter-${encounterAnimNames[anim].toLowerCase().replace(/\_/g, "-")}.json`)
+        .cachedFetch(`./battle-anims/encounter-${encounterAnimNames[anim].toLowerCase().replace(/_/g, "-")}.json`)
         .then((response) => response.json())
         .then((cas) => encounterAnims.set(anim, new LegacyAnimConfig(cas))),
     );

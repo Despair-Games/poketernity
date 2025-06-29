@@ -6,7 +6,6 @@ import { SpeciesId } from "#enums/species-id";
 import type { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
 import { VariableMoveTypeAttr } from "#moves/variable-move-type-attr";
-import { ShowAbilityPhase } from "#phases/show-ability-phase";
 import type { AbAttrCondition } from "#types/ab-attr-condition";
 import type { PokemonAttackCondition } from "#types/pokemon-attack-condition";
 
@@ -21,11 +20,6 @@ export function getPokemonWithWeatherBasedForms(): Pokemon[] {
         (p.hasAbility(AbilityId.FORECAST) && p.species.speciesId === SpeciesId.CASTFORM)
         || (p.hasAbility(AbilityId.FLOWER_GIFT) && p.species.speciesId === SpeciesId.CHERRIM),
     );
-}
-
-export function queueShowAbility(pokemon: Pokemon, passive: boolean): void {
-  globalScene.phaseManager.unshiftPhase(new ShowAbilityPhase(pokemon.id, passive));
-  globalScene.phaseManager.clearPhaseQueueSplice();
 }
 
 export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondition {

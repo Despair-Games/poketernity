@@ -21,7 +21,7 @@ import type { SpeciesId } from "#enums/species-id";
 import { TextStyle } from "#enums/text-style";
 import { TrainerVariant } from "#enums/trainer-variant";
 import { UiMode } from "#enums/ui-mode";
-// biome-ignore lint/style/noNamespaceImport: Something weird is going on here and I don't want to touch it
+// biome-ignore lint/performance/noNamespaceImport: Something weird is going on here and I don't want to touch it
 import * as Modifier from "#modifier/modifier";
 import { getLuckString, getLuckTextTint } from "#modifier/modifier-type";
 import type PokemonData from "#system/pokemon-data";

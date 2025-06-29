@@ -24,7 +24,8 @@ export class RepeatMoveAttr extends MoveEffectAttr {
     const movesetMove = target.getMoveset().find((m) => m?.moveId === lastMove.move.id)!;
     const moveTargets = lastMove.targets ?? [];
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("moveTriggers:instructingMove", {
         userPokemonName: getPokemonNameWithAffix(user),
         targetPokemonName: getPokemonNameWithAffix(target),

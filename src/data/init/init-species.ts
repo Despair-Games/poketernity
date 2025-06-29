@@ -4,8 +4,8 @@ import PokemonSpecies from "#data/pokemon-species";
 import { AbilityId } from "#enums/ability-id";
 import { ElementalType } from "#enums/elemental-type";
 import { GrowthRate } from "#enums/growth-rate";
-import { SpeciesGroups } from "#enums/species-groups";
 import { SpeciesFormKey } from "#enums/species-form-key";
+import { SpeciesGroups } from "#enums/species-groups";
 import { SpeciesId } from "#enums/species-id";
 
 export function initSpecies() {

@@ -9,7 +9,6 @@ import { UiMode } from "#enums/ui-mode";
 import type { CustomModifierSettings } from "#modifier/modifier-type";
 import { ModifierTypeOption } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
-import { SelectModifierPhase } from "#phases/select-modifier-phase";
 import { settings } from "#system/settings-manager";
 import { GameManager } from "#test/test-utils/game-manager";
 import { initSceneWithoutEncounterPhase } from "#test/test-utils/game-manager-utils";
@@ -48,8 +47,7 @@ describe("SelectModifierPhase", () => {
 
   it("should start a select modifier phase", async () => {
     initSceneWithoutEncounterPhase(scene, [SpeciesId.ABRA, SpeciesId.VOLCARONA]);
-    const selectModifierPhase = new SelectModifierPhase();
-    scene.phaseManager.unshiftPhase(selectModifierPhase);
+    scene.phaseManager.createAndUnshiftPhase("SelectModifierPhase");
     await game.phaseInterceptor.to("SelectModifierPhase");
 
     expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
@@ -73,10 +71,10 @@ describe("SelectModifierPhase", () => {
       new ModifierTypeOption(modifierTypes.REVIVE(), 0, 1000),
     ];
 
-    const selectModifierPhase1 = new SelectModifierPhase({
+    const selectModifierPhase1 = scene.phaseManager.createPhase("SelectModifierPhase", {
       customModifierSettings: { guaranteedModifierTypeOptions: options },
     });
-    const selectModifierPhase2 = new SelectModifierPhase({
+    const selectModifierPhase2 = scene.phaseManager.createPhase("SelectModifierPhase", {
       customModifierSettings: {
         guaranteedModifierTypeOptions: options,
         rerollMultiplier: 2,
@@ -151,7 +149,7 @@ describe("SelectModifierPhase", () => {
   it("should generate custom modifiers", async () => {
     await game.classicMode.startBattle(SpeciesId.ABRA, SpeciesId.VOLCARONA);
     scene.money = 1000000;
-    const customModifiers: CustomModifierSettings = {
+    const customModifierSettings: CustomModifierSettings = {
       guaranteedModifierTypeFuncs: [
         modifierTypes.MEMORY_MUSHROOM,
         modifierTypes.TM_ULTRA,
@@ -160,7 +158,7 @@ describe("SelectModifierPhase", () => {
         modifierTypes.GOLDEN_PUNCH,
       ],
     };
-    const selectModifierPhase = new SelectModifierPhase({ customModifierSettings: customModifiers });
+    const selectModifierPhase = scene.phaseManager.createPhase("SelectModifierPhase", { customModifierSettings });
     scene.phaseManager.unshiftPhase(selectModifierPhase);
     game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to("SelectModifierPhase");
@@ -179,7 +177,7 @@ describe("SelectModifierPhase", () => {
     game.override.shiny(true).shinyVariant(2);
     await game.classicMode.startBattle(SpeciesId.ABRA, ...new Array(5).fill(SpeciesId.ABRA));
     scene.money = 1000000;
-    const customModifiers: CustomModifierSettings = {
+    const customModifierSettings: CustomModifierSettings = {
       guaranteedModifierTiers: [
         ModifierTier.COMMON,
         ModifierTier.GREAT,
@@ -189,7 +187,7 @@ describe("SelectModifierPhase", () => {
       ],
     };
 
-    const selectModifierPhase = new SelectModifierPhase({ customModifierSettings: customModifiers });
+    const selectModifierPhase = scene.phaseManager.createPhase("SelectModifierPhase", { customModifierSettings });
     scene.phaseManager.unshiftPhase(selectModifierPhase);
     game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to("SelectModifierPhase");
@@ -222,11 +220,11 @@ describe("SelectModifierPhase", () => {
   it("should generate custom modifiers and modifier tiers together", async () => {
     await game.classicMode.startBattle(SpeciesId.ABRA, SpeciesId.VOLCARONA);
     scene.money = 1000000;
-    const customModifiers: CustomModifierSettings = {
+    const customModifierSettings: CustomModifierSettings = {
       guaranteedModifierTypeFuncs: [modifierTypes.MEMORY_MUSHROOM, modifierTypes.TM_COMMON],
       guaranteedModifierTiers: [ModifierTier.MASTER, ModifierTier.MASTER],
     };
-    const selectModifierPhase = new SelectModifierPhase({ customModifierSettings: customModifiers });
+    const selectModifierPhase = scene.phaseManager.createPhase("SelectModifierPhase", { customModifierSettings });
     scene.phaseManager.unshiftPhase(selectModifierPhase);
     game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to("SelectModifierPhase");
@@ -243,12 +241,12 @@ describe("SelectModifierPhase", () => {
   it("should fill remaining modifiers if fillRemaining is true with custom modifiers", async () => {
     await game.classicMode.startBattle(SpeciesId.ABRA, SpeciesId.VOLCARONA);
     scene.money = 1000000;
-    const customModifiers: CustomModifierSettings = {
+    const customModifierSettings: CustomModifierSettings = {
       guaranteedModifierTypeFuncs: [modifierTypes.MEMORY_MUSHROOM],
       guaranteedModifierTiers: [ModifierTier.MASTER],
       fillRemaining: true,
     };
-    const selectModifierPhase = new SelectModifierPhase({ customModifierSettings: customModifiers });
+    const selectModifierPhase = scene.phaseManager.createPhase("SelectModifierPhase", { customModifierSettings });
     scene.phaseManager.unshiftPhase(selectModifierPhase);
     game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to("SelectModifierPhase");

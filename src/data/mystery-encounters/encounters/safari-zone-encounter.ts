@@ -30,8 +30,6 @@ import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import type MysteryEncounterOption from "#mystery-encounters/mystery-encounter-option";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import { MoneyRequirement } from "#mystery-encounters/mystery-encounter-requirements";
-import { ScanIvsPhase } from "#phases/scan-ivs-phase";
-import { SummonPhase } from "#phases/summon-phase";
 import { settings } from "#system/settings-manager";
 import { NumberHolder } from "#utils/common-utils";
 import { getPokemonSpecies, getSpecialSpeciesList } from "#utils/pokemon-utils";
@@ -275,7 +273,12 @@ async function summonSafariPokemon() {
   const encounter = globalScene.currentBattle.mysteryEncounter!;
   // Message pokemon remaining
   encounter.setDialogueToken("remainingCount", encounter.misc.safariPokemonRemaining);
-  globalScene.phaseManager.queueMessagePhase(getEncounterText(`${namespace}:safari.remaining_count`) ?? "", null, true);
+  globalScene.phaseManager.createAndUnshiftPhase(
+    "MessagePhase",
+    getEncounterText(`${namespace}:safari.remaining_count`) ?? "",
+    undefined,
+    true,
+  );
 
   // Generate pokemon using safariPokemonRemaining so they are always the same pokemon no matter how many turns are taken
   // Safari pokemon roll twice on shiny and HA chances, but are otherwise normal
@@ -324,7 +327,7 @@ async function summonSafariPokemon() {
   encounter.misc.pokemon = pokemon;
   encounter.misc.safariPokemonRemaining -= 1;
 
-  globalScene.phaseManager.unshiftPhase(new SummonPhase(0, false));
+  globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", 0, false);
 
   encounter.setDialogueToken("pokemonName", getPokemonNameWithAffix(pokemon));
 
@@ -335,8 +338,10 @@ async function summonSafariPokemon() {
 
   const ivScannerModifier = globalScene.findModifier((m) => m instanceof IvScannerModifier);
   if (ivScannerModifier) {
-    globalScene.phaseManager.pushPhase(
-      new ScanIvsPhase(pokemon.getBattlerIndex(), Math.min(ivScannerModifier.getStackCount() * 2, 6)),
+    globalScene.phaseManager.createAndPushPhase(
+      "ScanIvsPhase",
+      pokemon.getBattlerIndex(),
+      Math.min(ivScannerModifier.getStackCount() * 2, 6),
     );
   }
 }
@@ -560,10 +565,11 @@ async function doEndTurn(cursorIndex: number) {
       leaveEncounterWithoutBattle(true);
     }
   } else {
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       getEncounterText(`${namespace}:safari.watching`) ?? "",
-      null,
-      null,
+      undefined,
+      undefined,
       1000,
     );
     initSubsequentOptionSelect({

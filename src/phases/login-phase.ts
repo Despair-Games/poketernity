@@ -3,12 +3,9 @@ import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { handleTutorial } from "#app/tutorial";
 import { BYPASS_LOGIN, SESSION_ID_COOKIE } from "#constants/app-constants";
-import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
 import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
-import { SelectGenderPhase } from "#phases/select-gender-phase";
-import { UnavailablePhase } from "#phases/unavailable-phase";
 import { settings } from "#system/settings-manager";
 import type { LoadingModalUiHandler } from "#ui/loading-modal-ui-handler";
 import type { LoginFormUiHandler } from "#ui/login-form-ui-handler";
@@ -18,7 +15,7 @@ import { executeIf } from "#utils/common-utils";
 import i18next from "i18next";
 
 export class LoginPhase extends Phase {
-  override readonly id = PhaseId.LOGIN;
+  public override readonly phaseName = "LoginPhase";
 
   private readonly showText: boolean;
 
@@ -80,7 +77,7 @@ export class LoginPhase extends Phase {
                       });
                     },
                     (): void => {
-                      globalScene.phaseManager.toLoginScreen({ showText: false, eager: true });
+                      globalScene.phaseManager.createAndUnshiftPhase("LoginPhase", false);
                       this.end();
                     },
                   ],
@@ -104,7 +101,7 @@ export class LoginPhase extends Phase {
           removeCookie(SESSION_ID_COOKIE);
           globalScene.reset(true, true);
         } else {
-          globalScene.phaseManager.unshiftPhase(new UnavailablePhase());
+          globalScene.phaseManager.createAndUnshiftPhase("UnavailablePhase");
           super.end();
         }
         return null;
@@ -124,7 +121,7 @@ export class LoginPhase extends Phase {
     globalScene.ui.setMessageMode();
 
     if (settings.display.playerGender === PlayerGender.UNSET) {
-      globalScene.phaseManager.unshiftPhase(new SelectGenderPhase());
+      globalScene.phaseManager.createAndUnshiftPhase("SelectGenderPhase");
     }
 
     handleTutorial(Tutorial.INTRO).then(() => super.end());

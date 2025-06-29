@@ -1,6 +1,6 @@
 import { InverseBattleChallenge, SingleGenerationChallenge, SingleTypeChallenge } from "#data/challenge";
 import { ElementalType } from "#enums/elemental-type";
-import { Achievement, ChallengeAchv, MonoGenAchv, MonoTypeAchv, RibbonAchv, achvs } from "#system/achievements";
+import { Achievement, achvs, ChallengeAchv, MonoGenAchv, MonoTypeAchv, RibbonAchv } from "#system/achievements";
 import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";

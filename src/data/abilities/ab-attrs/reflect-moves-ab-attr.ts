@@ -1,7 +1,7 @@
-// -- start tsdoc imports
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { MovePhase } from "#phases/move-phase";
-// -- end tsdoc imports
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
+
 import { PreDefendAbAttr } from "#abilities/pre-defend-ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";

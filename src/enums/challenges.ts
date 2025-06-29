@@ -1,3 +1,5 @@
+import type { EnumValues } from "#types/enum-values";
+
 export const Challenges = {
   SINGLE_GENERATION: 1,
   SINGLE_TYPE: 2,
@@ -7,4 +9,4 @@ export const Challenges = {
   INVERSE_BATTLE: 6,
 } as const;
 
-export type Challenges = (typeof Challenges)[keyof typeof Challenges];
+export type Challenges = EnumValues<typeof Challenges>;

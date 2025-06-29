@@ -3,8 +3,8 @@ import {
   getRandomPartyMemberFunc,
   getWavePartyTemplate,
   TrainerConfig,
-  trainerPartyTemplates,
   type TrainerConfigs,
+  trainerPartyTemplates,
 } from "#data/trainer-config";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
@@ -12,6 +12,7 @@ import { SpeciesId } from "#enums/species-id";
 import { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
+
 /**
  * If a trainer does not have any species filter then they use the default
  * filters of excluding sublegendary, legendary, mythic, eternal floette, and bloodmoon ursaluna

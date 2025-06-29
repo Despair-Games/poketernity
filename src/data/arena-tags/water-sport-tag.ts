@@ -16,10 +16,10 @@ export class WaterSportTag extends WeakenMoveTypeTag {
   }
 
   override onAdd(_arena: Arena): void {
-    globalScene.phaseManager.queueMessagePhase(i18next.t("arenaTag:waterSportOnAdd"));
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("arenaTag:waterSportOnAdd"));
   }
 
   override onRemove(_arena: Arena): void {
-    globalScene.phaseManager.queueMessagePhase(i18next.t("arenaTag:waterSportOnRemove"));
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("arenaTag:waterSportOnRemove"));
   }
 }

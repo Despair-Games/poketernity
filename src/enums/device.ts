@@ -1,6 +1,8 @@
+import type { EnumValues } from "#types/enum-values";
+
 export const Device = {
   GAMEPAD: 1,
   KEYBOARD: 2,
 } as const;
 
-export type Device = (typeof Device)[keyof typeof Device];
+export type Device = EnumValues<typeof Device>;

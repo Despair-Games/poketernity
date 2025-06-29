@@ -11,10 +11,9 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
 import { HitResult } from "#enums/hit-result";
-import { PhaseId } from "#enums/phase-id";
 import { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
-import { FieldPhase } from "#phases/abstract-field-phase";
+import { FieldPhase } from "#phases/base/field-phase";
 import { BooleanHolder, toDmgValue } from "#utils/common-utils";
 
 /**
@@ -25,7 +24,7 @@ import { BooleanHolder, toDmgValue } from "#utils/common-utils";
  * (e.g. Rain Dish, Dry Skin)
  */
 export class WeatherEffectPhase extends FieldPhase {
-  override readonly id = PhaseId.WEATHER_EFFECT;
+  public override readonly phaseName = "WeatherEffectPhase";
 
   public override start(): void {
     // Get current weather state at end of turn
@@ -125,7 +124,10 @@ export class WeatherEffectPhase extends FieldPhase {
 
     const damage = toDmgValue(pokemon.getMaxHp() * WEATHER_DAMAGE_RATIO);
 
-    globalScene.phaseManager.queueMessagePhase(getWeatherDamageMessage(weather.weatherType, pokemon) ?? "");
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
+      getWeatherDamageMessage(weather.weatherType, pokemon) ?? "",
+    );
     pokemon.damageAndUpdate(damage, { result: HitResult.EFFECTIVE, preventEndure: true });
   }
 }

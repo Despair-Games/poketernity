@@ -8,3 +8,11 @@ export enum BattlerIndex {
   ENEMY_SIDE,
   BOTH_SIDES,
 }
+
+export const FIELD_BATTLER_INDEXES = [
+  BattlerIndex.PLAYER,
+  BattlerIndex.PLAYER_2,
+  BattlerIndex.ENEMY,
+  BattlerIndex.ENEMY_2,
+] as const;
+export type FieldBattlerIndex = (typeof FIELD_BATTLER_INDEXES)[number];

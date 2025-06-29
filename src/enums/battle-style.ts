@@ -1,3 +1,5 @@
+import type { EnumValues } from "#types/enum-values";
+
 /**
  * Determines the selected battle style.
  * - 'Switch' - The option to switch the active pokemon at the start of a battle will be displayed.
@@ -8,4 +10,4 @@ export const BattleStyle = {
   SET: 2,
 } as const;
 
-export type BattleStyle = (typeof BattleStyle)[keyof typeof BattleStyle];
+export type BattleStyle = EnumValues<typeof BattleStyle>;

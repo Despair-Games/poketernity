@@ -5,7 +5,6 @@ import { type EffectiveStat, Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 
 /**
  * Attribute implementing the stat boosting effect of {@link https://bulbapedia.bulbagarden.net/wiki/Order_Up_(move) | Order Up}.
@@ -48,7 +47,13 @@ export class OrderUpStatBoostAttr extends MoveEffectAttr {
         break;
     }
 
-    globalScene.phaseManager.unshiftPhase(new StatStageChangePhase(user.getBattlerIndex(), user, [increasedStat], 1));
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "StatStageChangePhase",
+      user.getBattlerIndex(),
+      user,
+      [increasedStat],
+      1,
+    );
     return true;
   }
 }

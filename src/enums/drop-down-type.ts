@@ -1,3 +1,5 @@
+import type { EnumValues } from "#types/enum-values";
+
 export const DropDownType = {
   SINGLE: 1,
   MULTI: 2,
@@ -5,4 +7,4 @@ export const DropDownType = {
   RADIAL: 4,
 } as const;
 
-export type DropDownType = (typeof DropDownType)[keyof typeof DropDownType];
+export type DropDownType = EnumValues<typeof DropDownType>;

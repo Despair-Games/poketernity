@@ -41,6 +41,7 @@ import {
   GigantamaxAccessModifier,
   LevelIncrementBoosterModifier,
   MegaEvolutionAccessModifier,
+  type Modifier,
   MoneyMultiplierModifier,
   MoneyRewardModifier,
   PokemonAllMovePpRestoreModifier,
@@ -49,6 +50,7 @@ import {
   PokemonExpBoosterModifier,
   PokemonFormChangeItemModifier,
   PokemonFriendshipBoosterModifier,
+  type PokemonHeldItemModifier,
   PokemonHpRestoreModifier,
   PokemonLevelIncrementModifier,
   PokemonNatureChangeModifier,
@@ -60,13 +62,12 @@ import {
   TempStatStageBoosterModifier,
   TmModifier,
   TurnHeldItemTransferModifier,
-  type Modifier,
-  type PokemonHeldItemModifier,
 } from "#modifier/modifier";
 import { modifierPool } from "#modifier/modifier-pools";
 import { modifierTypes } from "#modifier/modifier-types";
 import { settings } from "#system/settings-manager";
 import { getVoucherTypeIcon, getVoucherTypeName } from "#system/voucher";
+import type { EnumValues } from "#types/enum-values";
 import type { PokemonMoveSelectFilter } from "#types/pokemon-move-select-filter";
 import type { PokemonSelectFilter } from "#types/pokemon-select-filter";
 import { getModifierTierTextTint } from "#ui/text-utils";
@@ -742,7 +743,7 @@ const AttackTypeBoosterItem = {
   FAIRY_FEATHER: ElementalType.FAIRY,
 } as const;
 
-type AttackTypeBoosterItem = (typeof AttackTypeBoosterItem)[keyof typeof AttackTypeBoosterItem];
+type AttackTypeBoosterItem = EnumValues<typeof AttackTypeBoosterItem>;
 
 export class AttackTypeBoosterModifierType
   extends PokemonHeldItemModifierType
@@ -1614,13 +1615,13 @@ let modifierPoolThresholds = {};
 let ignoredPoolIndexes = {};
 
 let dailyStarterModifierPoolThresholds = {};
-let _ignoredDailyStarterPoolIndexes = {}; // eslint-disable-line @typescript-eslint/no-unused-vars
+let _ignoredDailyStarterPoolIndexes = {};
 
 let enemyModifierPoolThresholds = {};
-let _enemyIgnoredPoolIndexes = {}; // eslint-disable-line @typescript-eslint/no-unused-vars
+let _enemyIgnoredPoolIndexes = {};
 
 let enemyBuffModifierPoolThresholds = {};
-let _enemyBuffIgnoredPoolIndexes = {}; // eslint-disable-line @typescript-eslint/no-unused-vars
+let _enemyBuffIgnoredPoolIndexes = {};
 
 const tierWeights = [768 / 1024, 195 / 1024, 48 / 1024, 12 / 1024, 1 / 1024];
 /**

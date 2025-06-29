@@ -36,7 +36,8 @@ export class BadDreamsAbAttr extends AbAttr {
           opp.damageAndUpdate(toDmgValue(opp.getMaxHp() / 8), {
             result: HitResult.OTHER,
           });
-          globalScene.phaseManager.queueMessagePhase(
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "MessagePhase",
             i18next.t("abilityTriggers:badDreams", { pokemonName: getPokemonNameWithAffix(opp) }),
           );
         }

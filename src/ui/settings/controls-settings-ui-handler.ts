@@ -187,7 +187,7 @@ export abstract class ControlsSettingsUiHandler extends UiHandler {
 
       settingFiltered.forEach((setting, s) => {
         // Convert the setting key from format 'Key_Name' to 'Key name' for display.
-        const settingName = setting.replace(/\_/g, " ");
+        const settingName = setting.replace(/_/g, " ");
 
         // Create and add a text object for the setting name to the scene.
         const isLock = this.settingBlacklisted.includes(this.setting[setting]);

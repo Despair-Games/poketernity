@@ -39,7 +39,7 @@ export class StealEatBerryAttr extends EatBerryAttr {
       targetName: target.name,
       berryName: this.chosenBerry.type.name,
     });
-    globalScene.phaseManager.queueMessagePhase(message);
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", message);
     this.reduceBerryModifier(target);
     this.eatBerry(user, target);
     return true;

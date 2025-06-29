@@ -19,7 +19,7 @@ export class MessageHeaderAttr extends MoveHeaderAttr {
     const message = typeof this.message === "string" ? this.message : this.message(user, target, move);
 
     if (message) {
-      globalScene.phaseManager.queueMessagePhase(message);
+      globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", message);
       return true;
     }
     return false;

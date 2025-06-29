@@ -21,7 +21,10 @@ export class WaterFirePledgeTag extends ArenaTag {
 
   override onAdd(_arena: Arena): void {
     // "A rainbow appeared in the sky on your/the opposing team's side!"
-    globalScene.phaseManager.queueMessagePhase(i18next.t(`arenaTag:waterFirePledgeOnAdd${this.i18nSideKey}`));
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
+      i18next.t(`arenaTag:waterFirePledgeOnAdd${this.i18nSideKey}`),
+    );
   }
 
   /**

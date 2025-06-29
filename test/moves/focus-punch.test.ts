@@ -1,6 +1,5 @@
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
@@ -106,10 +105,10 @@ describe("Moves - Focus Punch", () => {
 
     await game.phaseInterceptor.to("TurnStartPhase");
 
-    expect(game.scene.phaseManager.getCurrentPhase()).toMatchObject({ id: PhaseId.SWITCH_SUMMON });
+    expect(game.scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SwitchSummonPhase");
 
     await game.phaseInterceptor.to("PostActionPhase");
 
-    expect(game.scene.phaseManager.getCurrentPhase()).toMatchObject({ id: PhaseId.MOVE_HEADER });
+    expect(game.scene.phaseManager.getCurrentPhase()?.phaseName).toBe("MoveHeaderPhase");
   });
 });

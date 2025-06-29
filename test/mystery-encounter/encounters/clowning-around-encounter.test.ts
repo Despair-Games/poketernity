@@ -9,7 +9,6 @@ import { MoveId } from "#enums/move-id";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { UiMode } from "#enums/ui-mode";
@@ -23,10 +22,7 @@ import { ClowningAroundEncounter } from "#mystery-encounters/clowning-around-enc
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import { generateModifierType } from "#mystery-encounters/encounter-phase-utils";
 import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
-import { CommandPhase } from "#phases/command-phase";
 import type { MovePhase } from "#phases/move-phase";
-import { PostMysteryEncounterPhase } from "#phases/mystery-encounter-phases/post-mystery-encounter-phase";
-import { SelectModifierPhase } from "#phases/select-modifier-phase";
 import {
   runMysteryEncounterToEnd,
   runSelectMysteryEncounterOption,
@@ -172,7 +168,7 @@ describe("Clowning Around - Mystery Encounter", () => {
       expect(scene.currentBattle.double).toBeTruthy();
       const [enemy1, enemy2] = scene.getEnemyField();
       [enemy1, enemy2].forEach((p) => expect(p).toBeDefined());
-      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
       expect(enemy1.species.speciesId).toBe(SpeciesId.MR_MIME);
       expect(enemy1.moveset).toEqual([
         new PokemonMove(enemy1, MoveId.TEETER_DANCE),
@@ -189,7 +185,7 @@ describe("Clowning Around - Mystery Encounter", () => {
       ]);
 
       // Should have used moves pre-battle
-      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is<MovePhase>(PhaseId.MOVE)).map((p) => p[0]);
+      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is("MovePhase")).map((p) => p[0]);
       expect(movePhases.length).toBe(3);
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.ROLE_PLAY).length).toBe(1);
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.TAUNT).length).toBe(2);
@@ -205,7 +201,7 @@ describe("Clowning Around - Mystery Encounter", () => {
       game.move.use(MoveId.DAZZLING_GLEAM);
       await game.phaseInterceptor.to("MysteryEncounterRewardsPhase");
 
-      expect(game.scene.phaseManager.hasPhase((phase) => phase.is(PhaseId.ME_REWARDS), true)).toBe(false);
+      expect(game.scene.phaseManager.hasPhase((phase) => phase.is("MysteryEncounterRewardsPhase"), true)).toBe(false);
     });
 
     it("should let the player gain the ability after battle completion", async () => {
@@ -213,7 +209,7 @@ describe("Clowning Around - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
       await skipBattleRunMysteryEncounterRewardsPhase(game);
       await game.phaseInterceptor.to("SelectModifierPhase", false);
-      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SelectModifierPhase");
       await game.phaseInterceptor.to("SelectModifierPhase");
       const abilityToTrain = scene.currentBattle.mysteryEncounter?.misc.ability;
 
@@ -234,7 +230,7 @@ describe("Clowning Around - Mystery Encounter", () => {
 
       game.endPhase();
       await game.phaseInterceptor.to("PostMysteryEncounterPhase");
-      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(PostMysteryEncounterPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("PostMysteryEncounterPhase");
 
       await game.phaseInterceptor.to("NewBattlePhase", false);
 

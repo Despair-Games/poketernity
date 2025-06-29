@@ -4,10 +4,9 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitCheckResult } from "#enums/hit-check-result";
 import { MoveResult } from "#enums/move-result";
-import { PhaseId } from "#enums/phase-id";
 import { InstantChargeAttr } from "#moves/instant-charge-attr";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import { HitCheckPhase } from "#phases/hit-check-phase";
+import { HitCheckPhase } from "#phases/base/hit-check-phase";
 import { BooleanHolder } from "#utils/common-utils";
 import { applyMoveChargeAttrs } from "#utils/move-utils";
 import i18next from "i18next";
@@ -16,7 +15,7 @@ import i18next from "i18next";
  * Phase for the "charging turn" of two-turn moves (e.g. Dig).
  */
 export class MoveChargePhase extends HitCheckPhase {
-  override readonly id = PhaseId.MOVE_CHARGE;
+  public override readonly phaseName = "MoveChargePhase";
 
   public override start() {
     super.start();
@@ -37,7 +36,8 @@ export class MoveChargePhase extends HitCheckPhase {
     if (![HitCheckResult.HIT, HitCheckResult.MISS].includes(targetHitCheck)) {
       switch (targetHitCheck) {
         case HitCheckResult.NO_EFFECT:
-          globalScene.phaseManager.queueMessagePhase(
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "MessagePhase",
             i18next.t("battle:hitResultNoEffect", { pokemonName: getPokemonNameWithAffix(target) }),
           );
           break;

@@ -9,7 +9,7 @@ import type {
   UnlinkAccountFromDiscordIdRequest,
   UnlinkAccountFromGoogledIdRequest,
 } from "#types/admin-api";
-import { http, HttpResponse } from "msw";
+import { HttpResponse, http } from "msw";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const apiBase = getApiBaseUrl();

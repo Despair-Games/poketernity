@@ -16,11 +16,11 @@ import {
   EVIL_GRUNT_2_WAVE,
   EVIL_GRUNT_3_WAVE,
   EVIL_GRUNT_4_WAVE,
+  RIVAL_WAVE,
   RIVAL2_WAVE,
   RIVAL3_WAVE,
   RIVAL4_WAVE,
   RIVAL5_WAVE,
-  RIVAL_WAVE,
   TUTORIAL_BATTLE_WAVE,
 } from "#constants/wave-constants";
 import { getLevelForWaveFunc } from "#data/exp";
@@ -219,7 +219,7 @@ export default class Battle {
     const userLocale = navigator.language || "en-US";
     const formattedMoneyAmount = moneyAmount.value.toLocaleString(userLocale);
     const message = i18next.t("battle:moneyPickedUp", { moneyAmount: formattedMoneyAmount });
-    globalScene.phaseManager.queueMessagePhase(message, undefined, true);
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", message, undefined, true);
 
     globalScene.currentBattle.moneyScattered = 0;
   }

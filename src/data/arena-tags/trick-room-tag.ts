@@ -29,13 +29,14 @@ export class TrickRoomTag extends ArenaRoomTag {
   override onAdd(_arena: Arena): void {
     const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
     if (source) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("arenaTag:trickRoomOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(source) }),
       );
     }
   }
 
   override onRemove(_arena: Arena): void {
-    globalScene.phaseManager.queueMessagePhase(i18next.t("arenaTag:trickRoomOnRemove"));
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("arenaTag:trickRoomOnRemove"));
   }
 }

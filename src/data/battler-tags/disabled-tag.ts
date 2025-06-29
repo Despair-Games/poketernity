@@ -1,7 +1,6 @@
-// -- start tsdoc imports --
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { AbilityId } from "#enums/ability-id";
-// -- end tsdoc imports
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -53,7 +52,8 @@ export class DisabledTag extends MoveRestrictionBattlerTag {
     this.moveId = lastValidMove.id;
     const moveName = pokemon.getMove(this.moveId)?.name ?? "";
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:disabledOnAdd", {
         pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
         moveName,
@@ -70,7 +70,8 @@ export class DisabledTag extends MoveRestrictionBattlerTag {
       return;
     }
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:disabledLapse", {
         pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
         moveName,

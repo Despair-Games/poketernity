@@ -1,3 +1,5 @@
+import type { EnumValues } from "#types/enum-values";
+
 export const EaseType = {
   NONE: 0,
   LINEAR: "Linear",
@@ -14,4 +16,4 @@ export const EaseType = {
   STEPPED: "Stepped",
 } as const;
 
-export type EaseType = (typeof EaseType)[keyof typeof EaseType];
+export type EaseType = EnumValues<typeof EaseType>;

@@ -4,10 +4,6 @@ import { BattleStyle } from "#enums/battle-style";
 import type { Challenges } from "#enums/challenges";
 import type { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
-import { CommandPhase } from "#phases/command-phase";
-import { EncounterPhase } from "#phases/encounter-phase";
-import { SelectStarterPhase } from "#phases/select-starter-phase";
-import { TurnInitPhase } from "#phases/turn-init-phase";
 import { settings } from "#system/settings-manager";
 import { generateStarter } from "#test/test-utils/game-manager-utils";
 import { GameManagerHelper } from "#test/test-utils/helpers/game-manager-helper";
@@ -50,10 +46,11 @@ export class ChallengeModeHelper extends GameManagerHelper {
     }
 
     this.game.onNextPrompt("TitlePhase", UiMode.TITLE, () => {
+      const { phaseManager } = this.game.scene;
       this.game.scene.gameMode.challenges = this.challenges;
       const starters = generateStarter(this.game.scene, starterSpecies);
-      const selectStarterPhase = new SelectStarterPhase();
-      this.game.scene.phaseManager.pushPhase(new EncounterPhase(false));
+      const selectStarterPhase = phaseManager.createPhase("SelectStarterPhase");
+      phaseManager.createAndPushPhase("EncounterPhase", false);
       selectStarterPhase.initBattle(starters);
     });
 
@@ -79,7 +76,7 @@ export class ChallengeModeHelper extends GameManagerHelper {
           this.game.setMode(UiMode.MESSAGE);
           this.game.endPhase();
         },
-        () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase),
+        () => this.game.isCurrentPhase("CommandPhase") || this.game.isCurrentPhase("TurnInitPhase"),
       );
 
       this.game.onNextPrompt(
@@ -89,7 +86,7 @@ export class ChallengeModeHelper extends GameManagerHelper {
           this.game.setMode(UiMode.MESSAGE);
           this.game.endPhase();
         },
-        () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase),
+        () => this.game.isCurrentPhase("CommandPhase") || this.game.isCurrentPhase("TurnInitPhase"),
       );
     }
 

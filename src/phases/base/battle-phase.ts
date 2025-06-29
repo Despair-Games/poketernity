@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
-import { TrainerSlot } from "#enums/trainer-slot";
 import { Phase } from "#app/phase";
+import { TrainerSlot } from "#enums/trainer-slot";
 
 /**
  * Adds functions to display and hide the enemy trainer

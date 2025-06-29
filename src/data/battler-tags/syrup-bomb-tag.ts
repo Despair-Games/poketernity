@@ -6,7 +6,6 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
-import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import i18next from "i18next";
 
 /**
@@ -25,7 +24,8 @@ export class SyrupBombTag extends BattlerTag {
    */
   override onAdd(pokemon: Pokemon) {
     super.onAdd(pokemon);
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:syrupBombOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }
@@ -41,13 +41,19 @@ export class SyrupBombTag extends BattlerTag {
       return false;
     }
     // Custom message in lieu of an animation in mainline
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:syrupBombLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
-    globalScene.phaseManager.unshiftPhase(
-      new StatStageChangePhase(pokemon.getBattlerIndex(), this.getSourcePokemon(), [Stat.SPD], -1, {
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "StatStageChangePhase",
+      pokemon.getBattlerIndex(),
+      this.getSourcePokemon(),
+      [Stat.SPD],
+      -1,
+      {
         bypassReflect: true,
-      }),
+      },
     );
     return --this.turnCount > 0;
   }

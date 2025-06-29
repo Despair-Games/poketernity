@@ -21,7 +21,10 @@ export class AuroraVeilTag extends WeakenMoveScreenTag {
 
   override onAdd(_arena: Arena, quiet: boolean = false): void {
     if (!quiet) {
-      globalScene.phaseManager.queueMessagePhase(i18next.t(`arenaTag:auroraVeilOnAdd${this.i18nSideKey}`));
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
+        i18next.t(`arenaTag:auroraVeilOnAdd${this.i18nSideKey}`),
+      );
     }
   }
 }

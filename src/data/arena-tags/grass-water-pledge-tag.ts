@@ -19,6 +19,9 @@ export class GrassWaterPledgeTag extends ArenaTag {
 
   override onAdd(_arena: Arena): void {
     // "A swamp enveloped your/the opposing team!"
-    globalScene.phaseManager.queueMessagePhase(i18next.t(`arenaTag:grassWaterPledgeOnAdd${this.i18nSideKey}`));
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
+      i18next.t(`arenaTag:grassWaterPledgeOnAdd${this.i18nSideKey}`),
+    );
   }
 }

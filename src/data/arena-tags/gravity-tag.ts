@@ -18,7 +18,7 @@ export class GravityTag extends ArenaTag {
   }
 
   override onAdd(_arena: Arena): void {
-    globalScene.phaseManager.queueMessagePhase(i18next.t("arenaTag:gravityOnAdd"));
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("arenaTag:gravityOnAdd"));
     globalScene.getField(true).forEach((pokemon) => {
       if (pokemon) {
         pokemon.removeTag(BattlerTagType.FLOATING);
@@ -32,6 +32,6 @@ export class GravityTag extends ArenaTag {
   }
 
   override onRemove(_arena: Arena): void {
-    globalScene.phaseManager.queueMessagePhase(i18next.t("arenaTag:gravityOnRemove"));
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("arenaTag:gravityOnRemove"));
   }
 }

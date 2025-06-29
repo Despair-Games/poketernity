@@ -29,7 +29,8 @@ export const crashDamageFunc = (user: Pokemon, _move: Move): boolean => {
     result: HitResult.OTHER,
     ignoreSegments: true,
   });
-  globalScene.phaseManager.queueMessagePhase(
+  globalScene.phaseManager.createAndUnshiftPhase(
+    "MessagePhase",
     t("moveTriggers:keptGoingAndCrashed", { pokemonName: getPokemonNameWithAffix(user) }),
   );
 
@@ -109,6 +110,7 @@ function applyMoveChargeAttrsInternal<TAttr extends MoveAttr>(
     move.chargeAttrs.filter((attr) => attrFilter(attr)).forEach((attr) => attr.apply(user, target, move, ...args));
   }
 }
+
 export function isFieldTargeted(targets: BattlerIndex[]): boolean {
   return targets.some((t) => [BattlerIndex.BOTH_SIDES, BattlerIndex.PLAYER_SIDE, BattlerIndex.ENEMY_SIDE].includes(t));
 }

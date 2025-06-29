@@ -20,7 +20,8 @@ export class AquaRingTag extends BattlerTag {
   override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:aquaRingOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }
@@ -29,12 +30,17 @@ export class AquaRingTag extends BattlerTag {
     const ret = lapseType !== BattlerTagLapseType.CUSTOM || super.lapse(pokemon, lapseType);
 
     if (ret) {
-      globalScene.phaseManager.queuePokemonHealPhase(pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / 16), {
-        message: i18next.t("battlerTags:aquaRingLapse", {
-          moveName: this.getMoveName(),
-          pokemonName: getPokemonNameWithAffix(pokemon),
-        }),
-      });
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "PokemonHealPhase",
+        pokemon.getBattlerIndex(),
+        toDmgValue(pokemon.getMaxHp() / 16),
+        {
+          message: i18next.t("battlerTags:aquaRingLapse", {
+            moveName: this.getMoveName(),
+            pokemonName: getPokemonNameWithAffix(pokemon),
+          }),
+        },
+      );
     }
 
     return ret;

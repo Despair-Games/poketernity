@@ -7,7 +7,6 @@ import type { MoveId } from "#enums/move-id";
 import type { BattleStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 
 /**
  * Tag used to block damaging moves and change the attacker's stats if the move makes contact.
@@ -40,8 +39,12 @@ export class ContactStatStageChangeProtectedTag extends DamageProtectedTag {
     }
 
     if (!simulated && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker)) {
-      globalScene.phaseManager.unshiftPhase(
-        new StatStageChangePhase(attacker.getBattlerIndex(), pokemon, [this.stat], this.levels),
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "StatStageChangePhase",
+        attacker.getBattlerIndex(),
+        pokemon,
+        [this.stat],
+        this.levels,
       );
     }
     return true;

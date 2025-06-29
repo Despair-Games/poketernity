@@ -8,7 +8,7 @@ import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#data/pokemon-species";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { AiType } from "#enums/ai-type";
-import { BattlerIndex } from "#enums/battler-index";
+import { BattlerIndex, type FieldBattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Challenges } from "#enums/challenges";
 import { ElementalType } from "#enums/elemental-type";
@@ -26,7 +26,6 @@ import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-fo
 import { CounterDamageAttr } from "#moves/counter-damage-attr";
 import { CritOnlyAttr } from "#moves/crit-only-attr";
 import { getMoveTargets } from "#moves/move";
-import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import type PokemonData from "#system/pokemon-data";
 import type { TurnMove } from "#types/turn-move";
 import { EnemyBattleInfo } from "#ui/battle-info";
@@ -654,8 +653,13 @@ export class EnemyPokemon extends Pokemon {
         stages++;
       }
 
-      globalScene.phaseManager.unshiftPhase(
-        new StatStageChangePhase(this.getBattlerIndex(), this, [boostedStat!], stages, { ignoreAbilities: true }),
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "StatStageChangePhase",
+        this.getBattlerIndex(),
+        this,
+        [boostedStat!],
+        stages,
+        { ignoreAbilities: true },
       );
       this.bossSegmentIndex--;
     }
@@ -665,7 +669,7 @@ export class EnemyPokemon extends Pokemon {
     return globalScene.getEnemyField().indexOf(this);
   }
 
-  getBattlerIndex(): BattlerIndex {
+  getBattlerIndex(): FieldBattlerIndex {
     return BattlerIndex.ENEMY + this.getFieldIndex();
   }
 

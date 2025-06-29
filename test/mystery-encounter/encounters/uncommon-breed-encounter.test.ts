@@ -7,7 +7,6 @@ import { MoveId } from "#enums/move-id";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { PokemonMove } from "#field/pokemon-move";
@@ -17,10 +16,8 @@ import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils"
 import { generateModifierType } from "#mystery-encounters/encounter-phase-utils";
 import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
 import { UncommonBreedEncounter } from "#mystery-encounters/uncommon-breed-encounter";
-import { CommandPhase } from "#phases/command-phase";
 import type { MovePhase } from "#phases/move-phase";
-import { MysteryEncounterPhase } from "#phases/mystery-encounter-phases/mystery-encounter-phase";
-import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
+import type { MysteryEncounterPhase } from "#phases/mystery-encounter-phases/mystery-encounter-phase";
 import {
   runMysteryEncounterToEnd,
   runSelectMysteryEncounterOption,
@@ -124,17 +121,15 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
       const enemyField = scene.getEnemyField();
-      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
       expect(enemyField.length).toBe(1);
       expect(enemyField[0].species.speciesId).toBe(speciesToSpawn);
 
-      const statStagePhases = unshiftPhaseSpy.mock.calls.filter(
-        (p) => p[0] instanceof StatStageChangePhase,
-      )[0][0] as any;
+      const statStagePhases = unshiftPhaseSpy.mock.calls.filter((p) => p[0].is("StatStageChangePhase"))[0][0] as any;
       expect(statStagePhases.stats).toEqual([Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD]);
 
       // Should have used its egg move pre-battle
-      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is<MovePhase>(PhaseId.MOVE)).map((p) => p[0]);
+      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is("MovePhase")).map((p) => p[0]);
       expect(movePhases.length).toBe(1);
       const eggMoves: MoveId[] = speciesEggMoves[getPokemonSpecies(speciesToSpawn).getRootSpeciesId()];
       const usedMove = (movePhases[0] as MovePhase).move.moveId;
@@ -153,17 +148,15 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
       const enemyField = scene.getEnemyField();
-      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
       expect(enemyField.length).toBe(1);
       expect(enemyField[0].species.speciesId).toBe(speciesToSpawn);
 
-      const statStagePhases = unshiftPhaseSpy.mock.calls.filter(
-        (p) => p[0] instanceof StatStageChangePhase,
-      )[0][0] as any;
+      const statStagePhases = unshiftPhaseSpy.mock.calls.filter((p) => p[0].is("StatStageChangePhase"))[0][0] as any;
       expect(statStagePhases.stats).toEqual([Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD]);
 
       // Should have used its egg move pre-battle
-      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is<MovePhase>(PhaseId.MOVE)).map((p) => p[0]);
+      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is("MovePhase")).map((p) => p[0]);
       expect(movePhases.length).toBe(1);
       const eggMoves: MoveId[] = speciesEggMoves[getPokemonSpecies(speciesToSpawn).getRootSpeciesId()];
       const usedMove = (movePhases[0] as MovePhase).move.moveId;
@@ -199,7 +192,7 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       await game.phaseInterceptor.to("MysteryEncounterPhase", false);
 
       const encounterPhase = scene.phaseManager.getCurrentPhase();
-      expect(encounterPhase?.constructor.name).toBe(MysteryEncounterPhase.name);
+      expect(encounterPhase?.phaseName).toBe("MysteryEncounterPhase");
       const mysteryEncounterPhase = encounterPhase as MysteryEncounterPhase;
       vi.spyOn(mysteryEncounterPhase, "continueEncounter");
       vi.spyOn(mysteryEncounterPhase, "handleOptionSelect");
@@ -207,7 +200,7 @@ describe("Uncommon Breed - Mystery Encounter", () => {
 
       await runSelectMysteryEncounterOption(game, 2);
 
-      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(MysteryEncounterPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("MysteryEncounterPhase");
       expect(scene.ui.playError).not.toHaveBeenCalled(); // No error sfx, option is disabled
       expect(mysteryEncounterPhase.handleOptionSelect).not.toHaveBeenCalled();
       expect(mysteryEncounterPhase.continueEncounter).not.toHaveBeenCalled();
@@ -259,7 +252,7 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       await game.phaseInterceptor.to("MysteryEncounterPhase", false);
 
       const encounterPhase = scene.phaseManager.getCurrentPhase();
-      expect(encounterPhase?.constructor.name).toBe(MysteryEncounterPhase.name);
+      expect(encounterPhase?.phaseName).toBe("MysteryEncounterPhase");
       const mysteryEncounterPhase = encounterPhase as MysteryEncounterPhase;
       vi.spyOn(mysteryEncounterPhase, "continueEncounter");
       vi.spyOn(mysteryEncounterPhase, "handleOptionSelect");
@@ -267,7 +260,7 @@ describe("Uncommon Breed - Mystery Encounter", () => {
 
       await runSelectMysteryEncounterOption(game, 3);
 
-      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(MysteryEncounterPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("MysteryEncounterPhase");
       expect(scene.ui.playError).not.toHaveBeenCalled(); // No error sfx, option is disabled
       expect(mysteryEncounterPhase.handleOptionSelect).not.toHaveBeenCalled();
       expect(mysteryEncounterPhase.continueEncounter).not.toHaveBeenCalled();

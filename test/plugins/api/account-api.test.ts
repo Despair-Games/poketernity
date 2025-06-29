@@ -5,7 +5,7 @@ import { getApiBaseUrl } from "#test/test-utils/test-utils";
 import type { AccountInfoResponse } from "#types/account-api";
 import * as AppUtils from "#utils/app-utils";
 import { removeCookie, setCookie } from "#utils/app-utils";
-import { http, HttpResponse } from "msw";
+import { HttpResponse, http } from "msw";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const apiBase = getApiBaseUrl();

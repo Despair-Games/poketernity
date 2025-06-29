@@ -27,7 +27,8 @@ export class PerishSongTag extends BattlerTag {
     const ret = super.lapse(pokemon, lapseType);
 
     if (ret) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("battlerTags:perishSongLapse", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
           turnCount: this.turnCount,

@@ -10,7 +10,6 @@ import { ElementalType } from "#enums/elemental-type";
 import type { MoveId } from "#enums/move-id";
 import type { Arena } from "#field/arena";
 import type { Pokemon } from "#field/pokemon";
-import { CommonAnimPhase } from "#phases/common-anim-phase";
 import { BooleanHolder, enumValueToKey, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
@@ -48,7 +47,8 @@ export class TypeImmuneDamageOverTimeTag extends ArenaTag {
   }
 
   override onAdd(_arena: Arena) {
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t(
         `arenaTag:TypeImmuneDamageOverTimeOnAdd${this.i18nSideKey}${enumValueToKey(ElementalType, this.immuneType)}`,
       ),
@@ -68,14 +68,18 @@ export class TypeImmuneDamageOverTimeTag extends ArenaTag {
           return;
         }
 
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           i18next.t(`arenaTag:TypeImmuneDamageOverTimeLapse${enumValueToKey(ElementalType, this.immuneType)}`, {
             pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
           }),
         );
         // TODO: Replace this with a proper animation
-        globalScene.phaseManager.unshiftPhase(
-          new CommonAnimPhase(this.getAnimationForType(), pokemon.getBattlerIndex(), pokemon.getBattlerIndex()),
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "CommonAnimPhase",
+          this.getAnimationForType(),
+          pokemon.getBattlerIndex(),
+          pokemon.getBattlerIndex(),
         );
         pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 6));
       });

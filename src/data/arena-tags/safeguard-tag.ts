@@ -18,10 +18,16 @@ export class SafeguardTag extends ArenaTag {
   }
 
   override onAdd(_arena: Arena): void {
-    globalScene.phaseManager.queueMessagePhase(i18next.t(`arenaTag:safeguardOnAdd${this.i18nSideKey}`));
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
+      i18next.t(`arenaTag:safeguardOnAdd${this.i18nSideKey}`),
+    );
   }
 
   override onRemove(_arena: Arena): void {
-    globalScene.phaseManager.queueMessagePhase(i18next.t(`arenaTag:safeguardOnRemove${this.i18nSideKey}`));
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
+      i18next.t(`arenaTag:safeguardOnRemove${this.i18nSideKey}`),
+    );
   }
 }
