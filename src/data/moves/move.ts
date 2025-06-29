@@ -128,10 +128,7 @@ export abstract class Move {
   private get i18nKey(): string {
     const moveKey = MoveId[this.id];
     const gMaxPrefix = "G_MAX_";
-    if (moveKey.startsWith(gMaxPrefix)) {
-      return toCamelCaseString(moveKey.substring(gMaxPrefix.length));
-    }
-    return toCamelCaseString(moveKey);
+    return toCamelCaseString(moveKey.replace(gMaxPrefix, ""));
   }
 
   get type() {

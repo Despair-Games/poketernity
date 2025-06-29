@@ -37,7 +37,7 @@ export class TauntTag extends MoveRestrictionBattlerTag {
   }
 
   override getSelectionDeniedText(pokemon: Pokemon, moveId: MoveId): string {
-    const moveName = pokemon.getMove(moveId)?.name ?? "";
+    const moveName = pokemon.getMove(moveId)?.name ?? allMoves.get(moveId).name;
     return i18next.t("battle:moveDisabledTaunt", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       moveName,
@@ -45,7 +45,7 @@ export class TauntTag extends MoveRestrictionBattlerTag {
   }
 
   override getInterruptedText(pokemon: Pokemon, moveId: MoveId): string {
-    const moveName = pokemon.getMove(moveId)?.name ?? "";
+    const moveName = pokemon.getMove(moveId)?.name ?? allMoves.get(moveId).name;
     return i18next.t("battle:moveDisabledTaunt", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       moveName,

@@ -67,7 +67,7 @@ export class HealBlockTag extends MoveRestrictionBattlerTag {
    * Uses its own unique getSelectionDeniedText() message
    */
   override getSelectionDeniedText(pokemon: Pokemon, moveId: MoveId): string {
-    const moveName = pokemon.getMove(moveId)?.name ?? "";
+    const moveName = pokemon.getMove(moveId)?.name ?? allMoves.get(moveId).name;
     return i18next.t("battle:moveDisabledHealBlock", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       moveName,
@@ -82,7 +82,7 @@ export class HealBlockTag extends MoveRestrictionBattlerTag {
    * @returns text to display when the move is interrupted
    */
   override getInterruptedText(pokemon: Pokemon, moveId: MoveId): string {
-    const moveName = pokemon.getMove(moveId)?.name ?? "";
+    const moveName = pokemon.getMove(moveId)?.name ?? allMoves.get(moveId).name;
     return i18next.t("battle:moveDisabledHealBlock", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       moveName,

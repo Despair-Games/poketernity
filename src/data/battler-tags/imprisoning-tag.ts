@@ -2,6 +2,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTag } from "#battler-tags/battler-tag";
 import type { RestrictingBattlerTag } from "#battler-tags/restricting-battler-tag";
+import { allMoves } from "#data/data-lists";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { MoveId } from "#enums/move-id";
@@ -45,7 +46,7 @@ export class ImprisoningTag extends BattlerTag implements RestrictingBattlerTag 
   }
 
   public getInterruptedText(pokemon: Pokemon, moveId: MoveId): string {
-    const moveName = pokemon.getMove(moveId)?.name ?? "";
+    const moveName = pokemon.getMove(moveId)?.name ?? allMoves.get(moveId).name;
     return i18next.t("battle:moveDisabledImprison", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       moveName,
