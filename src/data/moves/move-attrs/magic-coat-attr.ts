@@ -25,7 +25,7 @@ export class MagicCoatAttr extends AddBattlerTagAttr {
     const bounceableMoveCount = user
       .getOpponents()
       .flatMap((opp) =>
-        [...opp.waveData.revealedMoves].filter((moveId) => allMoves.get(moveId).checkFlag(MoveFlags.BOUNCEABLE, opp)),
+        opp.getRevealedMoves().filter((moveId) => allMoves.get(moveId).checkFlag(MoveFlags.BOUNCEABLE, opp)),
       ).length;
 
     const uncappedScore = Math.floor(bounceableMoveCount / 2) * MINOR_EFFECT_SCORE_BONUS;

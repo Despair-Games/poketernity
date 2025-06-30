@@ -24,7 +24,7 @@ export class CritBoostStackableAttr extends AddBattlerTagAttr {
     const maxCritStage = user.getMoveset().reduce((maxStage, mv) => {
       /** @todo The active ally of `target` isn't accounted for here */
       const critStage = target.getCritStage(user, mv.getMove(), true);
-      return critStage > maxStage ? critStage : maxStage;
+      return Math.max(critStage, maxStage);
     }, 0);
 
     if (maxCritStage >= 4) {

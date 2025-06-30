@@ -4,6 +4,7 @@ import type { ExposedTag } from "#battler-tags/exposed-tag";
 import { getBattlerTag } from "#battler-tags/get-battler-tag";
 import { MINOR_EFFECT_SCORE_BONUS } from "#constants/ai-constants";
 import type { BattlerTagType } from "#enums/battler-tag-type";
+import { Stat } from "#enums/stat";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { AddBattlerTagAttr } from "#moves/add-battler-tag-attr";
@@ -41,7 +42,7 @@ export class ExposedMoveAttr extends AddBattlerTagAttr {
    * Grants an Effect Score bonus based on the following:
    * - If the user or its ally has a move that would bypass a type immunity from the target
    * because of this effect, this grants a {@link MINOR_EFFECT_SCORE_BONUS | minor bonus}.
-   * - Otherwise, if the user or its ally has a move with less than 80 base accuracy, this grants 50%(+1).
+   * - Otherwise, if the target's evasiveness stat is above 0 stages, this grants 50%(+1).
    * @todo Move types are only derived from their base type, not {@linkcode Pokemon.getMoveType}
    */
   public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
@@ -55,7 +56,7 @@ export class ExposedMoveAttr extends AddBattlerTagAttr {
       }
     }
 
-    const allyHasLowAcc = allyAttacks.some((mv) => mv.accuracy < 80);
-    return allyHasLowAcc ? this.getRandomScore(user, 50) : 0;
+    const targetHasEvaBoost = target.getStatStage(Stat.EVA) > 0;
+    return targetHasEvaBoost ? this.getRandomScore(user, 50) : 0;
   }
 }

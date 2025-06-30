@@ -26,7 +26,7 @@ export class UproarAttr extends AddBattlerTagAttr {
   public override getRawEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     const otherAsleepPokemon = globalScene
       .getField(true)
-      .filter((p) => p !== user && p.hasStatusEffect(StatusEffect.SLEEP));
+      .filter((p) => p !== user && p.hasStatusEffect(StatusEffect.SLEEP, false, true));
     const sleepScore = otherAsleepPokemon.reduce((total, pokemon) => total + (user.isOpponent(pokemon) ? -1 : 1), 0);
 
     return Math.max(MINOR_EFFECT_SCORE_PENALTY + sleepScore, MAJOR_EFFECT_SCORE_PENALTY);

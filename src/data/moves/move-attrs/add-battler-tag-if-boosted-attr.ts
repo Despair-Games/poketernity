@@ -7,10 +7,6 @@ import type { Move } from "#moves/move";
  * Attribute to apply a battler tag to the target if they have had their stats boosted this turn.
  */
 export class ConfuseIfBoostedAttr extends ConfuseAttr {
-  constructor() {
-    super(false);
-  }
-
   override canApply(user: Pokemon, target: Pokemon, move: Move): boolean {
     return target.turnData.statStagesIncreased && super.canApply(user, target, move);
   }

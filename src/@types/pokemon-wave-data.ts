@@ -17,8 +17,6 @@ export interface PokemonWaveData {
    * without applying them.
    */
   abilitiesRevealed: AbilityId[];
-  /**
-   * The moves revealed from this Pokemon
-   */
+  /** The moves revealed from this Pokemon */
   revealedMoves: Set<MoveId>;
 }

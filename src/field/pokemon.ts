@@ -1410,6 +1410,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return this.moveset;
   }
 
+  /** @returns this Pokemon's {@linkcode PokemonWaveData.revealedMoves | revealed moves} in array format */
+  public getRevealedMoves(): MoveId[] {
+    return [...this.waveData.revealedMoves];
+  }
+
   /**
    * Checks whether this Pokemon knows a specific move.
    * @param moveId - The {@linkcode MoveId} to check.

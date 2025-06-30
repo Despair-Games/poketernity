@@ -47,11 +47,11 @@ export class ConfuseAttr extends AddBattlerTagAttr {
    */
   public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     if (target.isSafeguarded(user)) {
-      /**
+      /*
        * Status moves "fail" if this is the case, but since Safeguard is checked
-       * in {@linkcode applyEffect}, it needs to be accounted for here instead
+       * in `applyEffect`, it needs to be accounted for here instead
        * of within the move's Condition Score calculation.
-       * @todo This can be removed if the Safeguard check is reorganized into a condition
+       * TODO: This can be removed if the Safeguard check is reorganized into a condition
        */
       return move.isStatusMove() ? BAD_MOVE_PENALTY : 0;
     }

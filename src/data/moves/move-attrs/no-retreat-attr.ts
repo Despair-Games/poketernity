@@ -1,4 +1,4 @@
-import { MINOR_EFFECT_SCORE_PENALTY } from "#constants/ai-constants";
+import { MINOR_EFFECT_SCORE_PENALTY, STRONG_MATCHUP_SCORE_THRESHOLD } from "#constants/ai-constants";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
@@ -17,6 +17,7 @@ export class NoRetreatAttr extends AddBattlerTagAttr {
 
   /** Grants a {@link MINOR_EFFECT_SCORE_PENALTY | minor penalty} if the user isn't already trapped. */
   public override getRawEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
-    return user.isTrapped() ? 0 : MINOR_EFFECT_SCORE_PENALTY;
+    const userHasStrongMatchup = user.getAverageMatchupScore() >= STRONG_MATCHUP_SCORE_THRESHOLD;
+    return userHasStrongMatchup || user.isTrapped() ? 0 : MINOR_EFFECT_SCORE_PENALTY;
   }
 }

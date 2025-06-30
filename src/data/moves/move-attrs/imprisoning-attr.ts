@@ -23,7 +23,7 @@ export class ImprisoningAttr extends AddBattlerTagAttr {
   public override getRawEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     const numOppMatchingMoves = user
       .getOpponents()
-      .flatMap((opp) => [...opp.waveData.revealedMoves])
+      .flatMap((opp) => opp.getRevealedMoves())
       .filter((moveId) => user.hasMove(moveId)).length;
 
     return Math.min(numOppMatchingMoves, SOFT_EFFECT_SCORE_LIMIT);

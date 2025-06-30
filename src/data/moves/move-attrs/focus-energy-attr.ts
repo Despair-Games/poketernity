@@ -24,7 +24,7 @@ export class FocusEnergyAttr extends AddBattlerTagAttr {
     /** @todo This is only based on the user's first opponent */
     const maxCritStage = user.getMoveset().reduce((maxStage, mv) => {
       const critStage = opponent?.getCritStage(user, mv.getMove(), true) ?? 0;
-      return critStage > maxStage ? critStage : maxStage;
+      return Math.max(critStage, maxStage);
     }, 0);
 
     if (maxCritStage >= 4) {

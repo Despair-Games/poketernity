@@ -5,7 +5,7 @@ import { AddBattlerTagAttr } from "#moves/add-battler-tag-attr";
 import type { Move } from "#moves/move";
 
 /**
- * Attribute to apply {@link https://bulbapedia.bulbagarden.net/wiki/Telekinesis_(move) | Telikinesis'}
+ * Attribute to apply {@link https://bulbapedia.bulbagarden.net/wiki/Telekinesis_(move) | Telekinesis'}
  * effect. Attacks against the target bypass accuracy checks for 3 turns.
  * @extends AddBattlerTagAttr
  */
