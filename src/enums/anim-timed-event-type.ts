@@ -1,8 +1,12 @@
-export enum AnimTimedEventType {
+import type { EnumValues } from "#types/enum-values";
+
+export const AnimTimedEventType = {
   /** Plays a sound effect */
-  SOUND = "AnimTimedSoundEvent",
+  SOUND: "AnimTimedSoundEvent",
   /** Adds a background sprite to display */
-  ADD_BG = "AnimTimedAddBgEvent",
+  ADD_BG: "AnimTimedAddBgEvent",
   /** Updates a displayed background sprite */
-  UPDATE_BG = "AnimTimedUpdateBgEvent",
-}
+  UPDATE_BG: "AnimTimedUpdateBgEvent",
+} as const;
+
+export type AnimTimedEventType = EnumValues<typeof AnimTimedEventType>;

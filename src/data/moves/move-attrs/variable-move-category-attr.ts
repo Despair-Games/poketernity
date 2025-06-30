@@ -5,7 +5,6 @@ import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute to modify a move's category (Physical, Special, or Status) based on game state.
- * @extends MoveAttr
  */
 export abstract class VariableMoveCategoryAttr extends MoveAttr {
   /**

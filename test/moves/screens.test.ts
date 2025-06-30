@@ -56,7 +56,7 @@ describe("Moves - Screen Moves", () => {
     }
     game.override.battleType(battleType);
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemyParty = game.scene.getEnemyParty();
 
@@ -89,7 +89,7 @@ describe("Moves - Screen Moves", () => {
   async function testConfusionDamage(): Promise<void> {
     game.override.battleType("single").disableCrits();
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemy = game.field.getEnemyPokemon();
 

@@ -31,7 +31,7 @@ describe("Abilities - Suction Cups", () => {
   });
 
   it("should prevent the user from being forced to switch out", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     game.move.use(MoveId.WHIRLWIND);
     await game.move.forceEnemyMove(MoveId.SPLASH);
@@ -43,7 +43,7 @@ describe("Abilities - Suction Cups", () => {
 
   it("should not prevent other Pokemon on the field from being forced to switch out via Wimp Out", async () => {
     game.override.ability(AbilityId.WIMP_OUT);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MILOTIC]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.MILOTIC);
 
     const [feebas, milotic] = game.scene.getPlayerParty();
 

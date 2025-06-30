@@ -26,7 +26,7 @@ describe("Enemy Commands - Low Accuracy", () => {
   it("AI should prefer accurate moves over inaccurate", async () => {
     game.override.enemySpecies(SpeciesId.ETERNATUS).enemyMoveset([MoveId.HYPNOSIS, MoveId.SLEEP_POWDER, MoveId.SPORE]);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemyPokemon = game.field.getEnemyPokemon();
 

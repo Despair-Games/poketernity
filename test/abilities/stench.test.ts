@@ -36,7 +36,7 @@ describe("Abilities - Stench", () => {
   });
 
   it("Stench should have a base 10% chance of applying flinch to the target Pokemon", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const playerPokemon = game.scene.getPlayerPokemon();
     const abilityAttr = playerPokemon!
@@ -51,7 +51,7 @@ describe("Abilities - Stench", () => {
   });
 
   it("Stench should not stack with moves that already have a chance to flinch", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const playerPokemon = game.scene.getPlayerPokemon();
     const abilityAttr = playerPokemon!
@@ -71,7 +71,7 @@ describe("Abilities - Stench", () => {
   });
 
   it("Stench should not bypass the enemy Pokemon's substitute under normal conditions", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const playerPokemon = game.scene.getPlayerPokemon();
     const abilityAttr = playerPokemon!
@@ -95,7 +95,7 @@ describe("Abilities - Stench", () => {
       .enemyAbility(AbilityId.SHIELD_DUST)
       .moveset([MoveId.TACKLE, MoveId.MOONGEIST_BEAM])
       .enemyMoveset(MoveId.SPLASH);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const abilityAttr = playerPokemon

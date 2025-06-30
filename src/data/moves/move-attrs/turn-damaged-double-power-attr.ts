@@ -7,7 +7,6 @@ import type { NumberHolder } from "#utils/common-utils";
  * Attribute to double move power if the user was damaged by the target this turn.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Revenge_(move) | Revenge}
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Avalanche_(move) | Avalanche}.
- * @extends VariablePowerAttr
  */
 export class TurnDamagedDoublePowerAttr extends VariablePowerAttr {
   override apply(user: Pokemon, target: Pokemon, _move: Move, power: NumberHolder): boolean {

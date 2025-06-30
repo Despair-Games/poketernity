@@ -40,7 +40,7 @@ describe("Moves - Fly", () => {
   });
 
   it("should make the user semi-invulnerable, then attack over 2 turns", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -48,14 +48,14 @@ describe("Moves - Fly", () => {
     game.move.select(MoveId.FLY);
 
     await game.toEndOfTurn();
-    expect(playerPokemon.getTag(BattlerTagType.FLYING)).toBeDefined();
+    expect(playerPokemon.getTag(BattlerTagType.MID_AIR)).toBeDefined();
     expect(enemyPokemon).toHaveMoveResult(MoveResult.MISS);
     expect(playerPokemon.hp).toBe(playerPokemon.getMaxHp());
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
     expect(playerPokemon.getMoveQueue()[0].move.id).toBe(MoveId.FLY);
 
     await game.toEndOfTurn();
-    expect(playerPokemon.getTag(BattlerTagType.FLYING)).toBeUndefined();
+    expect(playerPokemon.getTag(BattlerTagType.MID_AIR)).toBeUndefined();
     expect(enemyPokemon.hp).toBeLessThan(enemyPokemon.getMaxHp());
     expect(playerPokemon.getMoveHistory()).toHaveLength(2);
 
@@ -66,7 +66,7 @@ describe("Moves - Fly", () => {
   it("should not allow the user to evade attacks from Pokemon with No Guard", async () => {
     game.override.enemyAbility(AbilityId.NO_GUARD);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -81,14 +81,14 @@ describe("Moves - Fly", () => {
   it("should not expend PP when the attack phase is cancelled", async () => {
     game.override.enemyAbility(AbilityId.NO_GUARD).enemyMoveset(MoveId.SPORE);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
     game.move.select(MoveId.FLY);
 
     await game.toEndOfTurn();
-    expect(playerPokemon.getTag(BattlerTagType.FLYING)).toBeUndefined();
+    expect(playerPokemon.getTag(BattlerTagType.MID_AIR)).toBeUndefined();
     expect(playerPokemon.getStatusEffect(true)).toBe(StatusEffect.SLEEP);
 
     const playerFly = playerPokemon.getMoveset().find((mv) => mv && mv.moveId === MoveId.FLY);
@@ -98,7 +98,7 @@ describe("Moves - Fly", () => {
   it("should be cancelled when another Pokemon uses Gravity", async () => {
     game.override.enemyMoveset([MoveId.SPLASH, MoveId.GRAVITY]);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;

@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import { GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
 import { Button } from "#enums/button";
 import type { Stat } from "#enums/stat";
-import { PERMANENT_STATS, getStatKey } from "#enums/stat";
+import { getStatKey, PERMANENT_STATS } from "#enums/stat";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { settings } from "#system/settings-manager";
@@ -15,9 +15,11 @@ import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 export class BattleMessageUiHandler extends MessageUiHandler {
   private readonly wordWrapWidth: number = (GAME_WIDTH - 24) * TEXT_SCALE;
 
+  // TODO: Should not be part of this handler
   private levelUpStatsContainer: Phaser.GameObjects.Container;
   private levelUpStatsIncrContent: Phaser.GameObjects.Text;
   private levelUpStatsValuesContent: BBCodeText;
+
   private nameBox: Phaser.GameObjects.NineSlice;
   private nameText: Phaser.GameObjects.Text;
 
@@ -206,6 +208,7 @@ export class BattleMessageUiHandler extends MessageUiHandler {
     super.showDialogue(text, name, delay, callback, callbackDelay, prompt, promptDelay);
   }
 
+  // TODO: Should not be part of this handler
   promptLevelUpStats(partyMemberIndex: number, prevStats: number[], showTotals: boolean): Promise<void> {
     return new Promise((resolve) => {
       if (!settings.display.showStatsOnLevelUp) {
@@ -230,6 +233,7 @@ export class BattleMessageUiHandler extends MessageUiHandler {
     });
   }
 
+  // TODO: Should not be part of this handler
   promptIvs(pokemonId: number, ivs: number[], shownIvsCount: number): Promise<void> {
     return new Promise((resolve) => {
       globalScene.executeWithSeedOffset(() => {
@@ -250,6 +254,7 @@ export class BattleMessageUiHandler extends MessageUiHandler {
     });
   }
 
+  // TODO: Should not be part of this handler
   getTopIvs(ivs: number[], shownIvsCount: number): Stat[] {
     let shownStats: Stat[] = [];
     if (shownIvsCount < 6) {
@@ -265,6 +270,7 @@ export class BattleMessageUiHandler extends MessageUiHandler {
     return shownStats;
   }
 
+  // TODO: Should not be part of this handler
   getIvDescriptor(value: number, typeIv: number, pokemonId: number): string {
     const starterSpecies = globalScene.getPokemonById(pokemonId)!.species.getRootSpeciesId(); // we are using getRootSpeciesId() here because we want to check against the baby form, not the mid form if it exists
     const starterIvs: number[] = globalScene.gameData.starterData[starterSpecies].ivs;

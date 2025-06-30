@@ -1,16 +1,15 @@
 import { globalScene } from "#app/global-scene";
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { PhaseId } from "#enums/phase-id";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { SpeciesId } from "#enums/species-id";
 import type { Pokemon } from "#field/pokemon";
-import { BattlePhase } from "#phases/abstract-battle-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
 import { isNil } from "#utils/common-utils";
 
 // TODO: This should probably be made into an abstract base class
 export class PokemonAnimPhase extends BattlePhase {
-  override readonly id = PhaseId.POKEMON_ANIM;
+  public override readonly phaseName = "PokemonAnimPhase";
 
   /** The type of animation to play in this phase */
   protected readonly key: PokemonAnimType;
@@ -59,7 +58,8 @@ export class PokemonAnimPhase extends BattlePhase {
 
     const substitute = this.pokemon.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
     if (isNil(substitute)) {
-      return this.end();
+      this.end();
+      return;
     }
 
     const getSprite = (): Phaser.GameObjects.Sprite => {
@@ -122,12 +122,14 @@ export class PokemonAnimPhase extends BattlePhase {
 
   private doSubstitutePreMoveAnim(): void {
     if (this.fieldAssets.length !== 1) {
-      return this.end();
+      this.end();
+      return;
     }
 
     const subSprite = this.fieldAssets[0];
     if (subSprite === undefined) {
-      return this.end();
+      this.end();
+      return;
     }
 
     globalScene.tweens.add({
@@ -151,12 +153,14 @@ export class PokemonAnimPhase extends BattlePhase {
 
   private doSubstitutePostMoveAnim(): void {
     if (this.fieldAssets.length !== 1) {
-      return this.end();
+      this.end();
+      return;
     }
 
     const subSprite = this.fieldAssets[0];
     if (subSprite === undefined) {
-      return this.end();
+      this.end();
+      return;
     }
 
     globalScene.tweens.add({
@@ -182,12 +186,14 @@ export class PokemonAnimPhase extends BattlePhase {
     const { field, time, tweens } = globalScene;
 
     if (this.fieldAssets.length !== 1) {
-      return this.end();
+      this.end();
+      return;
     }
 
     const subSprite = this.fieldAssets[0];
     if (subSprite === undefined) {
-      return this.end();
+      this.end();
+      return;
     }
 
     const getSprite = (): Phaser.GameObjects.Sprite => {
@@ -254,12 +260,14 @@ export class PokemonAnimPhase extends BattlePhase {
     const { currentBattle, field, tweens } = globalScene;
 
     if (!currentBattle?.double) {
-      return this.end();
+      this.end();
+      return;
     }
 
     const dondozo = this.pokemon.getAlly();
     if (dondozo?.species?.speciesId !== SpeciesId.DONDOZO) {
-      return this.end();
+      this.end();
+      return;
     }
 
     const tatsugiriX = this.pokemon.x + this.pokemon.getSprite().x;
@@ -331,7 +339,8 @@ export class PokemonAnimPhase extends BattlePhase {
     const tatsugiri = this.pokemon.getAlly();
     if (isNil(tatsugiri)) {
       console.warn("Aborting COMMANDER_REMOVE anim: Tatsugiri is undefined");
-      return this.end();
+      this.end();
+      return;
     }
 
     const tatsuSprite = globalScene.addPokemonSprite(

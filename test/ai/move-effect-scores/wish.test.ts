@@ -35,7 +35,7 @@ describe("Move Effect Scores - Wish", () => {
   it("Enemy should prefer selecting Wish over moves that do nothing", async () => {
     game.override.enemyMoveset([MoveId.WISH, MoveId.SPLASH]);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
 
@@ -43,7 +43,7 @@ describe("Move Effect Scores - Wish", () => {
   });
 
   it("Enemy should prefer selecting Wish when damaged", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
 
@@ -62,7 +62,7 @@ describe("Move Effect Scores - Wish", () => {
     })),
   )("Enemy should prefer selecting Wish when it knows $moveName", async ({ moveId }) => {
     game.override.enemyMoveset([moveId, MoveId.WISH, MoveId.TACKLE, MoveId.SPLASH]);
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
 
@@ -77,7 +77,7 @@ describe("Move Effect Scores - Wish", () => {
   it("Enemy should strongly prefer selecting Wish when it knows Protect AND is damaged", async () => {
     // Super Fang should always have a score above (+1) since it does >40% damage
     game.override.enemyMoveset([MoveId.PROTECT, MoveId.WISH, MoveId.SUPER_FANG, MoveId.SPLASH]);
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
 
@@ -92,7 +92,7 @@ describe("Move Effect Scores - Wish", () => {
   });
 
   it("Enemy should avoid selecting Wish when its effect is already active", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
 
@@ -104,7 +104,7 @@ describe("Move Effect Scores - Wish", () => {
   });
 
   it("Enemy should avoid selecting Wish while under the effects of Heal Block", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
 

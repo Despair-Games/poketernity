@@ -5,7 +5,6 @@ import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute to modify move accuracy based on game state.
- * @extends MoveAttr
  */
 export abstract class VariableAccuracyAttr extends MoveAttr {
   /**

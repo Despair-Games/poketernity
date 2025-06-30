@@ -9,7 +9,6 @@ import i18next from "i18next";
 /**
  * Tag to force the affected Pokemon to move last in the turn.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Quash_(move) | Quash}.
- * @extends BattlerTag
  */
 export class QuashedTag extends BattlerTag {
   constructor() {
@@ -18,7 +17,8 @@ export class QuashedTag extends BattlerTag {
 
   override onAdd(pokemon: Pokemon) {
     // "{pokemonNameWithAffix}'s move was postponed!"
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:quashOnAdd", {
         pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       }),

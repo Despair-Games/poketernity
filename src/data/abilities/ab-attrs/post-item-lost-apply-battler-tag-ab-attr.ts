@@ -3,9 +3,9 @@ import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { Pokemon } from "#field/pokemon";
 
 /**
- * Applies a Battler Tag to the Pokemon after it loses or consumes item
+ * Applies a Battler Tag to the Pokemon after it loses or consumes item.
+ *
  * Used by Unburden
- * @extends PostItemLostAbAttr
  */
 export class PostItemLostApplyBattlerTagAbAttr extends PostItemLostAbAttr {
   private readonly tagType: BattlerTagType;
@@ -15,12 +15,12 @@ export class PostItemLostApplyBattlerTagAbAttr extends PostItemLostAbAttr {
   }
 
   public override apply(pokemon: Pokemon, simulated: boolean): boolean {
-    if (!pokemon.getTag(this.tagType)) {
-      if (!simulated) {
-        pokemon.addTag(this.tagType);
-      }
-      return true;
+    if (pokemon.hasTag(this.tagType)) {
+      return false;
     }
-    return false;
+    if (!simulated) {
+      pokemon.addTag(this.tagType);
+    }
+    return true;
   }
 }

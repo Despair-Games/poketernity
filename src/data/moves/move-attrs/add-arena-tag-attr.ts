@@ -18,7 +18,6 @@ interface AddArenaTagAttrOptions extends MoveEffectAttrOptions {
 
 /**
  * Attribute to add an arena tag to the field of a given {@linkcode ArenaTagType | type}.
- * @extends ChanceBasedMoveEffectAttr
  */
 export abstract class AddArenaTagAttr extends MoveEffectAttr {
   protected readonly tagType: ArenaTagType;
@@ -39,7 +38,7 @@ export abstract class AddArenaTagAttr extends MoveEffectAttr {
 
   /**
    * The number of turns the added tag remains in effect.
-   * @default 0, which denotes an arena tag that lasts indefinitely until the next arena reset.
+   * @defaultValue `0`, which denotes an arena tag that lasts indefinitely until the next arena reset.
    */
   public get turnCount() {
     return this.options?.turnCount ?? 0;
@@ -48,7 +47,7 @@ export abstract class AddArenaTagAttr extends MoveEffectAttr {
   /**
    * If `true`, causes the move to fail when a tag already exists
    * where it would otherwise be added on the field.
-   * @default false
+   * @defaultValue `false`
    */
   public get failOnOverlap() {
     return this.options?.failOnOverlap ?? false;

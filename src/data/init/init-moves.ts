@@ -1,9 +1,9 @@
-import { NON_VOLATILE_STATUS_EFFECTS } from "#app/constants/game-constants";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { StockpilingTag } from "#battler-tags/stockpiling-tag";
-import { CONDITIONAL_PROTECT_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
+import { CONDITIONAL_PROTECT_ARENA_TAG_TYPES, COURT_CHANGE_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
 import { SEMI_INVULNERABLE_BATTLER_TAG_TYPES, TRAPPED_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
+import { NON_VOLATILE_STATUS_EFFECTS } from "#constants/game-constants";
 import { allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
@@ -145,7 +145,7 @@ import { LeechSeedAttr } from "#moves/leech-seed-attr";
 import { LessPPMorePowerAttr } from "#moves/less-pp-more-power-attr";
 import { LevelDamageAttr } from "#moves/level-damage-attr";
 import { LowHpPowerAttr } from "#moves/low-hp-power-attr";
-import { magnitudeMessageFunc, MagnitudePowerAttr } from "#moves/magnitude-power-attr";
+import { MagnitudePowerAttr, magnitudeMessageFunc } from "#moves/magnitude-power-attr";
 import { MatchHpAttr } from "#moves/match-hp-attr";
 import { MatchUserTypeAttr } from "#moves/match-user-type-attr";
 import { MeFirstAttr } from "#moves/me-first-attr";
@@ -155,7 +155,7 @@ import { MirrorMoveAttr } from "#moves/mirror-move-attr";
 import { MissEffectAttr } from "#moves/miss-effect-attr";
 import { MistAttr } from "#moves/mist-attr";
 import { MoneyAttr } from "#moves/money-attr";
-import { AttackMove, SelfStatusMove, StatusMove, type Move } from "#moves/move";
+import { AttackMove, type Move, SelfStatusMove, StatusMove } from "#moves/move";
 import { MovePowerMultiplierAttr } from "#moves/move-power-multiplier-attr";
 import { MovesetCopyMoveAttr } from "#moves/moveset-copy-move-attr";
 import { MultiHitAttr } from "#moves/multi-hit-attr";
@@ -187,7 +187,7 @@ import { RecoilAttr } from "#moves/recoil-attr";
 import { ReducePpMoveAttr } from "#moves/reduce-pp-move-attr";
 import { RemoveAllSubstitutesAttr } from "#moves/remove-all-substitutes-attr";
 import { RemoveArenaTagsAttr } from "#moves/remove-arena-tags-attr";
-import { rapidSpinRemoveTags, RemoveBattlerTagAttr } from "#moves/remove-battler-tag-attr";
+import { RemoveBattlerTagAttr, rapidSpinRemoveTags } from "#moves/remove-battler-tag-attr";
 import { RemoveEntryHazardAttr } from "#moves/remove-entry-hazard-attr";
 import { RemoveHeldItemAttr } from "#moves/remove-held-item-attr";
 import { RemoveScreensAttr } from "#moves/remove-screens-attr";
@@ -224,7 +224,7 @@ import { SuppressAbilitiesAttr } from "#moves/suppress-abilities-attr";
 import { SuppressAbilitiesIfActedAttr } from "#moves/suppress-abilities-if-acted-attr";
 import { SurviveDamageAttr } from "#moves/survive-damage-attr";
 import { SwallowHealAttr } from "#moves/swallow-heal-attr";
-import { courtChangeArenaTags, SwapArenaTagsAttr } from "#moves/swap-arena-tags-attr";
+import { SwapArenaTagsAttr } from "#moves/swap-arena-tags-attr";
 import { SwapStatAttr } from "#moves/swap-stat-attr";
 import { SwapStatStagesAttr } from "#moves/swap-stat-stages-attr";
 import { SwitchAbilitiesAttr } from "#moves/switch-abilities-attr";
@@ -309,7 +309,7 @@ export function initMoves() {
     new AttackMove(MoveId.CUT, ElementalType.NORMAL, MoveCategory.PHYSICAL, 50, 95, 30, -1, 0, 1)
       .slicingMove(),
     new AttackMove(MoveId.GUST, ElementalType.FLYING, MoveCategory.SPECIAL, 40, 100, 35, -1, 0, 1)
-      .attr(HitsTagForDoubleDamageAttr, BattlerTagType.FLYING)
+      .attr(HitsTagForDoubleDamageAttr, BattlerTagType.MID_AIR)
       .attr(HitsTagAttr, BattlerTagType.SKY_DROP)
       .windMove(),
     new AttackMove(MoveId.WING_ATTACK, ElementalType.FLYING, MoveCategory.PHYSICAL, 60, 100, 35, -1, 0, 1),
@@ -321,7 +321,7 @@ export function initMoves() {
       .bounceable(),
     new ChargingAttackMove(MoveId.FLY, ElementalType.FLYING, MoveCategory.PHYSICAL, 90, 95, 15, -1, 0, 1)
       .chargeText(i18next.t("moveTriggers:flewUpHigh", { pokemonName: "{USER}" }))
-      .chargeAttr(SemiInvulnerableAttr, BattlerTagType.FLYING)
+      .chargeAttr(SemiInvulnerableAttr, BattlerTagType.MID_AIR)
       .condition(failOnGravityCondition),
     new AttackMove(MoveId.BIND, ElementalType.NORMAL, MoveCategory.PHYSICAL, 15, 85, 20, -1, 0, 1)
       .attr(TrapAttr, BattlerTagType.BIND),
@@ -477,7 +477,7 @@ export function initMoves() {
     new StatusMove(MoveId.LEECH_SEED, ElementalType.GRASS, 90, 10, -1, 0, 1)
       .attr(LeechSeedAttr)
       .condition(
-        (_user, target, _move) => !target.getTag(BattlerTagType.SEEDED) && !target.isOfType(ElementalType.GRASS),
+        (_user, target, _move) => !target.hasTag(BattlerTagType.SEEDED) && !target.isOfType(ElementalType.GRASS),
       )
       .bounceable(),
     new SelfStatusMove(MoveId.GROWTH, ElementalType.NORMAL, -1, 20, -1, 0, 1)
@@ -528,7 +528,7 @@ export function initMoves() {
     new AttackMove(MoveId.THUNDER, ElementalType.ELECTRIC, MoveCategory.SPECIAL, 110, 70, 10, 30, 0, 1)
       .attr(StatusEffectAttr, StatusEffect.PARALYSIS)
       .attr(ThunderAccuracyAttr)
-      .attr(HitsTagAttr, BattlerTagType.FLYING)
+      .attr(HitsTagAttr, BattlerTagType.MID_AIR)
       .attr(HitsTagAttr, BattlerTagType.SKY_DROP),
     new AttackMove(MoveId.ROCK_THROW, ElementalType.ROCK, MoveCategory.PHYSICAL, 50, 90, 15, -1, 0, 1)
       .makesContact(false),
@@ -713,7 +713,7 @@ export function initMoves() {
       .makesContact(false),
     new StatusMove(MoveId.TRANSFORM, ElementalType.NORMAL, -1, 10, -1, 0, 1)
       .attr(TransformAttr)
-      .condition((_user, target, _move) => !target.getTag(BattlerTagType.SUBSTITUTE))
+      .condition((_user, target, _move) => !target.hasTag(BattlerTagType.SUBSTITUTE))
       .ignoresProtect(),
     new AttackMove(MoveId.BUBBLE, ElementalType.WATER, MoveCategory.SPECIAL, 40, 100, 30, 10, 0, 1)
       .attr(StatStageChangeAttr, [Stat.SPD], -1)
@@ -850,7 +850,7 @@ export function initMoves() {
     new SelfStatusMove(MoveId.BELLY_DRUM, ElementalType.NORMAL, -1, 10, -1, 0, 2)
       .attr(CutHpStatStageBoostAttr, [Stat.ATK], 12, 2,
         (user) => {
-          globalScene.phaseManager.queueMessagePhase(
+          globalScene.phaseManager.createAndUnshiftPhase("MessagePhase",
             i18next.t("moveTriggers:cutOwnHpAndMaximizedStat", {
               pokemonName: getPokemonNameWithAffix(user),
               statName: i18next.t(getStatKey(Stat.ATK)),
@@ -1040,7 +1040,7 @@ export function initMoves() {
     new AttackMove(MoveId.CROSS_CHOP, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 100, 80, 5, -1, 0, 2)
       .attr(HighCritAttr),
     new AttackMove(MoveId.TWISTER, ElementalType.DRAGON, MoveCategory.SPECIAL, 40, 100, 20, 20, 0, 2)
-      .attr(HitsTagForDoubleDamageAttr, BattlerTagType.FLYING)
+      .attr(HitsTagForDoubleDamageAttr, BattlerTagType.MID_AIR)
       .attr(HitsTagAttr, BattlerTagType.SKY_DROP)
       .attr(FlinchAttr)
       .windMove()
@@ -1364,7 +1364,7 @@ export function initMoves() {
     new AttackMove(MoveId.EXTRASENSORY, ElementalType.PSYCHIC, MoveCategory.SPECIAL, 80, 100, 20, 10, 0, 3)
       .attr(FlinchAttr),
     new AttackMove(MoveId.SKY_UPPERCUT, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 85, 90, 15, -1, 0, 3)
-      .attr(HitsTagAttr, BattlerTagType.FLYING)
+      .attr(HitsTagAttr, BattlerTagType.MID_AIR)
       .attr(HitsTagAttr, BattlerTagType.SKY_DROP)
       .punchingMove(),
     new AttackMove(MoveId.SAND_TOMB, ElementalType.GROUND, MoveCategory.PHYSICAL, 35, 85, 15, -1, 0, 3)
@@ -1407,7 +1407,7 @@ export function initMoves() {
       .snatchable(),
     new ChargingAttackMove(MoveId.BOUNCE, ElementalType.FLYING, MoveCategory.PHYSICAL, 85, 85, 5, 30, 0, 3)
       .chargeText(i18next.t("moveTriggers:sprangUp", { pokemonName: "{USER}" }))
-      .chargeAttr(SemiInvulnerableAttr, BattlerTagType.FLYING)
+      .chargeAttr(SemiInvulnerableAttr, BattlerTagType.MID_AIR)
       .attr(StatusEffectAttr, StatusEffect.PARALYSIS)
       .condition(failOnGravityCondition),
     new AttackMove(MoveId.MUD_SHOT, ElementalType.GROUND, MoveCategory.SPECIAL, 55, 95, 15, 100, 0, 3)
@@ -1594,7 +1594,7 @@ export function initMoves() {
         (user, _target, _move) =>
           !globalScene.arena.hasTag(ArenaTagType.GRAVITY)
           && [BattlerTagType.FLOATING, BattlerTagType.IGNORE_FLYING, BattlerTagType.INGRAIN].every(
-            (tag) => !user.getTag(tag),
+            (tag) => !user.hasTag(tag),
           ),
       )
       .snatchable(),
@@ -1854,11 +1854,7 @@ export function initMoves() {
       .condition(
         (_user, target, _move) => !(target.species.speciesId === SpeciesId.GENGAR && target.getFormKey() === "mega"),
       )
-      .condition(
-        (_user, target, _move) =>
-          isNil(target.getTag(BattlerTagType.INGRAIN))
-          && isNil(target.getTag(BattlerTagType.IGNORE_FLYING)),
-      )
+      .condition((_user, target, _move) => !target.hasTag(BattlerTagType.INGRAIN, BattlerTagType.IGNORE_FLYING))
       .attr(AddBattlerTagAttr, BattlerTagType.TELEKINESIS, false, { failOnOverlap: true, turnCountMin: 3 })
       .attr(AddBattlerTagAttr, BattlerTagType.FLOATING, false, { failOnOverlap: true, turnCountMin: 3 })
       .bounceable(),
@@ -1869,8 +1865,8 @@ export function initMoves() {
     new AttackMove(MoveId.SMACK_DOWN, ElementalType.ROCK, MoveCategory.PHYSICAL, 50, 100, 15, -1, 0, 5)
       .attr(AddBattlerTagAttr, BattlerTagType.IGNORE_FLYING, false, { lastHitOnly: true })
       .attr(AddBattlerTagAttr, BattlerTagType.INTERRUPTED)
-      .attr(RemoveBattlerTagAttr, [BattlerTagType.FLYING, BattlerTagType.FLOATING, BattlerTagType.TELEKINESIS])
-      .attr(HitsTagAttr, BattlerTagType.FLYING)
+      .attr(RemoveBattlerTagAttr, [BattlerTagType.MID_AIR, BattlerTagType.FLOATING, BattlerTagType.TELEKINESIS])
+      .attr(HitsTagAttr, BattlerTagType.MID_AIR)
       .attr(HitsTagAttr, BattlerTagType.SKY_DROP)
       .makesContact(false)
       .edgeCase(), // Should hit a Pokemon lifted up by Sky Drop without permanently grounding it
@@ -2104,7 +2100,7 @@ export function initMoves() {
     new AttackMove(MoveId.HURRICANE, ElementalType.FLYING, MoveCategory.SPECIAL, 110, 70, 10, 30, 0, 5)
       .attr(ThunderAccuracyAttr)
       .attr(ConfuseAttr)
-      .attr(HitsTagAttr, BattlerTagType.FLYING)
+      .attr(HitsTagAttr, BattlerTagType.MID_AIR)
       .attr(HitsTagAttr, BattlerTagType.SKY_DROP)
       .windMove(),
     new AttackMove(MoveId.HEAD_CHARGE, ElementalType.NORMAL, MoveCategory.PHYSICAL, 120, 100, 15, -1, 0, 5)
@@ -2238,7 +2234,7 @@ export function initMoves() {
       .target(MoveTarget.ALL)
       .attr(StatStageChangeAttr, [Stat.DEF], 1, false, {
         condition: (_user, target, _move) =>
-          target.getTypes().includes(ElementalType.GRASS) && !target.getTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES),
+          target.getTypes().includes(ElementalType.GRASS) && !target.hasTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES),
       }),
     new StatusMove(MoveId.GRASSY_TERRAIN, ElementalType.GRASS, -1, 10, -1, 0, 6)
       .attr(TerrainChangeAttr, TerrainType.GRASSY)
@@ -2365,11 +2361,11 @@ export function initMoves() {
     new AttackMove(MoveId.THOUSAND_ARROWS, ElementalType.GROUND, MoveCategory.PHYSICAL, 90, 100, 10, -1, 0, 6)
       .attr(NeutralDamageAgainstFlyingTypeMultiplierAttr)
       .attr(AddBattlerTagAttr, BattlerTagType.IGNORE_FLYING, false, { lastHitOnly: true })
-      .attr(HitsTagAttr, BattlerTagType.FLYING)
+      .attr(HitsTagAttr, BattlerTagType.MID_AIR)
       .attr(HitsTagAttr, BattlerTagType.FLOATING)
       .attr(HitsTagAttr, BattlerTagType.SKY_DROP)
       .attr(AddBattlerTagAttr, BattlerTagType.INTERRUPTED)
-      .attr(RemoveBattlerTagAttr, [BattlerTagType.FLYING, BattlerTagType.FLOATING, BattlerTagType.TELEKINESIS])
+      .attr(RemoveBattlerTagAttr, [BattlerTagType.MID_AIR, BattlerTagType.FLOATING, BattlerTagType.TELEKINESIS])
       .makesContact(false)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
       .edgeCase(), // Should hit a Pokemon lifted up by Sky Drop without permanently grounding it
@@ -2563,7 +2559,7 @@ export function initMoves() {
       .attr(HealStatusEffectAttr, true, StatusEffect.FREEZE)
       .attr(AddBattlerTagAttr, BattlerTagType.BURNED_UP, true)
       .attr(RemoveTypeAttr, ElementalType.FIRE, (user) => {
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase("MessagePhase",
           i18next.t("moveTriggers:burnedItselfOut", { pokemonName: getPokemonNameWithAffix(user) }),
         );
       }),
@@ -2813,9 +2809,9 @@ export function initMoves() {
       .attr(FirstAttackDoublePowerAttr)
       .bitingMove(),
     new StatusMove(MoveId.COURT_CHANGE, ElementalType.NORMAL, -1, 10, -1, 0, 8)
-      .attr(SwapArenaTagsAttr, courtChangeArenaTags)
+      .attr(SwapArenaTagsAttr)
       .condition((_user, _target, _move) =>
-        globalScene.arena.tags.some((arenaTag) => courtChangeArenaTags.includes(arenaTag.tagType)),
+        globalScene.arena.tags.some((arenaTag) => COURT_CHANGE_ARENA_TAG_TYPES.includes(arenaTag.tagType)),
       )
       .target(MoveTarget.BOTH_SIDES),
     new AttackMove(MoveId.MAX_FLARE, ElementalType.FIRE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
@@ -3263,7 +3259,7 @@ export function initMoves() {
     new AttackMove(MoveId.AXE_KICK, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 120, 90, 10, 30, 0, 9)
       .attr(MissEffectAttr, crashDamageFunc)
       .attr(NoEffectAttr, crashDamageFunc)
-      .attr(ConfuseAttr)
+      .attr(ConfuseAttr, true)
       .recklessMove(),
     new AttackMove(MoveId.LAST_RESPECTS, ElementalType.GHOST, MoveCategory.PHYSICAL, 50, 100, 10, -1, 0, 9)
       .partial() // Counter resets every wave instead of on arena reset
@@ -3410,7 +3406,7 @@ export function initMoves() {
       })
       .attr(AddBattlerTagAttr, BattlerTagType.DOUBLE_SHOCKED, true)
       .attr(RemoveTypeAttr, ElementalType.ELECTRIC, (user) => {
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase("MessagePhase",
           i18next.t("moveTriggers:usedUpAllElectricity", { pokemonName: getPokemonNameWithAffix(user) }),
         );
       }),
@@ -3535,7 +3531,7 @@ export function initMoves() {
 
 /**
  * All damaging (aka {@linkcode AttackMove}) Fire-type moves can now thaw a frozen target, regardless of whether or not they have a chance to burn.
- * @source {@link https://bulbapedia.bulbagarden.net/wiki/Freeze_(status_condition) | Bulbapedia - Freeze (Status Condition)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Freeze_(status_condition) | Bulbapedia - Freeze (Status Condition)}
  */
 function addFireMovesThawFrozenTargetAttribute(move: Move) {
   if (move.type === ElementalType.FIRE && move.isAttackMove()) {

@@ -5,12 +5,12 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ElementalType } from "#enums/elemental-type";
 import { TerrainType } from "#enums/terrain-type";
 import type { Pokemon } from "#field/pokemon";
+import { enumValueToKey } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
  * This applies a terrain-based type change to the Pokemon.
  * Used by Mimicry.
- * @extends PostSummonAbAttr
  */
 export class TerrainEventTypeChangeAbAttr extends PostSummonAbAttr {
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
@@ -73,7 +73,9 @@ export class TerrainEventTypeChangeAbAttr extends PostSummonAbAttr {
     if (currentTerrain === TerrainType.NONE) {
       return i18next.t("abilityTriggers:pokemonTypeChangeRevert", { pokemonNameWithAffix });
     }
-    const moveType = i18next.t(`pokemonInfo:Type.${ElementalType[this.determineTypeChange(currentTerrain)]}`);
+    const moveType = i18next.t(
+      `pokemonInfo:Type.${enumValueToKey(ElementalType, this.determineTypeChange(currentTerrain))}`,
+    );
     return i18next.t("abilityTriggers:pokemonTypeChange", { pokemonNameWithAffix, moveType });
   }
 }

@@ -2,8 +2,6 @@ import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { Phase } from "#app/phase";
 import { ChallengeType } from "#enums/challenge-type";
-import { Gender } from "#enums/gender";
-import { PhaseId } from "#enums/phase-id";
 import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 import { UiMode } from "#enums/ui-mode";
 import { SpeciesFormChangeMoveLearnedTrigger } from "#form-change-triggers/species-form-change-move-learned-trigger";
@@ -17,7 +15,7 @@ import { getPokemonSpecies } from "#utils/pokemon-utils";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 
 export class SelectStarterPhase extends Phase {
-  override readonly id = PhaseId.SELECT_STARTER;
+  public override readonly phaseName = "SelectStarterPhase";
 
   public override start(): void {
     super.start();
@@ -68,11 +66,7 @@ export class SelectStarterPhase extends Phase {
         starterFormIndex = Overrides.STARTER_FORM_OVERRIDES[speciesId];
       }
 
-      let starterGender =
-        species.malePercent !== null ? (!starterProps.female ? Gender.MALE : Gender.FEMALE) : Gender.GENDERLESS;
-      if (Overrides.GENDER_OVERRIDE !== null) {
-        starterGender = Overrides.GENDER_OVERRIDE;
-      }
+      const starterGender = Overrides.GENDER_OVERRIDE ?? starterProps.gender;
 
       // Get ivs from the root species in case of an override to a non starter species
       const starterSpeciesId = species.getRootSpeciesId(true);

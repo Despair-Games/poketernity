@@ -27,12 +27,11 @@ describe("Moves - Obstruct", () => {
       .enemyMoveset(MoveId.TACKLE)
       .enemyAbility(AbilityId.BALL_FETCH)
       .ability(AbilityId.BALL_FETCH)
-      .moveset([MoveId.OBSTRUCT])
-      .starterSpecies(SpeciesId.FEEBAS);
+      .moveset([MoveId.OBSTRUCT]);
   });
 
   it("protects from contact damaging moves and lowers the opponent's defense by 2 stages", async () => {
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     game.move.select(MoveId.OBSTRUCT);
     await game.toEndOfTurn();
@@ -45,7 +44,7 @@ describe("Moves - Obstruct", () => {
   });
 
   it("bypasses accuracy checks when applying protection and defense reduction", async () => {
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     game.move.select(MoveId.OBSTRUCT);
     await game.phaseInterceptor.to("MoveEffectPhase");
@@ -61,7 +60,7 @@ describe("Moves - Obstruct", () => {
 
   it("protects from non-contact damaging moves and doesn't lower the opponent's defense by 2 stages", async () => {
     game.override.enemyMoveset(MoveId.WATER_GUN);
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     game.move.select(MoveId.OBSTRUCT);
     await game.toEndOfTurn();
@@ -75,7 +74,7 @@ describe("Moves - Obstruct", () => {
 
   it("doesn't protect from status moves", async () => {
     game.override.enemyMoveset(MoveId.GROWL);
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     game.move.select(MoveId.OBSTRUCT);
     await game.toEndOfTurn();
@@ -87,7 +86,7 @@ describe("Moves - Obstruct", () => {
 
   it("doesn't reduce the stats of an opponent with Clear Body/etc", async () => {
     game.override.enemyAbility(AbilityId.CLEAR_BODY);
-    await game.classicMode.startBattle();
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     game.move.select(MoveId.OBSTRUCT);
     await game.toEndOfTurn();

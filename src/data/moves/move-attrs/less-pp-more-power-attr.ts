@@ -6,7 +6,6 @@ import type { NumberHolder } from "#utils/common-utils";
 /**
  * Attribute to scale move power inversely with its remaining PP.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Trump_Card_(move) | Trump Card}.
- * @extends VariablePowerAttr
  */
 export class LessPPMorePowerAttr extends VariablePowerAttr {
   override apply(user: Pokemon, _target: Pokemon, move: Move, power: NumberHolder): boolean {

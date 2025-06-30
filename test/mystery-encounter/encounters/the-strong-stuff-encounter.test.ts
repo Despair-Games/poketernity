@@ -9,7 +9,6 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Nature } from "#enums/nature";
-import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
 import { PokemonMove } from "#field/pokemon-move";
@@ -18,9 +17,7 @@ import { PokemonBaseStatTotalModifier } from "#modifier/modifier";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
 import { TheStrongStuffEncounter } from "#mystery-encounters/the-strong-stuff-encounter";
-import { CommandPhase } from "#phases/command-phase";
 import type { MovePhase } from "#phases/move-phase";
-import { SelectModifierPhase } from "#phases/select-modifier-phase";
 import {
   runMysteryEncounterToEnd,
   skipBattleRunMysteryEncounterRewardsPhase,
@@ -197,7 +194,7 @@ describe("The Strong Stuff - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 2, undefined, true);
 
       const enemyField = scene.getEnemyField();
-      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
       expect(enemyField.length).toBe(1);
       expect(enemyField[0].species.speciesId).toBe(SpeciesId.SHUCKLE);
       expect(enemyField[0].summonData.statStages).toEqual([0, 2, 0, 2, 0, 0, 0]);
@@ -216,7 +213,7 @@ describe("The Strong Stuff - Mystery Encounter", () => {
       ]);
 
       // Should have used moves pre-battle
-      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is<MovePhase>(PhaseId.MOVE)).map((p) => p[0]);
+      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is("MovePhase")).map((p) => p[0]);
       expect(movePhases.length).toBe(2);
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.GASTRO_ACID).length).toBe(1);
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.STEALTH_ROCK).length).toBe(1);
@@ -227,7 +224,7 @@ describe("The Strong Stuff - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 2, undefined, true);
       await skipBattleRunMysteryEncounterRewardsPhase(game);
       await game.phaseInterceptor.to("SelectModifierPhase", false);
-      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SelectModifierPhase");
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);

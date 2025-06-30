@@ -8,7 +8,6 @@ import type { NumberHolder } from "#utils/common-utils";
  * Attribute to convert single-strike moves to two-strike moves.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Parental_Bond_(Ability) | Parental Bond}.
  * @param damageMultiplier the damage multiplier for the second strike, relative to the first.
- * @extends PreAttackAbAttr
  */
 export class AddSecondStrikeAbAttr extends PreAttackAbAttr {
   private readonly damageMultiplier: number;

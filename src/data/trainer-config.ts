@@ -4,7 +4,7 @@ import { getIsInitialized, initI18n } from "#app/plugins/i18n";
 import { EVIL_GRUNT_1_WAVE, EVIL_GRUNT_2_WAVE, EVIL_GRUNT_3_WAVE, EVIL_GRUNT_4_WAVE } from "#constants/wave-constants";
 import type PokemonSpecies from "#data/pokemon-species";
 import type { ElementalType } from "#enums/elemental-type";
-import { ImagesFolder } from "#enums/images-folders";
+import { ImagesFolder } from "#enums/images-folder";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { SpeciesId } from "#enums/species-id";
 import { TeraAIMode } from "#enums/tera-ai-mode";
@@ -551,7 +551,7 @@ export class TrainerConfig {
     if (doubleEncounterBgm) {
       this.doubleEncounterBgm =
         typeof doubleEncounterBgm === "number"
-          ? TrainerType[doubleEncounterBgm].toString().replace(/\_/g, " ").toLowerCase()
+          ? TrainerType[doubleEncounterBgm].toString().replace(/_/g, " ").toLowerCase()
           : doubleEncounterBgm;
     }
     return this;

@@ -6,13 +6,13 @@ import { TerrainType } from "#enums/terrain-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
+import { enumValueToKey } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
  * Attribute to change the user's type based on the current biome.
  * If terrain is active, the user's type is changed to match the terrain instead.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Camouflage_(move) | Camouflage}.
- * @extends MoveEffectAttr
  */
 export class CopyBiomeTypeAttr extends MoveEffectAttr {
   constructor() {
@@ -31,10 +31,11 @@ export class CopyBiomeTypeAttr extends MoveEffectAttr {
     user.setTemporaryTypes(typeChange);
     user.updateInfo();
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("moveTriggers:transformedIntoType", {
         pokemonName: getPokemonNameWithAffix(user),
-        typeName: i18next.t(`pokemonInfo:Type.${ElementalType[typeChange]}`),
+        typeName: i18next.t(`pokemonInfo:Type.${enumValueToKey(ElementalType, typeChange)}`),
       }),
     );
 

@@ -7,7 +7,7 @@ import { SpeciesId } from "#enums/species-id";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import { LostAtSeaEncounter } from "#mystery-encounters/lost-at-sea-encounter";
 import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
-import { MysteryEncounterPhase } from "#phases/mystery-encounter-phases/mystery-encounter-phase";
+import type { MysteryEncounterPhase } from "#phases/mystery-encounter-phases/mystery-encounter-phase";
 import {
   runMysteryEncounterToEnd,
   runSelectMysteryEncounterOption,
@@ -109,6 +109,7 @@ describe("Lost at Sea - Mystery Encounter", () => {
     });
 
     it("should award exp to surfable PKM (Blastoise)", async () => {
+      game.override.disableExpGain = false;
       const laprasSpecies = getPokemonSpecies(SpeciesId.LAPRAS);
 
       await game.runToMysteryEncounter(MysteryEncounterType.LOST_AT_SEA, defaultParty);
@@ -137,7 +138,7 @@ describe("Lost at Sea - Mystery Encounter", () => {
       await game.phaseInterceptor.to("MysteryEncounterPhase", false);
 
       const encounterPhase = scene.phaseManager.getCurrentPhase();
-      expect(encounterPhase?.constructor.name).toBe(MysteryEncounterPhase.name);
+      expect(encounterPhase?.phaseName).toBe("MysteryEncounterPhase");
       const mysteryEncounterPhase = encounterPhase as MysteryEncounterPhase;
       vi.spyOn(mysteryEncounterPhase, "continueEncounter");
       vi.spyOn(mysteryEncounterPhase, "handleOptionSelect");
@@ -145,7 +146,7 @@ describe("Lost at Sea - Mystery Encounter", () => {
 
       await runSelectMysteryEncounterOption(game, 1);
 
-      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(MysteryEncounterPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("MysteryEncounterPhase");
       expect(scene.ui.playError).not.toHaveBeenCalled(); // No error sfx, option is disabled
       expect(mysteryEncounterPhase.handleOptionSelect).not.toHaveBeenCalled();
       expect(mysteryEncounterPhase.continueEncounter).not.toHaveBeenCalled();
@@ -174,6 +175,7 @@ describe("Lost at Sea - Mystery Encounter", () => {
     it("should award exp to flyable PKM (Pidgeot)", async () => {
       const laprasBaseExp = 187;
       const wave = 33;
+      game.override.disableExpGain = false;
       game.override.startingWave(wave);
 
       await game.runToMysteryEncounter(MysteryEncounterType.LOST_AT_SEA, defaultParty);
@@ -202,7 +204,7 @@ describe("Lost at Sea - Mystery Encounter", () => {
       await game.phaseInterceptor.to("MysteryEncounterPhase", false);
 
       const encounterPhase = scene.phaseManager.getCurrentPhase();
-      expect(encounterPhase?.constructor.name).toBe(MysteryEncounterPhase.name);
+      expect(encounterPhase?.phaseName).toBe("MysteryEncounterPhase");
       const mysteryEncounterPhase = encounterPhase as MysteryEncounterPhase;
       vi.spyOn(mysteryEncounterPhase, "continueEncounter");
       vi.spyOn(mysteryEncounterPhase, "handleOptionSelect");
@@ -210,7 +212,7 @@ describe("Lost at Sea - Mystery Encounter", () => {
 
       await runSelectMysteryEncounterOption(game, 2);
 
-      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(MysteryEncounterPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("MysteryEncounterPhase");
       expect(scene.ui.playError).not.toHaveBeenCalled(); // No error sfx, option is disabled
       expect(mysteryEncounterPhase.handleOptionSelect).not.toHaveBeenCalled();
       expect(mysteryEncounterPhase.continueEncounter).not.toHaveBeenCalled();

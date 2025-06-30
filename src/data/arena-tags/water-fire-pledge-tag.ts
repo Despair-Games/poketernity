@@ -13,7 +13,6 @@ import i18next from "i18next";
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Fire_Pledge_(move) | Fire Pledge}.
  * Doubles the secondary effect chance of moves from Pokemon on the
  * given side of the field for 4 turns.
- * @extends ArenaTag
  */
 export class WaterFirePledgeTag extends ArenaTag {
   constructor(sourceId: number, side: ArenaTagSide) {
@@ -22,7 +21,10 @@ export class WaterFirePledgeTag extends ArenaTag {
 
   override onAdd(_arena: Arena): void {
     // "A rainbow appeared in the sky on your/the opposing team's side!"
-    globalScene.phaseManager.queueMessagePhase(i18next.t(`arenaTag:waterFirePledgeOnAdd${this.i18nSideKey}`));
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
+      i18next.t(`arenaTag:waterFirePledgeOnAdd${this.i18nSideKey}`),
+    );
   }
 
   /**

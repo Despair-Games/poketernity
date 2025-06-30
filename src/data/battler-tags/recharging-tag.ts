@@ -13,7 +13,6 @@ import i18next from "i18next";
 /**
  * Tag representing the "recharge" effects of moves
  * e.g. {@link https://bulbapedia.bulbagarden.net/wiki/Hyper_Beam_(move) | Hyper Beam}
- * @extends BattlerTag
  */
 export class RechargingTag extends BattlerTag {
   constructor(sourceMoveId: MoveId) {
@@ -30,7 +29,8 @@ export class RechargingTag extends BattlerTag {
   /** Cancels the source's move this turn and queues a "__ must recharge!" message */
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     if (lapseType === BattlerTagLapseType.PRE_MOVE) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("battlerTags:rechargingLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
       (globalScene.phaseManager.getCurrentPhase() as MovePhase).cancel();

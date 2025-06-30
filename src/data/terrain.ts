@@ -7,15 +7,15 @@ import type { Move } from "#moves/move";
 import { ProtectAttr } from "#moves/protect-attr";
 import i18next from "i18next";
 
-/**
- * Class representing Terrain effects
- * @var terrainType - The {@linkcode TerrainType} that is being represented
- * @var turnsLeft - How many turns the terrain still has left
- */
+/** Class representing Terrain effects */
 export class Terrain {
   public terrainType: TerrainType;
   public turnsLeft: number;
 
+  /**
+   * @param terrainType - The {@linkcode TerrainType} that is being represented
+   * @param turnsLeft - How many turns the terrain still has left
+   */
   constructor(terrainType: TerrainType, turnsLeft: number = 0) {
     this.terrainType = terrainType;
     this.turnsLeft = turnsLeft;

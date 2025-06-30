@@ -9,7 +9,6 @@ import {
 } from "#data/pokeball";
 import type PokemonSpecies from "#data/pokemon-species";
 import { speciesStarterCosts } from "#data/starters";
-import { getStatusEffectCatchRateMultiplier } from "#app/utils/status-effect-utils";
 import type { AbilityId } from "#enums/ability-id";
 import type { ElementalType } from "#enums/elemental-type";
 import { Gender } from "#enums/gender";
@@ -34,7 +33,6 @@ import {
   queueEncounterMessage,
   showEncounterText,
 } from "#mystery-encounters/encounter-dialogue-utils";
-import { PostKnockoutPhase } from "#phases/post-knockout-phase";
 import { achvs } from "#system/achievements";
 import { settings } from "#system/settings-manager";
 import type { OptionSelectModeConfig } from "#ui/option-select-config";
@@ -44,6 +42,7 @@ import type { SummaryUiHandler } from "#ui/summary-ui-handler";
 import { isNil } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedInt } from "#utils/random-utils";
+import { getStatusEffectCatchRateMultiplier } from "#utils/status-effect-utils";
 import i18next from "i18next";
 
 /** Will give +1 level every 10 waves */
@@ -671,7 +670,7 @@ export async function catchPokemon(
         if (!globalScene.getEnemyParty().some((p) => p.id === pokemon.id)) {
           globalScene.getEnemyParty().push(pokemon);
         }
-        globalScene.phaseManager.unshiftPhase(new PostKnockoutPhase(pokemon.id, true));
+        globalScene.phaseManager.createAndUnshiftPhase("PostKnockoutPhase", pokemon.id, true);
         globalScene.pokemonInfoContainer.hide();
         if (pokeball) {
           removePb(pokeball);

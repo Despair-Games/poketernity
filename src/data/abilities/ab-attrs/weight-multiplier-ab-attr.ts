@@ -6,7 +6,6 @@ import type { NumberHolder } from "#utils/common-utils";
 /**
  * Ability attribute used for abilites that change the ability owner's weight
  * Used for Heavy Metal (doubling weight) and Light Metal (halving weight)
- * @extends AbAttr
  */
 export class WeightMultiplierAbAttr extends AbAttr {
   private readonly multiplier: number;

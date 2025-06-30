@@ -10,7 +10,6 @@ import i18next from "i18next";
 /**
  * Tag representing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Slow_Start_(Ability) | Slow Start}.
  * Halves the owner's Attack and Speed stats for 5 turns.
- * @extends AbilityBattlerTag
  */
 export class SlowStartTag extends AbilityBattlerTag {
   constructor() {
@@ -20,12 +19,11 @@ export class SlowStartTag extends AbilityBattlerTag {
   override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndPushPhase(
+      "MessagePhase",
       i18next.t("battlerTags:slowStartOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
-      null,
+      undefined,
       false,
-      null,
-      true,
     );
   }
 
@@ -40,11 +38,11 @@ export class SlowStartTag extends AbilityBattlerTag {
   override onRemove(pokemon: Pokemon): void {
     super.onRemove(pokemon);
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:slowStartOnRemove", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
-      null,
+      undefined,
       false,
-      null,
     );
   }
 }

@@ -11,9 +11,10 @@ import type { Pokemon } from "#field/pokemon";
 import i18next from "i18next";
 
 /**
- * Tag for effects that ground the source, allowing Ground-type moves to hit them.
- * @description `IGNORE_FLYING`: Persistent grounding effects (i.e. from Smack Down and Thousand Waves)
- * @extends BattlerTag
+ * Tag for effects that ground the source (i.e. from Smack Down and Thousand Waves),
+ * allowing Ground-type moves to hit them.
+ *
+ * @see {@linkcode BattlerTagType.IGNORE_FLYING}
  */
 export class GroundedTag extends BattlerTag {
   constructor(tagType: BattlerTagType, lapseType: BattlerTagLapseType, sourceMoveId: MoveId) {
@@ -29,11 +30,11 @@ export class GroundedTag extends BattlerTag {
     const wasNotGrounded =
       pokemon.isOfType(ElementalType.FLYING, true, true)
       || pokemon.hasAbility(AbilityId.LEVITATE)
-      || pokemon.getTag(BattlerTagType.FLOATING)
-      || pokemon.getTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES);
+      || pokemon.hasTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES, BattlerTagType.FLOATING);
 
     if (isSmackDownOrThousandArrows && wasNotGrounded) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("battlerTags:groundedSmackDown", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
     }

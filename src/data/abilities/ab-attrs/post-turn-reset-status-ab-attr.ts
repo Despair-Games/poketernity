@@ -1,13 +1,12 @@
 import { PostTurnAbAttr } from "#abilities/post-turn-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { getStatusEffectHealText } from "#app/utils/status-effect-utils";
 import type { Pokemon } from "#field/pokemon";
+import { getStatusEffectHealText } from "#utils/status-effect-utils";
 
 /**
  * After the turn ends, resets the status of either the ability holder or their ally
  * @param allyTarget - Whether to target ally, defaults to `false` (self-target)
- * @extends PostTurnAbAttr
  */
 export class PostTurnResetStatusAbAttr extends PostTurnAbAttr {
   private readonly allyTarget: boolean;
@@ -26,7 +25,8 @@ export class PostTurnResetStatusAbAttr extends PostTurnAbAttr {
     }
     if (this.target?.hasNonVolatileStatusEffect(false, true)) {
       if (!simulated) {
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           getStatusEffectHealText(this.target.getStatusEffect(true), getPokemonNameWithAffix(this.target)),
         );
         this.target.resetStatus();

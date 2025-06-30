@@ -12,7 +12,6 @@ import { type NumberHolder, toDmgValue } from "#utils/common-utils";
  * that satisfy a given {@linkcode moveFilter | move filter}.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Variations_of_Counter | variants of Counter},
  * including Metal Burst and Comeuppance.
- * @extends FixedDamageAttr
  */
 export class CounterDamageAttr extends FixedDamageAttr {
   private moveFilter: MoveFilter;

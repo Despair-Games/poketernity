@@ -6,12 +6,10 @@ import { MoveId } from "#enums/move-id";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
-import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 
 /**
  * Battler tag indicating a Tatsugiri with {@link https://bulbapedia.bulbagarden.net/wiki/Commander_(Ability) | Commander}
  * has entered the tagged Pokemon's mouth.
- * @extends BattlerTag
  */
 export class CommandedTag extends BattlerTag {
   private _tatsugiriFormKey: string;
@@ -27,13 +25,12 @@ export class CommandedTag extends BattlerTag {
   /** Caches the Tatsugiri's form key and sharply boosts the tagged Pokemon's stats */
   override onAdd(pokemon: Pokemon): void {
     this._tatsugiriFormKey = this.getSourcePokemon()?.getFormKey() ?? "curly";
-    globalScene.phaseManager.unshiftPhase(
-      new StatStageChangePhase(
-        pokemon.getBattlerIndex(),
-        pokemon,
-        [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD],
-        2,
-      ),
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "StatStageChangePhase",
+      pokemon.getBattlerIndex(),
+      pokemon,
+      [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD],
+      2,
     );
   }
 

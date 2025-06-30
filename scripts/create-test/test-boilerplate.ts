@@ -33,7 +33,7 @@ describe("{{description}}", () => {
   });
 
   it("should do X", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     game.move.use(MoveId.SPLASH);
 

@@ -4,10 +4,8 @@ import { globalScene } from "#app/global-scene";
 import * as appConstants from "#constants/app-constants";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
-import { PhaseId } from "#enums/phase-id";
 import { Pokemon } from "#field/pokemon";
 import { version } from "#package.json";
-import type { MoveEffectPhase } from "#phases/move-effect-phase";
 import { MockClock } from "#test/test-utils/mocks/mock-clock";
 import { MockConsole } from "#test/test-utils/mocks/mock-console";
 import { MockGameObjectCreator } from "#test/test-utils/mocks/mock-game-object-creator";
@@ -16,12 +14,13 @@ import { MockTextureManager } from "#test/test-utils/mocks/mock-texture-manager"
 import fs from "node:fs";
 import Phaser from "phaser";
 import { vi } from "vitest";
-import InputManager = Phaser.Input.InputManager;
-import KeyboardManager = Phaser.Input.Keyboard.KeyboardManager;
-import KeyboardPlugin = Phaser.Input.Keyboard.KeyboardPlugin;
-import GamepadPlugin = Phaser.Input.Gamepad.GamepadPlugin;
-import EventEmitter = Phaser.Events.EventEmitter;
-import UpdateList = Phaser.GameObjects.UpdateList;
+
+const InputManager = Phaser.Input.InputManager;
+const KeyboardManager = Phaser.Input.Keyboard.KeyboardManager;
+const KeyboardPlugin = Phaser.Input.Keyboard.KeyboardPlugin;
+const GamepadPlugin = Phaser.Input.Gamepad.GamepadPlugin;
+const EventEmitter = Phaser.Events.EventEmitter;
+const UpdateList = Phaser.GameObjects.UpdateList;
 
 export class GameWrapper {
   public game: Phaser.Game;
@@ -54,7 +53,7 @@ export class GameWrapper {
       const currentPhase = globalScene.phaseManager.getCurrentPhase();
       let moveName = "N/A";
       let moveId = MoveId.NONE;
-      if (currentPhase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT)) {
+      if (currentPhase?.is("MoveEffectPhase")) {
         const move = currentPhase.move;
         moveName = move.getName();
         moveId = move.moveId;
@@ -74,7 +73,7 @@ export class GameWrapper {
         ret > 0
         && this.getHpRatio() < 0.2
         && !this.isFainted()
-        && !this.getTag(BattlerTagType.ENDURING)
+        && !this.hasTag(BattlerTagType.ENDURING)
         && !isLowHpMove
       ) {
         const line1 = `Caution: ${side} ${this.name} was damaged to low HP (${this.hp}/${this.getMaxHp()}) by the move ${moveName}!\n`;

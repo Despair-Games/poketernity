@@ -44,14 +44,14 @@ describe("Move Effect Scores - Hazards", () => {
     it("should gain a large incentive to use on the first turn of battle", async () => {
       game.override.enemyMoveset([...baseMoveset, MoveId.SUPER_FANG]);
 
-      await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+      await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
       const enemy = game.field.getEnemyPokemon();
       expect(enemy).toPreferSelectingMove(moveId);
     });
 
     it("should gain a small incentive to use after the first turn", async () => {
-      await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+      await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
       const enemy = game.field.getEnemyPokemon();
 

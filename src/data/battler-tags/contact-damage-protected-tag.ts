@@ -12,7 +12,6 @@ import { toDmgValue } from "#utils/common-utils";
 /**
  * Tag used to block damaging moves and damage the attacker if the move makes contact.
  * Used by {@linkcode MoveId.SPIKY_SHIELD}
- * @extends DamageProtectedTag
  */
 export class ContactDamageProtectedTag extends DamageProtectedTag {
   private damageRatio: number;

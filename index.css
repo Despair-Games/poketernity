@@ -113,6 +113,7 @@ body {
   bottom: 6rem;
 }
 
+/* biome-ignore lint/correctness/noUnknownPseudoClass: intentional? */
 input:-internal-autofill-selected {
   -webkit-background-clip: text;
   background-clip: text;
@@ -133,6 +134,7 @@ input {
   display: none !important;
 }
 
+/* biome-ignore lint/correctness/noUnknownPseudoClass: intentional? */
 input:-internal-autofill-selected {
   -webkit-background-clip: text;
   background-clip: text;
@@ -280,7 +282,6 @@ input:-internal-autofill-selected {
   justify-content: center;
   align-items: center;
   text-align: center;
-  border-radius: 10%;
   height: var(--small-control-size);
   font-size: var(--small-control-size);
   border-radius: 8px;
@@ -298,6 +299,7 @@ input:-internal-autofill-selected {
 }
 
 /* dpad */
+
 #dpad {
   z-index: 3;
   opacity: 0.8;
@@ -313,7 +315,6 @@ input:-internal-autofill-selected {
 
 .apad-button {
   background-color: var(--color-base);
-  border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -393,10 +394,12 @@ input:-internal-autofill-selected {
   bottom: 6rem;
 }
 
+/* biome-ignore lint/correctness/noUnknownPseudoClass: intentional? */
 input:-internal-autofill-selected {
   -webkit-background-clip: text;
   background-clip: text;
 }
+
 #banner {
   display: none;
   position: absolute;

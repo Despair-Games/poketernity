@@ -5,7 +5,6 @@ import { Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import i18next from "i18next";
 
 /**
@@ -16,11 +15,18 @@ export class CaptivateAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     // TODO: Should show oblivious ability flyout if target has oblivious
     if (!target.hasAbility(AbilityId.OBLIVIOUS) && target.isOppositeGender(user)) {
-      globalScene.phaseManager.unshiftPhase(new StatStageChangePhase(target.getBattlerIndex(), user, [Stat.SPATK], -2));
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "StatStageChangePhase",
+        target.getBattlerIndex(),
+        user,
+        [Stat.SPATK],
+        -2,
+      );
       return true;
     }
     // It doesn't affect pokemonNameWithAffix!
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("abilityTriggers:moveImmunity", {
         pokemonNameWithAffix: getPokemonNameWithAffix(target),
       }),

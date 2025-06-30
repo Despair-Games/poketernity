@@ -14,7 +14,7 @@ import type { StarterDataEntry } from "#types/starter-data";
 import { IVGraph } from "#ui/iv-graph";
 import { addBBCodeTextObject, addTextObject, setTextColor } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
-import { fixedNumber } from "#utils/common-utils";
+import { enumValueToKey, fixedNumber } from "#utils/common-utils";
 import { capitalizeString } from "#utils/string-utils";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
@@ -206,13 +206,14 @@ export class PokemonInfoContainer extends Phaser.GameObjects.Container {
     this.pokemonShinyNewIcon = addTextObject(
       this.pokemonShinyIcon.x + 12,
       this.pokemonShinyIcon.y,
-      "",
+      "(+)",
       this.defaultTextStyle,
     );
     this.pokemonShinyNewIcon.setOrigin(0, 0);
     this.pokemonShinyNewIcon.setName("text-pkmn-shiny-new-icon");
-    this.add(this.pokemonShinyNewIcon);
     this.pokemonShinyNewIcon.setVisible(false);
+    setTextColor(this.pokemonShinyNewIcon, TextStyle.SUMMARY_BLUE);
+    this.add(this.pokemonShinyNewIcon);
 
     this.setVisible(false);
   }
@@ -269,7 +270,7 @@ export class PokemonInfoContainer extends Phaser.GameObjects.Container {
       if (formName) {
         this.pokemonFormLabelText.setVisible(true);
         this.pokemonFormText.setVisible(true);
-        const newForm = BigInt(1 << pokemon.getSelectableFormIndex()) * DexAttr.DEFAULT_FORM;
+        const newForm = globalScene.gameData.getFormAttr(pokemon.getSelectableFormIndex());
 
         if ((newForm & caughtAttr) === BigInt(0)) {
           setTextColor(this.pokemonFormLabelText, TextStyle.SUMMARY_BLUE);
@@ -337,18 +338,15 @@ export class PokemonInfoContainer extends Phaser.GameObjects.Container {
         );
         this.pokemonShinyIcon.on("pointerout", () => globalScene.ui.hideTooltip());
 
-        const newShiny = BigInt(1 << (pokemon.shiny ? 1 : 0));
-        const newVariant = BigInt(1 << (pokemon.variant + 4));
-
-        this.pokemonShinyNewIcon.setText("(+)");
-        setTextColor(this.pokemonShinyNewIcon, TextStyle.SUMMARY_BLUE);
-        const newShinyOrVariant = (newShiny & caughtAttr) === BigInt(0) || (newVariant & caughtAttr) === BigInt(0);
-        this.pokemonShinyNewIcon.setVisible(newShinyOrVariant);
-      } else if ((caughtAttr & DexAttr.NON_SHINY) === BigInt(0) && (caughtAttr & DexAttr.SHINY) === DexAttr.SHINY) {
-        //If the player has *only* caught any shiny variant of this species, not a non-shiny
+        const variantAttr = BigInt(1 << baseVariant) * DexAttr.SHINY_BASE_VARIANT;
+        const isNewVariant = (variantAttr & caughtAttr) === BigInt(0);
+        this.pokemonShinyNewIcon.setVisible(isNewVariant);
+      } else if (
+        (caughtAttr & DexAttr.NON_SHINY) === 0n
+        && globalScene.gameData.getUnlockedVariantsAttr(caughtAttr).length > 0
+      ) {
+        // If the player has *only* caught shinies of this species before, not a non-shiny
         this.pokemonShinyNewIcon.setVisible(true);
-        this.pokemonShinyNewIcon.setText("(+)");
-        setTextColor(this.pokemonShinyNewIcon, TextStyle.SUMMARY_BLUE);
       } else {
         this.pokemonShinyNewIcon.setVisible(false);
       }
@@ -388,7 +386,7 @@ export class PokemonInfoContainer extends Phaser.GameObjects.Container {
       for (let m = 0; m < 4; m++) {
         const move = m < pokemon.moveset.length && pokemon.moveset[m] ? pokemon.moveset[m]!.getMove() : null;
         this.pokemonMoveBgs[m].setFrame(
-          ElementalType[move ? move.type : ElementalType.UNKNOWN].toString().toLowerCase(),
+          enumValueToKey(ElementalType, move ? move.type : ElementalType.UNKNOWN).toLowerCase(),
         );
         this.pokemonMoveLabels[m].setText(move ? move.name : "-");
         this.pokemonMovesContainers[m].setVisible(!!move);

@@ -8,7 +8,6 @@ import type { NumberHolder } from "#utils/common-utils";
 /**
  * Attribute implementing {@link https://bulbapedia.bulbagarden.net/wiki/Ivy_Cudgel_(move) | Ivy Cudgel}'s
  * type-changing effect. A move with this attribute changes type based on the specific form of Ogerpon using it.
- * @extends VariableMoveTypeAttr
  */
 export class IvyCudgelTypeAttr extends VariableMoveTypeAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {

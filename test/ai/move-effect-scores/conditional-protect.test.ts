@@ -44,7 +44,7 @@ describe("Move Effect Scores - Conditional Protection", () => {
     it("should not be preferred in single battles", async () => {
       game.override.battleType("single").moveset(blockedMove);
 
-      await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+      await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
       revealAllMoves(game.scene);
       const enemy = game.field.getEnemyPokemon();
@@ -54,7 +54,7 @@ describe("Move Effect Scores - Conditional Protection", () => {
     it("should be preferred in double battles when player Pokemon have a relevant and threatening move", async () => {
       game.override.moveset(blockedMove);
 
-      await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
+      await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
       revealAllMoves(game.scene);
       const [enemy] = game.scene.getEnemyField();
@@ -64,7 +64,7 @@ describe("Move Effect Scores - Conditional Protection", () => {
     it("should not be preferred when the player doesn't have any relevant moves", async () => {
       game.override.moveset(MoveId.SPLASH);
 
-      await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
+      await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
       revealAllMoves(game.scene);
       const [enemy] = game.scene.getEnemyField();
@@ -74,7 +74,7 @@ describe("Move Effect Scores - Conditional Protection", () => {
     it("should not be preferred when the player's relevant moves aren't revealed", async () => {
       game.override.moveset(blockedMove);
 
-      await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
+      await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
       const [enemy] = game.scene.getEnemyField();
       expect(enemy).not.toPreferSelectingMove(moveId);
@@ -85,7 +85,7 @@ describe("Move Effect Scores - Conditional Protection", () => {
     it("should not be preferred in single battles", async () => {
       game.override.battleType("single").enemyMoveset([MoveId.CRAFTY_SHIELD, MoveId.TACKLE]);
 
-      await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+      await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
       const enemy = game.field.getEnemyPokemon();
       expect(enemy).not.toPreferSelectingMove(MoveId.CRAFTY_SHIELD);
@@ -94,7 +94,7 @@ describe("Move Effect Scores - Conditional Protection", () => {
     it("should be preferred over doing nothing in double battles", async () => {
       game.override.enemyMoveset([MoveId.CRAFTY_SHIELD, MoveId.SPLASH]);
 
-      await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
+      await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
       const [enemy] = game.scene.getEnemyField();
       expect(enemy).toPreferSelectingMove(MoveId.CRAFTY_SHIELD);

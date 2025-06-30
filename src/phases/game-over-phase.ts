@@ -5,7 +5,6 @@ import { getCharVariantFromDialogue } from "#data/dialogue";
 import type PokemonSpecies from "#data/pokemon-species";
 import { AchvCategory } from "#enums/achv-category";
 import { BattleType } from "#enums/battle-type";
-import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
 import { TrainerType } from "#enums/trainer-type";
 import { UiMode } from "#enums/ui-mode";
@@ -13,15 +12,8 @@ import { Unlockables } from "#enums/unlockables";
 import type { Pokemon } from "#field/pokemon";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import { modifierTypes } from "#modifier/modifier-types";
-import { BattlePhase } from "#phases/abstract-battle-phase";
-import { CheckSwitchPhase } from "#phases/check-switch-phase";
-import { EncounterPhase } from "#phases/encounter-phase";
-import { EndCardPhase } from "#phases/end-card-phase";
-import { GameOverModifierRewardPhase } from "#phases/game-over-modifier-reward-phase";
-import { PostGameOverPhase } from "#phases/post-game-over-phase";
-import { RibbonModifierRewardPhase } from "#phases/ribbon-modifier-reward-phase";
-import { SummonPhase } from "#phases/summon-phase";
-import { UnlockPhase } from "#phases/unlock-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
+import type { EndCardPhase } from "#phases/end-card-phase";
 import { achvs } from "#system/achievements";
 import { settings } from "#system/settings-manager";
 import TrainerData from "#system/trainer-data";
@@ -40,7 +32,7 @@ import i18next from "i18next";
  * - Award ribbons + vouchers per player pokemon if a victory
  */
 export class GameOverPhase extends BattlePhase {
-  override readonly id = PhaseId.GAME_OVER;
+  public override readonly phaseName = "GameOverPhase";
 
   private isVictory: boolean;
   private readonly firstRibbons: PokemonSpecies[] = [];
@@ -64,7 +56,8 @@ export class GameOverPhase extends BattlePhase {
     // Handle Mystery Encounter special Game Over cases
     // Situations such as when player lost a battle, but it isn't treated as full Game Over
     if (!this.isVictory && currentBattle.mysteryEncounter?.onGameOver && !currentBattle.mysteryEncounter.onGameOver()) {
-      return this.end();
+      this.end();
+      return;
     }
 
     if (this.isVictory && gameMode.isEndless) {
@@ -84,19 +77,19 @@ export class GameOverPhase extends BattlePhase {
           globalScene.reset();
           globalScene.phaseManager.clearPhaseQueue();
           gameData.loadSession(globalScene.sessionSlotId).then(() => {
-            globalScene.phaseManager.pushPhase(new EncounterPhase(true));
+            globalScene.phaseManager.createAndPushPhase("EncounterPhase", true);
 
             const availablePartyMembers = globalScene.getPokemonAllowedInBattle().length;
 
-            globalScene.phaseManager.pushPhase(new SummonPhase(0, true, true));
+            globalScene.phaseManager.createAndPushPhase("SummonPhase", 0, true, true);
             if (currentBattle.double && availablePartyMembers > 1) {
-              globalScene.phaseManager.pushPhase(new SummonPhase(1, true, true));
+              globalScene.phaseManager.createAndPushPhase("SummonPhase", 1, true, true);
             }
             // TODO: Should this also check `!gameMode.isDaily` like in `TitlePhase.end()`?
             if (currentBattle.waveIndex > 1 && currentBattle.battleType !== BattleType.TRAINER) {
-              globalScene.phaseManager.pushPhase(new CheckSwitchPhase(0, currentBattle.double));
+              globalScene.phaseManager.createAndPushPhase("CheckSwitchPhase", 0, currentBattle.double);
               if (currentBattle.double && availablePartyMembers > 1) {
-                globalScene.phaseManager.pushPhase(new CheckSwitchPhase(1, currentBattle.double));
+                globalScene.phaseManager.createAndPushPhase("CheckSwitchPhase", 1, currentBattle.double);
               }
             }
 
@@ -164,19 +157,24 @@ export class GameOverPhase extends BattlePhase {
               this.handleUnlocks();
 
               for (const species of this.firstRibbons) {
-                globalScene.phaseManager.unshiftPhase(
-                  new RibbonModifierRewardPhase(modifierTypes.VOUCHER_PLUS, species),
+                globalScene.phaseManager.createAndUnshiftPhase(
+                  "RibbonModifierRewardPhase",
+                  modifierTypes.VOUCHER_PLUS,
+                  species,
                 );
               }
 
               if (!firstClear) {
-                globalScene.phaseManager.unshiftPhase(new GameOverModifierRewardPhase(modifierTypes.VOUCHER_PREMIUM));
+                globalScene.phaseManager.createAndUnshiftPhase(
+                  "GameOverModifierRewardPhase",
+                  modifierTypes.VOUCHER_PREMIUM,
+                );
               }
             }
 
             this.getRunHistoryEntry().then((runHistoryEntry) => {
               gameData.saveRunHistory(runHistoryEntry, this.isVictory);
-              globalScene.phaseManager.pushPhase(new PostGameOverPhase(endCardPhase));
+              globalScene.phaseManager.createAndPushPhase("PostGameOverPhase", endCardPhase);
               this.end();
             });
           };
@@ -184,7 +182,7 @@ export class GameOverPhase extends BattlePhase {
           if (this.isVictory && gameMode.isClassic) {
             const dialogueKey = "miscDialogue:ending";
             const displayEndCard = (): void => {
-              const endCardPhase = new EndCardPhase();
+              const endCardPhase = globalScene.phaseManager.createPhase("EndCardPhase");
               globalScene.phaseManager.unshiftPhase(endCardPhase);
               clear(endCardPhase);
             };
@@ -249,18 +247,18 @@ export class GameOverPhase extends BattlePhase {
 
     if (this.isVictory && gameMode.isClassic) {
       if (!gameData.unlocks[Unlockables.ENDLESS_MODE]) {
-        globalScene.phaseManager.unshiftPhase(new UnlockPhase(Unlockables.ENDLESS_MODE));
+        globalScene.phaseManager.createAndUnshiftPhase("UnlockPhase", Unlockables.ENDLESS_MODE);
       }
 
       if (!gameData.unlocks[Unlockables.MINI_BLACK_HOLE]) {
-        globalScene.phaseManager.unshiftPhase(new UnlockPhase(Unlockables.MINI_BLACK_HOLE));
+        globalScene.phaseManager.createAndUnshiftPhase("UnlockPhase", Unlockables.MINI_BLACK_HOLE);
       }
 
       if (
         !gameData.unlocks[Unlockables.EVIOLITE]
         && globalScene.getPlayerParty().some((p) => p.getSpeciesForm(true).speciesId in pokemonEvolutions)
       ) {
-        globalScene.phaseManager.unshiftPhase(new UnlockPhase(Unlockables.EVIOLITE));
+        globalScene.phaseManager.createAndUnshiftPhase("UnlockPhase", Unlockables.EVIOLITE);
       }
     }
   }

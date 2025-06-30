@@ -12,7 +12,6 @@ type ArenaTrapCondition = (user: Pokemon, target: Pokemon) => boolean;
 /**
  * Determines whether a Pokemon is blocked from switching/running away
  * because of a trapping ability or move.
- * @extends AbAttr
  */
 export class ArenaTrapAbAttr extends AbAttr {
   protected readonly arenaTrapCondition: ArenaTrapCondition;

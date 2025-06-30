@@ -6,19 +6,17 @@ import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { getPokeballTintColor } from "#data/pokeball";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
 import type { SwitchEffectTransferModifier } from "#modifier/modifier";
-import { PostSummonPhase } from "#phases/post-summon-phase";
 import { SummonPhase } from "#phases/summon-phase";
+import type { PhaseKey } from "#types/phase-types";
 import i18next from "i18next";
 
 export class SwitchSummonPhase extends SummonPhase {
-  /** @override **Must** use generic {@linkcode PhaseId} since {@linkcode SummonPhase} is extended by other phases */
-  override readonly id: PhaseId = PhaseId.SWITCH_SUMMON;
+  public override readonly phaseName: PhaseKey = "SwitchSummonPhase";
 
   private readonly switchType: SwitchType;
   private slotIndex: number;
@@ -223,6 +221,6 @@ export class SwitchSummonPhase extends SummonPhase {
   }
 
   protected override queuePostSummon(): void {
-    globalScene.phaseManager.unshiftPhase(new PostSummonPhase(this.getPokemon().getBattlerIndex()));
+    globalScene.phaseManager.createAndUnshiftPhase("PostSummonPhase", this.getPokemon().getBattlerIndex());
   }
 }

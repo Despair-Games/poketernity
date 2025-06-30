@@ -6,7 +6,6 @@ import type { NumberHolder } from "#utils/common-utils";
 /**
  * Attribute to set move effectiveness to 0 if the user doesn't share a type with the target.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Synchronoise_(move) | Synchronoise}.
- * @extends VariableMoveTypeMultiplierAttr
  */
 export class HitsSameTypeAttr extends VariableMoveTypeMultiplierAttr {
   override apply(user: Pokemon, target: Pokemon, _move: Move, multiplier: NumberHolder): boolean {

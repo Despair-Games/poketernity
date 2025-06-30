@@ -50,7 +50,7 @@ describe("Abilities - Gulp Missile", () => {
   });
 
   it("changes to Gulping Form if HP is over half when Surf or Dive is used", async () => {
-    await game.classicMode.startBattle([SpeciesId.CRAMORANT]);
+    await game.classicMode.startBattle(SpeciesId.CRAMORANT);
     const cramorant = game.scene.getPlayerPokemon()!;
 
     game.move.select(MoveId.DIVE);
@@ -64,7 +64,7 @@ describe("Abilities - Gulp Missile", () => {
   });
 
   it("changes to Gorging Form if HP is under half when Surf or Dive is used", async () => {
-    await game.classicMode.startBattle([SpeciesId.CRAMORANT]);
+    await game.classicMode.startBattle(SpeciesId.CRAMORANT);
     const cramorant = game.scene.getPlayerPokemon()!;
 
     vi.spyOn(cramorant, "getHpRatio").mockReturnValue(0.49);
@@ -78,7 +78,7 @@ describe("Abilities - Gulp Missile", () => {
   });
 
   it("changes to base form when switched out after Surf or Dive is used", async () => {
-    await game.classicMode.startBattle([SpeciesId.CRAMORANT, SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.CRAMORANT, SpeciesId.MAGIKARP);
     const cramorant = game.scene.getPlayerPokemon()!;
 
     game.move.select(MoveId.SURF);
@@ -93,7 +93,7 @@ describe("Abilities - Gulp Missile", () => {
   });
 
   it("changes form during Dive's charge turn", async () => {
-    await game.classicMode.startBattle([SpeciesId.CRAMORANT]);
+    await game.classicMode.startBattle(SpeciesId.CRAMORANT);
     const cramorant = game.scene.getPlayerPokemon()!;
 
     game.move.select(MoveId.DIVE);
@@ -105,7 +105,7 @@ describe("Abilities - Gulp Missile", () => {
 
   it("deals 1/4 of the attacker's maximum HP when hit by a damaging attack", async () => {
     game.override.enemyMoveset(MoveId.TACKLE);
-    await game.classicMode.startBattle([SpeciesId.CRAMORANT]);
+    await game.classicMode.startBattle(SpeciesId.CRAMORANT);
 
     const enemy = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemy, "damageAndUpdate");
@@ -118,7 +118,7 @@ describe("Abilities - Gulp Missile", () => {
 
   it("does not have any effect when hit by non-damaging attack", async () => {
     game.override.enemyMoveset(MoveId.TAIL_WHIP);
-    await game.classicMode.startBattle([SpeciesId.CRAMORANT]);
+    await game.classicMode.startBattle(SpeciesId.CRAMORANT);
 
     const cramorant = game.scene.getPlayerPokemon()!;
     vi.spyOn(cramorant, "getHpRatio").mockReturnValue(0.55);
@@ -137,7 +137,7 @@ describe("Abilities - Gulp Missile", () => {
 
   it("lowers attacker's DEF stat stage by 1 when hit in Gulping form", async () => {
     game.override.enemyMoveset(MoveId.TACKLE);
-    await game.classicMode.startBattle([SpeciesId.CRAMORANT]);
+    await game.classicMode.startBattle(SpeciesId.CRAMORANT);
 
     const cramorant = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -161,7 +161,7 @@ describe("Abilities - Gulp Missile", () => {
 
   it("paralyzes the enemy when hit in Gorging form", async () => {
     game.override.enemyMoveset(MoveId.TACKLE);
-    await game.classicMode.startBattle([SpeciesId.CRAMORANT]);
+    await game.classicMode.startBattle(SpeciesId.CRAMORANT);
 
     const cramorant = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -185,7 +185,7 @@ describe("Abilities - Gulp Missile", () => {
 
   it("does not activate the ability when underwater", async () => {
     game.override.enemyMoveset(MoveId.SURF);
-    await game.classicMode.startBattle([SpeciesId.CRAMORANT]);
+    await game.classicMode.startBattle(SpeciesId.CRAMORANT);
 
     const cramorant = game.scene.getPlayerPokemon()!;
 
@@ -198,7 +198,7 @@ describe("Abilities - Gulp Missile", () => {
 
   it("prevents effect damage but inflicts secondary effect on attacker with Magic Guard", async () => {
     game.override.enemyMoveset(MoveId.TACKLE).enemyAbility(AbilityId.MAGIC_GUARD);
-    await game.classicMode.startBattle([SpeciesId.CRAMORANT]);
+    await game.classicMode.startBattle(SpeciesId.CRAMORANT);
 
     const cramorant = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -222,7 +222,7 @@ describe("Abilities - Gulp Missile", () => {
 
   it("activates on faint", async () => {
     game.override.enemyMoveset(MoveId.THUNDERBOLT);
-    await game.classicMode.startBattle([SpeciesId.CRAMORANT]);
+    await game.classicMode.startBattle(SpeciesId.CRAMORANT);
 
     const cramorant = game.scene.getPlayerPokemon()!;
 
@@ -237,7 +237,7 @@ describe("Abilities - Gulp Missile", () => {
 
   it("doesn't trigger if user is behind a substitute", async () => {
     game.override.enemyAbility(AbilityId.STURDY);
-    await game.classicMode.startBattle([SpeciesId.CRAMORANT]);
+    await game.classicMode.startBattle(SpeciesId.CRAMORANT);
 
     game.move.select(MoveId.SURF);
     await game.move.forceEnemyMove(MoveId.SPLASH);
@@ -255,7 +255,7 @@ describe("Abilities - Gulp Missile", () => {
 
   it("cannot be suppressed", async () => {
     game.override.enemyMoveset(MoveId.GASTRO_ACID);
-    await game.classicMode.startBattle([SpeciesId.CRAMORANT]);
+    await game.classicMode.startBattle(SpeciesId.CRAMORANT);
 
     const cramorant = game.scene.getPlayerPokemon()!;
     vi.spyOn(cramorant, "getHpRatio").mockReturnValue(0.55);
@@ -275,7 +275,7 @@ describe("Abilities - Gulp Missile", () => {
 
   it("cannot be swapped with another ability", async () => {
     game.override.enemyMoveset(MoveId.SKILL_SWAP);
-    await game.classicMode.startBattle([SpeciesId.CRAMORANT]);
+    await game.classicMode.startBattle(SpeciesId.CRAMORANT);
 
     const cramorant = game.scene.getPlayerPokemon()!;
     vi.spyOn(cramorant, "getHpRatio").mockReturnValue(0.55);
@@ -296,7 +296,7 @@ describe("Abilities - Gulp Missile", () => {
   it("cannot be copied", async () => {
     game.override.enemyAbility(AbilityId.TRACE);
 
-    await game.classicMode.startBattle([SpeciesId.CRAMORANT]);
+    await game.classicMode.startBattle(SpeciesId.CRAMORANT);
     game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to("TurnStartPhase");
 

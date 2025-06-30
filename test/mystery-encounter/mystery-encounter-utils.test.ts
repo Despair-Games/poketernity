@@ -16,7 +16,6 @@ import {
   koPlayerPokemon,
 } from "#mystery-encounters/encounter-pokemon-utils";
 import MysteryEncounter from "#mystery-encounters/mystery-encounter";
-import { MessagePhase } from "#phases/message-phase";
 import { GameManager } from "#test/test-utils/game-manager";
 import { initSceneWithoutEncounterPhase } from "#test/test-utils/game-manager-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
@@ -283,12 +282,11 @@ describe("Mystery Encounter Utils", () => {
     it("queues a message with encounter dialogue tokens", async () => {
       scene.currentBattle.mysteryEncounter = new MysteryEncounter(null);
       scene.currentBattle.mysteryEncounter.setDialogueToken("test", "value");
-      const spy = vi.spyOn(game.scene.phaseManager, "queueMessagePhase");
-      const phaseSpy = vi.spyOn(game.scene.phaseManager, "unshiftPhase");
+      const phaseSpy = vi.spyOn(game.scene.phaseManager, "createAndUnshiftPhase");
 
       queueEncounterMessage("mysteryEncounter:unit_test_dialogue");
-      expect(spy).toHaveBeenCalledWith("mysteryEncounter:unit_test_dialogue", null, true);
-      expect(phaseSpy).toHaveBeenCalledWith(expect.any(MessagePhase));
+      const expectedParams = ["mysteryEncounter:unit_test_dialogue", undefined, true];
+      expect(phaseSpy).toHaveBeenCalledWith("MessagePhase", ...expectedParams);
     });
   });
 

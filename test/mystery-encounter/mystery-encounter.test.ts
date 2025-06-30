@@ -1,7 +1,6 @@
 import type BattleScene from "#app/battle-scene";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
-import { MysteryEncounterPhase } from "#phases/mystery-encounter-phases/mystery-encounter-phase";
 import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -35,7 +34,7 @@ describe("Mystery Encounters", () => {
     ]);
 
     await game.phaseInterceptor.to("MysteryEncounterPhase", false);
-    expect(game.scene.phaseManager.getCurrentPhase()!.constructor.name).toBe(MysteryEncounterPhase.name);
+    expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("MysteryEncounterPhase");
   });
 
   it("Encounters should not run below wave 10", async () => {

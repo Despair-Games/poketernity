@@ -31,7 +31,7 @@ describe("Move Effect Scores - Tailwind", () => {
   });
 
   it("should have a small incentive to use in a single battle", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).toPreferSelectingMove(MoveId.TAILWIND);
@@ -43,7 +43,7 @@ describe("Move Effect Scores - Tailwind", () => {
 
   it("should have a large incentive to use in a double battle", async () => {
     game.override.battleType("double");
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
     const [enemy] = game.scene.getEnemyField();
     expect(enemy).toPreferSelectingMove(MoveId.TAILWIND);
@@ -53,7 +53,7 @@ describe("Move Effect Scores - Tailwind", () => {
   });
 
   it("should be avoided when its effect is already active", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
 

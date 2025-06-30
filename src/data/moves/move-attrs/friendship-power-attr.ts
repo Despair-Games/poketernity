@@ -8,7 +8,6 @@ import type { NumberHolder } from "#utils/common-utils";
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Return_(move) | Return},
  * {@link https://bulbapedia.bulbagarden.net/wiki/Pika_Papow_(move) | Pika Papow},
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Veevee_Volley_(move) | Veevee Volley}.
- * @extends VariablePowerAttr
  */
 export class FriendshipPowerAttr extends VariablePowerAttr {
   private invert: boolean;

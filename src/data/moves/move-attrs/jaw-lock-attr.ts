@@ -6,7 +6,6 @@ import type { Move } from "#moves/move";
 
 /**
  * Attribute to implement Jaw Lock's linked trapping effect between the user and target
- * @extends AddBattlerTagAttr
  */
 export class JawLockAttr extends AddBattlerTagAttr {
   constructor() {
@@ -15,7 +14,7 @@ export class JawLockAttr extends AddBattlerTagAttr {
 
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     // If either the user or the target already has the tag, do not apply
-    if (user.getTag(...TRAPPED_BATTLER_TAG_TYPES) || target.getTag(...TRAPPED_BATTLER_TAG_TYPES)) {
+    if (user.hasTag(...TRAPPED_BATTLER_TAG_TYPES) || target.hasTag(...TRAPPED_BATTLER_TAG_TYPES)) {
       return false;
     }
 

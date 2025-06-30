@@ -8,7 +8,6 @@ import { MoveEffectAttr } from "#moves/move-effect-attr";
 
 /**
  * Adds the appropriate battler tag for Gulp Missile when Surf or Dive is used.
- * @extends MoveEffectAttr
  */
 export class GulpMissileTagAttr extends MoveEffectAttr {
   constructor() {
@@ -35,6 +34,6 @@ export class GulpMissileTagAttr extends MoveEffectAttr {
 
   override getUserBenefitScore(user: Pokemon, _target: Pokemon, _move: Move): number {
     const isCramorant = user.hasAbility(AbilityId.GULP_MISSILE) && user.species.speciesId === SpeciesId.CRAMORANT;
-    return isCramorant && !user.getTag(...GULP_MISSILE_BATTLER_TAG_TYPES) ? 10 : 0;
+    return isCramorant && !user.hasTag(...GULP_MISSILE_BATTLER_TAG_TYPES) ? 10 : 0;
   }
 }

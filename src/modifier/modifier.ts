@@ -17,7 +17,7 @@ import { ModifierPoolType } from "#enums/modifier-pool-type";
 import type { Nature } from "#enums/nature";
 import type { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
-import { type PermanentStat, type TempBattleStat, BATTLE_STATS, Stat, TEMP_BATTLE_STATS } from "#enums/stat";
+import { BATTLE_STATS, type PermanentStat, Stat, TEMP_BATTLE_STATS, type TempBattleStat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { TextStyle } from "#enums/text-style";
 import type { VoucherType } from "#enums/voucher-type";
@@ -38,9 +38,6 @@ import type {
   TmModifierType,
 } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
-import { EvolutionPhase } from "#phases/evolution-phase";
-import { LearnMovePhase } from "#phases/learn-move-phase";
-import { LevelUpPhase } from "#phases/level-up-phase";
 import { addTextObject } from "#ui/text-utils";
 import { hslToHex } from "#utils/color-utils";
 import { BooleanHolder, isNil, NumberHolder, toDmgValue } from "#utils/common-utils";
@@ -113,7 +110,7 @@ export class ModifierBar extends Phaser.GameObjects.Container {
       this.setModifierIconPosition(icon, sortedVisibleIconModifiers.length);
       icon.setInteractive(new Phaser.Geom.Rectangle(0, 0, 32, 24), Phaser.Geom.Rectangle.Contains);
       icon.on("pointerover", () => {
-        globalScene.ui.showTooltip(modifier.type.name, modifier.type.getDescription());
+        globalScene.ui.showTooltip(modifier.type.name, modifier.type.description);
         if (this.modifierCache && this.modifierCache.length > iconOverflowIndex) {
           this.updateModifierOverflowVisibility(true);
         }
@@ -406,12 +403,14 @@ export class AddVoucherModifier extends ConsumableModifier {
 /**
  * Modifier used for party-wide or passive items that start an initial
  * {@linkcode battleCount} equal to {@linkcode maxBattles} that, for every
- * battle, decrements. Typically, when {@linkcode battleCount} reaches 0, the
- * modifier will be removed. If a modifier of the same type is to be added, it
+ * battle, decrements.
+ *
+ * Typically, when {@linkcode battleCount} reaches 0, the
+ * modifier will be removed.
+ *
+ * If a modifier of the same type is to be added, it
  * will reset {@linkcode battleCount} back to {@linkcode maxBattles} of the
  * existing modifier instead of adding that modifier directly.
- * @extends PersistentModifier
- * @abstract
  * @see {@linkcode add}
  */
 export abstract class LapsingPersistentModifier extends PersistentModifier {
@@ -523,9 +522,8 @@ export abstract class LapsingPersistentModifier extends PersistentModifier {
 }
 
 /**
- * Modifier used for passive items, specifically lures, that
- * temporarily increases the chance of a double battle.
- * @extends LapsingPersistentModifier
+ * Modifier used for passive items (specifically lures)
+ * that temporarily increases the chance of a double battle.
  * @see {@linkcode apply}
  */
 export class DoubleBattleChanceBoosterModifier extends LapsingPersistentModifier {
@@ -559,10 +557,9 @@ export class DoubleBattleChanceBoosterModifier extends LapsingPersistentModifier
 }
 
 /**
- * Modifier used for party-wide items, specifically the X items, that
- * temporarily increases the stat stage multiplier of the corresponding
+ * Modifier used for party-wide items (specifically the X items)
+ * that temporarily increases the stat stage multiplier of the corresponding
  * {@linkcode TempBattleStat}.
- * @extends LapsingPersistentModifier
  * @see {@linkcode apply}
  */
 export class TempStatStageBoosterModifier extends LapsingPersistentModifier {
@@ -629,7 +626,6 @@ export class TempStatStageBoosterModifier extends LapsingPersistentModifier {
 /**
  * Modifier used for party-wide items, namely Dire Hit, that
  * temporarily increments the critical-hit stage
- * @extends LapsingPersistentModifier
  * @see {@linkcode apply}
  */
 export class TempCritBoosterModifier extends LapsingPersistentModifier {
@@ -883,7 +879,6 @@ export abstract class LapsingPokemonHeldItemModifier extends PokemonHeldItemModi
 /**
  * Modifier used for held items, specifically vitamins like Carbos, Hp Up, etc., that
  * increase the value of a given {@linkcode PermanentStat}.
- * @extends PokemonHeldItemModifier
  * @see {@linkcode apply}
  */
 export class BaseStatModifier extends PokemonHeldItemModifier {
@@ -1213,7 +1208,6 @@ export class PokemonIncrementingStatModifier extends PokemonHeldItemModifier {
 /**
  * Modifier used for held items that Applies {@linkcode Stat} boost(s)
  * using a multiplier.
- * @extends PokemonHeldItemModifier
  * @see {@linkcode apply}
  */
 export class StatBoosterModifier extends PokemonHeldItemModifier {
@@ -1281,7 +1275,6 @@ export class StatBoosterModifier extends PokemonHeldItemModifier {
 /**
  * Modifier used for held items, specifically Eviolite, that apply
  * {@linkcode Stat} boost(s) using a multiplier if the holder can evolve.
- * @extends StatBoosterModifier
  * @see {@linkcode apply}
  */
 export class EvolutionStatBoosterModifier extends StatBoosterModifier {
@@ -1325,7 +1318,6 @@ export class EvolutionStatBoosterModifier extends StatBoosterModifier {
 /**
  * Modifier used for held items that Applies {@linkcode Stat} boost(s) using a
  * multiplier if the holder is of a specific {@linkcode SpeciesId}.
- * @extends StatBoosterModifier
  * @see {@linkcode apply}
  */
 export class SpeciesStatBoosterModifier extends StatBoosterModifier {
@@ -1515,7 +1507,8 @@ export class SurviveDamageModifier extends PokemonHeldItemModifier {
     if (!surviveDamage.value && pokemon.randSeedInt(10) < this.getStackCount()) {
       surviveDamage.value = true;
 
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("modifier:surviveDamageApply", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
           typeName: this.type.name,
@@ -1551,7 +1544,8 @@ export class BypassSpeedChanceModifier extends PokemonHeldItemModifier {
       const hasQuickClaw = this.type.isPokemonHeldItemModifierType() && this.type.id === "QUICK_CLAW";
 
       if (hasQuickClaw) {
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           i18next.t("modifier:bypassSpeedChanceApply", {
             pokemonName: getPokemonNameWithAffix(pokemon),
             itemName: i18next.t("modifierType:ModifierType.QUICK_CLAW.name"),
@@ -1607,8 +1601,7 @@ export class FlinchChanceModifier extends PokemonHeldItemModifier {
    * @returns `true` if {@linkcode FlinchChanceModifier} has been applied
    */
   override apply(pokemon: Pokemon, flinched: BooleanHolder): boolean {
-    // The check for pokemon.summonData is to ensure that a crash doesn't occur when a Pokemon with King's Rock procs a flinch
-    if (pokemon.summonData && !flinched.value && pokemon.randSeedInt(100) < this.getStackCount() * this.chance) {
+    if (!flinched.value && pokemon.randSeedInt(100) < this.getStackCount() * this.chance) {
       flinched.value = true;
       return true;
     }
@@ -1637,7 +1630,8 @@ export class TurnHealModifier extends PokemonHeldItemModifier {
    */
   override apply(pokemon: Pokemon): boolean {
     if (!pokemon.isFullHp()) {
-      globalScene.phaseManager.queuePokemonHealPhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "PokemonHealPhase",
         pokemon.getBattlerIndex(),
         toDmgValue(pokemon.getMaxHp() / 16) * this.stackCount,
         {
@@ -1665,7 +1659,6 @@ export class TurnHealModifier extends PokemonHeldItemModifier {
 /**
  * Modifier used for held items, namely Toxic Orb and Flame Orb, that apply a
  * set {@linkcode StatusEffect} at the end of a turn.
- * @extends PokemonHeldItemModifier
  * @see {@linkcode apply}
  */
 export class TurnStatusEffectModifier extends PokemonHeldItemModifier {
@@ -1692,8 +1685,8 @@ export class TurnStatusEffectModifier extends PokemonHeldItemModifier {
    * would be the only item able to {@linkcode apply} successfully.
    * @override
    * @param modifier {@linkcode Modifier} being type tested
-   * @return `true` if {@linkcode modifier} is an instance of
-   * TurnStatusEffectModifier, false otherwise
+   * @returns `true` if {@linkcode modifier} is an instance of
+   * {@linkcode TurnStatusEffectModifier}, `false` otherwise
    */
   matchType(modifier: Modifier): boolean {
     return modifier instanceof TurnStatusEffectModifier;
@@ -1737,7 +1730,8 @@ export class HitHealModifier extends PokemonHeldItemModifier {
    */
   override apply(pokemon: Pokemon): boolean {
     if (pokemon.turnData.totalDamageDealt && !pokemon.isFullHp()) {
-      globalScene.phaseManager.queuePokemonHealPhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "PokemonHealPhase",
         pokemon.getBattlerIndex(),
         toDmgValue(pokemon.turnData.totalDamageDealt / 8) * this.stackCount,
         {
@@ -1845,7 +1839,8 @@ export class BerryModifier extends PokemonHeldItemModifier {
   }
 
   getMaxHeldItemCount(_pokemon: Pokemon): number {
-    if ([BerryType.LUM, BerryType.LEPPA, BerryType.SITRUS, BerryType.ENIGMA].includes(this.berryType)) {
+    const twoStackBerries: readonly BerryType[] = [BerryType.LUM, BerryType.LEPPA, BerryType.SITRUS, BerryType.ENIGMA];
+    if (twoStackBerries.includes(this.berryType)) {
       return 2;
     }
     return 3;
@@ -1914,14 +1909,19 @@ export class PokemonInstantReviveModifier extends PokemonHeldItemModifier {
    */
   override apply(pokemon: Pokemon): boolean {
     // Restore the Pokemon to half HP
-    globalScene.phaseManager.queuePokemonHealPhase(pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / 2), {
-      message: i18next.t("modifier:pokemonInstantReviveApply", {
-        pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-        typeName: this.type.name,
-      }),
-      showFullHpMessage: false,
-      revive: true,
-    });
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "PokemonHealPhase",
+      pokemon.getBattlerIndex(),
+      toDmgValue(pokemon.getMaxHp() / 2),
+      {
+        message: i18next.t("modifier:pokemonInstantReviveApply", {
+          pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+          typeName: this.type.name,
+        }),
+        showFullHpMessage: false,
+        revive: true,
+      },
+    );
 
     // Remove any status the Pokemon had before fainting
     pokemon.resetStatus(false, true);
@@ -1940,7 +1940,6 @@ export class PokemonInstantReviveModifier extends PokemonHeldItemModifier {
 /**
  * Modifier used for held items, namely White Herb, that restore adverse stat
  * stages in battle.
- * @extends PokemonHeldItemModifier
  * @see {@linkcode apply}
  */
 export class ResetNegativeStatStageModifier extends PokemonHeldItemModifier {
@@ -1969,7 +1968,8 @@ export class ResetNegativeStatStageModifier extends PokemonHeldItemModifier {
     }
 
     if (statRestored) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("modifier:resetNegativeStatStageApply", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
           typeName: this.type.name,
@@ -2213,12 +2213,11 @@ export class PokemonLevelIncrementModifier extends ConsumablePokemonModifier {
 
     playerPokemon.addFriendship(FRIENDSHIP_GAIN_FROM_CANDY);
 
-    globalScene.phaseManager.unshiftPhase(
-      new LevelUpPhase(
-        globalScene.getPlayerParty().indexOf(playerPokemon),
-        playerPokemon.level - levelCount.value,
-        playerPokemon.level,
-      ),
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "LevelUpPhase",
+      globalScene.getPlayerParty().indexOf(playerPokemon),
+      playerPokemon.level - levelCount.value,
+      playerPokemon.level,
     );
 
     return true;
@@ -2234,8 +2233,11 @@ export class TmModifier extends ConsumablePokemonModifier {
    * @returns always `true`
    */
   override apply(playerPokemon: PlayerPokemon): boolean {
-    globalScene.phaseManager.unshiftPhase(
-      new LearnMovePhase(globalScene.getPlayerParty().indexOf(playerPokemon), this.type.moveId, LearnMoveType.TM),
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "LearnMovePhase",
+      globalScene.getPlayerParty().indexOf(playerPokemon),
+      this.type.moveId,
+      LearnMoveType.TM,
     );
 
     return true;
@@ -2257,13 +2259,12 @@ export class RememberMoveModifier extends ConsumablePokemonModifier {
    * @returns always `true`
    */
   override apply(playerPokemon: PlayerPokemon, cost?: number): boolean {
-    globalScene.phaseManager.unshiftPhase(
-      new LearnMovePhase(
-        globalScene.getPlayerParty().indexOf(playerPokemon),
-        playerPokemon.getLearnableLevelMoves()[this.levelMoveIndex],
-        LearnMoveType.MEMORY,
-        cost,
-      ),
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "LearnMovePhase",
+      globalScene.getPlayerParty().indexOf(playerPokemon),
+      playerPokemon.getLearnableLevelMoves()[this.levelMoveIndex],
+      LearnMoveType.MEMORY,
+      cost,
     );
 
     return true;
@@ -2289,8 +2290,11 @@ export class EvolutionItemModifier extends ConsumablePokemonModifier {
       : null;
 
     if (matchingEvolution) {
-      globalScene.phaseManager.unshiftPhase(
-        new EvolutionPhase(playerPokemon, matchingEvolution, playerPokemon.level - 1),
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "EvolutionPhase",
+        playerPokemon,
+        matchingEvolution,
+        playerPokemon.level - 1,
       );
       return true;
     }
@@ -2736,7 +2740,7 @@ export class MoneyInterestModifier extends PersistentModifier {
       moneyAmount: formattedMoneyAmount,
       typeName: this.type.name,
     });
-    globalScene.phaseManager.queueMessagePhase(message, undefined, true);
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", message, undefined, true);
 
     return true;
   }
@@ -3022,7 +3026,10 @@ export abstract class HeldItemTransferModifier extends PokemonHeldItemModifier {
     }
 
     for (const mt of transferredModifierTypes) {
-      globalScene.phaseManager.queueMessagePhase(this.getTransferMessage(pokemon, targetPokemon, mt));
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
+        this.getTransferMessage(pokemon, targetPokemon, mt),
+      );
     }
 
     return transferredModifierTypes.length > 0;
@@ -3183,7 +3190,6 @@ export class ExtraModifierModifier extends PersistentModifier {
 
 /**
  * Modifier used for timed boosts to the player's shop item rewards.
- * @extends LapsingPersistentModifier
  * @see {@linkcode apply}
  */
 export class TempExtraModifierModifier extends LapsingPersistentModifier {

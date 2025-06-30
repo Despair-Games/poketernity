@@ -9,13 +9,10 @@ import { AbilityId } from "#enums/ability-id";
 import { BattleType } from "#enums/battle-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
-import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import { SwitchPhase } from "#phases/switch-phase";
-import { SwitchSummonPhase } from "#phases/switch-summon-phase";
 import { BooleanHolder, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
@@ -26,7 +23,6 @@ import i18next from "i18next";
  *
  * Used by Wimp Out and Emergency Exit
  *
- * @extends PostDamageAbAttr
  * @see {@linkcode applyPostDamage}
  */
 export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
@@ -68,7 +64,7 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
       if (enemyMoveHistory.length > 0) {
         const enemyLastMoveUsed = enemyMoveHistory[enemyMoveHistory.length - 1];
         // Will not activate if the Pokémon's HP falls below half while it is in the air during Sky Drop.
-        if (forbiddenDefendingMoves.includes(enemyLastMoveUsed.move.id) || pokemon.getTag(BattlerTagType.SKY_DROP)) {
+        if (forbiddenDefendingMoves.includes(enemyLastMoveUsed.move.id) || pokemon.hasTag(BattlerTagType.SKY_DROP)) {
           return false;
           // Will not activate if the Pokémon's HP falls below half by a move affected by Sheer Force.
         }
@@ -149,9 +145,13 @@ class ForceSwitchOutHelper {
 
       if (switchOutTarget.hp > 0) {
         switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
-        globalScene.phaseManager.prependToPhase(
-          new SwitchPhase(this.switchType, switchOutTarget.getFieldIndex(), true, true),
-          PhaseId.POST_ACTION,
+        globalScene.phaseManager.createAndPrependPhase(
+          "PostActionPhase",
+          "SwitchPhase",
+          this.switchType,
+          switchOutTarget.getFieldIndex(),
+          true,
+          true,
         );
         return true;
       }
@@ -166,9 +166,14 @@ class ForceSwitchOutHelper {
       if (switchOutTarget.hp > 0) {
         switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
         const summonIndex = trainer ? trainer.getNextSummonIndex((switchOutTarget as EnemyPokemon).trainerSlot) : 0;
-        globalScene.phaseManager.prependToPhase(
-          new SwitchSummonPhase(this.switchType, switchOutTarget.getFieldIndex(), summonIndex, false, false),
-          PhaseId.POST_ACTION,
+        globalScene.phaseManager.createAndPrependPhase(
+          "PostActionPhase",
+          "SwitchSummonPhase",
+          this.switchType,
+          switchOutTarget.getFieldIndex(),
+          summonIndex,
+          false,
+          false,
         );
         return true;
       }
@@ -185,9 +190,10 @@ class ForceSwitchOutHelper {
 
       if (switchOutTarget.hp > 0) {
         switchOutTarget.leaveField(false);
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           i18next.t("moveTriggers:fled", { pokemonName: getPokemonNameWithAffix(switchOutTarget) }),
-          null,
+          undefined,
           true,
           500,
         );

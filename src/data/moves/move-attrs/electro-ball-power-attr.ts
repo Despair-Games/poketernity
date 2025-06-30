@@ -9,7 +9,6 @@ import type { NumberHolder } from "#utils/common-utils";
  * move power modifier.
  * Sets the move's power proportional to the user's
  * {@linkcode Stat.SPD | Speed} compared to the target.
- * @extends VariablePowerAttr
  **/
 export class ElectroBallPowerAttr extends VariablePowerAttr {
   override apply(user: Pokemon, target: Pokemon, _move: Move, power: NumberHolder): boolean {

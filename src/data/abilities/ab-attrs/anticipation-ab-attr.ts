@@ -7,7 +7,6 @@ import { OneHitKOAttr } from "#moves/one-hit-ko-attr";
  * Ability Attribute for Anticipation.
  * When a Pokémon with Anticipation enters the battle or a Pokémon gains the Ability Anticipation, it causes the Pokémon to "shudder" if an opponent has a damaging move that is super effective against the Pokémon with Anticipation or a one-hit knockout move.
  * Shuddering has no actual effect, except that the presence of the Ability message is meant to provide information about possible moves the opponent might have.
- * @extends PostSummonMessageAbAttr
  */
 export class AnticipationAbAttr extends PostSummonMessageAbAttr {
   public override apply(pokemon: Pokemon, simulated: boolean): boolean {

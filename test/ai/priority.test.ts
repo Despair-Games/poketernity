@@ -30,7 +30,7 @@ describe("Enemy Commands - Priority", () => {
       .enemyLevel(100)
       .startingLevel(1);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemyPokemon = game.field.getEnemyPokemon();
 

@@ -35,7 +35,7 @@ describe("Moves - Tailwind", () => {
   });
 
   it("doubles the Speed stat of the Pokemon on its side", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.MEOWTH]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.MEOWTH);
     const magikarp = game.scene.getPlayerField()[0];
     const meowth = game.scene.getPlayerField()[1];
 
@@ -58,7 +58,7 @@ describe("Moves - Tailwind", () => {
   it("lasts for 4 turns", async () => {
     game.override.battleType("single");
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     game.move.select(MoveId.TAILWIND);
     await game.toNextTurn();
@@ -81,7 +81,7 @@ describe("Moves - Tailwind", () => {
   it("does not affect the opposing side", async () => {
     game.override.battleType("single");
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const ally = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -107,7 +107,7 @@ describe("Moves - Tailwind", () => {
   it("modifies turn order on the turn it is set", async () => {
     game.override.battleType("double").enemySpecies(SpeciesId.EXCADRILL).ability(AbilityId.PRANKSTER);
 
-    await game.classicMode.startBattle([SpeciesId.WHIMSICOTT, SpeciesId.URSALUNA]);
+    await game.classicMode.startBattle(SpeciesId.WHIMSICOTT, SpeciesId.URSALUNA);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();

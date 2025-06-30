@@ -7,7 +7,6 @@ import type { Pokemon } from "#field/pokemon";
 /**
  * Used for G-Max Centiferno that leaves a fire spin
  * that persists even on the user leaving the field
- * @extends FireSpinTag
  */
 export class GMaxFireSpinTag extends FireSpinTag {
   constructor(turnCount: number, sourceId: number) {
@@ -21,6 +20,6 @@ export class GMaxFireSpinTag extends FireSpinTag {
   }
 
   override canAdd(pokemon: Pokemon): boolean {
-    return !pokemon.getTag(...TRAPPED_BATTLER_TAG_TYPES);
+    return !pokemon.hasTag(...TRAPPED_BATTLER_TAG_TYPES);
   }
 }

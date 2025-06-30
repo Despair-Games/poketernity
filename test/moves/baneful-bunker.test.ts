@@ -36,7 +36,7 @@ describe("Moves - Baneful Bunker", () => {
     game.override.enemyLevel(100);
   });
   test("should protect the user and poison attackers that make contact", async () => {
-    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
+    await game.classicMode.startBattle(SpeciesId.CHARIZARD);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -48,7 +48,7 @@ describe("Moves - Baneful Bunker", () => {
     expect(leadPokemon.getStatusEffect(true)).toBe(StatusEffect.POISON);
   });
   test("should protect the user and poison attackers that make contact, regardless of accuracy checks", async () => {
-    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
+    await game.classicMode.startBattle(SpeciesId.CHARIZARD);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -65,7 +65,7 @@ describe("Moves - Baneful Bunker", () => {
 
   test("should not poison attackers that don't make contact", async () => {
     game.override.moveset(MoveId.FLASH_CANNON);
-    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
+    await game.classicMode.startBattle(SpeciesId.CHARIZARD);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;

@@ -37,7 +37,7 @@ describe("Moves - Me First", () => {
   });
 
   it("should copy the target's selected attack and use it with 50% more power", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const tackle = allMoves.get(MoveId.TACKLE);
     vi.spyOn(tackle, "calculateBattlePower");
@@ -55,7 +55,7 @@ describe("Moves - Me First", () => {
 
   it("should put the user in a frenzy if a frenzy move is copied", async () => {
     game.override.enemySpecies(SpeciesId.BASTIODON);
-    await game.classicMode.startBattle([SpeciesId.BASTIODON]);
+    await game.classicMode.startBattle(SpeciesId.BASTIODON);
 
     const outrage = allMoves.get(MoveId.OUTRAGE);
     vi.spyOn(outrage, "calculateBattlePower");
@@ -87,7 +87,7 @@ describe("Moves - Me First", () => {
   });
 
   it("should fail if the target selected a non-damaging move", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -104,7 +104,7 @@ describe("Moves - Me First", () => {
   });
 
   it("should fail if the target has already used their selected move for the turn", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -147,7 +147,7 @@ describe("Moves - Me First", () => {
     { moveId: MoveId.SLEEP_TALK, moveName: "Sleep Talk" },
     { moveId: MoveId.SNATCH, moveName: "Snatch" },
   ])("should fail if the target selected $moveName for the turn", async ({ moveId }) => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
 

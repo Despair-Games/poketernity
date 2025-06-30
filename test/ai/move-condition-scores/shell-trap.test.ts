@@ -31,7 +31,7 @@ describe("Move Condition Scores - Shell Trap", () => {
   });
 
   it("should not be penalized when all opponents have an Attack bias", async () => {
-    await game.classicMode.startBattle([SpeciesId.EXCADRILL, SpeciesId.DRILBUR]);
+    await game.classicMode.startBattle(SpeciesId.EXCADRILL, SpeciesId.DRILBUR);
 
     const [enemy] = game.scene.getEnemyField();
 
@@ -39,7 +39,7 @@ describe("Move Condition Scores - Shell Trap", () => {
   });
 
   it("should be penalized when all opponents have a Sp. Atk bias", async () => {
-    await game.classicMode.startBattle([SpeciesId.TOGETIC, SpeciesId.TOGEKISS]);
+    await game.classicMode.startBattle(SpeciesId.TOGETIC, SpeciesId.TOGEKISS);
 
     const [enemy] = game.scene.getEnemyField();
 
@@ -49,7 +49,7 @@ describe("Move Condition Scores - Shell Trap", () => {
   it("should be given a small penalty when one opponent has an Attack bias", async () => {
     game.override.enemyMoveset([MoveId.SHELL_TRAP, MoveId.SPIT_UP, MoveId.SWALLOW]);
 
-    await game.classicMode.startBattle([SpeciesId.EXCADRILL, SpeciesId.TOGEKISS]);
+    await game.classicMode.startBattle(SpeciesId.EXCADRILL, SpeciesId.TOGEKISS);
 
     const [enemy] = game.scene.getEnemyField();
 

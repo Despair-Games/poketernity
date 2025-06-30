@@ -6,7 +6,6 @@ import type { NumberHolder } from "#utils/common-utils";
 /**
  * Variable Power attribute for {@link https://bulbapedia.bulbagarden.net/wiki/Round_(move) | Round}.
  * Doubles power if another Pokemon has previously selected Round this turn.
- * @extends VariablePowerAttr
  */
 export class RoundPowerAttr extends VariablePowerAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {

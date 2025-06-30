@@ -36,7 +36,7 @@ describe("Move Effect Scores - Weaken Move Type", () => {
     beforeEach(() => game.override.enemyMoveset([moveId, MoveId.SPLASH]));
 
     it("should be preferred for selection when only opponents are of the weakened type", async () => {
-      await game.classicMode.startBattle([weakenedSpecies]);
+      await game.classicMode.startBattle(weakenedSpecies);
 
       const enemy = game.field.getEnemyPokemon();
 
@@ -45,7 +45,7 @@ describe("Move Effect Scores - Weaken Move Type", () => {
 
     it("should be avoided when only allies are of the weakened type", async () => {
       game.override.enemySpecies(weakenedSpecies);
-      await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+      await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
       const enemy = game.field.getEnemyPokemon();
 
@@ -54,7 +54,7 @@ describe("Move Effect Scores - Weaken Move Type", () => {
 
     it("should be avoided when all Pokemon are of the weakened type", async () => {
       game.override.enemySpecies(weakenedSpecies);
-      await game.classicMode.startBattle([weakenedSpecies]);
+      await game.classicMode.startBattle(weakenedSpecies);
 
       const enemy = game.field.getEnemyPokemon();
 
@@ -62,7 +62,7 @@ describe("Move Effect Scores - Weaken Move Type", () => {
     });
 
     it("should be avoided when its effect is already active", async () => {
-      await game.classicMode.startBattle([weakenedSpecies]);
+      await game.classicMode.startBattle(weakenedSpecies);
 
       const enemy = game.field.getEnemyPokemon();
 

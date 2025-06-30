@@ -1,5 +1,6 @@
 import { defineConfig, loadEnv, type Rollup, type UserConfig } from "vite";
 import ViteTsconfigPaths from "vite-tsconfig-paths";
+import { gitBranchPlugin as ViteGitBranchPlugin } from "./src/plugins/vite/vite-git-branch";
 import { minifyPublicJsonFiles as ViteMinifyPublicJsonFiles } from "./src/plugins/vite/vite-minify-public-json-files";
 
 export const defaultConfig: UserConfig = {
@@ -27,6 +28,7 @@ export default defineConfig(({ mode }) => {
 
   return {
     ...defaultConfig,
+    plugins: [...(defaultConfig.plugins ?? []), mode === "development" ? ViteGitBranchPlugin() : null],
     base: "",
     esbuild: {
       pure: mode === "production" ? ["console.log"] : [],

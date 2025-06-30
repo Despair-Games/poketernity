@@ -8,7 +8,6 @@ import { type NumberHolder, toDmgValue } from "#utils/common-utils";
  * If this move is boosted by {@linkcode PokemonMultiHitModifier | Multi-Lens},
  * damage is adjusted such that the combined damage of all hits is
  * equal to half the target's remaining HP.
- * @extends FixedDamageAttr
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Variations_of_Super_Fang | Variations of Super Fang}
  */
 export class TargetHalfHpDamageAttr extends FixedDamageAttr {

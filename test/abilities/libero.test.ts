@@ -9,6 +9,7 @@ import { SpeciesId } from "#enums/species-id";
 import { WeatherType } from "#enums/weather-type";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import { GameManager } from "#test/test-utils/game-manager";
+import { enumValueToKey } from "#utils/common-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -41,7 +42,7 @@ describe.each([
   });
 
   it("applies and changes a pokemon's type", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const leadPokemon = game.field.getPlayerPokemon();
 
@@ -53,7 +54,7 @@ describe.each([
 
   // Test for Gen9+ functionality, disabled because we are using previous funcionality
   it.skip("applies only once per switch in", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.BULBASAUR]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.BULBASAUR);
 
     let leadPokemon = game.field.getPlayerPokemon();
 
@@ -66,8 +67,8 @@ describe.each([
     await game.toEndOfTurn();
 
     expect(leadPokemon.summonData.abilitiesApplied.filter((a) => a === ability)).toHaveLength(1);
-    const leadPokemonType = ElementalType[leadPokemon.getTypes()[0]];
-    const moveType = ElementalType[allMoves.get(MoveId.AGILITY).type];
+    const leadPokemonType = enumValueToKey(ElementalType, leadPokemon.getTypes()[0]);
+    const moveType = enumValueToKey(ElementalType, allMoves.get(MoveId.AGILITY).type);
     expect(leadPokemonType).not.toBe(moveType);
 
     await game.toNextTurn();
@@ -85,7 +86,7 @@ describe.each([
   });
 
   it("applies correctly even if the pokemon's move has a variable type", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const leadPokemon = game.field.getPlayerPokemon();
 
@@ -95,15 +96,15 @@ describe.each([
 
     expect(leadPokemon.summonData.abilitiesApplied).toContain(ability);
     expect(leadPokemon.getTypes()).toHaveLength(1);
-    const leadPokemonType = ElementalType[leadPokemon.getTypes()[0]],
-      moveType = ElementalType[ElementalType.FIRE];
+    const leadPokemonType = enumValueToKey(ElementalType, leadPokemon.getTypes()[0]);
+    const moveType = enumValueToKey(ElementalType, ElementalType.FIRE);
     expect(leadPokemonType).toBe(moveType);
   });
 
   it("applies correctly even if the type has changed by another ability", async () => {
     game.override.passiveAbility(AbilityId.REFRIGERATE);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const leadPokemon = game.field.getPlayerPokemon();
 
@@ -112,13 +113,13 @@ describe.each([
 
     expect(leadPokemon.summonData.abilitiesApplied).toContain(ability);
     expect(leadPokemon.getTypes()).toHaveLength(1);
-    const leadPokemonType = ElementalType[leadPokemon.getTypes()[0]],
-      moveType = ElementalType[ElementalType.ICE];
+    const leadPokemonType = enumValueToKey(ElementalType, leadPokemon.getTypes()[0]);
+    const moveType = enumValueToKey(ElementalType, ElementalType.ICE);
     expect(leadPokemonType).toBe(moveType);
   });
 
   it("applies correctly even if the pokemon's move calls another move", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const leadPokemon = game.field.getPlayerPokemon();
 
@@ -130,7 +131,7 @@ describe.each([
   });
 
   it("applies correctly even if the pokemon's move is delayed / charging", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const leadPokemon = game.field.getPlayerPokemon();
 
@@ -143,7 +144,7 @@ describe.each([
   it("applies correctly even if the pokemon's move misses", async () => {
     game.override.enemyMoveset(MoveId.SPLASH);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const leadPokemon = game.field.getPlayerPokemon();
 
@@ -159,7 +160,7 @@ describe.each([
   it("applies correctly even if the pokemon's move is protected against", async () => {
     game.override.enemyMoveset(MoveId.PROTECT);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const leadPokemon = game.field.getPlayerPokemon();
 
@@ -172,7 +173,7 @@ describe.each([
   it("applies correctly even if the pokemon's move fails because of type immunity", async () => {
     game.override.enemySpecies(SpeciesId.GASTLY);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const leadPokemon = game.field.getPlayerPokemon();
 
@@ -183,7 +184,7 @@ describe.each([
   });
 
   it("is not applied if pokemon's type is the same as the move's type", async () => {
-    await game.classicMode.startBattle([SpeciesId.SNORLAX]);
+    await game.classicMode.startBattle(SpeciesId.SNORLAX);
 
     const leadPokemon = game.field.getPlayerPokemon();
 
@@ -194,7 +195,7 @@ describe.each([
   });
 
   it("is not applied if pokemon's modified type is the same as the move's type", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const leadPokemon = game.field.getPlayerPokemon();
 
@@ -206,7 +207,7 @@ describe.each([
   });
 
   it("is not applied if pokemon is terastallized", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const leadPokemon = game.field.getPlayerPokemon();
     game.field.forceTera(leadPokemon);
@@ -218,7 +219,7 @@ describe.each([
   });
 
   it("is not applied if pokemon uses struggle", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const leadPokemon = game.field.getPlayerPokemon();
 
@@ -229,7 +230,7 @@ describe.each([
   });
 
   it("is not applied if the pokemon's move fails", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const leadPokemon = game.field.getPlayerPokemon();
 
@@ -242,7 +243,7 @@ describe.each([
   it("applies correctly even if the pokemon's Trick-or-Treat fails", async () => {
     game.override.enemySpecies(SpeciesId.GASTLY);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const leadPokemon = game.field.getPlayerPokemon();
 
@@ -253,7 +254,7 @@ describe.each([
   });
 
   it("applies correctly and the pokemon curses itself", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const leadPokemon = game.field.getPlayerPokemon();
 
@@ -267,8 +268,8 @@ describe.each([
   function testPokemonTypeMatchesDefaultMoveType(pokemon: PlayerPokemon, moveId: MoveId) {
     expect(pokemon.summonData.abilitiesApplied).toContain(ability);
     expect(pokemon.getTypes()).toHaveLength(1);
-    const pokemonType = ElementalType[pokemon.getTypes()[0]],
-      moveType = ElementalType[allMoves.get(moveId).type];
+    const pokemonType = enumValueToKey(ElementalType, pokemon.getTypes()[0]);
+    const moveType = enumValueToKey(ElementalType, allMoves.get(moveId).type);
     expect(pokemonType).toBe(moveType);
   }
 });

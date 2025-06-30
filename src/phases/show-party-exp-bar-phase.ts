@@ -1,15 +1,13 @@
 import { globalScene } from "#app/global-scene";
 import { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import { ExpNotification } from "#enums/exp-notification";
-import { PhaseId } from "#enums/phase-id";
 import { ExpBoosterModifier } from "#modifier/modifier";
-import { PlayerPartyMemberPokemonPhase } from "#phases/abstract-player-party-member-pokemon-phase";
-import { LevelUpPhase } from "#phases/level-up-phase";
+import { PlayerPartyMemberPokemonPhase } from "#phases/base/player-party-member-pokemon-phase";
 import { settings } from "#system/settings-manager";
 import { NumberHolder } from "#utils/common-utils";
 
 export class ShowPartyExpBarPhase extends PlayerPartyMemberPokemonPhase {
-  override readonly id = PhaseId.SHOW_PARTY_EXP_BAR;
+  public override readonly phaseName = "ShowPartyExpBarPhase";
 
   private readonly expValue: number;
 
@@ -32,7 +30,7 @@ export class ShowPartyExpBarPhase extends PlayerPartyMemberPokemonPhase {
     pokemon.addExp(exp.value);
     const newLevel = pokemon.level;
     if (newLevel > lastLevel) {
-      globalScene.phaseManager.unshiftPhase(new LevelUpPhase(this.partyMemberIndex, lastLevel, newLevel));
+      globalScene.phaseManager.createAndUnshiftPhase("LevelUpPhase", this.partyMemberIndex, lastLevel, newLevel);
     }
     pokemon.updateInfo();
 

@@ -43,7 +43,7 @@ import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import PokemonData from "#system/pokemon-data";
 import type { OptionSelectItem } from "#ui/option-select-config";
-import { NumberHolder, isNil } from "#utils/common-utils";
+import { isNil, NumberHolder } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randInt, randItem, randSeedInt, randSeedShuffle } from "#utils/random-utils";
 import i18next from "i18next";
@@ -621,7 +621,7 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
       sprite.setPipelineData("ignoreTimeTint", true);
       sprite.setPipelineData("spriteKey", tradedPokemon.getSpriteKey());
       let key = "spriteColors";
-      if (tradedPokemon.summonData?.speciesForm) {
+      if (tradedPokemon.summonData.speciesForm) {
         key += "Base";
       }
       sprite.pipelineData[key] = tradedPokemon.getSprite().pipelineData[key];
@@ -640,7 +640,7 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
       sprite.setPipelineData("ignoreTimeTint", true);
       sprite.setPipelineData("spriteKey", receivedPokemon.getSpriteKey());
       let key = "spriteColors";
-      if (receivedPokemon.summonData?.speciesForm) {
+      if (receivedPokemon.summonData.speciesForm) {
         key += "Base";
       }
       sprite.pipelineData[key] = receivedPokemon.getSprite().pipelineData[key];

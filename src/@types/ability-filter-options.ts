@@ -1,14 +1,13 @@
-// -- start tsdoc imports --
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { PokemonWaveData } from "#types/pokemon-wave-data";
-// -- end tsdoc imports --
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 export interface AbilityFilterOptions {
   /**
    * If `true`, returns the Pokemon's base Ability whether or
    * not it was overridden in battle (e.g. by Skill Swap or Entrainment)
    */
-  baseOnly?: boolean;
+  bypassSummonData?: boolean;
   /**
    * If `true`, filters out Abilities that have not been revealed to the field yet
    * @see {@linkcode PokemonWaveData.abilitiesRevealed}

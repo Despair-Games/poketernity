@@ -394,8 +394,8 @@ const allTextStyles: Record<TextStyle, ModularTextStyleOptions> = {
   [TextStyle.STATS_LABEL]: {
     color: TextColor.ORANGE_DARK_SHADOW,
     fontStyle: {
-      [DEFAULT_LANGUAGE_KEY]: FontStyle.DEFAULT_FONT_96PX_BIG_SHADOW,
-      ["de"]: FontStyle.DEFAULT_FONT_80PX,
+      [DEFAULT_LANGUAGE_KEY]: FontStyle.DEFAULT_FONT_96PX_BIG_SHADOW_EXTRA_SPACING,
+      ["de"]: FontStyle.DEFAULT_FONT_80PX_EXTRA_SPACING,
     },
   },
   [TextStyle.STATS_VALUE]: {
@@ -404,8 +404,8 @@ const allTextStyles: Record<TextStyle, ModularTextStyleOptions> = {
       [UiTheme.LIGHT]: TextColor.DARK_GREY_LIGHT_SHADOW,
     },
     fontStyle: {
-      [DEFAULT_LANGUAGE_KEY]: FontStyle.DEFAULT_FONT_96PX,
-      ["de"]: FontStyle.DEFAULT_FONT_80PX,
+      [DEFAULT_LANGUAGE_KEY]: FontStyle.DEFAULT_FONT_96PX_EXTRA_SPACING,
+      ["de"]: FontStyle.DEFAULT_FONT_80PX_EXTRA_SPACING,
     },
   },
 

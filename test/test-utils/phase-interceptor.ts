@@ -1,6 +1,6 @@
 import type BattleScene from "#app/battle-scene";
 import { Phase } from "#app/phase";
-import { UiMode } from "#enums/ui-mode";
+import type { UiMode } from "#enums/ui-mode";
 import { AttemptRunPhase } from "#phases/attempt-run-phase";
 import { BattleEndPhase } from "#phases/battle-end-phase";
 import { BerryPhase } from "#phases/berry-phase";
@@ -37,6 +37,7 @@ import { PartyExpPhase } from "#phases/party-exp-phase";
 import { PartyHealPhase } from "#phases/party-heal-phase";
 import { PostActionPhase } from "#phases/post-action-phase";
 import { PostGameOverPhase } from "#phases/post-game-over-phase";
+import { PostKnockoutPhase } from "#phases/post-knockout-phase";
 import { PostSummonPhase } from "#phases/post-summon-phase";
 import { QuietFormChangePhase } from "#phases/quiet-form-change-phase";
 import { RevivalBlessingPhase } from "#phases/revival-blessing-phase";
@@ -61,6 +62,7 @@ import { UnavailablePhase } from "#phases/unavailable-phase";
 import { UnlockPhase } from "#phases/unlock-phase";
 import { VictoryPhase } from "#phases/victory-phase";
 import { ErrorInterceptor } from "#test/test-utils/error-interceptor";
+import type { PhaseClass, PhaseKey } from "#types/phase-types";
 import { UI } from "#ui/ui";
 import { expect } from "vitest";
 
@@ -79,6 +81,8 @@ export interface PromptHandler {
  * make sure that this list contains said phase AFTER all of its subclasses.
  * This way, the phase's `prototype.start` is properly preserved during
  * `initPhases()` so that its subclasses can use `super.start()` properly.
+ *
+ * @todo Can this be merged with the `PHASES` map in `phases/phases.ts`?
  */
 const PHASES = [
   LoginPhase,
@@ -140,13 +144,10 @@ const PHASES = [
   UnlockPhase,
   PostGameOverPhase,
   RevivalBlessingPhase,
+  PostKnockoutPhase,
 ] as const;
 
-type PhaseClass = (typeof PHASES)[number];
-/** This just evaluates to `string`, but is validated in {@linkcode PhaseInterceptor.getPhaseName} */
-type PhaseString = PhaseClass["name"];
-
-export type PhaseInterceptorPhase = PhaseClass | PhaseString;
+export type PhaseInterceptorPhase = PhaseClass | PhaseKey;
 
 interface PhaseStub {
   start(): void;
@@ -154,15 +155,16 @@ interface PhaseStub {
 }
 
 interface InProgressStub {
-  name: PhaseString;
+  name: PhaseKey;
   callback(): void;
   onError(error: any): void;
 }
 
 export class PhaseInterceptor {
   public scene: BattleScene;
-  public phases: Record<PhaseString, PhaseStub> = {};
-  public log: PhaseString[];
+  // @ts-expect-error - Initialized in `this.initPhases`
+  public phases: Record<PhaseKey, PhaseStub> = {};
+  public log: PhaseKey[];
   private onHold: PhaseClass[];
   private interval: NodeJS.Timeout;
   private promptInterval: NodeJS.Timeout;
@@ -216,8 +218,8 @@ export class PhaseInterceptor {
    * @param runTarget - Whether or not to run the target phase.
    * @returns A promise that resolves when the transition is complete.
    */
-  public async to(phaseTo: PhaseString, runTarget: boolean = true): Promise<void> {
-    return new Promise(async (resolve, reject) => {
+  public async to(phaseTo: PhaseKey, runTarget: boolean = true): Promise<void> {
+    return new Promise((resolve, reject) => {
       ErrorInterceptor.getInstance().add(this);
       const targetName = this.getPhaseName(phaseTo);
       this.intervalRun = setInterval(async () => {
@@ -269,7 +271,7 @@ export class PhaseInterceptor {
           }
           clearInterval(interval);
           this.inProgress = {
-            name: currentPhase.name,
+            name: currentPhase.name as PhaseKey,
             callback: () => {
               ErrorInterceptor.getInstance().remove(this);
               return resolve();
@@ -326,7 +328,7 @@ export class PhaseInterceptor {
    * @param phase - The phase to start.
    */
   startPhase(phase: PhaseClass): void {
-    this.log.push(phase.name);
+    this.log.push(phase.name as PhaseKey);
     this.onHold.push(phase);
   }
 
@@ -347,13 +349,14 @@ export class PhaseInterceptor {
 
   /**
    * m2m to set mode.
+   * TODO: not sure what the goal of this is since there are other ui set mode functions
+   * which don't get the same treatment (like `setOverlayMode`).
    * @param mode - The {@linkcode UiMode} to set.
    * @param args - Additional arguments to pass to the original method.
    */
   setMode(mode: UiMode, ...args: unknown[]): Promise<void> {
     const currentPhase = this.scene.phaseManager.getCurrentPhase();
     const instance = this.scene.ui;
-    console.log("setMode", `${UiMode[mode]} (=${mode})`, args);
     const ret = this.originalSetMode.apply(instance, [mode, ...args]);
     if (currentPhase && !this.phases[currentPhase.constructor.name]) {
       throw new Error(

@@ -4,8 +4,8 @@ import TouchControl from "#app/touch-controls";
 import pad_xbox360 from "#inputs/pad-xbox360";
 import { holdOn } from "#test/test-utils/game-manager-utils";
 import { RESOURCES_FOLDER_PATH } from "#test/test-utils/test-utils";
-import { JSDOM } from "jsdom";
 import fs from "node:fs";
+import { JSDOM } from "jsdom";
 import Phaser from "phaser";
 
 interface LogEntry {

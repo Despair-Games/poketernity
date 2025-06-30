@@ -1,8 +1,6 @@
-// -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { initGameSpeed } from "#system/game-speed";
-/* eslint-enable @typescript-eslint/no-unused-vars */
-// -- end tsdoc imports --
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { MAX_STAT_STAGE, MIN_STAT_STAGE } from "#constants/game-constants";
 import type { Pokemon } from "#field/pokemon";
@@ -231,4 +229,26 @@ export function calcAccuracyMultiplier(userAccStage: number, targetEvaStage: num
   }
 
   return 1;
+}
+
+/**
+ * Returns the name of the key that matches the enum [object] value.
+ * @param input - The enum [object] to check
+ * @param val - The value to get the key of
+ * @returns The name of the key with the specified value
+ * @example
+ * const thing = {
+ *   one: 1,
+ *   two: 2,
+ * } as const;
+ * console.log(enumValueToKey(thing, thing.two)); // output: "two"
+ * @throws An `Error` if an invalid enum value is passed to the function
+ */
+export function enumValueToKey<T extends Record<string, string | number>>(input: T, val: T[keyof T]): keyof T {
+  for (const [key, value] of Object.entries(input)) {
+    if (val === value) {
+      return key as keyof T;
+    }
+  }
+  throw new Error(`Invalid value passed to \`enumValueToKey\`! Value: ${val}`);
 }

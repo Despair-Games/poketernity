@@ -15,7 +15,6 @@ interface AddBattlerTagAttrOptions extends ChanceBasedMoveEffectAttrOptions {
 
 /**
  * Attribute to add a battler tag to a Pokemon of a given {@linkcode BattlerTagType | type}.
- * @extends ChanceBasedMoveEffectAttr
  * @see {@linkcode BattlerTag}
  */
 export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
@@ -32,7 +31,7 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
   /**
    * If `true`, causes the move to fail if the target already
    * has a tag of the same type.
-   * @default false
+   * @defaultValue `false`
    */
   public get failOnOverlap() {
     return this.options?.failOnOverlap ?? false;
@@ -40,7 +39,7 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
 
   /**
    * The minimum number of turns the tag is active
-   * @default 0
+   * @defaultValue `0`
    */
   public get turnCountMin() {
     return this.options?.turnCountMin ?? 0;
@@ -48,7 +47,7 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
 
   /**
    * The maximum number of turns the tag is active.
-   * @default turnCountMin
+   * @defaultValue {@linkcode turnCountMin}
    */
   public get turnCountMax() {
     return this.options?.turnCountMax ?? this.turnCountMin;
@@ -64,7 +63,7 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
   }
 
   override getCondition(): MoveConditionFunc | null {
-    return this.failOnOverlap ? (user, target, _move) => !(this.selfTarget ? user : target).getTag(this.tagType) : null;
+    return this.failOnOverlap ? (user, target, _move) => !(this.selfTarget ? user : target).hasTag(this.tagType) : null;
   }
 
   getTagTargetBenefitScore(): number {
@@ -175,7 +174,7 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
       case BattlerTagType.SILK_TRAP:
       case BattlerTagType.BANEFUL_BUNKER:
       case BattlerTagType.BURNING_BULWARK:
-      case BattlerTagType.FLYING:
+      case BattlerTagType.MID_AIR:
       case BattlerTagType.UNDERGROUND:
       case BattlerTagType.UNDERWATER:
       case BattlerTagType.HIDDEN:

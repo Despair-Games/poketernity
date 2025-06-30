@@ -16,7 +16,6 @@ import i18next from "i18next";
  * Tag representing the "charge phase" of Beak Blast.
  * Pokemon with this tag will burn any attacker that makes contact with it.
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Beak_Blast_(move) | Beak Blast}
- * @extends BattlerTag
  */
 export class BeakBlastChargingTag extends BattlerTag {
   constructor() {
@@ -33,7 +32,8 @@ export class BeakBlastChargingTag extends BattlerTag {
     new MoveChargeAnim(ChargeAnim.BEAK_BLAST_CHARGING, this.sourceMoveId, pokemon).play();
 
     // Queue Beak Blast's header message
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("moveTriggers:startedHeatingUpBeak", { pokemonName: getPokemonNameWithAffix(pokemon) }),
     );
   }

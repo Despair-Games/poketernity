@@ -5,13 +5,11 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
-import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 
 /**
  * BattlerTag representing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Rage_(move) | Rage}.
  * The owner gains +1 Attack after receiving an attack as long as
  * Rage is continuously used.
- * @extends BattlerTag
  */
 export class RageTag extends BattlerTag {
   constructor() {
@@ -29,8 +27,12 @@ export class RageTag extends BattlerTag {
       const lastAttackReceived = pokemon.turnData.attacksReceived[pokemon.turnData.attacksReceived.length - 1];
       const damageReceived = lastAttackReceived?.damage ?? 0;
       if (damageReceived > 0) {
-        globalScene.phaseManager.unshiftPhase(
-          new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [Stat.ATK], 1),
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "StatStageChangePhase",
+          pokemon.getBattlerIndex(),
+          pokemon,
+          [Stat.ATK],
+          1,
         );
       }
       pokemon.addTag(BattlerTagType.RAGE, undefined, MoveId.RAGE, pokemon.id);

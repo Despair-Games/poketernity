@@ -48,7 +48,7 @@ describe("Move Effect Scores - Ability Copy", () => {
       async ({ abilityId }) => {
         game.override.enemyAbility(abilityId);
 
-        await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+        await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
         revealAllAbilities(game.scene);
         const enemy = game.field.getEnemyPokemon();
@@ -62,7 +62,7 @@ describe("Move Effect Scores - Ability Copy", () => {
       async ({ abilityId }) => {
         game.override.ability(abilityId);
 
-        await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+        await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
         revealAllAbilities(game.scene);
         const enemy = game.field.getEnemyPokemon();
@@ -77,7 +77,7 @@ describe("Move Effect Scores - Ability Copy", () => {
     async ({ abilityId }) => {
       game.override.battleType("double").enemyMoveset([MoveId.DOODLE, MoveId.SPLASH, MoveId.TACKLE, MoveId.GROWL]);
 
-      await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
+      await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
       const [enemy1, enemy2] = game.scene.getEnemyField();
       game.field.mockAbility(enemy2, abilityId);

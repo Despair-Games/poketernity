@@ -36,7 +36,7 @@ describe("Moves - Mat Block", () => {
   });
 
   test("should protect the user and allies from attack moves", async () => {
-    await game.startBattle([SpeciesId.CHARIZARD, SpeciesId.BLASTOISE]);
+    await game.classicMode.startBattle(SpeciesId.CHARIZARD, SpeciesId.BLASTOISE);
 
     const leadPokemon = game.scene.getPlayerField();
 
@@ -54,7 +54,7 @@ describe("Moves - Mat Block", () => {
   test("should not protect the user and allies from status moves", async () => {
     game.override.enemyMoveset([MoveId.GROWL]);
 
-    await game.startBattle([SpeciesId.CHARIZARD, SpeciesId.BLASTOISE]);
+    await game.classicMode.startBattle(SpeciesId.CHARIZARD, SpeciesId.BLASTOISE);
 
     const leadPokemon = game.scene.getPlayerField();
 
@@ -70,7 +70,7 @@ describe("Moves - Mat Block", () => {
   });
 
   test("should fail when used after the first turn", async () => {
-    await game.startBattle([SpeciesId.BLASTOISE, SpeciesId.CHARIZARD]);
+    await game.classicMode.startBattle(SpeciesId.BLASTOISE, SpeciesId.CHARIZARD);
 
     const leadPokemon = game.scene.getPlayerField();
 

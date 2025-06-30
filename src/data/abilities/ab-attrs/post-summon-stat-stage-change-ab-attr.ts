@@ -7,7 +7,6 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { BattleStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
-import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import { BooleanHolder } from "#utils/common-utils";
 
 export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
@@ -33,23 +32,33 @@ export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
     const { phaseManager } = globalScene;
 
     if (this.selfTarget) {
-      phaseManager.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, this.stats, this.stages));
+      phaseManager.createAndUnshiftPhase(
+        "StatStageChangePhase",
+        pokemon.getBattlerIndex(),
+        pokemon,
+        this.stats,
+        this.stages,
+      );
       return true;
     }
 
     for (const opponent of pokemon.getOpponents()) {
       const cancelled = new BooleanHolder(false);
       if (this.intimidate) {
-        if (opponent.getTag(BattlerTagType.SUBSTITUTE)) {
-          return false;
+        if (opponent.hasTag(BattlerTagType.SUBSTITUTE)) {
+          continue;
         }
 
         applyAbAttrs<IntimidateImmunityAbAttr>(AbAttrFlag.INTIMIDATE_IMMUNITY, opponent, simulated, cancelled);
       }
 
       if (!cancelled.value) {
-        phaseManager.unshiftPhase(
-          new StatStageChangePhase(opponent.getBattlerIndex(), pokemon, this.stats, this.stages),
+        phaseManager.createAndUnshiftPhase(
+          "StatStageChangePhase",
+          opponent.getBattlerIndex(),
+          pokemon,
+          this.stats,
+          this.stages,
         );
       }
 

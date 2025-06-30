@@ -7,7 +7,6 @@ import { MoveEffectAttr } from "#moves/move-effect-attr";
 /**
  * Attribute to clear active weather of a given type from the field.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Defog_(move) | Defog}.
- * @extends MoveEffectAttr
  */
 export class ClearWeatherAttr extends MoveEffectAttr {
   private weatherType: WeatherType;

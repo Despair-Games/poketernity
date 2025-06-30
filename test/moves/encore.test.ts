@@ -1,5 +1,5 @@
 import { AbilityId } from "#enums/ability-id";
-import { BattlerIndex } from "#enums/battler-index";
+import { BattlerIndex, type FieldBattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
@@ -37,7 +37,7 @@ describe("Moves - Encore", () => {
   });
 
   it("should prevent the target from using any move except the last used move", async () => {
-    await game.classicMode.startBattle([SpeciesId.SNORLAX]);
+    await game.classicMode.startBattle(SpeciesId.SNORLAX);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -65,7 +65,7 @@ describe("Moves - Encore", () => {
     ])("$name", async ({ moveId, delay }) => {
       game.override.enemyMoveset(moveId);
 
-      await game.classicMode.startBattle([SpeciesId.SNORLAX]);
+      await game.classicMode.startBattle(SpeciesId.SNORLAX);
 
       const playerPokemon = game.scene.getPlayerPokemon()!;
       const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -78,7 +78,9 @@ describe("Moves - Encore", () => {
 
       game.move.select(MoveId.ENCORE);
 
-      const turnOrder = delay ? [BattlerIndex.PLAYER, BattlerIndex.ENEMY] : [BattlerIndex.ENEMY, BattlerIndex.PLAYER];
+      const turnOrder: FieldBattlerIndex[] = delay
+        ? [BattlerIndex.PLAYER, BattlerIndex.ENEMY]
+        : [BattlerIndex.ENEMY, BattlerIndex.PLAYER];
       game.setTurnOrder(turnOrder);
 
       await game.toEndOfTurn();
@@ -88,9 +90,9 @@ describe("Moves - Encore", () => {
   });
 
   it("Pokemon under both Encore and Torment should alternate between Struggle and restricted move", async () => {
-    const turnOrder = [BattlerIndex.ENEMY, BattlerIndex.PLAYER];
+    const turnOrder: FieldBattlerIndex[] = [BattlerIndex.ENEMY, BattlerIndex.PLAYER];
     game.override.moveset([MoveId.ENCORE, MoveId.TORMENT, MoveId.SPLASH]);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemyPokemon = game.field.getEnemyPokemon();
     game.move.select(MoveId.ENCORE);

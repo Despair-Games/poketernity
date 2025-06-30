@@ -2,7 +2,7 @@
 
 Pokéternity is a browser based Pokémon fangame heavily inspired by the roguelite genre. Battle endlessly while gathering stacking items, exploring many different biomes, fighting trainers, bosses, and more!
 
-# Contributing
+## 🤝 Contributing
 
 Make sure to read our [Code of Conduct](./CODE_OF_CONDUCT.md) before contributing!
 
@@ -14,29 +14,29 @@ If you have the motivation and experience with Typescript/Javascript (or are wil
 
 #### Prerequisites
 
-- node: 22.14.0
-- npm: [how to install](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- node: 22.14.0 - [manage with pnpm](https://pnpm.io/cli/env) | [manage with fnm](https://github.com/Schniz/fnm) | [manage with nvm](https://github.com/nvm-sh/nvm)
+- pnpm: 10.x - [how to install](https://pnpm.io/installation) (not recommended to install via `npm` on Windows native) | [alternate method - volta.sh](https://volta.sh/)
 - git: [how to install](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) (needed to retrieve the translations)
 
 #### Running Locally
 
-1. Clone the repo through git and in the root directory run `npm install`.
+1. Clone the repo through git and in the root directory run `pnpm install` (alias `pnpm i`).
 If the install process seems to hang at the post-install step, you likely just need to press `Enter` for it continue.
 <!--   - _if you run into any errors, reach out in [TBD]_-->
-2. Run `npm run start:dev` to locally run the project. You can then access it from the same machine by putting `http://localhost:8000/` in your browser's address bar.
-If you want to access the game from other devices on your local network, you can run `npm run start:dev -- --host` instead. You can then connect via `http://[IP of your device]:8000/` (e.g.: `http://192.168.1.101:8000/`).
+2. Run `pnpm start:dev` to locally run the project. You can then access it from the same machine by putting `http://localhost:8000/` in your browser's address bar.
+If you want to access the game from other devices on your local network, you can run `pnpm start:dev --host` instead. You can then connect via `http://[IP of your device]:8000/` (e.g.: `http://192.168.1.101:8000/`).
 
 ### Development Guidelines
 
 #### Continuous Integration
 
 Github Workflows are used on every PR to enforce the test suite being successful, proper linting, no compilation errors and no circular dependencies in the codebase.
-- Use `npm run typecheck` to invoke the Typescript compiler to check for basic code errors.
-- Use `npm run depcruise` to check the codebase for any runtime circular dependency.
-- Use `npm run docs` to generate html documentation for the game, which can then be found in the `typedoc` folder.
-- Use `npm run test:silent` to run the full test suite.
+- Use `pnpm typecheck` to invoke the Typescript compiler to check for basic code errors.
+- Use `pnpm depcruise` to check the codebase for any runtime circular dependency.
+- Use `pnpm run docs` to generate html documentation for the game, which can then be found in the `typedoc` folder.
+- Use `pnpm test:silent` to run the full test suite.
 
-We are using [Vitest](https://vitest.dev/) as a testing framework for the game. Most PRs are expected to add tests for their new features or bug fixes to avoid future regression. A basic test file for a variety of cases can be created by running the `npm run test:create` command.
+We are using [Vitest](https://vitest.dev/) as a testing framework for the game. Most PRs are expected to add tests for their new features or bug fixes to avoid future regression. A basic test file for a variety of cases can be created by running the `pnpm test:create` command.
 
 #### Code-Style
 
@@ -44,26 +44,42 @@ We are using [Prettier](https://prettier.io/) to format our code. It will run au
 
 #### Linting
 
-We're using [ESLint](https://eslint.org/docs/latest/rules/) plus the [ESLint Stylistic](https://eslint.style/rules) and [Typescript ESLint](https://typescript-eslint.io/rules/) plugins for linting. It will run automatically via the pre-commit hook, but if you would like to run it manually you can use the `npm run eslint` script. To view the currently applied ESLint rules, check out the [eslint.config.js](./eslint.config.js) file.
+##### ESLint
 
-#### Localization
+We are _still_ using [ESLint](https://eslint.org/docs/latest/rules/) plus the [ESLint Stylistic](https://eslint.style/rules) and [Typescript ESLint](https://typescript-eslint.io/rules/) plugins for linting. It will run automatically via the pre-commit hook, but if you would like to run it manually you can use the `pnpm eslint` script. To view the currently applied ESLint rules, check out the [eslint.config.js](./eslint.config.js) file.
+
+##### Biome-Lint
+
+We started transitioning over to [Biome](https://biomejs.dev/) as it's significantly faster (~15x) than ESLint. 
+
+> [!NOTE]
+> _We still require ESLint as some rules aren't covered by Biome yet. The plan is to migrate fully to Biome in the long run._
+
+##### Dependency-Cruiser
+
+We use [dependency-cruiser](https://github.com/sverweij/dependency-cruiser) to check for runtime circular dependencies.
+
+> [!TIP]
+> Use `npm run depcruise` to check the codebase for any runtime circular dependency.
+
+#### 🌐 Localization
 
 Pokéternity's translations are managed under a dedicated repository at https://github.com/Despair-Games/poketernity-locales/. There is a specific process involved in making PRs that impacts the in game text, which can be found in the [localization.md](./docs/localization.md) file.
 
 
-<!-- ### 📚 Documentation
+<!-- ## 📚 Documentation
 
 You can find the auto-generated documentation [here](https://despair-games.github.io/poketernity/main/index.html).
 For information on enemy AI, check out the [enemy-ai.md](./docs/enemy-ai.md) file.
 For detailed guidelines on documenting your code, refer to the [comments.md](./docs/comments.md) file. -->
 
-### ❔ FAQ
+## ❔ FAQ
 
-**How do I test a new **\_\_\_**?**
+### How do I test a new \_\_\_?
 
 - In the `src/overrides.ts` file there are overrides for most values you'll need to change for testing
 
-**How do I retrieve the translations?**
+### How do I retrieve the translations?
 
 - The translations are found in a [dedicated repository](https://github.com/despair-games/poketernity-locales) and are applied as a submodule in this project.
 - The command to retrieve the translations is `git submodule update --init --recursive`. <!--If you still struggle to get it working, please reach out in [TBD].-->
@@ -74,8 +90,9 @@ For detailed guidelines on documenting your code, refer to the [comments.md](./d
 - Check out [Github Issues](https://github.com/despair-games/poketernity/issues) to see how can you help us!
 - Check out our [Checkup Board](https://github.com/orgs/Despair-Games/projects/17/views/1) to see which abilities/moves etc. need to checked and covered!
 
-# 📝 Credits
+## 📝 Credits
 
+> [!IMPORTANT]
 > If this project contains assets you have produced and you do not see your name, **please** reach out [here on GitHub](https://github.com/despair-games/poketernity/issues/new).
 
 Thank you to all the wonderful people that have contributed to the project! You can find the credits [here](./CREDITS.md).

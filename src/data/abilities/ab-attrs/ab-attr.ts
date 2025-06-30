@@ -1,8 +1,6 @@
-// -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { ShowAbilityPhase } from "#phases/show-ability-phase";
-/* eslint-enable @typescript-eslint/no-unused-vars */
-// -- end tsdoc imports --
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import type { Ability } from "#abilities/ability";
 import { AbAttrFlag } from "#enums/ab-attr-flag";

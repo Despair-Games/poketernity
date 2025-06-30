@@ -1,15 +1,14 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTag } from "#battler-tags/battler-tag";
-import { getStatusEffectHealText } from "#app/utils/status-effect-utils";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
+import { getStatusEffectHealText } from "#utils/status-effect-utils";
 
 /**
  * Tag used to heal the user of Psycho Shift of its status effect if Psycho Shift succeeds in transferring its status effect to the target Pokemon
- * @extends BattlerTag
  */
 export class PsychoShiftTag extends BattlerTag {
   constructor() {
@@ -22,7 +21,8 @@ export class PsychoShiftTag extends BattlerTag {
    */
   override lapse(pokemon: Pokemon, _lapseType: BattlerTagLapseType): boolean {
     if (pokemon.hasNonVolatileStatusEffect() && pokemon.isActive(true)) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         getStatusEffectHealText(pokemon.getStatusEffect(), getPokemonNameWithAffix(pokemon)),
       );
       pokemon.resetStatus();

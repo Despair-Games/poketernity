@@ -15,7 +15,6 @@ import i18next from "i18next";
  * Applies up to 2 layers of Toxic Spikes, poisoning or badly poisoning any Pokémon who is
  * summoned into this trap if 1 or 2 layers of Toxic Spikes respectively are up. Poison-type
  * Pokémon summoned into this trap remove it entirely.
- * @extends EntryHazardTag
  */
 export class ToxicSpikesTag extends EntryHazardTag {
   private neutralized: boolean;
@@ -30,7 +29,8 @@ export class ToxicSpikesTag extends EntryHazardTag {
 
     const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
     if (!quiet && source) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("arenaTag:toxicSpikesOnAdd", {
           moveName: this.getMoveName(),
           opponentDesc: source.getOpponentDescriptor(),
@@ -53,7 +53,8 @@ export class ToxicSpikesTag extends EntryHazardTag {
       if (pokemon.isOfType(ElementalType.POISON)) {
         this.neutralized = true;
         if (globalScene.arena.removeTag(this.tagType)) {
-          globalScene.phaseManager.queueMessagePhase(
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "MessagePhase",
             i18next.t("arenaTag:toxicSpikesActivateTrapPoison", {
               pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
               moveName: this.getMoveName(),

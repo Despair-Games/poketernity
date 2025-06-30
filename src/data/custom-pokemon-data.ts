@@ -6,6 +6,7 @@ import { isNil } from "#utils/common-utils";
 /**
  * Data that can customize a Pokemon in non-standard ways from its Species
  * Currently only used by Mystery Encounters and Mints.
+ * @todo Make this an interface
  */
 export class CustomPokemonData {
   public spriteScale: number;

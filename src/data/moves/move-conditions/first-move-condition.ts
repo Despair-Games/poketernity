@@ -8,4 +8,4 @@ import type { MoveConditionFunc } from "#types/move-condition-func";
  * @param _move - (Unused) The {@linkcode Move} being used
  * @returns `true` if the condition is met
  */
-export const firstMoveCondition: MoveConditionFunc = (user, _target, _move) => user.summonData?.waveTurnCount === 1;
+export const firstMoveCondition: MoveConditionFunc = (user, _target, _move) => user.summonData.waveTurnCount === 1;

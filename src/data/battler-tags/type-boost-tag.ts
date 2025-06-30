@@ -1,3 +1,7 @@
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
+import type { TYPE_BOOST_TAG_TYPES } from "#constants/battler-tag-constants";
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
+
 import { BattlerTag } from "#battler-tags/battler-tag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";
@@ -7,7 +11,9 @@ import type { Pokemon } from "#field/pokemon";
 
 /**
  * Tag to amplify the power of the owner's attacks of a specified type.
- * @extends BattlerTag
+ *
+ * @privateRemarks
+ * Tags that use or subclass this should be added to {@linkcode TYPE_BOOST_TAG_TYPES}
  */
 export class TypeBoostTag extends BattlerTag {
   public boostedType: ElementalType;

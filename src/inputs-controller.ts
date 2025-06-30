@@ -2,7 +2,7 @@ import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import TouchControl from "#app/touch-controls";
 import { Button } from "#enums/button";
-import { Device } from "#enums/devices";
+import { Device } from "#enums/device";
 import type { SettingGamepad } from "#enums/setting-gamepad";
 import type { SettingKeyboard } from "#enums/setting-keyboard";
 import { UiMode } from "#enums/ui-mode";
@@ -11,12 +11,12 @@ import { assign, getButtonWithKeycode, getIconForLatestInput, swap } from "#inpu
 import pad_dualshock from "#inputs/pad-dualshock";
 import pad_generic from "#inputs/pad-generic";
 import pad_procon from "#inputs/pad-procon";
-import pad_unlicensedSNES from "#inputs/pad-unlicensedSNES";
+import pad_unlicensedSNES from "#inputs/pad-unlicensed-snes";
 import pad_xbox360 from "#inputs/pad-xbox360";
 import { settings } from "#system/settings-manager";
 import type { SettingsUpdateEventArgs } from "#types/settings";
 import { MoveTouchControlsHandler } from "#ui/move-touch-controls-handler";
-import { deepCopy, getTSEnumValues } from "#utils/common-utils";
+import { deepCopy } from "#utils/common-utils";
 import Phaser from "phaser";
 
 export interface DeviceMapping {
@@ -70,10 +70,10 @@ const repeatInputDelayMillis = 250;
  * providing a unified interface for all input-related interactions.
  */
 export class InputsController {
-  private gamepads: Phaser.Input.Gamepad.Gamepad[] = new Array();
+  private gamepads: Phaser.Input.Gamepad.Gamepad[] = [];
   public events: Phaser.Events.EventEmitter;
 
-  private buttonLock: Button[] = new Array();
+  private buttonLock: Button[] = [];
 
   // TODO interactions and configs are defined as maps but used as objects
   private interactions: Map<Button, Map<string, boolean>> = new Map();
@@ -82,10 +82,10 @@ export class InputsController {
   public gamepadSupport: boolean = true;
   public selectedDevice;
 
-  private disconnectedGamepads: string[] = new Array();
+  private disconnectedGamepads: string[] = [];
 
   public lastSource: string = "keyboard";
-  private inputInterval: NodeJS.Timeout[] = new Array();
+  private inputInterval: NodeJS.Timeout[] = [];
   private touchControls: TouchControl;
   public moveTouchControlsHandler: MoveTouchControlsHandler;
 
@@ -105,7 +105,7 @@ export class InputsController {
       [Device.KEYBOARD]: "default",
     };
 
-    for (const b of getTSEnumValues(Button)) {
+    for (const b of Object.values(Button)) {
       this.interactions[b] = {
         pressTime: false,
         isPressed: false,

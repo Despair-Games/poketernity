@@ -7,7 +7,6 @@ import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute used for Tera Starstorm that changes the move type to Stellar if the user is Terastallized.
- * @extends VariableMoveTypeAttr
  */
 export class TeraStarstormTypeAttr extends VariableMoveTypeAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {

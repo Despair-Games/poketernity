@@ -9,7 +9,6 @@ import i18next from "i18next";
 
 /**
  * Class for abilities that make drain moves deal damage to user instead of healing them.
- * @extends PostDefendAbAttr
  * @see {@linkcode applyPostDefend}
  */
 export class ReverseDrainAbAttr extends PostDefendAbAttr {
@@ -32,7 +31,8 @@ export class ReverseDrainAbAttr extends PostDefendAbAttr {
   public override apply(_pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     if (move.hasAttr(HitHealAttr)) {
       if (!simulated) {
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           i18next.t("abilityTriggers:reverseDrain", { pokemonNameWithAffix: getPokemonNameWithAffix(attacker) }),
         );
       }

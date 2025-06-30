@@ -1,3 +1,3 @@
 import type { BattleCommand } from "#enums/battle-command";
 
-export type FightCommand = BattleCommand.FIGHT | BattleCommand.TERA;
+export type FightCommand = typeof BattleCommand.FIGHT | typeof BattleCommand.TERA;

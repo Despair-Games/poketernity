@@ -5,7 +5,6 @@ import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute to modify move damage to a fixed value.
- * @extends MoveAttr
  * @see {@linkcode getDamage}
  */
 export class FixedDamageAttr extends MoveAttr {

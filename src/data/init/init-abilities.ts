@@ -6,6 +6,7 @@ import { AlwaysHitAbAttr } from "#abilities/always-hit-ab-attr";
 import { AnticipationAbAttr } from "#abilities/anticipation-ab-attr";
 import { ArenaTrapAbAttr } from "#abilities/arena-trap-ab-attr";
 import { AttackTypeImmunityAbAttr } from "#abilities/attack-type-immunity-ab-attr";
+import { BadDreamsAbAttr } from "#abilities/bad-dreams-ab-attr";
 import { BattlerTagImmunityAbAttr } from "#abilities/battler-tag-immunity-ab-attr";
 import { BlockCritAbAttr } from "#abilities/block-crit-ab-attr";
 import { BlockItemTheftAbAttr } from "#abilities/block-item-theft-ab-attr";
@@ -123,7 +124,6 @@ import { PostTeraFormChangeClearWeatherTerrainAbAttr } from "#abilities/post-ter
 import { PostTeraFormChangeStatChangeAbAttr } from "#abilities/post-tera-form-change-stat-change-ab-attr";
 import { PostTerrainChangeAddBattlerTagAbAttr } from "#abilities/post-terrain-change-add-battler-tag-ab-attr";
 import { PostTurnFormChangeAbAttr } from "#abilities/post-turn-form-change-ab-attr";
-import { PostTurnHurtIfSleepingAbAttr } from "#abilities/post-turn-hurt-if-sleeping-ab-attr";
 import { PostTurnLootAbAttr } from "#abilities/post-turn-loot-ab-attr";
 import { PostTurnResetStatusAbAttr } from "#abilities/post-turn-reset-status-ab-attr";
 import { PostTurnStatusHealAbAttr } from "#abilities/post-turn-status-heal-ab-attr";
@@ -133,7 +133,6 @@ import { PostWeatherChangeAddBattlerTagAbAttr } from "#abilities/post-weather-ch
 import { PostWeatherChangeFormChangeAbAttr } from "#abilities/post-weather-change-form-change-ab-attr";
 import { PostWeatherLapseDamageAbAttr } from "#abilities/post-weather-lapse-damage-ab-attr";
 import { PostWeatherLapseHealAbAttr } from "#abilities/post-weather-lapse-heal-ab-attr";
-import { PreDefendFullHpEndureAbAttr } from "#abilities/pre-defend-full-hp-endure-ab-attr";
 import { PreSwitchOutClearWeatherAbAttr } from "#abilities/pre-switch-out-clear-weather-ab-attr";
 import { PreSwitchOutFormChangeAbAttr } from "#abilities/pre-switch-out-form-change-ab-attr";
 import { PreSwitchOutHealAbAttr } from "#abilities/pre-switch-out-heal-ab-attr";
@@ -158,6 +157,7 @@ import { StatMultiplierAbAttr } from "#abilities/stat-multiplier-ab-attr";
 import { StatStageChangeCopyAbAttr } from "#abilities/stat-stage-change-copy-ab-attr";
 import { StatStageChangeMultiplierAbAttr } from "#abilities/stat-stage-change-multiplier-ab-attr";
 import { StatusEffectImmunityAbAttr } from "#abilities/status-effect-immunity-ab-attr";
+import { SturdyAbAttr } from "#abilities/sturdy-ab-attr";
 import { SuppressFieldAbilitiesAbAttr } from "#abilities/suppress-field-abilities-ab-attr";
 import { SuppressWeatherEffectAbAttr } from "#abilities/suppress-weather-effect-ab-attr";
 import { SyncEncounterNatureAbAttr } from "#abilities/sync-encounter-nature-ab-attr";
@@ -176,9 +176,9 @@ import { VariableMovePowerBoostAbAttr } from "#abilities/variable-move-power-boo
 import { WeatherBasedSpeedDoublerAbAttr } from "#abilities/weather-based-speed-doubler-ab-attr";
 import { WeightMultiplierAbAttr } from "#abilities/weight-multiplier-ab-attr";
 import { WonderSkinAbAttr } from "#abilities/wonder-skin-ab-attr";
-import { NON_VOLATILE_STATUS_EFFECTS } from "#app/constants/game-constants";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { NON_VOLATILE_STATUS_EFFECTS } from "#constants/game-constants";
 import { allAbilities, allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -188,7 +188,7 @@ import { Gender } from "#enums/gender";
 import { MoveCategory } from "#enums/move-category";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
-import { type EffectiveStat, EFFECTIVE_STATS, getStatKey, Stat } from "#enums/stat";
+import { EFFECTIVE_STATS, type EffectiveStat, getStatKey, Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
@@ -223,7 +223,7 @@ export function initAbilities() {
       .attr(BlockCritAbAttr)
       .ignorable(),
     new Ability(AbilityId.STURDY, 3)
-      .attr(PreDefendFullHpEndureAbAttr)
+      .attr(SturdyAbAttr)
       .attr(BlockOneHitKOAbAttr)
       .ignorable(),
     new Ability(AbilityId.DAMP, 3)
@@ -303,7 +303,7 @@ export function initAbilities() {
         AttackTypeImmunityAbAttr,
         ElementalType.GROUND,
         (pokemon: Pokemon) =>
-          !pokemon.getTag(BattlerTagType.IGNORE_FLYING) && !globalScene.arena.hasTag(ArenaTagType.GRAVITY),
+          !pokemon.hasTag(BattlerTagType.IGNORE_FLYING) && !globalScene.arena.hasTag(ArenaTagType.GRAVITY),
       )
       .ignorable(),
     new Ability(AbilityId.EFFECT_SPORE, 3)
@@ -678,7 +678,8 @@ export function initAbilities() {
       .partial() // Should also boosts stats of ally
       .ignorable(),
     new Ability(AbilityId.BAD_DREAMS, 4)
-      .attr(PostTurnHurtIfSleepingAbAttr),
+      .attr(BadDreamsAbAttr)
+      .edgeCase(), // When falling asleep, due to being drowsy, the ability flyout appears BEFORE the pokemon falls asleep
     new Ability(AbilityId.PICKPOCKET, 5)
       .attr(PostDefendStealHeldItemAbAttr, (target, user, move) => move.checkFlag(MoveFlags.MAKES_CONTACT, user, target))
       .condition(getSheerForceHitDisableAbCondition()),
@@ -803,9 +804,13 @@ export function initAbilities() {
     new Ability(AbilityId.RATTLED, 5)
       .attr(
         PostDefendStatStageChangeAbAttr,
-        (_target, user, move) =>
-          move.category !== MoveCategory.STATUS
-          && [ElementalType.BUG, ElementalType.DARK, ElementalType.GHOST].includes(user.getMoveType(move)),
+        (_target, user, move) => {
+          const rattledTypes: readonly ElementalType[] = [ElementalType.BUG, ElementalType.DARK, ElementalType.GHOST];
+          return (
+            move.category !== MoveCategory.STATUS
+            && rattledTypes.includes(user.getMoveType(move))
+          );
+        },
         Stat.SPD,
         1,
       )
@@ -1282,8 +1287,10 @@ export function initAbilities() {
     new Ability(AbilityId.STEAM_ENGINE, 8)
       .attr(
         PostDefendStatStageChangeAbAttr,
-        (_target, user, move) =>
-          move.category !== MoveCategory.STATUS && [ElementalType.FIRE, ElementalType.WATER].includes(user.getMoveType(move)),
+        (_target, user, move) => {
+          const affectedTypes: readonly ElementalType[] = [ElementalType.FIRE, ElementalType.WATER];
+          return move.category !== MoveCategory.STATUS && affectedTypes.includes(user.getMoveType(move));
+        },
         Stat.SPD,
         6,
       ),

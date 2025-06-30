@@ -51,26 +51,24 @@ import { VariablePowerAttr } from "#moves/variable-power-attr";
 import { VariableTargetAttr } from "#moves/variable-target-attr";
 import type { AbstractConstructor } from "#types/abstract-constructor";
 import type { Constructor } from "#types/constructor";
-import type { Localizable } from "#types/locales";
 import type { MoveConditionFunc } from "#types/move-condition-func";
 import type { nil } from "#types/nil";
 import { BooleanHolder, NumberHolder } from "#utils/common-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
+import { toCamelCaseString } from "#utils/string-utils";
 import i18next from "i18next";
 import { ALLY_TARGET_PENALTY, BAD_MOVE_PENALTY, COMMANDING_TARGET_PENALTY } from "#constants/ai-constants";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import { MultiHitPowerIncrementAttr } from "#moves/multi-hit-power-increment-attr";
 
-export abstract class Move implements Localizable {
+export abstract class Move {
   public id: MoveId;
-  public name: string;
   private _type: ElementalType;
   private _category: MoveCategory;
   public moveTarget: MoveTarget;
   public power: number;
   public accuracy: number;
   public pp: number;
-  public effect: string;
   /** The chance of a move's secondary effects activating */
   public chance: number;
   public priority: number;
@@ -110,8 +108,30 @@ export abstract class Move implements Localizable {
     if (category === MoveCategory.PHYSICAL) {
       this.setFlag(MoveFlags.MAKES_CONTACT, true);
     }
+  }
 
-    this.localize();
+  /**
+   * The move's localized name. May also include a {@linkcode nameAppend | tag} if
+   * the move is not fully implemented.
+   */
+  public get name(): string {
+    return this.id ? `${i18next.t(`move:${this.i18nKey}.name`)}${this.nameAppend}` : "";
+  }
+
+  /**
+   * The move's localized effect description. May also include a {@linkcode nameAppend | tag}
+   * if the move is not fully implemented.
+   */
+  public get effect(): string {
+    return this.id ? `${i18next.t(`move:${this.i18nKey}.effect`)}${this.nameAppend}` : "";
+  }
+
+  /**
+   * The i18n key for this move in camel-case, i.e. "moveName".
+   * Used to localize the move's {@linkcode name} and {@linkcode effect}.
+   */
+  private get i18nKey(): string {
+    return toCamelCaseString(MoveId[this.id]);
   }
 
   get type() {
@@ -119,17 +139,6 @@ export abstract class Move implements Localizable {
   }
   get category() {
     return this._category;
-  }
-
-  localize(): void {
-    const i18nKey = MoveId[this.id]
-      .split("_")
-      .filter((f) => f)
-      .map((f, i) => (i ? `${f[0]}${f.slice(1).toLowerCase()}` : f.toLowerCase()))
-      .join("") as unknown as string;
-
-    this.name = this.id ? `${i18next.t(`move:${i18nKey}.name`)}${this.nameAppend}` : "";
-    this.effect = this.id ? `${i18next.t(`move:${i18nKey}.effect`)}${this.nameAppend}` : "";
   }
 
   /**
@@ -326,7 +335,7 @@ export abstract class Move implements Localizable {
   hitsSubstitute(user: Pokemon, target: Pokemon | nil): boolean {
     if (
       [MoveTarget.USER, MoveTarget.USER_SIDE, MoveTarget.ENEMY_SIDE, MoveTarget.BOTH_SIDES].includes(this.moveTarget)
-      || !target?.getTag(BattlerTagType.SUBSTITUTE)
+      || !target?.hasTag(BattlerTagType.SUBSTITUTE)
     ) {
       return false;
     }
@@ -1028,7 +1037,7 @@ export abstract class Move implements Localizable {
       globalScene.applyModifiers(AttackTypeBoosterModifier, source.isPlayer(), source, this.type, power);
     }
 
-    if (source.getTag(BattlerTagType.HELPING_HAND)) {
+    if (source.hasTag(BattlerTagType.HELPING_HAND)) {
       power.value *= 1.5;
     }
 
@@ -1230,10 +1239,10 @@ export type ChargingMove = ChargingAttackMove | ChargingSelfStatusMove;
 
 export type MoveAttrFilter = (attr: MoveAttr) => boolean;
 
-export type MoveTargetSet = {
+export interface MoveTargetSet {
   targets: BattlerIndex[];
   multiple: boolean;
-};
+}
 
 export function getMoveTargets(user: Pokemon, moveId: MoveId, replaceTarget?: MoveTarget): MoveTargetSet {
   const variableTarget = new NumberHolder(0);

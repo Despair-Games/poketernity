@@ -8,7 +8,7 @@ import type {
   VerifySystemSavedataRequest,
   VerifySystemSavedataResponse,
 } from "#types/system-savedata-api";
-import { http, HttpResponse } from "msw";
+import { HttpResponse, http } from "msw";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const apiBase = getApiBaseUrl();

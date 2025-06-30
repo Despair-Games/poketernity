@@ -17,8 +17,6 @@ import i18next from "i18next";
 /**
  * Class to implement conditional team protection.
  * Applies protection based on the attributes of incoming moves.
- * @abstract
- * @extends ArenaTag
  */
 export abstract class ConditionalProtectTag extends ArenaTag {
   /** The condition function to determine which moves are negated */
@@ -41,7 +39,8 @@ export abstract class ConditionalProtectTag extends ArenaTag {
   }
 
   override onAdd(_arena: Arena): void {
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t(`arenaTag:conditionalProtectOnAdd${this.i18nSideKey}`, { moveName: super.getMoveName() }),
     );
   }
@@ -78,7 +77,8 @@ export abstract class ConditionalProtectTag extends ArenaTag {
         isProtected.value = true;
         if (!simulated) {
           new CommonBattleAnim(CommonAnim.PROTECT, defender).play();
-          globalScene.phaseManager.queueMessagePhase(
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "MessagePhase",
             i18next.t("arenaTag:conditionalProtectApply", {
               moveName: super.getMoveName(),
               pokemonNameWithAffix: getPokemonNameWithAffix(defender),

@@ -5,7 +5,6 @@ import type { BattlerTagType } from "#enums/battler-tag-type";
 
 /**
  * Tag representing the effect(s) of an ability.
- * @extends BattlerTag
  */
 export abstract class AbilityBattlerTag extends BattlerTag {
   public ability: AbilityId;

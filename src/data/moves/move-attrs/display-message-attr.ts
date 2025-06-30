@@ -6,7 +6,6 @@ import { MoveEffectAttr } from "#moves/move-effect-attr";
 
 /**
  * Attribute to display a message
- * @extends MoveEffectAttr
  */
 export class DisplayMessageAttr extends MoveEffectAttr {
   private displayMessage: string;
@@ -26,7 +25,7 @@ export class DisplayMessageAttr extends MoveEffectAttr {
     const replacedMessage = this.displayMessage
       .replace("{USER}", getPokemonNameWithAffix(user))
       .replace("{TARGET}", getPokemonNameWithAffix(target));
-    globalScene.phaseManager.queueMessagePhase(replacedMessage);
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", replacedMessage);
     return true;
   }
 }

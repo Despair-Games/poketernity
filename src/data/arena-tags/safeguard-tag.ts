@@ -10,7 +10,6 @@ import i18next from "i18next";
  * Prevents Pokemon on the tag's {@linkcode ArenaTagSide | side}
  * from being afflicted with non-volatile status conditions
  * and Confusion.
- * @extends ArenaTag
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Safeguard_(move) | Safeguard}
  */
 export class SafeguardTag extends ArenaTag {
@@ -19,10 +18,16 @@ export class SafeguardTag extends ArenaTag {
   }
 
   override onAdd(_arena: Arena): void {
-    globalScene.phaseManager.queueMessagePhase(i18next.t(`arenaTag:safeguardOnAdd${this.i18nSideKey}`));
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
+      i18next.t(`arenaTag:safeguardOnAdd${this.i18nSideKey}`),
+    );
   }
 
   override onRemove(_arena: Arena): void {
-    globalScene.phaseManager.queueMessagePhase(i18next.t(`arenaTag:safeguardOnRemove${this.i18nSideKey}`));
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
+      i18next.t(`arenaTag:safeguardOnRemove${this.i18nSideKey}`),
+    );
   }
 }

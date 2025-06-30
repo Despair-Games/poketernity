@@ -47,7 +47,6 @@ import {
   HeldItemRequirement,
   TypeRequirement,
 } from "#mystery-encounters/mystery-encounter-requirements";
-import { LearnMovePhase } from "#phases/learn-move-phase";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import { MoveInfoOverlay } from "#ui/move-info-overlay";
 import type { OptionSelectItem } from "#ui/option-select-config";
@@ -760,8 +759,10 @@ function doBugTypeMoveTutor(): Promise<void> {
 
     // Option select complete, handle if they are learning a move
     if (result && result.selectedOptionIndex < moveOptions.length) {
-      globalScene.phaseManager.unshiftPhase(
-        new LearnMovePhase(result.selectedPokemonIndex, moveOptions[result.selectedOptionIndex].moveId),
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "LearnMovePhase",
+        result.selectedPokemonIndex,
+        moveOptions[result.selectedOptionIndex].moveId,
       );
     }
 
