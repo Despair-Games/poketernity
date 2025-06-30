@@ -1,13 +1,13 @@
-import type { Move } from "#moves/move";
-import { AddArenaTagAttr } from "#moves/move-attrs/add-arena-tag-attr";
-import { OneHitKOAttr } from "#moves/move-attrs/one-hit-ko-attr";
-import type { EnemyPokemon } from "#field/enemy-pokemon";
-import type { Pokemon } from "#field/pokemon";
-import type { PokemonMove } from "#field/pokemon-move";
-import { isBetween } from "#utils/common-utils";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { ElementalType } from "#enums/elemental-type";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import type { PokemonMove } from "#field/pokemon-move";
+import type { Move } from "#moves/move";
+import { AddArenaTagAttr } from "#moves/move-attrs/add-arena-tag-attr";
+import { OneHitKOAttr } from "#moves/move-attrs/one-hit-ko-attr";
+import { isBetween } from "#utils/common-utils";
 
 /**
  * Attribute to apply the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Gravity_(move) | Gravity}.

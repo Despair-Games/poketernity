@@ -6,7 +6,7 @@ import { MoveTarget } from "#enums/move-target";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import { type MoveEffectAttrOptions, MoveEffectAttr } from "#moves/move-effect-attr";
+import { MoveEffectAttr, type MoveEffectAttrOptions } from "#moves/move-effect-attr";
 import type { MoveConditionFunc } from "#types/move-condition-func";
 
 interface AddArenaTagAttrOptions extends MoveEffectAttrOptions {

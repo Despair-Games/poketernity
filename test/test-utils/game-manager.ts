@@ -28,6 +28,7 @@ import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { ModifierTypeOption } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
+import type { EnemyCommandPhase } from "#phases/enemy-command-phase";
 import { settings } from "#system/settings-manager";
 import { ErrorInterceptor } from "#test/test-utils/error-interceptor";
 import { generateStarter, waitUntil } from "#test/test-utils/game-manager-utils";
@@ -56,7 +57,6 @@ import { isNil } from "#utils/common-utils";
 import fs from "node:fs";
 import { AES, enc } from "crypto-js";
 import { expect, vi } from "vitest";
-import type { EnemyCommandPhase } from "#phases/enemy-command-phase";
 
 /**
  * Class to manage the game state and transitions between phases.

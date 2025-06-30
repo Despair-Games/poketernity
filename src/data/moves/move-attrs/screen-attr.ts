@@ -1,11 +1,11 @@
 import { MAJOR_EFFECT_SCORE_BONUS, MINOR_EFFECT_SCORE_BONUS } from "#constants/ai-constants";
-import type { Move } from "#moves/move";
-import { AddArenaTagAttr } from "#moves/move-attrs/add-arena-tag-attr";
-import type { EnemyPokemon } from "#field/enemy-pokemon";
-import type { Pokemon } from "#field/pokemon";
-import { isNil } from "#utils/common-utils";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import { AddArenaTagAttr } from "#moves/move-attrs/add-arena-tag-attr";
+import { isNil } from "#utils/common-utils";
 
 /**
  * Attribute for moves that set a "screen" with a defensive effect on

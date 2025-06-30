@@ -1,7 +1,4 @@
-import battle from "#app/battle";
 import { globalScene } from "#app/global-scene";
-import type { BattleCommand } from "#enums/battle-command";
-import trainer from "#field/trainer";
 import { FieldPhase } from "#phases/base/field-phase";
 
 /**

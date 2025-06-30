@@ -1,11 +1,11 @@
 import { BAD_MOVE_PENALTY } from "#constants/ai-constants";
-import type { Move } from "#moves/move";
-import { AddArenaTagAttr } from "#moves/move-attrs/add-arena-tag-attr";
-import type { EnemyPokemon } from "#field/enemy-pokemon";
-import type { Pokemon } from "#field/pokemon";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { ElementalType } from "#enums/elemental-type";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+import { AddArenaTagAttr } from "#moves/move-attrs/add-arena-tag-attr";
 
 /**
  * Attribute to apply the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Variations_of_Mud_Sport | "Sport" moves}.

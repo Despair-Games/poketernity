@@ -1,10 +1,10 @@
-import type { Move } from "#moves/move";
-import type { EnemyPokemon } from "#field/enemy-pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { coerceArray } from "#utils/common-utils";
 import { MoveId } from "#enums/move-id";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { Move } from "#moves/move";
 import { getEnemyMoveChoices } from "#test/test-utils/enemy-command-utils";
 import { isPokemonInstance, receivedStr } from "#test/test-utils/test-utils";
+import { coerceArray } from "#utils/common-utils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
 /**

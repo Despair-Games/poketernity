@@ -59,6 +59,7 @@ import type { RestrictingBattlerTag } from "#battler-tags/restricting-battler-ta
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import type { TypeImmuneTag } from "#battler-tags/type-immune-tag";
 import type { UproarTag } from "#battler-tags/uproar-tag";
+import { ATTACK_SCORE_HP_THRESHOLD } from "#constants/ai-constants";
 import { WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
 import {
   CRIT_BOOST_BATTLER_TAG_TYPES,
@@ -182,6 +183,7 @@ import { settings } from "#system/settings-manager";
 import type { AbilityFilterOptions } from "#types/ability-filter-options";
 import type { DamageCalculationResult } from "#types/damage-calculation-result";
 import type { DamageFunctionOptions } from "#types/damage-function-options";
+import type { PokemonScoreData } from "#types/pokemon-score-data";
 import type { PokemonSummonData } from "#types/pokemon-summon-data";
 import type { PokemonTurnData } from "#types/pokemon-turn-data";
 import type { PokemonWaveData } from "#types/pokemon-wave-data";
@@ -205,8 +207,6 @@ import { applyMoveAttrs } from "#utils/move-utils";
 import { getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
 import { randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
-import type { PokemonScoreData } from "#types/pokemon-score-data";
-import { ATTACK_SCORE_HP_THRESHOLD } from "#constants/ai-constants";
 
 interface AbilityData {
   ability: Ability;

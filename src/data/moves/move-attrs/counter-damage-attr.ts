@@ -4,7 +4,7 @@ import { FixedDamageAttr } from "#moves/fixed-damage-attr";
 import type { Move } from "#moves/move";
 import type { MoveCondition } from "#moves/move-condition";
 import type { AttackMoveResult } from "#types/attack-move-result";
-import type { MoveFilter } from "#types/MoveFilter";
+import type { MoveFilter } from "#types/move-filter";
 import { type NumberHolder, toDmgValue } from "#utils/common-utils";
 
 /**
