@@ -11,7 +11,6 @@ import i18next from "i18next";
  * fleeing during their next turn.
  * If a Pokémon that's on the field when Fairy Lock is used goes on to faint later in the same turn,
  * the Pokémon that replaces it will still be unable to switch out in the following turn.
- * @extends ArenaTag
  */
 export class FairyLockTag extends ArenaTag {
   constructor(turnCount: number, sourceId: number) {
@@ -19,6 +18,6 @@ export class FairyLockTag extends ArenaTag {
   }
 
   override onAdd(_arena: Arena): void {
-    globalScene.phaseManager.queueMessagePhase(i18next.t("arenaTag:fairyLockOnAdd"));
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("arenaTag:fairyLockOnAdd"));
   }
 }

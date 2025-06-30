@@ -32,7 +32,7 @@ describe("Move Effect Scores - Disable", () => {
   });
 
   it("should be preferred when the target's last move deals significant damage to the user", async () => {
-    await game.classicMode.startBattle([SpeciesId.EXCADRILL]);
+    await game.classicMode.startBattle(SpeciesId.EXCADRILL);
 
     const enemy = game.field.getEnemyPokemon();
 
@@ -44,7 +44,7 @@ describe("Move Effect Scores - Disable", () => {
   });
 
   it("should not be preferred when the target's last move does nothing", async () => {
-    await game.classicMode.startBattle([SpeciesId.EXCADRILL]);
+    await game.classicMode.startBattle(SpeciesId.EXCADRILL);
 
     const enemy = game.field.getEnemyPokemon();
 

@@ -27,8 +27,6 @@ import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import { MoneyRequirement } from "#mystery-encounters/mystery-encounter-requirements";
-import { PostSummonPhase } from "#phases/post-summon-phase";
-import { ShinySparklePhase } from "#phases/shiny-sparkle-phase";
 import { settings } from "#system/settings-manager";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import i18next from "i18next";
@@ -395,13 +393,13 @@ function summonPlayerPokemonAnimation(pokemon: PlayerPokemon): Promise<void> {
                 pokemon.resetSummonData();
                 globalScene.time.delayedCall(1000, () => {
                   if (pokemon.isShiny()) {
-                    globalScene.phaseManager.unshiftPhase(new ShinySparklePhase(pokemon.getBattlerIndex()));
+                    globalScene.phaseManager.createAndUnshiftPhase("ShinySparklePhase", pokemon.getBattlerIndex());
                   }
 
                   pokemon.resetTurnData();
 
                   globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeActiveTrigger, true);
-                  globalScene.phaseManager.pushPhase(new PostSummonPhase(pokemon.getBattlerIndex()));
+                  globalScene.phaseManager.createAndPushPhase("PostSummonPhase", pokemon.getBattlerIndex());
                   resolve();
                 });
               },

@@ -1,3 +1,7 @@
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
+import type { DAMAGING_TRAPPED_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
+
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
 import { globalScene } from "#app/global-scene";
@@ -11,13 +15,14 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import type { CommonAnim } from "#enums/common-anim";
 import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
-import { CommonAnimPhase } from "#phases/common-anim-phase";
 import { BooleanHolder, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
  * Tag representing all effects that trap and damage a Pokemon over the course of multiple turns
- * @extends TrappedTag
+ *
+ * @privateRemarks
+ * Tags that use or subclass this should be added to {@linkcode DAMAGING_TRAPPED_BATTLER_TAG_TYPES}
  */
 export abstract class DamagingTrapTag extends TrappedTag {
   private commonAnim: CommonAnim;
@@ -44,20 +49,21 @@ export abstract class DamagingTrapTag extends TrappedTag {
   }
 
   override canAdd(pokemon: Pokemon): boolean {
-    return !pokemon.getTag(...TRAPPED_BATTLER_TAG_TYPES) && !pokemon.getTag(BattlerTagType.SUBSTITUTE);
+    return !pokemon.hasTag(...TRAPPED_BATTLER_TAG_TYPES, BattlerTagType.SUBSTITUTE);
   }
 
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     const ret = super.lapse(pokemon, lapseType);
 
     if (ret) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("battlerTags:damagingTrapLapse", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
           moveName: this.getMoveName(),
         }),
       );
-      globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(this.commonAnim, pokemon.getBattlerIndex()));
+      globalScene.phaseManager.createAndUnshiftPhase("CommonAnimPhase", this.commonAnim, pokemon.getBattlerIndex());
 
       const cancelled = new BooleanHolder(false);
       applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);

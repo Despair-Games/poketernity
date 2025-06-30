@@ -36,7 +36,7 @@ describe("Abilities - Fluffy", () => {
   });
 
   it("should reduce the damage of contact moves by half", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
     const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(AbAttrFlag.RECEIVED_MOVE_DAMAGE_MULTIPLIER)[0], "apply");
@@ -53,7 +53,7 @@ describe("Abilities - Fluffy", () => {
   });
 
   it("should double the damage of a non-contact fire move", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     const enemy = game.scene.getEnemyPokemon()!;
     const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(AbAttrFlag.RECEIVED_MOVE_DAMAGE_MULTIPLIER)[0], "apply");
 
@@ -65,7 +65,7 @@ describe("Abilities - Fluffy", () => {
   });
 
   it("should not alter the damage of a contact-making fire move", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
     const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(AbAttrFlag.RECEIVED_MOVE_DAMAGE_MULTIPLIER)[0], "apply");
@@ -84,7 +84,7 @@ describe("Abilities - Fluffy", () => {
 
   it("should not alter the damage of contact moves if the attacker has the ability Long Reach", async () => {
     game.override.ability(AbilityId.LONG_REACH);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
     const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(AbAttrFlag.RECEIVED_MOVE_DAMAGE_MULTIPLIER)[0], "apply");

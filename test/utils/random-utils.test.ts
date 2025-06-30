@@ -1,7 +1,6 @@
 import { randomString } from "#utils/random-utils";
-import { beforeAll, describe, expect, it } from "vitest";
-
 import Phaser from "phaser";
+import { beforeAll, describe, expect, it } from "vitest";
 
 describe("Utils - Random Utils", () => {
   beforeAll(() => {

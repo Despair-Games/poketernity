@@ -31,7 +31,7 @@ describe("Move Effect Scores - Flinch", () => {
   });
 
   it("should grant an incentive when the user is faster than the target", async () => {
-    await game.classicMode.startBattle([SpeciesId.DONDOZO]);
+    await game.classicMode.startBattle(SpeciesId.DONDOZO);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -41,7 +41,7 @@ describe("Move Effect Scores - Flinch", () => {
   });
 
   it("should not affect score when the target is faster than the user", async () => {
-    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -53,7 +53,7 @@ describe("Move Effect Scores - Flinch", () => {
   it("should grant an incentive when the move has increased priority", async () => {
     game.override.enemyMoveset([MoveId.FAKE_OUT, MoveId.TACKLE, MoveId.SPLASH]);
 
-    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();

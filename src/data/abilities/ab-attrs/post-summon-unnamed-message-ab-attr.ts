@@ -5,7 +5,6 @@ import type { Pokemon } from "#field/pokemon";
 /**
  * Displays the message for Cloud Nine and Air Lock.
  * Doesn't display the pokemon's name.
- * @extends PostSummonAbAttr
  */
 export class PostSummonUnnamedMessageAbAttr extends PostSummonAbAttr {
   private readonly message: string;
@@ -18,7 +17,7 @@ export class PostSummonUnnamedMessageAbAttr extends PostSummonAbAttr {
 
   public override apply(_pokemon: Pokemon, simulated: boolean): boolean {
     if (!simulated) {
-      globalScene.phaseManager.queueMessagePhase(this.message);
+      globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", this.message);
     }
 
     return true;

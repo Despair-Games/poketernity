@@ -4,12 +4,12 @@ import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
+import { enumValueToKey } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
  * Attribute to change the user's type to match that of the first move in its moveset.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Conversion_(move) | Conversion}.
- * @extends MoveEffectAttr
  */
 export class FirstMoveTypeAttr extends MoveEffectAttr {
   constructor() {
@@ -19,10 +19,11 @@ export class FirstMoveTypeAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     const firstMoveType = target.getMoveset()[0].getMove().type;
     user.setTemporaryTypes(firstMoveType);
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battle:transformedIntoType", {
         pokemonName: getPokemonNameWithAffix(user),
-        type: i18next.t(`pokemonInfo:Type.${ElementalType[firstMoveType]}`),
+        type: i18next.t(`pokemonInfo:Type.${enumValueToKey(ElementalType, firstMoveType)}`),
       }),
     );
 

@@ -1,5 +1,4 @@
 import { globalScene } from "#app/global-scene";
-import { PhaseId } from "#enums/phase-id";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { MoveEffectPhase } from "#phases/move-effect-phase";
@@ -15,7 +14,7 @@ export function getMoveEffectPhaseData(
   _pokemon: Pokemon,
 ): { phase: MoveEffectPhase; attacker: Pokemon; move: Move } | null {
   const phase = globalScene.phaseManager.getCurrentPhase();
-  if (phase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT)) {
+  if (phase?.is("MoveEffectPhase")) {
     return {
       phase: phase,
       attacker: phase.getPokemon(),

@@ -1,8 +1,7 @@
-// -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { Ability } from "#abilities/ability";
-/* eslint-enable @typescript-eslint/no-unused-vars */
-// -- end tsdoc imports --
+import type { SuppressWeatherEffectAbAttr } from "#abilities/suppress-weather-effect-ab-attr";
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { AbilityId } from "#enums/ability-id";
 
@@ -11,6 +10,12 @@ import { AbilityId } from "#enums/ability-id";
  * @see {@linkcode Ability.ignorable}
  */
 export const IGNORING_ABILITIES = Object.freeze([AbilityId.MOLD_BREAKER, AbilityId.TERAVOLT, AbilityId.TURBOBLAZE]);
+
+/**
+ * Abilities that suppress weather effects.
+ * @see {@linkcode SuppressWeatherEffectAbAttr}
+ */
+export const WEATHER_SUPPRESSING_ABILITIES = Object.freeze([AbilityId.CLOUD_NINE, AbilityId.AIR_LOCK]);
 
 /** Abilities perceived by the Enemy AI to have high value */
 export const HIGH_VALUE_ABILITIES: Readonly<AbilityId[]> = Object.freeze([

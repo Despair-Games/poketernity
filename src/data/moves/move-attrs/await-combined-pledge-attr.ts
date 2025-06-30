@@ -10,7 +10,6 @@ import i18next from "i18next";
  * Attribute that cancels the associated move's effects when set to be combined
  * with the user's ally's subsequent move this turn.
  * Used for the {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Pledge_moves | Pledge moves}.
- * @extends OverrideMoveEffectAttr
  */
 export class AwaitCombinedPledgeAttr extends OverrideMoveEffectAttr {
   constructor() {
@@ -20,7 +19,7 @@ export class AwaitCombinedPledgeAttr extends OverrideMoveEffectAttr {
   override apply(user: Pokemon, _target: Pokemon, move: Move, overridden: BooleanHolder): boolean {
     if (user.turnData.combiningPledge) {
       // "The two moves have become one!\nIt's a combined move!"
-      globalScene.phaseManager.queueMessagePhase(i18next.t("moveTriggers:combiningPledge"));
+      globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("moveTriggers:combiningPledge"));
       return false;
     }
 
@@ -39,7 +38,8 @@ export class AwaitCombinedPledgeAttr extends OverrideMoveEffectAttr {
       const allyPokemon = user.getAlly();
       if (allyPokemon) {
         // "{userPokemonName} is waiting for {allyPokemonName}'s move..."
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           i18next.t("moveTriggers:awaitingPledge", {
             userPokemonName: getPokemonNameWithAffix(user),
             allyPokemonName: getPokemonNameWithAffix(allyPokemon),

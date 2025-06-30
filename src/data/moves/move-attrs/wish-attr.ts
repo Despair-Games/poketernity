@@ -1,11 +1,11 @@
 import { MINOR_EFFECT_SCORE_BONUS } from "#constants/ai-constants";
+import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
+import { ArenaTagType } from "#enums/arena-tag-type";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { AddArenaTagAttr } from "#moves/move-attrs/add-arena-tag-attr";
 import { ProtectAttr } from "#moves/move-attrs/protect-attr";
-import type { EnemyPokemon } from "#field/enemy-pokemon";
-import type { Pokemon } from "#field/pokemon";
-import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
-import { ArenaTagType } from "#enums/arena-tag-type";
 
 /**
  * Attribute to apply the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Wish_(move) | Wish}.

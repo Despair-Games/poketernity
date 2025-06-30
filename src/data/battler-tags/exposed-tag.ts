@@ -1,3 +1,7 @@
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
+import type { EXPOSED_TAG_TYPES } from "#constants/battler-tag-constants";
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
+
 import { BattlerTag } from "#battler-tags/battler-tag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";
@@ -8,11 +12,14 @@ import type { MoveId } from "#enums/move-id";
  * Tag that makes the target drop all of its type immunities
  * and all accuracy checks ignore its evasiveness stat.
  *
- * Applied by moves: {@linkcode MoveId.ODOR_SLEUTH | Odor Sleuth},
- * {@linkcode MoveId.MIRACLE_EYE | Miracle Eye} and {@linkcode MoveId.FORESIGHT | Foresight}.
+ * Applied by the following moves:
+ * - {@linkcode MoveId.ODOR_SLEUTH | Odor Sleuth}
+ * - {@linkcode MoveId.MIRACLE_EYE | Miracle Eye}
+ * - {@linkcode MoveId.FORESIGHT | Foresight}
  *
- * @extends BattlerTag
  * @see {@linkcode ignoreImmunity}
+ * @privateRemarks
+ * Tags that use or subclass this should be added to {@linkcode EXPOSED_TAG_TYPES}
  */
 export class ExposedTag extends BattlerTag {
   private defenderType: ElementalType;

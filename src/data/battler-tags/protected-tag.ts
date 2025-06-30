@@ -1,3 +1,7 @@
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
+import type { PROTECTION_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
+
 import { CommonBattleAnim } from "#animations/common-battle-anim";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -13,8 +17,11 @@ import i18next from "i18next";
 
 /**
  * Tag to protect the owner from most incoming moves for the rest of the turn.
+ *
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Protect_(move) | Protect} and related moves.
- * @extends BattlerTag
+ *
+ * @privateRemarks
+ * Tags that use or subclass this should be added to {@linkcode PROTECTION_BATTLER_TAG_TYPES}
  */
 export class ProtectedTag extends BattlerTag {
   constructor(sourceMoveId: MoveId, tagType: BattlerTagType = BattlerTagType.PROTECTED) {
@@ -24,7 +31,8 @@ export class ProtectedTag extends BattlerTag {
   override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:protectedOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }
@@ -36,7 +44,8 @@ export class ProtectedTag extends BattlerTag {
 
     if (!simulated) {
       new CommonBattleAnim(CommonAnim.PROTECT, pokemon).play();
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("battlerTags:protectedLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
     }

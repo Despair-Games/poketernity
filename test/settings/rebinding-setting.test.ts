@@ -1,11 +1,11 @@
 import type { InterfaceConfig } from "#app/inputs-controller";
 import { Button } from "#enums/button";
-import { Device } from "#enums/devices";
+import { Device } from "#enums/device";
 import { SettingKeyboard } from "#enums/setting-keyboard";
 import cfg_keyboard_qwerty from "#inputs/cfg-keyboard-qwerty";
 import { getKeyWithKeycode, getKeyWithSettingName } from "#inputs/config-handler";
-import { InGameManip } from "#test/settings/helpers/inGameManip";
-import { MenuManip } from "#test/settings/helpers/menuManip";
+import { InGameManip } from "#test/settings/helpers/in-game-manip";
+import { MenuManip } from "#test/settings/helpers/menu-manip";
 import { deepCopy } from "#utils/common-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 

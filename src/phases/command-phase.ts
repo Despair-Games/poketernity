@@ -2,7 +2,6 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { TurnCommand } from "#app/turn-command-manager";
 import type { FairyLockTag } from "#arena-tags/fairy-lock-tag";
-import type { EncoreTag } from "#battler-tags/encore-tag";
 import type { SkyDropTag } from "#battler-tags/sky-drop-tag";
 import type { TrappedTag } from "#battler-tags/trapped-tag";
 import { MOVE_LOCK_TAG_TYPES, TRAPPED_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
@@ -18,12 +17,11 @@ import { BiomeId } from "#enums/biome-id";
 import { FieldPosition } from "#enums/field-position";
 import { MoveId } from "#enums/move-id";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
-import { PhaseId } from "#enums/phase-id";
 import { PokeballType } from "#enums/pokeball-type";
 import { UiMode } from "#enums/ui-mode";
 import type { Pokemon } from "#field/pokemon";
 import { getMoveTargets, type MoveTargetSet } from "#moves/move";
-import { FieldPhase } from "#phases/abstract-field-phase";
+import { FieldPhase } from "#phases/base/field-phase";
 import type { FightCommand } from "#types/fight-command";
 import type { TurnMove } from "#types/turn-move";
 import type { CommandUiHandler } from "#ui/command-ui-handler";
@@ -34,11 +32,10 @@ import i18next from "i18next";
 
 /**
  * Handles the player's start-of-turn actions (`Fight/Ball/Pokemon/Run`) during a battle
- * @extends FieldPhase
  * @see {@linkcode handleCommand}
  */
 export class CommandPhase extends FieldPhase {
-  override readonly id = PhaseId.COMMAND;
+  public override readonly phaseName = "CommandPhase";
 
   /** TODO: Is this supposed to be a {@linkcode FieldPosition} or a {@linkcode BattlerIndex}? */
   protected fieldIndex: number;
@@ -69,7 +66,8 @@ export class CommandPhase extends FieldPhase {
         if (allyPokemon) {
           const allyCommand = turnManager.findCommandFromPokemon(allyPokemon);
           if (allyCommand?.command === BattleCommand.BALL || allyCommand?.command === BattleCommand.RUN) {
-            return this.end();
+            this.end();
+            return;
           }
         }
       }
@@ -77,14 +75,12 @@ export class CommandPhase extends FieldPhase {
 
     // If the Pokemon has applied Commander's effects to its ally, skip this command
     if (currentBattle?.double && pokemon.getAlly()?.getTag(BattlerTagType.COMMANDED)?.getSourcePokemon() === pokemon) {
-      return this.end();
+      this.end();
+      return;
     }
 
-    // Checks if the Pokemon is under the effects of Encore. If so, Encore can end early if the encored move has no more PP.
-    const encoreTag = pokemon.getTag(BattlerTagType.ENCORE) as EncoreTag;
-    if (encoreTag) {
-      pokemon.lapseTag(BattlerTagType.ENCORE);
-    }
+    // Encore ends early if the encored move has no more PP.
+    pokemon.lapseTag(BattlerTagType.ENCORE);
 
     const moveQueue = pokemon.getMoveQueue();
 
@@ -131,16 +127,14 @@ export class CommandPhase extends FieldPhase {
    * @param command - Which of {@linkcode BattleCommand.BALL} or {@linkcode BattleCommand.RUN} was chosen
    * @param cursor - Cursor index for the selected Pokeball
    * @returns `true` if the command was successful
-   * @overload
    */
-  public handleCommand(command: BattleCommand.BALL | BattleCommand.RUN, cursor: number): boolean;
+  public handleCommand(command: typeof BattleCommand.BALL | typeof BattleCommand.RUN, cursor: number): boolean;
   /**
    * @param command - Which of {@linkcode BattleCommand.FIGHT} or {@linkcode BattleCommand.TERA} was chosen
    * @param cursor - Cursor index for the selected Move
    * @param ignorePp - (optional) `true` if the move shouldn't use PP
    * @param turnMove - (optional) A {@linkcode TurnMove} object for an existing queued move
    * @returns `true` if the command was successful
-   * @overload
    */
   public handleCommand(command: FightCommand, cursor: number, ignorePp?: boolean, turnMove?: TurnMove): boolean;
   /**
@@ -148,9 +142,8 @@ export class CommandPhase extends FieldPhase {
    * @param cursor - Cursor index for the selected Pokemon
    * @param isBaton - `true` if the pokemon being switched out is holding the Baton item
    * @returns `true` if the command was successful
-   * @overload
    */
-  public handleCommand(command: BattleCommand.POKEMON, cursor: number, isBaton: boolean): boolean;
+  public handleCommand(command: typeof BattleCommand.POKEMON, cursor: number, isBaton: boolean): boolean;
   public handleCommand(command: BattleCommand, cursor: number, ...args: unknown[]): boolean {
     // TODO: refactor this function
     const pokemon = this.getPokemon();
@@ -215,18 +208,18 @@ export class CommandPhase extends FieldPhase {
             (isFieldTargeted(moveTargets.targets) && double)
             || (moveTargets.targets.length > 1 && moveTargets.multiple)
           ) {
-            globalScene.phaseManager.queueSelectTargetPhase(this.fieldIndex);
+            globalScene.phaseManager.createAndUnshiftPhase("SelectTargetPhase", this.fieldIndex);
           }
           if (turnCommand.turnMove && (moveTargets.targets.length <= 1 || moveTargets.multiple)) {
             turnCommand.turnMove.targets = moveTargets.targets;
           } else if (
             turnCommand.turnMove
-            && pokemon.getTag(BattlerTagType.CHARGING)
+            && pokemon.hasTag(BattlerTagType.CHARGING)
             && pokemon.getMoveQueue().length >= 1
           ) {
             turnCommand.turnMove.targets = pokemon.getMoveQueue()[0].targets;
           } else {
-            globalScene.phaseManager.queueSelectTargetPhase(this.fieldIndex);
+            globalScene.phaseManager.createAndUnshiftPhase("SelectTargetPhase", this.fieldIndex);
           }
 
           turnManager.addCommand(turnCommand);
@@ -398,8 +391,7 @@ export class CommandPhase extends FieldPhase {
 
   public cancel(): void {
     if (this.fieldIndex) {
-      globalScene.phaseManager.unshiftPhase(new CommandPhase(0));
-      globalScene.phaseManager.unshiftPhase(new CommandPhase(1));
+      globalScene.phaseManager.unshiftPhase(new CommandPhase(0), new CommandPhase(1));
       this.end();
     }
   }

@@ -37,7 +37,6 @@ import {
 import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
-import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import PokemonData from "#system/pokemon-data";
 import { randSeedInt } from "#utils/random-utils";
 
@@ -235,8 +234,12 @@ export const BerriesAboundEncounter: MysteryEncounter = MysteryEncounterBuilder.
           config.pokemonConfigs![0].tags = [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON];
           config.pokemonConfigs![0].mysteryEncounterBattleEffects = (pokemon: Pokemon) => {
             queueEncounterMessage(`${namespace}:option.2.boss_enraged`);
-            globalScene.phaseManager.unshiftPhase(
-              new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, statChangesForBattle, 1),
+            globalScene.phaseManager.createAndUnshiftPhase(
+              "StatStageChangePhase",
+              pokemon.getBattlerIndex(),
+              pokemon,
+              statChangesForBattle,
+              1,
             );
           };
           setEncounterRewards(

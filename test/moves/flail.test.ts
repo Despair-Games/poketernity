@@ -52,7 +52,7 @@ describe("Moves - Flail", () => {
     { hpRatio: 33, expectedBp: 20 },
     { hpRatio: 48, expectedBp: 20 },
   ])("should have $expectedBp base power at ($hpRatio / 48) health", async ({ hpRatio, expectedBp }) => {
-    await game.classicMode.startBattle([SpeciesId.BLISSEY]);
+    await game.classicMode.startBattle(SpeciesId.BLISSEY);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getMaxHp").mockReturnValue(480);

@@ -1,6 +1,3 @@
-// -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import type { MoveId } from "#enums/move-id";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
@@ -9,7 +6,7 @@ import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveCondition } from "#moves/move-condition";
-import type { MoveFilter } from "#types/MoveFilter";
+import type { MoveFilter } from "#types/move-filter";
 
 export class CounterAttackCondition extends MoveCondition {
   private moveFilter: MoveFilter;

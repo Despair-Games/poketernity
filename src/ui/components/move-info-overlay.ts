@@ -8,7 +8,7 @@ import type { Move } from "#moves/move";
 import { settings } from "#system/settings-manager";
 import { addTextObject } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
-import { fixedNumber } from "#utils/common-utils";
+import { enumValueToKey, fixedNumber } from "#utils/common-utils";
 import i18next from "i18next";
 
 export interface MoveInfoOverlaySettings {
@@ -175,7 +175,7 @@ export class MoveInfoOverlay extends Phaser.GameObjects.Container implements Inf
     this.pow.setText(move.power >= 0 ? move.power.toString() : "---");
     this.acc.setText(move.accuracy >= 0 ? move.accuracy.toString() : "---");
     this.pp.setText(move.pp >= 0 ? move.pp.toString() : "---");
-    this.typ.setTexture("type_icons", ElementalType[move.type].toLowerCase());
+    this.typ.setTexture("type_icons", enumValueToKey(ElementalType, move.type).toLowerCase());
     this.cat.setFrame(MoveCategory[move.category].toLowerCase());
 
     this.desc.setText(move?.effect || "");

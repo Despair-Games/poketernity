@@ -1,10 +1,8 @@
-// -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { NewArenaEvent } from "#events/battle-scene";
 import type { Arena } from "#field/arena";
-import { GameManager } from "#test/test-utils/game-manager";
-/* eslint-enable @typescript-eslint/no-unused-vars */
-// -- end tsdoc imports --
+import type { GameManager } from "#test/test-utils/game-manager";
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import type { BattleStyle } from "#app/overrides";
 import Overrides, { defaultOverrides } from "#app/overrides";
@@ -26,7 +24,7 @@ import { WeatherType } from "#enums/weather-type";
 import type { ModifierOverride } from "#modifier/modifier-type";
 import { GameManagerHelper } from "#test/test-utils/helpers/game-manager-helper";
 import type { TimedEvent } from "#types/timed-event";
-import { coerceArray } from "#utils/common-utils";
+import { coerceArray, enumValueToKey } from "#utils/common-utils";
 import { shiftCharCodes } from "#utils/string-utils";
 import { expect, vi } from "vitest";
 
@@ -54,6 +52,12 @@ export class OverridesHelper extends GameManagerHelper {
    * @defaultValue `true`
    */
   public normalizeNatures: boolean = true;
+  /**
+   * If `true`, will automatically set the level cap to `1` at the start of each test
+   * (effectively disabling experience gain and thus level ups as well).
+   * @defaultValue `true`
+   */
+  public disableExpGain: boolean = true;
 
   /**
    * Override the starting biome
@@ -62,7 +66,7 @@ export class OverridesHelper extends GameManagerHelper {
    */
   public startingBiome(biome: BiomeId): this {
     this.game.scene.newArena(biome);
-    this.log(`Starting biome set to ${BiomeId[biome]} (=${biome})!`);
+    this.log(`Starting biome set to ${enumValueToKey(BiomeId, biome)} (=${biome})!`);
     return this;
   }
 
@@ -126,8 +130,11 @@ export class OverridesHelper extends GameManagerHelper {
   }
 
   /**
-   * Override the player (pokemon) {@linkcode SpeciesId | species}
-   * @param species the (pokemon) {@linkcode SpeciesId | species} to set
+   * Override the player pokemon {@linkcode SpeciesId | species}.
+   *
+   * **Warning**: **DO NOT** use for Classic or Challenge mode tests,
+   * instead pass the species you want to use to `runToSummon` or `startBattle`.
+   * @param species the {@linkcode SpeciesId | species} to set
    * @returns `this`
    */
   public starterSpecies(species: SpeciesId | number): this {
@@ -641,7 +648,7 @@ export class OverridesHelper extends GameManagerHelper {
     if (type === ElementalType.UNKNOWN) {
       this.log("Disabled override for player Tera type!");
     } else {
-      this.log(`Player Tera type set to ${ElementalType[type]} (=${type})!`);
+      this.log(`Player Tera type set to ${enumValueToKey(ElementalType, type)} (=${type})!`);
     }
     return this;
   }
@@ -655,7 +662,7 @@ export class OverridesHelper extends GameManagerHelper {
     if (type === ElementalType.UNKNOWN) {
       this.log("Disabled override for enemy Tera type!");
     } else {
-      this.log(`Enemy Tera type set to ${ElementalType[type]} (=${type})!`);
+      this.log(`Enemy Tera type set to ${enumValueToKey(ElementalType, type)} (=${type})!`);
     }
     return this;
   }

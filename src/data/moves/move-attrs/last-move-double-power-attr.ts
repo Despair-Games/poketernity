@@ -10,7 +10,6 @@ import type { NumberHolder } from "#utils/common-utils";
  * Attribute used for moves that double in power if the given move immediately
  * preceded the move applying the attribute, namely Fusion Flare and
  * Fusion Bolt.
- * @extends VariablePowerAttr
  */
 export class LastMoveDoublePowerAttr extends VariablePowerAttr {
   /** The move that must precede the current move */
@@ -23,7 +22,7 @@ export class LastMoveDoublePowerAttr extends VariablePowerAttr {
   }
 
   override apply(user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {
-    const target = user.getOpponent(0);
+    const [target] = user.getOpponents();
     const pokemonActed: Pokemon[] = [];
 
     if (target?.turnData?.acted) {

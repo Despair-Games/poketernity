@@ -15,7 +15,6 @@ import i18next from "i18next";
  * Attribute to copy the target's ability onto the user (and, optionally, the user's ally).
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Role_Play_(move) | Role Play}
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Doodle_(move) | Doodle}.
- * @extends MoveEffectAttr
  */
 export class AbilityCopyAttr extends MoveEffectAttr {
   public copyToPartner: boolean;
@@ -29,7 +28,8 @@ export class AbilityCopyAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     user.summonData.ability = target.getAbility().id;
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("moveTriggers:copiedTargetAbility", {
         pokemonName: getPokemonNameWithAffix(user),
         targetName: getPokemonNameWithAffix(target),
@@ -40,7 +40,8 @@ export class AbilityCopyAttr extends MoveEffectAttr {
     const allyPokemon = user.getAlly();
     if (this.copyToPartner && globalScene.currentBattle?.double && allyPokemon?.isActive(true)) {
       allyPokemon.summonData.ability = target.getAbility().id;
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("moveTriggers:copiedTargetAbility", {
           pokemonName: getPokemonNameWithAffix(allyPokemon),
           targetName: getPokemonNameWithAffix(target),

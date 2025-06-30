@@ -6,7 +6,7 @@ import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { ElementalType } from "#enums/elemental-type";
-import { EncounterAnim } from "#enums/encounter-anims";
+import { EncounterAnim } from "#enums/encounter-anim";
 import { Gender } from "#enums/gender";
 import { MoveId } from "#enums/move-id";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
@@ -45,7 +45,6 @@ import {
   TypeRequirement,
 } from "#mystery-encounters/mystery-encounter-requirements";
 import { FIRE_RESISTANT_ABILITIES } from "#mystery-encounters/requirement-groups";
-import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedInt } from "#utils/random-utils";
 
@@ -91,8 +90,12 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
           gender: Gender.MALE,
           tags: [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON],
           mysteryEncounterBattleEffects: (pokemon: Pokemon) => {
-            globalScene.phaseManager.unshiftPhase(
-              new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [Stat.SPDEF, Stat.SPD], 1),
+            globalScene.phaseManager.createAndUnshiftPhase(
+              "StatStageChangePhase",
+              pokemon.getBattlerIndex(),
+              pokemon,
+              [Stat.SPDEF, Stat.SPD],
+              1,
             );
           },
         },
@@ -102,8 +105,12 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
           gender: Gender.FEMALE,
           tags: [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON],
           mysteryEncounterBattleEffects: (pokemon: Pokemon) => {
-            globalScene.phaseManager.unshiftPhase(
-              new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [Stat.SPDEF, Stat.SPD], 1),
+            globalScene.phaseManager.createAndUnshiftPhase(
+              "StatStageChangePhase",
+              pokemon.getBattlerIndex(),
+              pokemon,
+              [Stat.SPDEF, Stat.SPD],
+              1,
             );
           },
         },

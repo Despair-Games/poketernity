@@ -38,7 +38,7 @@ describe("Weather - Fog", () => {
 
     vi.spyOn(moveToCheck, "calculateBattleAccuracy");
 
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     game.move.select(MoveId.TACKLE);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
@@ -50,7 +50,7 @@ describe("Weather - Fog", () => {
 
     vi.spyOn(moveToCheck, "calculateBattleAccuracy");
     game.override.ability(AbilityId.AIR_LOCK);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     game.move.select(MoveId.TACKLE);
     await game.phaseInterceptor.to("MoveEffectPhase");
 

@@ -7,7 +7,6 @@ import type { BooleanHolder } from "#utils/common-utils";
 
 /**
  * Guarantees a critical hit according to the given condition, except if target prevents critical hits. ie. Merciless
- * @extends AbAttr
  * @see {@linkcode apply}
  */
 export class ConditionalCritAbAttr extends AbAttr {

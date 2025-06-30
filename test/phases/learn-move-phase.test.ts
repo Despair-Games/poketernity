@@ -20,12 +20,13 @@ describe("Learn Move Phase", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
+    game.override.disableExpGain = false;
     game.override.xpMultiplier(50);
   });
 
   it("If Pokemon has less than 4 moves, its newest move will be added to the lowest empty index", async () => {
     game.override.moveset([MoveId.SPLASH]);
-    await game.startBattle([SpeciesId.BULBASAUR]);
+    await game.classicMode.startBattle(SpeciesId.BULBASAUR);
     const pokemon = game.scene.getPlayerPokemon()!;
     const newMovePos = pokemon?.getMoveset().length;
     game.move.select(MoveId.SPLASH);

@@ -32,7 +32,7 @@ describe("Move Effect Scores - Magnet Rise", () => {
   });
 
   it("should be preferred if the user's opponent is Ground-type", async () => {
-    await game.classicMode.startBattle([SpeciesId.DRILBUR]);
+    await game.classicMode.startBattle(SpeciesId.DRILBUR);
 
     const enemy = game.field.getEnemyPokemon();
 
@@ -40,7 +40,7 @@ describe("Move Effect Scores - Magnet Rise", () => {
   });
 
   it("should not be preferred if the user's opponent is not Ground-type", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
 
@@ -48,7 +48,7 @@ describe("Move Effect Scores - Magnet Rise", () => {
   });
 
   it("should be preferred after the user's opponent Terastallizes into Ground-type", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -60,7 +60,7 @@ describe("Move Effect Scores - Magnet Rise", () => {
   it("should not be preferred if the user is Flying-type", async () => {
     game.override.enemySpecies(SpeciesId.PIDGEY);
 
-    await game.classicMode.startBattle([SpeciesId.DRILBUR]);
+    await game.classicMode.startBattle(SpeciesId.DRILBUR);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).not.toPreferSelectingMove(MoveId.MAGNET_RISE);
@@ -69,7 +69,7 @@ describe("Move Effect Scores - Magnet Rise", () => {
   it("should not be preferred if the user has Levitate", async () => {
     game.override.enemyAbility(AbilityId.LEVITATE);
 
-    await game.classicMode.startBattle([SpeciesId.DRILBUR]);
+    await game.classicMode.startBattle(SpeciesId.DRILBUR);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).not.toPreferSelectingMove(MoveId.MAGNET_RISE);

@@ -1,12 +1,11 @@
-// -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { Pokemon } from "#field/pokemon";
-/* eslint-enable @typescript-eslint/no-unused-vars */
-// -- end tsdoc imports --
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { isPokemonInstance, receivedStr } from "#test/test-utils/test-utils";
+import { enumValueToKey } from "#utils/common-utils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
 /**
@@ -15,7 +14,7 @@ import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
  * @param expectedBattlerTagType - The {@linkcode BattlerTagType} to check for.
  * @returns Whether the matcher passed
  */
-export function toHaveBattlerTagTypeMatcher(
+export function toHaveBattlerTagMatcher(
   this: MatcherState,
   received: unknown,
   expectedBattlerTagType: BattlerTagType,
@@ -30,7 +29,7 @@ export function toHaveBattlerTagTypeMatcher(
   const pass = received.hasTag(expectedBattlerTagType);
 
   const pkmName = getPokemonNameWithAffix(received);
-  const expectedTagStr = `${BattlerTagType[expectedBattlerTagType]} (=${expectedBattlerTagType})`;
+  const expectedTagStr = `${enumValueToKey(BattlerTagType, expectedBattlerTagType)} (=${expectedBattlerTagType})`;
 
   return {
     pass,

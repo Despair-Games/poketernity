@@ -19,7 +19,7 @@ import type { CommandUiHandler } from "#ui/command-ui-handler";
 import { MoveInfoOverlay } from "#ui/move-info-overlay";
 import { addTextObject, setTextColor } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";
-import { fixedNumber } from "#utils/common-utils";
+import { enumValueToKey, fixedNumber } from "#utils/common-utils";
 import { leftPad } from "#utils/string-utils";
 import i18next from "i18next";
 
@@ -134,12 +134,14 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
     this.fromCommand = command;
 
     const messageHandler = this.getUi().getMessageHandler();
-    messageHandler.bg.setVisible(false);
-    messageHandler.commandWindow.setVisible(false);
-    messageHandler.movesWindowContainer.setVisible(true);
+    if (messageHandler) {
+      messageHandler.bg.setVisible(false);
+      messageHandler.commandWindow.setVisible(false);
+      messageHandler.movesWindowContainer.setVisible(true);
+    }
 
     const pokemon = (globalScene.phaseManager.getCurrentPhase() as CommandPhase).getPokemon();
-    if (pokemon.summonData?.turnCount > 1) {
+    if (pokemon.summonData.turnCount > 1) {
       this.setCursor(this.getCursor());
     } else {
       this.setCursor(0);
@@ -254,7 +256,7 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
     if (hasMove) {
       const pokemonMove = moveset[cursor];
       const moveType = pokemon.getMoveType(pokemonMove.getMove());
-      this.typeIcon.setTexture("type_icons", ElementalType[moveType].toLowerCase()).setScale(0.8);
+      this.typeIcon.setTexture("type_icons", enumValueToKey(ElementalType, moveType).toLowerCase()).setScale(0.8);
 
       const moveCategory = pokemonMove.getMove().category;
       this.moveCategoryIcon.setTexture("categories", MoveCategory[moveCategory].toLowerCase()).setScale(1.0);
@@ -371,7 +373,7 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
     this.accuracyText.setVisible(false);
     this.moveCategoryIcon.setVisible(false);
     this.moveInfoOverlay.clear();
-    messageHandler.bg.setVisible(true);
+    messageHandler?.bg.setVisible(true);
     this.eraseCursor();
   }
 

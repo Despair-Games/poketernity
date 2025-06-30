@@ -32,7 +32,7 @@ describe("Moves - Relic Song", () => {
   });
 
   it("swaps Meloetta's form between Aria and Pirouette", async () => {
-    await game.classicMode.startBattle([SpeciesId.MELOETTA]);
+    await game.classicMode.startBattle(SpeciesId.MELOETTA);
 
     const meloetta = game.scene.getPlayerPokemon()!;
 
@@ -48,8 +48,8 @@ describe("Moves - Relic Song", () => {
   });
 
   it("doesn't swap Meloetta's form during a mono-type challenge", async () => {
-    game.challengeMode.addChallenge(Challenges.SINGLE_TYPE, ElementalType.PSYCHIC + 1, 0);
-    await game.challengeMode.startBattle([SpeciesId.MELOETTA]);
+    game.challengeMode.addChallenge(Challenges.SINGLE_TYPE, ElementalType.PSYCHIC, 0);
+    await game.challengeMode.startBattle(SpeciesId.MELOETTA);
 
     const meloetta = game.scene.getPlayerPokemon()!;
 
@@ -64,7 +64,7 @@ describe("Moves - Relic Song", () => {
 
   it("doesn't swap Meloetta's form during biome change (arena reset)", async () => {
     game.override.starterForms({ [SpeciesId.MELOETTA]: 1 }).startingWave(10);
-    await game.classicMode.startBattle([SpeciesId.MELOETTA]);
+    await game.classicMode.startBattle(SpeciesId.MELOETTA);
 
     const meloetta = game.scene.getPlayerPokemon()!;
 

@@ -131,11 +131,27 @@ export class MoveHelper extends GameManagerHelper {
   }
 
   /**
-   * Used when the normal moveset override can't be used (such as when it's necessary to check updated properties of the moveset).
-   * @param pokemon - The pokemon being modified
-   * @param moveset - The moveset to use
+   * Changes a pokemon's moveset to the given move(s).
+   *
+   * Used when the normal moveset override can't be used (such as when it's necessary to check or update properties of the moveset).
+   *
+   * **Note**: Will disable the moveset override matching the pokemon's party!
+   * @param pokemon - The {@linkcode Pokemon} being modified
+   * @param moveset - The {@linkcode MoveId | moves} (single or array) to change the Pokemon's moveset to
    */
   public changeMoveset(pokemon: Pokemon, moveset: MoveId | MoveId[]): void {
+    if (pokemon.isPlayer()) {
+      if (coerceArray(Overrides.MOVESET_OVERRIDE).length > 0) {
+        vi.spyOn(Overrides, "MOVESET_OVERRIDE", "get").mockReturnValue([]);
+        console.warn("Player moveset override disabled due to use of `game.move.changeMoveset`!");
+      }
+    } else {
+      if (coerceArray(Overrides.ENEMY_MOVESET_OVERRIDE).length > 0) {
+        vi.spyOn(Overrides, "ENEMY_MOVESET_OVERRIDE", "get").mockReturnValue([]);
+        console.warn("Enemy moveset override disabled due to use of `game.move.changeMoveset`!");
+      }
+    }
+
     moveset = coerceArray(moveset);
     pokemon.moveset = [];
     moveset.forEach((moveId) => {

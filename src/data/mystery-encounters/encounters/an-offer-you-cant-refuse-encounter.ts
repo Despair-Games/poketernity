@@ -22,7 +22,6 @@ import {
   MoveRequirement,
 } from "#mystery-encounters/mystery-encounter-requirements";
 import { EXTORTION_ABILITIES, EXTORTION_MOVES } from "#mystery-encounters/requirement-groups";
-import { ModifierRewardPhase } from "#phases/modifier-reward-phase";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import i18next from "i18next";
 
@@ -136,7 +135,7 @@ export const AnOfferYouCantRefuseEncounter: MysteryEncounter = MysteryEncounterB
       })
       .withOptionPhase(async () => {
         // Give the player a Shiny Charm
-        globalScene.phaseManager.unshiftPhase(new ModifierRewardPhase(modifierTypes.SHINY_CHARM));
+        globalScene.phaseManager.createAndUnshiftPhase("ModifierRewardPhase", modifierTypes.SHINY_CHARM);
         leaveEncounterWithoutBattle(true);
       })
       .build(),

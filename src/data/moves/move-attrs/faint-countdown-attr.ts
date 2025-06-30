@@ -10,7 +10,6 @@ import i18next from "i18next";
 
 /**
  * Attribute to apply the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Perish_Song_(move) | Perish Song}.
- * @extends AddBattlerTagAttr
  */
 export class FaintCountdownAttr extends AddBattlerTagAttr {
   constructor() {
@@ -26,7 +25,8 @@ export class FaintCountdownAttr extends AddBattlerTagAttr {
       return false;
     }
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("moveTriggers:faintCountdown", {
         pokemonName: getPokemonNameWithAffix(target),
         turnCount: this.turnCountMin - 1,

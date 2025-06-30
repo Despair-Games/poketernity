@@ -9,7 +9,6 @@ import i18next from "i18next";
 /**
  * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Water_Sport_(move) Water Sport}.
  * Weakens Fire type moves for a set amount of turns, usually 5.
- * @extends WeakenMoveTypeTag
  */
 export class WaterSportTag extends WeakenMoveTypeTag {
   constructor(turnCount: number, sourceId: number) {
@@ -17,10 +16,10 @@ export class WaterSportTag extends WeakenMoveTypeTag {
   }
 
   override onAdd(_arena: Arena): void {
-    globalScene.phaseManager.queueMessagePhase(i18next.t("arenaTag:waterSportOnAdd"));
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("arenaTag:waterSportOnAdd"));
   }
 
   override onRemove(_arena: Arena): void {
-    globalScene.phaseManager.queueMessagePhase(i18next.t("arenaTag:waterSportOnRemove"));
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("arenaTag:waterSportOnRemove"));
   }
 }

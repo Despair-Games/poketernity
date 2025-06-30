@@ -10,7 +10,6 @@ import i18next from "i18next";
 /**
  * Tag to allow the affected Pokemon to survive lethal attacks at 1 HP.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Endure_(move) | Endure}.
- * @extends BattlerTag
  */
 export class EnduringTag extends BattlerTag {
   constructor(tagType: BattlerTagType, lapseType: BattlerTagLapseType, sourceMoveId: MoveId) {
@@ -20,14 +19,16 @@ export class EnduringTag extends BattlerTag {
   override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:enduringOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }
 
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     if (lapseType === BattlerTagLapseType.CUSTOM) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("battlerTags:enduringLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
       return true;

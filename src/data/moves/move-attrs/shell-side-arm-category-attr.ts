@@ -9,7 +9,6 @@ import type { NumberHolder } from "#utils/common-utils";
 /**
  * Attribute used for shell side arm that makes the move physical (and makes contact)
  * if it would deal more damage as a physical attack.
- * @extends VariableMoveCategoryAttr
  */
 export class ShellSideArmCategoryAttr extends VariableMoveCategoryAttr {
   override apply(user: Pokemon, target: Pokemon, move: Move, category: NumberHolder): boolean {

@@ -3,12 +3,11 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { BattlerTag } from "#battler-tags/battler-tag";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { Pokemon } from "#field/pokemon";
-import { coerceArray, type BooleanHolder } from "#utils/common-utils";
+import { type BooleanHolder, coerceArray } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
  * Provides immunity to BattlerTags {@linkcode BattlerTag} to specified targets.
- * @extends PreApplyBattlerTagAbAttr
  */
 export class PreApplyBattlerTagImmunityAbAttr extends PreApplyBattlerTagAbAttr {
   private readonly immuneTagTypes: BattlerTagType[];

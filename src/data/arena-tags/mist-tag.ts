@@ -15,7 +15,6 @@ import i18next from "i18next";
 /**
  * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Mist_(move) Mist}.
  * Prevents Pokémon on the opposing side from lowering the stats of the Pokémon in the Mist.
- * @extends ArenaTag
  */
 export class MistTag extends ArenaTag {
   constructor(turnCount: number, sourceId: number, side: ArenaTagSide) {
@@ -29,7 +28,8 @@ export class MistTag extends ArenaTag {
       const source = globalScene.getPokemonById(this.sourceId);
 
       if (!quiet && source) {
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           i18next.t("arenaTag:mistOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(source) }),
         );
       } else if (!quiet) {
@@ -59,7 +59,7 @@ export class MistTag extends ArenaTag {
     cancelled.value = true;
 
     if (!simulated) {
-      globalScene.phaseManager.queueMessagePhase(i18next.t("arenaTag:mistApply"));
+      globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("arenaTag:mistApply"));
     }
 
     return true;

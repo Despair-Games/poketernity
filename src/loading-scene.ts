@@ -1,7 +1,6 @@
-// -- start tsdoc imports --
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { UiWindowStyle } from "#enums/ui-window-style";
-// -- end tsdoc imports --
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { api } from "#api/api";
 import CacheBustedLoaderPlugin from "#app/plugins/cache-busted-loader-plugin";
@@ -15,8 +14,8 @@ import { initPokemonForms } from "#data/pokemon-forms";
 import { initPokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import { BiomeId } from "#enums/biome-id";
 import { CommonColor } from "#enums/color";
-import { GachaType } from "#enums/gacha-types";
-import { ImagesFolder } from "#enums/images-folders";
+import { GachaType } from "#enums/gacha-type";
+import { ImagesFolder } from "#enums/images-folder";
 import { WindowVariant } from "#enums/window-variant";
 import { getBiomeHasProps } from "#field/arena";
 import { initAbilities } from "#init/init-abilities";
@@ -31,7 +30,7 @@ import { initAchievements } from "#system/achievements";
 import { initVouchers } from "#system/init-vouchers";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
 import { getWindowVariantSuffix } from "#ui/ui-theme";
-import { getTSEnumKeys, getTSEnumValues } from "#utils/common-utils";
+import { enumValueToKey, getTSEnumKeys, getTSEnumValues } from "#utils/common-utils";
 import i18next from "i18next";
 
 export class LoadingScene extends SceneBase {
@@ -212,8 +211,8 @@ export class LoadingScene extends SceneBase {
 
     // Load arena images
     this.loadImage("default_bg", ImagesFolder.ARENAS);
-    getTSEnumValues(BiomeId).map((bt) => {
-      const btKey = BiomeId[bt].toLowerCase();
+    Object.values(BiomeId).map((bt) => {
+      const btKey = enumValueToKey(BiomeId, bt).toLowerCase();
       const isBaseAnimated = btKey === "end";
       const baseAKey = `${btKey}_a`;
       const baseBKey = `${btKey}_b`;

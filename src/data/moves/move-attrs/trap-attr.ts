@@ -10,7 +10,6 @@ import type { Move } from "#moves/move";
  * Unlike {@linkcode BindingAttr | binding effects}, this effect does not
  * damage the target at the end of each turn and lasts indefinitely
  * (i.e. until the user leaves the field).
- * @extends AddBattlerTagAttr
  */
 export class TrapAttr extends AddBattlerTagAttr {
   constructor(isAttack: boolean = false) {

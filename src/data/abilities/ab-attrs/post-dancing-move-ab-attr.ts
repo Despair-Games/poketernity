@@ -7,7 +7,6 @@ import type { PokemonMove } from "#field/pokemon-move";
 
 /**
  * Triggers after a dance move is used either by the opponent or the player
- * @extends PostMoveUsedAbAttr
  */
 export class PostDancingMoveAbAttr extends PostMoveUsedAbAttr {
   public override apply(

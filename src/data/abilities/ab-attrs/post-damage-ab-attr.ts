@@ -4,7 +4,6 @@ import type { Pokemon } from "#field/pokemon";
 
 /**
  * Triggers after the Pokemon takes any damage
- * @extends AbAttr
  */
 export abstract class PostDamageAbAttr extends AbAttr {
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {

@@ -9,7 +9,6 @@ import type { MoveConditionFunc } from "#types/move-condition-func";
  * Attribute to set the weather to Snow, then
  * attempt a forced switch on the user.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Chilly_Reception_(move) | Chilly Reception}.
- * @extends ForceSwitchOutAttr
  */
 export class ChillyReceptionAttr extends ForceSwitchOutAttr {
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {

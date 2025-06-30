@@ -5,7 +5,6 @@ import { MoveHeaderAttr } from "#moves/move-header-attr";
 
 /**
  * Header attribute to add a battler tag to the user at the beginning of a turn.
- * @extends MoveHeaderAttr
  */
 export class AddBattlerTagHeaderAttr extends MoveHeaderAttr {
   private tagType: BattlerTagType;

@@ -6,7 +6,6 @@ import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute for moves which have a custom type chart interaction.
- * @extends MoveAttr
  */
 export abstract class VariableMoveTypeChartAttr extends MoveAttr {
   /**

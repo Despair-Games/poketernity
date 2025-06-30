@@ -35,7 +35,7 @@ describe("Abilities - Perish Body", () => {
   });
 
   it("should not trigger if the attacker is afflicted with Perish", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MILOTIC]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.MILOTIC);
 
     const [, milotic] = game.scene.getPlayerParty();
     const enemy = game.field.getEnemyPokemon();
@@ -52,7 +52,7 @@ describe("Abilities - Perish Body", () => {
 
   it("should trigger if only the defender is afflicted with Perish", async () => {
     game.override.enemyMoveset(MoveId.SPLASH);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MILOTIC]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.MILOTIC);
 
     const [, milotic] = game.scene.getPlayerParty();
     const enemy = game.field.getEnemyPokemon();
@@ -72,7 +72,7 @@ describe("Abilities - Perish Body", () => {
 
   it("should trigger if the defender faints", async () => {
     game.override.startingLevel(200);
-    await game.classicMode.startBattle([SpeciesId.MILOTIC]);
+    await game.classicMode.startBattle(SpeciesId.MILOTIC);
 
     const player = game.field.getPlayerPokemon();
 

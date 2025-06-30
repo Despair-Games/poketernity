@@ -38,7 +38,7 @@ describe("Moves - Ceaseless Edge", () => {
   });
 
   test("move should hit and apply spikes", async () => {
-    await game.classicMode.startBattle([SpeciesId.ILLUMISE]);
+    await game.classicMode.startBattle(SpeciesId.ILLUMISE);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -61,7 +61,7 @@ describe("Moves - Ceaseless Edge", () => {
   test("trainer - move should hit twice, apply two layers of spikes, force switch opponent - opponent takes damage", async () => {
     game.override.startingWave(25).ability(AbilityId.PARENTAL_BOND);
 
-    await game.classicMode.startBattle([SpeciesId.ILLUMISE]);
+    await game.classicMode.startBattle(SpeciesId.ILLUMISE);
 
     game.move.select(MoveId.CEASELESS_EDGE);
     await game.phaseInterceptor.to("MoveEffectPhase", false);

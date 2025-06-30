@@ -1,17 +1,14 @@
 import { globalScene } from "#app/global-scene";
 import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
 import { Button } from "#enums/button";
-import { PhaseId } from "#enums/phase-id";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
-import type { EvolutionPhase } from "#phases/evolution-phase";
 import { settings } from "#system/settings-manager";
 import { MessageUiHandler } from "#ui/message-ui-handler";
 import { addTextObject } from "#ui/text-utils";
 
 /**
  * A handler for Pokemon form change and evolution scenes
- * @extends MessageUiHandler
  */
 export class FormChangeSceneUiHandler extends MessageUiHandler {
   public container: Phaser.GameObjects.Container;
@@ -75,7 +72,7 @@ export class FormChangeSceneUiHandler extends MessageUiHandler {
     if (this.canCancel && button === Button.CANCEL) {
       this.canCancel = false;
       const currentPhase = globalScene.phaseManager.getCurrentPhase();
-      if (currentPhase?.is<EvolutionPhase>(PhaseId.EVOLUTION)) {
+      if (currentPhase?.is("EvolutionPhase")) {
         currentPhase.cancelEvolution();
       }
       return true;

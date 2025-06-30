@@ -1,8 +1,5 @@
 import { BattleStyle } from "#enums/battle-style";
 import { UiMode } from "#enums/ui-mode";
-import { CommandPhase } from "#phases/command-phase";
-import { TitlePhase } from "#phases/title-phase";
-import { TurnInitPhase } from "#phases/turn-init-phase";
 import { settings } from "#system/settings-manager";
 import type { GameManager } from "#test/test-utils/game-manager";
 import { GameManagerHelper } from "#test/test-utils/helpers/game-manager-helper";
@@ -33,8 +30,8 @@ export class ReloadHelper extends GameManagerHelper {
    * the reloaded session.
    */
   async reloadSession(): Promise<void> {
-    const scene = this.game.scene;
-    const titlePhase = new TitlePhase();
+    const { scene, phaseInterceptor } = this.game;
+    const titlePhase = scene.phaseManager.createPhase("TitlePhase");
 
     scene.phaseManager.clearPhaseQueue();
 
@@ -45,10 +42,10 @@ export class ReloadHelper extends GameManagerHelper {
       }),
     );
     scene.phaseManager.unshiftPhase(titlePhase);
-    this.game.phaseInterceptor.superEndPhase(); // End the currently ongoing battle
+    phaseInterceptor.superEndPhase(); // End the currently ongoing battle
 
     titlePhase.loadSaveSlot(-1); // Load the desired session data
-    this.game.phaseInterceptor.shift(); // Loading the save slot also ended TitlePhase, clean it up
+    phaseInterceptor.shift(); // Loading the save slot also ended TitlePhase, clean it up
 
     // Run through prompts for switching Pokemon, copied from classicModeHelper.ts
     if (settings.general.battleStyle === BattleStyle.SWITCH) {
@@ -59,7 +56,7 @@ export class ReloadHelper extends GameManagerHelper {
           this.game.setMode(UiMode.MESSAGE);
           this.game.endPhase();
         },
-        () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase),
+        () => this.game.isCurrentPhase("CommandPhase") || this.game.isCurrentPhase("TurnInitPhase"),
       );
 
       this.game.onNextPrompt(
@@ -69,11 +66,11 @@ export class ReloadHelper extends GameManagerHelper {
           this.game.setMode(UiMode.MESSAGE);
           this.game.endPhase();
         },
-        () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase),
+        () => this.game.isCurrentPhase("CommandPhase") || this.game.isCurrentPhase("TurnInitPhase"),
       );
     }
 
-    await this.game.phaseInterceptor.to("CommandPhase");
+    await phaseInterceptor.to("CommandPhase");
     console.log("==================[New Turn]==================");
   }
 }

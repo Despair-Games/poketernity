@@ -34,7 +34,7 @@ describe("Move Condition Scores - Counter", () => {
   it("should not be penalized if the opponent knows a Physical attack", async () => {
     game.override.moveset([MoveId.TACKLE, MoveId.SPLASH, MoveId.WATER_GUN, MoveId.GROWL]);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     revealAllMoves(game.scene);
     const enemy = game.field.getEnemyPokemon();
@@ -45,7 +45,7 @@ describe("Move Condition Scores - Counter", () => {
   it("should be penalized if the opponent only knows Special attacks", async () => {
     game.override.moveset([MoveId.WATER_GUN, MoveId.ABSORB, MoveId.SPLASH, MoveId.GROWL]);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     revealAllMoves(game.scene);
     const enemy = game.field.getEnemyPokemon();
@@ -56,7 +56,7 @@ describe("Move Condition Scores - Counter", () => {
   it("should be penalized if the opponent can KO the user", async () => {
     game.override.moveset([MoveId.TACKLE, MoveId.FISSURE]);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     revealAllMoves(game.scene);
     const enemy = game.field.getEnemyPokemon();

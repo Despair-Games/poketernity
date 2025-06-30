@@ -34,7 +34,7 @@ describe("Moves - Tera Starstorm", () => {
 
   it("changes type to Stellar when used by Terapagos in its Stellar Form", async () => {
     game.override.battleType("single");
-    await game.classicMode.startBattle([SpeciesId.TERAPAGOS]);
+    await game.classicMode.startBattle(SpeciesId.TERAPAGOS);
 
     const terapagos = game.field.getPlayerPokemon();
     vi.spyOn(terapagos, "getMoveType");
@@ -50,7 +50,7 @@ describe("Moves - Tera Starstorm", () => {
   it("should be affected by type-changing abilities (e.g., Aerilate) if user is not Terastallized", async () => {
     game.override.ability(AbilityId.AERILATE);
     game.override.battleType("single");
-    await game.classicMode.startBattle([SpeciesId.TERAPAGOS]);
+    await game.classicMode.startBattle(SpeciesId.TERAPAGOS);
 
     const player = game.field.getPlayerPokemon();
     vi.spyOn(player, "getMoveType");
@@ -63,7 +63,7 @@ describe("Moves - Tera Starstorm", () => {
   });
 
   it("targets both opponents in a double battle when used by Terapagos in its Stellar Form", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.TERAPAGOS]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.TERAPAGOS);
 
     const terapagos = game.field.getPlayerPokemon();
     game.field.forceTera(terapagos);

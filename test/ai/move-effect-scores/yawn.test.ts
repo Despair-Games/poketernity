@@ -33,7 +33,7 @@ describe("Move Effect Scores - Yawn", () => {
   });
 
   it("should be preferred when the target can be made drowsy", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
 
@@ -43,14 +43,14 @@ describe("Move Effect Scores - Yawn", () => {
   it("should not be preferred when the target already has a status effect", async () => {
     game.override.statusEffect(StatusEffect.PARALYSIS);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).not.toPreferSelectingMove(MoveId.YAWN);
   });
 
   it("should not be preferred when the target is Safeguarded", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     game.move.use(MoveId.SAFEGUARD);
     await game.move.selectEnemyMove(MoveId.SPLASH);
@@ -63,7 +63,7 @@ describe("Move Effect Scores - Yawn", () => {
   it("should not be preferred when the target has Insomnia", async () => {
     game.override.ability(AbilityId.INSOMNIA);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
 
@@ -71,7 +71,7 @@ describe("Move Effect Scores - Yawn", () => {
   });
 
   it("should be avoided when the target is already drowsy", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
 

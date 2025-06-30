@@ -1,8 +1,8 @@
 import type BattleScene from "#app/battle-scene";
 import { allMoves } from "#data/data-lists";
+import type { MoveId } from "#enums/move-id";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import { randSeedInt } from "#utils/random-utils";
-import type { MoveId } from "#enums/move-id";
 import { vi } from "vitest";
 
 /** The number of move selections calculated by {@linkcode getEnemyMoveChoices} */

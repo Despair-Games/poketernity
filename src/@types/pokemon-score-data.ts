@@ -1,8 +1,3 @@
-// -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import type { EnemyPokemon } from "#field/enemy-pokemon";
-import type { Pokemon } from "#field/pokemon";
-import type { PokemonTurnData } from "#types/pokemon-turn-data";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 

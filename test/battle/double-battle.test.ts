@@ -3,7 +3,6 @@ import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { GameModes } from "#enums/game-modes";
 import { MoveId } from "#enums/move-id";
-import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { GameManager } from "#test/test-utils/game-manager";
@@ -45,7 +44,7 @@ describe("Double Battles", () => {
    * @todo This test is currently disabled because of stability issues with {@linkcode gameManager.faintOpponents} in double battles
    */
   it.skip("3v2 edge case: player summons 2 pokemon on the next battle after being fainted and revived", async () => {
-    await game.classicMode.startBattle([SpeciesId.BULBASAUR, SpeciesId.CHARIZARD, SpeciesId.SQUIRTLE]);
+    await game.classicMode.startBattle(SpeciesId.BULBASAUR, SpeciesId.CHARIZARD, SpeciesId.SQUIRTLE);
 
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.SPLASH, 1);
@@ -71,7 +70,7 @@ describe("Double Battles", () => {
   it.skip("randomly chooses between single and double battles if there is no battle type override", async () => {
     game.override.battleType(null);
 
-    await game.classicMode.startBattle([SpeciesId.BULBASAUR]);
+    await game.classicMode.startBattle(SpeciesId.BULBASAUR);
     game.scene.gameMode = getGameMode(GameModes.ENDLESS);
 
     let doubleCount = 0;
@@ -95,7 +94,7 @@ describe("Double Battles", () => {
   });
 
   it("shouldn't hit itself if ally dies before move", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MILOTIC]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.MILOTIC);
 
     const [, milotic] = game.scene.getPlayerField();
 
@@ -113,18 +112,18 @@ describe("Double Battles", () => {
     });
 
     it("should advance exactly one wave if both opponents are defeated at the same time", async () => {
-      await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+      await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
       game.move.use(MoveId.DAZZLING_GLEAM);
       await game.toNextWave();
 
       expect(game.scene.currentBattle.waveIndex).toBe(13);
       expect(game.phaseInterceptor.log.filter((phase) => phase === "SelectModifierPhase").length).toBe(1);
-      expect(game.scene.phaseManager.hasPhase((phase) => phase.is(PhaseId.SELECT_MODIFIER), true)).toBe(false);
+      expect(game.scene.phaseManager.hasPhase((phase) => phase.is("SelectModifierPhase"), true)).toBe(false);
     });
 
     it("should advance exactly one wave if the left opponent is defeated first", async () => {
-      await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MILOTIC]);
+      await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.MILOTIC);
 
       game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
       game.move.use(MoveId.MOONBLAST, 0, BattlerIndex.ENEMY);
@@ -133,11 +132,11 @@ describe("Double Battles", () => {
 
       expect(game.scene.currentBattle.waveIndex).toBe(13);
       expect(game.phaseInterceptor.log.filter((phase) => phase === "SelectModifierPhase").length).toBe(1);
-      expect(game.scene.phaseManager.hasPhase((phase) => phase.is(PhaseId.SELECT_MODIFIER), true)).toBe(false);
+      expect(game.scene.phaseManager.hasPhase((phase) => phase.is("SelectModifierPhase"), true)).toBe(false);
     });
 
     it("should advance exactly one wave if the right opponent is defeated first", async () => {
-      await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MILOTIC]);
+      await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.MILOTIC);
 
       game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
       game.move.use(MoveId.MOONBLAST, 0, BattlerIndex.ENEMY_2);
@@ -146,7 +145,7 @@ describe("Double Battles", () => {
 
       expect(game.scene.currentBattle.waveIndex).toBe(13);
       expect(game.phaseInterceptor.log.filter((phase) => phase === "SelectModifierPhase").length).toBe(1);
-      expect(game.scene.phaseManager.hasPhase((phase) => phase.is(PhaseId.SELECT_MODIFIER), true)).toBe(false);
+      expect(game.scene.phaseManager.hasPhase((phase) => phase.is("SelectModifierPhase"), true)).toBe(false);
     });
   });
 });

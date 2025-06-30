@@ -41,7 +41,7 @@ describe("Moves - Dragon Rage", () => {
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyLevel(100);
 
-    await game.classicMode.startBattle([SpeciesId.SNORLAX]);
+    await game.classicMode.startBattle(SpeciesId.SNORLAX);
 
     partyPokemon = game.field.getPlayerPokemon();
     enemyPokemon = game.field.getEnemyPokemon();

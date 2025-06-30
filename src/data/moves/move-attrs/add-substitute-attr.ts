@@ -12,11 +12,9 @@ import i18next from "i18next";
  * Attribute to put in a {@link https://bulbapedia.bulbagarden.net/wiki/Substitute_(doll) | Substitute Doll}
  * for the user.
  *
- * This attr is only used for Substitute and Shed Tail.
- * Substitute costs 1/4 of the user's max hp and rounds down
- * Shed tail costs 1/2 of the user's max hp and rounds up
- *
- * @extends MoveEffectAttr
+ * This attr is only used for Substitute and Shed Tail:
+ * - Substitute costs 1/4 of the user's max hp and rounds down
+ * - Shed tail costs 1/2 of the user's max hp and rounds up
  * @see {@linkcode apply}
  */
 export class AddSubstituteAttr extends MoveEffectAttr {
@@ -61,11 +59,11 @@ export class AddSubstituteAttr extends MoveEffectAttr {
      * - THe user has more than 1 max hp (wonder guard users)
      */
     return (user, _target, _move) =>
-      !user.getTag(BattlerTagType.SUBSTITUTE) && user.hp > this.getHpCost(user) && user.getMaxHp() > 1;
+      !user.hasTag(BattlerTagType.SUBSTITUTE) && user.hp > this.getHpCost(user) && user.getMaxHp() > 1;
   }
 
   override getFailedText(user: Pokemon, _target: Pokemon, _move: Move, _cancelled: BooleanHolder): string | null {
-    if (user.getTag(BattlerTagType.SUBSTITUTE)) {
+    if (user.hasTag(BattlerTagType.SUBSTITUTE)) {
       return i18next.t("moveTriggers:substituteOnOverlap", { pokemonName: getPokemonNameWithAffix(user) });
     }
     if (user.hp <= this.getHpCost(user) || user.getMaxHp() === 1) {

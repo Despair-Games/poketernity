@@ -10,7 +10,6 @@ import i18next from "i18next";
 /**
  * Attribute to apply the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Destiny_Bond_(move) | Destiny Bond}.
  * If the user faints while Destiny Bond is in effect, the user takes the attacker down with it.
- * @extends MoveEffectAttr
  */
 export class DestinyBondAttr extends MoveEffectAttr {
   constructor() {
@@ -18,7 +17,8 @@ export class DestinyBondAttr extends MoveEffectAttr {
   }
 
   override applyEffect(user: Pokemon, _target: Pokemon, move: Move): boolean {
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       `${i18next.t("moveTriggers:tryingToTakeFoeDown", { pokemonName: getPokemonNameWithAffix(user) })}`,
     );
     user.addTag(BattlerTagType.DESTINY_BOND, undefined, move.id, user.id);

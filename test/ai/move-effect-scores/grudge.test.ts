@@ -31,7 +31,7 @@ describe("Move Effect Scores - Grudge", () => {
   });
 
   it("should be strongly preferred if the user is expected to faint", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
     enemy.hp = 1;
@@ -40,7 +40,7 @@ describe("Move Effect Scores - Grudge", () => {
   });
 
   it("should not be preferred if the user is not expected to faint", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).not.toPreferSelectingMove(MoveId.GRUDGE);

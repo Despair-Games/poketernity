@@ -17,7 +17,6 @@ interface AddBattlerTagAttrOptions extends ChanceBasedMoveEffectAttrOptions {
 
 /**
  * Attribute to add a battler tag to a Pokemon of a given {@linkcode BattlerTagType | type}.
- * @extends ChanceBasedMoveEffectAttr
  * @see {@linkcode BattlerTag}
  */
 export abstract class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
@@ -34,7 +33,7 @@ export abstract class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
   /**
    * If `true`, causes the move to fail if the target already
    * has a tag of the same type.
-   * @default false
+   * @defaultValue `false`
    */
   public get failOnOverlap() {
     return this.options?.failOnOverlap ?? false;
@@ -42,7 +41,7 @@ export abstract class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
 
   /**
    * The minimum number of turns the tag is active
-   * @default 0
+   * @defaultValue `0`
    */
   public get turnCountMin() {
     return this.options?.turnCountMin ?? 0;
@@ -50,7 +49,7 @@ export abstract class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
 
   /**
    * The maximum number of turns the tag is active.
-   * @default turnCountMin
+   * @defaultValue {@linkcode turnCountMin}
    */
   public get turnCountMax() {
     return this.options?.turnCountMax ?? this.turnCountMin;
@@ -66,7 +65,7 @@ export abstract class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
   }
 
   override getCondition(): MoveCondition | MoveConditionFunc | null {
-    return this.failOnOverlap ? (user, target, _move) => !(this.selfTarget ? user : target).getTag(this.tagType) : null;
+    return this.failOnOverlap ? (user, target, _move) => !(this.selfTarget ? user : target).hasTag(this.tagType) : null;
   }
 
   public abstract override getRawEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number;

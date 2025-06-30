@@ -6,7 +6,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
-import { type StatStageChangeCallback, StatStageChangePhase } from "#phases/stat-stage-change-phase";
+import type { StatStageChangeCallback } from "#phases/stat-stage-change-phase";
 import i18next from "i18next";
 
 /**
@@ -19,7 +19,6 @@ import i18next from "i18next";
  * - Stat changes on removal of (all) stacks.
  *   - Removing stacks decreases DEF and SPDEF, independently, by one stage for each stack that successfully changed
  *     the stat when added.
- * @extends BattlerTag
  */
 export class StockpilingTag extends BattlerTag {
   public stockpiledCount: number = 0;
@@ -63,7 +62,8 @@ export class StockpilingTag extends BattlerTag {
     if (this.stockpiledCount < 3) {
       this.stockpiledCount++;
 
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("battlerTags:stockpilingOnAdd", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
           stockpiledCount: this.stockpiledCount,
@@ -71,10 +71,15 @@ export class StockpilingTag extends BattlerTag {
       );
 
       // Attempt to increase DEF and SPDEF by one stage, keeping track of successful changes.
-      globalScene.phaseManager.unshiftPhase(
-        new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [Stat.SPDEF, Stat.DEF], 1, {
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "StatStageChangePhase",
+        pokemon.getBattlerIndex(),
+        pokemon,
+        [Stat.SPDEF, Stat.DEF],
+        1,
+        {
           onChange: this.onStatStagesChanged,
-        }),
+        },
       );
     }
   }
@@ -92,14 +97,22 @@ export class StockpilingTag extends BattlerTag {
     const spDefChange = this.statChangeCounts[Stat.SPDEF];
 
     if (defChange) {
-      globalScene.phaseManager.unshiftPhase(
-        new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [Stat.DEF], -defChange),
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "StatStageChangePhase",
+        pokemon.getBattlerIndex(),
+        pokemon,
+        [Stat.DEF],
+        -defChange,
       );
     }
 
     if (spDefChange) {
-      globalScene.phaseManager.unshiftPhase(
-        new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [Stat.SPDEF], -spDefChange),
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "StatStageChangePhase",
+        pokemon.getBattlerIndex(),
+        pokemon,
+        [Stat.SPDEF],
+        -spDefChange,
       );
     }
   }

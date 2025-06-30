@@ -10,7 +10,6 @@ import i18next from "i18next";
 
 /**
  * Tag that swaps the user's base ATK stat with its base DEF stat.
- * @extends BattlerTag
  */
 export class PowerTrickTag extends BattlerTag {
   constructor(sourceMoveId: MoveId, sourceId: number) {
@@ -19,14 +18,16 @@ export class PowerTrickTag extends BattlerTag {
 
   override onAdd(pokemon: Pokemon): void {
     this.swapStat(pokemon);
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:powerTrickActive", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }
 
   override onRemove(pokemon: Pokemon): void {
     this.swapStat(pokemon);
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:powerTrickActive", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }

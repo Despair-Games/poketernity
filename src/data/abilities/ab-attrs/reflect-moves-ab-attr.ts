@@ -1,7 +1,7 @@
-// -- start tsdoc imports
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { MovePhase } from "#phases/move-phase";
-// -- end tsdoc imports
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
+
 import { PreDefendAbAttr } from "#abilities/pre-defend-ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -15,7 +15,6 @@ import i18next from "i18next";
  * on an incoming move, reflecting the move back to the user.
  * Most of the logic on whether the move meets conditions to be reflected
  * can be found in {@linkcode MovePhase.tryReflectMove}.
- * @extends PreDefendAbAttr
  */
 export class ReflectMovesAbAttr extends PreDefendAbAttr {
   constructor() {

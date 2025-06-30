@@ -34,7 +34,7 @@ describe("Move Condition Scores - Upper Hand", () => {
   it("should be penalized if the target doesn't have a high-priority move", async () => {
     game.override.moveset([MoveId.TACKLE, MoveId.SPLASH]);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     revealAllMoves(game.scene);
     const enemy = game.field.getEnemyPokemon();
@@ -45,7 +45,7 @@ describe("Move Condition Scores - Upper Hand", () => {
   it("should be given a reduced penalty if the target's best attack has high priority", async () => {
     game.override.moveset([MoveId.TACKLE, MoveId.QUICK_ATTACK]).enemyMoveset([MoveId.UPPER_HAND, MoveId.SPIT_UP]);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     revealAllMoves(game.scene);
     const enemy = game.field.getEnemyPokemon();
@@ -59,7 +59,7 @@ describe("Move Condition Scores - Upper Hand", () => {
   it("should be penalized if the target's moves are unknown", async () => {
     game.override.moveset([MoveId.TACKLE, MoveId.QUICK_ATTACK]);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
     // Set Enemy to 1 HP to allow all of the Player's attacks to KO.

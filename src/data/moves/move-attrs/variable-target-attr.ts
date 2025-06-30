@@ -5,7 +5,6 @@ import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute to change a move's legal target set based on game state.
- * @extends MoveAttr
  */
 export class VariableTargetAttr extends MoveAttr {
   private targetChangeFunc: (user: Pokemon, target: Pokemon, move: Move) => number;

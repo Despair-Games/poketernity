@@ -29,6 +29,7 @@ describe("UI - Battle Info", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
+    game.override.disableExpGain = false;
     game.override
       .moveset([MoveId.GUILLOTINE, MoveId.SPLASH])
       .battleType("single")
@@ -43,7 +44,7 @@ describe("UI - Battle Info", () => {
       game.settings.expGainsSpeed(expGainsSpeed);
       vi.spyOn(Math, "pow");
 
-      await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
+      await game.classicMode.startBattle(SpeciesId.CHARIZARD);
 
       game.move.select(MoveId.SPLASH);
       await game.faintOpponents();

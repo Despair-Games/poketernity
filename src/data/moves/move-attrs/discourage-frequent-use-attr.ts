@@ -6,7 +6,6 @@ import { MoveAttr } from "#moves/move-attr";
  * Attribute to discourage Enemy AI from using
  * the associated move multiple times in a short interval.
  * Has no effect on game state.
- * @extends MoveAttr
  * @deprecated To be removed once {@linkcode getUserBenefitScore} is fully replaced
  */
 export class DiscourageFrequentUseAttr extends MoveAttr {

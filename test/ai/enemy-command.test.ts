@@ -32,7 +32,7 @@ describe("Enemy Commands - Basic Move Selection", () => {
       .startingLevel(1)
       .enemyLevel(100);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -46,7 +46,7 @@ describe("Enemy Commands - Basic Move Selection", () => {
       .startingLevel(1)
       .enemyLevel(100);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -60,7 +60,7 @@ describe("Enemy Commands - Basic Move Selection", () => {
       .startingLevel(100)
       .enemyLevel(100);
 
-    await game.classicMode.startBattle([SpeciesId.DUSKULL]);
+    await game.classicMode.startBattle(SpeciesId.DUSKULL);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -69,7 +69,7 @@ describe("Enemy Commands - Basic Move Selection", () => {
 
   it("should not crash from an off-field enemy Pokemon simulating every move", async () => {
     game.override.startingWave(5);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
     const offFieldEnemy = game.scene.getEnemyParty()[1];

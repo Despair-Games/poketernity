@@ -12,7 +12,6 @@ import i18next from "i18next";
  * After the turn ends, try to create an extra item
  * @param itemType - The type of item to create
  * @param procChance - Chance to create an item
- * @extends PostTurnAbAttr
  */
 export class PostTurnLootAbAttr extends PostTurnAbAttr {
   constructor(
@@ -73,7 +72,8 @@ export class PostTurnLootAbAttr extends PostTurnAbAttr {
       berryModifier.stackCount++;
     }
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("abilityTriggers:postTurnLootCreateEatenBerry", {
         pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
         berryName: chosenBerry.name,

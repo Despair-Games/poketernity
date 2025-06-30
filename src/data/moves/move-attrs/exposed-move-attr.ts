@@ -15,7 +15,6 @@ import i18next from "i18next";
  * and makes its evasiveness be ignored during accuracy
  * checks.
  * Used by: {@linkcode MoveId.ODOR_SLEUTH | Odor Sleuth}, {@linkcode MoveId.MIRACLE_EYE | Miracle Eye} and {@linkcode MoveId.FORESIGHT | Foresight}
- * @extends AddBattlerTagAttr
  */
 export class ExposedMoveAttr extends AddBattlerTagAttr {
   constructor(tagType: BattlerTagType) {
@@ -27,7 +26,8 @@ export class ExposedMoveAttr extends AddBattlerTagAttr {
       return false;
     }
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("moveTriggers:exposedMove", {
         pokemonName: getPokemonNameWithAffix(user),
         targetPokemonName: getPokemonNameWithAffix(target),

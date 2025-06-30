@@ -3,7 +3,7 @@ import { TrappedTag } from "#battler-tags/trapped-tag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
-import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
+import type { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import { GameManager } from "#test/test-utils/game-manager";
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 
@@ -31,7 +31,7 @@ describe("BattlerTag - OctolockTag", () => {
       const subject = new OctolockTag(1);
 
       vi.spyOn(game.scene.phaseManager, "unshiftPhase").mockImplementation((phase) => {
-        expect(phase).toBeInstanceOf(StatStageChangePhase);
+        expect(phase.phaseName).toBe("StatStageChangePhase");
         expect((phase as StatStageChangePhase)["stages"]).toEqual(-1);
         expect((phase as StatStageChangePhase)["stats"]).toEqual([Stat.DEF, Stat.SPDEF]);
       });

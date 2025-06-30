@@ -1,7 +1,11 @@
-export enum AchvTier {
-  COMMON,
-  GREAT,
-  ULTRA,
-  EPIC,
-  MASTER,
-}
+import type { EnumValues } from "#types/enum-values";
+
+export const AchvTier = {
+  COMMON: 1,
+  GREAT: 2,
+  ULTRA: 3,
+  EPIC: 4,
+  MASTER: 5,
+} as const;
+
+export type AchvTier = EnumValues<typeof AchvTier>;

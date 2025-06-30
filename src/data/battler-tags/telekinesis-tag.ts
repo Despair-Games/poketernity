@@ -1,8 +1,6 @@
-// -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { FloatingTag } from "#battler-tags/floating-tag";
-/* eslint-enable @typescript-eslint/no-unused-vars */
-// -- end tsdoc imports --
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -20,7 +18,6 @@ import i18next from "i18next";
  * The Telekinesis tag can be baton-passed to a teammate.
  * Custom: Unlike the mainline games, it doesn't lapse when baton-passed to Mega Gengar.
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Telekinesis_(move) | Telekinesis}
- * @extends BattlerTag
  */
 export class TelekinesisTag extends BattlerTag {
   constructor(sourceMoveId: MoveId) {
@@ -35,7 +32,8 @@ export class TelekinesisTag extends BattlerTag {
   }
 
   override onAdd(pokemon: Pokemon) {
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:telekinesisOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }

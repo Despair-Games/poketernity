@@ -5,7 +5,6 @@ import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute to modify a move's damage after all other damage modifiers are accounted for.
- * @extends MoveAttr
  * @see {@linkcode getModifiedDamage}
  */
 export abstract class ModifiedDamageAttr extends MoveAttr {

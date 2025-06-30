@@ -2,16 +2,15 @@ import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { PostBattleAbAttr } from "#abilities/post-battle-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { PhaseId } from "#enums/phase-id";
 import type { LapsingPersistentModifier, LapsingPokemonHeldItemModifier } from "#modifier/modifier";
-import { BattlePhase } from "#phases/abstract-battle-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
 
 /**
  * Handles the effects that need to trigger after a battle ends (game stats updates, reducing item turn count, etc)
- * @extends BattlePhase
  */
 export class BattleEndPhase extends BattlePhase {
-  override readonly id = PhaseId.BATTLE_END;
+  public override readonly phaseName = "BattleEndPhase";
+
   /** If true, will increment battles won */
   public readonly isVictory: boolean;
 
@@ -36,8 +35,8 @@ export class BattleEndPhase extends BattlePhase {
       globalScene.phaseManager.queueGameOverPhase({ clearPhaseQueue: true, isVictory: true });
     }
 
-    for (const pokemon of globalScene.getField()) {
-      if (pokemon?.summonData) {
+    for (const pokemon of globalScene.getPlayerField()) {
+      if (pokemon) {
         pokemon.summonData.waveTurnCount = 0;
       }
     }

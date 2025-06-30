@@ -4,16 +4,16 @@ import type { PostItemLostAbAttr } from "#abilities/post-item-lost-ab-attr";
 import type { ReduceBerryUseThresholdAbAttr } from "#abilities/reduce-berry-use-threshold-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { getStatusEffectHealText } from "#app/utils/status-effect-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
 import { HitResult } from "#enums/hit-result";
-import { Stat, type BattleStat } from "#enums/stat";
+import { type BattleStat, Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import { getBerryName } from "#utils/berry-utils";
 import { NumberHolder, toDmgValue } from "#utils/common-utils";
 import { randSeedInt } from "#utils/random-utils";
+import { getStatusEffectHealText } from "#utils/status-effect-utils";
 import i18next from "i18next";
 
 export type BerryPredicate = (pokemon: Pokemon) => boolean;
@@ -42,7 +42,7 @@ export function getBerryPredicate(berryType: BerryType): BerryPredicate {
       return (pokemon: Pokemon) => {
         const threshold = new NumberHolder(0.25);
         applyAbAttrs<ReduceBerryUseThresholdAbAttr>(AbAttrFlag.REDUCE_BERRY_USE_THRESHOLD, pokemon, false, threshold);
-        return pokemon.getHpRatio() < 0.25 && !pokemon.getTag(BattlerTagType.CRIT_BOOST);
+        return pokemon.getHpRatio() < 0.25 && !pokemon.hasTag(BattlerTagType.CRIT_BOOST);
       };
     case BerryType.STARF:
       return (pokemon: Pokemon) => {
@@ -70,7 +70,7 @@ export function getBerryEffectFunc(berryType: BerryType): BerryEffectFunc {
         pokemon.waveData.berriesEaten.push(berryType);
         const hpHealed = new NumberHolder(toDmgValue(pokemon.getMaxHp() / 4));
         applyAbAttrs<DoubleBerryEffectAbAttr>(AbAttrFlag.DOUBLE_BERRY_EFFECT, pokemon, false, hpHealed);
-        globalScene.phaseManager.queuePokemonHealPhase(pokemon.getBattlerIndex(), hpHealed.value, {
+        globalScene.phaseManager.createAndUnshiftPhase("PokemonHealPhase", pokemon.getBattlerIndex(), hpHealed.value, {
           message: i18next.t("battle:hpHealBerry", {
             pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
             berryName: getBerryName(berryType),
@@ -82,7 +82,8 @@ export function getBerryEffectFunc(berryType: BerryType): BerryEffectFunc {
       return (pokemon: Pokemon, berryOwner?: Pokemon) => {
         pokemon.waveData.berriesEaten.push(berryType);
         if (pokemon.hasNonVolatileStatusEffect(false, true)) {
-          globalScene.phaseManager.queueMessagePhase(
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "MessagePhase",
             getStatusEffectHealText(pokemon.getStatusEffect(true), getPokemonNameWithAffix(pokemon)),
           );
         }
@@ -101,8 +102,8 @@ export function getBerryEffectFunc(berryType: BerryType): BerryEffectFunc {
         const stat: BattleStat = berryType - BerryType.ENIGMA;
         const statStages = new NumberHolder(1);
         applyAbAttrs<DoubleBerryEffectAbAttr>(AbAttrFlag.DOUBLE_BERRY_EFFECT, pokemon, false, statStages);
-        globalScene.phaseManager.queueStatStageChangePhase(
-          true,
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "StatStageChangePhase",
           pokemon.getBattlerIndex(),
           pokemon,
           [stat],
@@ -122,8 +123,8 @@ export function getBerryEffectFunc(berryType: BerryType): BerryEffectFunc {
         const randStat = randSeedInt(Stat.SPD, Stat.ATK);
         const stages = new NumberHolder(2);
         applyAbAttrs<DoubleBerryEffectAbAttr>(AbAttrFlag.DOUBLE_BERRY_EFFECT, pokemon, false, stages);
-        globalScene.phaseManager.queueStatStageChangePhase(
-          true,
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "StatStageChangePhase",
           pokemon.getBattlerIndex(),
           pokemon,
           [randStat],
@@ -139,7 +140,8 @@ export function getBerryEffectFunc(berryType: BerryType): BerryEffectFunc {
           : pokemon.getMoveset().find((m) => m.getPpRatio() < 1);
         if (ppRestoreMove !== undefined) {
           ppRestoreMove!.ppUsed = Math.max(ppRestoreMove!.ppUsed - 10, 0);
-          globalScene.phaseManager.queueMessagePhase(
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "MessagePhase",
             i18next.t("battle:ppHealBerry", {
               pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
               moveName: ppRestoreMove!.getName(),

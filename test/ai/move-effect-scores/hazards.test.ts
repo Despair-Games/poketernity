@@ -1,9 +1,9 @@
 import { HAZARD_STATUS_MOVES } from "#constants/move-constants";
-import { capitalizeString } from "#utils/string-utils";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/game-manager";
+import { capitalizeString } from "#utils/string-utils";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Move Effect Scores - Hazards", () => {
@@ -44,14 +44,14 @@ describe("Move Effect Scores - Hazards", () => {
     it("should gain a large incentive to use on the first turn of battle", async () => {
       game.override.enemyMoveset([...baseMoveset, MoveId.SUPER_FANG]);
 
-      await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+      await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
       const enemy = game.field.getEnemyPokemon();
       expect(enemy).toPreferSelectingMove(moveId);
     });
 
     it("should gain a small incentive to use after the first turn", async () => {
-      await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+      await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
       const enemy = game.field.getEnemyPokemon();
 

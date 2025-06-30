@@ -33,7 +33,7 @@ describe("Move Effect Scores - Encore", () => {
   });
 
   it("should not be preferred if the target hasn't used a move", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
 
@@ -41,7 +41,7 @@ describe("Move Effect Scores - Encore", () => {
   });
 
   it("should be preferred if the target last used a status move and the user outspeeds the target", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const player = game.field.getPlayerPokemon();
     player.setStat(Stat.SPD, 50);
@@ -56,7 +56,7 @@ describe("Move Effect Scores - Encore", () => {
   });
 
   it("should not be preferred if the target last used an attack", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const player = game.field.getPlayerPokemon();
     player.setStat(Stat.SPD, 50);
@@ -71,7 +71,7 @@ describe("Move Effect Scores - Encore", () => {
   });
 
   it("should be avoided if the target is already affected by Encore", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
 

@@ -1,8 +1,9 @@
 import { AbilityId } from "#enums/ability-id";
 import { ModifierTier } from "#enums/modifier-tier";
 import { MoveId } from "#enums/move-id";
+import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
-import { SelectModifierPhase } from "#phases/select-modifier-phase";
+import type { SelectModifierPhase } from "#phases/select-modifier-phase";
 import { GameManager } from "#test/test-utils/game-manager";
 import Phase from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -33,9 +34,10 @@ describe("Items - Lock Capsule", () => {
   });
 
   it("doesn't set the cost of common tier items to 0", async () => {
-    await game.classicMode.startBattle();
-    game.scene.phaseManager.overridePhase(
-      new SelectModifierPhase({
+    const { phaseManager } = game.scene;
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
+    phaseManager.overridePhase(
+      phaseManager.createPhase("SelectModifierPhase", {
         customModifierSettings: {
           guaranteedModifierTiers: [ModifierTier.COMMON, ModifierTier.COMMON, ModifierTier.COMMON],
           fillRemaining: false,

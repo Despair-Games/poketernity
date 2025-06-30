@@ -33,7 +33,7 @@ describe("Moves - Aroma Veil", () => {
   });
 
   it("Aroma Veil protects the Pokemon's side against most Move Restriction Battler Tags", async () => {
-    await game.classicMode.startBattle([SpeciesId.REGIELEKI, SpeciesId.BULBASAUR]);
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI, SpeciesId.BULBASAUR);
 
     const playerPokemon = game.scene.getPlayerField();
 
@@ -45,13 +45,13 @@ describe("Moves - Aroma Veil", () => {
     await game.toNextTurn();
 
     playerPokemon.forEach((p) => {
-      expect(p.getTag(BattlerTagType.HEAL_BLOCK)).toBeUndefined();
+      expect(p).not.toHaveBattlerTag(BattlerTagType.HEAL_BLOCK);
       expect(p).toHaveMoveResult(MoveResult.SUCCESS);
     });
   });
 
   it("Aroma Veil does not protect against Imprison", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
     const playerPokemon = game.scene.getPlayerField();
 

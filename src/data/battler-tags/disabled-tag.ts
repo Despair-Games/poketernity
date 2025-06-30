@@ -1,7 +1,6 @@
-// -- start tsdoc imports --
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { AbilityId } from "#enums/ability-id";
-// -- end tsdoc imports
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -17,7 +16,6 @@ import i18next from "i18next";
 /**
  * Tag representing the "disabling" effect performed by {@linkcode MoveId.DISABLE} and {@linkcode AbilityId.CURSED_BODY}.
  * When the tag is added, the last-used move of the tag holder is set as the disabled move.
- * @extends MoveRestrictionBattlerTag
  */
 export class DisabledTag extends MoveRestrictionBattlerTag {
   /** The move being disabled. Gets set when {@linkcode onAdd} is called for this tag. */
@@ -54,7 +52,8 @@ export class DisabledTag extends MoveRestrictionBattlerTag {
 
     this.moveId = lastValidMove.id;
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:disabledOnAdd", {
         pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
         moveName: allMoves.get(this.moveId).name,
@@ -66,7 +65,8 @@ export class DisabledTag extends MoveRestrictionBattlerTag {
   override onRemove(pokemon: Pokemon): void {
     super.onRemove(pokemon);
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:disabledLapse", {
         pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
         moveName: allMoves.get(this.moveId).name,

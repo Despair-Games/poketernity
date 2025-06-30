@@ -39,7 +39,7 @@ describe("Move Effect Scores - Ability Switching", () => {
   ])("Enemy should prefer selecting Skill Swap when the opponent has $abilityName", async ({ abilityId }) => {
     game.override.ability(abilityId);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     revealAllAbilities(game.scene);
     const enemy = game.field.getEnemyPokemon();
@@ -57,7 +57,7 @@ describe("Move Effect Scores - Ability Switching", () => {
   ])("Enemy should not prefer selecting Skill Swap when the opponent has $abilityName", async ({ abilityId }) => {
     game.override.ability(abilityId);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     revealAllAbilities(game.scene);
     const enemy = game.field.getEnemyPokemon();
@@ -72,7 +72,7 @@ describe("Move Effect Scores - Ability Switching", () => {
   )("Enemy should prefer selecting Skill Swap when it has $abilityName", async ({ abilityId }) => {
     game.override.enemyAbility(abilityId);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     revealAllAbilities(game.scene);
     const enemy = game.field.getEnemyPokemon();
@@ -83,7 +83,7 @@ describe("Move Effect Scores - Ability Switching", () => {
   it("Enemy should avoid selecting Skill Swap when it has an unswappable ability", async () => {
     game.override.enemyAbility(AbilityId.COMATOSE);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     revealAllAbilities(game.scene);
     const enemy = game.field.getEnemyPokemon();
@@ -94,7 +94,7 @@ describe("Move Effect Scores - Ability Switching", () => {
   it("Enemy should avoid selecting Skill Swap when the opponent has an unswappable ability", async () => {
     game.override.ability(AbilityId.COMATOSE);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     revealAllAbilities(game.scene);
     const enemy = game.field.getEnemyPokemon();
@@ -105,7 +105,7 @@ describe("Move Effect Scores - Ability Switching", () => {
   it("Enemy should not prefer selecting Skill Swap when no abilities are revealed", async () => {
     game.override.ability(AbilityId.HUGE_POWER);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
 

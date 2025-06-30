@@ -43,7 +43,7 @@ describe("Move Effect Scores - Screens", () => {
     });
 
     it("should be preferred on the first turn of battle", async () => {
-      await game.classicMode.startBattle([SpeciesId.AGGRON]);
+      await game.classicMode.startBattle(SpeciesId.AGGRON);
 
       const enemy = game.field.getEnemyPokemon();
 
@@ -51,7 +51,7 @@ describe("Move Effect Scores - Screens", () => {
     });
 
     it("should be avoided if the move's effect is already active", async () => {
-      await game.classicMode.startBattle([SpeciesId.AGGRON]);
+      await game.classicMode.startBattle(SpeciesId.AGGRON);
 
       const enemy = game.field.getEnemyPokemon();
 
@@ -72,7 +72,7 @@ describe("Move Effect Scores - Screens", () => {
     it("should be preferred over a similar move with a lesser additional effect", async () => {
       game.override.enemyMoveset([moveId, cmpId]);
 
-      await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+      await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
       const enemy = game.field.getEnemyPokemon();
 
@@ -82,7 +82,7 @@ describe("Move Effect Scores - Screens", () => {
     it("should still be preferred over Tackle if its secondary effect is already active", async () => {
       game.override.enemyMoveset([moveId, MoveId.TACKLE]);
 
-      await game.classicMode.startBattle([SpeciesId.BLISSEY]);
+      await game.classicMode.startBattle(SpeciesId.BLISSEY);
 
       const enemy = game.field.getEnemyPokemon();
 

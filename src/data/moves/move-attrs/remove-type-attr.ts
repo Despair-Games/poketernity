@@ -6,11 +6,12 @@ import { MoveEffectAttr } from "#moves/move-effect-attr";
 
 /**
  * Attribute to remove a set type from the user after the move is used.
+ *
  * If the user has no remaining type after removal, this makes the user
  * {@linkcode ElementalType.UNKNOWN | typeless} instead.
+ *
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Burn_Up_(move) | Burn Up}
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Double_Shock_(move) | Double Shock}.
- * @extends MoveEffectAttr
  */
 export class RemoveTypeAttr extends MoveEffectAttr {
   private removedType: ElementalType;

@@ -28,7 +28,6 @@ import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import { MoveRequirement } from "#mystery-encounters/mystery-encounter-requirements";
 import { STEALING_MOVES } from "#mystery-encounters/requirement-groups";
-import { PartyHealPhase } from "#phases/party-heal-phase";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 
 /** i18n namespace for the encounter */
@@ -148,7 +147,7 @@ export const SlumberingSnorlaxEncounter: MysteryEncounter = MysteryEncounterBuil
     async () => {
       // Fall asleep waiting for Snorlax
       // Full heal party
-      globalScene.phaseManager.unshiftPhase(new PartyHealPhase(true));
+      globalScene.phaseManager.createAndUnshiftPhase("PartyHealPhase", true);
       queueEncounterMessage(`${namespace}:option.2.rest_result`);
       leaveEncounterWithoutBattle();
     },

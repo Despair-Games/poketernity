@@ -31,7 +31,7 @@ describe("Move Effect Scores - Smack Down", () => {
   });
 
   it("should be preferred if the user is Ground-type against a Flying-type target", async () => {
-    await game.classicMode.startBattle([SpeciesId.SKARMORY]);
+    await game.classicMode.startBattle(SpeciesId.SKARMORY);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).toPreferSelectingMove(MoveId.SMACK_DOWN);
@@ -39,14 +39,14 @@ describe("Move Effect Scores - Smack Down", () => {
 
   it("should not be preferred if the user is not Ground-type", async () => {
     game.override.enemySpecies(SpeciesId.MAGIKARP);
-    await game.classicMode.startBattle([SpeciesId.SKARMORY]);
+    await game.classicMode.startBattle(SpeciesId.SKARMORY);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).not.toPreferSelectingMove(MoveId.SMACK_DOWN);
   });
 
   it("should not be preferred if the target is already grounded", async () => {
-    await game.classicMode.startBattle([SpeciesId.SKARMORY]);
+    await game.classicMode.startBattle(SpeciesId.SKARMORY);
 
     game.move.use(MoveId.SPLASH);
     await game.move.selectEnemyMove(MoveId.SMACK_DOWN);

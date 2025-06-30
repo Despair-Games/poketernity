@@ -7,11 +7,7 @@ import type { Arena } from "#field/arena";
 import type { Pokemon } from "#field/pokemon";
 import i18next from "i18next";
 
-/**
- * Base class for any special effects that apply to the {@linkcode Arena | field}
- * during battle.
- * @abstract
- */
+/** Base class for any special effects that apply to the {@linkcode Arena | field} during battle. */
 export abstract class ArenaTag {
   constructor(
     /** An {@linkcode ArenaTagType | identifier} for the tag's effect. */
@@ -78,7 +74,8 @@ export abstract class ArenaTag {
    */
   public onRemove(_arena: Arena, quiet: boolean = false): void {
     if (!quiet) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t(`arenaTag:arenaOnRemove${this.i18nSideKey}`, { moveName: this.getMoveName() }),
       );
     }

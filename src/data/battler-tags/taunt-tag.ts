@@ -12,7 +12,6 @@ import i18next from "i18next";
 /**
  * Tag that applies the effects of Taunt to the target Pokemon, restricting the use of status moves.
  * The tag is removed after 4 turns.
- * @extends MoveRestrictionBattlerTag
  */
 export class TauntTag extends MoveRestrictionBattlerTag {
   constructor() {
@@ -21,7 +20,8 @@ export class TauntTag extends MoveRestrictionBattlerTag {
 
   override onAdd(pokemon: Pokemon) {
     super.onAdd(pokemon);
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:tauntOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       1500,
     );

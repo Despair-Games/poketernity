@@ -2,7 +2,6 @@ import { PostStatStageChangeAbAttr } from "#abilities/post-stat-stage-change-ab-
 import { globalScene } from "#app/global-scene";
 import type { BattleStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
-import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 
 /**
  * Attribute to increase some of the user's stats in response to negative stat changes inflicted by an opponent.
@@ -15,7 +14,6 @@ import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
  * | Competitive | +2 SpA      |
  *
  *
- * @extends PostStatStageChangeAbAttr
  */
 export class DefiantCompetitiveAbAttr extends PostStatStageChangeAbAttr {
   private readonly statsToChange: BattleStat[];
@@ -41,8 +39,12 @@ export class DefiantCompetitiveAbAttr extends PostStatStageChangeAbAttr {
     const isSourceAllied = !!source && [pokemon, pokemon.getAlly()].includes(source);
     if (stagesChanged < 0 && (!isSourceAllied || isStickyWeb)) {
       if (!simulated) {
-        globalScene.phaseManager.unshiftPhase(
-          new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, this.statsToChange, this.stages),
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "StatStageChangePhase",
+          pokemon.getBattlerIndex(),
+          pokemon,
+          this.statsToChange,
+          this.stages,
         );
       }
       return true;

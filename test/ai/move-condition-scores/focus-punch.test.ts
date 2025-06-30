@@ -33,7 +33,7 @@ describe("Move Condition Scores - Focus Punch", () => {
   });
 
   it("should be penalized under normal circumstances", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
 
@@ -41,7 +41,7 @@ describe("Move Condition Scores - Focus Punch", () => {
   });
 
   it("should not be penalized if the user has an active Substitute", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
     enemy.addTag(BattlerTagType.SUBSTITUTE, 0, MoveId.SUBSTITUTE, enemy.id);
@@ -55,7 +55,7 @@ describe("Move Condition Scores - Focus Punch", () => {
   ])("should not be penalized if opponents are %s", async (_, statusEffect) => {
     game.override.statusEffect(statusEffect);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
 
@@ -67,7 +67,7 @@ describe("Move Condition Scores - Focus Punch", () => {
       .statusEffect(StatusEffect.PARALYSIS)
       .enemyMoveset([MoveId.FOCUS_PUNCH, MoveId.SWALLOW, MoveId.SPIT_UP]);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
 

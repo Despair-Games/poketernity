@@ -3,14 +3,13 @@ import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
 import { CallMoveAttr } from "#moves/call-move-attr";
 import type { Move } from "#moves/move";
-import { getTSEnumValues, type BooleanHolder } from "#utils/common-utils";
+import { type BooleanHolder, getTSEnumValues } from "#utils/common-utils";
 import { getMaxMoveList } from "#utils/move-utils";
 
 /**
  * Attribute used to call a random move.
  * Used for {@linkcode MoveId.METRONOME}
  * @see {@linkcode apply} for move selection and move call
- * @extends CallMoveAttr to call a selected move
  */
 export class MetronomeAttr extends CallMoveAttr {
   constructor() {

@@ -32,21 +32,21 @@ describe("Move Effect Scores - Foresight", () => {
   });
 
   it("should be strongly preferred if the user has a move that would bypass immunity", async () => {
-    await game.classicMode.startBattle([SpeciesId.DUSKULL]);
+    await game.classicMode.startBattle(SpeciesId.DUSKULL);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).toPreferSelectingMove(MoveId.FORESIGHT);
   });
 
   it("should not be preferred if the effect is irrelevant to the target's type", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).not.toPreferSelectingMove(MoveId.FORESIGHT);
   });
 
   it("should be avoided if the target is already under Foresight's effect", async () => {
-    await game.classicMode.startBattle([SpeciesId.DUSKULL]);
+    await game.classicMode.startBattle(SpeciesId.DUSKULL);
 
     game.move.use(MoveId.SPLASH);
     await game.move.selectEnemyMove(MoveId.FORESIGHT, BattlerIndex.PLAYER);

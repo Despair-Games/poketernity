@@ -19,7 +19,6 @@ import { NumberHolder } from "#utils/common-utils";
 /**
  * Attribute used to determine the Biome/Terrain-based secondary
  * effect of {@link https://bulbapedia.bulbagarden.net/wiki/Secret_Power_(move) | Secret Power}.
- * @extends ChanceBasedMoveEffectAttr
  */
 export class SecretPowerAttr extends ChanceBasedMoveEffectAttr {
   constructor() {

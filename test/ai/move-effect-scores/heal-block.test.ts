@@ -32,7 +32,7 @@ describe("Move Effect Scores - Heal Block", () => {
   });
 
   it("should be preferred over low-impact moves", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).toPreferSelectingMove(MoveId.HEAL_BLOCK);
@@ -41,7 +41,7 @@ describe("Move Effect Scores - Heal Block", () => {
   it("should be strongly preferred if the opponent has Triage", async () => {
     game.override.ability(AbilityId.TRIAGE).enemyMoveset([MoveId.HEAL_BLOCK, MoveId.SUPER_FANG, MoveId.SPLASH]);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     revealAllAbilities(game.scene);
     const enemy = game.field.getEnemyPokemon();
@@ -51,7 +51,7 @@ describe("Move Effect Scores - Heal Block", () => {
   it("should not be strongly preferred if the opponent does not have Triage", async () => {
     game.override.enemyMoveset([MoveId.HEAL_BLOCK, MoveId.SUPER_FANG, MoveId.SPLASH]);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     revealAllAbilities(game.scene);
     const enemy = game.field.getEnemyPokemon();
@@ -59,7 +59,7 @@ describe("Move Effect Scores - Heal Block", () => {
   });
 
   it("should be avoided if the opponent is already under Heal Block's effect", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     game.move.use(MoveId.SPLASH);
     await game.move.selectEnemyMove(MoveId.HEAL_BLOCK);

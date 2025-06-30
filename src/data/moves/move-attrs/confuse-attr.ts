@@ -12,12 +12,13 @@ import i18next from "i18next";
 /**
  * Attribute to {@link https://bulbapedia.bulbagarden.net/wiki/Confusion_(status_condition) | confuse}
  * the user or target.
- * @extends AddBattlerTagAttr
  */
 export class ConfuseAttr extends AddBattlerTagAttr {
-  constructor(failOnOverlap: boolean = false) {
+  constructor(failOnOverlap: boolean = false, axeKick: boolean = false) {
+    // Axe Kick has the odd mechanic of guranteeing 3 turns of confuse instead of 2
+    const turnCountMin = axeKick ? 3 : 2;
     super(BattlerTagType.CONFUSED, false, {
-      turnCountMin: 2,
+      turnCountMin,
       turnCountMax: 5,
       failOnOverlap,
     });
@@ -26,7 +27,8 @@ export class ConfuseAttr extends AddBattlerTagAttr {
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!this.selfTarget && target.isSafeguarded(user)) {
       if (move.category === MoveCategory.STATUS) {
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           i18next.t("moveTriggers:safeguard", { targetName: getPokemonNameWithAffix(target) }),
         );
       }

@@ -6,7 +6,6 @@ import type { MoveMessageFunc } from "#types/move-message-func";
 /**
  * Attribute to override the default move usage message (e.g. "Pikachu used Thunderbolt!")
  * with a custom message which can change based on game state.
- * @extends MoveAttr
  */
 export abstract class VariableMoveMessageAttr extends MoveAttr {
   protected message: string | MoveMessageFunc;

@@ -1,13 +1,17 @@
-// tsdoc imports
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { Pokemon } from "#field/pokemon";
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
+  
+import type { EnumValues } from "#types/enum-values";
 
 /**
  * Denotes which side of the field an effect applies,
  * relative to the {@linkcode Pokemon} invoking the effect.
  */
-export enum ArenaTagRelativeSide {
-  USER,
-  TARGET,
-  ALL,
-}
+export const ArenaTagRelativeSide = {
+  USER: 1,
+  TARGET: 2,
+  ALL: 3,
+} as const;
+
+export type ArenaTagRelativeSide = EnumValues<typeof ArenaTagRelativeSide>;

@@ -19,7 +19,6 @@ export interface MoveEffectAttrOptions extends MoveAttrOptions {
 
 /**
  * Base class defining all Move Effect Attributes
- * @extends MoveAttr
  * @see {@linkcode apply}
  */
 export abstract class MoveEffectAttr extends MoveAttr {
@@ -36,7 +35,7 @@ export abstract class MoveEffectAttr extends MoveAttr {
 
   /**
    * Defines when this effect should trigger in the move's effect order.
-   * @default MoveEffectTrigger.POST_APPLY
+   * @defaultValue {@linkcode MoveEffectTrigger.POST_APPLY}
    * @see {@linkcode MoveEffectTrigger}
    */
   public get trigger() {
@@ -46,7 +45,7 @@ export abstract class MoveEffectAttr extends MoveAttr {
   /**
    * `true` if this effect should only trigger on the first hit of
    * multi-hit moves.
-   * @default false
+   * @defaultValue `false`
    */
   public get firstHitOnly() {
     return this.options?.firstHitOnly ?? false;
@@ -55,7 +54,7 @@ export abstract class MoveEffectAttr extends MoveAttr {
   /**
    * `true` if this effect should only trigger on the last hit of
    * multi-hit moves.
-   * @default false
+   * @defaultValue `false`
    */
   public get lastHitOnly() {
     return this.options?.lastHitOnly ?? false;
@@ -64,7 +63,7 @@ export abstract class MoveEffectAttr extends MoveAttr {
   /**
    * `true` if this effect should apply only upon hitting a target
    * for the first time when targeting multiple {@linkcode Pokemon}.
-   * @default false
+   * @defaultValue `false`
    */
   public get firstTargetOnly() {
     return this.options?.firstTargetOnly ?? false;

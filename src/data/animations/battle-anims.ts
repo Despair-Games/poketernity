@@ -108,7 +108,7 @@ export abstract class BattleAnim {
     const target = !isOppAnim ? this.target : this.user;
 
     const targetSubstitute =
-      onSubstitute && user !== target ? target!.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE) : null;
+      onSubstitute && user !== target ? target?.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE) : null;
 
     const userInitialX = user!.x; // TODO: is this bang correct?
     const userInitialY = user!.y; // TODO: is this bang correct?
@@ -200,7 +200,7 @@ export abstract class BattleAnim {
     }
 
     const targetSubstitute =
-      onSubstitute && user !== target ? target.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE) : null;
+      onSubstitute && user !== target ? target?.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE) : null;
 
     const userSprite = user.getSprite();
     const targetSprite = targetSubstitute?.sprite ?? target.getSprite();

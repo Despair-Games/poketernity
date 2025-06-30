@@ -10,12 +10,13 @@ import { SpeciesId } from "#enums/species-id";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { TerastallizeAccessModifier } from "#modifier/modifier";
-import { CommandPhase } from "#phases/command-phase";
+import type { CommandPhase } from "#phases/command-phase";
 import type { BallUiHandler } from "#ui/ball-ui-handler";
 import type { FightUiHandler } from "#ui/fight-ui-handler";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
 import { addTextObject } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";
+import { enumValueToKey } from "#utils/common-utils";
 import { PartyFilterNonFainted } from "#utils/party-ui-utils";
 import i18next from "i18next";
 
@@ -77,7 +78,9 @@ export class CommandUiHandler extends UiHandler {
 
     if (this.canTera()) {
       this.teraButton.setVisible(true);
-      this.teraButton.setFrame(ElementalType[globalScene.getField()[this.fieldIndex].teraType].toLowerCase());
+      this.teraButton.setFrame(
+        enumValueToKey(ElementalType, globalScene.getField()[this.fieldIndex].teraType).toLowerCase(),
+      );
     } else {
       this.teraButton.setVisible(false);
       if (this.getCursor() === BattleCommand.TERA) {
@@ -87,14 +90,18 @@ export class CommandUiHandler extends UiHandler {
     this.toggleTeraButton();
 
     const messageHandler = this.getUi().getMessageHandler();
-    messageHandler.bg.setVisible(true);
-    messageHandler.commandWindow.setVisible(true);
-    messageHandler.movesWindowContainer.setVisible(false);
-    messageHandler.message.setWordWrapWidth((this.canTera() ? 152 : 185) * TEXT_SCALE);
-    messageHandler.showText(
-      i18next.t("commandUiHandler:actionMessage", { pokemonName: getPokemonNameWithAffix(commandPhase.getPokemon()) }),
-      0,
-    );
+    if (messageHandler) {
+      messageHandler.bg.setVisible(true);
+      messageHandler.commandWindow.setVisible(true);
+      messageHandler.movesWindowContainer.setVisible(false);
+      messageHandler.message.setWordWrapWidth((this.canTera() ? 152 : 185) * TEXT_SCALE);
+      messageHandler.showText(
+        i18next.t("commandUiHandler:actionMessage", {
+          pokemonName: getPokemonNameWithAffix(commandPhase.getPokemon()),
+        }),
+        0,
+      );
+    }
 
     // If this is the first turn of battle, default to the fight command. TODO: add setting to disable this behavior
     const isFirstAction = !this.active && globalScene.currentBattle.turn === 1;
@@ -157,27 +164,27 @@ export class CommandUiHandler extends UiHandler {
     } else {
       switch (button) {
         case Button.UP:
-          if ([BattleCommand.POKEMON, BattleCommand.RUN].includes(cursor)) {
+          if (cursor === BattleCommand.POKEMON || cursor === BattleCommand.RUN) {
             success = this.setCursor(cursor - 2);
           }
           break;
         case Button.DOWN:
-          if ([BattleCommand.FIGHT, BattleCommand.BALL].includes(cursor)) {
+          if (cursor === BattleCommand.FIGHT || cursor === BattleCommand.BALL) {
             success = this.setCursor(cursor + 2);
           }
           break;
         case Button.LEFT:
-          if ([BattleCommand.BALL, BattleCommand.RUN].includes(cursor)) {
+          if (cursor === BattleCommand.BALL || cursor === BattleCommand.RUN) {
             success = this.setCursor(cursor - 1);
-          } else if ([BattleCommand.FIGHT, BattleCommand.POKEMON].includes(cursor) && this.canTera()) {
+          } else if ((cursor === BattleCommand.FIGHT || cursor === BattleCommand.POKEMON) && this.canTera()) {
             success = this.setCursor(BattleCommand.TERA);
             this.toggleTeraButton();
           }
           break;
         case Button.RIGHT:
-          if ([BattleCommand.FIGHT, BattleCommand.POKEMON].includes(cursor)) {
+          if (cursor === BattleCommand.FIGHT || cursor === BattleCommand.POKEMON) {
             success = this.setCursor(cursor + 1);
-          } else if ([BattleCommand.TERA].includes(cursor)) {
+          } else if (cursor === BattleCommand.TERA) {
             success = this.setCursor(BattleCommand.FIGHT);
             this.toggleTeraButton();
           }
@@ -261,7 +268,7 @@ export class CommandUiHandler extends UiHandler {
   protected override clear(): void {
     this.commandsContainer.setVisible(false);
     const messageHandler = this.getUi().getMessageHandler();
-    if (messageHandler.ready) {
+    if (messageHandler?.ready) {
       messageHandler.commandWindow.setVisible(false);
       messageHandler.clearText();
     }
@@ -278,7 +285,7 @@ export class CommandUiHandler extends UiHandler {
   private getCommandPhase(): CommandPhase {
     let commandPhase: CommandPhase;
     const currentPhase = globalScene.phaseManager.getCurrentPhase();
-    if (currentPhase instanceof CommandPhase) {
+    if (currentPhase?.is("CommandPhase")) {
       commandPhase = currentPhase;
     } else {
       commandPhase = globalScene.phaseManager.getStandbyPhase() as CommandPhase;

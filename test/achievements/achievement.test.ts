@@ -1,6 +1,6 @@
 import { InverseBattleChallenge, SingleGenerationChallenge, SingleTypeChallenge } from "#data/challenge";
 import { ElementalType } from "#enums/elemental-type";
-import { Achievement, ChallengeAchv, MonoGenAchv, MonoTypeAchv, RibbonAchv, achvs } from "#system/achievements";
+import { Achievement, achvs, ChallengeAchv, MonoGenAchv, MonoTypeAchv, RibbonAchv } from "#system/achievements";
 import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -35,25 +35,6 @@ describe("Achv", () => {
     expect(achv.validate(5)).toBe(false);
     expect(achv.validate(10)).toBe(true);
     expect(conditionFunc).toHaveBeenCalledTimes(2);
-  });
-});
-
-describe("MoneyAchv", () => {
-  let phaserGame: Phaser.Game;
-  let game: GameManager;
-
-  beforeAll(() => {
-    phaserGame = new Phaser.Game({
-      type: Phaser.HEADLESS,
-    });
-  });
-
-  afterEach(() => {
-    game.phaseInterceptor.restoreOg();
-  });
-
-  beforeEach(() => {
-    game = new GameManager(phaserGame);
   });
 
   describe("RibbonAchv", () => {

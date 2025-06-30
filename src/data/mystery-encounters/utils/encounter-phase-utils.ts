@@ -1,3 +1,7 @@
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
+import type { IMysteryEncounter } from "#mystery-encounters/mystery-encounter";
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
+
 import type Battle from "#app/battle";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -14,7 +18,6 @@ import type { TrainerConfig } from "#data/trainer-config";
 import type { Variant } from "#data/variant";
 import type { AiType } from "#enums/ai-type";
 import { BattleType } from "#enums/battle-type";
-import { BattlerIndex } from "#enums/battler-index";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import { BiomeId } from "#enums/biome-id";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
@@ -27,7 +30,6 @@ import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import type { Nature } from "#enums/nature";
 import type { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
-import { PhaseId } from "#enums/phase-id";
 import { StatusEffect } from "#enums/status-effect";
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { TrainerType } from "#enums/trainer-type";
@@ -36,28 +38,18 @@ import { UiMode } from "#enums/ui-mode";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
-import { PokemonSummonData } from "#field/pokemon-summon-data";
 import Trainer from "#field/trainer";
 import { initMoveAnim } from "#init/init-move-anim";
 import {
+  type CustomModifierSettings,
+  type ModifierType,
   ModifierTypeGenerator,
   ModifierTypeOption,
   regenerateModifierPoolThresholds,
-  type CustomModifierSettings,
-  type ModifierType,
 } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
 import { showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import type MysteryEncounterOption from "#mystery-encounters/mystery-encounter-option";
-import { BattleEndPhase } from "#phases/battle-end-phase";
-import { EggLapsePhase } from "#phases/egg-lapse-phase";
-import { MysteryEncounterBattlePhase } from "#phases/mystery-encounter-phases/battle-phase";
-import { MysteryEncounterBattleStartCleanupPhase } from "#phases/mystery-encounter-phases/battle-start-cleanup-phase";
-import { MysteryEncounterPhase } from "#phases/mystery-encounter-phases/mystery-encounter-phase";
-import { MysteryEncounterRewardsPhase } from "#phases/mystery-encounter-phases/rewards-phase";
-import { PartyExpPhase } from "#phases/party-exp-phase";
-import { SelectModifierPhase } from "#phases/select-modifier-phase";
-import { TrainerVictoryPhase } from "#phases/trainer-victory-phase";
 import type PokemonData from "#system/pokemon-data";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import type { HeldModifierConfig } from "#types/held-modifier-config";
@@ -66,7 +58,7 @@ import type { OptionSelectItem, OptionSelectModeConfig } from "#ui/option-select
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
 import type { UiHandler } from "#ui/ui-handler";
-import { coerceArray, isNil } from "#utils/common-utils";
+import { coerceArray, enumValueToKey, isNil } from "#utils/common-utils";
 import { loadMoveAnimAssets } from "#utils/move-anim-utils";
 import { randomString, randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
@@ -354,9 +346,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
       }
 
       // Set summon data fields
-      if (!enemyPokemon.summonData) {
-        enemyPokemon.summonData = new PokemonSummonData();
-      }
+      enemyPokemon.resetSummonData();
 
       // Set ability
       if (!isNil(config.abilityIndex)) {
@@ -440,7 +430,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
     console.log("Moveset:", moveset);
   });
 
-  globalScene.phaseManager.pushPhase(new MysteryEncounterBattlePhase(partyConfig.disableSwitch));
+  globalScene.phaseManager.createAndPushPhase("MysteryEncounterBattlePhase", partyConfig.disableSwitch);
 
   await Promise.all(loadEnemyAssets);
   battle.enemyParty.forEach((enemyPokemon_2, e_1) => {
@@ -467,7 +457,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
 
 /**
  * Load special move animations/sfx for hard-coded encounter-specific moves that a pokemon uses at the start of an encounter
- * See: [startOfBattleEffects](IMysteryEncounter.startOfBattleEffects) for more details
+ * See: {@linkcode IMysteryEncounter.startOfBattleEffects} for more details
  *
  * This promise does not need to be awaited on if called in an encounter onInit (will just load lazily)
  * @param moveIds The move or moves the Pokemon uses at the start of the encounter
@@ -492,15 +482,17 @@ export function updatePlayerMoney(changeValue: number, playSound: boolean = true
   }
   if (showMessage) {
     if (changeValue < 0) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("mysteryEncounterMessages:paid_money", { amount: -changeValue }),
-        null,
+        undefined,
         true,
       );
     } else {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("mysteryEncounterMessages:receive_money", { amount: changeValue }),
-        null,
+        undefined,
         true,
       );
     }
@@ -787,9 +779,11 @@ export function setEncounterRewards(
     }
 
     if (customShopRewards) {
-      globalScene.phaseManager.unshiftPhase(new SelectModifierPhase({ customModifierSettings: customShopRewards }));
+      globalScene.phaseManager.createAndUnshiftPhase("SelectModifierPhase", {
+        customModifierSettings: customShopRewards,
+      });
     } else {
-      globalScene.phaseManager.tryRemovePhase((p) => p.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER));
+      globalScene.phaseManager.tryRemovePhase((p) => p.is("SelectModifierPhase"));
     }
 
     if (eggRewards) {
@@ -827,7 +821,12 @@ export function setEncounterExp(participantId: number | number[], baseExpValue: 
   const participantIds = coerceArray(participantId);
 
   globalScene.currentBattle.mysteryEncounter!.doEncounterExp = () => {
-    globalScene.phaseManager.unshiftPhase(new PartyExpPhase(baseExpValue, useWaveIndex, new Set(participantIds)));
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "PartyExpPhase",
+      baseExpValue,
+      useWaveIndex,
+      new Set(participantIds),
+    );
 
     return true;
   };
@@ -849,7 +848,7 @@ export class OptionSelectSettings {
  * @param optionSelectSettings - The initial OptionSelectSettings being passed to the new ME
  */
 export function initSubsequentOptionSelect(optionSelectSettings: OptionSelectSettings) {
-  globalScene.phaseManager.pushPhase(new MysteryEncounterPhase(optionSelectSettings));
+  globalScene.phaseManager.createAndPushPhase("MysteryEncounterPhase", optionSelectSettings);
 }
 
 /**
@@ -875,9 +874,10 @@ export function leaveEncounterWithoutBattle(
  */
 export function handleMysteryEncounterVictory(addHealPhase: boolean = false, doNotContinue: boolean = false) {
   const allowedPkm = globalScene.getPlayerParty().filter((pkm) => pkm.isAllowedInBattle());
+  const { phaseManager } = globalScene;
 
   if (allowedPkm.length === 0) {
-    globalScene.phaseManager.queueGameOverPhase({ clearPhaseQueue: true });
+    phaseManager.queueGameOverPhase({ clearPhaseQueue: true });
     return;
   }
 
@@ -888,8 +888,10 @@ export function handleMysteryEncounterVictory(addHealPhase: boolean = false, doN
     return;
   }
   if (encounter.encounterMode === MysteryEncounterMode.NO_BATTLE) {
-    globalScene.phaseManager.pushPhase(new MysteryEncounterRewardsPhase(addHealPhase));
-    globalScene.phaseManager.pushPhase(new EggLapsePhase());
+    phaseManager.pushPhase(
+      phaseManager.createPhase("MysteryEncounterRewardsPhase", addHealPhase),
+      phaseManager.createPhase("EggLapsePhase"),
+    );
   } else if (
     // If any enemy Pokemon are still alive on the field or waiting for its fainting animation, do not advance a wave.
     // Also, if the enemy is a Trainer with other Pokemon alive in their party backline, do not advance a wave.
@@ -900,15 +902,15 @@ export function handleMysteryEncounterVictory(addHealPhase: boolean = false, doN
           p && (p.isOnField() || (encounter.encounterMode === MysteryEncounterMode.TRAINER_BATTLE && !p.isFainted())),
       )
   ) {
-    globalScene.phaseManager.pushPhase(new BattleEndPhase(true));
+    globalScene.phaseManager.createAndPushPhase("BattleEndPhase", true);
     if (encounter.encounterMode === MysteryEncounterMode.TRAINER_BATTLE) {
-      globalScene.phaseManager.pushPhase(new TrainerVictoryPhase());
+      globalScene.phaseManager.createAndPushPhase("TrainerVictoryPhase");
     }
     if (globalScene.gameMode.isEndless || !globalScene.gameMode.isWaveFinal(globalScene.currentBattle.waveIndex)) {
-      globalScene.phaseManager.pushPhase(new MysteryEncounterRewardsPhase(addHealPhase));
+      globalScene.phaseManager.createAndPushPhase("MysteryEncounterRewardsPhase", addHealPhase);
       if (!encounter.doContinueEncounter) {
         // Only lapse eggs once for multi-battle encounters
-        globalScene.phaseManager.pushPhase(new EggLapsePhase());
+        globalScene.phaseManager.createAndPushPhase("EggLapsePhase");
       }
     }
   }
@@ -934,14 +936,14 @@ export function handleMysteryEncounterBattleFailed(addHealPhase: boolean = false
     return;
   }
   if (encounter.encounterMode !== MysteryEncounterMode.NO_BATTLE) {
-    globalScene.phaseManager.pushPhase(new BattleEndPhase(false));
+    globalScene.phaseManager.createAndPushPhase("BattleEndPhase", false);
   }
 
-  globalScene.phaseManager.pushPhase(new MysteryEncounterRewardsPhase(addHealPhase));
+  globalScene.phaseManager.createAndPushPhase("MysteryEncounterRewardsPhase", addHealPhase);
 
   if (!encounter.doContinueEncounter) {
     // Only lapse eggs once for multi-battle encounters
-    globalScene.phaseManager.pushPhase(new EggLapsePhase());
+    globalScene.phaseManager.createAndPushPhase("EggLapsePhase");
   }
 }
 
@@ -959,21 +961,11 @@ export function handleMysteryEncounterBattleStartEffects() {
   ) {
     const effects = encounter.startOfBattleEffects;
     effects.forEach((effect) => {
-      let source;
+      let source: Pokemon;
       if (effect.sourcePokemon) {
         source = effect.sourcePokemon;
       } else if (!isNil(effect.sourceBattlerIndex)) {
-        if (effect.sourceBattlerIndex === BattlerIndex.ATTACKER) {
-          source = globalScene.getEnemyField()[0];
-        } else if (effect.sourceBattlerIndex === BattlerIndex.ENEMY) {
-          source = globalScene.getEnemyField()[0];
-        } else if (effect.sourceBattlerIndex === BattlerIndex.ENEMY_2) {
-          source = globalScene.getEnemyField()[1];
-        } else if (effect.sourceBattlerIndex === BattlerIndex.PLAYER) {
-          source = globalScene.getPlayerField()[0];
-        } else if (effect.sourceBattlerIndex === BattlerIndex.PLAYER_2) {
-          source = globalScene.getPlayerField()[1];
-        }
+        source = globalScene.getPokemonByBattlerIndex(effect.sourceBattlerIndex) ?? globalScene.getEnemyField()[0];
       } else {
         source = globalScene.getEnemyField()[0];
       }
@@ -988,7 +980,7 @@ export function handleMysteryEncounterBattleStartEffects() {
     });
 
     // Pseudo turn end phase to reset flinch states, Endure, etc.
-    globalScene.phaseManager.pushPhase(new MysteryEncounterBattleStartCleanupPhase());
+    globalScene.phaseManager.createAndPushPhase("MysteryEncounterBattleStartCleanupPhase");
 
     encounter.startOfBattleEffectsComplete = true;
   }
@@ -997,7 +989,7 @@ export function handleMysteryEncounterBattleStartEffects() {
 /**
  * Can queue extra phases or logic during {@linkcode TurnInitPhase}
  * Should mostly just be used for injecting custom phases into the battle system on turn start
- * @return boolean - if true, will skip the remainder of the {@linkcode TurnInitPhase}
+ * @returns Whether to skip the remainder of the {@linkcode TurnInitPhase}
  */
 export function handleMysteryEncounterTurnStartEffects(): boolean {
   const encounter = globalScene.currentBattle.mysteryEncounter;
@@ -1017,7 +1009,7 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
   const numRuns = 1000;
   let run = 0;
   const biomes = Object.keys(BiomeId).filter((key) => Number.isNaN(Number(key)));
-  const alwaysPickTheseBiomes = [
+  const alwaysPickTheseBiomes: readonly BiomeId[] = [
     BiomeId.ISLAND,
     BiomeId.ABYSS,
     BiomeId.WASTELAND,
@@ -1034,7 +1026,7 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
     let mostRecentEncounterWave = 0;
     const encountersByBiome = new Map<string, number>(biomes.map((b) => [b, 0]));
     const validMEfloorsByBiome = new Map<string, number>(biomes.map((b) => [b, 0]));
-    let currentBiome = BiomeId.TOWN;
+    let currentBiome: BiomeId = BiomeId.TOWN;
     let currentArena = globalScene.newArena(currentBiome);
     globalScene.setSeed(randomString(24));
     globalScene.resetSeed();
@@ -1090,7 +1082,8 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
       // Otherwise, roll encounter
 
       const roll = randSeedInt(256);
-      validMEfloorsByBiome.set(BiomeId[currentBiome], (validMEfloorsByBiome.get(BiomeId[currentBiome]) ?? 0) + 1);
+      const biomeKey = enumValueToKey(BiomeId, currentBiome);
+      validMEfloorsByBiome.set(biomeKey, (validMEfloorsByBiome.get(biomeKey) ?? 0) + 1);
 
       // If total number of encounters is lower than expected for the run, slightly favor a new encounter
       // Do the reverse as well
@@ -1126,7 +1119,8 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
             : tierValue > rareThreshold
               ? ++numEncounters[2]
               : ++numEncounters[3];
-        encountersByBiome.set(BiomeId[currentBiome], (encountersByBiome.get(BiomeId[currentBiome]) ?? 0) + 1);
+        const biomeKey = enumValueToKey(BiomeId, currentBiome);
+        encountersByBiome.set(biomeKey, (encountersByBiome.get(biomeKey) ?? 0) + 1);
       } else {
         encounterRate += ME_WEIGHT_INCREMENT_ON_SPAWN_MISS;
       }

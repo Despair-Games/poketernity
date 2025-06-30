@@ -1,20 +1,17 @@
-// -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { CopycatAttr } from "#moves/copycat-attr";
 import type { MetronomeAttr } from "#moves/metronome-attr";
 import type { NaturePowerAttr } from "#moves/nature-power-attr";
 import type { RandomMovesetMoveAttr } from "#moves/random-moveset-move-attr";
-/* eslint-enable @typescript-eslint/no-unused-vars */
-// -- end tsdoc imports --
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#enums/battler-index";
 import type { MoveId } from "#enums/move-id";
 import { MoveTarget } from "#enums/move-target";
 import type { Pokemon } from "#field/pokemon";
-import { type Move, getMoveTargets } from "#moves/move";
+import { getMoveTargets, type Move } from "#moves/move";
 import { OverrideMoveEffectAttr } from "#moves/override-move-effect-attr";
-import { LoadMoveAnimPhase } from "#phases/load-move-anim-phase";
 import type { BooleanHolder } from "#utils/common-utils";
 
 /**
@@ -23,7 +20,6 @@ import type { BooleanHolder } from "#utils/common-utils";
  * Used by other move attributes: {@linkcode MetronomeAttr}, {@linkcode RandomMovesetMoveAttr}, {@linkcode CopycatAttr}
  * and {@linkcode NaturePowerAttr}
  * @see {@linkcode apply} for move call
- * @extends OverrideMoveEffectAttr
  */
 export abstract class CallMoveAttr extends OverrideMoveEffectAttr {
   protected invalidMoves: ReadonlySet<MoveId>;
@@ -50,7 +46,7 @@ export abstract class CallMoveAttr extends OverrideMoveEffectAttr {
     }
 
     user.getMoveQueue().push({ move: move, targets, virtual: true, ignorePP: true, type: user.getMoveType(move) });
-    globalScene.phaseManager.unshiftPhase(new LoadMoveAnimPhase(move.id));
+    globalScene.phaseManager.createAndUnshiftPhase("LoadMoveAnimPhase", move.id);
     globalScene.phaseManager.queueMovePhase({
       pokemon: user,
       targets,

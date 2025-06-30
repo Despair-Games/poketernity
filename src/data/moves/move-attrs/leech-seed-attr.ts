@@ -8,7 +8,6 @@ import type { Move } from "#moves/move";
 /**
  * Adds a {@link https://bulbapedia.bulbagarden.net/wiki/Seeding | Seeding} effect to the target
  * as seen with Leech Seed and Sappy Seed.
- * @extends AddBattlerTagAttr
  */
 export class LeechSeedAttr extends AddBattlerTagAttr {
   constructor() {

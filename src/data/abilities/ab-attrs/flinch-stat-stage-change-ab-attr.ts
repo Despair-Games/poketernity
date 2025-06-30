@@ -2,7 +2,6 @@ import { FlinchEffectAbAttr } from "#abilities/flinch-effect-ab-attr";
 import { globalScene } from "#app/global-scene";
 import type { BattleStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
-import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 
 /**
  * Attribute that prompts a stat stage change after the ability holder is flinched.
@@ -25,8 +24,12 @@ export class FlinchStatStageChangeAbAttr extends FlinchEffectAbAttr {
 
   public override apply(pokemon: Pokemon, simulated: boolean): boolean {
     if (!simulated) {
-      globalScene.phaseManager.unshiftPhase(
-        new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, this.stats, this.stages),
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "StatStageChangePhase",
+        pokemon.getBattlerIndex(),
+        pokemon,
+        this.stats,
+        this.stages,
       );
     }
 

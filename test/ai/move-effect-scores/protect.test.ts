@@ -33,7 +33,7 @@ describe("Move Effect Scores - Protect", () => {
   });
 
   it("should be preferred over moves with low impact", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).toPreferSelectingMove(MoveId.PROTECT);
@@ -41,7 +41,7 @@ describe("Move Effect Scores - Protect", () => {
 
   it("should not be preferred over moves with high impact", async () => {
     game.override.enemyMoveset([...baseMoveset, MoveId.SUPER_FANG]);
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).not.toPreferSelectingMove(MoveId.PROTECT);
@@ -54,14 +54,14 @@ describe("Move Effect Scores - Protect", () => {
   ])("should be strongly preferred if the user has $abilityName", async ({ abilityId }) => {
     game.override.enemyAbility(abilityId);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).toNeverSelectMove((move) => move.id !== MoveId.PROTECT);
   });
 
   it("should not be preferred if the user used Protect last turn", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
 

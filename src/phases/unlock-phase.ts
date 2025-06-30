@@ -1,12 +1,12 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import { PhaseId } from "#enums/phase-id";
 import type { Unlockables } from "#enums/unlockables";
 import { getUnlockableName } from "#system/unlockables";
 import i18next from "i18next";
 
 export class UnlockPhase extends Phase {
-  override readonly id = PhaseId.UNLOCK;
+  public override readonly phaseName = "UnlockPhase";
+
   private readonly unlockable: Unlockables;
 
   constructor(unlockable: Unlockables) {

@@ -8,7 +8,6 @@ import type { MoveConditionFunc } from "#types/move-condition-func";
 /**
  * Attribute to increase the user's stats upon knocking out the target with the move.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Fell_Stinger_(move) | Fell Stinger}.
- * @extends MoveAttr
  */
 export class PostVictoryStatStageChangeAttr extends MoveAttr {
   private stats: BattleStat[];

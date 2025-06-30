@@ -4,7 +4,7 @@ import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
 import { GameManager } from "#test/test-utils/game-manager";
-import type { MockText } from "#test/test-utils/mocks/mocksContainer/mock-text";
+import type { MockText } from "#test/test-utils/mocks/mocks-container/mock-text";
 import { FightUiHandler } from "#ui/fight-ui-handler";
 import i18next from "i18next";
 import Phaser from "phaser";
@@ -40,7 +40,7 @@ describe("UI - Type Hints", () => {
       .moveset([MoveId.DRAGON_CLAW]);
     game.settings.typeHints(true); //activate type hints
 
-    await game.startBattle([SpeciesId.RAYQUAZA]);
+    await game.classicMode.startBattle(SpeciesId.RAYQUAZA);
 
     game.onNextPrompt("CommandPhase", UiMode.COMMAND, () => {
       const { ui } = game.scene;
@@ -65,7 +65,7 @@ describe("UI - Type Hints", () => {
   it("check status move color", async () => {
     game.override.enemySpecies(SpeciesId.FLORGES).moveset([MoveId.GROWL]);
 
-    await game.startBattle([SpeciesId.RAYQUAZA]);
+    await game.classicMode.startBattle(SpeciesId.RAYQUAZA);
 
     game.onNextPrompt("CommandPhase", UiMode.COMMAND, () => {
       const { ui } = game.scene;

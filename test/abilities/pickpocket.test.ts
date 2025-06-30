@@ -34,7 +34,7 @@ describe("Abilities - Pickpocket", () => {
   });
 
   it("should steal the enemy's held item when hit by a contact move", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     game.move.select(MoveId.SPLASH);
     await game.toEndOfTurn();
@@ -45,7 +45,7 @@ describe("Abilities - Pickpocket", () => {
 
   it("should not steal the enemy's held item when hit by a non-contact move", async () => {
     game.override.enemyMoveset(MoveId.EMBER);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     game.move.select(MoveId.SPLASH);
     await game.toEndOfTurn();
@@ -55,7 +55,7 @@ describe("Abilities - Pickpocket", () => {
   });
 
   it("shouldn't trigger when the enemy hits a substitute", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     game.move.select(MoveId.SUBSTITUTE);
     await game.toEndOfTurn();

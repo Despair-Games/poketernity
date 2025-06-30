@@ -46,7 +46,7 @@ describe("Dex Data - Set Pokemon caught", () => {
     expect(naturesBefore).not.toContain(Nature.MODEST);
 
     expect(dexData.caughtCount).toBe(0);
-    expect(dexData.caughtAttr & DexAttr.SHINY).toBeFalsy();
+    expect(gameData.getUnlockedVariantsAttr(dexData.caughtAttr)).toHaveLength(0);
 
     // bulbasaur
     const newCatch = new PlayerPokemon(species, 5, 1, 0, Gender.MALE, false, 0, [], Nature.MODEST);
@@ -81,7 +81,7 @@ describe("Dex Data - Set Pokemon caught", () => {
     expect(naturesBefore).not.toContain(Nature.MODEST);
 
     expect(dexData.caughtCount).toBe(0);
-    expect(dexData.caughtAttr & DexAttr.SHINY).toBeFalsy();
+    expect(gameData.getUnlockedVariantsAttr(dexData.caughtAttr)).toHaveLength(0);
 
     // Shiny tier 3 bulbasaur
     const newCatch = new PlayerPokemon(species, 5, 1, 0, Gender.MALE, true, 2, [], Nature.MODEST);
@@ -98,8 +98,9 @@ describe("Dex Data - Set Pokemon caught", () => {
     const naturesAfter = gameData.getNaturesForAttr(starterData.natureAttr);
     expect(naturesAfter).toHaveLength(beforeNatureCount + 1);
     expect(naturesAfter).toContain(Nature.MODEST);
-    expect(dexData.caughtAttr & DexAttr.SHINY).toBeTruthy();
-    expect(dexData.caughtAttr & DexAttr.VARIANT_3).toBeTruthy();
+    const variantsAfter = gameData.getUnlockedVariantsAttr(dexData.caughtAttr);
+    expect(variantsAfter).toHaveLength(1);
+    expect(variantsAfter).toContain(DexAttr.SHINY_EPIC_VARIANT);
   });
 
   it("should update nothing for rental, not already caught Pokemon", async () => {
@@ -149,6 +150,9 @@ describe("Dex Data - Set Pokemon caught", () => {
     const ivyDexData = gameData.dexData[SpeciesId.IVYSAUR];
     const venuDexData = gameData.dexData[SpeciesId.VENUSAUR];
 
+    const variantsBefore = gameData.getUnlockedVariantsAttr(bulbaDexData.caughtAttr);
+    expect(variantsBefore).toHaveLength(0);
+
     [ivyDexData, venuDexData].forEach((dexData) => {
       expect(dexData.caughtCount).toBe(0);
       expect(dexData.hatchedCount).toBe(0);
@@ -174,17 +178,13 @@ describe("Dex Data - Set Pokemon caught", () => {
     expect(unlockedNatures).toContain(Nature.ADAMANT);
 
     expect(bulbaDexData.caughtAttr & DexAttr.NON_SHINY).toBeTruthy();
-    expect(bulbaDexData.caughtAttr & DexAttr.SHINY).toBeTruthy();
-    expect(bulbaDexData.caughtAttr & DexAttr.DEFAULT_VARIANT).toBeTruthy();
-    expect(bulbaDexData.caughtAttr & DexAttr.VARIANT_2).toBeTruthy();
-    expect(bulbaDexData.caughtAttr & DexAttr.VARIANT_3).toBeFalsy();
+    const bulbaVariantsAfter = gameData.getUnlockedVariantsAttr(bulbaDexData.caughtAttr);
+    expect(bulbaVariantsAfter).toEqual([DexAttr.SHINY_RARE_VARIANT]);
 
     [ivyDexData, venuDexData].forEach((dexData) => {
       expect(dexData.caughtAttr & DexAttr.NON_SHINY).toBeFalsy();
-      expect(dexData.caughtAttr & DexAttr.SHINY).toBeTruthy();
-      expect(dexData.caughtAttr & DexAttr.DEFAULT_VARIANT).toBeFalsy();
-      expect(dexData.caughtAttr & DexAttr.VARIANT_2).toBeTruthy();
-      expect(dexData.caughtAttr & DexAttr.VARIANT_3).toBeFalsy();
+      const variantsAfter = gameData.getUnlockedVariantsAttr(dexData.caughtAttr);
+      expect(variantsAfter).toEqual([DexAttr.SHINY_RARE_VARIANT]);
       expect(dexData.caughtAttr & DexAttr.FEMALE).toBeTruthy();
       expect(dexData.caughtAttr & DexAttr.MALE).toBeFalsy();
     });
@@ -242,17 +242,86 @@ describe("Dex Data - Set Pokemon caught", () => {
 
     // Phanpy data
     expect(phanpyDexData.caughtAttr & DexAttr.NON_SHINY).toBeTruthy();
-    expect(phanpyDexData.caughtAttr & DexAttr.SHINY).toBeTruthy();
-    expect(phanpyDexData.caughtAttr & DexAttr.DEFAULT_VARIANT).toBeTruthy();
+    const unlockedVariants = gameData.getUnlockedVariantsAttr(phanpyDexData.caughtAttr);
+    expect(unlockedVariants).toHaveLength(1);
+    expect(unlockedVariants).toContain(DexAttr.SHINY_BASE_VARIANT);
     expect(phanpyDexData.caughtAttr & DexAttr.FEMALE).toBeTruthy();
     expect(phanpyDexData.caughtAttr & DexAttr.MALE).toBeTruthy();
 
     // Donphan data
     expect(donphanDexData.caughtAttr & DexAttr.NON_SHINY).toBeTruthy();
-    expect(donphanDexData.caughtAttr & DexAttr.SHINY).toBeFalsy();
-    expect(donphanDexData.caughtAttr & DexAttr.DEFAULT_VARIANT).toBeTruthy();
+    expect(gameData.getUnlockedVariantsAttr(donphanDexData.caughtAttr)).toHaveLength(0);
     expect(donphanDexData.caughtAttr & DexAttr.FEMALE).toBeTruthy();
     expect(donphanDexData.caughtAttr & DexAttr.MALE).toBeFalsy();
+  });
+
+  it("should unlock a default gender for new pre-evolutions when catching a genderless mon", async () => {
+    await game.scene.initStarterColors();
+    const species = getPokemonSpecies(SpeciesId.SHEDINJA);
+    const nincadaDexData = gameData.dexData[SpeciesId.NINCADA];
+    const ninjaskDexData = gameData.dexData[SpeciesId.NINJASK];
+    const shedinjaDexData = gameData.dexData[SpeciesId.SHEDINJA];
+
+    expect(nincadaDexData.caughtAttr).toBeFalsy();
+    expect(ninjaskDexData.caughtAttr).toBeFalsy();
+    expect(shedinjaDexData.caughtAttr).toBeFalsy();
+
+    // Catch a (genderless) Shedinja
+    const shedinjaCatch = new PlayerPokemon(species, 5, 0, 0, Gender.GENDERLESS, false, 0, [], Nature.MILD);
+    const newStarters = await gameData.setPokemonCaught(shedinjaCatch, true, false, false);
+    expect(newStarters).toStrictEqual([SpeciesId.NINCADA]);
+
+    // genderless mon doesn't get a MALE of FEMALE DexAttr
+    expect(shedinjaDexData.caughtAttr).toBeTruthy();
+    expect(shedinjaDexData.caughtAttr & DexAttr.MALE).toBeFalsy();
+    expect(shedinjaDexData.caughtAttr & DexAttr.FEMALE).toBeFalsy();
+
+    // Nincada had no gender unlocked but is not genderless, default to male
+    expect(nincadaDexData.caughtAttr & DexAttr.MALE).toBeTruthy();
+    expect(nincadaDexData.caughtAttr & DexAttr.FEMALE).toBeFalsy();
+
+    // Ninjask does not get marked as caught by catching Shedinja
+    expect(ninjaskDexData.caughtAttr).toBeFalsy();
+  });
+
+  it("should not unlock a default gender for already caught pre-evolutions when catching a genderless mon", async () => {
+    await game.scene.initStarterColors();
+    const nincadaSpecies = getPokemonSpecies(SpeciesId.NINCADA);
+    const shedinjaSpecies = getPokemonSpecies(SpeciesId.SHEDINJA);
+    const nincadaDexData = gameData.dexData[SpeciesId.NINCADA];
+    const ninjaskDexData = gameData.dexData[SpeciesId.NINJASK];
+    const shedinjaDexData = gameData.dexData[SpeciesId.SHEDINJA];
+
+    expect(nincadaDexData.caughtAttr).toBeFalsy();
+    expect(ninjaskDexData.caughtAttr).toBeFalsy();
+    expect(shedinjaDexData.caughtAttr).toBeFalsy();
+
+    // Catch a female Nincada
+    const ninjaskCatch = new PlayerPokemon(nincadaSpecies, 5, 0, 0, Gender.FEMALE, false, 0, [], Nature.MILD);
+    let newStarters = await gameData.setPokemonCaught(ninjaskCatch, true, false, false);
+    expect(newStarters).toStrictEqual([SpeciesId.NINCADA]);
+
+    expect(nincadaDexData.caughtAttr & DexAttr.MALE).toBeFalsy();
+    expect(nincadaDexData.caughtAttr & DexAttr.FEMALE).toBeTruthy();
+    expect(ninjaskDexData.caughtAttr).toBeFalsy();
+    expect(shedinjaDexData.caughtAttr).toBeFalsy();
+
+    // Catch a (genderless) Shedinja
+    const shedinjaCatch = new PlayerPokemon(shedinjaSpecies, 5, 0, 0, Gender.GENDERLESS, false, 0, [], Nature.MILD);
+    newStarters = await gameData.setPokemonCaught(shedinjaCatch, true, false, false);
+    expect(newStarters).toHaveLength(0);
+
+    // genderless mon doesn't get a MALE of FEMALE DexAttr
+    expect(shedinjaDexData.caughtAttr).toBeTruthy();
+    expect(shedinjaDexData.caughtAttr & DexAttr.MALE).toBeFalsy();
+    expect(shedinjaDexData.caughtAttr & DexAttr.FEMALE).toBeFalsy();
+
+    // Nincada already had the Female gender unlocked, no need to get male unlocked
+    expect(nincadaDexData.caughtAttr & DexAttr.MALE).toBeFalsy();
+    expect(nincadaDexData.caughtAttr & DexAttr.FEMALE).toBeTruthy();
+
+    // Ninjask does not get marked as caught by catching Shedinja
+    expect(ninjaskDexData.caughtAttr).toBeFalsy();
   });
 
   it("should not unlock non existing forms for a caught mon's pre-evolutions", async () => {

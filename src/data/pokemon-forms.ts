@@ -1,10 +1,8 @@
-// -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { FORM_CHANGE_MOVE } from "#data/pokemon-level-moves";
 import type { FormChangePhase } from "#phases/form-change-phase";
 import type { QuietFormChangePhase } from "#phases/quiet-form-change-phase";
-/* eslint-enable @typescript-eslint/no-unused-vars */
-// -- end tsdoc imports --
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -187,7 +185,6 @@ export class SpeciesDefaultFormMatchTrigger extends SpeciesFormChangeTrigger {
 /**
  * Class used for triggering form changes based on the user's Tera type.
  * Used by Ogerpon and Terapagos.
- * @extends SpeciesFormChangeTrigger
  */
 export class SpeciesFormChangeTeraTrigger extends SpeciesFormChangeManualTrigger {
   // description = i18next.t("pokemonEvolutions:Forms.tera");
@@ -196,7 +193,6 @@ export class SpeciesFormChangeTeraTrigger extends SpeciesFormChangeManualTrigger
 /**
  * Class used for triggering form changes based on the user's lapsed Tera type.
  * Used by Ogerpon and Terapagos.
- * @extends SpeciesFormChangeTrigger
  */
 export class SpeciesFormChangeLapseTeraTrigger extends SpeciesFormChangeManualTrigger {
   // description = i18next.t("pokemonEvolutions:Forms.teraLapse");
@@ -205,7 +201,6 @@ export class SpeciesFormChangeLapseTeraTrigger extends SpeciesFormChangeManualTr
 /**
  * Class used for triggering form changes based on weather.
  * Used by Castform and Cherrim.
- * @extends SpeciesFormChangeTrigger
  */
 export class SpeciesFormChangeWeatherTrigger extends SpeciesFormChangeTrigger {
   /** The ability that  triggers the form change */
@@ -242,7 +237,6 @@ export class SpeciesFormChangeWeatherTrigger extends SpeciesFormChangeTrigger {
  * Class used for reverting to the original form when the weather runs out
  * or when the user loses the ability/is suppressed.
  * Used by Castform and Cherrim.
- * @extends SpeciesFormChangeTrigger
  */
 export class SpeciesFormChangeRevertWeatherFormTrigger extends SpeciesFormChangeTrigger {
   /** The ability that triggers the form change*/

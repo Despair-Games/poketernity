@@ -1,7 +1,6 @@
-// -- start tsdoc imports --
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { Pokemon } from "#field/pokemon";
-// -- end tsdoc imports --
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { getPokemonNameWithAffix } from "#app/messages";
 import { StatusEffect } from "#enums/status-effect";

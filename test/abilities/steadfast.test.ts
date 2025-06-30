@@ -38,7 +38,7 @@ describe("Abilities - Steadfast", () => {
 
   it("should boost SPD +1 after flinching", async () => {
     const { classicMode, field, move, phaseInterceptor } = game;
-    await classicMode.startBattle([SpeciesId.FEEBAS]);
+    await classicMode.startBattle(SpeciesId.FEEBAS);
 
     const playerPkm = field.getPlayerPokemon();
 
@@ -47,11 +47,11 @@ describe("Abilities - Steadfast", () => {
     await move.selectEnemyMove(MoveId.FAKE_OUT);
     await phaseInterceptor.to("MessagePhase", false);
 
-    expect(playerPkm).not.toHaveBattlerTagType(BattlerTagType.FLINCHED);
+    expect(playerPkm).not.toHaveBattlerTag(BattlerTagType.FLINCHED);
 
     await phaseInterceptor.to("PostActionPhase", true);
 
-    expect(playerPkm).toHaveBattlerTagType(BattlerTagType.FLINCHED);
+    expect(playerPkm).toHaveBattlerTag(BattlerTagType.FLINCHED);
 
     await game.toEndOfTurn();
 
@@ -60,7 +60,7 @@ describe("Abilities - Steadfast", () => {
 
   it("should NOT boost SPD when Pokemon does NOT flinch", async () => {
     const { classicMode, field, move, phaseInterceptor } = game;
-    await classicMode.startBattle([SpeciesId.FEEBAS]);
+    await classicMode.startBattle(SpeciesId.FEEBAS);
 
     const playerPkm = field.getPlayerPokemon();
 
@@ -69,11 +69,11 @@ describe("Abilities - Steadfast", () => {
     await move.forceEnemyMove(MoveId.QUICK_ATTACK);
     await phaseInterceptor.to("MessagePhase", false);
 
-    expect(playerPkm).not.toHaveBattlerTagType(BattlerTagType.FLINCHED);
+    expect(playerPkm).not.toHaveBattlerTag(BattlerTagType.FLINCHED);
 
     await phaseInterceptor.to("PostActionPhase", true);
 
-    expect(playerPkm).not.toHaveBattlerTagType(BattlerTagType.FLINCHED);
+    expect(playerPkm).not.toHaveBattlerTag(BattlerTagType.FLINCHED);
 
     await game.toEndOfTurn();
 
@@ -82,7 +82,7 @@ describe("Abilities - Steadfast", () => {
 
   it("should NOT boost SPD if flinching occured after owner acted", async () => {
     const { classicMode, field, move, phaseInterceptor } = game;
-    await classicMode.startBattle([SpeciesId.FEEBAS]);
+    await classicMode.startBattle(SpeciesId.FEEBAS);
 
     const playerPkm = field.getPlayerPokemon();
 
@@ -92,11 +92,11 @@ describe("Abilities - Steadfast", () => {
     await phaseInterceptor.to("PostActionPhase", true);
     await phaseInterceptor.to("MessagePhase", false);
 
-    expect(playerPkm).not.toHaveBattlerTagType(BattlerTagType.FLINCHED);
+    expect(playerPkm).not.toHaveBattlerTag(BattlerTagType.FLINCHED);
 
     await phaseInterceptor.to("PostActionPhase", true);
 
-    expect(playerPkm).toHaveBattlerTagType(BattlerTagType.FLINCHED);
+    expect(playerPkm).toHaveBattlerTag(BattlerTagType.FLINCHED);
 
     await game.toEndOfTurn();
 
@@ -115,7 +115,7 @@ describe("Abilities - Steadfast", () => {
   ])(`should NOT boost SPD if flinching is prevented by "$abilityName" ability`, async ({ abilityId }) => {
     const { classicMode, field, move, phaseInterceptor } = game;
     game.override.passiveAbility(abilityId);
-    await classicMode.startBattle([SpeciesId.FEEBAS]);
+    await classicMode.startBattle(SpeciesId.FEEBAS);
 
     const playerPkm = field.getPlayerPokemon();
 
@@ -124,11 +124,11 @@ describe("Abilities - Steadfast", () => {
     await move.selectEnemyMove(MoveId.FAKE_OUT);
     await phaseInterceptor.to("MessagePhase", false);
 
-    expect(playerPkm).not.toHaveBattlerTagType(BattlerTagType.FLINCHED);
+    expect(playerPkm).not.toHaveBattlerTag(BattlerTagType.FLINCHED);
 
     await phaseInterceptor.to("PostActionPhase", true);
 
-    expect(playerPkm).not.toHaveBattlerTagType(BattlerTagType.FLINCHED);
+    expect(playerPkm).not.toHaveBattlerTag(BattlerTagType.FLINCHED);
 
     await game.toEndOfTurn();
 
@@ -147,7 +147,7 @@ describe("Abilities - Steadfast", () => {
   )("should boost SPD +1 if Inner Focus is overridden by enemy $abilityName ability", async ({ abilityId }) => {
     const { classicMode, field, move, phaseInterceptor } = game;
     game.override.enemyAbility(abilityId).passiveAbility(AbilityId.INNER_FOCUS);
-    await classicMode.startBattle([SpeciesId.FEEBAS]);
+    await classicMode.startBattle(SpeciesId.FEEBAS);
 
     const playerPkm = field.getPlayerPokemon();
 
@@ -156,11 +156,11 @@ describe("Abilities - Steadfast", () => {
     await move.selectEnemyMove(MoveId.FAKE_OUT);
     await phaseInterceptor.to("MessagePhase", false);
 
-    expect(playerPkm).not.toHaveBattlerTagType(BattlerTagType.FLINCHED);
+    expect(playerPkm).not.toHaveBattlerTag(BattlerTagType.FLINCHED);
 
     await phaseInterceptor.to("PostActionPhase", true);
 
-    expect(playerPkm).toHaveBattlerTagType(BattlerTagType.FLINCHED);
+    expect(playerPkm).toHaveBattlerTag(BattlerTagType.FLINCHED);
 
     await game.toEndOfTurn();
 

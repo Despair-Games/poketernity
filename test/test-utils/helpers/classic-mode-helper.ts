@@ -5,13 +5,10 @@ import { GameModes } from "#enums/game-modes";
 import { Nature } from "#enums/nature";
 import type { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
-import { CommandPhase } from "#phases/command-phase";
-import { EncounterPhase } from "#phases/encounter-phase";
-import { SelectStarterPhase } from "#phases/select-starter-phase";
-import { TurnInitPhase } from "#phases/turn-init-phase";
 import { settings } from "#system/settings-manager";
 import { generateStarter } from "#test/test-utils/game-manager-utils";
 import { GameManagerHelper } from "#test/test-utils/helpers/game-manager-helper";
+import { vi } from "vitest";
 
 /**
  * Helper to handle classic mode specifics
@@ -19,10 +16,16 @@ import { GameManagerHelper } from "#test/test-utils/helpers/game-manager-helper"
 export class ClassicModeHelper extends GameManagerHelper {
   /**
    * Runs the classic game to the summon phase.
-   * @param species - Optional array of species to summon.
+   * @param species - The species to start the battle with. At least one must be specified, up to 6 max.
    * @returns A promise that resolves when the summon phase is reached.
    */
-  async runToSummon(species?: SpeciesId[]): Promise<void> {
+  async runToSummon(species: SpeciesId, ...extraSpecies: SpeciesId[]): Promise<void> {
+    if (overrides.STARTER_SPECIES_OVERRIDE) {
+      throw new Error(
+        "The player species override should not be used for classic mode tests. Pass the species you want to use to the `runToSummon` or `startBattle` function.",
+      );
+    }
+    const starterSpecies = [species, ...extraSpecies];
     await this.game.runToTitle();
 
     if (this.game.override.disableShinies) {
@@ -36,10 +39,11 @@ export class ClassicModeHelper extends GameManagerHelper {
     }
 
     this.game.onNextPrompt("TitlePhase", UiMode.TITLE, () => {
+      const { phaseManager } = this.game.scene;
       this.game.scene.gameMode = getGameMode(GameModes.CLASSIC);
-      const starters = generateStarter(this.game.scene, species);
-      const selectStarterPhase = new SelectStarterPhase();
-      this.game.scene.phaseManager.pushPhase(new EncounterPhase(false));
+      const starters = generateStarter(this.game.scene, starterSpecies);
+      const selectStarterPhase = phaseManager.createPhase("SelectStarterPhase");
+      phaseManager.createAndPushPhase("EncounterPhase", false);
       selectStarterPhase.initBattle(starters);
     });
 
@@ -51,11 +55,11 @@ export class ClassicModeHelper extends GameManagerHelper {
 
   /**
    * Transitions to the start of a battle.
-   * @param species - Optional array of species to start the battle with.
+   * @param species - The species to start the battle with. At least one must be specified, up to 6 max.
    * @returns A promise that resolves when the battle is started.
    */
-  async startBattle(species?: SpeciesId[]): Promise<void> {
-    await this.runToSummon(species);
+  async startBattle(species: SpeciesId, ...extraSpecies: SpeciesId[]): Promise<void> {
+    await this.runToSummon(species, ...extraSpecies);
 
     if (settings.general.battleStyle === BattleStyle.SWITCH) {
       this.game.onNextPrompt(
@@ -65,7 +69,7 @@ export class ClassicModeHelper extends GameManagerHelper {
           this.game.setMode(UiMode.MESSAGE);
           this.game.endPhase();
         },
-        () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase),
+        () => this.game.isCurrentPhase("CommandPhase") || this.game.isCurrentPhase("TurnInitPhase"),
       );
 
       this.game.onNextPrompt(
@@ -75,8 +79,12 @@ export class ClassicModeHelper extends GameManagerHelper {
           this.game.setMode(UiMode.MESSAGE);
           this.game.endPhase();
         },
-        () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase),
+        () => this.game.isCurrentPhase("CommandPhase") || this.game.isCurrentPhase("TurnInitPhase"),
       );
+    }
+
+    if (this.game.override.disableExpGain) {
+      vi.spyOn(overrides, "LEVEL_CAP_OVERRIDE", "get").mockReturnValue(1);
     }
 
     await this.game.phaseInterceptor.to("CommandPhase");

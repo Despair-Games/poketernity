@@ -2,12 +2,12 @@ import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import type { InterfaceConfig } from "#app/inputs-controller";
 import { MAPPING_CONFIG_LS_KEY } from "#constants/app-constants";
-import { Device } from "#enums/devices";
+import { Device } from "#enums/device";
 import { SettingGamepad } from "#enums/setting-gamepad";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import pad_dualshock from "#inputs/pad-dualshock";
-import pad_unlicensedSNES from "#inputs/pad-unlicensedSNES";
+import pad_unlicensedSNES from "#inputs/pad-unlicensed-snes";
 import pad_xbox360 from "#inputs/pad-xbox360";
 import {
   setSettingGamepad,
@@ -22,8 +22,6 @@ import i18next from "i18next";
 
 /**
  * Class representing the settings UI handler for gamepads.
- *
- * @extends ControlsSettingsUiHandler
  */
 export class GamepadSettingsUiHandler extends ControlsSettingsUiHandler {
   constructor() {

@@ -1,24 +1,23 @@
 import { CommonBattleAnim } from "#animations/common-battle-anim";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { BattlerIndex } from "#enums/battler-index";
+import type { FieldBattlerIndex } from "#enums/battler-index";
 import { CommonColor } from "#enums/color";
 import { CommonAnim } from "#enums/common-anim";
-import { PhaseId } from "#enums/phase-id";
 import { Stat } from "#enums/stat";
 import { UiMode } from "#enums/ui-mode";
-import { PokemonPhase } from "#phases/abstract-pokemon-phase";
+import { PokemonPhase } from "#phases/base/pokemon-phase";
 import { settings } from "#system/settings-manager";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import i18next from "i18next";
 
 export class ScanIvsPhase extends PokemonPhase {
-  override readonly id = PhaseId.SCAN_IVS;
+  public override readonly phaseName = "ScanIvsPhase";
 
   private readonly shownIvs: number;
 
-  constructor(battlerIndex: BattlerIndex, shownIvs: number) {
+  constructor(battlerIndex: FieldBattlerIndex, shownIvs: number) {
     super(battlerIndex);
 
     this.shownIvs = shownIvs;
@@ -30,7 +29,8 @@ export class ScanIvsPhase extends PokemonPhase {
     const { gameData, ui } = globalScene;
 
     if (!this.shownIvs) {
-      return this.end();
+      this.end();
+      return;
     }
 
     const pokemon = this.getPokemon();
@@ -38,12 +38,18 @@ export class ScanIvsPhase extends PokemonPhase {
     let statsContainer: Phaser.GameObjects.Sprite[] = [];
     let statsContainerLabels: Phaser.GameObjects.Sprite[] = [];
 
+    const messageUiHandler = ui.getMessageHandler();
+    if (!messageUiHandler) {
+      this.end();
+      return;
+    }
+
     const enemyField = globalScene.getEnemyField();
     for (const enemyPokemon of enemyField) {
       const enemyIvs = enemyPokemon.ivs;
       // we are using getRootSpeciesId() here because we want to check against the baby form, not the mid form if it exists
       const currentIvs = gameData.starterData[enemyPokemon.species.getRootSpeciesId()].ivs;
-      const ivsToShow = ui.getMessageHandler().getTopIvs(enemyIvs, this.shownIvs);
+      const ivsToShow = messageUiHandler.getTopIvs(enemyIvs, this.shownIvs);
 
       statsContainer = enemyPokemon.getBattleInfo().getStatsValueContainer().list as Phaser.GameObjects.Sprite[];
       statsContainerLabels = statsContainer.filter((m) => m.name.indexOf("icon_stat_label") >= 0);
@@ -69,9 +75,7 @@ export class ScanIvsPhase extends PokemonPhase {
               ui.setMessageMode();
               ui.clearText();
               new CommonBattleAnim(CommonAnim.LOCK_ON, pokemon, pokemon).play(false, () => {
-                ui.getMessageHandler()
-                  .promptIvs(pokemon.id, pokemon.ivs, this.shownIvs)
-                  .then(() => this.end());
+                messageUiHandler.promptIvs(pokemon.id, pokemon.ivs, this.shownIvs).then(() => this.end());
               });
             },
             noHandler: () => {

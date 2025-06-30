@@ -34,7 +34,7 @@ describe("Move Effect Scores - Electrify", () => {
   });
 
   it("should be avoided if the user is slower than the target", async () => {
-    await game.classicMode.startBattle([SpeciesId.DIGLETT]);
+    await game.classicMode.startBattle(SpeciesId.DIGLETT);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -46,7 +46,7 @@ describe("Move Effect Scores - Electrify", () => {
   });
 
   it("should be avoided if the user is not Electric-immune", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -59,7 +59,7 @@ describe("Move Effect Scores - Electrify", () => {
 
   it("should be preferred if the user is a Ground-type Pokemon", async () => {
     game.override.enemySpecies(SpeciesId.DIGLETT);
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -78,7 +78,7 @@ describe("Move Effect Scores - Electrify", () => {
   )("should be preferred if the user has $abilityName", async ({ abilityId }) => {
     game.override.enemyAbility(abilityId);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();

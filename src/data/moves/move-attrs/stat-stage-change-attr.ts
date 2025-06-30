@@ -4,12 +4,10 @@ import { type BattleStat, Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import { ChanceBasedMoveEffectAttr, type ChanceBasedMoveEffectAttrOptions } from "#moves/chance-based-move-effect-attr";
 import type { Move } from "#moves/move";
-import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import type { MoveConditionFunc } from "#types/move-condition-func";
 
 /**
  * Set of optional parameters that may be applied to stat stage changing effects
- * @extends MoveEffectAttrOptions
  * @see {@linkcode StatStageChangeAttr}
  */
 interface StatStageChangeAttrOptions extends ChanceBasedMoveEffectAttrOptions {
@@ -26,8 +24,6 @@ interface StatStageChangeAttrOptions extends ChanceBasedMoveEffectAttrOptions {
  * @param stages How many stages to change the stat(s) by, [-6, 6]
  * @param selfTarget `true` if the move is self-targetting
  * @param options {@linkcode StatStageChangeAttrOptions} Container for any optional parameters for this attribute.
- *
- * @extends ChanceBasedMoveEffectAttr
  */
 export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
   public stats: BattleStat[];
@@ -47,7 +43,7 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
 
   /**
    * The condition required for the stat stage change to apply.
-   * Defaults to `null` (i.e. no condition required).
+   * @defaultValue `null` (i.e. no condition required).
    */
   private get condition() {
     return this.options?.condition ?? null;
@@ -55,7 +51,7 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
 
   /**
    * `true` to display a message for the stat change.
-   * @default true
+   * @defaultValue `true`
    */
   private get showMessage() {
     return this.options?.showMessage ?? true;
@@ -67,10 +63,15 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
     }
 
     const stages = this.getLevels(user);
-    globalScene.phaseManager.unshiftPhase(
-      new StatStageChangePhase((this.selfTarget ? user : target).getBattlerIndex(), user, this.stats, stages, {
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "StatStageChangePhase",
+      (this.selfTarget ? user : target).getBattlerIndex(),
+      user,
+      this.stats,
+      stages,
+      {
         showMessage: this.showMessage,
-      }),
+      },
     );
     return true;
   }

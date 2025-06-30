@@ -44,7 +44,8 @@ export function ChargeMove<TBase extends SubMove>(Base: TBase) {
      * @param target the {@linkcode Pokemon} targeted by this move (optional)
      */
     showChargeText(user: Pokemon, target?: Pokemon): void {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         this._chargeText
           .replace("{USER}", getPokemonNameWithAffix(user))
           .replace("{TARGET}", getPokemonNameWithAffix(target)),

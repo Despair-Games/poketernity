@@ -6,7 +6,6 @@ import { Button } from "#enums/button";
 import { EggSkipPreference } from "#enums/egg-skip-preference";
 import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
 import { UiMode } from "#enums/ui-mode";
-import { EggSummaryPhase } from "#phases/egg-summary-phase";
 import { settings } from "#system/settings-manager";
 import { HatchedPokemonContainer } from "#ui/hatched-pokemon-container";
 import { MessageUiHandler } from "#ui/message-ui-handler";
@@ -126,7 +125,6 @@ export class EggHatchSummaryUiHandler extends MessageUiHandler {
     this.eggHatchBg.setVisible(false);
     this.getUi().hideTooltip();
 
-    // Note: Questions on garbage collection go to @frutescens
     const activeKeys = globalScene.getActiveKeys();
     // Removing unnecessary sprites from animation manager
     const animKeys = Object.keys(globalScene.anims["anims"]["entries"]);
@@ -233,7 +231,7 @@ export class EggHatchSummaryUiHandler extends MessageUiHandler {
     if (button === Button.CANCEL) {
       if (!this.blockExit) {
         const phase = globalScene.phaseManager.getCurrentPhase();
-        if (phase instanceof EggSummaryPhase) {
+        if (phase?.is("EggSummaryPhase")) {
           phase.end();
         }
         success = true;

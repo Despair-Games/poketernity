@@ -6,14 +6,13 @@ import type { Pokemon } from "#field/pokemon";
 
 /**
  * Tag for the effects of Dragon Cheer, which boosts the critical hit ratio of the user's ally.
- * @extends CritBoostTag
  */
 export class DragonCheerTag extends CritBoostTag {
   /** The types of the user's ally when the tag is added */
   public typesOnAdd: ElementalType[];
 
   constructor() {
-    super(BattlerTagType.CRIT_BOOST, MoveId.DRAGON_CHEER);
+    super(BattlerTagType.DRAGON_CHEER, MoveId.DRAGON_CHEER);
   }
 
   override onAdd(pokemon: Pokemon): void {

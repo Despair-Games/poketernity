@@ -43,10 +43,11 @@ export class RenamePokemonUiHandler extends FormModalUiHandler {
       return false;
     }
 
+    // TODO: When the text is set like this it flashes somewhere on the screen before being displayed properly
     if (typeof target === "string") {
-      this.inputs[0].text = target;
+      this.inputs[0].setText(target);
     } else {
-      this.inputs[0].text = target.getNameToRender();
+      this.inputs[0].setText(target.getNameToRender());
     }
     this.submitAction = (_) => {
       this.sanitizeInputs();

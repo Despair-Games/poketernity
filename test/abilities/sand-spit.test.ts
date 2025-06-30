@@ -32,7 +32,7 @@ describe("Abilities - Sand Spit", () => {
   });
 
   it("should trigger when hit with damaging move", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     game.move.select(MoveId.TACKLE);
     await game.toNextTurn();
@@ -42,7 +42,7 @@ describe("Abilities - Sand Spit", () => {
 
   it("should trigger when KO'd", async () => {
     game.override.startingLevel(1000).enemyLevel(1);
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     game.move.select(MoveId.WATERFALL);
     await game.phaseInterceptor.to("FaintPhase");
@@ -51,7 +51,7 @@ describe("Abilities - Sand Spit", () => {
   });
 
   it("should not trigger when targetted with status moves", async () => {
-    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
     game.move.select(MoveId.GROWL);
     await game.toNextTurn();
 

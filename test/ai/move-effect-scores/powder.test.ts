@@ -34,7 +34,7 @@ describe("Move Effect Scores - Powder", () => {
   it("should be preferred when the target is known to have a Fire-type attack", async () => {
     game.override.moveset([MoveId.EMBER, MoveId.SPLASH]);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).not.toPreferSelectingMove(MoveId.POWDER);
@@ -44,7 +44,7 @@ describe("Move Effect Scores - Powder", () => {
   });
 
   it("should be preferred when the target is a Fire-type Pokemon", async () => {
-    await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
+    await game.classicMode.startBattle(SpeciesId.CHARMANDER);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).toPreferSelectingMove(MoveId.POWDER);
@@ -53,7 +53,7 @@ describe("Move Effect Scores - Powder", () => {
   it("should not be preferred when the target is known to not have any Fire-type attack", async () => {
     game.override.moveset([MoveId.TACKLE, MoveId.SPLASH, MoveId.CELEBRATE, MoveId.POUND]);
 
-    await game.classicMode.startBattle([SpeciesId.CHARMANDER]);
+    await game.classicMode.startBattle(SpeciesId.CHARMANDER);
 
     const enemy = game.field.getEnemyPokemon();
 

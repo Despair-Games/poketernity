@@ -2,7 +2,7 @@ import type BattleScene from "#app/battle-scene";
 import { FRIENDSHIP_GAIN_PER_LEVEL_UP } from "#constants/friendship-constants";
 import { HumanTransitableBiomes } from "#data/biome-utils";
 import { BiomeId } from "#enums/biome-id";
-import { EggTier } from "#enums/egg-type";
+import { EggTier } from "#enums/egg-tier";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
@@ -12,8 +12,6 @@ import { TrainerType } from "#enums/trainer-type";
 import MysteryEncounter from "#mystery-encounters/mystery-encounter";
 import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
 import { TheExpertPokemonBreederEncounter } from "#mystery-encounters/the-expert-pokemon-breeder-encounter";
-import { CommandPhase } from "#phases/command-phase";
-import { SelectModifierPhase } from "#phases/select-modifier-phase";
 import {
   runMysteryEncounterToEnd,
   skipBattleRunMysteryEncounterRewardsPhase,
@@ -156,13 +154,14 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
       expect(successfullyLoaded).toBe(true);
 
       // Check usual battle stuff
-      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
       expect(scene.currentBattle.trainer).toBeDefined();
       expect(scene.currentBattle.mysteryEncounter?.encounterMode).toBe(MysteryEncounterMode.TRAINER_BATTLE);
       expect(scene.getPlayerParty().length).toBe(1);
     });
 
     it("Should reward the player with friendship and eggs based on pokemon selected", async () => {
+      game.override.disableExpGain = false;
       await game.runToMysteryEncounter(MysteryEncounterType.THE_EXPERT_POKEMON_BREEDER, defaultParty);
 
       const friendshipBefore = scene.currentBattle.mysteryEncounter!.misc.pokemon1.friendship;
@@ -175,7 +174,7 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
       await skipBattleRunMysteryEncounterRewardsPhase(game);
       await game.phaseInterceptor.to("SelectModifierPhase", false);
-      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SelectModifierPhase");
 
       const eggsAfter = scene.gameData.eggs;
       const commonEggs = scene.currentBattle.mysteryEncounter!.misc.pokemon1CommonEggs;
@@ -240,13 +239,14 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
       expect(successfullyLoaded).toBe(true);
 
       // Check usual battle stuff
-      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
       expect(scene.currentBattle.trainer).toBeDefined();
       expect(scene.currentBattle.mysteryEncounter?.encounterMode).toBe(MysteryEncounterMode.TRAINER_BATTLE);
       expect(scene.getPlayerParty().length).toBe(1);
     });
 
     it("Should reward the player with friendship and eggs based on pokemon selected", async () => {
+      game.override.disableExpGain = false;
       await game.runToMysteryEncounter(MysteryEncounterType.THE_EXPERT_POKEMON_BREEDER, defaultParty);
 
       const friendshipBefore = scene.currentBattle.mysteryEncounter!.misc.pokemon2.friendship;
@@ -259,7 +259,7 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 2, undefined, true);
       await skipBattleRunMysteryEncounterRewardsPhase(game);
       await game.phaseInterceptor.to("SelectModifierPhase", false);
-      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SelectModifierPhase");
 
       const eggsAfter = scene.gameData.eggs;
       const commonEggs = scene.currentBattle.mysteryEncounter!.misc.pokemon2CommonEggs;
@@ -323,13 +323,14 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
       expect(successfullyLoaded).toBe(true);
 
       // Check usual battle stuff
-      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
       expect(scene.currentBattle.trainer).toBeDefined();
       expect(scene.currentBattle.mysteryEncounter?.encounterMode).toBe(MysteryEncounterMode.TRAINER_BATTLE);
       expect(scene.getPlayerParty().length).toBe(1);
     });
 
     it("Should reward the player with friendship and eggs based on pokemon selected", async () => {
+      game.override.disableExpGain = false;
       await game.runToMysteryEncounter(MysteryEncounterType.THE_EXPERT_POKEMON_BREEDER, defaultParty);
 
       const friendshipBefore = scene.currentBattle.mysteryEncounter!.misc.pokemon3.friendship;
@@ -342,7 +343,7 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 3, undefined, true);
       await skipBattleRunMysteryEncounterRewardsPhase(game);
       await game.phaseInterceptor.to("SelectModifierPhase", false);
-      expect(scene.phaseManager.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
+      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SelectModifierPhase");
 
       const eggsAfter = scene.gameData.eggs;
       const commonEggs = scene.currentBattle.mysteryEncounter!.misc.pokemon3CommonEggs;

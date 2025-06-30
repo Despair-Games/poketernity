@@ -66,15 +66,15 @@ Do the reviewers need to do something special in order to test your changes?
 
 ## Checklist
 
-- [ ] ⚠️ If this is a PR for `main` (such as a hotfix), has the game version been updated (`npm run update-version:patch` / `npm run update version:minor`?
+- [ ] ⚠️ If this is a PR for `main` (such as a hotfix), has the game version been updated (`pnpm update-version:patch` / `pnpm update-version:minor`?
 - [ ] Otherwise: **I'm using `beta` as my base branch**
 - [ ] There is no overlap with another PR?
 - [ ] The PR is self-contained and cannot be split into smaller PRs?
 - [ ] Have I provided a clear explanation of the changes?
 - [ ] Have I tested the changes manually?
 <!-- We have heavily optimized our test suite, so please actually run the tests :) -->
-- [ ] Are all unit tests still passing? (`npm run test:silent`)
-  - [ ] Have I created new automated tests (`npm run test:create`) or updated existing tests related to the PR's changes?
+- [ ] Are all unit tests still passing? (`pnpm test:silent`)
+  - [ ] Have I created new automated tests (`pnpm test:create`) or updated existing tests related to the PR's changes?
 - [ ] Have I provided screenshots/videos of the changes (if applicable)?
   - [ ] Have I made sure that any UI change works for both UI themes (dark and light)?
 
@@ -95,12 +95,12 @@ Do the reviewers need to do something special in order to test your changes?
 <!-- #### Using the Command Line:
 - Go to https://github.com/Despair-Games/poketernity/tree/beta/public and copy the hash of the current locale commit beta is pointing to
 - If the hash corresponds to the latest commit in the locale repo:
-  - `npm run update-locales:remote`
+  - `pnpm update-locales:remote`
   - `git add public/locales`
   - make your commit, push etc
 - If it's not the latest commit:
   - `git checkout beta`
-  - if not up to date: `git pull`. Otherwise: `npm run update-locales:remote`
+  - if not up to date: `git pull`. Otherwise: `pnpm update-locales:remote`
   - `git checkout {this pr's branch}`
   - `git add public/locales`
   - make your commit, push etc

@@ -1,3 +1,8 @@
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
+import type { CRIT_BOOST_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
+import type { ElementalType } from "#enums/elemental-type";
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
+
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTag } from "#battler-tags/battler-tag";
@@ -9,9 +14,12 @@ import i18next from "i18next";
 
 /**
  * Tag to denote a nonstackable boost to crit rate. Granted by:
- * Focus Energy (+2), Dragon Cheer (+2 if dragon, +1 otherwise),
- * and Lansat Berry (+2)
- * @extends BattlerTag
+ * - Focus Energy (`+2`)
+ * - Dragon Cheer (`+2` if {@linkcode ElementalType.DRAGON | Dragon type}, `+1` otherwise)
+ * - Lansat Berry (`+2`)
+ *
+ * @privateRemarks
+ * Tags that use or subclass this should be added to {@linkcode CRIT_BOOST_BATTLER_TAG_TYPES}
  */
 export class CritBoostTag extends BattlerTag {
   constructor(tagType: BattlerTagType, sourceMoveId: MoveId) {
@@ -21,7 +29,8 @@ export class CritBoostTag extends BattlerTag {
   override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:critBoostOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }
@@ -33,7 +42,8 @@ export class CritBoostTag extends BattlerTag {
   override onRemove(pokemon: Pokemon): void {
     super.onRemove(pokemon);
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:critBoostOnRemove", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }

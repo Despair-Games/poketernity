@@ -1,3 +1,7 @@
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
+import type { SEMI_INVULNERABLE_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
+
 import { globalScene } from "#app/global-scene";
 import { BattlerTag } from "#battler-tags/battler-tag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
@@ -9,7 +13,9 @@ import { getFrameMs } from "#utils/common-utils";
 /**
  * Tag representing the {@link https://bulbapedia.bulbagarden.net/wiki/Semi-invulnerable_turn | Semi-invulnerable} state
  * during the execution of several two-turn moves.
- * @extends BattlerTag
+ *
+ * @privateRemarks
+ * Tags that use or subclass this should be added to {@linkcode SEMI_INVULNERABLE_BATTLER_TAG_TYPES}
  */
 export class SemiInvulnerableTag extends BattlerTag {
   constructor(tagType: BattlerTagType, turnCount: number, sourceMoveId: MoveId) {

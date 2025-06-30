@@ -9,7 +9,6 @@ import type { MoveConditionFunc } from "#types/move-condition-func";
  * condition for use.
  * The move can only be used after the user has used all other
  * moves in its moveset since it entered the field.
- * @extends MoveAttr
  */
 export class LastResortAttr extends MoveAttr {
   override getCondition(): MoveConditionFunc {

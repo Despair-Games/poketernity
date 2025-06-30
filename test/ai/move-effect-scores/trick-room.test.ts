@@ -31,7 +31,7 @@ describe("Move Effect Scores - Trick Room", async () => {
   });
 
   it("should be preferred when the player outspeeds the enemy in a single battle", async () => {
-    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI);
 
     const enemy = game.field.getEnemyPokemon();
 
@@ -40,7 +40,7 @@ describe("Move Effect Scores - Trick Room", async () => {
 
   it("should be preferred when both player Pokemon outspeed the enemy in a double battle", async () => {
     game.override.battleType("double");
-    await game.classicMode.startBattle([SpeciesId.REGIELEKI, SpeciesId.ELECTRODE]);
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI, SpeciesId.ELECTRODE);
 
     const [enemy] = game.scene.getEnemyField();
 
@@ -48,7 +48,7 @@ describe("Move Effect Scores - Trick Room", async () => {
   });
 
   it("should be avoided when the enemy outspeeds the player", async () => {
-    await game.classicMode.startBattle([SpeciesId.SHUCKLE]);
+    await game.classicMode.startBattle(SpeciesId.SHUCKLE);
 
     const enemy = game.field.getEnemyPokemon();
 
@@ -56,7 +56,7 @@ describe("Move Effect Scores - Trick Room", async () => {
   });
 
   it("should be avoided when its effect is already active", async () => {
-    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
+    await game.classicMode.startBattle(SpeciesId.REGIELEKI);
 
     const enemy = game.field.getEnemyPokemon();
 

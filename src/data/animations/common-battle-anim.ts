@@ -7,7 +7,6 @@ import type { Pokemon } from "#field/pokemon";
 /**
  * Animation for common battle effects that are (usually)
  * tied to a specific {@linkcode Pokemon}.
- * @extends BattleAnim
  * @todo Make `user` optional, or add a new subclass for
  * animations that don't require a "user" (e.g. weather animations)
  */

@@ -14,7 +14,6 @@ export interface MoveAttrOptions {
 
 /**
  * Base class defining all {@linkcode Move} Attributes
- * @abstract
  * @see {@linkcode apply}
  */
 export abstract class MoveAttr {

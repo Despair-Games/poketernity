@@ -9,23 +9,24 @@ import {
 import { chargeAnims } from "#animations/charge-anims";
 import { commonAnims } from "#animations/common-anims";
 import { moveAnims } from "#animations/move-anims";
+import type { AnimBlendType } from "#enums/anim-blend-type";
 import type { AnimFocus } from "#enums/anim-focus";
 import { ChargeAnim } from "#enums/charge-anim";
 import { CommonAnim } from "#enums/common-anim";
 import { MoveId } from "#enums/move-id";
-import { getTSEnumKeys, getTSEnumValues } from "#utils/common-utils";
+import { getTSEnumValues } from "#utils/common-utils";
 
 export async function populateAnims() {
-  const commonAnimNames = getTSEnumKeys(CommonAnim).map((k) => k.toLowerCase());
-  const commonAnimMatchNames = commonAnimNames.map((k) => k.replace(/\_/g, ""));
-  const commonAnimIds: CommonAnim[] = getTSEnumValues(CommonAnim);
-  const chargeAnimNames = getTSEnumKeys(ChargeAnim).map((k) => k.toLowerCase());
-  const chargeAnimMatchNames = chargeAnimNames.map((k) => k.replace(/\_/g, " "));
-  const chargeAnimIds: ChargeAnim[] = getTSEnumValues(ChargeAnim);
+  const commonAnimNames = Object.keys(CommonAnim).map((k) => k.toLowerCase());
+  const commonAnimMatchNames = commonAnimNames.map((k) => k.replace(/_/g, ""));
+  const commonAnimIds: CommonAnim[] = Object.values(CommonAnim);
+  const chargeAnimNames = Object.keys(ChargeAnim).map((k) => k.toLowerCase());
+  const chargeAnimMatchNames = chargeAnimNames.map((k) => k.replace(/_/g, " "));
+  const chargeAnimIds: ChargeAnim[] = Object.values(ChargeAnim);
   const commonNamePattern = /name: (?:Common:)?(Opp )?(.*)/;
   const moveNameToId = {};
   for (const move of getTSEnumValues(MoveId).slice(1)) {
-    const moveName = MoveId[move].toUpperCase().replace(/\_/g, "");
+    const moveName = MoveId[move].toUpperCase().replace(/_/g, "");
     moveNameToId[moveName] = move;
   }
 
@@ -83,7 +84,7 @@ export async function populateAnims() {
             const frameData = framesData[fd];
             const focusFramesData = frameData.split("    - - ");
             for (let tf = 0; tf < focusFramesData.length; tf++) {
-              const values = focusFramesData[tf].replace(/ {6}\- /g, "").split("\n");
+              const values = focusFramesData[tf].replace(/ {6}- /g, "").split("\n");
               const targetFrame = new AnimFrame(
                 Number.parseFloat(values[0]),
                 Number.parseFloat(values[1]),
@@ -92,7 +93,7 @@ export async function populateAnims() {
                 Number.parseFloat(values[3]),
                 Number.parseInt(values[4]) === 1,
                 Number.parseInt(values[6]) === 1,
-                Number.parseInt(values[5]),
+                Number.parseInt(values[5]) as AnimBlendType,
                 Number.parseInt(values[7]),
                 Number.parseInt(values[8]),
                 Number.parseInt(values[12]),
@@ -130,7 +131,7 @@ export async function populateAnims() {
               .replace(/[a-z]+: ! '', /gi, "")
               .replace(/name: (.*?),/, 'name: "$1",')
               .replace(
-                /flashColor: !ruby\/object:Color { alpha: ([\d\.]+), blue: ([\d\.]+), green: ([\d\.]+), red: ([\d\.]+)}/,
+                /flashColor: !ruby\/object:Color { alpha: ([\d.]+), blue: ([\d.]+), green: ([\d.]+), red: ([\d.]+)}/,
                 "flashRed: $4, flashGreen: $3, flashBlue: $2, flashAlpha: $1",
               );
             const frameIndex = Number.parseInt(/frame: (\d+)/.exec(timingData)![1]); // TODO: is the bang correct?

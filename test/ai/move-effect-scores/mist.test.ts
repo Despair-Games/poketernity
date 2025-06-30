@@ -31,7 +31,7 @@ describe("Move Effect Scores - Mist", () => {
   });
 
   it("Enemy should prefer selecting Mist on its first turn in battle", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
 
@@ -41,7 +41,7 @@ describe("Move Effect Scores - Mist", () => {
   it("Enemy should not prefer selecting Mist after its first turn in battle", async () => {
     game.override.enemyMoveset([MoveId.MIST, MoveId.TACKLE, MoveId.SPLASH]);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
 
@@ -56,7 +56,7 @@ describe("Move Effect Scores - Mist", () => {
   it("Enemy should not prefer selecting Mist over attacks with AS > 1", async () => {
     game.override.enemyMoveset([MoveId.MIST, MoveId.SUPER_FANG]);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
 
@@ -66,7 +66,7 @@ describe("Move Effect Scores - Mist", () => {
   it("Enemy should prefer selecting Mist after switching in", async () => {
     game.override.startingWave(8); // Forced Trainer fight
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
 
@@ -82,7 +82,7 @@ describe("Move Effect Scores - Mist", () => {
   });
 
   it("Enemy should avoid selecting Mist if Mist is already active", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
 

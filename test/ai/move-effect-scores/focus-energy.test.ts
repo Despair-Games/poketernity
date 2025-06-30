@@ -31,7 +31,7 @@ describe("Move Effect Scores - Focus Energy", () => {
   });
 
   it("should be preferred over moves with low-impact", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).toPreferSelectingMove(MoveId.FOCUS_ENERGY);
@@ -40,7 +40,7 @@ describe("Move Effect Scores - Focus Energy", () => {
   it("should have greater incentive when the user has a move with a high critical hit ratio", async () => {
     game.override.enemyMoveset([MoveId.FOCUS_ENERGY, MoveId.SUPER_FANG, MoveId.PSYCHO_CUT]);
 
-    await game.classicMode.startBattle([SpeciesId.POOCHYENA]);
+    await game.classicMode.startBattle(SpeciesId.POOCHYENA);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).toPreferSelectingMove(MoveId.FOCUS_ENERGY);
@@ -49,14 +49,14 @@ describe("Move Effect Scores - Focus Energy", () => {
   it("should not have high incentive when the user does not have a move with a high critical hit ratio", async () => {
     game.override.enemyMoveset([MoveId.FOCUS_ENERGY, MoveId.SUPER_FANG, MoveId.PSYCHO_CUT]);
 
-    await game.classicMode.startBattle([SpeciesId.POOCHYENA]);
+    await game.classicMode.startBattle(SpeciesId.POOCHYENA);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).not.toPreferSelectingMove(MoveId.FOCUS_ENERGY);
   });
 
   it("should be avoided when the user is already under Focus Energy's effect", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
 

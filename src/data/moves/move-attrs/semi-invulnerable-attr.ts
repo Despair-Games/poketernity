@@ -5,8 +5,9 @@ import { MoveEffectAttr } from "#moves/move-effect-attr";
 
 /**
  * Attribute that grants {@link https://bulbapedia.bulbagarden.net/wiki/Semi-invulnerable_turn | semi-invulnerability} to the user during
- * the associated move's charging phase. Should only be used for {@linkcode ChargingMove | charge moves} via `.chargeAttr()`.
- * @extends MoveEffectAttr
+ * the associated move's charging phase.
+ *
+ * Should only be used for {@linkcode ChargingMove | charge moves} via `.chargeAttr()`.
  */
 export class SemiInvulnerableAttr extends MoveEffectAttr {
   /** The type of {@linkcode SemiInvulnerableTag} to grant to the user */

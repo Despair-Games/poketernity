@@ -39,7 +39,7 @@ describe("Move Effect Scores - Ability Suppression", () => {
   )("Enemy should prefer selecting Gastro Acid if the opponent has $abilityName", async ({ abilityId }) => {
     game.override.ability(abilityId);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     revealAllAbilities(game.scene);
     const enemy = game.field.getEnemyPokemon();
@@ -48,7 +48,7 @@ describe("Move Effect Scores - Ability Suppression", () => {
   });
 
   it("Enemy should not prefer selecting Gastro Acid if the opponent has Torrent", async () => {
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     revealAllAbilities(game.scene);
     const enemy = game.field.getEnemyPokemon();
@@ -59,7 +59,7 @@ describe("Move Effect Scores - Ability Suppression", () => {
   it("Enemy should not prefer selecting Gastro Acid if the opponent's ability isn't revealed", async () => {
     game.override.ability(AbilityId.HUGE_POWER);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
 
@@ -69,7 +69,7 @@ describe("Move Effect Scores - Ability Suppression", () => {
   it("Enemy should avoid selecting Gastro Acid if the opponent's ability is unsuppressable", async () => {
     game.override.ability(AbilityId.SCHOOLING);
 
-    await game.classicMode.startBattle([SpeciesId.WISHIWASHI]);
+    await game.classicMode.startBattle(SpeciesId.WISHIWASHI);
 
     revealAllAbilities(game.scene);
     const enemy = game.field.getEnemyPokemon();

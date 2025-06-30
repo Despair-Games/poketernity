@@ -5,7 +5,6 @@ import type { BooleanHolder } from "#utils/common-utils";
 
 /**
  * Attribute to guarantee that the move critically hits.
- * @extends MoveAttr
  */
 export class CritOnlyAttr extends MoveAttr {
   /**

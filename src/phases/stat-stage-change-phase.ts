@@ -10,13 +10,12 @@ import { handleTutorial } from "#app/tutorial";
 import { CANVAS_SCALE } from "#constants/ui-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import type { BattlerIndex } from "#enums/battler-index";
-import { PhaseId } from "#enums/phase-id";
-import { getStatKey, getStatStageChangeDescriptionKey, Stat, type BattleStat } from "#enums/stat";
+import type { FieldBattlerIndex } from "#enums/battler-index";
+import { type BattleStat, getStatKey, getStatStageChangeDescriptionKey, Stat } from "#enums/stat";
 import { Tutorial } from "#enums/tutorial";
 import type { Pokemon } from "#field/pokemon";
 import { ResetNegativeStatStageModifier } from "#modifier/modifier";
-import { PokemonPhase } from "#phases/abstract-pokemon-phase";
+import { PokemonPhase } from "#phases/base/pokemon-phase";
 import { settings } from "#system/settings-manager";
 import { BooleanHolder, NumberHolder } from "#utils/common-utils";
 import i18next from "i18next";
@@ -37,7 +36,7 @@ export interface SSCPhaseOptions {
 //#endregion
 
 export class StatStageChangePhase extends PokemonPhase {
-  override readonly id = PhaseId.STAT_STAGE_CHANGE;
+  public override readonly phaseName = "StatStageChangePhase";
 
   protected readonly stats: BattleStat[];
   protected readonly source: Pokemon | null;
@@ -57,7 +56,7 @@ export class StatStageChangePhase extends PokemonPhase {
   protected readonly isStickyWeb: boolean;
 
   constructor(
-    battlerIndex: BattlerIndex,
+    battlerIndex: FieldBattlerIndex,
     source: Pokemon | null,
     stats: BattleStat[],
     stages: number,
@@ -91,7 +90,8 @@ export class StatStageChangePhase extends PokemonPhase {
     const { add, arena, field, fieldSpritePipeline, tweens, time } = globalScene;
 
     if (!pokemon.isActive(true)) {
-      return super.end();
+      super.end();
+      return;
     }
 
     if (!this.ignoreAbilities && !this.bypassReflect) {
@@ -106,7 +106,8 @@ export class StatStageChangePhase extends PokemonPhase {
         reflected,
       );
       if (reflected.value) {
-        return super.end();
+        super.end();
+        return;
       }
     }
 
@@ -114,11 +115,17 @@ export class StatStageChangePhase extends PokemonPhase {
     if (this.stats.length > 1) {
       for (let i = 0; i < this.stats.length; i++) {
         const stat = [this.stats[i]];
-        globalScene.phaseManager.unshiftPhase(
-          new StatStageChangePhase(this.battlerIndex, this.source, stat, this.stages, this.options),
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "StatStageChangePhase",
+          this.battlerIndex,
+          this.source,
+          stat,
+          this.stages,
+          this.options,
         );
       }
-      return super.end();
+      super.end();
+      return;
     }
 
     const stages = new NumberHolder(this.stages);
@@ -171,7 +178,7 @@ export class StatStageChangePhase extends PokemonPhase {
           messages.push(...this.getStatStageChangeMessages(filteredStats, stages.value, relLevels));
         }
         for (const message of messages) {
-          globalScene.phaseManager.queueMessagePhase(message);
+          globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", message);
         }
       }
 

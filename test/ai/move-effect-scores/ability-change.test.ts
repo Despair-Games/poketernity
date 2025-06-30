@@ -37,7 +37,7 @@ describe("Move Effect Scores - Ability Change", () => {
   )("Enemy should prefer selecting Worry Seed when the opponent has $abilityName", async ({ abilityId }) => {
     game.override.ability(abilityId);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     revealAllAbilities(game.scene);
     const enemyPokemon = game.field.getEnemyPokemon();
@@ -48,7 +48,7 @@ describe("Move Effect Scores - Ability Change", () => {
   it("Enemy should not prefer selecting Worry Seed when the opponent has a non-high-value ability", async () => {
     game.override.ability(AbilityId.TORRENT);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     revealAllAbilities(game.scene);
     const enemyPokemon = game.field.getEnemyPokemon();
@@ -59,7 +59,7 @@ describe("Move Effect Scores - Ability Change", () => {
   it("Enemy should not prefer selecting Worry Seed when the opponent's ability isn't revealed", async () => {
     game.override.ability(AbilityId.HUGE_POWER);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemyPokemon = game.field.getEnemyPokemon();
 
@@ -69,7 +69,7 @@ describe("Move Effect Scores - Ability Change", () => {
   it("Enemy should avoid selecting Worry Seed when the opponent already has Insomnia", async () => {
     game.override.ability(AbilityId.INSOMNIA);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     revealAllAbilities(game.scene);
     const enemyPokemon = game.field.getEnemyPokemon();
@@ -80,7 +80,7 @@ describe("Move Effect Scores - Ability Change", () => {
   it("Enemy should avoid selecting Worry Seed when the opponent's ability is unsuppressable", async () => {
     game.override.ability(AbilityId.SCHOOLING);
 
-    await game.classicMode.startBattle([SpeciesId.WISHIWASHI]);
+    await game.classicMode.startBattle(SpeciesId.WISHIWASHI);
 
     revealAllAbilities(game.scene);
     const enemyPokemon = game.field.getEnemyPokemon();

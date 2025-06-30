@@ -12,6 +12,7 @@ import type { PlayerPokemon } from "#field/player-pokemon";
 import { PokemonInfoContainer } from "#ui/pokemon-info-container";
 import { addTextObject } from "#ui/text-utils";
 import { rgbHexToRgba } from "#utils/color-utils";
+import { enumValueToKey } from "#utils/common-utils";
 import { getPokemonSpeciesForm } from "#utils/pokemon-utils";
 import { leftPad } from "#utils/string-utils";
 import { argbFromRgba } from "@material/material-color-utilities";
@@ -168,7 +169,7 @@ export class PokemonHatchInfoContainer extends PokemonInfoContainer {
       const eggMove = hasEggMoves ? allMoves.get(speciesEggMoves[species.speciesId][em]) : null;
       const eggMoveUnlocked = eggMove && globalScene.gameData.starterData[species.speciesId].eggMoves & Math.pow(2, em);
       this.pokemonEggMoveBgs[em].setFrame(
-        ElementalType[eggMove ? eggMove.type : ElementalType.UNKNOWN].toString().toLowerCase(),
+        enumValueToKey(ElementalType, eggMove ? eggMove.type : ElementalType.UNKNOWN).toLowerCase(),
       );
 
       this.pokemonEggMoveLabels[em].setText(eggMove && eggMoveUnlocked ? eggMove.name : "???");

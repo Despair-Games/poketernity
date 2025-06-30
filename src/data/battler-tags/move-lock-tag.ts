@@ -1,3 +1,7 @@
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
+import type { MOVE_LOCK_TAG_TYPES } from "#constants/battler-tag-constants";
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
+
 import { globalScene } from "#app/global-scene";
 import { BattlerTag } from "#battler-tags/battler-tag";
 import { allMoves } from "#data/data-lists";
@@ -8,12 +12,14 @@ import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 import { MoveTarget } from "#enums/move-target";
 import type { Pokemon } from "#field/pokemon";
-import { type Move, getMoveTargets } from "#moves/move";
+import { getMoveTargets, type Move } from "#moves/move";
 
 /**
- * Locks the source into using a move consecutively for `turnCount - 1` turns. If the move fails or is interrupted
- * during any of these uses, this effect is removed.
- * @extends BattlerTag
+ * Locks the source into using a move consecutively for `turnCount - 1` turns.
+ * If the move fails or is interrupted during any of these uses, this effect is removed.
+ *
+ * @privateRemarks
+ * Tags that use or subclass this should be added to {@linkcode MOVE_LOCK_TAG_TYPES}
  */
 export abstract class MoveLockTag extends BattlerTag {
   protected lastTargets?: BattlerIndex[];

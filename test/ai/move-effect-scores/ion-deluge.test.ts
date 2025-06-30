@@ -1,9 +1,9 @@
 import { ELECTRIC_IMMUNE_ABILITIES } from "#constants/ability-constants";
-import { capitalizeString } from "#utils/string-utils";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/game-manager";
+import { capitalizeString } from "#utils/string-utils";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Move Effect Scores - Ion Deluge", () => {
@@ -35,7 +35,7 @@ describe("Move Effect Scores - Ion Deluge", () => {
   it("should be preferred when the enemy is Ground-type", async () => {
     game.override.enemySpecies(SpeciesId.DRILBUR);
 
-    await game.classicMode.startBattle([SpeciesId.AGGRON]);
+    await game.classicMode.startBattle(SpeciesId.AGGRON);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).toPreferSelectingMove(MoveId.ION_DELUGE);
@@ -49,7 +49,7 @@ describe("Move Effect Scores - Ion Deluge", () => {
   )("should be preferred when the enemy has $abilityName", async ({ abilityId }) => {
     game.override.enemyAbility(abilityId);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).toPreferSelectingMove(MoveId.ION_DELUGE);

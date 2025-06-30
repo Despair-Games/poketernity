@@ -7,10 +7,10 @@ import { pokemonFormLevelMoves } from "#data/pokemon-form-level-moves";
 import { type LevelMoves, pokemonSpeciesLevelMoves } from "#data/pokemon-level-moves";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import { speciesStarterCosts } from "#data/starters";
-import { type Variant, variantData, type VariantSet } from "#data/variant";
+import { type Variant, type VariantSet, variantData } from "#data/variant";
 import { AbilityId } from "#enums/ability-id";
 import type { ElementalType } from "#enums/elemental-type";
-import { PokemonRegion } from "#enums/pokemon-regions";
+import { PokemonRegion } from "#enums/pokemon-region";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesId } from "#enums/species-id";
 import type { Stat } from "#enums/stat";
@@ -220,7 +220,7 @@ export abstract class PokemonSpeciesForm {
   }
 
   getSpriteAtlasPath(female: boolean, formIndex?: number, shiny?: boolean, variant?: number): string {
-    const spriteId = this.getSpriteId(female, formIndex, shiny, variant).replace(/\_{2}/g, "/");
+    const spriteId = this.getSpriteId(female, formIndex, shiny, variant).replace(/_{2}/g, "/");
     return `${/_[1-3]$/.test(spriteId) ? "variant/" : ""}${spriteId}`;
   }
 
@@ -401,7 +401,7 @@ export abstract class PokemonSpeciesForm {
     const rootSpeciesId = this.getRootSpeciesId();
     for (const moveId of moveset) {
       if (Object.hasOwn(speciesEggMoves, rootSpeciesId)) {
-        const eggMoveIndex = speciesEggMoves[rootSpeciesId].findIndex((m) => m === moveId);
+        const eggMoveIndex = speciesEggMoves[rootSpeciesId].indexOf(moveId);
         if (eggMoveIndex > -1 && eggMoves & (1 << eggMoveIndex)) {
           continue;
         }

@@ -7,13 +7,11 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
 import type { MovePhase } from "#phases/move-phase";
-import { ShowAbilityPhase } from "#phases/show-ability-phase";
 import i18next from "i18next";
 
 /**
  * Tag representing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Truant_(Ability) | Truant}.
  * Prevents the owner from using a move every other turn.
- * @extends AbilityBattlerTag
  */
 export class TruantTag extends AbilityBattlerTag {
   constructor() {
@@ -30,8 +28,9 @@ export class TruantTag extends AbilityBattlerTag {
 
     if (lastMove && lastMove.move.id !== MoveId.NONE) {
       globalScene.phaseManager.getCurrentPhase<MovePhase>()?.cancel();
-      globalScene.phaseManager.unshiftPhase(new ShowAbilityPhase(pokemon.id, passive));
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase("ShowAbilityPhase", pokemon.id, passive);
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("battlerTags:truantLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
     }

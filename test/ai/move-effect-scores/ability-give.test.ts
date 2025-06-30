@@ -39,7 +39,7 @@ describe("Move Effect Scores - Ability Give", () => {
   )("Enemy should prefer selecting Entrainment when the opponent has $abilityName", async ({ abilityId }) => {
     game.override.ability(abilityId);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     revealAllAbilities(game.scene);
     const enemy = game.field.getEnemyPokemon();
@@ -54,7 +54,7 @@ describe("Move Effect Scores - Ability Give", () => {
   )("Enemy should prefer selecting Entrainment when it has $abilityName", async ({ abilityId }) => {
     game.override.enemyAbility(abilityId);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     revealAllAbilities(game.scene);
     const enemy = game.field.getEnemyPokemon();
@@ -65,7 +65,7 @@ describe("Move Effect Scores - Ability Give", () => {
   it("Enemy should not prefer selecting Entrainment when the opponent's ability isn't revealed", async () => {
     game.override.ability(AbilityId.HUGE_POWER);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
 
@@ -75,7 +75,7 @@ describe("Move Effect Scores - Ability Give", () => {
   it("Enemy should avoid selecting Entrainment when the opponent has the same ability", async () => {
     game.override.ability(AbilityId.TORRENT);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     revealAllAbilities(game.scene);
     const enemy = game.field.getEnemyPokemon();
@@ -86,7 +86,7 @@ describe("Move Effect Scores - Ability Give", () => {
   it("Enemy should avoid selecting Entrainment when its ability is uncopiable", async () => {
     game.override.enemyAbility(AbilityId.COMATOSE).ability(AbilityId.HUGE_POWER);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     revealAllAbilities(game.scene);
     const enemy = game.field.getEnemyPokemon();
@@ -97,7 +97,7 @@ describe("Move Effect Scores - Ability Give", () => {
   it("Enemy should avoid selecting Entrainment when the opponent's ability is unsuppressable", async () => {
     game.override.enemyAbility(AbilityId.TRUANT).ability(AbilityId.COMATOSE);
 
-    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     revealAllAbilities(game.scene);
     const enemy = game.field.getEnemyPokemon();
