@@ -6,7 +6,7 @@ import { ElementalType } from "#enums/elemental-type";
 import { PlayerGender } from "#enums/player-gender";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import { settings } from "#system/settings-manager";
-import type { ConditionFn } from "#types/condition-fn";
+import type { ConditionFn } from "#types/utility-types";
 import { enumValueToKey } from "#utils/common-utils";
 import i18next from "i18next";
 

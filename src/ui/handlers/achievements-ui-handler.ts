@@ -9,7 +9,7 @@ import { achvs } from "#system/achievements";
 import { settings } from "#system/settings-manager";
 import type { Voucher } from "#system/voucher";
 import { getVoucherTypeIcon, getVoucherTypeName, vouchers } from "#system/voucher";
-import type { EnumValues } from "#types/enum-values";
+import type { EnumValues } from "#types/utility-types";
 import { MessageUiHandler } from "#ui/message-ui-handler";
 import { ScrollBar } from "#ui/scroll-bar";
 import { ScrollableGridController } from "#ui/scrollable-grid-controller";

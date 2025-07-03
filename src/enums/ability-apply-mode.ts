@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/enum-values";
+import type { EnumValues } from "#types/utility-types";
 
 export const AbilityApplyMode = {
   /** Applies abilities as normal, without restrictions */

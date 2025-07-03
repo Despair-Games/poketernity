@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import { BattlerIndex, type FieldBattlerIndex } from "#enums/battler-index";
 import type { Pokemon } from "#field/pokemon";
 import { FieldPhase } from "#phases/base/field-phase";
-import type { nil } from "#types/nil";
+import type { nil } from "#types/utility-types";
 
 /**
  * Provides helper functions to get the pokemon involved in the phase

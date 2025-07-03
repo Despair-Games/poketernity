@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/enum-values";
+import type { EnumValues } from "#types/utility-types";
 
 /**
  * Specifies the reference point (origin)

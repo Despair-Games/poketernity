@@ -47,10 +47,8 @@ import { UseHigherAttackingStatAttr } from "#moves/use-higher-attacking-stat-att
 import { VariableAccuracyAttr } from "#moves/variable-accuracy-attr";
 import { VariablePowerAttr } from "#moves/variable-power-attr";
 import { VariableTargetAttr } from "#moves/variable-target-attr";
-import type { AbstractConstructor } from "#types/abstract-constructor";
-import type { Constructor } from "#types/constructor";
 import type { MoveConditionFunc } from "#types/move-condition-func";
-import type { nil } from "#types/nil";
+import type { AbstractConstructor, Constructor, nil } from "#types/utility-types";
 import { BooleanHolder, NumberHolder } from "#utils/common-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
 import { toCamelCaseString } from "#utils/string-utils";

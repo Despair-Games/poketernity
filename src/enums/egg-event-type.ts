@@ -2,7 +2,7 @@
 import type { MoveUsedEvent } from "#events/battle-scene";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
-import type { EnumValues } from "#types/enum-values";
+import type { EnumValues } from "#types/utility-types";
 
 export const EggEventType = {
   /**

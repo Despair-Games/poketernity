@@ -2,7 +2,7 @@
 import type { CommandPhase } from "#phases/command-phase";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
-import type { EnumValues } from "#types/enum-values";
+import type { EnumValues } from "#types/utility-types";
 
 /**
  * Commands that can be executed from a {@linkcode CommandPhase}.

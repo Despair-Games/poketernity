@@ -4,7 +4,7 @@ import type { initGameSpeed } from "#system/game-speed";
 
 import { MAX_STAT_STAGE, MIN_STAT_STAGE } from "#constants/game-constants";
 import type { Pokemon } from "#field/pokemon";
-import type { nil } from "#types/nil";
+import type { nil } from "#types/utility-types";
 
 export function getFrameMs(frameCount: number): number {
   return Math.floor((1 / 60) * 1000 * frameCount);
