@@ -4,7 +4,7 @@ import type {
   UpdateSystemSavedataRequest,
   VerifySystemSavedataRequest,
   VerifySystemSavedataResponse,
-} from "#types/system-savedata-api";
+} from "#types/api-types";
 
 /**
  * A wrapper for system savedata API requests.
