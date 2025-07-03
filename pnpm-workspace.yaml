@@ -1,0 +1,5 @@
+onlyBuiltDependencies:
+  - esbuild
+  - lefthook
+  - msw
+  - unrs-resolver

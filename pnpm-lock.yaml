@@ -54,9 +54,6 @@ importers:
       '@eslint/js':
         specifier: ^9.28.0
         version: 9.28.0
-      '@hpcc-js/wasm':
-        specifier: ^2.22.4
-        version: 2.22.4
       '@stylistic/eslint-plugin-ts':
         specifier: ^4.4.1
         version: 4.4.1(eslint@9.28.0)(typescript@5.8.3)
@@ -501,10 +498,6 @@ packages:
 
   '@gerrit0/mini-shiki@3.4.2':
     resolution: {integrity: sha512-3jXo5bNjvvimvdbIhKGfFxSnKCX+MA8wzHv55ptzk/cx8wOzT+BRcYgj8aFN3yTiTs+zvQQiaZFr7Jce1ZG3fw==}
-
-  '@hpcc-js/wasm@2.22.4':
-    resolution: {integrity: sha512-58JkRkxZffiBAbZhc7z+9iaaAOmn1cyxLL3rRwsUvco/I0Wwb7uVAlHM9HiU6XASe2k11jrIjCFff1t9QKjlqg==}
-    hasBin: true
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -2919,10 +2912,6 @@ snapshots:
       '@shikijs/themes': 3.4.2
       '@shikijs/types': 3.4.2
       '@shikijs/vscode-textmate': 10.0.2
-
-  '@hpcc-js/wasm@2.22.4':
-    dependencies:
-      yargs: 17.7.2
 
   '@humanfs/core@0.19.1': {}
 
