@@ -43,7 +43,7 @@ import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encou
 import PokemonData from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
-import type { HeldModifierConfig } from "#types/held-modifier-config";
+import type { HeldModifierConfig } from "#types/modifiers-types";
 import { isNil, NumberHolder } from "#utils/common-utils";
 import { getPokemonSpecies, getRandomElementalType, getSpecialSpeciesList } from "#utils/pokemon-utils";
 import { randSeedInt, randSeedShuffle } from "#utils/random-utils";
