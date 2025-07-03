@@ -6,7 +6,7 @@ import { SpeciesId } from "#enums/species-id";
 import type { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
 import { VariableMoveTypeAttr } from "#moves/variable-move-type-attr";
-import type { AbAttrCondition } from "#types/ab-attr-condition";
+import type { AbAttrCondition } from "#types/ability-types";
 import type { PokemonAttackCondition } from "#types/move-types";
 
 /**

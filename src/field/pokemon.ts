@@ -179,7 +179,7 @@ import { VariableMoveTypeChartAttr } from "#moves/variable-move-type-chart-attr"
 import { VariableMoveTypeMultiplierAttr } from "#moves/variable-move-type-multiplier-attr";
 import type PokemonData from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
-import type { AbilityFilterOptions } from "#types/ability-filter-options";
+import type { AbilityFilterOptions } from "#types/ability-types";
 import type { DamageCalculationResult, DamageResult, TurnMove } from "#types/move-types";
 import type { PokemonSummonData } from "#types/pokemon-summon-data";
 import type { PokemonTurnData } from "#types/pokemon-turn-data";

@@ -196,7 +196,7 @@ import type { Pokemon } from "#field/pokemon";
 import { FlinchAttr } from "#moves/flinch-attr";
 import type { Move } from "#moves/move";
 import { VariablePowerAttr } from "#moves/variable-power-attr";
-import type { AbAttrCondition } from "#types/ab-attr-condition";
+import type { AbAttrCondition } from "#types/ability-types";
 import { getWeatherCondition, normalTypeMoveConversionCondition } from "#utils/ability-utils";
 import { NumberHolder, toDmgValue } from "#utils/common-utils";
 import { applyMoveAttrs } from "#utils/move-utils";

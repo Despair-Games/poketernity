@@ -3,7 +3,7 @@ import { globalScene } from "#app/global-scene";
 import type { BattleStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import type { PreDefendAbAttrCondition } from "#types/pre-defend-ab-attr-condition";
+import type { PreDefendAbAttrCondition } from "#types/ability-types";
 import type { BooleanHolder } from "#utils/common-utils";
 
 export class MoveImmunityStatStageChangeAbAttr extends MoveImmunityAbAttr {

@@ -3,7 +3,7 @@ import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import type { AbAttrCondition } from "#types/ab-attr-condition";
+import type { AbAttrCondition } from "#types/ability-types";
 import type { BooleanHolder, NumberHolder } from "#utils/common-utils";
 
 export class TypeImmunityAddBattlerTagAbAttr extends TypeImmunityAbAttr {

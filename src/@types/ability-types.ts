@@ -2,6 +2,12 @@
 import type { PokemonWaveData } from "#types/pokemon-wave-data";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
+import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
+
+export type AbAttrCondition = (pokemon: Pokemon) => boolean;
+export type PreDefendAbAttrCondition = (pokemon: Pokemon, attacker: Pokemon, move: Move) => boolean;
+
 export interface AbilityFilterOptions {
   /**
    * If `true`, returns the Pokemon's base Ability whether or
