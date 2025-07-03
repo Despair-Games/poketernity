@@ -3,3 +3,5 @@ onlyBuiltDependencies:
   - lefthook
   - msw
   - unrs-resolver
+
+shellEmulator: true
