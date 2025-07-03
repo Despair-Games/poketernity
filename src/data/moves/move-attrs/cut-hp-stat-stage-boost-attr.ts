@@ -3,7 +3,7 @@ import type { BattleStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { StatStageChangeAttr } from "#moves/stat-stage-change-attr";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 import { toDmgValue } from "#utils/common-utils";
 
 /**

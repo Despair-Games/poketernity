@@ -5,7 +5,7 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveCategory } from "#enums/move-category";
 import { MoveId } from "#enums/move-id";
 import { MoveTarget } from "#enums/move-target";
-import type { ProtectConditionFunc } from "#types/protect-condition-func";
+import type { ProtectConditionFunc } from "#types/move-types";
 
 /**
  * Condition function for {@link https://bulbapedia.bulbagarden.net/wiki/Crafty_Shield_(move) Crafty Shield's}

@@ -4,7 +4,7 @@ import { type BattleStat, Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import { ChanceBasedMoveEffectAttr, type ChanceBasedMoveEffectAttrOptions } from "#moves/chance-based-move-effect-attr";
 import type { Move } from "#moves/move";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 
 /**
  * Set of optional parameters that may be applied to stat stage changing effects

@@ -47,7 +47,7 @@ import { UseHigherAttackingStatAttr } from "#moves/use-higher-attacking-stat-att
 import { VariableAccuracyAttr } from "#moves/variable-accuracy-attr";
 import { VariablePowerAttr } from "#moves/variable-power-attr";
 import { VariableTargetAttr } from "#moves/variable-target-attr";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 import type { AbstractConstructor, Constructor, nil } from "#types/utility-types";
 import { BooleanHolder, NumberHolder } from "#utils/common-utils";
 import { applyMoveAttrs } from "#utils/move-utils";

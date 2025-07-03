@@ -5,7 +5,7 @@ import { MoveCategory } from "#enums/move-category";
 import type { Pokemon } from "#field/pokemon";
 import type { PokemonHeldItemModifier } from "#modifier/modifier";
 import type { Move } from "#moves/move";
-import type { PokemonDefendCondition } from "#types/pokemon-defend-condition";
+import type { PokemonDefendCondition } from "#types/move-types";
 import i18next from "i18next";
 
 export class PostDefendStealHeldItemAbAttr extends PostDefendAbAttr {

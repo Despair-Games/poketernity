@@ -18,8 +18,8 @@ import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
 import { BypassSpeedChanceModifier } from "#modifier/modifier";
 import { MoveHeaderAttr } from "#moves/move-header-attr";
+import type { TurnMove } from "#types/move-types";
 import type { TurnCommandFilter } from "#types/turn-command-filter";
-import type { TurnMove } from "#types/turn-move";
 import { BooleanHolder, isNil } from "#utils/common-utils";
 import { randSeedShuffle } from "#utils/random-utils";
 

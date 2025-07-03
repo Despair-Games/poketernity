@@ -4,7 +4,7 @@ import type { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveId } from "#enums/move-id";
 import { MoveTarget } from "#enums/move-target";
-import type { ProtectConditionFunc } from "#types/protect-condition-func";
+import type { ProtectConditionFunc } from "#types/move-types";
 
 /**
  * Condition function for {@link https://bulbapedia.bulbagarden.net/wiki/Wide_Guard_(move) Wide Guard's}

@@ -7,7 +7,7 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveCategory } from "#enums/move-category";
 import { MoveId } from "#enums/move-id";
 import type { Arena } from "#field/arena";
-import type { ProtectConditionFunc } from "#types/protect-condition-func";
+import type { ProtectConditionFunc } from "#types/move-types";
 import i18next from "i18next";
 
 /**

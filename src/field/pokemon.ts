@@ -180,13 +180,11 @@ import { VariableMoveTypeMultiplierAttr } from "#moves/variable-move-type-multip
 import type PokemonData from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
 import type { AbilityFilterOptions } from "#types/ability-filter-options";
-import type { DamageCalculationResult } from "#types/damage-calculation-result";
-import type { DamageFunctionOptions } from "#types/damage-function-options";
+import type { DamageCalculationResult, DamageResult, TurnMove } from "#types/move-types";
 import type { PokemonSummonData } from "#types/pokemon-summon-data";
 import type { PokemonTurnData } from "#types/pokemon-turn-data";
 import type { PokemonWaveData } from "#types/pokemon-wave-data";
 import type { Status } from "#types/status";
-import type { TurnMove } from "#types/turn-move";
 import type { BattleInfo } from "#ui/battle-info";
 import { applyChallenges } from "#utils/challenge-utils";
 import {
@@ -209,6 +207,15 @@ import i18next from "i18next";
 interface AbilityData {
   ability: Ability;
   passive: boolean;
+}
+
+interface DamageFunctionOptions {
+  result?: DamageResult;
+  isCritical?: boolean;
+  ignoreSegments?: boolean;
+  preventEndure?: boolean;
+  ignoreFaintPhase?: boolean;
+  source?: Pokemon;
 }
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {

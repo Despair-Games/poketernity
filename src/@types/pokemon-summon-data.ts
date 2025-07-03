@@ -1,15 +1,16 @@
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
+
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
+import type { TurnMove } from "#app/@types/move-types";
 import type { BattlerTag } from "#battler-tags/battler-tag";
 import type { PokemonSpeciesForm } from "#data/pokemon-species-form";
 import type { AbilityId } from "#enums/ability-id";
 import type { ElementalType } from "#enums/elemental-type";
 import type { Gender } from "#enums/gender";
 import type { PokemonMove } from "#field/pokemon-move";
-import type { TurnMove } from "#types/turn-move";
 
 /**
  * Data that resets whenever a Pokemon is switched out.

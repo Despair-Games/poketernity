@@ -5,7 +5,7 @@ import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/game-manager";
-import type { TurnMove } from "#types/turn-move";
+import type { TurnMove } from "#types/move-types";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Moves - Disable", () => {

@@ -23,7 +23,7 @@ import type { Pokemon } from "#field/pokemon";
 import { getMoveTargets, type MoveTargetSet } from "#moves/move";
 import { FieldPhase } from "#phases/base/field-phase";
 import type { FightCommand } from "#types/fight-command";
-import type { TurnMove } from "#types/turn-move";
+import type { TurnMove } from "#types/move-types";
 import type { CommandUiHandler } from "#ui/command-ui-handler";
 import type { FightUiHandler } from "#ui/fight-ui-handler";
 import { isNil } from "#utils/common-utils";

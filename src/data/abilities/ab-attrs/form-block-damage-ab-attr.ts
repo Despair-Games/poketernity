@@ -3,7 +3,7 @@ import type { BattlerTagType } from "#enums/battler-tag-type";
 import { HitResult } from "#enums/hit-result";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import type { PokemonDefendCondition } from "#types/pokemon-defend-condition";
+import type { PokemonDefendCondition } from "#types/move-types";
 import type { NumberHolder } from "#utils/common-utils";
 
 /**

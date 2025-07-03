@@ -27,7 +27,7 @@ import { CounterDamageAttr } from "#moves/counter-damage-attr";
 import { CritOnlyAttr } from "#moves/crit-only-attr";
 import { getMoveTargets } from "#moves/move";
 import type PokemonData from "#system/pokemon-data";
-import type { TurnMove } from "#types/turn-move";
+import type { TurnMove } from "#types/move-types";
 import { EnemyBattleInfo } from "#ui/battle-info";
 import { isBetween, isNil, toDmgValue } from "#utils/common-utils";
 import { randSeedInt, randSeedItem } from "#utils/random-utils";

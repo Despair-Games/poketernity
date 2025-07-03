@@ -5,7 +5,7 @@ import { CommonAnim } from "#enums/common-anim";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { OverrideMoveEffectAttr } from "#moves/override-move-effect-attr";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 import type { BooleanHolder } from "#utils/common-utils";
 
 /**
