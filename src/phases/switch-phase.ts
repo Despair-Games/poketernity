@@ -1,9 +1,6 @@
-// -- start tsdoc imports --
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type BattleScene from "#app/battle-scene";
 import type { RecallPhase } from "#phases/recall-phase";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-// -- end tsdoc imports --
 
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { PreSwitchOutAbAttr } from "#abilities/pre-switch-out-ab-attr";
@@ -23,7 +20,6 @@ import type { PartyUiHandler } from "#ui/party-ui-handler";
 
 /**
  * Phase to handle all logical elements of switching a Pokemon.
- * @extends PokemonPhase
  */
 export class SwitchPhase extends PokemonPhase {
   public override readonly phaseName = "SwitchPhase";
@@ -47,14 +43,16 @@ export class SwitchPhase extends PokemonPhase {
   public override start(): void {
     if (this.switchInIndex !== -1) {
       this.updatePokemonData();
-      return this.end();
+      this.end();
+      return;
     }
 
     // If this is a faint-triggered switch, and the target Pokemon is somehow not fainted,
     // end this phase (and resummon the target Pokemon)
     // TODO: This is a bandaid fix that can be avoided if `TurnEndPhase` is responsible for scheduling faint switches
     if (this.switchType === SwitchType.FAINT_SWITCH && this.getPokemon().isAllowedInBattle()) {
-      return this.end();
+      this.end();
+      return;
     }
 
     if (this.isPlayer) {

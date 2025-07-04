@@ -978,10 +978,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         targets.push(subTag.sprite);
       }
       await playTween({
-        targets: targets,
+        targets,
         x: (_target, _key, value: number) => value + relX,
         y: (_target, _key, value: number) => value + relY,
-        duration: duration,
+        duration,
         ease: "Sine.easeOut",
       });
     } else {

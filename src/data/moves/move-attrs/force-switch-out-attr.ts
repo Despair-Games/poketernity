@@ -110,10 +110,10 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
 
       if (switchOutTarget.hp > 0) {
         if (this.switchType === SwitchType.FORCE_SWITCH) {
-          const slotIndex = eligibleNewIndices[user.randSeedInt(eligibleNewIndices.length)];
+          const switchInIndex = eligibleNewIndices[user.randSeedInt(eligibleNewIndices.length)];
           globalScene.phaseManager.queueBattlerSwitchOut(switchOutTarget.getBattlerIndex(), {
             switchType: this.switchType,
-            switchInIndex: slotIndex,
+            switchInIndex,
             when: "before",
             phaseKey: "PostActionPhase",
           });

@@ -651,7 +651,7 @@ export class PhaseManager {
 
     const validatePhaseId = () => {
       if (!phaseKey) {
-        throw new Error("phaseId is required for when === 'before' or 'after'");
+        throw new Error("`phaseId` is required if `when` is 'before' or 'after'");
       }
     };
 

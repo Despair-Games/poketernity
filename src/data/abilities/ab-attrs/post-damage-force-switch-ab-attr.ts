@@ -1,3 +1,7 @@
+/** biome-ignore-start lint/correctness/noUnusedImports: TSDoc imports */
+import type BattleScene from "#app/battle-scene";
+/** biome-ignore-end lint/correctness/noUnusedImports: TSDoc imports */
+
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { ForceSwitchOutImmunityAbAttr } from "#abilities/force-switch-out-immunity-ab-attr";
 import { PostDamageAbAttr } from "#abilities/post-damage-ab-attr";

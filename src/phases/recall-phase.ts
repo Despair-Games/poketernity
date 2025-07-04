@@ -13,7 +13,6 @@ import i18next from "i18next";
 /**
  * - Handles all VFX and SFX related to recalling a {@linkcode Pokemon}.
  * - {@link Pokemon.leaveField | Removes the Pokemon from the field}.
- * @extends PokemonPhase
  */
 export class RecallPhase extends PokemonPhase {
   public override readonly phaseName = "RecallPhase";
