@@ -19,7 +19,6 @@ import { PokemonMove } from "#field/pokemon-move";
 import { BypassSpeedChanceModifier } from "#modifier/modifier";
 import { MoveHeaderAttr } from "#moves/move-header-attr";
 import type { TurnMove } from "#types/move-types";
-import type { TurnCommandFilter } from "#types/turn-command-filter";
 import { BooleanHolder, isNil } from "#utils/common-utils";
 import { randSeedShuffle } from "#utils/random-utils";
 
@@ -31,6 +30,8 @@ const COMMAND_PRIORITY_MAP = {
   [BattleCommand.BALL]: 3,
   [BattleCommand.RUN]: 4,
 } as const;
+
+type TurnCommandFilter = (command: TurnCommand) => boolean;
 
 /**
  * Interface representing an action taken by a Pokemon for the turn.
