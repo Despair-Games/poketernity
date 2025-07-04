@@ -10,7 +10,7 @@ import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesGroups } from "#enums/species-groups";
 import { SpeciesId } from "#enums/species-id";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
-import type { PokemonSpeciesFilter } from "#types/pokemon-species-filter";
+import type { PokemonSpeciesFilter } from "#types/ui-types";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedGauss, randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";

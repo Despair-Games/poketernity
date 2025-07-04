@@ -25,11 +25,13 @@ import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import type { PokemonFormChangeItemModifier, PokemonHeldItemModifier } from "#modifier/modifier";
 import { ForceSwitchOutAttr } from "#moves/force-switch-out-attr";
 import type { CommandPhase } from "#phases/command-phase";
-import type { PartyModifierTransferSelectCallback } from "#types/party-modifier-transfer-select-callback";
-import type { PartySelectCallback } from "#types/party-select-callback";
-import type { PokemonModifierTransferSelectFilter } from "#types/pokemon-modifier-transfer-select-filter";
-import type { PokemonMoveSelectFilter } from "#types/pokemon-move-select-filter";
-import type { PokemonSelectFilter } from "#types/pokemon-select-filter";
+import type {
+  PartyModifierTransferSelectCallback,
+  PartySelectCallback,
+  PokemonModifierTransferSelectFilter,
+  PokemonMoveSelectFilter,
+  PokemonSelectFilter,
+} from "#types/ui-types";
 import type { CommandUiHandler } from "#ui/command-ui-handler";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
