@@ -1,5 +1,5 @@
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { PokemonWaveData } from "#types/pokemon-wave-data";
+import type { PokemonWaveData } from "#types/pokemon-types";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import type { Pokemon } from "#field/pokemon";

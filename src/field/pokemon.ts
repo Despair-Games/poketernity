@@ -181,10 +181,7 @@ import type PokemonData from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
 import type { AbilityFilterOptions } from "#types/ability-types";
 import type { DamageCalculationResult, DamageResult, TurnMove } from "#types/move-types";
-import type { PokemonSummonData } from "#types/pokemon-summon-data";
-import type { PokemonTurnData } from "#types/pokemon-turn-data";
-import type { PokemonWaveData } from "#types/pokemon-wave-data";
-import type { Status } from "#types/status";
+import type { PokemonSummonData, PokemonTurnData, PokemonWaveData, Status } from "#types/pokemon-types";
 import type { BattleInfo } from "#ui/battle-info";
 import { applyChallenges } from "#utils/challenge-utils";
 import {
