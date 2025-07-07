@@ -111,7 +111,7 @@ export function setSettingGamepad(setting: SettingGamepad, value: number): boole
           globalScene.ui.setOverlayMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, {
             options: [
               ...gp.map((g: string, index) => ({
-                label: truncateString(g, 30), // Truncate the gamepad name for display
+                label: truncateString(g, 40), // Truncate the gamepad name for display
                 handler: () => changeGamepadHandler(g, index),
               })),
               {

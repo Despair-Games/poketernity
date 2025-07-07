@@ -1,4 +1,6 @@
+import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
+import { SettingsUiItem } from "#types/settings";
 import { SettingsUiHandler } from "#ui/settings-ui-handler";
 import { generalSettingsUiItems } from "#ui/settings-ui-items";
 import { hasTouchscreen, isLandscapeMode } from "#utils/app-utils";
@@ -34,6 +36,15 @@ export class GeneralSettingsUiHandler extends SettingsUiHandler {
       this.updateMoveTouchControlsSettingsLabel();
     }
     return true;
+  }
+
+  protected override handleSaveSetting<V = any>(uiItem: SettingsUiItem, newValue: V): void {
+    if (uiItem.key === "moveTouchControls") {
+      eventBus.emit("touchControls/move/start");
+      eventBus.once("touchControls/move/end", () => {
+        this.setOptionCursor(-1, 0, false);
+      });
+    }
   }
 
   private updateMoveTouchControlsSettingsLabel() {

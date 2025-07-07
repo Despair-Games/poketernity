@@ -162,9 +162,9 @@ export class KeyboardSettingsUiHandler extends ControlsSettingsUiHandler {
             continue;
           } // Skip updating the no gamepad layout.
           // Update the text of the first option label under the current setting to the name of the chosen gamepad,
-          // truncating the name to 30 characters if necessary.
+          // truncating the name to 20 characters if necessary.
           this.layout[_key].optionValueLabels[index][0].setText(
-            truncateString(globalScene.inputController.selectedDevice[Device.KEYBOARD], 22),
+            truncateString(globalScene.inputController.selectedDevice[Device.KEYBOARD], 20),
           );
         }
       }

@@ -20,6 +20,11 @@ import { isNil } from "#utils/common-utils";
 import { capitalizeFirstLetter } from "#utils/string-utils";
 import i18next from "i18next";
 
+interface OptionLabelData {
+  labels: string[];
+  positions: number[];
+}
+
 /**
  * Abstract class for handling UI elements related to settings.
  */
@@ -36,8 +41,8 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
   /** The currently selected options for all settings. */
   private optionCursors: number[];
 
-  /** The computed horizontal positionning of the options for all settings. */
-  private settingValuesPosition: number[][];
+  /** Horizontal positionning and labels of the options for all settings. */
+  private settingValuesData: OptionLabelData[];
 
   /** Container for all settings labels in a single TextObject. */
   private labelsTextList: TextListContainer;
@@ -70,8 +75,6 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
     this.rowsToDisplay = Math.min(8, this.uiItems.length);
 
     this.reloadRequired = false;
-
-    this.settingValuesPosition = [];
   }
 
   /**
@@ -128,15 +131,18 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
 
     this.optionsContainer = globalScene.add.container(0, 0);
 
-    // Initialize the settings labels text object
+    // Initialize the settings labels text object and option label values
+    const settingValuesData: OptionLabelData[] = [];
     const settingLabels: string[] = [];
-    this.uiItems.forEach((uiItem) => {
-      let settingName = uiItem.label;
-      if (uiItem?.requiresReload) {
-        settingName += "*";
-      }
-      settingLabels.push(settingName);
-    });
+    for (const uiItem of this.uiItems) {
+      settingLabels.push(uiItem.label + (uiItem.requiresReload ? "*" : ""));
+
+      settingValuesData.push({
+        labels: uiItem.options.map((option) => option.label),
+        positions: [],
+      });
+    }
+    this.settingValuesData = settingValuesData;
     this.labelsTextList = new TextListContainer(8, 28, TextStyle.SETTINGS_LABEL, this.rowsToDisplay);
     this.labelsTextList.setList(settingLabels, true);
     this.optionsContainer.add(this.labelsTextList);
@@ -475,52 +481,71 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
 
     for (let i = 0; i < this.rowsToDisplay; i++) {
       const uiItem = this.uiItems[i + this.scrollCursor];
-      const optionText = this.optionValueLabels[i];
+      // All existing text objects for the current row on screen
+      const optionTextObjects = this.optionValueLabels[i];
 
       // If needed, create more text objects for this setting's options
       const yPosition = 28 + i * 16;
-      for (let j = optionText.length; j < uiItem.options.length; j++) {
+      for (let j = optionTextObjects.length; j < uiItem.options.length; j++) {
         const value = addTextObject(100, yPosition, "", TextStyle.SETTINGS_VALUE).setOrigin(0, 0);
         this.optionsContainer.add(value);
-        optionText.push(value);
+        optionTextObjects.push(value);
       }
 
+      const optionData = this.settingValuesData[i + this.scrollCursor];
+
       // Set text for each option
-      for (let j = 0; j < optionText.length; j++) {
+      for (let j = 0; j < optionTextObjects.length; j++) {
         if (j < uiItem.options.length) {
-          optionText[j].setText(uiItem.options[j].label);
-          optionText[j].setVisible(true);
+          optionTextObjects[j].setText(optionData.labels[j] ?? uiItem.options[j]);
+          optionTextObjects[j].setVisible(true);
 
           // By default, mark as unselected
-          setTextColor(optionText[j], TextStyle.SETTINGS_VALUE);
+          setTextColor(optionTextObjects[j], TextStyle.SETTINGS_VALUE);
         } else {
-          optionText[j].setVisible(false);
+          optionTextObjects[j].setVisible(false);
         }
       }
 
+      // Only work on the labels needed for the current setting
+      const visibleOptionLabels = optionTextObjects.filter((o) => o.visible);
+
       // If needed, compute the horizontal position of each option
-      if (isNil(this.settingValuesPosition[i + this.scrollCursor])) {
-        const positions: number[] = [];
-        const totalWidth = optionText.map((o) => o.displayWidth).reduce((total, width) => (total += width), 0);
+      if (optionData.positions.length === 0) {
+        // width needed for all option values, without space between them
+        const totalWidth = visibleOptionLabels.map((o) => o.displayWidth).reduce((total, width) => (total += width), 0);
+
         if (!tempTextObject) {
           tempTextObject = addTextObject(0, 0, "", TextStyle.SETTINGS_LABEL);
         }
         tempTextObject.setText(uiItem.label + (uiItem.requiresReload ? "*" : ""));
         const labelWidth = Math.max(78, tempTextObject.displayWidth + 8);
-        const totalSpace = 297 - labelWidth - totalWidth;
-        const optionSpacing = Math.floor(totalSpace / (this.optionValueLabels[i].length - 1));
 
-        let xPosition = labelWidth + this.labelsTextList.x;
-        for (let j = 0; j < uiItem.options.length; j++) {
-          positions.push(xPosition);
-          xPosition += this.optionValueLabels[i][j].displayWidth + optionSpacing;
+        // Attempt to align the options starting at 40% of the screen, and if not possible extend to 50%/30%
+        // If none of these fit the placement will just depend on the label and options dimensions
+        let labelsOffset = 0;
+        for (const ratio of [4, 5, 3]) {
+          const breakingPoint = Math.floor((this.optionsBg.width * ratio) / 10);
+          const availableSpace = this.optionsBg.width - breakingPoint;
+          const neededSpace = totalWidth + 16 * (visibleOptionLabels.length - 1);
+          if (labelsOffset === 0 && labelWidth < breakingPoint && neededSpace < availableSpace) {
+            labelsOffset = breakingPoint - labelWidth;
+          }
         }
-        this.settingValuesPosition[i + this.scrollCursor] = positions;
+
+        const totalSpace = 297 - labelWidth - totalWidth - labelsOffset;
+        const optionSpacing = Math.floor(totalSpace / (visibleOptionLabels.length - 1));
+
+        let xPosition = this.labelsTextList.x + labelWidth + labelsOffset;
+        for (const optionLabel of visibleOptionLabels) {
+          optionData.positions.push(xPosition);
+          xPosition += optionLabel.displayWidth + optionSpacing;
+        }
       }
 
       // Set position for each option
-      for (let j = 0; j < optionText.length; j++) {
-        optionText[j].setX(this.settingValuesPosition[i + this.scrollCursor][j]);
+      for (let j = 0; j < visibleOptionLabels.length; j++) {
+        visibleOptionLabels[j].setX(optionData.positions[j]);
       }
 
       // Mark the correct option as selected
@@ -582,36 +607,40 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
     super.showText(text, delay, callback, callbackDelay, prompt, promptDelay);
   }
 
+  /**
+   * Update the text of an option for a given setting.
+   * If the option is not currently on screen, store the new label to be used when the settings gets scrolled.
+   * @param settingIndex - The index of the settings (in uiItems).
+   * @param optionIndex - The indew of the option to change.
+   * @param newLabel - The new label to set.
+   */
   protected updateOptionValueLabel(settingIndex: number, optionIndex: number, newLabel: string) {
-    this.optionValueLabels[settingIndex][optionIndex].setText(newLabel);
+    // Save the new label
+    this.settingValuesData[settingIndex].labels[optionIndex] = newLabel;
+
+    // If the option is currently shown on screen, update the text object
+    if (!isNil(this.optionValueLabels[settingIndex - this.scrollCursor])) {
+      this.optionValueLabels[settingIndex - this.scrollCursor][optionIndex].setText(newLabel);
+    }
   }
 
-  private handleSaveSetting<V = any>(uiItem: SettingsUiItem, newValue: V) {
+  protected handleSaveSetting<V = any>(uiItem: SettingsUiItem, newValue: V) {
     const { key, requiresReload } = uiItem;
 
-    if (this.category === "display" && key === "language") {
-      eventBus.emit("language/change", newValue);
-    } else if (this.category === "general" && uiItem.key === "moveTouchControls") {
-      eventBus.emit("touchControls/move/start");
-      eventBus.once("touchControls/move/end", () => {
-        this.setOptionCursor(-1, 0, false);
-      });
-    } else {
-      /* Checks if the game is in a state where progress may be lost due to options with reloadRequired while in battle.
-       * TODO: Handle lost progress from non battle MEs */
-      if (requiresReload) {
-        if (this.canLoseProgress()) {
-          this.showConfirm(
-            i18next.t("menuUiHandler:losingProgressionWarning"),
-            () => settingsManager.updateAndReload(this.category, key as never, newValue),
-            () => this.handleCancelConfirm(uiItem),
-          );
-        } else {
-          settingsManager.updateAndReload(this.category, key as never, newValue);
-        }
+    /* Checks if the game is in a state where progress may be lost due to options with reloadRequired while in battle.
+     * TODO: Handle lost progress from non battle MEs */
+    if (requiresReload) {
+      if (this.canLoseProgress()) {
+        this.showConfirm(
+          i18next.t("menuUiHandler:losingProgressionWarning"),
+          () => settingsManager.updateAndReload(this.category, key as never, newValue),
+          () => this.handleCancelConfirm(uiItem),
+        );
       } else {
-        settingsManager.update(this.category, key as never, newValue);
+        settingsManager.updateAndReload(this.category, key as never, newValue);
       }
+    } else {
+      settingsManager.update(this.category, key as never, newValue);
     }
   }
 
