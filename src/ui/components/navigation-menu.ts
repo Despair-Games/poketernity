@@ -34,30 +34,36 @@ export class NavigationMenu extends Phaser.GameObjects.Container {
 
     this.navigationIcons = {};
 
-    const iconPreviousTab = globalScene.add.sprite(8, 4, "keyboard");
-    iconPreviousTab.setOrigin(0, -0.1);
-    iconPreviousTab.setPositionRelative(headerBg, 8, 4);
+    const iconPreviousTab = globalScene.add.sprite(0, 0, "keyboard");
+    iconPreviousTab.setOrigin(0, 0.5);
+    iconPreviousTab.setPositionRelative(headerBg, 8, Math.floor(headerBg.height / 2));
     this.navigationIcons["BUTTON_CYCLE_FORM"] = iconPreviousTab;
 
     const iconNextTab = globalScene.add.sprite(0, 0, "keyboard");
-    iconNextTab.setOrigin(0, -0.1);
-    iconNextTab.setPositionRelative(headerBg, headerBg.width - 20, 4);
+    iconNextTab.setOrigin(1, 0.5);
+    iconNextTab.setPositionRelative(headerBg, headerBg.width - 8, Math.floor(headerBg.height / 2));
     this.navigationIcons["BUTTON_CYCLE_SHINY"] = iconNextTab;
-
-    let relative: Phaser.GameObjects.Sprite | Phaser.GameObjects.Text = iconPreviousTab;
-    let relativeWidth: number = iconPreviousTab.displayWidth;
-    for (const label of labels) {
-      const labelText = addTextObject(0, 0, label, TextStyle.SETTINGS_LABEL);
-      labelText.setOrigin(0, 0);
-      labelText.setPositionRelative(relative, 6 + relativeWidth, 0);
-      this.add(labelText);
-      this.headerTitles.push(labelText);
-      relative = labelText;
-      relativeWidth = labelText.displayWidth;
-    }
 
     this.add(iconPreviousTab);
     this.add(iconNextTab);
+
+    let totalLabelWidth = 0;
+    for (const label of labels) {
+      const labelText = addTextObject(0, 0, label, TextStyle.SETTINGS_LABEL);
+      labelText.setOrigin(0, 0.5);
+      totalLabelWidth += labelText.displayWidth;
+      this.add(labelText);
+      this.headerTitles.push(labelText);
+    }
+
+    const spacing = Math.floor(
+      (headerBg.width - totalLabelWidth - iconPreviousTab.displayWidth * 3) / (labels.length + 1),
+    );
+    let previousObject: Phaser.GameObjects.Sprite | Phaser.GameObjects.Text = iconPreviousTab;
+    for (const label of this.headerTitles) {
+      label.setPosition(previousObject.x + previousObject.displayWidth + spacing, previousObject.y);
+      previousObject = label;
+    }
   }
 
   public setSelected(cursor: number): boolean {
