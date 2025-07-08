@@ -1,4 +1,4 @@
-import { MINOR_EFFECT_SCORE_BONUS } from "#constants/ai-constants";
+import { BAD_MOVE_PENALTY, MINOR_EFFECT_SCORE_BONUS } from "#constants/ai-constants";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
@@ -18,11 +18,14 @@ export class DrowsyAttr extends AddBattlerTagAttr {
     });
   }
 
-  /** Grants (+1) + 30%(+1) if the target can become Drowsy */
-  public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+  /**
+   * Grants (+1) + 30%(+1) if the target can become Drowsy.
+   * Otherwise, if this effect is from a Status move, this grants a {@linkcode BAD_MOVE_PENALTY}.
+   */
+  public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     if (target.canAddTag(this.tagType)) {
       return MINOR_EFFECT_SCORE_BONUS + this.getRandomScore(user, 30);
     }
-    return 0;
+    return move.isStatusMove() ? BAD_MOVE_PENALTY : 0;
   }
 }

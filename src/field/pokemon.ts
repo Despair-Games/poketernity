@@ -1389,7 +1389,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns An array containing this Pokemon's known {@linkcode PokemonMove | PokemonMoves}
    */
   public getMoveset(bypassSummonData: boolean = false): PokemonMove[] {
-    const ret = !bypassSummonData && this.summonData?.moveset ? this.summonData.moveset : this.moveset;
+    const ret = !bypassSummonData && this.summonData?.moveset.length > 0 ? this.summonData.moveset : this.moveset;
 
     // Overrides moveset based on arrays specified in overrides.ts
     let overrideArray: MoveId | MoveId[] = this.isPlayer()
@@ -4262,7 +4262,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return false;
     }
 
-    if (sourcePokemon && sourcePokemon !== this && this.isSafeguarded(sourcePokemon)) {
+    if (sourcePokemon && sourcePokemon !== this && this.isSafeguarded(sourcePokemon, quiet)) {
       return false;
     }
 
@@ -4493,15 +4493,16 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   /**
    * Checks if this Pokemon is protected by Safeguard
-   * @param attacker the {@linkcode Pokemon} inflicting status on this Pokemon
+   * @param attacker - The {@linkcode Pokemon} inflicting status on this Pokemon
+   * @param simulated - If `true`, suppresses messages and other changes to game state
    * @returns `true` if this Pokemon is protected by Safeguard; `false` otherwise.
    */
-  isSafeguarded(attacker: Pokemon): boolean {
+  isSafeguarded(attacker: Pokemon, simulated: boolean = true): boolean {
     const defendingSide = this.getArenaTagSide();
     if (globalScene.arena.hasTag(ArenaTagType.SAFEGUARD, defendingSide)) {
       const bypassed = new BooleanHolder(false);
       if (attacker) {
-        applyAbAttrs<InfiltratorAbAttr>(AbAttrFlag.INFILTRATOR, attacker, false, bypassed);
+        applyAbAttrs<InfiltratorAbAttr>(AbAttrFlag.INFILTRATOR, attacker, simulated, bypassed);
       }
       return !bypassed.value;
     }
