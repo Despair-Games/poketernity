@@ -180,7 +180,7 @@ export class MysteryEncounterBattlePhase extends Phase {
     } else {
       if (availablePartyMembers.length > 1 && availablePartyMembers[1].isOnField()) {
         globalScene.getPlayerField().forEach((pokemon) => pokemon.lapseTag(BattlerTagType.COMMANDED));
-        globalScene.phaseManager.createAndPushPhase("RecallPhase", 1);
+        globalScene.phaseManager.createAndPushPhase("RecallPhase", BattlerIndex.PLAYER_2);
       }
       globalScene.phaseManager.createAndPushPhase("ToggleDoublePositionPhase", false);
     }

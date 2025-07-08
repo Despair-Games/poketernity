@@ -33,13 +33,17 @@ export abstract class PokemonPhase extends FieldPhase {
     return pokemon!;
   }
 
-  public getTrainerSlot(): TrainerSlot | undefined {
-    switch (this.battlerIndex) {
-      case BattlerIndex.ENEMY:
-        return TrainerSlot.TRAINER;
-      case BattlerIndex.ENEMY_2:
-        return TrainerSlot.TRAINER_PARTNER;
+  /**
+   * @returns the {@linkcode TrainerSlot} for this phase's {@linkcode getPokemon | Pokemon},
+   * or {@linkcode TrainerSlot.NONE} if the Pokemon does not have a Trainer
+   */
+  public getTrainerSlot(): TrainerSlot {
+    const pokemon = this.getPokemon();
+
+    if (!pokemon.isEnemy()) {
+      return TrainerSlot.NONE;
     }
+    return pokemon.trainerSlot;
   }
 
   public getAlliedParty(): Pokemon[] {

@@ -667,8 +667,6 @@ export class PhaseManager {
         validatePhaseId();
         this.prependToPhase(phaseKey!, ...phases);
         break;
-      default:
-        throw new Error(`Unknown queueBattlerSwitchOut.when: ${when}`);
     }
   }
 

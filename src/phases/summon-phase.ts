@@ -19,8 +19,27 @@ import { playTween } from "#utils/anim-utils";
 import i18next from "i18next";
 
 interface SummonPhaseOptions {
+  /**
+   * If `true`, summons the Pokemon as if loading into a wave
+   * @defaultValue `false`
+   */
   loaded?: boolean;
+  /**
+   * If `true` for an enemy Trainer's switch, this phase will play
+   * an animation on the Trainer before the "thrown Poke Ball" animation.
+   * This does not affect summons on the Player's side since part of the
+   * Player Trainer's animation is implemented in {@linkcode EncounterPhase}.
+   * @defaultValue `true`
+   */
   playTrainerAnim?: boolean;
+  /**
+   * If `true`, this phase will push its corresponding {@linkcode PostSummonPhase}
+   * to the phase manager instead of unshifting it.
+   * @defaultValue `false`
+   * @privateRemarks
+   * This should be enabled whenever multiple Pokemon are summoned at the same
+   * time outside of a turn in battle, e.g. at the start of a Trainer battle.
+   */
   delayPostSummon?: boolean;
 }
 
