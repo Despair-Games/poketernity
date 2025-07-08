@@ -38,7 +38,7 @@ export class ProtectAttr extends AddBattlerTagAttr {
    * The Effect Score bonus from this effect consists of 3 components, and only applies
    * if the user did not use a "protection" move successfully last turn:
    * - A flat {@link MINOR_EFFECT_SCORE_BONUS | minor bonus}
-   * - A 30%(+1) bonus. The chance is increased to 100% if the user has an {@link synergyAbilities | ability}
+   * - A 15%(+1) bonus. The chance is increased to 100% if the user has an {@link synergyAbilities | ability}
    * that synergizes with self-protection.
    * - A chance-based (+1) bonus. The chance varies based on the type of protection applied.
    * @see {@linkcode getTagEffectScore}
@@ -50,7 +50,7 @@ export class ProtectAttr extends AddBattlerTagAttr {
     }
 
     const synergyAbilities = [AbilityId.MOODY, AbilityId.SPEED_BOOST, AbilityId.STANCE_CHANGE];
-    const synergyBonusChance = synergyAbilities.some((abId) => user.hasAbility(abId)) ? 100 : 30;
+    const synergyBonusChance = synergyAbilities.some((abId) => user.hasAbility(abId)) ? 100 : 15;
     const synergyBonus = this.getRandomScore(user, synergyBonusChance);
 
     return MINOR_EFFECT_SCORE_BONUS + synergyBonus + this.getTagEffectScore(user);

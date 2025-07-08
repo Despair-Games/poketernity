@@ -32,7 +32,7 @@ const protectCondition: MoveConditionFunc = (user, _target, _move) => {
   const moveHistory = user.getLastXMoves(-1).filter((mv) => !mv.virtual);
   // Note: This can't check for `ProtectAttr` directly as it would create a circular dependency
   const lastNonUse = moveHistory.findIndex(
-    (mv) => mv.result !== MoveResult.SUCCESS || PROTECT_MOVES.includes(mv.move.id),
+    (mv) => mv.result !== MoveResult.SUCCESS || !PROTECT_MOVES.includes(mv.move.id),
   );
 
   if (lastNonUse === -1) {

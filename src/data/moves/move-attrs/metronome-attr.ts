@@ -24,7 +24,7 @@ export class MetronomeAttr extends CallMoveAttr {
    */
   public getRandomMove(user: Pokemon): MoveId {
     const moveIds = getTSEnumValues(MoveId).filter(
-      (m) => !this.invalidMoves.has(m) && !allMoves.get(m).name.endsWith(" (N)"),
+      (m) => m > 0 && !this.invalidMoves.has(m) && !allMoves.get(m).name.endsWith(" (N)"),
     );
 
     return moveIds[user.randSeedInt(moveIds.length)];

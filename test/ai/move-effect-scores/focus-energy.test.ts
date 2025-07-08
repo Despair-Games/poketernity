@@ -47,7 +47,7 @@ describe("Move Effect Scores - Focus Energy", () => {
   });
 
   it("should not have high incentive when the user does not have a move with a high critical hit ratio", async () => {
-    game.override.enemyMoveset([MoveId.FOCUS_ENERGY, MoveId.SUPER_FANG, MoveId.PSYCHO_CUT]);
+    game.override.enemyMoveset([MoveId.FOCUS_ENERGY, MoveId.SUPER_FANG]);
 
     await game.classicMode.startBattle(SpeciesId.POOCHYENA);
 

@@ -47,11 +47,11 @@ describe("Move Effect Scores - Flinch", () => {
     const enemy = game.field.getEnemyPokemon();
 
     expect(player.outspeeds(enemy)).toBeTruthy();
-    expect(enemy).toPreferSelectingMove(MoveId.TACKLE);
+    expect(enemy).toPreferSelectingMove(MoveId.VISE_GRIP);
   });
 
   it("should grant an incentive when the move has increased priority", async () => {
-    game.override.enemyMoveset([MoveId.FAKE_OUT, MoveId.TACKLE, MoveId.SPLASH]);
+    game.override.enemyMoveset([MoveId.FAKE_OUT, MoveId.VISE_GRIP, MoveId.SPLASH]);
 
     await game.classicMode.startBattle(SpeciesId.REGIELEKI);
 
