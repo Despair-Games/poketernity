@@ -101,7 +101,7 @@ export class CheckSwitchPhase extends BattlePhase {
     globalScene.ui.setMessageMode().then(() => this.end());
   }
 
-  private onPartyModeSelection(cursor: number, option: PartyOption) {
+  private onPartyModeSelection(cursor: number, option: PartyOption): void {
     if (option === PartyOption.CANCEL) {
       globalScene.ui.setMessageMode().then(() => this.start());
       return;

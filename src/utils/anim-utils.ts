@@ -10,6 +10,8 @@ import { globalScene } from "#app/global-scene";
 import type { SceneBase } from "#app/scene-base";
 import { ImagesFolder } from "#enums/images-folder";
 
+type TweenBuilderConfig = Phaser.Types.Tweens.TweenBuilderConfig;
+
 export function loadAnimAssets(anims: LegacyAnimConfig[], startLoad?: boolean): Promise<void> {
   return new Promise((resolve) => {
     const backgrounds = new Set<string>();
@@ -71,9 +73,8 @@ export async function loadEncounterAnimAssets(startLoad?: boolean): Promise<void
  * Plays a Tween animation, resolving once the animation completes.
  * @param config - The config for a single Tween
  * @param scene - The {@linkcode SceneBase} on which the Tween plays (Default {@linkcode globalScene})
- * @async
  */
-export async function playTween(config: Phaser.Types.Tweens.TweenBuilderConfig, scene: SceneBase = globalScene) {
+export async function playTween(config: TweenBuilderConfig, scene: SceneBase = globalScene): Promise<void> {
   await new Promise((resolve) =>
     scene.tweens.add({
       ...config,

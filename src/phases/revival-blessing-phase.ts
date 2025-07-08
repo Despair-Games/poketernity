@@ -50,9 +50,9 @@ export class RevivalBlessingPhase extends BattlePhase {
   private revivePokemonAtSlotIndex(slotIndex: number): void {
     const { currentBattle, phaseManager, ui } = globalScene;
     const pokemon = globalScene.getPlayerParty()[slotIndex];
-    console.log(pokemon.name);
     if (isNil(pokemon) || !pokemon.isFainted()) {
-      return this.end();
+      this.end();
+      return;
     }
 
     pokemon.resetTurnData();
@@ -91,7 +91,7 @@ export class RevivalBlessingPhase extends BattlePhase {
    * can fill said field slots before the end of the turn. The pushed `SwitchPhases`
    * should be scheduled in {@linkcode TurnEndPhase} instead to make this method obsolete.
    */
-  private clearFaintSwitchPhase(pokemon: Pokemon) {
+  private clearFaintSwitchPhase(pokemon: Pokemon): void {
     globalScene.phaseManager.tryRemovePhase((phase) => phase.is("SwitchPhase") && phase.getPokemon() === pokemon);
   }
 

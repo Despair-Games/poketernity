@@ -1,9 +1,7 @@
-// -- start tsdoc imports --
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { EncounterPhase } from "#phases/encounter-phase";
 import type { PostSummonPhase } from "#phases/post-summon-phase";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-// -- end tsdoc imports --
 
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -17,7 +15,6 @@ import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
 import { PokemonPhase } from "#phases/base/pokemon-phase";
 import { settings } from "#system/settings-manager";
-import type { PhaseKey } from "#types/phase-types";
 import { playTween } from "#utils/anim-utils";
 import i18next from "i18next";
 
@@ -29,11 +26,10 @@ interface SummonPhaseOptions {
 
 /**
  * Phase to visually summon the Pokemon at the given {@linkcode fieldIndex} onto the field.
- * @extends PokemonPhase
  */
 export class SummonPhase extends PokemonPhase {
   /** @override */
-  public override readonly phaseName: PhaseKey = "SummonPhase";
+  public override readonly phaseName = "SummonPhase";
 
   /**
    * If `true`, summons the Pokemon as if loading into a wave
@@ -77,15 +73,15 @@ export class SummonPhase extends PokemonPhase {
     // If the Pokemon about to be summoned is fainted or illegal under active challenges,
     // try to reorganize the Pokemon's party such that a legal inactive Pokemon is summoned instead.
     if (!this.getPokemon().isAllowedInBattle() && !this.handleIllegalSummon()) {
-      return super.end();
+      super.end();
+      return;
     }
 
-    /**
-     * If this summon is from loading into a wave, load the Pokemon's
-     * saved summon data.
-     * @todo This only uses `resetSummonData` to push data from a
-     * {@linkcode Pokemon.summonDataPrimer | primer}. This should use a
-     * separate dedicated method instead to avoid the risk of side effects
+    /*
+     * If this summon is from loading into a wave, load the Pokemon's saved summon data.
+     *
+     * TODO: This only uses `resetSummonData` to push data from `Pokemon.summonDataPrimer`.
+     * This should use a separate dedicated method instead to avoid the risk of side effects.
      */
     if (this.loaded) {
       this.getPokemon().resetSummonData();
