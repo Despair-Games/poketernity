@@ -205,7 +205,7 @@ export class Animation {
   }
 
   public addPokeballCaptureStars(pokeball: Phaser.GameObjects.Sprite): void {
-    const addParticle = () => {
+    const addParticle = (): void => {
       const particle = this.scene.add.sprite(pokeball.x, pokeball.y, "pb_particles", "4.png");
       particle.setOrigin(pokeball.originX, pokeball.originY);
       particle.setAlpha(0.5);
@@ -243,7 +243,9 @@ export class Animation {
       });
     };
 
-    new Array(3).fill(null).map(() => addParticle());
+    for (let i = 0; i < 3; i++) {
+      addParticle();
+    }
   }
 
   /**

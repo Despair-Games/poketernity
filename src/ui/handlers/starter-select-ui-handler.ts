@@ -699,21 +699,23 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
     starterBoxContainer.add(this.starterSelectScrollBar);
 
-    this.pokerusCursorObjs = new Array(POKERUS_STARTER_COUNT).fill(null).map(() => {
+    this.pokerusCursorObjs = [];
+    for (let i = 0; i < POKERUS_STARTER_COUNT; i++) {
       const cursorObj = globalScene.add.image(0, 0, "select_cursor_pokerus");
       cursorObj.setVisible(false);
       cursorObj.setOrigin(0, 0);
       starterBoxContainer.add(cursorObj);
-      return cursorObj;
-    });
+      this.pokerusCursorObjs.push(cursorObj);
+    }
 
-    this.starterCursorObjs = new Array(6).fill(null).map(() => {
+    this.starterCursorObjs = [];
+    for (let i = 0; i < 6; i++) {
       const cursorObj = globalScene.add.image(0, 0, "select_cursor_highlight");
       cursorObj.setVisible(false);
       cursorObj.setOrigin(0, 0);
       starterBoxContainer.add(cursorObj);
-      return cursorObj;
-    });
+      this.starterCursorObjs.push(cursorObj);
+    }
 
     this.cursorObj = globalScene.add.image(0, 0, "select_cursor");
     this.cursorObj.setOrigin(0, 0);
@@ -742,15 +744,16 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
     this.starterSelectContainer.add(starterBoxContainer);
 
-    this.starterIcons = new Array(6).fill(null).map((_, i) => {
+    this.starterIcons = [];
+    for (let i = 0; i < 6; i++) {
       const icon = globalScene.add.sprite(teamWindowX + 7, calcStarterIconY(i), "pokemon_icons_0");
       icon.setScale(0.5);
       icon.setOrigin(0, 0);
       icon.setFrame("unknown");
       this.starterSelectContainer.add(icon);
       this.iconAnimHandler.addOrUpdate(icon, PokemonIconAnimMode.PASSIVE);
-      return icon;
-    });
+      this.starterIcons.push(icon);
+    }
 
     this.pokemonSprite = globalScene.add.sprite(53, 63, "pkmn__sub");
     this.pokemonSprite.setPipeline(globalScene.spritePipeline, { tone: [0.0, 0.0, 0.0, 0.0], ignoreTimeTint: true });
