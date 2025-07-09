@@ -783,7 +783,7 @@ export async function catchPokemon(
         i18next.t(isObtain ? "battle:pokemonObtained" : "battle:pokemonCaught", {
           pokemonName: pokemon.getNameToRender(),
         }),
-        { callback: doPokemonCatchMenu, callbackDelay: 0, prompt: true },
+        { callback: doPokemonCatchMenu, prompt: true },
       );
     } else {
       doPokemonCatchMenu();

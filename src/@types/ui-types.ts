@@ -6,10 +6,27 @@ import type { PokemonMove } from "#field/pokemon-move";
 import type { PokemonHeldItemModifier } from "#modifier/modifier";
 
 export interface ShowTextOptions {
+  /**
+   * The delay in milliseconds before the dialogue is displayed.
+   * @defaultValue `20`
+   */
   delay?: number;
+  /** A callback function to execute after the dialogue is displayed. */
   callback?: VoidFunction;
+  /**
+   * The delay in milliseconds before executing the callback.
+   * @defaultValue `0`
+   */
   callbackDelay?: number;
+  /**
+   * Whether to display the prompt icon at the end of the textbox.
+   * @defaultValue `false`
+   */
   prompt?: boolean;
+  /**
+   * The delay in milliseconds before showing the prompt.
+   * @defaultValue `0`
+   */
   promptDelay?: number;
 }
 
