@@ -1,5 +1,6 @@
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
+import { UiMode } from "#enums/ui-mode";
 import { SettingsUiItem } from "#types/settings";
 import { SettingsUiHandler } from "#ui/settings-ui-handler";
 import { generalSettingsUiItems } from "#ui/settings-ui-items";
@@ -12,7 +13,7 @@ export class GeneralSettingsUiHandler extends SettingsUiHandler {
   private onOrientationChange = () => this.updateMoveTouchControlsSettingsLabel();
 
   constructor() {
-    super("general", generalSettingsUiItems);
+    super(UiMode.SETTINGS, "general", generalSettingsUiItems);
   }
 
   protected override setup(): void {

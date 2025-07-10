@@ -6,6 +6,7 @@ import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
 import { getIconWithSettingName } from "#inputs/config-handler";
 import { settings } from "#system/settings-manager";
+import type { InputsIcons } from "#ui/inputs-config";
 import { SettingsNavigationManager } from "#ui/settings-navigation-manager";
 import { ScrollBar } from "#ui/scroll-bar";
 import { addTextObject, setTextColor } from "#ui/text-utils";

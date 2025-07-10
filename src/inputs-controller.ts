@@ -50,7 +50,7 @@ export class InputsController {
 
   // TODO interactions and configs are defined as maps but used as objects
   private interactions: Map<Button, Map<string, boolean>> = new Map();
-  private configs: Map<string, InputInterfaceConfig<string>> = new Map();
+  private configs: Map<string, InputInterfaceConfig> = new Map();
 
   public gamepadSupport: boolean = true;
   public selectedDevice; //: {[key:string]: string};

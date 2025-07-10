@@ -1,4 +1,3 @@
-import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import { LANGUAGE_MAX_OPTIONS } from "#constants/ui-constants";
 import { UiMode } from "#enums/ui-mode";
@@ -13,7 +12,7 @@ import i18next from "i18next";
 
 export class DisplaySettingsUiHandler extends SettingsUiHandler {
   constructor() {
-    super("display", displaySettingUiItems);
+    super(UiMode.SETTINGS_DISPLAY, "display", displaySettingUiItems);
   }
 
   protected override handleSaveSetting<V = any>(uiItem: SettingsUiItem, newValue: V): void {
