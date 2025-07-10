@@ -70,7 +70,7 @@ describe("Moves - Disable", () => {
     expect(enemy.isMoveRestricted(MoveId.SPLASH)).toBeTruthy();
   });
 
-  it("fails if enemy has no move history", async () => {
+  it("should fail if enemy has no move history", async () => {
     await game.classicMode.startBattle(SpeciesId.PIKACHU);
 
     const player = game.field.getPlayerPokemon();
@@ -89,7 +89,7 @@ describe("Moves - Disable", () => {
     expect(enemy.isMoveRestricted(MoveId.SPLASH)).toBeFalsy();
   }, 20000);
 
-  it("causes STRUGGLE if all usable moves are disabled", async () => {
+  it("should force the target to use Struggle if all usable moves are disabled", async () => {
     await game.classicMode.startBattle(SpeciesId.PIKACHU);
 
     const enemy = game.field.getEnemyPokemon();
@@ -107,7 +107,7 @@ describe("Moves - Disable", () => {
     expect(enemyHistory[1].move.id).toBe(MoveId.STRUGGLE);
   }, 20000);
 
-  it("cannot disable STRUGGLE", async () => {
+  it("should fail if the target's last move was Struggle", async () => {
     game.override.enemyMoveset([MoveId.STRUGGLE]);
     await game.classicMode.startBattle(SpeciesId.PIKACHU);
 
@@ -123,7 +123,7 @@ describe("Moves - Disable", () => {
     expect(enemy.isMoveRestricted(MoveId.STRUGGLE)).toBeFalsy();
   }, 20000);
 
-  it("interrupts target's move when target moves after", async () => {
+  it("should interrupt the target's move if it matches the disabled move", async () => {
     await game.classicMode.startBattle(SpeciesId.PIKACHU);
 
     const enemy = game.field.getEnemyPokemon();
