@@ -38,7 +38,6 @@ describe("Moves - Disable", () => {
 
     await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
-    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     game.move.select(MoveId.SPLASH, 0);
     game.move.select(MoveId.SPLASH, 1);
     await game.toNextTurn();
@@ -47,6 +46,7 @@ describe("Moves - Disable", () => {
     game.move.select(MoveId.CELEBRATE, 1);
     await game.toNextTurn();
 
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     game.move.select(MoveId.DISABLE, 0, BattlerIndex.PLAYER_2);
     game.move.select(MoveId.SPLASH, 1);
     await game.toEndOfTurn();
