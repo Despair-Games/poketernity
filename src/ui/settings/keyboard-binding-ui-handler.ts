@@ -1,15 +1,14 @@
 import { globalScene } from "#app/global-scene";
 import { Device } from "#enums/device";
-import type { SettingKeyboard } from "#enums/setting-keyboard";
 import { TextStyle } from "#enums/text-style";
-import type { UiMode } from "#enums/ui-mode";
+import { UiMode } from "#enums/ui-mode";
 import { getKeyWithKeycode } from "#inputs/config-handler";
 import { BindingUiHandler } from "#ui/binding-ui-handler";
 import { addTextObject } from "#ui/text-utils";
 
 export class KeyboardBindingUiHandler extends BindingUiHandler {
-  constructor(mode: UiMode | null = null) {
-    super(mode);
+  constructor() {
+    super(UiMode.KEYBOARD_BINDING);
   }
 
   protected override setup() {
@@ -37,10 +36,6 @@ export class KeyboardBindingUiHandler extends BindingUiHandler {
     globalScene.input.keyboard?.off("keydown", this.onKeyDown, this);
 
     super.tearDown();
-  }
-
-  public override show(target: SettingKeyboard, cancelHandler: (success: boolean) => boolean): boolean {
-    return super.show(target, cancelHandler);
   }
 
   private getSelectedDevice() {

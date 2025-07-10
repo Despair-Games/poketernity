@@ -9,7 +9,7 @@ import { UiHandler } from "#ui/ui-handler";
 import { addWindow } from "#ui/ui-theme";
 import i18next from "i18next";
 
-type CancelFn = (succes?: boolean) => boolean;
+type FinishCallback = (succes?: boolean) => boolean;
 
 /**
  * Abstract class for handling UI elements related to button bindings.
@@ -39,7 +39,7 @@ export abstract class BindingUiHandler extends UiHandler {
   protected targetButtonIcon: Phaser.GameObjects.Sprite;
 
   // Function to call on cancel or completion of binding.
-  protected cancelFn: CancelFn | null;
+  protected callback: FinishCallback | null;
   protected abstract swapAction(): boolean;
 
   protected timeLeftAutoClose: number = 5;
@@ -48,16 +48,10 @@ export abstract class BindingUiHandler extends UiHandler {
   // The specific setting being modified.
   protected target;
 
-  /**
-   * @param mode - The UI mode.
-   */
-  constructor(mode: UiMode | null = null) {
+  constructor(mode: UiMode) {
     super(mode);
   }
 
-  /**
-   * Setup UI elements.
-   */
   protected override setup() {
     const ui = this.getUi();
     this.optionSelectContainer = globalScene.add.container(0, 0);
@@ -123,7 +117,7 @@ export abstract class BindingUiHandler extends UiHandler {
       if (this.timeLeftAutoClose >= 0) {
         this.manageAutoCloseTimer();
       } else {
-        this.cancelFn?.();
+        this.callback?.();
       }
     }, 1000);
   }
@@ -132,13 +126,13 @@ export abstract class BindingUiHandler extends UiHandler {
    * Show the UI with the provided arguments.
    *
    * @param target - The binding to update
-   * @param cancelHandler - Handler to call if the binding gets cancelled
+   * @param finishHandler - Handler to call when the binding gets changed or cancelled
    * @returns `true` if successful.
    */
-  public override show(target: string, cancelHandler: (success: boolean) => boolean): boolean {
+  public override show(target: string, finishHandler: FinishCallback): boolean {
     this.buttonPressed = null;
     this.timeLeftAutoClose = 5;
-    this.cancelFn = cancelHandler;
+    this.callback = finishHandler;
     this.target = target;
 
     // Bring the option and action containers to the front of the UI.
@@ -158,7 +152,7 @@ export abstract class BindingUiHandler extends UiHandler {
    *
    * @returns The window width.
    */
-  getWindowWidth(): number {
+  private getWindowWidth(): number {
     return 160;
   }
 
@@ -167,7 +161,7 @@ export abstract class BindingUiHandler extends UiHandler {
    *
    * @returns The window height.
    */
-  getWindowHeight(): number {
+  private getWindowHeight(): number {
     return 64;
   }
 
@@ -182,35 +176,39 @@ export abstract class BindingUiHandler extends UiHandler {
       return false; // TODO: is false correct as default? (previously was `undefined`)
     }
     const ui = this.getUi();
-    let success = false;
+    let playSuccess = false;
+    let playError = false;
     switch (button) {
       case Button.LEFT:
       case Button.RIGHT: {
         // Toggle between action and cancel options.
         const cursor = this.cursor ? 0 : 1;
-        success = this.setCursor(cursor);
+        playSuccess = this.setCursor(cursor);
         break;
       }
       case Button.ACTION:
-        // Process actions based on current cursor position.
         if (this.cursor === 0) {
-          this.cancelFn?.();
+          playSuccess = true;
+          this.callback?.(); // Cancel out without remapping
         } else {
-          success = this.swapAction();
-          SettingsNavigationManager.getInstance().updateIcons();
-          this.cancelFn?.(success);
+          // Validate the remap
+          const remapSuccess = this.swapAction();
+          playSuccess = remapSuccess;
+          playError = !remapSuccess;
+          SettingsNavigationManager.getInstance().updateIcons(); // TODO don't call here?
+          this.callback?.(remapSuccess);
         }
         break;
     }
 
-    // Plays a select sound effect if an action was successfully processed.
-    if (success) {
+    // Plays success or error sound effect, depending.
+    if (playSuccess) {
       ui.playSelect();
-    } else {
+    } else if (playError) {
       ui.playError();
     }
 
-    return success;
+    return playSuccess;
   }
 
   /**
@@ -231,16 +229,13 @@ export abstract class BindingUiHandler extends UiHandler {
     return true;
   }
 
-  /**
-   * Clear the UI elements and state.
-   */
   protected override clear() {
     clearTimeout(this.countdownTimer);
     this.timerText.setText("(5)");
     this.timeLeftAutoClose = 5;
     this.listening = false;
     this.target = null;
-    this.cancelFn = null;
+    this.callback = null;
     this.optionSelectContainer.setVisible(false);
     this.actionsContainer.setVisible(false);
     this.newButtonIcon.setVisible(false);

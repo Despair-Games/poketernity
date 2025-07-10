@@ -1,15 +1,14 @@
 import { globalScene } from "#app/global-scene";
 import { Device } from "#enums/device";
-import type { SettingGamepad } from "#enums/setting-gamepad";
 import { TextStyle } from "#enums/text-style";
-import type { UiMode } from "#enums/ui-mode";
+import { UiMode } from "#enums/ui-mode";
 import { getIconWithSettingName, getKeyWithKeycode } from "#inputs/config-handler";
 import { BindingUiHandler } from "#ui/binding-ui-handler";
 import { addTextObject } from "#ui/text-utils";
 
 export class GamepadBindingUiHandler extends BindingUiHandler {
-  constructor(mode: UiMode | null = null) {
-    super(mode);
+  constructor() {
+    super(UiMode.GAMEPAD_BINDING);
   }
   protected override setup() {
     super.setup();
@@ -54,10 +53,6 @@ export class GamepadBindingUiHandler extends BindingUiHandler {
     super.tearDown();
   }
 
-  public override show(target: SettingGamepad, cancelHandler: (success: boolean) => boolean): boolean {
-    return super.show(target, cancelHandler);
-  }
-
   private getSelectedDevice() {
     return globalScene.inputController?.selectedDevice[Device.GAMEPAD];
   }
@@ -67,6 +62,7 @@ export class GamepadBindingUiHandler extends BindingUiHandler {
     button: Phaser.Input.Gamepad.Button,
     _value: number,
   ): void {
+    // TODO: use blacklist from config
     const blacklist = [12, 13, 14, 15]; // d-pad buttons are blacklisted.
     // Check conditions before processing the button press.
     if (
