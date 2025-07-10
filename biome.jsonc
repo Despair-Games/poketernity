@@ -56,7 +56,8 @@
         "noVoidTypeReturn": "warn", // TODO: Refactor and make this an error
         "noUnusedImports": {
           "level": "error",
-          "fix": "safe"
+          "fix": "safe",
+          "options": {}
         },
         "noUnusedFunctionParameters": "error",
         "noUnusedLabels": "error",
