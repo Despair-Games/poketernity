@@ -90,9 +90,9 @@ export abstract class MoveRestrictionBattlerTag extends BattlerTag implements Re
    * @param pokemon {@linkcode Pokemon} to get the last valid move from
    * @returns the last valid move from the pokemon's move history
    */
-  public getLastValidMove(pokemon: Pokemon): Move | undefined {
+  protected getLastValidMove(pokemon: Pokemon): Move | undefined {
     const turnMove = pokemon
-      .getLastXMoves()
+      .getLastXMoves(-1)
       .find((m) => m.move.id !== MoveId.NONE && m.move.id !== MoveId.STRUGGLE && !m.virtual);
 
     return turnMove?.move;
