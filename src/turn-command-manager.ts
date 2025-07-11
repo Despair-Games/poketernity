@@ -428,14 +428,9 @@ export class TurnCommandManager {
 
     phaseManager.appendToPhase(
       "PostActionPhase",
-      phaseManager.createPhase(
-        "MovePhase",
-        pokemon,
-        targets ?? turnMove.targets,
-        move,
-        undefined,
-        cursor !== -1 && turnMove.ignorePP,
-      ),
+      phaseManager.createPhase("MovePhase", pokemon, targets ?? turnMove.targets, move, {
+        ignorePp: cursor !== -1 && turnMove.ignorePP,
+      }),
       phaseManager.createPhase("PostActionPhase", pokemon.getBattlerIndex(), true),
     );
 
