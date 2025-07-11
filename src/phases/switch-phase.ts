@@ -140,11 +140,13 @@ export class SwitchPhase extends PokemonPhase {
     // relevant effects from the active Pokemon to the switched in Pokemon
     if (this.switchType === SwitchType.BATON_PASS) {
       this.transferBatonPassableEffects(activePokemon, switchedInPokemon);
+      activePokemon.resetSummonData();
     } else if (this.switchType === SwitchType.SHED_TAIL) {
       const subTag = activePokemon.getTag(BattlerTagType.SUBSTITUTE);
       if (subTag) {
         switchedInPokemon.summonData.tags.push(subTag);
       }
+      activePokemon.resetSummonData();
     }
 
     // If a Substitute was transferred, update the switched in Pokemon's sprite
@@ -160,9 +162,6 @@ export class SwitchPhase extends PokemonPhase {
     party[this.switchInIndex] = activePokemon;
     party[this.fieldIndex] = switchedInPokemon;
 
-    // Reset the switched out Pokemon's summon and turn data
-    activePokemon.resetSummonData();
-    activePokemon.resetTurnData();
     // Mark the switched in Pokemon as having switched in this turn
     if (this.switchType !== SwitchType.INITIAL_SWITCH) {
       switchedInPokemon.turnData.switchedInThisTurn = true;
