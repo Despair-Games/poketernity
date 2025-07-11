@@ -156,7 +156,7 @@ export class BattlerTag {
 
   /**
    * Helper function that retrieves the source Pokemon object
-   * @returns The source {@linkcode Pokemon} or `null` if none is found
+   * @returns The source {@linkcode Pokemon} or `undefined` if none is found
    */
   public getSourcePokemon(): Pokemon | undefined {
     if (!isNil(this.sourceId)) {

@@ -165,7 +165,6 @@ class ForceSwitchOutHelper {
         return false;
       }
       if (switchOutTarget.hp > 0) {
-        switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
         globalScene.phaseManager.queueBattlerSwitchOut(switchOutTarget.getBattlerIndex(), {
           switchType: this.switchType,
           when: "before",

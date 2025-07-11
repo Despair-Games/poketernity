@@ -7,7 +7,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { getPokeballAtlasKey, getPokeballTintColor } from "#data/pokeball";
 import { BattleType } from "#enums/battle-type";
-import type { BattlerIndex } from "#enums/battler-index";
+import type { FieldBattlerIndex } from "#enums/battler-index";
 import { FieldPosition } from "#enums/field-position";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PlayerGender } from "#enums/player-gender";
@@ -74,7 +74,7 @@ export class SummonPhase extends PokemonPhase {
   private readonly delayPostSummon: boolean;
 
   constructor(
-    battlerIndex: BattlerIndex,
+    battlerIndex: FieldBattlerIndex,
     { loaded = false, playTrainerAnim = true, delayPostSummon = false }: SummonPhaseOptions = {},
   ) {
     super(battlerIndex);
@@ -171,6 +171,8 @@ export class SummonPhase extends PokemonPhase {
    */
   private async playSummonSequence(): Promise<void> {
     const { currentBattle, pbTray, pbTrayEnemy, trainer, ui } = globalScene;
+    // Update field scale in case a G-Max Pokemon or Starmobile is being summoned
+    await globalScene.updateFieldScale();
     if (this.isPlayer) {
       ui.showText(i18next.t("battle:playerGo", { pokemonName: getPokemonNameWithAffix(this.getPokemon()) }));
       pbTray.hide();
@@ -352,7 +354,7 @@ export class SummonPhase extends PokemonPhase {
     pokemon.cry(pokemon.getHpRatio() > 0.25 ? undefined : { rate: 0.85 });
     pokemon.getSprite().clearTint();
     // required to load the proper assets when loading from save data
-    if (pokemon.summonData.speciesForm) {
+    if (this.loaded && pokemon.summonData.speciesForm) {
       pokemon.loadAssets(false);
     }
 

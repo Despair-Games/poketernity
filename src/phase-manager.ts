@@ -641,7 +641,7 @@ export class PhaseManager {
    * during the {@linkcode SwitchPhase}.
    */
   public queueBattlerSwitchOut(
-    battlerIndex: BattlerIndex,
+    battlerIndex: FieldBattlerIndex,
     { switchType = SwitchType.SWITCH, switchInIndex = -1, when = "eager", phaseKey }: BattlerSwitchOutInit = {},
   ): void {
     const phases = [
@@ -665,7 +665,7 @@ export class PhaseManager {
         break;
       case "after":
         validatePhaseId();
-        this.prependToPhase(phaseKey!, ...phases);
+        this.appendToPhase(phaseKey!, ...phases);
         break;
     }
   }

@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { getPokeballTintColor } from "#data/pokeball";
-import type { BattlerIndex } from "#enums/battler-index";
+import type { FieldBattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { SwitchType } from "#enums/switch-type";
 import type { Pokemon } from "#field/pokemon";
@@ -11,7 +11,8 @@ import { playTween } from "#utils/anim-utils";
 import i18next from "i18next";
 
 /**
- * - Handles all VFX and SFX related to recalling a {@linkcode Pokemon}.
+ * - Handles all VFX and SFX related to recalling a {@linkcode Pokemon} for player Pokemon at all times,
+ * and for enemy Pokemon in trainer battles.
  * - {@link Pokemon.leaveField | Removes the Pokemon from the field}.
  */
 export class RecallPhase extends PokemonPhase {
@@ -20,7 +21,7 @@ export class RecallPhase extends PokemonPhase {
   private readonly switchType: SwitchType;
   private readonly pokemon: Pokemon;
 
-  constructor(battlerIndex: BattlerIndex, switchType: SwitchType = SwitchType.SWITCH) {
+  constructor(battlerIndex: FieldBattlerIndex, switchType: SwitchType = SwitchType.SWITCH) {
     super(battlerIndex);
 
     this.switchType = switchType;
@@ -91,6 +92,7 @@ export class RecallPhase extends PokemonPhase {
     );
 
     await Promise.allSettled(promises);
+    await globalScene.updateFieldScale();
   }
 
   private async removeSubstitute(): Promise<void> {

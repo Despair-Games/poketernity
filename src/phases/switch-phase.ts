@@ -7,6 +7,7 @@ import type { PreSwitchOutAbAttr } from "#abilities/pre-switch-out-ab-attr";
 import { globalScene } from "#app/global-scene";
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { FieldBattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
@@ -32,7 +33,20 @@ export class SwitchPhase extends PokemonPhase {
    */
   private readonly withSummon: boolean;
 
-  constructor(battlerIndex: number, switchType: SwitchType, switchInIndex: number = -1, withSummon: boolean = true) {
+  /**
+   * @param battlerIndex - The {@linkcode FieldBattlerIndex} of the Pokemon to switch out
+   * @param switchType - The {@linkcode SwitchType} for this switch action
+   * @param switchInIndex - (Default `-1`) The party index of the Pokemon to switch in. If set to
+   * `-1`, this phase will prompt the player or Enemy AI to select a Pokemon to switch in
+   * @param withSummon - (Default `true`) If `true`, this immediately queues a {@linkcode SummonPhase} once
+   * the switch is complete
+   */
+  constructor(
+    battlerIndex: FieldBattlerIndex,
+    switchType: SwitchType,
+    switchInIndex: number = -1,
+    withSummon: boolean = true,
+  ) {
     super(battlerIndex);
 
     this.switchType = switchType;
