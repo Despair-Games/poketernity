@@ -586,8 +586,6 @@ export class PhaseManager {
 
   // #region Phase-Specific Utils
 
-  /**  @todo Are these utils still necessary? */
-
   /**
    * Unshifts a new {@linkcode FaintPhase} for the given {@linkcode BattlerIndex} to faint.
    *
