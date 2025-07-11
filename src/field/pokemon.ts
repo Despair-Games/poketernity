@@ -3798,7 +3798,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (moveCount >= 0) {
       return moveHistory.slice(Math.max(moveHistory.length - moveCount, 0)).reverse();
     }
-    return moveHistory.slice(0).reverse();
+    return moveHistory.slice().reverse();
   }
 
   getMoveQueue(): TurnMove[] {

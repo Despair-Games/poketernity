@@ -402,8 +402,7 @@ export function initMoves() {
       .condition(
         (_user, target, _move) =>
           target
-            .getMoveHistory()
-            .reverse()
+            .getLastXMoves(-1)
             .find((m) => m.move.id !== MoveId.NONE && m.move.id !== MoveId.STRUGGLE && !m.virtual) !== undefined,
       )
       .ignoresSubstitute()
