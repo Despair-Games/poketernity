@@ -243,7 +243,8 @@ export class Animation {
       });
     };
 
-    for (let i = 0; i < 3; i++) {
+    const numStars = 3;
+    for (let i = 0; i < numStars; i++) {
       addParticle();
     }
   }
