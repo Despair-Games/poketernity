@@ -1156,6 +1156,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
      * Variable Attack attributes are applied only to the raw stat
      * value and associated stat stage multiplier. Other stat modifiers,
      * e.g. items and abilities, apply based on the original stat.
+     * See https://bulbapedia.bulbagarden.net/wiki/Body_Press_(move)#Effect for more info
      */
     if (move && opponent && [Stat.ATK, Stat.SPATK].includes(stat)) {
       applyMoveAttrs(VariableAtkAttr, this, opponent, move, statValue, isCritical);
