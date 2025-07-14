@@ -3,7 +3,6 @@ import { AbilityId } from "#enums/ability-id";
 import { BattleCommand } from "#enums/battle-command";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
-import { PhaseId } from "#enums/phase-id";
 import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
@@ -170,7 +169,7 @@ describe.todo("Abilities - Neutralizing Gas", () => {
 
     // TODO: add currentphase helper that `expect`s the correct phase
     const commandPhase = game.scene.phaseManager.getCurrentPhase<CommandPhase>();
-    expect(commandPhase?.id).toBe(PhaseId.COMMAND);
+    expect(commandPhase?.phaseName).toBe("CommandPhase");
     commandPhase!.handleCommand(BattleCommand.RUN, 0);
     await game.toEndOfTurn();
 
