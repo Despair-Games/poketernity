@@ -172,7 +172,6 @@ export class SummonPhase extends PokemonPhase {
   private async playSummonSequence(): Promise<void> {
     const { currentBattle, pbTray, pbTrayEnemy, trainer, ui } = globalScene;
     // Update field scale in case a G-Max Pokemon or Starmobile is being summoned
-    await globalScene.updateFieldScale();
     if (this.isPlayer) {
       ui.showText(i18next.t("battle:playerGo", { pokemonName: getPokemonNameWithAffix(this.getPokemon()) }));
       pbTray.hide();
@@ -342,14 +341,15 @@ export class SummonPhase extends PokemonPhase {
     pokemon.tint(getPokeballTintColor(pokemon.pokeball));
     pokemon.untint(250, "Sine.easeIn");
 
-    globalScene.updateFieldScale();
-
-    await playTween({
-      targets: pokemon,
-      duration: 250,
-      ease: "Sine.easeIn",
-      scale: pokemon.getSpriteScale(),
-    });
+    await Promise.allSettled([
+      globalScene.updateFieldScale(),
+      playTween({
+        targets: pokemon,
+        duration: 250,
+        ease: "Sine.easeIn",
+        scale: pokemon.getSpriteScale(),
+      }),
+    ]);
 
     pokemon.cry(pokemon.getHpRatio() > 0.25 ? undefined : { rate: 0.85 });
     pokemon.getSprite().clearTint();
@@ -393,6 +393,7 @@ export class SummonPhase extends PokemonPhase {
     }
 
     globalScene.updateModifiers(this.isPlayer);
+    // TODO: This is a dangling Promise
     globalScene.updateFieldScale();
 
     pokemon.showInfo();
@@ -402,7 +403,6 @@ export class SummonPhase extends PokemonPhase {
     pokemon.setScale(0.75);
     pokemon.tint(getPokeballTintColor(pokemon.pokeball));
     pokemon.untint(250, "Sine.easeIn");
-    globalScene.updateFieldScale();
     pokemon.x += 16;
     pokemon.y -= 20;
     pokemon.alpha = 0;
@@ -420,7 +420,6 @@ export class SummonPhase extends PokemonPhase {
 
     pokemon.cry(pokemon.getHpRatio() > 0.25 ? undefined : { rate: 0.85 });
     pokemon.getSprite().clearTint();
-    globalScene.updateFieldScale();
 
     await new Promise((resolve) => time.delayedCall(1000, resolve));
   }
