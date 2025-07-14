@@ -4,7 +4,7 @@ import type { EntryHazardTag } from "#arena-tags/entry-hazard-tag";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import type { PokemonDefendCondition } from "#types/pokemon-defend-condition";
+import type { PokemonDefendCondition } from "#types/move-types";
 
 export class PostDefendApplyEntryHazardTagAbAttr extends PostDefendAbAttr {
   private readonly condition: PokemonDefendCondition;

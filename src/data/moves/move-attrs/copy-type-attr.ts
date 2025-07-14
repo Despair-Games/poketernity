@@ -4,13 +4,12 @@ import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 import i18next from "i18next";
 
 /**
  * Attribute to change the user's type to match the target's type(s).
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Reflect_Type_(move) | Reflect Type}.
- * @extends MoveEffectAttr
  */
 export class CopyTypeAttr extends MoveEffectAttr {
   constructor() {
@@ -25,7 +24,8 @@ export class CopyTypeAttr extends MoveEffectAttr {
     user.setTemporaryTypes(targetTypes);
     user.updateInfo();
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("moveTriggers:copyType", {
         pokemonName: getPokemonNameWithAffix(user),
         targetPokemonName: getPokemonNameWithAffix(target),

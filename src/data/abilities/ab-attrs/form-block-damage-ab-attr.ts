@@ -3,7 +3,7 @@ import type { BattlerTagType } from "#enums/battler-tag-type";
 import { HitResult } from "#enums/hit-result";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import type { PokemonDefendCondition } from "#types/pokemon-defend-condition";
+import type { PokemonDefendCondition } from "#types/move-types";
 import type { NumberHolder } from "#utils/common-utils";
 
 /**
@@ -11,7 +11,6 @@ import type { NumberHolder } from "#utils/common-utils";
  * then removes the appropriate `BattlerTag` from the pokemon.
  *
  * This is used in the Disguise and Ice Face abilities.
- * @extends ReceivedMoveDamageMultiplierAbAttr
  */
 export class FormBlockDamageAbAttr extends ReceivedMoveDamageMultiplierAbAttr {
   private readonly multiplier: number;

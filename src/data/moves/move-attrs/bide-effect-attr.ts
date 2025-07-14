@@ -5,8 +5,7 @@ import { CommonAnim } from "#enums/common-anim";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { OverrideMoveEffectAttr } from "#moves/override-move-effect-attr";
-import { CommonAnimPhase } from "#phases/common-anim-phase";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 import type { BooleanHolder } from "#utils/common-utils";
 
 /**
@@ -15,7 +14,6 @@ import type { BooleanHolder } from "#utils/common-utils";
  * - Adding a tag to the user to record received attack damage on the first turn
  * - Playing Bide's "charging" animation on all but the last turn of execution
  * - Cancelling Bide's damage on all but the last turn of execution
- * @extends OverrideMoveEffectAttr
  */
 export class BideEffectAttr extends OverrideMoveEffectAttr {
   public override apply(user: Pokemon, _target: Pokemon | null, _move: Move, overridden: BooleanHolder): boolean {
@@ -26,7 +24,7 @@ export class BideEffectAttr extends OverrideMoveEffectAttr {
       // If the tag already exists on the user, this does nothing.
       user.addTag(BattlerTagType.BIDE);
       // Play Bide's "charging" animation
-      globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.BIDE, user.getBattlerIndex()));
+      globalScene.phaseManager.createAndUnshiftPhase("CommonAnimPhase", CommonAnim.BIDE, user.getBattlerIndex());
       // Cancel other effects in the move's execution (i.e. the move's damage)
       overridden.value = true;
     }

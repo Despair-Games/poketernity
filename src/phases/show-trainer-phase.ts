@@ -1,11 +1,10 @@
 import { globalScene } from "#app/global-scene";
-import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
-import { BattlePhase } from "#phases/abstract-battle-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
 import { settings } from "#system/settings-manager";
 
 export class ShowTrainerPhase extends BattlePhase {
-  override readonly id = PhaseId.SHOW_TRAINER;
+  public override readonly phaseName = "ShowTrainerPhase";
 
   public override start(): void {
     super.start();

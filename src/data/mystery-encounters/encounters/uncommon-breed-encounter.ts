@@ -32,7 +32,6 @@ import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import { MoveRequirement, PersistentModifierRequirement } from "#mystery-encounters/mystery-encounter-requirements";
 import { CHARMING_MOVES } from "#mystery-encounters/requirement-groups";
-import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import PokemonData from "#system/pokemon-data";
 import { isNil } from "#utils/common-utils";
 import { randSeedInt } from "#utils/random-utils";
@@ -106,8 +105,12 @@ export const UncommonBreedEncounter: MysteryEncounter = MysteryEncounterBuilder.
           tags: [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON],
           mysteryEncounterBattleEffects: (pokemon: Pokemon) => {
             queueEncounterMessage(`${namespace}:option.1.stat_boost`);
-            globalScene.phaseManager.unshiftPhase(
-              new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, statChangesForBattle, 1),
+            globalScene.phaseManager.createAndUnshiftPhase(
+              "StatStageChangePhase",
+              pokemon.getBattlerIndex(),
+              pokemon,
+              statChangesForBattle,
+              1,
             );
           },
         },

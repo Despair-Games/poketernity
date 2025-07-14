@@ -2,12 +2,11 @@ import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { Phase } from "#app/phase";
 import { ChallengeType } from "#enums/challenge-type";
-import { PhaseId } from "#enums/phase-id";
 import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 import { UiMode } from "#enums/ui-mode";
 import { SpeciesFormChangeMoveLearnedTrigger } from "#form-change-triggers/species-form-change-move-learned-trigger";
 import { overrideHeldItems, overrideModifiers } from "#modifier/modifier";
-import type { StarterConfig } from "#types/starter-config";
+import type { StarterConfig } from "#types/starter-data";
 import type { SaveSlotSelectUiHandler } from "#ui/save-slot-select-ui-handler";
 import type { StarterSelectUiHandler } from "#ui/starter-select-ui-handler";
 import { applyChallenges } from "#utils/challenge-utils";
@@ -16,7 +15,7 @@ import { getPokemonSpecies } from "#utils/pokemon-utils";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 
 export class SelectStarterPhase extends Phase {
-  override readonly id = PhaseId.SELECT_STARTER;
+  public override readonly phaseName = "SelectStarterPhase";
 
   public override start(): void {
     super.start();

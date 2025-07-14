@@ -13,7 +13,7 @@ import { TYPE_BOOST_TAG_TYPES } from "#constants/battler-tag-constants";
 import type { TypeDamageMultiplier } from "#data/type";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
-import { BattlerIndex } from "#enums/battler-index";
+import { BattlerIndex, type FieldBattlerIndex } from "#enums/battler-index";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitCheckResult } from "#enums/hit-check-result";
@@ -24,7 +24,6 @@ import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 import { MoveTarget } from "#enums/move-target";
-import { PhaseId } from "#enums/phase-id";
 import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangePostMoveTrigger } from "#form-change-triggers/species-form-change-post-move-trigger";
 import {
@@ -41,16 +40,14 @@ import { MoveEffectAttr } from "#moves/move-effect-attr";
 import { MultiHitAttr } from "#moves/multi-hit-attr";
 import { NoEffectAttr } from "#moves/no-effect-attr";
 import { OverrideMoveEffectAttr } from "#moves/override-move-effect-attr";
-import { HitCheckPhase } from "#phases/hit-check-phase";
-import type { AttackMoveResult } from "#types/attack-move-result";
-import type { DamageResult } from "#types/damage-result";
-import type { TurnMove } from "#types/turn-move";
+import { HitCheckPhase } from "#phases/base/hit-check-phase";
+import type { AttackMoveResult, DamageResult, TurnMove } from "#types/move-types";
 import { BooleanHolder, isNil, NumberHolder } from "#utils/common-utils";
 import { applyFilteredMoveAttrs, applyMoveAttrs, isFieldTargeted } from "#utils/move-utils";
 import i18next from "i18next";
 
 export class MoveEffectPhase extends HitCheckPhase {
-  override readonly id = PhaseId.MOVE_EFFECT;
+  public override readonly phaseName = "MoveEffectPhase";
 
   private moveHistoryEntry: TurnMove;
   /** The targets of the move after dynamic adjustments, e.g. from Dragon Darts */
@@ -233,11 +230,13 @@ export class MoveEffectPhase extends HitCheckPhase {
           // biome-ignore lint/suspicious/noFallthroughSwitchClause: intentional
           case HitCheckResult.NO_EFFECT:
             if (move.id === MoveId.SHEER_COLD) {
-              globalScene.phaseManager.queueMessagePhase(
+              globalScene.phaseManager.createAndUnshiftPhase(
+                "MessagePhase",
                 i18next.t("battle:hitResultImmune", { pokemonName: getPokemonNameWithAffix(target) }),
               );
             } else {
-              globalScene.phaseManager.queueMessagePhase(
+              globalScene.phaseManager.createAndUnshiftPhase(
+                "MessagePhase",
                 i18next.t("battle:hitResultNoEffect", { pokemonName: getPokemonNameWithAffix(target) }),
               );
             }
@@ -246,7 +245,8 @@ export class MoveEffectPhase extends HitCheckPhase {
             applyMoveAttrs(NoEffectAttr, user, target, move);
             break;
           case HitCheckResult.MISS:
-            globalScene.phaseManager.queueMessagePhase(
+            globalScene.phaseManager.createAndUnshiftPhase(
+              "MessagePhase",
               i18next.t("battle:attackMissed", { pokemonNameWithAffix: getPokemonNameWithAffix(target) }),
             );
             applyMoveAttrs(MissEffectAttr, user, target, move);
@@ -345,7 +345,7 @@ export class MoveEffectPhase extends HitCheckPhase {
     user.lapseTags(BattlerTagLapseType.MOVE_EFFECT);
 
     /** The indexes of active Pokemon that fall within the move's field effect */
-    const affectedPokemon: BattlerIndex[] = [];
+    const affectedPokemon: FieldBattlerIndex[] = [];
 
     if (this.targets.some((t) => [BattlerIndex.PLAYER_SIDE, BattlerIndex.BOTH_SIDES].includes(t))) {
       affectedPokemon.push(...globalScene.getPlayerField().map((p) => p.getBattlerIndex()));
@@ -532,7 +532,7 @@ export class MoveEffectPhase extends HitCheckPhase {
         targetBideTag?.updateAttackData(user, damage);
 
         if (isCritical) {
-          globalScene.phaseManager.queueMessagePhase(i18next.t("battle:hitResultCriticalHit"));
+          globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("battle:hitResultCriticalHit"));
         }
 
         // `.isFainted()` is here in case a multi hit move ends early
@@ -540,13 +540,19 @@ export class MoveEffectPhase extends HitCheckPhase {
         if (user.turnData.hitsLeft === 1 || target.isFainted()) {
           switch (result) {
             case HitResult.SUPER_EFFECTIVE:
-              globalScene.phaseManager.queueMessagePhase(i18next.t("battle:hitResultSuperEffective"));
+              globalScene.phaseManager.createAndUnshiftPhase(
+                "MessagePhase",
+                i18next.t("battle:hitResultSuperEffective"),
+              );
               break;
             case HitResult.NOT_VERY_EFFECTIVE:
-              globalScene.phaseManager.queueMessagePhase(i18next.t("battle:hitResultNotVeryEffective"));
+              globalScene.phaseManager.createAndUnshiftPhase(
+                "MessagePhase",
+                i18next.t("battle:hitResultNotVeryEffective"),
+              );
               break;
             case HitResult.ONE_HIT_KO:
-              globalScene.phaseManager.queueMessagePhase(i18next.t("battle:hitResultOneHitKO"));
+              globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("battle:hitResultOneHitKO"));
               break;
           }
         }
@@ -629,7 +635,10 @@ export class MoveEffectPhase extends HitCheckPhase {
         const hitsTotal = user.turnData.hitCount - Math.max(user.turnData.hitsLeft, 0);
         if (hitsTotal > 1 || user.turnData.hitsLeft > 0) {
           // If there are multiple hits, or if there are hits of the multi-hit move left
-          globalScene.phaseManager.queueMessagePhase(i18next.t("battle:attackHitsCount", { count: hitsTotal }));
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "MessagePhase",
+            i18next.t("battle:attackHitsCount", { count: hitsTotal }),
+          );
         }
         globalScene.applyModifiers(HitHealModifier, this.isPlayer, user);
         // Clear all cached move effectiveness values among targets

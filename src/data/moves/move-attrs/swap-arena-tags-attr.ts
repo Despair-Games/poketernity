@@ -10,7 +10,6 @@ import i18next from "i18next";
 /**
  * Swaps arena effects between the player and enemy side.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Court_Change_(move) | Court Change}
- * @extends MoveEffectAttr
  */
 export class SwapArenaTagsAttr extends MoveEffectAttr {
   constructor() {
@@ -50,7 +49,8 @@ export class SwapArenaTagsAttr extends MoveEffectAttr {
       }
     }
 
-    phaseManager.queueMessagePhase(
+    phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("moveTriggers:swapArenaTags", { pokemonName: getPokemonNameWithAffix(user) }),
     );
     return true;

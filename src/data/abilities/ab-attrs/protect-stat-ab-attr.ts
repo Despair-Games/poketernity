@@ -1,14 +1,13 @@
 import { PreStatStageChangeAbAttr } from "#abilities/pre-stat-stage-change-ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { getStatKey, type BattleStat } from "#enums/stat";
+import { type BattleStat, getStatKey } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
-import { isNil, type BooleanHolder } from "#utils/common-utils";
+import { type BooleanHolder, isNil } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
  * Protect one or all {@linkcode BattleStat} from reductions caused by other Pokémon's moves and Abilities
- * @extends PreStatStageChangeAbAttr
  */
 export class ProtectStatAbAttr extends PreStatStageChangeAbAttr {
   /** {@linkcode BattleStat} to protect or `undefined` if **all** {@linkcode BattleStat} are protected */

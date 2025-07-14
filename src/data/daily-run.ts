@@ -5,7 +5,7 @@ import type { PokemonSpeciesForm } from "#data/pokemon-species-form";
 import { speciesStarterCosts } from "#data/starters";
 import type { SpeciesId } from "#enums/species-id";
 import { PlayerPokemon } from "#field/player-pokemon";
-import type { StarterConfig } from "#types/starter-config";
+import type { StarterConfig } from "#types/starter-data";
 import { getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
 import { randSeedGauss, randSeedInt, randSeedItem } from "#utils/random-utils";
 

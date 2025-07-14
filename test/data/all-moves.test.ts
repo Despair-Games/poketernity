@@ -2,8 +2,7 @@ import { allMoves } from "#data/data-lists";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";
 import { MoveFlags } from "#enums/move-flags";
-import { MoveId } from "#enums/move-id";
-import type { Move } from "#moves/move";
+import { enumValueToKey } from "#utils/common-utils";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
@@ -41,7 +40,7 @@ describe("All Moves", async () => {
     18: MoveFlags.BULLET_MOVE,
     21: MoveFlags.DANCE_MOVE,
     22: MoveFlags.SLICING_MOVE,
-  };
+  } as const;
 
   /**
    * Custom Implementations as of 03/2025:
@@ -72,38 +71,34 @@ describe("All Moves", async () => {
   const moveData: MoveData[] = JSON.parse(file);
 
   it.each(moveData)("$identifier, if implemented, should have correct move data", async (move: MoveData) => {
-    const pktyMove = allMoves.get(move.id as MoveId) as Move;
+    const pktyMove = allMoves.get(move.id);
     if (pktyMove && !isUnimplemented(pktyMove.name)) {
-      expect(
-        pktyMove.type,
-        `Elemntal type of ${MoveId[pktyMove.id]} should be ${ElementalType[move.type_id - 1]} but is ${ElementalType[pktyMove.type]}`,
-      ).toBe(move.type_id - 1); // PokeAPI begins its list of types with the number 1
-      expect(
-        pktyMove.accuracy,
-        `Accuracy of ${MoveId[pktyMove.id]} should be ${move.accuracy} but is ${pktyMove.accuracy}`,
-      ).toBe(move.accuracy);
-      expect(
-        pktyMove.priority,
-        `Priority of ${MoveId[pktyMove.id]} should be ${move.priority} but is ${pktyMove.priority}`,
-      ).toBe(move.priority);
-      expect(pktyMove.power, `Power of ${MoveId[pktyMove.id]} should be ${move.power} but is ${pktyMove.power}`).toBe(
-        move.power,
-      );
-      expect(pktyMove.pp, `PP of ${MoveId[pktyMove.id]} should be ${move.pp} but is ${pktyMove.pp}`).toBe(move.pp);
-      expect(
-        pktyMove.category,
-        `Move category of ${MoveId[pktyMove.id]} should be ${MoveCategory[move.damage_class_id]} but is ${MoveCategory[pktyMove.category]}`,
-      ).toBe(move.damage_class_id);
-      expect(
-        pktyMove.chance,
-        `Chance of ${MoveId[pktyMove.id]} should be ${move.effect_chance} but is ${pktyMove.chance}`,
-      ).toBe(move.effect_chance);
+      const moveCompareMessage = `Elemntal type of "${pktyMove.name}" should be ${enumValueToKey(ElementalType, move.type_id as ElementalType)} but is ${enumValueToKey(ElementalType, pktyMove.type)}`;
+      expect(pktyMove.type, moveCompareMessage).toBe(move.type_id);
+
+      const accuracyCompareMessage = `Accuracy of "${pktyMove.name}" should be "${move.accuracy}" but is "${pktyMove.accuracy}"`;
+      expect(pktyMove.accuracy, accuracyCompareMessage).toBe(move.accuracy);
+
+      const priorityCompareMessage = `Priority of "${pktyMove.name}" should be "${move.priority}" but is "${pktyMove.priority}"`;
+      expect(pktyMove.priority, priorityCompareMessage).toBe(move.priority);
+
+      const powerCompareMessage = `Power of "${pktyMove.name}" should be "${move.power}" but is "${pktyMove.power}"`;
+      expect(pktyMove.power, powerCompareMessage).toBe(move.power);
+
+      expect(pktyMove.pp, `PP of "${pktyMove.name}" should be "${move.pp}" but is "${pktyMove.pp}"`).toBe(move.pp);
+
+      const categoryCompareMessage = `Move category of "${pktyMove.name}" should be "${MoveCategory[move.damage_class_id]}" but is "${MoveCategory[pktyMove.category]}"`;
+      expect(pktyMove.category, categoryCompareMessage).toBe(move.damage_class_id);
+
+      const chanceCompareMessage = `Chance of "${pktyMove.name}" should be "${move.effect_chance}" but is "${pktyMove.chance}"`;
+      expect(pktyMove.chance, chanceCompareMessage).toBe(move.effect_chance);
+
       if (Array.isArray(move.flags)) {
         for (const f of Object.keys(flagsToCheck)) {
           // @ts-expect-error - `hasFlag()` is private but we need to check for the existence of the flag
           const actualHasFlag = pktyMove.hasFlag(flagsToCheck[f]);
           const expectedHasFlag = move.flags.includes(Number(f));
-          const errOutput = `${MoveId[pktyMove.id]}'s usage of flag ${MoveFlags[flagsToCheck[f]]} should be ${expectedHasFlag} but is ${actualHasFlag}!`;
+          const errOutput = `Expected flag "${MoveFlags[flagsToCheck[f]]}" of "${pktyMove.name}" to be "${expectedHasFlag}" but got "${actualHasFlag}"!`;
           expect(actualHasFlag, errOutput).toBe(expectedHasFlag);
         }
       }

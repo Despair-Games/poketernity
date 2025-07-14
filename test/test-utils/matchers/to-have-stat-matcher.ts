@@ -1,5 +1,5 @@
 import { getPokemonNameWithAffix } from "#app/messages";
-import { Stat, type PermanentStat } from "#enums/stat";
+import { type PermanentStat, Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import { isPokemonInstance, receivedStr } from "#test/test-utils/test-utils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";

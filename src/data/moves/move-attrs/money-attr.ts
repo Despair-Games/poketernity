@@ -8,7 +8,6 @@ import i18next from "i18next";
  * Attribute to scatter coins on the field, to be collected by the player at the end of battle.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Pay_Day_(move) | Pay Day}
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Make_It_Rain_(move) | Make It Rain}.
- * @extends MoveEffectAttr
  */
 export class MoneyAttr extends MoveEffectAttr {
   constructor() {
@@ -17,7 +16,7 @@ export class MoneyAttr extends MoveEffectAttr {
 
   override applyEffect(_user: Pokemon, _target: Pokemon, _move: Move): boolean {
     globalScene.currentBattle.moneyScattered += globalScene.getWaveMoneyAmount(0.2);
-    globalScene.phaseManager.queueMessagePhase(i18next.t("moveTriggers:coinsScatteredEverywhere"));
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("moveTriggers:coinsScatteredEverywhere"));
     return true;
   }
 }

@@ -1,11 +1,10 @@
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveAttr } from "#moves/move-attr";
-import type { UserMoveConditionFunc } from "#types/user-move-condition-func";
+import type { UserMoveConditionFunc } from "#types/move-types";
 
 /**
  * Attribute to add an effect that triggers when the move misses.
- * @extends MoveAttr
  * @see {@linkcode missEffectFunc}
  */
 export class MissEffectAttr extends MoveAttr {

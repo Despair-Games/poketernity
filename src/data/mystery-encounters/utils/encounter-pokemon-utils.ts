@@ -33,7 +33,6 @@ import {
   queueEncounterMessage,
   showEncounterText,
 } from "#mystery-encounters/encounter-dialogue-utils";
-import { PostKnockoutPhase } from "#phases/post-knockout-phase";
 import { achvs } from "#system/achievements";
 import { settings } from "#system/settings-manager";
 import type { OptionSelectModeConfig } from "#ui/option-select-config";
@@ -671,7 +670,7 @@ export async function catchPokemon(
         if (!globalScene.getEnemyParty().some((p) => p.id === pokemon.id)) {
           globalScene.getEnemyParty().push(pokemon);
         }
-        globalScene.phaseManager.unshiftPhase(new PostKnockoutPhase(pokemon.id, true));
+        globalScene.phaseManager.createAndUnshiftPhase("PostKnockoutPhase", pokemon.id, true);
         globalScene.pokemonInfoContainer.hide();
         if (pokeball) {
           removePb(pokeball);

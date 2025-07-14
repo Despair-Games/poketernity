@@ -1,12 +1,10 @@
-// -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { initGameSpeed } from "#system/game-speed";
-/* eslint-enable @typescript-eslint/no-unused-vars */
-// -- end tsdoc imports --
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { MAX_STAT_STAGE, MIN_STAT_STAGE } from "#constants/game-constants";
 import type { Pokemon } from "#field/pokemon";
-import type { nil } from "#types/nil";
+import type { nil } from "#types/utility-types";
 
 export function getFrameMs(frameCount: number): number {
   return Math.floor((1 / 60) * 1000 * frameCount);

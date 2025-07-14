@@ -1,15 +1,13 @@
 import { globalScene } from "#app/global-scene";
 import { FRIENDSHIP_GAIN_PER_WAVE } from "#constants/friendship-constants";
-import { PhaseId } from "#enums/phase-id";
 import { EncounterPhase } from "#phases/encounter-phase";
+import type { PhaseKey } from "#types/phase-types";
 
 /**
  * Triggers the next encounter (no biome change)
- * @extends EncounterPhase
  */
 export class NextEncounterPhase extends EncounterPhase {
-  /** @override **Must** use generic {@linkcode PhaseId} since {@linkcode NextEncounterPhase} is extended by other phases */
-  override readonly id: PhaseId = PhaseId.NEXT_ENCOUNTER;
+  public override readonly phaseName: PhaseKey = "NextEncounterPhase";
 
   protected override doEncounter(): void {
     const { arena, arenaEnemy, arenaNextEnemy, currentBattle, field, lastEnemyTrainer, lastMysteryEncounter, tweens } =

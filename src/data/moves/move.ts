@@ -47,25 +47,21 @@ import { UseHigherAttackingStatAttr } from "#moves/use-higher-attacking-stat-att
 import { VariableAccuracyAttr } from "#moves/variable-accuracy-attr";
 import { VariablePowerAttr } from "#moves/variable-power-attr";
 import { VariableTargetAttr } from "#moves/variable-target-attr";
-import type { AbstractConstructor } from "#types/abstract-constructor";
-import type { Constructor } from "#types/constructor";
-import type { Localizable } from "#types/locales";
-import type { MoveConditionFunc } from "#types/move-condition-func";
-import type { nil } from "#types/nil";
+import type { MoveConditionFunc } from "#types/move-types";
+import type { AbstractConstructor, Constructor, nil } from "#types/utility-types";
 import { BooleanHolder, NumberHolder } from "#utils/common-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
+import { toCamelCaseString } from "#utils/string-utils";
 import i18next from "i18next";
 
-export abstract class Move implements Localizable {
+export abstract class Move {
   public id: MoveId;
-  public name: string;
   private _type: ElementalType;
   private _category: MoveCategory;
   public moveTarget: MoveTarget;
   public power: number;
   public accuracy: number;
   public pp: number;
-  public effect: string;
   /** The chance of a move's secondary effects activating */
   public chance: number;
   public priority: number;
@@ -105,8 +101,30 @@ export abstract class Move implements Localizable {
     if (category === MoveCategory.PHYSICAL) {
       this.setFlag(MoveFlags.MAKES_CONTACT, true);
     }
+  }
 
-    this.localize();
+  /**
+   * The move's localized name. May also include a {@linkcode nameAppend | tag} if
+   * the move is not fully implemented.
+   */
+  public get name(): string {
+    return this.id ? `${i18next.t(`move:${this.i18nKey}.name`)}${this.nameAppend}` : "";
+  }
+
+  /**
+   * The move's localized effect description. May also include a {@linkcode nameAppend | tag}
+   * if the move is not fully implemented.
+   */
+  public get effect(): string {
+    return this.id ? `${i18next.t(`move:${this.i18nKey}.effect`)}${this.nameAppend}` : "";
+  }
+
+  /**
+   * The i18n key for this move in camel-case, i.e. "moveName".
+   * Used to localize the move's {@linkcode name} and {@linkcode effect}.
+   */
+  private get i18nKey(): string {
+    return toCamelCaseString(MoveId[this.id]);
   }
 
   get type() {
@@ -114,17 +132,6 @@ export abstract class Move implements Localizable {
   }
   get category() {
     return this._category;
-  }
-
-  localize(): void {
-    const i18nKey = MoveId[this.id]
-      .split("_")
-      .filter((f) => f)
-      .map((f, i) => (i ? `${f[0]}${f.slice(1).toLowerCase()}` : f.toLowerCase()))
-      .join("") as unknown as string;
-
-    this.name = this.id ? `${i18next.t(`move:${i18nKey}.name`)}${this.nameAppend}` : "";
-    this.effect = this.id ? `${i18next.t(`move:${i18nKey}.effect`)}${this.nameAppend}` : "";
   }
 
   /**
@@ -956,9 +963,9 @@ export class AttackMove extends Move {
     attackScore = Math.pow(effectiveness - 1, 2) * effectiveness < 1 ? -2 : 2;
     if (attackScore) {
       if (this.category === MoveCategory.PHYSICAL) {
-        const atk = new NumberHolder(user.getEffectiveStat(Stat.ATK, target));
-        if (atk.value > user.getEffectiveStat(Stat.SPATK, target)) {
-          const statRatio = user.getEffectiveStat(Stat.SPATK, target) / atk.value;
+        const atk = new NumberHolder(user.getEffectiveStat(Stat.ATK, { opponent: target }));
+        if (atk.value > user.getEffectiveStat(Stat.SPATK, { opponent: target })) {
+          const statRatio = user.getEffectiveStat(Stat.SPATK, { opponent: target }) / atk.value;
           if (statRatio <= 0.75) {
             attackScore *= 2;
           } else if (statRatio <= 0.875) {
@@ -966,9 +973,9 @@ export class AttackMove extends Move {
           }
         }
       } else {
-        const spAtk = new NumberHolder(user.getEffectiveStat(Stat.SPATK, target));
-        if (spAtk.value > user.getEffectiveStat(Stat.ATK, target)) {
-          const statRatio = user.getEffectiveStat(Stat.ATK, target) / spAtk.value;
+        const spAtk = new NumberHolder(user.getEffectiveStat(Stat.SPATK, { opponent: target }));
+        if (spAtk.value > user.getEffectiveStat(Stat.ATK, { opponent: target })) {
+          const statRatio = user.getEffectiveStat(Stat.ATK, { opponent: target }) / spAtk.value;
           if (statRatio <= 0.75) {
             attackScore *= 2;
           } else if (statRatio <= 0.875) {
@@ -1026,10 +1033,10 @@ export type ChargingMove = ChargingAttackMove | ChargingSelfStatusMove;
 
 export type MoveAttrFilter = (attr: MoveAttr) => boolean;
 
-export type MoveTargetSet = {
+export interface MoveTargetSet {
   targets: BattlerIndex[];
   multiple: boolean;
-};
+}
 
 export function getMoveTargets(user: Pokemon, moveId: MoveId, replaceTarget?: MoveTarget): MoveTargetSet {
   const variableTarget = new NumberHolder(0);

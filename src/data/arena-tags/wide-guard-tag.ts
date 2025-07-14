@@ -4,7 +4,7 @@ import type { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveId } from "#enums/move-id";
 import { MoveTarget } from "#enums/move-target";
-import type { ProtectConditionFunc } from "#types/protect-condition-func";
+import type { ProtectConditionFunc } from "#types/move-types";
 
 /**
  * Condition function for {@link https://bulbapedia.bulbagarden.net/wiki/Wide_Guard_(move) Wide Guard's}
@@ -28,9 +28,9 @@ const WideGuardConditionFunc: ProtectConditionFunc = (_arena, moveId): boolean =
 
 /**
  * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Wide_Guard_(move) Wide Guard}.
+ *
  * *Condition:* The incoming move can target multiple Pokemon. The move's source
  * can be an ally or enemy.
- * @extends ConditionalProtectTag
  */
 export class WideGuardTag extends ConditionalProtectTag {
   constructor(sourceId: number, side: ArenaTagSide) {

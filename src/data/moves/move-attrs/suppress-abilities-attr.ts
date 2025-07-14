@@ -3,21 +3,21 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 import i18next from "i18next";
 
 /**
  * Attribute used for moves that suppress abilities like {@linkcode MoveId.GASTRO_ACID}.
  * A suppressed ability cannot be activated.
  *
- * @extends MoveEffectAttr
  */
 export class SuppressAbilitiesAttr extends MoveEffectAttr {
   override applyEffect(_user: Pokemon, target: Pokemon, _move: Move): boolean {
     target.summonData.abilitySuppressed = true;
     globalScene.arena.triggerWeatherBasedFormChangesToNormal();
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("moveTriggers:suppressAbilities", { pokemonName: getPokemonNameWithAffix(target) }),
     );
 

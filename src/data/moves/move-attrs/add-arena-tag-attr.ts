@@ -6,7 +6,7 @@ import { MoveTarget } from "#enums/move-target";
 import type { Pokemon } from "#field/pokemon";
 import { ChanceBasedMoveEffectAttr, type ChanceBasedMoveEffectAttrOptions } from "#moves/chance-based-move-effect-attr";
 import type { Move } from "#moves/move";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 
 interface AddArenaTagAttrOptions extends ChanceBasedMoveEffectAttrOptions {
   /** The number of turns the tag is in effect */
@@ -17,7 +17,6 @@ interface AddArenaTagAttrOptions extends ChanceBasedMoveEffectAttrOptions {
 
 /**
  * Attribute to add an arena tag to the field of a given {@linkcode ArenaTagType | type}.
- * @extends ChanceBasedMoveEffectAttr
  */
 export class AddArenaTagAttr extends ChanceBasedMoveEffectAttr {
   protected readonly tagType: ArenaTagType;

@@ -8,8 +8,8 @@ import type { NumberHolder } from "#utils/common-utils";
 /**
  * Attribute used for Bleakwind Storm, Wildbolt Storm, and Sandsear Storm
  * that sets accuracy to never miss in rain.
+ *
  * Springtide Storm does NOT have this property
- * @extends VariableAccuracyAttr
  */
 export class StormAccuracyAttr extends VariableAccuracyAttr {
   override apply(_user: Pokemon, _target: Pokemon, _move: Move, accuracy: NumberHolder): boolean {

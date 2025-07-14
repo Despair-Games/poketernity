@@ -4,7 +4,7 @@ import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
 import { CallMoveAttr } from "#moves/call-move-attr";
 import type { Move } from "#moves/move";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 import type { BooleanHolder } from "#utils/common-utils";
 import { getMaxMoveList } from "#utils/move-utils";
 
@@ -13,7 +13,6 @@ import { getMaxMoveList } from "#utils/move-utils";
  * Used for {@linkcode MoveId.ASSIST} and {@linkcode MoveId.SLEEP_TALK}
  *
  * Fails if the user has no callable moves.
- * @extends CallMoveAttr
  * @see {@linkcode getCondition} for move selection
  */
 export class RandomMovesetMoveAttr extends CallMoveAttr {

@@ -1,5 +1,4 @@
-// -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { AbAttr } from "#abilities/ab-attr";
 import type { AddSecondStrikeAbAttr } from "#abilities/add-second-strike-ab-attr";
 import type { AlliedFieldDamageReductionAbAttr } from "#abilities/allied-field-damage-reduction-ab-attr";
@@ -72,7 +71,6 @@ import type { PostTurnAbAttr } from "#abilities/post-turn-ab-attr";
 import type { PostVictoryAbAttr } from "#abilities/post-victory-ab-attr";
 import type { PostWeatherChangeAbAttr } from "#abilities/post-weather-change-ab-attr";
 import type { PostWeatherLapseAbAttr } from "#abilities/post-weather-lapse-ab-attr";
-import type { PreDefendFullHpEndureAbAttr } from "#abilities/pre-defend-full-hp-endure-ab-attr";
 import type { PreSwitchOutAbAttr } from "#abilities/pre-switch-out-ab-attr";
 import type { PreWeatherDamageAbAttr } from "#abilities/pre-weather-damage-ab-attr";
 import type { PreventBerryUseAbAttr } from "#abilities/prevent-berry-use-ab-attr";
@@ -93,6 +91,7 @@ import type { StatMultiplierAbAttr } from "#abilities/stat-multiplier-ab-attr";
 import type { StatStageChangeCopyAbAttr } from "#abilities/stat-stage-change-copy-ab-attr";
 import type { StatStageChangeMultiplierAbAttr } from "#abilities/stat-stage-change-multiplier-ab-attr";
 import type { StatusEffectImmunityAbAttr } from "#abilities/status-effect-immunity-ab-attr";
+import type { SturdyAbAttr } from "#abilities/sturdy-ab-attr";
 import type { SuppressFieldAbilitiesAbAttr } from "#abilities/suppress-field-abilities-ab-attr";
 import type { SuppressWeatherEffectAbAttr } from "#abilities/suppress-weather-effect-ab-attr";
 import type { SyncEncounterNatureAbAttr } from "#abilities/sync-encounter-nature-ab-attr";
@@ -105,8 +104,9 @@ import type { UserFieldStatusEffectImmunityAbAttr } from "#abilities/user-field-
 import type { VariableMovePowerAbAttr } from "#abilities/variable-move-power-ab-attr";
 import type { WeightMultiplierAbAttr } from "#abilities/weight-multiplier-ab-attr";
 import type { WonderSkinAbAttr } from "#abilities/wonder-skin-ab-attr";
-/* eslint-enable @typescript-eslint/no-unused-vars */
-// -- end tsdoc imports --
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
+
+import type { EnumValues } from "#types/utility-types";
 
 export const AbAttrFlag = {
   /** @see {@linkcode AbAttr} */
@@ -265,8 +265,8 @@ export const AbAttrFlag = {
   DAMAGE_BOOST: 79,
   /** @see {@linkcode AlliedFieldDamageReductionAbAttr} */
   ALLIED_FIELD_DAMAGE_REDUCTION: 80,
-  /** @see {@linkcode PreDefendFullHpEndureAbAttr} */
-  PRE_DEFEND_FULL_HP_ENDURE: 81,
+  /** @see {@linkcode SturdyAbAttr} */
+  STURDY: 81,
   /** @see {@linkcode ConditionalCritAbAttr} */
   CONDITIONAL_CRIT: 82,
   /** @see {@linkcode BlockCritAbAttr} */
@@ -331,4 +331,4 @@ export const AbAttrFlag = {
   BAD_DREAMS: 112,
 } as const;
 
-export type AbAttrFlag = (typeof AbAttrFlag)[keyof typeof AbAttrFlag];
+export type AbAttrFlag = EnumValues<typeof AbAttrFlag>;

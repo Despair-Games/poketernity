@@ -5,13 +5,12 @@ import { SpeciesFormChangeManualTrigger } from "#form-change-triggers/species-fo
 
 /**
  * Attribute for form changes that occur on switching out
- * @extends PreSwitchOutAbAttr
  * @see {@linkcode applyPreSwitchOut}
  */
 export class PreSwitchOutFormChangeAbAttr extends PreSwitchOutAbAttr {
-  private readonly formFunc: (p: Pokemon) => integer;
+  private readonly formFunc: (p: Pokemon) => number;
 
-  constructor(formFunc: (p: Pokemon) => integer) {
+  constructor(formFunc: (p: Pokemon) => number) {
     super();
 
     this.formFunc = formFunc;

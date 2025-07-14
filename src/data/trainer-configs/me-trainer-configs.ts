@@ -1,10 +1,10 @@
 import {
   getRandomPartyMemberFunc,
   TrainerConfig,
+  type TrainerConfigs,
   TrainerPartyCompoundTemplate,
   TrainerPartyTemplate,
   trainerPartyTemplates,
-  type TrainerConfigs,
 } from "#data/trainer-config";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { PokeballType } from "#enums/pokeball-type";

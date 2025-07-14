@@ -4,16 +4,13 @@ import { SwitchType } from "#enums/switch-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import { RevivalBlessingPhase } from "#phases/revival-blessing-phase";
-import { SwitchSummonPhase } from "#phases/switch-summon-phase";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 import { toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
  * Attribute to revive a Pokemon in the user's party to 50% HP.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Revival_Blessing_(move) | Revival Blessing}
- * @extends MoveEffectAttr
  */
 export class RevivalBlessingAttr extends MoveEffectAttr {
   constructor() {
@@ -23,7 +20,7 @@ export class RevivalBlessingAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
     // If user is player, checks if the user has fainted pokemon
     if (user.isPlayer()) {
-      globalScene.phaseManager.unshiftPhase(new RevivalBlessingPhase(user));
+      globalScene.phaseManager.createAndUnshiftPhase("RevivalBlessingPhase", user);
       return true;
     }
     if (user.isEnemy()) {
@@ -34,7 +31,8 @@ export class RevivalBlessingAttr extends MoveEffectAttr {
       const slotIndex = globalScene.getEnemyParty().findIndex((p) => pokemon.id === p.id);
       pokemon.resetStatus();
       pokemon.heal(Math.min(toDmgValue(0.5 * pokemon.getMaxHp()), pokemon.getMaxHp()));
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("moveTriggers:revivalBlessing", { pokemonName: getPokemonNameWithAffix(pokemon) }),
         0,
         true,
@@ -43,12 +41,22 @@ export class RevivalBlessingAttr extends MoveEffectAttr {
       if (globalScene.currentBattle.double && globalScene.getEnemyParty().length > 1) {
         const allyPokemon = user.getAlly();
         if (slotIndex <= 1) {
-          globalScene.phaseManager.unshiftPhase(
-            new SwitchSummonPhase(SwitchType.SWITCH, pokemon.getFieldIndex(), slotIndex, false, false),
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "SwitchSummonPhase",
+            SwitchType.SWITCH,
+            pokemon.getFieldIndex(),
+            slotIndex,
+            false,
+            false,
           );
         } else if (allyPokemon?.isFainted()) {
-          globalScene.phaseManager.unshiftPhase(
-            new SwitchSummonPhase(SwitchType.SWITCH, allyPokemon.getFieldIndex(), slotIndex, false, false),
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "SwitchSummonPhase",
+            SwitchType.SWITCH,
+            allyPokemon.getFieldIndex(),
+            slotIndex,
+            false,
+            false,
           );
         }
       }

@@ -1,6 +1,5 @@
 import { getPokemonNameWithAffix } from "#app/messages";
-import { AbilityApplyMode } from "#enums/ability-apply-mode";
-import { Stat, type EffectiveStat } from "#enums/stat";
+import { type EffectiveStat, Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { isPokemonInstance, receivedStr } from "#test/test-utils/test-utils";
@@ -46,7 +45,11 @@ export function toHaveEffectiveStatMatcher(
     };
   }
 
-  const actualValue = received.getEffectiveStat(stat, enemy, move, AbilityApplyMode.DEFAULT, isCritical);
+  const actualValue = received.getEffectiveStat(stat, {
+    opponent: enemy,
+    move,
+    isCritical,
+  });
   const pass = actualValue === expectedValue;
 
   const pkmName = getPokemonNameWithAffix(received);

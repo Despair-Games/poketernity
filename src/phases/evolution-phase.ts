@@ -1,21 +1,17 @@
-// -- start tsdoc imports --
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { FormChangePhase } from "#phases/form-change-phase";
-// -- end tsdoc imports --
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import type { AnySound } from "#app/audio-manager";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { SpeciesFormEvolution } from "#data/pokemon-evolutions";
 import { EVOLVE_MOVE } from "#data/pokemon-level-moves";
-import { PhaseId } from "#enums/phase-id";
 import type { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
-import { FormChangeBasePhase } from "#phases/abstract-form-change-base-phase";
-import { EndEvolutionPhase } from "#phases/end-evolution-phase";
-import { LearnMovePhase } from "#phases/learn-move-phase";
+import { FormChangeBasePhase } from "#phases/base/form-change-base-phase";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { BooleanHolder, fixedNumber } from "#utils/common-utils";
@@ -26,10 +22,9 @@ import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 /**
  * A phase for handling Pokemon evolution
  * @see {@linkcode FormChangePhase} for general form changes
- * @extends FormChangeBasePhase
  */
 export class EvolutionPhase extends FormChangeBasePhase {
-  override readonly id = PhaseId.EVOLUTION;
+  public override readonly phaseName = "EvolutionPhase";
 
   protected readonly lastLevel: number;
 
@@ -169,7 +164,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
 
     SoundFade.fadeOut(globalScene, this.evolutionBgm, 100);
 
-    globalScene.phaseManager.unshiftPhase(new EndEvolutionPhase());
+    globalScene.phaseManager.createAndUnshiftPhase("EndEvolutionPhase");
 
     ui.showText(
       i18next.t("menu:stoppedEvolving", { pokemonName: this.preEvolvedPokemonName }),
@@ -270,11 +265,13 @@ export class EvolutionPhase extends FormChangeBasePhase {
           .getLevelMoves(this.lastLevel + 1, true, false, false)
           .filter((lm) => lm[0] === EVOLVE_MOVE);
         for (const lm of levelMoves) {
-          globalScene.phaseManager.unshiftPhase(
-            new LearnMovePhase(globalScene.getPlayerParty().indexOf(this.pokemon), lm[1]),
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "LearnMovePhase",
+            globalScene.getPlayerParty().indexOf(this.pokemon),
+            lm[1],
           );
         }
-        globalScene.phaseManager.unshiftPhase(new EndEvolutionPhase());
+        globalScene.phaseManager.createAndUnshiftPhase("EndEvolutionPhase");
 
         globalScene.audioManager.playSound("se/shine");
         animations.doSpray(this.baseBgImg, this.container);

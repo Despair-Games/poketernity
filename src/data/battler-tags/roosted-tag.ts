@@ -9,7 +9,6 @@ import type { Pokemon } from "#field/pokemon";
 /**
  * Tag representing the secondary effect of {@link https://bulbapedia.bulbagarden.net/wiki/Roost_(move) | Roost}.
  * Removes Flying type from the owner for the rest of the turn.
- * @extends BattlerTag
  */
 export class RoostedTag extends BattlerTag {
   private isBaseFlying: boolean;

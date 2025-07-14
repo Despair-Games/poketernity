@@ -1,6 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
-import { PhaseId } from "#enums/phase-id";
 import { SpeciesId } from "#enums/species-id";
 import { BATTLE_STATS, EFFECTIVE_STATS, Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/game-manager";
@@ -133,7 +132,7 @@ describe("Moves - Transform", () => {
     await game.move.selectEnemyMove(MoveId.MEMENTO);
     await game.toNextWave();
 
-    expect(game.scene.phaseManager.getCurrentPhase()?.id).toBe(PhaseId.COMMAND);
+    expect(game.scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
     expect(game.scene.currentBattle.waveIndex).toBe(2);
 
     await game.reload.reloadSession();

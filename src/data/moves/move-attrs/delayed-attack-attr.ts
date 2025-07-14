@@ -1,3 +1,4 @@
+import { MoveChargeAnim } from "#animations/move-charge-anim";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { DelayedAttackTag } from "#arena-tags/delayed-attack-tag";
@@ -7,7 +8,7 @@ import { MoveResult } from "#enums/move-result";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { OverrideMoveEffectAttr } from "#moves/override-move-effect-attr";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 import type { BooleanHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
@@ -15,7 +16,6 @@ import i18next from "i18next";
  * Attack Move that doesn't hit the turn it is played and doesn't allow for multiple uses on the same target.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Future_Sight_(move) | Future Sight}
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Doom_Desire_(move) | Doom Desire}.
- * @extends OverrideMoveEffectAttr
  */
 export class DelayedAttackAttr extends OverrideMoveEffectAttr {
   public chargeAnim: ChargeAnim;
@@ -44,8 +44,12 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
 
     if (!virtual) {
       overridden.value = true;
-      globalScene.phaseManager.queueMoveAnimPhase(this.chargeAnim, move.id, user);
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MoveAnimPhase",
+        new MoveChargeAnim(this.chargeAnim, move.id, user),
+      );
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         this.chargeText
           .replace("{TARGET}", getPokemonNameWithAffix(target))
           .replace("{USER}", getPokemonNameWithAffix(user)),
@@ -64,7 +68,8 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
 
       return true;
     }
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("moveTriggers:tookMoveAttack", {
         pokemonName: getPokemonNameWithAffix(globalScene.getPokemonById(target.id) ?? undefined),
         moveName: move.name,

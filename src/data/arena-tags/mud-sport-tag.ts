@@ -9,7 +9,6 @@ import i18next from "i18next";
 /**
  * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Mud_Sport_(move) Mud Sport}.
  * Weakens Electric type moves for a set amount of turns, usually 5.
- * @extends WeakenMoveTypeTag
  */
 export class MudSportTag extends WeakenMoveTypeTag {
   constructor(turnCount: number, sourceId: number) {
@@ -17,10 +16,10 @@ export class MudSportTag extends WeakenMoveTypeTag {
   }
 
   override onAdd(_arena: Arena): void {
-    globalScene.phaseManager.queueMessagePhase(i18next.t("arenaTag:mudSportOnAdd"));
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("arenaTag:mudSportOnAdd"));
   }
 
   override onRemove(_arena: Arena): void {
-    globalScene.phaseManager.queueMessagePhase(i18next.t("arenaTag:mudSportOnRemove"));
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("arenaTag:mudSportOnRemove"));
   }
 }

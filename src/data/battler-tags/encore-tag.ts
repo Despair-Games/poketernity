@@ -12,7 +12,6 @@ import i18next from "i18next";
 /**
  * Applies the effects of the move Encore onto the target Pokemon.
  * Encore forces the target Pokemon to use its most-recent move for 3 turns
- * @extends MoveRestrictionBattlerTag
  */
 export class EncoreTag extends MoveRestrictionBattlerTag {
   public moveId: MoveId;
@@ -40,7 +39,8 @@ export class EncoreTag extends MoveRestrictionBattlerTag {
     const lastMove = pokemon.getLastXMoves(-1).filter((mv) => !mv.virtual)[0];
     this.moveId = lastMove?.move.id;
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:encoreOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
 
@@ -91,7 +91,8 @@ export class EncoreTag extends MoveRestrictionBattlerTag {
   override onRemove(pokemon: Pokemon): void {
     super.onRemove(pokemon);
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:encoreOnRemove", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }

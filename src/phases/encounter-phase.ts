@@ -1,9 +1,7 @@
-// -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { NewBiomeEncounterPhase } from "#phases/new-biome-encounter-phase";
 import type { NextEncounterPhase } from "#phases/next-encounter-phase";
-/* eslint-enable @typescript-eslint/no-unused-vars */
-// -- end tsdoc imports --
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { SyncEncounterNatureAbAttr } from "#abilities/sync-encounter-nature-ab-attr";
@@ -20,10 +18,9 @@ import { BattleType } from "#enums/battle-type";
 import { BattlerIndex } from "#enums/battler-index";
 import { BiomeId } from "#enums/biome-id";
 import { FieldPosition } from "#enums/field-position";
-import { ImagesFolder } from "#enums/images-folders";
+import { ImagesFolder } from "#enums/images-folder";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
-import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
@@ -42,31 +39,23 @@ import { regenerateModifierPoolThresholds } from "#modifier/modifier-type";
 import { getEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import { doTrainerExclamation } from "#mystery-encounters/encounter-phase-utils";
 import { getGoldenBugNetSpecies } from "#mystery-encounters/encounter-pokemon-utils";
-import { BattlePhase } from "#phases/abstract-battle-phase";
-import { CheckSwitchPhase } from "#phases/check-switch-phase";
-import { MysteryEncounterPhase } from "#phases/mystery-encounter-phases/mystery-encounter-phase";
-import { PostSummonPhase } from "#phases/post-summon-phase";
-import { ReturnPhase } from "#phases/return-phase";
-import { ScanIvsPhase } from "#phases/scan-ivs-phase";
-import { ShinySparklePhase } from "#phases/shiny-sparkle-phase";
-import { SummonPhase } from "#phases/summon-phase";
-import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
 import { achvs } from "#system/achievements";
 import { settings } from "#system/settings-manager";
+import type { PhaseKey } from "#types/phase-types";
 import { loadEncounterAnimAssets } from "#utils/anim-utils";
 import { randSeedInt, randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
 /**
- * Starts the first encounter (wave 1) of a new run. Subsequent encounters are handled by
+ * Starts the first encounter (wave 1) of a new run.
+ *
+ * Subsequent encounters are handled by
  * {@linkcode NextEncounterPhase} and {@linkcode NewBiomeEncounterPhase},
  * or {@linkcode MysteryEncounterPhase} for Mystery Encounters.
- *
- * @extends BattlePhase
  */
 export class EncounterPhase extends BattlePhase {
-  /** @override **Must** use generic {@linkcode PhaseId} since {@linkcode EncounterPhase} is extended by other phases */
-  override readonly id: PhaseId = PhaseId.ENCOUNTER;
+  public override readonly phaseName: PhaseKey = "EncounterPhase";
 
   private readonly loaded: boolean;
 
@@ -449,9 +438,9 @@ export class EncounterPhase extends BattlePhase {
         const doTrainerSummon = (): void => {
           this.hideEnemyTrainer();
           const availablePartyMembers = globalScene.getEnemyParty().filter((p) => !p.isFainted()).length;
-          globalScene.phaseManager.unshiftPhase(new SummonPhase(0, false));
+          globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", 0, false);
           if (double && availablePartyMembers > 1) {
-            globalScene.phaseManager.unshiftPhase(new SummonPhase(1, false));
+            globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", 1, false);
           }
           this.end();
         };
@@ -501,9 +490,9 @@ export class EncounterPhase extends BattlePhase {
       const doEncounter = (): void => {
         const doShowEncounterOptions = (): void => {
           ui.clearText();
-          ui.getMessageHandler().hideNameText();
+          ui.getMessageHandler()?.hideNameText();
 
-          globalScene.phaseManager.unshiftPhase(new MysteryEncounterPhase());
+          globalScene.phaseManager.createAndUnshiftPhase("MysteryEncounterPhase");
           this.end();
         };
 
@@ -550,13 +539,13 @@ export class EncounterPhase extends BattlePhase {
   }
 
   public override end(): void {
-    const { currentBattle, gameMode } = globalScene;
+    const { currentBattle, gameMode, phaseManager } = globalScene;
     const { battleType, double, waveIndex } = currentBattle;
     const enemyField = globalScene.getEnemyField();
 
     enemyField.forEach((enemyPokemon, e) => {
       if (enemyPokemon.isShiny()) {
-        globalScene.phaseManager.unshiftPhase(new ShinySparklePhase(BattlerIndex.ENEMY + e));
+        phaseManager.createAndUnshiftPhase("ShinySparklePhase", BattlerIndex.ENEMY + e);
       }
       // This sets Eternatus' held item to be untransferrable, preventing it from being stolen
       if (
@@ -577,7 +566,7 @@ export class EncounterPhase extends BattlePhase {
 
     if (battleType !== BattleType.TRAINER && battleType !== BattleType.MYSTERY_ENCOUNTER) {
       enemyField.map((p) =>
-        globalScene.phaseManager.pushConditionalPhase(new PostSummonPhase(p.getBattlerIndex()), () => {
+        phaseManager.pushConditionalPhase(phaseManager.createPhase("PostSummonPhase", p.getBattlerIndex()), () => {
           if (!globalScene.getPlayerParty().length) {
             return false;
           }
@@ -595,8 +584,10 @@ export class EncounterPhase extends BattlePhase {
       const ivScannerModifier = globalScene.findModifier((m) => m instanceof IvScannerModifier);
       if (ivScannerModifier) {
         enemyField.map((p) =>
-          globalScene.phaseManager.pushPhase(
-            new ScanIvsPhase(p.getBattlerIndex(), Math.min(ivScannerModifier.getStackCount() * 2, 6)),
+          globalScene.phaseManager.createAndPushPhase(
+            "ScanIvsPhase",
+            p.getBattlerIndex(),
+            Math.min(ivScannerModifier.getStackCount() * 2, 6),
           ),
         );
       }
@@ -606,29 +597,29 @@ export class EncounterPhase extends BattlePhase {
       const availablePartyMembers = globalScene.getPokemonAllowedInBattle();
 
       if (!availablePartyMembers[0].isOnField()) {
-        globalScene.phaseManager.pushPhase(new SummonPhase(0));
+        globalScene.phaseManager.createAndPushPhase("SummonPhase", 0);
       }
 
       if (double) {
         if (availablePartyMembers.length > 1) {
-          globalScene.phaseManager.pushPhase(new ToggleDoublePositionPhase(true));
+          globalScene.phaseManager.createAndPushPhase("ToggleDoublePositionPhase", true);
           if (!availablePartyMembers[1].isOnField()) {
-            globalScene.phaseManager.pushPhase(new SummonPhase(1));
+            globalScene.phaseManager.createAndPushPhase("SummonPhase", 1);
           }
         }
       } else {
         if (availablePartyMembers.length > 1 && availablePartyMembers[1].isOnField()) {
-          globalScene.phaseManager.pushPhase(new ReturnPhase(1));
+          globalScene.phaseManager.createAndPushPhase("ReturnPhase", 1);
         }
-        globalScene.phaseManager.pushPhase(new ToggleDoublePositionPhase(false));
+        globalScene.phaseManager.createAndPushPhase("ToggleDoublePositionPhase", false);
       }
 
       if (battleType !== BattleType.TRAINER && (waveIndex > 1 || !gameMode.isDaily)) {
         const minPartySize = double ? 2 : 1;
         if (availablePartyMembers.length > minPartySize) {
-          globalScene.phaseManager.pushPhase(new CheckSwitchPhase(0, double));
+          globalScene.phaseManager.createAndPushPhase("CheckSwitchPhase", 0, double);
           if (double) {
-            globalScene.phaseManager.pushPhase(new CheckSwitchPhase(1, double));
+            globalScene.phaseManager.createAndPushPhase("CheckSwitchPhase", 1, double);
           }
         }
       }

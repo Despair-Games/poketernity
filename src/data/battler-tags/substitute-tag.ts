@@ -5,17 +5,14 @@ import { DamagingTrapTag } from "#battler-tags/damaging-trap-tag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
-import { PhaseId } from "#enums/phase-id";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import type { Pokemon } from "#field/pokemon";
-import type { MoveEffectPhase } from "#phases/move-effect-phase";
 import i18next from "i18next";
 
 /**
  * Tag implementing the {@link https://bulbapedia.bulbagarden.net/wiki/Substitute_(doll)#Effect | Substitute Doll} effect,
  * for use with the moves Substitute and Shed Tail. Pokemon with this tag deflect most forms of received attack damage
  * onto the tag. This tag also grants immunity to most Status moves and several move effects.
- * @extends BattlerTag
  */
 export class SubstituteTag extends BattlerTag {
   /** The substitute's remaining HP. If HP is depleted, the Substitute fades. */
@@ -44,12 +41,14 @@ export class SubstituteTag extends BattlerTag {
     // Queue battle animation and message
     globalScene.triggerPokemonBattleAnim(pokemon, PokemonAnimType.SUBSTITUTE_ADD);
     if (this.sourceMoveId === MoveId.SHED_TAIL) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("battlerTags:shedTailOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
         1500,
       );
     } else {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("battlerTags:substituteOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
         1500,
       );
@@ -67,7 +66,8 @@ export class SubstituteTag extends BattlerTag {
     } else {
       this.sprite.destroy();
     }
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:substituteOnRemove", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }
@@ -102,7 +102,7 @@ export class SubstituteTag extends BattlerTag {
   /** If the Substitute redirects damage, queue a message to indicate it. */
   onHit(pokemon: Pokemon): void {
     const moveEffectPhase = globalScene.phaseManager.getCurrentPhase();
-    if (moveEffectPhase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT)) {
+    if (moveEffectPhase?.is("MoveEffectPhase")) {
       const attacker = moveEffectPhase.getUserPokemon();
       if (!attacker) {
         return;
@@ -111,7 +111,8 @@ export class SubstituteTag extends BattlerTag {
       const firstHit = attacker.turnData.hitCount === attacker.turnData.hitsLeft;
 
       if (firstHit && move.hitsSubstitute(attacker, pokemon)) {
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           i18next.t("battlerTags:substituteOnHit", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
         );
       }

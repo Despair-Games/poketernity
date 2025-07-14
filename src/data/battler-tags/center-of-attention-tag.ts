@@ -10,7 +10,6 @@ import i18next from "i18next";
 /**
  * Applies the "Center of Attention" volatile status effect, the effect applied by Follow Me, Rage Powder, and Spotlight.
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Center_of_attention | Center of Attention}
- * @extends BattlerTag
  */
 export class CenterOfAttentionTag extends BattlerTag {
   public powder: boolean;
@@ -29,7 +28,8 @@ export class CenterOfAttentionTag extends BattlerTag {
   override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:centerOfAttentionOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }

@@ -17,7 +17,7 @@ import { settings } from "#system/settings-manager";
 import { BattleFlyout } from "#ui/battle-flyout";
 import { addTextObject, setTextColor } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
-import { clamp, fixedNumber } from "#utils/common-utils";
+import { clamp, enumValueToKey, fixedNumber } from "#utils/common-utils";
 import i18next from "i18next";
 
 export class BattleInfo extends Phaser.GameObjects.Container {
@@ -346,7 +346,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
         globalScene.ui.showTooltip(
           "",
           i18next.t("fightUiHandler:teraHover", {
-            type: i18next.t(`pokemonInfo:Type.${ElementalType[this.lastTeraType]}`),
+            type: i18next.t(`pokemonInfo:Type.${enumValueToKey(ElementalType, this.lastTeraType)}`),
           }),
         );
       }
@@ -433,14 +433,14 @@ export class BattleInfo extends Phaser.GameObjects.Container {
 
     const types = pokemon.getTypes(true);
     this.type1Icon.setTexture(`pbinfo_${this.player ? "player" : "enemy"}_type${types.length > 1 ? "1" : ""}`);
-    this.type1Icon.setFrame(ElementalType[types[0]].toLowerCase());
+    this.type1Icon.setFrame(enumValueToKey(ElementalType, types[0]).toLowerCase());
     this.type2Icon.setVisible(types.length > 1);
     this.type3Icon.setVisible(types.length > 2);
     if (types.length > 1) {
-      this.type2Icon.setFrame(ElementalType[types[1]].toLowerCase());
+      this.type2Icon.setFrame(enumValueToKey(ElementalType, types[1]).toLowerCase());
     }
     if (types.length > 2) {
-      this.type3Icon.setFrame(ElementalType[types[2]].toLowerCase());
+      this.type3Icon.setFrame(enumValueToKey(ElementalType, types[2]).toLowerCase());
     }
 
     if (this.player) {
@@ -632,14 +632,14 @@ export class BattleInfo extends Phaser.GameObjects.Container {
 
       const types = pokemon.getTypes(true);
       this.type1Icon.setTexture(`pbinfo_${this.player ? "player" : "enemy"}_type${types.length > 1 ? "1" : ""}`);
-      this.type1Icon.setFrame(ElementalType[types[0]].toLowerCase());
+      this.type1Icon.setFrame(enumValueToKey(ElementalType, types[0]).toLowerCase());
       this.type2Icon.setVisible(types.length > 1);
       this.type3Icon.setVisible(types.length > 2);
       if (types.length > 1) {
-        this.type2Icon.setFrame(ElementalType[types[1]].toLowerCase());
+        this.type2Icon.setFrame(enumValueToKey(ElementalType, types[1]).toLowerCase());
       }
       if (types.length > 2) {
-        this.type3Icon.setFrame(ElementalType[types[2]].toLowerCase());
+        this.type3Icon.setFrame(enumValueToKey(ElementalType, types[2]).toLowerCase());
       }
 
       // Updates the color of the HP bar (50-100% HP: Green, 25-50% HP: Yellow, 0-25% HP: Red)

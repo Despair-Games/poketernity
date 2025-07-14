@@ -1,3 +1,5 @@
+import type { EnumValues } from "#types/utility-types";
+
 /**
  * Specifies the type of sprite affected by an animation
  * @todo Start values at `1`
@@ -19,4 +21,4 @@ export const AnimFrameTarget = {
 } as const;
 
 /** The sprite types affected by an animation */
-export type AnimFrameTarget = (typeof AnimFrameTarget)[keyof typeof AnimFrameTarget];
+export type AnimFrameTarget = EnumValues<typeof AnimFrameTarget>;

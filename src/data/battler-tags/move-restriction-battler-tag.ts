@@ -1,8 +1,6 @@
-// -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { RESTRICTING_TAG_TYPES } from "#constants/battler-tag-constants";
-/* eslint-enable @typescript-eslint/no-unused-vars */
-// -- end tsdoc imports --
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { globalScene } from "#app/global-scene";
 import { BattlerTag } from "#battler-tags/battler-tag";
@@ -36,7 +34,7 @@ export abstract class MoveRestrictionBattlerTag extends BattlerTag implements Re
 
       if (this.isMoveRestricted(move.moveId, pokemon)) {
         if (this.getInterruptedText(pokemon, move.moveId)) {
-          globalScene.phaseManager.queueMessagePhase(this.getInterruptedText(pokemon, move.moveId));
+          globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", this.getInterruptedText(pokemon, move.moveId));
         }
         phase.cancel();
       }
@@ -92,9 +90,9 @@ export abstract class MoveRestrictionBattlerTag extends BattlerTag implements Re
    * @param pokemon {@linkcode Pokemon} to get the last valid move from
    * @returns the last valid move from the pokemon's move history
    */
-  public getLastValidMove(pokemon: Pokemon): Move | undefined {
+  protected getLastValidMove(pokemon: Pokemon): Move | undefined {
     const turnMove = pokemon
-      .getLastXMoves()
+      .getLastXMoves(-1)
       .find((m) => m.move.id !== MoveId.NONE && m.move.id !== MoveId.STRUGGLE && !m.virtual);
 
     return turnMove?.move;

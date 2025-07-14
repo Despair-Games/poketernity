@@ -9,7 +9,6 @@ import type { NumberHolder } from "#utils/common-utils";
  * Attribute to set a move's type effectiveness to 1 against
  * Flying-type Pokemon that are not grounded by an effect.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Thousand_Arrows_(move) | Thousand Arrows}.
- * @extends VariableMoveTypeMultiplierAttr
  */
 export class NeutralDamageAgainstFlyingTypeMultiplierAttr extends VariableMoveTypeMultiplierAttr {
   override apply(_user: Pokemon, target: Pokemon, _move: Move, multiplier: NumberHolder): boolean {

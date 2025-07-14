@@ -1,3 +1,5 @@
+import type { EnumValues } from "#types/utility-types";
+
 /**
  * Remember to add the appropriate score to
  * {@linkcode getTagTargetBenefitScore}
@@ -118,4 +120,4 @@ export const BattlerTagType = {
   BIDE: 106,
 } as const;
 
-export type BattlerTagType = (typeof BattlerTagType)[keyof typeof BattlerTagType];
+export type BattlerTagType = EnumValues<typeof BattlerTagType>;

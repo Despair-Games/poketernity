@@ -1,13 +1,12 @@
 import type { Pokemon } from "#field/pokemon";
 import { HealAttr } from "#moves/heal-attr";
 import type { Move } from "#moves/move";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 
 /**
  * Heals the target or the user by either {@linkcode normalHealRatio} or {@linkcode boostedHealRatio}
  * depending on the evaluation of {@linkcode condition}.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Floral_Healing_(move) | Floral Healing}.
- * @extends HealAttr
  */
 export class BoostHealAttr extends HealAttr {
   /** Healing received when {@linkcode condition} is false */

@@ -1,4 +1,4 @@
-/**
+/*
  * This file is imported in "development" mode only!
  */
 

@@ -13,7 +13,6 @@ import i18next from "i18next";
  * Tag that applies the move Torment to the target Pokemon, preventing the use of moves twice in a row.
  * The tag is only removed if the target leaves the battle.
  * Torment does not interrupt the move if the move is performed consecutively in the same turn and right after Torment is applied
- * @extends MoveRestrictionBattlerTag
  */
 export class TormentTag extends MoveRestrictionBattlerTag {
   constructor(sourceId: number) {
@@ -27,7 +26,8 @@ export class TormentTag extends MoveRestrictionBattlerTag {
    */
   override onAdd(pokemon: Pokemon) {
     super.onAdd(pokemon);
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:tormentOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       1500,
     );

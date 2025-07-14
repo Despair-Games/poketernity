@@ -1,3 +1,5 @@
+import type { EnumValues } from "#types/utility-types";
+
 // TODO: start this at 1
 export const BiomeId = {
   TOWN: 0,
@@ -39,4 +41,4 @@ export const BiomeId = {
   END: 50,
 } as const;
 
-export type BiomeId = (typeof BiomeId)[keyof typeof BiomeId];
+export type BiomeId = EnumValues<typeof BiomeId>;

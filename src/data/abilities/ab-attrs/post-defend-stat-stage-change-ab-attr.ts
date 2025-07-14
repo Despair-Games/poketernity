@@ -3,8 +3,7 @@ import { globalScene } from "#app/global-scene";
 import type { BattleStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
-import type { PokemonDefendCondition } from "#types/pokemon-defend-condition";
+import type { PokemonDefendCondition } from "#types/move-types";
 
 /**
  * Activates after receiving an attack and if certain conditions are met, changes the effective stats
@@ -56,19 +55,22 @@ export class PostDefendStatStageChangeAbAttr extends PostDefendAbAttr {
           otherPokemon.push(allyPokemon);
         }
         for (const other of otherPokemon) {
-          globalScene.phaseManager.unshiftPhase(
-            new StatStageChangePhase(other.getBattlerIndex(), pokemon, [this.stat], this.stages),
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "StatStageChangePhase",
+            other.getBattlerIndex(),
+            pokemon,
+            [this.stat],
+            this.stages,
           );
         }
         return true;
       }
-      globalScene.phaseManager.unshiftPhase(
-        new StatStageChangePhase(
-          (this.selfTarget ? pokemon : attacker).getBattlerIndex(),
-          pokemon,
-          [this.stat],
-          this.stages,
-        ),
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "StatStageChangePhase",
+        (this.selfTarget ? pokemon : attacker).getBattlerIndex(),
+        pokemon,
+        [this.stat],
+        this.stages,
       );
       return true;
     }

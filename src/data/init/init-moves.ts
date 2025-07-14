@@ -141,7 +141,7 @@ import { LeechSeedAttr } from "#moves/leech-seed-attr";
 import { LessPPMorePowerAttr } from "#moves/less-pp-more-power-attr";
 import { LevelDamageAttr } from "#moves/level-damage-attr";
 import { LowHpPowerAttr } from "#moves/low-hp-power-attr";
-import { magnitudeMessageFunc, MagnitudePowerAttr } from "#moves/magnitude-power-attr";
+import { MagnitudePowerAttr, magnitudeMessageFunc } from "#moves/magnitude-power-attr";
 import { MatchHpAttr } from "#moves/match-hp-attr";
 import { MatchUserTypeAttr } from "#moves/match-user-type-attr";
 import { MeFirstAttr } from "#moves/me-first-attr";
@@ -150,7 +150,7 @@ import { MetronomeAttr } from "#moves/metronome-attr";
 import { MirrorMoveAttr } from "#moves/mirror-move-attr";
 import { MissEffectAttr } from "#moves/miss-effect-attr";
 import { MoneyAttr } from "#moves/money-attr";
-import { AttackMove, SelfStatusMove, StatusMove, type Move } from "#moves/move";
+import { AttackMove, type Move, SelfStatusMove, StatusMove } from "#moves/move";
 import { MovePowerMultiplierAttr } from "#moves/move-power-multiplier-attr";
 import { MovesetCopyMoveAttr } from "#moves/moveset-copy-move-attr";
 import { MultiHitAttr } from "#moves/multi-hit-attr";
@@ -182,7 +182,7 @@ import { RecoilAttr } from "#moves/recoil-attr";
 import { ReducePpMoveAttr } from "#moves/reduce-pp-move-attr";
 import { RemoveAllSubstitutesAttr } from "#moves/remove-all-substitutes-attr";
 import { RemoveArenaTagsAttr } from "#moves/remove-arena-tags-attr";
-import { rapidSpinRemoveTags, RemoveBattlerTagAttr } from "#moves/remove-battler-tag-attr";
+import { RemoveBattlerTagAttr, rapidSpinRemoveTags } from "#moves/remove-battler-tag-attr";
 import { RemoveEntryHazardAttr } from "#moves/remove-entry-hazard-attr";
 import { RemoveHeldItemAttr } from "#moves/remove-held-item-attr";
 import { RemoveScreensAttr } from "#moves/remove-screens-attr";
@@ -402,8 +402,7 @@ export function initMoves() {
       .condition(
         (_user, target, _move) =>
           target
-            .getMoveHistory()
-            .reverse()
+            .getLastXMoves(-1)
             .find((m) => m.move.id !== MoveId.NONE && m.move.id !== MoveId.STRUGGLE && !m.virtual) !== undefined,
       )
       .ignoresSubstitute()
@@ -840,7 +839,7 @@ export function initMoves() {
     new SelfStatusMove(MoveId.BELLY_DRUM, ElementalType.NORMAL, -1, 10, -1, 0, 2)
       .attr(CutHpStatStageBoostAttr, [Stat.ATK], 12, 2,
         (user) => {
-          globalScene.phaseManager.queueMessagePhase(
+          globalScene.phaseManager.createAndUnshiftPhase("MessagePhase",
             i18next.t("moveTriggers:cutOwnHpAndMaximizedStat", {
               pokemonName: getPokemonNameWithAffix(user),
               statName: i18next.t(getStatKey(Stat.ATK)),
@@ -2564,7 +2563,7 @@ export function initMoves() {
       .attr(HealStatusEffectAttr, true, StatusEffect.FREEZE)
       .attr(AddBattlerTagAttr, BattlerTagType.BURNED_UP, true)
       .attr(RemoveTypeAttr, ElementalType.FIRE, (user) => {
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase("MessagePhase",
           i18next.t("moveTriggers:burnedItselfOut", { pokemonName: getPokemonNameWithAffix(user) }),
         );
       }),
@@ -3411,7 +3410,7 @@ export function initMoves() {
       })
       .attr(AddBattlerTagAttr, BattlerTagType.DOUBLE_SHOCKED, true)
       .attr(RemoveTypeAttr, ElementalType.ELECTRIC, (user) => {
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase("MessagePhase",
           i18next.t("moveTriggers:usedUpAllElectricity", { pokemonName: getPokemonNameWithAffix(user) }),
         );
       }),

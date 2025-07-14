@@ -3,7 +3,7 @@ import { AdminApi } from "#api/admin-api";
 import { ApiBase } from "#api/api-base";
 import { DailyApi } from "#api/daily-api";
 import { SavedataApi } from "#api/savedata-api";
-import type { TitleStatsResponse } from "#types/api";
+import type { TitleStatsResponse } from "#types/api-types";
 
 /**
  * A wrapper for API requests.

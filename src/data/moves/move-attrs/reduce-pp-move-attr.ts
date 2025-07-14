@@ -4,13 +4,12 @@ import { MoveUsedEvent } from "#events/battle-scene";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 import i18next from "i18next";
 
 /**
  * Attribute used for moves that reduce PP of the target's last used move.
  * Used for Spite.
- * @extends MoveEffectAttr
  */
 export class ReducePpMoveAttr extends MoveEffectAttr {
   protected reduction: number;
@@ -31,7 +30,7 @@ export class ReducePpMoveAttr extends MoveEffectAttr {
       reduction: movesetMove.ppUsed - lastPpUsed,
     });
     globalScene.eventTarget.dispatchEvent(new MoveUsedEvent(target.id, movesetMove.getMove(), movesetMove.ppUsed));
-    globalScene.phaseManager.queueMessagePhase(message);
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", message);
 
     return true;
   }

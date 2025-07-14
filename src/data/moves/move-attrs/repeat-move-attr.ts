@@ -6,13 +6,12 @@ import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 import i18next from "i18next";
 
 /**
  * Attribute used for moves that causes the target to repeat their last used move.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Instruct_(move) | Instruct}.
- * @extends MoveEffectAttr
  */
 export class RepeatMoveAttr extends MoveEffectAttr {
   constructor() {
@@ -25,7 +24,8 @@ export class RepeatMoveAttr extends MoveEffectAttr {
     const movesetMove = target.getMoveset().find((m) => m?.moveId === lastMove.move.id)!;
     const moveTargets = lastMove.targets ?? [];
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("moveTriggers:instructingMove", {
         userPokemonName: getPokemonNameWithAffix(user),
         targetPokemonName: getPokemonNameWithAffix(target),

@@ -1,14 +1,11 @@
-// -- start tsdoc imports --
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type MysteryEncounterOption from "#mystery-encounters/mystery-encounter-option";
-// -- end tsdoc imports --
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import { PhaseId } from "#enums/phase-id";
 import { getEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import type { OptionPhaseCallback } from "#mystery-encounters/mystery-encounter-option";
-import { NewBattlePhase } from "#phases/new-battle-phase";
 import { isNil } from "#utils/common-utils";
 /**
  * Will handle (in order):
@@ -16,11 +13,9 @@ import { isNil } from "#utils/common-utils";
  * - Showing any outro dialogue messages
  * - Cleanup of any leftover intro visuals
  * - Queuing of the next wave
- *
- * @extends Phase
  */
 export class PostMysteryEncounterPhase extends Phase {
-  override readonly id = PhaseId.ME_POST;
+  public override readonly phaseName = "PostMysteryEncounterPhase";
 
   private readonly FIRST_DIALOGUE_PROMPT_DELAY = 750;
   protected onPostOptionSelect?: OptionPhaseCallback =
@@ -58,7 +53,7 @@ export class PostMysteryEncounterPhase extends Phase {
     const { mysteryEncounter } = currentBattle;
 
     const endPhase = (): void => {
-      globalScene.phaseManager.pushPhase(new NewBattlePhase());
+      globalScene.phaseManager.createAndPushPhase("NewBattlePhase");
       this.end();
     };
 

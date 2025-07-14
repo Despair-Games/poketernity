@@ -5,14 +5,13 @@ import { PokemonMove } from "#field/pokemon-move";
 import type { Move } from "#moves/move";
 import { OverrideMoveEffectAttr } from "#moves/override-move-effect-attr";
 import { targetMoveCopiableCondition } from "#moves/target-move-copiable-condition";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 import i18next from "i18next";
 
 /**
  * Attribute to copy the target's last used move into the user's moveset,
  * temporarily replacing the move with this attribute.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Mimic_(move) | Mimic}.
- * @extends OverrideMoveEffectAttr
  */
 export class MovesetCopyMoveAttr extends OverrideMoveEffectAttr {
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
@@ -32,7 +31,8 @@ export class MovesetCopyMoveAttr extends OverrideMoveEffectAttr {
     user.summonData.moveset = user.getMoveset().slice(0);
     user.summonData.moveset[thisMoveIndex] = new PokemonMove(copiedMove.move.id, 0, 0);
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("moveTriggers:copiedMove", {
         pokemonName: getPokemonNameWithAffix(user),
         moveName: copiedMove.move?.name,

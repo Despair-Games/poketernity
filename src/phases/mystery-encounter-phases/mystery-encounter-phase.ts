@@ -1,19 +1,15 @@
-// -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type MysteryEncounterDialogue from "#mystery-encounters/mystery-encounter-dialogue";
 import type { OptionTextDisplay } from "#mystery-encounters/mystery-encounter-dialogue";
-/* eslint-enable @typescript-eslint/no-unused-vars */
-// -- end tsdoc imports --
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
 import { getEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import type { OptionSelectSettings } from "#mystery-encounters/encounter-phase-utils";
 import type MysteryEncounterOption from "#mystery-encounters/mystery-encounter-option";
 import { SeenEncounterData } from "#mystery-encounters/mystery-encounter-save-data";
-import { MysteryEncounterOptionSelectedPhase } from "#phases/mystery-encounter-phases/option-selected-phase";
 import type { MysteryEncounterUiHandler } from "#ui/mystery-encounter-ui-handler";
 import { isNil } from "#utils/common-utils";
 
@@ -25,11 +21,9 @@ import { isNil } from "#utils/common-utils";
  * - Execute {@linkcode MysteryEncounterOption.onPreOptionPhase} logic if it exists for the selected option
  * - Display any {@linkcode OptionTextDisplay.selected} type dialogue that is set in the {@linkcode MysteryEncounterDialogue} dialogue tree for selected option
  * - Queuing of the {@linkcode MysteryEncounterOptionSelectedPhase}
- *
- * @extends Phase
  */
 export class MysteryEncounterPhase extends Phase {
-  override readonly id = PhaseId.ME_ENCOUNTER;
+  public override readonly phaseName = "MysteryEncounterPhase";
 
   protected optionSelectSettings?: OptionSelectSettings;
 
@@ -123,7 +117,7 @@ export class MysteryEncounterPhase extends Phase {
     const { currentBattle, ui } = globalScene;
 
     const endDialogueAndContinueEncounter = (): void => {
-      globalScene.phaseManager.pushPhase(new MysteryEncounterOptionSelectedPhase());
+      globalScene.phaseManager.createAndPushPhase("MysteryEncounterOptionSelectedPhase");
       this.end();
     };
 

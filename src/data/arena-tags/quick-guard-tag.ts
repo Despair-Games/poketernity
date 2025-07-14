@@ -4,9 +4,7 @@ import { allMoves } from "#data/data-lists";
 import type { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveId } from "#enums/move-id";
-import { PhaseId } from "#enums/phase-id";
-import type { MoveEffectPhase } from "#phases/move-effect-phase";
-import type { ProtectConditionFunc } from "#types/protect-condition-func";
+import type { ProtectConditionFunc } from "#types/move-types";
 
 /**
  * Condition function for {@link https://bulbapedia.bulbagarden.net/wiki/Quick_Guard_(move) Quick Guard's}
@@ -20,7 +18,7 @@ const QuickGuardConditionFunc: ProtectConditionFunc = (_arena, moveId) => {
   const move = allMoves.get(moveId);
   const effectPhase = globalScene.phaseManager.getCurrentPhase();
 
-  if (effectPhase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT)) {
+  if (effectPhase?.is("MoveEffectPhase")) {
     const attacker = effectPhase.getUserPokemon();
     if (attacker) {
       return move.getPriority(attacker) > 0;
@@ -31,8 +29,8 @@ const QuickGuardConditionFunc: ProtectConditionFunc = (_arena, moveId) => {
 
 /**
  * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Quick_Guard_(move) Quick Guard}.
+ *
  * *Condition:* The incoming move has increased priority.
- * @extends ConditionalProtectTag
  */
 export class QuickGuardTag extends ConditionalProtectTag {
   constructor(sourceId: number, side: ArenaTagSide) {

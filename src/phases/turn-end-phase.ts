@@ -4,16 +4,15 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
-import { PhaseId } from "#enums/phase-id";
 import { TerrainType } from "#enums/terrain-type";
 import { TurnEndEvent } from "#events/battle-scene";
 import type { Pokemon } from "#field/pokemon";
 import { TurnHealModifier, TurnHeldItemTransferModifier, TurnStatusEffectModifier } from "#modifier/modifier";
-import { FieldPhase } from "#phases/abstract-field-phase";
+import { FieldPhase } from "#phases/base/field-phase";
 import i18next from "i18next";
 
 export class TurnEndPhase extends FieldPhase {
-  override readonly id = PhaseId.TURN_END;
+  public override readonly phaseName = "TurnEndPhase";
 
   public override start(): void {
     super.start();
@@ -31,7 +30,8 @@ export class TurnEndPhase extends FieldPhase {
         globalScene.applyModifiers(TurnHealModifier, pokemon.isPlayer(), pokemon);
 
         if (terrain?.terrainType === TerrainType.GRASSY && pokemon.isGrounded()) {
-          globalScene.phaseManager.queuePokemonHealPhase(
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "PokemonHealPhase",
             pokemon.getBattlerIndex(),
             Math.max(pokemon.getMaxHp() >> 4, 1),
             {
@@ -40,7 +40,7 @@ export class TurnEndPhase extends FieldPhase {
           );
         }
         applyAbAttrs<PostTurnAbAttr>(AbAttrFlag.POST_TURN, pokemon, false);
-       // TODO: Temporary workaround so that bad dreams doesn't hurt Pokemon waking up in the same turn. Has to be fixed with #1211
+        // TODO: Temporary workaround so that bad dreams doesn't hurt Pokemon waking up in the same turn. Has to be fixed with #1211
         applyAbAttrs<PostTurnAbAttr>(AbAttrFlag.BAD_DREAMS, pokemon, false);
       }
 

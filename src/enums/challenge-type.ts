@@ -1,8 +1,8 @@
-// -- start tsdoc imports
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { Challenge } from "#data/challenge";
-/* eslint-enable @typescript-eslint/no-unused-vars */
-// -- end tsdoc imports --
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
+
+import type { EnumValues } from "#types/utility-types";
 
 /**
  * An enum for all the challenge types. The parameter entries on these describe the
@@ -70,4 +70,4 @@ export const ChallengeType = {
   MOVE_WEIGHT: 13,
 } as const;
 
-export type ChallengeType = (typeof ChallengeType)[keyof typeof ChallengeType];
+export type ChallengeType = EnumValues<typeof ChallengeType>;

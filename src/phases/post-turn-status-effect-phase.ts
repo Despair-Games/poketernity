@@ -8,23 +8,24 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { CommonAnim } from "#enums/common-anim";
-import { PhaseId } from "#enums/phase-id";
 import { StatusEffect } from "#enums/status-effect";
-import { PokemonPhase } from "#phases/abstract-pokemon-phase";
+import { PokemonPhase } from "#phases/base/pokemon-phase";
 import { BooleanHolder, NumberHolder, toDmgValue } from "#utils/common-utils";
 import { getStatusEffectActivationText } from "#utils/status-effect-utils";
 
 export class PostTurnStatusEffectPhase extends PokemonPhase {
-  override readonly id = PhaseId.POST_TURN_STATUS_EFFECT;
+  public override readonly phaseName = "PostTurnStatusEffectPhase";
 
   public override start(): void {
     const pokemon = this.getPokemon();
 
     if (!pokemon?.isActive(true)) {
-      return this.end();
+      this.end();
+      return;
     }
     if (!pokemon.hasStatusEffect([StatusEffect.BURN, StatusEffect.POISON, StatusEffect.TOXIC], false, true)) {
-      return this.end();
+      this.end();
+      return;
     }
 
     pokemon.advanceStatusCounter();
@@ -34,10 +35,12 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
     applyAbAttrs<BlockStatusDamageAbAttr>(AbAttrFlag.BLOCK_STATUS_DAMAGE, pokemon, false, cancelled);
 
     if (cancelled.value) {
-      return this.end();
+      this.end();
+      return;
     }
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       getStatusEffectActivationText(pokemon.getStatusEffect(true), getPokemonNameWithAffix(pokemon)),
     );
 
@@ -62,8 +65,9 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
     }
 
     // TODO: this should be handled by some sort of animation manager instead of instantiating a new `CommonBattleAnim` class
-    new CommonBattleAnim(CommonAnim.POISON + (pokemon.getStatusEffect(true) - 1), pokemon).play(false, () =>
-      this.end(),
+    new CommonBattleAnim((CommonAnim.POISON + (pokemon.getStatusEffect(true) - 1)) as CommonAnim, pokemon).play(
+      false,
+      () => this.end(),
     );
   }
 

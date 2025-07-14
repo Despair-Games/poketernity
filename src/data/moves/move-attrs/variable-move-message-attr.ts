@@ -1,12 +1,11 @@
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveAttr } from "#moves/move-attr";
-import type { MoveMessageFunc } from "#types/move-message-func";
+import type { MoveMessageFunc } from "#types/move-types";
 
 /**
  * Attribute to override the default move usage message (e.g. "Pikachu used Thunderbolt!")
  * with a custom message which can change based on game state.
- * @extends MoveAttr
  */
 export abstract class VariableMoveMessageAttr extends MoveAttr {
   protected message: string | MoveMessageFunc;

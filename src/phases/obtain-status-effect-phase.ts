@@ -1,20 +1,18 @@
 import { CommonBattleAnim } from "#animations/common-battle-anim";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { BattlerIndex } from "#enums/battler-index";
+import type { FieldBattlerIndex } from "#enums/battler-index";
 import { CommonAnim } from "#enums/common-anim";
-import { PhaseId } from "#enums/phase-id";
 import { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#field/pokemon";
-import { PokemonPhase } from "#phases/abstract-pokemon-phase";
+import { PokemonPhase } from "#phases/base/pokemon-phase";
 import { getStatusEffectObtainText, getStatusEffectOverlapText } from "#utils/status-effect-utils";
 
 /**
  * Applies a status effect to a pokemon
- * @extends PokemonPhase
  */
 export class ObtainStatusEffectPhase extends PokemonPhase {
-  override readonly id = PhaseId.OBTAIN_STATUS_EFFECT;
+  public override readonly phaseName = "ObtainStatusEffectPhase";
 
   private readonly statusEffect: StatusEffect;
   private readonly turnsRemaining?: number;
@@ -22,7 +20,7 @@ export class ObtainStatusEffectPhase extends PokemonPhase {
   private readonly sourcePokemon?: Pokemon | null;
 
   constructor(
-    battlerIndex: BattlerIndex,
+    battlerIndex: FieldBattlerIndex,
     statusEffect: StatusEffect,
     turnsRemaining?: number,
     sourceText?: string | null,
@@ -41,13 +39,13 @@ export class ObtainStatusEffectPhase extends PokemonPhase {
     if (pokemon && !pokemon.hasNonVolatileStatusEffect(false, true)) {
       if (pokemon.trySetStatus(this.statusEffect, false, this.sourcePokemon, this.turnsRemaining, this.sourceText)) {
         pokemon.updateInfo(true);
-        new CommonBattleAnim(CommonAnim.POISON + (this.statusEffect - 1), pokemon).play(false, () => {
+        new CommonBattleAnim((CommonAnim.POISON + (this.statusEffect - 1)) as CommonAnim, pokemon).play(false, () => {
           const effectObtainText = getStatusEffectObtainText(
             this.statusEffect,
             getPokemonNameWithAffix(pokemon),
             this.sourceText,
           );
-          globalScene.phaseManager.queueMessagePhase(effectObtainText);
+          globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", effectObtainText);
           this.end();
         });
         return;
@@ -57,7 +55,7 @@ export class ObtainStatusEffectPhase extends PokemonPhase {
         this.statusEffect ?? StatusEffect.NONE,
         getPokemonNameWithAffix(pokemon),
       );
-      globalScene.phaseManager.queueMessagePhase(effectOverlapText);
+      globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", effectOverlapText);
     }
     this.end();
   }

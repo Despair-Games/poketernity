@@ -11,7 +11,6 @@ import i18next from "i18next";
  * (e.g. {@link https://bulbapedia.bulbagarden.net/wiki/Clear_Smog_(move) | Clear Smog})
  * or all Pokemon on the field
  * (e.g. {@link https://bulbapedia.bulbagarden.net/wiki/Haze_(move) | Haze}).
- * @extends MoveEffectAttr
  */
 export class ResetStatsAttr extends MoveEffectAttr {
   /** Should this attribute reset the stat stages of *all* Pokemon on the field? */
@@ -26,11 +25,12 @@ export class ResetStatsAttr extends MoveEffectAttr {
       // Target all pokemon on the field when Freezy Frost or Haze are used
       const activePokemon = globalScene.getField(true);
       activePokemon.forEach((p) => this.resetStats(p));
-      globalScene.phaseManager.queueMessagePhase(i18next.t("moveTriggers:statEliminated"));
+      globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("moveTriggers:statEliminated"));
     } else {
       // Affects only the single target when Clear Smog is used
       this.resetStats(target);
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t("moveTriggers:resetStats", { pokemonName: getPokemonNameWithAffix(target) }),
       );
     }

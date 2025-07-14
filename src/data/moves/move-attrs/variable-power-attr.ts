@@ -5,7 +5,6 @@ import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Attribute to modify a move's power based on game state.
- * @extends MoveAttr
  */
 export abstract class VariablePowerAttr extends MoveAttr {
   /**

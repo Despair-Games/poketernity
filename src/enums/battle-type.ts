@@ -1,3 +1,5 @@
+import type { EnumValues } from "#types/utility-types";
+
 export const BattleType = {
   WILD: 1,
   TRAINER: 2,
@@ -5,4 +7,4 @@ export const BattleType = {
   MYSTERY_ENCOUNTER: 4,
 } as const;
 
-export type BattleType = (typeof BattleType)[keyof typeof BattleType];
+export type BattleType = EnumValues<typeof BattleType>;

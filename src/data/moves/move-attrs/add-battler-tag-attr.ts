@@ -2,7 +2,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import type { Pokemon } from "#field/pokemon";
 import { ChanceBasedMoveEffectAttr, type ChanceBasedMoveEffectAttrOptions } from "#moves/chance-based-move-effect-attr";
 import type { Move } from "#moves/move";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 
 interface AddBattlerTagAttrOptions extends ChanceBasedMoveEffectAttrOptions {
   /** Should the move fail if the target already has a tag of the same type? */
@@ -15,7 +15,6 @@ interface AddBattlerTagAttrOptions extends ChanceBasedMoveEffectAttrOptions {
 
 /**
  * Attribute to add a battler tag to a Pokemon of a given {@linkcode BattlerTagType | type}.
- * @extends ChanceBasedMoveEffectAttr
  * @see {@linkcode BattlerTag}
  */
 export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {

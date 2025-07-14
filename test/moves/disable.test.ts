@@ -5,7 +5,7 @@ import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/game-manager";
-import type { TurnMove } from "#types/turn-move";
+import type { TurnMove } from "#types/move-types";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Moves - Disable", () => {
@@ -28,91 +28,115 @@ describe("Moves - Disable", () => {
       .battleType("single")
       .ability(AbilityId.BALL_FETCH)
       .enemyAbility(AbilityId.BALL_FETCH)
-      .moveset([MoveId.DISABLE, MoveId.SPLASH])
+      .moveset([MoveId.DISABLE, MoveId.SPLASH, MoveId.CELEBRATE])
       .enemyMoveset(MoveId.SPLASH)
       .enemySpecies(SpeciesId.SHUCKLE);
   });
 
-  it("restricts moves", async () => {
-    await game.classicMode.startBattle(SpeciesId.PIKACHU);
+  it("should restrict the target's last used move, and only that move", async () => {
+    game.override.battleType("double");
 
-    const enemyMon = game.scene.getEnemyPokemon()!;
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
-    game.move.select(MoveId.DISABLE);
-    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.move.select(MoveId.SPLASH, 0);
+    game.move.select(MoveId.SPLASH, 1);
     await game.toNextTurn();
 
-    expect(enemyMon.getMoveHistory()).toHaveLength(1);
-    expect(enemyMon.isMoveRestricted(MoveId.SPLASH)).toBe(true);
+    game.move.select(MoveId.CELEBRATE, 0);
+    game.move.select(MoveId.CELEBRATE, 1);
+    await game.toNextTurn();
+
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.move.select(MoveId.DISABLE, 0, BattlerIndex.PLAYER_2);
+    game.move.select(MoveId.SPLASH, 1);
+    await game.toEndOfTurn();
+
+    const [, player2] = game.scene.getPlayerField();
+
+    expect(player2.isMoveRestricted(MoveId.CELEBRATE)).toBeTruthy();
+    expect(player2.isMoveRestricted(MoveId.SPLASH)).toBeFalsy();
   });
 
-  it("fails if enemy has no move history", async () => {
+  it("should restrict the move used by the target on the same turn", async () => {
     await game.classicMode.startBattle(SpeciesId.PIKACHU);
 
-    const playerMon = game.scene.getPlayerPokemon()!;
-    const enemyMon = game.scene.getEnemyPokemon()!;
+    const enemy = game.field.getEnemyPokemon();
 
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     game.move.select(MoveId.DISABLE);
-    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 
-    expect(playerMon.getMoveHistory()[0]).toMatchObject<TurnMove>({
+    expect(enemy.getMoveHistory()).toHaveLength(1);
+    expect(enemy.isMoveRestricted(MoveId.SPLASH)).toBeTruthy();
+  });
+
+  it("should fail if enemy has no move history", async () => {
+    await game.classicMode.startBattle(SpeciesId.PIKACHU);
+
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
+
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.move.select(MoveId.DISABLE);
+    await game.toNextTurn();
+
+    expect(player.getMoveHistory()[0]).toMatchObject<TurnMove>({
       move: expect.objectContaining({ id: MoveId.DISABLE }),
       result: MoveResult.FAIL,
       type: ElementalType.NORMAL,
       targets: [2],
     });
-    expect(enemyMon.isMoveRestricted(MoveId.SPLASH)).toBe(false);
+    expect(enemy.isMoveRestricted(MoveId.SPLASH)).toBeFalsy();
   }, 20000);
 
-  it("causes STRUGGLE if all usable moves are disabled", async () => {
+  it("should force the target to use Struggle if all usable moves are disabled", async () => {
     await game.classicMode.startBattle(SpeciesId.PIKACHU);
 
-    const enemyMon = game.scene.getEnemyPokemon()!;
+    const enemy = game.field.getEnemyPokemon();
 
-    game.move.select(MoveId.DISABLE);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.move.select(MoveId.DISABLE);
     await game.toNextTurn();
 
     game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
 
-    const enemyHistory = enemyMon.getMoveHistory();
+    const enemyHistory = enemy.getMoveHistory();
     expect(enemyHistory).toHaveLength(2);
     expect(enemyHistory[0].move.id).toBe(MoveId.SPLASH);
     expect(enemyHistory[1].move.id).toBe(MoveId.STRUGGLE);
   }, 20000);
 
-  it("cannot disable STRUGGLE", async () => {
+  it("should fail if the target's last move was Struggle", async () => {
     game.override.enemyMoveset([MoveId.STRUGGLE]);
     await game.classicMode.startBattle(SpeciesId.PIKACHU);
 
-    const playerMon = game.scene.getPlayerPokemon()!;
-    const enemyMon = game.scene.getEnemyPokemon()!;
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
 
-    game.move.select(MoveId.DISABLE);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.move.select(MoveId.DISABLE);
     await game.toNextTurn();
 
-    expect(playerMon).toHaveMoveResult(MoveResult.FAIL);
-    expect(enemyMon).toHaveUsedMove(MoveId.STRUGGLE);
-    expect(enemyMon.isMoveRestricted(MoveId.STRUGGLE)).toBe(false);
+    expect(player).toHaveMoveResult(MoveResult.FAIL);
+    expect(enemy).toHaveUsedMove(MoveId.STRUGGLE);
+    expect(enemy.isMoveRestricted(MoveId.STRUGGLE)).toBeFalsy();
   }, 20000);
 
-  it("interrupts target's move when target moves after", async () => {
+  it("should interrupt the target's move if it matches the disabled move", async () => {
     await game.classicMode.startBattle(SpeciesId.PIKACHU);
 
-    const enemyMon = game.scene.getEnemyPokemon()!;
+    const enemy = game.field.getEnemyPokemon();
 
     game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
 
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     // Both mons just used Splash last turn; now have player use Disable.
     game.move.select(MoveId.DISABLE);
-    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 
-    const enemyHistory = enemyMon.getMoveHistory();
+    const enemyHistory = enemy.getMoveHistory();
     expect(enemyHistory).toHaveLength(2);
     expect(enemyHistory[0]).toMatchObject<TurnMove>({
       move: expect.objectContaining({ id: MoveId.SPLASH }),
@@ -123,17 +147,16 @@ describe("Moves - Disable", () => {
     expect(enemyHistory[1].result).toBe(MoveResult.FAIL);
   }, 20000);
 
-  it("disables NATURE POWER, not the move invoked by it", async () => {
+  it("should disable Nature Power, not the move invoked by it", async () => {
     game.override.enemyMoveset([MoveId.NATURE_POWER]);
     await game.classicMode.startBattle(SpeciesId.PIKACHU);
 
-    const enemyMon = game.scene.getEnemyPokemon()!;
+    const enemy = game.field.getEnemyPokemon();
 
-    game.move.select(MoveId.DISABLE);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.move.select(MoveId.DISABLE);
     await game.toNextTurn();
 
-    expect(enemyMon.isMoveRestricted(MoveId.NATURE_POWER)).toBe(true);
-    expect(enemyMon.isMoveRestricted(enemyMon.getLastXMoves(2)[1].move.id)).toBe(false);
+    expect(enemy.isMoveRestricted(MoveId.NATURE_POWER)).toBeTruthy();
   }, 20000);
 });

@@ -2,12 +2,11 @@ import { AbAttr } from "#abilities/ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import type { PokemonAttackCondition } from "#types/pokemon-attack-condition";
+import type { PokemonAttackCondition } from "#types/move-types";
 import type { BooleanHolder } from "#utils/common-utils";
 
 /**
  * Guarantees a critical hit according to the given condition, except if target prevents critical hits. ie. Merciless
- * @extends AbAttr
  * @see {@linkcode apply}
  */
 export class ConditionalCritAbAttr extends AbAttr {

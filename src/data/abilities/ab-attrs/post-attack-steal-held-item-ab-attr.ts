@@ -4,7 +4,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { Pokemon } from "#field/pokemon";
 import type { PokemonHeldItemModifier } from "#modifier/modifier";
 import type { Move } from "#moves/move";
-import type { PokemonAttackCondition } from "#types/pokemon-attack-condition";
+import type { PokemonAttackCondition } from "#types/move-types";
 import i18next from "i18next";
 
 export class PostAttackStealHeldItemAbAttr extends PostAttackAbAttr {
@@ -22,7 +22,8 @@ export class PostAttackStealHeldItemAbAttr extends PostAttackAbAttr {
       if (heldItems.length) {
         const stolenItem = heldItems[pokemon.randSeedInt(heldItems.length)];
         if (globalScene.tryTransferHeldItemModifier(stolenItem, pokemon, false)) {
-          globalScene.phaseManager.queueMessagePhase(
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "MessagePhase",
             i18next.t("abilityTriggers:postAttackStealHeldItem", {
               pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
               defenderName: defender.name,

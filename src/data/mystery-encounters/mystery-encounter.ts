@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
-import type { BattlerIndex } from "#enums/battler-index";
+import type { BattlerIndex, FieldBattlerIndex } from "#enums/battler-index";
 import type { Challenges } from "#enums/challenges";
-import type { EncounterAnim } from "#enums/encounter-anims";
+import type { EncounterAnim } from "#enums/encounter-anim";
 import type { GameModes } from "#enums/game-modes";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
@@ -33,7 +33,7 @@ import { capitalizeFirstLetter } from "#utils/string-utils";
 
 export interface EncounterStartOfBattleEffect {
   sourcePokemon?: Pokemon;
-  sourceBattlerIndex?: BattlerIndex;
+  sourceBattlerIndex?: FieldBattlerIndex;
   targets: BattlerIndex[];
   move: PokemonMove;
   ignorePp: boolean;

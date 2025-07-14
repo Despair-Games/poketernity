@@ -1,7 +1,7 @@
 import { PostSummonStatStageChangeAbAttr } from "#abilities/post-summon-stat-stage-change-ab-attr";
 import { globalScene } from "#app/global-scene";
 import type { ArenaTagType } from "#enums/arena-tag-type";
-import { Stat, type BattleStat } from "#enums/stat";
+import { type BattleStat, Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 
 /**
@@ -13,7 +13,6 @@ import type { Pokemon } from "#field/pokemon";
  * @param tagType the {@linkcode ArenaTagType} to check for
  * @param stats an array of {@linkcode BattleStat}s to change. Defaults to {@linkcode Stat.ATK}
  * @param stages how much to change the stat(s) by. Defaults to 1
- * @extends PostSummonStatStageChangeAbAttr
  */
 export class PostSummonStatStageChangeOnArenaAbAttr extends PostSummonStatStageChangeAbAttr {
   /** The type of arena tag that conditions the stat change. */

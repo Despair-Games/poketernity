@@ -1,3 +1,5 @@
+import type { EnumValues } from "#types/utility-types";
+
 /**
  * Specifies the reference point (origin)
  * for x- and y-coordinates of an animation frame.
@@ -20,4 +22,4 @@ export const AnimFocus = {
   SCREEN: 4,
 } as const;
 
-export type AnimFocus = (typeof AnimFocus)[keyof typeof AnimFocus];
+export type AnimFocus = EnumValues<typeof AnimFocus>;

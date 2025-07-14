@@ -1,18 +1,17 @@
-// -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { HIGHEST_STAT_BOOST_TAG_TYPES } from "#constants/battler-tag-constants";
-/* eslint-enable @typescript-eslint/no-unused-vars */
-// -- end tsdoc imports --
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbilityBattlerTag } from "#battler-tags/ability-battler-tag";
 import type { BattlerTag } from "#battler-tags/battler-tag";
 import { allAbilities } from "#data/data-lists";
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import type { AbilityId } from "#enums/ability-id";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";
-import { EFFECTIVE_STATS, getStatKey, Stat, type EffectiveStat } from "#enums/stat";
+import { EFFECTIVE_STATS, type EffectiveStat, getStatKey, Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import i18next from "i18next";
 
@@ -47,13 +46,16 @@ export abstract class HighestStatBoostTag extends AbilityBattlerTag {
     super.onAdd(pokemon);
 
     let highestStat: EffectiveStat;
-    EFFECTIVE_STATS.map((s) => pokemon.getEffectiveStat(s)).reduce((highestValue: number, value: number, i: number) => {
-      if (value > highestValue) {
-        highestStat = EFFECTIVE_STATS[i];
-        return value;
-      }
-      return highestValue;
-    }, 0);
+    EFFECTIVE_STATS.map((s) => pokemon.getEffectiveStat(s, { abilityApplyMode: AbilityApplyMode.IGNORE })).reduce(
+      (highestValue: number, value: number, i: number) => {
+        if (value > highestValue) {
+          highestStat = EFFECTIVE_STATS[i];
+          return value;
+        }
+        return highestValue;
+      },
+      0,
+    );
 
     highestStat = highestStat!; // tell TS compiler it's defined!
     this.stat = highestStat;
@@ -67,22 +69,20 @@ export abstract class HighestStatBoostTag extends AbilityBattlerTag {
         break;
     }
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndPushPhase(
+      "MessagePhase",
       i18next.t("battlerTags:highestStatBoostOnAdd", {
         pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
         statName: i18next.t(getStatKey(highestStat)),
       }),
-      null,
-      false,
-      null,
-      true,
     );
   }
 
   override onRemove(pokemon: Pokemon): void {
     super.onRemove(pokemon);
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:highestStatBoostOnRemove", {
         pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
         abilityName: allAbilities[this.ability].name,

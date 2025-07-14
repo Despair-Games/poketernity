@@ -1,8 +1,6 @@
-// -- start tsdoc imports --
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { Pokemon } from "#field/pokemon";
-/* eslint-enable @typescript-eslint/no-unused-vars */
-// -- end tsdoc imports --
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import type { BattleAnim } from "#animations/battle-anims";
 import type { easeFunctions } from "#animations/ease-functions";
@@ -584,15 +582,11 @@ export class AnimTimedUpdateBgEvent extends AnimTimedBgEvent {
       tweenProps["alpha"] = (this.opacity || 0) / 255;
     }
     if (Object.keys(tweenProps).length) {
-      globalScene.tweens.add(
-        Object.assign(
-          {
-            targets: moveAnim.bgSprite,
-            duration: getFrameMs(this.duration * 3),
-          },
-          tweenProps,
-        ),
-      );
+      globalScene.tweens.add({
+        targets: moveAnim.bgSprite,
+        duration: getFrameMs(this.duration * 3),
+        ...tweenProps,
+      });
     }
     return this.duration * 2;
   }

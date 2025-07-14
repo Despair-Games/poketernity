@@ -5,7 +5,7 @@ import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
 import { CallMoveAttr } from "#moves/call-move-attr";
 import type { Move } from "#moves/move";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 import type { BooleanHolder } from "#utils/common-utils";
 
 /**
@@ -16,7 +16,6 @@ import type { BooleanHolder } from "#utils/common-utils";
  * NOTE: Unlike in mainline, Me First is currently redirected to the target's ally
  * if the target faints or the target's index is otherwise vacant. This is intentional;
  * we'd rather keep move behavior consistent than replicate what is likely a bug.
- * @extends CallMoveAttr
  */
 export class MeFirstAttr extends CallMoveAttr {
   constructor() {

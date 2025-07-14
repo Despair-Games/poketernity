@@ -7,7 +7,6 @@ import type { BooleanHolder } from "#utils/common-utils";
 /**
  * This attribute will block any status damage that you put in the parameter.
  * @param effects - The {@linkcode StatusEffect | status effect(s)} that will be blocked from damaging the ability pokemon
- * @extends AbAttr
  */
 export class BlockStatusDamageAbAttr extends AbAttr {
   private readonly statusEffects: StatusEffect[];

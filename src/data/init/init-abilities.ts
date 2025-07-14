@@ -132,7 +132,6 @@ import { PostWeatherChangeAddBattlerTagAbAttr } from "#abilities/post-weather-ch
 import { PostWeatherChangeFormChangeAbAttr } from "#abilities/post-weather-change-form-change-ab-attr";
 import { PostWeatherLapseDamageAbAttr } from "#abilities/post-weather-lapse-damage-ab-attr";
 import { PostWeatherLapseHealAbAttr } from "#abilities/post-weather-lapse-heal-ab-attr";
-import { PreDefendFullHpEndureAbAttr } from "#abilities/pre-defend-full-hp-endure-ab-attr";
 import { PreSwitchOutClearWeatherAbAttr } from "#abilities/pre-switch-out-clear-weather-ab-attr";
 import { PreSwitchOutFormChangeAbAttr } from "#abilities/pre-switch-out-form-change-ab-attr";
 import { PreSwitchOutHealAbAttr } from "#abilities/pre-switch-out-heal-ab-attr";
@@ -157,6 +156,7 @@ import { StatMultiplierAbAttr } from "#abilities/stat-multiplier-ab-attr";
 import { StatStageChangeCopyAbAttr } from "#abilities/stat-stage-change-copy-ab-attr";
 import { StatStageChangeMultiplierAbAttr } from "#abilities/stat-stage-change-multiplier-ab-attr";
 import { StatusEffectImmunityAbAttr } from "#abilities/status-effect-immunity-ab-attr";
+import { SturdyAbAttr } from "#abilities/sturdy-ab-attr";
 import { SuppressFieldAbilitiesAbAttr } from "#abilities/suppress-field-abilities-ab-attr";
 import { SuppressWeatherEffectAbAttr } from "#abilities/suppress-weather-effect-ab-attr";
 import { SyncEncounterNatureAbAttr } from "#abilities/sync-encounter-nature-ab-attr";
@@ -184,7 +184,7 @@ import { Gender } from "#enums/gender";
 import { MoveCategory } from "#enums/move-category";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
-import { type EffectiveStat, EFFECTIVE_STATS, getStatKey, Stat } from "#enums/stat";
+import { EFFECTIVE_STATS, type EffectiveStat, getStatKey, Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
@@ -192,7 +192,7 @@ import type { Pokemon } from "#field/pokemon";
 import { FlinchAttr } from "#moves/flinch-attr";
 import type { Move } from "#moves/move";
 import { VariablePowerAttr } from "#moves/variable-power-attr";
-import type { AbAttrCondition } from "#types/ab-attr-condition";
+import type { AbAttrCondition } from "#types/ability-types";
 import { getWeatherCondition, normalTypeMoveConversionCondition } from "#utils/ability-utils";
 import { NumberHolder, toDmgValue } from "#utils/common-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
@@ -219,7 +219,7 @@ export function initAbilities() {
       .attr(BlockCritAbAttr)
       .ignorable(),
     new Ability(AbilityId.STURDY, 3)
-      .attr(PreDefendFullHpEndureAbAttr)
+      .attr(SturdyAbAttr)
       .attr(BlockOneHitKOAbAttr)
       .ignorable(),
     new Ability(AbilityId.DAMP, 3)
@@ -808,9 +808,13 @@ export function initAbilities() {
     new Ability(AbilityId.RATTLED, 5)
       .attr(
         PostDefendStatStageChangeAbAttr,
-        (_target, user, move) =>
-          move.category !== MoveCategory.STATUS
-          && [ElementalType.BUG, ElementalType.DARK, ElementalType.GHOST].includes(user.getMoveType(move)),
+        (_target, user, move) => {
+          const rattledTypes: readonly ElementalType[] = [ElementalType.BUG, ElementalType.DARK, ElementalType.GHOST];
+          return (
+            move.category !== MoveCategory.STATUS
+            && rattledTypes.includes(user.getMoveType(move))
+          );
+        },
         Stat.SPD,
         1,
       )
@@ -1294,8 +1298,10 @@ export function initAbilities() {
     new Ability(AbilityId.STEAM_ENGINE, 8)
       .attr(
         PostDefendStatStageChangeAbAttr,
-        (_target, user, move) =>
-          move.category !== MoveCategory.STATUS && [ElementalType.FIRE, ElementalType.WATER].includes(user.getMoveType(move)),
+        (_target, user, move) => {
+          const affectedTypes: readonly ElementalType[] = [ElementalType.FIRE, ElementalType.WATER];
+          return move.category !== MoveCategory.STATUS && affectedTypes.includes(user.getMoveType(move));
+        },
         Stat.SPD,
         6,
       ),
@@ -1522,9 +1528,7 @@ export function initAbilities() {
       )
       .attr(PostWeatherChangeAddBattlerTagAbAttr, BattlerTagType.PROTOSYNTHESIS, 0, WeatherType.SUNNY, WeatherType.HARSH_SUN)
       .uncopiable()
-      .noTransform()
-      // While setting the tag, the getbattlestat should ignore all modifiers to stats except stat stages
-      .partial(),
+      .noTransform(),
     new Ability(AbilityId.QUARK_DRIVE, 9)
       .conditionalAttr(
         getTerrainCondition(TerrainType.ELECTRIC),
@@ -1535,9 +1539,7 @@ export function initAbilities() {
       )
       .attr(PostTerrainChangeAddBattlerTagAbAttr, BattlerTagType.QUARK_DRIVE, 0, TerrainType.ELECTRIC)
       .uncopiable()
-      .noTransform()
-      // While setting the tag, the getbattlestat should ignore all modifiers to stats except stat stages
-      .partial(),
+      .noTransform(),
     new Ability(AbilityId.GOOD_AS_GOLD, 9)
       .attr(MoveImmunityAbAttr, (pokemon, attacker, move) => pokemon !== attacker && move.category === MoveCategory.STATUS)
       .ignorable(),

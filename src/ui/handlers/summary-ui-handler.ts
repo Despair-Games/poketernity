@@ -16,7 +16,7 @@ import { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";
 import { Nature } from "#enums/nature";
 import { PlayerGender } from "#enums/player-gender";
-import { PERMANENT_STATS, Stat, getStatKey } from "#enums/stat";
+import { getStatKey, PERMANENT_STATS, Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { SummaryUiPage } from "#enums/summary-ui-page";
@@ -31,7 +31,7 @@ import type { PartyUiHandler } from "#ui/party-ui-handler";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";
 import { rgbHexToRgba } from "#utils/color-utils";
-import { fixedNumber, getTSEnumValues, isNil } from "#utils/common-utils";
+import { enumValueToKey, fixedNumber, getTSEnumValues, isNil } from "#utils/common-utils";
 import { formatStat, leftPad, toReadableString } from "#utils/string-utils";
 import { argbFromRgba } from "@material/material-color-utilities";
 import i18next from "i18next";
@@ -773,7 +773,7 @@ export class SummaryUiHandler extends UiHandler {
         const getTypeIcon = (index: number, type: ElementalType, tera: boolean = false) => {
           const xCoord = typeLabel.width * typeLabel.scale + 9 + 34 * index;
           const typeIcon = !tera
-            ? globalScene.add.sprite(xCoord, 42, "type_icons", ElementalType[type].toLowerCase())
+            ? globalScene.add.sprite(xCoord, 42, "type_icons", enumValueToKey(ElementalType, type).toLowerCase())
             : globalScene.add.sprite(xCoord, 42, "type_tera");
           if (tera) {
             typeIcon.setScale(0.5);
@@ -812,7 +812,7 @@ export class SummaryUiHandler extends UiHandler {
         ) {
           const teraIcon = globalScene.add.sprite(123, 26, "button_tera");
           teraIcon.setName("terrastallize-icon");
-          teraIcon.setFrame(ElementalType[this.pokemon.teraType].toLowerCase());
+          teraIcon.setFrame(enumValueToKey(ElementalType, this.pokemon.teraType).toLowerCase());
           profileContainer.add(teraIcon);
         }
 
@@ -962,7 +962,7 @@ export class SummaryUiHandler extends UiHandler {
           statsContainer.add(icon);
 
           icon.setInteractive(new Phaser.Geom.Rectangle(0, 0, 32, 32), Phaser.Geom.Rectangle.Contains);
-          icon.on("pointerover", () => globalScene.ui.showTooltip(item.type.name, item.type.getDescription(), true));
+          icon.on("pointerover", () => globalScene.ui.showTooltip(item.type.name, item.type.description, true));
           icon.on("pointerout", () => globalScene.ui.hideTooltip());
         });
 
@@ -1033,8 +1033,8 @@ export class SummaryUiHandler extends UiHandler {
           this.extraMoveRowContainer.setVisible(true);
 
           if (this.newMove && this.pokemon) {
-            const moveType = this.pokemon.getMoveType(this.newMove);
-            const newMoveTypeIcon = globalScene.add.sprite(0, 0, "type_icons", ElementalType[moveType].toLowerCase());
+            const moveTypeKey = enumValueToKey(ElementalType, this.pokemon.getMoveType(this.newMove)).toLowerCase();
+            const newMoveTypeIcon = globalScene.add.sprite(0, 0, "type_icons", moveTypeKey);
             newMoveTypeIcon.setOrigin(0, 1);
             this.extraMoveRowContainer.add(newMoveTypeIcon);
           }
@@ -1058,8 +1058,8 @@ export class SummaryUiHandler extends UiHandler {
           this.moveRowsContainer.add(moveRowContainer);
 
           if (move && this.pokemon) {
-            const moveType = this.pokemon.getMoveType(move.getMove());
-            const typeIcon = globalScene.add.sprite(0, 0, "type_icons", ElementalType[moveType].toLowerCase());
+            const moveTypeKey = enumValueToKey(ElementalType, this.pokemon.getMoveType(move.getMove())).toLowerCase();
+            const typeIcon = globalScene.add.sprite(0, 0, "type_icons", moveTypeKey);
             typeIcon.setOrigin(0, 1);
             moveRowContainer.add(typeIcon);
           }

@@ -6,9 +6,8 @@ import type { Pokemon } from "#field/pokemon";
 import type { ChargingMove } from "#moves/move";
 import type { MoveAttr } from "#moves/move-attr";
 import { MoveCondition } from "#moves/move-condition";
-import type { AbstractConstructor } from "#types/abstract-constructor";
-import type { Constructor } from "#types/constructor";
-import type { SubMove } from "#types/sub-move";
+import type { SubMove } from "#types/move-types";
+import type { AbstractConstructor, Constructor } from "#types/utility-types";
 
 export function ChargeMove<TBase extends SubMove>(Base: TBase) {
   return class extends Base {
@@ -44,7 +43,8 @@ export function ChargeMove<TBase extends SubMove>(Base: TBase) {
      * @param target the {@linkcode Pokemon} targeted by this move (optional)
      */
     showChargeText(user: Pokemon, target?: Pokemon): void {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         this._chargeText
           .replace("{USER}", getPokemonNameWithAffix(user))
           .replace("{TARGET}", getPokemonNameWithAffix(target)),

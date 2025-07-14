@@ -10,17 +10,14 @@ import type { NumberHolder } from "#utils/common-utils";
  *
  * Formula from {@link https://www.smogon.com/dex/sv/moves/flail/}
  *
- * | hp ratio (out of 48) | default bp |
- * |----------------------|------------|
- * | 0-1                  | 200        |
- * | 2-4                  | 150        |
- * | 5-9                  | 100        |
- * | 10-16                | 80         |
- * | 17-32                | 40         |
- * | 33-48                | 20         |
- *
- *
- * @extends VariablePowerAttr
+ * | HP Ratio (out of 48) | **\|** Default BP |
+ * |:--------------------:|:-----------------:|
+ * | 0-1                  | 200               |
+ * | 2-4                  | 150               |
+ * | 5-9                  | 100               |
+ * | 10-16                | 80                |
+ * | 17-32                | 40                |
+ * | 33-48                | 20                |
  */
 export class LowHpPowerAttr extends VariablePowerAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {

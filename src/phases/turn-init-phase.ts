@@ -1,32 +1,28 @@
 import { globalScene } from "#app/global-scene";
-import { PhaseId } from "#enums/phase-id";
 import { TurnInitEvent } from "#events/battle-scene";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import {
   handleMysteryEncounterBattleStartEffects,
   handleMysteryEncounterTurnStartEffects,
 } from "#mystery-encounters/encounter-phase-utils";
-import { FieldPhase } from "#phases/abstract-field-phase";
-import { CommandPhase } from "#phases/command-phase";
-import { EnemyCommandPhase } from "#phases/enemy-command-phase";
-import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase";
-import { TurnStartPhase } from "#phases/turn-start-phase";
+import { FieldPhase } from "#phases/base/field-phase";
 import i18next from "i18next";
 
 export class TurnInitPhase extends FieldPhase {
-  override readonly id = PhaseId.TURN_INIT;
+  public override readonly phaseName = "TurnInitPhase";
 
   public override start(): void {
     super.start();
 
-    const { currentBattle } = globalScene;
+    const { currentBattle, phaseManager } = globalScene;
 
     globalScene.getPlayerField().forEach((p) => {
       // If this pokemon is in play and evolved into something illegal under the current challenge, force a switch
       if (p.isOnField() && !p.isAllowedInBattle()) {
-        globalScene.phaseManager.queueMessagePhase(
+        phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           i18next.t("challenges:illegalEvolution", { pokemon: p.name }),
-          null,
+          undefined,
           true,
         );
 
@@ -34,7 +30,7 @@ export class TurnInitPhase extends FieldPhase {
 
         if (!allowedPokemon.length) {
           // If there are no longer any legal pokemon in the party, game over.
-          globalScene.phaseManager.queueGameOverPhase({ clearPhaseQueue: true });
+          phaseManager.queueGameOverPhase({ clearPhaseQueue: true });
         } else if (
           allowedPokemon.length >= currentBattle.getBattlerCount()
           || (currentBattle.double && !allowedPokemon[0].isActive(true))
@@ -47,7 +43,7 @@ export class TurnInitPhase extends FieldPhase {
           p.leaveField();
         }
         if (allowedPokemon.length === 1 && currentBattle.double) {
-          globalScene.phaseManager.unshiftPhase(new ToggleDoublePositionPhase(true));
+          phaseManager.createAndUnshiftPhase("ToggleDoublePositionPhase", true);
         }
       }
     });
@@ -58,7 +54,8 @@ export class TurnInitPhase extends FieldPhase {
 
     // If true, will skip remainder of current phase (and not queue CommandPhases etc.)
     if (handleMysteryEncounterTurnStartEffects()) {
-      return this.end();
+      this.end();
+      return;
     }
 
     globalScene.getField().forEach((pokemon) => {
@@ -73,13 +70,15 @@ export class TurnInitPhase extends FieldPhase {
         pokemon.summonData.turnCount++;
         pokemon.summonData.waveTurnCount++;
 
-        globalScene.phaseManager.pushPhase(
-          pokemon.isPlayer() ? new CommandPhase(fieldIndex) : new EnemyCommandPhase(fieldIndex),
+        phaseManager.pushPhase(
+          pokemon.isPlayer()
+            ? phaseManager.createPhase("CommandPhase", fieldIndex)
+            : phaseManager.createPhase("EnemyCommandPhase", fieldIndex),
         );
       }
     });
 
-    globalScene.phaseManager.pushPhase(new TurnStartPhase());
+    phaseManager.createAndPushPhase("TurnStartPhase");
 
     this.end();
   }

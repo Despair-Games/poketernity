@@ -4,14 +4,13 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { MoveId } from "#enums/move-id";
 import type { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#field/pokemon";
-import { type Move, getMoveTargets } from "#moves/move";
+import { getMoveTargets, type Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
 import { getStatusEffectHealText } from "#utils/status-effect-utils";
 
 /**
  * Move attribute to cure a set of {@linkcode StatusEffect | status effects}
  * from the user or target, depending on if the effect is {@linkcode selfTarget | self-targeted}.
- * @extends MoveEffectAttr
  */
 export class HealStatusEffectAttr extends MoveEffectAttr {
   /** List of Status Effects to cure */
@@ -39,7 +38,8 @@ export class HealStatusEffectAttr extends MoveEffectAttr {
 
     const pokemon = this.selfTarget ? user : target;
     if (pokemon.hasStatusEffect(this.effects, false, true)) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         getStatusEffectHealText(pokemon.getStatusEffect(true), getPokemonNameWithAffix(pokemon)),
       );
       pokemon.resetStatus();

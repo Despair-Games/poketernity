@@ -35,7 +35,8 @@ export class StealHeldItemAttr extends MoveEffectAttr {
       const tierHeldItems = heldItems.filter((m) => m.type.getOrInferTier(poolType) === highestItemTier);
       const stolenItem = tierHeldItems[user.randSeedInt(tierHeldItems.length)];
       if (globalScene.tryTransferHeldItemModifier(stolenItem, user, false)) {
-        globalScene.phaseManager.queueMessagePhase(
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
           i18next.t("moveTriggers:stoleItem", {
             pokemonName: getPokemonNameWithAffix(user),
             targetName: getPokemonNameWithAffix(target),

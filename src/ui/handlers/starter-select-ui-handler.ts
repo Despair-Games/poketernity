@@ -20,11 +20,11 @@ import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#data/pokemon-species";
 import { starterColors } from "#data/starter-colors";
 import {
-  POKERUS_STARTER_COUNT,
   getCandyProgressRequirement,
   getPassiveCandyCount,
   getSameSpeciesEggCandyCounts,
   getValueReductionCandyCounts,
+  POKERUS_STARTER_COUNT,
   speciesStarterCosts,
 } from "#data/starters";
 import type { Variant } from "#data/variant";
@@ -32,16 +32,16 @@ import { getVariantTierForVariant, getVariantTint } from "#data/variant";
 import { AbilityId } from "#enums/ability-id";
 import { Button } from "#enums/button";
 import { ChallengeType } from "#enums/challenge-type";
-import { Device } from "#enums/devices";
+import { Device } from "#enums/device";
 import { DropDownColumn } from "#enums/drop-down-column";
 import { DropDownState } from "#enums/drop-down-state";
 import { DropDownType } from "#enums/drop-down-type";
-import { EggSourceType } from "#enums/egg-source-types";
+import { EggSourceType } from "#enums/egg-source-type";
 import { ElementalType } from "#enums/elemental-type";
 import { GameDataType } from "#enums/game-data-type";
 import { GameModes } from "#enums/game-modes";
 import { Gender } from "#enums/gender";
-import { GrowthRate } from "#enums/growth-rates";
+import { GrowthRate } from "#enums/growth-rate";
 import type { MoveId } from "#enums/move-id";
 import type { Nature } from "#enums/nature";
 import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
@@ -51,13 +51,11 @@ import { SpeciesId } from "#enums/species-id";
 import { TextStyle } from "#enums/text-style";
 import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
-import { EncounterPhase } from "#phases/encounter-phase";
-import { SelectChallengePhase } from "#phases/select-challenge-phase";
 import type { DexAttrProps, StarterAttributes, StarterPreferences } from "#system/game-data";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
 import type { DexEntry } from "#types/dex-data";
-import type { StarterConfig } from "#types/starter-config";
-import type { StarterDataEntry, StarterMoveset } from "#types/starter-data";
+import type { StarterConfig, StarterDataEntry, StarterMoveset } from "#types/starter-data";
+import type { EnumValues } from "#types/utility-types";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { DropDown, DropDownLabel, DropDownOption } from "#ui/drop-down";
@@ -75,7 +73,7 @@ import { addBBCodeTextObject, addTextObject, setTextColor } from "#ui/text-utils
 import { addWindow } from "#ui/ui-theme";
 import { applyChallenges } from "#utils/challenge-utils";
 import { rgbHexToRgba } from "#utils/color-utils";
-import { BooleanHolder, NumberHolder, fixedNumber, isNil } from "#utils/common-utils";
+import { BooleanHolder, enumValueToKey, fixedNumber, isNil, NumberHolder } from "#utils/common-utils";
 import { getPokemonSpeciesForm, getPokerusStarters } from "#utils/pokemon-utils";
 import { capitalizeString, leftPad, toReadableString } from "#utils/string-utils";
 import { argbFromRgba } from "@material/material-color-utilities";
@@ -104,7 +102,7 @@ const StarterSelectMode = {
   START: 4,
 } as const;
 
-type StarterSelectMode = (typeof StarterSelectMode)[keyof typeof StarterSelectMode];
+type StarterSelectMode = EnumValues<typeof StarterSelectMode>;
 
 const languageSettings: { [key: string]: LanguageSetting } = {
   pt_BR: {
@@ -203,10 +201,9 @@ let StarterPrefers_private_latest: string = StarterPrefers_DEFAULT;
 
 /** called on starter selection show once */
 function loadStarterPrefs(): StarterPreferences {
-  return JSON.parse(
-    (StarterPrefers_private_latest =
-      localStorage.getItem(getLocalStorageKey(GameDataType.STARTER_PREFS)) ?? StarterPrefers_DEFAULT),
-  );
+  StarterPrefers_private_latest =
+    localStorage.getItem(getLocalStorageKey(GameDataType.STARTER_PREFS)) ?? StarterPrefers_DEFAULT;
+  return JSON.parse(StarterPrefers_private_latest);
 }
 
 /** called on starter selection clear, always */
@@ -427,7 +424,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     this.filterBar.addFilter(DropDownColumn.GEN, i18next.t("filterBar:genFilter"), genDropDown);
 
     // type filter
-    const typeKeys = Object.keys(ElementalType).filter((v) => Number.isNaN(Number(v)));
+    const typeKeys = Object.keys(ElementalType);
     const typeOptions: DropDownOption[] = [];
     typeKeys.forEach((type, index) => {
       if (index === 0 || index === 19) {
@@ -2678,7 +2675,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       // Type filter
       const fitsType = this.filterBar
         .getVals(DropDownColumn.TYPES)
-        .some((type) => container.species.isOfType((type as number) - 1));
+        .some((type) => container.species.isOfType(type as number));
 
       // Caught / Shiny filter
       const isNonShinyCaught: boolean = (caughtAttr & DexAttr.NON_SHINY) > 0;
@@ -3700,7 +3697,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
         this.setTypeIcons(speciesForm.type1, speciesForm.type2);
 
-        this.teraIcon.setFrame(ElementalType[this.teraCursor].toLowerCase());
+        this.teraIcon.setFrame(enumValueToKey(ElementalType, this.teraCursor).toLowerCase());
         this.teraIcon.setVisible(
           !this.statsMode /*
             && Object.hasOwn(globalScene.gameData.achvUnlocks, achvs.TERASTALLIZE.id) */,
@@ -3729,7 +3726,9 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
     for (let m = 0; m < 4; m++) {
       const move = m < this.starterMoveset.length ? allMoves.get(this.starterMoveset[m]) : null;
-      this.pokemonMoveBgs[m].setFrame(ElementalType[move ? move.type : ElementalType.UNKNOWN].toString().toLowerCase());
+      this.pokemonMoveBgs[m].setFrame(
+        enumValueToKey(ElementalType, move ? move.type : ElementalType.UNKNOWN).toLowerCase(),
+      );
       this.pokemonMoveLabels[m].setText(move ? move.name : "-");
       this.pokemonMoveContainers[m].setVisible(!!move);
     }
@@ -3740,7 +3739,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       const eggMove = hasEggMoves ? allMoves.get(speciesEggMoves[species.speciesId][em]) : null;
       const eggMoveUnlocked = eggMove && globalScene.gameData.starterData[species.speciesId].eggMoves & (1 << em);
       this.pokemonEggMoveBgs[em].setFrame(
-        ElementalType[eggMove ? eggMove.type : ElementalType.UNKNOWN].toString().toLowerCase(),
+        enumValueToKey(ElementalType, eggMove ? eggMove.type : ElementalType.UNKNOWN).toLowerCase(),
       );
       this.pokemonEggMoveLabels[em].setText(eggMove && eggMoveUnlocked ? eggMove.name : "???");
     }
@@ -3758,13 +3757,13 @@ export class StarterSelectUiHandler extends MessageUiHandler {
   setTypeIcons(type1: ElementalType | null, type2: ElementalType | null): void {
     if (type1 !== null) {
       this.type1Icon.setVisible(true);
-      this.type1Icon.setFrame(ElementalType[type1].toLowerCase());
+      this.type1Icon.setFrame(enumValueToKey(ElementalType, type1).toLowerCase());
     } else {
       this.type1Icon.setVisible(false);
     }
     if (type2 !== null) {
       this.type2Icon.setVisible(true);
-      this.type2Icon.setFrame(ElementalType[type2].toLowerCase());
+      this.type2Icon.setFrame(enumValueToKey(ElementalType, type2).toLowerCase());
     } else {
       this.type2Icon.setVisible(false);
     }
@@ -3945,8 +3944,10 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       ui.setMode<StarterSelectUiHandler>(UiMode.STARTER_SELECT);
       globalScene.phaseManager.clearPhaseQueue();
       if (globalScene.gameMode.isChallenge) {
-        globalScene.phaseManager.pushPhase(new SelectChallengePhase());
-        globalScene.phaseManager.pushPhase(new EncounterPhase());
+        globalScene.phaseManager.pushPhase(
+          globalScene.phaseManager.createPhase("SelectChallengePhase"),
+          globalScene.phaseManager.createPhase("EncounterPhase"),
+        );
       } else {
         globalScene.phaseManager.toTitleScreen();
       }

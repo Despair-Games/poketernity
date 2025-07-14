@@ -10,7 +10,6 @@ import i18next from "i18next";
 /**
  * Attribute used to switch the user's own stats.
  * Used by Power Shift.
- * @extends MoveEffectAttr
  */
 export class ShiftStatAttr extends MoveEffectAttr {
   private statToSwitch: EffectiveStat;
@@ -30,7 +29,8 @@ export class ShiftStatAttr extends MoveEffectAttr {
     user.setStat(this.statToSwitch, secondStat, false);
     user.setStat(this.statToSwitchWith, firstStat, false);
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("moveTriggers:shiftedStats", {
         pokemonName: getPokemonNameWithAffix(user),
         statToSwitch: i18next.t(getStatKey(this.statToSwitch)),

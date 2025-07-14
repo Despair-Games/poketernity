@@ -7,13 +7,13 @@ import { type NumberHolder, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
- * Attribute to set move power based on one of four random outcomes (listed below).
- * - 40% : 40 BP attack
- * - 30% : 80 BP attack
- * - 10% : 120 BP attack
- * - 20% : Heal 25% of the target's HP
+ * Attribute to set move power based on one of four random outcomes:
+ * - `40%`: `40` BP attack
+ * - `30%`: `80` BP attack
+ * - `10%`: `120` BP attack
+ * - `20%`: Heal `25%` of the target's HP
+ *
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Present_(move) | Present}.
- * @extends VariablePowerAttr
  */
 export class PresentPowerAttr extends VariablePowerAttr {
   override apply(user: Pokemon, target: Pokemon, _move: Move, power: NumberHolder): boolean {
@@ -33,9 +33,14 @@ export class PresentPowerAttr extends VariablePowerAttr {
     } else if (powerSeed < 100) {
       // If this move is multi-hit, disable all other hits
       user.stopMultiHit();
-      globalScene.phaseManager.queuePokemonHealPhase(target.getBattlerIndex(), toDmgValue(target.getMaxHp() / 4), {
-        message: i18next.t("moveTriggers:regainedHealth", { pokemonName: getPokemonNameWithAffix(target) }),
-      });
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "PokemonHealPhase",
+        target.getBattlerIndex(),
+        toDmgValue(target.getMaxHp() / 4),
+        {
+          message: i18next.t("moveTriggers:regainedHealth", { pokemonName: getPokemonNameWithAffix(target) }),
+        },
+      );
     }
 
     return true;

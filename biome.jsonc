@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.0.5/schema.json",
   "vcs": {
     "enabled": false,
     "clientKind": "git",
@@ -16,35 +16,53 @@
     "ignoreUnknown": true,
     // Adding folders to the ignore list is GREAT for performance because it prevents biome from descending into them
     // and having to verify whether each individual file is ignored
-    "ignore": [
-      "**/*.d.ts",
-      ".github/*",
-      ".vscode/*",
-      "build/*",
-      "coverage/*",
-      "dist/*",
-      "docs/*",
-      "node_modules/*",
-      "public/*",
-      "typedoc/*",
-      "src/data/tms.ts" // this file is just too big
+    "includes": [
+      "**",
+      "!**/*.d.ts",
+      "!**/.github/**/*",
+      "!**/.vscode/**/*",
+      "!**/build/**/*",
+      "!**/coverage/**/*",
+      "!**/dist/**/*",
+      "!**/docs/**/*",
+      "!**/node_modules/**/*",
+      "!**/public/**/*",
+      "!**/typedoc/**/*",
+      // this file is too big
+      "!**/src/data/tms.ts"
     ]
   },
 
-  "organizeImports": { "enabled": false }, // TODO: Enable in Biome 2.0
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": {
+          "level": "on",
+          "options": {
+            "groups": [":ALIAS:", ":NODE:", ":PACKAGE_WITH_PROTOCOL:", ":PACKAGE:", ":PATH:"]
+          }
+        }
+      }
+    }
+  },
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true, // see https://biomejs.dev/linter/rules/#recommended-rules
+      "recommended": true, // see https://biomejs.dev/linter/javascript/rules/#recommended-rules and https://biomejs.dev/linter/css/rules/#recommended-rules
       "correctness": {
         "noUndeclaredVariables": "off", // handled by TypeScript
         "noUnusedVariables": "error",
         "noSwitchDeclarations": "error",
         "noVoidTypeReturn": "warn", // TODO: Refactor and make this an error
-        "noUnusedImports": "off" // Handled by ESLint until multi-line disable is added (in Biome 2.0)
+        "noUnusedImports": {
+          "level": "error",
+          "fix": "safe"
+        },
+        "noUnusedFunctionParameters": "error",
+        "noUnusedLabels": "error",
+        "noPrivateImports": "error"
       },
       "style": {
-        "noVar": "error",
         "useEnumInitializers": "off", // large enums like Moves/Species would make this cumbersome
         "useBlockStatements": "error",
         "useConst": "error",
@@ -56,9 +74,32 @@
         "useSingleVarDeclarator": "off",
         "useNodejsImportProtocol": "error",
         "useTemplate": "off", // string concatenation is faster: https://stackoverflow.com/questions/29055518/are-es6-template-literals-faster-than-string-concatenation
-        "noNamespaceImport": "error",
         "noInferrableTypes": "off", // Explicit > Implicit
-        "useConsistentArrayType": "error" // Standardize on `T[]`
+        "useConsistentArrayType": "error", // Standardize on `T[]`
+        "useFilenamingConvention": {
+          "level": "error",
+          "options": {
+            "filenameCases": ["kebab-case"],
+            "requireAscii": true,
+            "strictCase": false
+          }
+        },
+        "useAsConstAssertion": "error",
+        "noUnusedTemplateLiteral": "error",
+        "useNumberNamespace": "error",
+        "noUselessElse": "error",
+        "noCommonJs": "error",
+        "noRestrictedTypes": {
+          "level": "error",
+          "options": {
+            "types": {
+              "integer": {
+                "message": "This is an alias for 'number' that can provide false impressions of what values can actually be contained in this variable. Use 'number' instead.",
+                "use": "number"
+              }
+            }
+          }
+        }
       },
       "suspicious": {
         "noDoubleEquals": "error",
@@ -70,7 +111,9 @@
         "noRedeclare": "error",
         "noGlobalIsNan": "error",
         "noAsyncPromiseExecutor": "warn", // TODO: Refactor and make this an error
-        "useDefaultSwitchClauseLast": "warn" // TODO: make error?
+        "useDefaultSwitchClauseLast": "warn", // TODO: make error?
+        "noVar": "error",
+        "noDocumentCookie": "off" // Firefox has minimal support for the "Cookie Store API"
       },
       "complexity": {
         "noExcessiveCognitiveComplexity": "info", // TODO: Refactor and make this an error
@@ -79,27 +122,49 @@
         "noUselessSwitchCase": "off", // Explicit > Implicit
         "noUselessConstructor": "error",
         "noBannedTypes": "warn", // TODO: refactor and make an error
-        "useRegexLiterals": "off" // Was broken for some reason; TODO: re-enable
+        "useRegexLiterals": "off", // Was broken for some reason; TODO: re-enable
+        "noThisInStatic": "error",
+        "noUselessThisAlias": "error",
+        "noUselessTernary": "error"
       },
       "nursery": {
-        "noCommonJs": "error"
+        "useAdjacentGetterSetter": "error",
+        "noConstantBinaryExpression": "error",
+        "noTsIgnore": "error",
+        "noAwaitInLoop": "warn",
+        "useJsonImportAttribute": "off", // "Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'. ts(2823)"
+        "useIndexOf": "error",
+        "useObjectSpread": "error",
+        "useNumericSeparators": "off", // TODO: enable?
+        "useIterableCallbackReturn": "warn", // TODO: refactor and make "error"
+        "noShadow": "warn" // TODO: refactor and make "error"
+      },
+      "performance": {
+        "noNamespaceImport": "error",
+        "noDelete": "error"
       }
     }
   },
   "javascript": {
-    "formatter": { "quoteStyle": "double", "arrowParentheses": "always" }
+    "formatter": {
+      "quoteStyle": "double",
+      "arrowParentheses": "always"
+    },
+    "parser": {
+      "jsxEverywhere": false
+    }
   },
   "overrides": [
     {
-      "include": ["test/**"],
+      "includes": ["**/test/**"],
       "javascript": { "globals": [] },
       "linter": {
         "rules": {
           "performance": {
-            "noDelete": "off" // TODO: evaluate if this is necessary for the test(s) to function
+            "noDelete": "off", // TODO: evaluate if this is necessary for the test(s) to function
+            "noNamespaceImport": "off"
           },
           "style": {
-            "noNamespaceImport": "off", // this is required for `vi.spyOn` to work in some tests
             "noNonNullAssertion": "off" // tests are able to make assumptions about the game state that normally can't be made
           }
         }
@@ -107,7 +172,7 @@
     },
     {
       // This section is to improve the bug tester workflow
-      "include": ["src/overrides.ts"],
+      "includes": ["**/src/overrides.ts"],
       "linter": {
         "rules": {
           "correctness": {

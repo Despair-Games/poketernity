@@ -74,7 +74,8 @@ export abstract class ArenaTag {
    */
   public onRemove(_arena: Arena, quiet: boolean = false): void {
     if (!quiet) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         i18next.t(`arenaTag:arenaOnRemove${this.i18nSideKey}`, { moveName: this.getMoveName() }),
       );
     }

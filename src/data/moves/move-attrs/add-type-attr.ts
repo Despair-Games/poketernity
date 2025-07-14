@@ -4,7 +4,8 @@ import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
+import { enumValueToKey } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -13,7 +14,6 @@ import i18next from "i18next";
  * it only overwrites types added by other moves with this attribute.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Forest%27s_Curse_(move) | Forest's Curse}
  * and {@linkcode https://bulbapedia.bulbagarden.net/wiki/Trick-or-Treat_(move) | Trick-or-Treat}.
- * @extends MoveEffectAttr
  */
 export class AddTypeAttr extends MoveEffectAttr {
   private type: ElementalType;
@@ -28,9 +28,10 @@ export class AddTypeAttr extends MoveEffectAttr {
     target.summonData.addedType = this.type;
     target.updateInfo();
 
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("moveTriggers:addType", {
-        typeName: i18next.t(`pokemonInfo:Type.${ElementalType[this.type]}`),
+        typeName: i18next.t(`pokemonInfo:Type.${enumValueToKey(ElementalType, this.type)}`),
         pokemonName: getPokemonNameWithAffix(target),
       }),
     );

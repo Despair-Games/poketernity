@@ -1,3 +1,5 @@
+import type { EnumValues } from "#types/utility-types";
+
 export const ArenaTagType = {
   MUD_SPORT: 1,
   WATER_SPORT: 2,
@@ -34,4 +36,4 @@ export const ArenaTagType = {
   PENDING_HEAL: 33,
 } as const;
 
-export type ArenaTagType = (typeof ArenaTagType)[keyof typeof ArenaTagType];
+export type ArenaTagType = EnumValues<typeof ArenaTagType>;

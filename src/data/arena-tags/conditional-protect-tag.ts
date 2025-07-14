@@ -10,14 +10,13 @@ import { MoveFlags } from "#enums/move-flags";
 import type { MoveId } from "#enums/move-id";
 import type { Arena } from "#field/arena";
 import type { Pokemon } from "#field/pokemon";
-import type { ProtectConditionFunc } from "#types/protect-condition-func";
+import type { ProtectConditionFunc } from "#types/move-types";
 import type { BooleanHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
  * Class to implement conditional team protection.
  * Applies protection based on the attributes of incoming moves.
- * @extends ArenaTag
  */
 export abstract class ConditionalProtectTag extends ArenaTag {
   /** The condition function to determine which moves are negated */
@@ -40,7 +39,8 @@ export abstract class ConditionalProtectTag extends ArenaTag {
   }
 
   override onAdd(_arena: Arena): void {
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t(`arenaTag:conditionalProtectOnAdd${this.i18nSideKey}`, { moveName: super.getMoveName() }),
     );
   }
@@ -77,7 +77,8 @@ export abstract class ConditionalProtectTag extends ArenaTag {
         isProtected.value = true;
         if (!simulated) {
           new CommonBattleAnim(CommonAnim.PROTECT, defender).play();
-          globalScene.phaseManager.queueMessagePhase(
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "MessagePhase",
             i18next.t("arenaTag:conditionalProtectApply", {
               moveName: super.getMoveName(),
               pokemonNameWithAffix: getPokemonNameWithAffix(defender),

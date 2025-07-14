@@ -231,7 +231,6 @@ describe("Abilities - Unburden", () => {
     game.override.battleType("double").ability(AbilityId.NONE).moveset(MoveId.FALSE_SWIPE); // Disable ability override so that we can properly set abilities below
     await game.classicMode.startBattle(SpeciesId.TREECKO, SpeciesId.MEOWTH, SpeciesId.WEEZING);
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [treecko, _meowth, weezing] = game.scene.getPlayerParty();
     treecko.abilityIndex = 2; // Treecko has Unburden
     weezing.abilityIndex = 1; // Weezing has Neutralizing Gas

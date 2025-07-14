@@ -1,3 +1,5 @@
+import type { EnumValues } from "#types/utility-types";
+
 /** @todo make this start at 1 */
 export const AnimBlendType = {
   NORMAL: 0,
@@ -5,4 +7,4 @@ export const AnimBlendType = {
   SUBTRACT: 2,
 } as const;
 
-export type AnimBlendType = (typeof AnimBlendType)[keyof typeof AnimBlendType];
+export type AnimBlendType = EnumValues<typeof AnimBlendType>;

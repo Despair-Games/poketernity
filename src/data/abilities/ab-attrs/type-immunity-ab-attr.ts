@@ -4,12 +4,11 @@ import type { ElementalType } from "#enums/elemental-type";
 import { MoveTarget } from "#enums/move-target";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import type { AbAttrCondition } from "#types/ab-attr-condition";
+import type { AbAttrCondition } from "#types/ability-types";
 import type { BooleanHolder, NumberHolder } from "#utils/common-utils";
 
 /**
  * Determines whether a Pokemon is immune to a move because of an ability.
- * @extends PreDefendAbAttr
  * @see {@linkcode applyPreDefend}
  * @see {@linkcode getCondition}
  */

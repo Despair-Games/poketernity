@@ -3,7 +3,7 @@ import type { BattleStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { StatStageChangeAttr } from "#moves/stat-stage-change-attr";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 import { toDmgValue } from "#utils/common-utils";
 
 /**
@@ -11,7 +11,6 @@ import { toDmgValue } from "#utils/common-utils";
  * at the cost of a portion of the user's maximum HP.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Belly_Drum_(move) | Belly Drum}
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Clangorous_Soul_(move) | Clangorous Soul}.
- * @extends StatStageChangeAttr
  */
 export class CutHpStatStageBoostAttr extends StatStageChangeAttr {
   private cutRatio: number;

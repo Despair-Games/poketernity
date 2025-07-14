@@ -11,7 +11,6 @@ import i18next from "i18next";
 /**
  * BattlerTag for the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Magic_Coat_(move) | Magic Coat}.
  * Reflects status moves back at the attacker.
- * @extends BattlerTag
  * @see {@linkcode MovePhase.tryReflectMove}
  */
 export class MagicCoatTag extends BattlerTag {
@@ -20,7 +19,8 @@ export class MagicCoatTag extends BattlerTag {
   }
 
   override onAdd(pokemon: Pokemon): void {
-    globalScene.phaseManager.queueMessagePhase(
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
       i18next.t("battlerTags:magicCoatOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }
@@ -33,7 +33,7 @@ export class MagicCoatTag extends BattlerTag {
     reflected: BooleanHolder,
   ): boolean {
     if (!simulated) {
-      globalScene.phaseManager.queueMessagePhase(this.getReflectionMessage(attacker, move));
+      globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", this.getReflectionMessage(attacker, move));
     }
     reflected.value = true;
     return true;

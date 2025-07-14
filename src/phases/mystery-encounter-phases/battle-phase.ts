@@ -1,21 +1,14 @@
-// -- start tsdoc imports --
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { PostSummonPhase } from "#phases/post-summon-phase";
-// -- end tsdoc imports --
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { getCharVariantFromDialogue } from "#data/dialogue";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
-import { PhaseId } from "#enums/phase-id";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { IvScannerModifier } from "#modifier/modifier";
-import { CheckSwitchPhase } from "#phases/check-switch-phase";
-import { ReturnPhase } from "#phases/return-phase";
-import { ScanIvsPhase } from "#phases/scan-ivs-phase";
-import { SummonPhase } from "#phases/summon-phase";
-import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase";
 import { randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
@@ -25,11 +18,9 @@ import i18next from "i18next";
  * - Showing intro dialogue for an enemy trainer or wild Pokemon
  * - Sliding in the visuals for enemy trainer or wild Pokemon, as well as handling summoning animations
  * - Queue the {@linkcode SummonPhase}s, {@linkcode PostSummonPhase}s, etc., required to initialize the phase queue for a battle
- *
- * @extends Phase
  */
 export class MysteryEncounterBattlePhase extends Phase {
-  override readonly id = PhaseId.ME_BATTLE;
+  public override readonly phaseName = "MysteryEncounterBattlePhase";
 
   protected disableSwitch: boolean;
 
@@ -83,9 +74,9 @@ export class MysteryEncounterBattlePhase extends Phase {
         globalScene.audioManager.playBgm();
       }
       const availablePartyMembers = globalScene.getEnemyParty().filter((p) => !p.isFainted()).length;
-      globalScene.phaseManager.unshiftPhase(new SummonPhase(0, false));
+      globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", 0, false);
       if (double && availablePartyMembers > 1) {
-        globalScene.phaseManager.unshiftPhase(new SummonPhase(1, false));
+        globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", 1, false);
       }
 
       if (!mysteryEncounter?.hideBattleIntroMessage) {
@@ -103,9 +94,9 @@ export class MysteryEncounterBattlePhase extends Phase {
         const doTrainerSummon = (): void => {
           this.hideEnemyTrainer();
           const availablePartyMembers = globalScene.getEnemyParty().filter((p) => !p.isFainted()).length;
-          globalScene.phaseManager.unshiftPhase(new SummonPhase(0, false));
+          globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", 0, false);
           if (double && availablePartyMembers > 1) {
-            globalScene.phaseManager.unshiftPhase(new SummonPhase(1, false));
+            globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", 1, false);
           }
           this.endBattleSetup();
         };
@@ -161,8 +152,10 @@ export class MysteryEncounterBattlePhase extends Phase {
       const ivScannerModifier = globalScene.findModifier((m) => m instanceof IvScannerModifier);
       if (ivScannerModifier) {
         enemyField.map((p) =>
-          globalScene.phaseManager.pushPhase(
-            new ScanIvsPhase(p.getBattlerIndex(), Math.min(ivScannerModifier.getStackCount() * 2, 6)),
+          globalScene.phaseManager.createAndPushPhase(
+            "ScanIvsPhase",
+            p.getBattlerIndex(),
+            Math.min(ivScannerModifier.getStackCount() * 2, 6),
           ),
         );
       }
@@ -171,30 +164,30 @@ export class MysteryEncounterBattlePhase extends Phase {
     const availablePartyMembers = globalScene.getPlayerParty().filter((p) => p.isAllowedInBattle());
 
     if (!availablePartyMembers[0].isOnField()) {
-      globalScene.phaseManager.pushPhase(new SummonPhase(0));
+      globalScene.phaseManager.createAndPushPhase("SummonPhase", 0);
     }
 
     if (double) {
       if (availablePartyMembers.length > 1) {
-        globalScene.phaseManager.pushPhase(new ToggleDoublePositionPhase(true));
+        globalScene.phaseManager.createAndPushPhase("ToggleDoublePositionPhase", true);
         if (!availablePartyMembers[1].isOnField()) {
-          globalScene.phaseManager.pushPhase(new SummonPhase(1));
+          globalScene.phaseManager.createAndPushPhase("SummonPhase", 1);
         }
       }
     } else {
       if (availablePartyMembers.length > 1 && availablePartyMembers[1].isOnField()) {
         globalScene.getPlayerField().forEach((pokemon) => pokemon.lapseTag(BattlerTagType.COMMANDED));
-        globalScene.phaseManager.pushPhase(new ReturnPhase(1));
+        globalScene.phaseManager.createAndPushPhase("ReturnPhase", 1);
       }
-      globalScene.phaseManager.pushPhase(new ToggleDoublePositionPhase(false));
+      globalScene.phaseManager.createAndPushPhase("ToggleDoublePositionPhase", false);
     }
 
     if (encounterMode !== MysteryEncounterMode.TRAINER_BATTLE && !this.disableSwitch) {
       const minPartySize = double ? 2 : 1;
       if (availablePartyMembers.length > minPartySize) {
-        globalScene.phaseManager.pushPhase(new CheckSwitchPhase(0, double));
+        globalScene.phaseManager.createAndPushPhase("CheckSwitchPhase", 0, double);
         if (double) {
-          globalScene.phaseManager.pushPhase(new CheckSwitchPhase(1, double));
+          globalScene.phaseManager.createAndPushPhase("CheckSwitchPhase", 1, double);
         }
       }
     }

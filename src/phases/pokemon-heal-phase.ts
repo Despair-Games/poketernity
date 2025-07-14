@@ -1,10 +1,9 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { HealBlockTag } from "#battler-tags/heal-block-tag";
-import type { BattlerIndex } from "#enums/battler-index";
+import type { FieldBattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
-import { PhaseId } from "#enums/phase-id";
 import { StatusEffect } from "#enums/status-effect";
 import { HealingBoosterModifier } from "#modifier/modifier";
 import { CommonAnimPhase } from "#phases/common-anim-phase";
@@ -34,7 +33,7 @@ export interface PokemonHealPhaseOptions {
  * @param fullRestorePP - If `true`, will restore the pokemon's moves to full PP. Default `false`
  */
 export class PokemonHealPhase extends CommonAnimPhase {
-  override readonly id = PhaseId.POKEMON_HEAL;
+  public override readonly phaseName = "PokemonHealPhase";
 
   private readonly hpHealed: number;
   private message?: string;
@@ -46,7 +45,7 @@ export class PokemonHealPhase extends CommonAnimPhase {
   private readonly fullRestorePP: boolean;
 
   constructor(
-    battlerIndex: BattlerIndex,
+    battlerIndex: FieldBattlerIndex,
     hpHealed: number,
     {
       message,
@@ -95,7 +94,7 @@ export class PokemonHealPhase extends CommonAnimPhase {
     let lastStatusEffect = StatusEffect.NONE;
 
     if (healBlock && this.hpHealed > 0) {
-      globalScene.phaseManager.queueMessagePhase(healBlock.onActivation(pokemon));
+      globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", healBlock.onActivation(pokemon));
       this.message = undefined;
       super.end();
       return;
@@ -151,11 +150,12 @@ export class PokemonHealPhase extends CommonAnimPhase {
     }
 
     if (this.message) {
-      globalScene.phaseManager.queueMessagePhase(this.message);
+      globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", this.message);
     }
 
     if (this.healStatus && lastStatusEffect && !hasMessage) {
-      globalScene.phaseManager.queueMessagePhase(
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
         getStatusEffectHealText(lastStatusEffect, getPokemonNameWithAffix(pokemon)),
       );
     }

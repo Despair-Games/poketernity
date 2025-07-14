@@ -2,19 +2,16 @@ import { globalScene } from "#app/global-scene";
 import { timedEventManager } from "#app/timed-event-manager";
 import { getCharVariantFromDialogue } from "#data/dialogue";
 import { EventModifierType } from "#enums/event-modifier-type";
-import { PhaseId } from "#enums/phase-id";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
 import { modifierTypes } from "#modifier/modifier-types";
-import { BattlePhase } from "#phases/abstract-battle-phase";
-import { ModifierRewardPhase } from "#phases/modifier-reward-phase";
-import { MoneyRewardPhase } from "#phases/money-reward-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
 import { vouchers } from "#system/voucher";
 import { randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
 export class TrainerVictoryPhase extends BattlePhase {
-  override readonly id = PhaseId.TRAINER_VICTORY;
+  public override readonly phaseName = "TrainerVictoryPhase";
 
   public override start(): void {
     const { charSprite, currentBattle, ui } = globalScene;
@@ -22,21 +19,22 @@ export class TrainerVictoryPhase extends BattlePhase {
     globalScene.disableMenu = true;
 
     if (!trainer) {
-      return this.end();
+      this.end();
+      return;
     }
 
     globalScene.audioManager.playBgm(trainer.config.victoryBgm);
 
-    globalScene.phaseManager.unshiftPhase(new MoneyRewardPhase(trainer.config.moneyMultiplier));
+    globalScene.phaseManager.createAndUnshiftPhase("MoneyRewardPhase", trainer.config.moneyMultiplier);
 
     const modifierRewardFuncs = trainer.config.modifierRewardFuncs;
     for (const modifierRewardFunc of modifierRewardFuncs) {
-      globalScene.phaseManager.unshiftPhase(new ModifierRewardPhase(modifierRewardFunc));
+      globalScene.phaseManager.createAndUnshiftPhase("ModifierRewardPhase", modifierRewardFunc);
     }
 
     if (timedEventManager.isEventActive(EventModifierType.EXTRA_TRAINER_REWARDS)) {
       for (const rewardFunc of trainer.config.eventRewardFuncs) {
-        globalScene.phaseManager.unshiftPhase(new ModifierRewardPhase(rewardFunc));
+        globalScene.phaseManager.createAndUnshiftPhase("ModifierRewardPhase", rewardFunc);
       }
     }
 
@@ -44,12 +42,11 @@ export class TrainerVictoryPhase extends BattlePhase {
     // Validate Voucher for boss trainers
     if (Object.hasOwn(vouchers, TrainerType[trainerType])) {
       if (!globalScene.validateVoucher(vouchers[TrainerType[trainerType]]) && trainer.config.isBoss) {
-        globalScene.phaseManager.unshiftPhase(
-          new ModifierRewardPhase(
-            [modifierTypes.VOUCHER, modifierTypes.VOUCHER, modifierTypes.VOUCHER_PLUS, modifierTypes.VOUCHER_PREMIUM][
-              vouchers[TrainerType[trainerType]].voucherType
-            ],
-          ),
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "ModifierRewardPhase",
+          [modifierTypes.VOUCHER, modifierTypes.VOUCHER, modifierTypes.VOUCHER_PLUS, modifierTypes.VOUCHER_PREMIUM][
+            vouchers[TrainerType[trainerType]].voucherType
+          ],
         );
       }
     }
@@ -62,7 +59,9 @@ export class TrainerVictoryPhase extends BattlePhase {
       () => {
         const victoryMessages = trainer.getVictoryMessages();
         let message: string;
-        globalScene.executeWithSeedOffset(() => (message = randSeedItem(victoryMessages)), waveIndex);
+        globalScene.executeWithSeedOffset(() => {
+          message = randSeedItem(victoryMessages);
+        }, waveIndex);
         message = message!; // tell TS compiler it's defined now
 
         const showMessage = (): void => {

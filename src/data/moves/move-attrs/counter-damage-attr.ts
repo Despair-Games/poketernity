@@ -2,8 +2,7 @@ import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
 import { FixedDamageAttr } from "#moves/fixed-damage-attr";
 import type { Move } from "#moves/move";
-import type { AttackMoveResult } from "#types/attack-move-result";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { AttackMoveResult, MoveConditionFunc } from "#types/move-types";
 import { type NumberHolder, toDmgValue } from "#utils/common-utils";
 
 type MoveFilter = (moveId: MoveId) => boolean;
@@ -13,7 +12,6 @@ type MoveFilter = (moveId: MoveId) => boolean;
  * that satisfy a given {@linkcode moveFilter | move filter}.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Variations_of_Counter | variants of Counter},
  * including Metal Burst and Comeuppance.
- * @extends FixedDamageAttr
  */
 export class CounterDamageAttr extends FixedDamageAttr {
   private moveFilter: MoveFilter;

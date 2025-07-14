@@ -10,7 +10,7 @@ import type { Pokemon } from "#field/pokemon";
 import type { PokemonMove } from "#field/pokemon-move";
 import type { Move, MoveAttrFilter } from "#moves/move";
 import type { MoveAttr } from "#moves/move-attr";
-import type { AbstractConstructor } from "#types/abstract-constructor";
+import type { AbstractConstructor } from "#types/utility-types";
 import { BooleanHolder, getTSEnumKeys, toDmgValue } from "#utils/common-utils";
 import { t } from "i18next";
 
@@ -29,7 +29,8 @@ export const crashDamageFunc = (user: Pokemon, _move: Move): boolean => {
     result: HitResult.OTHER,
     ignoreSegments: true,
   });
-  globalScene.phaseManager.queueMessagePhase(
+  globalScene.phaseManager.createAndUnshiftPhase(
+    "MessagePhase",
     t("moveTriggers:keptGoingAndCrashed", { pokemonName: getPokemonNameWithAffix(user) }),
   );
 
@@ -109,6 +110,7 @@ function applyMoveChargeAttrsInternal<TAttr extends MoveAttr>(
     move.chargeAttrs.filter((attr) => attrFilter(attr)).forEach((attr) => attr.apply(user, target, move, ...args));
   }
 }
+
 export function isFieldTargeted(targets: BattlerIndex[]): boolean {
   return targets.some((t) => [BattlerIndex.BOTH_SIDES, BattlerIndex.PLAYER_SIDE, BattlerIndex.ENEMY_SIDE].includes(t));
 }

@@ -2,9 +2,8 @@ import { DailyApi } from "#api/daily-api";
 import { ScoreboardCategory } from "#enums/scoreboard-category";
 import { initServerForApiTests } from "#test/test-utils/test-file-initialization";
 import { getApiBaseUrl } from "#test/test-utils/test-utils";
-import type { GetDailyRankingsPageCountRequest, GetDailyRankingsRequest } from "#types/daily-api";
-import type { RankingEntry } from "#types/ranking-entry";
-import { http, HttpResponse } from "msw";
+import type { GetDailyRankingsPageCountRequest, GetDailyRankingsRequest, RankingEntry } from "#types/api-types";
+import { HttpResponse, http } from "msw";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const apiBase = getApiBaseUrl();

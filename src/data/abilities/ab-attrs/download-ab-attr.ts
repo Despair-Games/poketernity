@@ -3,13 +3,11 @@ import { globalScene } from "#app/global-scene";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { type BattleStat, Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
-import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 
 /**
  * Download raises either the Attack stat or Special Attack stat by one stage depending on the foe's currently lowest defensive stat:
  * it will raise Attack if the foe's current Defense is lower than its current Special Defense stat;
  * otherwise, it will raise Special Attack.
- * @extends PostSummonAbAttr
  */
 export class DownloadAbAttr extends PostSummonAbAttr {
   private enemyDef: number;
@@ -25,8 +23,8 @@ export class DownloadAbAttr extends PostSummonAbAttr {
     this.enemySpDef = 0;
 
     for (const opponent of pokemon.getOpponents()) {
-      this.enemyDef += opponent.getEffectiveStat(Stat.DEF, undefined, undefined, AbilityApplyMode.IGNORE);
-      this.enemySpDef += opponent.getEffectiveStat(Stat.SPDEF, undefined, undefined, AbilityApplyMode.IGNORE);
+      this.enemyDef += opponent.getEffectiveStat(Stat.DEF, { abilityApplyMode: AbilityApplyMode.IGNORE });
+      this.enemySpDef += opponent.getEffectiveStat(Stat.SPDEF, { abilityApplyMode: AbilityApplyMode.IGNORE });
     }
 
     if (this.enemyDef < this.enemySpDef) {
@@ -38,8 +36,12 @@ export class DownloadAbAttr extends PostSummonAbAttr {
     // only activate if there's actually an enemy to download from
     if (this.enemyDef > 0 && this.enemySpDef > 0) {
       if (!simulated) {
-        globalScene.phaseManager.unshiftPhase(
-          new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, this.stats, 1),
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "StatStageChangePhase",
+          pokemon.getBattlerIndex(),
+          pokemon,
+          this.stats,
+          1,
         );
       }
       return true;

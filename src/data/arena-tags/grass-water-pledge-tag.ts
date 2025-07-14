@@ -11,7 +11,6 @@ import i18next from "i18next";
  * of {@link https://bulbapedia.bulbagarden.net/wiki/Grass_Pledge_(move) | Grass Pledge}
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Water_Pledge_(move) | Water Pledge}.
  * Quarters the Speed of Pokemon on the given side of the field for 4 turns.
- * @extends ArenaTag
  */
 export class GrassWaterPledgeTag extends ArenaTag {
   constructor(sourceId: number, side: ArenaTagSide) {
@@ -20,6 +19,9 @@ export class GrassWaterPledgeTag extends ArenaTag {
 
   override onAdd(_arena: Arena): void {
     // "A swamp enveloped your/the opposing team!"
-    globalScene.phaseManager.queueMessagePhase(i18next.t(`arenaTag:grassWaterPledgeOnAdd${this.i18nSideKey}`));
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
+      i18next.t(`arenaTag:grassWaterPledgeOnAdd${this.i18nSideKey}`),
+    );
   }
 }

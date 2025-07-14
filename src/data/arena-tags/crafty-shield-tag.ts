@@ -5,7 +5,7 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveCategory } from "#enums/move-category";
 import { MoveId } from "#enums/move-id";
 import { MoveTarget } from "#enums/move-target";
-import type { ProtectConditionFunc } from "#types/protect-condition-func";
+import type { ProtectConditionFunc } from "#types/move-types";
 
 /**
  * Condition function for {@link https://bulbapedia.bulbagarden.net/wiki/Crafty_Shield_(move) Crafty Shield's}
@@ -29,7 +29,6 @@ const CraftyShieldConditionFunc: ProtectConditionFunc = (_arena, moveId) => {
  * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Crafty_Shield_(move) Crafty Shield}.
  * *Condition:* The incoming move is a Status move, is not a hazard, and does
  * not target all Pokemon or sides of the field.
- * @extends ConditionalProtectTag
  */
 export class CraftyShieldTag extends ConditionalProtectTag {
   constructor(sourceId: number, side: ArenaTagSide) {

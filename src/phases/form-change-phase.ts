@@ -1,21 +1,17 @@
-// -- start tsdoc imports --
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { EvolutionPhase } from "#phases/evolution-phase";
-// -- end tsdoc imports --
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { SpeciesFormChange } from "#data/pokemon-forms";
 import { getSpeciesFormChangeMessage } from "#data/pokemon-forms";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { PhaseId } from "#enums/phase-id";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { UiMode } from "#enums/ui-mode";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
-import { FormChangeBasePhase } from "#phases/abstract-form-change-base-phase";
-import { EndEvolutionPhase } from "#phases/end-evolution-phase";
-import { LearnMovePhase } from "#phases/learn-move-phase";
+import { FormChangeBasePhase } from "#phases/base/form-change-base-phase";
 import { achvs } from "#system/achievements";
 import type { FormChangeSceneUiHandler } from "#ui/form-change-scene-ui-handler";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
@@ -25,10 +21,9 @@ import { fixedNumber } from "#utils/common-utils";
  * A phase for handling certain form changes for player Pokemon.
  * This does not cover evolutions, and this does not cover form changes for enemy Pokemon.
  * @see {@linkcode EvolutionPhase} for evolutions
- * @extends FormChangeBasePhase
  */
 export class FormChangePhase extends FormChangeBasePhase {
-  override readonly id = PhaseId.FORM_CHANGE;
+  public override readonly phaseName = "FormChangePhase";
 
   /**
    * The form change that occurs during this phase.
@@ -222,12 +217,14 @@ export class FormChangePhase extends FormChangeBasePhase {
       // then end the form change cutscene via `EndEvolutionPhase`.
       for (const [, learnMoveId] of this.pokemon.getLevelMoves(1, true)) {
         if (this.formChange.movesToLearn.includes(learnMoveId)) {
-          globalScene.phaseManager.unshiftPhase(
-            new LearnMovePhase(globalScene.getPlayerParty().indexOf(this.pokemon), learnMoveId),
+          globalScene.phaseManager.createAndUnshiftPhase(
+            "LearnMovePhase",
+            globalScene.getPlayerParty().indexOf(this.pokemon),
+            learnMoveId,
           );
         }
       }
-      globalScene.phaseManager.unshiftPhase(new EndEvolutionPhase());
+      globalScene.phaseManager.createAndUnshiftPhase("EndEvolutionPhase");
 
       super.end();
     }

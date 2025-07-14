@@ -10,7 +10,7 @@ import { getArenaTag } from "#arena-tags/utils/get-arena-tag";
 import { ENTRY_HAZARD_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
 import { DEFAULT_NEW_TERRAIN_DURATION } from "#constants/game-constants";
 import { DEFAULT_NEW_WEATHER_DURATION, PRIMAL_WEATHER_TYPES } from "#constants/weather-constants";
-import { getBiomeBgm, IndoorBiomes, type BiomeTierTrainerPools, type PokemonPools } from "#data/biome-utils";
+import { type BiomeTierTrainerPools, getBiomeBgm, IndoorBiomes, type PokemonPools } from "#data/biome-utils";
 import { allBiomes } from "#data/data-lists";
 import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrigger } from "#data/pokemon-forms";
 import type PokemonSpecies from "#data/pokemon-species";
@@ -20,7 +20,7 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { ArenaTagType } from "#enums/arena-tag-type";
-import type { BattlerIndex } from "#enums/battler-index";
+import type { BattlerIndex, FieldBattlerIndex } from "#enums/battler-index";
 import { BiomeId } from "#enums/biome-id";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
 import { CommonAnim } from "#enums/common-anim";
@@ -34,8 +34,6 @@ import { WeatherType } from "#enums/weather-type";
 import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#events/arena";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import { CommonAnimPhase } from "#phases/common-anim-phase";
-import { ShowAbilityPhase } from "#phases/show-ability-phase";
 import { coerceArray, enumValueToKey, getTSEnumValues } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedInt, weightedPick } from "#utils/random-utils";
@@ -47,7 +45,7 @@ export class Arena {
   public tags: ArenaTag[] = [];
   public bgm: string;
   public ignoreAbilities: boolean;
-  public ignoringEffectSource: BattlerIndex | null;
+  public ignoringEffectSource?: FieldBattlerIndex;
 
   /**
    * Used to keep track of the previous TimeOfDay.
@@ -384,8 +382,8 @@ export class Arena {
    */
   tryOverrideWeather(weather: WeatherType): boolean {
     this.weather = new Weather(weather, 0);
-    globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.SUNNY + (weather - 1)));
-    globalScene.phaseManager.queueMessagePhase(getWeatherStartMessage(weather) ?? "");
+    globalScene.phaseManager.createAndUnshiftPhase("CommonAnimPhase", (CommonAnim.SUNNY + (weather - 1)) as CommonAnim);
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", getWeatherStartMessage(weather) ?? "");
     return true;
   }
 
@@ -396,8 +394,11 @@ export class Arena {
    */
   tryOverrideTerrain(terrain: TerrainType): boolean {
     this.terrain = new Terrain(terrain, 0);
-    globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.MISTY_TERRAIN + (terrain - 1)));
-    globalScene.phaseManager.queueMessagePhase(getTerrainStartMessage(terrain) ?? "");
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "CommonAnimPhase",
+      (CommonAnim.MISTY_TERRAIN + (terrain - 1)) as CommonAnim,
+    );
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", getTerrainStartMessage(terrain) ?? "");
     return true;
   }
 
@@ -449,11 +450,14 @@ export class Arena {
     }
 
     if (newWeatherType !== WeatherType.NONE) {
-      globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.SUNNY + (newWeatherType - 1)));
-      globalScene.phaseManager.queueMessagePhase(getWeatherStartMessage(newWeatherType) ?? "");
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "CommonAnimPhase",
+        (CommonAnim.SUNNY + (newWeatherType - 1)) as CommonAnim,
+      );
+      globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", getWeatherStartMessage(newWeatherType) ?? "");
       this.weather = new Weather(newWeatherType, newWeatherDuration);
     } else {
-      globalScene.phaseManager.queueMessagePhase(getWeatherClearMessage(oldWeatherType) ?? "");
+      globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", getWeatherClearMessage(oldWeatherType) ?? "");
       this.weather = null;
     }
 
@@ -481,7 +485,8 @@ export class Arena {
       const isCherrimWithFlowerGift = p.hasAbility(AbilityId.FLOWER_GIFT) && p.species.speciesId === SpeciesId.CHERRIM;
 
       if (isCastformWithForecast || isCherrimWithFlowerGift) {
-        new ShowAbilityPhase(p.getBattlerIndex());
+        // TODO: This doesn't seem to account for which ability is triggered (main vs. passive)
+        globalScene.phaseManager.createAndUnshiftPhase("ShowAbilityPhase", p.getBattlerIndex());
         globalScene.triggerPokemonFormChange(p, SpeciesFormChangeWeatherTrigger);
       }
     });
@@ -498,7 +503,8 @@ export class Arena {
         p.hasAbility(AbilityId.FLOWER_GIFT, false, true) && p.species.speciesId === SpeciesId.CHERRIM;
 
       if (isCastformWithForecast || isCherrimWithFlowerGift) {
-        new ShowAbilityPhase(p.getBattlerIndex());
+        // TODO: This doesn't seem to account for which ability is triggered (main vs. passive)
+        globalScene.phaseManager.createAndUnshiftPhase("ShowAbilityPhase", p.getBattlerIndex());
         return globalScene.triggerPokemonFormChange(p, SpeciesFormChangeRevertWeatherFormTrigger);
       }
     });
@@ -539,11 +545,14 @@ export class Arena {
         new TerrainChangedEvent(oldTerrainType, this.terrain.terrainType, this.terrain.turnsLeft),
       );
       if (!ignoreAnim) {
-        globalScene.phaseManager.unshiftPhase(new CommonAnimPhase(CommonAnim.MISTY_TERRAIN + (terrain - 1)));
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "CommonAnimPhase",
+          (CommonAnim.MISTY_TERRAIN + (terrain - 1)) as CommonAnim,
+        );
       }
-      globalScene.phaseManager.queueMessagePhase(getTerrainStartMessage(terrain) ?? "");
+      globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", getTerrainStartMessage(terrain) ?? "");
     } else {
-      globalScene.phaseManager.queueMessagePhase(getTerrainClearMessage(oldTerrainType) ?? "");
+      globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", getTerrainClearMessage(oldTerrainType) ?? "");
     }
 
     globalScene
@@ -750,9 +759,9 @@ export class Arena {
     }
   }
 
-  setIgnoreAbilities(ignoreAbilities: boolean, ignoringEffectSource: BattlerIndex | null = null): void {
+  setIgnoreAbilities(ignoreAbilities: boolean, ignoringEffectSource?: FieldBattlerIndex): void {
     this.ignoreAbilities = ignoreAbilities;
-    this.ignoringEffectSource = ignoreAbilities ? ignoringEffectSource : null;
+    this.ignoringEffectSource = ignoreAbilities ? ignoringEffectSource : undefined;
   }
 
   /**

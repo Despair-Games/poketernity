@@ -1,18 +1,15 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { PhaseId } from "#enums/phase-id";
 import { ExpBoosterModifier } from "#modifier/modifier";
-import { PlayerPartyMemberPokemonPhase } from "#phases/abstract-player-party-member-pokemon-phase";
-import { LevelUpPhase } from "#phases/level-up-phase";
+import { PlayerPartyMemberPokemonPhase } from "#phases/base/player-party-member-pokemon-phase";
 import { NumberHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
  * Grants a player pokemon EXP and pushes a {@linkcode LevelUpPhase} if it leveled up
- * @extends PlayerPartyMemberPokemonPhase
  */
 export class ExpPhase extends PlayerPartyMemberPokemonPhase {
-  override readonly id = PhaseId.EXP;
+  public override readonly phaseName = "ExpPhase";
 
   private readonly expValue: number;
 
@@ -37,7 +34,7 @@ export class ExpPhase extends PlayerPartyMemberPokemonPhase {
         pokemon.addExp(exp.value);
         const newLevel = pokemon.level;
         if (newLevel > lastLevel) {
-          globalScene.phaseManager.unshiftPhase(new LevelUpPhase(this.partyMemberIndex, lastLevel, newLevel));
+          globalScene.phaseManager.createAndUnshiftPhase("LevelUpPhase", this.partyMemberIndex, lastLevel, newLevel);
         }
         pokemon.updateInfo().then(() => this.end());
       },

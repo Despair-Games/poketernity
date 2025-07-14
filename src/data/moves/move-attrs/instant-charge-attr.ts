@@ -1,13 +1,12 @@
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveAttr } from "#moves/move-attr";
-import type { UserMoveConditionFunc } from "#types/user-move-condition-func";
+import type { UserMoveConditionFunc } from "#types/move-types";
 import type { BooleanHolder } from "#utils/common-utils";
 
 /**
  * Attribute that allows charge moves to resolve in 1 turn under a set condition.
  * Should only be used for {@linkcode ChargingMove | charge moves} via `.chargeAttr()`.
- * @extends MoveAttr
  */
 export class InstantChargeAttr extends MoveAttr {
   /** The condition in which the move with this attribute instantly charges */

@@ -3,12 +3,11 @@ import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveAttr } from "#moves/move-attr";
 import { StatStageChangeAttr } from "#moves/stat-stage-change-attr";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 
 /**
  * Attribute to increase the user's stats upon knocking out the target with the move.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Fell_Stinger_(move) | Fell Stinger}.
- * @extends MoveAttr
  */
 export class PostVictoryStatStageChangeAttr extends MoveAttr {
   private stats: BattleStat[];

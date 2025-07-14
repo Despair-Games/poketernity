@@ -1,12 +1,11 @@
 import { PreAttackAbAttr } from "#abilities/pre-attack-ab-attr";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import type { PokemonAttackCondition } from "#types/pokemon-attack-condition";
+import type { PokemonAttackCondition } from "#types/move-types";
 import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Boosts the power of a Pokémon's move under certain conditions.
- * @extends AbAttr
  */
 export abstract class FieldMovePowerBoostAbAttr extends PreAttackAbAttr {
   private readonly condition: PokemonAttackCondition;

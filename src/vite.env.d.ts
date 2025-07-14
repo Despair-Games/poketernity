@@ -21,6 +21,8 @@ interface ImportMetaEnv {
   readonly VITE_API_DEBUG?: string;
   /** Enables Modifiers debug logging when set to `"1"` */
   readonly VITE_MODIFIERS_DEBUG?: string;
+  /** Enables UI debug logging. `"0"`: disabled; `"1"`: only logs ui mode changes; `"2"`: all ui logging enabled */
+  readonly VITE_UI_DEBUG?: string;
   /** Contains the name of the current git branch (Only available in development!) */
   readonly VITE_GIT_BRANCH?: string;
   /** Set to `"0"` to remove the branch-name element from the DOM. Set to `"1"` to show it. _Only available in `"development"` mode!_ */

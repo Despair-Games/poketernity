@@ -8,7 +8,6 @@ import type { BooleanHolder } from "#utils/common-utils";
 /**
  * If the defender is normally immune to a status effect due to its type, ignore that immunity.
  * Used by Corrosion
- * @extends AbAttr
  */
 export class IgnoreTypeStatusEffectImmunityAbAttr extends AbAttr {
   private readonly statusEffect: StatusEffect[];

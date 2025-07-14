@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import type { InterfaceConfig } from "#app/inputs-controller";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { Button } from "#enums/button";
-import type { Device } from "#enums/devices";
+import type { Device } from "#enums/device";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
 import { getIconWithSettingName } from "#inputs/config-handler";
@@ -146,6 +146,7 @@ export abstract class ControlsSettingsUiHandler extends UiHandler {
     this.settingsContainer.add(resetText);
 
     /// Initialize a new configuration "screen" for each type of gamepad.
+    // TODO: this is inefficient as it creates text objects for each configuration instead of reusing them.
     for (const config of this.configs) {
       // Create a map to store layout settings based on the pad type.
       this.layout[config.padType] = new Map();
@@ -186,7 +187,7 @@ export abstract class ControlsSettingsUiHandler extends UiHandler {
 
       settingFiltered.forEach((setting, s) => {
         // Convert the setting key from format 'Key_Name' to 'Key name' for display.
-        const settingName = setting.replace(/\_/g, " ");
+        const settingName = setting.replace(/_/g, " ");
 
         // Create and add a text object for the setting name to the scene.
         const isLock = this.settingBlacklisted.includes(this.setting[setting]);
@@ -413,15 +414,6 @@ export abstract class ControlsSettingsUiHandler extends UiHandler {
    * @returns `true` if the layout was successfully applied, otherwise `false`.
    */
   protected setLayout(activeConfig: InterfaceConfig): boolean {
-    // Check if there is no active configuration (e.g., no gamepad connected).
-    if (!activeConfig) {
-      // Retrieve the layout for when no gamepads are connected.
-      const layout = this.layout["noGamepads"];
-      // Make the options container visible to show message.
-      layout.optionsContainer.setVisible(true);
-      // Return false indicating the layout application was not successful due to lack of gamepad.
-      return false;
-    }
     // Extract the type of the gamepad from the active configuration.
     const configType = activeConfig.padType;
 

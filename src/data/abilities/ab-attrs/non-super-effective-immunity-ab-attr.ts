@@ -2,13 +2,12 @@ import { TypeImmunityAbAttr } from "#abilities/type-immunity-ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import type { AbAttrCondition } from "#types/ab-attr-condition";
+import type { AbAttrCondition } from "#types/ability-types";
 import type { BooleanHolder, NumberHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
  * Used by Wonder Guard
- * @extends TypeImmunityAbAttr
  */
 export class NonSuperEffectiveImmunityAbAttr extends TypeImmunityAbAttr {
   constructor(condition?: AbAttrCondition) {

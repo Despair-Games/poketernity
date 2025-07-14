@@ -10,9 +10,10 @@ import { BooleanHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
- * Attribute used for moves that steal a random berry from the target. The user then eats the stolen berry.
+ * Attribute used for moves that steal a random berry from the target.
+ * The user then eats the stolen berry.
+ *
  * Used for Pluck & Bug Bite.
- * @extends EatBerryAttr
  */
 export class StealEatBerryAttr extends EatBerryAttr {
   constructor() {
@@ -38,7 +39,7 @@ export class StealEatBerryAttr extends EatBerryAttr {
       targetName: target.name,
       berryName: this.chosenBerry.type.name,
     });
-    globalScene.phaseManager.queueMessagePhase(message);
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", message);
     this.reduceBerryModifier(target);
     this.eatBerry(user, target);
     return true;
