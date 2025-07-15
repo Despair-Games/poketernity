@@ -1,3 +1,4 @@
+import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
 import { Button } from "#enums/button";
@@ -9,8 +10,8 @@ import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import type { InputsIcons } from "#ui/inputs-config";
 import { MessageUiHandler } from "#ui/message-ui-handler";
-import { SettingsNavigationManager } from "#ui/settings-navigation-manager";
 import { ScrollBar } from "#ui/scroll-bar";
+import { SettingsNavigationManager } from "#ui/settings-navigation-manager";
 import { TextListContainer } from "#ui/text-list-container";
 import { addTextObject, getBBCodeFragment, setTextColor } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
@@ -231,7 +232,8 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
   }
 
   /**
-   * Update the icons for instructions at the bottom of the screen based on the latest used input device.
+   * Update the icons for instructions at the bottom of the screen and in the navigation header
+   * based on the latest used input device.
    */
   protected updateInstructionIcons(): void {
     for (const settingName of Object.keys(this.instructionIcons)) {
@@ -249,11 +251,12 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
         this.instructionIcons[settingName].alpha = 0;
       }
     }
+
+    SettingsNavigationManager.getInstance().updateIcons();
   }
 
   public override show(): boolean {
     this.updateInstructionIcons();
-    SettingsNavigationManager.getInstance().updateIcons();
 
     this.settingsContainer.setVisible(true);
     this.setCursor(0);
@@ -262,6 +265,8 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
     this.getUi().moveTo(this.settingsContainer, this.getUi().length - 1);
 
     this.getUi().hideTooltip();
+
+    eventBus.on("gamepad/init", this.updateInstructionIcons, this);
 
     return true;
   }
@@ -636,6 +641,8 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
     this.setScrollCursor(0);
     this.eraseCursor();
     this.getUi().bgmBar.toggleBgmBar(settingsManager.display.showBgmBar);
+
+    eventBus.off("gamepad/init", this.updateInstructionIcons, this);
   }
 
   /**
