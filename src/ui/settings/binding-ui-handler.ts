@@ -82,6 +82,7 @@ export abstract class BindingUiHandler extends UiHandler {
     this.actionsContainer.add(this.actionBg);
 
     // Text prompts and instructions for the user.
+    // TODO: fix placement
     this.unlockText = addTextObject(0, 0, i18next.t("settings:pressButton"), TextStyle.WINDOW);
     this.unlockText.setOrigin(0, 0);
     this.unlockText.setPositionRelative(this.titleBg, 36, 4);

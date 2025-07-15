@@ -1,5 +1,5 @@
 export const SettingKeyboard = {
-  // Default_Layout: "DEFAULT_LAYOUT",
+  Default_Layout: "layout",
   Button_Up: "BUTTON_UP",
   Alt_Button_Up: "ALT_BUTTON_UP",
   Button_Down: "BUTTON_DOWN",

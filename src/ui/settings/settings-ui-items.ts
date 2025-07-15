@@ -21,6 +21,7 @@ import type {
   DisplaySettingsKey,
   GamepadSettingsKey,
   GeneralSettingsKey,
+  KeyboardSettingsKey,
   SettingsUiItem,
   SettingUiItemOption,
 } from "#types/settings";
@@ -392,5 +393,23 @@ export const gamepadSettingsUiItems: SettingsUiItem<GamepadSettingsKey>[] = [
     key: "enabled",
     label: t("settings:gamepadSupport"),
     options: useAutoDisabledOptions(),
+  },
+];
+
+export const keyboardSettingsUiItems: SettingsUiItem<KeyboardSettingsKey>[] = [
+  {
+    key: "layout",
+    label: "Keyboard Type", // TODO: localize
+    options: [
+      {
+        label: "Default", // Will be overridden with the currently set layout name at runtime
+        value: 0,
+      },
+      {
+        label: t("settings:change"),
+        value: 1,
+      },
+    ],
+    overrideSelectedIndex: 0,
   },
 ];
