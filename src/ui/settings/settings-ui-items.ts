@@ -19,6 +19,7 @@ import { supportedLanguages } from "#system/supported-languages";
 import type {
   AudioSettingsKey,
   DisplaySettingsKey,
+  GamepadSettingsKey,
   GeneralSettingsKey,
   SettingsUiItem,
   SettingUiItemOption,
@@ -367,5 +368,27 @@ export const audioSettingsUiItems: SettingsUiItem<AudioSettingsKey>[] = [
     key: "uiVolume",
     label: t("settings:uiVolume"),
     options: useVolumeOptions(),
+  },
+];
+
+export const gamepadSettingsUiItems: SettingsUiItem<GamepadSettingsKey>[] = [
+  {
+    key: "activeIndex",
+    label: t("settings:controller"),
+    options: [
+      {
+        label: "Default", // Will be overridden with the proper gamepad id at runtime
+        value: 0,
+      },
+      {
+        label: t("settings:change"),
+        value: 1,
+      },
+    ],
+  },
+  {
+    key: "enabled",
+    label: t("settings:gamepadSupport"),
+    options: useAutoDisabledOptions(),
   },
 ];

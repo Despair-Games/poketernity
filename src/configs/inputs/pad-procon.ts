@@ -83,6 +83,12 @@ const pad_procon: GamepadInterfaceConfig<ProControllerKeys> = {
     RS: SettingGamepad.Button_Slow_Down,
     MENU: -1, // TODO: find proper default mapping, if any.
   },
+  settingsBlacklist: [
+    SettingGamepad.Button_Up,
+    SettingGamepad.Button_Down,
+    SettingGamepad.Button_Left,
+    SettingGamepad.Button_Right,
+  ],
 };
 
 export default pad_procon;

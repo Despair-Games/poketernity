@@ -68,6 +68,12 @@ const pad_unlicensedSNES: GamepadInterfaceConfig<BasicGamepadKeys> = {
     LB: SettingGamepad.Button_Cycle_Form,
     RB: SettingGamepad.Button_Cycle_Shiny,
   },
+  settingsBlacklist: [
+    SettingGamepad.Button_Up,
+    SettingGamepad.Button_Down,
+    SettingGamepad.Button_Left,
+    SettingGamepad.Button_Right,
+  ],
 };
 
 export default pad_unlicensedSNES;

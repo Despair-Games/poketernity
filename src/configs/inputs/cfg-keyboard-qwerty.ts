@@ -288,6 +288,16 @@ const cfg_keyboard_qwerty: KeyboardInterfaceConfig = {
     "KEY_DEL",
     "KEY_HOME",
   ],
+  settingsBlacklist: [
+    SettingKeyboard.Button_Submit,
+    SettingKeyboard.Button_Menu,
+    SettingKeyboard.Button_Action,
+    SettingKeyboard.Button_Cancel,
+    SettingKeyboard.Button_Up,
+    SettingKeyboard.Button_Down,
+    SettingKeyboard.Button_Left,
+    SettingKeyboard.Button_Right,
+  ],
 };
 
 export default cfg_keyboard_qwerty;

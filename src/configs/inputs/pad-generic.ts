@@ -81,6 +81,12 @@ const pad_generic: GamepadInterfaceConfig<ModernGamepadKeys> = {
     RS: SettingGamepad.Button_Slow_Down,
   },
   bindingBlacklist: ["LC_N", "LC_S", "LC_W", "LC_E"],
+  settingsBlacklist: [
+    SettingGamepad.Button_Up,
+    SettingGamepad.Button_Down,
+    SettingGamepad.Button_Left,
+    SettingGamepad.Button_Right,
+  ],
 };
 
 export default pad_generic;

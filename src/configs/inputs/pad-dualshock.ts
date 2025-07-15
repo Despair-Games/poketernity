@@ -84,6 +84,12 @@ const pad_dualshock: GamepadInterfaceConfig<DualshockKeys> = {
     RS: SettingGamepad.Button_Slow_Down,
     TOUCH: SettingGamepad.Button_Submit,
   },
+  settingsBlacklist: [
+    SettingGamepad.Button_Up,
+    SettingGamepad.Button_Down,
+    SettingGamepad.Button_Left,
+    SettingGamepad.Button_Right,
+  ],
 };
 
 export default pad_dualshock;

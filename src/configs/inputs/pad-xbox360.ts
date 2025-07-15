@@ -80,6 +80,12 @@ const pad_xbox360: GamepadInterfaceConfig<ModernGamepadKeys> = {
     LS: SettingGamepad.Button_Speed_Up,
     RS: SettingGamepad.Button_Slow_Down,
   },
+  settingsBlacklist: [
+    SettingGamepad.Button_Up,
+    SettingGamepad.Button_Down,
+    SettingGamepad.Button_Left,
+    SettingGamepad.Button_Right,
+  ],
 };
 
 export default pad_xbox360;

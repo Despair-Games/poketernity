@@ -2514,7 +2514,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     this.filterInstructionsContainer.removeAll();
     let gamepadType;
     if (globalScene.inputMethod === "gamepad") {
-      gamepadType = globalScene.inputController.getConfig(
+      gamepadType = globalScene.inputController.getGamepadConfig(
         globalScene.inputController.selectedDevice[Device.GAMEPAD],
       ).padType;
     } else {

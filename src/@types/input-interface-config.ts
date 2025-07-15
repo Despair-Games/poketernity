@@ -24,15 +24,16 @@ export type ProControllerKeys = ModernGamepadKeys | "MENU";
 
 export type GamepadKeys = BasicGamepadKeys | ModernGamepadKeys | DualshockKeys | ProControllerKeys;
 
+export type InputKeys = GamepadKeys | KeyboardKeys;
+
+export type InputSettings = SettingGamepad | SettingKeyboard;
+
 /**
  * Interface used to define the configuration of specific types of keyboard or gamepads.
  * @typeParam K - Represent the usable buttons for this device type.
  * @typeParam S - Represent the mapping settings for this device type.
  */
-export interface InputInterfaceConfig<
-  K extends string = GamepadKeys | KeyboardKeys,
-  S extends string = SettingGamepad | SettingKeyboard,
-> {
+export interface InputInterfaceConfig<K extends InputKeys, S extends InputSettings> {
   padID: string;
   padType: string;
   /** Mapping each key to a Phaser keycode. */
@@ -52,4 +53,5 @@ export interface InputInterfaceConfig<
 }
 
 export interface KeyboardInterfaceConfig extends InputInterfaceConfig<KeyboardKeys, SettingKeyboard> {}
-export interface GamepadInterfaceConfig<T extends GamepadKeys> extends InputInterfaceConfig<T, SettingGamepad> {}
+export interface GamepadInterfaceConfig<T extends GamepadKeys = GamepadKeys>
+  extends InputInterfaceConfig<T, SettingGamepad> {}
