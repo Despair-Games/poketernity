@@ -1,5 +1,5 @@
 import { Device } from "#enums/device";
-import type { GamepadKeys, InputInterfaceConfig, KeyboardKeys } from "#types/input-interface-config";
+import type { GamepadKeys, InputInterfaceConfig, InputKeys, KeyboardKeys } from "#types/input-interface-config";
 import { isNil } from "#utils/common-utils";
 
 /**
@@ -56,7 +56,7 @@ export function getButtonWithKeycode(config: InputInterfaceConfig, keycode: numb
  * @param settingName - The setting name to search for.
  * @returns The key associated with the specified setting name.
  */
-export function getKeyWithSettingName<K extends string = GamepadKeys | KeyboardKeys>(
+export function getKeyWithSettingName<K extends InputKeys>(
   config: InputInterfaceConfig<K, any>,
   settingName,
 ): K | null {

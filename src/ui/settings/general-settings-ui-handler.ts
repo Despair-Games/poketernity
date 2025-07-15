@@ -40,11 +40,13 @@ export class GeneralSettingsUiHandler extends SettingsUiHandler {
   }
 
   protected override handleSaveSetting<V = any>(uiItem: SettingsUiItem, newValue: V): void {
-    if (uiItem.key === "moveTouchControls") {
+    if (uiItem.key === "moveTouchControls" && newValue) {
       eventBus.emit("touchControls/move/start");
       eventBus.once("touchControls/move/end", () => {
         this.setOptionCursor(-1, 0, false);
       });
+    } else {
+      super.handleSaveSetting(uiItem, newValue);
     }
   }
 

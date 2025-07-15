@@ -1,6 +1,12 @@
+import { GAMEPAD_BUTTONS_BLACKLIST, GAMEPAD_LOCKED_BINDINGS } from "#constants/inputs-constants";
 import { Button } from "#enums/button";
 import { SettingGamepad } from "#enums/setting-gamepad";
-import { BasicGamepadKeys, GamepadInterfaceConfig, InputInterfaceConfig } from "#types/input-interface-config";
+import {
+  BasicGamepadKeys,
+  GamepadInterfaceConfig,
+  InputInterfaceConfig,
+  ModernGamepadKeys,
+} from "#types/input-interface-config";
 
 /**
  * 081f-e401 - UnlicensedSNES
@@ -68,12 +74,8 @@ const pad_unlicensedSNES: GamepadInterfaceConfig<BasicGamepadKeys> = {
     LB: SettingGamepad.Button_Cycle_Form,
     RB: SettingGamepad.Button_Cycle_Shiny,
   },
-  settingsBlacklist: [
-    SettingGamepad.Button_Up,
-    SettingGamepad.Button_Down,
-    SettingGamepad.Button_Left,
-    SettingGamepad.Button_Right,
-  ],
+  bindingBlacklist: GAMEPAD_BUTTONS_BLACKLIST as BasicGamepadKeys[],
+  settingsBlacklist: GAMEPAD_LOCKED_BINDINGS,
 };
 
 export default pad_unlicensedSNES;

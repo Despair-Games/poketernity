@@ -33,7 +33,7 @@ export type InputSettings = SettingGamepad | SettingKeyboard;
  * @typeParam K - Represent the usable buttons for this device type.
  * @typeParam S - Represent the mapping settings for this device type.
  */
-export interface InputInterfaceConfig<K extends InputKeys, S extends InputSettings> {
+export interface InputInterfaceConfig<K extends InputKeys = InputKeys, S extends InputSettings = InputSettings> {
   padID: string;
   padType: string;
   /** Mapping each key to a Phaser keycode. */
@@ -44,12 +44,12 @@ export interface InputInterfaceConfig<K extends InputKeys, S extends InputSettin
   settings: Partial<Record<S, Button>>;
   /** Default mappings of each key to a setting. -1 means no mapping. */
   default: Record<K, S | -1>;
+  /** Keys of reserved buttons which cannot be (re)mapped. */
+  bindingBlacklist: readonly K[];
+  /** Keys of settings that cannot be changed. */
+  settingsBlacklist: readonly S[];
   /** Custom remappings. -1 means no mapping. */
   custom?: Record<K, S | -1>;
-  /** Keys of reserved buttons which cannot be (re)mapped. */
-  bindingBlacklist?: K[];
-  /** TODO: Keys of settings that cannot be changed. */
-  settingsBlacklist?: S[];
 }
 
 export interface KeyboardInterfaceConfig extends InputInterfaceConfig<KeyboardKeys, SettingKeyboard> {}

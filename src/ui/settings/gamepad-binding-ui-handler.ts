@@ -3,12 +3,14 @@ import { Device } from "#enums/device";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { getIconWithSettingName, getKeyWithKeycode } from "#inputs/config-handler";
+import { GamepadInterfaceConfig, GamepadKeys } from "#types/input-interface-config";
 import { BindingUiHandler } from "#ui/binding-ui-handler";
 import { addTextObject } from "#ui/text-utils";
+import { isNil } from "#utils/common-utils";
 
 export class GamepadBindingUiHandler extends BindingUiHandler {
   constructor() {
-    super(UiMode.GAMEPAD_BINDING);
+    super(UiMode.GAMEPAD_BINDING, Device.GAMEPAD);
   }
   protected override setup() {
     super.setup();
@@ -53,45 +55,29 @@ export class GamepadBindingUiHandler extends BindingUiHandler {
     super.tearDown();
   }
 
-  private getSelectedDevice() {
-    return globalScene.inputController?.selectedDevice[Device.GAMEPAD];
-  }
-
   private gamepadButtonDown(
     pad: Phaser.Input.Gamepad.Gamepad,
     button: Phaser.Input.Gamepad.Button,
     _value: number,
   ): void {
-    // TODO: use blacklist from config
-    const blacklist = [12, 13, 14, 15]; // d-pad buttons are blacklisted.
     // Check conditions before processing the button press.
-    if (
-      !this.listening
-      || pad.id.toLowerCase() !== this.getSelectedDevice()
-      || blacklist.includes(button.index)
-      || this.buttonPressed !== null
-    ) {
+    if (!this.listening || pad.id.toLowerCase() !== this.getSelectedDevice() || this.buttonPressed !== null) {
       return;
     }
-    const activeConfig = globalScene.inputController.getActiveConfig(Device.GAMEPAD);
-    const type = activeConfig.padType;
+
+    const activeConfig = globalScene.inputController.getActiveConfig(this.device);
     const key = getKeyWithKeycode(activeConfig, button.index);
+    if (isNil(key) || activeConfig.bindingBlacklist?.includes(key as GamepadKeys)) {
+      return;
+    }
+    const type = activeConfig.padType;
     const buttonIcon = activeConfig.icons[key];
-    if (!buttonIcon) {
+    if (isNil(buttonIcon)) {
       return;
     }
     this.buttonPressed = button.index;
     const assignedButtonIcon = getIconWithSettingName(activeConfig, this.target);
     this.onInputDown(buttonIcon, assignedButtonIcon, type);
-  }
-
-  protected override swapAction(): boolean {
-    const activeConfig = globalScene.inputController.getActiveConfig(Device.GAMEPAD);
-    if (globalScene.inputController.assignBinding(activeConfig, this.target, this.buttonPressed)) {
-      globalScene.gameData.saveMappingConfigs(this.getSelectedDevice(), activeConfig);
-      return true;
-    }
-    return false;
   }
 
   /**

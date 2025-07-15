@@ -216,6 +216,7 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
         value: 1,
       },
     ],
+    overrideSelectedIndex: 0,
     requiresReload: true,
   },
   {
@@ -385,6 +386,7 @@ export const gamepadSettingsUiItems: SettingsUiItem<GamepadSettingsKey>[] = [
         value: 1,
       },
     ],
+    overrideSelectedIndex: 0,
   },
   {
     key: "enabled",

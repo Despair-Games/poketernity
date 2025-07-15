@@ -236,9 +236,13 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
    * based on the latest used input device.
    */
   protected updateInstructionIcons(): void {
+    const specialIcons = {
+      BUTTON_HOME: "HOME.png",
+      BUTTON_DELETE: "DEL.png",
+    };
     for (const settingName of Object.keys(this.instructionIcons)) {
-      if (settingName === "BUTTON_HOME") {
-        this.instructionIcons[settingName].setTexture("keyboard", "HOME.png");
+      if (Object.keys(specialIcons).includes(settingName)) {
+        this.instructionIcons[settingName].setTexture("keyboard", specialIcons[settingName]);
         this.instructionIcons[settingName].alpha = 1;
         continue;
       }
@@ -581,7 +585,9 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
       // Mark the correct option as selected
       const value = settingsManager[this.category][uiItem.key];
       let index = 0;
-      if (value !== undefined) {
+      if (!isNil(uiItem.overrideSelectedIndex)) {
+        index = uiItem.overrideSelectedIndex;
+      } else if (value !== undefined) {
         index = uiItem.options.findIndex((option) => option.value === value);
       }
       if (index < 0) {

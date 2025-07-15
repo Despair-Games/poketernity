@@ -1,12 +1,13 @@
 import { globalScene } from "#app/global-scene";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { Button } from "#enums/button";
+import type { Device } from "#enums/device";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
-import { SettingsNavigationManager } from "#ui/settings-navigation-manager";
 import { addTextObject, setTextColor } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";
 import { addWindow } from "#ui/ui-theme";
+import { isNil } from "#utils/common-utils";
 import i18next from "i18next";
 
 type FinishCallback = (succes?: boolean) => boolean;
@@ -15,6 +16,8 @@ type FinishCallback = (succes?: boolean) => boolean;
  * Abstract class for handling UI elements related to button bindings.
  */
 export abstract class BindingUiHandler extends UiHandler {
+  protected device: Device;
+
   // Containers for different segments of the UI.
   protected optionSelectContainer: Phaser.GameObjects.Container;
   protected actionsContainer: Phaser.GameObjects.Container;
@@ -40,7 +43,6 @@ export abstract class BindingUiHandler extends UiHandler {
 
   // Function to call on cancel or completion of binding.
   protected callback: FinishCallback | null;
-  protected abstract swapAction(): boolean;
 
   protected timeLeftAutoClose: number = 5;
   protected countdownTimer;
@@ -48,8 +50,9 @@ export abstract class BindingUiHandler extends UiHandler {
   // The specific setting being modified.
   protected target;
 
-  constructor(mode: UiMode) {
+  constructor(mode: UiMode, device: Device) {
     super(mode);
+    this.device = device;
   }
 
   protected override setup() {
@@ -195,7 +198,6 @@ export abstract class BindingUiHandler extends UiHandler {
           const remapSuccess = this.swapAction();
           playSuccess = remapSuccess;
           playError = !remapSuccess;
-          SettingsNavigationManager.getInstance().updateIcons(); // TODO don't call here?
           this.callback?.(remapSuccess);
         }
         break;
@@ -263,5 +265,22 @@ export abstract class BindingUiHandler extends UiHandler {
     this.newButtonIcon.setVisible(true);
     this.setCursor(0);
     this.actionsContainer.setVisible(true);
+  }
+
+  protected getSelectedDevice(): string | null {
+    return globalScene.inputController?.selectedDevice[this.device];
+  }
+
+  protected swapAction() {
+    const selectedDevice = this.getSelectedDevice();
+    if (isNil(selectedDevice)) {
+      return false;
+    }
+    const activeConfig = globalScene.inputController.getActiveConfig(this.device);
+    if (globalScene.inputController.assignBinding(activeConfig, this.target, this.buttonPressed)) {
+      globalScene.gameData.saveMappingConfigs(selectedDevice, activeConfig);
+      return true;
+    }
+    return false;
   }
 }

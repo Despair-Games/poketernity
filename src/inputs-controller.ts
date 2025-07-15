@@ -53,7 +53,7 @@ export class InputsController {
   private configs: Map<string, InputInterfaceConfig<any, any>> = new Map();
 
   public gamepadSupport: boolean = true;
-  public selectedDevice; //: {[key:string]: string};
+  public selectedDevice; //TODO: Record<Device, string | null>;
 
   private disconnectedGamepads: string[] = [];
 
@@ -510,8 +510,9 @@ export class InputsController {
    * @returns InterfaceConfig The configuration object for the active gamepad, or null if not set.
    */
   getActiveConfig(device: Device) {
-    if (this.configs[this.selectedDevice[device]]?.padID) {
-      return this.configs[this.selectedDevice[device]];
+    const selectedDevice = this.selectedDevice[device];
+    if (selectedDevice && this.configs[selectedDevice]?.padID) {
+      return this.configs[selectedDevice];
     }
     return null;
   }
@@ -535,6 +536,8 @@ export class InputsController {
     if (sourceDevice === Device.KEYBOARD) {
       this.ensureKeyboardIsInit();
     }
+    // TODO: we should have a specific config for touch input
+    // to ensure the icons remain correct even with keyboard remappings
     return this.getActiveConfig(sourceDevice);
   }
 

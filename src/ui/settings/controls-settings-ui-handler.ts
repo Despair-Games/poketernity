@@ -10,7 +10,7 @@ import { SettingsCategory, SettingsUiItem } from "#types/settings";
 import { BindingUiHandler } from "#ui/binding-ui-handler";
 import { SettingsUiHandler } from "#ui/settings-ui-handler";
 import { TextListContainer } from "#ui/text-list-container";
-import { getBBCodeFragment } from "#ui/text-utils";
+import { addTextObject, getBBCodeFragment } from "#ui/text-utils";
 import { isNil } from "#utils/common-utils";
 import { camelizeString } from "#utils/string-utils";
 import i18next from "i18next";
@@ -28,9 +28,14 @@ export abstract class ControlsSettingsUiHandler<
   /** Rotating array of sprites for the button mappings. */
   private mappingIcons: Phaser.GameObjects.Sprite[];
 
+  private homeKey: Phaser.Input.Keyboard.Key | undefined;
+
+  /** Text object to show when no device is detected. */
+  protected noDeviceText: Phaser.GameObjects.Text;
+
   protected bindingUiMode: UiMode;
   protected device: Device;
-
+  protected plugInText: string = i18next.t("settings:keyboardPleasePress");
   protected bindingText: string = i18next.t("settings:pressToBind");
   protected buttonsTextureMap: string;
 
@@ -62,8 +67,38 @@ export abstract class ControlsSettingsUiHandler<
     });
     this.optionsContainer.add(this.mappingValuesText);
 
-    // Hide the options until a controller is plugged in
+    // Create text in case no controller is plugged in
+    this.noDeviceText = addTextObject(8, 28, this.plugInText, TextStyle.SETTINGS_LABEL);
+    this.settingsContainer.add(this.noDeviceText);
+
+    // Hide the options until a device is detected
     this.optionsContainer.setVisible(false);
+  }
+
+  public override show(): boolean {
+    if (super.show()) {
+      // Listen to the home key to reset current bindings mapping
+      this.homeKey = globalScene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.HOME);
+      this.homeKey?.on("up", this.resetBindings, this);
+      return true;
+    }
+    return false;
+  }
+
+  protected override clear(): void {
+    this.homeKey?.off("up", this.resetBindings, this);
+    super.clear();
+  }
+
+  /**
+   * Handle the home key press event: reset mappings for the current device.
+   */
+  private resetBindings(): void {
+    if (globalScene.ui.getMode() !== this.mode) {
+      return;
+    }
+    globalScene.gameData.resetMappingToFactory(this.device);
+    this.updateInstructionIcons();
   }
 
   protected override displaySettingsOptions(): void {
@@ -122,8 +157,8 @@ export abstract class ControlsSettingsUiHandler<
       // Convert the setting key from format 'Key_Name' to 'Key name' for display.
       const settingName = key.replace(/_/g, " ").toLowerCase();
 
-      const isLock = config.settingsBlacklist?.includes(key as S);
-      const labelStyle = isLock ? TextStyle.SETTINGS_LOCKED : TextStyle.SETTINGS_LABEL;
+      const isLocked = config.settingsBlacklist?.includes(key as S);
+      const labelStyle = isLocked ? TextStyle.SETTINGS_LOCKED : TextStyle.SETTINGS_LABEL;
 
       let labelText: string;
       const i18nKey = camelizeString(settingName.replace("alt ", ""));
@@ -133,7 +168,7 @@ export abstract class ControlsSettingsUiHandler<
         labelText = i18next.t(`settings:${i18nKey}`);
       }
       settingLabels.push(getBBCodeFragment(labelText, labelStyle, true));
-      settingValues.push(isLock ? "" : this.bindingText);
+      settingValues.push(isLocked ? "" : this.bindingText);
     }
     this.labelsTextList.setList(settingLabels);
     this.mappingValuesText.setList(settingValues);
