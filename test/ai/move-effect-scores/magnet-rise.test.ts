@@ -1,7 +1,7 @@
 import { AbilityId } from "#enums/ability-id";
-import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { revealAllMoves } from "#test/test-utils/enemy-command-utils";
 import { GameManager } from "#test/test-utils/game-manager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -39,22 +39,23 @@ describe("Move Effect Scores - Magnet Rise", () => {
     expect(enemy).toPreferSelectingMove(MoveId.MAGNET_RISE);
   });
 
-  it("should not be preferred if the user's opponent is not Ground-type", async () => {
+  it("should be preferred if the user's opponent has revealed a Ground-type move", async () => {
+    game.override.moveset(MoveId.EARTHQUAKE);
+
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
+
+    revealAllMoves(game.scene);
+    const enemy = game.field.getEnemyPokemon();
+
+    expect(enemy).toPreferSelectingMove(MoveId.MAGNET_RISE);
+  });
+
+  it("should not be preferred if neither of the above conditions are met", async () => {
     await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
 
     expect(enemy).not.toPreferSelectingMove(MoveId.MAGNET_RISE);
-  });
-
-  it("should be preferred after the user's opponent Terastallizes into Ground-type", async () => {
-    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
-
-    const player = game.field.getPlayerPokemon();
-    const enemy = game.field.getEnemyPokemon();
-
-    game.field.forceTera(player, ElementalType.GROUND);
-    expect(enemy).toPreferSelectingMove(MoveId.MAGNET_RISE);
   });
 
   it("should not be preferred if the user is Flying-type", async () => {
