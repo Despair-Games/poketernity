@@ -34,7 +34,7 @@ export class FloatingAttr extends AddBattlerTagAttr {
 
     const numGroundTypeOpponents = pokemon
       .getOpponents()
-      .filter((opp) => opp.isOfType(ElementalType.GROUND, true)).length;
+      .filter((opp) => opp.estimateAttackMoves().some((mv) => opp.getMoveType(mv) === ElementalType.GROUND)).length;
 
     return (pokemon.isOpponent(user) ? MINOR_EFFECT_SCORE_PENALTY : MINOR_EFFECT_SCORE_BONUS) * numGroundTypeOpponents;
   }

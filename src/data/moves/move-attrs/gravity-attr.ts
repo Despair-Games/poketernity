@@ -3,7 +3,6 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import { ElementalType } from "#enums/elemental-type";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
-import type { PokemonMove } from "#field/pokemon-move";
 import type { Move } from "#moves/move";
 import { AddArenaTagAttr } from "#moves/move-attrs/add-arena-tag-attr";
 import { OneHitKOAttr } from "#moves/move-attrs/one-hit-ko-attr";
@@ -21,21 +20,26 @@ export class GravityAttr extends AddArenaTagAttr {
   }
 
   /**
-   * Grants 60%(+1) for each ally that either
-   * - is a natural Ground-type Pokemon, or
-   * - knows a move with less than 80% base accuracy
+   * Grants 60%(+1) for each ally that knows a move that is either Ground-type or
+   * has a base accuracy of less than 80%.
    */
   public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
-    const isBenefitMove = (pokemonMove: PokemonMove) => {
-      const move = pokemonMove.getMove();
-      return !move.hasAttr(OneHitKOAttr) && isBetween(move.accuracy, 0, 79);
+    /**
+     * @returns `true` if the given {@linkcode Pokemon} has a move that is either Ground-type
+     * when used by the Pokemon or has less than 80 base accuracy.
+     */
+    const hasBenefitMove = (pokemon: Pokemon) => {
+      return pokemon
+        .getMoveset()
+        .map((pmv) => pmv.getMove())
+        .some(
+          (mv) =>
+            (!mv.hasAttr(OneHitKOAttr) && isBetween(mv.accuracy, 0, 79))
+            || pokemon.getMoveType(mv) === ElementalType.GROUND,
+        );
     };
 
-    const benefittingAllies = user
-      .getField()
-      .filter(
-        (p) => p.isActive(true) && (p.isOfType(ElementalType.GROUND, false) || p.getMoveset().some(isBenefitMove)),
-      );
+    const benefittingAllies = user.getField().filter((p) => p.isActive(true) && hasBenefitMove(p));
 
     return benefittingAllies.map(() => this.getRandomScore(user, 60)).reduce((total, score) => total + score, 0);
   }

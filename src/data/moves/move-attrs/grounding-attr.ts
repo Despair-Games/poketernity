@@ -22,7 +22,7 @@ export class GroundingAttr extends AddBattlerTagAttr {
 
   /**
    * If the affected Pokemon is already grounded, this contributes nothing to Effect Score.
-   * Otherwise, this grants a {@linkcode MINOR_EFFECT_SCORE_BONUS} for each Ground-type Pokemon
+   * Otherwise, this grants a {@linkcode MINOR_EFFECT_SCORE_BONUS} for each Pokemon with a Ground-type move
    * on the opposing side of the affected Pokemon. If the affected Pokemon is on the same
    * side as the user, this bonus is multiplied by -1.
    */
@@ -32,8 +32,19 @@ export class GroundingAttr extends AddBattlerTagAttr {
       return 0;
     }
 
+    const getAttackMoves = (p: Pokemon) => {
+      return p.isOpponent(user)
+        ? p.estimateAttackMoves()
+        : p
+            .getMoveset()
+            .map((pmv) => pmv.getMove())
+            .filter((mv) => mv.isAttackMove());
+    };
+
     const opponents = pokemon.getOpponents();
-    const numGroundTypeOpponents = opponents.filter((opp) => opp.isOfType(ElementalType.GROUND, true)).length;
+    const numGroundTypeOpponents = opponents.filter((opp) =>
+      getAttackMoves(opp).some((mv) => opp.getMoveType(mv) === ElementalType.GROUND),
+    ).length;
 
     return (pokemon.isOpponent(user) ? MINOR_EFFECT_SCORE_BONUS : MINOR_EFFECT_SCORE_PENALTY) * numGroundTypeOpponents;
   }

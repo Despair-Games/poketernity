@@ -22,7 +22,7 @@ describe("Move Effect Scores - Smack Down", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("single")
-      .enemySpecies(SpeciesId.DIGLETT)
+      .enemySpecies(SpeciesId.MAGIKARP)
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset([MoveId.SMACK_DOWN, MoveId.BULLDOZE, MoveId.ASSURANCE, MoveId.SPLASH])
       .ability(AbilityId.BALL_FETCH)
@@ -30,15 +30,15 @@ describe("Move Effect Scores - Smack Down", () => {
       .enemyLevel(100);
   });
 
-  it("should be preferred if the user is Ground-type against a Flying-type target", async () => {
+  it("should be preferred against Flying-type targets if the user knows a Ground-type move", async () => {
     await game.classicMode.startBattle(SpeciesId.SKARMORY);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).toPreferSelectingMove(MoveId.SMACK_DOWN);
   });
 
-  it("should not be preferred if the user is not Ground-type", async () => {
-    game.override.enemySpecies(SpeciesId.MAGIKARP);
+  it("should not be preferred if the user does not know a Ground-type move", async () => {
+    game.override.enemyMoveset([MoveId.SMACK_DOWN, MoveId.ASSURANCE, MoveId.SPLASH]);
     await game.classicMode.startBattle(SpeciesId.SKARMORY);
 
     const enemy = game.field.getEnemyPokemon();
