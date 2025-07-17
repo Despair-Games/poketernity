@@ -315,16 +315,17 @@ export class EnemyPokemon extends Pokemon {
       }
     }
 
-    const nextMove = this.getNextMove();
+    const command = this.shouldTera() ? BattleCommand.TERA : BattleCommand.FIGHT;
+    const turnMove = this.getNextMove();
     console.log(
-      `${BattlerIndex[this.getBattlerIndex()]}: selecting ${MoveId[nextMove.move.id]} against ${nextMove.targets.map((i) => BattlerIndex[i])}`,
+      `${BattlerIndex[this.getBattlerIndex()]}: selecting ${MoveId[turnMove.move.id]} against ${turnMove.targets.map((i) => BattlerIndex[i])}`,
     );
 
     return {
       pokemon: this,
-      command: BattleCommand.FIGHT,
-      turnMove: nextMove,
-      targets: nextMove.targets,
+      command,
+      turnMove,
+      targets: turnMove.targets,
     };
   }
 
@@ -525,6 +526,16 @@ export class EnemyPokemon extends Pokemon {
       targets: [optTarget[0]],
       score: optTarget[1],
     };
+  }
+
+  /** @returns `true` if this Pokemon should Terastallize on its next action */
+  private shouldTera(): boolean {
+    if (this.isTerastallized) {
+      return false;
+    }
+
+    const { trainer } = globalScene.currentBattle;
+    return Overrides.FORCE_ENEMY_TERA_OVERRIDE || (!isNil(trainer) && trainer.shouldTera(this));
   }
 
   /**
