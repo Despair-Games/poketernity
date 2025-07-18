@@ -866,7 +866,13 @@ export abstract class Move {
     }
 
     if (!this.hasAttr(TypelessAttr)) {
-      globalScene.arena.applyTags([...WEAKEN_MOVE_TYPE_ARENA_TAG_TYPES], simulated, this.type, power);
+      globalScene.arena.applyTags(
+        [...WEAKEN_MOVE_TYPE_ARENA_TAG_TYPES],
+        ArenaTagSide.BOTH,
+        simulated,
+        this.type,
+        power,
+      );
       globalScene.applyModifiers(AttackTypeBoosterModifier, source.isPlayer(), source, this.type, power);
     }
 

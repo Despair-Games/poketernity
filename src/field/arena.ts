@@ -765,35 +765,19 @@ export class Arena {
   }
 
   /**
-   * Applies each `ArenaTag` in this Arena, based on which side (self, enemy, or both) is passed in as a parameter
+   * Applies each `ArenaTag` in this Arena, based on which side (player, enemy, or both) is passed in as a parameter
    * @param tagTypes Either an {@linkcode ArenaTagType} string, or an actual {@linkcode ArenaTag} class to filter which ones to apply
    * @param side {@linkcode ArenaTagSide} which side's arena tags to apply
    * @param simulated if `true`, this applies arena tags without changing game state
    * @param args array of parameters that the called upon tags may need
    */
-  applyTagsForSide(
-    tagTypes: ArenaTagType | ArenaTagType[],
-    side: ArenaTagSide,
-    simulated: boolean,
-    ...args: unknown[]
-  ): void {
+  applyTags(tagTypes: ArenaTagType | ArenaTagType[], side: ArenaTagSide, simulated: boolean, ...args: unknown[]): void {
     const tagTypeArr = coerceArray(tagTypes);
     let tags = this.tags.filter((t) => tagTypeArr.includes(t.tagType));
     if (side !== ArenaTagSide.BOTH) {
       tags = tags.filter((t) => t.side === side);
     }
     tags.forEach((t) => t.apply(simulated, ...args));
-  }
-
-  /**
-   * Applies the specified tag to both sides (ie: both user and trainer's tag that match the Tag specified)
-   * by calling {@linkcode applyTagsForSide()}
-   * @param tagType Either an {@linkcode ArenaTagType} string, or an actual {@linkcode ArenaTag} class to filter which ones to apply
-   * @param simulated if `true`, this applies arena tags without changing game state
-   * @param args array of parameters that the called upon tags may need
-   */
-  applyTags(tagType: ArenaTagType | ArenaTagType[], simulated: boolean, ...args: unknown[]): void {
-    this.applyTagsForSide(tagType, ArenaTagSide.BOTH, simulated, ...args);
   }
 
   /**

@@ -1875,7 +1875,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     applyMoveAttrs(VariableMoveTypeAttr, this, null, move, moveTypeHolder);
     applyAbAttrs<MoveTypeChangeAbAttr>(AbAttrFlag.MOVE_TYPE_CHANGE, this, simulated, move, undefined, moveTypeHolder);
 
-    globalScene.arena.applyTags(ArenaTagType.ION_DELUGE, simulated, moveTypeHolder);
+    globalScene.arena.applyTags(ArenaTagType.ION_DELUGE, ArenaTagSide.BOTH, simulated, moveTypeHolder);
     if (this.hasTag(BattlerTagType.ELECTRIFIED)) {
       moveTypeHolder.value = ElementalType.ELECTRIC;
     }
@@ -3218,7 +3218,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     /** Critical hits ignore the damage reduction from screens */
     if (!isCritical) {
-      globalScene.arena.applyTagsForSide(
+      globalScene.arena.applyTags(
         [...WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES],
         defendingSide,
         simulated,

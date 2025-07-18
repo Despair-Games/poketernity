@@ -111,7 +111,7 @@ export abstract class HitCheckPhase extends PokemonPhase {
     const hasConditionalProtectApplied = new BooleanHolder(false);
     /** If the move is not targeting a Pokemon on the user's side, try to apply conditional protection effects */
     if (!this.move.getMove().isAllyTarget()) {
-      globalScene.arena.applyTagsForSide(
+      globalScene.arena.applyTags(
         [...CONDITIONAL_PROTECT_ARENA_TAG_TYPES],
         targetSide,
         simulated,
