@@ -9,12 +9,11 @@ import type { ProtectConditionFunc } from "#types/move-types";
 /**
  * Condition function for {@link https://bulbapedia.bulbagarden.net/wiki/Quick_Guard_(move) Quick Guard's}
  * protection effect.
- * @param _arena {@linkcode Arena} The arena containing the protection effect
  * @param moveId {@linkcode MoveId} The move to check against this condition
  * @returns `true` if the incoming move's priority is greater than 0.
  *   This includes moves with modified priorities from abilities (e.g. Prankster)
  */
-const QuickGuardConditionFunc: ProtectConditionFunc = (_arena, moveId) => {
+const QuickGuardConditionFunc: ProtectConditionFunc = (moveId) => {
   const move = allMoves.get(moveId);
   const effectPhase = globalScene.phaseManager.getCurrentPhase();
 

@@ -67,7 +67,7 @@ export abstract class ConditionalProtectTag extends ArenaTag {
   ): boolean {
     if (
       (this.side === ArenaTagSide.PLAYER) === defender.isPlayer()
-      && this.protectConditionFunc(globalScene.arena, moveId)
+      && this.protectConditionFunc(moveId)
       && (this.ignoresBypass || !allMoves.get(moveId).checkFlag(MoveFlags.IGNORE_PROTECT, attacker, defender))
     ) {
       if (!isProtected.value) {

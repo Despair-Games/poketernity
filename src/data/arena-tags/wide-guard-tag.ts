@@ -9,11 +9,10 @@ import type { ProtectConditionFunc } from "#types/move-types";
 /**
  * Condition function for {@link https://bulbapedia.bulbagarden.net/wiki/Wide_Guard_(move) Wide Guard's}
  * protection effect.
- * @param _arena {@linkcode Arena} The arena containing the protection effect
  * @param moveId {@linkcode MoveId} The move to check against this condition
  * @returns `true` if the incoming move is multi-targeted (even if it's only used against one Pokemon).
  */
-const WideGuardConditionFunc: ProtectConditionFunc = (_arena, moveId): boolean => {
+const WideGuardConditionFunc: ProtectConditionFunc = (moveId): boolean => {
   const move = allMoves.get(moveId);
 
   switch (move.moveTarget) {

@@ -12,11 +12,10 @@ import i18next from "i18next";
 /**
  * Condition function for {@link https://bulbapedia.bulbagarden.net/wiki/Mat_Block_(move) Mat Block's}
  * protection effect.
- * @param _arena {@linkcode Arena} The arena containing the protection effect.
  * @param moveId {@linkcode MoveId} The move to check against this condition.
  * @returns `true` if the incoming move is not a Status move.
  */
-const MatBlockConditionFunc: ProtectConditionFunc = (_arena, moveId): boolean => {
+const MatBlockConditionFunc: ProtectConditionFunc = (moveId): boolean => {
   const move = allMoves.get(moveId);
   return move.category !== MoveCategory.STATUS;
 };
