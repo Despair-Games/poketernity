@@ -1256,7 +1256,7 @@ export class BattleScene extends SceneBase {
       if (!this.gameMode.hasTrainers) {
         newBattleType = BattleType.WILD;
       } else if (battleType === undefined) {
-        newBattleType = this.gameMode.isWaveTrainer(newWaveIndex, this.arena) ? BattleType.TRAINER : BattleType.WILD;
+        newBattleType = this.gameMode.isWaveTrainer(newWaveIndex) ? BattleType.TRAINER : BattleType.WILD;
       } else {
         newBattleType = battleType;
       }

@@ -1027,7 +1027,6 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
     const encountersByBiome = new Map<string, number>(biomes.map((b) => [b, 0]));
     const validMEfloorsByBiome = new Map<string, number>(biomes.map((b) => [b, 0]));
     let currentBiome: BiomeId = BiomeId.TOWN;
-    let currentArena = globalScene.newArena(currentBiome);
     globalScene.setSeed(randomString(24));
     globalScene.resetSeed();
     for (let i = 10; i < 180; i++) {
@@ -1066,7 +1065,7 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
           }
         }
 
-        currentArena = globalScene.newArena(currentBiome);
+        globalScene.newArena(currentBiome);
       }
 
       // Fixed battle
@@ -1075,7 +1074,7 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
       }
 
       // Trainer
-      if (globalScene.gameMode.isWaveTrainer(i, currentArena)) {
+      if (globalScene.gameMode.isWaveTrainer(i)) {
         continue;
       }
 
