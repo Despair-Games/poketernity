@@ -3,7 +3,6 @@ import { allMoves } from "#data/data-lists";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import type { MoveId } from "#enums/move-id";
-import type { Arena } from "#field/arena";
 import type { Pokemon } from "#field/pokemon";
 import i18next from "i18next";
 
@@ -49,30 +48,27 @@ export abstract class ArenaTag {
   /**
    * Applies the tag's effect(s). Should be called via
    * {@linkcode Arena.applyTagsForSide} or {@linkcode Arena.applyTags}.
-   * @param _arena - The {@linkcode Arena} to which the tag belongs
    * @param _simulated - If `true`, should suppress changes to game state
    * @param _args - Additional arguments
    * @returns `true` if effects are applied successfully.
    */
-  public apply(_arena: Arena, _simulated: boolean, ..._args: unknown[]): boolean {
+  public apply(_simulated: boolean, ..._args: unknown[]): boolean {
     return true;
   }
 
   /**
    * Applies effects when the tag is first added to the field.
-   * @param _arena - The {@linkcode Arena} to which the tag belongs
    * @param _quiet - (Default `false`) If `true`, should suppress game messages during execution
    * @see {@linkcode Arena.addTag}
    */
-  public onAdd(_arena: Arena, _quiet: boolean = false): void {}
+  public onAdd(_quiet: boolean = false): void {}
 
   /**
    * Applies effects when the tag is removed from the field.
    * By default, this queues a localized on-remove message.
-   * @param _arena - The {@linkcode Arena} to which the tag belongs
    * @param quiet - (Default `false`) If `true`, should suppress game messages during execution
    */
-  public onRemove(_arena: Arena, quiet: boolean = false): void {
+  public onRemove(quiet: boolean = false): void {
     if (!quiet) {
       globalScene.phaseManager.createAndUnshiftPhase(
         "MessagePhase",
@@ -84,20 +80,18 @@ export abstract class ArenaTag {
   /**
    * Applies effects when a tag of the same {@linkcode ArenaTagType | type}
    * and {@linkcode ArenaTagSide | side} would be added to the field.
-   * @param _arena - The {@linkcode Arena} to which the tag belongs
    */
-  public onOverlap(_arena: Arena): void {}
+  public onOverlap(): void {}
 
   /**
    * Applies effects at the end of each turn.
    * If this returns `false`, the tag is removed from the field
    * after these effects are applied.
-   * @param _arena - The {@linkcode Arena} to which the tag belongs
    * @returns `true` to retain the tag on the field after this call;
    * `false` to remove the tag.
    * @see {@linkcode Arena.lapseTags}
    */
-  public lapse(_arena: Arena): boolean {
+  public lapse(): boolean {
     return this.turnCount < 1 || --this.turnCount !== 0;
   }
 

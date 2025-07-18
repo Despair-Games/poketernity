@@ -7,7 +7,6 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { Stat } from "#enums/stat";
-import type { Arena } from "#field/arena";
 import i18next from "i18next";
 
 /**
@@ -20,7 +19,7 @@ export class TailwindTag extends ArenaTag {
     super(ArenaTagType.TAILWIND, turnCount, MoveId.TAILWIND, sourceId, side);
   }
 
-  override onAdd(_arena: Arena, quiet: boolean = false): void {
+  override onAdd(quiet: boolean = false): void {
     if (!quiet) {
       globalScene.phaseManager.createAndUnshiftPhase(
         "MessagePhase",
@@ -57,7 +56,7 @@ export class TailwindTag extends ArenaTag {
     }
   }
 
-  override onRemove(_arena: Arena, quiet: boolean = false): void {
+  override onRemove(quiet: boolean = false): void {
     if (!quiet) {
       globalScene.phaseManager.createAndUnshiftPhase(
         "MessagePhase",

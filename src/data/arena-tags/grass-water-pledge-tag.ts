@@ -3,7 +3,6 @@ import { ArenaTag } from "#arena-tags/arena-tag";
 import type { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveId } from "#enums/move-id";
-import type { Arena } from "#field/arena";
 import i18next from "i18next";
 
 /**
@@ -17,7 +16,7 @@ export class GrassWaterPledgeTag extends ArenaTag {
     super(ArenaTagType.GRASS_WATER_PLEDGE, 4, MoveId.GRASS_PLEDGE, sourceId, side);
   }
 
-  override onAdd(_arena: Arena): void {
+  override onAdd(): void {
     // "A swamp enveloped your/the opposing team!"
     globalScene.phaseManager.createAndUnshiftPhase(
       "MessagePhase",

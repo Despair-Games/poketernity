@@ -6,7 +6,6 @@ import type { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveCategory } from "#enums/move-category";
 import { MoveId } from "#enums/move-id";
-import type { Arena } from "#field/arena";
 import type { ProtectConditionFunc } from "#types/move-types";
 import i18next from "i18next";
 
@@ -31,7 +30,7 @@ export class MatBlockTag extends ConditionalProtectTag {
     super(ArenaTagType.MAT_BLOCK, MoveId.MAT_BLOCK, sourceId, side, MatBlockConditionFunc);
   }
 
-  override onAdd(_arena: Arena) {
+  override onAdd() {
     if (this.sourceId) {
       const source = globalScene.getPokemonById(this.sourceId);
       if (source) {

@@ -9,7 +9,6 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import { CommonAnim } from "#enums/common-anim";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
-import type { Arena } from "#field/arena";
 import type { Pokemon } from "#field/pokemon";
 import { BooleanHolder, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
@@ -26,7 +25,7 @@ export class FireGrassPledgeTag extends ArenaTag {
     super(ArenaTagType.FIRE_GRASS_PLEDGE, 4, MoveId.FIRE_PLEDGE, sourceId, side);
   }
 
-  override onAdd(_arena: Arena): void {
+  override onAdd(): void {
     // "A sea of fire enveloped your/the opposing team!"
     globalScene.phaseManager.createAndUnshiftPhase(
       "MessagePhase",
@@ -34,7 +33,7 @@ export class FireGrassPledgeTag extends ArenaTag {
     );
   }
 
-  override lapse(arena: Arena): boolean {
+  override lapse(): boolean {
     const field: Pokemon[] =
       this.side === ArenaTagSide.PLAYER ? globalScene.getPlayerField() : globalScene.getEnemyField();
 
@@ -62,6 +61,6 @@ export class FireGrassPledgeTag extends ArenaTag {
         pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8));
       });
 
-    return super.lapse(arena);
+    return super.lapse();
   }
 }

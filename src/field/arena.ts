@@ -782,7 +782,7 @@ export class Arena {
     if (side !== ArenaTagSide.BOTH) {
       tags = tags.filter((t) => t.side === side);
     }
-    tags.forEach((t) => t.apply(this, simulated, ...args));
+    tags.forEach((t) => t.apply(simulated, ...args));
   }
 
   /**
@@ -818,7 +818,7 @@ export class Arena {
   ): boolean {
     const existingTag = this.findTag(tagType, side);
     if (existingTag) {
-      existingTag.onOverlap(this);
+      existingTag.onOverlap();
 
       if (ENTRY_HAZARD_ARENA_TAG_TYPES.includes(existingTag.tagType)) {
         const { tagType, side, turnCount, layers, maxLayers } = existingTag as EntryHazardTag;
@@ -832,7 +832,7 @@ export class Arena {
     const newTag = getArenaTag(tagType, sourceId, turnCount, sourceMove, side);
     if (newTag) {
       this.tags.push(newTag);
-      newTag.onAdd(this, quiet);
+      newTag.onAdd(quiet);
 
       const { layers = 0, maxLayers = 0 } = ENTRY_HAZARD_ARENA_TAG_TYPES.includes(newTag.tagType)
         ? (newTag as EntryHazardTag)
@@ -889,9 +889,9 @@ export class Arena {
 
   lapseTags(): void {
     this.tags
-      .filter((t) => !t.lapse(this))
+      .filter((t) => !t.lapse())
       .forEach((t) => {
-        t.onRemove(this);
+        t.onRemove();
         this.tags.splice(this.tags.indexOf(t), 1);
 
         this.eventTarget.dispatchEvent(new TagRemovedEvent(t.tagType, t.side, t.turnCount));
@@ -902,7 +902,7 @@ export class Arena {
     const tags = this.tags;
     const tag = tags.find((t) => t.tagType === tagType);
     if (tag) {
-      tag.onRemove(this);
+      tag.onRemove();
       tags.splice(tags.indexOf(tag), 1);
 
       this.eventTarget.dispatchEvent(new TagRemovedEvent(tag.tagType, tag.side, tag.turnCount));
@@ -913,7 +913,7 @@ export class Arena {
   removeTagOnSide(tagType: ArenaTagType, side: ArenaTagSide, quiet: boolean = false): boolean {
     const tag = this.findTag(tagType, side);
     if (tag) {
-      tag.onRemove(this, quiet);
+      tag.onRemove(quiet);
       this.tags.splice(this.tags.indexOf(tag), 1);
 
       this.eventTarget.dispatchEvent(new TagRemovedEvent(tag.tagType, tag.side, tag.turnCount));
@@ -923,7 +923,7 @@ export class Arena {
 
   removeAllTags(): void {
     while (this.tags.length) {
-      this.tags[0].onRemove(this);
+      this.tags[0].onRemove();
       this.eventTarget.dispatchEvent(
         new TagRemovedEvent(this.tags[0].tagType, this.tags[0].side, this.tags[0].turnCount),
       );
