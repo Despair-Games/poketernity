@@ -1438,13 +1438,11 @@ export class BattleScene extends SceneBase {
     return this.currentBattle;
   }
 
-  newArena(biomeId: BiomeId): Arena {
+  newArena(biomeId: BiomeId): void {
     this.arena = new Arena(biomeId);
     this.eventTarget.dispatchEvent(new NewArenaEvent());
 
     this.arenaBg.pipelineData = { terrainColorRatio: this.arena.getBgTerrainColorRatioForBiome() };
-
-    return this.arena;
   }
 
   updateFieldScale(): Promise<void> {
