@@ -40,6 +40,9 @@ export class GamepadSettingsUiHandler extends ControlsSettingsUiHandler<GamepadK
 
   /**
    * Update the display for the chosen gamepad.
+   *
+   * TODO: should we really switch the view is the gamepad is not the one with activeIndex?
+   * activeIndex is not actually being used right now because of it
    */
   private updateChosenGamepadDisplay(): void {
     this.noDeviceText.setVisible(false);
@@ -81,6 +84,7 @@ export class GamepadSettingsUiHandler extends ControlsSettingsUiHandler<GamepadK
         if (globalScene.ui && gp) {
           const cancelHandler = () => {
             globalScene.ui.revertMode();
+            this.setOptionCursor(-1, 0);
             return true;
           };
           const changeGamepadHandler = (gamepad: string, index: number) => {

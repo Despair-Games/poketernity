@@ -68,6 +68,7 @@ import { applySessionVersionMigration, applySystemVersionMigration } from "#syst
 import { vouchers } from "#system/voucher";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import type { DexData, DexEntry } from "#types/dex-data";
+import type { InputInterfaceConfig } from "#types/input-interface-config";
 import type { SessionSaveData } from "#types/session-data";
 import type { StarterData } from "#types/starter-data";
 import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlocks } from "#types/system-data";
@@ -561,8 +562,8 @@ export class GameData {
    * @param config - The configuration object containing custom mapping details.
    * @returns `true` if the configurations are successfully saved.
    */
-  public saveMappingConfigs(deviceName: string, config): boolean {
-    const key = deviceName.toLowerCase(); // Convert the gamepad name to lowercase to use as a key
+  public saveMappingConfigs(deviceName: string, config: InputInterfaceConfig): boolean {
+    const key = deviceName.toLowerCase(); // Convert the device name to lowercase to use as a key
     let mappingConfigs: object = {}; // Initialize an empty object to hold the mapping configurations
     const lsMappingStr = localStorage.getItem(MAPPING_CONFIG_LS_KEY);
     if (lsMappingStr) {

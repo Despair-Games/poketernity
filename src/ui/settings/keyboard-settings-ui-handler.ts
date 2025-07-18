@@ -1,16 +1,18 @@
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import { Device } from "#enums/device";
+import { KeyboardLayout } from "#enums/keyboard-layout";
 import { SettingKeyboard } from "#enums/setting-keyboard";
 import { UiMode } from "#enums/ui-mode";
+import { settings } from "#system/settings-manager";
 import type { KeyboardKeys } from "#types/input-interface-config";
+import { SettingsUiItem } from "#types/settings";
 import { ControlsSettingsUiHandler } from "#ui/controls-settings-ui-handler";
+import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
+import { enumValueToKey, getTSEnumKeys } from "#utils/common-utils";
 import { truncateString } from "#utils/string-utils";
 import i18next from "i18next";
 import { keyboardSettingsUiItems } from "./settings-ui-items";
-import { enumValueToKey } from "#utils/common-utils";
-import { KeyboardLayout } from "#enums/keyboard-layout";
-import { settings } from "#system/settings-manager";
 
 /**
  * Class representing the settings UI handler for keyboards.
@@ -98,8 +100,9 @@ export class KeyboardSettingsUiHandler extends ControlsSettingsUiHandler<Keyboar
     this.updateInstructionIcons();
 
     // Iterate over the keys in the settingDevice enumeration.
-    for (const [index, key] of Object.keys(SettingKeyboard).entries()) {
-      if (key === "Default_Layout") {
+    for (const [index, value] of Object.values(SettingKeyboard).entries()) {
+      console.log(index, value);
+      if (value === "layout") {
         // Update the text of the first option label under the current setting to the name of the chosen layout
         this.updateOptionValueLabel(
           index,
@@ -107,6 +110,41 @@ export class KeyboardSettingsUiHandler extends ControlsSettingsUiHandler<Keyboar
           truncateString(enumValueToKey(KeyboardLayout, settings.keyboard.layout ?? KeyboardLayout.QWERTY), 25),
         );
       }
+    }
+  }
+
+  protected override handleSaveSetting<V = any>(uiItem: SettingsUiItem, newValue: V): void {
+    if (uiItem.key === "layout") {
+      // Show menu with the available keyboard layouts
+      const cancelHandler = () => {
+        globalScene.ui.revertMode();
+        this.setOptionCursor(-1, 0);
+        return true;
+      };
+      const changeLayoutHandler = (layout: KeyboardLayout) => {
+        if (settings.keyboard.layout !== layout) {
+          settings.update("keyboard", "layout", layout);
+          globalScene.inputController.setChosenKeyboardLayout(layout);
+        }
+        return cancelHandler();
+      };
+      globalScene.ui.setOverlayMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, {
+        options: [
+          ...Object.keys(KeyboardLayout).map((layout) => {
+            return {
+              label: layout,
+              handler: () => changeLayoutHandler(KeyboardLayout[layout]),
+            };
+          }),
+          {
+            label: i18next.t("menu:cancel"),
+            handler: cancelHandler,
+          },
+        ],
+        yOffset: 48,
+      });
+    } else {
+      super.handleSaveSetting(uiItem, newValue);
     }
   }
 }

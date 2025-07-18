@@ -3,7 +3,9 @@ import { globalScene } from "#app/global-scene";
 import { TouchControl } from "#app/touch-controls";
 import { Button } from "#enums/button";
 import { Device } from "#enums/device";
+import { KeyboardLayout } from "#enums/keyboard-layout";
 import { UiMode } from "#enums/ui-mode";
+import cfg_keyboard_azerty from "#inputs/cfg-keyboard-azerty";
 import cfg_keyboard_qwerty from "#inputs/cfg-keyboard-qwerty";
 import { assign, getButtonWithKeycode, getIconForLatestInput, swap } from "#inputs/config-handler";
 import pad_dualshock from "#inputs/pad-dualshock";
@@ -15,7 +17,7 @@ import { settings } from "#system/settings-manager";
 import { GamepadInterfaceConfig, InputInterfaceConfig, KeyboardInterfaceConfig } from "#types/input-interface-config";
 import type { SettingsUpdateEventArgs } from "#types/settings";
 import { MoveTouchControlsHandler } from "#ui/move-touch-controls-handler";
-import { deepCopy, isNil } from "#utils/common-utils";
+import { deepCopy, enumValueToKey, isNil } from "#utils/common-utils";
 import Phaser from "phaser";
 
 const repeatInputDelayMillis = 250;
@@ -75,7 +77,7 @@ export class InputsController {
   constructor() {
     this.selectedDevice = {
       [Device.GAMEPAD]: null,
-      [Device.KEYBOARD]: "default",
+      [Device.KEYBOARD]: enumValueToKey(KeyboardLayout, settings.keyboard.layout).toLowerCase(),
     };
 
     for (const b of Object.values(Button)) {
@@ -112,7 +114,7 @@ export class InputsController {
           return;
         }
         this.refreshGamepads();
-        this.setupGamepad(thisGamepad);
+        this.setupGamepad();
         this.onReconnect(thisGamepad);
       };
       globalScene.input.gamepad?.on("connected", connectedListenerFunc, this);
@@ -193,11 +195,22 @@ export class InputsController {
   /**
    * Sets the currently chosen keyboard layout and initializes related settings.
    *
-   * @param layoutKeyboard - The identifier of the keyboard layout to set as chosen.
+   * @param layout - The {@linkcode KeyboardLayout} to set as chosen.
    */
-  setChosenKeyboardLayout(layoutKeyboard: string): void {
+  setChosenKeyboardLayout(layout: KeyboardLayout): void {
     this.deactivatePressedKey();
-    this.initChosenLayoutKeyboard(layoutKeyboard);
+
+    const previousLayoutKey = this.selectedDevice[Device.KEYBOARD];
+    const layoutKey = enumValueToKey(KeyboardLayout, layout).toLowerCase();
+    this.selectedDevice[Device.KEYBOARD] = layoutKey;
+    if (!this.configs[layoutKey]) {
+      this.setupKeyboard(layout); // Setup the keyboard for this layout
+      if (previousLayoutKey !== layoutKey && this.configs[previousLayoutKey]) {
+        delete this.configs[previousLayoutKey]; // No need to keep other keyboard layouts in memory
+      }
+    } else {
+      this.initChosenLayoutKeyboard(layoutKey);
+    }
   }
 
   /**
@@ -226,13 +239,10 @@ export class InputsController {
   /**
    * Initializes the chosen keyboard layout by setting its identifier in the local storage and updating the UI to reflect the chosen layout.
    * If a layout name is provided, it uses that as the chosen layout; otherwise, it defaults to the currently chosen layout.
-   * @param layoutKeyboard Optional parameter to specify the name of the keyboard layout to initialize as chosen.
+   * @param layoutKey - A unique key corresponding to the {@linkcode KeyboardLayout} to use.
    */
-  initChosenLayoutKeyboard(layoutKeyboard?: string): void {
-    if (layoutKeyboard) {
-      this.selectedDevice[Device.KEYBOARD] = layoutKeyboard.toLowerCase();
-    }
-
+  initChosenLayoutKeyboard(layoutKey: string): void {
+    this.selectedDevice[Device.KEYBOARD] = layoutKey;
     eventBus.emit("keyboard/init");
   }
 
@@ -262,12 +272,9 @@ export class InputsController {
   /**
    * Initializes or updates configurations for connected gamepads.
    * It retrieves the names of all connected gamepads, sets up their configurations according to stored or default settings,
-   * and ensures these configurations are saved. If the connected gamepad is the currently chosen one,
-   * it reinitializes the chosen gamepad settings.
-   *
-   * @param thisGamepad The gamepad that is being set up.
+   * and ensures these configurations are saved.
    */
-  setupGamepad(_thisGamepad: Phaser.Input.Gamepad.Gamepad): void {
+  setupGamepad(): void {
     const allGamepads = this.getGamepadsName();
     for (const gamepad of allGamepads) {
       const gamepadID = gamepad.toLowerCase();
@@ -287,14 +294,13 @@ export class InputsController {
   /**
    * Initializes or updates configurations for connected keyboards.
    */
-  setupKeyboard(): void {
-    for (const layout of ["default"]) {
-      const config = deepCopy(this.getKeyboardConfig(layout));
-      config.custom = this.configs[layout]?.custom || { ...config.default };
-      this.configs[layout] = config;
-      globalScene.gameData?.saveMappingConfigs(this.selectedDevice[Device.KEYBOARD], this.configs[layout]);
-    }
-    this.initChosenLayoutKeyboard(this.selectedDevice[Device.KEYBOARD]);
+  setupKeyboard(layout: KeyboardLayout = settings.keyboard.layout): void {
+    const layoutKey = enumValueToKey(KeyboardLayout, layout).toLowerCase();
+    const config = deepCopy(this.getKeyboardConfig(layout));
+    config.custom = this.configs[layoutKey]?.custom || { ...config.default };
+    this.configs[layoutKey] = config;
+    globalScene.gameData?.saveMappingConfigs(layoutKey, this.configs[layoutKey]);
+    this.initChosenLayoutKeyboard(layoutKey);
   }
 
   /**
@@ -480,17 +486,17 @@ export class InputsController {
   }
 
   /**
-   * Retrieves the configuration object for a keyboard layout based on its identifier.
-   *
-   * @param id The identifier string of the keyboard layout.
-   * @returns InterfaceConfig The configuration object corresponding to the identified keyboard layout.
+   * Retrieves the configuration object for a given keyboard layout.
+   * @param layout The {@linkcode KeyboardLayout} identifier string of the keyboard layout.
+   * @returns {@linkcode KeyboardInterfaceConfig} for this layout.
    */
-  getKeyboardConfig(id: string): KeyboardInterfaceConfig {
-    if (id === "default") {
-      return cfg_keyboard_qwerty;
+  getKeyboardConfig(layout: KeyboardLayout): KeyboardInterfaceConfig {
+    switch (layout) {
+      case KeyboardLayout.AZERTY:
+        return cfg_keyboard_azerty;
+      case KeyboardLayout.QWERTY:
+        return cfg_keyboard_qwerty;
     }
-
-    return cfg_keyboard_qwerty;
   }
 
   /**
@@ -574,7 +580,7 @@ export class InputsController {
           this.setupKeyboard();
           break;
         case Device.GAMEPAD:
-          this.setupGamepad(deviceName);
+          this.setupGamepad();
           break;
       }
     }

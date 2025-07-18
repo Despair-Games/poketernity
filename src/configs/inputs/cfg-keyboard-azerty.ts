@@ -3,8 +3,8 @@ import { Button } from "#enums/button";
 import { SettingKeyboard } from "#enums/setting-keyboard";
 import type { KeyboardInterfaceConfig } from "#types/input-interface-config";
 
-const cfg_keyboard_qwerty: KeyboardInterfaceConfig = {
-  padID: "default",
+const cfg_keyboard_azerty: KeyboardInterfaceConfig = {
+  padID: "azerty",
   padType: "keyboard",
   deviceMapping: {
     KEY_A: Phaser.Input.Keyboard.KeyCodes.A,
@@ -281,4 +281,4 @@ const cfg_keyboard_qwerty: KeyboardInterfaceConfig = {
   settingsBlacklist: KEYBOARD_LOCKED_BINDINGS,
 };
 
-export default cfg_keyboard_qwerty;
+export default cfg_keyboard_azerty;

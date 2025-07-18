@@ -190,7 +190,7 @@ class SettingsManager {
         }
 
         if (keyboard) {
-          this._settings.keyboard = { ...this._settings.keyboard, ...this.keyboard };
+          this._settings.keyboard = { ...this._settings.keyboard, ...keyboard };
         }
       } catch (err) {
         console.error("Error loading settings from local storage:", err);

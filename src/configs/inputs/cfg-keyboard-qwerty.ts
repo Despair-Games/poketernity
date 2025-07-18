@@ -4,7 +4,7 @@ import { SettingKeyboard } from "#enums/setting-keyboard";
 import type { KeyboardInterfaceConfig } from "#types/input-interface-config";
 
 const cfg_keyboard_qwerty: KeyboardInterfaceConfig = {
-  padID: "default",
+  padID: "qwerty",
   padType: "keyboard",
   deviceMapping: {
     KEY_A: Phaser.Input.Keyboard.KeyCodes.A,
