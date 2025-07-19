@@ -33,36 +33,24 @@ export default class AchvBanner extends Phaser.GameObjects.Container {
     this.defaultWidth = 200;
     this.defaultHeight = 40;
 
-    this.bg = globalScene.add.nineslice(
-      0,
-      0,
-      "achv_bar",
-      undefined,
-      this.defaultWidth,
-      this.defaultHeight,
-      41,
-      6,
-      16,
-      4,
-    );
-    this.bg.setOrigin(0, 0);
+    this.bg = globalScene.add
+      .nineslice(0, 0, "achv_bar", undefined, this.defaultWidth, this.defaultHeight, 41, 6, 16, 4)
+      .setOrigin(0);
 
     this.add(this.bg);
 
-    this.icon = globalScene.add.sprite(4, 4, "items");
-    this.icon.setOrigin(0, 0);
+    this.icon = globalScene.add.sprite(4, 4, "items").setOrigin(0);
     this.add(this.icon);
 
-    this.titleText = addTextObject(40, 3, "", TextStyle.MESSAGE, { fontSize: "72px" });
-    this.titleText.setOrigin(0, 0);
+    this.titleText = addTextObject(40, 3, "", TextStyle.MESSAGE, { fontSize: "72px" }).setOrigin(0);
     this.add(this.titleText);
 
-    this.descriptionText = addTextObject(43, 16, "", TextStyle.WINDOW_ALT, { fontSize: "72px" });
-    this.descriptionText.setOrigin(0, 0);
-    this.add(this.descriptionText);
+    this.descriptionText = addTextObject(43, 16, "", TextStyle.WINDOW_ALT, { fontSize: "72px" })
+      .setOrigin(0)
+      .setWordWrapWidth(664)
+      .setLineSpacing(-5);
 
-    this.descriptionText.setWordWrapWidth(664);
-    this.descriptionText.setLineSpacing(-5);
+    this.add([this.bg, this.icon, this.titleText, this.descriptionText]);
 
     this.loadAchievement();
     this.setScale(this.bannerScale);
