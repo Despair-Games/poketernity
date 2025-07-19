@@ -235,14 +235,14 @@ export const newAchvs = {
     "FRESH_START",
     "reviver_seed",
     (challenges: Challenge[]) =>
-      challenges.length > 0 && !!challenges.find((c: Challenge) => c.isFreshStartChallenge() && c.value > 0),
+      challenges.length > 0 && challenges.some((c: Challenge) => c.isFreshStartChallenge() && c.value > 0),
   ),
   INVERSE_BATTLE: new ChallengeCompletionAchievement(
     "INVERSE_BATTLE",
     "inverse",
     (challenges: Challenge[]) =>
       challenges.length > 0
-      && !!challenges.find(
+      && challenges.some(
         (c: Challenge) =>
           c.isInverseBattleChallenge()
           && c.value > 0
