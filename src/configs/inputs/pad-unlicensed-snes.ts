@@ -1,12 +1,7 @@
 import { GAMEPAD_BUTTONS_BLACKLIST, GAMEPAD_LOCKED_BINDINGS } from "#constants/inputs-constants";
 import { Button } from "#enums/button";
 import { SettingGamepad } from "#enums/setting-gamepad";
-import {
-  BasicGamepadKeys,
-  GamepadInterfaceConfig,
-  InputInterfaceConfig,
-  ModernGamepadKeys,
-} from "#types/input-interface-config";
+import { BasicGamepadKeys, GamepadInterfaceConfig, InputInterfaceConfig, ModernGamepadKeys } from "#types/input-types";
 
 /**
  * 081f-e401 - UnlicensedSNES

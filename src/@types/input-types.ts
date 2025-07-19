@@ -34,7 +34,9 @@ export type InputSettings = SettingGamepad | SettingKeyboard;
  * @typeParam S - Represent the mapping settings for this device type.
  */
 export interface InputInterfaceConfig<K extends InputKeys = InputKeys, S extends InputSettings = InputSettings> {
+  /** Unique ID for this type of device. */
   padID: string;
+  /** Device type. Should have a matching image file for buttons in `public/images/inputs`. */
   padType: string;
   /** Mapping each key to a Phaser keycode. */
   deviceMapping: Record<K, number>;

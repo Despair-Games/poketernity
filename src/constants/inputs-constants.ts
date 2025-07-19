@@ -1,6 +1,6 @@
 import { SettingGamepad } from "#enums/setting-gamepad";
 import { SettingKeyboard } from "#enums/setting-keyboard";
-import type { GamepadKeys, KeyboardKeys } from "#types/input-interface-config";
+import type { GamepadKeys, KeyboardKeys } from "#types/input-types";
 
 /** Array of Keyboard Keys that should not remapped to any input. */
 export const KEYBOARD_KEYS_BLACKLIST: readonly KeyboardKeys[] = Object.freeze([

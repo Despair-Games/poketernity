@@ -1,7 +1,7 @@
 import { KEYBOARD_KEYS_BLACKLIST, KEYBOARD_LOCKED_BINDINGS } from "#constants/inputs-constants";
 import { Button } from "#enums/button";
 import { SettingKeyboard } from "#enums/setting-keyboard";
-import type { KeyboardInterfaceConfig } from "#types/input-interface-config";
+import type { KeyboardInterfaceConfig } from "#types/input-types";
 
 const cfg_keyboard_azerty: KeyboardInterfaceConfig = {
   padID: "azerty",

@@ -14,7 +14,7 @@ import pad_procon from "#inputs/pad-procon";
 import pad_unlicensedSNES from "#inputs/pad-unlicensed-snes";
 import pad_xbox360 from "#inputs/pad-xbox360";
 import { settings } from "#system/settings-manager";
-import { GamepadInterfaceConfig, InputInterfaceConfig, KeyboardInterfaceConfig } from "#types/input-interface-config";
+import type { GamepadInterfaceConfig, InputInterfaceConfig, KeyboardInterfaceConfig } from "#types/input-types";
 import type { SettingsUpdateEventArgs } from "#types/settings";
 import { MoveTouchControlsHandler } from "#ui/move-touch-controls-handler";
 import { deepCopy, enumValueToKey, isNil } from "#utils/common-utils";

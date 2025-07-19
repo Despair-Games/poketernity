@@ -5,7 +5,7 @@ import { Device } from "#enums/device";
 import { SettingGamepad } from "#enums/setting-gamepad";
 import { UiMode } from "#enums/ui-mode";
 import { settings } from "#system/settings-manager";
-import { GamepadKeys } from "#types/input-interface-config";
+import { GamepadKeys } from "#types/input-types";
 import { SettingsUiItem } from "#types/settings";
 import { ControlsSettingsUiHandler } from "#ui/controls-settings-ui-handler";
 import { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
@@ -41,8 +41,8 @@ export class GamepadSettingsUiHandler extends ControlsSettingsUiHandler<GamepadK
   /**
    * Update the display for the chosen gamepad.
    *
-   * TODO: should we really switch the view is the gamepad is not the one with activeIndex?
-   * activeIndex is not actually being used right now because of it
+   * TODO: should we really switch the view if the gamepad is not the one with activeIndex?
+   * activeIndex is not actually being used right now
    */
   private updateChosenGamepadDisplay(): void {
     this.noDeviceText.setVisible(false);

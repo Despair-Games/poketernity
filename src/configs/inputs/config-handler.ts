@@ -1,5 +1,5 @@
 import { Device } from "#enums/device";
-import type { GamepadKeys, InputInterfaceConfig, InputKeys, KeyboardKeys } from "#types/input-interface-config";
+import type { InputInterfaceConfig, InputKeys, InputSettings } from "#types/input-types";
 import { isNil } from "#utils/common-utils";
 
 /**
@@ -9,8 +9,8 @@ import { isNil } from "#utils/common-utils";
  * @param keycode - The keycode to search for.
  * @returns The key associated with the specified keycode.
  */
-export function getKeyWithKeycode(config: InputInterfaceConfig, keycode: number) {
-  return Object.keys(config.deviceMapping).find((key) => config.deviceMapping[key] === keycode);
+export function getKeyWithKeycode(config: InputInterfaceConfig, keycode: number): InputKeys | undefined {
+  return Object.keys(config.deviceMapping).find((key) => config.deviceMapping[key] === keycode) as InputKeys;
 }
 
 /**
@@ -123,10 +123,13 @@ export function getIconForLatestInput(configs, source: string, devices, settingN
   return icon;
 }
 
-export function assign(config, settingNameTarget, keycode): boolean {
+export function assign(config: InputInterfaceConfig, settingNameTarget: InputSettings, keycode: number): boolean {
   // first, we need to check if this keycode is already used on another settingName
+  const key = getKeyWithKeycode(config, keycode);
   if (
-    !canIAssignThisKey(config, getKeyWithKeycode(config, keycode))
+    !config.custom
+    || !key
+    || !canIAssignThisKey(config, key)
     || !canIOverrideThisSetting(config, settingNameTarget)
   ) {
     return false;
@@ -153,9 +156,9 @@ export function assign(config, settingNameTarget, keycode): boolean {
   return true;
 }
 
-export function swap(config, settingNameTarget, keycode) {
+export function swap(config: InputInterfaceConfig, settingNameTarget: InputSettings, keycode: number) {
   // only for gamepad
-  if (config.padType === "keyboard") {
+  if (config.padType === "keyboard" || isNil(config.custom)) {
     return false;
   }
   const prev_key = getKeyWithSettingName(config, settingNameTarget)!;
@@ -178,19 +181,20 @@ export function swap(config, settingNameTarget, keycode) {
  *
  * @param config - The configuration object containing custom settings.
  * @param settingName - The setting name to delete.
+ * @returns `true` if the binding was deleted succcessfully, `false` otherwise.
  */
-export function deleteBind(config: InputInterfaceConfig, settingName) {
+export function deleteBind(config: InputInterfaceConfig, settingName: InputSettings): boolean {
   const key = getKeyWithSettingName(config, settingName);
-  if (isNil(config.custom) || isNil(key) || config.bindingBlacklist?.includes(key)) {
+  if (isNil(config.custom) || isNil(key) || !canIDeleteThisSetting(config, settingName)) {
     return false;
   }
   config.custom[key] = -1;
   return true;
 }
 
-export function canIAssignThisKey(config: InputInterfaceConfig, key) {
+export function canIAssignThisKey(config: InputInterfaceConfig, key: InputKeys): boolean {
   const settingName = getSettingNameWithKey(config, key);
-  if (config.bindingBlacklist?.includes(key)) {
+  if (config.bindingBlacklist.includes(key)) {
     return false;
   }
   if (settingName === -1) {
@@ -202,17 +206,18 @@ export function canIAssignThisKey(config: InputInterfaceConfig, key) {
   return true;
 }
 
-export function canIOverrideThisSetting(config: InputInterfaceConfig, settingName) {
+export function canIOverrideThisSetting(config: InputInterfaceConfig, settingName: InputSettings): boolean {
+  const { settingsBlacklist, bindingBlacklist } = config;
   const key = getKeyWithSettingName(config, settingName);
   // If the setting is mapped to a protected key, we can't change it
-  if (!isNil(key) && config.bindingBlacklist?.includes(key)) {
+  if (settingsBlacklist.includes(settingName) || (!isNil(key) && bindingBlacklist.includes(key))) {
     return false;
   }
   return true;
 }
 
-export function canIDeleteThisKey(config, key) {
-  return canIAssignThisKey(config, key);
+export function canIDeleteThisSetting(config: InputInterfaceConfig, settingName: InputSettings): boolean {
+  return canIOverrideThisSetting(config, settingName);
 }
 
 // export function isTheLatestBind(config, settingName) {

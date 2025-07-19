@@ -48,7 +48,7 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
   /** Container for all settings labels in a single TextObject. */
   protected labelsTextList: TextListContainer;
   /** References to the Sprites for the button corresponding to each instruction. */
-  private instructionIcons: InputsIcons;
+  protected instructionIcons: InputsIcons;
   /**
    * References to the Text objects used to display each setting's options, for up to the maximum number of rows.
    * The text objects get recycled and reused when scrolling around the settings.
@@ -228,7 +228,7 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
     this.instructionsContainer.add([icon, text]);
 
     // keep a reference to the icon so that it can be updated based on the input method
-    this.instructionIcons[buttonId] = icon;
+    this.instructionIcons[buttonId] = { sprite: icon, label: text };
   }
 
   /**
@@ -241,18 +241,19 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
       BUTTON_DELETE: "DEL.png",
     };
     for (const settingName of Object.keys(this.instructionIcons)) {
+      const icon = this.instructionIcons[settingName].sprite;
       if (Object.keys(specialIcons).includes(settingName)) {
-        this.instructionIcons[settingName].setTexture("keyboard", specialIcons[settingName]);
-        this.instructionIcons[settingName].alpha = 1;
+        icon.setTexture("keyboard", specialIcons[settingName]);
+        icon.alpha = 1;
         continue;
       }
-      const icon = globalScene.inputController?.getIconForLatestInputRecorded(settingName);
-      if (icon) {
+      const frame = globalScene.inputController?.getIconForLatestInputRecorded(settingName);
+      if (frame) {
         const type = globalScene.inputController?.getLastSourceType();
-        this.instructionIcons[settingName].setTexture(type, icon);
-        this.instructionIcons[settingName].alpha = 1;
+        icon.setTexture(type, frame);
+        icon.alpha = 1;
       } else {
-        this.instructionIcons[settingName].alpha = 0;
+        icon.alpha = 0;
       }
     }
 

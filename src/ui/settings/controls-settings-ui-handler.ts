@@ -5,7 +5,7 @@ import { Device } from "#enums/device";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { getIconWithSettingName } from "#inputs/config-handler";
-import { InputInterfaceConfig, InputKeys, InputSettings } from "#types/input-interface-config";
+import { InputInterfaceConfig, InputKeys, InputSettings } from "#types/input-types";
 import { SettingsCategory, SettingsUiItem } from "#types/settings";
 import { BindingUiHandler } from "#ui/binding-ui-handler";
 import { SettingsUiHandler } from "#ui/settings-ui-handler";
@@ -110,7 +110,7 @@ export abstract class ControlsSettingsUiHandler<
    * Update the icons for the bindings currently shown on screen.
    * Reuses existing sprites if they exist, otherwise initializes them.
    */
-  private updateBindingIcons(): void {
+  protected updateBindingIcons(): void {
     const config = globalScene.inputController.getActiveConfig(this.device);
     if (!config) {
       return;
@@ -204,11 +204,10 @@ export abstract class ControlsSettingsUiHandler<
   public override processInput(button: Button): boolean {
     const config: InputInterfaceConfig<K, S> = globalScene.inputController.getActiveConfig(this.device);
 
+    // ACTION button when on a binding setting => remap
     if (config && button === Button.ACTION && this.cursor + this.scrollCursor >= this.uiItems.length) {
       const settingIndex = this.cursor + this.scrollCursor - this.uiItems.length;
       const settingKey = Object.keys(config.settings)[settingIndex] as S;
-
-      console.log(settingKey, Object.keys(config.settings)[settingIndex], config.settingsBlacklist);
 
       // Cannot remap blacklisted buttons
       if (config.settingsBlacklist?.includes(settingKey)) {

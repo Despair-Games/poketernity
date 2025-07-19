@@ -1,7 +1,7 @@
 import { GAMEPAD_BUTTONS_BLACKLIST, GAMEPAD_LOCKED_BINDINGS } from "#constants/inputs-constants";
 import { Button } from "#enums/button";
 import { SettingGamepad } from "#enums/setting-gamepad";
-import { GamepadInterfaceConfig, ProControllerKeys } from "#types/input-interface-config";
+import { GamepadInterfaceConfig, ProControllerKeys } from "#types/input-types";
 
 /**
  * Nintendo Pro Controller mapping

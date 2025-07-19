@@ -37,12 +37,12 @@ export class NavigationMenu extends Phaser.GameObjects.Container {
     const iconPreviousTab = globalScene.add.sprite(0, 0, "keyboard");
     iconPreviousTab.setOrigin(0, 0.5);
     iconPreviousTab.setPositionRelative(headerBg, 8, Math.floor(headerBg.height / 2));
-    this.navigationIcons["BUTTON_CYCLE_FORM"] = iconPreviousTab;
+    this.navigationIcons["BUTTON_CYCLE_FORM"] = { sprite: iconPreviousTab };
 
     const iconNextTab = globalScene.add.sprite(0, 0, "keyboard");
     iconNextTab.setOrigin(1, 0.5);
     iconNextTab.setPositionRelative(headerBg, headerBg.width - 8, Math.floor(headerBg.height / 2));
-    this.navigationIcons["BUTTON_CYCLE_SHINY"] = iconNextTab;
+    this.navigationIcons["BUTTON_CYCLE_SHINY"] = { sprite: iconNextTab };
 
     this.add(iconPreviousTab);
     this.add(iconNextTab);
@@ -82,25 +82,15 @@ export class NavigationMenu extends Phaser.GameObjects.Container {
    * Updates the icons in the NavigationMenu based on the latest input recorded.
    */
   public updateIcons() {
-    const specialIcons = {
-      BUTTON_HOME: "HOME.png",
-      BUTTON_DELETE: "DEL.png",
-    };
     for (const settingName of Object.keys(this.navigationIcons)) {
-      if (Object.keys(specialIcons).includes(settingName)) {
-        this.navigationIcons[settingName].setTexture("keyboard");
-        this.navigationIcons[settingName].setFrame(specialIcons[settingName]);
-        this.navigationIcons[settingName].alpha = 1;
-        continue;
-      }
-      const icon = globalScene.inputController?.getIconForLatestInputRecorded(settingName);
-      if (icon) {
+      const icon = this.navigationIcons[settingName].sprite;
+      const frame = globalScene.inputController?.getIconForLatestInputRecorded(settingName);
+      if (frame) {
         const type = globalScene.inputController?.getLastSourceType();
-        this.navigationIcons[settingName].setTexture(type);
-        this.navigationIcons[settingName].setFrame(icon);
-        this.navigationIcons[settingName].alpha = 1;
+        icon.setTexture(type, frame);
+        icon.alpha = 1;
       } else {
-        this.navigationIcons[settingName].alpha = 0;
+        icon.alpha = 0;
       }
     }
   }

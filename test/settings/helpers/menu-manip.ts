@@ -2,7 +2,7 @@ import { SettingKeyboard } from "#enums/setting-keyboard";
 import {
   assign,
   canIAssignThisKey,
-  canIDeleteThisKey,
+  canIDeleteThisSetting,
   canIOverrideThisSetting,
   deleteBind,
   getIconWithKeycode,
@@ -118,7 +118,7 @@ export class MenuManip {
   }
 
   weCantAssignThisKey() {
-    const key = getKeyWithKeycode(this.config, this.keycode);
+    const key = getKeyWithKeycode(this.config, this.keycode)!;
     expect(canIAssignThisKey(this.config, key)).toEqual(false);
     return this;
   }
@@ -129,8 +129,7 @@ export class MenuManip {
   }
 
   weCantDelete() {
-    const key = getKeyWithSettingName(this.config, this.settingName);
-    expect(canIDeleteThisKey(this.config, key)).toEqual(false);
+    expect(canIDeleteThisSetting(this.config, this.settingName)).toEqual(false);
     return this;
   }
 }

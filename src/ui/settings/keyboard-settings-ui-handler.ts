@@ -3,25 +3,26 @@ import { globalScene } from "#app/global-scene";
 import { Device } from "#enums/device";
 import { KeyboardLayout } from "#enums/keyboard-layout";
 import { SettingKeyboard } from "#enums/setting-keyboard";
+import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
+import { deleteBind } from "#inputs/config-handler";
 import { settings } from "#system/settings-manager";
-import type { KeyboardKeys } from "#types/input-interface-config";
+import type { InputInterfaceConfig, KeyboardKeys } from "#types/input-types";
 import { SettingsUiItem } from "#types/settings";
 import { ControlsSettingsUiHandler } from "#ui/controls-settings-ui-handler";
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
-import { enumValueToKey, getTSEnumKeys } from "#utils/common-utils";
+import { keyboardSettingsUiItems } from "#ui/settings-ui-items";
+import { setTextColor } from "#ui/text-utils";
+import { enumValueToKey } from "#utils/common-utils";
 import { truncateString } from "#utils/string-utils";
 import i18next from "i18next";
-import { keyboardSettingsUiItems } from "./settings-ui-items";
 
 /**
  * Class representing the settings UI handler for keyboards.
  *
  * TODO:
- * - re implement deleting mapping
- * - prevent deleting some mappings even if not locked? (see 284)
  * - implement binding swapping like for gamepad?
- * - implement keyboard layout switching
+ * - localize what needs to be localized
  */
 export class KeyboardSettingsUiHandler extends ControlsSettingsUiHandler<KeyboardKeys, SettingKeyboard> {
   private deleteKey: Phaser.Input.Keyboard.Key | undefined;
@@ -67,28 +68,6 @@ export class KeyboardSettingsUiHandler extends ControlsSettingsUiHandler<Keyboar
   }
 
   /**
-   * Handle the delete key press event: remove mapping for the current button
-   */
-  private deleteBinding(): void {
-    console.log("DELETE BINDING");
-    if (globalScene.ui.getMode() !== UiMode.SETTINGS_KEYBOARD) {
-      return;
-    }
-    /*const cursor = this.cursor + this.scrollCursor; // Calculate the absolute cursor position.
-    const target = this.setting[Object.keys(this.setting)[cursor]];
-    const activeConfig = this.getActiveConfig();
-    const success = deleteBind(this.getActiveConfig(), target);
-    if (success) {
-      globalScene.gameData.saveMappingConfigs(
-        globalScene.inputController?.selectedDevice[Device.KEYBOARD],
-        activeConfig,
-      );
-      this.updateBindings();
-      SettingsNavigationManager.getInstance().updateIcons();
-    }*/
-  }
-
-  /**
    * Update the display of the chosen keyboard layout.
    */
   private updateChosenKeyboardDisplay(): void {
@@ -101,7 +80,6 @@ export class KeyboardSettingsUiHandler extends ControlsSettingsUiHandler<Keyboar
 
     // Iterate over the keys in the settingDevice enumeration.
     for (const [index, value] of Object.values(SettingKeyboard).entries()) {
-      console.log(index, value);
       if (value === "layout") {
         // Update the text of the first option label under the current setting to the name of the chosen layout
         this.updateOptionValueLabel(
@@ -145,6 +123,79 @@ export class KeyboardSettingsUiHandler extends ControlsSettingsUiHandler<Keyboar
       });
     } else {
       super.handleSaveSetting(uiItem, newValue);
+    }
+  }
+
+  /**
+   * Handle the delete key press event: remove mapping for the current button
+   */
+  private deleteBinding(): void {
+    if (globalScene.ui.getMode() !== UiMode.SETTINGS_KEYBOARD) {
+      return;
+    }
+
+    if (this.cursor + this.scrollCursor < this.uiItems.length) {
+      // We are currently not hovering a binding setting, ignore the input
+      return;
+    }
+
+    let success = false;
+    const config: InputInterfaceConfig = globalScene.inputController.getActiveConfig(this.device);
+    if (config) {
+      const settingIndex = this.cursor + this.scrollCursor - this.uiItems.length;
+      const settingKey = Object.keys(config.settings)[settingIndex] as SettingKeyboard;
+
+      success = deleteBind(config, settingKey);
+      if (success) {
+        globalScene.gameData.saveMappingConfigs(globalScene.inputController.selectedDevice[this.device], config);
+        this.updateBindingIcons();
+      }
+    }
+
+    if (success) {
+      this.getUi().playSelect();
+    } else {
+      this.getUi().playError();
+    }
+  }
+
+  public override setCursor(cursor: number): boolean {
+    if (super.setCursor(cursor)) {
+      this.updateDeleteInstruction();
+      return true;
+    }
+    return false;
+  }
+
+  protected override setScrollCursor(scrollCursor: number): boolean {
+    if (super.setScrollCursor(scrollCursor)) {
+      this.updateDeleteInstruction();
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Make the "delete" instruction text grayed out if the current setting cannot be deleted.
+   */
+  private updateDeleteInstruction(): void {
+    let isLocked = false;
+    const settingIndex = this.cursor + this.scrollCursor;
+    if (settingIndex < this.uiItems.length) {
+      isLocked = true;
+    } else {
+      const config: InputInterfaceConfig = globalScene.inputController.getActiveConfig(this.device);
+      if (config) {
+        const settingKey = Object.keys(config.settings)[settingIndex - this.uiItems.length] as SettingKeyboard;
+        if (config.settingsBlacklist.includes(settingKey)) {
+          isLocked = true;
+        }
+      }
+    }
+
+    const textStyle = isLocked ? TextStyle.SETTINGS_LOCKED : TextStyle.SETTINGS_LABEL;
+    if (this.instructionIcons["BUTTON_DELETE"]?.label) {
+      setTextColor(this.instructionIcons["BUTTON_DELETE"].label, textStyle);
     }
   }
 }

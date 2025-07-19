@@ -1,3 +1,8 @@
+interface IconWithLabel {
+  sprite: Phaser.GameObjects.Sprite;
+  label?: Phaser.GameObjects.Text;
+}
+
 export interface InputsIcons {
-  [key: string]: Phaser.GameObjects.Sprite;
+  [key: string]: IconWithLabel;
 }
