@@ -1,5 +1,5 @@
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type MysteryEncounterOption from "#mystery-encounters/mystery-encounter-option";
+import type { MysteryEncounterOption } from "#mystery-encounters/mystery-encounter-option";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { globalScene } from "#app/global-scene";

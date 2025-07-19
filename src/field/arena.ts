@@ -13,7 +13,7 @@ import { DEFAULT_NEW_WEATHER_DURATION, PRIMAL_WEATHER_TYPES } from "#constants/w
 import { type BiomeTierTrainerPools, getBiomeBgm, IndoorBiomes, type PokemonPools } from "#data/biome-utils";
 import { allBiomes } from "#data/data-lists";
 import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrigger } from "#data/pokemon-forms";
-import type PokemonSpecies from "#data/pokemon-species";
+import type { PokemonSpecies } from "#data/pokemon-species";
 import { getTerrainClearMessage, getTerrainStartMessage, Terrain } from "#data/terrain";
 import { getWeatherClearMessage, getWeatherStartMessage, Weather } from "#data/weather";
 import { AbAttrFlag } from "#enums/ab-attr-flag";

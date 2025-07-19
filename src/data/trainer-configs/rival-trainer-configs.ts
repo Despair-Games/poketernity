@@ -1,5 +1,5 @@
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
-import type PokemonSpecies from "#data/pokemon-species";
+import type { PokemonSpecies } from "#data/pokemon-species";
 import {
   getRandomPartyMemberFunc,
   getSpeciesFilterRandomPartyMemberFunc,

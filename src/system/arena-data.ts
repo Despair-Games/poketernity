@@ -6,7 +6,7 @@ import type { BiomeId } from "#enums/biome-id";
 import { Arena } from "#field/arena";
 import { isNil } from "#utils/common-utils";
 
-export default class ArenaData {
+export class ArenaData {
   public biome: BiomeId;
   public weather: Weather | null;
   public terrain: Terrain | null;

@@ -1,5 +1,5 @@
-import Battle from "#app/battle";
-import type BattleScene from "#app/battle-scene";
+import { Battle } from "#app/battle";
+import type { BattleScene } from "#app/battle-scene";
 import { getGameMode } from "#app/game-mode";
 import { BattleType } from "#enums/battle-type";
 import { GameModes } from "#enums/game-modes";

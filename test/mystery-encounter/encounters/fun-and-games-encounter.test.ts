@@ -1,4 +1,4 @@
-import type BattleScene from "#app/battle-scene";
+import type { BattleScene } from "#app/battle-scene";
 import { HumanTransitableBiomes } from "#data/biome-utils";
 import { BattleCommand } from "#enums/battle-command";
 import { BiomeId } from "#enums/biome-id";
@@ -11,7 +11,7 @@ import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import { FunAndGamesEncounter } from "#mystery-encounters/fun-and-games-encounter";
-import MysteryEncounter from "#mystery-encounters/mystery-encounter";
+import { MysteryEncounter } from "#mystery-encounters/mystery-encounter";
 import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
 import type { CommandPhase } from "#phases/command-phase";
 import type { MysteryEncounterPhase } from "#phases/mystery-encounter-phases/mystery-encounter-phase";

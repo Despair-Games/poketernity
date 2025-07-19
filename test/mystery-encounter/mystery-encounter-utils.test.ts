@@ -1,4 +1,4 @@
-import type BattleScene from "#app/battle-scene";
+import type { BattleScene } from "#app/battle-scene";
 import { speciesStarterCosts } from "#data/starters";
 import { ElementalType } from "#enums/elemental-type";
 import { SpeciesId } from "#enums/species-id";
@@ -15,7 +15,7 @@ import {
   getRandomSpeciesByStarterCost,
   koPlayerPokemon,
 } from "#mystery-encounters/encounter-pokemon-utils";
-import MysteryEncounter from "#mystery-encounters/mystery-encounter";
+import { MysteryEncounter } from "#mystery-encounters/mystery-encounter";
 import { GameManager } from "#test/test-utils/game-manager";
 import { initSceneWithoutEncounterPhase } from "#test/test-utils/game-manager-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";

@@ -15,7 +15,7 @@ import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedGauss, randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
-export default class PokemonSpecies extends PokemonSpeciesForm {
+export class PokemonSpecies extends PokemonSpeciesForm {
   readonly group: SpeciesGroups;
   readonly species: string;
   readonly growthRate: GrowthRate;

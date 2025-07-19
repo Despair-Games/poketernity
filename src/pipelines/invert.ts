@@ -13,7 +13,7 @@ void main()
 }
 `;
 
-export default class InvertPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline {
+export class InvertPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline {
   constructor(game: Game) {
     super({
       game,

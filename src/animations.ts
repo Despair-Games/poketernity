@@ -2,7 +2,7 @@
 import type { BattleAnim } from "#animations/battle-anims";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
-import type BattleScene from "#app/battle-scene";
+import type { BattleScene } from "#app/battle-scene";
 import type { Variant } from "#data/variant";
 import { PokeballType } from "#enums/pokeball-type";
 import { settings } from "#system/settings-manager";

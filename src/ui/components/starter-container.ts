@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import type PokemonSpecies from "#data/pokemon-species";
+import type { PokemonSpecies } from "#data/pokemon-species";
 import { Gender } from "#enums/gender";
 import { TextStyle } from "#enums/text-style";
 import { addTextObject } from "#ui/text-utils";

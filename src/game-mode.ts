@@ -10,7 +10,7 @@ import {
 import type { Challenge } from "#data/challenge";
 import { allChallenges, copyChallenge } from "#data/challenge";
 import { allSpecies } from "#data/data-lists";
-import type PokemonSpecies from "#data/pokemon-species";
+import type { PokemonSpecies } from "#data/pokemon-species";
 import { BiomeId } from "#enums/biome-id";
 import { ChallengeType } from "#enums/challenge-type";
 import { Challenges } from "#enums/challenges";

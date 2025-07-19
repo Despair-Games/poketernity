@@ -1,4 +1,4 @@
-import type BattleScene from "#app/battle-scene";
+import type { BattleScene } from "#app/battle-scene";
 import { HumanTransitableBiomes } from "#data/biome-utils";
 import { AbilityId } from "#enums/ability-id";
 import { BiomeId } from "#enums/biome-id";

@@ -3,11 +3,11 @@ import type { BattleType } from "#enums/battle-type";
 import type { GameModes } from "#enums/game-modes";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import type { MysteryEncounterSaveData } from "#mystery-encounters/mystery-encounter-save-data";
-import type ArenaData from "#system/arena-data";
-import type ChallengeData from "#system/challenge-data";
-import type PersistentModifierData from "#system/modifier-data";
-import type PokemonData from "#system/pokemon-data";
-import type TrainerData from "#system/trainer-data";
+import type { ArenaData } from "#system/arena-data";
+import type { ChallengeData } from "#system/challenge-data";
+import type { ModifierData } from "#system/modifier-data";
+import type { PokemonData } from "#system/pokemon-data";
+import type { TrainerData } from "#system/trainer-data";
 
 /**
  * Save data for a run, as defined server-side
@@ -18,8 +18,8 @@ export interface SessionSaveData {
   gameMode: GameModes;
   party: PokemonData[];
   enemyParty: PokemonData[];
-  modifiers: PersistentModifierData[];
-  enemyModifiers: PersistentModifierData[];
+  modifiers: ModifierData[];
+  enemyModifiers: ModifierData[];
   arena: ArenaData;
   pokeballCounts: PokeballCounts;
   money: number;

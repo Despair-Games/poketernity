@@ -5,8 +5,7 @@ import { SpeciesId } from "#enums/species-id";
 import type { ModifierTypeFunc } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
 import { leaveEncounterWithoutBattle, setEncounterRewards } from "#mystery-encounters/encounter-phase-utils";
-import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
-import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
+import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { randSeedInt } from "#utils/random-utils";
 
 /** i18n namespace for encounter */

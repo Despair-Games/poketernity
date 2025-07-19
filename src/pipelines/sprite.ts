@@ -1,5 +1,5 @@
 import { CANVAS_SCALE } from "#constants/ui-constants";
-import FieldSpritePipeline from "#pipelines/field-sprite";
+import { FieldSpritePipeline } from "#pipelines/field-sprite";
 
 const spriteFragShader = `
 #ifdef GL_FRAGMENT_PRECISION_HIGH
@@ -282,7 +282,7 @@ void main()
 }
 `;
 
-export default class SpritePipeline extends FieldSpritePipeline {
+export class SpritePipeline extends FieldSpritePipeline {
   private _tone: number[];
 
   constructor(game: Phaser.Game) {

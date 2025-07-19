@@ -17,7 +17,7 @@ import { pokemonFormChanges } from "#data/pokemon-forms";
 import type { LevelMoves } from "#data/pokemon-level-moves";
 import { pokemonSpeciesLevelMoves } from "#data/pokemon-level-moves";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
-import type PokemonSpecies from "#data/pokemon-species";
+import type { PokemonSpecies } from "#data/pokemon-species";
 import { starterColors } from "#data/starter-colors";
 import {
   getCandyProgressRequirement,

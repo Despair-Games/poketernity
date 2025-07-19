@@ -5,7 +5,7 @@ import type { TurnStartPhase } from "#phases/turn-start-phase";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { updateUserInfo } from "#app/account";
-import BattleScene from "#app/battle-scene";
+import { BattleScene } from "#app/battle-scene";
 import { getGameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
 import overrides from "#app/overrides";
@@ -26,7 +26,7 @@ import { UiMode } from "#enums/ui-mode";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
-import Trainer from "#field/trainer";
+import { Trainer } from "#field/trainer";
 import { ModifierTypeOption } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
 import { settings } from "#system/settings-manager";
