@@ -5,12 +5,12 @@ import { achievementsBus } from "#app/system/achievements/achievements-events";
 import AchvBanner from "#app/system/achievements/unlocking/achievements-banner";
 import type { AchvCategory } from "#enums/achv-category";
 
-type UnlockAchievementsManagerData = {
+type UnlockAchievementsSceneData = {
   context: AchvCategory;
   unlockedAchievements: string[];
 };
 
-export class UnlockAchievementsManager extends SceneBase {
+export class UnlockAchievementsScene extends SceneBase {
   private lockedAchievements: string[];
   private validAchievements: string[];
   private achievementBanners: AchvBanner[];
@@ -19,7 +19,7 @@ export class UnlockAchievementsManager extends SceneBase {
     super({ key: "Achievements_Manager" });
   }
 
-  init(data: UnlockAchievementsManagerData): void {
+  init(data: UnlockAchievementsSceneData): void {
     this.validAchievements = [];
     this.achievementBanners = [];
     const unlockedAchievements = Object.keys(data.unlockedAchievements);
