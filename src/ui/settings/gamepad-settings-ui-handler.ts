@@ -1,14 +1,14 @@
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
-import { Button } from "#enums/button";
+import type { Button } from "#enums/button";
 import { Device } from "#enums/device";
 import { SettingGamepad } from "#enums/setting-gamepad";
 import { UiMode } from "#enums/ui-mode";
 import { settings } from "#system/settings-manager";
-import { GamepadKeys } from "#types/input-types";
-import { SettingsUiItem } from "#types/settings";
+import type { GamepadKeys } from "#types/input-types";
+import type { SettingsUiItem } from "#types/settings";
 import { ControlsSettingsUiHandler } from "#ui/controls-settings-ui-handler";
-import { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
+import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 import { gamepadSettingsUiItems } from "#ui/settings-ui-items";
 import { truncateString } from "#utils/string-utils";
 import i18next from "i18next";

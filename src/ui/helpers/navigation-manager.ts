@@ -23,8 +23,7 @@ interface TabOptions {
  * preferrably through a singleton pattern.
  */
 export abstract class NavigationManager {
-  private modes: UiMode[];
-  private labels: string[];
+  private tabs: TabOptions[];
   private cursor: number;
   private navigationMenus: NavigationMenu[];
 
@@ -33,9 +32,8 @@ export abstract class NavigationManager {
    * To create a new NavigationMenu to track, call {@linkcode addMenu}
    * @example `this.navigationContainer = manager.addMenu(0, 0);`
    */
-  constructor(modes: UiMode[], labels: string[]) {
-    this.modes = modes;
-    this.labels = labels;
+  constructor(tabs: TabOptions[]) {
+    this.tabs = tabs;
     this.cursor = 0;
     this.navigationMenus = [];
   }
@@ -45,7 +43,11 @@ export abstract class NavigationManager {
   }
 
   public addMenu(x: number, y: number): NavigationMenu {
-    const menu = new NavigationMenu(x, y, this.labels);
+    const menu = new NavigationMenu(
+      x,
+      y,
+      this.tabs.map((tab) => tab.label),
+    );
     menu.setSelected(this.cursor);
     this.navigationMenus.push(menu);
     return menu;
@@ -71,11 +73,11 @@ export abstract class NavigationManager {
     switch (button) {
       case Button.CYCLE_FORM: // LEFT
         if (this.cursor === 0) {
-          return this.setCursor(this.modes.length - 1);
+          return this.setCursor(this.tabs.length - 1);
         }
         return this.setCursor(this.cursor - 1);
       case Button.CYCLE_SHINY: // RIGHT
-        if (this.cursor === this.modes.length - 1) {
+        if (this.cursor === this.tabs.length - 1) {
           return this.setCursor(0);
         }
         return this.setCursor(this.cursor + 1);
@@ -91,7 +93,7 @@ export abstract class NavigationManager {
     for (const menu of this.navigationMenus) {
       menu.setSelected(this.cursor);
     }
-    globalScene.ui.setMode<GeneralSettingsUiHandler>(this.modes[this.cursor]);
+    globalScene.ui.setMode<GeneralSettingsUiHandler>(this.tabs[this.cursor].mode);
     return true;
   }
 

@@ -8,7 +8,6 @@ import {
   getIconWithKeycode,
   getIconWithSettingName,
   getKeyWithKeycode,
-  getKeyWithSettingName,
   getSettingNameWithKeycode,
 } from "#inputs/config-handler";
 import { expect } from "vitest";

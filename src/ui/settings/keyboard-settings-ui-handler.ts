@@ -8,7 +8,7 @@ import { UiMode } from "#enums/ui-mode";
 import { deleteBind } from "#inputs/config-handler";
 import { settings } from "#system/settings-manager";
 import type { InputInterfaceConfig, KeyboardKeys } from "#types/input-types";
-import { SettingsUiItem } from "#types/settings";
+import type { SettingsUiItem } from "#types/settings";
 import { ControlsSettingsUiHandler } from "#ui/controls-settings-ui-handler";
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 import { keyboardSettingsUiItems } from "#ui/settings-ui-items";

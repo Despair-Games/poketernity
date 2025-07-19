@@ -19,7 +19,6 @@ import { hasTouchscreen } from "#utils/app-utils";
 import { isNil } from "#utils/common-utils";
 import { capitalizeFirstLetter } from "#utils/string-utils";
 import i18next from "i18next";
-import { GameObjects } from "phaser";
 
 interface OptionLabelData {
   labels: string[];
@@ -615,7 +614,7 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
    * @param labels - Array of Text objects for all options of this setting.
    * @param positions - Array to edit with the computed positions of each label.
    */
-  computeLabelsPosition(labelDisplayWidth: number, labels: GameObjects.Text[], positions: number[]): void {
+  computeLabelsPosition(labelDisplayWidth: number, labels: Phaser.GameObjects.Text[], positions: number[]): void {
     // width needed for all option values, without space between them
     const totalWidth = labels.map((o) => o.displayWidth).reduce((total, width) => (total += width), 0);
 

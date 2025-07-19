@@ -1,7 +1,7 @@
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import { UiMode } from "#enums/ui-mode";
-import { SettingsUiItem } from "#types/settings";
+import type { SettingsUiItem } from "#types/settings";
 import { SettingsUiHandler } from "#ui/settings-ui-handler";
 import { generalSettingsUiItems } from "#ui/settings-ui-items";
 import { hasTouchscreen, isLandscapeMode } from "#utils/app-utils";

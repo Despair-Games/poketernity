@@ -1,13 +1,13 @@
 import { globalScene } from "#app/global-scene";
 import { GAME_WIDTH } from "#constants/ui-constants";
 import { Button } from "#enums/button";
-import { Device } from "#enums/device";
+import type { Device } from "#enums/device";
 import { TextStyle } from "#enums/text-style";
-import { UiMode } from "#enums/ui-mode";
+import type { UiMode } from "#enums/ui-mode";
 import { getIconWithSettingName } from "#inputs/config-handler";
-import { InputInterfaceConfig, InputKeys, InputSettings } from "#types/input-types";
-import { SettingsCategory, SettingsUiItem } from "#types/settings";
-import { BindingUiHandler } from "#ui/binding-ui-handler";
+import type { InputInterfaceConfig, InputKeys, InputSettings } from "#types/input-types";
+import type { SettingsCategory, SettingsUiItem } from "#types/settings";
+import type { BindingUiHandler } from "#ui/binding-ui-handler";
 import { SettingsUiHandler } from "#ui/settings-ui-handler";
 import { TextListContainer } from "#ui/text-list-container";
 import { addTextObject, getBBCodeFragment } from "#ui/text-utils";

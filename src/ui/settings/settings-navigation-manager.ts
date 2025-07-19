@@ -9,21 +9,14 @@ export class SettingsNavigationManager extends NavigationManager {
   private static instance: SettingsNavigationManager;
 
   private constructor() {
-    const modes = [
-      UiMode.SETTINGS,
-      UiMode.SETTINGS_DISPLAY,
-      UiMode.SETTINGS_AUDIO,
-      UiMode.SETTINGS_GAMEPAD,
-      UiMode.SETTINGS_KEYBOARD,
+    const options = [
+      { mode: UiMode.SETTINGS, label: i18next.t("settings:general") },
+      { mode: UiMode.SETTINGS_DISPLAY, label: i18next.t("settings:display") },
+      { mode: UiMode.SETTINGS_AUDIO, label: i18next.t("settings:audio") },
+      { mode: UiMode.SETTINGS_GAMEPAD, label: i18next.t("settings:gamepad") },
+      { mode: UiMode.SETTINGS_KEYBOARD, label: i18next.t("settings:keyboard") },
     ];
-    const labels = [
-      i18next.t("settings:general"),
-      i18next.t("settings:display"),
-      i18next.t("settings:audio"),
-      i18next.t("settings:gamepad"),
-      i18next.t("settings:keyboard"),
-    ];
-    super(modes, labels);
+    super(options);
   }
 
   /**

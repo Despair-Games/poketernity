@@ -1,7 +1,7 @@
 import { GAMEPAD_BUTTONS_BLACKLIST, GAMEPAD_LOCKED_BINDINGS } from "#constants/inputs-constants";
 import { Button } from "#enums/button";
 import { SettingGamepad } from "#enums/setting-gamepad";
-import { DualshockKeys, GamepadInterfaceConfig } from "#types/input-types";
+import type { DualshockKeys, GamepadInterfaceConfig } from "#types/input-types";
 
 /**
  * Dualshock mapping
