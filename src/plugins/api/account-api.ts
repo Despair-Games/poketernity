@@ -41,7 +41,7 @@ export class AccountApi extends ApiBase {
    */
   public async register(registerData: AccountRegisterRequest) {
     try {
-      const response = await this.doPost("/account/register", registerData, "form-urlencoded");
+      const response = await this.doPost("/account/register", registerData, "json");
 
       if (response.ok) {
         return null;
@@ -62,7 +62,7 @@ export class AccountApi extends ApiBase {
    */
   public async login(loginData: AccountLoginRequest) {
     try {
-      const response = await this.doPost("/account/login", loginData, "form-urlencoded");
+      const response = await this.doPost("/account/login", loginData, "json");
 
       if (response.ok) {
         const loginResponse = (await response.json()) as AccountLoginResponse;

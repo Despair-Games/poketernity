@@ -307,8 +307,8 @@ export class EncounterPhase extends BattlePhase {
           // Set weather and terrain before session gets saved to ensure it's properly added to session data
           this.trySetWeatherIfNewBiome();
           this.trySetTerrainIfNewBiome();
-          // Game currently syncs to server on waves X1 and X6, or after 5 minutes have passed without a save
-          gameData.saveAll(true, waveIndex % 5 === 1 || (globalScene.lastSavePlayTime ?? 0) >= 300).then((success) => {
+          // Game currently syncs to server on every wave, or after 5 minutes have passed without a save
+          gameData.saveAll(true, true).then((success) => {
             globalScene.disableMenu = false;
             if (!success) {
               return globalScene.reset(true);

@@ -100,7 +100,7 @@ const applyMigrators = (migrators: readonly SaveMigrator[], data: SaveData, save
  */
 export function applySystemVersionMigration(data: SystemSaveData) {
   const prevVersion = data.gameVersion;
-  const isCurrentVersionHigher = compareVersions(prevVersion, LATEST_VERSION) === -1;
+  const isCurrentVersionHigher = prevVersion && compareVersions(prevVersion, LATEST_VERSION) === -1;
 
   if (isCurrentVersionHigher) {
     applyMigrators(systemMigrators, data, prevVersion);
@@ -120,7 +120,7 @@ export function applySystemVersionMigration(data: SystemSaveData) {
  */
 export function applySessionVersionMigration(data: SessionSaveData) {
   const prevVersion = data.gameVersion;
-  const isCurrentVersionHigher = compareVersions(prevVersion, LATEST_VERSION) === -1;
+  const isCurrentVersionHigher = prevVersion && compareVersions(prevVersion, LATEST_VERSION) === -1;
 
   if (isCurrentVersionHigher) {
     // Always sanitize money as a safeguard

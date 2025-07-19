@@ -63,9 +63,10 @@ export abstract class ApiBase {
    * @param config The request {@linkcode RequestInit | Configuration}.
    */
   protected async doFetch(path: string, config: RequestInit): Promise<Response> {
+    const token = getCookie(SESSION_ID_COOKIE);
     config.headers = {
       ...config.headers,
-      Authorization: getCookie(SESSION_ID_COOKIE),
+      Authorization: token ? `Bearer ${token}` : "",
       "Content-Type": config.headers?.["Content-Type"] ?? "application/json",
     };
 
