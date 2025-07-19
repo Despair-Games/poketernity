@@ -274,8 +274,8 @@ export class EggGachaUiHandler extends MessageUiHandler {
 
     this.eggGachaContainer.add(this.eggGachaOptionsContainer);
 
-    new Array(getTSEnumKeys(VoucherType).length).fill(null).map((_, i) => {
-      const container = globalScene.add.container(GAME_WIDTH - 56 * i, 0);
+    getTSEnumValues(VoucherType).forEach((voucher, index) => {
+      const container = globalScene.add.container(GAME_WIDTH - 56 * index, 0);
 
       const bg = addWindow(0, 0, 56, 22);
       bg.setOrigin(1, 0);
@@ -287,7 +287,7 @@ export class EggGachaUiHandler extends MessageUiHandler {
 
       this.voucherCountLabels.push(countLabel);
 
-      const iconImage = getVoucherTypeIcon(i as VoucherType);
+      const iconImage = getVoucherTypeIcon(voucher);
 
       const icon = globalScene.add.sprite(-19, 2, "items", iconImage);
       icon.setOrigin(0, 0);

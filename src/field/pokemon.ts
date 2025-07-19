@@ -506,7 +506,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   /** @returns An array of 6 random numbers, each between `0-31` inclusive */
   public generateIvs(): number[] {
-    return new Array(6).fill(null).map(() => this.randSeedIntRange(IV_MIN, IV_MAX));
+    const ivs: number[] = [];
+    for (let i = 0; i < 6; i++) {
+      ivs.push(this.randSeedIntRange(IV_MIN, IV_MAX));
+    }
+    return ivs;
   }
 
   /**
