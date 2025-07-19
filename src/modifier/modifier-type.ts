@@ -1778,8 +1778,7 @@ export function getPlayerModifierTypeOptions(
   const retryCount = Math.min(count * 5, 50);
   if (!customModifierSettings) {
     for (let i = 0; i < count; i++) {
-      const tier = modifierTiers && modifierTiers.length > i ? modifierTiers[i] : undefined;
-      options.push(getModifierTypeOptionWithRetry(options, retryCount, party, tier));
+      options.push(getModifierTypeOptionWithRetry(options, retryCount, party, modifierTiers?.[i]));
     }
   } else {
     // Guaranteed mod options first
