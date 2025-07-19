@@ -10,7 +10,7 @@ import type { NumberHolder } from "#utils/common-utils";
  */
 export class HitCountPowerAttr extends VariablePowerAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {
-    power.value += Math.min(user.waveData?.hitCount ?? 0, 6) * 50;
+    power.value += Math.min(user.waveData.hitCount, 6) * 50;
 
     return true;
   }

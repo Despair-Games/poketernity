@@ -1024,7 +1024,7 @@ export function initAbilities() {
       .bypassFaint()
       .partial(), // Meteor form should protect against status effects and yawn
     new Ability(AbilityId.STAKEOUT, 7)
-      .attr(MovePowerBoostAbAttr, (_user, target, _move) => !!target?.turnData?.switchedInThisTurn, 2),
+      .attr(MovePowerBoostAbAttr, (_user, target, _move) => !!target?.turnData.switchedInThisTurn, 2),
     new Ability(AbilityId.WATER_BUBBLE, 7)
       .attr(ReceivedTypeDamageMultiplierAbAttr, ElementalType.FIRE, 0.5)
       .attr(MoveTypePowerBoostAbAttr, ElementalType.WATER, 2)

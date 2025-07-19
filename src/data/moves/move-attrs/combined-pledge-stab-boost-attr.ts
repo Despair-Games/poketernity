@@ -17,7 +17,7 @@ export class CombinedPledgeStabBoostAttr extends MoveAttr {
    * @returns `true` if the STAB multiplier is modified
    */
   override apply(user: Pokemon, _target: Pokemon, move: Move, appliesStab: BooleanHolder): boolean {
-    const combinedPledgeMove = user.turnData?.combiningPledge;
+    const combinedPledgeMove = user.turnData.combiningPledge;
 
     if (combinedPledgeMove && combinedPledgeMove !== move.id) {
       appliesStab.value = true;

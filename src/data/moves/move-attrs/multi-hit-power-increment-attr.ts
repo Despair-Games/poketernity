@@ -18,10 +18,6 @@ export class MultiHitPowerIncrementAttr extends VariablePowerAttr {
   }
 
   override apply(user: Pokemon, _target: Pokemon, move: Move, power: NumberHolder): boolean {
-    if (!user.turnData) {
-      return false;
-    }
-
     const hitsTotal = user.turnData.hitCount - Math.max(user.turnData.hitsLeft, 0);
     power.value = move.power * (1 + (hitsTotal % this.maxHits));
     return true;
