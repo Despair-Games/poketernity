@@ -7,11 +7,11 @@ import type { PokemonHeldItemModifier } from "#modifier/modifier";
 
 export interface ShowTextOptions {
   /**
-   * The delay in milliseconds before the dialogue is displayed.
+   * The delay in milliseconds before the text is displayed.
    * @defaultValue `20`
    */
   delay?: number;
-  /** A callback function to execute after the dialogue is displayed. */
+  /** A callback function to execute after the text is done displaying. */
   callback?: VoidFunction;
   /**
    * The delay in milliseconds before executing the callback.

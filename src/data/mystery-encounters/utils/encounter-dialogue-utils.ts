@@ -51,7 +51,7 @@ export function queueEncounterMessage(contentKey: string): void {
 
 interface ShowEncounterTextOptions {
   /**
-   * The delay in milliseconds before the dialogue is displayed.
+   * The delay in milliseconds before the text starts getting displayed.
    * @defaultValue `20`
    */
   delay?: number;
