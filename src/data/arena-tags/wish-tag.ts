@@ -5,7 +5,6 @@ import type { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import type { FieldBattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
-import type { Arena } from "#field/arena";
 import { toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
@@ -22,7 +21,7 @@ export class WishTag extends ArenaTag {
     super(ArenaTagType.WISH, turnCount, MoveId.WISH, sourceId, side);
   }
 
-  override onAdd(_arena: Arena): void {
+  override onAdd(): void {
     if (this.sourceId) {
       const user = globalScene.getPokemonById(this.sourceId);
       if (user) {
@@ -37,7 +36,7 @@ export class WishTag extends ArenaTag {
     }
   }
 
-  override onRemove(_arena: Arena): void {
+  override onRemove(): void {
     const target = globalScene.getPokemonByBattlerIndex(this.battlerIndex);
     if (target?.isActive(true)) {
       globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", this.triggerMessage);

@@ -3,7 +3,7 @@ import type { PersistentModifier } from "#modifier/modifier";
 import type { GeneratedPersistentModifierType, ModifierType } from "#modifier/modifier-type";
 import { getModifierTypeFuncById, ModifierTypeGenerator } from "#modifier/modifier-type";
 
-export default class ModifierData {
+export class ModifierData {
   public player: boolean;
   public typeId: string;
   public typePregenArgs: any[];

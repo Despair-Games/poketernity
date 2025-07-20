@@ -4,7 +4,6 @@ import type { SkyDropTag } from "#battler-tags/sky-drop-tag";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
-import type { Arena } from "#field/arena";
 import i18next from "i18next";
 
 /**
@@ -17,7 +16,7 @@ export class GravityTag extends ArenaTag {
     super(ArenaTagType.GRAVITY, turnCount, MoveId.GRAVITY);
   }
 
-  override onAdd(_arena: Arena): void {
+  override onAdd(): void {
     globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("arenaTag:gravityOnAdd"));
     globalScene.getField(true).forEach((pokemon) => {
       if (pokemon) {
@@ -31,7 +30,7 @@ export class GravityTag extends ArenaTag {
     });
   }
 
-  override onRemove(_arena: Arena): void {
+  override onRemove(): void {
     globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("arenaTag:gravityOnRemove"));
   }
 }

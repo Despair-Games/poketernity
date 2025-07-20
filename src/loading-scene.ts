@@ -3,7 +3,7 @@ import type { UiWindowStyle } from "#enums/ui-window-style";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { api } from "#api/api";
-import CacheBustedLoaderPlugin from "#app/plugins/cache-busted-loader-plugin";
+import { CacheBustedLoaderPlugin } from "#app/plugins/cache-busted-loader-plugin";
 import { SceneBase } from "#app/scene-base";
 import { timedEventManager } from "#app/timed-event-manager";
 import { isMobile } from "#app/touch-controls";

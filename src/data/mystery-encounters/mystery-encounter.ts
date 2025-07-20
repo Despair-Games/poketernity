@@ -8,17 +8,17 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import type { StatusEffect } from "#enums/status-effect";
-import type { MysteryEncounterSpriteConfig } from "#field/mystery-encounter-intro";
-import MysteryEncounterIntroVisuals from "#field/mystery-encounter-intro";
+import { MysteryEncounterIntroVisuals, type MysteryEncounterSpriteConfig } from "#field/mystery-encounter-intro";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { PokemonMove } from "#field/pokemon-move";
 import type { EnemyPartyConfig } from "#mystery-encounters/encounter-phase-utils";
-import type MysteryEncounterDialogue from "#mystery-encounters/mystery-encounter-dialogue";
-import type { OptionTextDisplay } from "#mystery-encounters/mystery-encounter-dialogue";
-import type MysteryEncounterOption from "#mystery-encounters/mystery-encounter-option";
-import type { OptionPhaseCallback } from "#mystery-encounters/mystery-encounter-option";
-import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
+import type { MysteryEncounterDialogue, OptionTextDisplay } from "#mystery-encounters/mystery-encounter-dialogue";
+import {
+  type MysteryEncounterOption,
+  MysteryEncounterOptionBuilder,
+  type OptionPhaseCallback,
+} from "#mystery-encounters/mystery-encounter-option";
 import {
   EncounterPokemonRequirement,
   EncounterSceneRequirement,
@@ -92,7 +92,7 @@ export interface IMysteryEncounter {
  * These objects will be saved as part of session data any time the player is on a floor with an encounter
  * Unless you know what you're doing, you should use MysteryEncounterBuilder to create an instance for this class
  */
-export default class MysteryEncounter implements IMysteryEncounter {
+export class MysteryEncounter implements IMysteryEncounter {
   // #region Required params
 
   encounterType: MysteryEncounterType;

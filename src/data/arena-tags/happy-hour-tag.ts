@@ -3,7 +3,6 @@ import { ArenaTag } from "#arena-tags/arena-tag";
 import type { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveId } from "#enums/move-id";
-import type { Arena } from "#field/arena";
 import i18next from "i18next";
 
 /**
@@ -15,11 +14,11 @@ export class HappyHourTag extends ArenaTag {
     super(ArenaTagType.HAPPY_HOUR, 0, MoveId.HAPPY_HOUR, sourceId, side);
   }
 
-  override onAdd(_arena: Arena): void {
+  override onAdd(): void {
     globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("arenaTag:happyHourOnAdd"));
   }
 
-  override onRemove(_arena: Arena): void {
+  override onRemove(): void {
     globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("arenaTag:happyHourOnRemove"));
   }
 }

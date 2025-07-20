@@ -7,7 +7,6 @@ import type { ElementalType } from "#enums/elemental-type";
 import type { HitResult } from "#enums/hit-result";
 import type { MoveId } from "#enums/move-id";
 import type { MoveResult } from "#enums/move-result";
-import type { Arena } from "#field/arena";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 
@@ -60,7 +59,7 @@ export type MoveConditionFunc = (user: Pokemon, target: Pokemon, move: Move) => 
  * can have its effects negated by a {@linkcode ConditionalProtectTag | conditional protection}
  * field effect (e.g. Wide Guard).
  */
-export type ProtectConditionFunc = (arena: Arena, moveId: MoveId) => boolean;
+export type ProtectConditionFunc = (moveId: MoveId) => boolean;
 
 export type UserMoveConditionFunc = (user: Pokemon, move: Move) => boolean;
 

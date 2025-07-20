@@ -1,4 +1,4 @@
-import type PokemonSpecies from "#data/pokemon-species";
+import type { PokemonSpecies } from "#data/pokemon-species";
 import type { BattleCommand } from "#enums/battle-command";
 import type { PartyOption } from "#enums/party-option";
 import type { PlayerPokemon } from "#field/player-pokemon";

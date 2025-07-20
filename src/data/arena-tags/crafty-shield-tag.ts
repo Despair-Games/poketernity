@@ -10,12 +10,11 @@ import type { ProtectConditionFunc } from "#types/move-types";
 /**
  * Condition function for {@link https://bulbapedia.bulbagarden.net/wiki/Crafty_Shield_(move) Crafty Shield's}
  * protection effect.
- * @param _arena {@linkcode Arena} The arena containing the protection effect
  * @param moveId {@linkcode MoveId} The move to check against this condition
  * @returns `true` if the incoming move is a Status move, is not a hazard, and does not target all
  * Pokemon or sides of the field.
  */
-const CraftyShieldConditionFunc: ProtectConditionFunc = (_arena, moveId) => {
+const CraftyShieldConditionFunc: ProtectConditionFunc = (moveId) => {
   const move = allMoves.get(moveId);
   return (
     move.category === MoveCategory.STATUS

@@ -3,7 +3,6 @@ import { ArenaTag } from "#arena-tags/arena-tag";
 import type { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveId } from "#enums/move-id";
-import type { Arena } from "#field/arena";
 import i18next from "i18next";
 
 /**
@@ -17,14 +16,14 @@ export class SafeguardTag extends ArenaTag {
     super(ArenaTagType.SAFEGUARD, turnCount, MoveId.SAFEGUARD, sourceId, side);
   }
 
-  override onAdd(_arena: Arena): void {
+  override onAdd(): void {
     globalScene.phaseManager.createAndUnshiftPhase(
       "MessagePhase",
       i18next.t(`arenaTag:safeguardOnAdd${this.i18nSideKey}`),
     );
   }
 
-  override onRemove(_arena: Arena): void {
+  override onRemove(): void {
     globalScene.phaseManager.createAndUnshiftPhase(
       "MessagePhase",
       i18next.t(`arenaTag:safeguardOnRemove${this.i18nSideKey}`),

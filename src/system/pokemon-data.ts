@@ -18,7 +18,7 @@ import type { PokemonSummonData, Status } from "#types/pokemon-types";
 import { clamp, isPokemon } from "#utils/common-utils";
 import { getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
 
-export default class PokemonData {
+export class PokemonData {
   public id: number;
   public player: boolean;
   public speciesId: SpeciesId;

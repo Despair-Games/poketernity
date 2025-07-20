@@ -2,7 +2,6 @@ import { globalScene } from "#app/global-scene";
 import { ArenaTag } from "#arena-tags/arena-tag";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveId } from "#enums/move-id";
-import type { Arena } from "#field/arena";
 import i18next from "i18next";
 
 /**
@@ -17,7 +16,7 @@ export class FairyLockTag extends ArenaTag {
     super(ArenaTagType.FAIRY_LOCK, turnCount, MoveId.FAIRY_LOCK, sourceId);
   }
 
-  override onAdd(_arena: Arena): void {
+  override onAdd(): void {
     globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("arenaTag:fairyLockOnAdd"));
   }
 }

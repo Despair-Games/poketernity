@@ -1,6 +1,6 @@
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
-import TouchControl from "#app/touch-controls";
+import { TouchControl } from "#app/touch-controls";
 import { Button } from "#enums/button";
 import { Device } from "#enums/device";
 import type { SettingGamepad } from "#enums/setting-gamepad";

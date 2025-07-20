@@ -7,7 +7,7 @@ import {
   getPokeballCatchMultiplier,
   getPokeballTintColor,
 } from "#data/pokeball";
-import type PokemonSpecies from "#data/pokemon-species";
+import type { PokemonSpecies } from "#data/pokemon-species";
 import { speciesStarterCosts } from "#data/starters";
 import type { AbilityId } from "#enums/ability-id";
 import type { ElementalType } from "#enums/elemental-type";

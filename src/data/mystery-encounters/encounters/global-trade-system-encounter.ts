@@ -6,7 +6,7 @@ import { allSpecies } from "#data/data-lists";
 import { getGenderSymbol } from "#data/gender";
 import { getNatureName } from "#data/nature";
 import { getPokeballAtlasKey, getPokeballTintColor } from "#data/pokeball";
-import type PokemonSpecies from "#data/pokemon-species";
+import type { PokemonSpecies } from "#data/pokemon-species";
 import { trainerNamePools } from "#data/trainer-names";
 import { getTypeRgb } from "#data/type";
 import { EventModifierType } from "#enums/event-modifier-type";
@@ -23,14 +23,17 @@ import { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
-import type { PokemonHeldItemModifier } from "#modifier/modifier";
 import {
   HiddenAbilityRateBoosterModifier,
+  type PokemonHeldItemModifier,
   ShinyRateBoosterModifier,
   SpeciesStatBoosterModifier,
 } from "#modifier/modifier";
-import type { ModifierTypeOption } from "#modifier/modifier-type";
-import { getPlayerModifierTypeOptions, regenerateModifierPoolThresholds } from "#modifier/modifier-type";
+import {
+  getPlayerModifierTypeOptions,
+  type ModifierTypeOption,
+  regenerateModifierPoolThresholds,
+} from "#modifier/modifier-type";
 import { getEncounterText, showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import {
   leaveEncounterWithoutBattle,
@@ -38,10 +41,9 @@ import {
   setEncounterRewards,
 } from "#mystery-encounters/encounter-phase-utils";
 import { addPokemonDataToDexAndValidateAchievements } from "#mystery-encounters/encounter-pokemon-utils";
-import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
-import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
+import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
-import PokemonData from "#system/pokemon-data";
+import { PokemonData } from "#system/pokemon-data";
 import type { OptionSelectItem } from "#ui/option-select-config";
 import { isNil, NumberHolder } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";

@@ -1,6 +1,6 @@
 import { api } from "#api/api";
 import { globalScene } from "#app/global-scene";
-import type PokemonSpecies from "#data/pokemon-species";
+import type { PokemonSpecies } from "#data/pokemon-species";
 import type { PokemonSpeciesForm } from "#data/pokemon-species-form";
 import { speciesStarterCosts } from "#data/starters";
 import type { SpeciesId } from "#enums/species-id";

@@ -255,9 +255,9 @@ export class TitlePhase extends Phase {
         Promise.all(loadPokemonAssets).then(() => {
           time.delayedCall(500, () => globalScene.audioManager.playBgm());
           gameData.gameStats.dailyRunSessionsPlayed++;
-          const arena = globalScene.newArena(gameMode.getStartingBiome());
+          globalScene.newArena(gameMode.getStartingBiome());
           globalScene.newBattle();
-          arena.init();
+          globalScene.arena.init();
           globalScene.sessionPlayTime = 0;
           globalScene.lastSavePlayTime = 0;
           this.end();
