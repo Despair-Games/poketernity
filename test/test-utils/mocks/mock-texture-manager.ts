@@ -1,4 +1,4 @@
-import type BattleScene from "#app/battle-scene";
+import type { BattleScene } from "#app/battle-scene";
 import type { MockGameObject } from "#test/test-utils/mocks/mock-game-object";
 import { MockVideoGameObject } from "#test/test-utils/mocks/mock-video-game-object";
 import { MockBBCodeText } from "#test/test-utils/mocks/mocks-container/mock-bbcode-text";
