@@ -5,7 +5,6 @@ import { Device } from "#enums/device";
 import { SettingGamepad } from "#enums/setting-gamepad";
 import { UiMode } from "#enums/ui-mode";
 import { settings } from "#system/settings-manager";
-import type { GamepadKeys } from "#types/input-types";
 import type { SettingsUiItem } from "#types/settings";
 import { ControlsSettingsUiHandler } from "#ui/controls-settings-ui-handler";
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
@@ -16,7 +15,7 @@ import i18next from "i18next";
 /**
  * Class representing the settings UI handler for gamepads.
  */
-export class GamepadSettingsUiHandler extends ControlsSettingsUiHandler<GamepadKeys, SettingGamepad> {
+export class GamepadSettingsUiHandler extends ControlsSettingsUiHandler {
   private ignoreNextInput: boolean;
 
   constructor() {

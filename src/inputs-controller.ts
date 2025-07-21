@@ -9,7 +9,6 @@ import { SettingKeyboard } from "#enums/setting-keyboard";
 import { UiMode } from "#enums/ui-mode";
 import { cfg_keyboard_azerty } from "#inputs/cfg-keyboard-azerty";
 import { cfg_keyboard_qwerty } from "#inputs/cfg-keyboard-qwerty";
-import { assign, getButtonWithKeycode, getIconForLatestInput, swap } from "#inputs/config-handler";
 import { pad_dualshock } from "#inputs/pad-dualshock";
 import { pad_generic } from "#inputs/pad-generic";
 import { pad_procon } from "#inputs/pad-procon";
@@ -28,6 +27,7 @@ import type {
 import type { SettingsUpdateEventArgs } from "#types/settings";
 import { MoveTouchControlsHandler } from "#ui/move-touch-controls-handler";
 import { deepCopy, enumValueToKey, isNil } from "#utils/common-utils";
+import { assign, getButtonWithKeycode, getIconForLatestInput, swap } from "#utils/inputs-utils";
 import Phaser from "phaser";
 
 const repeatInputDelayMillis = 250;
@@ -625,11 +625,17 @@ export class InputsController {
     return null;
   }
 
-  getIconForLatestInputRecorded(settingName: string): string {
+  getIconForLatestInputRecorded(settingName: InputSettings): string | undefined {
     if (this.lastSource === "keyboard") {
       this.ensureKeyboardIsInit();
     }
-    return getIconForLatestInput(this.configs, this.lastSource, this.selectedDevice, settingName);
+    const configs: Record<Device, InputInterfaceConfig | null> = {
+      [Device.KEYBOARD]: this.selectedDevice[Device.KEYBOARD]
+        ? this.configs[this.selectedDevice[Device.KEYBOARD]]
+        : null,
+      [Device.GAMEPAD]: this.selectedDevice[Device.GAMEPAD] ? this.configs[this.selectedDevice[Device.GAMEPAD]] : null,
+    };
+    return getIconForLatestInput(configs, this.lastSource, settingName);
   }
 
   getLastSourceDevice(): Device {

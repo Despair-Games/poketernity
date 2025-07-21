@@ -5,10 +5,10 @@ import { Button } from "#enums/button";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { settings as settingsManager } from "#system/settings-manager";
+import type { InputSettings } from "#types/input-types";
 import type { SettingsCategory, SettingsUiItem } from "#types/settings";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
-import type { InputsIcons } from "#ui/inputs-config";
 import { MessageUiHandler } from "#ui/message-ui-handler";
 import { ScrollBar } from "#ui/scroll-bar";
 import { SettingsNavigationManager } from "#ui/settings-navigation-manager";
@@ -23,6 +23,10 @@ import i18next from "i18next";
 interface OptionLabelData {
   labels: string[];
   positions: number[];
+}
+interface IconWithLabel {
+  sprite: Phaser.GameObjects.Sprite;
+  label: Phaser.GameObjects.Text;
 }
 
 /**
@@ -47,7 +51,7 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
   /** Container for all settings labels in a single TextObject. */
   protected labelsTextList: TextListContainer;
   /** References to the Sprites for the button corresponding to each instruction. */
-  protected instructionIcons: InputsIcons;
+  protected instructionIcons: Partial<Record<InputSettings, IconWithLabel>>;
   /**
    * References to the Text objects used to display each setting's options, for up to the maximum number of rows.
    * The text objects get recycled and reused when scrolling around the settings.
@@ -212,7 +216,7 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
    * @param buttonId - The id of the button to map. eg: `BUTTON_CANCEL`.
    * @param label - The label to display next to the button. eg: `Cancel`.
    */
-  protected addInstructionText(buttonId: string, label: string) {
+  protected addInstructionText(buttonId: InputSettings | "BUTTON_HOME" | "BUTTON_DELETE", label: string) {
     let x = -5;
     if (this.instructionsContainer.length > 0) {
       const previousLabel = this.instructionsContainer.last as Phaser.GameObjects.Text;
@@ -246,7 +250,7 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
         icon.alpha = 1;
         continue;
       }
-      const frame = globalScene.inputController?.getIconForLatestInputRecorded(settingName);
+      const frame = globalScene.inputController?.getIconForLatestInputRecorded(settingName as InputSettings);
       const type = globalScene.inputController?.getLastSourceType();
       if (frame && type) {
         icon.setTexture(type, frame);

@@ -4,14 +4,14 @@ import { Button } from "#enums/button";
 import type { Device } from "#enums/device";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
-import { getIconWithSettingName } from "#inputs/config-handler";
-import type { InputInterfaceConfig, InputKeys, InputSettings } from "#types/input-types";
+import type { InputSettings } from "#types/input-types";
 import type { SettingsCategory, SettingsUiItem } from "#types/settings";
 import type { BindingUiHandler } from "#ui/binding-ui-handler";
 import { SettingsUiHandler } from "#ui/settings-ui-handler";
 import { TextListContainer } from "#ui/text-list-container";
 import { addTextObject, getBBCodeFragment } from "#ui/text-utils";
 import { isNil } from "#utils/common-utils";
+import { getIconWithSettingName } from "#utils/inputs-utils";
 import { camelizeString } from "#utils/string-utils";
 import i18next from "i18next";
 
@@ -19,10 +19,7 @@ import i18next from "i18next";
  * Abstract class representing the settings UI handler for controls of a specific input type,
  * including control remapping.
  */
-export abstract class ControlsSettingsUiHandler<
-  K extends InputKeys,
-  S extends InputSettings,
-> extends SettingsUiHandler {
+export abstract class ControlsSettingsUiHandler extends SettingsUiHandler {
   /** Single text object for all "press action to bind" labels. */
   private mappingValuesText: TextListContainer;
   /** Rotating array of sprites for the button mappings. */
@@ -129,11 +126,11 @@ export abstract class ControlsSettingsUiHandler<
 
       // If the row corresponds to a mapping setting, set the correct frame and show the icon.
       if (i + this.scrollCursor >= this.uiItems.length) {
-        const settingKey = Object.keys(config.settings)[i + settingOffset];
+        const settingKey = Object.keys(config.settings)[i + settingOffset] as InputSettings;
         const frame = getIconWithSettingName(config, settingKey);
         if (!isNil(frame)) {
           icon.setVisible(true);
-          icon.setFrame(getIconWithSettingName(config, settingKey));
+          icon.setFrame(frame);
         }
       }
     }
@@ -157,7 +154,7 @@ export abstract class ControlsSettingsUiHandler<
       // Convert the setting key from format 'Key_Name' to 'Key name' for display.
       const settingName = key.replace(/_/g, " ").toLowerCase();
 
-      const isLocked = config.settingsBlacklist?.includes(key as S);
+      const isLocked = config.settingsBlacklist?.includes(key as InputSettings);
       const labelStyle = isLocked ? TextStyle.SETTINGS_LOCKED : TextStyle.SETTINGS_LABEL;
 
       let labelText: string;
@@ -207,7 +204,7 @@ export abstract class ControlsSettingsUiHandler<
     // ACTION button when on a binding setting => remap
     if (config && button === Button.ACTION && this.cursor + this.scrollCursor >= this.uiItems.length) {
       const settingIndex = this.cursor + this.scrollCursor - this.uiItems.length;
-      const settingKey = Object.keys(config.settings)[settingIndex] as S;
+      const settingKey = Object.keys(config.settings)[settingIndex] as InputSettings;
 
       // Cannot remap blacklisted buttons
       if (config.settingsBlacklist?.includes(settingKey)) {

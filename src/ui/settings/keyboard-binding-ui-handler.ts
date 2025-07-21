@@ -2,11 +2,11 @@ import { globalScene } from "#app/global-scene";
 import { Device } from "#enums/device";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
-import { getKeyWithKeycode } from "#inputs/config-handler";
 import type { KeyboardKeys } from "#types/input-types";
 import { BindingUiHandler } from "#ui/binding-ui-handler";
 import { addTextObject } from "#ui/text-utils";
 import { isNil } from "#utils/common-utils";
+import { getKeyWithKeycode } from "#utils/inputs-utils";
 
 export class KeyboardBindingUiHandler extends BindingUiHandler {
   constructor() {

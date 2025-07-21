@@ -2,11 +2,11 @@ import { globalScene } from "#app/global-scene";
 import { Device } from "#enums/device";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
-import { getIconWithSettingName, getKeyWithKeycode } from "#inputs/config-handler";
 import type { GamepadKeys } from "#types/input-types";
 import { BindingUiHandler } from "#ui/binding-ui-handler";
 import { addTextObject } from "#ui/text-utils";
 import { isNil } from "#utils/common-utils";
+import { getIconWithSettingName, getKeyWithKeycode } from "#utils/inputs-utils";
 
 export class GamepadBindingUiHandler extends BindingUiHandler {
   constructor() {
@@ -81,6 +81,9 @@ export class GamepadBindingUiHandler extends BindingUiHandler {
     }
     this.buttonPressed = button.index;
     const assignedButtonIcon = getIconWithSettingName(activeConfig, this.target);
+    if (isNil(assignedButtonIcon)) {
+      return;
+    }
     this.onInputDown(buttonIcon, assignedButtonIcon, type);
   }
 

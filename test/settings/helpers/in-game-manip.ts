@@ -1,6 +1,7 @@
+import type { Device } from "#enums/device";
 import { SettingKeyboard } from "#enums/setting-keyboard";
-import { getIconForLatestInput, getSettingNameWithKeycode } from "#inputs/config-handler";
 import type { InputInterfaceConfig } from "#types/input-types";
+import { getIconForLatestInput, getSettingNameWithKeycode } from "#utils/inputs-utils";
 import { expect } from "vitest";
 
 export class InGameManip {
@@ -8,14 +9,12 @@ export class InGameManip {
   private keycode;
   private settingName;
   private icon;
-  private configs;
+  private configs: Record<Device, InputInterfaceConfig | null>;
   private latestSource;
-  private selectedDevice;
 
-  constructor(configs, config: InputInterfaceConfig, selectedDevice) {
+  constructor(configs: Record<Device, InputInterfaceConfig | null>, config: InputInterfaceConfig) {
     this.config = config;
     this.configs = configs;
-    this.selectedDevice = selectedDevice;
     this.keycode = null;
     this.settingName = null;
     this.icon = null;
@@ -46,9 +45,7 @@ export class InGameManip {
       icon = "KEY_" + icon;
     }
     this.icon = this.config.icons[icon];
-    expect(getIconForLatestInput(this.configs, this.latestSource, this.selectedDevice, this.settingName)).toEqual(
-      this.icon,
-    );
+    expect(getIconForLatestInput(this.configs, this.latestSource, this.settingName)).toEqual(this.icon);
     return this;
   }
 

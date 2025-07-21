@@ -1,18 +1,21 @@
 import { Button } from "#enums/button";
 import { Device } from "#enums/device";
 import { SettingKeyboard } from "#enums/setting-keyboard";
-import { getKeyWithKeycode, getKeyWithSettingName } from "#inputs/config-handler";
 import { InGameManip } from "#test/settings/helpers/in-game-manip";
 import { MenuManip } from "#test/settings/helpers/menu-manip";
 import { GameManager } from "#test/test-utils/game-manager";
 import type { InputInterfaceConfig } from "#types/input-types";
+import { getKeyWithKeycode, getKeyWithSettingName } from "#utils/inputs-utils";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
-describe("Test Keyboard Rebinding", () => {
+describe("Keyboard Rebinding", () => {
+  const configs: Record<Device, InputInterfaceConfig | null> = {
+    [Device.KEYBOARD]: null,
+    [Device.GAMEPAD]: null,
+  };
   let config: InputInterfaceConfig;
   let inGame: InGameManip;
   let inTheSettingMenu: MenuManip;
-  const configs: Map<string, InputInterfaceConfig> = new Map();
 
   let phaserGame: Phaser.Game;
   let game: GameManager;
@@ -21,9 +24,6 @@ describe("Test Keyboard Rebinding", () => {
     phaserGame = new Phaser.Game({
       type: Phaser.HEADLESS,
     });
-    game = new GameManager(phaserGame);
-    const inputsController = game.scene.inputController;
-    inputsController.setupKeyboard();
   });
 
   afterEach(() => {
@@ -34,9 +34,10 @@ describe("Test Keyboard Rebinding", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     const inputsController = game.scene.inputController;
+    inputsController.ensureKeyboardIsInit();
     config = inputsController.getActiveConfig(Device.KEYBOARD)!;
-    configs["qwerty"] = config;
-    inGame = new InGameManip(configs, config, inputsController.selectedDevice);
+    configs[Device.KEYBOARD] = config;
+    inGame = new InGameManip(configs, config);
     inTheSettingMenu = new MenuManip(config);
   });
 

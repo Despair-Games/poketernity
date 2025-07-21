@@ -1,13 +1,13 @@
 import { globalScene } from "#app/global-scene";
 import { GAME_WIDTH } from "#constants/ui-constants";
 import { TextStyle } from "#enums/text-style";
-import type { InputsIcons } from "#ui/inputs-config";
+import type { InputSettings } from "#types/input-types";
 import { addTextObject, setTextColor } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
 
 export class NavigationMenu extends Phaser.GameObjects.Container {
   private cursor: number;
-  private navigationIcons: InputsIcons;
+  private navigationIcons: Partial<Record<InputSettings, Phaser.GameObjects.Sprite>>;
   private headerTitles: Phaser.GameObjects.Text[] = [];
 
   /**
@@ -37,12 +37,12 @@ export class NavigationMenu extends Phaser.GameObjects.Container {
     const iconPreviousTab = globalScene.add.sprite(0, 0, "keyboard");
     iconPreviousTab.setOrigin(0, 0.5);
     iconPreviousTab.setPositionRelative(headerBg, 8, Math.floor(headerBg.height / 2));
-    this.navigationIcons["BUTTON_CYCLE_FORM"] = { sprite: iconPreviousTab };
+    this.navigationIcons["BUTTON_CYCLE_FORM"] = iconPreviousTab;
 
     const iconNextTab = globalScene.add.sprite(0, 0, "keyboard");
     iconNextTab.setOrigin(1, 0.5);
     iconNextTab.setPositionRelative(headerBg, headerBg.width - 8, Math.floor(headerBg.height / 2));
-    this.navigationIcons["BUTTON_CYCLE_SHINY"] = { sprite: iconNextTab };
+    this.navigationIcons["BUTTON_CYCLE_SHINY"] = iconNextTab;
 
     this.add(iconPreviousTab);
     this.add(iconNextTab);
@@ -83,8 +83,8 @@ export class NavigationMenu extends Phaser.GameObjects.Container {
    */
   public updateIcons() {
     for (const settingName of Object.keys(this.navigationIcons)) {
-      const icon = this.navigationIcons[settingName].sprite;
-      const frame = globalScene.inputController?.getIconForLatestInputRecorded(settingName);
+      const icon = this.navigationIcons[settingName];
+      const frame = globalScene.inputController?.getIconForLatestInputRecorded(settingName as InputSettings);
       const type = globalScene.inputController?.getLastSourceType();
       if (frame && type) {
         icon.setTexture(type, frame);

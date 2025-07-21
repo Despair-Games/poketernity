@@ -5,15 +5,14 @@ import { KeyboardLayout } from "#enums/keyboard-layout";
 import { SettingKeyboard } from "#enums/setting-keyboard";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
-import { deleteBind } from "#inputs/config-handler";
 import { settings } from "#system/settings-manager";
-import type { InputInterfaceConfig, KeyboardKeys } from "#types/input-types";
 import type { SettingsUiItem } from "#types/settings";
 import { ControlsSettingsUiHandler } from "#ui/controls-settings-ui-handler";
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 import { keyboardSettingsUiItems } from "#ui/settings-ui-items";
 import { setTextColor } from "#ui/text-utils";
 import { enumValueToKey } from "#utils/common-utils";
+import { deleteBind } from "#utils/inputs-utils";
 import { truncateString } from "#utils/string-utils";
 import i18next from "i18next";
 
@@ -24,7 +23,7 @@ import i18next from "i18next";
  * - implement binding swapping like for gamepad?
  * - localize what needs to be localized
  */
-export class KeyboardSettingsUiHandler extends ControlsSettingsUiHandler<KeyboardKeys, SettingKeyboard> {
+export class KeyboardSettingsUiHandler extends ControlsSettingsUiHandler {
   private deleteKey: Phaser.Input.Keyboard.Key | undefined;
 
   constructor() {
