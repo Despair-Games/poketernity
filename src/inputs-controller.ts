@@ -615,9 +615,9 @@ export class InputsController {
    * Retrieves the active configuration for the currently chosen device.
    * It checks if a specific device ID is stored in configurations and returns it.
    *
-   * @returns InterfaceConfig The configuration object for the active gamepad, or null if not set.
+   * @returns The {@linkcode InputInterfaceConfig} for the active gamepad, or null if not set.
    */
-  getActiveConfig(device: Device) {
+  public getActiveConfig(device: Device): InputInterfaceConfig | null {
     const selectedDevice = this.selectedDevice[device];
     if (selectedDevice && this.configs[selectedDevice]?.padID) {
       return this.configs[selectedDevice];

@@ -278,7 +278,7 @@ export abstract class BindingUiHandler extends UiHandler {
       return false;
     }
     const activeConfig = globalScene.inputController.getActiveConfig(this.device);
-    if (globalScene.inputController.assignBinding(activeConfig, this.target, this.buttonPressed)) {
+    if (activeConfig && globalScene.inputController.assignBinding(activeConfig, this.target, this.buttonPressed)) {
       globalScene.gameData.saveMappingConfigs(selectedDevice, activeConfig);
       return true;
     }

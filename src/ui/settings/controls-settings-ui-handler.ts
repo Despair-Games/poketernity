@@ -140,7 +140,7 @@ export abstract class ControlsSettingsUiHandler<
   }
 
   protected initBindings(): void {
-    const config: InputInterfaceConfig<K, S> = globalScene.inputController.getActiveConfig(this.device);
+    const config = globalScene.inputController.getActiveConfig(this.device);
     if (!config) {
       return;
     }
@@ -202,7 +202,7 @@ export abstract class ControlsSettingsUiHandler<
   }
 
   public override processInput(button: Button): boolean {
-    const config: InputInterfaceConfig<K, S> = globalScene.inputController.getActiveConfig(this.device);
+    const config = globalScene.inputController.getActiveConfig(this.device);
 
     // ACTION button when on a binding setting => remap
     if (config && button === Button.ACTION && this.cursor + this.scrollCursor >= this.uiItems.length) {

@@ -85,8 +85,8 @@ export class NavigationMenu extends Phaser.GameObjects.Container {
     for (const settingName of Object.keys(this.navigationIcons)) {
       const icon = this.navigationIcons[settingName].sprite;
       const frame = globalScene.inputController?.getIconForLatestInputRecorded(settingName);
-      if (frame) {
-        const type = globalScene.inputController?.getLastSourceType();
+      const type = globalScene.inputController?.getLastSourceType();
+      if (frame && type) {
         icon.setTexture(type, frame);
         icon.alpha = 1;
       } else {

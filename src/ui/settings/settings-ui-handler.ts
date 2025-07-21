@@ -247,8 +247,8 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
         continue;
       }
       const frame = globalScene.inputController?.getIconForLatestInputRecorded(settingName);
-      if (frame) {
-        const type = globalScene.inputController?.getLastSourceType();
+      const type = globalScene.inputController?.getLastSourceType();
+      if (frame && type) {
         icon.setTexture(type, frame);
         icon.alpha = 1;
       } else {

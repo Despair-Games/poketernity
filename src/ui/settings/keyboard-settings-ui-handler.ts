@@ -139,7 +139,7 @@ export class KeyboardSettingsUiHandler extends ControlsSettingsUiHandler<Keyboar
     }
 
     let success = false;
-    const config: InputInterfaceConfig = globalScene.inputController.getActiveConfig(this.device);
+    const config = globalScene.inputController.getActiveConfig(this.device);
     if (config) {
       const settingIndex = this.cursor + this.scrollCursor - this.uiItems.length;
       const settingKey = Object.keys(config.settings)[settingIndex] as SettingKeyboard;
@@ -183,7 +183,7 @@ export class KeyboardSettingsUiHandler extends ControlsSettingsUiHandler<Keyboar
     if (settingIndex < this.uiItems.length) {
       isLocked = true;
     } else {
-      const config: InputInterfaceConfig = globalScene.inputController.getActiveConfig(this.device);
+      const config = globalScene.inputController.getActiveConfig(this.device);
       if (config) {
         const settingKey = Object.keys(config.settings)[settingIndex - this.uiItems.length] as SettingKeyboard;
         if (config.settingsBlacklist?.includes(settingKey)) {

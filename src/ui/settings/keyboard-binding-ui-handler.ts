@@ -41,23 +41,27 @@ export class KeyboardBindingUiHandler extends BindingUiHandler {
   }
 
   private onKeyDown(event): void {
-    const key = event.keyCode;
+    const keyCode = event.keyCode;
     // // Check conditions before processing the button press.
     if (!this.listening || this.buttonPressed !== null) {
       return;
     }
+
     const activeConfig = globalScene.inputController.getActiveConfig(Device.KEYBOARD);
-    const _key = getKeyWithKeycode(activeConfig, key);
-    if (isNil(_key) || activeConfig.keysBlacklist?.includes(_key as KeyboardKeys)) {
-      console.log("invalid key", _key);
+    if (!activeConfig) {
       return;
     }
 
-    const buttonIcon = activeConfig.icons[_key];
+    const key = getKeyWithKeycode(activeConfig, keyCode);
+    if (isNil(key) || activeConfig.keysBlacklist?.includes(key as KeyboardKeys)) {
+      return;
+    }
+
+    const buttonIcon = activeConfig.icons[key];
     if (!buttonIcon) {
       return;
     }
-    this.buttonPressed = key;
+    this.buttonPressed = keyCode;
     // const assignedButtonIcon = getIconWithSettingName(activeConfig, this.target);
     this.onInputDown(buttonIcon, null, "keyboard");
   }

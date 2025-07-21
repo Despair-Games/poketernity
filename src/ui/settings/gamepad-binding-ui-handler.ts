@@ -66,6 +66,10 @@ export class GamepadBindingUiHandler extends BindingUiHandler {
     }
 
     const activeConfig = globalScene.inputController.getActiveConfig(this.device);
+    if (!activeConfig) {
+      return;
+    }
+
     const key = getKeyWithKeycode(activeConfig, button.index);
     if (isNil(key) || activeConfig.keysBlacklist?.includes(key as GamepadKeys)) {
       return;
