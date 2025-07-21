@@ -1,4 +1,3 @@
-import { GAMEPAD_BUTTONS_BLACKLIST, GAMEPAD_LOCKED_BINDINGS } from "#constants/inputs-constants";
 import { Button } from "#enums/button";
 import { SettingGamepad } from "#enums/setting-gamepad";
 import type { BasicGamepadKeys, GamepadInterfaceConfig } from "#types/input-types";
@@ -6,7 +5,7 @@ import type { BasicGamepadKeys, GamepadInterfaceConfig } from "#types/input-type
 /**
  * 081f-e401 - UnlicensedSNES
  */
-const pad_unlicensedSNES: GamepadInterfaceConfig<BasicGamepadKeys> = {
+export const pad_unlicensedSNES: GamepadInterfaceConfig<BasicGamepadKeys> = {
   padID: "081f-e401",
   padType: "xbox",
   deviceMapping: {
@@ -69,8 +68,4 @@ const pad_unlicensedSNES: GamepadInterfaceConfig<BasicGamepadKeys> = {
     LB: SettingGamepad.Button_Cycle_Form,
     RB: SettingGamepad.Button_Cycle_Shiny,
   },
-  bindingBlacklist: GAMEPAD_BUTTONS_BLACKLIST as BasicGamepadKeys[],
-  settingsBlacklist: GAMEPAD_LOCKED_BINDINGS,
 };
-
-export default pad_unlicensedSNES;

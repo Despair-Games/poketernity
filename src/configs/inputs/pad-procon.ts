@@ -1,4 +1,3 @@
-import { GAMEPAD_BUTTONS_BLACKLIST, GAMEPAD_LOCKED_BINDINGS } from "#constants/inputs-constants";
 import { Button } from "#enums/button";
 import { SettingGamepad } from "#enums/setting-gamepad";
 import type { GamepadInterfaceConfig, ProControllerKeys } from "#types/input-types";
@@ -6,7 +5,7 @@ import type { GamepadInterfaceConfig, ProControllerKeys } from "#types/input-typ
 /**
  * Nintendo Pro Controller mapping
  */
-const pad_procon: GamepadInterfaceConfig<ProControllerKeys> = {
+export const pad_procon: GamepadInterfaceConfig<ProControllerKeys> = {
   padID: "Pro Controller",
   padType: "xbox",
   deviceMapping: {
@@ -84,8 +83,4 @@ const pad_procon: GamepadInterfaceConfig<ProControllerKeys> = {
     RS: SettingGamepad.Button_Slow_Down,
     MENU: -1, // TODO: find proper default mapping, if any.
   },
-  bindingBlacklist: GAMEPAD_BUTTONS_BLACKLIST as ProControllerKeys[],
-  settingsBlacklist: GAMEPAD_LOCKED_BINDINGS,
 };
-
-export default pad_procon;

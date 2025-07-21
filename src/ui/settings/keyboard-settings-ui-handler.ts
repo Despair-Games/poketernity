@@ -102,7 +102,6 @@ export class KeyboardSettingsUiHandler extends ControlsSettingsUiHandler<Keyboar
       const changeLayoutHandler = (layout: KeyboardLayout) => {
         if (settings.keyboard.layout !== layout) {
           settings.update("keyboard", "layout", layout);
-          globalScene.inputController.setChosenKeyboardLayout(layout);
         }
         return cancelHandler();
       };
@@ -187,7 +186,7 @@ export class KeyboardSettingsUiHandler extends ControlsSettingsUiHandler<Keyboar
       const config: InputInterfaceConfig = globalScene.inputController.getActiveConfig(this.device);
       if (config) {
         const settingKey = Object.keys(config.settings)[settingIndex - this.uiItems.length] as SettingKeyboard;
-        if (config.settingsBlacklist.includes(settingKey)) {
+        if (config.settingsBlacklist?.includes(settingKey)) {
           isLocked = true;
         }
       }

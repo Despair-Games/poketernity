@@ -67,7 +67,7 @@ export class GamepadBindingUiHandler extends BindingUiHandler {
 
     const activeConfig = globalScene.inputController.getActiveConfig(this.device);
     const key = getKeyWithKeycode(activeConfig, button.index);
-    if (isNil(key) || activeConfig.bindingBlacklist?.includes(key as GamepadKeys)) {
+    if (isNil(key) || activeConfig.keysBlacklist?.includes(key as GamepadKeys)) {
       return;
     }
     const type = activeConfig.padType;

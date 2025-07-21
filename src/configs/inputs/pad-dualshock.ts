@@ -1,12 +1,11 @@
-import { GAMEPAD_BUTTONS_BLACKLIST, GAMEPAD_LOCKED_BINDINGS } from "#constants/inputs-constants";
 import { Button } from "#enums/button";
 import { SettingGamepad } from "#enums/setting-gamepad";
 import type { DualshockKeys, GamepadInterfaceConfig } from "#types/input-types";
 
 /**
- * Dualshock mapping
+ * Dualshock 4+ mapping, with touch pad.
  */
-const pad_dualshock: GamepadInterfaceConfig<DualshockKeys> = {
+export const pad_dualshock: GamepadInterfaceConfig<DualshockKeys> = {
   padID: "Dualshock",
   padType: "dualshock",
   deviceMapping: {
@@ -85,8 +84,4 @@ const pad_dualshock: GamepadInterfaceConfig<DualshockKeys> = {
     RS: SettingGamepad.Button_Slow_Down,
     TOUCH: SettingGamepad.Button_Submit,
   },
-  bindingBlacklist: GAMEPAD_BUTTONS_BLACKLIST as DualshockKeys[],
-  settingsBlacklist: GAMEPAD_LOCKED_BINDINGS,
 };
-
-export default pad_dualshock;

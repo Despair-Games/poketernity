@@ -48,7 +48,7 @@ export class KeyboardBindingUiHandler extends BindingUiHandler {
     }
     const activeConfig = globalScene.inputController.getActiveConfig(Device.KEYBOARD);
     const _key = getKeyWithKeycode(activeConfig, key);
-    if (isNil(_key) || activeConfig.bindingBlacklist?.includes(_key as KeyboardKeys)) {
+    if (isNil(_key) || activeConfig.keysBlacklist?.includes(_key as KeyboardKeys)) {
       console.log("invalid key", _key);
       return;
     }

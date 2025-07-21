@@ -194,7 +194,7 @@ export function deleteBind(config: InputInterfaceConfig, settingName: InputSetti
 
 export function canIAssignThisKey(config: InputInterfaceConfig, key: InputKeys): boolean {
   const settingName = getSettingNameWithKey(config, key);
-  if (config.bindingBlacklist.includes(key)) {
+  if (config.keysBlacklist?.includes(key)) {
     return false;
   }
   if (settingName === -1) {
@@ -207,10 +207,10 @@ export function canIAssignThisKey(config: InputInterfaceConfig, key: InputKeys):
 }
 
 export function canIOverrideThisSetting(config: InputInterfaceConfig, settingName: InputSettings): boolean {
-  const { settingsBlacklist, bindingBlacklist } = config;
+  const { settingsBlacklist, keysBlacklist } = config;
   const key = getKeyWithSettingName(config, settingName);
   // If the setting is mapped to a protected key, we can't change it
-  if (settingsBlacklist.includes(settingName) || (!isNil(key) && bindingBlacklist.includes(key))) {
+  if (settingsBlacklist?.includes(settingName) || (!isNil(key) && keysBlacklist?.includes(key))) {
     return false;
   }
   return true;

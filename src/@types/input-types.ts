@@ -46,10 +46,13 @@ export interface InputInterfaceConfig<K extends InputKeys = InputKeys, S extends
   settings: Partial<Record<S, Button>>;
   /** Default mappings of each key to a setting. -1 means no mapping. */
   default: Record<K, S | -1>;
-  /** Keys of reserved buttons which cannot be (re)mapped. */
-  bindingBlacklist: readonly K[];
-  /** Keys of settings that cannot be changed. */
-  settingsBlacklist: readonly S[];
+  /** Keys of binding settings that cannot be changed. */
+  settingsBlacklist?: S[];
+  /**
+   * Keys of reserved buttons which cannot be (re)mapped.
+   * Will be filled automatically with the keys mapped by default to the settingsBlacklist.
+   */
+  keysBlacklist?: K[];
   /** Custom remappings. -1 means no mapping. */
   custom?: Record<K, S | -1>;
 }

@@ -4,23 +4,67 @@ import { TouchControl } from "#app/touch-controls";
 import { Button } from "#enums/button";
 import { Device } from "#enums/device";
 import { KeyboardLayout } from "#enums/keyboard-layout";
+import { SettingGamepad } from "#enums/setting-gamepad";
+import { SettingKeyboard } from "#enums/setting-keyboard";
 import { UiMode } from "#enums/ui-mode";
-import cfg_keyboard_azerty from "#inputs/cfg-keyboard-azerty";
-import cfg_keyboard_qwerty from "#inputs/cfg-keyboard-qwerty";
+import { cfg_keyboard_azerty } from "#inputs/cfg-keyboard-azerty";
+import { cfg_keyboard_qwerty } from "#inputs/cfg-keyboard-qwerty";
 import { assign, getButtonWithKeycode, getIconForLatestInput, swap } from "#inputs/config-handler";
-import pad_dualshock from "#inputs/pad-dualshock";
-import pad_generic from "#inputs/pad-generic";
-import pad_procon from "#inputs/pad-procon";
-import pad_unlicensedSNES from "#inputs/pad-unlicensed-snes";
-import pad_xbox360 from "#inputs/pad-xbox360";
+import { pad_dualshock } from "#inputs/pad-dualshock";
+import { pad_generic } from "#inputs/pad-generic";
+import { pad_procon } from "#inputs/pad-procon";
+import { pad_unlicensedSNES } from "#inputs/pad-unlicensed-snes";
+import { pad_xbox360 } from "#inputs/pad-xbox360";
 import { settings } from "#system/settings-manager";
-import type { GamepadInterfaceConfig, InputInterfaceConfig, KeyboardInterfaceConfig } from "#types/input-types";
+import type {
+  GamepadInterfaceConfig,
+  GamepadKeys,
+  InputInterfaceConfig,
+  InputKeys,
+  InputSettings,
+  KeyboardInterfaceConfig,
+  KeyboardKeys,
+} from "#types/input-types";
 import type { SettingsUpdateEventArgs } from "#types/settings";
 import { MoveTouchControlsHandler } from "#ui/move-touch-controls-handler";
 import { deepCopy, enumValueToKey, isNil } from "#utils/common-utils";
 import Phaser from "phaser";
 
 const repeatInputDelayMillis = 250;
+
+/**
+ * Array of Keyboard Settings that shouldn't be allowed to be remapped.
+ * Keys mapped to these settings by default will be blocked from being mapped to other settings.
+ */
+const KEYBOARD_LOCKED_BINDINGS: readonly SettingKeyboard[] = Object.freeze([
+  SettingKeyboard.Button_Submit,
+  SettingKeyboard.Button_Menu,
+  SettingKeyboard.Button_Action,
+  SettingKeyboard.Button_Cancel,
+  SettingKeyboard.Button_Up,
+  SettingKeyboard.Button_Down,
+  SettingKeyboard.Button_Left,
+  SettingKeyboard.Button_Right,
+  SettingKeyboard.Button_Cycle_Form, // Needed to navigate the settings
+  SettingKeyboard.Button_Cycle_Shiny, // Needed to navigate the settings
+]);
+
+/** Array of Keyboard Keys that should not mapped to any input. */
+const KEYBOARD_KEYS_BLACKLIST: readonly KeyboardKeys[] = Object.freeze([
+  "KEY_DEL", // Used in keyboard settings to delete the existing binding
+  "KEY_HOME", // Used in keyboard/gamepad settings to reset all bindings
+]);
+
+/**
+ * Array of Gamepad Settings that shouldn't be allowed to be remapped.
+ * Buttons mapped to these settings by default will be blocked from being mapped to other settings.
+ */
+const GAMEPAD_LOCKED_BINDINGS: readonly SettingGamepad[] = Object.freeze([
+  SettingGamepad.Button_Up,
+  SettingGamepad.Button_Down,
+  SettingGamepad.Button_Left,
+  SettingGamepad.Button_Right,
+]);
 
 /**
  * Manages and handles all input controls for the game, including keyboard and gamepad interactions.
@@ -148,6 +192,8 @@ export class InputsController {
     eventBus.on("settings/updated", ({ category, key, value }: SettingsUpdateEventArgs) => {
       if (category === "gamepad" && key === "enabled" && typeof value === "boolean") {
         this.setGamepadSupport(value);
+      } else if (category === "keyboard" && key === "layout" && typeof value === "number") {
+        this.setChosenKeyboardLayout(value as KeyboardLayout);
       }
     });
   }
@@ -197,7 +243,7 @@ export class InputsController {
    *
    * @param layout - The {@linkcode KeyboardLayout} to set as chosen.
    */
-  setChosenKeyboardLayout(layout: KeyboardLayout): void {
+  private setChosenKeyboardLayout(layout: KeyboardLayout): void {
     this.deactivatePressedKey();
 
     const previousLayoutKey = this.selectedDevice[Device.KEYBOARD];
@@ -281,10 +327,7 @@ export class InputsController {
       if (!this.selectedDevice[Device.GAMEPAD]) {
         this.setChosenGamepad(gamepadID, false);
       }
-      const config = deepCopy(this.getGamepadConfig(gamepadID));
-      config.custom = this.configs[gamepadID]?.custom || { ...config.default };
-      this.configs[gamepadID] = config;
-      globalScene.gameData?.saveMappingConfigs(gamepadID, this.configs[gamepadID]);
+      this.initGamepadConfig(gamepadID);
     }
     this.lastSource = "gamepad";
 
@@ -296,11 +339,63 @@ export class InputsController {
    */
   setupKeyboard(layout: KeyboardLayout = settings.keyboard.layout): void {
     const layoutKey = enumValueToKey(KeyboardLayout, layout).toLowerCase();
-    const config = deepCopy(this.getKeyboardConfig(layout));
-    config.custom = this.configs[layoutKey]?.custom || { ...config.default };
-    this.configs[layoutKey] = config;
-    globalScene.gameData?.saveMappingConfigs(layoutKey, this.configs[layoutKey]);
+    this.initKeyboardConfig(layout, layoutKey);
     this.initChosenLayoutKeyboard(layoutKey);
+  }
+
+  /**
+   * Initializes the config object for the given gamepad.
+   * @param gamepadID - unique string id for this gamepad.
+   */
+  private initGamepadConfig(gamepadID: string): void {
+    this.initConfig<GamepadKeys, SettingGamepad>(gamepadID, this.getGamepadConfig(gamepadID), GAMEPAD_LOCKED_BINDINGS);
+  }
+
+  /**
+   * Initializes the config object for the given keyboard layout.
+   * @param - The {@linkcode KeyboardLayout}
+   * @param - Unique string corresponding to this layout
+   */
+  private initKeyboardConfig(layout: KeyboardLayout, layoutKey: string) {
+    this.initConfig<KeyboardKeys, SettingKeyboard>(
+      layoutKey,
+      this.getKeyboardConfig(layout),
+      KEYBOARD_LOCKED_BINDINGS,
+      KEYBOARD_KEYS_BLACKLIST,
+    );
+  }
+
+  /**
+   * Initializes and stores a config object for a given device.
+   * @param id - unique string id for this device
+   * @param baseConfig - the default {@linkcode InputInterfaceConfig} for this device type
+   * @param lockedSettings - Optional. Array of binding settings that are not allowed to be remapped for this device
+   * @param lockedBindings - Optional. Array of keys/buttons that are not allowed to be mapped for this device
+   * @template K - the type of {@linkcode InputKeys} relative to this device
+   * @template S - the type of {@linkcode InputSettings} relative to this device
+   */
+  private initConfig<K extends InputKeys, S extends InputSettings>(
+    id: string,
+    baseConfig: InputInterfaceConfig<K, S>,
+    lockedSettings: readonly S[] = [],
+    lockedBindings: readonly K[] = [],
+  ) {
+    const config = deepCopy(baseConfig);
+
+    // Copy existing custom bindings if any, otherwise use the default bindings
+    config.custom = this.configs[id]?.custom || { ...config.default };
+
+    // Initialize locked settings and locks the keys/buttons assigned to those settings by default.
+    config.settingsBlacklist = [...(config.settingsBlacklist ?? []), ...lockedSettings];
+    config.keysBlacklist = [...(config.keysBlacklist ?? []), ...lockedBindings];
+    for (const key of Object.keys(config.default)) {
+      if (config.settingsBlacklist.includes(config.default[key])) {
+        config.keysBlacklist.push(key as K);
+      }
+    }
+
+    this.configs[id] = config;
+    globalScene.gameData?.saveMappingConfigs(id, this.configs[id]);
   }
 
   /**
@@ -338,7 +433,7 @@ export class InputsController {
   keyboardKeyDown(event): void {
     this.lastSource = "keyboard";
     this.ensureKeyboardIsInit();
-    const buttonDown = getButtonWithKeycode(this.getActiveConfig(Device.KEYBOARD), event.keyCode);
+    const buttonDown = getButtonWithKeycode(this.getActiveConfig(Device.KEYBOARD)!, event.keyCode);
     if (!isNil(buttonDown)) {
       if (this.buttonLock.includes(buttonDown)) {
         return;
@@ -365,7 +460,11 @@ export class InputsController {
    */
   keyboardKeyUp(event): void {
     this.lastSource = "keyboard";
-    const buttonUp = getButtonWithKeycode(this.getActiveConfig(Device.KEYBOARD), event.keyCode);
+    const config = this.getActiveConfig(Device.KEYBOARD);
+    if (!config) {
+      return; // The keyboard isn't setup, ignore the input
+    }
+    const buttonUp = getButtonWithKeycode(config, event.keyCode);
     if (!isNil(buttonUp)) {
       this.events.emit("input_up", {
         controller_type: "keyboard",
@@ -388,6 +487,7 @@ export class InputsController {
    */
   gamepadButtonDown(pad: Phaser.Input.Gamepad.Gamepad, button: Phaser.Input.Gamepad.Button, _value: number): void {
     if (!this.configs[this.selectedDevice[Device.KEYBOARD]]?.padID) {
+      // TODO: why do we care about keyboard condig here?
       this.setupKeyboard();
     }
     if (!pad) {
@@ -443,10 +543,12 @@ export class InputsController {
       return;
     }
     this.lastSource = "gamepad";
-    if (!this.gamepadSupport || pad.id.toLowerCase() !== this.selectedDevice[Device.GAMEPAD]) {
+    const config = this.getActiveConfig(Device.GAMEPAD);
+    if (!this.gamepadSupport || pad.id.toLowerCase() !== this.selectedDevice[Device.GAMEPAD] || !config) {
       return;
     }
-    const buttonUp = getButtonWithKeycode(this.getActiveConfig(Device.GAMEPAD), button.index);
+
+    const buttonUp = getButtonWithKeycode(config, button.index);
     if (!isNil(buttonUp)) {
       this.events.emit("input_up", {
         controller_type: "gamepad",
@@ -466,7 +568,7 @@ export class InputsController {
    * @param id The identifier string of the gamepad.
    * @returns InterfaceConfig The configuration object corresponding to the identified gamepad type.
    */
-  getGamepadConfig(id: string): GamepadInterfaceConfig<any> {
+  private getGamepadConfig(id: string): GamepadInterfaceConfig<any> {
     id = id.toLowerCase();
 
     if (id.includes("081f") && id.includes("e401")) {
@@ -490,7 +592,7 @@ export class InputsController {
    * @param layout The {@linkcode KeyboardLayout} identifier string of the keyboard layout.
    * @returns {@linkcode KeyboardInterfaceConfig} for this layout.
    */
-  getKeyboardConfig(layout: KeyboardLayout): KeyboardInterfaceConfig {
+  private getKeyboardConfig(layout: KeyboardLayout): KeyboardInterfaceConfig {
     switch (layout) {
       case KeyboardLayout.AZERTY:
         return cfg_keyboard_azerty;

@@ -1,49 +1,66 @@
 import { Button } from "#enums/button";
 import { Device } from "#enums/device";
 import { SettingKeyboard } from "#enums/setting-keyboard";
-import cfg_keyboard_qwerty from "#inputs/cfg-keyboard-qwerty";
 import { getKeyWithKeycode, getKeyWithSettingName } from "#inputs/config-handler";
 import { InGameManip } from "#test/settings/helpers/in-game-manip";
 import { MenuManip } from "#test/settings/helpers/menu-manip";
+import { GameManager } from "#test/test-utils/game-manager";
 import type { InputInterfaceConfig } from "#types/input-types";
-import { deepCopy } from "#utils/common-utils";
-import { beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
-describe("Test Rebinding", () => {
-  let config: any;
+describe("Test Keyboard Rebinding", () => {
+  let config: InputInterfaceConfig;
   let inGame: InGameManip;
   let inTheSettingMenu: MenuManip;
   const configs: Map<string, InputInterfaceConfig> = new Map();
-  const selectedDevice = {
-    [Device.GAMEPAD]: null,
-    [Device.KEYBOARD]: "qwerty",
-  };
+
+  let phaserGame: Phaser.Game;
+  let game: GameManager;
+
+  beforeAll(() => {
+    phaserGame = new Phaser.Game({
+      type: Phaser.HEADLESS,
+    });
+    game = new GameManager(phaserGame);
+    const inputsController = game.scene.inputController;
+    inputsController.setupKeyboard();
+  });
+
+  afterEach(() => {
+    game.phaseInterceptor.restoreOg();
+    game.scene.inputController.resetConfig(Device.KEYBOARD);
+  });
 
   beforeEach(() => {
-    config = deepCopy(cfg_keyboard_qwerty);
-    config.custom = { ...config.default };
+    game = new GameManager(phaserGame);
+    const inputsController = game.scene.inputController;
+    config = inputsController.getActiveConfig(Device.KEYBOARD)!;
     configs["qwerty"] = config;
-    inGame = new InGameManip(configs, config, selectedDevice);
+    inGame = new InGameManip(configs, config, inputsController.selectedDevice);
     inTheSettingMenu = new MenuManip(config);
   });
 
   it("Check if config is loaded", () => {
     expect(config).not.toBeNull();
+    expect(config.padID).toBe("qwerty");
   });
+
   it("Check button for setting name", () => {
     const settingName = SettingKeyboard.Button_Left;
     const button = config.settings[settingName];
     expect(button).toEqual(Button.LEFT);
   });
+
   it("Check key for Keyboard KeyCode", () => {
     const key = getKeyWithKeycode(config, Phaser.Input.Keyboard.KeyCodes.LEFT) ?? "";
-    const settingName = config.custom[key];
+    const settingName = config.custom![key];
     const button = config.settings[settingName];
     expect(button).toEqual(Button.LEFT);
   });
+
   it("Check key for currenly Assigned to action not alt", () => {
     const key = getKeyWithKeycode(config, Phaser.Input.Keyboard.KeyCodes.A) ?? "";
-    const settingName = config.custom[key];
+    const settingName = config.custom![key];
     const button = config.settings[settingName];
     expect(button).toEqual(Button.LEFT);
   });
@@ -502,7 +519,7 @@ describe("Test Rebinding", () => {
   it("test keyboard listener", () => {
     const keyDown = Phaser.Input.Keyboard.KeyCodes.S;
     const key = getKeyWithKeycode(config, keyDown) ?? "";
-    const settingName = config.custom[key];
+    const settingName = config.custom![key];
     const buttonDown = config.settings[settingName];
     expect(buttonDown).toEqual(Button.DOWN);
   });

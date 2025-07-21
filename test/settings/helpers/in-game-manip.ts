@@ -1,9 +1,10 @@
 import { SettingKeyboard } from "#enums/setting-keyboard";
 import { getIconForLatestInput, getSettingNameWithKeycode } from "#inputs/config-handler";
+import type { InputInterfaceConfig } from "#types/input-types";
 import { expect } from "vitest";
 
 export class InGameManip {
-  private config;
+  private config: InputInterfaceConfig;
   private keycode;
   private settingName;
   private icon;
@@ -11,7 +12,7 @@ export class InGameManip {
   private latestSource;
   private selectedDevice;
 
-  constructor(configs, config, selectedDevice) {
+  constructor(configs, config: InputInterfaceConfig, selectedDevice) {
     this.config = config;
     this.configs = configs;
     this.selectedDevice = selectedDevice;

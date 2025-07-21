@@ -1,12 +1,11 @@
-import { GAMEPAD_BUTTONS_BLACKLIST, GAMEPAD_LOCKED_BINDINGS } from "#constants/inputs-constants";
 import { Button } from "#enums/button";
 import { SettingGamepad } from "#enums/setting-gamepad";
 import type { GamepadInterfaceConfig, ModernGamepadKeys } from "#types/input-types";
 
 /**
- * Generic pad mapping
+ * Xbox 360 gamepad mapping
  */
-const pad_xbox360: GamepadInterfaceConfig<ModernGamepadKeys> = {
+export const pad_xbox360: GamepadInterfaceConfig<ModernGamepadKeys> = {
   padID: "Xbox 360 controller (XInput STANDARD GAMEPAD)",
   padType: "xbox",
   deviceMapping: {
@@ -81,8 +80,4 @@ const pad_xbox360: GamepadInterfaceConfig<ModernGamepadKeys> = {
     LS: SettingGamepad.Button_Speed_Up,
     RS: SettingGamepad.Button_Slow_Down,
   },
-  bindingBlacklist: GAMEPAD_BUTTONS_BLACKLIST as ModernGamepadKeys[],
-  settingsBlacklist: GAMEPAD_LOCKED_BINDINGS,
 };
-
-export default pad_xbox360;

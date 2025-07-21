@@ -1,9 +1,8 @@
-import { KEYBOARD_KEYS_BLACKLIST, KEYBOARD_LOCKED_BINDINGS } from "#constants/inputs-constants";
 import { Button } from "#enums/button";
 import { SettingKeyboard } from "#enums/setting-keyboard";
 import type { KeyboardInterfaceConfig } from "#types/input-types";
 
-const cfg_keyboard_qwerty: KeyboardInterfaceConfig = {
+export const cfg_keyboard_qwerty: KeyboardInterfaceConfig = {
   padID: "qwerty",
   padType: "keyboard",
   deviceMapping: {
@@ -277,8 +276,4 @@ const cfg_keyboard_qwerty: KeyboardInterfaceConfig = {
     KEY_SEMICOLON: -1,
     KEY_ALT: -1,
   },
-  bindingBlacklist: KEYBOARD_KEYS_BLACKLIST,
-  settingsBlacklist: KEYBOARD_LOCKED_BINDINGS,
 };
-
-export default cfg_keyboard_qwerty;
