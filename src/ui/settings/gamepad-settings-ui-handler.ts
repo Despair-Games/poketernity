@@ -57,15 +57,12 @@ export class GamepadSettingsUiHandler extends ControlsSettingsUiHandler {
     }
 
     // Iterate over the keys in the settingDevice enumeration.
+    const deviceId = globalScene.inputController.selectedDevice[Device.GAMEPAD];
     for (const [index, key] of Object.keys(SettingGamepad).entries()) {
-      if (key === "Controller") {
+      if (key === "Controller" && deviceId) {
         // Update the text of the first option label under the current setting to the name of the chosen gamepad,
         // truncating the name to 25 charactersif necessary.
-        this.updateOptionValueLabel(
-          index,
-          0,
-          truncateString(globalScene.inputController.selectedDevice[Device.GAMEPAD], 25),
-        );
+        this.updateOptionValueLabel(index, 0, truncateString(deviceId, 25));
       }
     }
   }

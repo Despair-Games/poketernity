@@ -18,23 +18,14 @@ import i18next from "i18next";
 
 /**
  * Class representing the settings UI handler for keyboards.
- *
- * TODO:
- * - implement binding swapping like for gamepad?
- * - localize what needs to be localized
  */
 export class KeyboardSettingsUiHandler extends ControlsSettingsUiHandler {
   private deleteKey: Phaser.Input.Keyboard.Key | undefined;
 
   constructor() {
     super(UiMode.SETTINGS_KEYBOARD, "keyboard", keyboardSettingsUiItems, Device.KEYBOARD, UiMode.KEYBOARD_BINDING);
-
-    this.buttonsTextureMap = "keyboard";
   }
 
-  /**
-   * Setup UI elements.
-   */
   protected override setup() {
     super.setup();
 
@@ -144,8 +135,9 @@ export class KeyboardSettingsUiHandler extends ControlsSettingsUiHandler {
       const settingKey = Object.keys(config.settings)[settingIndex] as SettingKeyboard;
 
       success = deleteBind(config, settingKey);
-      if (success) {
-        globalScene.gameData.saveMappingConfigs(globalScene.inputController.selectedDevice[this.device], config);
+      const deviceId = globalScene.inputController.selectedDevice[this.device];
+      if (success && deviceId) {
+        globalScene.gameData.saveMappingConfigs(deviceId, config);
         this.updateBindingIcons();
       }
     }

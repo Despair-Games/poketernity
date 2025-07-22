@@ -595,16 +595,15 @@ export class GameData {
   public loadMappingConfigs(): boolean {
     const lsMappingStr = localStorage.getItem(MAPPING_CONFIG_LS_KEY);
     if (!lsMappingStr) {
-      // Check if 'mappingConfigs' exists in localStorage
       return false;
-    } // If 'mappingConfigs' does not exist, return false
-    const mappingConfigs = JSON.parse(lsMappingStr); // Parse the existing 'mappingConfigs' from localStorage
-    for (const key of Object.keys(mappingConfigs)) {
-      // Iterate over the keys of the mapping configurations
-      globalScene.inputController.injectConfig(key, mappingConfigs[key]);
-    } // Inject each configuration into the input controller for the corresponding key
+    }
+    const mappingConfigs = JSON.parse(lsMappingStr);
 
-    return true; // Return true to indicate the operation was successful
+    // Inject each configuration into the input controller for the corresponding key
+    for (const key of Object.keys(mappingConfigs)) {
+      globalScene.inputController.injectConfig(key, mappingConfigs[key]);
+    }
+    return true;
   }
 
   /**
@@ -615,7 +614,7 @@ export class GameData {
   public resetMappingToFactory(device: Device): boolean {
     const deviceName = globalScene.inputController?.selectedDevice[device];
     const lsMappingStr = localStorage.getItem(MAPPING_CONFIG_LS_KEY);
-    if (!lsMappingStr) {
+    if (!deviceName || !lsMappingStr) {
       // no config found
       return false;
     }

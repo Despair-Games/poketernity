@@ -28,6 +28,8 @@ export type InputKeys = GamepadKeys | KeyboardKeys;
 
 export type InputSettings = SettingGamepad | SettingKeyboard;
 
+export type InputMappings<K extends InputKeys = InputKeys, S extends InputSettings = InputSettings> = Record<K, S | -1>;
+
 /**
  * Interface used to define the configuration of specific types of keyboard or gamepads.
  * @typeParam K - Represent the usable buttons for this device type.
@@ -45,7 +47,7 @@ export interface InputInterfaceConfig<K extends InputKeys = InputKeys, S extends
   /** Mapping of each Setting for this input interface to a button. */
   settings: Partial<Record<S, Button>>;
   /** Default mappings of each key to a setting. -1 means no mapping. */
-  default: Record<K, S | -1>;
+  default: InputMappings<K, S>;
   /** Keys of binding settings that cannot be changed. */
   settingsBlacklist?: S[];
   /**
@@ -54,7 +56,7 @@ export interface InputInterfaceConfig<K extends InputKeys = InputKeys, S extends
    */
   keysBlacklist?: K[];
   /** Custom remappings. -1 means no mapping. */
-  custom?: Record<K, S | -1>;
+  custom?: InputMappings<K, S>;
 }
 
 export interface KeyboardInterfaceConfig extends InputInterfaceConfig<KeyboardKeys, SettingKeyboard> {}

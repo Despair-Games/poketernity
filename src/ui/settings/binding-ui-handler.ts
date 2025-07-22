@@ -101,7 +101,7 @@ export abstract class BindingUiHandler extends UiHandler {
     // Window at the bottom with cancel and confirm labels
     this.actionBg = addWindow(
       GAME_WIDTH - this.getWindowWidth(),
-      -GAME_HEIGHT + this.getWindowHeight() + 28 + 21 + 21,
+      -GAME_HEIGHT + this.getWindowHeight() + 29 + 21 + 21,
       this.getWindowWidth(),
       24,
     );
@@ -285,7 +285,7 @@ export abstract class BindingUiHandler extends UiHandler {
 
   protected swapAction() {
     const selectedDevice = this.getSelectedDevice();
-    if (isNil(selectedDevice)) {
+    if (isNil(selectedDevice) || isNil(this.target) || isNil(this.buttonPressed)) {
       return false;
     }
     const activeConfig = globalScene.inputController.getActiveConfig(this.device);

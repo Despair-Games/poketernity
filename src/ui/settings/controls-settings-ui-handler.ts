@@ -34,7 +34,6 @@ export abstract class ControlsSettingsUiHandler extends SettingsUiHandler {
   protected device: Device;
   protected plugInText: string = i18next.t("settings:keyboardPleasePress");
   protected bindingText: string = i18next.t("settings:pressToBind");
-  protected buttonsTextureMap: string;
 
   constructor(
     mode: UiMode,
@@ -117,7 +116,7 @@ export abstract class ControlsSettingsUiHandler extends SettingsUiHandler {
     for (let i = 0; i < this.rowsToDisplay; i++) {
       let icon = this.mappingIcons[i];
       if (!icon) {
-        icon = globalScene.add.sprite(GAME_WIDTH * 0.45, 30 + i * 16, this.buttonsTextureMap ?? config.padType);
+        icon = globalScene.add.sprite(GAME_WIDTH * 0.45, 30 + i * 16, config.padType);
         icon.setOrigin(0.5, 0);
         this.mappingIcons[i] = icon;
         this.optionsContainer.add(icon);
