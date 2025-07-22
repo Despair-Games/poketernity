@@ -22,7 +22,7 @@ export class FloatingAttr extends AddBattlerTagAttr {
 
   /**
    * If the affected Pokemon is already un-grounded, this contributes nothing to Effect Score.
-   * Otherwise, this grants an Effect Score modifier based on the number of Ground-type opponents to the affected Pokemon:
+   * Otherwise, this grants an Effect Score modifier based on the number of opponents to the affected Pokemon with Ground-type moves:
    * - If the affected Pokemon is the user or its ally, this modifier is {@linkcode MINOR_EFFECT_SCORE_BONUS}
    * - If the affected Pokemon is an opponent of the user, this modifier is {@linkcode MINOR_EFFECT_SCORE_PENALTY}
    */
