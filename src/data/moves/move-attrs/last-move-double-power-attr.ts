@@ -25,7 +25,7 @@ export class LastMoveDoublePowerAttr extends VariablePowerAttr {
     const [target] = user.getOpponents();
     const pokemonActed: Pokemon[] = [];
 
-    if (target?.turnData?.acted) {
+    if (target?.turnData.acted) {
       pokemonActed.push(target);
     }
 

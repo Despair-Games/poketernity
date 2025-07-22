@@ -9,7 +9,7 @@ import type { NumberHolder } from "#utils/common-utils";
  */
 export class CombinedPledgePowerAttr extends VariablePowerAttr {
   override apply(user: Pokemon, _target: Pokemon, move: Move, power: NumberHolder): boolean {
-    const combinedPledgeMove = user.turnData?.combiningPledge;
+    const combinedPledgeMove = user.turnData.combiningPledge;
 
     if (combinedPledgeMove && combinedPledgeMove !== move.id) {
       power.value *= 150 / 80;

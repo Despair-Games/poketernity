@@ -12,7 +12,7 @@ export class CounterAttackCondition extends MoveCondition {
   private moveFilter: MoveFilter;
 
   constructor(moveFilter: MoveFilter) {
-    super((user, _target, _move) => user.turnData?.attacksReceived.some((ar) => moveFilter(ar.moveId)));
+    super((user, _target, _move) => user.turnData.attacksReceived.some((ar) => moveFilter(ar.moveId)));
     this.moveFilter = moveFilter;
   }
 

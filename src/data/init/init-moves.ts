@@ -1561,9 +1561,9 @@ export function initMoves() {
     new AttackMove(MoveId.CLOSE_COMBAT, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 120, 100, 5, -1, 0, 4)
       .attr(StatStageChangeAttr, [Stat.DEF, Stat.SPDEF], -1, true),
     new AttackMove(MoveId.PAYBACK, ElementalType.DARK, MoveCategory.PHYSICAL, 50, 100, 10, -1, 0, 4)
-      .attr(MovePowerMultiplierAttr, (_user, target, _move) => (target.turnData?.acted ? 2 : 1)),
+      .attr(MovePowerMultiplierAttr, (_user, target, _move) => (target.turnData.acted ? 2 : 1)),
     new AttackMove(MoveId.ASSURANCE, ElementalType.DARK, MoveCategory.PHYSICAL, 60, 100, 10, -1, 0, 4)
-      .attr(MovePowerMultiplierAttr, (_user, target, _move) => (target.turnData?.damageTaken > 0 ? 2 : 1)),
+      .attr(MovePowerMultiplierAttr, (_user, target, _move) => (target.turnData.damageTaken > 0 ? 2 : 1)),
     new StatusMove(MoveId.EMBARGO, ElementalType.DARK, 100, 15, -1, 0, 4)
       .bounceable()
       .unimplemented(),
@@ -3029,7 +3029,7 @@ export function initMoves() {
     new AttackMove(MoveId.LASH_OUT, ElementalType.DARK, MoveCategory.PHYSICAL, 75, 100, 5, -1, 0, 8)
       .attr(
         MovePowerMultiplierAttr,
-        (user, _target, _move) => (user.turnData?.statStagesDecreased ? 2 : 1),
+        (user, _target, _move) => (user.turnData.statStagesDecreased ? 2 : 1),
       ),
     new AttackMove(MoveId.POLTERGEIST, ElementalType.GHOST, MoveCategory.PHYSICAL, 110, 90, 5, -1, 0, 8)
       .attr(AttackedByItemAttr)

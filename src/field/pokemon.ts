@@ -1389,7 +1389,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns An array containing this Pokemon's known {@linkcode PokemonMove | PokemonMoves}
    */
   public getMoveset(bypassSummonData: boolean = false): PokemonMove[] {
-    const ret = !bypassSummonData && this.summonData?.moveset.length > 0 ? this.summonData.moveset : this.moveset;
+    const ret = !bypassSummonData && this.summonData.moveset.length > 0 ? this.summonData.moveset : this.moveset;
 
     // Overrides moveset based on arrays specified in overrides.ts
     let overrideArray: MoveId | MoveId[] = this.isPlayer()
@@ -4067,7 +4067,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   public getMoveHistory(): TurnMove[] {
-    return this.summonData?.moveHistory ?? [];
+    return this.summonData.moveHistory;
   }
 
   public pushMoveHistory(turnMove: TurnMove): void {

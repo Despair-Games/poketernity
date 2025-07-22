@@ -33,10 +33,6 @@ const beatUpFunc = (user: Pokemon, allyIndex: number): number => {
  */
 export class BeatUpAttr extends VariablePowerAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {
-    if (!user.turnData) {
-      return false;
-    }
-
     const party = user.getParty();
     const allyCount = party.filter((pokemon) => {
       return pokemon.id === user.id || !pokemon.hasNonVolatileStatusEffect(false, true);

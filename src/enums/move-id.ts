@@ -1,5 +1,6 @@
-/* eslint-enable @typescript-eslint/no-unused-vars */
-// -- end tsdoc imports --
+/** biome-ignore-start lint/correctness/noUnusedImports: TSDoc imports */
+import type { Pokemon } from "#field/pokemon";
+/** biome-ignore-end lint/correctness/noUnusedImports: TSDoc imports */
 
 export enum MoveId {
   /**

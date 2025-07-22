@@ -12,7 +12,7 @@ import { MoveCondition } from "#moves/move-condition";
  */
 export class AfterYouCondition extends MoveCondition {
   constructor() {
-    super((_user, target, _move) => !target.turnData?.acted);
+    super((_user, target, _move) => !target.turnData.acted);
   }
 
   /**
