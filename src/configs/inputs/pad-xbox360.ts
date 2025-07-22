@@ -1,10 +1,11 @@
 import { Button } from "#enums/button";
 import { SettingGamepad } from "#enums/setting-gamepad";
+import type { GamepadInterfaceConfig, ModernGamepadKeys } from "#types/input-types";
 
 /**
- * Generic pad mapping
+ * Xbox 360 gamepad mapping
  */
-const pad_xbox360 = {
+export const pad_xbox360: GamepadInterfaceConfig<ModernGamepadKeys> = {
   padID: "Xbox 360 controller (XInput STANDARD GAMEPAD)",
   padType: "xbox",
   deviceMapping: {
@@ -80,5 +81,3 @@ const pad_xbox360 = {
     RS: SettingGamepad.Button_Slow_Down,
   },
 };
-
-export default pad_xbox360;

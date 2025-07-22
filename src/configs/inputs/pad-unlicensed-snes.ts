@@ -1,10 +1,11 @@
 import { Button } from "#enums/button";
 import { SettingGamepad } from "#enums/setting-gamepad";
+import type { BasicGamepadKeys, GamepadInterfaceConfig } from "#types/input-types";
 
 /**
  * 081f-e401 - UnlicensedSNES
  */
-const pad_unlicensedSNES = {
+export const pad_unlicensedSNES: GamepadInterfaceConfig<BasicGamepadKeys> = {
   padID: "081f-e401",
   padType: "xbox",
   deviceMapping: {
@@ -66,11 +67,5 @@ const pad_unlicensedSNES = {
     SELECT: SettingGamepad.Button_Stats,
     LB: SettingGamepad.Button_Cycle_Form,
     RB: SettingGamepad.Button_Cycle_Shiny,
-    LT: -1,
-    RT: -1,
-    LS: -1,
-    RS: -1,
   },
 };
-
-export default pad_unlicensedSNES;

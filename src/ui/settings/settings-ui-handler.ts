@@ -5,6 +5,7 @@ import { Button } from "#enums/button";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { settings as settingsManager } from "#system/settings-manager";
+import { InputSettings } from "#types/input-types";
 import type { SettingsCategory, SettingsUiItem } from "#types/settings";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
@@ -226,11 +227,10 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
         this.navigationIcons[settingName].alpha = 1;
         continue;
       }
-      const icon = globalScene.inputController?.getIconForLatestInputRecorded(settingName);
-      if (icon) {
-        const type = globalScene.inputController?.getLastSourceType();
-        this.navigationIcons[settingName].setTexture(type);
-        this.navigationIcons[settingName].setFrame(icon);
+      const icon = globalScene.inputController?.getIconForLatestInputRecorded(settingName as InputSettings);
+      const type = globalScene.inputController?.getLastSourceType();
+      if (icon && type) {
+        this.navigationIcons[settingName].setTexture(type, icon);
         this.navigationIcons[settingName].alpha = 1;
       } else {
         this.navigationIcons[settingName].alpha = 0;

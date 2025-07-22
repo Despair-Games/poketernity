@@ -2,15 +2,14 @@ import { SettingKeyboard } from "#enums/setting-keyboard";
 import {
   assign,
   canIAssignThisKey,
-  canIDeleteThisKey,
+  canIDeleteThisSetting,
   canIOverrideThisSetting,
   deleteBind,
   getIconWithKeycode,
   getIconWithSettingName,
   getKeyWithKeycode,
-  getKeyWithSettingName,
   getSettingNameWithKeycode,
-} from "#inputs/config-handler";
+} from "#utils/inputs-utils";
 import { expect } from "vitest";
 
 export class MenuManip {
@@ -83,7 +82,7 @@ export class MenuManip {
 
   weWantThisBindInstead(keycode) {
     this.keycode = Phaser.Input.Keyboard.KeyCodes[keycode];
-    const icon = getIconWithKeycode(this.config, this.keycode);
+    const icon = getIconWithKeycode(this.config, this.keycode)!; // TODO: is this bang correct?
     const key = getKeyWithKeycode(this.config, this.keycode)!; // TODO: is this bang correct?
     const _keys = key.toLowerCase().split("_");
     const iconIdentifier = _keys[_keys.length - 1];
@@ -118,7 +117,7 @@ export class MenuManip {
   }
 
   weCantAssignThisKey() {
-    const key = getKeyWithKeycode(this.config, this.keycode);
+    const key = getKeyWithKeycode(this.config, this.keycode)!;
     expect(canIAssignThisKey(this.config, key)).toEqual(false);
     return this;
   }
@@ -129,8 +128,7 @@ export class MenuManip {
   }
 
   weCantDelete() {
-    const key = getKeyWithSettingName(this.config, this.settingName);
-    expect(canIDeleteThisKey(this.config, key)).toEqual(false);
+    expect(canIDeleteThisSetting(this.config, this.settingName)).toEqual(false);
     return this;
   }
 }

@@ -1,10 +1,11 @@
 import { Button } from "#enums/button";
 import { SettingGamepad } from "#enums/setting-gamepad";
+import type { GamepadInterfaceConfig, ProControllerKeys } from "#types/input-types";
 
 /**
  * Nintendo Pro Controller mapping
  */
-const pad_procon = {
+export const pad_procon: GamepadInterfaceConfig<ProControllerKeys> = {
   padID: "Pro Controller",
   padType: "xbox",
   deviceMapping: {
@@ -43,6 +44,7 @@ const pad_procon = {
     LC_S: "DOWN.png",
     LC_W: "LEFT.png",
     LC_E: "RIGHT.png",
+    MENU: "START.png", // TODO: add dedicated icon (currently that configuration is unused)
   },
   settings: {
     [SettingGamepad.Button_Up]: Button.UP,
@@ -79,7 +81,6 @@ const pad_procon = {
     RT: SettingGamepad.Button_Cycle_Ability,
     LS: SettingGamepad.Button_Speed_Up,
     RS: SettingGamepad.Button_Slow_Down,
+    MENU: -1, // TODO: find proper default mapping, if any.
   },
 };
-
-export default pad_procon;
