@@ -22,7 +22,6 @@ export class GamepadSettingsUiHandler extends ControlsSettingsUiHandler {
     super(UiMode.SETTINGS_GAMEPAD, "gamepad", gamepadSettingsUiItems, Device.GAMEPAD, UiMode.GAMEPAD_BINDING);
 
     this.plugInText = i18next.t("settings:gamepadPleasePlug");
-    this.bindingText = "Press action to assign"; // TODO: localize
   }
 
   protected override setup() {

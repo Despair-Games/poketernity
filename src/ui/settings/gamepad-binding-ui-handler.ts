@@ -7,40 +7,33 @@ import { BindingUiHandler } from "#ui/binding-ui-handler";
 import { addTextObject } from "#ui/text-utils";
 import { isNil } from "#utils/common-utils";
 import { getIconWithSettingName, getKeyWithKeycode } from "#utils/inputs-utils";
+import i18next from "i18next";
 
 export class GamepadBindingUiHandler extends BindingUiHandler {
   constructor() {
     super(UiMode.GAMEPAD_BINDING, Device.GAMEPAD);
+
+    this.pressButtonText = i18next.t("settings:pressButton");
+    this.buttonPressedText = i18next.t("settings:buttonPressed");
+    this.confirmAssignText = i18next.t("settings:confirmSwap");
   }
   protected override setup() {
     super.setup();
 
-    // New button icon setup.
-    this.newButtonIcon = globalScene.add.sprite(0, 0, "xbox");
-    this.newButtonIcon.setPositionRelative(this.optionSelectBg, 78, 16);
-    this.newButtonIcon.setOrigin(0.5);
-    this.newButtonIcon.setVisible(false);
+    const windowCenterX = this.optionSelectBg.x;
+    const windowCenterY = this.optionSelectBg.y;
 
-    this.swapText = addTextObject(0, 0, "will swap with", TextStyle.WINDOW);
+    // Move the selected icon button up to accomodate the other icon and text
+    this.newButtonIcon.setY(this.newButtonIcon.y - 16);
+
+    this.swapText = addTextObject(windowCenterX, windowCenterY, i18next.t("settings:willSwapWith"), TextStyle.WINDOW);
     this.swapText.setOrigin(0.5);
-    this.swapText.setPositionRelative(
-      this.optionSelectBg,
-      this.optionSelectBg.width / 2 - 2,
-      this.optionSelectBg.height / 2 - 2,
-    );
     this.swapText.setVisible(false);
 
-    this.targetButtonIcon = globalScene.add.sprite(0, 0, "xbox");
-    this.targetButtonIcon.setPositionRelative(this.optionSelectBg, 78, 48);
+    this.targetButtonIcon = globalScene.add.sprite(windowCenterX, windowCenterY + 16, "xbox");
     this.targetButtonIcon.setOrigin(0.5);
     this.targetButtonIcon.setVisible(false);
 
-    this.actionLabel = addTextObject(0, 0, "Confirm swap", TextStyle.SETTINGS_LABEL);
-    this.actionLabel.setOrigin(0, 0.5);
-    this.actionLabel.setPositionRelative(this.actionBg, this.actionBg.width - 75, this.actionBg.height / 2);
-    this.actionsContainer.add(this.actionLabel);
-
-    this.optionSelectContainer.add(this.newButtonIcon);
     this.optionSelectContainer.add(this.swapText);
     this.optionSelectContainer.add(this.targetButtonIcon);
 
@@ -61,7 +54,12 @@ export class GamepadBindingUiHandler extends BindingUiHandler {
     _value: number,
   ): void {
     // Check conditions before processing the button press.
-    if (!this.listening || pad.id.toLowerCase() !== this.getSelectedDevice() || this.buttonPressed !== null) {
+    if (
+      !this.listening
+      || !this.target
+      || pad.id.toLowerCase() !== this.getSelectedDevice()
+      || this.buttonPressed !== null
+    ) {
       return;
     }
 

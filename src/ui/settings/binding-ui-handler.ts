@@ -4,6 +4,7 @@ import { Button } from "#enums/button";
 import type { Device } from "#enums/device";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
+import type { InputSettings } from "#types/input-types";
 import { addTextObject, setTextColor } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";
 import { addWindow } from "#ui/ui-theme";
@@ -28,8 +29,7 @@ export abstract class BindingUiHandler extends UiHandler {
   protected optionSelectBg: Phaser.GameObjects.NineSlice;
 
   // Text elements for displaying instructions and actions.
-  protected unlockText: Phaser.GameObjects.Text;
-  protected timerText: Phaser.GameObjects.Text;
+  protected promptText: Phaser.GameObjects.Text; // prompt for pressing a button with timer
   protected swapText: Phaser.GameObjects.Text;
   protected actionLabel: Phaser.GameObjects.Text;
   protected cancelLabel: Phaser.GameObjects.Text;
@@ -45,10 +45,17 @@ export abstract class BindingUiHandler extends UiHandler {
   protected callback: FinishCallback | null;
 
   protected timeLeftAutoClose: number = 5;
-  protected countdownTimer;
+  protected countdownTimer: NodeJS.Timeout;
 
   // The specific setting being modified.
-  protected target;
+  protected target: InputSettings | null;
+
+  /** text to display while waiting for a button to be pressed */
+  protected pressButtonText = i18next.t("settings:pressButton");
+  /** text to display once a button has been pressed */
+  protected buttonPressedText = i18next.t("settings:buttonPressed");
+  /** text to display to confirm the selected mapping */
+  protected confirmAssignText = i18next.t("settings:confirmAssign");
 
   constructor(mode: UiMode, device: Device) {
     super(mode);
@@ -67,32 +74,16 @@ export abstract class BindingUiHandler extends UiHandler {
     ui.add(this.optionSelectContainer);
     ui.add(this.actionsContainer);
 
-    // Setup backgrounds and text objects for UI.
+    // Top window with instructions
     this.titleBg = addWindow(GAME_WIDTH - this.getWindowWidth(), -GAME_HEIGHT + 28 + 21, this.getWindowWidth(), 24);
     this.titleBg.setOrigin(0.5);
     this.optionSelectContainer.add(this.titleBg);
 
-    this.actionBg = addWindow(
-      GAME_WIDTH - this.getWindowWidth(),
-      -GAME_HEIGHT + this.getWindowHeight() + 28 + 21 + 21,
-      this.getWindowWidth(),
-      24,
-    );
-    this.actionBg.setOrigin(0.5);
-    this.actionsContainer.add(this.actionBg);
+    this.promptText = addTextObject(this.titleBg.x, this.titleBg.y, `${this.pressButtonText} (5)`, TextStyle.WINDOW);
+    this.promptText.setOrigin(0.5, 0.5);
+    this.optionSelectContainer.add(this.promptText);
 
-    // Text prompts and instructions for the user.
-    // TODO: fix placement
-    this.unlockText = addTextObject(0, 0, i18next.t("settings:pressButton"), TextStyle.WINDOW);
-    this.unlockText.setOrigin(0, 0);
-    this.unlockText.setPositionRelative(this.titleBg, 36, 4);
-    this.optionSelectContainer.add(this.unlockText);
-
-    this.timerText = addTextObject(0, 0, "(5)", TextStyle.WINDOW);
-    this.timerText.setOrigin(0, 0);
-    this.timerText.setPositionRelative(this.unlockText, this.unlockText.displayWidth + 5, 0);
-    this.optionSelectContainer.add(this.timerText);
-
+    // Center window with the selected button
     this.optionSelectBg = addWindow(
       GAME_WIDTH - this.getWindowWidth(),
       -GAME_HEIGHT + this.getWindowHeight() + 28,
@@ -102,10 +93,30 @@ export abstract class BindingUiHandler extends UiHandler {
     this.optionSelectBg.setOrigin(0.5);
     this.optionSelectContainer.add(this.optionSelectBg);
 
-    this.cancelLabel = addTextObject(0, 0, i18next.t("settings:back"), TextStyle.SETTINGS_LABEL);
+    this.newButtonIcon = globalScene.add.sprite(this.optionSelectBg.x, this.optionSelectBg.y, "xbox");
+    this.newButtonIcon.setOrigin(0.5);
+    this.newButtonIcon.setVisible(false);
+    this.optionSelectContainer.add(this.newButtonIcon);
+
+    // Window at the bottom with cancel and confirm labels
+    this.actionBg = addWindow(
+      GAME_WIDTH - this.getWindowWidth(),
+      -GAME_HEIGHT + this.getWindowHeight() + 28 + 21 + 21,
+      this.getWindowWidth(),
+      24,
+    );
+    this.actionBg.setOrigin(0.5);
+    this.actionsContainer.add(this.actionBg);
+
+    this.cancelLabel = addTextObject(0, 0, i18next.t("menu:cancel"), TextStyle.SETTINGS_LABEL);
     this.cancelLabel.setOrigin(0, 0.5);
-    this.cancelLabel.setPositionRelative(this.actionBg, 10, this.actionBg.height / 2);
+    this.cancelLabel.setPositionRelative(this.actionBg, 6, this.actionBg.height / 2);
     this.actionsContainer.add(this.cancelLabel);
+
+    const labelX = this.actionBg.getRightCenter().x - 6;
+    this.actionLabel = addTextObject(labelX, this.actionBg.y, this.confirmAssignText, TextStyle.SETTINGS_LABEL);
+    this.actionLabel.setOrigin(1, 0.5);
+    this.actionsContainer.add(this.actionLabel);
   }
 
   protected override tearDown(): void {
@@ -117,7 +128,7 @@ export abstract class BindingUiHandler extends UiHandler {
     clearTimeout(this.countdownTimer);
     this.countdownTimer = setTimeout(() => {
       this.timeLeftAutoClose -= 1;
-      this.timerText.setText(`(${this.timeLeftAutoClose})`);
+      this.promptText.setText(`${this.pressButtonText} (${this.timeLeftAutoClose})`);
       if (this.timeLeftAutoClose >= 0) {
         this.manageAutoCloseTimer();
       } else {
@@ -133,7 +144,7 @@ export abstract class BindingUiHandler extends UiHandler {
    * @param finishHandler - Handler to call when the binding gets changed or cancelled
    * @returns `true` if successful.
    */
-  public override show(target: string, finishHandler: FinishCallback): boolean {
+  public override show(target: InputSettings, finishHandler: FinishCallback): boolean {
     this.buttonPressed = null;
     this.timeLeftAutoClose = 5;
     this.callback = finishHandler;
@@ -234,7 +245,7 @@ export abstract class BindingUiHandler extends UiHandler {
 
   protected override clear() {
     clearTimeout(this.countdownTimer);
-    this.timerText.setText("(5)");
+    this.promptText.setText(`${this.pressButtonText} (5)`);
     this.timeLeftAutoClose = 5;
     this.listening = false;
     this.target = null;
@@ -254,7 +265,7 @@ export abstract class BindingUiHandler extends UiHandler {
    */
   onInputDown(buttonIcon: string, assignedButtonIcon: string | null, type: string): void {
     clearTimeout(this.countdownTimer);
-    this.timerText.setText("");
+    this.promptText.setText(this.buttonPressedText);
     this.newButtonIcon.setTexture(type);
     this.newButtonIcon.setFrame(buttonIcon);
     if (assignedButtonIcon) {

@@ -1,33 +1,23 @@
 import { globalScene } from "#app/global-scene";
 import { Device } from "#enums/device";
-import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import type { KeyboardKeys } from "#types/input-types";
 import { BindingUiHandler } from "#ui/binding-ui-handler";
-import { addTextObject } from "#ui/text-utils";
 import { isNil } from "#utils/common-utils";
 import { getKeyWithKeycode } from "#utils/inputs-utils";
+import i18next from "i18next";
 
 export class KeyboardBindingUiHandler extends BindingUiHandler {
   constructor() {
     super(UiMode.KEYBOARD_BINDING, Device.KEYBOARD);
+
+    this.pressButtonText = i18next.t("settings:pressKey");
+    this.buttonPressedText = i18next.t("settings:keyPressed");
+    this.confirmAssignText = i18next.t("settings:confirmAssign");
   }
 
   protected override setup() {
     super.setup();
-
-    // New button icon setup.
-    this.newButtonIcon = globalScene.add.sprite(0, 0, "keyboard");
-    this.newButtonIcon.setPositionRelative(this.optionSelectBg, 78, 32);
-    this.newButtonIcon.setOrigin(0.5);
-    this.newButtonIcon.setVisible(false);
-
-    this.actionLabel = addTextObject(0, 0, "Assign button", TextStyle.SETTINGS_LABEL);
-    this.actionLabel.setOrigin(0, 0.5);
-    this.actionLabel.setPositionRelative(this.actionBg, this.actionBg.width - 80, this.actionBg.height / 2);
-    this.actionsContainer.add(this.actionLabel);
-
-    this.optionSelectContainer.add(this.newButtonIcon);
 
     // Listen to keyboard button down events to initiate binding.
     globalScene.input.keyboard?.on("keydown", this.onKeyDown, this);

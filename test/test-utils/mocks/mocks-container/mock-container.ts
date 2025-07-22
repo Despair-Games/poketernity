@@ -272,6 +272,10 @@ export class MockContainer implements MockGameObject {
     return this.list.find((v) => v.name === key) ?? new MockContainer(this.textureManager, 0, 0);
   }
 
+  getRightCenter(): Phaser.Types.Math.Vector2Like {
+    return { x: this.x, y: this.y };
+  }
+
   disableInteractive(): this {
     return this;
   }

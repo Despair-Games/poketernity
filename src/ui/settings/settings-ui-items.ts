@@ -399,7 +399,7 @@ export const gamepadSettingsUiItems: SettingsUiItem<GamepadSettingsKey>[] = [
 export const keyboardSettingsUiItems: SettingsUiItem<KeyboardSettingsKey>[] = [
   {
     key: "layout",
-    label: "Keyboard Type", // TODO: localize
+    label: t("settings:keyboardLayout"),
     options: [
       {
         label: "Default", // Will be overridden with the currently set layout name at runtime
