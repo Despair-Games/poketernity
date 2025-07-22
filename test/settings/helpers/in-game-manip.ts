@@ -1,6 +1,6 @@
 import type { Device } from "#enums/device";
 import { SettingKeyboard } from "#enums/setting-keyboard";
-import type { InputInterfaceConfig } from "#types/input-types";
+import type { InputInterfaceConfig } from "#types/inputs-types";
 import { getIconForLatestInput, getSettingNameWithKeycode } from "#utils/inputs-utils";
 import { expect } from "vitest";
 

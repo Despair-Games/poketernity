@@ -1,6 +1,6 @@
 import { Button } from "#enums/button";
 import { SettingGamepad } from "#enums/setting-gamepad";
-import type { GamepadInterfaceConfig, ModernGamepadKeys } from "#types/input-types";
+import type { GamepadInterfaceConfig, ModernGamepadKeys } from "#types/inputs-types";
 
 /**
  * Xbox 360 gamepad mapping

@@ -4,7 +4,7 @@ import { SettingKeyboard } from "#enums/setting-keyboard";
 import { InGameManip } from "#test/settings/helpers/in-game-manip";
 import { MenuManip } from "#test/settings/helpers/menu-manip";
 import { GameManager } from "#test/test-utils/game-manager";
-import type { InputInterfaceConfig } from "#types/input-types";
+import type { InputInterfaceConfig } from "#types/inputs-types";
 import { getKeyWithKeycode, getKeyWithSettingName } from "#utils/inputs-utils";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 

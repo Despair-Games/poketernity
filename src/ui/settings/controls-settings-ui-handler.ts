@@ -5,7 +5,7 @@ import type { Device } from "#enums/device";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
 import { settings } from "#system/settings-manager";
-import type { InputInterfaceConfig, InputSettings } from "#types/input-types";
+import type { InputInterfaceConfig, InputSettings } from "#types/inputs-types";
 import { NavigationManager, NavigationMenu } from "#ui/navigation-menu";
 import { ScrollBar } from "#ui/scroll-bar";
 import { addTextObject, setTextColor } from "#ui/text-utils";

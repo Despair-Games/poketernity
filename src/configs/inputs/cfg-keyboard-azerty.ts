@@ -1,6 +1,6 @@
 import { Button } from "#enums/button";
 import { SettingKeyboard } from "#enums/setting-keyboard";
-import type { KeyboardInterfaceConfig } from "#types/input-types";
+import type { KeyboardInterfaceConfig } from "#types/inputs-types";
 
 export const cfg_keyboard_azerty: KeyboardInterfaceConfig = {
   padID: "azerty",

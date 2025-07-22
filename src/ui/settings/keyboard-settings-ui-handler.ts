@@ -11,7 +11,7 @@ import {
   settingKeyboardDefaults,
   settingKeyboardOptions,
 } from "#system/settings-keyboard";
-import type { InputInterfaceConfig } from "#types/input-types";
+import type { InputInterfaceConfig } from "#types/inputs-types";
 import { ControlsSettingsUiHandler } from "#ui/controls-settings-ui-handler";
 import { NavigationManager } from "#ui/navigation-menu";
 import { addTextObject } from "#ui/text-utils";

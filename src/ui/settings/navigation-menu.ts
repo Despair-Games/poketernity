@@ -3,7 +3,7 @@ import { GAME_WIDTH } from "#constants/ui-constants";
 import { Button } from "#enums/button";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
-import type { InputSettings } from "#types/input-types";
+import type { InputSettings } from "#types/inputs-types";
 import type { InputsIcons } from "#ui/controls-settings-ui-handler";
 import type { GeneralSettingsUiHandler } from "#ui/general-settings-ui-handler";
 import { addTextObject, setTextColor } from "#ui/text-utils";

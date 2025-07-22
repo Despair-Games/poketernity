@@ -4,7 +4,7 @@ import { settings } from "#system/settings-manager";
 import { InGameManip } from "#test/settings/helpers/in-game-manip";
 import { MenuManip } from "#test/settings/helpers/menu-manip";
 import { GameManager } from "#test/test-utils/game-manager";
-import type { InputInterfaceConfig } from "#types/input-types";
+import type { InputInterfaceConfig } from "#types/inputs-types";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Keyboard Layout Change", () => {

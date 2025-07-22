@@ -14,7 +14,7 @@ import {
   settingGamepadDefaults,
   settingGamepadOptions,
 } from "#system/settings-gamepad";
-import type { InputInterfaceConfig } from "#types/input-types";
+import type { InputInterfaceConfig } from "#types/inputs-types";
 import { ControlsSettingsUiHandler } from "#ui/controls-settings-ui-handler";
 import { addTextObject } from "#ui/text-utils";
 import { truncateString } from "#utils/string-utils";

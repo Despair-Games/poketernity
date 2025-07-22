@@ -68,7 +68,7 @@ import { applySessionVersionMigration, applySystemVersionMigration } from "#syst
 import { vouchers } from "#system/voucher";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import type { DexData, DexEntry } from "#types/dex-data";
-import type { InputInterfaceConfig } from "#types/input-types";
+import type { InputInterfaceConfig } from "#types/inputs-types";
 import type { SessionSaveData } from "#types/session-data";
 import type { StarterData } from "#types/starter-data";
 import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlocks } from "#types/system-data";
