@@ -18,7 +18,7 @@ export class DragonCheerAttr extends AddBattlerTagAttr {
   }
 
   /**
-   * Grants a 55%(+1) bonus.
+   * Grants a 50%(+1) bonus.
    * Also grants a {@link MINOR_EFFECT_SCORE_BONUS | minor bonus} if the target is Dragon-type.
    * Also grants a minor bonus if the target has a move with an increased critical hit ratio.
    */
