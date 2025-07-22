@@ -1,3 +1,7 @@
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
+import type { ProtectAttr } from "#moves/protect-attr";
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
+
 import { PROTECT_MOVES } from "#constants/move-constants";
 import { MoveResult } from "#enums/move-result";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
@@ -30,7 +34,13 @@ export class ProtectCondition extends MoveCondition {
 
 const protectCondition: MoveConditionFunc = (user, _target, _move) => {
   const moveHistory = user.getLastXMoves(-1).filter((mv) => !mv.virtual);
-  // Note: This can't check for `ProtectAttr` directly as it would create a circular dependency
+  /**
+   * The index of the last move in the user's move history that either failed
+   * or is not a variation of Protect
+   *
+   * @privateRemarks
+   * This cannot check if the move has a {@linkcode ProtectAttr}; doing so would create a circular dependency.
+   */
   const lastNonUse = moveHistory.findIndex(
     (mv) => mv.result !== MoveResult.SUCCESS || !PROTECT_MOVES.includes(mv.move.id),
   );
