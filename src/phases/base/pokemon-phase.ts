@@ -3,7 +3,7 @@ import { BattlerIndex, type FieldBattlerIndex } from "#enums/battler-index";
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { Pokemon } from "#field/pokemon";
 import { FieldPhase } from "#phases/base/field-phase";
-import type { nil } from "#types/nil";
+import type { nil } from "#types/utility-types";
 
 /**
  * Provides helper functions to get the pokemon involved in the phase

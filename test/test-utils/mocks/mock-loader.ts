@@ -1,4 +1,6 @@
-import CacheManager = Phaser.Cache.CacheManager;
+import Phaser from "phaser";
+
+const CacheManager = Phaser.Cache.CacheManager;
 
 export class MockLoader {
   public cacheManager;

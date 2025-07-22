@@ -117,5 +117,3 @@ export interface SettingsUpdateEventArgs {
   key: AnySettingKey;
   value: string | number | boolean;
 }
-
-export type SettingsEvent = "settings/updated" | "settings/update/failed" | "settings/saved";

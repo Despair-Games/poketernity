@@ -47,10 +47,8 @@ import { UseHigherAttackingStatAttr } from "#moves/use-higher-attacking-stat-att
 import { VariableAccuracyAttr } from "#moves/variable-accuracy-attr";
 import { VariablePowerAttr } from "#moves/variable-power-attr";
 import { VariableTargetAttr } from "#moves/variable-target-attr";
-import type { AbstractConstructor } from "#types/abstract-constructor";
-import type { Constructor } from "#types/constructor";
-import type { MoveConditionFunc } from "#types/move-condition-func";
-import type { nil } from "#types/nil";
+import type { MoveConditionFunc } from "#types/move-types";
+import type { AbstractConstructor, Constructor, nil } from "#types/utility-types";
 import { BooleanHolder, NumberHolder } from "#utils/common-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
 import { toCamelCaseString } from "#utils/string-utils";
@@ -965,9 +963,9 @@ export class AttackMove extends Move {
     attackScore = Math.pow(effectiveness - 1, 2) * effectiveness < 1 ? -2 : 2;
     if (attackScore) {
       if (this.category === MoveCategory.PHYSICAL) {
-        const atk = new NumberHolder(user.getEffectiveStat(Stat.ATK, target));
-        if (atk.value > user.getEffectiveStat(Stat.SPATK, target)) {
-          const statRatio = user.getEffectiveStat(Stat.SPATK, target) / atk.value;
+        const atk = new NumberHolder(user.getEffectiveStat(Stat.ATK, { opponent: target }));
+        if (atk.value > user.getEffectiveStat(Stat.SPATK, { opponent: target })) {
+          const statRatio = user.getEffectiveStat(Stat.SPATK, { opponent: target }) / atk.value;
           if (statRatio <= 0.75) {
             attackScore *= 2;
           } else if (statRatio <= 0.875) {
@@ -975,9 +973,9 @@ export class AttackMove extends Move {
           }
         }
       } else {
-        const spAtk = new NumberHolder(user.getEffectiveStat(Stat.SPATK, target));
-        if (spAtk.value > user.getEffectiveStat(Stat.ATK, target)) {
-          const statRatio = user.getEffectiveStat(Stat.ATK, target) / spAtk.value;
+        const spAtk = new NumberHolder(user.getEffectiveStat(Stat.SPATK, { opponent: target }));
+        if (spAtk.value > user.getEffectiveStat(Stat.ATK, { opponent: target })) {
+          const statRatio = user.getEffectiveStat(Stat.ATK, { opponent: target }) / spAtk.value;
           if (statRatio <= 0.75) {
             attackScore *= 2;
           } else if (statRatio <= 0.875) {

@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/enum-values";
+import type { EnumValues } from "#types/utility-types";
 
 /**
  * Enum holding the basic pokemon types, plus the pseudo-type Stellar.

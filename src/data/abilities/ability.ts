@@ -1,8 +1,8 @@
 import type { AbAttr } from "#abilities/ab-attr";
 import type { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
-import type { AbAttrCondition } from "#types/ab-attr-condition";
-import type { Constructor } from "#types/constructor";
+import type { AbAttrCondition } from "#types/ability-types";
+import type { Constructor } from "#types/utility-types";
 import { toCamelCaseString } from "#utils/string-utils";
 import i18next from "i18next";
 

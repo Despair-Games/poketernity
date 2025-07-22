@@ -113,19 +113,23 @@ describe("Moves - Metronome", () => {
     await game.phaseInterceptor.to("CommandPhase");
   });
 
+  // The test is very long running at the moment on some machines
+  // because of the `getTSEnumValues(MoveId)` call in `randomMoveAttr.getRandomMove`
+  // TODO: remove the custom timeout once the MoveId enum gets converted (after checking it is indeed faster).
   it("should never call a G-Max move", async () => {
     await game.classicMode.startBattle(SpeciesId.REGIELEKI);
 
     const user = game.field.getPlayerPokemon();
 
-    const NUM_ROLLS = 2000; // As long as this is greater than total number of moves, this should cover all possible RNG rolls
+    // As long as this is greater than total number of moves, this should cover all possible RNG rolls
+    const NUM_ROLLS = allMoves.size + 1;
 
     await game.rng.equalSample(NUM_ROLLS, () => {
       const moveId = randomMoveAttr.getRandomMove(user);
       const move = allMoves.get(moveId);
       // @ts-expect-error - `hasFlag()` is private but we want to validate the flag is set
       expect(move.hasFlag(MoveFlags.G_MAX_MOVE)).toBe(false);
-      expect(allMoves.get(moveId).checkFlag(MoveFlags.G_MAX_MOVE, user)).toBe(false);
+      expect(move.checkFlag(MoveFlags.G_MAX_MOVE, user)).toBe(false);
     });
-  });
+  }, 50000);
 });

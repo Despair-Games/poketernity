@@ -2,8 +2,6 @@
 import type { LoadingScene } from "#app/loading-scene";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
-export type LanguageEvent = "language/change";
-
 export type SupportedLanguageKey = "en" | "es-ES" | "it" | "fr" | "de" | "pt-BR" | "zh-CN" | "zh-TW" | "ko" | "ja";
 
 export type SupportedLanguage = {

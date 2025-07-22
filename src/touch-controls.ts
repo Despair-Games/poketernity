@@ -5,7 +5,7 @@ import { hasTouchscreen } from "#utils/app-utils";
 
 const repeatInputDelayMillis = 250;
 
-export default class TouchControl {
+export class TouchControl {
   events: Phaser.Events.EventEmitter;
   private buttonLock: string[] = [];
   private inputInterval: NodeJS.Timeout[] = [];

@@ -3,7 +3,6 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { ArenaRoomTag } from "#arena-tags/arena-room-tag";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveId } from "#enums/move-id";
-import type { Arena } from "#field/arena";
 import type { BooleanHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
@@ -21,12 +20,12 @@ export class TrickRoomTag extends ArenaRoomTag {
    * turn order should be reversed.
    * @returns `true`
    */
-  override apply(_arena: Arena, _simulated: boolean, speedReversed: BooleanHolder): boolean {
+  override apply(_simulated: boolean, speedReversed: BooleanHolder): boolean {
     speedReversed.value = !speedReversed.value;
     return true;
   }
 
-  override onAdd(_arena: Arena): void {
+  override onAdd(): void {
     const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
     if (source) {
       globalScene.phaseManager.createAndUnshiftPhase(
@@ -36,7 +35,7 @@ export class TrickRoomTag extends ArenaRoomTag {
     }
   }
 
-  override onRemove(_arena: Arena): void {
+  override onRemove(): void {
     globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("arenaTag:trickRoomOnRemove"));
   }
 }

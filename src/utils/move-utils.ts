@@ -10,7 +10,7 @@ import type { Pokemon } from "#field/pokemon";
 import type { PokemonMove } from "#field/pokemon-move";
 import type { Move, MoveAttrFilter } from "#moves/move";
 import type { MoveAttr } from "#moves/move-attr";
-import type { AbstractConstructor } from "#types/abstract-constructor";
+import type { AbstractConstructor } from "#types/utility-types";
 import { BooleanHolder, getTSEnumKeys, toDmgValue } from "#utils/common-utils";
 import { t } from "i18next";
 

@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/enum-values";
+import type { EnumValues } from "#types/utility-types";
 
 export const ChargeAnim = {
   FLY_CHARGING: 1000,

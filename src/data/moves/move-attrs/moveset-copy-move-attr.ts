@@ -5,7 +5,7 @@ import { PokemonMove } from "#field/pokemon-move";
 import type { Move } from "#moves/move";
 import { OverrideMoveEffectAttr } from "#moves/override-move-effect-attr";
 import { targetMoveCopiableCondition } from "#moves/target-move-copiable-condition";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 import i18next from "i18next";
 
 /**

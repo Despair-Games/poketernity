@@ -1,4 +1,4 @@
-import type BattleScene from "#app/battle-scene";
+import type { BattleScene } from "#app/battle-scene";
 import { Phase } from "#app/phase";
 import type { UiMode } from "#enums/ui-mode";
 import { AttemptRunPhase } from "#phases/attempt-run-phase";

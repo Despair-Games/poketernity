@@ -5,7 +5,6 @@ import { allMoves } from "#data/data-lists";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import type { FieldBattlerIndex } from "#enums/battler-index";
 import type { MoveId } from "#enums/move-id";
-import type { Arena } from "#field/arena";
 import type { Pokemon } from "#field/pokemon";
 import { isNil } from "#utils/common-utils";
 import i18next from "i18next";
@@ -60,10 +59,10 @@ export class PendingHealTag extends ArenaTag {
   }
 
   /** Removes default on-remove message */
-  override onRemove(_arena: Arena): void {}
+  override onRemove(): void {}
 
   /** This arena tag is removed at the end of the turn if no pending healing effects are on the field */
-  override lapse(_arena: Arena): boolean {
+  override lapse(): boolean {
     for (const key in this.pendingHeals) {
       if (this.pendingHeals[key].length > 0) {
         return true;
@@ -76,13 +75,12 @@ export class PendingHealTag extends ArenaTag {
    * Applies a pending healing effect on the given target index. If an effect is found for
    * the index, the Pokemon at that index is healed to full HP, is cured of any non-volatile status,
    * and has its PP fully restored (if the effect is from Lunar Dance).
-   * @param arena - The {@linkcode Arena} containing this tag
    * @param simulated - If `true`, suppresses changes to game state
    * @param pokemon - The {@linkcode Pokemon} receiving the healing effect
    * @returns `true` if the target Pokemon was healed by this effect
    * @todo This should also be called when a Pokemon moves into a new position via Ally Switch
    */
-  override apply(arena: Arena, simulated: boolean, pokemon: Pokemon): boolean {
+  override apply(simulated: boolean, pokemon: Pokemon): boolean {
     const targetIndex = pokemon.getBattlerIndex();
     const targetEffects = this.pendingHeals[targetIndex];
 
@@ -98,7 +96,7 @@ export class PendingHealTag extends ArenaTag {
         console.warn(`Source of pending ${allMoves.get(moveId).name} effect is undefined!`);
         targetEffects.splice(targetEffects.indexOf(healEffect), 1);
         // Re-evaluate after the invalid heal effect is removed
-        return this.apply(arena, simulated, pokemon);
+        return this.apply(simulated, pokemon);
       }
 
       globalScene.phaseManager.createAndUnshiftPhase("PokemonHealPhase", targetIndex, pokemon.getMaxHp(), {

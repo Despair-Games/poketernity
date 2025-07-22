@@ -4,7 +4,7 @@ import { coerceArray, fixedNumber } from "#utils/common-utils";
 import { randInt } from "#utils/random-utils";
 import type Phaser from "phaser";
 
-export default class PokemonSpriteTeraSparkleHandler {
+export class PokemonSpriteTeraSparkleHandler {
   private sprites: Set<Phaser.GameObjects.Sprite>;
 
   private counterTween?: Phaser.Tweens.Tween;

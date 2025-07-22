@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import type PokemonSpecies from "#data/pokemon-species";
+import type { PokemonSpecies } from "#data/pokemon-species";
 import type { ModifierTypeFunc } from "#modifier/modifier-type";
 import { ModifierRewardPhase } from "#phases/modifier-reward-phase";
 import i18next from "i18next";

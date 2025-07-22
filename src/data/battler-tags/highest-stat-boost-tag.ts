@@ -7,6 +7,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { AbilityBattlerTag } from "#battler-tags/ability-battler-tag";
 import type { BattlerTag } from "#battler-tags/battler-tag";
 import { allAbilities } from "#data/data-lists";
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import type { AbilityId } from "#enums/ability-id";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";
@@ -45,13 +46,16 @@ export abstract class HighestStatBoostTag extends AbilityBattlerTag {
     super.onAdd(pokemon);
 
     let highestStat: EffectiveStat;
-    EFFECTIVE_STATS.map((s) => pokemon.getEffectiveStat(s)).reduce((highestValue: number, value: number, i: number) => {
-      if (value > highestValue) {
-        highestStat = EFFECTIVE_STATS[i];
-        return value;
-      }
-      return highestValue;
-    }, 0);
+    EFFECTIVE_STATS.map((s) => pokemon.getEffectiveStat(s, { abilityApplyMode: AbilityApplyMode.IGNORE })).reduce(
+      (highestValue: number, value: number, i: number) => {
+        if (value > highestValue) {
+          highestStat = EFFECTIVE_STATS[i];
+          return value;
+        }
+        return highestValue;
+      },
+      0,
+    );
 
     highestStat = highestStat!; // tell TS compiler it's defined!
     this.stat = highestStat;

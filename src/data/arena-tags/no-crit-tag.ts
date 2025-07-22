@@ -4,7 +4,6 @@ import { ArenaTag } from "#arena-tags/arena-tag";
 import type { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import type { MoveId } from "#enums/move-id";
-import type { Arena } from "#field/arena";
 import i18next from "i18next";
 
 /**
@@ -24,7 +23,7 @@ export class NoCritTag extends ArenaTag {
   }
 
   /** Queues a message upon adding this effect to the field */
-  override onAdd(_arena: Arena): void {
+  override onAdd(): void {
     globalScene.phaseManager.createAndUnshiftPhase(
       "MessagePhase",
       i18next.t(`arenaTag:noCritOnAdd${this.i18nSideKey}`, {
@@ -34,7 +33,7 @@ export class NoCritTag extends ArenaTag {
   }
 
   /** Queues a message upon removing this effect from the field */
-  override onRemove(_arena: Arena): void {
+  override onRemove(): void {
     const source = globalScene.getPokemonById(this.sourceId!); // TODO: is this bang correct?
     globalScene.phaseManager.createAndUnshiftPhase(
       "MessagePhase",

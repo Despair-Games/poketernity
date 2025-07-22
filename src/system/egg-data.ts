@@ -4,7 +4,7 @@ import type { EggTier } from "#enums/egg-tier";
 import type { SpeciesId } from "#enums/species-id";
 import type { VariantTier } from "#enums/variant-tier";
 
-export default class EggData {
+export class EggData {
   public id: number;
   public tier: EggTier;
   public sourceType: EggSourceType;

@@ -6,7 +6,6 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import { StatusEffect } from "#enums/status-effect";
-import type { Arena } from "#field/arena";
 import type { Pokemon } from "#field/pokemon";
 import i18next from "i18next";
 
@@ -24,8 +23,8 @@ export class ToxicSpikesTag extends EntryHazardTag {
     this.neutralized = false;
   }
 
-  override onAdd(arena: Arena, quiet: boolean = false): void {
-    super.onAdd(arena);
+  override onAdd(quiet: boolean = false): void {
+    super.onAdd();
 
     const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
     if (!quiet && source) {
@@ -39,9 +38,9 @@ export class ToxicSpikesTag extends EntryHazardTag {
     }
   }
 
-  override onRemove(arena: Arena): void {
+  override onRemove(): void {
     if (!this.neutralized) {
-      super.onRemove(arena);
+      super.onRemove();
     }
   }
 

@@ -3,7 +3,7 @@ import { globalScene } from "#app/global-scene";
 import { ScoreboardCategory } from "#enums/scoreboard-category";
 import { TextStyle } from "#enums/text-style";
 import { WindowVariant } from "#enums/window-variant";
-import type { RankingEntry } from "#types/ranking-entry";
+import type { RankingEntry } from "#types/api-types";
 import { addTextObject } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
 import { executeIf, getTSEnumKeys } from "#utils/common-utils";

@@ -5,7 +5,7 @@ import { timedEventManager } from "#app/timed-event-manager";
 import { FRIENDSHIP_GAIN_CUTOFF } from "#constants/friendship-constants";
 import type { SpeciesFormEvolution } from "#data/pokemon-evolutions";
 import type { SpeciesFormChange } from "#data/pokemon-forms";
-import type PokemonSpecies from "#data/pokemon-species";
+import type { PokemonSpecies } from "#data/pokemon-species";
 import { CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER, getCandyProgressRequirement, speciesStarterCosts } from "#data/starters";
 import { reverseCompatibleTms, tmSpecies } from "#data/tms";
 import type { Variant } from "#data/variant";
@@ -26,7 +26,7 @@ import { PokemonMove } from "#field/pokemon-move";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import { EvoTrackerModifier, PokemonFriendshipBoosterModifier, type PokemonHeldItemModifier } from "#modifier/modifier";
 import { achvs } from "#system/achievements";
-import type PokemonData from "#system/pokemon-data";
+import type { PokemonData } from "#system/pokemon-data";
 import type { StarterMoveset } from "#types/starter-data";
 import { PlayerBattleInfo } from "#ui/battle-info";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
@@ -67,7 +67,10 @@ export class PlayerPokemon extends Pokemon {
     }
 
     if (!dataSource) {
-      if (globalScene.gameMode.isDaily) {
+      if (
+        globalScene.gameMode.isDaily
+        || (Overrides.STARTER_SPECIES_OVERRIDE && Overrides.STARTER_SPECIES_OVERRIDE !== SpeciesId.KELDEO)
+      ) {
         this.generateAndPopulateMoveset();
       } else {
         this.moveset = [];

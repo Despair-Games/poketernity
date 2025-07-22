@@ -3,7 +3,6 @@ import { ArenaTag } from "#arena-tags/arena-tag";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import type { FieldBattlerIndex } from "#enums/battler-index";
 import type { MoveId } from "#enums/move-id";
-import type { Arena } from "#field/arena";
 import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
 import { isNil } from "#utils/common-utils";
@@ -45,7 +44,7 @@ export class DelayedAttackTag extends ArenaTag {
     this.delayedAttacks.push({ sourceId: source.id, moveId: moveId, targetIndex, turnCount: 3 });
   }
 
-  override lapse(_arena: Arena): boolean {
+  override lapse(): boolean {
     this.delayedAttacks.forEach((attack) => {
       attack.turnCount--;
 
@@ -76,7 +75,7 @@ export class DelayedAttackTag extends ArenaTag {
     return this.delayedAttacks.length > 0;
   }
 
-  override onRemove(_arena: Arena): void {}
+  override onRemove(): void {}
 
   override loadTag(source: ArenaTag | any): void {
     super.loadTag(source);

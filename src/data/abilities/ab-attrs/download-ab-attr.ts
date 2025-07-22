@@ -23,8 +23,8 @@ export class DownloadAbAttr extends PostSummonAbAttr {
     this.enemySpDef = 0;
 
     for (const opponent of pokemon.getOpponents()) {
-      this.enemyDef += opponent.getEffectiveStat(Stat.DEF, undefined, undefined, AbilityApplyMode.IGNORE);
-      this.enemySpDef += opponent.getEffectiveStat(Stat.SPDEF, undefined, undefined, AbilityApplyMode.IGNORE);
+      this.enemyDef += opponent.getEffectiveStat(Stat.DEF, { abilityApplyMode: AbilityApplyMode.IGNORE });
+      this.enemySpDef += opponent.getEffectiveStat(Stat.SPDEF, { abilityApplyMode: AbilityApplyMode.IGNORE });
     }
 
     if (this.enemyDef < this.enemySpDef) {

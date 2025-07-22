@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { allSpecies } from "#data/data-lists";
-import type PokemonSpecies from "#data/pokemon-species";
+import type { PokemonSpecies } from "#data/pokemon-species";
 import type { PokemonSpeciesForm } from "#data/pokemon-species-form";
 import { POKERUS_STARTER_COUNT, speciesStarterCosts } from "#data/starters";
 import type { ElementalType } from "#enums/elemental-type";

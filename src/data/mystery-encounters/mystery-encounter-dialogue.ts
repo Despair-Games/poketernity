@@ -25,8 +25,7 @@ export class EncounterOptionsDialogue {
 }
 
 /**
- * Example MysteryEncounterDialogue object:
- *
+ * @example
  {
     intro: [
       {
@@ -67,7 +66,7 @@ export class EncounterOptionsDialogue {
  }
  *
  */
-export default class MysteryEncounterDialogue {
+export class MysteryEncounterDialogue {
   intro?: TextDisplay[];
   encounterOptionsDialogue?: EncounterOptionsDialogue;
   outro?: TextDisplay[];

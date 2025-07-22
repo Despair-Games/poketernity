@@ -75,7 +75,7 @@ export class MoveChargePhase extends HitCheckPhase {
           pokemon: user,
           targets: this.targets,
           move: this.move,
-          followUp: false,
+          followUp: true,
           when: "eager",
         });
       } else {
