@@ -43,7 +43,11 @@ export class KeyboardSettingsUiHandler extends ControlsSettingsUiHandler {
 
   public override show(): boolean {
     if (super.show()) {
-      // Listen to the delete key presses to delete an existing mapping
+      // If a keyboard is connected but the view hasn't been initialized for it, do it
+      if (this.noDeviceText.visible && globalScene.inputController.getActiveConfig(this.device)) {
+        this.updateChosenKeyboardDisplay();
+      }
+      // Listen to the "delete" key presses to clear an existing mapping
       this.deleteKey = globalScene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.DELETE);
       this.deleteKey?.on("up", this.deleteBinding, this);
       return true;

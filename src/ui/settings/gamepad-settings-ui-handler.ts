@@ -36,6 +36,17 @@ export class GamepadSettingsUiHandler extends ControlsSettingsUiHandler {
     super.tearDown();
   }
 
+  public override show(): boolean {
+    if (super.show()) {
+      // If a gamepad is connected but the view hasn't been initialized for it, do it
+      if (this.noDeviceText.visible && globalScene.inputController.getActiveConfig(this.device)) {
+        this.updateChosenGamepadDisplay();
+      }
+      return true;
+    }
+    return false;
+  }
+
   /**
    * Update the display for the chosen gamepad.
    *

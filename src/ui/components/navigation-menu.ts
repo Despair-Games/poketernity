@@ -5,6 +5,11 @@ import type { InputSettings } from "#types/input-types";
 import { addTextObject, setTextColor } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
 
+/**
+ * Container composed of a horizontal window panning the game's width
+ * with a series of text labels corresponding to tabs
+ * and button icons for navigating between the tabs.
+ */
 export class NavigationMenu extends Phaser.GameObjects.Container {
   private cursor: number;
   private navigationIcons: Partial<Record<InputSettings, Phaser.GameObjects.Sprite>>;
@@ -25,7 +30,7 @@ export class NavigationMenu extends Phaser.GameObjects.Container {
   /**
    * Sets up the NavigationMenu by adding windows, icons, and labels.
    */
-  private setup(labels: string[]) {
+  private setup(labels: string[]): void {
     const headerBg = addWindow(0, 0, GAME_WIDTH - 2, 24);
     headerBg.setOrigin(0, 0);
     this.add(headerBg);
@@ -66,6 +71,11 @@ export class NavigationMenu extends Phaser.GameObjects.Container {
     }
   }
 
+  /**
+   * Mark the given tab as selected, updating its text color.
+   * @param cursor index of the selected tab.
+   * @returns `true` if the selection was updated, `false` otherwise
+   */
   public setSelected(cursor: number): boolean {
     if (cursor === this.cursor) {
       return false;
@@ -79,9 +89,9 @@ export class NavigationMenu extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Updates the icons in the NavigationMenu based on the latest input recorded.
+   * Updates the icons in the NavigationMenu based on the latest input device used.
    */
-  public updateIcons() {
+  public updateIcons(): void {
     for (const settingName of Object.keys(this.navigationIcons)) {
       const icon = this.navigationIcons[settingName];
       const frame = globalScene.inputController?.getIconForLatestInputRecorded(settingName as InputSettings);

@@ -197,11 +197,7 @@ export class UI extends Phaser.GameObjects.Container {
 
     // Initialize the default handler
     this.addUiHandler(this.mode);
-    // The settings Ui handlers are inefficient and take a while to initialize
-    // so for now we initialize them all during loading and never stop them.
-    for (const mode of settingsUiModes) {
-      this.addUiHandler(mode);
-    }
+
     // If this handler gets initialized just before being shown the input text flashes
     // so for now we initialize it during loading and never stop it.
     // note: all form modals that use 'inputText.setText' have this issue, but this is the only one players can see
@@ -845,7 +841,7 @@ export class UI extends Phaser.GameObjects.Container {
       const doSetMode = () => {
         if (this.mode !== mode) {
           if (clear && this.getCurrentHandler().active) {
-            this.stopCurrentHandler();
+            this.stopCurrentHandler(mode);
           }
           if (chainMode && this.mode && !clear) {
             this.modeChain.push(this.mode);
@@ -901,8 +897,9 @@ export class UI extends Phaser.GameObjects.Container {
       const lastMode = this.mode;
 
       const doRevertMode = () => {
-        this.stopCurrentHandler();
-        this.mode = this.modeChain.pop()!;
+        const newMode = this.modeChain.pop()!;
+        this.stopCurrentHandler(newMode);
+        this.mode = newMode;
         globalScene.updateGameInfo();
         logUiDebug(`Set ${UiMode[this.mode]} (${this.mode}) Mode (reverting from ${UiMode[lastMode]})`);
         const touchControls = document.getElementById("touchControls");
@@ -927,15 +924,22 @@ export class UI extends Phaser.GameObjects.Container {
 
   /**
    * Stop the current Ui Handler, potentially destroying it to free it from memory.
-   * If the stopped handler was the menu hanlder, destroy all handlers that depended on it.
+   * If the stopped handler was the menu handler, destroy all handlers that depended on it.
+   * If the stopped handler was part of the settings and we not switching to another settings handler,
+   * destroy all settings handlers
+   * @param nextMode if applicable, which Ui Mode will replace the current one.
    */
-  private stopCurrentHandler() {
+  private stopCurrentHandler(nextMode?: UiMode) {
     this.getCurrentHandler().stop();
     if (alwaysDestroyModes.includes(this.mode)) {
       this.deleteUiHandlers(this.mode);
     } else if (this.mode === UiMode.MENU) {
       // When stopping the menu destroy all handlers that depend on it
       this.deleteUiHandlers(...mainMenuAccessedModes);
+    } else if (nextMode && settingsUiModes.includes(this.mode) && !settingsUiModes.includes(nextMode)) {
+      // When existing the settings, clear the settings navigation menu and destroy all settings-related handlers
+      SettingsNavigationManager.getInstance().clearMenus();
+      this.deleteUiHandlers(...settingsUiModes);
     }
   }
 

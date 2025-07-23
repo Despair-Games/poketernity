@@ -198,6 +198,16 @@ export abstract class ControlsSettingsUiHandler extends SettingsUiHandler {
   }
 
   public override processInput(button: Button): boolean {
+    if (
+      this.noDeviceText.visible
+      && button !== Button.CYCLE_SHINY
+      && button !== Button.CYCLE_FORM
+      && button !== Button.CANCEL
+    ) {
+      // Prevent any interaction with the settings if no device is connected
+      return false;
+    }
+
     const config = globalScene.inputController.getActiveConfig(this.device);
 
     // ACTION button when on a binding setting => remap
