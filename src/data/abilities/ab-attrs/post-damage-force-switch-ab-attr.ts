@@ -1,5 +1,5 @@
 /** biome-ignore-start lint/correctness/noUnusedImports: TSDoc imports */
-import type BattleScene from "#app/battle-scene";
+import type { BattleScene } from "#app/battle-scene";
 /** biome-ignore-end lint/correctness/noUnusedImports: TSDoc imports */
 
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
