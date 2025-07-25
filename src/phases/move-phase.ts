@@ -86,9 +86,12 @@ interface MovePhaseOptions {
 export class MovePhase extends BattlePhase {
   public override readonly phaseName = "MovePhase";
 
-  private _pokemon: Pokemon;
-  private _move: PokemonMove;
-  private _targets: BattlerIndex[];
+  /** The {@linkcode Pokemon} using the move */
+  public readonly pokemon: Pokemon;
+  /** The {@linkcode PokemonMove} to be used */
+  public readonly move: PokemonMove;
+  /** The {@linkcode BattlerIndex | indexes} of the move's targets on the field */
+  public readonly targets: BattlerIndex[];
   /**
    * If `true`, some condition checks are skipped for this use of the move:
    * - Effects from non-volatile status conditions (i.e. Sleep, Freeze, and Paralysis)
@@ -98,14 +101,14 @@ export class MovePhase extends BattlePhase {
    * - The move-cancelling effects of Imprison from any Pokemon other than the user
    * - The move-copying effects of Dancer from any Pokemon other than the user
    */
-  private followUp: boolean;
+  private readonly followUp: boolean;
   /** If `true`, this use of the move will not consume any PP */
   private ignorePp: boolean;
   /**
    * Whether or not this move is a "bounced" move as a result of
    * the Pokemon's ongoing Magic Coat effect or Magic Bounce ability.
    */
-  private reflected: boolean;
+  private readonly reflected: boolean;
   /**
    * Whether or not this move is a "stolen" move as
    * a result of the user previously using Snatch.
@@ -115,7 +118,7 @@ export class MovePhase extends BattlePhase {
    * However, whether or not the move was snatched cannot be verified without
    * peeking into the current phase.
    */
-  public snatched: boolean;
+  public readonly snatched: boolean;
   private failed: boolean = false;
   private cancelled: boolean = false;
 
@@ -138,33 +141,6 @@ export class MovePhase extends BattlePhase {
     this.ignorePp = ignorePp;
     this.reflected = reflected;
     this.snatched = snatched;
-  }
-
-  /** The {@linkcode Pokemon} using the move */
-  public get pokemon(): Pokemon {
-    return this._pokemon;
-  }
-
-  protected set pokemon(pokemon: Pokemon) {
-    this._pokemon = pokemon;
-  }
-
-  /** The {@linkcode PokemonMove} to be used */
-  public get move(): PokemonMove {
-    return this._move;
-  }
-
-  protected set move(move: PokemonMove) {
-    this._move = move;
-  }
-
-  /** The {@linkcode BattlerIndex | indexes} of the move's targets on the field */
-  public get targets(): BattlerIndex[] {
-    return this._targets;
-  }
-
-  protected set targets(targets: BattlerIndex[]) {
-    this._targets = targets;
   }
 
   /**
