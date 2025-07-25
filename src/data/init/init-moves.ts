@@ -1181,7 +1181,7 @@ export function initMoves() {
         i18next.t("moveTriggers:isTighteningFocus", { pokemonName: getPokemonNameWithAffix(user) }),
       )
       .punchingMove()
-      .condition(new FocusPunchCondition),
+      .condition(new FocusPunchCondition()),
     new AttackMove(MoveId.SMELLING_SALTS, ElementalType.NORMAL, MoveCategory.PHYSICAL, 70, 100, 10, -1, 0, 3)
       .attr(MovePowerMultiplierAttr, (_user, target, _move) => (target.hasStatusEffect(StatusEffect.PARALYSIS) ? 2 : 1))
       .attr(HealStatusEffectAttr, true, StatusEffect.PARALYSIS),

@@ -41,8 +41,9 @@ export class EnemyCommandPhase extends FieldPhase {
     const battle = globalScene.currentBattle;
     battle.turnManager.addCommand(nextCommand);
     /**
-     * @todo Should we keep this? it was a factor in the old switch logic
-     * that might still be useful
+     * This is currently unused. It was used before to discourage Trainers from
+     * choosing to switch over multiple consecutive turns.
+     * @todo Should this still be factored into command selection?
      */
     battle.enemySwitchCounter = Math.max(battle.enemySwitchCounter - 1, 0);
 

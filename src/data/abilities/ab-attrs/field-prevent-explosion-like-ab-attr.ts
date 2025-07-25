@@ -31,7 +31,7 @@ export class FieldPreventExplosionLikeAbAttr extends AbAttr {
     _pokemon: Pokemon,
     _simulated: boolean,
     cancelled: BooleanHolder,
-    _attacker: Pokemon,
+    _attacker?: Pokemon,
     _move?: Move,
   ): boolean {
     cancelled.value = true;
