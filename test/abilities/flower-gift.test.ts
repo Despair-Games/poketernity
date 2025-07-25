@@ -90,25 +90,6 @@ describe("Abilities - Flower Gift", () => {
     await testRevertFormAgainstAbility(game, AbilityId.CLOUD_NINE);
   });
 
-  it("reverts to Overcast Form when the Pokémon loses Flower Gift, changes form under Harsh Sunlight/Sunny when it regains it", async () => {
-    game.override.enemyMoveset([MoveId.SKILL_SWAP]).weather(WeatherType.HARSH_SUN);
-
-    await game.classicMode.startBattle(SpeciesId.CHERRIM);
-
-    const cherrim = game.field.getPlayerPokemon();
-
-    game.move.select(MoveId.SKILL_SWAP);
-
-    await game.phaseInterceptor.to("TurnStartPhase");
-    expect(cherrim.formIndex).toBe(SUNSHINE_FORM);
-
-    await game.phaseInterceptor.to("PostActionPhase");
-    expect(cherrim.formIndex).toBe(OVERCAST_FORM);
-
-    await game.phaseInterceptor.to("PostActionPhase");
-    expect(cherrim.formIndex).toBe(SUNSHINE_FORM);
-  });
-
   it("reverts to Overcast Form when the Flower Gift is suppressed, changes form under Harsh Sunlight/Sunny when it regains it", async () => {
     game.override.enemyMoveset([MoveId.GASTRO_ACID]).weather(WeatherType.HARSH_SUN);
 

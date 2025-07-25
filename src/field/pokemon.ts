@@ -1712,7 +1712,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (arena.ignoreAbilities && arena.ignoringEffectSource !== this.getBattlerIndex() && ability.isIgnorable) {
       return false;
     }
-    if (this.summonData.abilitySuppressed && !ability.hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY)) {
+    if (this.summonData.abilitySuppressed && ability.isSuppressable) {
       return false;
     }
     if (this.isOnField() && !ability.hasAttrFlag(AbAttrFlag.SUPPRESS_FIELD_ABILITIES)) {

@@ -1,5 +1,5 @@
 // @ts-check
-import stylisticTs from "@stylistic/eslint-plugin-ts";
+import stylistic from "@stylistic/eslint-plugin";
 import parser from "@typescript-eslint/parser";
 import prettierConfig from "eslint-config-prettier";
 import importX from "eslint-plugin-import-x";
@@ -16,13 +16,13 @@ export default tseslint.config(
     },
     plugins: {
       "import-x": importX,
-      "@stylistic/ts": stylisticTs,
+      "@stylistic": stylistic,
       "@typescript-eslint": tseslint.plugin,
       "no-relative-import-paths": noRelativeImportPaths,
     },
     rules: {
       "no-undef": "off", // Disables the rule that disallows the use of undeclared variables (TypeScript handles this)
-      "@stylistic/ts/semi": ["error", "always"], // Requires semicolons for TypeScript-specific syntax
+      "@stylistic/semi": ["error", "always"], // Requires semicolons for TypeScript-specific syntax
       semi: "off", // Disables the general semi rule for TypeScript files
       "no-extra-semi": "error", // Disallows unnecessary semicolons for TypeScript-specific syntax
       "import-x/extensions": ["error", "never", { json: "always" }], // Enforces no extension for imports unless json
@@ -60,19 +60,19 @@ export default tseslint.config(
     },
     plugins: {
       "import-x": importX,
-      "@stylistic/ts": stylisticTs,
+      "@stylistic": stylistic,
       "@typescript-eslint": tseslint.plugin,
     },
     rules: {
       indent: ["error", 2, { SwitchCase: 1 }], // Enforces a 2-space indentation, enforces indentation of `case ...:` statements
       "no-undef": "off", // Disables the rule that disallows the use of undeclared variables (TypeScript handles this)
       "eol-last": ["error", "always"], // Enforces at least one newline at the end of files
-      "@stylistic/ts/semi": ["error", "always"], // Requires semicolons for TypeScript-specific syntax
+      "@stylistic/semi": ["error", "always"], // Requires semicolons for TypeScript-specific syntax
       semi: "off", // Disables the general semi rule for TypeScript files
       "no-extra-semi": "error", // Disallows unnecessary semicolons for TypeScript-specific syntax
       "brace-style": "off", // Note: you must disable the base rule as it can report incorrect errors
       curly: ["error", "all"], // Enforces the use of curly braces for all control statements
-      "@stylistic/ts/brace-style": ["error", "1tbs"], // Enforces the following brace style: https://eslint.style/rules/js/brace-style#_1tbs
+      "@stylistic/brace-style": ["error", "1tbs"], // Enforces the following brace style: https://eslint.style/rules/js/brace-style#_1tbs
       "no-trailing-spaces": [
         // Disallows trailing whitespace at the end of lines
         "error",
