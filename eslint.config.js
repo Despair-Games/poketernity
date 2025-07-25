@@ -27,7 +27,7 @@ export default tseslint.config(
       "no-extra-semi": "error", // Disallows unnecessary semicolons for TypeScript-specific syntax
       "import-x/extensions": ["error", "never", { json: "always" }], // Enforces no extension for imports unless json
       "no-relative-import-paths/no-relative-import-paths": [
-        // Enforces absolute paths only (for example, converts "./data/moves/move-attrs/call-move-attr" to "#moves/move-attrs/call-move-attr")
+        // Enforces absolute paths only (for example, converts "./data/moves/move-attrs/call-move-attr" to "#app/data/moves/move-attrs/call-move-attr")
         "error",
         { rootDir: "src", prefix: "#app" },
       ],

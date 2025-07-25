@@ -31,7 +31,7 @@ export class FieldPreventExplosionLikeAbAttr extends AbAttr {
     _pokemon: Pokemon,
     _simulated: boolean,
     cancelled: BooleanHolder,
-    _attacker: Pokemon,
+    _attacker?: Pokemon,
     _move?: Move,
   ): boolean {
     cancelled.value = true;
@@ -39,13 +39,15 @@ export class FieldPreventExplosionLikeAbAttr extends AbAttr {
   }
 
   /**
-   * UNUSED - Can be used once move conditional checking differentiates between simulated and non-simulated checks
    * Returns an ability activation message in cases where Damp prevents the usage of a move
    * @returns the appropriate trigger message or null
    */
-  public override getTriggerMessage(_pokemon: Pokemon, _abilityName: string, ...args: any[]): string | null {
-    /** @todo Remove casting when `args`' typing is changed to `unknown[]` */
-    const [attacker, move]: [Pokemon, Move] = args as [Pokemon, Move];
+  public override getTriggerMessage(
+    _pokemon: Pokemon,
+    _abilityName: string,
+    attacker: Pokemon,
+    move: Move,
+  ): string | null {
     if (isNil(move)) {
       return null;
     }
