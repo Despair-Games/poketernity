@@ -287,7 +287,7 @@ export class GameManager {
     await this.faintPokemon(this.scene.currentBattle.enemyParty[0]);
     if (this.scene.currentBattle.double && this.scene.currentBattle.enemyParty[1]?.isOnField()) {
       // run the first PostKnockoutPhase now, otherwise both PostKnockoutPhases will queue a VictoryPhase
-      await this.phaseInterceptor.to("PostKnockoutPhase", true);
+      await this.phaseInterceptor.to("PostKnockoutPhase");
       await this.faintPokemon(this.scene.currentBattle.enemyParty[1]);
     }
   }
