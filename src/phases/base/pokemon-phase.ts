@@ -9,9 +9,9 @@ import type { nil } from "#types/utility-types";
  * Provides helper functions to get the pokemon involved in the phase
  */
 export abstract class PokemonPhase extends FieldPhase {
-  protected battlerIndex: FieldBattlerIndex | number;
-  public isPlayer: boolean;
-  public fieldIndex: number;
+  protected readonly battlerIndex: FieldBattlerIndex | number;
+  public readonly isPlayer: boolean;
+  public readonly fieldIndex: number;
 
   constructor(battlerIndex: FieldBattlerIndex | number) {
     super();

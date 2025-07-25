@@ -29,7 +29,6 @@ export class CommonAnimPhase extends PokemonPhase {
     }
 
     this.anim = anim;
-    this.battlerIndex = battlerIndex!;
     this.targetIndex = targetIndex;
   }
 
