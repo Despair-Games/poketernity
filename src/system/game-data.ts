@@ -74,7 +74,7 @@ import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlock
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { applyChallenges } from "#utils/challenge-utils";
-import { executeIf, fixedNumber, getTSEnumKeys, isNil, NumberHolder } from "#utils/common-utils";
+import { enumValueToKey, executeIf, fixedNumber, getTSEnumKeys, isNil, NumberHolder } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randInt } from "#utils/random-utils";
 import { AES, enc } from "crypto-js";
@@ -1247,7 +1247,7 @@ export class GameData {
           let dataStr = AES.decrypt(e.target?.result?.toString()!, saveKey).toString(enc.Utf8); // TODO: is this bang correct?
           let valid = false;
           try {
-            dataName = GameDataType[dataType].toLowerCase();
+            dataName = enumValueToKey(GameDataType, dataType).toLowerCase();
             switch (dataType) {
               case GameDataType.SYSTEM: {
                 dataStr = this.convertSystemDataStr(dataStr);
