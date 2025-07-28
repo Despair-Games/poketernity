@@ -1,4 +1,3 @@
-import type { ProtectConditionFunc } from "#app/@types/ProtectConditionFunc";
 import { globalScene } from "#app/global-scene";
 import { CraftyShieldConditionFunc } from "#arena-tags/crafty-shield-tag";
 import { MatBlockConditionFunc } from "#arena-tags/mat-block-tag";
@@ -11,6 +10,7 @@ import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { AddArenaTagAttr } from "#moves/move-attrs/add-arena-tag-attr";
+import type { ProtectConditionFunc } from "#types/protect-condition-func";
 
 /**
  * Attribute to apply team-wide protection against certain moves

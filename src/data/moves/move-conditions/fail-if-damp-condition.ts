@@ -1,8 +1,7 @@
-import { getAbApplyFunc } from "#abilities/apply-ab-attrs";
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { FieldPreventExplosionLikeAbAttr } from "#abilities/field-prevent-explosion-like-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { MoveConditionFunc } from "#types/move-condition-func";
@@ -24,18 +23,17 @@ export const failIfDampCondition: MoveConditionFunc = (
   simulated: boolean,
 ) => {
   const cancelled = new BooleanHolder(false);
-  const applyAbFunc = getAbApplyFunc(simulated ? AbilityApplyMode.REVEALED : AbilityApplyMode.DEFAULT);
-  globalScene
-    .getField(true)
-    .forEach((p) =>
-      applyAbFunc<FieldPreventExplosionLikeAbAttr>(
-        AbAttrFlag.FIELD_PREVENT_EXPLOSION_LIKE,
-        p,
-        simulated,
-        cancelled,
-        user,
-        move,
-      ),
-    );
+  globalScene.getField(true).forEach((p) =>
+    // TODO: This can unintentionally reveal Damp before it activates
+    // when evaluated by the AI
+    applyAbAttrs<FieldPreventExplosionLikeAbAttr>(
+      AbAttrFlag.FIELD_PREVENT_EXPLOSION_LIKE,
+      p,
+      simulated,
+      cancelled,
+      user,
+      move,
+    ),
+  );
   return !cancelled.value;
 };

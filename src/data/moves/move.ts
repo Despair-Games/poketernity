@@ -908,7 +908,7 @@ export abstract class Move {
    * @returns the score penalty from accuracy
    * @see {@linkcode getEffectScore}
    */
-  protected getBattleAccuracyPenalty(user: EnemyPokemon, target: Pokemon): number {
+  public getBattleAccuracyPenalty(user: EnemyPokemon, target: Pokemon): number {
     /**
      * If any ongoing effect would cause the move to bypass accuracy checks, assign no penalty.
      * @todo the target's No Guard can be discovered prematurely here
@@ -916,7 +916,7 @@ export abstract class Move {
     if (
       [user, target].some((p) => p.hasAbilityWithAttr(AbAttrFlag.ALWAYS_HIT))
       || user.getTag(BattlerTagType.IGNORE_ACCURACY)
-      || target.getTag(BattlerTagType.ALWAYS_GET_HIT)
+      || target.getTag(BattlerTagType.GLAIVE_RUSH)
       || target.getTag(BattlerTagType.TELEKINESIS)
     ) {
       return 0;
@@ -1245,11 +1245,22 @@ export interface MoveTargetSet {
 }
 
 export function getMoveTargets(user: Pokemon, moveId: MoveId, replaceTarget?: MoveTarget): MoveTargetSet {
+  if ([MoveId.SIMULATED_MOVE_1, MoveId.SIMULATED_MOVE_2].includes(moveId)) {
+    return {
+      targets: globalScene
+        .getField(true)
+        .filter((p) => p !== user)
+        .map((p) => p.getBattlerIndex()),
+      multiple: false,
+    };
+  }
+
   const variableTarget = new NumberHolder(0);
-  user.getOpponents().forEach((p) => applyMoveAttrs(VariableTargetAttr, user, p, allMoves.get(moveId), variableTarget));
+  const move = allMoves.get(moveId);
+  user.getOpponents().forEach((p) => applyMoveAttrs(VariableTargetAttr, user, p, move, variableTarget));
 
   let moveTarget: MoveTarget | undefined;
-  if (allMoves.get(moveId).hasAttr(VariableTargetAttr)) {
+  if (move?.hasAttr(VariableTargetAttr)) {
     moveTarget = variableTarget.value;
   } else if (replaceTarget !== undefined) {
     moveTarget = replaceTarget;

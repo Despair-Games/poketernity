@@ -38,13 +38,10 @@ export class FieldPreventExplosionLikeAbAttr extends AbAttr {
     return true;
   }
 
-  /**
-   * Returns an ability activation message in cases where Damp prevents the usage of a move
-   * @returns the appropriate trigger message or null
-   */
   public override getTriggerMessage(
     _pokemon: Pokemon,
     _abilityName: string,
+    _cancelled: BooleanHolder,
     attacker: Pokemon,
     move: Move,
   ): string | null {

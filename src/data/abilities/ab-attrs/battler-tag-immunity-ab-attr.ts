@@ -1,4 +1,4 @@
-import { PreApplyBattlerTagImmunityAbAttr } from "#abilities/pre-apply-battler-tag-immunnity-ab-attr";
+import { PreApplyBattlerTagImmunityAbAttr } from "#abilities/pre-apply-battler-tag-immunity-ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 

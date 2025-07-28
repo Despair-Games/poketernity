@@ -11,6 +11,11 @@ export interface Status {
    */
   toxicTurnCount: number;
   /**
+   * The number of turns the affected Pokemon has been sleeping.
+   * @defaultValue 0
+   */
+  turnsAsleep: number;
+  /**
    * The pokemon wakes up when this is `0` and the {@linkcode effect} is {@linkcode StatusEffect.SLEEP}.
    * Ignored if the effect is not sleep.
    * @defaultValue 0

@@ -450,6 +450,15 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
+   * The number of turns this Pokemon has slept since afflicted with the
+   * {@linkcode StatusEffect.SLEEP | SLEEP} condition.
+   * @defaultValue 0
+   */
+  public get turnsAsleep(): number {
+    return this.status?.turnsAsleep ?? 0;
+  }
+
+  /**
    * The pokemon wakes up when this is `0` and the {@linkcode effect} is {@linkcode StatusEffect.SLEEP}.
    * Ignored if the effect is not sleep.
    * @defaultValue 0
@@ -1224,6 +1233,16 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return Math.floor(ret);
   }
 
+  /**
+   * @param target - The {@linkcode Pokemon} to compare Speed against
+   * @param estimate - If `true`, estimates the target's Speed, not accounting for unrevealed Abilities
+   * @returns `true` if this Pokemon has higher Speed than
+   */
+  public outspeeds(target: Pokemon, estimate: boolean = false): boolean {
+    const applyMode = estimate ? AbilityApplyMode.REVEALED : AbilityApplyMode.DEFAULT;
+    return this.getEffectiveStat(Stat.SPD, target) > target.getEffectiveStat(Stat.SPD, this, undefined, applyMode);
+  }
+
   calculateStats(): void {
     if (!this.stats) {
       this.stats = [0, 0, 0, 0, 0, 0];
@@ -1389,6 +1408,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.moveset[index] = new PokemonMove(moveId, Math.min(ppUsed, allMoves.get(moveId).pp));
     });
     return this.moveset;
+  }
+
+  /** @returns this Pokemon's {@linkcode PokemonWaveData.revealedMoves | revealed moves} in array format */
+  public getRevealedMoves(): MoveId[] {
+    return [...this.waveData.revealedMoves];
   }
 
   /**
@@ -2318,9 +2342,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return cachedScore;
     }
 
-    const speed = this.getEffectiveStat(Stat.SPD, opponent, undefined, AbilityApplyMode.REVEALED);
-    const oppSpeed = opponent.getEffectiveStat(Stat.SPD, this, undefined, AbilityApplyMode.REVEALED);
-    const userCanOutspeed = speed >= oppSpeed;
+    const canOutspeed = this.outspeeds(opponent, true);
 
     const attackMoves = this.getAttackMoves(true);
     const oppAttackMoves = opponent.estimateAttackMoves();
@@ -2330,15 +2352,15 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     let score: number = 0;
     if (this.isActive(true)) {
-      if (eas >= 4 && (userCanOutspeed || oppEas < eas)) {
+      if (eas >= 4 && (canOutspeed || oppEas < eas)) {
         score = Number.POSITIVE_INFINITY;
-      } else if (oppEas >= 4 && (!userCanOutspeed || eas < oppEas)) {
+      } else if (oppEas >= 4 && (!canOutspeed || eas < oppEas)) {
         score = 0;
       } else {
-        score = eas * (3 - oppEas + (userCanOutspeed ? 1 : 0));
+        score = eas * (3 - oppEas + (canOutspeed ? 1 : 0));
       }
     } else {
-      score = Math.max(eas * (2 - oppEas + (userCanOutspeed ? 1 : 0)), 0);
+      score = Math.max(eas * (2 - oppEas + (canOutspeed ? 1 : 0)), 0);
     }
 
     this.cacheMatchupScore(opponent, score);
@@ -3420,7 +3442,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     /** Doubles damage if this Pokemon's last move was Glaive Rush */
     const glaiveRushMultiplier = new NumberHolder(1);
-    if (this.hasTag(BattlerTagType.RECEIVE_DOUBLE_DAMAGE)) {
+    if (this.hasTag(BattlerTagType.GLAIVE_RUSH)) {
       glaiveRushMultiplier.value = 2;
     }
 
@@ -4240,7 +4262,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return false;
     }
 
-    if (sourcePokemon && sourcePokemon !== this && this.isSafeguarded(sourcePokemon)) {
+    if (sourcePokemon && sourcePokemon !== this && this.isSafeguarded(sourcePokemon, quiet)) {
       return false;
     }
 
@@ -4404,11 +4426,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   protected setStatus(
     effect: StatusEffect,
-    { toxicTurnCount = 0, sleepTurnsRemaining = 0 }: Partial<Omit<Status, "effect">>,
+    { toxicTurnCount = 0, turnsAsleep = 0, sleepTurnsRemaining = 0 }: Partial<Omit<Status, "effect">>,
   ): void {
     this.status = {
       effect,
       toxicTurnCount,
+      turnsAsleep,
       sleepTurnsRemaining,
     };
   }
@@ -4423,6 +4446,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         break;
       case StatusEffect.SLEEP:
         if (Overrides.STATUS_ACTIVATION_OVERRIDE === true) {
+          this.status.turnsAsleep++;
           this.status.sleepTurnsRemaining = Math.max(this.status.sleepTurnsRemaining, 1);
           break;
         }
@@ -4430,6 +4454,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           this.status.sleepTurnsRemaining = 0;
           break;
         }
+        this.status.turnsAsleep++;
         this.status.sleepTurnsRemaining--;
         break;
       default:
@@ -4468,15 +4493,16 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   /**
    * Checks if this Pokemon is protected by Safeguard
-   * @param attacker the {@linkcode Pokemon} inflicting status on this Pokemon
+   * @param attacker - The {@linkcode Pokemon} inflicting status on this Pokemon
+   * @param simulated - If `true`, suppresses messages and other changes to game state
    * @returns `true` if this Pokemon is protected by Safeguard; `false` otherwise.
    */
-  isSafeguarded(attacker: Pokemon): boolean {
+  isSafeguarded(attacker: Pokemon, simulated: boolean = true): boolean {
     const defendingSide = this.getArenaTagSide();
     if (globalScene.arena.hasTag(ArenaTagType.SAFEGUARD, defendingSide)) {
       const bypassed = new BooleanHolder(false);
       if (attacker) {
-        applyAbAttrs<InfiltratorAbAttr>(AbAttrFlag.INFILTRATOR, attacker, false, bypassed);
+        applyAbAttrs<InfiltratorAbAttr>(AbAttrFlag.INFILTRATOR, attacker, simulated, bypassed);
       }
       return !bypassed.value;
     }

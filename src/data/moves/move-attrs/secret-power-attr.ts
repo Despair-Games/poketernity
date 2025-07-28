@@ -9,7 +9,7 @@ import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
 import type { Pokemon } from "#field/pokemon";
-import { AddBattlerTagAttr } from "#moves/add-battler-tag-attr";
+import { AddUnscoredBattlerTagAttr } from "#moves/add-unscored-battler-tag-attr";
 import { ChanceBasedMoveEffectAttr } from "#moves/chance-based-move-effect-attr";
 import type { Move } from "#moves/move";
 import { StatStageChangeAttr } from "#moves/stat-stage-change-attr";
@@ -113,7 +113,7 @@ export class SecretPowerAttr extends ChanceBasedMoveEffectAttr {
       case BiomeId.GRAVEYARD:
       case BiomeId.ABYSS:
       case BiomeId.SPACE:
-        return new AddBattlerTagAttr(BattlerTagType.FLINCHED, false, { effectChanceOverride: -1 });
+        return new AddUnscoredBattlerTagAttr(BattlerTagType.FLINCHED, false, { effectChanceOverride: -1 });
       case BiomeId.END:
         return new StatStageChangeAttr([Stat.DEF], -1, false, { effectChanceOverride: -1 });
       case BiomeId.TOWN:

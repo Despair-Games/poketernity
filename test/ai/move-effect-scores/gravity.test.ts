@@ -32,7 +32,7 @@ describe("Move Effect Scores - Gravity", () => {
       .enemyLevel(100);
   });
 
-  it("should be preferred when the enemy has a low-accuracy move", async () => {
+  it("should be preferred when the user has a low-accuracy move", async () => {
     game.override.enemyMoveset([...baseMoveset, MoveId.SUPERSONIC]);
 
     await game.classicMode.startBattle(SpeciesId.MAGIKARP);
@@ -41,10 +41,10 @@ describe("Move Effect Scores - Gravity", () => {
     expect(enemy).toPreferSelectingMove(MoveId.GRAVITY);
   });
 
-  it("should be preferred when the enemy is a Ground-type Pokemon", async () => {
-    game.override.enemySpecies(SpeciesId.DRILBUR);
+  it("should be preferred when the user knows a Ground-type move", async () => {
+    game.override.enemyMoveset([...baseMoveset, MoveId.BULLDOZE]);
 
-    await game.classicMode.startBattle(SpeciesId.AGGRON);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).toPreferSelectingMove(MoveId.GRAVITY);
