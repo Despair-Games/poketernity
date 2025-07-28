@@ -568,8 +568,8 @@ export class UI extends Phaser.GameObjects.Container {
       this.getCurrentMessageHandler().showDialogue(
         text,
         name,
-        delay,
         showMessageAndCallback,
+        delay,
         callbackDelay,
         true,
         promptDelay,

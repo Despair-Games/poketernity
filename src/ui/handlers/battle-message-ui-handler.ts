@@ -193,8 +193,8 @@ export class BattleMessageUiHandler extends MessageUiHandler {
   public override showDialogue(
     text: string,
     name?: string,
-    delay?: number,
     callback?: VoidFunction,
+    delay?: number,
     callbackDelay?: number,
     prompt?: boolean,
     promptDelay?: number,
@@ -202,7 +202,7 @@ export class BattleMessageUiHandler extends MessageUiHandler {
     if (name) {
       this.showNameText(name);
     }
-    super.showDialogue(text, name, delay, callback, callbackDelay, prompt, promptDelay);
+    super.showDialogue(text, name, callback, delay, callbackDelay, prompt, promptDelay);
   }
 
   // TODO: Should not be part of this handler

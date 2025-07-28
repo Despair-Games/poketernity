@@ -64,8 +64,8 @@ export abstract class MessageUiHandler extends AwaitableUiHandler {
   public showDialogue(
     text: string,
     _name?: string,
-    delay?: number,
     callback?: VoidFunction,
+    delay?: number,
     callbackDelay?: number,
     prompt?: boolean,
     promptDelay?: number,
