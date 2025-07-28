@@ -676,12 +676,25 @@ export class EncounterPhase extends BattlePhase {
    * Wave 1 of a Daily Run), but NOT `NextEncounterPhase` (which starts the next
    * wave in the same biome).
    */
+
+  /**
+   * Set biome weather if this is wave 1 and the game isn't being loaded from save data.
+   *
+   * @privateRemarks
+   * This is overridden in {@linkcode NextEncounterPhase} and {@linkcode NewBiomeEncounterPhase}
+   */
   protected trySetWeatherIfNewBiome(): void {
     if (!this.loaded) {
       globalScene.arena.setRandomWeather();
     }
   }
 
+  /**
+   * Set biome terrain if this is wave 1 and the game isn't being loaded from save data
+   *
+   * @privateRemarks
+   * This is overridden in {@linkcode NextEncounterPhase} and {@linkcode NewBiomeEncounterPhase}
+   */
   protected trySetTerrainIfNewBiome(): void {
     if (!this.loaded) {
       globalScene.arena.setRandomTerrain();
