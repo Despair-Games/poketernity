@@ -125,9 +125,7 @@ export const TrashToTreasureEncounter: MysteryEncounter = MysteryEncounterBuilde
         if (modifier) {
           globalScene.addModifier(modifier, false, false, false, true);
           globalScene.audioManager.playSound("battle_anims/PRSFX- Venom Drench", { volume: 2 });
-          await showEncounterText(i18next.t("battle:rewardGain", { modifierName: modifier.type.name }), {
-            prompt: true,
-          });
+          await showEncounterText(i18next.t("battle:rewardGain", { modifierName: modifier.type.name }));
         }
 
         leaveEncounterWithoutBattle(true);
@@ -213,9 +211,7 @@ async function tryApplyDigRewardItems() {
   }
 
   globalScene.audioManager.playSound("item_fanfare");
-  await showEncounterText(i18next.t("battle:rewardGainCount", { modifierName: leftovers.name, count: 2 }), {
-    prompt: true,
-  });
+  await showEncounterText(i18next.t("battle:rewardGainCount", { modifierName: leftovers.name, count: 2 }));
 
   // First Shell bell
   for (const pokemon of party) {
@@ -246,9 +242,7 @@ async function tryApplyDigRewardItems() {
   }
 
   globalScene.audioManager.playSound("item_fanfare");
-  await showEncounterText(i18next.t("battle:rewardGainCount", { modifierName: shellBell.name, count: 2 }), {
-    prompt: true,
-  });
+  await showEncounterText(i18next.t("battle:rewardGainCount", { modifierName: shellBell.name, count: 2 }));
 }
 
 function doGarbageDig() {

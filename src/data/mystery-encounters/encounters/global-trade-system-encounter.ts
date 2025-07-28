@@ -195,7 +195,7 @@ export const GlobalTradeSystemEncounter: MysteryEncounter = MysteryEncounterBuil
                   + " "
                   + getNatureName(tradePokemon.getNature())
                   + (formName ? "     |     " + i18next.t("pokemonInfoContainer:form") + " " + formName : "");
-                showEncounterText(`${line1}\n${line2}`, { delay: 0, callbackDelay: 0, prompt: false });
+                showEncounterText(`${line1}\n${line2}`, { delay: 0, prompt: false });
               },
             };
             return option;
@@ -505,7 +505,7 @@ async function doTradeOptionPhaseCallback(): Promise<void> {
   // Show the trade animation
   await showTradeBackground();
   await doPokemonTradeSequence(tradedPokemon, newPlayerPokemon);
-  await showEncounterText(`${namespace}:trade_received`, { callbackDelay: 0, prompt: true, promptDelay: 4000 });
+  await showEncounterText(`${namespace}:trade_received`, { promptDelay: 4000 });
   globalScene.audioManager.playBgm(encounter.misc.bgmKey);
   const unlockedStarters = await addPokemonDataToDexAndValidateAchievements(newPlayerPokemon);
   if (unlockedStarters.length > 0) {

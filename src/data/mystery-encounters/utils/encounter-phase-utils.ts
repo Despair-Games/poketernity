@@ -608,7 +608,6 @@ export function selectPokemonForOption(
                     onHover: () => {
                       showEncounterText(i18next.t("mysteryEncounterMessages:cancel_option"), {
                         delay: 0,
-                        callbackDelay: 0,
                         prompt: false,
                       });
                     },
@@ -753,7 +752,6 @@ export function selectOptionThenPokemon(
           }
           showEncounterText(i18next.t("mysteryEncounterMessages:cancel_option"), {
             delay: 0,
-            callbackDelay: 0,
             prompt: false,
           });
         },

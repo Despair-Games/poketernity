@@ -658,7 +658,7 @@ export class EncounterPhase extends BattlePhase {
           if (!gameData.getSeenDialogues()[localizationKey]) {
             gameData.saveSeenDialogue(localizationKey);
           }
-          ui.showDialogue(encounterDialogue, enemy?.species.name ?? "something broke", () => {
+          ui.showDialogue(encounterDialogue, enemy?.species.name ?? "MissingNo", () => {
             this.doEncounterCommon(false);
           });
         }

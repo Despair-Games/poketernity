@@ -205,10 +205,8 @@ const safariZoneGameOptions: MysteryEncounterOption[] = [
       // 80% chance to increase flee stage +1
       const fleeChangeResult = tryChangeFleeStage(1, 8);
       if (!fleeChangeResult) {
-        await showEncounterText(getEncounterText(`${namespace}:safari.busy_eating`) ?? "", {
-          callbackDelay: 1000,
-          prompt: false,
-        });
+        const text = getEncounterText(`${namespace}:safari.busy_eating`) ?? "";
+        await showEncounterText(text, { callbackDelay: 1000, prompt: false });
       } else {
         await showEncounterText(getEncounterText(`${namespace}:safari.eating`) ?? "", {
           callbackDelay: 1000,
@@ -238,11 +236,8 @@ const safariZoneGameOptions: MysteryEncounterOption[] = [
       tryChangeFleeStage(-2);
       // 80% chance to decrease catch stage -1
       const catchChangeResult = tryChangeCatchStage(-1, 8);
-      await showEncounterText(
-        getEncounterText(catchChangeResult ? `${namespace}:safari.angry` : `${namespace}:safari.beside_itself_angry`)
-          ?? "",
-        { callbackDelay: 1000, prompt: false },
-      );
+      const textKey = catchChangeResult ? `${namespace}:safari.angry` : `${namespace}:safari.beside_itself_angry`;
+      await showEncounterText(getEncounterText(textKey) ?? "", { callbackDelay: 1000, prompt: false });
 
       await doEndTurn(2);
       return true;

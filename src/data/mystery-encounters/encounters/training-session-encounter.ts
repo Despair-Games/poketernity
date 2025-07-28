@@ -278,7 +278,7 @@ export const TrainingSessionEncounter: MysteryEncounter = MysteryEncounterBuilde
                   return true;
                 },
                 onHover: () => {
-                  showEncounterText(ability.description, { delay: 0, callbackDelay: 0, prompt: false });
+                  showEncounterText(ability.description, { delay: 0, prompt: false });
                 },
               };
               optionSelectItems.push(option);
