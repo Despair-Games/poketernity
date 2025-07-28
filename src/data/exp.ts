@@ -83,7 +83,7 @@ const SMOOTHING_FACTOR = 0.675;
  */
 export function getLevelTotalExp(level: number, growthRate: GrowthRate): number {
   if (level < 100) {
-    const levelExp = expLevels[growthRate][level - 1];
+    const levelExp = expLevels[growthRate - 1][level - 1];
     if (growthRate !== GrowthRate.MEDIUM_FAST) {
       return Math.floor(
         levelExp * (1 - SMOOTHING_FACTOR) + getLevelTotalExp(level, GrowthRate.MEDIUM_FAST) * SMOOTHING_FACTOR,
