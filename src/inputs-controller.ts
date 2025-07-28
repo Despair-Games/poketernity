@@ -9,6 +9,7 @@ import { SettingKeyboard } from "#enums/setting-keyboard";
 import { UiMode } from "#enums/ui-mode";
 import { cfg_keyboard_azerty } from "#inputs/cfg-keyboard-azerty";
 import { cfg_keyboard_qwerty } from "#inputs/cfg-keyboard-qwerty";
+import { cfg_keyboard_qwertz } from "#inputs/cfg-keyboard-qwertz";
 import { pad_dualshock } from "#inputs/pad-dualshock";
 import { pad_generic } from "#inputs/pad-generic";
 import { pad_procon } from "#inputs/pad-procon";
@@ -599,6 +600,8 @@ export class InputsController {
         return cfg_keyboard_azerty;
       case KeyboardLayout.QWERTY:
         return cfg_keyboard_qwerty;
+      case KeyboardLayout.QWERTZ:
+        return cfg_keyboard_qwertz;
     }
   }
 
