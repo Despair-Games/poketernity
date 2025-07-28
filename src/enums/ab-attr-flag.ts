@@ -98,9 +98,6 @@ import type { SyncEncounterNatureAbAttr } from "#abilities/sync-encounter-nature
 import type { SynchronizeStatusAbAttr } from "#abilities/synchronize-status-ab-attr";
 import type { TerrainEventTypeChangeAbAttr } from "#abilities/terrain-event-type-change-ab-attr";
 import type { TypeImmunityAbAttr } from "#abilities/type-immunity-ab-attr";
-import type { UncopiableAbilityAbAttr } from "#abilities/uncopiable-ability-ab-attr";
-import type { UnsuppressableAbilityAbAttr } from "#abilities/unsuppressable-ability-ab-attr";
-import type { UnswappableAbilityAbAttr } from "#abilities/unswappable-ability-ab-attr";
 import type { UserFieldBattlerTagImmunityAbAttr } from "#abilities/user-field-battler-tag-immunity-ab-attr";
 import type { UserFieldMoveTypePowerBoostAbAttr } from "#abilities/user-field-move-type-power-boost-ab-attr";
 import type { UserFieldStatusEffectImmunityAbAttr } from "#abilities/user-field-status-effect-immunity-ab-attr";
@@ -114,14 +111,8 @@ import type { EnumValues } from "#types/utility-types";
 export const AbAttrFlag = {
   /** @see {@linkcode AbAttr} */
   UNSPECIFIED: -1,
-  /** @see {@linkcode UncopiableAbilityAbAttr} */
-  UNCOPIABLE_ABILITY: 1,
-  /** @see {@linkcode UnsuppressableAbilityAbAttr} */
-  UNSUPPRESSABLE_ABILITY: 2,
   /** @see {@linkcode PostDefendAbilityGiveAbAttr} */
   POST_DEFEND_ABILITY_GIVE: 3,
-  /** @see {@linkcode UnswappableAbilityAbAttr} */
-  UNSWAPPABLE_ABILITY: 4,
   /** @see {@linkcode PostDamageForceSwitchAbAttr} */
   POST_DAMAGE_FORCE_SWITCH: 5,
   /** @see {@linkcode SuppressFieldAbilitiesAbAttr} */

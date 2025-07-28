@@ -43,6 +43,31 @@ import { applyMoveAttrs, isFieldTargeted } from "#utils/move-utils";
 import { getStatusEffectActivationText, getStatusEffectHealText } from "#utils/status-effect-utils";
 import i18next from "i18next";
 
+interface MovePhaseOptions {
+  /**
+   * If `true`, some condition checks are skipped for this use of the move:
+   * - Effects from non-volatile status conditions (i.e. Sleep, Freeze, and Paralysis)
+   * - Volatile status effects; namely Confusion and Infatuation
+   * - The effects of the user's Truant ability. Truant will not cancel the move nor
+   * increment its turn counter.
+   * - The move-cancelling effects of Imprison from any Pokemon other than the user
+   * - The move-copying effects of Dancer from any Pokemon other than the user
+   */
+  followUp?: boolean;
+  /** If `true`, this use of the move will not consume any PP */
+  ignorePp?: boolean;
+  /**
+   * Whether or not this move is a "bounced" move as a result of
+   * the Pokemon's ongoing Magic Coat effect or Magic Bounce ability.
+   */
+  reflected?: boolean;
+  /**
+   * Whether or not this move is a "stolen" move as
+   * a result of the user previously using Snatch.
+   */
+  snatched?: boolean;
+}
+
 /**
  * Resolves the following:
  * - Checks if the move can be executed
@@ -61,15 +86,41 @@ import i18next from "i18next";
 export class MovePhase extends BattlePhase {
   public override readonly phaseName = "MovePhase";
 
-  protected _pokemon: Pokemon;
-  protected _move: PokemonMove;
-  protected _targets: BattlerIndex[];
-  protected followUp: boolean;
-  protected ignorePp: boolean;
-  protected reflected: boolean;
-  public snatched: boolean;
-  protected failed: boolean = false;
-  protected cancelled: boolean = false;
+  /** The {@linkcode Pokemon} using the move */
+  public readonly pokemon: Pokemon;
+  /** The {@linkcode PokemonMove} to be used */
+  public readonly move: PokemonMove;
+  /** The {@linkcode BattlerIndex | indexes} of the move's targets on the field */
+  public readonly targets: BattlerIndex[];
+  /**
+   * If `true`, some condition checks are skipped for this use of the move:
+   * - Effects from non-volatile status conditions (i.e. Sleep, Freeze, and Paralysis)
+   * - Volatile status effects; namely Confusion and Infatuation
+   * - The effects of the user's Truant ability. Truant will not cancel the move nor
+   * increment its turn counter.
+   * - The move-cancelling effects of Imprison from any Pokemon other than the user
+   * - The move-copying effects of Dancer from any Pokemon other than the user
+   */
+  private readonly followUp: boolean;
+  /** If `true`, this use of the move will not consume any PP */
+  private ignorePp: boolean;
+  /**
+   * Whether or not this move is a "bounced" move as a result of
+   * the Pokemon's ongoing Magic Coat effect or Magic Bounce ability.
+   */
+  private readonly reflected: boolean;
+  /**
+   * Whether or not this move is a "stolen" move as
+   * a result of the user previously using Snatch.
+   * @privateRemarks
+   * This is only `public` because Swallow is meant to always succeed
+   * when snatched -- even when the user does not have Stockpile stacks.
+   * However, whether or not the move was snatched cannot be verified without
+   * peeking into the current phase.
+   */
+  public readonly snatched: boolean;
+  private failed: boolean = false;
+  private cancelled: boolean = false;
 
   /**
    * @param followUp Indicates that the move being used is a "follow-up" - for example, a move being used by Metronome or Dancer.
@@ -79,10 +130,7 @@ export class MovePhase extends BattlePhase {
     pokemon: Pokemon,
     targets: BattlerIndex[],
     move: PokemonMove | MoveId,
-    followUp: boolean = false,
-    ignorePp: boolean = false,
-    reflected: boolean = false,
-    snatched: boolean = false,
+    { followUp = false, ignorePp = false, reflected = false, snatched = false }: MovePhaseOptions = {},
   ) {
     super();
 
@@ -93,30 +141,6 @@ export class MovePhase extends BattlePhase {
     this.ignorePp = ignorePp;
     this.reflected = reflected;
     this.snatched = snatched;
-  }
-
-  public get pokemon(): Pokemon {
-    return this._pokemon;
-  }
-
-  protected set pokemon(pokemon: Pokemon) {
-    this._pokemon = pokemon;
-  }
-
-  public get move(): PokemonMove {
-    return this._move;
-  }
-
-  protected set move(move: PokemonMove) {
-    this._move = move;
-  }
-
-  public get targets(): BattlerIndex[] {
-    return this._targets;
-  }
-
-  protected set targets(targets: BattlerIndex[]) {
-    this._targets = targets;
   }
 
   /**
@@ -289,7 +313,7 @@ export class MovePhase extends BattlePhase {
         );
         globalScene.phaseManager.createAndUnshiftPhase(
           "CommonAnimPhase",
-          CommonAnim.POISON + (statusEffect - 1) as CommonAnim,
+          (CommonAnim.POISON + (statusEffect - 1)) as CommonAnim,
           this.pokemon.getBattlerIndex(),
         );
       } else if (healed) {
@@ -375,14 +399,16 @@ export class MovePhase extends BattlePhase {
      */
     for (const p of otherPokemon) {
       if (applyBattlerTags<SnatchingTag>(BattlerTagType.SNATCHING, p, false, this.pokemon)) {
-        globalScene.phaseManager.queueMovePhase({
-          pokemon: p,
-          targets: getMoveTargets(p, this.move.moveId).targets,
-          move: this.move,
-          followUp: true,
-          snatched: true,
-          when: "eager",
-        });
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MovePhase",
+          p,
+          getMoveTargets(p, this.move.moveId).targets,
+          this.move,
+          {
+            followUp: true,
+            snatched: true,
+          },
+        );
 
         /**
          * Remove Snatch's effect from the Pokemon to prevent it from
@@ -444,14 +470,16 @@ export class MovePhase extends BattlePhase {
       applyAbAttrs<ReflectMovesAbAttr>(AbAttrFlag.REFLECT_MOVES, target, false, this.pokemon, move, reflected);
 
       if (reflected.value) {
-        globalScene.phaseManager.queueMovePhase({
-          pokemon: target,
-          targets: this.getReflectionTargets(target),
-          move: move.id,
-          followUp: true,
-          reflected: true,
-          when: "eager",
-        });
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MovePhase",
+          target,
+          this.getReflectionTargets(target),
+          move.id,
+          {
+            followUp: true,
+            reflected: true,
+          },
+        );
 
         // Only one Pokemon can reflect a field-targeting move (e.g. Spikes) at a time
         if (isFieldTargeted(this.targets)) {

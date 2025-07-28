@@ -47,13 +47,9 @@ export abstract class CallMoveAttr extends OverrideMoveEffectAttr {
 
     user.getMoveQueue().push({ move: move, targets, virtual: true, ignorePP: true, type: user.getMoveType(move) });
     globalScene.phaseManager.createAndUnshiftPhase("LoadMoveAnimPhase", move.id);
-    globalScene.phaseManager.queueMovePhase({
-      pokemon: user,
-      targets,
-      move: move.id,
+    globalScene.phaseManager.createAndUnshiftPhase("MovePhase", user, targets, move.id, {
       followUp: true,
       ignorePp: true,
-      when: "eager",
     });
 
     overridden.value = true;

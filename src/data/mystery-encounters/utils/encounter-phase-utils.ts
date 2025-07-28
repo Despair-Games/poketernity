@@ -969,13 +969,10 @@ export function handleMysteryEncounterBattleStartEffects() {
       } else {
         source = globalScene.getEnemyField()[0];
       }
-      globalScene.phaseManager.queueMovePhase({
-        pokemon: source,
-        targets: effect.targets,
-        move: effect.move,
-        followUp: effect.followUp,
-        ignorePp: effect.ignorePp,
-        when: "defer",
+      const { targets, move, followUp, ignorePp } = effect;
+      globalScene.phaseManager.createAndPushPhase("MovePhase", source, targets, move, {
+        followUp,
+        ignorePp,
       });
     });
 

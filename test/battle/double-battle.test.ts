@@ -43,7 +43,7 @@ describe("Double Battles", () => {
    * - The Player advances to another wild double battle in the next wave. The Player should automatically resummon the revived Pokemon
    * @todo This test is currently disabled because of stability issues with {@linkcode gameManager.faintOpponents} in double battles
    */
-  it.skip("3v2 edge case: player summons 2 pokemon on the next battle after being fainted and revived", async () => {
+  it("3v2 edge case: player summons 2 pokemon on the next battle after being fainted and revived", async () => {
     await game.classicMode.startBattle(SpeciesId.BULBASAUR, SpeciesId.CHARIZARD, SpeciesId.SQUIRTLE);
 
     game.move.select(MoveId.SPLASH);
@@ -64,10 +64,9 @@ describe("Double Battles", () => {
 
     await game.phaseInterceptor.to("TurnInitPhase");
     expect(game.scene.getPlayerField().filter((p) => !p.isFainted())).toHaveLength(2);
-  }, 20000);
+  });
 
-  /** @todo This test is currently disabled because of stability issues with {@linkcode gameManager.faintOpponents} in double battles */
-  it.skip("randomly chooses between single and double battles if there is no battle type override", async () => {
+  it("randomly chooses between single and double battles if there is no battle type override", async () => {
     game.override.battleType(null);
 
     await game.classicMode.startBattle(SpeciesId.BULBASAUR);
