@@ -1922,7 +1922,7 @@ export class GameData {
    * @returns {@linkcode DexAttrProps} corresponding to the given dex attribute.
    */
   public getSpeciesDexAttrProps(_species: PokemonSpecies, dexAttr: bigint): DexAttrProps {
-    let gender = Gender.GENDERLESS;
+    let gender: Gender = Gender.GENDERLESS;
     if (dexAttr & DexAttr.MALE) {
       gender = Gender.MALE;
     } else if (dexAttr & DexAttr.FEMALE) {
