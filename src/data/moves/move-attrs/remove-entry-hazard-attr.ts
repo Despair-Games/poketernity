@@ -1,5 +1,5 @@
+import { ENTRY_HAZARD_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
-import { ArenaTagType } from "#enums/arena-tag-type";
 import { RemoveArenaTagsAttr } from "#moves/remove-arena-tags-attr";
 
 /**
@@ -8,15 +8,6 @@ import { RemoveArenaTagsAttr } from "#moves/remove-arena-tags-attr";
  */
 export class RemoveEntryHazardAttr extends RemoveArenaTagsAttr {
   constructor(targetBothSides: boolean = false) {
-    super(
-      [
-        ArenaTagType.SPIKES,
-        ArenaTagType.TOXIC_SPIKES,
-        ArenaTagType.STEALTH_ROCK,
-        ArenaTagType.STICKY_WEB,
-        ArenaTagType.SHARP_STEEL,
-      ],
-      targetBothSides ? ArenaTagRelativeSide.ALL : ArenaTagRelativeSide.USER,
-    );
+    super([...ENTRY_HAZARD_ARENA_TAG_TYPES], targetBothSides ? ArenaTagRelativeSide.ALL : ArenaTagRelativeSide.USER);
   }
 }
