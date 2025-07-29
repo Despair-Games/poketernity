@@ -9,6 +9,7 @@ import type { UserFieldMoveTypePowerBoostAbAttr } from "#abilities/user-field-mo
 import type { VariableMovePowerAbAttr } from "#abilities/variable-move-power-ab-attr";
 import type { WonderSkinAbAttr } from "#abilities/wonder-skin-ab-attr";
 import { globalScene } from "#app/global-scene";
+import type { WeakenMoveTypeTag } from "#arena-tags/weaken-move-type-tag";
 import { applyBattlerTags } from "#battler-tags/apply-battler-tags";
 import type { MeFirstPowerBoostTag } from "#battler-tags/me-first-power-boost-tag";
 import type { TypeBoostTag } from "#battler-tags/type-boost-tag";
@@ -866,7 +867,7 @@ export abstract class Move {
     }
 
     if (!this.hasAttr(TypelessAttr)) {
-      globalScene.arena.applyTags(
+      globalScene.arena.applyTags<WeakenMoveTypeTag>(
         [...WEAKEN_MOVE_TYPE_ARENA_TAG_TYPES],
         ArenaTagSide.BOTH,
         simulated,
