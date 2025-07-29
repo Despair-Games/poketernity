@@ -456,16 +456,17 @@ export class EncounterPhase extends BattlePhase {
       if (!encounterMessages.length) {
         doSummon();
       } else {
-        let message: string;
+        let message = "";
         globalScene.executeWithSeedOffset(() => {
           message = randSeedItem(encounterMessages);
         }, waveIndex);
-        message = message!; // tell TS compiler it's defined now
+
         const showDialogueAndSummon = (): void => {
           ui.showDialogue(message, trainer.getName(TrainerSlot.NONE, true), () => {
             charSprite.hide().then(() => globalScene.hideFieldOverlay(250).then(() => doSummon()));
           });
         };
+
         if (trainer.config.hasCharSprite && !ui.shouldSkipDialogue(message)) {
           globalScene
             .showFieldOverlay(500)
