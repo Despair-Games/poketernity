@@ -7,6 +7,7 @@ import { getVariantTint } from "#data/variant";
 import { ElementalType } from "#enums/elemental-type";
 import { expGainSpeedMap } from "#enums/exp-gain-speed";
 import { Gender } from "#enums/gender";
+import { HpBarSpeed } from "#enums/hp-bar-speed";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { TextStyle } from "#enums/text-style";
@@ -655,9 +656,14 @@ export class BattleInfo extends Phaser.GameObjects.Container {
       const updatePokemonHp = () => {
         let duration = !instant ? clamp(Math.abs(this.lastHp - pokemon.hp) * 5, 250, 5000) : 0;
         const speed = settings.general.hpBarSpeed;
-        if (speed) {
-          duration = speed >= 3 ? 0 : duration / Math.pow(2, speed);
-        }
+        const speedMap = {
+          [HpBarSpeed.DEFAULT]: 1,
+          [HpBarSpeed.FAST]: 1 / 2,
+          [HpBarSpeed.FASTER]: 1 / 4,
+          [HpBarSpeed.SKIP]: 0,
+        };
+        duration *= speedMap[speed];
+
         globalScene.tweens.add({
           targets: this.hpBar,
           ease: "Sine.easeOut",
