@@ -34,12 +34,7 @@ export class RepeatMoveAttr extends MoveEffectAttr {
     target
       .getMoveQueue()
       .unshift({ move: lastMove.move, targets: moveTargets, ignorePP: false, type: target.getMoveType(lastMove.move) });
-    globalScene.phaseManager.queueMovePhase({
-      pokemon: target,
-      targets: moveTargets,
-      move: movesetMove,
-      when: "eager",
-    });
+    globalScene.phaseManager.createAndUnshiftPhase("MovePhase", target, moveTargets, movesetMove);
     return true;
   }
 

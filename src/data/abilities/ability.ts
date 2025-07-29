@@ -1,3 +1,7 @@
+/** biome-ignore-start lint/correctness/noUnusedImports: TSDoc imports */
+import type { MoveId } from "#enums/move-id";
+/** biome-ignore-end lint/correctness/noUnusedImports: TSDoc imports */
+
 import type { AbAttr } from "#abilities/ab-attr";
 import type { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
@@ -8,21 +12,45 @@ import i18next from "i18next";
 
 export class Ability {
   public id: AbilityId;
-
-  private nameAppend: string;
+  private nameAppend: string = "";
   public generation: number;
-  public isBypassFaint: boolean;
-  public isIgnorable: boolean;
-  public attrs: AbAttr[];
-  public conditions: AbAttrCondition[];
+  /**
+   * If `true`, the ability will activate even if the pokemon faints.
+   * @defaultValue `false`
+   */
+  public isBypassFaint: boolean = false;
+  /**
+   * If `true`, the ability can be ignored by effects like {@linkcode AbilityId.MOLD_BREAKER | Mold Breaker}.
+   * @defaultValue `false`
+   */
+  public isIgnorable: boolean = false;
+  /**
+   * If `true`, the ability can be suppressed by effects like {@linkcode AbilityId.NEUTRALIZING_GAS | Neutralizing Gas}.
+   * @defaultValue `true`
+   */
+  public isSuppressable: boolean = true;
+  /**
+   * If `true`, the ability can be copied by effects like {@linkcode MoveId.ROLE_PLAY | Role Play}.
+   * @defaultValue `true`
+   */
+  public isCopiable: boolean = true;
+  /**
+   * If `true`, the ability can be replaced by effects like {@linkcode MoveId.ROLE_PLAY | Role Play}.
+   * @defaultValue `true`
+   */
+  public isReplaceable: boolean = true;
+  /**
+   * If `true`, the ability will activate if the pokemon is transformed (such as by {@linkcode MoveId.TRANSFORM | Transform}).
+   * @defaultValue `true`
+   * @todo Implement the effects of the flag
+   */
+  public worksWhenTransformed: boolean = true;
+  public attrs: AbAttr[] = [];
+  public conditions: AbAttrCondition[] = [];
 
   constructor(id: AbilityId, generation: number) {
     this.id = id;
-
-    this.nameAppend = "";
     this.generation = generation;
-    this.attrs = [];
-    this.conditions = [];
   }
 
   /**
@@ -44,6 +72,11 @@ export class Ability {
    */
   private get i18nKey(): string {
     return toCamelCaseString(AbilityId[this.id]);
+  }
+
+  /** @returns `true` if both {@linkcode isCopiable} and {@linkcode isReplaceable} are `true` */
+  public get isSwappable(): boolean {
+    return this.isCopiable && this.isReplaceable;
   }
 
   /**
@@ -85,13 +118,42 @@ export class Ability {
     return this;
   }
 
+  /** Marks the ability as able to activate even if the ability holder faints. */
   bypassFaint(): Ability {
     this.isBypassFaint = true;
     return this;
   }
 
+  /** Marks the ability as able to be ignored by effects like {@linkcode AbilityId.MOLD_BREAKER | Mold Breaker} */
   ignorable(): Ability {
     this.isIgnorable = true;
+    return this;
+  }
+
+  /** Marks the ability as unable to be suppressed by effects like {@linkcode AbilityId.NEUTRALIZING_GAS | Neutralizing Gas} */
+  unsuppressable(): Ability {
+    this.isSuppressable = false;
+    return this;
+  }
+
+  /** Marks the ability as unable to be copied by effects like {@linkcode MoveId.ROLE_PLAY | Role Play} */
+  uncopiable(): Ability {
+    this.isCopiable = false;
+    return this;
+  }
+
+  /** Marks the ability as unable to be replaced by effects like {@linkcode MoveId.SIMPLE_BEAM | Simple Beam} */
+  unreplaceable(): Ability {
+    this.isReplaceable = false;
+    return this;
+  }
+
+  /**
+   * Marks the ability as unable to activate if the user is transformed (such as from {@linkcode MoveId.TRANSFORM | Transform}).
+   * @todo Implement the effects of this flag
+   */
+  noTransform(): Ability {
+    this.worksWhenTransformed = false;
     return this;
   }
 
@@ -101,11 +163,13 @@ export class Ability {
     return this;
   }
 
+  /** Marks the ability as being incomplete (missing functionality) in some way */
   partial(): this {
     this.nameAppend += " (P)";
     return this;
   }
 
+  /** Marks the ability as being unimplemented (no functionality) */
   unimplemented(): this {
     this.nameAppend += " (N)";
     return this;

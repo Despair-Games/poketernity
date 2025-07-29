@@ -140,7 +140,7 @@ export class StatStageChangePhase extends PokemonPhase {
       const cancelled = new BooleanHolder(false);
 
       if (!selfTarget && stages.value < 0) {
-        arena.applyTagsForSide(ArenaTagType.MIST, pokemon.getArenaTagSide(), false, this.source, cancelled);
+        arena.applyTags(ArenaTagType.MIST, pokemon.getArenaTagSide(), false, this.source, cancelled);
       }
 
       if (!cancelled.value && !selfTarget && stages.value < 0) {

@@ -33,7 +33,7 @@ export class FlinchAttr extends AddBattlerTagAttr {
 
     if (moveChance.value <= move.chance) {
       const userSide = user.getArenaTagSide();
-      globalScene.arena.applyTagsForSide(ArenaTagType.WATER_FIRE_PLEDGE, userSide, false, moveChance);
+      globalScene.arena.applyTags(ArenaTagType.WATER_FIRE_PLEDGE, userSide, false, moveChance);
     }
 
     applyAbAttrs<IgnoreMoveEffectsAbAttr>(AbAttrFlag.IGNORE_MOVE_EFFECTS, target, false, user, move, moveChance);
