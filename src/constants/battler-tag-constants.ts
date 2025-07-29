@@ -100,6 +100,11 @@ export const DAMAGING_TRAPPED_BATTLER_TAG_TYPES = Object.freeze<BattlerTagType[]
   ...VORTEX_TRAPPED_BATTLER_TAG_TYPES,
 ]);
 
+export const RAPID_SPIN_REMOVABLE_BATTLER_TAG_TYPES = Object.freeze<BattlerTagType[]>([
+  ...DAMAGING_TRAPPED_BATTLER_TAG_TYPES,
+  BattlerTagType.SEEDED,
+]);
+
 /**
  * All {@linkcode BattlerTagType}s that trap a pokemon.
  * @see {@linkcode TrappedTag}

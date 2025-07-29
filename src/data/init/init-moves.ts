@@ -2,7 +2,11 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { StockpilingTag } from "#battler-tags/stockpiling-tag";
 import { CONDITIONAL_PROTECT_ARENA_TAG_TYPES, COURT_CHANGE_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
-import { SEMI_INVULNERABLE_BATTLER_TAG_TYPES, TRAPPED_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
+import {
+  RAPID_SPIN_REMOVABLE_BATTLER_TAG_TYPES,
+  SEMI_INVULNERABLE_BATTLER_TAG_TYPES,
+  TRAPPED_BATTLER_TAG_TYPES,
+} from "#constants/battler-tag-constants";
 import { NON_VOLATILE_STATUS_EFFECTS } from "#constants/game-constants";
 import { allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
@@ -213,7 +217,7 @@ import { RecoilAttr } from "#moves/recoil-attr";
 import { ReducePpMoveAttr } from "#moves/reduce-pp-move-attr";
 import { RemoveAllSubstitutesAttr } from "#moves/remove-all-substitutes-attr";
 import { RemoveArenaTagsAttr } from "#moves/remove-arena-tags-attr";
-import { RemoveBattlerTagAttr, rapidSpinRemoveTags } from "#moves/remove-battler-tag-attr";
+import { RemoveBattlerTagAttr } from "#moves/remove-battler-tag-attr";
 import { RemoveEntryHazardAttr } from "#moves/remove-entry-hazard-attr";
 import { RemoveHeldItemAttr } from "#moves/remove-held-item-attr";
 import { RemoveScreensAttr } from "#moves/remove-screens-attr";
@@ -1050,7 +1054,7 @@ export function initMoves() {
       .partial(), // No effect implemented
     new AttackMove(MoveId.RAPID_SPIN, ElementalType.NORMAL, MoveCategory.PHYSICAL, 50, 100, 40, 100, 0, 2)
       .attr(StatStageChangeAttr, [Stat.SPD], 1, true)
-      .attr(RemoveBattlerTagAttr, rapidSpinRemoveTags, true)
+      .attr(RemoveBattlerTagAttr, [...RAPID_SPIN_REMOVABLE_BATTLER_TAG_TYPES], true)
       .attr(RemoveEntryHazardAttr),
     new StatusMove(MoveId.SWEET_SCENT, ElementalType.NORMAL, 100, 20, -1, 0, 2)
       .attr(StatStageChangeAttr, [Stat.EVA], -2)
@@ -3343,7 +3347,7 @@ export function initMoves() {
     new AttackMove(MoveId.TRIPLE_DIVE, ElementalType.WATER, MoveCategory.PHYSICAL, 30, 95, 10, -1, 0, 9)
       .attr(MultiHitAttr, MultiHitType._3),
     new AttackMove(MoveId.MORTAL_SPIN, ElementalType.POISON, MoveCategory.PHYSICAL, 30, 100, 15, 100, 0, 9)
-      .attr(RemoveBattlerTagAttr, rapidSpinRemoveTags, true)
+      .attr(RemoveBattlerTagAttr, [...RAPID_SPIN_REMOVABLE_BATTLER_TAG_TYPES], true)
       .attr(StatusEffectAttr, StatusEffect.POISON)
       .attr(RemoveEntryHazardAttr)
       .target(MoveTarget.ALL_NEAR_ENEMIES),
