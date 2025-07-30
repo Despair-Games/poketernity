@@ -136,7 +136,7 @@
         "useIndexOf": "error",
         "useObjectSpread": "error",
         "useNumericSeparators": "off", // TODO: enable?
-        "useIterableCallbackReturn": "warn", // TODO: refactor and make "error"
+        "useIterableCallbackReturn": "off", // TODO: re-enable if the rule is changed to be type-aware
         "noShadow": "warn" // TODO: refactor and make "error"
       },
       "performance": {
