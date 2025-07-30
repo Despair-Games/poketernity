@@ -1,9 +1,8 @@
 import { SettingKeyboard } from "#enums/setting-keyboard";
 import {
   assign,
-  canIAssignThisKey,
-  canIDeleteThisSetting,
-  canIOverrideThisSetting,
+  canAssignKey,
+  canOverrideOrDeleteSetting,
   deleteBind,
   getIconWithKeycode,
   getIconWithSettingName,
@@ -118,17 +117,17 @@ export class MenuManip {
 
   weCantAssignThisKey() {
     const key = getKeyWithKeycode(this.config, this.keycode)!;
-    expect(canIAssignThisKey(this.config, key)).toEqual(false);
+    expect(canAssignKey(this.config, key)).toEqual(false);
     return this;
   }
 
   weCantOverrideThisBind() {
-    expect(canIOverrideThisSetting(this.config, this.settingName)).toEqual(false);
+    expect(canOverrideOrDeleteSetting(this.config, this.settingName)).toEqual(false);
     return this;
   }
 
   weCantDelete() {
-    expect(canIDeleteThisSetting(this.config, this.settingName)).toEqual(false);
+    expect(canOverrideOrDeleteSetting(this.config, this.settingName)).toEqual(false);
     return this;
   }
 }

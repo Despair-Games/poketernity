@@ -58,10 +58,11 @@ export function getButtonWithKeycode(config: InputInterfaceConfig, keycode: numb
  * @returns The key associated with the specified setting name, or undefined if none.
  */
 export function getKeyWithSettingName(config: InputInterfaceConfig, settingName: InputSettings): InputKeys | undefined {
-  if (isNil(config.custom)) {
+  const { custom } = config;
+  if (isNil(custom)) {
     return undefined;
   }
-  return Object.keys(config.custom).find((key) => config.custom![key] === settingName) as InputKeys;
+  return Object.keys(custom).find((key) => custom[key] === settingName) as InputKeys;
 }
 
 /**
@@ -72,7 +73,7 @@ export function getKeyWithSettingName(config: InputInterfaceConfig, settingName:
  * @returns The setting associated with the specified key, or -1 if none.
  */
 export function getSettingNameWithKey(config: InputInterfaceConfig, key: InputKeys): InputSettings | -1 {
-  return config.custom ? config.custom[key] : -1;
+  return config.custom?.[key] ?? -1;
 }
 
 /**
@@ -130,12 +131,7 @@ export function getIconForLatestInput(
 export function assign(config: InputInterfaceConfig, settingNameTarget: InputSettings, keycode: number): boolean {
   // first, we need to check if this keycode is already used on another settingName
   const key = getKeyWithKeycode(config, keycode);
-  if (
-    !config.custom
-    || !key
-    || !canIAssignThisKey(config, key)
-    || !canIOverrideThisSetting(config, settingNameTarget)
-  ) {
+  if (!config.custom || !key || !canAssignKey(config, key) || !canOverrideOrDeleteSetting(config, settingNameTarget)) {
     return false;
   }
   const previousSettingName = getSettingNameWithKeycode(config, keycode);
@@ -189,14 +185,14 @@ export function swap(config: InputInterfaceConfig, settingNameTarget: InputSetti
  */
 export function deleteBind(config: InputInterfaceConfig, settingName: InputSettings): boolean {
   const key = getKeyWithSettingName(config, settingName);
-  if (isNil(config.custom) || isNil(key) || !canIDeleteThisSetting(config, settingName)) {
+  if (isNil(config.custom) || isNil(key) || !canOverrideOrDeleteSetting(config, settingName)) {
     return false;
   }
   config.custom[key] = -1;
   return true;
 }
 
-export function canIAssignThisKey(config: InputInterfaceConfig, key: InputKeys): boolean {
+export function canAssignKey(config: InputInterfaceConfig, key: InputKeys): boolean {
   const settingName = getSettingNameWithKey(config, key);
   if (config.keysBlacklist?.includes(key) || (settingName !== -1 && config.settingsBlacklist?.includes(settingName))) {
     return false;
@@ -204,7 +200,7 @@ export function canIAssignThisKey(config: InputInterfaceConfig, key: InputKeys):
   return true;
 }
 
-export function canIOverrideThisSetting(config: InputInterfaceConfig, settingName: InputSettings): boolean {
+export function canOverrideOrDeleteSetting(config: InputInterfaceConfig, settingName: InputSettings): boolean {
   const { settingsBlacklist, keysBlacklist } = config;
   const key = getKeyWithSettingName(config, settingName);
   // If the setting is mapped to a protected key, we can't change it
@@ -212,8 +208,4 @@ export function canIOverrideThisSetting(config: InputInterfaceConfig, settingNam
     return false;
   }
   return true;
-}
-
-export function canIDeleteThisSetting(config: InputInterfaceConfig, settingName: InputSettings): boolean {
-  return canIOverrideThisSetting(config, settingName);
 }
