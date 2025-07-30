@@ -7,14 +7,12 @@ import { KeyboardLayout } from "#enums/keyboard-layout";
 import { SettingGamepad } from "#enums/setting-gamepad";
 import { SettingKeyboard } from "#enums/setting-keyboard";
 import { UiMode } from "#enums/ui-mode";
-import { cfg_keyboard_azerty } from "#inputs/cfg-keyboard-azerty";
-import { cfg_keyboard_qwerty } from "#inputs/cfg-keyboard-qwerty";
-import { cfg_keyboard_qwertz } from "#inputs/cfg-keyboard-qwertz";
 import { pad_dualshock } from "#inputs/pad-dualshock";
 import { pad_generic } from "#inputs/pad-generic";
 import { pad_procon } from "#inputs/pad-procon";
 import { pad_unlicensedSNES } from "#inputs/pad-unlicensed-snes";
 import { pad_xbox360 } from "#inputs/pad-xbox360";
+import { cfg_keyboard_azerty, cfg_keyboard_qwerty, cfg_keyboard_qwertz } from "#inputs/keyboard-configs";
 import { settings } from "#system/settings-manager";
 import type {
   GamepadInterfaceConfig,

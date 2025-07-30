@@ -4,7 +4,7 @@ import { Device } from "#enums/device";
 import { SettingKeyboard } from "#enums/setting-keyboard";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
-import { cfg_keyboard_qwerty } from "#inputs/cfg-keyboard-qwerty";
+import { cfg_keyboard_qwerty } from "#inputs/keyboard-configs";
 import {
   setSettingKeyboard,
   settingKeyboardBlackList,
