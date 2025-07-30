@@ -324,7 +324,7 @@ const azertyKeymap = {
   KEY_Z: SettingKeyboard.Alt_Button_Up,
 };
 
-const quertyKeymap = {
+const qwertyKeymap = {
   ...commonKeymap,
   KEY_A: SettingKeyboard.Alt_Button_Left,
   KEY_W: SettingKeyboard.Alt_Button_Up,
@@ -332,7 +332,7 @@ const quertyKeymap = {
   KEY_Z: SettingKeyboard.Alt_Button_Action,
 };
 
-const quertzKeymap = {
+const qwertzKeymap = {
   ...commonKeymap,
   KEY_A: SettingKeyboard.Alt_Button_Left,
   KEY_W: SettingKeyboard.Alt_Button_Up,
@@ -351,14 +351,14 @@ export const cfg_keyboard_azerty: KeyboardInterfaceConfig = {
 
 export const cfg_keyboard_qwerty: KeyboardInterfaceConfig = {
   ...baseKeyboardConfig,
-  padID: "querty",
-  default: quertyKeymap,
+  padID: "qwerty",
+  default: qwertyKeymap,
 };
 
 export const cfg_keyboard_qwertz: KeyboardInterfaceConfig = {
   ...baseKeyboardConfig,
-  padID: "quertz",
-  default: quertzKeymap,
+  padID: "qwertz",
+  default: qwertzKeymap,
 };
 
 // #endregion
