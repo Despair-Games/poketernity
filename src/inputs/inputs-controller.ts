@@ -102,8 +102,9 @@ export class InputsController {
 
   private disconnectedGamepads: string[] = [];
 
+  // TODO: add proper typing and handle touch
   public lastSource: string = "keyboard";
-  private inputInterval: NodeJS.Timeout[] = [];
+  private inputInterval: Partial<Record<Button, NodeJS.Timeout>> = {};
   private touchControls: TouchControl;
   public moveTouchControlsHandler: MoveTouchControlsHandler;
 
@@ -204,7 +205,7 @@ export class InputsController {
    * This method is triggered when the game or the browser tab loses focus. It ensures that any keys pressed are deactivated to prevent stuck keys affecting gameplay when the game is not active.
    */
   private loseFocus(): void {
-    this.deactivatePressedKey();
+    this.deactivatePressedKeys();
     this.touchControls.deactivatePressedKey();
   }
 
@@ -219,7 +220,7 @@ export class InputsController {
   private setGamepadSupport(value: boolean): void {
     this.gamepadSupport = value;
     if (!value) {
-      this.deactivatePressedKey();
+      this.deactivatePressedKeys();
     }
   }
 
@@ -231,7 +232,7 @@ export class InputsController {
    * @param emitInitEvent - Whether to send a gamepad initialization event. Default: `true`.
    */
   public setChosenGamepad(gamepad: string, emitInitEvent: boolean = true): void {
-    this.deactivatePressedKey();
+    this.deactivatePressedKeys();
     this.initChosenGamepad(gamepad, emitInitEvent);
   }
 
@@ -241,7 +242,7 @@ export class InputsController {
    * @param layout - The {@linkcode KeyboardLayout} to set as chosen.
    */
   private setChosenKeyboardLayout(layout: KeyboardLayout): void {
-    this.deactivatePressedKey();
+    this.deactivatePressedKeys();
 
     const layoutKey = enumValueToKey(KeyboardLayout, layout).toLowerCase();
     this.selectedDevice[Device.KEYBOARD] = layoutKey;
@@ -426,26 +427,23 @@ export class InputsController {
    */
   private keyboardKeyDown(event: KeyboardEvent): void {
     this.lastSource = "keyboard";
-    this.ensureKeyboardIsInit();
+
+    this.ensureKeyboardIsInit(); // ensure the active keyboard config is defined
     // TODO: event.keyCode is deprecated, we should use event.key or event.code
     const buttonDown = getButtonWithKeycode(this.getActiveConfig(Device.KEYBOARD)!, event.keyCode);
-    if (!isNil(buttonDown)) {
-      if (this.buttonLock.includes(buttonDown)) {
-        return;
-      }
-      this.events.emit("input_down", {
-        controller_type: "keyboard",
-        button: buttonDown,
-      });
-      clearInterval(this.inputInterval[buttonDown]);
-      this.inputInterval[buttonDown] = setInterval(() => {
-        this.events.emit("input_down", {
-          controller_type: "keyboard",
-          button: buttonDown,
-        });
-      }, repeatInputDelayMillis);
-      this.buttonLock.push(buttonDown);
+    if (isNil(buttonDown) || this.buttonLock.includes(buttonDown)) {
+      return;
     }
+
+    // Create interval for repeating inputs when the button keeps being pressed
+    this.createInputDownInterval(buttonDown, "keyboard");
+
+    /* Emit input down event *after* the interval was created in case the event results
+     * in the interval needing to be cleared, typically when remapping inputs */
+    this.events.emit("input_down", {
+      controller_type: "keyboard",
+      button: buttonDown,
+    });
   }
 
   /**
@@ -470,6 +468,25 @@ export class InputsController {
       this.buttonLock.splice(index, 1);
       clearInterval(this.inputInterval[buttonUp]);
     }
+  }
+
+  private createInputDownInterval(buttonDown: Button, controllerType: string) {
+    // Clear any previously existing interval
+    clearInterval(this.inputInterval[buttonDown]);
+
+    // Mark the button as locked down
+    this.buttonLock.push(buttonDown);
+
+    this.inputInterval[buttonDown] = setInterval(() => {
+      if (!this.buttonLock.includes(buttonDown)) {
+        clearInterval(this.inputInterval[buttonDown]);
+        return;
+      }
+      this.events.emit("input_down", {
+        controller_type: controllerType,
+        button: buttonDown,
+      });
+    }, repeatInputDelayMillis);
   }
 
   /**
@@ -504,27 +521,19 @@ export class InputsController {
     }
     const activeConfig = this.getActiveConfig(Device.GAMEPAD);
     const buttonDown = activeConfig && getButtonWithKeycode(activeConfig, button.index);
-    if (!isNil(buttonDown)) {
-      if (this.buttonLock.includes(buttonDown)) {
-        return;
-      }
-      this.events.emit("input_down", {
-        controller_type: "gamepad",
-        button: buttonDown,
-      });
-      clearInterval(this.inputInterval[buttonDown]);
-      this.inputInterval[buttonDown] = setInterval(() => {
-        if (!this.buttonLock.includes(buttonDown)) {
-          clearInterval(this.inputInterval[buttonDown]);
-          return;
-        }
-        this.events.emit("input_down", {
-          controller_type: "gamepad",
-          button: buttonDown,
-        });
-      }, repeatInputDelayMillis);
-      this.buttonLock.push(buttonDown);
+    if (isNil(buttonDown) || this.buttonLock.includes(buttonDown)) {
+      return;
     }
+
+    // Create interval for repeating inputs when the button keeps being pressed
+    this.createInputDownInterval(buttonDown, "gamepad");
+
+    /* Emit input down event *after* the interval was created in case the event results
+     * in the interval needing to be cleared, typically when remapping inputs */
+    this.events.emit("input_down", {
+      controller_type: "gamepad",
+      button: buttonDown,
+    });
   }
 
   /**
@@ -606,9 +615,10 @@ export class InputsController {
   }
 
   /**
-   * Deactivates all currently pressed keys.
+   * Deactivates all currently pressed keys and clears any repeating input.
+   * TODO: should we remove the cleared intervals from `this.inputInterval`?
    */
-  private deactivatePressedKey(): void {
+  private deactivatePressedKeys(): void {
     for (const key of Object.keys(this.inputInterval)) {
       clearInterval(this.inputInterval[key]);
     }
@@ -705,7 +715,7 @@ export class InputsController {
    * @param keycode The button that was pressed.
    */
   public assignBinding(config: InputInterfaceConfig, settingName: InputSettings, keycode: number): boolean {
-    this.deactivatePressedKey();
+    this.deactivatePressedKeys();
     if (config.padType === "keyboard") {
       return assign(config, settingName, keycode);
     }
