@@ -92,11 +92,12 @@ export class SwitchPhase extends PokemonPhase {
     );
   }
 
-  private onPartyModeSelection(cursor: number, option: PartyOption): void {
+  private async onPartyModeSelection(cursor: number, option: PartyOption): Promise<void> {
     this.switchInIndex = cursor;
     if (option === PartyOption.PASS_BATON) {
       this.switchType = SwitchType.BATON_PASS;
     }
+    await globalScene.ui.setMessageMode();
     this.updatePokemonData();
     this.end();
   }
