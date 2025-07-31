@@ -771,13 +771,18 @@ export class Arena {
    * @param simulated if `true`, this applies arena tags without changing game state
    * @param args array of parameters that the called upon tags may need
    */
-  applyTags(tagTypes: ArenaTagType | ArenaTagType[], side: ArenaTagSide, simulated: boolean, ...args: unknown[]): void {
+  applyTags<T extends ArenaTag = never>(
+    tagTypes: ArenaTagType | ArenaTagType[],
+    side: ArenaTagSide,
+    ...args: Parameters<T["apply"]>
+  ): void {
     const tagTypeArr = coerceArray(tagTypes);
     let tags = this.tags.filter((t) => tagTypeArr.includes(t.tagType));
     if (side !== ArenaTagSide.BOTH) {
       tags = tags.filter((t) => t.side === side);
     }
-    tags.forEach((t) => t.apply(simulated, ...args));
+    const [simulated, ...params] = args;
+    tags.forEach((t) => t.apply(simulated, ...params));
   }
 
   /**
