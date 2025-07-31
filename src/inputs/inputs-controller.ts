@@ -617,21 +617,21 @@ export class InputsController {
    * Retrieves the active configuration for the currently chosen device.
    * It checks if a specific device ID is stored in configurations and returns it.
    *
-   * @returns The {@linkcode InputInterfaceConfig} for the active gamepad, or `null` if not set.
+   * @returns The {@linkcode InputInterfaceConfig} for the active gamepad, or `undefined` if not set.
    */
-  public getActiveConfig(device: Device): InputInterfaceConfig | null {
+  public getActiveConfig(device: Device): InputInterfaceConfig | undefined {
     const selectedDevice = this.selectedDevice[device];
     if (selectedDevice && this.configs[selectedDevice]) {
       return this.configs[selectedDevice];
     }
-    return null;
+    return undefined;
   }
 
   public getIconForLatestInputRecorded(settingName: InputSettings): string | undefined {
     if (this.lastSource === "keyboard") {
       this.ensureKeyboardIsInit();
     }
-    const configs: Record<Device, InputInterfaceConfig | null> = {
+    const configs: Record<Device, InputInterfaceConfig | undefined> = {
       [Device.KEYBOARD]: this.getActiveConfig(Device.KEYBOARD),
       [Device.GAMEPAD]: this.getActiveConfig(Device.GAMEPAD),
     };
@@ -645,7 +645,7 @@ export class InputsController {
     return Device.KEYBOARD;
   }
 
-  private getLastSourceConfig(): InputInterfaceConfig | null {
+  private getLastSourceConfig(): InputInterfaceConfig | undefined {
     const sourceDevice = this.getLastSourceDevice();
     if (sourceDevice === Device.KEYBOARD) {
       this.ensureKeyboardIsInit();

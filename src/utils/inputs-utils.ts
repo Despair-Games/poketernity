@@ -96,15 +96,15 @@ export function getIconWithKey(config: InputInterfaceConfig, key: InputKeys): st
  */
 export function getIconWithSettingName(config: InputInterfaceConfig, settingName: InputSettings): string | undefined {
   const key = getKeyWithSettingName(config, settingName);
-  return key ? getIconWithKey(config, key) : key;
+  return key ? getIconWithKey(config, key) : undefined;
 }
 
 export function getIconForLatestInput(
-  configs: Record<Device, InputInterfaceConfig | null>,
+  configs: Record<Device, InputInterfaceConfig | undefined>,
   source: string,
   settingName: InputSettings,
 ): string | undefined {
-  let config: InputInterfaceConfig | null;
+  let config: InputInterfaceConfig | undefined;
   if (source === "gamepad") {
     config = configs[Device.GAMEPAD];
   } else {
