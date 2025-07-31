@@ -348,7 +348,7 @@ export class InputsController {
    * @param - The {@linkcode KeyboardLayout}
    * @param - Unique string corresponding to this layout
    */
-  private initKeyboardConfig(layout: KeyboardLayout, layoutKey: string) {
+  private initKeyboardConfig(layout: KeyboardLayout, layoutKey: string): void {
     this.initConfig(
       layoutKey,
       this.getKeyboardConfig(layout) as InputInterfaceConfig,
@@ -369,7 +369,7 @@ export class InputsController {
     baseConfig: InputInterfaceConfig,
     lockedSettings: readonly InputSettings[] = [],
     lockedBindings: readonly InputKeys[] = [],
-  ) {
+  ): void {
     const config = deepCopy(baseConfig);
 
     // Copy existing custom bindings if any, otherwise use the default bindings
@@ -470,7 +470,7 @@ export class InputsController {
     }
   }
 
-  private createInputDownInterval(buttonDown: Button, controllerType: string) {
+  private createInputDownInterval(buttonDown: Button, controllerType: string): void {
     // Clear any previously existing interval
     clearInterval(this.inputInterval[buttonDown]);
 
