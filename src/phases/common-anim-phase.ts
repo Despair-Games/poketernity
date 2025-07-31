@@ -16,8 +16,6 @@ export class CommonAnimPhase extends PokemonPhase {
 
   constructor(anim: CommonAnim, battlerIndex?: FieldBattlerIndex, targetIndex?: FieldBattlerIndex) {
     // TODO: refactor `PokemonPhase` and/or this phase
-    super(battlerIndex!);
-
     battlerIndex =
       battlerIndex
       ?? globalScene
@@ -27,6 +25,8 @@ export class CommonAnimPhase extends PokemonPhase {
     if (battlerIndex === undefined) {
       console.warn("There are no Pokemon on the field!"); // TODO: figure out a suitable fallback behavior
     }
+
+    super(battlerIndex!);
 
     this.anim = anim;
     this.targetIndex = targetIndex;
