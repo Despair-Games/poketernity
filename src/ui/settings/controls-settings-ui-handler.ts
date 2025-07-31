@@ -307,9 +307,9 @@ export abstract class ControlsSettingsUiHandler extends UiHandler {
   /**
    * Get the active configuration.
    *
-   * @returns The active configuration for current device
+   * @returns The active configuration for current device, or `undefined` if none exists.
    */
-  getActiveConfig(): InputInterfaceConfig | null {
+  getActiveConfig(): InputInterfaceConfig | undefined {
     return globalScene.inputController.getActiveConfig(this.device);
   }
 

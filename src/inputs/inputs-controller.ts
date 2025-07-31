@@ -424,9 +424,10 @@ export class InputsController {
    *
    * @param event The keyboard event.
    */
-  private keyboardKeyDown(event): void {
+  private keyboardKeyDown(event: KeyboardEvent): void {
     this.lastSource = "keyboard";
     this.ensureKeyboardIsInit();
+    // TODO: event.keyCode is deprecated, we should use event.key or event.code
     const buttonDown = getButtonWithKeycode(this.getActiveConfig(Device.KEYBOARD)!, event.keyCode);
     if (!isNil(buttonDown)) {
       if (this.buttonLock.includes(buttonDown)) {
@@ -452,12 +453,13 @@ export class InputsController {
    *
    * @param event The keyboard event.
    */
-  private keyboardKeyUp(event): void {
+  private keyboardKeyUp(event: KeyboardEvent): void {
     this.lastSource = "keyboard";
     const config = this.getActiveConfig(Device.KEYBOARD);
     if (!config) {
       return; // The keyboard isn't setup, ignore the input
     }
+    // TODO: event.keyCode is deprecated, we should use event.key or event.code
     const buttonUp = getButtonWithKeycode(config, event.keyCode);
     if (!isNil(buttonUp)) {
       this.events.emit("input_up", {

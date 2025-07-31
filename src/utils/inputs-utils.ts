@@ -99,6 +99,9 @@ export function getIconWithSettingName(config: InputInterfaceConfig, settingName
   return key ? getIconWithKey(config, key) : undefined;
 }
 
+// TODO: refactor this function. It should probably be part of inputsController to have access to its configs directly
+// and remove the need for the configs parameter. It's only called from the inputs controller and tests,
+// and shouldn't be exported/made public just for tests.
 export function getIconForLatestInput(
   configs: Record<Device, InputInterfaceConfig | undefined>,
   source: string,
