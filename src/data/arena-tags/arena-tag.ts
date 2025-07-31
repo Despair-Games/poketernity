@@ -46,8 +46,7 @@ export abstract class ArenaTag {
   }
 
   /**
-   * Applies the tag's effect(s). Should be called via
-   * {@linkcode Arena.applyTagsForSide} or {@linkcode Arena.applyTags}.
+   * Applies the tag's effect(s). Should be called via {@linkcode Arena.applyTags}.
    * @param _simulated - If `true`, should suppress changes to game state
    * @param _args - Additional arguments
    * @returns `true` if effects are applied successfully.

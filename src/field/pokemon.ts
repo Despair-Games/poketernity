@@ -44,6 +44,8 @@ import type { AnySound } from "#app/audio-manager";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { timedEventManager } from "#app/timed-event-manager";
+import type { IonDelugeTag } from "#arena-tags/ion-deluge-tag";
+import type { WeakenMoveScreenTag } from "#arena-tags/weaken-move-screen-tag";
 import { applyBattlerTags } from "#battler-tags/apply-battler-tags";
 import type { AutotomizedTag } from "#battler-tags/autotomized-tag";
 import { BattlerTag } from "#battler-tags/battler-tag";
@@ -1712,7 +1714,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (arena.ignoreAbilities && arena.ignoringEffectSource !== this.getBattlerIndex() && ability.isIgnorable) {
       return false;
     }
-    if (this.summonData.abilitySuppressed && !ability.hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY)) {
+    if (this.summonData.abilitySuppressed && ability.isSuppressable) {
       return false;
     }
     if (this.isOnField() && !ability.hasAttrFlag(AbAttrFlag.SUPPRESS_FIELD_ABILITIES)) {
@@ -1875,7 +1877,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     applyMoveAttrs(VariableMoveTypeAttr, this, null, move, moveTypeHolder);
     applyAbAttrs<MoveTypeChangeAbAttr>(AbAttrFlag.MOVE_TYPE_CHANGE, this, simulated, move, undefined, moveTypeHolder);
 
-    globalScene.arena.applyTags(ArenaTagType.ION_DELUGE, simulated, moveTypeHolder);
+    globalScene.arena.applyTags<IonDelugeTag>(ArenaTagType.ION_DELUGE, ArenaTagSide.BOTH, simulated, moveTypeHolder);
     if (this.hasTag(BattlerTagType.ELECTRIFIED)) {
       moveTypeHolder.value = ElementalType.ELECTRIC;
     }
@@ -3218,7 +3220,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     /** Critical hits ignore the damage reduction from screens */
     if (!isCritical) {
-      globalScene.arena.applyTagsForSide(
+      globalScene.arena.applyTags<WeakenMoveScreenTag>(
         [...WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES],
         defendingSide,
         simulated,

@@ -282,12 +282,12 @@ export class GameManager {
 
   /**
    * Faint all opponents currently on the field
-   * @todo This is currently bugged for double battles and can cause multiple waves
-   * to be cleared at once, especially if called before a turn's {@linkcode TurnStartPhase}
    */
   async faintOpponents() {
     await this.faintPokemon(this.scene.currentBattle.enemyParty[0]);
-    if (this.scene.currentBattle.double) {
+    if (this.scene.currentBattle.double && this.scene.currentBattle.enemyParty[1]?.isOnField()) {
+      // run the first PostKnockoutPhase now, otherwise both PostKnockoutPhases will queue a VictoryPhase
+      await this.phaseInterceptor.to("PostKnockoutPhase");
       await this.faintPokemon(this.scene.currentBattle.enemyParty[1]);
     }
   }

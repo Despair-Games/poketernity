@@ -1,10 +1,8 @@
 import type { Phase } from "#app/phase";
 import type { DestinyBondTag } from "#battler-tags/destiny-bond-tag";
 import type { GrudgeTag } from "#battler-tags/grudge-tag";
-import type { BattlerIndex, FieldBattlerIndex } from "#enums/battler-index";
-import type { MoveId } from "#enums/move-id";
+import type { FieldBattlerIndex } from "#enums/battler-index";
 import type { Pokemon } from "#field/pokemon";
-import type { PokemonMove } from "#field/pokemon-move";
 import { AttemptCapturePhase } from "#phases/attempt-capture-phase";
 import { AttemptRunPhase } from "#phases/attempt-run-phase";
 import { BattleEndPhase } from "#phases/battle-end-phase";
@@ -195,19 +193,6 @@ const PHASES = {
 } as const;
 
 export type PhaseConstructorMap = typeof PHASES;
-
-interface UseMoveInit {
-  pokemon: Pokemon;
-  targets: BattlerIndex[];
-  move: PokemonMove | MoveId;
-  /** Whether to add the {@linkcode MovePhase} to the front of the phase queue or defer it. */
-  when: "eager" | "defer" | "before" | "after";
-  targetPhaseKey?: PhaseKey;
-  followUp?: boolean;
-  ignorePp?: boolean;
-  reflected?: boolean;
-  snatched?: boolean;
-}
 
 interface GameOverInit {
   isVictory?: boolean;
@@ -601,8 +586,6 @@ export class PhaseManager {
 
   // #region Phase-Specific Utils
 
-  /**  @todo Are these utils still necessary? */
-
   /**
    * Unshifts a new {@linkcode FaintPhase} for the given {@linkcode BattlerIndex} to faint.
    *
@@ -626,46 +609,6 @@ export class PhaseManager {
   ): void {
     this.setPhaseQueueSplice();
     this.createAndUnshiftPhase("FaintPhase", battlerIndex, preventEndure, destinyTag, grudgeTag, source);
-  }
-
-  public queueMovePhase({
-    pokemon,
-    targets,
-    move,
-    followUp = false,
-    ignorePp = false,
-    reflected = false,
-    snatched = false,
-    when,
-    targetPhaseKey,
-  }: UseMoveInit) {
-    const builderParams = ["MovePhase", pokemon, targets, move, followUp, ignorePp, reflected, snatched] as const;
-
-    const validateTargetPhaseKey = () => {
-      if (!targetPhaseKey) {
-        throw new Error("targetPhaseKey is required for useMove.when === 'before' or 'after'");
-      }
-      return true;
-    };
-
-    switch (when) {
-      case "eager":
-        this.createAndUnshiftPhase(...builderParams);
-        break;
-      case "defer":
-        this.createAndPushPhase(...builderParams);
-        break;
-      case "before":
-        validateTargetPhaseKey();
-        this.createAndPrependPhase(targetPhaseKey!, ...builderParams);
-        break;
-      case "after":
-        validateTargetPhaseKey();
-        this.createAndAppendPhase(targetPhaseKey!, ...builderParams);
-        break;
-      default:
-        throw new Error(`Unknown useMove.when: ${when}`);
-    }
   }
 
   /**

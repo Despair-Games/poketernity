@@ -7,6 +7,7 @@ import type { StatStageChangeMultiplierAbAttr } from "#abilities/stat-stage-chan
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { handleTutorial } from "#app/tutorial";
+import type { MistTag } from "#arena-tags/mist-tag";
 import { CANVAS_SCALE } from "#constants/ui-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -140,7 +141,7 @@ export class StatStageChangePhase extends PokemonPhase {
       const cancelled = new BooleanHolder(false);
 
       if (!selfTarget && stages.value < 0) {
-        arena.applyTagsForSide(ArenaTagType.MIST, pokemon.getArenaTagSide(), false, this.source, cancelled);
+        arena.applyTags<MistTag>(ArenaTagType.MIST, pokemon.getArenaTagSide(), false, this.source, cancelled);
       }
 
       if (!cancelled.value && !selfTarget && stages.value < 0) {

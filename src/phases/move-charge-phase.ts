@@ -71,12 +71,8 @@ export class MoveChargePhase extends HitCheckPhase {
 
       if (instantCharge.value) {
         // queue a new MovePhase for this move's attack phase
-        globalScene.phaseManager.queueMovePhase({
-          pokemon: user,
-          targets: this.targets,
-          move: this.move,
+        globalScene.phaseManager.createAndUnshiftPhase("MovePhase", user, this.targets, this.move, {
           followUp: true,
-          when: "eager",
         });
       } else {
         user.getMoveQueue().push({ move, targets: this.targets, type: user.getMoveType(move) });

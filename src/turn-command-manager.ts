@@ -6,8 +6,10 @@ import type { MovePhase } from "#phases/move-phase";
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BypassSpeedChanceAbAttr } from "#abilities/bypass-speed-chance-ab-attr";
 import { globalScene } from "#app/global-scene";
+import type { TrickRoomTag } from "#arena-tags/trick-room-tag";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleCommand } from "#enums/battle-command";
 import type { BattlerIndex } from "#enums/battler-index";
@@ -299,7 +301,7 @@ export class TurnCommandManager {
 
     /** 'true' if Trick Room is on the field. */
     const speedReversed = new BooleanHolder(false);
-    globalScene.arena.applyTags(ArenaTagType.TRICK_ROOM, false, speedReversed);
+    globalScene.arena.applyTags<TrickRoomTag>(ArenaTagType.TRICK_ROOM, ArenaTagSide.BOTH, false, speedReversed);
 
     if (speedReversed.value) {
       this.turnCommands = this.turnCommands.reverse();
@@ -428,14 +430,9 @@ export class TurnCommandManager {
 
     phaseManager.appendToPhase(
       "PostActionPhase",
-      phaseManager.createPhase(
-        "MovePhase",
-        pokemon,
-        targets ?? turnMove.targets,
-        move,
-        undefined,
-        cursor !== -1 && turnMove.ignorePP,
-      ),
+      phaseManager.createPhase("MovePhase", pokemon, targets ?? turnMove.targets, move, {
+        ignorePp: cursor !== -1 && turnMove.ignorePP,
+      }),
       phaseManager.createPhase("PostActionPhase", pokemon.getBattlerIndex(), true),
     );
 
