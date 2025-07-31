@@ -353,7 +353,7 @@ export class PartyUiHandler extends MessageUiHandler {
               filterResult = this.FilterChallengeLegal(pokemon);
             }
             if (filterResult === null && this.partyUiMode === PartyUiMode.MOVE_MODIFIER) {
-              filterResult = this.moveSelectFilter(pokemon.moveset[this.optionsCursor]);
+              filterResult = this.moveSelectFilter(pokemon.getMoveset(true)[this.optionsCursor]);
             }
           } else {
             filterResult = (this.selectFilter as PokemonModifierTransferSelectFilter)(
@@ -900,7 +900,7 @@ export class PartyUiHandler extends MessageUiHandler {
         this.options.push(PartyOption.RELEASE);
       }
     } else if (this.partyUiMode === PartyUiMode.MOVE_MODIFIER) {
-      for (let m = 0; m < pokemon.moveset.length; m++) {
+      for (let m = 0; m < pokemon.getMoveset(true).length; m++) {
         this.options.push(PartyOption.MOVE_1 + m);
       }
     } else if (this.partyUiMode === PartyUiMode.REMEMBER_MOVE_MODIFIER) {
@@ -968,7 +968,7 @@ export class PartyUiHandler extends MessageUiHandler {
           case PartyOption.MOVE_2:
           case PartyOption.MOVE_3:
           case PartyOption.MOVE_4: {
-            const move = pokemon.moveset[option - PartyOption.MOVE_1];
+            const move = pokemon.getMoveset(true)[option - PartyOption.MOVE_1];
             if (this.showMovePp) {
               const maxPP = move.getMovePp();
               const currPP = maxPP - move.ppUsed;

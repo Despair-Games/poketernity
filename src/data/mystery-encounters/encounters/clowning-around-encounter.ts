@@ -367,12 +367,12 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
 
           // If the Pokemon has non-status moves that don't match the Pokemon's type, prioritizes those as the new type
           // Makes the "randomness" of the shuffle slightly less punishing
-          let priorityTypes = pokemon.moveset
+          let priorityTypes = pokemon
+            .getMoveset(true)
             .filter(
-              (move) =>
-                move && !originalTypes.includes(move.getMove().type) && move.getMove().category !== MoveCategory.STATUS,
+              (move) => !originalTypes.includes(move.getMove().type) && move.getMove().category !== MoveCategory.STATUS,
             )
-            .map((move) => move!.getMove().type);
+            .map((move) => move?.getMove().type);
           if (priorityTypes?.length > 0) {
             priorityTypes = [...new Set(priorityTypes)].sort();
             priorityTypes = randSeedShuffle(priorityTypes);

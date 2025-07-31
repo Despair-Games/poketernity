@@ -466,7 +466,7 @@ export class SummaryUiHandler extends UiHandler {
 
     if (this.moveSelect) {
       if (button === Button.ACTION) {
-        if (this.pokemon && this.moveCursor < this.pokemon.moveset.length) {
+        if (this.pokemon && this.moveCursor < this.pokemon.getMoveset(true).length) {
           if (this.summaryUiMode === SummaryUiMode.LEARN_MOVE) {
             this.moveSelectFunction?.(this.moveCursor);
           } else {
@@ -475,9 +475,7 @@ export class SummaryUiHandler extends UiHandler {
               this.setCursor(this.moveCursor);
             } else {
               if (this.selectedMoveIndex !== this.moveCursor) {
-                const tempMove = this.pokemon?.moveset[this.selectedMoveIndex];
-                this.pokemon.moveset[this.selectedMoveIndex] = this.pokemon.moveset[this.moveCursor];
-                this.pokemon.moveset[this.moveCursor] = tempMove;
+                this.pokemon.swapMoves(this.selectedMoveIndex, this.moveCursor);
 
                 const selectedMoveRow = this.moveRowsContainer.getAt(
                   this.selectedMoveIndex,
@@ -1053,7 +1051,7 @@ export class SummaryUiHandler extends UiHandler {
 
         for (let m = 0; m < 4; m++) {
           const move: PokemonMove | null =
-            this.pokemon && this.pokemon.moveset.length > m ? this.pokemon?.moveset[m] : null;
+            this.pokemon && this.pokemon.getMoveset(true).length > m ? this.pokemon.getMoveset(true)[m] : null;
           const moveRowContainer = globalScene.add.container(0, 16 * m);
           this.moveRowsContainer.add(moveRowContainer);
 
@@ -1134,8 +1132,8 @@ export class SummaryUiHandler extends UiHandler {
       return null;
     }
 
-    if (this.moveCursor < 4 && this.pokemon && this.moveCursor < this.pokemon.moveset.length) {
-      return this.pokemon.moveset[this.moveCursor].getMove();
+    if (this.moveCursor < 4 && this.pokemon && this.moveCursor < this.pokemon.getMoveset(true).length) {
+      return this.pokemon.getMoveset(true)[this.moveCursor].getMove();
     }
     if (this.summaryUiMode === SummaryUiMode.LEARN_MOVE && this.moveCursor === 4) {
       return this.newMove;

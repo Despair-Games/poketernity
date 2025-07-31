@@ -259,7 +259,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public stats: number[];
   public ivs: number[];
   public nature: Nature;
-  public moveset: PokemonMove[];
+  protected moveset: PokemonMove[];
   protected status: Status | null = null;
   public friendship: number;
   public metLevel: number;
@@ -353,8 +353,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       }
       this.nature = dataSource.nature || (0 as Nature);
       this.nickname = dataSource.nickname;
+      // @ts-expect-error - `Pokemon#moveset` is `protected`
       this.moveset = dataSource.moveset;
-      // @ts-expect-error - `Pokemon#status` is protected
+      // @ts-expect-error - `Pokemon#status` is `protected`
       this.status = dataSource.status;
       this.friendship = dataSource.friendship !== undefined ? dataSource.friendship : this.species.baseFriendship;
       this.metLevel = dataSource.metLevel || 5;
@@ -1390,7 +1391,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   abstract getBossSegmentIndex(): number;
 
-  getMoveset(bypassSummonData: boolean = false): PokemonMove[] {
+  /**
+   * @param bypassSummonData - Whether to get the Pokemon's actual moveset
+   * @returns The Pokemon's active moveset
+   */
+  public getMoveset(bypassSummonData: boolean = false): readonly PokemonMove[] {
     const ret = !bypassSummonData && this.summonData.moveset.length > 0 ? this.summonData.moveset : this.moveset;
 
     // Overrides moveset based on arrays specified in overrides.ts
@@ -1410,6 +1415,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.moveset[index] = new PokemonMove(moveId, Math.min(ppUsed, allMoves.get(moveId).pp));
     });
     return this.moveset;
+  }
+
+  public restoreMovePP(): void {
+    for (const move of this.moveset) {
+      move.ppUsed = 0;
+    }
   }
 
   /**
@@ -2244,21 +2255,21 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
   }
 
-  /**
-   * Get a list of all egg moves
-   *
-   * @returns list of egg moves
-   */
-  getEggMoves(): MoveId[] | undefined {
+  /** @returns A list of the pokemon's egg moves */
+  public getEggMoves(): MoveId[] | undefined {
     return speciesEggMoves[this.getSpeciesForm().getRootSpeciesId()];
   }
 
-  setMove(moveIndex: number, moveId: MoveId): void {
+  public setMove(moveIndex: number, moveId: MoveId): void {
     if (moveId === MoveId.NONE) {
       return;
     }
     const move = new PokemonMove(moveId);
     this.moveset[moveIndex] = move;
+  }
+
+  public swapMoves(firstIndex: number, secondIndex: number): void {
+    [this.moveset[firstIndex], this.moveset[secondIndex]] = [this.moveset[secondIndex], this.moveset[firstIndex]];
   }
 
   /**

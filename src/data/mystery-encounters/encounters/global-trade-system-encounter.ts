@@ -22,7 +22,6 @@ import { TrainerSlot } from "#enums/trainer-slot";
 import { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
-import { PokemonMove } from "#field/pokemon-move";
 import {
   HiddenAbilityRateBoosterModifier,
   type PokemonHeldItemModifier,
@@ -47,7 +46,7 @@ import { PokemonData } from "#system/pokemon-data";
 import type { OptionSelectItem } from "#ui/option-select-config";
 import { isNil, NumberHolder } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
-import { randInt, randItem, randSeedInt, randSeedShuffle } from "#utils/random-utils";
+import { randInt, randItem, randSeedInt, randSeedItem, randSeedShuffle } from "#utils/random-utils";
 import i18next from "i18next";
 
 /** the i18n namespace for the encounter */
@@ -252,16 +251,17 @@ export const GlobalTradeSystemEncounter: MysteryEncounter = MysteryEncounterBuil
 
           // If Pokemon is still not shiny or with HA, give the Pokemon a random Common egg move in its moveset
           if (!tradePokemon.shiny && (!tradePokemon.species.abilityHidden || tradePokemon.abilityIndex < hiddenIndex)) {
-            const eggMoves = tradePokemon.getEggMoves();
+            // Cannot gen the rare egg move, only 1 of the first 3 common moves
+            const eggMoves = tradePokemon.getEggMoves()?.slice(0, 2);
             if (eggMoves) {
-              // Cannot gen the rare egg move, only 1 of the first 3 common moves
-              const eggMove = eggMoves[randSeedInt(3)];
-              if (!tradePokemon.moveset.some((m) => m.moveId === eggMove)) {
-                if (tradePokemon.moveset.length < 4) {
-                  tradePokemon.moveset.push(new PokemonMove(eggMove));
+              const eggMove = randSeedItem(eggMoves);
+              const moveset = tradePokemon.getMoveset(true);
+              if (!moveset.some((m) => m.moveId === eggMove)) {
+                if (moveset.length < 4) {
+                  tradePokemon.setMove(moveset.length, eggMove);
                 } else {
                   const eggMoveIndex = randSeedInt(4);
-                  tradePokemon.moveset[eggMoveIndex] = new PokemonMove(eggMove);
+                  tradePokemon.setMove(eggMoveIndex, eggMove);
                 }
               }
             }

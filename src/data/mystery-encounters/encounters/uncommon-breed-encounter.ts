@@ -7,7 +7,7 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PokeballType } from "#enums/pokeball-type";
-import { Stat } from "#enums/stat";
+import { type BattleStat, Stat } from "#enums/stat";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
@@ -33,7 +33,7 @@ import { MoveRequirement, PersistentModifierRequirement } from "#mystery-encount
 import { CHARMING_MOVES } from "#mystery-encounters/requirement-groups";
 import { PokemonData } from "#system/pokemon-data";
 import { isNil } from "#utils/common-utils";
-import { randSeedInt } from "#utils/random-utils";
+import { randSeedInt, randSeedItem } from "#utils/random-utils";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/uncommonBreed";
@@ -73,23 +73,23 @@ export const UncommonBreedEncounter: MysteryEncounter = MysteryEncounterBuilder.
     // Pokemon will always have one of its egg moves in its moveset
     const eggMoves = pokemon.getEggMoves();
     if (eggMoves) {
-      const eggMoveIndex = randSeedInt(4);
-      const randomEggMoveId: MoveId = eggMoves[eggMoveIndex];
+      const randomEggMoveId = randSeedItem(eggMoves);
       encounter.misc = {
         eggMove: randomEggMoveId,
         pokemon: pokemon,
       };
-      if (pokemon.moveset.length < 4) {
-        pokemon.moveset.push(new PokemonMove(randomEggMoveId));
+      const moveset = pokemon.getMoveset(true);
+      if (moveset.length < 4) {
+        pokemon.setMove(moveset.length, randomEggMoveId);
       } else {
-        pokemon.moveset[0] = new PokemonMove(randomEggMoveId);
+        pokemon.setMove(0, randomEggMoveId);
       }
     } else {
       encounter.misc.pokemon = pokemon;
     }
 
     // Defense/Spd buffs below wave 50, +1 to all stats otherwise
-    const statChangesForBattle: (Stat.ATK | Stat.DEF | Stat.SPATK | Stat.SPDEF | Stat.SPD | Stat.ACC | Stat.EVA)[] =
+    const statChangesForBattle: BattleStat[] =
       globalScene.currentBattle.waveIndex < 50
         ? [Stat.DEF, Stat.SPDEF, Stat.SPD]
         : [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD];
@@ -280,10 +280,11 @@ function givePokemonExtraEggMove(pokemon: EnemyPokemon, previousEggMoveId: MoveI
     while (randomEggMoveId === previousEggMoveId) {
       randomEggMoveId = eggMoves[randSeedInt(4)];
     }
-    if (pokemon.moveset.length < 4) {
-      pokemon.moveset.push(new PokemonMove(randomEggMoveId));
+    const moveset = pokemon.getMoveset(true);
+    if (moveset.length < 4) {
+      pokemon.setMove(moveset.length, randomEggMoveId);
     } else {
-      pokemon.moveset[1] = new PokemonMove(randomEggMoveId);
+      pokemon.setMove(1, randomEggMoveId);
     }
   }
 }

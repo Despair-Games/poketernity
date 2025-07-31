@@ -48,7 +48,7 @@ export class RandomMovesetMoveAttr extends CallMoveAttr {
         allies = [user];
       }
 
-      const partyMoveset = allies.flatMap((p) => p.moveset);
+      const partyMoveset = allies.flatMap((p) => p.getMoveset(true));
       const moves = partyMoveset.filter((m) => !this.invalidMoves.has(m.moveId) && !m.getMove().name.endsWith(" (N)"));
 
       if (moves.length === 0) {
@@ -62,6 +62,8 @@ export class RandomMovesetMoveAttr extends CallMoveAttr {
   }
 }
 
+// TODO: these lists should be moved to their own file (e.g. `invalid-moves.ts`)
+// so that importing them doesn't import anything else
 export const invalidAssistMoves: ReadonlySet<MoveId> = Object.freeze(
   new Set([
     ...getMaxMoveList(),
