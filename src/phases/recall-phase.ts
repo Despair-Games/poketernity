@@ -19,18 +19,24 @@ export class RecallPhase extends PokemonPhase {
   public override readonly phaseName = "RecallPhase";
 
   private readonly switchType: SwitchType;
-  private readonly pokemon: Pokemon;
+  private pokemon: Pokemon;
 
   constructor(battlerIndex: FieldBattlerIndex, switchType: SwitchType = SwitchType.SWITCH) {
     super(battlerIndex);
 
     this.switchType = switchType;
-    this.pokemon = this.getPokemon();
   }
 
   // #region Public methods
 
   public override start(): void {
+    const pokemon = this.getPokemonAtFieldIndex();
+    if (!pokemon?.isOnField()) {
+      this.end();
+      return;
+    }
+    this.pokemon = pokemon;
+
     this.recall().then(() => this.end());
   }
 
