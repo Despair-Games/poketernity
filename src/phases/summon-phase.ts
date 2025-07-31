@@ -171,7 +171,6 @@ export class SummonPhase extends PokemonPhase {
    */
   private async playSummonSequence(): Promise<void> {
     const { currentBattle, pbTray, pbTrayEnemy, trainer, ui } = globalScene;
-    // Update field scale in case a G-Max Pokemon or Starmobile is being summoned
     if (this.isPlayer) {
       ui.showText(i18next.t("battle:playerGo", { pokemonName: getPokemonNameWithAffix(this.getPokemon()) }));
       pbTray.hide();
