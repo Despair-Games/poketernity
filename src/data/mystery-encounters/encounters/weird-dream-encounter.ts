@@ -499,8 +499,7 @@ async function postProcessTransformedPokemon(
   // Store a copy of a "standard" generated moveset for the new pokemon, will be used later for finding a favored move
   const newPokemonGeneratedMoveset = newPokemon.getMoveset(true);
 
-  // @ts-expect-error - `Pokemon#moveset` is private
-  const previousMoveset = previousPokemon.moveset.slice(0).map((m) => m.getMove().id);
+  const previousMoveset = previousPokemon.getMoveset(true).map((m) => m.getMove().id);
   newPokemon.setMoveset(...previousMoveset);
 
   const newEggMoveIndex = await addEggMoveToNewPokemonMoveset(newPokemon, speciesRootForm, forBattle);
