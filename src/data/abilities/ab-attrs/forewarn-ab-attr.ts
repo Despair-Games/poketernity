@@ -15,8 +15,7 @@ export class ForewarnAbAttr extends PostSummonAbAttr {
     const movesets: PokemonMove[] = [];
 
     for (const opponent of pokemon.getOpponents()) {
-      // TODO: should this consider summon data movesets (such as from Transform)?
-      movesets.push(...opponent.getMoveset(true));
+      movesets.push(...opponent.getMoveset());
     }
 
     for (const move of movesets) {
