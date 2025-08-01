@@ -141,7 +141,7 @@ describe("Moves - Instruct", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     game.move.changeMoveset(enemyPokemon, MoveId.HIDDEN_POWER);
-    const moveUsed = enemyPokemon.moveset.find((m) => m?.moveId === MoveId.HIDDEN_POWER)!;
+    const moveUsed = enemyPokemon.getMoveset(true).find((m) => m.moveId === MoveId.HIDDEN_POWER)!;
     moveUsed.ppUsed = moveUsed.getMovePp() - 1;
 
     game.move.select(MoveId.INSTRUCT);

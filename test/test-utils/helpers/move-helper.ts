@@ -114,6 +114,7 @@ export class MoveHelper extends GameManagerHelper {
     }
 
     const pokemon = this.game.scene.getPlayerField()[pkmIndex];
+    // @ts-expect-error - `Pokemon#moveset` is `protected`
     pokemon.moveset = [new PokemonMove(moveId)];
 
     this.select(moveId, pkmIndex, targetIndex, useTera);
@@ -153,10 +154,12 @@ export class MoveHelper extends GameManagerHelper {
     }
 
     moveset = coerceArray(moveset);
+    // @ts-expect-error - `Pokemon#moveset` is `protected`
     pokemon.moveset = [];
-    moveset.forEach((moveId) => {
+    for (const moveId of moveset) {
+      // @ts-expect-error - `Pokemon#moveset` is `protected`
       pokemon.moveset.push(new PokemonMove(moveId));
-    });
+    }
     const movesetStr = moveset.map((moveId) => MoveId[moveId]).join(", ");
     console.log(`Pokemon ${pokemon.species.name}'s moveset manually set to ${movesetStr} (=[${moveset.join(", ")}])!`);
   }
@@ -213,6 +216,7 @@ export class MoveHelper extends GameManagerHelper {
         "Warning: `forceEnemyMove` overwrites the Pokemon's moveset and disables the enemy moveset override!",
       );
     }
+    // @ts-expect-error - `Pokemon#moveset` is `protected`
     enemy.moveset = [new PokemonMove(moveId)];
     const legalTargets = getMoveTargets(enemy, moveId);
 
