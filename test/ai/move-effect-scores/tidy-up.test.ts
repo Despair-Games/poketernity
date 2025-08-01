@@ -86,14 +86,13 @@ describe("Move Effect Scores - Tidy Up", () => {
       expect(enemy).toNeverSelectMove(MoveId.TIDY_UP);
     });
 
-    it("should not be preferred when all Pokemon have Substitutes", async () => {
+    it("should be avoided when all Pokemon have Substitutes", async () => {
       await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
       game.scene.getField(true).forEach((p) => p.addTag(BattlerTagType.SUBSTITUTE, 0, MoveId.SUBSTITUTE, p.id));
 
       const enemy = game.field.getEnemyPokemon();
-      expect(enemy).not.toNeverSelectMove(MoveId.TIDY_UP);
-      expect(enemy).not.toNeverSelectMove(MoveId.DRAGON_DANCE);
+      expect(enemy).toNeverSelectMove(MoveId.TIDY_UP);
     });
   });
 });

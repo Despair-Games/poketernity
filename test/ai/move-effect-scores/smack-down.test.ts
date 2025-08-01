@@ -22,7 +22,7 @@ describe("Move Effect Scores - Smack Down", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("single")
-      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemySpecies(SpeciesId.GYARADOS)
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset([MoveId.SMACK_DOWN, MoveId.BULLDOZE, MoveId.ASSURANCE, MoveId.SPLASH])
       .ability(AbilityId.BALL_FETCH)
