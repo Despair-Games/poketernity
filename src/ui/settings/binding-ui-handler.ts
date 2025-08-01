@@ -190,7 +190,7 @@ export abstract class BindingUiHandler extends UiHandler {
     if (this.buttonPressed === null) {
       return false; // TODO: is false correct as default? (previously was `undefined`)
     }
-    const ui = this.getUi();
+
     let playSuccess = false;
     let playError = false;
     switch (button) {
@@ -213,9 +213,14 @@ export abstract class BindingUiHandler extends UiHandler {
           this.callback?.(remapSuccess);
         }
         break;
+      case Button.CANCEL:
+        playSuccess = true;
+        this.callback?.(); // Cancel out without remapping
+        break;
     }
 
     // Plays success or error sound effect, depending.
+    const ui = this.getUi();
     if (playSuccess) {
       ui.playSelect();
     } else if (playError) {
