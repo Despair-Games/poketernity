@@ -1431,7 +1431,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.moveset[moveIndex] = move;
   }
 
-  /** Sets the pokemon's moveset to the specified moves, deleting the old moveset. */
+  /** Overwrites the pokemon's moveset to the specified set of moves, deleting the old moveset. */
   public setMoveset(...moves: MoveId[]): void {
     this.moveset = [];
     if (moves.length === 0) {

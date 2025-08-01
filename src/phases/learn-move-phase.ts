@@ -54,7 +54,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
     }
 
     const move = allMoves.get(this.moveId);
-    const currentMoveset = pokemon.getMoveset();
+    const currentMoveset = pokemon.getMoveset(true);
 
     // The game first checks if the Pokemon already has the move and ends the phase if it does.
     const hasMoveAlready = currentMoveset.some((m) => m.moveId === move.id) && this.moveId !== MoveId.SKETCH;
