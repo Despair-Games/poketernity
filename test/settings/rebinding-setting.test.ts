@@ -9,9 +9,9 @@ import { getKeyWithKeycode, getKeyWithSettingName } from "#utils/inputs-utils";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Keyboard Rebinding", () => {
-  const configs: Record<Device, InputInterfaceConfig | null> = {
-    [Device.KEYBOARD]: null,
-    [Device.GAMEPAD]: null,
+  const configs: Record<Device, InputInterfaceConfig | undefined> = {
+    [Device.KEYBOARD]: undefined,
+    [Device.GAMEPAD]: undefined,
   };
   let config: InputInterfaceConfig;
   let inGame: InGameManip;

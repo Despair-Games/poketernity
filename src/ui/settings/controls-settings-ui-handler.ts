@@ -35,6 +35,13 @@ export abstract class ControlsSettingsUiHandler extends SettingsUiHandler {
   protected plugInText: string = i18next.t("settings:keyboardPleasePress");
   protected bindingText: string = i18next.t("settings:pressToBind");
 
+  /**
+   * @param mode - The {@linkcode UiMode} for this handler.
+   * @param category - The {@linkcode SettingsCategory} for this handler.
+   * @param uiItems - The {@linkcode SettingsUiItem}s for non rebinding settings.
+   * @param device - The {@linkcode Device} type for this handler
+   * @param bindingMode - The {@linkcode UiMode} that handles rebinding controls for this device type.
+   */
   constructor(
     mode: UiMode,
     category: SettingsCategory,

@@ -9,10 +9,10 @@ export class InGameManip {
   private keycode;
   private settingName;
   private icon;
-  private configs: Record<Device, InputInterfaceConfig | null>;
+  private configs: Record<Device, InputInterfaceConfig | undefined>;
   private latestSource;
 
-  constructor(configs: Record<Device, InputInterfaceConfig | null>, config: InputInterfaceConfig) {
+  constructor(configs: Record<Device, InputInterfaceConfig | undefined>, config: InputInterfaceConfig) {
     this.config = config;
     this.configs = configs;
     this.keycode = null;
