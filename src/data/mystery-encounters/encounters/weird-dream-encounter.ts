@@ -500,7 +500,8 @@ async function postProcessTransformedPokemon(
   const newPokemonGeneratedMoveset = newPokemon.getMoveset(true);
 
   // @ts-expect-error - `Pokemon#moveset` is private
-  newPokemon.moveset = previousPokemon.moveset.slice(0);
+  const previousMoveset = previousPokemon.moveset.slice(0).map((m) => m.getMove().id);
+  newPokemon.setMoveset(...previousMoveset);
 
   const newEggMoveIndex = await addEggMoveToNewPokemonMoveset(newPokemon, speciesRootForm, forBattle);
 

@@ -10,6 +10,8 @@ import { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
 
+const teamStarCommonMoveset = [MoveId.SPIN_OUT, MoveId.SHIFT_GEAR, MoveId.HIGH_HORSEPOWER] as const;
+
 let t = TrainerType.ROCKET_GRUNT;
 export const evilTeamTrainerConfigs: TrainerConfigs = {
   [TrainerType.ROCKET_GRUNT]: new TrainerConfig(t)
@@ -596,10 +598,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
       3,
       getRandomPartyMemberFunc([SpeciesId.REVAVROOM], TrainerSlot.TRAINER, true, (p) => {
         p.formIndex = 1; // Segin Starmobile
-        p.setMove(0, MoveId.WICKED_TORQUE);
-        p.setMove(1, MoveId.SPIN_OUT);
-        p.setMove(2, MoveId.SHIFT_GEAR);
-        p.setMove(3, MoveId.HIGH_HORSEPOWER);
+        p.setMoveset(MoveId.WICKED_TORQUE, ...teamStarCommonMoveset);
       }),
     ),
   [TrainerType.MELA]: new TrainerConfig(++t)
@@ -613,10 +612,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
       3,
       getRandomPartyMemberFunc([SpeciesId.REVAVROOM], TrainerSlot.TRAINER, true, (p) => {
         p.formIndex = 2; // Schedar Starmobile
-        p.setMove(0, MoveId.BLAZING_TORQUE);
-        p.setMove(1, MoveId.SPIN_OUT);
-        p.setMove(2, MoveId.SHIFT_GEAR);
-        p.setMove(3, MoveId.HIGH_HORSEPOWER);
+        p.setMoveset(MoveId.BLAZING_TORQUE, ...teamStarCommonMoveset);
       }),
     ),
   [TrainerType.ATTICUS]: new TrainerConfig(++t)
@@ -630,10 +626,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
       3,
       getRandomPartyMemberFunc([SpeciesId.REVAVROOM], TrainerSlot.TRAINER, true, (p) => {
         p.formIndex = 3; // Navi Starmobile
-        p.setMove(0, MoveId.NOXIOUS_TORQUE);
-        p.setMove(1, MoveId.SPIN_OUT);
-        p.setMove(2, MoveId.SHIFT_GEAR);
-        p.setMove(3, MoveId.HIGH_HORSEPOWER);
+        p.setMoveset(MoveId.NOXIOUS_TORQUE, ...teamStarCommonMoveset);
       }),
     ),
   [TrainerType.ORTEGA]: new TrainerConfig(++t)
@@ -647,10 +640,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
       3,
       getRandomPartyMemberFunc([SpeciesId.REVAVROOM], TrainerSlot.TRAINER, true, (p) => {
         p.formIndex = 4; // Ruchbah Starmobile
-        p.setMove(0, MoveId.MAGICAL_TORQUE);
-        p.setMove(1, MoveId.SPIN_OUT);
-        p.setMove(2, MoveId.SHIFT_GEAR);
-        p.setMove(3, MoveId.HIGH_HORSEPOWER);
+        p.setMoveset(MoveId.MAGICAL_TORQUE, ...teamStarCommonMoveset);
       }),
     ),
   [TrainerType.ERI]: new TrainerConfig(++t)
@@ -664,10 +654,7 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
       3,
       getRandomPartyMemberFunc([SpeciesId.REVAVROOM], TrainerSlot.TRAINER, true, (p) => {
         p.formIndex = 5; // Caph Starmobile
-        p.setMove(0, MoveId.COMBAT_TORQUE);
-        p.setMove(1, MoveId.SPIN_OUT);
-        p.setMove(2, MoveId.SHIFT_GEAR);
-        p.setMove(3, MoveId.HIGH_HORSEPOWER);
+        p.setMoveset(MoveId.COMBAT_TORQUE, ...teamStarCommonMoveset);
       }),
     ),
 };

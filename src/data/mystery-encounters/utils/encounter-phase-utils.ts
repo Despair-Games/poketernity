@@ -366,9 +366,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
       // Set moves
       if (config?.moveSet && config.moveSet.length > 0) {
         enemyPokemon.summonData.moveset = [];
-        config.moveSet.forEach((m, i) => {
-          enemyPokemon.setMove(i, m);
-        });
+        enemyPokemon.setMoveset(...config.moveSet);
       }
 
       // Set tags

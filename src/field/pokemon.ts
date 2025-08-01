@@ -1417,6 +1417,40 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return this.moveset;
   }
 
+  /**
+   * Sets the move in the specified move slot to the specified move. Does nothing if `moveId` is `MoveId.NONE`.
+   * @param moveIndex - Which move slot to set
+   * @param moveId - The move to set the slot to
+   * @todo Should it remove the move from the moveset if `moveId` is `MoveId.NONE` instead of doing nothing?
+   */
+  public setMove(moveIndex: number, moveId: MoveId): void {
+    if (moveId === MoveId.NONE) {
+      return;
+    }
+    const move = new PokemonMove(moveId);
+    this.moveset[moveIndex] = move;
+  }
+
+  /** Sets the pokemon's moveset to the specified moves, deleting the old moveset. */
+  public setMoveset(...moves: MoveId[]): void {
+    this.moveset = [];
+    if (moves.length === 0) {
+      return;
+    }
+    for (const move of moves) {
+      this.moveset.push(new PokemonMove(move));
+    }
+  }
+
+  /** Swaps 2 moves in the pokemon's moveset. Does nothing if one of the slots is empty. */
+  public swapMoves(firstIndex: number, secondIndex: number): void {
+    if (!this.moveset[firstIndex] || !this.moveset[secondIndex]) {
+      return;
+    }
+    [this.moveset[firstIndex], this.moveset[secondIndex]] = [this.moveset[secondIndex], this.moveset[firstIndex]];
+  }
+
+  /** Resets the used PP of all moves in the pokemon's moveset to 0 */
   public restoreMovePP(): void {
     for (const move of this.moveset) {
       move.ppUsed = 0;
@@ -2258,18 +2292,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   /** @returns A list of the pokemon's egg moves */
   public getEggMoves(): MoveId[] | undefined {
     return speciesEggMoves[this.getSpeciesForm().getRootSpeciesId()];
-  }
-
-  public setMove(moveIndex: number, moveId: MoveId): void {
-    if (moveId === MoveId.NONE) {
-      return;
-    }
-    const move = new PokemonMove(moveId);
-    this.moveset[moveIndex] = move;
-  }
-
-  public swapMoves(firstIndex: number, secondIndex: number): void {
-    [this.moveset[firstIndex], this.moveset[secondIndex]] = [this.moveset[secondIndex], this.moveset[firstIndex]];
   }
 
   /**

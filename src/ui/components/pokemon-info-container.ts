@@ -385,7 +385,7 @@ export class PokemonInfoContainer extends Phaser.GameObjects.Container {
 
       for (let m = 0; m < 4; m++) {
         const moveset = pokemon.getMoveset(true);
-        const move = m < moveset.length && moveset[m] ? moveset[m]!.getMove() : null;
+        const move = m < moveset.length && moveset[m] ? moveset[m].getMove() : null;
         this.pokemonMoveBgs[m].setFrame(
           enumValueToKey(ElementalType, move ? move.type : ElementalType.UNKNOWN).toLowerCase(),
         );
