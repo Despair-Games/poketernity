@@ -4,7 +4,7 @@ import { Button } from "#enums/button";
 import type { Device } from "#enums/device";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
-import type { InputSettings } from "#types/input-types";
+import type { InputSettings } from "#types/inputs-types";
 import { addTextObject, setTextColor } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";
 import { addWindow } from "#ui/ui-theme";

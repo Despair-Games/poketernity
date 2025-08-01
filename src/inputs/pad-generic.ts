@@ -1,6 +1,6 @@
 import { Button } from "#enums/button";
 import { SettingGamepad } from "#enums/setting-gamepad";
-import type { GamepadInterfaceConfig, ModernGamepadKeys } from "#types/input-types";
+import type { GamepadInterfaceConfig, ModernGamepadKeys } from "#types/inputs-types";
 
 /**
  * Mapping for a generic pad with dpad, 2 joysticks, 4 face buttons, 4 shoulder buttons, start and select.

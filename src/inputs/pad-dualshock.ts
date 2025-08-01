@@ -1,6 +1,6 @@
 import { Button } from "#enums/button";
 import { SettingGamepad } from "#enums/setting-gamepad";
-import type { DualshockKeys, GamepadInterfaceConfig } from "#types/input-types";
+import type { DualshockKeys, GamepadInterfaceConfig } from "#types/inputs-types";
 
 /**
  * Dualshock 4+ mapping, with touch pad.

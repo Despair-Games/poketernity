@@ -1,6 +1,6 @@
 import { Button } from "#enums/button";
 import { SettingGamepad } from "#enums/setting-gamepad";
-import type { GamepadInterfaceConfig, ProControllerKeys } from "#types/input-types";
+import type { GamepadInterfaceConfig, ProControllerKeys } from "#types/inputs-types";
 
 /**
  * Nintendo Pro Controller mapping

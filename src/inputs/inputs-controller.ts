@@ -23,7 +23,7 @@ import type {
   InputSettings,
   KeyboardInterfaceConfig,
   KeyboardKeys,
-} from "#types/input-types";
+} from "#types/inputs-types";
 import type { SettingsUpdateEventArgs } from "#types/settings";
 import { MoveTouchControlsHandler } from "#ui/move-touch-controls-handler";
 import { deepCopy, enumValueToKey, isNil } from "#utils/common-utils";

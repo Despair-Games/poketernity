@@ -1,9 +1,9 @@
 import { Button } from "#enums/button";
 import { SettingKeyboard } from "#enums/setting-keyboard";
-import type { KeyboardInterfaceConfig } from "#types/input-types";
+import type { KeyboardInterfaceConfig } from "#types/inputs-types";
 
-export const cfg_keyboard_qwerty: KeyboardInterfaceConfig = {
-  padID: "qwerty",
+export const cfg_keyboard_azerty: KeyboardInterfaceConfig = {
+  padID: "azerty",
   padType: "keyboard",
   deviceMapping: {
     KEY_A: Phaser.Input.Keyboard.KeyCodes.A,
@@ -219,7 +219,7 @@ export const cfg_keyboard_qwerty: KeyboardInterfaceConfig = {
     KEY_V: SettingKeyboard.Button_Cycle_Tera,
     KEY_PLUS: -1,
     KEY_MINUS: -1,
-    KEY_A: SettingKeyboard.Alt_Button_Left,
+    KEY_A: -1,
     KEY_B: -1,
     KEY_D: SettingKeyboard.Alt_Button_Right,
     KEY_H: -1,
@@ -230,14 +230,14 @@ export const cfg_keyboard_qwerty: KeyboardInterfaceConfig = {
     KEY_M: SettingKeyboard.Alt_Button_Menu,
     KEY_O: -1,
     KEY_P: -1,
-    KEY_Q: -1,
+    KEY_Q: SettingKeyboard.Alt_Button_Left,
     KEY_S: SettingKeyboard.Alt_Button_Down,
     KEY_T: SettingKeyboard.Alt_Button_Cycle_Form,
     KEY_U: -1,
-    KEY_W: SettingKeyboard.Alt_Button_Up,
+    KEY_W: SettingKeyboard.Alt_Button_Action,
     KEY_X: SettingKeyboard.Alt_Button_Cancel,
     KEY_Y: SettingKeyboard.Alt_Button_Cycle_Shiny,
-    KEY_Z: SettingKeyboard.Alt_Button_Action,
+    KEY_Z: SettingKeyboard.Alt_Button_Up,
     KEY_0: -1,
     KEY_1: -1,
     KEY_2: -1,

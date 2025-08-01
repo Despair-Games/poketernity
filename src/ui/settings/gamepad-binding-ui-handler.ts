@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import { Device } from "#enums/device";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
-import type { GamepadKeys } from "#types/input-types";
+import type { GamepadKeys } from "#types/inputs-types";
 import { BindingUiHandler } from "#ui/binding-ui-handler";
 import { addTextObject } from "#ui/text-utils";
 import { isNil } from "#utils/common-utils";

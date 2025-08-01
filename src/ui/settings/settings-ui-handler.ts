@@ -5,7 +5,7 @@ import { Button } from "#enums/button";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { settings as settingsManager } from "#system/settings-manager";
-import type { InputSettings } from "#types/input-types";
+import type { InputSettings } from "#types/inputs-types";
 import type { SettingsCategory, SettingsUiItem } from "#types/settings";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";

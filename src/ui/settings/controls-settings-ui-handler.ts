@@ -4,7 +4,7 @@ import { Button } from "#enums/button";
 import type { Device } from "#enums/device";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
-import type { InputSettings } from "#types/input-types";
+import type { InputSettings } from "#types/inputs-types";
 import type { SettingsCategory, SettingsUiItem } from "#types/settings";
 import type { BindingUiHandler } from "#ui/binding-ui-handler";
 import { SettingsUiHandler } from "#ui/settings-ui-handler";

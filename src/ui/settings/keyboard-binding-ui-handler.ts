@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { Device } from "#enums/device";
 import { UiMode } from "#enums/ui-mode";
-import type { KeyboardKeys } from "#types/input-types";
+import type { KeyboardKeys } from "#types/inputs-types";
 import { BindingUiHandler } from "#ui/binding-ui-handler";
 import { isNil } from "#utils/common-utils";
 import { getKeyWithKeycode } from "#utils/inputs-utils";

@@ -1,6 +1,6 @@
 import type { Button } from "#enums/button";
 import { Device } from "#enums/device";
-import type { InputInterfaceConfig, InputKeys, InputSettings } from "#types/input-types";
+import type { InputInterfaceConfig, InputKeys, InputSettings } from "#types/inputs-types";
 import { isNil } from "#utils/common-utils";
 
 // TODO: Most of these are only used in the inputs controller and tests,
