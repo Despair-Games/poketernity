@@ -17,7 +17,8 @@ interface TabOptions {
  * Each ui handler that is to be part of the NavigationManager's responsibility should:
  * - register a new NavigationMenu by calling {@linkcode addMenu}.
  * - handler the navigation and updating of the menu, call {@linkcode processInput}.
- * Note: Adding the NavigationMenu to the ui as well as clearing and destroying
+ *
+ * Note: Adding the `NavigationMenu` to the ui as well as clearing and destroying
  * it is the responsibility of the individual handlers.
  * As such, children classes should be careful about not allowing multiple instances,
  * preferrably through a singleton pattern.
@@ -30,7 +31,7 @@ export abstract class NavigationManager {
   /**
    * Creates an instance of NavigationManager which handles a number of NavigationMenus accross different ui modes.
    * To create a new NavigationMenu to track, call {@linkcode addMenu}
-   * @example `this.navigationContainer = manager.addMenu(0, 0);`
+   * @example this.navigationContainer = manager.addMenu(0, 0);
    */
   constructor(tabs: TabOptions[]) {
     this.tabs = tabs;
