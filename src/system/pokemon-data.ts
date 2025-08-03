@@ -2,6 +2,7 @@ import { globalScene } from "#app/global-scene";
 import { loadBattlerTag } from "#battler-tags/load-battler-tag";
 import { CustomPokemonData } from "#data/custom-pokemon-data";
 import { allMoves } from "#data/data-lists";
+import type { PokemonSpeciesForm } from "#data/pokemon-species-form";
 import type { Variant } from "#data/variant";
 import { BattleType } from "#enums/battle-type";
 import type { BiomeId } from "#enums/biome-id";
@@ -14,9 +15,30 @@ import type { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
-import type { PokemonSummonData, Status } from "#types/pokemon-types";
-import { clamp, isPokemon } from "#utils/common-utils";
+import type { PokemonSummonData, SerializedSpeciesForm, Status } from "#types/pokemon-types";
+import { clamp, isNil, isPokemon } from "#utils/common-utils";
 import { getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
+
+/**
+ * Deserialize a pokemon species form from an object containing `id` and `formIdx` properties.
+ * @param value - The value to deserialize
+ * @returns The `PokemonSpeciesForm`, or `null` if the fields could not be properly discerned
+ */
+function deserializePokemonSpeciesForm(value: SerializedSpeciesForm | PokemonSpeciesForm): PokemonSpeciesForm | null {
+  // @ts-expect-error: We may be deserializing a PokemonSpeciesForm, but we catch later on
+  let { id, formIdx } = value;
+
+  if (isNil(id) || isNil(formIdx)) {
+    // `["..."]` used due to TypeScript being unable to properly infer the type, plus `_formIndex` is `protected`
+    id = value["speciesId"];
+    formIdx = value["_formIndex"];
+  }
+  // If for some reason either of these fields are null/undefined, we cannot reconstruct the species form
+  if (isNil(id) || isNil(formIdx)) {
+    return null;
+  }
+  return getPokemonSpeciesForm(id, formIdx);
+}
 
 export class PokemonData {
   public id: number;
@@ -99,8 +121,7 @@ export class PokemonData {
     this.teraType = source.teraType;
     this.isTerastallized = source.isTerastallized ?? false;
     this.stellarTypesBoosted = source.stellarTypesBoosted ?? [];
-    // @ts-expect-error - `Pokemon#status` is protected
-    this.status = source.status;
+    this.status = source["status"];
 
     this.customPokemonData = new CustomPokemonData(source.customPokemonData);
 
@@ -128,11 +149,7 @@ export class PokemonData {
     // This is required because the full class object doesn't exist in save data
     this.summonData.tags = source.summonData.tags?.map((t) => loadBattlerTag(t)) ?? [];
     if (source.summonData.speciesForm) {
-      this.summonData.speciesForm = getPokemonSpeciesForm(
-        source.summonData.speciesForm.speciesId,
-        // @ts-expect-error - `_formIndex` is protected but we can't use `.formIndex` because it's a getter and the class data is lost
-        source.summonData.speciesForm._formIndex,
-      );
+      this.summonData.speciesForm = deserializePokemonSpeciesForm(source.summonData.speciesForm);
     }
     for (const turnMove of this.summonData.moveHistory) {
       // This is required because the full class object doesn't exist in save data
