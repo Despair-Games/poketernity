@@ -50,6 +50,7 @@ export class EndCardPhase extends Phase {
           messageHandler?.bg.setVisible(true);
           this.end();
         },
+        // TODO: should this not have a prompt (and set delay to 0)?
         prompt: true,
       });
     });
