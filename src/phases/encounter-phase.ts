@@ -422,7 +422,7 @@ export class EncounterPhase extends BattlePhase {
       });
       globalScene.updateFieldScale();
       if (showEncounterMessage) {
-        ui.showText(this.getEncounterMessage(), null, () => this.end(), 1500);
+        ui.showText(this.getEncounterMessage(), { callback: () => this.end(), callbackDelay: 1500 });
       } else {
         this.end();
       }
@@ -445,7 +445,7 @@ export class EncounterPhase extends BattlePhase {
           this.end();
         };
         if (showEncounterMessage) {
-          ui.showText(this.getEncounterMessage(), null, doTrainerSummon, 1500, true);
+          ui.showText(this.getEncounterMessage(), { callback: doTrainerSummon, callbackDelay: 1500, prompt: true });
         } else {
           doTrainerSummon();
         }
@@ -456,14 +456,17 @@ export class EncounterPhase extends BattlePhase {
       if (!encounterMessages.length) {
         doSummon();
       } else {
-        let message: string;
-        globalScene.executeWithSeedOffset(() => (message = randSeedItem(encounterMessages)), waveIndex);
-        message = message!; // tell TS compiler it's defined now
+        let message = "";
+        globalScene.executeWithSeedOffset(() => {
+          message = randSeedItem(encounterMessages);
+        }, waveIndex);
+
         const showDialogueAndSummon = (): void => {
-          ui.showDialogue(message, trainer.getName(TrainerSlot.NONE, true), null, () => {
+          ui.showDialogue(message, trainer.getName(TrainerSlot.NONE, true), () => {
             charSprite.hide().then(() => globalScene.hideFieldOverlay(250).then(() => doSummon()));
           });
         };
+
         if (trainer.config.hasCharSprite && !ui.shouldSkipDialogue(message)) {
           globalScene
             .showFieldOverlay(500)
@@ -510,9 +513,13 @@ export class EncounterPhase extends BattlePhase {
               const text = getEncounterText(dialogue.text)!;
               i++;
               if (title) {
-                ui.showDialogue(text, title, null, nextAction, 0, i === 1 ? FIRST_DIALOGUE_PROMPT_DELAY : 0);
+                ui.showDialogue(text, title, nextAction, undefined, 0, i === 1 ? FIRST_DIALOGUE_PROMPT_DELAY : 0);
               } else {
-                ui.showText(text, null, nextAction, i === 1 ? FIRST_DIALOGUE_PROMPT_DELAY : 0, true);
+                ui.showText(text, {
+                  callback: nextAction,
+                  callbackDelay: i === 1 ? FIRST_DIALOGUE_PROMPT_DELAY : 0,
+                  prompt: true,
+                });
               }
             };
 
@@ -531,7 +538,7 @@ export class EncounterPhase extends BattlePhase {
         doEncounter();
       } else {
         doTrainerExclamation();
-        ui.showDialogue(encounterMessage, "???", null, () => {
+        ui.showDialogue(encounterMessage, "???", () => {
           charSprite.hide().then(() => globalScene.hideFieldOverlay(250).then(() => doEncounter()));
         });
       }
@@ -627,13 +634,12 @@ export class EncounterPhase extends BattlePhase {
     handleTutorial(Tutorial.ACCESS_MENU).then(() => super.end());
   }
 
+  // TODO: something different
   public displayFinalBossDialogue(): void {
     const enemy = globalScene.getEnemyPokemon();
     const { gameData, ui } = globalScene;
-    ui.showText(
-      this.getEncounterMessage(),
-      null,
-      () => {
+    ui.showText(this.getEncounterMessage(), {
+      callback: () => {
         const localizationKey = "battleSpecDialogue:encounter";
         if (ui.shouldSkipDialogue(localizationKey)) {
           // Logging mirrors logging found in dialogue-ui-handler
@@ -653,23 +659,30 @@ export class EncounterPhase extends BattlePhase {
           if (!gameData.getSeenDialogues()[localizationKey]) {
             gameData.saveSeenDialogue(localizationKey);
           }
-          ui.showDialogue(encounterDialogue, enemy?.species.name, null, () => {
+          ui.showDialogue(encounterDialogue, enemy?.species.name ?? "MissingNo", () => {
             this.doEncounterCommon(false);
           });
         }
       },
-      1500,
-      true,
-    );
+      callbackDelay: 1500,
+      prompt: true,
+    });
   }
 
-  /**
+  /*
    * Set biome weather and terrain if and only if this encounter is the start of a new biome.
    *
    * By using function overrides, this should happen if and only if this phase
-   * is exactly a NewBiomeEncounterPhase or an EncounterPhase (to account for
-   * Wave 1 of a Daily Run), but NOT NextEncounterPhase (which starts the next
+   * is exactly a `NewBiomeEncounterPhase` or an `EncounterPhase` (to account for
+   * Wave 1 of a Daily Run), but NOT `NextEncounterPhase` (which starts the next
    * wave in the same biome).
+   */
+
+  /**
+   * Set biome weather if this is wave 1 and the game isn't being loaded from save data.
+   *
+   * @privateRemarks
+   * This is overridden in {@linkcode NextEncounterPhase} and {@linkcode NewBiomeEncounterPhase}
    */
   protected trySetWeatherIfNewBiome(): void {
     if (!this.loaded) {
@@ -677,6 +690,12 @@ export class EncounterPhase extends BattlePhase {
     }
   }
 
+  /**
+   * Set biome terrain if this is wave 1 and the game isn't being loaded from save data
+   *
+   * @privateRemarks
+   * This is overridden in {@linkcode NextEncounterPhase} and {@linkcode NewBiomeEncounterPhase}
+   */
   protected trySetTerrainIfNewBiome(): void {
     if (!this.loaded) {
       globalScene.arena.setRandomTerrain();

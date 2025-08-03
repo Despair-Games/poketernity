@@ -1,5 +1,5 @@
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type BattleScene from "#app/battle-scene";
+import type { BattleScene } from "#app/battle-scene";
 import type {
   BerryUsedEvent,
   EncounterPhaseEvent,
@@ -12,7 +12,7 @@ import type {
 import type { Arena } from "#field/arena";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
-import type { EnumValues } from "#types/enum-values";
+import type { EnumValues } from "#types/utility-types";
 
 /** Alias for all {@linkcode BattleScene} events */
 export const BattleSceneEventType = {

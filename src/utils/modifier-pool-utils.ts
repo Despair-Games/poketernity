@@ -6,7 +6,7 @@ import {
   trainerModifierPool,
   wildModifierPool,
 } from "#modifier/modifier-pools";
-import type { ModifierPool } from "#types/modifier-pool";
+import type { ModifierPool } from "#types/modifiers-types";
 
 export function getModifierPoolForType(poolType: ModifierPoolType): ModifierPool {
   switch (poolType) {

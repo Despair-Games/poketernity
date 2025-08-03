@@ -1,11 +1,10 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { allAbilities } from "#data/data-lists";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 import i18next from "i18next";
 
 /**
@@ -52,13 +51,9 @@ export class AbilityCopyAttr extends MoveEffectAttr {
 
   override getCondition(): MoveConditionFunc {
     return (user, target, _move) => {
-      let ret =
-        !target.getAbility().hasAttrFlag(AbAttrFlag.UNCOPIABLE_ABILITY)
-        && !user.getAbility().hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY);
+      let ret = target.getAbility().isCopiable && user.getAbility().isReplaceable;
       if (this.copyToPartner && globalScene.currentBattle?.double) {
-        ret =
-          ret
-          && (user.getAlly()?.hp === 0 || !user.getAlly()?.getAbility().hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY));
+        ret = ret && (user.getAlly()?.hp === 0 || !!user.getAlly()?.getAbility().isReplaceable);
       } else {
         ret = ret && user.getAbility().id !== target.getAbility().id;
       }

@@ -1,0 +1,7 @@
+onlyBuiltDependencies:
+  - esbuild
+  - lefthook
+  - msw
+  - unrs-resolver
+
+shellEmulator: true

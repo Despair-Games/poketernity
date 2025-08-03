@@ -1,4 +1,4 @@
-import type BattleScene from "#app/battle-scene";
+import type { BattleScene } from "#app/battle-scene";
 import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";

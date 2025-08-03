@@ -1,4 +1,7 @@
 import type { MockGameObject } from "#test/test-utils/mocks/mock-game-object";
+import type { MockTextureManager } from "#test/test-utils/mocks/mock-texture-manager";
+import type { TextInterceptor } from "#test/test-utils/text-interceptor";
+import type { ShowTextOptions } from "#types/ui-types";
 import { UI } from "#ui/ui";
 
 export class MockText implements MockGameObject {
@@ -6,7 +9,7 @@ export class MockText implements MockGameObject {
   private wordWrapWidth;
   private splitRegExp;
   private scene;
-  private textureManager;
+  private textureManager: MockTextureManager;
   public list: MockGameObject[] = [];
   public style;
   public text = "";
@@ -14,7 +17,8 @@ export class MockText implements MockGameObject {
   public color?: string;
   public active = true;
 
-  constructor(textureManager, _x, _y, _content, _styleOptions) {
+  constructor(textureManager: MockTextureManager, _x, _y, _content, _styleOptions) {
+    // @ts-expect-error - this is intentional I guess?
     this.scene = textureManager.scene;
     this.textureManager = textureManager;
     this.style = {};
@@ -80,15 +84,8 @@ export class MockText implements MockGameObject {
     return result;
   }
 
-  showText(
-    text: string,
-    delay?: number | null,
-    callback?: VoidFunction | null,
-    callbackDelay?: number | null,
-    prompt?: boolean | null,
-    promptDelay?: number | null,
-  ) {
-    this.scene.messageWrapper.showText(text, delay, callback, callbackDelay, prompt, promptDelay);
+  showText(text: string, { delay, callback, callbackDelay, prompt, promptDelay }: ShowTextOptions = {}) {
+    (this.scene.messageWrapper as TextInterceptor).showText(text, delay, callback, callbackDelay, prompt, promptDelay);
     if (callback) {
       callback();
     }
@@ -96,14 +93,21 @@ export class MockText implements MockGameObject {
 
   showDialogue(
     keyOrText: string,
-    name: string | undefined,
-    delay: number | null,
+    name: string,
     callback: VoidFunction,
+    delay?: number,
     callbackDelay?: number,
     promptDelay?: number,
   ) {
     delay ??= 0;
-    this.scene.messageWrapper.showDialogue(keyOrText, name, delay, callback, callbackDelay, promptDelay);
+    (this.scene.messageWrapper as TextInterceptor).showDialogue(
+      keyOrText,
+      name,
+      callback,
+      delay,
+      callbackDelay,
+      promptDelay,
+    );
     if (callback) {
       callback();
     }

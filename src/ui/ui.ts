@@ -8,6 +8,7 @@ import { PlayerGender } from "#enums/player-gender";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { settings } from "#system/settings-manager";
+import type { ShowTextOptions } from "#types/ui-types";
 import { AchievementsUiHandler } from "#ui/achievements-ui-handler";
 import { AchvBar } from "#ui/achv-bar";
 import { AdminUiHandler } from "#ui/admin-ui-handler";
@@ -57,7 +58,7 @@ import { TitleUiHandler } from "#ui/title-ui-handler";
 import type { UiHandler } from "#ui/ui-handler";
 import { addWindow } from "#ui/ui-theme";
 import { UnavailableModalUiHandler } from "#ui/unavailable-modal-ui-handler";
-import { executeIf } from "#utils/common-utils";
+import { executeIf, isNil } from "#utils/common-utils";
 import i18next from "i18next";
 
 /** All modes that are part of the settings UI. */
@@ -495,43 +496,40 @@ export class UI extends Phaser.GameObjects.Container {
     return handler.processInput(button);
   }
 
-  public showTextPromise(
+  public async showTextPromise(
     text: string,
     callbackDelay: number = 0,
     prompt: boolean = true,
-    promptDelay?: number | null,
+    promptDelay?: number,
   ): Promise<void> {
+    if (isNil(text)) {
+      console.error("Missing `text` param for `UI#showTextPromise`!");
+      text = "";
+    }
     return new Promise<void>((resolve) => {
-      this.showText(text ?? "", null, () => resolve(), callbackDelay, prompt, promptDelay);
+      this.showText(text, { callback: () => resolve(), callbackDelay, prompt, promptDelay });
     });
   }
 
-  public showText(
-    text: string,
-    delay?: number | null,
-    callback?: VoidFunction | null,
-    callbackDelay?: number | null,
-    prompt?: boolean | null,
-    promptDelay?: number | null,
-  ): void {
+  public showText(text: string, { delay, callback, callbackDelay, prompt, promptDelay }: ShowTextOptions = {}): void {
     if (prompt && text.indexOf("$") > -1) {
       const messagePages = text.split(/\$/g).map((m) => m.trim());
       let showMessageAndCallback = () => callback?.();
       for (let p = messagePages.length - 1; p >= 0; p--) {
         const originalFunc = showMessageAndCallback;
-        showMessageAndCallback = () => this.showText(messagePages[p], null, originalFunc, null, true);
+        showMessageAndCallback = () => this.showText(messagePages[p], { callback: originalFunc, prompt: true });
       }
       showMessageAndCallback();
     } else {
-      this.getCurrentMessageHandler()!.showText(text, delay, callback, callbackDelay, prompt, promptDelay);
+      this.getCurrentMessageHandler().showText(text, { delay, callback, callbackDelay, prompt, promptDelay });
     }
   }
 
   public showDialogue(
     keyOrText: string,
-    name: string | undefined,
-    delay: number | null,
+    name: string,
     callback: VoidFunction,
+    delay?: number,
     callbackDelay?: number,
     promptDelay?: number,
   ): void {
@@ -563,15 +561,15 @@ export class UI extends Phaser.GameObjects.Container {
       const messagePages = text.split(/\$/g).map((m) => m.trim());
       for (let p = messagePages.length - 1; p >= 0; p--) {
         const originalFunc = showMessageAndCallback;
-        showMessageAndCallback = () => this.showDialogue(messagePages[p], name, null, originalFunc);
+        showMessageAndCallback = () => this.showDialogue(messagePages[p], name, originalFunc);
       }
       showMessageAndCallback();
     } else {
       this.getCurrentMessageHandler().showDialogue(
         text,
         name,
-        delay,
         showMessageAndCallback,
+        delay,
         callbackDelay,
         true,
         promptDelay,
@@ -969,7 +967,7 @@ export class UI extends Phaser.GameObjects.Container {
    */
   public getGamepadType(): string {
     if (globalScene.inputMethod === "gamepad") {
-      return globalScene.inputController.getConfig(globalScene.inputController.selectedDevice[Device.GAMEPAD]).padType;
+      return globalScene.inputController.getActiveConfig(Device.GAMEPAD)?.padType ?? globalScene.inputMethod;
     }
     return globalScene.inputMethod;
   }

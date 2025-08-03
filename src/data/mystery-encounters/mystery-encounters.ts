@@ -24,7 +24,7 @@ import { GlobalTradeSystemEncounter } from "#mystery-encounters/global-trade-sys
 import { LostAtSeaEncounter } from "#mystery-encounters/lost-at-sea-encounter";
 import { MysteriousChallengersEncounter } from "#mystery-encounters/mysterious-challengers-encounter";
 import { MysteriousChestEncounter } from "#mystery-encounters/mysterious-chest-encounter";
-import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
+import type { MysteryEncounter } from "#mystery-encounters/mystery-encounter";
 import { PartTimerEncounter } from "#mystery-encounters/part-timer-encounter";
 import { SafariZoneEncounter } from "#mystery-encounters/safari-zone-encounter";
 import { ShadyVitaminDealerEncounter } from "#mystery-encounters/shady-vitamin-dealer-encounter";

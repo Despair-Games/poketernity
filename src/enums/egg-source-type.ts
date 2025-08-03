@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/enum-values";
+import type { EnumValues } from "#types/utility-types";
 
 // TODO: decouple enum value from cursor position
 export const EggSourceType = {

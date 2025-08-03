@@ -1,4 +1,4 @@
-import type BattleScene from "#app/battle-scene";
+import type { BattleScene } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#system/settings-manager";
 import { FixedNumber } from "#utils/common-utils";

@@ -1,20 +1,18 @@
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
-import type { InterfaceConfig } from "#app/inputs-controller";
 import { MAPPING_CONFIG_LS_KEY } from "#constants/app-constants";
 import { Device } from "#enums/device";
 import { SettingGamepad } from "#enums/setting-gamepad";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
-import pad_dualshock from "#inputs/pad-dualshock";
-import pad_unlicensedSNES from "#inputs/pad-unlicensed-snes";
-import pad_xbox360 from "#inputs/pad-xbox360";
+import { pad_dualshock, pad_unlicensedSNES, pad_xbox360 } from "#inputs/gamepad-configs";
 import {
   setSettingGamepad,
   settingGamepadBlackList,
   settingGamepadDefaults,
   settingGamepadOptions,
 } from "#system/settings-gamepad";
+import type { InputInterfaceConfig } from "#types/inputs-types";
 import { ControlsSettingsUiHandler } from "#ui/controls-settings-ui-handler";
 import { addTextObject } from "#ui/text-utils";
 import { truncateString } from "#utils/string-utils";
@@ -71,7 +69,7 @@ export class GamepadSettingsUiHandler extends ControlsSettingsUiHandler {
    * @param activeConfig - The active gamepad configuration.
    * @returns `true` if the layout was successfully applied, otherwise `false`.
    */
-  protected override setLayout(activeConfig: InterfaceConfig): boolean {
+  protected override setLayout(activeConfig: InputInterfaceConfig): boolean {
     // Check if there is no active configuration (e.g., no gamepad connected).
     if (!activeConfig) {
       // Retrieve the layout for when no gamepads are connected.
@@ -108,7 +106,7 @@ export class GamepadSettingsUiHandler extends ControlsSettingsUiHandler {
           // Update the text of the first option label under the current setting to the name of the chosen gamepad,
           // truncating the name to 30 characters if necessary.
           this.layout[_key].optionValueLabels[index][0].setText(
-            truncateString(globalScene.inputController.selectedDevice[Device.GAMEPAD], 20),
+            truncateString(globalScene.inputController.selectedDevice[Device.GAMEPAD] ?? "", 20),
           );
         }
       }

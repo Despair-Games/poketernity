@@ -103,7 +103,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
       const message = i18next.t("battle:trainerSendOut", { trainerName, pokemonName });
 
       pbTrayEnemy.hide();
-      ui.showText(message, null, () => this.summon());
+      ui.showText(message, { callback: () => this.summon() });
     } else if (currentBattle.isBattleMysteryEncounter()) {
       pbTrayEnemy.hide();
       this.summonWild();

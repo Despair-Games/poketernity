@@ -1,4 +1,4 @@
-import type BattleScene from "#app/battle-scene";
+import type { BattleScene } from "#app/battle-scene";
 import { AbilityId } from "#enums/ability-id";
 import { BerryType } from "#enums/berry-type";
 import { BiomeId } from "#enums/biome-id";

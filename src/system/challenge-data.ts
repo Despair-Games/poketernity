@@ -1,7 +1,7 @@
 import type { Challenge } from "#data/challenge";
 import { copyChallenge } from "#data/challenge";
 
-export default class ChallengeData {
+export class ChallengeData {
   public id: number;
   public value: number;
   public severity: number;

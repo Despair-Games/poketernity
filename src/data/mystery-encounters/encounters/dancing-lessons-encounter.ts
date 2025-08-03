@@ -19,8 +19,8 @@ import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
 import { modifierTypes } from "#modifier/modifier-types";
 import { getEncounterText, queueEncounterMessage } from "#mystery-encounters/encounter-dialogue-utils";
-import type { EnemyPartyConfig } from "#mystery-encounters/encounter-phase-utils";
 import {
+  type EnemyPartyConfig,
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
   selectPokemonForOption,
@@ -31,12 +31,11 @@ import {
   getEncounterPokemonLevelForWave,
   STANDARD_ENCOUNTER_BOOSTED_LEVEL_MODIFIER,
 } from "#mystery-encounters/encounter-pokemon-utils";
-import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
-import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
+import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import { MoveRequirement } from "#mystery-encounters/mystery-encounter-requirements";
 import { DANCING_MOVES } from "#mystery-encounters/requirement-groups";
-import PokemonData from "#system/pokemon-data";
+import { PokemonData } from "#system/pokemon-data";
 import type { OptionSelectItem } from "#ui/option-select-config";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import i18next from "i18next";

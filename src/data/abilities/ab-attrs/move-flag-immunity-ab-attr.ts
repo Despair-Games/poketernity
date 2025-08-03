@@ -1,6 +1,6 @@
 import { MoveImmunityAbAttr } from "#abilities/move-immunity-ab-attr";
 import type { MoveFlags } from "#enums/move-flags";
-import type { PreDefendAbAttrCondition } from "#types/pre-defend-ab-attr-condition";
+import type { PreDefendAbAttrCondition } from "#types/ability-types";
 
 /**
  * This ability attribute provides the ability holder immunity to moves of a specified move flag category

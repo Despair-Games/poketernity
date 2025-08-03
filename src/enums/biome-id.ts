@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/enum-values";
+import type { EnumValues } from "#types/utility-types";
 
 // TODO: start this at 1
 export const BiomeId = {

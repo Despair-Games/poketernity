@@ -11,10 +11,7 @@ export class SuppressFieldAbilitiesAbAttr extends AbAttr {
   }
 
   public override apply(_pokemon: Pokemon, _simulated: boolean, suppressed: BooleanHolder, ability: Ability): boolean {
-    if (
-      !ability.hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY)
-      && !ability.hasAttrFlag(AbAttrFlag.SUPPRESS_FIELD_ABILITIES)
-    ) {
+    if (ability.isSuppressable && !ability.hasAttrFlag(AbAttrFlag.SUPPRESS_FIELD_ABILITIES)) {
       suppressed.value = true;
       return true;
     }

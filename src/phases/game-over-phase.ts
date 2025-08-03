@@ -2,7 +2,7 @@ import { api } from "#api/api";
 import { clientSessionId } from "#app/account";
 import { globalScene } from "#app/global-scene";
 import { getCharVariantFromDialogue } from "#data/dialogue";
-import type PokemonSpecies from "#data/pokemon-species";
+import type { PokemonSpecies } from "#data/pokemon-species";
 import { AchvCategory } from "#enums/achv-category";
 import { BattleType } from "#enums/battle-type";
 import { PlayerGender } from "#enums/player-gender";
@@ -16,7 +16,7 @@ import { BattlePhase } from "#phases/base/battle-phase";
 import type { EndCardPhase } from "#phases/end-card-phase";
 import { achvs } from "#system/achievements";
 import { settings } from "#system/settings-manager";
-import TrainerData from "#system/trainer-data";
+import { TrainerData } from "#system/trainer-data";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import type { SessionSaveData } from "#types/session-data";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
@@ -66,8 +66,8 @@ export class GameOverPhase extends BattlePhase {
       ui.showDialogue(
         i18next.t("miscDialogue:ending_endless", { context: genderStr }),
         i18next.t("miscDialogue:ending_name"),
-        0,
         () => this.handleGameOver(),
+        0,
       );
     } else if (this.isVictory || !settings.general.enableRetries) {
       this.handleGameOver();
@@ -99,15 +99,17 @@ export class GameOverPhase extends BattlePhase {
         });
       };
 
-      ui.showText(i18next.t("battle:retryBattle"), null, () => {
-        const retryOptions: ConfirmModeConfig = {
-          yesHandler: reloadGame,
-          noHandler: () => {
-            this.handleGameOver();
-          },
-          inputDelay: 1000,
-        };
-        ui.setMode<ConfirmUiHandler>(UiMode.CONFIRM, retryOptions);
+      ui.showText(i18next.t("battle:retryBattle"), {
+        callback: () => {
+          const retryOptions: ConfirmModeConfig = {
+            yesHandler: reloadGame,
+            noHandler: () => {
+              this.handleGameOver();
+            },
+            inputDelay: 1000,
+          };
+          ui.setMode<ConfirmUiHandler>(UiMode.CONFIRM, retryOptions);
+        },
       });
     }
   }
@@ -205,7 +207,7 @@ export class GameOverPhase extends BattlePhase {
                     getCharVariantFromDialogue(dialogue),
                   )
                   .then(() => {
-                    ui.showDialogue(dialogueKey, rivalName, null, () => {
+                    ui.showDialogue(dialogueKey, rivalName, () => {
                       ui.fadeOut(500).then(() => {
                         globalScene.charSprite.hide().then(() => {
                           displayEndCard();

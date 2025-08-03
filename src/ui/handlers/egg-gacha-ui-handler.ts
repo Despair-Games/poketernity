@@ -14,6 +14,7 @@ import { UiMode } from "#enums/ui-mode";
 import { VoucherType } from "#enums/voucher-type";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
 import { getVoucherTypeIcon } from "#system/voucher";
+import type { ShowTextOptions } from "#types/ui-types";
 import { MessageUiHandler } from "#ui/message-ui-handler";
 import { addTextObject, getEggTierTextTint } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
@@ -274,8 +275,8 @@ export class EggGachaUiHandler extends MessageUiHandler {
 
     this.eggGachaContainer.add(this.eggGachaOptionsContainer);
 
-    new Array(getTSEnumKeys(VoucherType).length).fill(null).map((_, i) => {
-      const container = globalScene.add.container(GAME_WIDTH - 56 * i, 0);
+    getTSEnumValues(VoucherType).forEach((voucher, index) => {
+      const container = globalScene.add.container(GAME_WIDTH - 56 * index, 0);
 
       const bg = addWindow(0, 0, 56, 22);
       bg.setOrigin(1, 0);
@@ -287,7 +288,7 @@ export class EggGachaUiHandler extends MessageUiHandler {
 
       this.voucherCountLabels.push(countLabel);
 
-      const iconImage = getVoucherTypeIcon(i as VoucherType);
+      const iconImage = getVoucherTypeIcon(voucher);
 
       const icon = globalScene.add.sprite(-19, 2, "items", iconImage);
       icon.setOrigin(0, 0);
@@ -334,7 +335,7 @@ export class EggGachaUiHandler extends MessageUiHandler {
   }
 
   public override show(): boolean {
-    this.getUi().showText(this.defaultText, 0);
+    globalScene.ui.showText(this.defaultText, { delay: 0 });
 
     this.setGachaCursor(1);
 
@@ -624,11 +625,7 @@ export class EggGachaUiHandler extends MessageUiHandler {
 
   public override showText(
     text: string,
-    delay?: number,
-    callback?: Function,
-    callbackDelay?: number,
-    prompt?: boolean,
-    promptDelay?: number,
+    { delay, callback, callbackDelay, prompt, promptDelay }: ShowTextOptions = {},
   ): void {
     if (!text) {
       text = this.defaultText;
@@ -644,11 +641,11 @@ export class EggGachaUiHandler extends MessageUiHandler {
       this.message.setY(-6);
     }
 
-    super.showText(text, delay, callback, callbackDelay, prompt, promptDelay);
+    super.showText(text, { delay, callback, callbackDelay, prompt, promptDelay });
   }
 
   showError(text: string): void {
-    this.showText(text, undefined, () => this.showText(this.defaultText), fixedNumber(1500));
+    this.showText(text, { callback: () => this.showText(this.defaultText), callbackDelay: fixedNumber(1500) });
   }
 
   setTransitioning(transitioning: boolean): void {

@@ -8,7 +8,6 @@ import { ArenaTagSide } from "#enums/arena-tag-side";
 import { CommonAnim } from "#enums/common-anim";
 import { ElementalType } from "#enums/elemental-type";
 import type { MoveId } from "#enums/move-id";
-import type { Arena } from "#field/arena";
 import type { Pokemon } from "#field/pokemon";
 import { BooleanHolder, enumValueToKey, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
@@ -46,7 +45,7 @@ export class TypeImmuneDamageOverTimeTag extends ArenaTag {
     }
   }
 
-  override onAdd(_arena: Arena) {
+  override onAdd() {
     globalScene.phaseManager.createAndUnshiftPhase(
       "MessagePhase",
       i18next.t(
@@ -55,7 +54,7 @@ export class TypeImmuneDamageOverTimeTag extends ArenaTag {
     );
   }
 
-  override lapse(arena: Arena): boolean {
+  override lapse(): boolean {
     const field: Pokemon[] =
       this.side === ArenaTagSide.PLAYER ? globalScene.getPlayerField() : globalScene.getEnemyField();
 
@@ -84,6 +83,6 @@ export class TypeImmuneDamageOverTimeTag extends ArenaTag {
         pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 6));
       });
 
-    return super.lapse(arena);
+    return super.lapse();
   }
 }

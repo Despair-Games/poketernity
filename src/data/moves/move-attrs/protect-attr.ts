@@ -1,7 +1,7 @@
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveResult } from "#enums/move-result";
 import { AddBattlerTagAttr } from "#moves/add-battler-tag-attr";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 
 /**
  * Attribute to apply a set type of protection to the user.

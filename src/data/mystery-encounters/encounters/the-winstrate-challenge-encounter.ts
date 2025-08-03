@@ -29,8 +29,7 @@ import {
   setEncounterRewards,
 } from "#mystery-encounters/encounter-phase-utils";
 import { transitionMysteryEncounterIntroVisuals } from "#mystery-encounters/encounter-visuals-utils";
-import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
-import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
+import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import i18next from "i18next";
 

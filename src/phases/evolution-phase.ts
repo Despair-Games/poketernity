@@ -59,10 +59,8 @@ export class EvolutionPhase extends FormChangeBasePhase {
   public override doFormChange(): void {
     const { time, tweens, ui, animations } = globalScene;
 
-    ui.showText(
-      i18next.t("menu:evolving", { pokemonName: this.preEvolvedPokemonName }),
-      null,
-      () => {
+    ui.showText(i18next.t("menu:evolving", { pokemonName: this.preEvolvedPokemonName }), {
+      callback: () => {
         this.pokemon.cry();
 
         this.pokemon.getPossibleEvolution(this.evolution).then((evolvedPokemon) => {
@@ -133,8 +131,8 @@ export class EvolutionPhase extends FormChangeBasePhase {
           });
         });
       },
-      1000,
-    );
+      callbackDelay: 1000,
+    });
   }
 
   /**
@@ -166,16 +164,12 @@ export class EvolutionPhase extends FormChangeBasePhase {
 
     globalScene.phaseManager.createAndUnshiftPhase("EndEvolutionPhase");
 
-    ui.showText(
-      i18next.t("menu:stoppedEvolving", { pokemonName: this.preEvolvedPokemonName }),
-      null,
-      () => {
-        ui.showText(
-          i18next.t("menu:pauseEvolutionsQuestion", { pokemonName: this.preEvolvedPokemonName }),
-          null,
-          () => {
+    ui.showText(i18next.t("menu:stoppedEvolving", { pokemonName: this.preEvolvedPokemonName }), {
+      callback: () => {
+        ui.showText(i18next.t("menu:pauseEvolutionsQuestion", { pokemonName: this.preEvolvedPokemonName }), {
+          callback: () => {
             const end = (): void => {
-              ui.showText("", 0);
+              ui.showText("", { delay: 0 });
               globalScene.audioManager.playBgm();
               evolvedPokemon.destroy();
               this.end();
@@ -184,12 +178,10 @@ export class EvolutionPhase extends FormChangeBasePhase {
               yesHandler: () => {
                 ui.revertMode();
                 this.pokemon.pauseEvolutions = true;
-                ui.showText(
-                  i18next.t("menu:evolutionsPaused", { pokemonName: this.preEvolvedPokemonName }),
-                  null,
-                  end,
-                  3000,
-                );
+                ui.showText(i18next.t("menu:evolutionsPaused", { pokemonName: this.preEvolvedPokemonName }), {
+                  callback: end,
+                  callbackDelay: 3000,
+                });
               },
               noHandler: () => {
                 ui.revertMode();
@@ -198,11 +190,10 @@ export class EvolutionPhase extends FormChangeBasePhase {
             };
             ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, options);
           },
-        );
+        });
       },
-      null,
-      true,
-    );
+      prompt: true,
+    });
   }
 
   /**
@@ -220,13 +211,10 @@ export class EvolutionPhase extends FormChangeBasePhase {
       for (const speciesId of unlockedStarters) {
         globalScene.audioManager.playSound("level_up_fanfare");
         await new Promise<void>((resolve) => {
-          ui.showText(
-            i18next.t("battle:addedAsAStarter", { pokemonName: getPokemonSpecies(speciesId).getName() }),
-            null,
-            () => resolve(),
-            null,
-            true,
-          );
+          ui.showText(i18next.t("battle:addedAsAStarter", { pokemonName: getPokemonSpecies(speciesId).getName() }), {
+            callback: () => resolve(),
+            prompt: true,
+          });
         });
       }
     }
@@ -244,13 +232,13 @@ export class EvolutionPhase extends FormChangeBasePhase {
               pokemonName: this.preEvolvedPokemonName,
               evolvedPokemonName: this.pokemon.name,
             }),
-            null,
-            () => {
-              showStarterUnlockText(unlockedStarters).then(() => this.end());
+            {
+              callback: () => {
+                showStarterUnlockText(unlockedStarters).then(() => this.end());
+              },
+              prompt: true,
+              promptDelay: fixedNumber(4000),
             },
-            null,
-            true,
-            fixedNumber(4000),
           );
           time.delayedCall(fixedNumber(4250), () => globalScene.audioManager.playBgm());
         });

@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/enum-values";
+import type { EnumValues } from "#types/utility-types";
 
 /** Alias for all {@linkcode ArenaEvent} type strings */
 export const ArenaEventType = {

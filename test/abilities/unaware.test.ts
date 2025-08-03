@@ -49,7 +49,7 @@ describe("Abilities - Unaware", () => {
         expectedStat = expectedStat * 2; // Should not ignore stat stages in Speed
       }
 
-      const actualStat = enemyPokemon.getEffectiveStat(stat, playerPokemon);
+      const actualStat = enemyPokemon.getEffectiveStat(stat, { opponent: playerPokemon });
       expect(actualStat).toBe(expectedStat);
     }
   });
@@ -71,7 +71,7 @@ describe("Abilities - Unaware", () => {
         expectedStat = Math.floor(expectedStat * (2 / 3));
       }
 
-      const actualStat = playerPokemon.getEffectiveStat(stat, enemyPokemon);
+      const actualStat = playerPokemon.getEffectiveStat(stat, { opponent: enemyPokemon });
       expect(actualStat).toBe(expectedStat);
     }
   });

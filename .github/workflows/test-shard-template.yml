@@ -35,4 +35,4 @@ jobs:
         run: pnpm i
 
       - name: Run tests
-        run: pnpm exec vitest --shard=${{ inputs.shard }}/${{ inputs.totalShards }} --no-isolate ${{ !runner.debug && '--silent' || '' }}
+        run: pnpm test:silent --shard=${{ inputs.shard }}/${{ inputs.totalShards }}

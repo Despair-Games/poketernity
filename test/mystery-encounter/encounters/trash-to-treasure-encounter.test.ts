@@ -1,4 +1,4 @@
-import type BattleScene from "#app/battle-scene";
+import type { BattleScene } from "#app/battle-scene";
 import { BiomeId } from "#enums/biome-id";
 import { ModifierTier } from "#enums/modifier-tier";
 import { MoveId } from "#enums/move-id";

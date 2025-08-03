@@ -6,7 +6,7 @@ import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 import i18next from "i18next";
 
 /**
@@ -34,12 +34,7 @@ export class RepeatMoveAttr extends MoveEffectAttr {
     target
       .getMoveQueue()
       .unshift({ move: lastMove.move, targets: moveTargets, ignorePP: false, type: target.getMoveType(lastMove.move) });
-    globalScene.phaseManager.queueMovePhase({
-      pokemon: target,
-      targets: moveTargets,
-      move: movesetMove,
-      when: "eager",
-    });
+    globalScene.phaseManager.createAndUnshiftPhase("MovePhase", target, moveTargets, movesetMove);
     return true;
   }
 

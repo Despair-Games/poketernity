@@ -2,7 +2,7 @@
 import type { IMysteryEncounter } from "#mystery-encounters/mystery-encounter";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
-import type Battle from "#app/battle";
+import type { Battle } from "#app/battle";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import {
@@ -13,7 +13,7 @@ import { biomeLinks } from "#data/biome-links";
 import type { CustomPokemonData } from "#data/custom-pokemon-data";
 import { Egg, type EggOptions } from "#data/egg";
 import { getNatureName } from "#data/nature";
-import type PokemonSpecies from "#data/pokemon-species";
+import type { PokemonSpecies } from "#data/pokemon-species";
 import type { TrainerConfig } from "#data/trainer-config";
 import type { Variant } from "#data/variant";
 import type { AiType } from "#enums/ai-type";
@@ -38,7 +38,7 @@ import { UiMode } from "#enums/ui-mode";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
-import Trainer from "#field/trainer";
+import { Trainer } from "#field/trainer";
 import { initMoveAnim } from "#init/init-move-anim";
 import {
   type CustomModifierSettings,
@@ -49,11 +49,11 @@ import {
 } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
 import { showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
-import type MysteryEncounterOption from "#mystery-encounters/mystery-encounter-option";
-import type PokemonData from "#system/pokemon-data";
+import type { MysteryEncounterOption } from "#mystery-encounters/mystery-encounter-option";
+import type { PokemonData } from "#system/pokemon-data";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
-import type { HeldModifierConfig } from "#types/held-modifier-config";
-import type { PokemonSelectFilter } from "#types/pokemon-select-filter";
+import type { HeldModifierConfig } from "#types/modifiers-types";
+import type { PokemonSelectFilter } from "#types/ui-types";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#ui/option-select-config";
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
@@ -606,7 +606,10 @@ export function selectPokemonForOption(
                       return true;
                     },
                     onHover: () => {
-                      showEncounterText(i18next.t("mysteryEncounterMessages:cancel_option"), 0, 0, false);
+                      showEncounterText(i18next.t("mysteryEncounterMessages:cancel_option"), {
+                        delay: 0,
+                        prompt: false,
+                      });
                     },
                   });
 
@@ -747,7 +750,10 @@ export function selectOptionThenPokemon(
           if (onHoverOverCancelOption) {
             onHoverOverCancelOption();
           }
-          showEncounterText(i18next.t("mysteryEncounterMessages:cancel_option"), 0, 0, false);
+          showEncounterText(i18next.t("mysteryEncounterMessages:cancel_option"), {
+            delay: 0,
+            prompt: false,
+          });
         },
       });
 
@@ -969,13 +975,10 @@ export function handleMysteryEncounterBattleStartEffects() {
       } else {
         source = globalScene.getEnemyField()[0];
       }
-      globalScene.phaseManager.queueMovePhase({
-        pokemon: source,
-        targets: effect.targets,
-        move: effect.move,
-        followUp: effect.followUp,
-        ignorePp: effect.ignorePp,
-        when: "defer",
+      const { targets, move, followUp, ignorePp } = effect;
+      globalScene.phaseManager.createAndPushPhase("MovePhase", source, targets, move, {
+        followUp,
+        ignorePp,
       });
     });
 
@@ -1027,7 +1030,6 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
     const encountersByBiome = new Map<string, number>(biomes.map((b) => [b, 0]));
     const validMEfloorsByBiome = new Map<string, number>(biomes.map((b) => [b, 0]));
     let currentBiome: BiomeId = BiomeId.TOWN;
-    let currentArena = globalScene.newArena(currentBiome);
     globalScene.setSeed(randomString(24));
     globalScene.resetSeed();
     for (let i = 10; i < 180; i++) {
@@ -1066,7 +1068,7 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
           }
         }
 
-        currentArena = globalScene.newArena(currentBiome);
+        globalScene.newArena(currentBiome);
       }
 
       // Fixed battle
@@ -1075,7 +1077,7 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
       }
 
       // Trainer
-      if (globalScene.gameMode.isWaveTrainer(i, currentArena)) {
+      if (globalScene.gameMode.isWaveTrainer(i)) {
         continue;
       }
 

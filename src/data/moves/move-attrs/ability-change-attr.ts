@@ -2,12 +2,11 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { allAbilities } from "#data/data-lists";
 import { SpeciesFormChangeRevertWeatherFormTrigger } from "#data/pokemon-forms";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { AbilityId } from "#enums/ability-id";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 import i18next from "i18next";
 
 /**
@@ -43,7 +42,7 @@ export class AbilityChangeAttr extends MoveEffectAttr {
 
   override getCondition(): MoveConditionFunc {
     return (user, target, _move) =>
-      !(this.selfTarget ? user : target).getAbility().hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY)
+      (this.selfTarget ? user : target).getAbility().isReplaceable
       && (this.selfTarget ? user : target).getAbility().id !== this.ability;
   }
 }

@@ -8,8 +8,7 @@ import { SpeciesId } from "#enums/species-id";
 import { PokemonMove } from "#field/pokemon-move";
 import { leaveEncounterWithoutBattle, setEncounterExp } from "#mystery-encounters/encounter-phase-utils";
 import { applyDamageToPokemon } from "#mystery-encounters/encounter-pokemon-utils";
-import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
-import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
+import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 

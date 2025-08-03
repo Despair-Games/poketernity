@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import type { EntryHazardTag } from "#arena-tags/entry-hazard-tag";
 import { AddArenaTagAttr } from "#moves/add-arena-tag-attr";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 
 /**
  * Attribute to add a {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Variations_of_Spikes | hazard} to the field.

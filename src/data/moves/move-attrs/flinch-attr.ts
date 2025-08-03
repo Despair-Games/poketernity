@@ -2,6 +2,7 @@ import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { IgnoreMoveEffectsAbAttr } from "#abilities/ignore-move-effects-ab-attr";
 import type { MoveEffectChanceMultiplierAbAttr } from "#abilities/move-effect-chance-multiplier-ab-attr";
 import { globalScene } from "#app/global-scene";
+import type { WaterFirePledgeTag } from "#arena-tags/water-fire-pledge-tag";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -33,7 +34,7 @@ export class FlinchAttr extends AddBattlerTagAttr {
 
     if (moveChance.value <= move.chance) {
       const userSide = user.getArenaTagSide();
-      globalScene.arena.applyTagsForSide(ArenaTagType.WATER_FIRE_PLEDGE, userSide, false, moveChance);
+      globalScene.arena.applyTags<WaterFirePledgeTag>(ArenaTagType.WATER_FIRE_PLEDGE, userSide, false, moveChance);
     }
 
     applyAbAttrs<IgnoreMoveEffectsAbAttr>(AbAttrFlag.IGNORE_MOVE_EFFECTS, target, false, user, move, moveChance);

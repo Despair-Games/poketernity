@@ -11,7 +11,7 @@ import {
   TUTORIALS_LS_KEY,
 } from "#constants/app-constants";
 import { GameDataType } from "#enums/game-data-type";
-import type { UserInfo } from "#types/user-info";
+import type { UserInfo } from "#types/api-types";
 import { randomString } from "#utils/random-utils";
 
 export let loggedInUser: UserInfo | null = null;

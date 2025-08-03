@@ -4,7 +4,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { Pokemon } from "#field/pokemon";
 import type { PokemonHeldItemModifier } from "#modifier/modifier";
 import type { Move } from "#moves/move";
-import type { PokemonAttackCondition } from "#types/pokemon-attack-condition";
+import type { PokemonAttackCondition } from "#types/move-types";
 import i18next from "i18next";
 
 export class PostAttackStealHeldItemAbAttr extends PostAttackAbAttr {

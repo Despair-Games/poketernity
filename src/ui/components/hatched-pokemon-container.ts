@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { DexAttr } from "#data/dex-attributes";
 import type { EggHatchData } from "#data/egg-hatch-data";
-import type PokemonSpecies from "#data/pokemon-species";
+import type { PokemonSpecies } from "#data/pokemon-species";
 import { getVariantTint } from "#data/variant";
 import { Gender } from "#enums/gender";
 import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";

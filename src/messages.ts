@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import type { Pokemon } from "#field/pokemon";
-import type { nil } from "#types/nil";
+import type { nil } from "#types/utility-types";
 import i18next from "i18next";
 
 /**

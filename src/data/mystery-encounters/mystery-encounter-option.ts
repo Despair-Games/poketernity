@@ -40,7 +40,7 @@ export interface IMysteryEncounterOption {
   onPostOptionPhase?: OptionPhaseCallback;
 }
 
-export default class MysteryEncounterOption implements IMysteryEncounterOption {
+export class MysteryEncounterOption implements IMysteryEncounterOption {
   optionMode: MysteryEncounterOptionMode;
   hasDexProgress: boolean;
   requirements: EncounterSceneRequirement[];

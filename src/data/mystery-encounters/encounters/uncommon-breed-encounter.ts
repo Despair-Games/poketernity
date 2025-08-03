@@ -15,8 +15,8 @@ import { PokemonMove } from "#field/pokemon-move";
 import type { BerryModifier } from "#modifier/modifier";
 import { getPartyLuckValue } from "#modifier/modifier-type";
 import { queueEncounterMessage } from "#mystery-encounters/encounter-dialogue-utils";
-import type { EnemyPartyConfig } from "#mystery-encounters/encounter-phase-utils";
 import {
+  type EnemyPartyConfig,
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
   setEncounterExp,
@@ -27,12 +27,11 @@ import {
   getHighestLevelPlayerPokemon,
   getSpriteKeysFromPokemon,
 } from "#mystery-encounters/encounter-pokemon-utils";
-import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
-import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
+import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import { MoveRequirement, PersistentModifierRequirement } from "#mystery-encounters/mystery-encounter-requirements";
 import { CHARMING_MOVES } from "#mystery-encounters/requirement-groups";
-import PokemonData from "#system/pokemon-data";
+import { PokemonData } from "#system/pokemon-data";
 import { isNil } from "#utils/common-utils";
 import { randSeedInt } from "#utils/random-utils";
 

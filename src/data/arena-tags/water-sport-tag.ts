@@ -3,7 +3,6 @@ import { WeakenMoveTypeTag } from "#arena-tags/weaken-move-type-tag";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
-import type { Arena } from "#field/arena";
 import i18next from "i18next";
 
 /**
@@ -15,11 +14,11 @@ export class WaterSportTag extends WeakenMoveTypeTag {
     super(ArenaTagType.WATER_SPORT, turnCount, ElementalType.FIRE, MoveId.WATER_SPORT, sourceId);
   }
 
-  override onAdd(_arena: Arena): void {
+  override onAdd(): void {
     globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("arenaTag:waterSportOnAdd"));
   }
 
-  override onRemove(_arena: Arena): void {
+  override onRemove(): void {
     globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("arenaTag:waterSportOnRemove"));
   }
 }

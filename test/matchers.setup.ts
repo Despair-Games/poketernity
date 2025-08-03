@@ -14,9 +14,9 @@ import { toHaveUsedMoveMatcher } from "#test/test-utils/matchers/to-have-used-mo
 import { toHaveWeatherMatcher } from "#test/test-utils/matchers/to-have-weather-matcher";
 import { expect } from "vitest";
 
-/**
+/*
  * Setup for custom matchers.
- * Make sure to define the call signatures in {@linkcode file://./@types/vitest.d.ts} too!
+ * Make sure to define the call signatures in `test/@types/vitest.d.ts` too!
  */
 
 expect.extend({

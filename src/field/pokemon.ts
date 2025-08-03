@@ -1,6 +1,6 @@
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type Battle from "#app/battle";
-import type BattleScene from "#app/battle-scene";
+import type { Battle } from "#app/battle";
+import type { BattleScene } from "#app/battle-scene";
 import type { FaintPhase } from "#phases/faint-phase";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
@@ -44,6 +44,8 @@ import type { AnySound } from "#app/audio-manager";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { timedEventManager } from "#app/timed-event-manager";
+import type { IonDelugeTag } from "#arena-tags/ion-deluge-tag";
+import type { WeakenMoveScreenTag } from "#arena-tags/weaken-move-screen-tag";
 import { applyBattlerTags } from "#battler-tags/apply-battler-tags";
 import type { AutotomizedTag } from "#battler-tags/autotomized-tag";
 import { BattlerTag } from "#battler-tags/battler-tag";
@@ -90,7 +92,7 @@ import type { SpeciesEvolutionCondition, SpeciesFormEvolution } from "#data/poke
 import { type SpeciesFormChange, SpeciesFormChangeLapseTeraTrigger } from "#data/pokemon-forms";
 import { EVOLVE_MOVE, type LevelMoves, RELEARN_MOVE } from "#data/pokemon-level-moves";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
-import type PokemonSpecies from "#data/pokemon-species";
+import type { PokemonSpecies } from "#data/pokemon-species";
 import type { PokemonSpeciesForm } from "#data/pokemon-species-form";
 import { BASE_HIDDEN_ABILITY_CHANCE, BASE_SHINY_CHANCE, SHINY_EPIC_CHANCE, SHINY_VARIANT_CHANCE } from "#data/rates";
 import { tmPoolTiers, tmSpecies } from "#data/tms";
@@ -177,16 +179,11 @@ import { VariableMoveCategoryAttr } from "#moves/variable-move-category-attr";
 import { VariableMoveTypeAttr } from "#moves/variable-move-type-attr";
 import { VariableMoveTypeChartAttr } from "#moves/variable-move-type-chart-attr";
 import { VariableMoveTypeMultiplierAttr } from "#moves/variable-move-type-multiplier-attr";
-import type PokemonData from "#system/pokemon-data";
+import type { PokemonData } from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
-import type { AbilityFilterOptions } from "#types/ability-filter-options";
-import type { DamageCalculationResult } from "#types/damage-calculation-result";
-import type { DamageFunctionOptions } from "#types/damage-function-options";
-import type { PokemonSummonData } from "#types/pokemon-summon-data";
-import type { PokemonTurnData } from "#types/pokemon-turn-data";
-import type { PokemonWaveData } from "#types/pokemon-wave-data";
-import type { Status } from "#types/status";
-import type { TurnMove } from "#types/turn-move";
+import type { AbilityFilterOptions } from "#types/ability-types";
+import type { DamageCalculationResult, DamageResult, TurnMove } from "#types/move-types";
+import type { PokemonSummonData, PokemonTurnData, PokemonWaveData, Status } from "#types/pokemon-types";
 import type { BattleInfo } from "#ui/battle-info";
 import { applyChallenges } from "#utils/challenge-utils";
 import {
@@ -209,6 +206,37 @@ import i18next from "i18next";
 interface AbilityData {
   ability: Ability;
   passive: boolean;
+}
+
+interface DamageFunctionOptions {
+  result?: DamageResult;
+  isCritical?: boolean;
+  ignoreSegments?: boolean;
+  preventEndure?: boolean;
+  ignoreFaintPhase?: boolean;
+  source?: Pokemon;
+}
+
+interface EffectiveStatOptions {
+  /** The opposing {@linkcode Pokemon}, usually involved in an incoming or outgoing attack */
+  opponent?: Pokemon;
+  /** The {@linkcode Move} being used */
+  move?: Move;
+  /**
+   * The {@linkcode AbilityApplyMode} determining how abilities are applied
+   * @defaultValue {@linkcode AbilityApplyMode.DEFAULT}
+   */
+  abilityApplyMode?: AbilityApplyMode;
+  /**
+   * Whether a critical hit has occurred or not
+   * @defaultValue `false`
+   */
+  isCritical?: boolean;
+  /**
+   * If `true`, nullifies any effects that produce any changes to game state from triggering
+   * @defaultValue `true`
+   */
+  simulated?: boolean;
 }
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
@@ -488,7 +516,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   /** @returns An array of 6 random numbers, each between `0-31` inclusive */
   public generateIvs(): number[] {
-    return new Array(6).fill(null).map(() => this.randSeedIntRange(IV_MIN, IV_MAX));
+    const ivs: number[] = [];
+    for (let i = 0; i < 6; i++) {
+      ivs.push(this.randSeedIntRange(IV_MIN, IV_MAX));
+    }
+    return ivs;
   }
 
   /**
@@ -1114,33 +1146,31 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Calculates and retrieves the final value of a stat considering any held
-   * items, move effects, opponent abilities, and whether there was a critical
-   * hit.
-   * @param stat the desired {@linkcode EffectiveStat}
-   * @param opponent the target {@linkcode Pokemon}
-   * @param move the {@linkcode Move} being used
-   * @param abilityApplyMode the {@linkcode AbilityApplyMode} determining how abilities are applied
-   * @param isCritical determines whether a critical hit has occurred or not (`false` by default)
-   * @param simulated if `true`, nullifies any effects that produce any changes to game state from triggering
-   * @returns the final in-battle value of a stat
+   * Calculates and retrieves the final value of a stat considering any held items,
+   * move effects, opponent abilities, and whether there was a critical hit.
+   * @param stat - The desired {@linkcode EffectiveStat}
+   * @see {@linkcode EffectiveStatOptions} for optional params
+   * @returns The final in-battle value of a stat
    */
   getEffectiveStat(
     stat: EffectiveStat,
-    opponent?: Pokemon,
-    move?: Move,
-    abilityApplyMode: AbilityApplyMode = AbilityApplyMode.DEFAULT,
-    isCritical: boolean = false,
-    simulated: boolean = true,
+    {
+      opponent,
+      move,
+      abilityApplyMode = AbilityApplyMode.DEFAULT,
+      isCritical = false,
+      simulated = true,
+    }: EffectiveStatOptions = {},
   ): number {
     const applyAbFunc = getAbApplyFunc(abilityApplyMode);
 
     const statValue = new NumberHolder(-1);
 
-    /**
+    /*
      * Variable Attack attributes are applied only to the raw stat
      * value and associated stat stage multiplier. Other stat modifiers,
-     * e.g. items and abilities, apply based on the original {@linkcode stat}.
+     * e.g. items and abilities, apply based on the original stat.
+     * See https://bulbapedia.bulbagarden.net/wiki/Body_Press_(move)#Effect for more info
      */
     if (move && opponent && [Stat.ATK, Stat.SPATK].includes(stat)) {
       applyMoveAttrs(VariableAtkAttr, this, opponent, move, statValue, isCritical);
@@ -1172,6 +1202,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     let ret = statValue.value;
 
+    const { arena } = globalScene;
     switch (stat) {
       case Stat.ATK:
         if (this.hasTag(BattlerTagType.SLOW_START)) {
@@ -1179,23 +1210,23 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         }
         break;
       case Stat.DEF:
-        if (this.isOfType(ElementalType.ICE) && globalScene.arena.hasWeather(WeatherType.SNOW)) {
+        if (this.isOfType(ElementalType.ICE) && arena.hasWeather(WeatherType.SNOW)) {
           ret *= 1.5;
         }
         break;
       case Stat.SPATK:
         break;
       case Stat.SPDEF:
-        if (this.isOfType(ElementalType.ROCK) && globalScene.arena.hasWeather(WeatherType.SANDSTORM)) {
+        if (this.isOfType(ElementalType.ROCK) && arena.hasWeather(WeatherType.SANDSTORM)) {
           ret *= 1.5;
         }
         break;
       case Stat.SPD: {
         const side = this.getArenaTagSide();
-        if (globalScene.arena.hasTag(ArenaTagType.TAILWIND, side)) {
+        if (arena.hasTag(ArenaTagType.TAILWIND, side)) {
           ret *= 2;
         }
-        if (globalScene.arena.hasTag(ArenaTagType.GRASS_WATER_PLEDGE, side)) {
+        if (arena.hasTag(ArenaTagType.GRASS_WATER_PLEDGE, side)) {
           ret >>= 2;
         }
 
@@ -1698,7 +1729,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (arena.ignoreAbilities && arena.ignoringEffectSource !== this.getBattlerIndex() && ability.isIgnorable) {
       return false;
     }
-    if (this.summonData.abilitySuppressed && !ability.hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY)) {
+    if (this.summonData.abilitySuppressed && ability.isSuppressable) {
       return false;
     }
     if (this.isOnField() && !ability.hasAttrFlag(AbAttrFlag.SUPPRESS_FIELD_ABILITIES)) {
@@ -1861,7 +1892,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     applyMoveAttrs(VariableMoveTypeAttr, this, null, move, moveTypeHolder);
     applyAbAttrs<MoveTypeChangeAbAttr>(AbAttrFlag.MOVE_TYPE_CHANGE, this, simulated, move, undefined, moveTypeHolder);
 
-    globalScene.arena.applyTags(ArenaTagType.ION_DELUGE, simulated, moveTypeHolder);
+    globalScene.arena.applyTags<IonDelugeTag>(ArenaTagType.ION_DELUGE, ArenaTagSide.BOTH, simulated, moveTypeHolder);
     if (this.hasTag(BattlerTagType.ELECTRIFIED)) {
       moveTypeHolder.value = ElementalType.ELECTRIC;
     }
@@ -2084,8 +2115,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const enemyTypes = opponent.getTypes(true, true);
     /** Is this Pokemon faster than the opponent? */
     const outspeed =
-      (this.isActive(true) ? this.getEffectiveStat(Stat.SPD, opponent) : this.getStat(Stat.SPD, false))
-      >= opponent.getEffectiveStat(Stat.SPD, this);
+      (this.isActive(true) ? this.getEffectiveStat(Stat.SPD, { opponent }) : this.getStat(Stat.SPD, false))
+      >= opponent.getEffectiveStat(Stat.SPD, { opponent: this });
     /**
      * Based on how effective this Pokemon's types are offensively against the opponent's types.
      * This score is increased by 25 percent if this Pokemon is faster than the opponent.
@@ -2934,14 +2965,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
      * The attacker's offensive stat for the given move's category.
      * Critical hits cause negative stat stages to be ignored.
      */
-    const sourceAtk = source.getEffectiveStat(
-      isPhysical ? Stat.ATK : Stat.SPATK,
-      this,
+    const sourceAtk = source.getEffectiveStat(isPhysical ? Stat.ATK : Stat.SPATK, {
+      opponent: this,
       move,
       abilityApplyMode,
       isCritical,
       simulated,
-    );
+    });
 
     /**
      * The {@linkcode EffectiveStat} used to defend against the given move.
@@ -2954,7 +2984,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
      * This Pokemon's defensive stat for the given move's category.
      * Critical hits cause positive stat stages to be ignored.
      */
-    const targetDef = this.getEffectiveStat(defendingStat.value, source, move, abilityApplyMode, isCritical, simulated);
+    const targetDef = this.getEffectiveStat(defendingStat.value, {
+      opponent: source,
+      move,
+      abilityApplyMode,
+      isCritical,
+      simulated,
+    });
 
     /** This prevents a move with negative power from possibly dealing positive damage.
      * The issue can occur because the base damage is the result of the below equation plus 2.
@@ -3199,7 +3235,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     /** Critical hits ignore the damage reduction from screens */
     if (!isCritical) {
-      globalScene.arena.applyTagsForSide(
+      globalScene.arena.applyTags<WeakenMoveScreenTag>(
         [...WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES],
         defendingSide,
         simulated,
@@ -3809,7 +3845,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (moveCount >= 0) {
       return moveHistory.slice(Math.max(moveHistory.length - moveCount, 0)).reverse();
     }
-    return moveHistory.slice(0).reverse();
+    return moveHistory.slice().reverse();
   }
 
   getMoveQueue(): TurnMove[] {

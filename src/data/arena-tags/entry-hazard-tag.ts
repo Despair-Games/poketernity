@@ -2,7 +2,6 @@ import { ArenaTag } from "#arena-tags/arena-tag";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import type { MoveId } from "#enums/move-id";
-import type { Arena } from "#field/arena";
 import type { Pokemon } from "#field/pokemon";
 
 /**
@@ -26,22 +25,21 @@ export abstract class EntryHazardTag extends ArenaTag {
     this.maxLayers = maxLayers;
   }
 
-  override onOverlap(arena: Arena): void {
+  override onOverlap(): void {
     if (this.layers < this.maxLayers) {
       this.layers++;
 
-      this.onAdd(arena);
+      this.onAdd();
     }
   }
 
   /**
    * Activates the hazard effect onto a Pokemon when it enters the field
-   * @param _arena the {@linkcode Arena} containing this tag
    * @param simulated if `true`, only checks if the hazard would activate.
    * @param pokemon the {@linkcode Pokemon} triggering this hazard
    * @returns `true` if this hazard affects the given Pokemon; `false` otherwise.
    */
-  override apply(_arena: Arena, simulated: boolean, pokemon: Pokemon): boolean {
+  override apply(simulated: boolean, pokemon: Pokemon): boolean {
     if (this.side !== ArenaTagSide.BOTH && (this.side === ArenaTagSide.PLAYER) !== pokemon.isPlayer()) {
       return false;
     }

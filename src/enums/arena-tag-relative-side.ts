@@ -1,8 +1,8 @@
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { Pokemon } from "#field/pokemon";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-  
-import type { EnumValues } from "#types/enum-values";
+
+import type { EnumValues } from "#types/utility-types";
 
 /**
  * Denotes which side of the field an effect applies,

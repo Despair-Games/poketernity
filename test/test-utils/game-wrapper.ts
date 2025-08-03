@@ -1,5 +1,5 @@
 import { MoveAnim } from "#animations/move-anim";
-import BattleScene from "#app/battle-scene";
+import { BattleScene } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import * as appConstants from "#constants/app-constants";
 import { BattlerTagType } from "#enums/battler-tag-type";

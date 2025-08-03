@@ -1,10 +1,9 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 import i18next from "i18next";
 
 /**
@@ -30,8 +29,6 @@ export class SwitchAbilitiesAttr extends MoveEffectAttr {
   }
 
   override getCondition(): MoveConditionFunc {
-    return (user, target, _move) =>
-      !user.getAbility().hasAttrFlag(AbAttrFlag.UNSWAPPABLE_ABILITY)
-      && !target.getAbility().hasAttrFlag(AbAttrFlag.UNSWAPPABLE_ABILITY);
+    return (user, target, _move) => [user, target].every((pkmn) => pkmn.getAbility().isSwappable);
   }
 }

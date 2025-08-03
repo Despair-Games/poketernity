@@ -126,8 +126,8 @@ export class SelectModifierPhase extends BattlePhase {
             );
           },
         };
-        ui.showText(i18next.t("battle:skipItemQuestion"), null, () => {
-          ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, skipRewardConfirmOptions);
+        ui.showText(i18next.t("battle:skipItemQuestion"), {
+          callback: () => ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, skipRewardConfirmOptions),
         });
         return false;
       }

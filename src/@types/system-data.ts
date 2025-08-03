@@ -1,5 +1,5 @@
 import type { PlayerGender } from "#enums/player-gender";
-import type EggData from "#system/egg-data";
+import type { EggData } from "#system/egg-data";
 import type { GameStats } from "#system/game-stats";
 import type { DexData } from "#types/dex-data";
 import type { StarterData } from "#types/starter-data";

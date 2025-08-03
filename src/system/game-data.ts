@@ -21,7 +21,7 @@ import type { Egg } from "#data/egg";
 import { speciesEggMoves } from "#data/egg-moves";
 import { starterPassiveAbilities } from "#data/passives";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
-import type PokemonSpecies from "#data/pokemon-species";
+import type { PokemonSpecies } from "#data/pokemon-species";
 import {
   getCandyGainMultiplierForShinies,
   STARTER_CANDY_GAIN_FROM_CATCH,
@@ -56,18 +56,19 @@ import type { Pokemon } from "#field/pokemon";
 import * as Modifier from "#modifier/modifier";
 import { MysteryEncounterSaveData } from "#mystery-encounters/mystery-encounter-save-data";
 import { achvs } from "#system/achievements";
-import ArenaData from "#system/arena-data";
-import ChallengeData from "#system/challenge-data";
-import EggData from "#system/egg-data";
+import { ArenaData } from "#system/arena-data";
+import { ChallengeData } from "#system/challenge-data";
+import { EggData } from "#system/egg-data";
 import { GameStats } from "#system/game-stats";
-import PersistentModifierData from "#system/modifier-data";
-import PokemonData from "#system/pokemon-data";
+import { ModifierData } from "#system/modifier-data";
+import { PokemonData } from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
-import TrainerData from "#system/trainer-data";
+import { TrainerData } from "#system/trainer-data";
 import { applySessionVersionMigration, applySystemVersionMigration } from "#system/version-converter";
 import { vouchers } from "#system/voucher";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import type { DexData, DexEntry } from "#types/dex-data";
+import type { InputInterfaceConfig } from "#types/inputs-types";
 import type { SessionSaveData } from "#types/session-data";
 import type { StarterData } from "#types/starter-data";
 import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlocks } from "#types/system-data";
@@ -561,8 +562,8 @@ export class GameData {
    * @param config - The configuration object containing custom mapping details.
    * @returns `true` if the configurations are successfully saved.
    */
-  public saveMappingConfigs(deviceName: string, config): boolean {
-    const key = deviceName.toLowerCase(); // Convert the gamepad name to lowercase to use as a key
+  public saveMappingConfigs(deviceName: string, config: InputInterfaceConfig): boolean {
+    const key = deviceName.toLowerCase(); // Convert the device name to lowercase to use as a key
     let mappingConfigs: object = {}; // Initialize an empty object to hold the mapping configurations
     const lsMappingStr = localStorage.getItem(MAPPING_CONFIG_LS_KEY);
     if (lsMappingStr) {
@@ -594,16 +595,15 @@ export class GameData {
   public loadMappingConfigs(): boolean {
     const lsMappingStr = localStorage.getItem(MAPPING_CONFIG_LS_KEY);
     if (!lsMappingStr) {
-      // Check if 'mappingConfigs' exists in localStorage
       return false;
-    } // If 'mappingConfigs' does not exist, return false
-    const mappingConfigs = JSON.parse(lsMappingStr); // Parse the existing 'mappingConfigs' from localStorage
-    for (const key of Object.keys(mappingConfigs)) {
-      // Iterate over the keys of the mapping configurations
-      globalScene.inputController.injectConfig(key, mappingConfigs[key]);
-    } // Inject each configuration into the input controller for the corresponding key
+    }
+    const mappingConfigs = JSON.parse(lsMappingStr);
 
-    return true; // Return true to indicate the operation was successful
+    // Inject each configuration into the input controller for the corresponding key
+    for (const key of Object.keys(mappingConfigs)) {
+      globalScene.inputController.injectConfig(key, mappingConfigs[key]);
+    }
+    return true;
   }
 
   /**
@@ -614,7 +614,7 @@ export class GameData {
   public resetMappingToFactory(device: Device): boolean {
     const deviceName = globalScene.inputController?.selectedDevice[device];
     const lsMappingStr = localStorage.getItem(MAPPING_CONFIG_LS_KEY);
-    if (!lsMappingStr) {
+    if (!deviceName || !lsMappingStr) {
       // no config found
       return false;
     }
@@ -716,8 +716,8 @@ export class GameData {
       gameMode: globalScene.gameMode.modeId,
       party: globalScene.getPlayerParty().map((p) => new PokemonData(p)),
       enemyParty: globalScene.getEnemyParty().map((p) => new PokemonData(p)),
-      modifiers: globalScene.findModifiers(() => true).map((m) => new PersistentModifierData(m, true)),
-      enemyModifiers: globalScene.findModifiers(() => true, false).map((m) => new PersistentModifierData(m, false)),
+      modifiers: globalScene.findModifiers(() => true).map((m) => new ModifierData(m, true)),
+      enemyModifiers: globalScene.findModifiers(() => true, false).map((m) => new ModifierData(m, false)),
       arena: new ArenaData(globalScene.arena),
       pokeballCounts: globalScene.pokeballCounts,
       money: Math.floor(globalScene.money),
@@ -1060,7 +1060,7 @@ export class GameData {
 
       if (k === "modifiers" || k === "enemyModifiers") {
         const player = k === "modifiers";
-        const ret: PersistentModifierData[] = [];
+        const ret: ModifierData[] = [];
         if (v === null) {
           v = [];
         }
@@ -1069,7 +1069,7 @@ export class GameData {
             // Temporarily limit EXP Balance until it gets reworked
             md.stackCount = Math.min(md.stackCount, 4);
           }
-          ret.push(new PersistentModifierData(md, player));
+          ret.push(new ModifierData(md, player));
         }
         return ret;
       }
@@ -1281,18 +1281,19 @@ export class GameData {
           }
 
           const displayError = (error: string) =>
-            globalScene.ui.showText(error, null, () => globalScene.ui.showText("", 0), fixedNumber(1500));
+            globalScene.ui.showText(error, {
+              callback: () => globalScene.ui.showText("", { delay: 0 }),
+              callbackDelay: fixedNumber(1500),
+            });
           dataName = dataName!; // tell TS compiler that dataName is defined!
 
           const dataNotLoadedString =
             dataName === "session" ? i18next.t("menu:sessionDataNotLoaded") : i18next.t("menu:gameDataNotLoaded");
           if (!valid) {
-            return globalScene.ui.showText(
-              dataNotLoadedString,
-              null,
-              () => globalScene.ui.showText("", 0),
-              fixedNumber(1500),
-            );
+            return globalScene.ui.showText(dataNotLoadedString, {
+              callback: () => globalScene.ui.showText("", { delay: 0 }),
+              callbackDelay: fixedNumber(1500),
+            });
           }
 
           // TODO: move this outside of game data
@@ -1329,7 +1330,7 @@ export class GameData {
             },
             noHandler: () => {
               globalScene.ui.revertMode();
-              globalScene.ui.showText("", 0);
+              globalScene.ui.showText("", { delay: 0 });
             },
             xOffset: confirmWindowXOffset,
           };
@@ -1338,8 +1339,8 @@ export class GameData {
             dataName === "session"
               ? i18next.t("menu:sessionDataOverwriteWarning")
               : i18next.t("menu:gameDataOverwriteWarning");
-          globalScene.ui.showText(dataOverwriteString, null, () => {
-            globalScene.ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, importDataConfirmOptions);
+          globalScene.ui.showText(dataOverwriteString, {
+            callback: () => globalScene.ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, importDataConfirmOptions),
           });
         };
       })((e.target as any).files[0]);
@@ -1596,13 +1597,10 @@ export class GameData {
           checkPreEvolution(unlockedStarters);
         } else {
           globalScene.audioManager.playSound("level_up_fanfare");
-          globalScene.ui.showText(
-            i18next.t("battle:addedAsAStarter", { pokemonName: species.name }),
-            null,
-            () => checkPreEvolution(unlockedStarters),
-            null,
-            true,
-          );
+          globalScene.ui.showText(i18next.t("battle:addedAsAStarter", { pokemonName: species.name }), {
+            callback: () => checkPreEvolution(unlockedStarters),
+            prompt: true,
+          });
         }
       } else {
         checkPreEvolution(unlockedStarters);
@@ -1768,7 +1766,7 @@ export class GameData {
           ? i18next.t("egg:rareEggMoveUnlock", { moveName: moveName })
           : i18next.t("egg:eggMoveUnlock", { moveName: moveName });
 
-      globalScene.ui.showText(message, null, () => resolve(true), null, true);
+      globalScene.ui.showText(message, { callback: () => resolve(true), prompt: true });
     });
   }
 

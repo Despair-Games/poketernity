@@ -11,7 +11,7 @@ import { UiMode } from "#enums/ui-mode";
 import { WindowVariant } from "#enums/window-variant";
 import { getEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import type { OptionSelectSettings } from "#mystery-encounters/encounter-phase-utils";
-import type MysteryEncounterOption from "#mystery-encounters/mystery-encounter-option";
+import type { MysteryEncounterOption } from "#mystery-encounters/mystery-encounter-option";
 import type { MysteryEncounterPhase } from "#phases/mystery-encounter-phases/mystery-encounter-phase";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#ui/text-utils";

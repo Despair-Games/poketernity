@@ -5,7 +5,7 @@ import type {
   AccountLoginRequest,
   AccountLoginResponse,
   AccountRegisterRequest,
-} from "#types/account-api";
+} from "#types/api-types";
 import { removeCookie, setCookie } from "#utils/app-utils";
 
 /**

@@ -34,6 +34,6 @@ export class MoneyRewardPhase extends BattlePhase {
     const formattedMoneyAmount = moneyAmount.value.toLocaleString(userLocale);
     const message = i18next.t("battle:moneyWon", { moneyAmount: formattedMoneyAmount });
 
-    globalScene.ui.showText(message, null, () => this.end(), null, true);
+    globalScene.ui.showText(message, { callback: () => this.end(), prompt: true });
   }
 }

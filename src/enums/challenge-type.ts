@@ -2,7 +2,7 @@
 import type { Challenge } from "#data/challenge";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
-import type { EnumValues } from "#types/enum-values";
+import type { EnumValues } from "#types/utility-types";
 
 /**
  * An enum for all the challenge types. The parameter entries on these describe the

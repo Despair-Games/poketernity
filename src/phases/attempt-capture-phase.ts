@@ -3,11 +3,11 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { PLAYER_PARTY_MAX_SIZE } from "#constants/game-constants";
 import {
-    doPokeballBounceAnim,
-    getCriticalCaptureChance,
-    getPokeballAtlasKey,
-    getPokeballCatchMultiplier,
-    getPokeballTintColor,
+  doPokeballBounceAnim,
+  getCriticalCaptureChance,
+  getPokeballAtlasKey,
+  getPokeballCatchMultiplier,
+  getPokeballTintColor,
 } from "#data/pokeball";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -259,10 +259,8 @@ export class AttemptCapturePhase extends PokemonPhase {
 
     gameData.updateSpeciesDexIvs(pokemon.species.getRootSpeciesId(true), pokemon.ivs);
 
-    ui.showText(
-      i18next.t("battle:pokemonCaught", { pokemonName: getPokemonNameWithAffix(pokemon) }),
-      null,
-      () => {
+    ui.showText(i18next.t("battle:pokemonCaught", { pokemonName: getPokemonNameWithAffix(pokemon) }), {
+      callback: () => {
         const end = (): void => {
           globalScene.phaseManager.createAndUnshiftPhase("PostKnockoutPhase", this.battlerIndex);
           pokemonInfoContainer.hide();
@@ -367,8 +365,8 @@ export class AttemptCapturePhase extends PokemonPhase {
               },
             };
             const promptRelease = (): void => {
-              ui.showText(i18next.t("battle:partyFull", { pokemonName: pokemon.getNameToRender() }), null, () => {
-                ui.setMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, addToPartyMenuConfig);
+              ui.showText(i18next.t("battle:partyFull", { pokemonName: pokemon.getNameToRender() }), {
+                callback: () => ui.setMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, addToPartyMenuConfig),
               });
             };
             promptRelease();
@@ -377,9 +375,9 @@ export class AttemptCapturePhase extends PokemonPhase {
           }
         });
       },
-      0,
-      true,
-    );
+      callbackDelay: 0,
+      prompt: true,
+    });
   }
 
   /** Destroys the thrown pokeball object */

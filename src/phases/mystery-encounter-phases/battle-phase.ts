@@ -80,7 +80,7 @@ export class MysteryEncounterBattlePhase extends Phase {
       }
 
       if (!mysteryEncounter?.hideBattleIntroMessage) {
-        ui.showText(this.getBattleMessage(), null, () => this.endBattleSetup(), 0);
+        ui.showText(this.getBattleMessage(), { callback: () => this.endBattleSetup(), callbackDelay: 0 });
       } else {
         this.endBattleSetup();
       }
@@ -101,7 +101,7 @@ export class MysteryEncounterBattlePhase extends Phase {
           this.endBattleSetup();
         };
         if (!mysteryEncounter?.hideBattleIntroMessage) {
-          ui.showText(this.getBattleMessage(), null, doTrainerSummon, 1000, true);
+          ui.showText(this.getBattleMessage(), { callback: doTrainerSummon, callbackDelay: 1000, prompt: true });
         } else {
           doTrainerSummon();
         }
@@ -113,13 +113,12 @@ export class MysteryEncounterBattlePhase extends Phase {
         doSummon();
       } else {
         let message: string;
-        globalScene.executeWithSeedOffset(
-          () => (message = randSeedItem(encounterMessages)),
-          mysteryEncounter?.getSeedOffset() ?? 0,
-        );
+        globalScene.executeWithSeedOffset(() => {
+          message = randSeedItem(encounterMessages);
+        }, mysteryEncounter?.getSeedOffset() ?? 0);
         message = message!; // tell TS compiler it's defined now
         const showDialogueAndSummon = (): void => {
-          ui.showDialogue(message, trainer?.getName(TrainerSlot.NONE, true), null, () => {
+          ui.showDialogue(message, trainer?.getName(TrainerSlot.NONE, true) ?? "", () => {
             globalScene.charSprite.hide().then(() => globalScene.hideFieldOverlay(250).then(() => doSummon()));
           });
         };

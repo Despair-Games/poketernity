@@ -1,6 +1,6 @@
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
-import type TouchControl from "#app/touch-controls";
+import type { TouchControl } from "#app/touch-controls";
 import { TOUCH_CONSTROLS_LS_KEY_PREFIX } from "#constants/app-constants";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import type { UI } from "#ui/ui";
