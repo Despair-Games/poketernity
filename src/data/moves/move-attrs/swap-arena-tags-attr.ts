@@ -67,8 +67,15 @@ export class SwapArenaTagsAttr extends MoveEffectAttr {
    */
   public override getEffectScore(_user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     const { arena } = globalScene;
-    const playerTags = arena.getTags((t) => COURT_CHANGE_ARENA_TAG_TYPES.includes(t.tagType), ArenaTagSide.PLAYER);
-    const enemyTags = arena.getTags((t) => COURT_CHANGE_ARENA_TAG_TYPES.includes(t.tagType), ArenaTagSide.ENEMY);
+    // Tags that will expire at the end of the turn are excluded
+    const playerTags = arena.getTags(
+      (t) => COURT_CHANGE_ARENA_TAG_TYPES.includes(t.tagType) && t.turnCount !== 1,
+      ArenaTagSide.PLAYER,
+    );
+    const enemyTags = arena.getTags(
+      (t) => COURT_CHANGE_ARENA_TAG_TYPES.includes(t.tagType) && t.turnCount !== 1,
+      ArenaTagSide.ENEMY,
+    );
 
     /**
      * @returns the total score from the given Arena Tags, assuming they are all on the Player's side of the field.

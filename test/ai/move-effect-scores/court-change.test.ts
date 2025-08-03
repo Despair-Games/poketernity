@@ -94,4 +94,12 @@ describe("Move Effect Scores - Court Change", () => {
       expect(enemy).not.toPreferSelectingMove(MoveId.COURT_CHANGE);
     });
   });
+
+  it("should not gain incentive from tags that will expire at the end of the turn", async () => {
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
+
+    game.scene.arena.addTag(ArenaTagType.LIGHT_SCREEN, 0, 1, MoveId.LIGHT_SCREEN, ArenaTagSide.PLAYER, true);
+    const enemy = game.field.getEnemyPokemon();
+    expect(enemy).not.toPreferSelectingMove(MoveId.COURT_CHANGE);
+  });
 });
