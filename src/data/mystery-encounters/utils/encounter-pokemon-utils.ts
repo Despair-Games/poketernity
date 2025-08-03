@@ -614,13 +614,10 @@ function failCatch(
     globalScene.currentBattle.lastUsedPokeball = pokeballType;
     removePb(pokeball);
 
-    globalScene.ui.showText(
-      i18next.t("battle:pokemonBrokeFree", { pokemonName: pokemon.getNameToRender() }),
-      null,
-      () => resolve(),
-      null,
-      true,
-    );
+    globalScene.ui.showText(i18next.t("battle:pokemonBrokeFree", { pokemonName: pokemon.getNameToRender() }), {
+      callback: () => resolve(),
+      prompt: true,
+    });
   });
 }
 
@@ -770,13 +767,9 @@ export async function catchPokemon(
             },
           };
           const promptRelease = () => {
-            globalScene.ui.showText(
-              i18next.t("battle:partyFull", { pokemonName: pokemon.getNameToRender() }),
-              null,
-              () => {
-                globalScene.ui.setMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, addToPartyMenuConfig);
-              },
-            );
+            globalScene.ui.showText(i18next.t("battle:partyFull", { pokemonName: pokemon.getNameToRender() }), {
+              callback: () => globalScene.ui.setMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, addToPartyMenuConfig),
+            });
           };
           promptRelease();
         } else {
@@ -790,10 +783,7 @@ export async function catchPokemon(
         i18next.t(isObtain ? "battle:pokemonObtained" : "battle:pokemonCaught", {
           pokemonName: pokemon.getNameToRender(),
         }),
-        null,
-        doPokemonCatchMenu,
-        0,
-        true,
+        { callback: doPokemonCatchMenu, prompt: true },
       );
     } else {
       doPokemonCatchMenu();
@@ -839,12 +829,10 @@ export async function doPokemonFlee(pokemon: EnemyPokemon): Promise<void> {
       onComplete: () => {
         pokemon.setVisible(false);
         globalScene.field.remove(pokemon, true);
-        showEncounterText(
-          i18next.t("battle:pokemonFled", { pokemonName: pokemon.getNameToRender() }),
-          null,
-          600,
-          false,
-        ).then(() => {
+        showEncounterText(i18next.t("battle:pokemonFled", { pokemonName: pokemon.getNameToRender() }), {
+          callbackDelay: 600,
+          prompt: false,
+        }).then(() => {
           resolve();
         });
       },
@@ -870,12 +858,10 @@ export function doPlayerFlee(pokemon: EnemyPokemon): Promise<void> {
       onComplete: () => {
         pokemon.setVisible(false);
         globalScene.field.remove(pokemon, true);
-        showEncounterText(
-          i18next.t("battle:playerFled", { pokemonName: pokemon.getNameToRender() }),
-          null,
-          600,
-          false,
-        ).then(() => {
+        showEncounterText(i18next.t("battle:playerFled", { pokemonName: pokemon.getNameToRender() }), {
+          callbackDelay: 600,
+          prompt: false,
+        }).then(() => {
           resolve();
         });
       },

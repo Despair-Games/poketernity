@@ -6,6 +6,7 @@ import type { MovePhase } from "#phases/move-phase";
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BypassSpeedChanceAbAttr } from "#abilities/bypass-speed-chance-ab-attr";
 import { globalScene } from "#app/global-scene";
+import type { TrickRoomTag } from "#arena-tags/trick-room-tag";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
@@ -300,7 +301,7 @@ export class TurnCommandManager {
 
     /** 'true' if Trick Room is on the field. */
     const speedReversed = new BooleanHolder(false);
-    globalScene.arena.applyTags(ArenaTagType.TRICK_ROOM, ArenaTagSide.BOTH, false, speedReversed);
+    globalScene.arena.applyTags<TrickRoomTag>(ArenaTagType.TRICK_ROOM, ArenaTagSide.BOTH, false, speedReversed);
 
     if (speedReversed.value) {
       this.turnCommands = this.turnCommands.reverse();

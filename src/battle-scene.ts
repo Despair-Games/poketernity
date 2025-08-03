@@ -9,14 +9,12 @@ import { Battle, type FixedBattleConfig } from "#app/battle";
 import { eventBus } from "#app/event-bus";
 import { type GameMode, getGameMode } from "#app/game-mode";
 import { initGlobalScene } from "#app/global-scene";
-import { InputsController } from "#app/inputs-controller";
 import { LoadingScene } from "#app/loading-scene";
 import { CallSourceLogger, logModifiers } from "#app/loggers";
 import Overrides from "#app/overrides";
 import type { Phase } from "#app/phase";
 import { PhaseManager } from "#app/phase-manager";
 import { SceneBase } from "#app/scene-base";
-import { UiInputs } from "#app/ui-inputs";
 import { IV_MAX, IV_MIN, LEVEL_CAP_SCALE_FACTOR } from "#constants/game-constants";
 import {
   ME_ANTI_VARIANCE_WEIGHT_MODIFIER,
@@ -75,6 +73,8 @@ import type { SpeciesFormChangeTrigger } from "#form-change-triggers/species-for
 import { populateAnims } from "#init/init-anims";
 import { initCommonAnims } from "#init/init-common-anims";
 import { initMoveAnim } from "#init/init-move-anim";
+import { InputsController } from "#inputs/inputs-controller";
+import { UiInputs } from "#inputs/ui-inputs";
 import {
   ConsumableModifier,
   ConsumablePokemonModifier,
@@ -2707,7 +2707,7 @@ export class BattleScene extends SceneBase {
   initFinalBossPhaseTwo(pokemon: Pokemon): void {
     if (pokemon.isEnemy() && pokemon.isBoss() && !pokemon.formIndex && pokemon.bossSegmentIndex < 1) {
       this.audioManager.fadeOutBgm(fixedNumber(2000), false);
-      this.ui.showDialogue(classicFinalBossDialogue.firstStageWin, pokemon.species.name, null, () => {
+      this.ui.showDialogue(classicFinalBossDialogue.firstStageWin, pokemon.species.name, () => {
         const finalBossMBH = getModifierType(modifierTypes.MINI_BLACK_HOLE).newModifier(
           pokemon,
         ) as TurnHeldItemTransferModifier;

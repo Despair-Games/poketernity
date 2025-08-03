@@ -188,7 +188,7 @@ export function getWeatherStartMessage(weatherType: WeatherType): string | null 
  * @param weatherType - the {@linkcode WeatherType} lapsing
  * @returns the associated string
  */
-export function getWeatherLapseMessage(weatherType: WeatherType): string | null {
+export function getWeatherLapseMessage(weatherType: WeatherType): string {
   switch (weatherType) {
     case WeatherType.SUNNY:
       return i18next.t("weather:sunnyLapseMessage");
@@ -208,9 +208,9 @@ export function getWeatherLapseMessage(weatherType: WeatherType): string | null 
       return i18next.t("weather:harshSunLapseMessage");
     case WeatherType.STRONG_WINDS:
       return i18next.t("weather:strongWindsLapseMessage");
+    case WeatherType.NONE:
+      return "";
   }
-
-  return null;
 }
 
 /**

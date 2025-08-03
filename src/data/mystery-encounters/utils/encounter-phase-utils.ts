@@ -606,7 +606,10 @@ export function selectPokemonForOption(
                       return true;
                     },
                     onHover: () => {
-                      showEncounterText(i18next.t("mysteryEncounterMessages:cancel_option"), 0, 0, false);
+                      showEncounterText(i18next.t("mysteryEncounterMessages:cancel_option"), {
+                        delay: 0,
+                        prompt: false,
+                      });
                     },
                   });
 
@@ -747,7 +750,10 @@ export function selectOptionThenPokemon(
           if (onHoverOverCancelOption) {
             onHoverOverCancelOption();
           }
-          showEncounterText(i18next.t("mysteryEncounterMessages:cancel_option"), 0, 0, false);
+          showEncounterText(i18next.t("mysteryEncounterMessages:cancel_option"), {
+            delay: 0,
+            prompt: false,
+          });
         },
       });
 

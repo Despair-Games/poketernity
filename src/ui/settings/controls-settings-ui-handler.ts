@@ -1,17 +1,17 @@
 import { globalScene } from "#app/global-scene";
-import type { InterfaceConfig } from "#app/inputs-controller";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { Button } from "#enums/button";
 import type { Device } from "#enums/device";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
-import { getIconWithSettingName } from "#inputs/config-handler";
 import { settings } from "#system/settings-manager";
+import type { InputInterfaceConfig, InputSettings } from "#types/inputs-types";
 import { NavigationManager, NavigationMenu } from "#ui/navigation-menu";
 import { ScrollBar } from "#ui/scroll-bar";
 import { addTextObject, setTextColor } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";
 import { addWindow } from "#ui/ui-theme";
+import { getIconWithSettingName } from "#utils/inputs-utils";
 import i18next from "i18next";
 
 export interface InputsIcons {
@@ -55,7 +55,7 @@ export abstract class ControlsSettingsUiHandler extends UiHandler {
   protected keys: string[];
 
   // Store the specific settings related to key bindings for the current gamepad configuration.
-  protected bindingSettings: string[];
+  protected bindingSettings: InputSettings[];
 
   protected setting;
   protected settingBlacklisted;
@@ -307,9 +307,9 @@ export abstract class ControlsSettingsUiHandler extends UiHandler {
   /**
    * Get the active configuration.
    *
-   * @returns The active configuration for current device
+   * @returns The active configuration for current device, or `undefined` if none exists.
    */
-  getActiveConfig(): InterfaceConfig {
+  getActiveConfig(): InputInterfaceConfig | undefined {
     return globalScene.inputController.getActiveConfig(this.device);
   }
 
@@ -323,7 +323,7 @@ export abstract class ControlsSettingsUiHandler extends UiHandler {
     const activeConfig = this.getActiveConfig();
 
     // Set the UI layout for the active configuration. If unsuccessful, exit the function early.
-    if (!this.setLayout(activeConfig)) {
+    if (!activeConfig || !this.setLayout(activeConfig)) {
       return;
     }
 
@@ -337,7 +337,7 @@ export abstract class ControlsSettingsUiHandler extends UiHandler {
     // If the active configuration has no custom bindings set, exit the function early.
     // by default, if custom does not exists, a default is assigned to it
     // it only means the gamepad is not yet initalized
-    if (!activeConfig.custom) {
+    if (!activeConfig?.custom) {
       return;
     }
 
@@ -369,11 +369,10 @@ export abstract class ControlsSettingsUiHandler extends UiHandler {
         this.navigationIcons[settingName].alpha = 1;
         continue;
       }
-      const icon = globalScene.inputController?.getIconForLatestInputRecorded(settingName);
-      if (icon) {
-        const type = globalScene.inputController?.getLastSourceType();
-        this.navigationIcons[settingName].setTexture(type);
-        this.navigationIcons[settingName].setFrame(icon);
+      const icon = globalScene.inputController?.getIconForLatestInputRecorded(settingName as InputSettings);
+      const type = globalScene.inputController?.getLastSourceType();
+      if (icon && type) {
+        this.navigationIcons[settingName].setTexture(type, icon);
         this.navigationIcons[settingName].alpha = 1;
       } else {
         this.navigationIcons[settingName].alpha = 0;
@@ -413,7 +412,7 @@ export abstract class ControlsSettingsUiHandler extends UiHandler {
    * @param activeConfig - The active device configuration.
    * @returns `true` if the layout was successfully applied, otherwise `false`.
    */
-  protected setLayout(activeConfig: InterfaceConfig): boolean {
+  protected setLayout(activeConfig: InputInterfaceConfig): boolean {
     // Extract the type of the gamepad from the active configuration.
     const configType = activeConfig.padType;
 

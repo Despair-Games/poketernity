@@ -3,9 +3,9 @@ import { Device } from "#enums/device";
 import type { SettingGamepad } from "#enums/setting-gamepad";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
-import { getIconWithSettingName, getKeyWithKeycode } from "#inputs/config-handler";
 import { BindingUiHandler } from "#ui/binding-ui-handler";
 import { addTextObject } from "#ui/text-utils";
+import { getIconWithSettingName, getKeyWithKeycode } from "#utils/inputs-utils";
 
 export class GamepadBindingUiHandler extends BindingUiHandler {
   constructor(mode: UiMode | null = null) {
@@ -78,21 +78,34 @@ export class GamepadBindingUiHandler extends BindingUiHandler {
       return;
     }
     const activeConfig = globalScene.inputController.getActiveConfig(Device.GAMEPAD);
+    if (!activeConfig) {
+      return;
+    }
     const type = activeConfig.padType;
     const key = getKeyWithKeycode(activeConfig, button.index);
+    if (!key) {
+      return;
+    }
     const buttonIcon = activeConfig.icons[key];
     if (!buttonIcon) {
       return;
     }
     this.buttonPressed = button.index;
     const assignedButtonIcon = getIconWithSettingName(activeConfig, this.target);
+    if (!assignedButtonIcon) {
+      return;
+    }
     this.onInputDown(buttonIcon, assignedButtonIcon, type);
   }
 
   protected override swapAction(): boolean {
     const activeConfig = globalScene.inputController.getActiveConfig(Device.GAMEPAD);
+    const selectedDevice = this.getSelectedDevice();
+    if (!selectedDevice || !activeConfig || !this.buttonPressed) {
+      return false;
+    }
     if (globalScene.inputController.assignBinding(activeConfig, this.target, this.buttonPressed)) {
-      globalScene.gameData.saveMappingConfigs(this.getSelectedDevice(), activeConfig);
+      globalScene.gameData.saveMappingConfigs(selectedDevice, activeConfig);
       return true;
     }
     return false;

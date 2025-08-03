@@ -1,4 +1,4 @@
-/**
+/*
  * Used for `classicFixedBattles` and `VictoryPhase`
  *
  * Youngster/Lass on 5
@@ -9,6 +9,7 @@
  * E4 on 182, 184, 186, 188
  * Champion on 190
  */
+
 /** Youngster/Lass */
 export const TUTORIAL_BATTLE_WAVE = 5;
 

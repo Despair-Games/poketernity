@@ -1,3 +1,4 @@
+import type { BattleScene } from "#app/battle-scene";
 import type { MockGameObject } from "#test/test-utils/mocks/mock-game-object";
 import { MockVideoGameObject } from "#test/test-utils/mocks/mock-video-game-object";
 import { MockBBCodeText } from "#test/test-utils/mocks/mocks-container/mock-bbcode-text";
@@ -16,12 +17,12 @@ import { MockTexture } from "#test/test-utils/mocks/mocks-container/mock-texture
  */
 export class MockTextureManager {
   private textures: Map<string, any>;
-  private scene;
+  private scene: BattleScene;
   public add;
   public displayList;
   public list: MockGameObject[] = [];
 
-  constructor(scene) {
+  constructor(scene: BattleScene) {
     this.scene = scene;
     this.textures = new Map();
     this.displayList = new Phaser.GameObjects.DisplayList(scene);
