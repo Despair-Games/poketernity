@@ -77,13 +77,14 @@ export class CheckSwitchPhase extends BattlePhase {
       i18next.t("battle:switchQuestion", {
         pokemonName: this.useName ? getPokemonNameWithAffix(pokemon) : i18next.t("battle:pokemon"),
       }),
-      null,
-      () => {
-        const options: ConfirmModeConfig = {
-          yesHandler: () => this.onConfirm(),
-          noHandler: () => this.onCancel(),
-        };
-        globalScene.ui.setMode<ConfirmUiHandler>(UiMode.CONFIRM, options);
+      {
+        callback: () => {
+          const options: ConfirmModeConfig = {
+            yesHandler: () => this.onConfirm(),
+            noHandler: () => this.onCancel(),
+          };
+          globalScene.ui.setMode<ConfirmUiHandler>(UiMode.CONFIRM, options);
+        }
       },
     );
   }

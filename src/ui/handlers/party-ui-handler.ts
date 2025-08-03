@@ -31,6 +31,7 @@ import type {
   PokemonModifierTransferSelectFilter,
   PokemonMoveSelectFilter,
   PokemonSelectFilter,
+  ShowTextOptions,
 } from "#types/ui-types";
 import type { CommandUiHandler } from "#ui/command-ui-handler";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
@@ -329,7 +330,7 @@ export class PartyUiHandler extends MessageUiHandler {
             this.clearOptions();
           } else {
             this.clearOptions();
-            this.showText(filterResult as string, undefined, () => this.showText("", 0), undefined, true);
+            this.showText(filterResult, { callback: () => this.showText("", { delay: 0 }), prompt: true });
           }
           ui.playSelect();
           return true;
@@ -424,7 +425,7 @@ export class PartyUiHandler extends MessageUiHandler {
             return true;
           }
           this.clearOptions();
-          this.showText(filterResult as string, undefined, () => this.showText("", 0), undefined, true);
+          this.showText(filterResult, { callback: () => this.showText("", { delay: 0 }), prompt: true });
         } else if (option === PartyOption.SUMMARY) {
           ui.playSelect();
           ui.setModeWithoutClear<SummaryUiHandler>(UiMode.SUMMARY, pokemon).then(() => this.clearOptions());
@@ -438,10 +439,7 @@ export class PartyUiHandler extends MessageUiHandler {
               pokemon.pauseEvolutions ? "partyUiHandler:pausedEvolutions" : "partyUiHandler:unpausedEvolutions",
               { pokemonName: getPokemonNameWithAffix(pokemon) },
             ),
-            undefined,
-            () => this.showText("", 0),
-            null,
-            true,
+            { callback: () => this.showText("", { delay: 0 }), prompt: true },
           );
         } else if (option === PartyOption.RELEASE) {
           this.clearOptions();
@@ -455,19 +453,23 @@ export class PartyUiHandler extends MessageUiHandler {
               },
               noHandler: () => {
                 ui.setMode<PartyUiHandler>(UiMode.PARTY);
-                this.showText("", 0);
+                this.showText("", { delay: 0 });
               },
             };
             this.showText(
               i18next.t("partyUiHandler:releaseConfirmation", { pokemonName: getPokemonNameWithAffix(pokemon) }),
-              null,
-              () => {
-                this.blockInput = false;
-                ui.setModeWithoutClear<ConfirmUiHandler>(UiMode.CONFIRM, options);
+              {
+                callback: () => {
+                  this.blockInput = false;
+                  ui.setModeWithoutClear<ConfirmUiHandler>(UiMode.CONFIRM, options);
+                },
               },
             );
           } else {
-            this.showText(i18next.t("partyUiHandler:releaseInBattle"), null, () => this.showText("", 0), null, true);
+            this.showText(i18next.t("partyUiHandler:releaseInBattle"), {
+              callback: () => this.showText("", { delay: 0 }),
+              prompt: true,
+            });
           }
           return true;
         } else if (option === PartyOption.RENAME) {
@@ -739,17 +741,13 @@ export class PartyUiHandler extends MessageUiHandler {
 
   public override showText(
     text: string,
-    delay?: number | null,
-    callback?: Function | null,
-    callbackDelay?: number | null,
-    prompt?: boolean | null,
-    promptDelay?: number | null,
+    { delay, callback, callbackDelay, prompt, promptDelay }: ShowTextOptions = {},
   ) {
     if (text.length === 0) {
       text = defaultMessage;
     }
 
-    if (text?.indexOf("\n") === -1) {
+    if (text.indexOf("\n") === -1) {
       this.partyMessageBox.setSize(262, 30);
       this.message.setY(10);
     } else {
@@ -757,7 +755,7 @@ export class PartyUiHandler extends MessageUiHandler {
       this.message.setY(-5);
     }
 
-    super.showText(text, delay, callback, callbackDelay, prompt, promptDelay);
+    super.showText(text, { delay, callback, callbackDelay, prompt, promptDelay });
   }
 
   showOptions() {
@@ -780,7 +778,7 @@ export class PartyUiHandler extends MessageUiHandler {
         break;
     }
 
-    this.showText(optionsMessage, 0);
+    this.showText(optionsMessage, { delay: 0 });
 
     this.updateOptions();
 
@@ -1076,10 +1074,8 @@ export class PartyUiHandler extends MessageUiHandler {
    */
   tryRelease(slotIndex: number): void {
     if (globalScene.canReleasePokemon(slotIndex)) {
-      this.showText(
-        globalScene.getReleaseMessage(getPokemonNameWithAffix(globalScene.getPlayerParty()[slotIndex])),
-        null,
-        () => {
+      this.showText(globalScene.getReleaseMessage(getPokemonNameWithAffix(globalScene.getPlayerParty()[slotIndex])), {
+        callback: () => {
           globalScene.releasePokemon(slotIndex);
           this.clearPartySlots();
           this.populatePartySlots();
@@ -1091,13 +1087,15 @@ export class PartyUiHandler extends MessageUiHandler {
             selectCallback?.(cursor, PartyOption.RELEASE);
             this.selectCallback = null;
           }
-          this.showText("", 0);
+          this.showText("", { delay: 0 });
         },
-        null,
-        true,
-      );
+        prompt: true,
+      });
     } else {
-      this.showText(i18next.t("partyUiHandler:cannotReleasePokemon"), null, () => this.showText("", 0), null, true);
+      this.showText(i18next.t("partyUiHandler:cannotReleasePokemon"), {
+        callback: () => this.showText("", { delay: 0 }),
+        prompt: true,
+      });
     }
   }
 
@@ -1146,7 +1144,7 @@ export class PartyUiHandler extends MessageUiHandler {
     this.eraseOptionsCursor();
 
     this.partyMessageBox.setSize(262, 30);
-    this.showText("", 0);
+    this.showText("", { delay: 0 });
   }
 
   eraseOptionsCursor() {

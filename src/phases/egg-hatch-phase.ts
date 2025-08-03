@@ -359,20 +359,20 @@ export class EggHatchPhase extends Phase {
 
         globalScene.ui.showText(
           i18next.t("egg:hatchFromTheEgg", { pokemonName: getPokemonNameWithAffix(this.pokemon) }),
-          null,
-          () => {
-            globalScene.gameData.updateSpeciesDexIvs(this.pokemon.species.speciesId, this.pokemon.ivs);
-            globalScene.gameData.setPokemonCaught(this.pokemon, true, true).then(() => {
-              globalScene.gameData.setEggMoveUnlocked(this.pokemon.species, this.eggMoveIndex).then((value) => {
-                this.eggHatchData.setEggMoveUnlocked(value);
-                globalScene.ui.showText("", 0);
-                this.end();
+          {
+            callback: () => {
+              globalScene.gameData.updateSpeciesDexIvs(this.pokemon.species.speciesId, this.pokemon.ivs);
+              globalScene.gameData.setPokemonCaught(this.pokemon, true, true).then(() => {
+                globalScene.gameData.setEggMoveUnlocked(this.pokemon.species, this.eggMoveIndex).then((value) => {
+                  this.eggHatchData.setEggMoveUnlocked(value);
+                  globalScene.ui.showText("", { delay: 0 });
+                  this.end();
+                });
               });
-            });
+            },
+            prompt: true,
+            promptDelay: 3000,
           },
-          null,
-          true,
-          3000,
         );
       });
     });

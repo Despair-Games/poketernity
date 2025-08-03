@@ -1,7 +1,7 @@
 import type { BattleScene } from "#app/battle-scene";
-import type { InputsController } from "#app/inputs-controller";
 import { TouchControl } from "#app/touch-controls";
-import pad_xbox360 from "#inputs/pad-xbox360";
+import { pad_xbox360 } from "#inputs/gamepad-configs";
+import type { InputsController } from "#inputs/inputs-controller";
 import { holdOn } from "#test/test-utils/game-manager-utils";
 import { RESOURCES_FOLDER_PATH } from "#test/test-utils/test-utils";
 import fs from "node:fs";

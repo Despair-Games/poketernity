@@ -297,14 +297,11 @@ describe("Mystery Encounter Utils", () => {
       const spy = vi.spyOn(game.scene.ui, "showText");
 
       await showEncounterText("mysteryEncounter:unit_test_dialogue");
-      expect(spy).toHaveBeenCalledWith(
-        "mysteryEncounter:unit_test_dialogue",
-        null,
-        expect.any(Function),
-        0,
-        true,
-        null,
-      );
+      expect(spy).toHaveBeenCalledWith("mysteryEncounter:unit_test_dialogue", {
+        callback: expect.any(Function),
+        callbackDelay: 0,
+        prompt: true,
+      });
     });
   });
 
@@ -318,8 +315,8 @@ describe("Mystery Encounter Utils", () => {
       expect(spy).toHaveBeenCalledWith(
         "mysteryEncounter:unit_test_dialogue",
         "mysteryEncounter:unit_test_dialogue",
-        null,
         expect.any(Function),
+        undefined,
         0,
       );
     });

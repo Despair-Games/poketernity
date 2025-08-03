@@ -252,15 +252,13 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
     }
 
     globalScene.audioManager.playSound("level_up_fanfare"); // Sound loaded into game as is
-    ui.showText(
-      learnMoveText,
-      null,
-      () => {
+    ui.showText(learnMoveText, {
+      callback: () => {
         globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeMoveLearnedTrigger, true);
         this.end();
       },
-      this.messageMode === UiMode.FORM_CHANGE_SCENE ? 1000 : undefined,
-      true,
-    );
+      callbackDelay: this.messageMode === UiMode.FORM_CHANGE_SCENE ? 1000 : undefined,
+      prompt: true,
+    });
   }
 }

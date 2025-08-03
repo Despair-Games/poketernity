@@ -74,6 +74,13 @@ class SettingsManager {
   }
 
   /**
+   * Quick access to keyboard settings
+   */
+  get keyboard() {
+    return this._settings.keyboard;
+  }
+
+  /**
    * Getter for bgm volume after applying the master volume multiplier
    */
   get effectiveBgmVolume() {
@@ -164,7 +171,7 @@ class SettingsManager {
         // TODO figure out what to do with settings migration
         // applySettingsVersionMigration(lsSettings);
 
-        const { general, audio, display, gamepad } = lsSettings;
+        const { general, audio, display, gamepad, keyboard } = lsSettings;
 
         if (general) {
           this._settings.general = { ...this._settings.general, ...general };
@@ -180,6 +187,10 @@ class SettingsManager {
 
         if (gamepad) {
           this._settings.gamepad = { ...this._settings.gamepad, ...gamepad };
+        }
+
+        if (keyboard) {
+          this._settings.keyboard = { ...this._settings.keyboard, ...keyboard };
         }
       } catch (err) {
         console.error("Error loading settings from local storage:", err);

@@ -5,6 +5,7 @@ import type { EggSkipPreference } from "#enums/egg-skip-preference";
 import type { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import type { ExpNotification } from "#enums/exp-notification";
 import type { HpBarSpeed } from "#enums/hp-bar-speed";
+import type { KeyboardLayout } from "#enums/keyboard-layout";
 import type { MoneyFormat } from "#enums/money-format";
 import type { PlayerGender } from "#enums/player-gender";
 import type { ShopCursorTarget } from "#enums/shop-cursor-target";
@@ -20,6 +21,7 @@ export interface UserFacingSettings {
   audio: AudioSettings;
   display: DisplaySettings;
   gamepad: GamepadSettings;
+  keyboard: KeyboardSettings;
 }
 
 export interface MetaSettings {
@@ -74,6 +76,10 @@ export interface GamepadSettings {
   enabled: boolean;
 }
 
+export interface KeyboardSettings {
+  layout: KeyboardLayout;
+}
+
 export type SettingUiItemOption = {
   value: number | string | boolean;
   label: string;
@@ -91,14 +97,21 @@ export interface SettingsUiItem<K = string> {
   requiresReload?: boolean;
   /** Whether the setting is only available on devices supporting touchscreen. */
   touchscreenOnly?: boolean;
-  /** Wheter the setting options cursor should wrap. Should not be combined with {@linkcode requiresReload} */
+  /** Whether the setting options cursor should wrap. Should not be combined with {@linkcode requiresReload} */
   doWrap?: boolean;
+  /** Whether the setting should force a specific option to show as selected */
+  overrideSelectedIndex?: number;
 }
 
 export type SettingsCategory = keyof UserFacingSettings;
 
 /** All keys for all settings categories */
-export type AnySettingKey = GeneralSettingsKey | DisplaySettingsKey | AudioSettingsKey | GamepadSettingsKey;
+export type AnySettingKey =
+  | GeneralSettingsKey
+  | DisplaySettingsKey
+  | AudioSettingsKey
+  | GamepadSettingsKey
+  | KeyboardSettingsKey;
 
 /** All keys for the general settings + `"moveTouchControls"`. */
 export type GeneralSettingsKey = keyof GeneralSettings | "moveTouchControls";
@@ -111,6 +124,9 @@ export type AudioSettingsKey = keyof AudioSettings;
 
 /** All keys for the gamepad settings. */
 export type GamepadSettingsKey = keyof GamepadSettings;
+
+/** All keys for the keyboard settings. */
+export type KeyboardSettingsKey = keyof KeyboardSettings;
 
 export interface SettingsUpdateEventArgs {
   category: SettingsCategory;

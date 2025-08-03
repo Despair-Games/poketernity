@@ -10,6 +10,7 @@ import { GameDataType } from "#enums/game-data-type";
 import { TextStyle } from "#enums/text-style";
 import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
+import type { ShowTextOptions } from "#types/ui-types";
 import type { AchievementsUiHandler } from "#ui/achievements-ui-handler";
 import type { AdminUiHandler } from "#ui/admin-ui-handler";
 import { getAdminModeName } from "#ui/admin-ui-handler";
@@ -183,37 +184,39 @@ export class MenuUiHandler extends OptionSelectUiHandler {
 
     const confirmSlot = (message: string, slotFilter: (i: number) => boolean, callback: (i: number) => void) => {
       ui.revertMode();
-      ui.showText(message, null, () => {
-        const config: OptionSelectModeConfig = {
-          options: new Array(SAVE_SLOT_LIMIT)
-            .fill(null)
-            .map((_, i) => i)
-            .filter(slotFilter)
-            .map((i) => {
-              return {
-                label: i18next.t("menuUiHandler:slot", { slotNumber: i + 1 }),
-                handler: () => {
-                  callback(i);
-                  ui.revertMode();
-                  ui.showText("", 0);
-                  return true;
+      ui.showText(message, {
+        callback: () => {
+          const config: OptionSelectModeConfig = {
+            options: new Array(SAVE_SLOT_LIMIT)
+              .fill(null)
+              .map((_, i) => i)
+              .filter(slotFilter)
+              .map((i) => {
+                return {
+                  label: i18next.t("menuUiHandler:slot", { slotNumber: i + 1 }),
+                  handler: () => {
+                    callback(i);
+                    ui.revertMode();
+                    ui.showText("", { delay: 0 });
+                    return true;
+                  },
+                };
+              })
+              .concat([
+                {
+                  label: i18next.t("menuUiHandler:cancel"),
+                  handler: () => {
+                    ui.revertMode();
+                    ui.showText("", { delay: 0 });
+                    return true;
+                  },
                 },
-              };
-            })
-            .concat([
-              {
-                label: i18next.t("menuUiHandler:cancel"),
-                handler: () => {
-                  ui.revertMode();
-                  ui.showText("", 0);
-                  return true;
-                },
-              },
-            ]),
-          xOffset: this.optionSelectBg.displayWidth,
-          yOffset: this.menuMessageBox.displayHeight + 1,
-        };
-        ui.setOverlayMode<OptionSelectUiHandler>(UiMode.MENU_OPTION_SELECT, config);
+              ]),
+            xOffset: this.optionSelectBg.displayWidth,
+            yOffset: this.menuMessageBox.displayHeight + 1,
+          };
+          ui.setOverlayMode<OptionSelectUiHandler>(UiMode.MENU_OPTION_SELECT, config);
+        },
       });
     };
     // Import Session
@@ -345,16 +348,16 @@ export class MenuUiHandler extends OptionSelectUiHandler {
                 }
               }
               // Switch to the dialog test window
-              ui.showText(
-                String(i18next.t(translatedString, interpolatorOptions)),
-                null,
-                () =>
-                  globalScene.ui.showText("", 0, () => {
-                    handler.tutorialActive = false;
+              ui.showText(String(i18next.t(translatedString, interpolatorOptions)), {
+                callback: () =>
+                  globalScene.ui.showText("", {
+                    delay: 0,
+                    callback: () => {
+                      handler.tutorialActive = false;
+                    },
                   }),
-                null,
-                true,
-              );
+                prompt: true,
+              });
             },
             () => {
               ui.revertMode();
@@ -540,7 +543,10 @@ export class MenuUiHandler extends OptionSelectUiHandler {
           ui.setOverlayMode<EggListUiHandler>(UiMode.EGG_LIST);
           success = true;
         } else {
-          ui.showText(i18next.t("menuUiHandler:noEggs"), null, () => ui.showText(""), fixedNumber(1500));
+          ui.showText(i18next.t("menuUiHandler:noEggs"), {
+            callback: () => ui.showText(""),
+            callbackDelay: fixedNumber(1500),
+          });
         }
         break;
       case MenuOptions.EGG_GACHA:
@@ -621,20 +627,22 @@ export class MenuUiHandler extends OptionSelectUiHandler {
             });
           };
           if (globalScene.currentBattle.turn > 1) {
-            ui.showText(i18next.t("menuUiHandler:losingProgressionWarning"), null, () => {
-              if (!this.active) {
-                this.showText("", 0);
-                return;
-              }
-              const options: ConfirmModeConfig = {
-                yesHandler: doSaveQuit,
-                noHandler: () => {
-                  ui.revertMode();
-                  this.showText("", 0);
-                },
-                xOffset: this.optionSelectBg.displayWidth,
-              };
-              ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, options);
+            ui.showText(i18next.t("menuUiHandler:losingProgressionWarning"), {
+              callback: () => {
+                if (!this.active) {
+                  this.showText("", { delay: 0 });
+                  return;
+                }
+                const options: ConfirmModeConfig = {
+                  yesHandler: doSaveQuit,
+                  noHandler: () => {
+                    ui.revertMode();
+                    this.showText("", { delay: 0 });
+                  },
+                  xOffset: this.optionSelectBg.displayWidth,
+                };
+                ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, options);
+              },
             });
           } else {
             doSaveQuit();
@@ -653,20 +661,22 @@ export class MenuUiHandler extends OptionSelectUiHandler {
           });
         };
         if (globalScene.currentBattle) {
-          ui.showText(i18next.t("menuUiHandler:losingProgressionWarning"), null, () => {
-            if (!this.active) {
-              this.showText("", 0);
-              return;
-            }
-            const options: ConfirmModeConfig = {
-              yesHandler: doLogout,
-              noHandler: () => {
-                ui.revertMode();
-                this.showText("", 0);
-              },
-              xOffset: this.optionSelectBg.displayWidth,
-            };
-            ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, options);
+          ui.showText(i18next.t("menuUiHandler:losingProgressionWarning"), {
+            callback: () => {
+              if (!this.active) {
+                this.showText("", { delay: 0 });
+                return;
+              }
+              const options: ConfirmModeConfig = {
+                yesHandler: doLogout,
+                noHandler: () => {
+                  ui.revertMode();
+                  this.showText("", { delay: 0 });
+                },
+                xOffset: this.optionSelectBg.displayWidth,
+              };
+              ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, options);
+            },
           });
         } else {
           doLogout();
@@ -693,15 +703,11 @@ export class MenuUiHandler extends OptionSelectUiHandler {
 
   public override showText(
     text: string,
-    delay?: number,
-    callback?: Function,
-    callbackDelay?: number,
-    prompt?: boolean,
-    promptDelay?: number,
+    { delay, callback, callbackDelay, prompt, promptDelay }: ShowTextOptions = {},
   ): void {
     this.menuMessageBoxContainer.setVisible(!!text);
 
-    super.showText(text, delay, callback, callbackDelay, prompt, promptDelay);
+    super.showText(text, { delay, callback, callbackDelay, prompt, promptDelay });
   }
 
   protected override clear() {

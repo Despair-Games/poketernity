@@ -55,44 +55,44 @@ export class TrainerVictoryPhase extends BattlePhase {
       i18next.t("battle:trainerDefeated", {
         trainerName: trainer.getName(TrainerSlot.NONE, true),
       }),
-      null,
-      () => {
-        const victoryMessages = trainer.getVictoryMessages();
-        let message: string;
-        globalScene.executeWithSeedOffset(() => {
-          message = randSeedItem(victoryMessages);
-        }, waveIndex);
-        message = message!; // tell TS compiler it's defined now
+      {
+        callback: () => {
+          const victoryMessages = trainer.getVictoryMessages();
+          let message: string;
+          globalScene.executeWithSeedOffset(() => {
+            message = randSeedItem(victoryMessages);
+          }, waveIndex);
+          message = message!; // tell TS compiler it's defined now
 
-        const showMessage = (): void => {
-          const originalFunc = showMessageOrEnd;
-          showMessageOrEnd = (): void =>
-            ui.showDialogue(message, trainer.getName(TrainerSlot.TRAINER, true), null, originalFunc);
-
-          showMessageOrEnd();
-        };
-        let showMessageOrEnd = (): void => this.end();
-        if (victoryMessages.length) {
-          if (trainer.config.hasCharSprite && !ui.shouldSkipDialogue(message)) {
+          const showMessage = (): void => {
             const originalFunc = showMessageOrEnd;
-            showMessageOrEnd = (): Promise<void> =>
-              charSprite.hide().then(() => globalScene.hideFieldOverlay(250).then(() => originalFunc()));
-            globalScene
-              .showFieldOverlay(500)
-              .then(() =>
-                charSprite
-                  .showCharacter(trainer.getKey(), getCharVariantFromDialogue(victoryMessages[0]))
-                  .then(() => showMessage()),
-              );
+            showMessageOrEnd = (): void =>
+              ui.showDialogue(message, trainer.getName(TrainerSlot.TRAINER, true), originalFunc);
+
+            showMessageOrEnd();
+          };
+          let showMessageOrEnd = (): void => this.end();
+          if (victoryMessages.length) {
+            if (trainer.config.hasCharSprite && !ui.shouldSkipDialogue(message)) {
+              const originalFunc = showMessageOrEnd;
+              showMessageOrEnd = (): Promise<void> =>
+                charSprite.hide().then(() => globalScene.hideFieldOverlay(250).then(() => originalFunc()));
+              globalScene
+                .showFieldOverlay(500)
+                .then(() =>
+                  charSprite
+                    .showCharacter(trainer.getKey(), getCharVariantFromDialogue(victoryMessages[0]))
+                    .then(() => showMessage()),
+                );
+            } else {
+              showMessage();
+            }
           } else {
-            showMessage();
+            showMessageOrEnd();
           }
-        } else {
-          showMessageOrEnd();
-        }
+        },
+        prompt: true,
       },
-      null,
-      true,
     );
 
     this.showEnemyTrainer();

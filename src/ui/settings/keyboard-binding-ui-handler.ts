@@ -3,9 +3,9 @@ import { Device } from "#enums/device";
 import type { SettingKeyboard } from "#enums/setting-keyboard";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
-import { getKeyWithKeycode } from "#inputs/config-handler";
 import { BindingUiHandler } from "#ui/binding-ui-handler";
 import { addTextObject } from "#ui/text-utils";
+import { getKeyWithKeycode } from "#utils/inputs-utils";
 
 export class KeyboardBindingUiHandler extends BindingUiHandler {
   constructor(mode: UiMode | null = null) {
@@ -64,7 +64,13 @@ export class KeyboardBindingUiHandler extends BindingUiHandler {
       return;
     }
     const activeConfig = globalScene.inputController.getActiveConfig(Device.KEYBOARD);
+    if (!activeConfig) {
+      return;
+    }
     const _key = getKeyWithKeycode(activeConfig, key);
+    if (!_key) {
+      return;
+    }
     const buttonIcon = activeConfig.icons[_key];
     if (!buttonIcon) {
       return;
@@ -76,8 +82,12 @@ export class KeyboardBindingUiHandler extends BindingUiHandler {
 
   protected override swapAction(): boolean {
     const activeConfig = globalScene.inputController.getActiveConfig(Device.KEYBOARD);
+    const selectedDevice = this.getSelectedDevice();
+    if (!selectedDevice || !activeConfig || !this.buttonPressed) {
+      return false;
+    }
     if (globalScene.inputController.assignBinding(activeConfig, this.target, this.buttonPressed)) {
-      globalScene.gameData.saveMappingConfigs(this.getSelectedDevice(), activeConfig);
+      globalScene.gameData.saveMappingConfigs(selectedDevice, activeConfig);
       return true;
     }
     return false;

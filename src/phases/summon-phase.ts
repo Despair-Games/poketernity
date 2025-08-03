@@ -246,7 +246,7 @@ export class SummonPhase extends PokemonPhase {
     const pokemonName = this.getPokemon().getNameToRender();
     const message = i18next.t("battle:trainerSendOut", { trainerName, pokemonName });
 
-    await new Promise<void>((resolve) => ui.showText(message, null, resolve));
+    await new Promise<void>((resolve) => ui.showText(message, { callback: resolve }));
   }
 
   /**

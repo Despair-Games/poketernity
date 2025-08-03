@@ -195,7 +195,7 @@ export const GlobalTradeSystemEncounter: MysteryEncounter = MysteryEncounterBuil
                   + " "
                   + getNatureName(tradePokemon.getNature())
                   + (formName ? "     |     " + i18next.t("pokemonInfoContainer:form") + " " + formName : "");
-                showEncounterText(`${line1}\n${line2}`, 0, 0, false);
+                showEncounterText(`${line1}\n${line2}`, { delay: 0, prompt: false });
               },
             };
             return option;
@@ -505,7 +505,7 @@ async function doTradeOptionPhaseCallback(): Promise<void> {
   // Show the trade animation
   await showTradeBackground();
   await doPokemonTradeSequence(tradedPokemon, newPlayerPokemon);
-  await showEncounterText(`${namespace}:trade_received`, null, 0, true, 4000);
+  await showEncounterText(`${namespace}:trade_received`, { promptDelay: 4000 });
   globalScene.audioManager.playBgm(encounter.misc.bgmKey);
   const unlockedStarters = await addPokemonDataToDexAndValidateAchievements(newPlayerPokemon);
   if (unlockedStarters.length > 0) {
@@ -582,11 +582,6 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
     const tradeContainer = globalScene.fieldUI.getByName("Trade Background") as Phaser.GameObjects.Container;
     const tradeBaseBg = tradeContainer.getByName("Trade Background Image") as Phaser.GameObjects.Image;
 
-    let tradedPokemonSprite: Phaser.GameObjects.Sprite;
-    let tradedPokemonTintSprite: Phaser.GameObjects.Sprite;
-    let receivedPokemonSprite: Phaser.GameObjects.Sprite;
-    let receivedPokemonTintSprite: Phaser.GameObjects.Sprite;
-
     const getPokemonSprite = () => {
       const ret = globalScene.addPokemonSprite(
         tradedPokemon,
@@ -598,10 +593,17 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
       return ret;
     };
 
-    tradeContainer.add((tradedPokemonSprite = getPokemonSprite()));
-    tradeContainer.add((tradedPokemonTintSprite = getPokemonSprite()));
-    tradeContainer.add((receivedPokemonSprite = getPokemonSprite()));
-    tradeContainer.add((receivedPokemonTintSprite = getPokemonSprite()));
+    const tradedPokemonSprite: Phaser.GameObjects.Sprite = getPokemonSprite();
+    const tradedPokemonTintSprite: Phaser.GameObjects.Sprite = getPokemonSprite();
+    const receivedPokemonSprite: Phaser.GameObjects.Sprite = getPokemonSprite();
+    const receivedPokemonTintSprite: Phaser.GameObjects.Sprite = getPokemonSprite();
+
+    tradeContainer.add([
+      tradedPokemonSprite,
+      tradedPokemonTintSprite,
+      receivedPokemonSprite,
+      receivedPokemonTintSprite,
+    ]);
 
     tradedPokemonSprite.setAlpha(0);
     tradedPokemonTintSprite.setAlpha(0);

@@ -60,7 +60,7 @@ export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
         pokemonName: getPokemonNameWithAffix(this.pokemon),
         level: this.level,
       });
-      ui.showText(levelUpText, null, () => promptLevelUpStats(), null, true);
+      ui.showText(levelUpText, { callback: () => promptLevelUpStats(), prompt: true });
     } else if (settings.general.partyExpNotificationMode === ExpNotification.SKIP) {
       this.end();
     } else {
