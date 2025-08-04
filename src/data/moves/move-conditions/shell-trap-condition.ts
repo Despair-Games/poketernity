@@ -7,7 +7,7 @@ import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveCondition } from "#moves/move-condition";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 
 /**
  * Condition for the move {@link https://bulbapedia.bulbagarden.net/wiki/Shell_Trap_(move) | Shell Trap}.
@@ -27,10 +27,15 @@ export class ShellTrapCondition extends MoveCondition {
    */
   public override getConditionScore(user: EnemyPokemon, _target: Pokemon, move: Move): number {
     const opponents = user.getOpponents();
+    const effectiveStatOptions = {
+      opponent: user,
+      move,
+      abilityApplyMode: AbilityApplyMode.REVEALED,
+    };
+
     return opponents
       .map((p) =>
-        p.getEffectiveStat(Stat.ATK, user, move, AbilityApplyMode.REVEALED)
-        > p.getEffectiveStat(Stat.SPATK, user, move, AbilityApplyMode.REVEALED)
+        p.getEffectiveStat(Stat.ATK, effectiveStatOptions) > p.getEffectiveStat(Stat.SPATK, effectiveStatOptions)
           ? 0
           : MAJOR_EFFECT_SCORE_PENALTY,
       )

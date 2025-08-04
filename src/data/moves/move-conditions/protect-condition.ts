@@ -8,7 +8,7 @@ import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveCondition } from "#moves/move-condition";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 
 /**
  * Condition for {@link https://bulbapedia.bulbagarden.net/wiki/Protect_(move) | Protect}

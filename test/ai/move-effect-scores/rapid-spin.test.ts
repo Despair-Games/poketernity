@@ -30,7 +30,7 @@ describe("Move Effect Scores - Rapid Spin", () => {
       .ability(AbilityId.BALL_FETCH)
       .startingLevel(100)
       .enemyLevel(100)
-      .enemyMoveset([MoveId.RAPID_SPIN, MoveId.FACADE]);
+      .enemyMoveset([MoveId.RAPID_SPIN, MoveId.EXTREME_SPEED]);
   });
 
   it("should not be preferred when no effects are on the field", async () => {

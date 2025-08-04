@@ -10,7 +10,7 @@ import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { AddArenaTagAttr } from "#moves/move-attrs/add-arena-tag-attr";
-import type { ProtectConditionFunc } from "#types/protect-condition-func";
+import type { ProtectConditionFunc } from "#types/move-types";
 
 /**
  * Attribute to apply team-wide protection against certain moves

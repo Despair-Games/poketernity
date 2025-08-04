@@ -1270,8 +1270,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns `true` if this Pokemon has higher Speed than
    */
   public outspeeds(target: Pokemon, estimate: boolean = false): boolean {
-    const applyMode = estimate ? AbilityApplyMode.REVEALED : AbilityApplyMode.DEFAULT;
-    return this.getEffectiveStat(Stat.SPD, target) > target.getEffectiveStat(Stat.SPD, this, undefined, applyMode);
+    const abilityApplyMode = estimate ? AbilityApplyMode.REVEALED : AbilityApplyMode.DEFAULT;
+    return (
+      this.getEffectiveStat(Stat.SPD, { opponent: target })
+      > target.getEffectiveStat(Stat.SPD, { opponent: this, abilityApplyMode })
+    );
   }
 
   calculateStats(): void {

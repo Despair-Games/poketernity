@@ -926,7 +926,7 @@ export abstract class Move {
      * assign a (-5) penalty.
      */
     const userSpd = user.getEffectiveStat(Stat.SPD);
-    const targetSpd = target.getEffectiveStat(Stat.SPD, undefined, undefined, AbilityApplyMode.REVEALED);
+    const targetSpd = target.getEffectiveStat(Stat.SPD, { abilityApplyMode: AbilityApplyMode.REVEALED });
     if (target.isSemiInvulnerable() && userSpd > targetSpd) {
       return BAD_MOVE_PENALTY;
     }
