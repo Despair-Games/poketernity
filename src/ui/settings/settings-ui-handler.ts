@@ -7,6 +7,7 @@ import { UiMode } from "#enums/ui-mode";
 import { settings as settingsManager } from "#system/settings-manager";
 import type { InputSettings } from "#types/inputs-types";
 import type { SettingsCategory, SettingsUiItem } from "#types/settings";
+import type { ShowTextOptions } from "#types/ui-types";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import type { InputsIcons } from "#ui/controls-settings-ui-handler";
@@ -469,8 +470,8 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
           inputDelay: 750,
           canBypassInputDelay: true,
         };
-        globalScene.ui.showText(confirmationMessage, null, () => {
-          globalScene.ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, confirmSettingOptions);
+        globalScene.ui.showText(confirmationMessage, {
+          callback: () => globalScene.ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, confirmSettingOptions),
         });
       } else {
         this.handleSaveSetting<typeof value>(uiItem, value);
@@ -542,14 +543,10 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
 
   public override showText(
     text: string,
-    delay?: number,
-    callback?: Function,
-    callbackDelay?: number,
-    prompt?: boolean,
-    promptDelay?: number,
+    { delay, callback, callbackDelay, prompt, promptDelay }: ShowTextOptions = {},
   ) {
     this.messageBoxContainer.setVisible(!!text?.length);
-    super.showText(text, delay, callback, callbackDelay, prompt, promptDelay);
+    super.showText(text, { delay, callback, callbackDelay, prompt, promptDelay });
   }
 
   protected updateOptionValueLabel(settingIndex: number, optionIndex: number, newLabel: string) {
@@ -595,18 +592,16 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
         globalScene.ui.revertMode();
         // revert settings mode.
         globalScene.ui.revertMode();
-        this.showText("", 0);
+        this.showText("", { delay: 0 });
         onConfirm();
       },
       noHandler: () => {
         globalScene.ui.revertMode();
-        this.showText("", 0);
+        this.showText("", { delay: 0 });
         onCancel?.();
       },
     };
-    this.showText(text, undefined, () => {
-      globalScene.ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, config);
-    });
+    this.showText(text, { callback: () => globalScene.ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, config) });
   }
 
   protected handleCancelConfirm(uiItem: SettingsUiItem) {

@@ -153,14 +153,11 @@ export class FormChangePhase extends FormChangeBasePhase {
               );
 
               formChangedPokemon.destroy();
-              ui.showText(
-                getSpeciesFormChangeMessage(this.pokemon, this.formChange, preName),
-                null,
-                () => this.end(),
-                null,
-                true,
-                fixedNumber(delay),
-              );
+              ui.showText(getSpeciesFormChangeMessage(this.pokemon, this.formChange, preName), {
+                callback: () => this.end(),
+                prompt: true,
+                promptDelay: fixedNumber(delay),
+              });
               time.delayedCall(fixedNumber(delay + 250), () => globalScene.audioManager.playBgm());
             });
           });

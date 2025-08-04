@@ -153,13 +153,13 @@ export class CommandPhase extends FieldPhase {
     const { battleType, mysteryEncounter, turnManager, double } = currentBattle;
 
     const failCatchRunCallback = (): void => {
-      ui.showText("", 0);
+      ui.showText("", { delay: 0 });
       ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);
     };
     const failCatchRun = (i18nKey: string): void => {
       ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);
       ui.setMessageMode();
-      ui.showText(i18next.t(i18nKey), null, () => failCatchRunCallback(), null, true);
+      ui.showText(i18next.t(i18nKey), { callback: () => failCatchRunCallback(), prompt: true });
     };
 
     // TODO: break out the code in this switch block into private methods
@@ -240,16 +240,13 @@ export class CommandPhase extends FieldPhase {
           }
           const moveName = move.getName().replace(" (N)", ""); // Trims off the "unimplemented move" indicator
 
-          ui.showText(
-            i18next.t(errorMessageKey, { moveName: moveName }),
-            null,
-            () => {
+          ui.showText(i18next.t(errorMessageKey, { moveName: moveName }), {
+            callback: () => {
               ui.clearText();
               ui.setMode<FightUiHandler>(UiMode.FIGHT, this.fieldIndex);
             },
-            null,
-            true,
-          );
+            prompt: true,
+          });
         }
         break;
       }
@@ -323,18 +320,15 @@ export class CommandPhase extends FieldPhase {
         const trappedAbMessages: string[] = [];
 
         const showNoEscapeText = (text: string): void => {
-          ui.showText(
-            text,
-            null,
-            () => {
-              ui.showText("", 0);
+          ui.showText(text, {
+            callback: () => {
+              ui.showText("", { delay: 0 });
               if (!isSwitch) {
                 ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);
               }
             },
-            null,
-            true,
-          );
+            prompt: true,
+          });
         };
 
         if (batonPass || !pokemon.isTrapped(trappedAbMessages)) {

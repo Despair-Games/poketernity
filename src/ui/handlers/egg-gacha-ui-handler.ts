@@ -14,6 +14,7 @@ import { UiMode } from "#enums/ui-mode";
 import { VoucherType } from "#enums/voucher-type";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
 import { getVoucherTypeIcon } from "#system/voucher";
+import type { ShowTextOptions } from "#types/ui-types";
 import { MessageUiHandler } from "#ui/message-ui-handler";
 import { addTextObject, getEggTierTextTint } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
@@ -334,7 +335,7 @@ export class EggGachaUiHandler extends MessageUiHandler {
   }
 
   public override show(): boolean {
-    this.getUi().showText(this.defaultText, 0);
+    globalScene.ui.showText(this.defaultText, { delay: 0 });
 
     this.setGachaCursor(1);
 
@@ -624,11 +625,7 @@ export class EggGachaUiHandler extends MessageUiHandler {
 
   public override showText(
     text: string,
-    delay?: number,
-    callback?: Function,
-    callbackDelay?: number,
-    prompt?: boolean,
-    promptDelay?: number,
+    { delay, callback, callbackDelay, prompt, promptDelay }: ShowTextOptions = {},
   ): void {
     if (!text) {
       text = this.defaultText;
@@ -644,11 +641,11 @@ export class EggGachaUiHandler extends MessageUiHandler {
       this.message.setY(-6);
     }
 
-    super.showText(text, delay, callback, callbackDelay, prompt, promptDelay);
+    super.showText(text, { delay, callback, callbackDelay, prompt, promptDelay });
   }
 
   showError(text: string): void {
-    this.showText(text, undefined, () => this.showText(this.defaultText), fixedNumber(1500));
+    this.showText(text, { callback: () => this.showText(this.defaultText), callbackDelay: fixedNumber(1500) });
   }
 
   setTransitioning(transitioning: boolean): void {

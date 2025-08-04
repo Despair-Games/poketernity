@@ -1281,18 +1281,19 @@ export class GameData {
           }
 
           const displayError = (error: string) =>
-            globalScene.ui.showText(error, null, () => globalScene.ui.showText("", 0), fixedNumber(1500));
+            globalScene.ui.showText(error, {
+              callback: () => globalScene.ui.showText("", { delay: 0 }),
+              callbackDelay: fixedNumber(1500),
+            });
           dataName = dataName!; // tell TS compiler that dataName is defined!
 
           const dataNotLoadedString =
             dataName === "session" ? i18next.t("menu:sessionDataNotLoaded") : i18next.t("menu:gameDataNotLoaded");
           if (!valid) {
-            return globalScene.ui.showText(
-              dataNotLoadedString,
-              null,
-              () => globalScene.ui.showText("", 0),
-              fixedNumber(1500),
-            );
+            return globalScene.ui.showText(dataNotLoadedString, {
+              callback: () => globalScene.ui.showText("", { delay: 0 }),
+              callbackDelay: fixedNumber(1500),
+            });
           }
 
           // TODO: move this outside of game data
@@ -1329,7 +1330,7 @@ export class GameData {
             },
             noHandler: () => {
               globalScene.ui.revertMode();
-              globalScene.ui.showText("", 0);
+              globalScene.ui.showText("", { delay: 0 });
             },
             xOffset: confirmWindowXOffset,
           };
@@ -1338,8 +1339,8 @@ export class GameData {
             dataName === "session"
               ? i18next.t("menu:sessionDataOverwriteWarning")
               : i18next.t("menu:gameDataOverwriteWarning");
-          globalScene.ui.showText(dataOverwriteString, null, () => {
-            globalScene.ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, importDataConfirmOptions);
+          globalScene.ui.showText(dataOverwriteString, {
+            callback: () => globalScene.ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, importDataConfirmOptions),
           });
         };
       })((e.target as any).files[0]);
@@ -1596,13 +1597,10 @@ export class GameData {
           checkPreEvolution(unlockedStarters);
         } else {
           globalScene.audioManager.playSound("level_up_fanfare");
-          globalScene.ui.showText(
-            i18next.t("battle:addedAsAStarter", { pokemonName: species.name }),
-            null,
-            () => checkPreEvolution(unlockedStarters),
-            null,
-            true,
-          );
+          globalScene.ui.showText(i18next.t("battle:addedAsAStarter", { pokemonName: species.name }), {
+            callback: () => checkPreEvolution(unlockedStarters),
+            prompt: true,
+          });
         }
       } else {
         checkPreEvolution(unlockedStarters);
@@ -1768,7 +1766,7 @@ export class GameData {
           ? i18next.t("egg:rareEggMoveUnlock", { moveName: moveName })
           : i18next.t("egg:eggMoveUnlock", { moveName: moveName });
 
-      globalScene.ui.showText(message, null, () => resolve(true), null, true);
+      globalScene.ui.showText(message, { callback: () => resolve(true), prompt: true });
     });
   }
 

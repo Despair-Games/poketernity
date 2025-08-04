@@ -33,10 +33,9 @@ export class EggLapsePhase extends Phase {
 
     if (eggsToHatchCount > 0) {
       if (eggsToHatchCount >= this.minEggsToSkip && settings.general.eggSkipPreference === EggSkipPreference.ASK) {
-        globalScene.ui.showText(
-          i18next.t("battle:eggHatching"),
-          0,
-          () => {
+        globalScene.ui.showText(i18next.t("battle:eggHatching"), {
+          delay: 0,
+          callback: () => {
             const options: ConfirmModeConfig = {
               yesHandler: () => {
                 this.hatchEggsSkipped(eggsToHatch);
@@ -49,12 +48,12 @@ export class EggLapsePhase extends Phase {
               inputDelay: 1000,
             };
             // show prompt for skip, blocking inputs for 1 second
-            globalScene.ui.showText(i18next.t("battle:eggSkipPrompt", { eggsToHatch: eggsToHatchCount }), 0);
+            globalScene.ui.showText(i18next.t("battle:eggSkipPrompt", { eggsToHatch: eggsToHatchCount }), { delay: 0 });
             globalScene.ui.setModeWithoutClear<ConfirmUiHandler>(UiMode.CONFIRM, options);
           },
-          100,
-          true,
-        );
+          callbackDelay: 100,
+          prompt: true,
+        });
       } else if (
         eggsToHatchCount >= this.minEggsToSkip
         && settings.general.eggSkipPreference === EggSkipPreference.ALWAYS

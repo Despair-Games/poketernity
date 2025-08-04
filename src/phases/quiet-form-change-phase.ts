@@ -37,12 +37,10 @@ export class QuietFormChangePhase extends BattlePhase {
     if (!this.pokemon.isOnField() || this.pokemon.isSemiInvulnerable() || this.pokemon.isFainted()) {
       if (this.pokemon.isPlayer() || this.pokemon.isActive()) {
         this.pokemon.changeForm(this.formChange).then(() => {
-          ui.showText(
-            getSpeciesFormChangeMessage(this.pokemon, this.formChange, preName),
-            null,
-            () => this.end(),
-            1500,
-          );
+          ui.showText(getSpeciesFormChangeMessage(this.pokemon, this.formChange, preName), {
+            callback: () => this.end(),
+            callbackDelay: 1500,
+          });
         });
       } else {
         this.end();
@@ -136,12 +134,10 @@ export class QuietFormChangePhase extends BattlePhase {
                 duration: 1000,
                 onComplete: () => {
                   pokemonTintSprite.setVisible(false);
-                  ui.showText(
-                    getSpeciesFormChangeMessage(this.pokemon, this.formChange, preName),
-                    null,
-                    () => this.end(),
-                    1500,
-                  );
+                  ui.showText(getSpeciesFormChangeMessage(this.pokemon, this.formChange, preName), {
+                    callback: () => this.end(),
+                    callbackDelay: 1500,
+                  });
                 },
               });
             },
