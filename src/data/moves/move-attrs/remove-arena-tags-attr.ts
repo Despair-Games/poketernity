@@ -65,11 +65,11 @@ export class RemoveArenaTagsAttr extends MoveEffectAttr {
 
     /**
      * Each {@link affectedTags | tag} contributes its {@link getTagRemovalBonus | base score},
-     * multiplied by -1 if the tag only exists on the enemy's (i.e. user's) side
+     * multiplied by -1 if the tag only exists on the user's side
      */
     const totalScore =
       affectedTags?.reduce(
-        (score, tag) => score + this.getTagRemovalBonus(tag.tagType) * (tag.side === ArenaTagSide.ENEMY ? -1 : 1),
+        (score, tag) => score + this.getTagRemovalBonus(tag.tagType) * (tag.side === user.getArenaTagSide() ? -1 : 1),
         0,
       ) ?? 0;
 
