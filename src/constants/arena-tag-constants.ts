@@ -27,6 +27,17 @@ export const WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES = Object.freeze<ArenaTagType[]>(
   ArenaTagType.LIGHT_SCREEN,
 ]);
 
+/**
+ * All {@linkcode ArenaTagType | ArenaTagTypes} that can be removed by
+ * {@link https://bulbapedia.bulbagarden.net/wiki/Defog_(move) | Defog}
+ * and equivalent effects from the target's side of the field
+ */
+export const DEFOG_REMOVABLE_ARENA_TAG_TYPES = Object.freeze<ArenaTagType[]>([
+  ...WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES,
+  ArenaTagType.SAFEGUARD,
+  ArenaTagType.MIST,
+]);
+
 /** All {@linkcode ArenaTagType | ArenaTagTypes} that grant protection/invulnerability under certain conditions. */
 export const CONDITIONAL_PROTECT_ARENA_TAG_TYPES = Object.freeze<ArenaTagType[]>([
   ArenaTagType.QUICK_GUARD,
@@ -51,6 +62,20 @@ export const COURT_CHANGE_ARENA_TAG_TYPES = Object.freeze<ArenaTagType[]>([
   ArenaTagType.GRASS_WATER_PLEDGE,
   ArenaTagType.FIRE_GRASS_PLEDGE,
   ArenaTagType.WATER_FIRE_PLEDGE,
+  ArenaTagType.G_MAX_VINE_LASH,
+  ArenaTagType.G_MAX_WILDFIRE,
+  ArenaTagType.G_MAX_CANNONADE,
+  ArenaTagType.G_MAX_VOLCALITH,
+]);
+
+/**
+ * All {@linkcode ArenaTagType | ArenaTagTypes} that can be swapped by {@linkcode MoveId.COURT_CHANGE}
+ * and are perceived by the Enemy AI to have a harmful effect.
+ */
+export const HARMFUL_COURT_CHANGE_ARENA_TAG_TYPES = Object.freeze<ArenaTagType[]>([
+  ...ENTRY_HAZARD_ARENA_TAG_TYPES,
+  ArenaTagType.GRASS_WATER_PLEDGE,
+  ArenaTagType.FIRE_GRASS_PLEDGE,
   ArenaTagType.G_MAX_VINE_LASH,
   ArenaTagType.G_MAX_WILDFIRE,
   ArenaTagType.G_MAX_CANNONADE,
