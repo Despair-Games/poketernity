@@ -25,7 +25,7 @@ describe("Move Effect Scores - Rapid Spin", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("double")
-      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemySpecies(SpeciesId.MEW)
       .enemyAbility(AbilityId.BALL_FETCH)
       .ability(AbilityId.BALL_FETCH)
       .startingLevel(100)
@@ -34,7 +34,7 @@ describe("Move Effect Scores - Rapid Spin", () => {
   });
 
   it("should not be preferred when no effects are on the field", async () => {
-    await game.classicMode.startBattle(SpeciesId.MUNCHLAX);
+    await game.classicMode.startBattle(SpeciesId.SNORLAX);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).not.toPreferSelectingMove(MoveId.RAPID_SPIN);
@@ -55,7 +55,7 @@ describe("Move Effect Scores - Rapid Spin", () => {
     { moveName: "Whirlpool", tagType: BattlerTagType.WHIRLPOOL },
     { moveName: "Leech Seed", tagType: BattlerTagType.SEEDED },
   ])("should be preferred when the user is afflicted with the effects of $moveName", async ({ tagType }) => {
-    await game.classicMode.startBattle(SpeciesId.MUNCHLAX);
+    await game.classicMode.startBattle(SpeciesId.SNORLAX);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -71,7 +71,7 @@ describe("Move Effect Scores - Rapid Spin", () => {
     { tagName: "Sticky Web", tagType: ArenaTagType.STICKY_WEB },
     { tagName: "Sharp Steel", tagType: ArenaTagType.SHARP_STEEL },
   ])(`should be preferred when $tagName is on the user's side of the field`, async ({ tagType }) => {
-    await game.classicMode.startBattle(SpeciesId.MUNCHLAX);
+    await game.classicMode.startBattle(SpeciesId.SNORLAX);
 
     game.scene.arena.addTag(tagType, 0, 0, MoveId.NONE, ArenaTagSide.ENEMY, true);
     const enemy = game.field.getEnemyPokemon();
@@ -79,7 +79,7 @@ describe("Move Effect Scores - Rapid Spin", () => {
   });
 
   it("should not gain or lose incentive from hazards on the opposing side", async () => {
-    await game.classicMode.startBattle(SpeciesId.MUNCHLAX);
+    await game.classicMode.startBattle(SpeciesId.SNORLAX);
 
     game.scene.arena.addTag(ArenaTagType.SPIKES, 0, 0, MoveId.NONE, ArenaTagSide.PLAYER, true);
     const enemy = game.field.getEnemyPokemon();
