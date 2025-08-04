@@ -23,7 +23,6 @@ import { SummaryUiPage } from "#enums/summary-ui-page";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import type { Pokemon } from "#field/pokemon";
-import type { PokemonMove } from "#field/pokemon-move";
 import { modifierSortFunc, type PokemonHeldItemModifier } from "#modifier/modifier";
 import type { Move } from "#moves/move";
 import { settings } from "#system/settings-manager";
@@ -1049,9 +1048,12 @@ export class SummaryUiHandler extends UiHandler {
         this.moveRowsContainer = globalScene.add.container(0, 0);
         this.movesContainer.add(this.moveRowsContainer);
 
+        // TODO: is it even possible to reach this `for` loop if `this.pokemon` is `null`?
+        // what about the rest of this method? in what situation is `this.pokemon` `null`?
+        const moveset = this.pokemon?.getMoveset(true);
         for (let m = 0; m < 4; m++) {
-          const move: PokemonMove | null =
-            this.pokemon && this.pokemon.getMoveset(true).length > m ? this.pokemon.getMoveset(true)[m] : null;
+          // `!`s are safe because `moveset` isn't `undefined` if `this.pokemon` is defined
+          const move = this.pokemon && moveset!.length > m ? moveset![m] : null;
           const moveRowContainer = globalScene.add.container(0, 16 * m);
           this.moveRowsContainer.add(moveRowContainer);
 
