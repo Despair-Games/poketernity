@@ -1,5 +1,5 @@
 import { MoveResult } from "#enums/move-result";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 
 /**
  * Condition function requiring the target's last-used move to be copiable,

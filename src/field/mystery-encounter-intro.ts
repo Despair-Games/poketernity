@@ -3,7 +3,7 @@ import type { Variant } from "#data/variant";
 import { ImagesFolder } from "#enums/images-folder";
 import type { SpeciesId } from "#enums/species-id";
 import { getSpriteKeysFromSpecies } from "#mystery-encounters/encounter-pokemon-utils";
-import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
+import type { MysteryEncounter } from "#mystery-encounters/mystery-encounter";
 import { isNil } from "#utils/common-utils";
 import Phaser from "phaser";
 
@@ -54,11 +54,13 @@ export class MysteryEncounterSpriteConfig {
 }
 
 /**
- * When a mystery encounter spawns, there are visuals (mainly sprites) tied to the field for the new encounter to inform the player of the type of encounter
- * These slide in with the field as part of standard field change cycle, and will typically be hidden after the player has selected an option for the encounter
- * Note: intro visuals are not "Trainers" or any other specific game object, though they may contain trainer sprites
+ * When a mystery encounter spawns, there are visuals (mainly sprites) tied to the field for the new encounter to inform the player of the type of encounter.
+ *
+ * These slide in with the field as part of standard field change cycle, and will typically be hidden after the player has selected an option for the encounter.
+ *
+ * Note: intro visuals are not "Trainers" or any other specific game object, though they may contain trainer sprites.
  */
-export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Container {
+export class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Container {
   public encounter: MysteryEncounter;
   public spriteConfigs: MysteryEncounterSpriteConfig[];
   public enterFromRight: boolean;

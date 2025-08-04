@@ -1,4 +1,4 @@
-import type BattleScene from "#app/battle-scene";
+import type { BattleScene } from "#app/battle-scene";
 import { AbilityId } from "#enums/ability-id";
 import { Button } from "#enums/button";
 import { ModifierTier } from "#enums/modifier-tier";

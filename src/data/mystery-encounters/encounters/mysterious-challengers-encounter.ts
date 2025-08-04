@@ -6,10 +6,12 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { modifierTypes } from "#modifier/modifier-types";
-import type { EnemyPartyConfig } from "#mystery-encounters/encounter-phase-utils";
-import { initBattleWithEnemyConfig, setEncounterRewards } from "#mystery-encounters/encounter-phase-utils";
-import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
-import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
+import {
+  type EnemyPartyConfig,
+  initBattleWithEnemyConfig,
+  setEncounterRewards,
+} from "#mystery-encounters/encounter-phase-utils";
+import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import { randSeedInt } from "#utils/random-utils";
 

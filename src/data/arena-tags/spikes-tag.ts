@@ -8,7 +8,6 @@ import type { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { HitResult } from "#enums/hit-result";
 import { MoveId } from "#enums/move-id";
-import type { Arena } from "#field/arena";
 import type { Pokemon } from "#field/pokemon";
 import { BooleanHolder, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
@@ -23,8 +22,8 @@ export class SpikesTag extends EntryHazardTag {
     super(ArenaTagType.SPIKES, MoveId.SPIKES, sourceId, side, 3);
   }
 
-  override onAdd(arena: Arena, quiet: boolean = false): void {
-    super.onAdd(arena);
+  override onAdd(quiet: boolean = false): void {
+    super.onAdd();
 
     const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
     if (!quiet && source) {

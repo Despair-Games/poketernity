@@ -3,6 +3,7 @@ import { GAME_WIDTH } from "#constants/ui-constants";
 import { Button } from "#enums/button";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
+import type { InputSettings } from "#types/inputs-types";
 import type { InputsIcons } from "#ui/controls-settings-ui-handler";
 import type { GeneralSettingsUiHandler } from "#ui/general-settings-ui-handler";
 import { addTextObject, setTextColor } from "#ui/text-utils";
@@ -190,11 +191,10 @@ export class NavigationMenu extends Phaser.GameObjects.Container {
         this.navigationIcons[settingName].alpha = 1;
         continue;
       }
-      const icon = globalScene.inputController?.getIconForLatestInputRecorded(settingName);
-      if (icon) {
-        const type = globalScene.inputController?.getLastSourceType();
-        this.navigationIcons[settingName].setTexture(type);
-        this.navigationIcons[settingName].setFrame(icon);
+      const icon = globalScene.inputController?.getIconForLatestInputRecorded(settingName as InputSettings);
+      const type = globalScene.inputController?.getLastSourceType();
+      if (icon && type) {
+        this.navigationIcons[settingName].setTexture(type, icon);
         this.navigationIcons[settingName].alpha = 1;
       } else {
         this.navigationIcons[settingName].alpha = 0;

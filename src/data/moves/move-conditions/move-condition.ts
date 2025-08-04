@@ -2,7 +2,7 @@ import { BAD_MOVE_PENALTY } from "#constants/ai-constants";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 
 export class MoveCondition {
   /** The {@linkcode MoveConditionFunc | function} to determine if the move can be used */

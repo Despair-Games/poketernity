@@ -15,8 +15,8 @@ import { PokemonMove } from "#field/pokemon-move";
 import type { PokemonHeldItemModifierType } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
 import { queueEncounterMessage, showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
-import type { EnemyPartyConfig } from "#mystery-encounters/encounter-phase-utils";
 import {
+  type EnemyPartyConfig,
   generateModifierType,
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
@@ -25,8 +25,7 @@ import {
 } from "#mystery-encounters/encounter-phase-utils";
 import { modifyPlayerPokemonBST } from "#mystery-encounters/encounter-pokemon-utils";
 import { transitionMysteryEncounterIntroVisuals } from "#mystery-encounters/encounter-visuals-utils";
-import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
-import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
+import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 
 /** the i18n namespace for the encounter */
@@ -179,7 +178,7 @@ export const TheStrongStuffEncounter: MysteryEncounter = MysteryEncounterBuilder
 
       encounter.setDialogueToken("reductionValue", HIGH_BST_REDUCTION_VALUE.toString());
       encounter.setDialogueToken("increaseValue", BST_INCREASE_VALUE.toString());
-      await showEncounterText(`${namespace}:option.1.selected_2`, null, undefined, true);
+      await showEncounterText(`${namespace}:option.1.selected_2`);
 
       encounter.dialogue.outro = [
         {

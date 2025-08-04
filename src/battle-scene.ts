@@ -5,18 +5,16 @@ import type { PostBattleInitAbAttr } from "#abilities/post-battle-init-ab-attr";
 import type { PostItemLostAbAttr } from "#abilities/post-item-lost-ab-attr";
 import { Animation } from "#app/animations";
 import { AudioManager } from "#app/audio-manager";
-import Battle, { type FixedBattleConfig } from "#app/battle";
+import { Battle, type FixedBattleConfig } from "#app/battle";
 import { eventBus } from "#app/event-bus";
 import { type GameMode, getGameMode } from "#app/game-mode";
 import { initGlobalScene } from "#app/global-scene";
-import { InputsController } from "#app/inputs-controller";
 import { LoadingScene } from "#app/loading-scene";
 import { CallSourceLogger, logModifiers } from "#app/loggers";
 import Overrides from "#app/overrides";
 import type { Phase } from "#app/phase";
 import { PhaseManager } from "#app/phase-manager";
 import { SceneBase } from "#app/scene-base";
-import { UiInputs } from "#app/ui-inputs";
 import { IV_MAX, IV_MIN, LEVEL_CAP_SCALE_FACTOR } from "#constants/game-constants";
 import {
   ME_ANTI_VARIANCE_WEIGHT_MODIFIER,
@@ -32,7 +30,7 @@ import { classicFinalBossDialogue } from "#data/dialogue";
 import { getLevelForWaveFunc } from "#data/exp";
 import { pokemonFormChanges, type SpeciesFormChange } from "#data/pokemon-forms";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
-import type PokemonSpecies from "#data/pokemon-species";
+import type { PokemonSpecies } from "#data/pokemon-species";
 import { resetStarterColors, starterColors } from "#data/starter-colors";
 import { getTypeRgb } from "#data/type";
 import { type Variant, variantData } from "#data/variant";
@@ -63,18 +61,20 @@ import type { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerVariant } from "#enums/trainer-variant";
 import { NewArenaEvent } from "#events/battle-scene";
 import { Arena, ArenaBase } from "#field/arena";
-import DamageNumberHandler from "#field/damage-number-handler";
+import { DamageNumberHandler } from "#field/damage-number-handler";
 import { EnemyPokemon } from "#field/enemy-pokemon";
 import { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
-import PokemonSpriteTeraSparkleHandler from "#field/pokemon-sprite-tera-sparkle-handler";
-import Trainer from "#field/trainer";
+import { PokemonSpriteTeraSparkleHandler } from "#field/pokemon-sprite-tera-sparkle-handler";
+import { Trainer } from "#field/trainer";
 import { SpeciesFormChangeManualTrigger } from "#form-change-triggers/species-form-change-manual-trigger";
 import { SpeciesFormChangeTimeOfDayTrigger } from "#form-change-triggers/species-form-change-time-of-day-trigger";
 import type { SpeciesFormChangeTrigger } from "#form-change-triggers/species-form-change-trigger";
 import { populateAnims } from "#init/init-anims";
 import { initCommonAnims } from "#init/init-common-anims";
 import { initMoveAnim } from "#init/init-move-anim";
+import { InputsController } from "#inputs/inputs-controller";
+import { UiInputs } from "#inputs/ui-inputs";
 import {
   ConsumableModifier,
   ConsumablePokemonModifier,
@@ -103,26 +103,25 @@ import {
   PokemonHeldItemModifierType,
 } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
-import MysteryEncounter from "#mystery-encounters/mystery-encounter";
+import { MysteryEncounter } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterSaveData } from "#mystery-encounters/mystery-encounter-save-data";
 import { allMysteryEncounters, mysteryEncountersByBiome } from "#mystery-encounters/mystery-encounters";
 import type { MovePhase } from "#phases/move-phase";
-import FieldSpritePipeline from "#pipelines/field-sprite";
-import InvertPostFX from "#pipelines/invert";
-import SpritePipeline from "#pipelines/sprite";
+import { FieldSpritePipeline } from "#pipelines/field-sprite";
+import { InvertPostFX } from "#pipelines/invert";
+import { SpritePipeline } from "#pipelines/sprite";
 import { type Achievement, achvs } from "#system/achievements";
 import { GameData } from "#system/game-data";
 import { initGameSpeed } from "#system/game-speed";
-import type PokemonData from "#system/pokemon-data";
+import type { PokemonData } from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
-import type TrainerData from "#system/trainer-data";
+import type { TrainerData } from "#system/trainer-data";
 import { type Voucher, vouchers } from "#system/voucher";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
-import type { AbstractConstructor } from "#types/abstract-constructor";
-import type { HeldModifierConfig } from "#types/held-modifier-config";
-import type { ModifierPredicate } from "#types/modifier-predicate";
-import type { PokemonSpeciesFilter } from "#types/pokemon-species-filter";
+import type { HeldModifierConfig, ModifierPredicate } from "#types/modifiers-types";
 import type { AnySettingKey, SettingsUpdateEventArgs } from "#types/settings";
+import type { PokemonSpeciesFilter } from "#types/ui-types";
+import type { AbstractConstructor } from "#types/utility-types";
 import { AbilityBar } from "#ui/ability-bar";
 import { ArenaFlyout } from "#ui/arena-flyout";
 import { CandyBar } from "#ui/candy-bar";
@@ -171,7 +170,7 @@ const startingWave = Overrides.STARTING_WAVE_OVERRIDE || 1;
 
 //#endregion
 
-export default class BattleScene extends SceneBase {
+export class BattleScene extends SceneBase {
   public inputController: InputsController;
   public uiInputs: UiInputs;
 
@@ -1257,7 +1256,7 @@ export default class BattleScene extends SceneBase {
       if (!this.gameMode.hasTrainers) {
         newBattleType = BattleType.WILD;
       } else if (battleType === undefined) {
-        newBattleType = this.gameMode.isWaveTrainer(newWaveIndex, this.arena) ? BattleType.TRAINER : BattleType.WILD;
+        newBattleType = this.gameMode.isWaveTrainer(newWaveIndex) ? BattleType.TRAINER : BattleType.WILD;
       } else {
         newBattleType = battleType;
       }
@@ -1439,13 +1438,11 @@ export default class BattleScene extends SceneBase {
     return this.currentBattle;
   }
 
-  newArena(biomeId: BiomeId): Arena {
+  newArena(biomeId: BiomeId): void {
     this.arena = new Arena(biomeId);
     this.eventTarget.dispatchEvent(new NewArenaEvent());
 
     this.arenaBg.pipelineData = { terrainColorRatio: this.arena.getBgTerrainColorRatioForBiome() };
-
-    return this.arena;
   }
 
   updateFieldScale(): Promise<void> {
@@ -2710,7 +2707,7 @@ export default class BattleScene extends SceneBase {
   initFinalBossPhaseTwo(pokemon: Pokemon): void {
     if (pokemon.isEnemy() && pokemon.isBoss() && !pokemon.formIndex && pokemon.bossSegmentIndex < 1) {
       this.audioManager.fadeOutBgm(fixedNumber(2000), false);
-      this.ui.showDialogue(classicFinalBossDialogue.firstStageWin, pokemon.species.name, null, () => {
+      this.ui.showDialogue(classicFinalBossDialogue.firstStageWin, pokemon.species.name, () => {
         const finalBossMBH = getModifierType(modifierTypes.MINI_BLACK_HOLE).newModifier(
           pokemon,
         ) as TurnHeldItemTransferModifier;

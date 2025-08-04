@@ -1,4 +1,5 @@
 import { globalScene } from "#app/global-scene";
+import type { ConditionalProtectTag } from "#arena-tags/conditional-protect-tag";
 import { applyBattlerTags } from "#battler-tags/apply-battler-tags";
 import type { ProtectedTag } from "#battler-tags/protected-tag";
 import { CONDITIONAL_PROTECT_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
@@ -111,7 +112,7 @@ export abstract class HitCheckPhase extends PokemonPhase {
     const hasConditionalProtectApplied = new BooleanHolder(false);
     /** If the move is not targeting a Pokemon on the user's side, try to apply conditional protection effects */
     if (!this.move.getMove().isAllyTarget()) {
-      globalScene.arena.applyTagsForSide(
+      globalScene.arena.applyTags<ConditionalProtectTag>(
         [...CONDITIONAL_PROTECT_ARENA_TAG_TYPES],
         targetSide,
         simulated,

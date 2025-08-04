@@ -6,6 +6,7 @@ import { getStatKey, PERMANENT_STATS } from "#enums/stat";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { settings } from "#system/settings-manager";
+import type { ShowTextOptions } from "#types/ui-types";
 import { MessageUiHandler } from "#ui/message-ui-handler";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
@@ -183,21 +184,17 @@ export class BattleMessageUiHandler extends MessageUiHandler {
 
   public override showText(
     text: string,
-    delay?: number | null,
-    callback?: Function | null,
-    callbackDelay?: number | null,
-    prompt?: boolean | null,
-    promptDelay?: number | null,
+    { delay, callback, callbackDelay, prompt, promptDelay }: ShowTextOptions = {},
   ) {
     this.hideNameText();
-    super.showText(text, delay, callback, callbackDelay, prompt, promptDelay);
+    super.showText(text, { delay, callback, callbackDelay, prompt, promptDelay });
   }
 
   public override showDialogue(
     text: string,
     name?: string,
-    delay?: number | null,
-    callback?: Function,
+    callback?: VoidFunction,
+    delay?: number,
     callbackDelay?: number,
     prompt?: boolean,
     promptDelay?: number,
@@ -205,7 +202,7 @@ export class BattleMessageUiHandler extends MessageUiHandler {
     if (name) {
       this.showNameText(name);
     }
-    super.showDialogue(text, name, delay, callback, callbackDelay, prompt, promptDelay);
+    super.showDialogue(text, name, callback, delay, callbackDelay, prompt, promptDelay);
   }
 
   // TODO: Should not be part of this handler

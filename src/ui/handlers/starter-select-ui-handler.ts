@@ -17,7 +17,7 @@ import { pokemonFormChanges } from "#data/pokemon-forms";
 import type { LevelMoves } from "#data/pokemon-level-moves";
 import { pokemonSpeciesLevelMoves } from "#data/pokemon-level-moves";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
-import type PokemonSpecies from "#data/pokemon-species";
+import type { PokemonSpecies } from "#data/pokemon-species";
 import { starterColors } from "#data/starter-colors";
 import {
   getCandyProgressRequirement,
@@ -54,9 +54,9 @@ import { UiMode } from "#enums/ui-mode";
 import type { DexAttrProps, StarterAttributes, StarterPreferences } from "#system/game-data";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
 import type { DexEntry } from "#types/dex-data";
-import type { EnumValues } from "#types/enum-values";
-import type { StarterConfig } from "#types/starter-config";
-import type { StarterDataEntry, StarterMoveset } from "#types/starter-data";
+import type { StarterConfig, StarterDataEntry, StarterMoveset } from "#types/starter-data";
+import type { ShowTextOptions } from "#types/ui-types";
+import type { EnumValues } from "#types/utility-types";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { DropDown, DropDownLabel, DropDownOption } from "#ui/drop-down";
@@ -87,6 +87,10 @@ type StarterSelectCallback = (starters: StarterConfig[]) => void;
 interface LanguageSetting {
   starterInfoXPos?: number;
   starterInfoYOffset?: number;
+}
+
+interface StarterSelectShowTextOptions extends ShowTextOptions {
+  moveToTop?: boolean;
 }
 
 /** Possible states of the handler based on which section of the UI the player is currently interacting with. */
@@ -700,21 +704,23 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
     starterBoxContainer.add(this.starterSelectScrollBar);
 
-    this.pokerusCursorObjs = new Array(POKERUS_STARTER_COUNT).fill(null).map(() => {
+    this.pokerusCursorObjs = [];
+    for (let i = 0; i < POKERUS_STARTER_COUNT; i++) {
       const cursorObj = globalScene.add.image(0, 0, "select_cursor_pokerus");
       cursorObj.setVisible(false);
       cursorObj.setOrigin(0, 0);
       starterBoxContainer.add(cursorObj);
-      return cursorObj;
-    });
+      this.pokerusCursorObjs.push(cursorObj);
+    }
 
-    this.starterCursorObjs = new Array(6).fill(null).map(() => {
+    this.starterCursorObjs = [];
+    for (let i = 0; i < 6; i++) {
       const cursorObj = globalScene.add.image(0, 0, "select_cursor_highlight");
       cursorObj.setVisible(false);
       cursorObj.setOrigin(0, 0);
       starterBoxContainer.add(cursorObj);
-      return cursorObj;
-    });
+      this.starterCursorObjs.push(cursorObj);
+    }
 
     this.cursorObj = globalScene.add.image(0, 0, "select_cursor");
     this.cursorObj.setOrigin(0, 0);
@@ -743,15 +749,16 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
     this.starterSelectContainer.add(starterBoxContainer);
 
-    this.starterIcons = new Array(6).fill(null).map((_, i) => {
+    this.starterIcons = [];
+    for (let i = 0; i < 6; i++) {
       const icon = globalScene.add.sprite(teamWindowX + 7, calcStarterIconY(i), "pokemon_icons_0");
       icon.setScale(0.5);
       icon.setOrigin(0, 0);
       icon.setFrame("unknown");
       this.starterSelectContainer.add(icon);
       this.iconAnimHandler.addOrUpdate(icon, PokemonIconAnimMode.PASSIVE);
-      return icon;
-    });
+      this.starterIcons.push(icon);
+    }
 
     this.pokemonSprite = globalScene.add.sprite(53, 63, "pkmn__sub");
     this.pokemonSprite.setPipeline(globalScene.spritePipeline, { tone: [0.0, 0.0, 0.0, 0.0], ignoreTimeTint: true });
@@ -1267,14 +1274,9 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
   public override showText(
     text: string,
-    delay?: number,
-    callback?: Function,
-    callbackDelay?: number,
-    prompt?: boolean,
-    promptDelay?: number,
-    moveToTop?: boolean,
+    { delay, callback, callbackDelay, prompt, promptDelay, moveToTop }: StarterSelectShowTextOptions = {},
   ) {
-    super.showText(text, delay, callback, callbackDelay, prompt, promptDelay);
+    super.showText(text, { delay, callback, callbackDelay, prompt, promptDelay });
 
     const singleLine = text?.indexOf("\n") === -1;
 
@@ -1631,10 +1633,8 @@ export class StarterSelectUiHandler extends MessageUiHandler {
             const onSelectedMoveToSwapWith = (moveId: MoveId, index: number): boolean => {
               this.blockInput = true;
               ui.setMode<StarterSelectUiHandler>(UiMode.STARTER_SELECT).then(() => {
-                ui.showText(
-                  `${i18next.t("starterSelectUiHandler:selectMoveSwapWith")} ${allMoves.get(moveId).name}.`,
-                  null,
-                  () => {
+                ui.showText(`${i18next.t("starterSelectUiHandler:selectMoveSwapWith")} ${allMoves.get(moveId).name}.`, {
+                  callback: () => {
                     const possibleMoves = this.speciesStarterMoves.filter((sm: MoveId) => sm !== moveId);
                     this.moveInfoOverlay.show(allMoves.get(possibleMoves[0]));
                     const movesOptions = getMoveOptions(
@@ -1647,7 +1647,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
                     ui.setModeWithoutClear<OptionSelectUiHandler>(UiMode.OPTION_SELECT, movesOptions);
                     this.blockInput = false;
                   },
-                );
+                });
               });
               return true;
             };
@@ -1678,11 +1678,13 @@ export class StarterSelectUiHandler extends MessageUiHandler {
             const showSwapOptions = (moveset: StarterMoveset) => {
               this.blockInput = true;
               ui.setMode<StarterSelectUiHandler>(UiMode.STARTER_SELECT).then(() => {
-                ui.showText(i18next.t("starterSelectUiHandler:selectMoveSwapOut"), null, () => {
-                  this.moveInfoOverlay.show(allMoves.get(moveset[0]));
-                  const movesOptions = getMoveOptions(moveset, onSelectedMoveToSwapWith, onCancelMoveToSwapWith);
-                  ui.setModeWithoutClear<OptionSelectUiHandler>(UiMode.OPTION_SELECT, movesOptions);
-                  this.blockInput = false;
+                ui.showText(i18next.t("starterSelectUiHandler:selectMoveSwapOut"), {
+                  callback: () => {
+                    this.moveInfoOverlay.show(allMoves.get(moveset[0]));
+                    const movesOptions = getMoveOptions(moveset, onSelectedMoveToSwapWith, onCancelMoveToSwapWith);
+                    ui.setModeWithoutClear<OptionSelectUiHandler>(UiMode.OPTION_SELECT, movesOptions);
+                    this.blockInput = false;
+                  },
                 });
               });
             };
@@ -1700,41 +1702,43 @@ export class StarterSelectUiHandler extends MessageUiHandler {
               this.blockInput = true;
 
               ui.setMode<StarterSelectUiHandler>(UiMode.STARTER_SELECT).then(() => {
-                ui.showText(i18next.t("starterSelectUiHandler:selectNature"), null, () => {
-                  const natures = globalScene.gameData.getNaturesForAttr(starterData.natureAttr);
-                  ui.setModeWithoutClear<OptionSelectUiHandler>(UiMode.OPTION_SELECT, {
-                    options: natures
-                      .map((n: Nature, _i: number) => {
-                        const option: OptionSelectItem = {
-                          label: getNatureName(n, true, true, true),
+                ui.showText(i18next.t("starterSelectUiHandler:selectNature"), {
+                  callback: () => {
+                    const natures = globalScene.gameData.getNaturesForAttr(starterData.natureAttr);
+                    ui.setModeWithoutClear<OptionSelectUiHandler>(UiMode.OPTION_SELECT, {
+                      options: natures
+                        .map((n: Nature, _i: number) => {
+                          const option: OptionSelectItem = {
+                            label: getNatureName(n, true, true, true),
+                            handler: () => {
+                              // update default nature in starter save data
+                              if (!starterAttributes) {
+                                starterAttributes = this.starterPreferences[this.lastSpecies.speciesId] = {};
+                              }
+                              starterAttributes.nature = n;
+                              this.clearText();
+                              ui.setMode<StarterSelectUiHandler>(UiMode.STARTER_SELECT);
+                              // set nature for starter
+                              this.setSpeciesDetails(this.lastSpecies, { natureIndex: n });
+                              this.blockInput = false;
+                              return true;
+                            },
+                          };
+                          return option;
+                        })
+                        .concat({
+                          label: i18next.t("menu:cancel"),
                           handler: () => {
-                            // update default nature in starter save data
-                            if (!starterAttributes) {
-                              starterAttributes = this.starterPreferences[this.lastSpecies.speciesId] = {};
-                            }
-                            starterAttributes.nature = n;
                             this.clearText();
                             ui.setMode<StarterSelectUiHandler>(UiMode.STARTER_SELECT);
-                            // set nature for starter
-                            this.setSpeciesDetails(this.lastSpecies, { natureIndex: n });
                             this.blockInput = false;
                             return true;
                           },
-                        };
-                        return option;
-                      })
-                      .concat({
-                        label: i18next.t("menu:cancel"),
-                        handler: () => {
-                          this.clearText();
-                          ui.setMode<StarterSelectUiHandler>(UiMode.STARTER_SELECT);
-                          this.blockInput = false;
-                          return true;
-                        },
-                      }),
-                    maxOptions: 8,
-                    yOffset: 29,
-                  });
+                        }),
+                      maxOptions: 8,
+                      yOffset: 29,
+                    });
+                  },
                 });
               });
             };
@@ -1938,15 +1942,18 @@ export class StarterSelectUiHandler extends MessageUiHandler {
                 if (Overrides.FREE_CANDY_UPGRADE_OVERRIDE || candyCount >= sameSpeciesEggCost) {
                   if (globalScene.gameData.eggs.length >= 99 && !Overrides.UNLIMITED_EGG_COUNT_OVERRIDE) {
                     // Egg list full, show error message at the top of the screen and abort
-                    this.showText(
-                      i18next.t("egg:tooManyEggs"),
-                      undefined,
-                      () => this.showText("", 0, () => (this.tutorialActive = false)),
-                      2000,
-                      false,
-                      undefined,
-                      true,
-                    );
+                    this.showText(i18next.t("egg:tooManyEggs"), {
+                      callback: () =>
+                        this.showText("", {
+                          delay: 0,
+                          callback: () => {
+                            this.tutorialActive = false;
+                          },
+                        }),
+                      callbackDelay: 2000,
+                      prompt: false,
+                      moveToTop: true,
+                    });
                     return false;
                   }
                   if (!Overrides.FREE_CANDY_UPGRADE_OVERRIDE) {
@@ -2512,9 +2519,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     this.filterInstructionsContainer.removeAll();
     let gamepadType;
     if (globalScene.inputMethod === "gamepad") {
-      gamepadType = globalScene.inputController.getConfig(
-        globalScene.inputController.selectedDevice[Device.GAMEPAD],
-      ).padType;
+      gamepadType = globalScene.inputController.getActiveConfig(Device.GAMEPAD)?.padType ?? globalScene.inputMethod;
     } else {
       gamepadType = globalScene.inputMethod;
     }
@@ -3965,8 +3970,8 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       noHandler: cancelExit,
       yOffset: 29,
     };
-    ui.showText(i18next.t("starterSelectUiHandler:confirmExit"), null, () => {
-      ui.setModeWithoutClear<ConfirmUiHandler>(UiMode.CONFIRM, options);
+    ui.showText(i18next.t("starterSelectUiHandler:confirmExit"), {
+      callback: () => ui.setModeWithoutClear<ConfirmUiHandler>(UiMode.CONFIRM, options),
     });
 
     return true;
@@ -4017,18 +4022,21 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         noHandler: cancelStartRun,
         yOffset: 29,
       };
-      ui.showText(i18next.t("starterSelectUiHandler:confirmStartTeam"), null, () => {
-        ui.setModeWithoutClear<ConfirmUiHandler>(UiMode.CONFIRM, confirmStartOptions);
+      ui.showText(i18next.t("starterSelectUiHandler:confirmStartTeam"), {
+        callback: () => ui.setModeWithoutClear<ConfirmUiHandler>(UiMode.CONFIRM, confirmStartOptions),
       });
     } else {
       this.tutorialActive = true;
-      this.showText(
-        i18next.t("starterSelectUiHandler:invalidParty"),
-        undefined,
-        () => this.showText("", 0, () => (this.tutorialActive = false)),
-        undefined,
-        true,
-      );
+      this.showText(i18next.t("starterSelectUiHandler:invalidParty"), {
+        callback: () =>
+          this.showText("", {
+            delay: 0,
+            callback: () => {
+              this.tutorialActive = false;
+            },
+          }),
+        prompt: true,
+      });
     }
     return true;
   }

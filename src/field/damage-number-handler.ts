@@ -7,14 +7,14 @@ import { HitResult } from "#enums/hit-result";
 import { TextStyle } from "#enums/text-style";
 import type { Pokemon } from "#field/pokemon";
 import { settings } from "#system/settings-manager";
-import type { DamageResult } from "#types/damage-result";
+import type { DamageResult } from "#types/move-types";
 import { addTextObject } from "#ui/text-utils";
 import { fixedNumber } from "#utils/common-utils";
 import { formatStat } from "#utils/string-utils";
 
 type TextAndShadowArr = [string | null, string | null];
 
-export default class DamageNumberHandler {
+export class DamageNumberHandler {
   private damageNumbers: Map<FieldBattlerIndex, Phaser.GameObjects.Text[]>;
 
   constructor() {

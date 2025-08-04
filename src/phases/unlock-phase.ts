@@ -23,17 +23,14 @@ export class UnlockPhase extends Phase {
       // Sound loaded into game as is
       globalScene.audioManager.playSound("level_up_fanfare");
       ui.setMessageMode();
-      ui.showText(
-        i18next.t("battle:unlockedSomething", { unlockedThing: getUnlockableName(this.unlockable) }),
-        null,
-        () => {
+      ui.showText(i18next.t("battle:unlockedSomething", { unlockedThing: getUnlockableName(this.unlockable) }), {
+        callback: () => {
           time.delayedCall(1500, () => arenaBg.setVisible(true));
           this.end();
         },
-        null,
-        true,
-        1500,
-      );
+        prompt: true,
+        promptDelay: 1500,
+      });
     });
   }
 }

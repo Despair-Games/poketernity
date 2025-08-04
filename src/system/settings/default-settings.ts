@@ -5,6 +5,7 @@ import { EggSkipPreference } from "#enums/egg-skip-preference";
 import { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import { ExpNotification } from "#enums/exp-notification";
 import { HpBarSpeed } from "#enums/hp-bar-speed";
+import { KeyboardLayout } from "#enums/keyboard-layout";
 import { MoneyFormat } from "#enums/money-format";
 import { PlayerGender } from "#enums/player-gender";
 import { ShopCursorTarget } from "#enums/shop-cursor-target";
@@ -15,6 +16,7 @@ import type {
   DisplaySettings,
   GamepadSettings,
   GeneralSettings,
+  KeyboardSettings,
   UserFacingSettings,
 } from "#types/settings";
 
@@ -65,9 +67,14 @@ export const defaultGamepadSettings: GamepadSettings = {
   enabled: true,
 };
 
+export const defaultKeyboardSettings: KeyboardSettings = {
+  layout: KeyboardLayout.QWERTY,
+};
+
 export const defaultSettings: UserFacingSettings = {
   general: defaultGeneralSettings,
   display: defaultDisplaySettings,
   audio: defaultAudioSettings,
   gamepad: defaultGamepadSettings,
+  keyboard: defaultKeyboardSettings,
 };

@@ -5,7 +5,7 @@ import { ENTRY_HAZARD_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
 import { LEVEL_CAP_SCALE_FACTOR } from "#constants/game-constants";
 import { getLevelForWaveFunc } from "#data/exp";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
-import type PokemonSpecies from "#data/pokemon-species";
+import type { PokemonSpecies } from "#data/pokemon-species";
 import { signatureSpecies } from "#data/signature-species";
 import type { TrainerConfig, TrainerPartyTemplate } from "#data/trainer-config";
 import { TrainerPartyCompoundTemplate, trainerPartyTemplates } from "#data/trainer-config";
@@ -25,7 +25,7 @@ import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedInt, randSeedItem, randSeedWeightedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
-export default class Trainer extends Phaser.GameObjects.Container {
+export class Trainer extends Phaser.GameObjects.Container {
   public config: TrainerConfig;
   public variant: TrainerVariant;
   public partyTemplateIndex: number;

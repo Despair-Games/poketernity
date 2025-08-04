@@ -1,6 +1,6 @@
 import type { Ability } from "#abilities/ability";
 import type { Biome } from "#data/biome";
-import type PokemonSpecies from "#data/pokemon-species";
+import type { PokemonSpecies } from "#data/pokemon-species";
 import type { BiomeId } from "#enums/biome-id";
 import type { MoveId } from "#enums/move-id";
 import type { Move } from "#moves/move";

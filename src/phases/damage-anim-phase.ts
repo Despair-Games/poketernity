@@ -3,7 +3,7 @@ import type { FieldBattlerIndex } from "#enums/battler-index";
 import { HitResult } from "#enums/hit-result";
 import { PokemonPhase } from "#phases/base/pokemon-phase";
 import { settings } from "#system/settings-manager";
-import type { DamageResult } from "#types/damage-result";
+import type { DamageResult } from "#types/move-types";
 import { fixedNumber } from "#utils/common-utils";
 
 /**

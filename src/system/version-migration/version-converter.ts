@@ -1,10 +1,8 @@
 import { version } from "#package.json";
+import type { SessionSaveMigrator, SettingsSaveMigrator, SystemSaveMigrator } from "#types/save-migrator-types";
 import type { SessionSaveData } from "#types/session-data";
-import type { SessionSaveMigrator } from "#types/session-save-migrator";
 import type { Settings } from "#types/settings";
-import type { SettingsSaveMigrator } from "#types/settings-save-migrator";
 import type { SystemSaveData } from "#types/system-data";
-import type { SystemSaveMigrator } from "#types/system-save-migrator";
 import { compareVersions } from "compare-versions";
 
 /*

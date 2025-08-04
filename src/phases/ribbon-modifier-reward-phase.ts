@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import type PokemonSpecies from "#data/pokemon-species";
+import type { PokemonSpecies } from "#data/pokemon-species";
 import type { ModifierTypeFunc } from "#modifier/modifier-type";
 import { ModifierRewardPhase } from "#phases/modifier-reward-phase";
 import i18next from "i18next";
@@ -27,13 +27,7 @@ export class RibbonModifierRewardPhase extends ModifierRewardPhase {
           gameMode: globalScene.gameMode.getName(),
           newModifier: newModifier?.type.name,
         }),
-        null,
-        () => {
-          resolve();
-        },
-        null,
-        true,
-        1500,
+        { callback: () => resolve(), prompt: true, promptDelay: 1500 },
       );
     });
   }

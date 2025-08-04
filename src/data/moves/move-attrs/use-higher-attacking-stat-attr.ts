@@ -16,8 +16,8 @@ export class UseHigherAttackingStatAttr extends VariableMoveCategoryAttr {
   override apply(user: Pokemon, target: Pokemon, move: Move, category: NumberHolder): boolean {
     let returnVal = false;
     if (
-      user.getEffectiveStat(Stat.ATK, target, move, AbilityApplyMode.IGNORE)
-      > user.getEffectiveStat(Stat.SPATK, target, move, AbilityApplyMode.IGNORE)
+      user.getEffectiveStat(Stat.ATK, { opponent: target, move, abilityApplyMode: AbilityApplyMode.IGNORE })
+      > user.getEffectiveStat(Stat.SPATK, { opponent: target, move, abilityApplyMode: AbilityApplyMode.IGNORE })
     ) {
       if (category.value === MoveCategory.SPECIAL) {
         returnVal = true;

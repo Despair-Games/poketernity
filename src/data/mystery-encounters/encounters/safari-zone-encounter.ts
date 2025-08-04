@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
-import type PokemonSpecies from "#data/pokemon-species";
+import type { PokemonSpecies } from "#data/pokemon-species";
 import { ImagesFolder } from "#enums/images-folder";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
@@ -25,10 +25,11 @@ import {
   trainerThrowPokeball,
 } from "#mystery-encounters/encounter-pokemon-utils";
 import { transitionMysteryEncounterIntroVisuals } from "#mystery-encounters/encounter-visuals-utils";
-import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
-import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
-import type MysteryEncounterOption from "#mystery-encounters/mystery-encounter-option";
-import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
+import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
+import {
+  type MysteryEncounterOption,
+  MysteryEncounterOptionBuilder,
+} from "#mystery-encounters/mystery-encounter-option";
 import { MoneyRequirement } from "#mystery-encounters/mystery-encounter-requirements";
 import { settings } from "#system/settings-manager";
 import { NumberHolder } from "#utils/common-utils";
@@ -203,11 +204,8 @@ const safariZoneGameOptions: MysteryEncounterOption[] = [
       tryChangeCatchStage(2);
       // 80% chance to increase flee stage +1
       const fleeChangeResult = tryChangeFleeStage(1, 8);
-      if (!fleeChangeResult) {
-        await showEncounterText(getEncounterText(`${namespace}:safari.busy_eating`) ?? "", null, 1000, false);
-      } else {
-        await showEncounterText(getEncounterText(`${namespace}:safari.eating`) ?? "", null, 1000, false);
-      }
+      const textKey = fleeChangeResult ? `${namespace}:safari.eating` : `${namespace}:safari.busy_eating`;
+      await showEncounterText(getEncounterText(textKey) ?? "", { callbackDelay: 1000, prompt: false });
 
       await doEndTurn(1);
       return true;
@@ -231,11 +229,8 @@ const safariZoneGameOptions: MysteryEncounterOption[] = [
       tryChangeFleeStage(-2);
       // 80% chance to decrease catch stage -1
       const catchChangeResult = tryChangeCatchStage(-1, 8);
-      if (!catchChangeResult) {
-        await showEncounterText(getEncounterText(`${namespace}:safari.beside_itself_angry`) ?? "", null, 1000, false);
-      } else {
-        await showEncounterText(getEncounterText(`${namespace}:safari.angry`) ?? "", null, 1000, false);
-      }
+      const textKey = catchChangeResult ? `${namespace}:safari.angry` : `${namespace}:safari.beside_itself_angry`;
+      await showEncounterText(getEncounterText(textKey) ?? "", { callbackDelay: 1000, prompt: false });
 
       await doEndTurn(2);
       return true;
@@ -516,6 +511,12 @@ function isPokemonFlee(pokemon: EnemyPokemon, fleeStage: number): boolean {
   return roll < fleeRate;
 }
 
+/**
+ * TODO: confirm function description (it probably changes how likely the pokemon is to flee?)
+ * @param change - How many stages to change by
+ * @param chance - (Optional) The % chance for the change to occur. Must be between `1-10` (`10` = `100%`, `5` = `50%`, etc)
+ * @returns Whether the change occurred
+ */
 function tryChangeFleeStage(change: number, chance?: number): boolean {
   if (chance && randSeedInt(10) >= chance) {
     return false;
@@ -525,6 +526,12 @@ function tryChangeFleeStage(change: number, chance?: number): boolean {
   return true;
 }
 
+/**
+ * TODO: confirm function description (it probably changes how likely you are to catch the pokemon?)
+ * @param change - How many stages to change by
+ * @param chance - (Optional) The % chance for the change to occur. Must be between `1-10` (`10` = `100%`, `5` = `50%`, etc)
+ * @returns Whether the change occurred
+ */
 function tryChangeCatchStage(change: number, chance?: number): boolean {
   if (chance && randSeedInt(10) >= chance) {
     return false;

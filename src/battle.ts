@@ -38,11 +38,11 @@ import { TrainerVariant } from "#enums/trainer-variant";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
-import Trainer from "#field/trainer";
+import { Trainer } from "#field/trainer";
 import { MoneyMultiplierModifier, type PokemonHeldItemModifier } from "#modifier/modifier";
 import type { CustomModifierSettings } from "#modifier/modifier-type";
 import type { Move } from "#moves/move";
-import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
+import type { MysteryEncounter } from "#mystery-encounters/mystery-encounter";
 import { settings } from "#system/settings-manager";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import { isBetween, NumberHolder } from "#utils/common-utils";
@@ -61,7 +61,7 @@ function generateBattleSeed() {
   return randomString(16, true);
 }
 
-export default class Battle {
+export class Battle {
   protected gameMode: GameMode;
   public waveIndex: number;
   public battleType: BattleType;

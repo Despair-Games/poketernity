@@ -49,24 +49,41 @@ export function queueEncounterMessage(contentKey: string): void {
   globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", text ?? "", undefined, true);
 }
 
+interface ShowEncounterTextOptions {
+  /**
+   * The delay in milliseconds before the text starts getting displayed.
+   * @defaultValue `20`
+   */
+  delay?: number;
+  /**
+   * The delay in milliseconds before executing the callback.
+   * @defaultValue `0`
+   */
+  callbackDelay?: number;
+  /**
+   * Whether to display the prompt icon at the end of the textbox.
+   * @defaultValue `true`
+   */
+  prompt?: boolean;
+  /**
+   * The delay in milliseconds before showing the prompt.
+   * @defaultValue `0`
+   */
+  promptDelay?: number;
+}
+
 /**
  * Will display a message in UI with injected encounter data tokens
  * @param contentKey the key representing the localized text
- * @param delay the delay in milliseconds (20 if null or undefined)
- * @param callbackDelay the delay of resolving the promise in milliseconds
- * @param prompt whether or not to use the promptDelay
- * @param promptDelay the delay of the prompt in milliseconds
+ * @see {@linkcode ShowEncounterTextOptions} for optional parameters
  */
-export function showEncounterText(
+export async function showEncounterText(
   contentKey: string,
-  delay: number | null = null,
-  callbackDelay: number = 0,
-  prompt: boolean = true,
-  promptDelay: number | null = null,
+  { delay, callbackDelay = 0, prompt = true, promptDelay }: ShowEncounterTextOptions = {},
 ): Promise<void> {
   return new Promise<void>((resolve) => {
-    const text: string | null = getEncounterText(contentKey);
-    globalScene.ui.showText(text ?? "", delay, () => resolve(), callbackDelay, prompt, promptDelay);
+    const text = getEncounterText(contentKey) ?? "";
+    globalScene.ui.showText(text, { delay, callback: () => resolve(), callbackDelay, prompt, promptDelay });
   });
 }
 
@@ -80,12 +97,12 @@ export function showEncounterText(
 export function showEncounterDialogue(
   textContentKey: string,
   speakerContentKey: string,
-  delay: number | null = null,
+  delay?: number,
   callbackDelay: number = 0,
 ): Promise<void> {
   return new Promise<void>((resolve) => {
     const text: string | null = getEncounterText(textContentKey);
     const speaker: string | null = getEncounterText(speakerContentKey);
-    globalScene.ui.showDialogue(text ?? "", speaker ?? "", delay, () => resolve(), callbackDelay);
+    globalScene.ui.showDialogue(text ?? "", speaker ?? "", () => resolve(), delay, callbackDelay);
   });
 }

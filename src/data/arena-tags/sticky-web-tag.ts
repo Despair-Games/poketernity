@@ -7,7 +7,6 @@ import type { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveId } from "#enums/move-id";
 import { Stat } from "#enums/stat";
-import type { Arena } from "#field/arena";
 import type { Pokemon } from "#field/pokemon";
 import { BooleanHolder, NumberHolder } from "#utils/common-utils";
 import i18next from "i18next";
@@ -23,8 +22,8 @@ export class StickyWebTag extends EntryHazardTag {
   }
 
   /** @todo Should `quiet` ever be `true`? */
-  override onAdd(arena: Arena, quiet: boolean = false): void {
-    super.onAdd(arena);
+  override onAdd(quiet: boolean = false): void {
+    super.onAdd();
     const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
     if (!quiet && source) {
       globalScene.phaseManager.createAndUnshiftPhase(

@@ -14,13 +14,10 @@ export class LevelCapPhase extends FieldPhase {
     globalScene.ui.setMessageMode().then(() => {
       // Sound loaded into game as is
       globalScene.audioManager.playSound("level_up_fanfare");
-      globalScene.ui.showText(
-        i18next.t("battle:levelCapUp", { levelCap: globalScene.getMaxExpLevel() }),
-        null,
-        () => this.end(),
-        null,
-        true,
-      );
+      globalScene.ui.showText(i18next.t("battle:levelCapUp", { levelCap: globalScene.getMaxExpLevel() }), {
+        callback: () => this.end(),
+        prompt: true,
+      });
       this.executeForAll((pokemon) => pokemon.updateInfo(true));
     });
   }

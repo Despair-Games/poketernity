@@ -16,9 +16,9 @@ import { toNeverSelectMoveMatcher } from "#test/test-utils/matchers/to-never-sel
 import { toPreferSelectingMoveMatcher } from "#test/test-utils/matchers/to-prefer-selecting-move-matcher";
 import { expect } from "vitest";
 
-/**
+/*
  * Setup for custom matchers.
- * Make sure to define the call signatures in {@linkcode file://./@types/vitest.d.ts} too!
+ * Make sure to define the call signatures in `test/@types/vitest.d.ts` too!
  */
 
 expect.extend({

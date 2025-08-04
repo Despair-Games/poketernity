@@ -26,8 +26,8 @@ import { PokemonMove } from "#field/pokemon-move";
 import type { PokemonHeldItemModifierType } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
 import { showEncounterDialogue, showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
-import type { EnemyPartyConfig } from "#mystery-encounters/encounter-phase-utils";
 import {
+  type EnemyPartyConfig,
   generateModifierType,
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
@@ -40,8 +40,7 @@ import {
   applyModifierTypeToPlayerPokemon,
 } from "#mystery-encounters/encounter-pokemon-utils";
 import { transitionMysteryEncounterIntroVisuals } from "#mystery-encounters/encounter-visuals-utils";
-import type MysteryEncounter from "#mystery-encounters/mystery-encounter";
-import { MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
+import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
@@ -419,13 +418,13 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
   ])
   .build();
 
-async function handleSwapAbility() {
+async function handleSwapAbility(): Promise<boolean> {
   return new Promise<boolean>(async (resolve) => {
     await showEncounterDialogue(`${namespace}:option.1.apply_ability_dialogue`, `${namespace}:speaker`);
     await showEncounterText(`${namespace}:option.1.apply_ability_message`);
 
     await globalScene.ui.setMessageMode();
-    await showEncounterText(`${namespace}:option.1.ability_prompt`, null, 500, false);
+    await showEncounterText(`${namespace}:option.1.ability_prompt`, { callbackDelay: 500, prompt: false });
     displayYesNoOptions(resolve);
   });
 }
@@ -442,7 +441,7 @@ function displayYesNoOptions(resolve) {
   globalScene.ui.setModeWithoutClear<ConfirmUiHandler>(UiMode.CONFIRM, confirmMenuConfig);
 }
 
-function onYesAbilitySwap(resolve) {
+function onYesAbilitySwap(resolve): void {
   const onPokemonSelected = (pokemon: PlayerPokemon) => {
     // Do ability swap
     const encounter = globalScene.currentBattle.mysteryEncounter!;

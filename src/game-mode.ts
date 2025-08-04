@@ -10,13 +10,12 @@ import {
 import type { Challenge } from "#data/challenge";
 import { allChallenges, copyChallenge } from "#data/challenge";
 import { allSpecies } from "#data/data-lists";
-import type PokemonSpecies from "#data/pokemon-species";
+import type { PokemonSpecies } from "#data/pokemon-species";
 import { BiomeId } from "#enums/biome-id";
 import { ChallengeType } from "#enums/challenge-type";
 import { Challenges } from "#enums/challenges";
 import { GameModes } from "#enums/game-modes";
 import { SpeciesId } from "#enums/species-id";
-import type { Arena } from "#field/arena";
 import { applyChallenges } from "#utils/challenge-utils";
 import { randSeedInt, randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
@@ -142,10 +141,9 @@ export class GameMode implements GameModeConfig {
   /**
    * Determines whether or not to generate a trainer
    * @param waveIndex the current floor the player is on (trainer sprites fail to generate on X1 floors)
-   * @param arena the current {@linkcode Arena}
    * @returns `true` if a trainer should be generated, `false` otherwise
    */
-  isWaveTrainer(waveIndex: number, arena: Arena): boolean {
+  isWaveTrainer(waveIndex: number): boolean {
     // Daily spawns trainers on floors 5, 15, 20, 25, 30, 35, 40, and 45
     if (this.isDaily) {
       return waveIndex % 10 === 5 || (!(waveIndex % 10) && waveIndex > 10 && !this.isWaveFinal(waveIndex));
@@ -158,7 +156,7 @@ export class GameMode implements GameModeConfig {
     // Trainers must not appear on X1 waves due to a bug that prevents trainer sprites from appearing
     // after the full party heal that happens between X0 and X1 waves
     if (waveIndex % 10 > 1) {
-      const trainerChance = arena.getTrainerChance();
+      const trainerChance = globalScene.arena.getTrainerChance();
       let allowTrainerBattle = true;
       if (trainerChance) {
         const waveBase = Math.floor(waveIndex / 10) * 10;
@@ -175,7 +173,7 @@ export class GameMode implements GameModeConfig {
 
           if (w < waveIndex) {
             globalScene.executeWithSeedOffset(() => {
-              const waveTrainerChance = arena.getTrainerChance();
+              const waveTrainerChance = globalScene.arena.getTrainerChance();
               if (!randSeedInt(waveTrainerChance)) {
                 allowTrainerBattle = false;
               }

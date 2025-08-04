@@ -4,7 +4,7 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { SacrificialAttr } from "#moves/sacrificial-attr";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 
 /**
  * Attr used for moves that faint the user but revive a different Pokemon

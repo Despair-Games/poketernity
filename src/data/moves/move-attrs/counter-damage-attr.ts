@@ -3,8 +3,8 @@ import { CounterAttackCondition } from "#moves/counter-attack-condition";
 import { FixedDamageAttr } from "#moves/fixed-damage-attr";
 import type { Move } from "#moves/move";
 import type { MoveCondition } from "#moves/move-condition";
-import type { AttackMoveResult } from "#types/attack-move-result";
 import type { MoveFilter } from "#types/move-filter";
+import type { AttackMoveResult } from "#types/move-types";
 import { type NumberHolder, toDmgValue } from "#utils/common-utils";
 
 /**

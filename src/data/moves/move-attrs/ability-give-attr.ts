@@ -3,12 +3,11 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { DETRIMENTAL_ABILITIES, HIGH_VALUE_ABILITIES } from "#constants/ability-constants";
 import { BAD_MOVE_PENALTY, MINOR_EFFECT_SCORE_BONUS } from "#constants/ai-constants";
 import { allAbilities } from "#data/data-lists";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import type { MoveConditionFunc } from "#types/move-condition-func";
+import type { MoveConditionFunc } from "#types/move-types";
 import i18next from "i18next";
 
 /**
@@ -32,8 +31,8 @@ export class AbilityGiveAttr extends MoveEffectAttr {
 
   override getCondition(): MoveConditionFunc {
     return (user, target, _move) =>
-      !user.getAbility().hasAttrFlag(AbAttrFlag.UNCOPIABLE_ABILITY)
-      && !target.getAbility().hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY)
+      user.getAbility().isCopiable
+      && target.getAbility().isReplaceable
       && user.getAbility().id !== target.getAbility().id;
   }
 

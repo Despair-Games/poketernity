@@ -4,7 +4,6 @@ import type { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveCategory } from "#enums/move-category";
 import { MoveId } from "#enums/move-id";
-import type { Arena } from "#field/arena";
 import i18next from "i18next";
 
 /**
@@ -16,7 +15,7 @@ export class LightScreenTag extends WeakenMoveScreenTag {
     super(ArenaTagType.LIGHT_SCREEN, turnCount, MoveId.LIGHT_SCREEN, sourceId, side, [MoveCategory.SPECIAL]);
   }
 
-  override onAdd(_arena: Arena, quiet: boolean = false): void {
+  override onAdd(quiet: boolean = false): void {
     if (!quiet) {
       globalScene.phaseManager.createAndUnshiftPhase(
         "MessagePhase",
