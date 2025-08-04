@@ -63,6 +63,32 @@ describe("Move Effect Scores - Defog", () => {
     });
   });
 
+  describe.each([
+    { tagName: "Light Screen", tagType: ArenaTagType.LIGHT_SCREEN },
+    { tagName: "Reflect", tagType: ArenaTagType.REFLECT },
+    { tagName: "Aurora Veil", tagType: ArenaTagType.AURORA_VEIL },
+    { tagName: "Safeguard", tagType: ArenaTagType.SAFEGUARD },
+    { tagName: "Mist", tagType: ArenaTagType.MIST },
+  ])("Screen Removal", ({ tagName, tagType }) => {
+    it(`should be preferred when ${tagName} is on the opponent's side of the field`, async () => {
+      await game.classicMode.startBattle(SpeciesId.MAGIKARP);
+
+      game.scene.arena.addTag(tagType, 0, 0, MoveId.NONE, ArenaTagSide.PLAYER, true);
+      const enemy = game.field.getEnemyPokemon();
+      expect(enemy).toPreferSelectingMove(MoveId.DEFOG);
+    });
+
+    // This may need to be removed or adjusted when scoring is added for Defog's accuracy drop
+    it(`should not gain or lose incentive when ${tagName} is only on the user's side of the field`, async () => {
+      await game.classicMode.startBattle(SpeciesId.MAGIKARP);
+
+      game.scene.arena.addTag(tagType, 0, 0, MoveId.NONE, ArenaTagSide.ENEMY, true);
+      const enemy = game.field.getEnemyPokemon();
+      expect(enemy).not.toPreferSelectingMove(MoveId.DEFOG);
+      expect(enemy).not.toNeverSelectMove(MoveId.DEFOG);
+    });
+  });
+
   // TODO: Implement scoring for weather removal and add tests
   describe.todo("Weather Removal");
 
