@@ -1,8 +1,18 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { StockpilingTag } from "#battler-tags/stockpiling-tag";
-import { CONDITIONAL_PROTECT_ARENA_TAG_TYPES, COURT_CHANGE_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
-import { SEMI_INVULNERABLE_BATTLER_TAG_TYPES, TRAPPED_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
+import {
+  CONDITIONAL_PROTECT_ARENA_TAG_TYPES,
+  COURT_CHANGE_ARENA_TAG_TYPES,
+  DEFOG_REMOVABLE_ARENA_TAG_TYPES,
+  ENTRY_HAZARD_ARENA_TAG_TYPES,
+  WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES,
+} from "#constants/arena-tag-constants";
+import {
+  RAPID_SPIN_REMOVABLE_BATTLER_TAG_TYPES,
+  SEMI_INVULNERABLE_BATTLER_TAG_TYPES,
+  TRAPPED_BATTLER_TAG_TYPES,
+} from "#constants/battler-tag-constants";
 import { NON_VOLATILE_STATUS_EFFECTS } from "#constants/game-constants";
 import { allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
@@ -28,7 +38,6 @@ import { AbilityCopyAttr } from "#moves/ability-copy-attr";
 import { AbilityGiveAttr } from "#moves/ability-give-attr";
 import { AcupressureStatStageChangeAttr } from "#moves/acupressure-stat-stage-change-attr";
 import { AddBattlerTagHeaderAttr } from "#moves/add-battler-tag-header-attr";
-import { ConfuseIfBoostedAttr } from "#moves/add-battler-tag-if-boosted-attr";
 import { AddEntryHazardTagAttr } from "#moves/add-entry-hazard-tag-attr";
 import { AddPledgeEffectAttr } from "#moves/add-pledge-effect-attr";
 import { AddSubstituteAttr } from "#moves/add-substitute-attr";
@@ -70,6 +79,7 @@ import { CombinedPledgeTypeAttr } from "#moves/combined-pledge-type-attr";
 import { CompareWeightPowerAttr } from "#moves/compare-weight-power-attr";
 import { ConditionalProtectAttr } from "#moves/conditional-protect-attr";
 import { ConfuseAttr } from "#moves/confuse-attr";
+import { ConfuseIfBoostedAttr } from "#moves/confuse-if-boosted-attr";
 import { ConsecutiveUseDoublePowerAttr } from "#moves/consecutive-use-double-power-attr";
 import { ConsecutiveUseMultiBasePowerAttr } from "#moves/consecutive-use-multi-base-power-attr";
 import { CopyBiomeTypeAttr } from "#moves/copy-biome-type-attr";
@@ -213,10 +223,8 @@ import { RecoilAttr } from "#moves/recoil-attr";
 import { ReducePpMoveAttr } from "#moves/reduce-pp-move-attr";
 import { RemoveAllSubstitutesAttr } from "#moves/remove-all-substitutes-attr";
 import { RemoveArenaTagsAttr } from "#moves/remove-arena-tags-attr";
-import { RemoveBattlerTagAttr, rapidSpinRemoveTags } from "#moves/remove-battler-tag-attr";
-import { RemoveEntryHazardAttr } from "#moves/remove-entry-hazard-attr";
+import { RemoveBattlerTagAttr } from "#moves/remove-battler-tag-attr";
 import { RemoveHeldItemAttr } from "#moves/remove-held-item-attr";
-import { RemoveScreensAttr } from "#moves/remove-screens-attr";
 import { RemoveTypeAttr } from "#moves/remove-type-attr";
 import { RepeatMoveAttr } from "#moves/repeat-move-attr";
 import { ResetStatsAttr } from "#moves/reset-stats-attr";
@@ -306,7 +314,7 @@ import i18next from "i18next";
 
 // prettier-ignore
 export function initMoves() {
-  const rawAllMoves = [
+  const rawAllMoves: Move[] = [
     SelfStatusMove.none(),
     new AttackMove(MoveId.POUND, ElementalType.NORMAL, MoveCategory.PHYSICAL, 40, 100, 35, -1, 0, 1),
     new AttackMove(MoveId.KARATE_CHOP, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 50, 100, 25, -1, 0, 1)
@@ -1050,8 +1058,8 @@ export function initMoves() {
       .partial(), // No effect implemented
     new AttackMove(MoveId.RAPID_SPIN, ElementalType.NORMAL, MoveCategory.PHYSICAL, 50, 100, 40, 100, 0, 2)
       .attr(StatStageChangeAttr, [Stat.SPD], 1, true)
-      .attr(RemoveBattlerTagAttr, rapidSpinRemoveTags, true)
-      .attr(RemoveEntryHazardAttr),
+      .attr(RemoveBattlerTagAttr, [...RAPID_SPIN_REMOVABLE_BATTLER_TAG_TYPES], true)
+      .attr(RemoveArenaTagsAttr, [...ENTRY_HAZARD_ARENA_TAG_TYPES], ArenaTagRelativeSide.USER),
     new StatusMove(MoveId.SWEET_SCENT, ElementalType.NORMAL, 100, 20, -1, 0, 2)
       .attr(StatStageChangeAttr, [Stat.EVA], -2)
       .bounceable()
@@ -1230,7 +1238,7 @@ export function initMoves() {
     new AttackMove(MoveId.REVENGE, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 60, 100, 10, -1, -4, 3)
       .attr(TurnDamagedDoublePowerAttr),
     new AttackMove(MoveId.BRICK_BREAK, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 75, 100, 15, -1, 0, 3)
-      .attr(RemoveScreensAttr),
+      .attr(RemoveArenaTagsAttr, [...WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES], ArenaTagRelativeSide.TARGET, MoveEffectTrigger.PRE_APPLY),
     new StatusMove(MoveId.YAWN, ElementalType.NORMAL, -1, 10, -1, 0, 3)
       .attr(DrowsyAttr)
       .bounceable()
@@ -1741,9 +1749,8 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [Stat.EVA], -1)
       .attr(ClearWeatherAttr, WeatherType.FOG)
       .attr(ClearTerrainAttr)
-      .attr(RemoveScreensAttr, false)
-      .attr(RemoveEntryHazardAttr, true)
-      .attr(RemoveArenaTagsAttr, [ArenaTagType.SAFEGUARD, ArenaTagType.MIST], ArenaTagRelativeSide.TARGET)
+      .attr(RemoveArenaTagsAttr, [...ENTRY_HAZARD_ARENA_TAG_TYPES], ArenaTagRelativeSide.ALL)
+      .attr(RemoveArenaTagsAttr, [...DEFOG_REMOVABLE_ARENA_TAG_TYPES], ArenaTagRelativeSide.TARGET)
       .bounceable(),
     new StatusMove(MoveId.TRICK_ROOM, ElementalType.PSYCHIC, -1, 5, -1, -7, 4)
       .attr(TrickRoomAttr)
@@ -2686,7 +2693,7 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [Stat.SPATK], -2, true),
     new AttackMove(MoveId.PSYCHIC_FANGS, ElementalType.PSYCHIC, MoveCategory.PHYSICAL, 85, 100, 10, -1, 0, 7)
       .bitingMove()
-      .attr(RemoveScreensAttr),
+      .attr(RemoveArenaTagsAttr, [...WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES], ArenaTagRelativeSide.TARGET, MoveEffectTrigger.PRE_APPLY),
     new AttackMove(MoveId.STOMPING_TANTRUM, ElementalType.GROUND, MoveCategory.PHYSICAL, 75, 100, 10, -1, 0, 7)
       .attr(
         MovePowerMultiplierAttr,
@@ -3218,9 +3225,8 @@ export function initMoves() {
       .gMaxMove(SpeciesId.CORVIKNIGHT)
       .attr(ClearWeatherAttr, WeatherType.FOG)
       .attr(ClearTerrainAttr)
-      .attr(RemoveScreensAttr, false)
-      .attr(RemoveEntryHazardAttr, true)
-      .attr(RemoveArenaTagsAttr, [ArenaTagType.SAFEGUARD, ArenaTagType.MIST], ArenaTagRelativeSide.TARGET),
+      .attr(RemoveArenaTagsAttr, [...ENTRY_HAZARD_ARENA_TAG_TYPES], ArenaTagRelativeSide.ALL)
+      .attr(RemoveArenaTagsAttr, [...DEFOG_REMOVABLE_ARENA_TAG_TYPES], ArenaTagRelativeSide.TARGET),
     new AttackMove(MoveId.G_MAX_STUN_SHOCK, ElementalType.ELECTRIC, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(SpeciesId.TOXTRICITY)
       .attr(MultiStatusEffectAttr, [StatusEffect.POISON, StatusEffect.PARALYSIS]),
@@ -3343,9 +3349,9 @@ export function initMoves() {
     new AttackMove(MoveId.TRIPLE_DIVE, ElementalType.WATER, MoveCategory.PHYSICAL, 30, 95, 10, -1, 0, 9)
       .attr(MultiHitAttr, MultiHitType._3),
     new AttackMove(MoveId.MORTAL_SPIN, ElementalType.POISON, MoveCategory.PHYSICAL, 30, 100, 15, 100, 0, 9)
-      .attr(RemoveBattlerTagAttr, rapidSpinRemoveTags, true)
+      .attr(RemoveBattlerTagAttr, [...RAPID_SPIN_REMOVABLE_BATTLER_TAG_TYPES], true)
       .attr(StatusEffectAttr, StatusEffect.POISON)
-      .attr(RemoveEntryHazardAttr)
+      .attr(RemoveArenaTagsAttr, [...ENTRY_HAZARD_ARENA_TAG_TYPES], ArenaTagRelativeSide.USER)
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new StatusMove(MoveId.DOODLE, ElementalType.NORMAL, 100, 10, -1, 0, 9)
       .attr(AbilityCopyAttr, true),
@@ -3366,7 +3372,7 @@ export function initMoves() {
       .danceMove(),
     new AttackMove(MoveId.RAGING_BULL, ElementalType.NORMAL, MoveCategory.PHYSICAL, 90, 100, 10, -1, 0, 9)
       .attr(RagingBullTypeAttr)
-      .attr(RemoveScreensAttr),
+      .attr(RemoveArenaTagsAttr, [...WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES], ArenaTagRelativeSide.TARGET, MoveEffectTrigger.PRE_APPLY),
     new AttackMove(MoveId.MAKE_IT_RAIN, ElementalType.STEEL, MoveCategory.SPECIAL, 120, 100, 5, -1, 0, 9)
       .attr(MoneyAttr)
       .attr(StatStageChangeAttr, [Stat.SPATK], -1, true, { firstTargetOnly: true })
@@ -3411,7 +3417,7 @@ export function initMoves() {
       .attr(ChillyReceptionAttr, true),
     new SelfStatusMove(MoveId.TIDY_UP, ElementalType.NORMAL, -1, 10, -1, 0, 9)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPD], 1, true)
-      .attr(RemoveEntryHazardAttr, true)
+      .attr(RemoveArenaTagsAttr, [...ENTRY_HAZARD_ARENA_TAG_TYPES], ArenaTagRelativeSide.ALL)
       .attr(RemoveAllSubstitutesAttr)
       .snatchable(), // Custom
     new StatusMove(MoveId.SNOWSCAPE, ElementalType.ICE, -1, 10, -1, 0, 9)

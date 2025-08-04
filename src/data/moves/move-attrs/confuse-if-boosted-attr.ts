@@ -4,7 +4,9 @@ import { ConfuseAttr } from "#moves/confuse-attr";
 import type { Move } from "#moves/move";
 
 /**
- * Attribute to apply a battler tag to the target if they have had their stats boosted this turn.
+ * Attribute to confuse the target if the target has had its stat stages increased
+ * in the same turn.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Alluring_Voice_(move) | Alluring Voice}
  */
 export class ConfuseIfBoostedAttr extends ConfuseAttr {
   override canApply(user: Pokemon, target: Pokemon, move: Move): boolean {

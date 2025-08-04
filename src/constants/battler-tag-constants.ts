@@ -101,6 +101,15 @@ export const DAMAGING_TRAPPED_BATTLER_TAG_TYPES = Object.freeze<BattlerTagType[]
 ]);
 
 /**
+ * All {@linkcode BattlerTagType | BattlerTagTypes} that may be removed when the
+ * afflicted Pokemon successfully uses Rapid Spin or Mortal Spin.
+ */
+export const RAPID_SPIN_REMOVABLE_BATTLER_TAG_TYPES = Object.freeze<BattlerTagType[]>([
+  ...DAMAGING_TRAPPED_BATTLER_TAG_TYPES,
+  BattlerTagType.SEEDED,
+]);
+
+/**
  * All {@linkcode BattlerTagType}s that trap a pokemon.
  * @see {@linkcode TrappedTag}
  */
