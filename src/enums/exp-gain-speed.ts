@@ -14,9 +14,9 @@ export const ExpGainSpeed = {
 
 export type ExpGainSpeed = EnumValues<typeof ExpGainSpeed>;
 
-export const expGainSpeedMap = {
+export const EXP_GAIN_SPEED_MAP = {
   [ExpGainSpeed.DEFAULT]: 1,
   [ExpGainSpeed.FAST]: 1 / 2,
   [ExpGainSpeed.FASTER]: 1 / 4,
   [ExpGainSpeed.SKIP]: 0,
-};
+} as const;
