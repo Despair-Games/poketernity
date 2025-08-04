@@ -339,8 +339,9 @@ export class EggGachaUiHandler extends MessageUiHandler {
 
     this.setGachaCursor(1);
 
-    for (let g = 0; g < this.gachaContainers.length; g++) {
-      this.updateGachaInfo((g + 1) as GachaType);
+    // this loop starts at 1 because the `GachaType` enum starts at one
+    for (let g = 1; g <= this.gachaContainers.length; g++) {
+      this.updateGachaInfo(g as GachaType);
     }
 
     this.updateVoucherCounts();
