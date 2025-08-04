@@ -1392,7 +1392,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   abstract getBossSegmentIndex(): number;
 
   /**
-   * @param bypassSummonData - Whether to get the Pokemon's actual moveset
+   * @param bypassSummonData - (Default `true`) Whether to get the Pokemon's actual/unmodified moveset (`true`)
+   *   or the Pokemon's temporary/modified moveset (such as due to Transform) (`false`).
    * @returns The Pokemon's active moveset
    */
   public getMoveset(bypassSummonData: boolean = false): readonly PokemonMove[] {
