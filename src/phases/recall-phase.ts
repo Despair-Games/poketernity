@@ -56,19 +56,16 @@ export class RecallPhase extends PokemonPhase {
 
   /** Plays a message before this phase's target {@linkcode Pokemon} is recalled */
   private async playRecallMessage(): Promise<void> {
-    await new Promise<void>((resolve) =>
-      globalScene.ui.showText(
-        this.isPlayer
-          ? i18next.t("battle:playerComeBack", { pokemonName: getPokemonNameWithAffix(this.pokemon) })
-          : i18next.t("battle:trainerComeBack", {
-              trainerName: globalScene.currentBattle.trainer?.getName(this.getTrainerSlot()),
-              pokemonName: this.pokemon.getNameToRender(),
-            }),
-        null, // TODO: check and adjust this delay if needed
-        resolve,
-        250,
-      ),
-    );
+    await new Promise<void>((resolve) => {
+      const text = this.isPlayer
+        ? i18next.t("battle:playerComeBack", { pokemonName: getPokemonNameWithAffix(this.pokemon) })
+        : i18next.t("battle:trainerComeBack", {
+            trainerName: globalScene.currentBattle.trainer?.getName(this.getTrainerSlot()),
+            pokemonName: this.pokemon.getNameToRender(),
+          });
+      // TODO: check and adjust this delay if needed
+      globalScene.ui.showText(text, { callback: resolve, callbackDelay: 250 });
+    });
   }
 
   /**
