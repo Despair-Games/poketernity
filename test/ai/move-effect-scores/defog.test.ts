@@ -78,7 +78,7 @@ describe("Move Effect Scores - Defog", () => {
       expect(enemy).toPreferSelectingMove(MoveId.DEFOG);
     });
 
-    // This may need to be removed or adjusted when scoring is added for Defog's accuracy drop
+    // This may need to be removed or adjusted when scoring is added for Defog's evasion drop
     it(`should not gain or lose incentive when ${tagName} is only on the user's side of the field`, async () => {
       await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
