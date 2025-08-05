@@ -133,15 +133,7 @@ import { addTextObject } from "#ui/text-utils";
 import { UI } from "#ui/ui";
 import { setDocumentUiTheme, updateWindowStyle } from "#ui/ui-theme";
 import { loadCommonAnimAssets } from "#utils/anim-utils";
-import {
-  BooleanHolder,
-  enumValueToKey,
-  fixedNumber,
-  getTSEnumValues,
-  isBetween,
-  isNil,
-  NumberHolder,
-} from "#utils/common-utils";
+import { BooleanHolder, enumValueToKey, fixedNumber, isBetween, isNil, NumberHolder } from "#utils/common-utils";
 import { getModifierType } from "#utils/modifier-type-utils";
 import { loadMoveAnimAssets } from "#utils/move-anim-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
@@ -1092,7 +1084,7 @@ export class BattleScene extends SceneBase {
     this.lockModifierTiers = false;
 
     this.pokeballCounts = Object.fromEntries(
-      getTSEnumValues(PokeballType)
+      Object.values(PokeballType)
         .filter((p) => p <= PokeballType.MASTER_BALL)
         .map((t) => [t, 0]),
     );
