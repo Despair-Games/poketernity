@@ -377,12 +377,7 @@ export const AbsoluteAvariceEncounter: MysteryEncounter = MysteryEncounterBuilde
         // Greedent joins the team, level equal to 2 below highest party member (shiny locked)
         const level = getHighestLevelPlayerPokemon(false, true).level - 2;
         const greedent = new EnemyPokemon(getPokemonSpecies(SpeciesId.GREEDENT), level, TrainerSlot.NONE, false, true);
-        greedent.moveset = [
-          new PokemonMove(MoveId.THRASH),
-          new PokemonMove(MoveId.BODY_PRESS),
-          new PokemonMove(MoveId.STUFF_CHEEKS),
-          new PokemonMove(MoveId.SLACK_OFF),
-        ];
+        greedent.setMoveset(MoveId.THRASH, MoveId.BODY_PRESS, MoveId.STUFF_CHEEKS, MoveId.SLACK_OFF);
         greedent.passive = true;
 
         await transitionMysteryEncounterIntroVisuals(true, true, 500);

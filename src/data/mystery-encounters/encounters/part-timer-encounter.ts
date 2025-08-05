@@ -110,7 +110,7 @@ export const PartTimerEncounter: MysteryEncounter = MysteryEncounterBuilder.with
           };
 
           // Reduce all PP to 2 (if they started at greater than 2)
-          pokemon.moveset.forEach((move) => {
+          pokemon.getMoveset(true).forEach((move) => {
             if (move) {
               const newPpUsed = move.getMovePp() - 2;
               move.ppUsed = move.ppUsed < newPpUsed ? newPpUsed : move.ppUsed;
@@ -188,7 +188,7 @@ export const PartTimerEncounter: MysteryEncounter = MysteryEncounterBuilder.with
           };
 
           // Reduce all PP to 2 (if they started at greater than 2)
-          pokemon.moveset.forEach((move) => {
+          pokemon.getMoveset(true).forEach((move) => {
             if (move) {
               const newPpUsed = move.getMovePp() - 2;
               move.ppUsed = move.ppUsed < newPpUsed ? newPpUsed : move.ppUsed;
@@ -252,7 +252,7 @@ export const PartTimerEncounter: MysteryEncounter = MysteryEncounterBuilder.with
         encounter.setDialogueToken("selectedPokemon", selectedPokemon.getNameToRender());
 
         // Reduce all PP to 2 (if they started at greater than 2)
-        selectedPokemon.moveset.forEach((move) => {
+        selectedPokemon.getMoveset(true).forEach((move) => {
           if (move) {
             const newPpUsed = move.getMovePp() - 2;
             move.ppUsed = move.ppUsed < newPpUsed ? newPpUsed : move.ppUsed;

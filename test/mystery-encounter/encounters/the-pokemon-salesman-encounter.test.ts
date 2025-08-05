@@ -154,7 +154,7 @@ describe("The Pokemon Salesman - Mystery Encounter", () => {
 
       const newlyPurchasedPokemon = scene.getPlayerParty()[scene.getPlayerParty().length - 1];
       expect(newlyPurchasedPokemon.name).toBe(pokemonName);
-      expect(newlyPurchasedPokemon!.moveset.length > 0).toBeTruthy();
+      expect(newlyPurchasedPokemon.getMoveset(true).length).toBeGreaterThan(0);
     });
 
     it("should give the purchased Pokemon its HA or make it shiny", async () => {

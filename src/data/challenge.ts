@@ -16,7 +16,6 @@ import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { TrainerVariant } from "#enums/trainer-variant";
 import type { Pokemon } from "#field/pokemon";
-import { PokemonMove } from "#field/pokemon-move";
 import { Trainer } from "#field/trainer";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import type { DexAttrProps, GameData } from "#system/game-data";
@@ -669,12 +668,12 @@ export class FreshStartChallenge extends Challenge {
     pokemon.abilityIndex = 0; // Always base ability, not hidden ability
     pokemon.passive = false; // Passive isn't unlocked
     pokemon.nature = Nature.HARDY; // Neutral nature
-    pokemon.moveset = pokemon.species
+    const moveset = pokemon.species
       .getLevelMoves()
       .filter((m) => m[0] <= 5)
       .map((lm) => lm[1])
-      .slice(0, 4)
-      .map((m) => new PokemonMove(m)); // No egg moves
+      .slice(0, 4); // No egg moves
+    pokemon.setMoveset(...moveset);
     pokemon.luck = 0; // No luck
     pokemon.shiny = false; // Not shiny
     pokemon.variant = 0; // Not shiny

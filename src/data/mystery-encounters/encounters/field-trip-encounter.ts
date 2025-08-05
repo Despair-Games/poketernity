@@ -74,7 +74,7 @@ export const FieldTripEncounter: MysteryEncounter = MysteryEncounterBuilder.with
         const encounter = globalScene.currentBattle.mysteryEncounter!;
         const onPokemonSelected = (pokemon: PlayerPokemon) => {
           // Return the options for Pokemon move valid for this option
-          return pokemon.moveset.map((move: PokemonMove) => {
+          return pokemon.getMoveset(true).map((move) => {
             const option: OptionSelectItem = {
               label: move.getName(),
               handler: () => {
@@ -119,7 +119,7 @@ export const FieldTripEncounter: MysteryEncounter = MysteryEncounterBuilder.with
         const encounter = globalScene.currentBattle.mysteryEncounter!;
         const onPokemonSelected = (pokemon: PlayerPokemon) => {
           // Return the options for Pokemon move valid for this option
-          return pokemon.moveset.map((move: PokemonMove) => {
+          return pokemon.getMoveset(true).map((move) => {
             const option: OptionSelectItem = {
               label: move.getName(),
               handler: () => {
@@ -164,7 +164,7 @@ export const FieldTripEncounter: MysteryEncounter = MysteryEncounterBuilder.with
         const encounter = globalScene.currentBattle.mysteryEncounter!;
         const onPokemonSelected = (pokemon: PlayerPokemon) => {
           // Return the options for Pokemon move valid for this option
-          return pokemon.moveset.map((move: PokemonMove) => {
+          return pokemon.getMoveset(true).map((move) => {
             const option: OptionSelectItem = {
               label: move.getName(),
               handler: () => {

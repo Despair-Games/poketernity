@@ -1363,7 +1363,7 @@ export class TmModifierTypeGenerator extends ModifierTypeGenerator {
         return new TmModifierType(pregenArgs[0] as MoveId);
       }
       const partyMemberCompatibleTms = party.map((p) =>
-        (p as PlayerPokemon).compatibleTms.filter((tm) => !p.moveset.find((m) => m.moveId === tm)),
+        (p as PlayerPokemon).compatibleTms.filter((tm) => !p.getMoveset(true).find((m) => m.moveId === tm)),
       );
       const tierUniqueCompatibleTms = partyMemberCompatibleTms
         .flat()

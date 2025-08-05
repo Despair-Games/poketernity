@@ -259,7 +259,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public stats: number[];
   public ivs: number[];
   public nature: Nature;
-  public moveset: PokemonMove[];
+  protected moveset: PokemonMove[];
   protected status: Status | null = null;
   public friendship: number;
   public metLevel: number;
@@ -353,8 +353,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       }
       this.nature = dataSource.nature || (0 as Nature);
       this.nickname = dataSource.nickname;
+      // @ts-expect-error - `Pokemon#moveset` is `protected`
       this.moveset = dataSource.moveset;
-      // @ts-expect-error - `Pokemon#status` is protected
+      // @ts-expect-error - `Pokemon#status` is `protected`
       this.status = dataSource.status;
       this.friendship = dataSource.friendship !== undefined ? dataSource.friendship : this.species.baseFriendship;
       this.metLevel = dataSource.metLevel || 5;
@@ -1390,7 +1391,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   abstract getBossSegmentIndex(): number;
 
-  getMoveset(bypassSummonData: boolean = false): PokemonMove[] {
+  /**
+   * @param bypassSummonData - (Default `true`) Whether to get the Pokemon's actual/unmodified moveset (`true`)
+   *   or the Pokemon's temporary/modified moveset (such as due to Transform) (`false`).
+   * @returns The Pokemon's active moveset
+   */
+  public getMoveset(bypassSummonData: boolean = false): readonly PokemonMove[] {
     const ret = !bypassSummonData && this.summonData.moveset.length > 0 ? this.summonData.moveset : this.moveset;
 
     // Overrides moveset based on arrays specified in overrides.ts
@@ -1410,6 +1416,46 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.moveset[index] = new PokemonMove(moveId, Math.min(ppUsed, allMoves.get(moveId).pp));
     });
     return this.moveset;
+  }
+
+  /**
+   * Sets the move in the specified move slot to the specified move. Does nothing if `moveId` is `MoveId.NONE`.
+   * @param moveIndex - Which move slot to set
+   * @param moveId - The move to set the slot to
+   * @todo Should it remove the move from the moveset if `moveId` is `MoveId.NONE` instead of doing nothing?
+   */
+  public setMove(moveIndex: number, moveId: MoveId): void {
+    if (moveId === MoveId.NONE) {
+      return;
+    }
+    const move = new PokemonMove(moveId);
+    this.moveset[moveIndex] = move;
+  }
+
+  /** Overwrites the pokemon's moveset to the specified set of moves, deleting the old moveset. */
+  public setMoveset(...moves: MoveId[]): void {
+    this.moveset = [];
+    if (moves.length === 0) {
+      return;
+    }
+    for (const move of moves) {
+      this.moveset.push(new PokemonMove(move));
+    }
+  }
+
+  /** Swaps 2 moves in the pokemon's moveset. Does nothing if one of the slots is empty. */
+  public swapMoves(firstIndex: number, secondIndex: number): void {
+    if (!this.moveset[firstIndex] || !this.moveset[secondIndex]) {
+      return;
+    }
+    [this.moveset[firstIndex], this.moveset[secondIndex]] = [this.moveset[secondIndex], this.moveset[firstIndex]];
+  }
+
+  /** Resets the used PP of all moves in the pokemon's moveset to 0 */
+  public restoreMovePP(): void {
+    for (const move of this.moveset) {
+      move.ppUsed = 0;
+    }
   }
 
   /**
@@ -2244,21 +2290,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
   }
 
-  /**
-   * Get a list of all egg moves
-   *
-   * @returns list of egg moves
-   */
-  getEggMoves(): MoveId[] | undefined {
+  /** @returns A list of the pokemon's egg moves */
+  public getEggMoves(): MoveId[] | undefined {
     return speciesEggMoves[this.getSpeciesForm().getRootSpeciesId()];
-  }
-
-  setMove(moveIndex: number, moveId: MoveId): void {
-    if (moveId === MoveId.NONE) {
-      return;
-    }
-    const move = new PokemonMove(moveId);
-    this.moveset[moveIndex] = move;
   }
 
   /**

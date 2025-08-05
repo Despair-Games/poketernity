@@ -37,7 +37,6 @@ import { TrainerVariant } from "#enums/trainer-variant";
 import { UiMode } from "#enums/ui-mode";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
-import { PokemonMove } from "#field/pokemon-move";
 import { Trainer } from "#field/trainer";
 import { initMoveAnim } from "#init/init-move-anim";
 import {
@@ -366,9 +365,8 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
 
       // Set moves
       if (config?.moveSet && config.moveSet.length > 0) {
-        const moves = config.moveSet.map((m) => new PokemonMove(m));
-        enemyPokemon.moveset = moves;
-        enemyPokemon.summonData.moveset = moves;
+        enemyPokemon.summonData.moveset = [];
+        enemyPokemon.setMoveset(...config.moveSet);
       }
 
       // Set tags

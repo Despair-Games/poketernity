@@ -36,7 +36,7 @@ describe("Daily Mode", () => {
     expect(party).toHaveLength(3);
     party.forEach((pkm) => {
       expect(pkm.level).toBe(20);
-      expect(pkm.moveset.length).toBeGreaterThan(0);
+      expect(pkm.getMoveset(true).length).toBeGreaterThan(0);
     });
     expect(game.scene.getModifiers(MapModifier).length).toBeGreaterThan(0);
   });

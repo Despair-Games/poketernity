@@ -21,7 +21,7 @@ import { TrainerType } from "#enums/trainer-type";
 import { TransformationScreenPosition } from "#enums/transformation-screen-position";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
-import { PokemonMove } from "#field/pokemon-move";
+import type { PokemonMove } from "#field/pokemon-move";
 import { HiddenAbilityRateBoosterModifier, type PokemonHeldItemModifier } from "#modifier/modifier";
 import type { PokemonHeldItemModifierType } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
@@ -497,9 +497,10 @@ async function postProcessTransformedPokemon(
   // Set the moveset of the new pokemon to be the same as previous, but with 1 egg move and 1 (attempted) STAB move of the new species
   newPokemon.generateAndPopulateMoveset();
   // Store a copy of a "standard" generated moveset for the new pokemon, will be used later for finding a favored move
-  const newPokemonGeneratedMoveset = newPokemon.moveset;
+  const newPokemonGeneratedMoveset = newPokemon.getMoveset(true);
 
-  newPokemon.moveset = previousPokemon.moveset.slice(0);
+  const previousMoveset = previousPokemon.getMoveset(true).map((m) => m.getMove().id);
+  newPokemon.setMoveset(...previousMoveset);
 
   const newEggMoveIndex = await addEggMoveToNewPokemonMoveset(newPokemon, speciesRootForm, forBattle);
 
@@ -708,7 +709,7 @@ async function addEggMoveToNewPokemonMoveset(
     let randomEggMoveIndex = eggMoveIndices.pop();
     let randomEggMove = !isNil(randomEggMoveIndex) ? eggMoves[randomEggMoveIndex] : null;
     let retries = 0;
-    while (retries < 3 && (!randomEggMove || newPokemon.moveset.some((m) => m.moveId === randomEggMove))) {
+    while (retries < 3 && (!randomEggMove || newPokemon.getMoveset(true).some((m) => m.moveId === randomEggMove))) {
       // If Pokemon already knows this move, roll for another egg move
       randomEggMoveIndex = eggMoveIndices.pop();
       randomEggMove = !isNil(randomEggMoveIndex) ? eggMoves[randomEggMoveIndex] : null;
@@ -716,12 +717,13 @@ async function addEggMoveToNewPokemonMoveset(
     }
 
     if (randomEggMove) {
-      if (!newPokemon.moveset.some((m) => m.moveId === randomEggMove)) {
-        if (newPokemon.moveset.length < 4) {
-          newPokemon.moveset.push(new PokemonMove(randomEggMove));
+      const moveset = newPokemon.getMoveset(true);
+      if (!moveset.some((m) => m.moveId === randomEggMove)) {
+        if (moveset.length < 4) {
+          newPokemon.setMove(moveset.length, randomEggMove);
         } else {
           eggMoveIndex = randSeedInt(4);
-          newPokemon.moveset[eggMoveIndex] = new PokemonMove(randomEggMove);
+          newPokemon.setMove(eggMoveIndex, randomEggMove);
         }
       }
 
@@ -748,13 +750,16 @@ async function addEggMoveToNewPokemonMoveset(
  */
 function addFavoredMoveToNewPokemonMoveset(
   newPokemon: PlayerPokemon,
-  newPokemonGeneratedMoveset: PokemonMove[],
+  newPokemonGeneratedMoveset: readonly PokemonMove[],
   newEggMoveIndex: number | null,
 ) {
   let favoredMove: PokemonMove | null = null;
   for (const move of newPokemonGeneratedMoveset) {
     // Needs to match first type, second type will be replaced
-    if (move.getMove().type === newPokemon.getTypes()[0] && !newPokemon.moveset.some((m) => m.moveId === move.moveId)) {
+    if (
+      move.getMove().type === newPokemon.getTypes()[0]
+      && !newPokemon.getMoveset(true).some((m) => m.moveId === move.moveId)
+    ) {
       favoredMove = move;
       break;
     }
@@ -764,7 +769,7 @@ function addFavoredMoveToNewPokemonMoveset(
   if (!favoredMove) {
     for (const move of newPokemonGeneratedMoveset) {
       // Needs to match first type, second type will be replaced
-      if (!newPokemon.moveset.some((m) => m.moveId === move.moveId)) {
+      if (!newPokemon.getMoveset(true).some((m) => m.moveId === move.moveId)) {
         favoredMove = move;
         break;
       }
@@ -772,15 +777,15 @@ function addFavoredMoveToNewPokemonMoveset(
   }
   // Finally, assign favored move to random index that isn't the new egg move index
   if (favoredMove) {
-    if (newPokemon.moveset.length < 4) {
-      newPokemon.moveset.push(favoredMove);
+    if (newPokemon.getMoveset(true).length < 4) {
+      newPokemon.setMove(newPokemon.getMoveset(true).length, favoredMove.getMove().id);
     } else {
       let favoredMoveIndex = randSeedInt(4);
       while (newEggMoveIndex !== null && favoredMoveIndex === newEggMoveIndex) {
         favoredMoveIndex = randSeedInt(4);
       }
 
-      newPokemon.moveset[favoredMoveIndex] = favoredMove;
+      newPokemon.setMove(favoredMoveIndex, favoredMove.getMove().id);
     }
   }
 }
