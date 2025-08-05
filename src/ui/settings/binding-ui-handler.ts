@@ -288,7 +288,7 @@ export abstract class BindingUiHandler extends UiHandler {
     return globalScene.inputController?.selectedDevice[this.device];
   }
 
-  protected swapAction() {
+  protected swapAction(): boolean {
     const selectedDevice = this.getSelectedDevice();
     if (isNil(selectedDevice) || isNil(this.target) || isNil(this.buttonPressed)) {
       return false;

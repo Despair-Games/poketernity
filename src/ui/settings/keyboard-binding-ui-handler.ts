@@ -52,7 +52,6 @@ export class KeyboardBindingUiHandler extends BindingUiHandler {
       return;
     }
     this.buttonPressed = keyCode;
-    // const assignedButtonIcon = getIconWithSettingName(activeConfig, this.target);
     this.onInputDown(buttonIcon, null, "keyboard");
   }
 }

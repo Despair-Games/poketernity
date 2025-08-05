@@ -20,7 +20,6 @@ export class SettingsNavigationManager extends NavigationManager {
   }
 
   /**
-   * Gets the singleton instance of the NavigationManager.
    * @returns The singleton instance of NavigationManager.
    */
   public static getInstance(): NavigationManager {

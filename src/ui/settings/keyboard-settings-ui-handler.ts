@@ -76,11 +76,8 @@ export class KeyboardSettingsUiHandler extends ControlsSettingsUiHandler {
     for (const [index, value] of Object.values(SettingKeyboard).entries()) {
       if (value === "layout") {
         // Update the text of the first option label under the current setting to the name of the chosen layout
-        this.updateOptionValueLabel(
-          index,
-          0,
-          truncateString(enumValueToKey(KeyboardLayout, settings.keyboard.layout ?? KeyboardLayout.QWERTY), 25),
-        );
+        const layoutLabel = truncateString(enumValueToKey(KeyboardLayout, settings.keyboard.layout), 25);
+        this.updateOptionValueLabel(index, 0, layoutLabel);
       }
     }
   }

@@ -44,11 +44,8 @@ export abstract class NavigationManager {
   }
 
   public addMenu(x: number, y: number): NavigationMenu {
-    const menu = new NavigationMenu(
-      x,
-      y,
-      this.tabs.map((tab) => tab.label),
-    );
+    const tabsMap = this.tabs.map((tab) => tab.label);
+    const menu = new NavigationMenu(x, y, tabsMap);
     menu.setSelected(this.cursor);
     this.navigationMenus.push(menu);
     return menu;
