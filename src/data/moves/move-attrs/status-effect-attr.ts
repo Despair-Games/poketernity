@@ -2,9 +2,18 @@ import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { ConfusionOnStatusEffectAbAttr } from "#abilities/confusion-on-status-effect-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import {
+  BURN_SYNERGY_ABILITIES,
+  POISON_SYNERGY_ABILITIES,
+  POISONING_SYNERGY_ABILITIES,
+} from "#constants/ability-constants";
+import { ALLY_TARGET_PENALTY } from "#constants/ai-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { MoveCategory } from "#enums/move-category";
-import type { StatusEffect } from "#enums/status-effect";
+import { Stat } from "#enums/stat";
+import { StatusEffect } from "#enums/status-effect";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { ChanceBasedMoveEffectAttr } from "#moves/chance-based-move-effect-attr";
 import type { Move } from "#moves/move";
@@ -27,16 +36,19 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
     overrideStatus: boolean = false,
     effectChanceOverride?: number,
   ) {
-    super(selfTarget, { effectChanceOverride: effectChanceOverride });
+    super(selfTarget, {
+      effectChanceOverride: effectChanceOverride,
+      overridesAllyTargetPenalty: true,
+    });
 
     this.effect = effect;
     this.turnsRemaining = turnsRemaining;
     this.overrideStatus = overrideStatus;
   }
 
-  override canApply(user: Pokemon, target: Pokemon, move: Move): boolean {
+  public override canApply(user: Pokemon, target: Pokemon, move: Move, simulated: boolean = false): boolean {
     if (user !== target && target.isSafeguarded(user)) {
-      if (move.category === MoveCategory.STATUS) {
+      if (move.category === MoveCategory.STATUS && !simulated) {
         globalScene.phaseManager.createAndUnshiftPhase(
           "MessagePhase",
           i18next.t("moveTriggers:safeguard", { targetName: getPokemonNameWithAffix(target) }),
@@ -47,7 +59,7 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
     return super.canApply(user, target, move);
   }
 
-  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
+  public override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     const pokemon = this.selfTarget ? user : target;
     if (pokemon.hasNonVolatileStatusEffect()) {
       if (this.overrideStatus) {
@@ -72,11 +84,80 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
     return false;
   }
 
-  override getTargetBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {
-    const moveChance = this.getMoveChance(user, target, move);
-    const score = moveChance < 0 ? -10 : Math.floor(moveChance * -0.1);
-    const pokemon = this.selfTarget ? user : target;
+  /**
+   * @returns The output of {@linkcode getAllyTargetScore} when evaluating the move against the given user's
+   * ally, or the chance-adjusted {@linkcode getRawEffectScore | raw Effect Score} otherwise.
+   * This score is inverted for self-targeted effects (i.e. Rest).
+   */
+  public override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    if (target === user.getAlly()) {
+      return this.getAllyTargetScore(user, target, move);
+    }
 
-    return !pokemon.hasNonVolatileStatusEffect() && pokemon.canSetStatus(this.effect, true, false, user) ? score : 0;
+    return (this.selfTarget ? -1 : 1) * super.getEffectScore(user, target, move);
+  }
+
+  /**
+   * Computes the Effect Score from this attribute when targeting the user's ally.
+   * This accounts for the ally's abilties, which may benefit from the ally being afflicted with
+   * certain status effects. In these cases, the move is generally awarded a X%(+2) bonus, where
+   * the bonus chance X reflects the damage per turn of the status effect.
+   * @param user - The {@linkcode Pokemon} evaluating the move
+   * @param ally - The user's ally
+   * @param move - The {@linkcode Move} being evaluated
+   * @returns The overriding Effect Score when targeting the given ally.
+   */
+  private getAllyTargetScore(user: EnemyPokemon, ally: Pokemon, move: Move): number {
+    if (!move.isStatusMove() || !this.canApply(user, ally, move, true)) {
+      return ALLY_TARGET_PENALTY;
+    }
+
+    if (this.effect === StatusEffect.BURN && BURN_SYNERGY_ABILITIES.some((abId) => ally.hasAbility(abId))) {
+      return this.getRandomScore(user, 80, 2);
+    }
+
+    if (
+      [StatusEffect.POISON, StatusEffect.TOXIC].includes(this.effect)
+      && POISON_SYNERGY_ABILITIES.some((abId) => ally.hasAbility(abId))
+    ) {
+      const bonusChance = this.effect === StatusEffect.POISON ? 70 : 60;
+      return this.getRandomScore(user, bonusChance, 2);
+    }
+
+    return ALLY_TARGET_PENALTY;
+  }
+
+  /**
+   * @returns A base effect score depending on this attribute's {@linkcode effect}:
+   * - Poison and Toxic Poison grant (+1)/(+1.5) respectively. If the user has Poison Puppeteer or
+   * Merciless, this bonus is increased to (+2)/(+2.5).
+   * - Paralysis grants (+1) if the user outspeeds the target, and (+2) otherwise.
+   * - Sleep and Freeze grant (+2.5) in all cases
+   * - Burn grants (+2) if the target has a physical affinity (ATK > SPATK), and (+1) otherwise.
+   */
+  public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+    switch (this.effect) {
+      case StatusEffect.POISON:
+        return POISONING_SYNERGY_ABILITIES.some((abId) => user.hasAbility(abId)) ? 2 : 1;
+      case StatusEffect.TOXIC:
+        return POISONING_SYNERGY_ABILITIES.some((abId) => user.hasAbility(abId)) ? 2.5 : 1.5;
+      case StatusEffect.PARALYSIS:
+        return user.outspeeds(target, true) ? 1 : 2;
+      case StatusEffect.SLEEP:
+      case StatusEffect.FREEZE:
+        return 2.5;
+      case StatusEffect.BURN: {
+        const effectiveStatOptions = {
+          abilityApplyMode: AbilityApplyMode.REVEALED,
+          simulated: true,
+        };
+        return target.getEffectiveStat(Stat.ATK, effectiveStatOptions)
+          > target.getEffectiveStat(Stat.SPATK, effectiveStatOptions)
+          ? 2
+          : 1;
+      }
+      default:
+        return 0;
+    }
   }
 }

@@ -1,5 +1,6 @@
-/* eslint-enable @typescript-eslint/no-unused-vars */
-// -- end tsdoc imports --
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
+import type { Pokemon } from "#field/pokemon";
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 /** The {@link Pokemon.getAttackScore | Attack Score} granted to moves that KO an opponent. */
 export const KO_ATTACK_SCORE = 4;
