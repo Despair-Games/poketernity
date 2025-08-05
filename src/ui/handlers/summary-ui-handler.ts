@@ -615,7 +615,7 @@ export class SummaryUiHandler extends UiHandler {
         this.moveDescriptionText.setY(84);
         this.movePowerText.setText(selectedMove.power >= 0 ? selectedMove.power.toString() : "---");
         this.moveAccuracyText.setText(selectedMove.accuracy >= 0 ? selectedMove.accuracy.toString() : "---");
-        this.moveCategoryIcon.setFrame(MoveCategory[selectedMove.category].toLowerCase());
+        this.moveCategoryIcon.setFrame(enumValueToKey(MoveCategory, selectedMove.category).toLowerCase());
         this.showMoveEffect();
       } else {
         this.hideMoveEffect();
