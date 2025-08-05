@@ -2997,7 +2997,7 @@ export class BattleScene extends SceneBase {
       MysteryEncounterTier.GREAT,
       MysteryEncounterTier.ULTRA,
       MysteryEncounterTier.EPIC,
-    ];
+    ] as number[];
 
     // Adjust tier weights by previously encountered events to lower odds of only Common/Great in run
     this.mysteryEncounterSaveData.encounteredEvents.forEach((seenEncounterData) => {
@@ -3036,8 +3036,8 @@ export class BattleScene extends SceneBase {
     // If no valid encounters exist at tier, checks next tier down, continuing until there are some encounters available
     while (availableEncounters.length === 0 && tier !== null) {
       availableEncounters = biomeMysteryEncounters
-        .filter((encounterType) => {
-          const encounterCandidate = allMysteryEncounters[encounterType];
+        .filter((encType) => {
+          const encounterCandidate = allMysteryEncounters[encType];
           if (!encounterCandidate) {
             return false;
           }
@@ -3065,14 +3065,14 @@ export class BattleScene extends SceneBase {
           if (!encounterCandidate.meetsRequirements()) {
             return false;
           }
-          if (previousEncounter !== null && encounterType === previousEncounter) {
+          if (previousEncounter !== null && encType === previousEncounter) {
             return false;
           }
           if (
             this.mysteryEncounterSaveData.encounteredEvents.length > 0
             && encounterCandidate.maxAllowedEncounters
             && encounterCandidate.maxAllowedEncounters > 0
-            && this.mysteryEncounterSaveData.encounteredEvents.filter((e) => e.type === encounterType).length
+            && this.mysteryEncounterSaveData.encounteredEvents.filter((e) => e.type === encType).length
               >= encounterCandidate.maxAllowedEncounters
           ) {
             return false;
