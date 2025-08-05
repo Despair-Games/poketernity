@@ -80,17 +80,6 @@ export function getSettingNameWithKey(config: InputInterfaceConfig, key: InputKe
 }
 
 /**
- * Retrieves the icon associated with the specified key.
- *
- * @param config - The configuration object containing icons.
- * @param key - The key to search for.
- * @returns The icon associated with the specified key.
- */
-export function getIconWithKey(config: InputInterfaceConfig, key: InputKeys): string | undefined {
-  return config.icons[key];
-}
-
-/**
  * Retrieves the icon associated with the specified setting name.
  *
  * @param config - The configuration object containing icons.
@@ -99,7 +88,7 @@ export function getIconWithKey(config: InputInterfaceConfig, key: InputKeys): st
  */
 export function getIconWithSettingName(config: InputInterfaceConfig, settingName: InputSettings): string | undefined {
   const key = getKeyWithSettingName(config, settingName);
-  return key ? getIconWithKey(config, key) : undefined;
+  return key ? config.icons[key] : undefined;
 }
 
 /* TODO: refactor this function. It should probably be part of inputsController to have access to its configs directly
