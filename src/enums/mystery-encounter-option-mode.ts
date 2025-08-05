@@ -1,10 +1,14 @@
-export enum MysteryEncounterOptionMode {
+import type { EnumValues } from "#types/utility-types";
+
+export const MysteryEncounterOptionMode = {
   /** Default style */
-  DEFAULT,
+  DEFAULT: 1,
   /** Disabled on requirements not met, default style on requirements met */
-  DISABLED_OR_DEFAULT,
+  DISABLED_OR_DEFAULT: 2,
   /** Default style on requirements not met, special style on requirements met */
-  DEFAULT_OR_SPECIAL,
+  DEFAULT_OR_SPECIAL: 3,
   /** Disabled on requirements not met, special style on requirements met */
-  DISABLED_OR_SPECIAL,
-}
+  DISABLED_OR_SPECIAL: 4,
+} as const;
+
+export type MysteryEncounterOptionMode = EnumValues<typeof MysteryEncounterOptionMode>;
