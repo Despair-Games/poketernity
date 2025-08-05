@@ -98,7 +98,7 @@ describe("All Moves", async () => {
           // @ts-expect-error - `hasFlag()` is private but we need to check for the existence of the flag
           const actualHasFlag = pktyMove.hasFlag(flagsToCheck[f]);
           const expectedHasFlag = move.flags.includes(Number(f));
-          const errOutput = `Expected flag "${MoveFlags[flagsToCheck[f]]}" of "${pktyMove.name}" to be "${expectedHasFlag}" but got "${actualHasFlag}"!`;
+          const errOutput = `Expected flag "${enumValueToKey(MoveFlags, flagsToCheck[f])}" of "${pktyMove.name}" to be "${expectedHasFlag}" but got "${actualHasFlag}"!`;
           expect(actualHasFlag, errOutput).toBe(expectedHasFlag);
         }
       }
