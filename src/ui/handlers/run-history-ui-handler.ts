@@ -16,7 +16,7 @@ import { MessageUiHandler } from "#ui/message-ui-handler";
 import type { RunInfoUiHandler } from "#ui/run-info-ui-handler";
 import { addTextObject } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
-import { fixedNumber, isNil } from "#utils/common-utils";
+import { enumValueToKey, fixedNumber, isNil } from "#utils/common-utils";
 import { getPokemonLevelText } from "#utils/string-utils";
 import i18next from "i18next";
 
@@ -295,7 +295,7 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
     } else {
       // Run Result: Defeats
       const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
-      const genderStr = PlayerGender[genderIndex].toLowerCase();
+      const genderStr = enumValueToKey(PlayerGender, genderIndex).toLowerCase();
       // Defeats from wild Pokemon battles will show the Pokemon responsible by the text of the run result.
       if (data.battleType === BattleType.WILD || (data.battleType === BattleType.MYSTERY_ENCOUNTER && !data.trainer)) {
         const enemyContainer = globalScene.add.container(8, 5);

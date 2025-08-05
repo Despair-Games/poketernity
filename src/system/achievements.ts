@@ -43,7 +43,7 @@ export class Achievement {
    */
   public get name(): string {
     const playerGender = settings.display.playerGender ?? PlayerGender.MALE;
-    const genderStr = PlayerGender[playerGender].toLowerCase();
+    const genderStr = enumValueToKey(PlayerGender, playerGender).toLowerCase();
     // Localization key is used to get the name of the achievement
     return i18next.t(`achv:${this.localizationKey}.name`, { context: genderStr });
   }
@@ -54,7 +54,7 @@ export class Achievement {
    */
   public get description(): string {
     const playerGender = settings.display.playerGender ?? PlayerGender.MALE;
-    const genderStr = PlayerGender[playerGender].toLowerCase();
+    const genderStr = enumValueToKey(PlayerGender, playerGender).toLowerCase();
     const locOptions = { context: genderStr, ...(this.descriptionLocArgs ?? {}) };
     return i18next.t(`achv:${this.descriptionKey}.description`, locOptions);
   }
