@@ -550,7 +550,7 @@ export class DoubleBattleChanceBoosterModifier extends LapsingPersistentModifier
   override apply(doubleBattleChance: NumberHolder): boolean {
     // This is divided because the chance is generated as a number from 0 to doubleBattleChance.value using randSeedInt
     // A double battle will initiate if the generated number is 0
-    doubleBattleChance.value = doubleBattleChance.value / 4;
+    doubleBattleChance.value /= 4;
 
     return true;
   }
