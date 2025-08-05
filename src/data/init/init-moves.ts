@@ -2659,7 +2659,7 @@ export function initMoves() {
           if (isNil(result)) {
             return 1;
           }
-          return [MoveResult.MISS, MoveResult.FAIL].includes(result) ? 2 : 1;
+          return ([MoveResult.MISS, MoveResult.FAIL] as MoveResult[]).includes(result) ? 2 : 1;
         },
       ),
     new AttackMove(MoveId.SHADOW_BONE, ElementalType.GHOST, MoveCategory.PHYSICAL, 85, 100, 10, 20, 0, 7)
@@ -3519,7 +3519,7 @@ export function initMoves() {
           if (!result) {
             return 1;
           }
-          return [MoveResult.MISS, MoveResult.FAIL].includes(result) ? 2 : 1;
+          return ([MoveResult.MISS, MoveResult.FAIL] as MoveResult[]).includes(result) ? 2 : 1;
         },
       ),
     new AttackMove(MoveId.SUPERCELL_SLAM, ElementalType.ELECTRIC, MoveCategory.PHYSICAL, 100, 95, 15, -1, 0, 9)
