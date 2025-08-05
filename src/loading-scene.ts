@@ -30,7 +30,7 @@ import { initAchievements } from "#system/achievements";
 import { initVouchers } from "#system/init-vouchers";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
 import { getWindowVariantSuffix } from "#ui/ui-theme";
-import { enumValueToKey, getTSEnumKeys, getTSEnumValues } from "#utils/common-utils";
+import { enumValueToKey, getTSEnumValues } from "#utils/common-utils";
 import i18next from "i18next";
 
 export class LoadingScene extends SceneBase {
@@ -272,11 +272,11 @@ export class LoadingScene extends SceneBase {
     this.loadAtlas("egg_icons", ImagesFolder.EGG);
     this.loadAtlas("egg_shard", ImagesFolder.EGG);
     this.loadAtlas("egg_lightrays", ImagesFolder.EGG);
-    getTSEnumKeys(GachaType).forEach((gt) => {
-      const key = gt.toLowerCase();
+    for (const gachaType of Object.keys(GachaType)) {
+      const key = gachaType.toLowerCase();
       this.loadImage(`gacha_${key}`, ImagesFolder.EGG);
       this.loadAtlas(`gacha_underlay_${key}`, ImagesFolder.EGG);
-    });
+    }
     this.loadImage("gacha_glass", ImagesFolder.EGG);
     this.loadImage("gacha_eggs", ImagesFolder.EGG);
     this.loadAtlas("gacha_hatch", ImagesFolder.EGG);

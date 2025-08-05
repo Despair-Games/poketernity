@@ -27,13 +27,7 @@ export class RibbonModifierRewardPhase extends ModifierRewardPhase {
           gameMode: globalScene.gameMode.getName(),
           newModifier: newModifier?.type.name,
         }),
-        null,
-        () => {
-          resolve();
-        },
-        null,
-        true,
-        1500,
+        { callback: () => resolve(), prompt: true, promptDelay: 1500 },
       );
     });
   }

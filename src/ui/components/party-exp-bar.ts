@@ -1,5 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
+import { EXP_GAIN_SPEED_MAP } from "#enums/exp-gain-speed";
 import { TextStyle } from "#enums/text-style";
 import type { Pokemon } from "#field/pokemon";
 import { settings } from "#system/settings-manager";
@@ -68,7 +69,7 @@ export class PartyExpBar extends Phaser.GameObjects.Container {
       this.tween = globalScene.tweens.add({
         targets: this,
         x: GAME_WIDTH - (this.bg.width - 5),
-        duration: 500 / Math.pow(2, settings.general.expGainsSpeed),
+        duration: 500 * EXP_GAIN_SPEED_MAP[settings.general.expGainSpeed],
         ease: "Sine.easeOut",
         onComplete: () => {
           this.tween = null;

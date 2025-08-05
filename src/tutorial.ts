@@ -11,7 +11,7 @@ import i18next from "i18next";
 const tutorialHandlers = {
   [Tutorial.INTRO]: () => {
     return new Promise<void>((resolve) => {
-      globalScene.ui.showText(i18next.t("tutorial:intro"), null, () => resolve(), null, true);
+      globalScene.ui.showText(i18next.t("tutorial:intro"), { callback: () => resolve(), prompt: true });
     });
   },
   [Tutorial.ACCESS_MENU]: () => {
@@ -22,48 +22,36 @@ const tutorialHandlers = {
       globalScene
         .showFieldOverlay(1000)
         .then(() =>
-          globalScene.ui.showText(
-            i18next.t("tutorial:accessMenu"),
-            null,
-            () => globalScene.hideFieldOverlay(1000).then(() => resolve()),
-            null,
-            true,
-          ),
+          globalScene.ui.showText(i18next.t("tutorial:accessMenu"), {
+            callback: () => globalScene.hideFieldOverlay(1000).then(() => resolve()),
+            prompt: true,
+          }),
         );
     });
   },
   [Tutorial.MENU]: () => {
     return new Promise<void>((resolve) => {
       globalScene.gameData.saveTutorialAsSeen(Tutorial.ACCESS_MENU);
-      globalScene.ui.showText(
-        i18next.t("tutorial:menu"),
-        null,
-        () => globalScene.ui.showText("", null, () => resolve()),
-        null,
-        true,
-      );
+      globalScene.ui.showText(i18next.t("tutorial:menu"), {
+        callback: () => globalScene.ui.showText("", { callback: () => resolve() }),
+        prompt: true,
+      });
     });
   },
   [Tutorial.STARTER_SELECT]: () => {
     return new Promise<void>((resolve) => {
-      globalScene.ui.showText(
-        i18next.t("tutorial:starterSelect"),
-        null,
-        () => globalScene.ui.showText("", null, () => resolve()),
-        null,
-        true,
-      );
+      globalScene.ui.showText(i18next.t("tutorial:starterSelect"), {
+        callback: () => globalScene.ui.showText("", { callback: () => resolve() }),
+        prompt: true,
+      });
     });
   },
   [Tutorial.POKERUS]: () => {
     return new Promise<void>((resolve) => {
-      globalScene.ui.showText(
-        i18next.t("tutorial:pokerus"),
-        null,
-        () => globalScene.ui.showText("", null, () => resolve()),
-        null,
-        true,
-      );
+      globalScene.ui.showText(i18next.t("tutorial:pokerus"), {
+        callback: () => globalScene.ui.showText("", { callback: () => resolve() }),
+        prompt: true,
+      });
     });
   },
   [Tutorial.STAT_CHANGE]: () => {
@@ -71,13 +59,11 @@ const tutorialHandlers = {
       globalScene
         .showFieldOverlay(1000)
         .then(() =>
-          globalScene.ui.showText(
-            i18next.t("tutorial:statChange"),
-            null,
-            () => globalScene.ui.showText("", null, () => globalScene.hideFieldOverlay(1000).then(() => resolve())),
-            null,
-            true,
-          ),
+          globalScene.ui.showText(i18next.t("tutorial:statChange"), {
+            callback: () =>
+              globalScene.ui.showText("", { callback: () => globalScene.hideFieldOverlay(1000).then(() => resolve()) }),
+            prompt: true,
+          }),
         );
     });
   },
@@ -85,28 +71,25 @@ const tutorialHandlers = {
     // TODO: fix up that tutorial up so that ModifierSelectUiHandler is not called like this
     return new Promise<void>((resolve) => {
       globalScene.ui.setModeWithoutClear<MessageUiHandler>(UiMode.MESSAGE).then(() => {
-        globalScene.ui.showText(
-          i18next.t("tutorial:selectItem"),
-          null,
-          () =>
-            globalScene.ui.showText("", null, () =>
-              globalScene.ui.setModeWithoutClear<ModifierSelectUiHandler>(UiMode.MODIFIER_SELECT).then(() => resolve()),
-            ),
-          null,
-          true,
-        );
+        globalScene.ui.showText(i18next.t("tutorial:selectItem"), {
+          callback: () =>
+            globalScene.ui.showText("", {
+              callback: () =>
+                globalScene.ui
+                  .setModeWithoutClear<ModifierSelectUiHandler>(UiMode.MODIFIER_SELECT)
+                  .then(() => resolve()),
+            }),
+          prompt: true,
+        });
       });
     });
   },
   [Tutorial.EGG_GACHA]: () => {
     return new Promise<void>((resolve) => {
-      globalScene.ui.showText(
-        i18next.t("tutorial:eggGacha"),
-        null,
-        () => globalScene.ui.showText("", null, () => resolve()),
-        null,
-        true,
-      );
+      globalScene.ui.showText(i18next.t("tutorial:eggGacha"), {
+        callback: () => globalScene.ui.showText("", { callback: () => resolve() }),
+        prompt: true,
+      });
     });
   },
 };

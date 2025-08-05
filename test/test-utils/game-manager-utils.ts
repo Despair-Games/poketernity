@@ -53,9 +53,9 @@ export function generateStarter(scene: BattleScene, species: SpeciesId[]): Start
       starter.nature,
     );
     const moveset: MoveId[] = [];
-    starterPokemon.moveset.forEach((move) => {
-      moveset.push(move!.getMove().id);
-    });
+    for (const move of starterPokemon.getMoveset(true)) {
+      moveset.push(move.getMove().id);
+    }
     starter.moveset = moveset as StarterMoveset;
   }
   return starters;

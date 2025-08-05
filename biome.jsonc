@@ -99,6 +99,12 @@
               }
             }
           }
+        },
+        "useConsistentMemberAccessibility": {
+          "level": "off", // TODO: refactor and make this an error
+          "options": {
+            "accessibility": "explicit"
+          }
         }
       },
       "suspicious": {
@@ -116,7 +122,7 @@
         "noDocumentCookie": "off" // Firefox has minimal support for the "Cookie Store API"
       },
       "complexity": {
-        "noExcessiveCognitiveComplexity": "info", // TODO: Refactor and make this an error
+        "noExcessiveCognitiveComplexity": "info",
         "useLiteralKeys": "off",
         "noForEach": "off", // Foreach vs for of is not that simple.
         "noUselessSwitchCase": "off", // Explicit > Implicit
@@ -131,7 +137,7 @@
         "useAdjacentGetterSetter": "error",
         "noConstantBinaryExpression": "error",
         "noTsIgnore": "error",
-        "noAwaitInLoop": "warn",
+        "noAwaitInLoop": "off",
         "useJsonImportAttribute": "off", // "Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'. ts(2823)"
         "useIndexOf": "error",
         "useObjectSpread": "error",

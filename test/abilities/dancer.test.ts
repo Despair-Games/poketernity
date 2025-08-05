@@ -59,6 +59,6 @@ describe("Abilities - Dancer", () => {
     await game.toEndOfTurn();
 
     // doesn't use PP if copied move is also in moveset
-    expect(oricorio.moveset[0]?.ppUsed).toBe(0);
+    expect(oricorio.getMoveset(true)[0]?.ppUsed).toBe(0);
   });
 });

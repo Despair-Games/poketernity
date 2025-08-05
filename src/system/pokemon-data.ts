@@ -110,6 +110,7 @@ export class PokemonData {
     }
 
     if (isPokemon(source)) {
+      // @ts-expect-error - `Pokemon#moveset` is `protected`
       this.moveset = source.moveset;
       this.summonData = source.summonData;
       return;

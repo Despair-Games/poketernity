@@ -83,11 +83,12 @@ export const DancingLessonsEncounter: MysteryEncounter = MysteryEncounterBuilder
     const species = getPokemonSpecies(SpeciesId.ORICORIO);
     const level = getEncounterPokemonLevelForWave(STANDARD_ENCOUNTER_BOOSTED_LEVEL_MODIFIER);
     const enemyPokemon = new EnemyPokemon(species, level, TrainerSlot.NONE, false);
-    if (!enemyPokemon.moveset.some((m) => m && m.getMove().id === MoveId.REVELATION_DANCE)) {
-      if (enemyPokemon.moveset.length < 4) {
-        enemyPokemon.moveset.push(new PokemonMove(MoveId.REVELATION_DANCE));
+    const moveset = enemyPokemon.getMoveset(true);
+    if (!moveset.some((m) => m && m.getMove().id === MoveId.REVELATION_DANCE)) {
+      if (moveset.length < 4) {
+        enemyPokemon.setMove(moveset.length, MoveId.REVELATION_DANCE);
       } else {
-        enemyPokemon.moveset[0] = new PokemonMove(MoveId.REVELATION_DANCE);
+        enemyPokemon.setMove(0, MoveId.REVELATION_DANCE);
       }
     }
 
@@ -225,9 +226,10 @@ export const DancingLessonsEncounter: MysteryEncounter = MysteryEncounterBuilder
         const encounter = globalScene.currentBattle.mysteryEncounter!;
         const onPokemonSelected = (pokemon: PlayerPokemon) => {
           // Return the options for nature selection
-          return pokemon.moveset
-            .filter((move) => move && DANCING_MOVES.includes(move.getMove().id))
-            .map((move: PokemonMove) => {
+          return pokemon
+            .getMoveset(true)
+            .filter((move) => DANCING_MOVES.includes(move.getMove().id))
+            .map((move) => {
               const option: OptionSelectItem = {
                 label: move.getName(),
                 handler: () => {

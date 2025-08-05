@@ -54,7 +54,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
     }
 
     const move = allMoves.get(this.moveId);
-    const currentMoveset = pokemon.getMoveset();
+    const currentMoveset = pokemon.getMoveset(true);
 
     // The game first checks if the Pokemon already has the move and ends the phase if it does.
     const hasMoveAlready = currentMoveset.some((m) => m.moveId === move.id) && this.moveId !== MoveId.SKETCH;
@@ -146,7 +146,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
 
         const forgetSuccessText = i18next.t("battle:learnMoveForgetSuccess", {
           pokemonName: getPokemonNameWithAffix(pokemon),
-          moveName: pokemon.moveset[moveIndex]!.getName(),
+          moveName: pokemon.getMoveset(true)[moveIndex]?.getName() ?? "Unknown",
         });
         const fullText = [i18next.t("battle:countdownPoof"), forgetSuccessText, i18next.t("battle:learnMoveAnd")].join(
           "$",
@@ -252,15 +252,13 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
     }
 
     globalScene.audioManager.playSound("level_up_fanfare"); // Sound loaded into game as is
-    ui.showText(
-      learnMoveText,
-      null,
-      () => {
+    ui.showText(learnMoveText, {
+      callback: () => {
         globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeMoveLearnedTrigger, true);
         this.end();
       },
-      this.messageMode === UiMode.FORM_CHANGE_SCENE ? 1000 : undefined,
-      true,
-    );
+      callbackDelay: this.messageMode === UiMode.FORM_CHANGE_SCENE ? 1000 : undefined,
+      prompt: true,
+    });
   }
 }

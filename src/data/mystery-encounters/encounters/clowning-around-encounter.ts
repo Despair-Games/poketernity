@@ -367,12 +367,12 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
 
           // If the Pokemon has non-status moves that don't match the Pokemon's type, prioritizes those as the new type
           // Makes the "randomness" of the shuffle slightly less punishing
-          let priorityTypes = pokemon.moveset
+          let priorityTypes = pokemon
+            .getMoveset(true)
             .filter(
-              (move) =>
-                move && !originalTypes.includes(move.getMove().type) && move.getMove().category !== MoveCategory.STATUS,
+              (move) => !originalTypes.includes(move.getMove().type) && move.getMove().category !== MoveCategory.STATUS,
             )
-            .map((move) => move!.getMove().type);
+            .map((move) => move?.getMove().type);
           if (priorityTypes?.length > 0) {
             priorityTypes = [...new Set(priorityTypes)].sort();
             priorityTypes = randSeedShuffle(priorityTypes);
@@ -418,13 +418,13 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
   ])
   .build();
 
-async function handleSwapAbility() {
+async function handleSwapAbility(): Promise<boolean> {
   return new Promise<boolean>(async (resolve) => {
     await showEncounterDialogue(`${namespace}:option.1.apply_ability_dialogue`, `${namespace}:speaker`);
     await showEncounterText(`${namespace}:option.1.apply_ability_message`);
 
     await globalScene.ui.setMessageMode();
-    await showEncounterText(`${namespace}:option.1.ability_prompt`, null, 500, false);
+    await showEncounterText(`${namespace}:option.1.ability_prompt`, { callbackDelay: 500, prompt: false });
     displayYesNoOptions(resolve);
   });
 }
@@ -441,7 +441,7 @@ function displayYesNoOptions(resolve) {
   globalScene.ui.setModeWithoutClear<ConfirmUiHandler>(UiMode.CONFIRM, confirmMenuConfig);
 }
 
-function onYesAbilitySwap(resolve) {
+function onYesAbilitySwap(resolve): void {
   const onPokemonSelected = (pokemon: PlayerPokemon) => {
     // Do ability swap
     const encounter = globalScene.currentBattle.mysteryEncounter!;

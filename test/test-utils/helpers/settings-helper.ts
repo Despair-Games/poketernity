@@ -1,8 +1,9 @@
 import { BattleStyle } from "#enums/battle-style";
-import { ExpGainsSpeed } from "#enums/exp-gains-speed";
+import { ExpGainSpeed } from "#enums/exp-gain-speed";
 import { PlayerGender } from "#enums/player-gender";
 import { settings } from "#system/settings-manager";
 import { GameManagerHelper } from "#test/test-utils/helpers/game-manager-helper";
+import { enumValueToKey } from "#utils/common-utils";
 
 /**
  * Helper to handle settings for tests
@@ -42,11 +43,11 @@ export class SettingsHelper extends GameManagerHelper {
 
   /**
    * Change the exp gains speed
-   * @param speed the {@linkcode ExpGainsSpeed} to set
+   * @param speed the {@linkcode ExpGainSpeed} to set
    */
-  expGainsSpeed(speed: ExpGainsSpeed) {
-    settings.update("general", "expGainsSpeed", speed);
-    this.log(`Exp Gains Speed set to: ${ExpGainsSpeed[speed]} (=${speed})`);
+  expGainSpeed(speed: ExpGainSpeed) {
+    settings.update("general", "expGainSpeed", speed);
+    this.log(`Exp Gain Speed set to: ${enumValueToKey(ExpGainSpeed, speed)} (=${speed})`);
   }
 
   private log(...params: any[]) {

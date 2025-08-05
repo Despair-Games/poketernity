@@ -116,12 +116,13 @@ export class TitlePhase extends Phase {
               },
             });
 
-            ui.showText(i18next.t("menu:selectGameMode"), null, () =>
-              ui.setOverlayMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, {
-                options: options,
-                yOffset: 48,
-              }),
-            );
+            ui.showText(i18next.t("menu:selectGameMode"), {
+              callback: () =>
+                ui.setOverlayMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, {
+                  options: options,
+                  yOffset: 48,
+                }),
+            });
           } else {
             this.gameMode = GameModes.CLASSIC;
             ui.setMessageMode();
@@ -178,14 +179,14 @@ export class TitlePhase extends Phase {
       .then((success: boolean) => {
         if (success) {
           this.loaded = true;
-          ui.showText(i18next.t("menu:sessionSuccess"), null, () => this.end());
+          ui.showText(i18next.t("menu:sessionSuccess"), { callback: () => this.end() });
         } else {
           this.end();
         }
       })
       .catch((err) => {
         console.error(err);
-        ui.showText(i18next.t("menu:failedToLoadSession"), null);
+        ui.showText(i18next.t("menu:failedToLoadSession"));
       });
   }
 

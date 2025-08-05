@@ -11,6 +11,7 @@ import { UiMode } from "#enums/ui-mode";
 import * as Modifier from "#modifier/modifier";
 import type { PokemonData } from "#system/pokemon-data";
 import type { SessionSaveData } from "#types/session-data";
+import type { ShowTextOptions } from "#types/ui-types";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { MessageUiHandler } from "#ui/message-ui-handler";
@@ -116,7 +117,7 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
                 const originalCallback = this.saveSlotSelectCallback;
                 this.saveSlotSelectCallback = null;
                 ui.revertMode();
-                ui.showText("", 0);
+                ui.showText("", { delay: 0 });
                 ui.setMessageMode();
                 originalCallback?.(cursor);
               };
@@ -133,14 +134,14 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
                   },
                   noHandler: () => {
                     ui.revertMode();
-                    ui.showText("", 0);
+                    ui.showText("", { delay: 0 });
                   },
                   canBypassInputDelay: true,
                   yOffset: 28,
                   inputDelay: import.meta.env.DEV ? 300 : 2000,
                 };
-                ui.showText(i18next.t("saveSlotSelectUiHandler:overwriteData"), null, () => {
-                  ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, overwriteDataOptions);
+                ui.showText(i18next.t("saveSlotSelectUiHandler:overwriteData"), {
+                  callback: () => ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, overwriteDataOptions),
                 });
               } else if (this.sessionSlots[cursor].hasData === false) {
                 saveAndCallback();
@@ -214,13 +215,9 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
 
   public override showText(
     text: string,
-    delay?: number,
-    callback?: Function,
-    callbackDelay?: number,
-    prompt?: boolean,
-    promptDelay?: number,
+    { delay, callback, callbackDelay, prompt, promptDelay }: ShowTextOptions = {},
   ) {
-    super.showText(text, delay, callback, callbackDelay, prompt, promptDelay);
+    super.showText(text, { delay, callback, callbackDelay, prompt, promptDelay });
 
     if (text?.indexOf("\n") === -1) {
       this.saveSlotSelectMessageBox.setSize(318, 28);

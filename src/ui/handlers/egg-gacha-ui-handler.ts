@@ -14,10 +14,11 @@ import { UiMode } from "#enums/ui-mode";
 import { VoucherType } from "#enums/voucher-type";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
 import { getVoucherTypeIcon } from "#system/voucher";
+import type { ShowTextOptions } from "#types/ui-types";
 import { MessageUiHandler } from "#ui/message-ui-handler";
 import { addTextObject, getEggTierTextTint } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
-import { fixedNumber, getTSEnumKeys, getTSEnumValues } from "#utils/common-utils";
+import { enumValueToKey, fixedNumber, getTSEnumValues } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedShuffle } from "#utils/random-utils";
 import i18next from "i18next";
@@ -92,8 +93,8 @@ export class EggGachaUiHandler extends MessageUiHandler {
       });
     }
 
-    getTSEnumValues(GachaType).forEach((gachaType, g) => {
-      const gachaTypeKey = GachaType[gachaType].toString().toLowerCase();
+    Object.values(GachaType).forEach((gachaType, g) => {
+      const gachaTypeKey = enumValueToKey(GachaType, gachaType).toLowerCase();
       const gachaContainer = globalScene.add.container(180 * g, 18);
 
       const gacha = globalScene.add.sprite(0, 0, `gacha_${gachaTypeKey}`);
@@ -138,7 +139,7 @@ export class EggGachaUiHandler extends MessageUiHandler {
       gachaUpLabel.setOrigin(0, 0);
       gachaInfoContainer.add(gachaUpLabel);
 
-      switch (gachaType as GachaType) {
+      switch (gachaType) {
         case GachaType.LEGENDARY: {
           if (["de", "es-ES"].includes(currentLanguage)) {
             gachaUpLabel.setAlign("center");
@@ -202,7 +203,7 @@ export class EggGachaUiHandler extends MessageUiHandler {
 
       this.eggGachaContainer.add(gachaContainer);
 
-      this.updateGachaInfo(g);
+      this.updateGachaInfo(gachaType);
     });
 
     this.eggGachaOptionsContainer = globalScene.add.container();
@@ -334,12 +335,13 @@ export class EggGachaUiHandler extends MessageUiHandler {
   }
 
   public override show(): boolean {
-    this.getUi().showText(this.defaultText, 0);
+    globalScene.ui.showText(this.defaultText, { delay: 0 });
 
     this.setGachaCursor(1);
 
-    for (let g = 0; g < this.gachaContainers.length; g++) {
-      this.updateGachaInfo(g);
+    // this loop starts at 1 because the `GachaType` enum starts at one
+    for (let g = 1; g <= this.gachaContainers.length; g++) {
+      this.updateGachaInfo(g as GachaType);
     }
 
     this.updateVoucherCounts();
@@ -597,8 +599,8 @@ export class EggGachaUiHandler extends MessageUiHandler {
   }
 
   updateGachaInfo(gachaType: GachaType): void {
-    const infoContainer = this.gachaInfoContainers[gachaType];
-    switch (gachaType as GachaType) {
+    const infoContainer = this.gachaInfoContainers[gachaType - 1];
+    switch (gachaType) {
       case GachaType.LEGENDARY: {
         const species = getPokemonSpecies(getLegendaryGachaSpeciesForTimestamp(Date.now()));
         const pokemonIcon = infoContainer.getAt(1) as Phaser.GameObjects.Sprite;
@@ -624,11 +626,7 @@ export class EggGachaUiHandler extends MessageUiHandler {
 
   public override showText(
     text: string,
-    delay?: number,
-    callback?: Function,
-    callbackDelay?: number,
-    prompt?: boolean,
-    promptDelay?: number,
+    { delay, callback, callbackDelay, prompt, promptDelay }: ShowTextOptions = {},
   ): void {
     if (!text) {
       text = this.defaultText;
@@ -644,11 +642,11 @@ export class EggGachaUiHandler extends MessageUiHandler {
       this.message.setY(-6);
     }
 
-    super.showText(text, delay, callback, callbackDelay, prompt, promptDelay);
+    super.showText(text, { delay, callback, callbackDelay, prompt, promptDelay });
   }
 
   showError(text: string): void {
-    this.showText(text, undefined, () => this.showText(this.defaultText), fixedNumber(1500));
+    this.showText(text, { callback: () => this.showText(this.defaultText), callbackDelay: fixedNumber(1500) });
   }
 
   setTransitioning(transitioning: boolean): void {
@@ -788,7 +786,7 @@ export class EggGachaUiHandler extends MessageUiHandler {
             }
             break;
           case Button.RIGHT:
-            if (this.gachaCursor < getTSEnumKeys(GachaType).length - 1) {
+            if (this.gachaCursor < Object.values(GachaType).length - 1) {
               success = this.setGachaCursor(this.gachaCursor + 1);
             }
             break;
