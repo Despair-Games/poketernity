@@ -1,4 +1,5 @@
 import type { StatusEffect } from "#enums/status-effect";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { StatusEffectAttr } from "#moves/status-effect-attr";
@@ -18,16 +19,20 @@ export class MultiStatusEffectAttr extends StatusEffectAttr {
     this.effects = effects;
   }
 
-  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
+  public override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     this.effect = randSeedItem(this.effects);
     return super.applyEffect(user, target, move);
   }
 
-  override getTargetBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {
-    const moveChance = this.getMoveChance(user, target, move);
-    const score = moveChance < 0 ? -10 : Math.floor(moveChance * -0.1);
-    const pokemon = this.selfTarget ? user : target;
-
-    return !pokemon.hasNonVolatileStatusEffect() && pokemon.canSetStatus(this.effect, true, false, user) ? score : 0;
+  /**
+   * @returns The average base Effect Score among each of this attribute's {@linkcode effects},
+   * according to {@linkcode getStatusEffectScore}
+   */
+  public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+    const totalStatusEffectScore = this.effects.reduce(
+      (score, effect) => score + this.getStatusEffectScore(user, target, effect),
+      0,
+    );
+    return totalStatusEffectScore / this.effects.length;
   }
 }

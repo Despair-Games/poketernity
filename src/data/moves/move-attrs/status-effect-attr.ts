@@ -1,3 +1,7 @@
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
+import type { MultiStatusEffectAttr } from "#moves/multi-status-effect-attr";
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
+
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { ConfusionOnStatusEffectAbAttr } from "#abilities/confusion-on-status-effect-ab-attr";
 import { globalScene } from "#app/global-scene";
@@ -128,15 +132,27 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
   }
 
   /**
-   * @returns A base effect score depending on this attribute's {@linkcode effect}:
+   * @returns The base Effect Score corresponding to this attribute's {@linkcode effect}.
+   * @see {@linkcode getStatusEffectScore}
+   */
+  public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+    return this.getStatusEffectScore(user, target, this.effect);
+  }
+
+  /**
+   * @returns A base Effect Score depending on the given {@linkcode StatusEffect}:
    * - Poison and Toxic Poison grant (+1)/(+1.5) respectively. If the user has Poison Puppeteer or
    * Merciless, this bonus is increased to (+2)/(+2.5).
    * - Paralysis grants (+1) if the user outspeeds the target, and (+2) otherwise.
    * - Sleep and Freeze grant (+2.5) in all cases
    * - Burn grants (+2) if the target has a physical affinity (ATK > SPATK), and (+1) otherwise.
+   *
+   * @privateRemarks
+   * This is organized here (and not in {@linkcode getRawEffectScore}) so that
+   * {@linkcode MultiStatusEffectAttr} can reuse this method in its scoring.
    */
-  public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
-    switch (this.effect) {
+  protected getStatusEffectScore(user: EnemyPokemon, target: Pokemon, effect: StatusEffect) {
+    switch (effect) {
       case StatusEffect.POISON:
         return POISONING_SYNERGY_ABILITIES.some((abId) => user.hasAbility(abId)) ? 2 : 1;
       case StatusEffect.TOXIC:
