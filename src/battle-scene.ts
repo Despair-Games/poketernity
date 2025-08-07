@@ -262,9 +262,12 @@ export class BattleScene extends SceneBase {
    * Allows subscribers to listen for events
    *
    * @see `src/events/`
-   * @todo Migrate to using {@linkcode eventBus} instead.
+   * @todo Migrate to only using {@linkcode eventBus} instead of a mix of both.
    */
   public readonly eventTarget: EventTarget = new EventTarget();
+
+  /** Contains the IDs of all active Pokemon. This allows ensuring that all Pokemon have a unique ID. */
+  public activePokemonIDs: Set<number> = new Set();
 
   constructor() {
     super("battle");
@@ -279,6 +282,8 @@ export class BattleScene extends SceneBase {
   private initSettingsEventListeners() {
     const updateSoundKeys: AnySettingKey[] = ["masterVolume", "bgmVolume", "fieldVolume", "soundEffectsVolume"];
 
+    // TODO: add early returns in the `if` statements
+    // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Necessary to change behavior depending on the key being modified
     eventBus.on("settings/updated", ({ key, value }: SettingsUpdateEventArgs) => {
       if (updateSoundKeys.includes(key)) {
         //TODO: check if the effective volume changed to optimize

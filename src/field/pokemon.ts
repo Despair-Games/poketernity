@@ -418,6 +418,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.resetWaveData();
     this.resetTurnData();
     this.resetSummonData();
+
+    globalScene.activePokemonIDs.add(this.id);
   }
 
   /**
@@ -500,11 +502,20 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Sets this Pokemon's ID to be a random integer from 0 to 2^32 - 1, inclusive.
-   * @todo This should be `protected` or `private` but MEs currently call it
+   * Sets this Pokemon's ID to be a random integer from 1 to 2^32 - 1, inclusive.
    */
-  public generateId(): void {
-    this.id = randSeedInt(4294967295);
+  protected generateId(): void {
+    // ID has already been generated before, don't allow assigning new IDs
+    if (!isNil(this.id)) {
+      return;
+    }
+
+    let id = randSeedInt(4294967295) || 1;
+    while (globalScene.activePokemonIDs.has(id)) {
+      id = randSeedInt(4294967295) || 1;
+    }
+
+    this.id = id;
   }
 
   /** @returns An array of 6 random numbers, each between `0-31` inclusive */
@@ -4504,6 +4515,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   override destroy(): void {
     this.battleInfo?.destroy();
     this.destroySubstitute();
+    globalScene.activePokemonIDs.delete(this.id);
     super.destroy();
   }
 
