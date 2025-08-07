@@ -1,0 +1,31 @@
+name: PR Title Validation
+on:
+  pull_request:
+    types: [opened, edited, reopened]
+
+jobs:
+  lint-pr:
+    name: Lint PR title
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "pnpm"
+
+      - name: Install Node.js dependencies
+        run: pnpm add @actions/core @actions/github tsx
+
+      - name: Lint PR title
+        run: pnpm exec tsx ./.github/scripts/pr-title.ts
+        env:
+          INPUT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,23 +1,61 @@
-<!-- (Once you have read these comments, you are free to remove them) -->
+<!-- Once you have read these comments, you are free to remove them -->
+
 <!-- Feel free to look at other PRs for examples -->
+
 <!--
-Make sure the title includes categorization (choose the one that best fits):
--       [Bug]: If the PR is primarily a bug fix
--      [Move]: If a move has new or changed functionality
--   [Ability]: If an ability has new or changed functionality
--      [Item]: For new or modified items
--   [Mystery]: For new or modified Mystery Encounters
--      [Test]: If the PR is primarily adding or modifying tests
--     [UI/UX]: If the PR is changing UI/UX elements
--     [Audio]: If the PR is adding or changing music/sfx
--    [Sprite]: If the PR is adding or changing sprites
--   [Balance]: If the PR is related to game balance
-- [Challenge]: If the PR is adding or modifying challenges
--  [Refactor]: If the PR is primarily rewriting existing code
--      [Docs]: If the PR is just adding or modifying documentation (such as tsdocs/code comments)
--    [GitHub]: For changes to GitHub workflows/templates/etc
--      [Misc]: If no other category fits the PR
+The PR title must match this format (and is ideally less than or equal to 72 characters):
+
+fix(move): Future Sight no longer crashes
+^   ^      ^
+|   |      |__ Subject
+|   |_________ Scope (optional)
+|_____________ Prefix
+
+You should add a `!` before the `:` if the PR includes a version increase / save migrator. Example:
+refactor!: change Tera mechanic to match mainline
+
+List of valid prefixes:
+  balance - Primarily a balance change
+  deps - Primarily adding/updating/removing dependencies
+  dev - Improving the developer experience (such as by modifying lint rules or creating cli scripts)
+  docs - Primarily adding/updating documentation
+  feat - Adding a new feature (e.g. adding a new implementation of a move) or redesigning an existing feature
+  fix - Fixing a bug
+  github - Updating the CI pipeline or otherwise modifying something in the `./github/` directory
+  i18n - Updating the localization submodule, adding new translatable text, etc
+  refactor - A change that doesn't impact functionality or fix any bugs (except incidentally)
+  revert - Reverting a previous commit
+  test - Primarily adding/updating tests or modifying the test framework
+
+List of valid scopes:
+  ability
+  ai
+  anomaly - Formerly "Mystery Encounters"
+  art
+  audio
+  battle - Relating to the general battle engine
+  biomes
+  challenge
+  data - Data not covered by other scopes, such as TM lists
+  event
+  item
+  move
+  ui - UI/UX
+
+List of valid "prefix(scope)" combinations:
+  balance - ability, ai, anomaly, biomes, challenge, item, move
+  deps - N/A
+  dev - N/A
+  docs - N/A
+  feat - All
+  fix - All
+  github - N/A
+  i18n - N/A
+  refactor - All
+  revert - N/A
+  test - N/A
 -->
+
 <!--
 Make sure that this PR is not overlapping with someone else's work
 Please try to keep the PR self-contained (and small)
@@ -72,7 +110,6 @@ Do the reviewers need to do something special in order to test your changes?
 - [ ] The PR is self-contained and cannot be split into smaller PRs?
 - [ ] Have I provided a clear explanation of the changes?
 - [ ] Have I tested the changes manually?
-<!-- We have heavily optimized our test suite, so please actually run the tests :) -->
 - [ ] Are all unit tests still passing? (`pnpm test:silent`)
   - [ ] Have I created new automated tests (`pnpm test:create`) or updated existing tests related to the PR's changes?
 - [ ] Have I provided screenshots/videos of the changes (if applicable)?
