@@ -159,29 +159,24 @@ export class EnemyPokemon extends Pokemon {
   override generateAndPopulateMoveset(formIndex?: number): void {
     switch (this.species.speciesId) {
       case SpeciesId.SMEARGLE:
-        this.moveset = [
-          new PokemonMove(MoveId.SKETCH, { pokemon: this }),
-          new PokemonMove(MoveId.SKETCH, { pokemon: this }),
-          new PokemonMove(MoveId.SKETCH, { pokemon: this }),
-          new PokemonMove(MoveId.SKETCH, { pokemon: this }),
-        ];
+        this.setMoveset(...Array(4).fill(MoveId.SKETCH));
         break;
       case SpeciesId.ETERNATUS:
         this.moveset = (formIndex !== undefined ? formIndex : this.formIndex)
           ? [
-              new PokemonMove(MoveId.DYNAMAX_CANNON, { pokemon: this }),
-              new PokemonMove(MoveId.CROSS_POISON, { pokemon: this }),
-              new PokemonMove(MoveId.FLAMETHROWER, { pokemon: this }),
-              new PokemonMove(MoveId.RECOVER, { pokemon: this, ppUp: -4 }),
+              new PokemonMove(MoveId.DYNAMAX_CANNON, { pokemonId: this.id }),
+              new PokemonMove(MoveId.CROSS_POISON, { pokemonId: this.id }),
+              new PokemonMove(MoveId.FLAMETHROWER, { pokemonId: this.id }),
+              new PokemonMove(MoveId.RECOVER, { pokemonId: this.id, ppUp: -4 }),
             ]
           : [
-              new PokemonMove(MoveId.ETERNABEAM, { pokemon: this }),
-              new PokemonMove(MoveId.SLUDGE_BOMB, { pokemon: this }),
-              new PokemonMove(MoveId.FLAMETHROWER, { pokemon: this }),
-              new PokemonMove(MoveId.COSMIC_POWER, { pokemon: this }),
+              new PokemonMove(MoveId.ETERNABEAM, { pokemonId: this.id }),
+              new PokemonMove(MoveId.SLUDGE_BOMB, { pokemonId: this.id }),
+              new PokemonMove(MoveId.FLAMETHROWER, { pokemonId: this.id }),
+              new PokemonMove(MoveId.COSMIC_POWER, { pokemonId: this.id }),
             ];
         if (globalScene.gameMode.hasChallenge(Challenges.INVERSE_BATTLE)) {
-          this.moveset[2] = new PokemonMove(MoveId.THUNDERBOLT, { pokemon: this });
+          this.moveset[2] = new PokemonMove(MoveId.THUNDERBOLT, { pokemonId: this.id });
         }
         break;
       default:

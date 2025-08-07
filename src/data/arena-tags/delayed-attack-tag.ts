@@ -57,7 +57,7 @@ export class DelayedAttackTag extends ArenaTag {
             attack.sourceId,
             [attack.targetIndex],
             new PokemonMove(attack.moveId, {
-              pokemon: attacker,
+              pokemonId: attacker.id,
               virtual: true,
             }),
           );
@@ -68,7 +68,7 @@ export class DelayedAttackTag extends ArenaTag {
             attack.sourceId,
             [redirectIndex],
             new PokemonMove(attack.moveId, {
-              pokemon: attacker,
+              pokemonId: attacker.id,
               virtual: true,
             }),
           );

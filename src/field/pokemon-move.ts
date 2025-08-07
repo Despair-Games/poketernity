@@ -1,3 +1,4 @@
+import { globalScene } from "#app/global-scene";
 import { allMoves } from "#data/data-lists";
 import { MoveFlags } from "#enums/move-flags";
 import type { MoveId } from "#enums/move-id";
@@ -20,8 +21,8 @@ import i18next from "i18next";
  * @see {@linkcode getName} - returns name of the {@linkcode Move}.
  **/
 export class PokemonMove {
-  /** The {@linkcode Pokemon} whose moveset this move is part of. Used for localization of the move name. */
-  public pokemon?: Pokemon;
+  /** The ID of the {@linkcode Pokemon} whose moveset this move is part of. Used for localization of the move name. */
+  private readonly pokemonId: number;
   public moveId: MoveId;
   public ppUsed: number;
   public ppUp: number;
@@ -36,25 +37,29 @@ export class PokemonMove {
   constructor(
     moveId: MoveId,
     {
-      pokemon,
+      pokemonId = 0,
       ppUsed = 0,
       ppUp = 0,
       virtual = false,
       maxPpOverride,
     }: {
-      pokemon?: Pokemon;
+      pokemonId?: number;
       ppUsed?: number;
       ppUp?: number;
       virtual?: boolean;
       maxPpOverride?: number;
     } = {},
   ) {
-    this.pokemon = pokemon;
+    this.pokemonId = pokemonId;
     this.moveId = moveId;
     this.ppUsed = ppUsed;
     this.ppUp = ppUp;
     this.virtual = virtual;
     this.maxPpOverride = maxPpOverride;
+  }
+
+  private get pokemon(): Pokemon | undefined {
+    return globalScene.getPokemonById(this.pokemonId) ?? undefined;
   }
 
   public get name(): string {
@@ -117,7 +122,7 @@ export class PokemonMove {
    * @returns A valid {@linkcode PokemonMove} object
    */
   static loadMove(source: PokemonMove | any): PokemonMove {
-    const { moveId, ppUsed, ppUp, virtual, maxPpOverride } = source;
-    return new PokemonMove(moveId, { ppUsed, ppUp, virtual, maxPpOverride });
+    const { pokemonId, moveId, ppUsed, ppUp, virtual, maxPpOverride } = source;
+    return new PokemonMove(moveId, { pokemonId, ppUsed, ppUp, virtual, maxPpOverride });
   }
 }

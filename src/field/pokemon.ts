@@ -355,14 +355,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.nickname = dataSource.nickname;
       // @ts-expect-error - `Pokemon#moveset` is `protected`
       this.moveset = dataSource.moveset;
-      /**
-       * `PokemonData` does not preserve the "owner" reference in
-       * saved moves, so the reference needs to be reset for move names
-       * to be displayed properly in some contexts.
-       */
-      this.moveset.forEach((mv) => {
-        mv.pokemon = this;
-      });
       // @ts-expect-error - `Pokemon#status` is `protected`
       this.status = dataSource.status;
       this.friendship = dataSource.friendship !== undefined ? dataSource.friendship : this.species.baseFriendship;
@@ -1422,7 +1414,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     overrideArray.forEach((moveId: MoveId, index: number) => {
       const ppUsed = this.moveset[index]?.ppUsed ?? 0;
       this.moveset[index] = new PokemonMove(moveId, {
-        pokemon: this,
+        pokemonId: this.id,
         ppUsed: Math.min(ppUsed, allMoves.get(moveId).pp),
       });
     });
@@ -1439,7 +1431,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (moveId === MoveId.NONE) {
       return;
     }
-    const move = new PokemonMove(moveId, { pokemon: this });
+    const move = new PokemonMove(moveId, { pokemonId: this.id });
     this.moveset[moveIndex] = move;
   }
 
@@ -1450,7 +1442,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return;
     }
     for (const move of moves) {
-      this.moveset.push(new PokemonMove(move, { pokemon: this }));
+      this.moveset.push(new PokemonMove(move, { pokemonId: this.id }));
     }
   }
 
@@ -2583,7 +2575,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         while (rand > stabMovePool[index][1]) {
           rand -= stabMovePool[index++][1];
         }
-        this.moveset.push(new PokemonMove(stabMovePool[index][0], { pokemon: this }));
+        this.moveset.push(new PokemonMove(stabMovePool[index][0], { pokemonId: this.id }));
       }
     } else {
       // Normal wild pokemon just force a random damaging move
@@ -2595,7 +2587,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         while (rand > attackMovePool[index][1]) {
           rand -= attackMovePool[index++][1];
         }
-        this.moveset.push(new PokemonMove(attackMovePool[index][0], { pokemon: this }));
+        this.moveset.push(new PokemonMove(attackMovePool[index][0], { pokemonId: this.id }));
       }
     }
 
@@ -2635,7 +2627,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       while (rand > movePool[index][1]) {
         rand -= movePool[index++][1];
       }
-      this.moveset.push(new PokemonMove(movePool[index][0], { pokemon: this }));
+      this.moveset.push(new PokemonMove(movePool[index][0], { pokemonId: this.id }));
     }
 
     // Trigger FormChange, except for enemy Pokemon during Mystery Encounters, to avoid crashes

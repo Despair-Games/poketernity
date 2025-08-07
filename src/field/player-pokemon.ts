@@ -22,7 +22,6 @@ import { SwitchType } from "#enums/switch-type";
 import { UiMode } from "#enums/ui-mode";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import { Pokemon } from "#field/pokemon";
-import { PokemonMove } from "#field/pokemon-move";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import { EvoTrackerModifier, PokemonFriendshipBoosterModifier, type PokemonHeldItemModifier } from "#modifier/modifier";
 import { achvs } from "#system/achievements";
@@ -162,7 +161,7 @@ export class PlayerPokemon extends Pokemon {
       return false;
     }
 
-    this.moveset = moveset.map((m) => new PokemonMove(m, { pokemon: this }));
+    this.setMoveset(...moveset);
 
     return true;
   }

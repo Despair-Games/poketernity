@@ -271,9 +271,9 @@ export const DancingLessonsEncounter: MysteryEncounter = MysteryEncounterBuilder
         const move = encounter.misc.selectedMove?.getMove().id;
         if (!oricorio.moveset.some((m) => m.getMove().id === move)) {
           if (oricorio.moveset.length < 4) {
-            oricorio.moveset.push(new PokemonMove(move, { pokemon: oricorio }));
+            oricorio.moveset.push(new PokemonMove(move, { pokemonId: oricorio }));
           } else {
-            oricorio.moveset[3] = new PokemonMove(move, { pokemon: oricorio });
+            oricorio.moveset[3] = new PokemonMove(move, { pokemonId: oricorio });
           }
         }
 

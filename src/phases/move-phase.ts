@@ -136,7 +136,7 @@ export class MovePhase extends BattlePhase {
 
     this.pokemon = pokemon;
     this.targets = targets;
-    this.move = typeof move === "number" ? new PokemonMove(move, { pokemon, virtual: true }) : move;
+    this.move = typeof move === "number" ? new PokemonMove(move, { pokemonId: pokemon.id, virtual: true }) : move;
     this.followUp = followUp;
     this.ignorePp = ignorePp;
     this.reflected = reflected;
