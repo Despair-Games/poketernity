@@ -282,7 +282,9 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
       // Generate new id, reset status and HP in case using data source
       // TODO: figure out if this is necessary
       // if (config.dataSource) {
-      //   enemyPokemon.generateId();
+      //   // remove old id from battlescene active id list here
+      //   enemyPokemon.id = enemyPokemon.generateId();
+      //   // add new id to battlescene active id list here
       // }
 
       // Set form

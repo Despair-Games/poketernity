@@ -373,7 +373,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.isTerastallized = dataSource.isTerastallized;
       this.stellarTypesBoosted = dataSource.stellarTypesBoosted ?? [];
     } else {
-      this.generateId();
+      this.id = this.generateId();
       this.ivs = ivs || this.generateIvs();
 
       if (this.gender === undefined) {
@@ -502,20 +502,22 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Sets this Pokemon's ID to be a random integer from 1 to 2^32 - 1, inclusive.
+   * Generates a random integer from `1` to `2^32 - 1`, inclusive, to be assigned to as the Pokemon's ID.
+   *
+   * Prevents duplicate IDs from being assigned.
    */
-  protected generateId(): void {
+  protected generateId(): number {
     // ID has already been generated before, don't allow assigning new IDs
     if (!isNil(this.id)) {
-      return;
+      return this.id;
     }
 
-    let id = randSeedInt(4294967295) || 1;
+    let id = randSeedInt(4294967295, 1);
     while (globalScene.activePokemonIDs.has(id)) {
-      id = randSeedInt(4294967295) || 1;
+      id = randSeedInt(4294967295, 1);
     }
 
-    this.id = id;
+    return id;
   }
 
   /** @returns An array of 6 random numbers, each between `0-31` inclusive */
