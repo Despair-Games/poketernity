@@ -203,7 +203,7 @@ describe("The Strong Stuff - Mystery Encounter", () => {
       expect(shuckleItems.find((m) => m.isBerryModifier() && m.berryType === BerryType.GANLON)?.stackCount).toBe(1);
       expect(shuckleItems.find((m) => m.isBerryModifier() && m.berryType === BerryType.APICOT)?.stackCount).toBe(1);
       expect(shuckleItems.find((m) => m.isBerryModifier() && m.berryType === BerryType.LUM)?.stackCount).toBe(2);
-      expect(enemy.moveset.map((m) => m.moveId)).toEqual([
+      expect(enemy.getMoveset(true).map((m) => m.moveId)).toEqual([
         MoveId.INFESTATION,
         MoveId.SALT_CURE,
         MoveId.GASTRO_ACID,

@@ -23,7 +23,6 @@ import { SummaryUiPage } from "#enums/summary-ui-page";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import type { Pokemon } from "#field/pokemon";
-import type { PokemonMove } from "#field/pokemon-move";
 import { modifierSortFunc, type PokemonHeldItemModifier } from "#modifier/modifier";
 import type { Move } from "#moves/move";
 import { settings } from "#system/settings-manager";
@@ -466,7 +465,7 @@ export class SummaryUiHandler extends UiHandler {
 
     if (this.moveSelect) {
       if (button === Button.ACTION) {
-        if (this.pokemon && this.moveCursor < this.pokemon.moveset.length) {
+        if (this.pokemon && this.moveCursor < this.pokemon.getMoveset(true).length) {
           if (this.summaryUiMode === SummaryUiMode.LEARN_MOVE) {
             this.moveSelectFunction?.(this.moveCursor);
           } else {
@@ -475,9 +474,7 @@ export class SummaryUiHandler extends UiHandler {
               this.setCursor(this.moveCursor);
             } else {
               if (this.selectedMoveIndex !== this.moveCursor) {
-                const tempMove = this.pokemon?.moveset[this.selectedMoveIndex];
-                this.pokemon.moveset[this.selectedMoveIndex] = this.pokemon.moveset[this.moveCursor];
-                this.pokemon.moveset[this.moveCursor] = tempMove;
+                this.pokemon.swapMoves(this.selectedMoveIndex, this.moveCursor);
 
                 const selectedMoveRow = this.moveRowsContainer.getAt(
                   this.selectedMoveIndex,
@@ -1051,9 +1048,12 @@ export class SummaryUiHandler extends UiHandler {
         this.moveRowsContainer = globalScene.add.container(0, 0);
         this.movesContainer.add(this.moveRowsContainer);
 
+        // TODO: is it even possible to reach this `for` loop if `this.pokemon` is `null`?
+        // what about the rest of this method? in what situation is `this.pokemon` `null`?
+        const moveset = this.pokemon?.getMoveset(true);
         for (let m = 0; m < 4; m++) {
-          const move: PokemonMove | null =
-            this.pokemon && this.pokemon.moveset.length > m ? this.pokemon?.moveset[m] : null;
+          // `!`s are safe because `moveset` isn't `undefined` if `this.pokemon` is defined
+          const move = this.pokemon && moveset!.length > m ? moveset![m] : null;
           const moveRowContainer = globalScene.add.container(0, 16 * m);
           this.moveRowsContainer.add(moveRowContainer);
 
@@ -1134,8 +1134,8 @@ export class SummaryUiHandler extends UiHandler {
       return null;
     }
 
-    if (this.moveCursor < 4 && this.pokemon && this.moveCursor < this.pokemon.moveset.length) {
-      return this.pokemon.moveset[this.moveCursor].getMove();
+    if (this.moveCursor < 4 && this.pokemon && this.moveCursor < this.pokemon.getMoveset(true).length) {
+      return this.pokemon.getMoveset(true)[this.moveCursor].getMove();
     }
     if (this.summaryUiMode === SummaryUiMode.LEARN_MOVE && this.moveCursor === 4) {
       return this.newMove;

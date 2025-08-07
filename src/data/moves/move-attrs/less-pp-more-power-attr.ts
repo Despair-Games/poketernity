@@ -10,10 +10,10 @@ import type { NumberHolder } from "#utils/common-utils";
 export class LessPPMorePowerAttr extends VariablePowerAttr {
   override apply(user: Pokemon, _target: Pokemon, move: Move, power: NumberHolder): boolean {
     const ppMax = move.pp;
-    const ppUsed = user.moveset.find((m) => m.moveId === move.id)?.ppUsed ?? 0;
+    const ppUsed = user.getMoveset().find((m) => m.moveId === move.id)?.ppUsed ?? 0;
 
     let ppRemains = ppMax - ppUsed;
-    /** Reduce to 0 to avoid negative numbers if user has 1PP before attack and target has Ability.PRESSURE */
+    // Reduce to 0 to avoid negative numbers if user has 1PP before attack and target has Pressure
     if (ppRemains < 0) {
       ppRemains = 0;
     }

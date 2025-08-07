@@ -470,13 +470,9 @@ export class PlayerPokemon extends Pokemon {
   /**
    * Copies this Pokemon's moveset array onto the given Pokemon.
    * @param pokemon - The {@linkcode Pokemon} receiving the copied moveset
+   * @todo This doesn't deeply copy each move (e.g. copied moves always have full PP)
    */
   copyMoveset(pokemon: Pokemon): void {
-    const newMoveset: PokemonMove[] = [];
-    this.moveset.forEach((move) => {
-      const { moveId, ppUp, virtual, maxPpOverride } = move;
-      newMoveset.push(new PokemonMove(moveId, { pokemon, ppUp, virtual, maxPpOverride }));
-    });
-    pokemon.moveset = newMoveset;
+    pokemon.setMoveset(...this.getMoveset(true).map((mv) => mv.moveId));
   }
 }

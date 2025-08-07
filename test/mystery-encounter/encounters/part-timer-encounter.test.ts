@@ -108,7 +108,7 @@ describe("Part-Timer - Mystery Encounter", () => {
 
       expect(EncounterPhaseUtils.updatePlayerMoney).toHaveBeenCalledWith(scene.getWaveMoneyAmount(1), true, false);
       // Expect PP of mon's moves to have been reduced to 2
-      const moves = scene.getPlayerParty()[0].moveset;
+      const moves = scene.getPlayerParty()[0].getMoveset(true);
       for (const move of moves) {
         expect((move?.getMovePp() ?? 0) - (move?.ppUsed ?? 0)).toBe(2);
       }
@@ -128,7 +128,7 @@ describe("Part-Timer - Mystery Encounter", () => {
 
       expect(EncounterPhaseUtils.updatePlayerMoney).toHaveBeenCalledWith(scene.getWaveMoneyAmount(4), true, false);
       // Expect PP of mon's moves to have been reduced to 2
-      const moves = scene.getPlayerParty()[1].moveset;
+      const moves = scene.getPlayerParty()[1].getMoveset(true);
       for (const move of moves) {
         expect((move?.getMovePp() ?? 0) - (move?.ppUsed ?? 0)).toBe(2);
       }
@@ -173,7 +173,7 @@ describe("Part-Timer - Mystery Encounter", () => {
 
       expect(EncounterPhaseUtils.updatePlayerMoney).toHaveBeenCalledWith(scene.getWaveMoneyAmount(1), true, false);
       // Expect PP of mon's moves to have been reduced to 2
-      const moves = scene.getPlayerParty()[2].moveset;
+      const moves = scene.getPlayerParty()[2].getMoveset(true);
       for (const move of moves) {
         expect((move?.getMovePp() ?? 0) - (move?.ppUsed ?? 0)).toBe(2);
       }
@@ -193,7 +193,7 @@ describe("Part-Timer - Mystery Encounter", () => {
 
       expect(EncounterPhaseUtils.updatePlayerMoney).toHaveBeenCalledWith(scene.getWaveMoneyAmount(4), true, false);
       // Expect PP of mon's moves to have been reduced to 2
-      const moves = scene.getPlayerParty()[3].moveset;
+      const moves = scene.getPlayerParty()[3].getMoveset(true);
       for (const move of moves) {
         expect((move?.getMovePp() ?? 0) - (move?.ppUsed ?? 0)).toBe(2);
       }
@@ -231,7 +231,9 @@ describe("Part-Timer - Mystery Encounter", () => {
 
       await game.runToMysteryEncounter(MysteryEncounterType.PART_TIMER, defaultParty);
       // Mock movesets
-      scene.getPlayerParty().forEach((p) => (p.moveset = []));
+      scene.getPlayerParty().forEach((p) => {
+        game.move.changeMoveset(p, []);
+      });
       await game.phaseInterceptor.to("MysteryEncounterPhase", false);
 
       const encounterPhase = scene.phaseManager.getCurrentPhase();
@@ -261,7 +263,7 @@ describe("Part-Timer - Mystery Encounter", () => {
 
       expect(EncounterPhaseUtils.updatePlayerMoney).toHaveBeenCalledWith(scene.getWaveMoneyAmount(2.5), true, false);
       // Expect PP of mon's moves to have been reduced to 2
-      const moves = scene.getPlayerParty()[0].moveset;
+      const moves = scene.getPlayerParty()[0].getMoveset(true);
       for (const move of moves) {
         expect((move?.getMovePp() ?? 0) - (move?.ppUsed ?? 0)).toBe(2);
       }

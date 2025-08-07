@@ -247,7 +247,9 @@ describe("Uncommon Breed - Mystery Encounter", () => {
 
     it("should NOT be selectable if the player doesn't have an Attracting move", async () => {
       await game.runToMysteryEncounter(MysteryEncounterType.UNCOMMON_BREED, defaultParty);
-      scene.getPlayerParty().forEach((p) => (p.moveset = []));
+      scene.getPlayerParty().forEach((p) => {
+        game.move.changeMoveset(p, []);
+      });
       await game.phaseInterceptor.to("MysteryEncounterPhase", false);
 
       const encounterPhase = scene.phaseManager.getCurrentPhase();

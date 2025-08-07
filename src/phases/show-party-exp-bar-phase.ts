@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { ExpGainsSpeed } from "#enums/exp-gains-speed";
+import { EXP_GAIN_SPEED_MAP, ExpGainSpeed } from "#enums/exp-gain-speed";
 import { ExpNotification } from "#enums/exp-notification";
 import { ExpBoosterModifier } from "#modifier/modifier";
 import { PlayerPartyMemberPokemonPhase } from "#phases/base/player-party-member-pokemon-phase";
@@ -35,7 +35,7 @@ export class ShowPartyExpBarPhase extends PlayerPartyMemberPokemonPhase {
     pokemon.updateInfo();
 
     const { partyExpBar } = globalScene;
-    const { partyExpNotificationMode, expGainsSpeed } = settings.general;
+    const { partyExpNotificationMode, expGainSpeed } = settings.general;
 
     if (partyExpNotificationMode === ExpNotification.SKIP) {
       this.end();
@@ -47,14 +47,14 @@ export class ShowPartyExpBarPhase extends PlayerPartyMemberPokemonPhase {
         partyExpBar
           .showPokemonExp(pokemon, exp.value, partyExpNotificationMode === ExpNotification.ONLY_LEVEL_UP, newLevel)
           .then(() => {
-            setTimeout(() => this.end(), 800 / Math.pow(2, expGainsSpeed));
+            setTimeout(() => this.end(), 800 * EXP_GAIN_SPEED_MAP[expGainSpeed]);
           });
       } else {
         this.end();
       }
-    } else if (expGainsSpeed < ExpGainsSpeed.SKIP) {
+    } else if (expGainSpeed < ExpGainSpeed.SKIP) {
       partyExpBar.showPokemonExp(pokemon, exp.value, false, newLevel).then(() => {
-        setTimeout(() => this.end(), 500 / Math.pow(2, expGainsSpeed));
+        setTimeout(() => this.end(), 500 * EXP_GAIN_SPEED_MAP[expGainSpeed]);
       });
     } else {
       this.end();

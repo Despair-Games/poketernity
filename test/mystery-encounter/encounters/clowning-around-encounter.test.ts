@@ -169,14 +169,14 @@ describe("Clowning Around - Mystery Encounter", () => {
       [enemy1, enemy2].forEach((p) => expect(p).toBeDefined());
       expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
       expect(enemy1.species.speciesId).toBe(SpeciesId.MR_MIME);
-      expect(enemy1.moveset.map((m) => m.moveId)).toEqual([
+      expect(enemy1.getMoveset(true).map((m) => m.moveId)).toEqual([
         MoveId.TEETER_DANCE,
         MoveId.ALLY_SWITCH,
         MoveId.DAZZLING_GLEAM,
         MoveId.PSYCHIC,
       ]);
       expect(enemy2.species.speciesId).toBe(SpeciesId.BLACEPHALON);
-      expect(enemy2.moveset.map((m) => m.moveId)).toEqual([
+      expect(enemy2.getMoveset(true).map((m) => m.moveId)).toEqual([
         MoveId.TRICK,
         MoveId.HYPNOSIS,
         MoveId.SHADOW_BALL,

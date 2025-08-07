@@ -170,7 +170,7 @@ describe("Trash to Treasure - Mystery Encounter", () => {
       const enemy = game.field.getEnemyPokemon();
       expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
       expect(enemy.species.speciesId).toBe(SpeciesId.GARBODOR);
-      expect(enemy.moveset.map((m) => m.moveId)).toEqual([
+      expect(enemy.getMoveset(true).map((m) => m.moveId)).toEqual([
         MoveId.PAYBACK,
         MoveId.GUNK_SHOT,
         MoveId.STOMPING_TANTRUM,

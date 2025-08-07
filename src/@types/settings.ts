@@ -2,7 +2,7 @@ import type { BattleStyle } from "#enums/battle-style";
 import type { DamageNumbersMode } from "#enums/damage-numbers-mode";
 import type { EaseType } from "#enums/ease-type";
 import type { EggSkipPreference } from "#enums/egg-skip-preference";
-import type { ExpGainsSpeed } from "#enums/exp-gains-speed";
+import type { ExpGainSpeed } from "#enums/exp-gain-speed";
 import type { ExpNotification } from "#enums/exp-notification";
 import type { HpBarSpeed } from "#enums/hp-bar-speed";
 import type { KeyboardLayout } from "#enums/keyboard-layout";
@@ -31,7 +31,7 @@ export interface MetaSettings {
 export interface GeneralSettings {
   gameSpeed: number;
   hpBarSpeed: HpBarSpeed;
-  expGainsSpeed: ExpGainsSpeed;
+  expGainSpeed: ExpGainSpeed;
   partyExpNotificationMode: ExpNotification;
   skipSeenDialogues: boolean;
   eggSkipPreference: EggSkipPreference;
