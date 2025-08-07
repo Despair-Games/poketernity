@@ -14,6 +14,10 @@ export abstract class BattlePhase extends Phase {
       console.warn("Enemy trainer is missing!");
       return;
     }
+
+    trainer.setVisible(true);
+
+    // TODO: Do these sprites still need to be reset/made visible?
     const sprites = trainer.getSprites();
     const tintSprites = trainer.getTintSprites();
     for (let i = 0; i < sprites.length; i++) {
