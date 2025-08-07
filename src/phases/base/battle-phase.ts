@@ -7,6 +7,7 @@ import { playTween } from "#utils/anim-utils";
  * Adds functions to display and hide the enemy trainer
  */
 export abstract class BattlePhase extends Phase {
+  /** Slides the enemy trainer into view */
   public async showEnemyTrainer(trainerSlot: TrainerSlot = TrainerSlot.NONE): Promise<void> {
     const { trainer } = globalScene.currentBattle;
     if (!trainer) {
@@ -40,6 +41,7 @@ export abstract class BattlePhase extends Phase {
     });
   }
 
+  /** Slides the enemy trainer out of view */
   public async hideEnemyTrainer(): Promise<void> {
     const { trainer } = globalScene.currentBattle;
     if (!trainer) {
