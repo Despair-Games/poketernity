@@ -506,7 +506,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    *
    * Prevents duplicate IDs from being assigned.
    */
-  protected generateId(): number {
+  public generateId(): number {
     // ID has already been generated before, don't allow assigning new IDs
     if (!isNil(this.id)) {
       return this.id;

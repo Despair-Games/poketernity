@@ -38,7 +38,6 @@ export class RngHelper extends GameManagerHelper {
     });
     // This is required because otherwise the function that generates a random ID for a pokemon
     // will get stuck in an infinite loop due to not being able to generate random numbers
-    // @ts-expect-error - `Pokemon#generateId` is `protected`
     vi.spyOn(Pokemon.prototype, "generateId").mockImplementation(() => {
       let id = 1;
       while (this.game.scene.activePokemonIDs.has(id)) {
@@ -54,7 +53,6 @@ export class RngHelper extends GameManagerHelper {
 
     vi.spyOn(Phaser.Math.RND, "realInRange").mockRestore();
     vi.spyOn(this.game.scene, "randBattleSeedInt").mockRestore();
-    // @ts-expect-error - `Pokemon#generateId` is `protected`
     vi.spyOn(Pokemon.prototype, "generateId").mockRestore();
   }
 }
