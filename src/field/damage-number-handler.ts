@@ -24,7 +24,7 @@ export class DamageNumberHandler {
   add(
     target: Pokemon,
     amount: number,
-    result: DamageResult | HitResult.HEAL = HitResult.EFFECTIVE,
+    result: DamageResult | typeof HitResult.HEAL = HitResult.EFFECTIVE,
     critical: boolean = false,
   ): void {
     if (settings.display.damageNumbersMode === DamageNumbersMode.OFF) {

@@ -2,11 +2,15 @@
 import type { TimedEvent } from "#types/timed-event";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
+import type { EnumValues } from "#types/utility-types";
+
 /**
  * The various type of modifications that {@linkcode TimedEvent}s can activate.
  */
-export enum EventModifierType {
-  WILD_SHINY_CHANCE,
-  CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER,
-  EXTRA_TRAINER_REWARDS,
-}
+export const EventModifierType = {
+  WILD_SHINY_CHANCE: 1,
+  CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER: 2,
+  EXTRA_TRAINER_REWARDS: 3,
+} as const;
+
+export type EventModifierType = EnumValues<typeof EventModifierType>;

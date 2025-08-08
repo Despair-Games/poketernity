@@ -3154,7 +3154,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         this.pokemonLuckLabelText.setVisible(this.pokemonLuckText.visible);
 
         //Growth translate
-        let growthReadable = toReadableString(GrowthRate[species.growthRate]);
+        let growthReadable = toReadableString(enumValueToKey(GrowthRate, species.growthRate));
         const growthAux = growthReadable.replace(" ", "_");
         if (i18next.exists("growth:" + growthAux)) {
           growthReadable = i18next.t(("growth:" + growthAux) as any);

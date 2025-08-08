@@ -139,7 +139,7 @@ export function getBerryEffectFunc(berryType: BerryType): BerryEffectFunc {
           ? pokemon.getMoveset().find((m) => !m.getPpRatio())
           : pokemon.getMoveset().find((m) => m.getPpRatio() < 1);
         if (ppRestoreMove !== undefined) {
-          ppRestoreMove!.ppUsed = Math.max(ppRestoreMove!.ppUsed - 10, 0);
+          ppRestoreMove.ppUsed = Math.max(ppRestoreMove.ppUsed - 10, 0);
           globalScene.phaseManager.createAndUnshiftPhase(
             "MessagePhase",
             i18next.t("battle:ppHealBerry", {

@@ -20,6 +20,7 @@
       "**",
       "!**/*.d.ts",
       "!**/.github/**/*",
+      "**/.github/**/*.ts",
       "!**/.vscode/**/*",
       "!**/build/**/*",
       "!**/coverage/**/*",
@@ -99,6 +100,12 @@
               }
             }
           }
+        },
+        "useConsistentMemberAccessibility": {
+          "level": "off", // TODO: refactor and make this an error
+          "options": {
+            "accessibility": "explicit"
+          }
         }
       },
       "suspicious": {
@@ -116,7 +123,7 @@
         "noDocumentCookie": "off" // Firefox has minimal support for the "Cookie Store API"
       },
       "complexity": {
-        "noExcessiveCognitiveComplexity": "info", // TODO: Refactor and make this an error
+        "noExcessiveCognitiveComplexity": "info",
         "useLiteralKeys": "off",
         "noForEach": "off", // Foreach vs for of is not that simple.
         "noUselessSwitchCase": "off", // Explicit > Implicit

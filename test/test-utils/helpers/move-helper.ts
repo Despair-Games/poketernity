@@ -7,7 +7,6 @@ import { Button } from "#enums/button";
 import { MoveId } from "#enums/move-id";
 import { UiMode } from "#enums/ui-mode";
 import type { Pokemon } from "#field/pokemon";
-import { PokemonMove } from "#field/pokemon-move";
 import { getMoveTargets } from "#moves/move";
 import type { CommandPhase } from "#phases/command-phase";
 import type { EnemyCommandPhase } from "#phases/enemy-command-phase";
@@ -114,7 +113,7 @@ export class MoveHelper extends GameManagerHelper {
     }
 
     const pokemon = this.game.scene.getPlayerField()[pkmIndex];
-    pokemon.moveset = [new PokemonMove(moveId)];
+    pokemon.setMoveset(moveId);
 
     this.select(moveId, pkmIndex, targetIndex, useTera);
   }
@@ -152,13 +151,12 @@ export class MoveHelper extends GameManagerHelper {
       }
     }
 
-    moveset = coerceArray(moveset);
-    pokemon.moveset = [];
-    moveset.forEach((moveId) => {
-      pokemon.moveset.push(new PokemonMove(moveId));
-    });
-    const movesetStr = moveset.map((moveId) => MoveId[moveId]).join(", ");
-    console.log(`Pokemon ${pokemon.species.name}'s moveset manually set to ${movesetStr} (=[${moveset.join(", ")}])!`);
+    const newMoveset = coerceArray(moveset);
+    pokemon.setMoveset(...newMoveset);
+    const movesetStr = newMoveset.map((moveId) => MoveId[moveId]).join(", ");
+    console.log(
+      `Pokemon ${pokemon.species.name}'s moveset manually set to ${movesetStr} (=[${newMoveset.join(", ")}])!`,
+    );
   }
 
   /**
@@ -213,7 +211,8 @@ export class MoveHelper extends GameManagerHelper {
         "Warning: `forceEnemyMove` overwrites the Pokemon's moveset and disables the enemy moveset override!",
       );
     }
-    enemy.moveset = [new PokemonMove(moveId)];
+
+    enemy.setMoveset(moveId);
     const legalTargets = getMoveTargets(enemy, moveId);
 
     vi.spyOn(enemy, "getNextMove").mockReturnValueOnce({

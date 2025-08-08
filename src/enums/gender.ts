@@ -1,5 +1,9 @@
-export enum Gender {
-  GENDERLESS = -1,
-  MALE,
-  FEMALE,
-}
+import type { EnumValues } from "#types/utility-types";
+
+export const Gender = {
+  GENDERLESS: -1,
+  MALE: 1,
+  FEMALE: 2,
+} as const;
+
+export type Gender = EnumValues<typeof Gender>;

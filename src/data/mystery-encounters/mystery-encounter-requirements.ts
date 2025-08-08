@@ -573,14 +573,21 @@ export class MoveRequirement extends EncounterPokemonRequirement {
 
   override queryParty(partyPokemon: PlayerPokemon[]): PlayerPokemon[] {
     return partyPokemon.filter((pokemon) => {
-      const movesetFilter = pokemon.moveset.some((move) => move.moveId && this.requiredMoves.includes(move.moveId));
+      const movesetFilter = pokemon
+        .getMoveset(true)
+        .some((move) => move.moveId && this.requiredMoves.includes(move.moveId));
       const pokemonIsAllowed = !this.excludeDisallowedPokemon || pokemon.isAllowedInBattle();
       return pokemonIsAllowed && (this.invertQuery ? !movesetFilter : movesetFilter);
     });
   }
 
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
-    const includedMoves = pokemon?.moveset.filter((move) => move?.moveId && this.requiredMoves.includes(move.moveId));
+    if (!pokemon) {
+      return ["move", ""];
+    }
+    const includedMoves = pokemon
+      .getMoveset(true)
+      .filter((move) => move.moveId && this.requiredMoves.includes(move.moveId));
     if (includedMoves && includedMoves.length > 0 && includedMoves[0]) {
       return ["move", includedMoves[0].getName()];
     }
@@ -616,7 +623,9 @@ export class CompatibleMoveRequirement extends EncounterPokemonRequirement {
       return partyPokemon.filter(
         (pokemon) =>
           this.requiredMoves.filter((learnableMove) =>
-            pokemon.compatibleTms.filter((tm) => !pokemon.moveset.find((m) => m.moveId === tm)).includes(learnableMove),
+            pokemon.compatibleTms
+              .filter((tm) => !pokemon.getMoveset(true).find((m) => m.moveId === tm))
+              .includes(learnableMove),
           ).length > 0,
       );
     }
@@ -624,14 +633,19 @@ export class CompatibleMoveRequirement extends EncounterPokemonRequirement {
     return partyPokemon.filter(
       (pokemon) =>
         this.requiredMoves.filter((learnableMove) =>
-          pokemon.compatibleTms.filter((tm) => !pokemon.moveset.find((m) => m.moveId === tm)).includes(learnableMove),
+          pokemon.compatibleTms
+            .filter((tm) => !pokemon.getMoveset(true).find((m) => m.moveId === tm))
+            .includes(learnableMove),
         ).length === 0,
     );
   }
 
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
+    if (!pokemon) {
+      return ["compatibleMove", ""];
+    }
     const includedCompatMoves = this.requiredMoves.filter((reqMove) =>
-      pokemon?.compatibleTms.filter((tm) => !pokemon.moveset.find((m) => m.moveId === tm)).includes(reqMove),
+      pokemon.compatibleTms.filter((tm) => !pokemon.getMoveset(true).find((m) => m.moveId === tm)).includes(reqMove),
     );
     if (includedCompatMoves.length > 0) {
       return ["compatibleMove", MoveId[includedCompatMoves[0]]];
