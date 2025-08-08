@@ -596,8 +596,13 @@ export class RunInfoUiHandler extends UiHandler {
     // Luck
     const luckValue = clamp(
       this.runInfo.party
-        .map((p) => p.toPokemon().getLuck())
-        .reduce((total: number, value: number) => (total += value), 0),
+        .map((p) => {
+          const pokemon = p.toPokemon();
+          const luck = pokemon.getLuck();
+          pokemon.destroy();
+          return luck;
+        })
+        .reduce((total: number, value: number) => total + value, 0),
       0,
       14,
     );
