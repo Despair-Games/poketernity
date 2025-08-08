@@ -183,14 +183,7 @@ import type { PokemonData } from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
 import type { AbilityFilterOptions } from "#types/ability-types";
 import type { DamageCalculationResult, DamageResult, TurnMove } from "#types/move-types";
-import type {
-  PokemonSummonData,
-  PokemonTurnData,
-  PokemonWaveData,
-  SerializedPokemonSummonData,
-  Status,
-} from "#types/pokemon-types";
-import type { CoerceNullPropertiesToUndefined } from "#types/utility-types";
+import type { PokemonSummonData, PokemonTurnData, PokemonWaveData, Status } from "#types/pokemon-types";
 import type { BattleInfo } from "#ui/battle-info";
 import { applyChallenges } from "#utils/challenge-utils";
 import {
@@ -206,7 +199,7 @@ import {
 } from "#utils/common-utils";
 import { loadMoveAnimAssets } from "#utils/move-anim-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
-import { getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
+import { getPokemonSpecies, getPokemonSpeciesForm, summonDataToJSON } from "#utils/pokemon-utils";
 import { randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
 
@@ -4311,23 +4304,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       turnCount: 0,
       waveTurnCount: 0,
       moveHistory: [],
-      toJSON(): SerializedPokemonSummonData {
-        // Pokemon species forms are never saved, only the species ID.
-        const speciesForm = this.speciesForm;
-        const t = {
-          // the "as omit" is required to avoid TS resolving the overwritten properties to `never`
-          // We coerce `null` to `undefined` in the type, as the for loop below replaces `null` with `undefined`
-          ...(this as Omit<CoerceNullPropertiesToUndefined<PokemonSummonData>, "speciesForm">),
-          speciesForm: isNil(speciesForm) ? undefined : { id: speciesForm.speciesId, formIdx: speciesForm.formIndex },
-        };
-        // Replace `null` with `undefined`, as `undefined` never gets serialized
-        for (const [key, value] of Object.entries(t)) {
-          if (value === null) {
-            t[key] = undefined;
-          }
-        }
-        return t;
-      },
+      toJSON: summonDataToJSON,
     };
     this.setSwitchOutStatus(false);
     if (globalScene) {

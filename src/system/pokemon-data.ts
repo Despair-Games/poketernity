@@ -17,7 +17,7 @@ import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
 import type { PokemonSummonData, SerializedSpeciesForm, Status } from "#types/pokemon-types";
 import { clamp, isNil, isPokemon } from "#utils/common-utils";
-import { getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
+import { getPokemonSpecies, getPokemonSpeciesForm, summonDataToJSON } from "#utils/pokemon-utils";
 
 /**
  * Deserialize a pokemon species form from an object containing `id` and `formIdx` properties.
@@ -144,6 +144,7 @@ export class PokemonData {
     ];
 
     this.summonData = source.summonData;
+    this.summonData.toJSON = summonDataToJSON;
     // This is required because the full class object doesn't exist in save data
     this.summonData.moveset = source.summonData.moveset?.map((m) => PokemonMove.loadMove(m)) ?? [];
     // This is required because the full class object doesn't exist in save data
