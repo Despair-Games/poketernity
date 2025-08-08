@@ -180,8 +180,8 @@ describe("Trash to Treasure - Mystery Encounter", () => {
       // Should have used moves pre-battle
       const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is("MovePhase")).map((p) => p[0]);
       expect(movePhases.length).toBe(2);
-      expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.TOXIC).length).toBe(1);
-      expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.AMNESIA).length).toBe(1);
+      expect(movePhases.filter((p) => (p as MovePhase).pokemonMove.moveId === MoveId.TOXIC).length).toBe(1);
+      expect(movePhases.filter((p) => (p as MovePhase).pokemonMove.moveId === MoveId.AMNESIA).length).toBe(1);
     });
 
     it("should have 2 Epic, 1 Ultra, 1 Great in rewards", async () => {

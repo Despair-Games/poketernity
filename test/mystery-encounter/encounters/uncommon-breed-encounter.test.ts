@@ -131,7 +131,7 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is("MovePhase")).map((p) => p[0]);
       expect(movePhases.length).toBe(1);
       const eggMoves: MoveId[] = speciesEggMoves[getPokemonSpecies(speciesToSpawn).getRootSpeciesId()];
-      const usedMove = (movePhases[0] as MovePhase).move.moveId;
+      const usedMove = (movePhases[0] as MovePhase).pokemonMove.moveId;
       expect(eggMoves.includes(usedMove)).toBe(true);
     });
 
@@ -158,7 +158,7 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is("MovePhase")).map((p) => p[0]);
       expect(movePhases.length).toBe(1);
       const eggMoves: MoveId[] = speciesEggMoves[getPokemonSpecies(speciesToSpawn).getRootSpeciesId()];
-      const usedMove = (movePhases[0] as MovePhase).move.moveId;
+      const usedMove = (movePhases[0] as MovePhase).pokemonMove.moveId;
       expect(eggMoves.includes(usedMove)).toBe(true);
     });
   });

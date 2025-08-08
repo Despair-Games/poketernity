@@ -12,6 +12,7 @@ import { HealOnAllyAttr } from "#moves/heal-on-ally-attr";
 import { StatusCategoryOnAllyAttr } from "#moves/status-category-on-ally-attr";
 import { NumberHolder } from "#utils/common-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
+import { getPokemonMoveName } from "#utils/pokemon-utils";
 import i18next from "i18next";
 
 /**
@@ -67,7 +68,7 @@ export class HealBlockTag extends MoveRestrictionBattlerTag {
    * Uses its own unique getSelectionDeniedText() message
    */
   override getSelectionDeniedText(pokemon: Pokemon, moveId: MoveId): string {
-    const moveName = pokemon.getMove(moveId)?.name ?? allMoves.get(moveId).name;
+    const moveName = getPokemonMoveName(pokemon, moveId);
     return i18next.t("battle:moveDisabledHealBlock", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       moveName,
@@ -82,7 +83,7 @@ export class HealBlockTag extends MoveRestrictionBattlerTag {
    * @returns text to display when the move is interrupted
    */
   override getInterruptedText(pokemon: Pokemon, moveId: MoveId): string {
-    const moveName = pokemon.getMove(moveId)?.name ?? allMoves.get(moveId).name;
+    const moveName = getPokemonMoveName(pokemon, moveId);
     return i18next.t("battle:moveDisabledHealBlock", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       moveName,

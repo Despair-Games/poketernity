@@ -2,11 +2,11 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { BattlerTag } from "#battler-tags/battler-tag";
 import { MoveRestrictionBattlerTag } from "#battler-tags/move-restriction-battler-tag";
-import { allMoves } from "#data/data-lists";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
+import { getPokemonMoveName } from "#utils/pokemon-utils";
 import i18next from "i18next";
 
 /**
@@ -81,7 +81,7 @@ export class EncoreTag extends MoveRestrictionBattlerTag {
   }
 
   override getSelectionDeniedText(pokemon: Pokemon, moveId: MoveId): string {
-    const moveName = pokemon.getMove(moveId)?.name ?? allMoves.get(moveId).name;
+    const moveName = getPokemonMoveName(pokemon, moveId);
     return i18next.t("battle:moveDisabled", { moveName });
   }
 

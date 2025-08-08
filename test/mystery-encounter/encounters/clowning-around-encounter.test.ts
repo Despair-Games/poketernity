@@ -186,8 +186,8 @@ describe("Clowning Around - Mystery Encounter", () => {
       // Should have used moves pre-battle
       const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is("MovePhase")).map((p) => p[0]);
       expect(movePhases.length).toBe(3);
-      expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.ROLE_PLAY).length).toBe(1);
-      expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.TAUNT).length).toBe(2);
+      expect(movePhases.filter((p) => (p as MovePhase).pokemonMove.moveId === MoveId.ROLE_PLAY).length).toBe(1);
+      expect(movePhases.filter((p) => (p as MovePhase).pokemonMove.moveId === MoveId.TAUNT).length).toBe(2);
     });
 
     it("should advance exactly one wave if the clown's Pokemon get defeated simultaneously", async () => {

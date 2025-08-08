@@ -6,6 +6,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
+import { getPokemonMoveName } from "#utils/pokemon-utils";
 import i18next from "i18next";
 
 /**
@@ -45,7 +46,7 @@ export class ThroatChoppedTag extends MoveRestrictionBattlerTag {
    * @returns the message to display when the player attempts to select the restricted move
    */
   override getSelectionDeniedText(pokemon: Pokemon, moveId: MoveId): string {
-    const moveName = pokemon.getMove(moveId)?.name ?? allMoves.get(moveId).name;
+    const moveName = getPokemonMoveName(pokemon, moveId);
     return i18next.t("battle:moveCannotBeSelected", { moveName });
   }
 
