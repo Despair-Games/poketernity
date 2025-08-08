@@ -31,7 +31,7 @@ describe("UI - Type Hints", () => {
     game.override.battleType("single").startingLevel(100).startingWave(1).enemyMoveset(MoveId.SPLASH);
   });
 
-  it.skip("check immunity color", async () => {
+  it("check immunity color", async () => {
     game.override
       .battleType("single")
       .startingLevel(100)
@@ -63,7 +63,7 @@ describe("UI - Type Hints", () => {
     await game.phaseInterceptor.to("CommandPhase");
   });
 
-  it.skip("check status move color", async () => {
+  it("check status move color", async () => {
     game.override.enemySpecies(SpeciesId.FLORGES).moveset([MoveId.GROWL]);
 
     await game.classicMode.startBattle(SpeciesId.RAYQUAZA);

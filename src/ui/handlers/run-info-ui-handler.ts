@@ -818,11 +818,10 @@ export class RunInfoUiHandler extends UiHandler {
         moveContainer.add(moveBg);
         moveContainer.add(moveLabel);
         movesetContainer.add(moveContainer);
-        const move = pokemonMoveset[m]?.getMove();
-        const moveName = move ? pokemon.getMove(move.id)!.name : "-";
-        pokemonMoveBgs[m].setFrame(
-          enumValueToKey(ElementalType, move ? move.type : ElementalType.UNKNOWN).toLowerCase(),
-        );
+        const pokemonMove = pokemonMoveset[m];
+        const moveName = pokemonMove?.name ?? "-";
+        const moveType = pokemonMove?.getMove()?.type ?? ElementalType.UNKNOWN;
+        pokemonMoveBgs[m].setFrame(enumValueToKey(ElementalType, moveType).toLowerCase());
         pokemonMoveLabels[m].setText(moveName);
       }
 
