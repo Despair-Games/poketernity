@@ -31,13 +31,13 @@ List of valid scopes:
   ability
   ai
   anomaly - Formerly "Mystery Encounters"
-  art
   audio
   battle - Relating to the general battle engine
   biomes
   challenge
   data - Data not covered by other scopes, such as TM lists
   event
+  graphics - Anything related to art/graphics (adding new sprites, fixing a sprite that isn't displaying, etc)
   item
   move
   ui - UI/UX
