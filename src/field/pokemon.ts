@@ -2312,14 +2312,15 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Function that tries to set a Pokemon shiny based on the trainer's trainer ID and secret ID.
-   * Endless Pokemon in the end biome are unable to be set to shiny
+   * Function that tries to set a Pokemon shiny based on the trainer's trainer ID and secret ID. \
+   * Endless Pokemon in the end biome are unable to be set to shiny.
    *
-   * The exact mechanic is that it calculates E as the XOR of the player's trainer ID and secret ID.
-   * F is calculated as the XOR of the first 16 bits of the Pokemon's {@linkcode personalityValue | Personality Value} with the last 16 bits.
-   * The XOR of E and F are then compared to the {@linkcode shinyThreshold} (or {@linkcode thresholdOverride} if set) to see whether or not to generate a shiny.
+   * The exact mechanic is that it calculates E as the XOR of the player's trainer ID and secret ID. \
+   * F is calculated as the XOR of the first 16 bits of the Pokemon's {@linkcode personalityValue | Personality Value} with the last 16 bits. \
+   * The XOR of E and F are then compared to the {@linkcode shinyThreshold} (or {@linkcode thresholdOverride} if set) to see whether or not to generate a shiny. \
    * The base shiny odds are {@linkcode BASE_SHINY_CHANCE} `/` `65536`
-   * @param thresholdOverride number that is divided by `2^16` (`65536`) to get the shiny chance, overrides {@linkcode shinyThreshold} if set (bypassing shiny rate modifiers such as Shiny Charm)
+   * @param thresholdOverride number that is divided by `2^16` (`65536`) to get the shiny chance,
+   *   overrides {@linkcode shinyThreshold} if set (bypassing shiny rate modifiers such as Shiny Charm)
    * @returns Whether the Pokemon is shiny
    */
   trySetShiny(thresholdOverride?: number): boolean {
