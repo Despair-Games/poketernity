@@ -70,7 +70,7 @@ export class PokemonData {
    */
   constructor(source: Pokemon | PokemonData) {
     this.id = source.id;
-    this.personalityValue = source.personalityValue ?? 0; // TODO: temporary `?? 0` to handle dev saves from before this was added, remove in the future
+    this.personalityValue = source.personalityValue ?? source.id; // TODO: temporary `??` to handle dev saves from before this was added, remove in the future
     this.player = isPokemon(source) ? source.isPlayer() : source.player;
     this.speciesId = isPokemon(source) ? source.species.speciesId : source.speciesId;
     this.nickname = source.nickname;
