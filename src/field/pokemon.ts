@@ -508,11 +508,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
   }
 
-  /**
-   * Generates a random integer from `1` to `2^32 - 1`, inclusive, to be assigned to as the Pokemon's ID.
-   *
-   * Prevents duplicate IDs from being assigned.
-   */
+  /** Generates a unique integer to be set as the Pokemon's ID. */
   public generateId(): number {
     // ID has already been generated before, don't allow assigning new IDs
     if (!isNil(this.id)) {
