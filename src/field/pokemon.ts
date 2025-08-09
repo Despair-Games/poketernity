@@ -246,7 +246,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @see {@link https://bulbapedia.bulbagarden.net/wiki/Personality_value}
    */
   public personalityValue: number;
-  public override name: string;
   public nickname: string;
   public species: PokemonSpecies;
   public formIndex: number;

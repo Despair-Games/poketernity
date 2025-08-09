@@ -29,7 +29,6 @@ export class Trainer extends Phaser.GameObjects.Container {
   public config: TrainerConfig;
   public variant: TrainerVariant;
   public partyTemplateIndex: number;
-  public override name: string;
   public partnerName: string;
   public originalIndexes: { [key: number]: number } = {};
 
