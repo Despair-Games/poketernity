@@ -1,3 +1,4 @@
+import "#app/polyfills"; // polyfills must be first
 import "#app/phaser-extensions";
 
 // Catch global errors and display them in an alert so users can report the issue.
