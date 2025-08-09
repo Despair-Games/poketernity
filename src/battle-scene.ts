@@ -266,8 +266,8 @@ export class BattleScene extends SceneBase {
    */
   public readonly eventTarget: EventTarget = new EventTarget();
 
-  /** Contains the IDs of all active Pokemon. This allows ensuring that all Pokemon have a unique ID. */
-  public activePokemonIDs: Set<number> = new Set();
+  /** The next ID to assign to a Pokemon. */
+  private nextPokemonID: number = 1;
 
   constructor() {
     super("battle");
@@ -750,6 +750,19 @@ export class BattleScene extends SceneBase {
           resolve();
         });
     });
+  }
+
+  /** Gets the next available Pokemon ID value and then updates the counter. */
+  public getNextPokemonID(): number {
+    return this.nextPokemonID++;
+  }
+
+  /**
+   * Sets {@linkcode nextPokemonID} to the maximum of its current value and the passed in value plus 1. \
+   * Used when loading Pokemon from a save to ensure there are no ID collisions.
+   */
+  public updateNextPokemonID(id: number): void {
+    this.nextPokemonID = Math.max(id + 1, this.nextPokemonID);
   }
 
   public getPlayerParty(): PlayerPokemon[] {

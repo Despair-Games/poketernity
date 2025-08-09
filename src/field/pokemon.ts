@@ -240,7 +240,7 @@ interface EffectiveStatOptions {
 }
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
-  public id: number;
+  public readonly id: number;
   /**
    * A random number between `0` and `2^32 - 1`. Currently only used to determine shininess of the pokemon.
    * @see {@link https://bulbapedia.bulbagarden.net/wiki/Personality_value}
@@ -348,6 +348,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.levelExp = dataSource?.levelExp || 0;
     if (dataSource) {
       this.id = dataSource.id;
+      globalScene.updateNextPokemonID(this.id);
       this.personalityValue = dataSource.personalityValue;
       this.hp = dataSource.hp;
       this.stats = dataSource.stats;
@@ -378,7 +379,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.isTerastallized = dataSource.isTerastallized;
       this.stellarTypesBoosted = dataSource.stellarTypesBoosted ?? [];
     } else {
-      this.id = this.generateId();
+      this.id = globalScene.getNextPokemonID();
       this.personalityValue = this.randSeedInt(Math.pow(2, 32) - 1);
       this.ivs = ivs || this.generateIvs();
 
@@ -424,8 +425,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.resetWaveData();
     this.resetTurnData();
     this.resetSummonData();
-
-    globalScene.activePokemonIDs.add(this.id);
   }
 
   /**
@@ -505,21 +504,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.updateSpritePipelineData();
       globalScene.triggerPokemonFormChange(this, SpeciesFormChangeLapseTeraTrigger);
     }
-  }
-
-  /** Generates a unique integer to be set as the Pokemon's ID. */
-  public generateId(): number {
-    // ID has already been generated before, don't allow assigning new IDs
-    if (!isNil(this.id)) {
-      return this.id;
-    }
-
-    let id = 1;
-    while (globalScene.activePokemonIDs.has(id)) {
-      ++id;
-    }
-
-    return id;
   }
 
   /** @returns An array of 6 random numbers, each between `0-31` inclusive */
@@ -4522,7 +4506,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   override destroy(): void {
     this.battleInfo?.destroy();
     this.destroySubstitute();
-    globalScene.activePokemonIDs.delete(this.id);
     super.destroy();
   }
 
