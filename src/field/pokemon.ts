@@ -241,6 +241,11 @@ interface EffectiveStatOptions {
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;
+  /**
+   * A random number between `0` and `2^32 - 1`. Currently only used to determine shininess of the pokemon.
+   * @see {@link https://bulbapedia.bulbagarden.net/wiki/Personality_value}
+   */
+  public personalityValue: number;
   public override name: string;
   public nickname: string;
   public species: PokemonSpecies;
@@ -344,6 +349,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.levelExp = dataSource?.levelExp || 0;
     if (dataSource) {
       this.id = dataSource.id;
+      this.personalityValue = dataSource.personalityValue;
       this.hp = dataSource.hp;
       this.stats = dataSource.stats;
       this.ivs = dataSource.ivs;
@@ -374,6 +380,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.stellarTypesBoosted = dataSource.stellarTypesBoosted ?? [];
     } else {
       this.id = this.generateId();
+      this.personalityValue = this.randSeedInt(Math.pow(2, 32) - 1);
       this.ivs = ivs || this.generateIvs();
 
       if (this.gender === undefined) {
@@ -512,9 +519,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return this.id;
     }
 
-    let id = randSeedInt(4294967295, 1);
+    let id = 1;
     while (globalScene.activePokemonIDs.has(id)) {
-      id = randSeedInt(4294967295, 1);
+      ++id;
     }
 
     return id;
@@ -2313,22 +2320,24 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * Endless Pokemon in the end biome are unable to be set to shiny
    *
    * The exact mechanic is that it calculates E as the XOR of the player's trainer ID and secret ID.
-   * F is calculated as the XOR of the first 16 bits of the Pokemon's ID with the last 16 bits.
+   * F is calculated as the XOR of the first 16 bits of the Pokemon's {@linkcode personalityValue | Personality Value} with the last 16 bits.
    * The XOR of E and F are then compared to the {@linkcode shinyThreshold} (or {@linkcode thresholdOverride} if set) to see whether or not to generate a shiny.
-   * The base shiny odds are {@linkcode BASE_SHINY_CHANCE} / 65536
-   * @param thresholdOverride number that is divided by 2^16 (65536) to get the shiny chance, overrides {@linkcode shinyThreshold} if set (bypassing shiny rate modifiers such as Shiny Charm)
-   * @returns true if the Pokemon has been set as a shiny, false otherwise
+   * The base shiny odds are {@linkcode BASE_SHINY_CHANCE} `/` `65536`
+   * @param thresholdOverride number that is divided by `2^16` (`65536`) to get the shiny chance, overrides {@linkcode shinyThreshold} if set (bypassing shiny rate modifiers such as Shiny Charm)
+   * @returns Whether the Pokemon is shiny
    */
   trySetShiny(thresholdOverride?: number): boolean {
+    const { arena, gameData, gameMode } = globalScene;
+
     // Shiny Pokemon should not spawn in the end biome in endless
-    if (globalScene.gameMode.isEndless && globalScene.arena.biomeId === BiomeId.END) {
+    if (gameMode.isEndless && arena.biomeId === BiomeId.END) {
       return false;
     }
 
-    const rand1 = (this.id & 0xffff0000) >>> 16;
-    const rand2 = this.id & 0x0000ffff;
+    const rand1 = (this.personalityValue & 0xffff0000) >>> 16;
+    const rand2 = this.personalityValue & 0x0000ffff;
 
-    const E = globalScene.gameData.trainerId ^ globalScene.gameData.secretId;
+    const E = gameData.trainerId ^ gameData.secretId;
     const F = rand1 ^ rand2;
 
     const shinyThreshold = new NumberHolder(BASE_SHINY_CHANCE);

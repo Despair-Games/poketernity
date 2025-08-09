@@ -1,4 +1,3 @@
-import { Pokemon } from "#field/pokemon";
 import { GameManagerHelper } from "#test/test-utils/helpers/game-manager-helper";
 import { vi } from "vitest";
 
@@ -36,15 +35,6 @@ export class RngHelper extends GameManagerHelper {
     vi.spyOn(this.game.scene, "randBattleSeedInt").mockImplementation((range: number, min: number = 0) => {
       return Math.floor(min + range * sampleProgress);
     });
-    // This is required because otherwise the function that generates a random ID for a pokemon
-    // will get stuck in an infinite loop due to not being able to generate random numbers
-    vi.spyOn(Pokemon.prototype, "generateId").mockImplementation(() => {
-      let id = 1;
-      while (this.game.scene.activePokemonIDs.has(id)) {
-        ++id;
-      }
-      return id;
-    });
 
     for (let i = 0; i < numTrials; i++) {
       sampleProgress = (2 * i + 1) / (2 * numTrials); // The midpoint of the i^th interval
@@ -53,6 +43,5 @@ export class RngHelper extends GameManagerHelper {
 
     vi.spyOn(Phaser.Math.RND, "realInRange").mockRestore();
     vi.spyOn(this.game.scene, "randBattleSeedInt").mockRestore();
-    vi.spyOn(Pokemon.prototype, "generateId").mockRestore();
   }
 }
