@@ -52,6 +52,7 @@ List of valid "prefix(scope)" combinations:
   fix - All
   github - N/A
   i18n - N/A
+  misc - N/A
   refactor - All
   revert - N/A
   test - N/A
