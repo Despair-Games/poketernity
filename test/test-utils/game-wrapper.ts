@@ -245,6 +245,7 @@ export class GameWrapper {
     this.scene.time = new MockClock(this.scene);
     // @ts-expect-error - the test framework intentionally mocks out functionality
     this.scene.remove = vi.fn();
+    this.scene.validateAchievements = () => null;
 
     Pokemon.prototype.updateInfo = async () => {};
   }
