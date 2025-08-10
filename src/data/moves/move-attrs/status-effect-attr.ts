@@ -112,7 +112,7 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
    * @returns The overriding Effect Score when targeting the given ally.
    */
   private getAllyTargetScore(user: EnemyPokemon, ally: Pokemon, move: Move): number {
-    if (!move.isStatusMove() || ally.isSafeguarded(user)) {
+    if (!move.isStatusMove() || !ally.canSetStatus(this.effect, true, this.overrideStatus, user)) {
       return ALLY_TARGET_PENALTY;
     }
 
@@ -141,7 +141,7 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
    * @see {@linkcode getStatusEffectScore}
    */
   public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
-    if (target.isSafeguarded(user)) {
+    if (!target.canSetStatus(this.effect, true, this.overrideStatus, user)) {
       return move.isStatusMove() ? BAD_MOVE_PENALTY : 0;
     }
     return this.getStatusEffectScore(user, target, this.effect);

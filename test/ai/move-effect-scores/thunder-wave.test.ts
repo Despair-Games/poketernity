@@ -58,7 +58,7 @@ describe("Move Effect Scores - Thunder Wave", () => {
   it("should be avoided if the opponent is under the effects of Safeguard", async () => {
     await game.classicMode.startBattle(SpeciesId.PURUGLY);
 
-    game.scene.arena.addTag(ArenaTagType.SAFEGUARD, 0, 1, MoveId.NONE, ArenaTagSide.PLAYER);
+    game.scene.arena.addTag(ArenaTagType.SAFEGUARD, 0, 1, MoveId.NONE, ArenaTagSide.PLAYER, true);
 
     const enemy = game.scene.getEnemyPokemon();
     expect(enemy).toNeverSelectMove(MoveId.THUNDER_WAVE);

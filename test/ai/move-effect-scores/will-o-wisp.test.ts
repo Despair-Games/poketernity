@@ -58,14 +58,13 @@ describe("Move Effect Scores - Will-O-Wisp", () => {
   it("should be avoided if the opponent is under the effects of Safeguard", async () => {
     await game.classicMode.startBattle(SpeciesId.EXCADRILL);
 
-    game.scene.arena.addTag(ArenaTagType.SAFEGUARD, 0, 1, MoveId.NONE, ArenaTagSide.PLAYER);
+    game.scene.arena.addTag(ArenaTagType.SAFEGUARD, 0, 1, MoveId.NONE, ArenaTagSide.PLAYER, true);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).toNeverSelectMove(MoveId.WILL_O_WISP);
   });
 
-  // TODO: Fix effectiveness logic for status effect moves to pass this test
-  it.todo("should be avoided if the opponent is Fire-type", async () => {
+  it("should be avoided if the opponent is Fire-type", async () => {
     await game.classicMode.startBattle(SpeciesId.CINDERACE);
 
     const enemy = game.field.getEnemyPokemon();
