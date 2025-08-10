@@ -237,19 +237,13 @@ export const newAchvs = {
     "FRESH_START",
     "reviver_seed",
     (challenges: Challenge[]) =>
-      challenges.length > 0 && challenges.some((c) => c.isFreshStartChallenge() && c.value > 0),
+      challenges.length > 0 && challenges.some((c) => c.id === Challenges.FRESH_START && c.value > 0),
   ),
   INVERSE_BATTLE: new ChallengeCompletionAchievement(
     "INVERSE_BATTLE",
     "inverse",
     (challenges: Challenge[]) =>
-      challenges.length > 0
-      && challenges.some(
-        (ch) =>
-          ch.isInverseBattleChallenge()
-          && ch.value > 0
-          && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
-      ),
+      challenges.length > 0 && challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
 };
 
