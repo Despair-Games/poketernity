@@ -212,7 +212,8 @@ export class EnemyPokemon extends Pokemon {
    */
   public getMoveScore(target: Pokemon, move: Move): number {
     // If the move is known to have no effect on the target, return a Bad Move Penalty.
-    // TODO: This is inefficient for attacks since effectiveness is calculated again for Attack Score.
+    // TODO: This is necessary for some status moves, but is inefficient for attacks
+    // since effectiveness is calculated again for Attack Score.
     if (target.getMoveEffectiveness(this, move, AbilityApplyMode.REVEALED) === 0) {
       return BAD_MOVE_PENALTY;
     }
