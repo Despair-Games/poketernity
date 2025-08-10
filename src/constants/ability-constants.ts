@@ -45,7 +45,7 @@ export const ELECTRIC_IMMUNE_ABILITIES: Readonly<AbilityId[]> = Object.freeze([
 ]);
 
 /** Abilities that grant a benefit when the source is under a non-volatile status effect */
-export const STATUS_SYNERGY_ABILITIES: Readonly<AbilityId[]> = Object.freeze([
+export const ANY_STATUS_SYNERGY_ABILITIES: Readonly<AbilityId[]> = Object.freeze([
   AbilityId.GUTS,
   AbilityId.QUICK_FEET,
   AbilityId.MARVEL_SCALE,
@@ -54,17 +54,18 @@ export const STATUS_SYNERGY_ABILITIES: Readonly<AbilityId[]> = Object.freeze([
 
 /** Abilities that grant a benefit when the source is burned */
 export const BURN_SYNERGY_ABILITIES: Readonly<AbilityId[]> = Object.freeze([
-  ...STATUS_SYNERGY_ABILITIES,
+  ...ANY_STATUS_SYNERGY_ABILITIES,
   AbilityId.FLARE_BOOST,
 ]);
 
 /** Abilities that grant a benefit when the source is poisoned (or badly poisoned) */
 export const POISON_SYNERGY_ABILITIES: Readonly<AbilityId[]> = Object.freeze([
-  ...STATUS_SYNERGY_ABILITIES,
+  ...ANY_STATUS_SYNERGY_ABILITIES,
   AbilityId.TOXIC_BOOST,
   AbilityId.POISON_HEAL,
 ]);
 
+/** Abilities that grant a benefit when the source poisons another Pokemon */
 export const POISONING_SYNERGY_ABILITIES: Readonly<AbilityId[]> = Object.freeze([
   AbilityId.MERCILESS,
   AbilityId.POISON_PUPPETEER,

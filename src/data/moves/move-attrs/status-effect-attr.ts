@@ -11,7 +11,7 @@ import {
   POISON_SYNERGY_ABILITIES,
   POISONING_SYNERGY_ABILITIES,
 } from "#constants/ability-constants";
-import { ALLY_TARGET_PENALTY } from "#constants/ai-constants";
+import { ALLY_TARGET_PENALTY, MAJOR_EFFECT_SCORE_BONUS } from "#constants/ai-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { MoveCategory } from "#enums/move-category";
@@ -117,15 +117,20 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
     }
 
     if (this.effect === StatusEffect.BURN && BURN_SYNERGY_ABILITIES.some((abId) => ally.hasAbility(abId))) {
-      return this.getRandomScore(user, 80, 2);
+      return this.getRandomScore(user, 80, MAJOR_EFFECT_SCORE_BONUS);
     }
 
     if (
       [StatusEffect.POISON, StatusEffect.TOXIC].includes(this.effect)
       && POISON_SYNERGY_ABILITIES.some((abId) => ally.hasAbility(abId))
     ) {
+      /**
+       * The chance to grant a bonus for poisoning the user's ally (with a status move).
+       * {@link StatusEffect.TOXIC | Badly poisoning} an ally is less likely to grant a bonus
+       * than {@link StatusEffect.POISON | poisoning} an ally.
+       */
       const bonusChance = this.effect === StatusEffect.POISON ? 70 : 60;
-      return this.getRandomScore(user, bonusChance, 2);
+      return this.getRandomScore(user, bonusChance, MAJOR_EFFECT_SCORE_BONUS);
     }
 
     return ALLY_TARGET_PENALTY;
