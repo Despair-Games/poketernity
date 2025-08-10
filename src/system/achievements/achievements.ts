@@ -9,6 +9,7 @@ import { Challenges } from "#enums/challenges";
 import { ElementalType } from "#enums/elemental-type";
 import type { StarterDataEntry } from "#types/starter-data";
 import type { ConditionFn } from "#types/utility-types";
+import { enumValueToKey } from "#utils/common-utils";
 import i18next from "i18next";
 
 type AchievementLocalesData = {
@@ -64,7 +65,7 @@ export class MonoGenAchievement extends ChallengeCompletionAchievement {
     this.conditionFunc = (challanges: Challenge[]) => {
       return (
         challanges.length > 0
-        && !!challanges.find((c: Challenge) => c.isSingleGenerationChallenge() && c.value === generation)
+        && challanges.some((c) => c.id === Challenges.SINGLE_GENERATION && c.value === generation)
         && !challanges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0)
       );
     };
@@ -73,13 +74,14 @@ export class MonoGenAchievement extends ChallengeCompletionAchievement {
 
 export class MonoTypeAchievement extends ChallengeCompletionAchievement {
   constructor(type: ElementalType, iconKey: string) {
-    super("MONO_" + ElementalType[type], iconKey);
+    const typeName = enumValueToKey(ElementalType, type);
+    super("MONO_" + typeName, iconKey);
     this.localizationInformation.descriptionKey = "MonoType";
-    this.localizationInformation.descriptionArgs = { type: i18next.t(`pokemonInfo:Type.${ElementalType[type]}`) };
+    this.localizationInformation.descriptionArgs = { type: i18next.t(`pokemonInfo:Type.${typeName}`) };
     this.conditionFunc = (challenges: Challenge[]) => {
       return (
         challenges.length > 0
-        && !!challenges.find((c: Challenge) => c.isSingleTypeChallenge() && c.value === type + 1)
+        && challenges.some((c) => c.id === Challenges.SINGLE_TYPE && c.value === type)
         && !challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0)
       );
     };

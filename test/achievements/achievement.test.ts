@@ -165,7 +165,7 @@ describe("MonoType Challenge Achievement", () => {
       challenge.value = 1;
     game.scene.gameMode.challenges.push(challenge);
     expect(monoTypeAchievement.conditionFunc(game.scene.gameMode.challenges)).toBe(false);
-      challenge.value = 6;
+    challenge.value = ElementalType.ROCK;
     expect(monoTypeAchievement.conditionFunc(game.scene.gameMode.challenges)).toBe(true);
 
     game.scene.gameMode.challenges = [];
@@ -178,7 +178,7 @@ describe("MonoType Challenge Achievement", () => {
     it("should not validate the achievement if inverse challenge is active", () => {
     const monoTypeAchievement = new MonoTypeAchievement(ElementalType.ROCK, "monotype_icon");
       const challenge = new SingleTypeChallenge();
-      challenge.value = 6;
+    challenge.value = ElementalType.ROCK;
     game.scene.gameMode.challenges.push(challenge);
 
       const inverseChallenge = new InverseBattleChallenge();
