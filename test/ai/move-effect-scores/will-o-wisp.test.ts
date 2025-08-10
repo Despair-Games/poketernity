@@ -66,7 +66,7 @@ describe("Move Effect Scores - Will-O-Wisp", () => {
 
   // TODO: Fix effectiveness logic for status effect moves to pass this test
   it.todo("should be avoided if the opponent is Fire-type", async () => {
-    await game.classicMode.startBattle(SpeciesId.INFERNAPE);
+    await game.classicMode.startBattle(SpeciesId.CINDERACE);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).toNeverSelectMove(MoveId.WILL_O_WISP);
