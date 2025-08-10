@@ -11,6 +11,7 @@ const PREFIXES = [
   "fix", // Fixing a bug
   "github", // Updating the CI pipeline or otherwise modifying something in the `./github/` directory
   "i18n", // Updating the localization submodule, adding new translatable text, etc
+  "misc", // A change that doesn't fit any other category
   "refactor", // A change that doesn't impact functionality or fix any bugs (except incidentally)
   "revert", // Reverting a previous commit
   "test", // Primarily adding/updating tests or modifying the test framework
@@ -41,6 +42,7 @@ const PREFIX_SCOPE_MAP = {
   fix: ALL_SCOPES,
   github: [],
   i18n: [],
+  misc: [],
   refactor: ALL_SCOPES,
   revert: [],
   test: [],
