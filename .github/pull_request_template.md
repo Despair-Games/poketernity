@@ -23,6 +23,7 @@ List of valid prefixes:
   fix - Fixing a bug
   github - Updating the CI pipeline or otherwise modifying something in the `./github/` directory
   i18n - Updating the localization submodule, adding new translatable text, etc
+  misc - A change that doesn't fit any other category
   refactor - A change that doesn't impact functionality or fix any bugs (except incidentally)
   revert - Reverting a previous commit
   test - Primarily adding/updating tests or modifying the test framework
@@ -51,6 +52,7 @@ List of valid "prefix(scope)" combinations:
   fix - All
   github - N/A
   i18n - N/A
+  misc - N/A
   refactor - All
   revert - N/A
   test - N/A
