@@ -160,7 +160,7 @@ export abstract class BattleAnim {
             frame.target === AnimFrameTarget.IMAGE
             && isReversed(this.srcLine[0], this.srcLine[2], this.dstLine[0], this.dstLine[2])
           ) {
-            zoomX = zoomX * -1;
+            zoomX *= -1;
           }
           break;
         }
