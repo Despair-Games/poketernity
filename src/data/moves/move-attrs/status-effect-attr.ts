@@ -11,7 +11,7 @@ import {
   POISON_SYNERGY_ABILITIES,
   POISONING_SYNERGY_ABILITIES,
 } from "#constants/ability-constants";
-import { ALLY_TARGET_PENALTY, MAJOR_EFFECT_SCORE_BONUS } from "#constants/ai-constants";
+import { ALLY_TARGET_PENALTY, BAD_MOVE_PENALTY, MAJOR_EFFECT_SCORE_BONUS } from "#constants/ai-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { MoveCategory } from "#enums/move-category";
@@ -140,7 +140,10 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
    * @returns The base Effect Score corresponding to this attribute's {@linkcode effect}.
    * @see {@linkcode getStatusEffectScore}
    */
-  public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    if (!this.canApply(user, target, move, true)) {
+      return move.isStatusMove() ? BAD_MOVE_PENALTY : 0;
+    }
     return this.getStatusEffectScore(user, target, this.effect);
   }
 

@@ -211,6 +211,12 @@ export class EnemyPokemon extends Pokemon {
    * @returns the sum of this move's score components against the given target
    */
   public getMoveScore(target: Pokemon, move: Move): number {
+    // If the move is known to have no effect on the target, return a Bad Move Penalty.
+    // TODO: This is inefficient for attacks since effectiveness is calculated again for Attack Score.
+    if (target.getMoveEffectiveness(this, move, AbilityApplyMode.REVEALED) === 0) {
+      return BAD_MOVE_PENALTY;
+    }
+
     const conditionScore = move.getConditionScore(this, target);
     const attackScore = this.getAttackScore(target, move);
 
