@@ -159,7 +159,7 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
    * This is organized here (and not in {@linkcode getRawEffectScore}) so that
    * {@linkcode MultiStatusEffectAttr} can reuse this method in its scoring.
    */
-  protected getStatusEffectScore(user: EnemyPokemon, target: Pokemon, effect: StatusEffect) {
+  protected getStatusEffectScore(user: EnemyPokemon, target: Pokemon, effect: StatusEffect): number {
     switch (effect) {
       case StatusEffect.POISON:
         return POISONING_SYNERGY_ABILITIES.some((abId) => user.hasAbility(abId)) ? 2 : 1;
@@ -181,6 +181,9 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
           : 1;
       }
       default:
+        // This will cause a type error if more status effects are added in the future,
+        // ensuring they are not forgotten to be accounted for.
+        effect satisfies StatusEffect.NONE;
         return 0;
     }
   }
