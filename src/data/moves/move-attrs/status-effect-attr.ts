@@ -51,7 +51,7 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
   }
 
   public override canApply(user: Pokemon, target: Pokemon, move: Move, simulated: boolean = false): boolean {
-    if (user !== target && target.isSafeguarded(user)) {
+    if (user !== target && target.isSafeguarded(user, simulated)) {
       if (move.category === MoveCategory.STATUS && !simulated) {
         globalScene.phaseManager.createAndUnshiftPhase(
           "MessagePhase",
@@ -112,7 +112,7 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
    * @returns The overriding Effect Score when targeting the given ally.
    */
   private getAllyTargetScore(user: EnemyPokemon, ally: Pokemon, move: Move): number {
-    if (!move.isStatusMove() || !this.canApply(user, ally, move, true)) {
+    if (!move.isStatusMove() || ally.isSafeguarded(user)) {
       return ALLY_TARGET_PENALTY;
     }
 
@@ -141,7 +141,7 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
    * @see {@linkcode getStatusEffectScore}
    */
   public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
-    if (!this.canApply(user, target, move, true)) {
+    if (target.isSafeguarded(user)) {
       return move.isStatusMove() ? BAD_MOVE_PENALTY : 0;
     }
     return this.getStatusEffectScore(user, target, this.effect);
