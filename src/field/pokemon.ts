@@ -242,7 +242,6 @@ interface EffectiveStatOptions {
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;
-  public override name: string;
   public nickname: string;
   public species: PokemonSpecies;
   public formIndex: number;
