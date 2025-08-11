@@ -96,6 +96,13 @@ export function getRandomElementalType(): ElementalType {
   return randSeedIntRange(1, 18) as ElementalType;
 }
 
+/**
+ * @param pokemon - The {@linkcode Pokemon} with the move of interest
+ * @param moveId - The {@linkcode MoveId} to search for within the given Pokemon's moveset
+ * @param bypassSummonData - If `true`, ignores the Pokemon's temporary moveset overrides
+ * @returns The name of the given move as used by the given Pokemon, or the move's base name
+ * if a matching move isn't found within the Pokemon's moveset.
+ */
 export function getPokemonMoveName(pokemon: Pokemon, moveId: MoveId, bypassSummonData: boolean = false): string {
   return pokemon.getMove(moveId, bypassSummonData)?.name ?? allMoves.get(moveId).name;
 }
