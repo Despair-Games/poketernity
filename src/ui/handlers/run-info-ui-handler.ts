@@ -596,13 +596,8 @@ export class RunInfoUiHandler extends UiHandler {
     // Luck
     const luckValue = clamp(
       this.runInfo.party
-        .map((p) => {
-          const pokemon = p.toPokemon();
-          const luck = pokemon.getLuck();
-          pokemon.destroy();
-          return luck;
-        })
-        .reduce((total: number, value: number) => total + value, 0),
+        .map((p) => p.toPokemon().getLuck())
+        .reduce((total: number, value: number) => (total += value), 0),
       0,
       14,
     );
@@ -824,6 +819,7 @@ export class RunInfoUiHandler extends UiHandler {
         moveContainer.add(moveLabel);
         movesetContainer.add(moveContainer);
         const pokemonMove = pokemonMoveset[m];
+        // TODO: the name doesn't get the GMax prefix if the Pokemon is Gigantamaxed
         const moveName = pokemonMove?.name ?? "-";
         const moveType = pokemonMove?.getMove()?.type ?? ElementalType.UNKNOWN;
         pokemonMoveBgs[m].setFrame(enumValueToKey(ElementalType, moveType).toLowerCase());
