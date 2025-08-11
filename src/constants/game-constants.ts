@@ -27,6 +27,11 @@ export const IV_MAX = 31;
 export const DEFAULT_STARTER_IVS = 15;
 
 /**
+ * Maximum value for the cumulated luck of a team.
+ */
+export const MAX_PARTY_LUCK_VALUE = 14;
+
+/**
  * In the mainline games, dynamaxing increases HP from +50% to +100% in 5% intervals.
  * Below is a chart showing what an equivalent damage taken factor would be compared to
  * the increased HP.

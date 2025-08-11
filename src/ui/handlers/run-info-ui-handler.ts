@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { PLAYER_PARTY_MAX_SIZE } from "#constants/game-constants";
+import { MAX_PARTY_LUCK_VALUE, PLAYER_PARTY_MAX_SIZE } from "#constants/game-constants";
 import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
 import { getBiomeName } from "#data/biome-utils";
 import { getNatureName, getNatureStatMultiplier } from "#data/nature";
@@ -598,7 +598,7 @@ export class RunInfoUiHandler extends UiHandler {
     const luckText = addTextObject(windowX - 6, windowY - 4, "", TextStyle.SCORE);
     luckText.setOrigin(1, 1);
     luckText.setText(i18next.t("runHistory:luck") + ": " + getLuckString(luckValue)); // TODO: localize properly
-    if (luckValue < 14) {
+    if (luckValue < MAX_PARTY_LUCK_VALUE) {
       luckText.setTint(getLuckTextTint(luckValue));
     } else {
       luckText.setTint(0xffef5c, 0x47ff69, 0x6b6bff, 0xff6969);
