@@ -33,7 +33,7 @@ export class SelectTargetPhase extends PokemonPhase {
           .getRestrictingTag(moveId, user, firstTarget)
           ?.getSelectionDeniedText(user, moveObject.id);
 
-        const moveName = user.getMove(moveObject.id)?.name ?? allMoves.get(moveId).name;
+        const moveName = user.getPokemonMove(moveObject.id)?.name ?? allMoves.get(moveId).name;
         globalScene.phaseManager.createAndUnshiftPhase(
           "MessagePhase",
           errorMessage ?? i18next.t("battle:moveCannotBeSelected", { moveName }),

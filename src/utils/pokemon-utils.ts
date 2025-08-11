@@ -104,5 +104,5 @@ export function getRandomElementalType(): ElementalType {
  * if a matching move isn't found within the Pokemon's moveset.
  */
 export function getPokemonMoveName(pokemon: Pokemon, moveId: MoveId, bypassSummonData: boolean = false): string {
-  return pokemon.getMove(moveId, bypassSummonData)?.name ?? allMoves.get(moveId).name;
+  return pokemon.getPokemonMove(moveId, bypassSummonData)?.name ?? allMoves.get(moveId).name;
 }

@@ -46,7 +46,7 @@ export class ImprisoningTag extends BattlerTag implements RestrictingBattlerTag 
   }
 
   public getInterruptedText(pokemon: Pokemon, moveId: MoveId): string {
-    const moveName = pokemon.getMove(moveId)?.name ?? allMoves.get(moveId).name;
+    const moveName = pokemon.getPokemonMove(moveId)?.name ?? allMoves.get(moveId).name;
     return i18next.t("battle:moveDisabledImprison", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       moveName,

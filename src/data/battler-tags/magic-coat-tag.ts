@@ -40,7 +40,7 @@ export class MagicCoatTag extends BattlerTag {
   }
 
   private getReflectionMessage(attacker: Pokemon, move: Move) {
-    const moveName = attacker.getMove(move.id)?.name ?? move.name;
+    const moveName = attacker.getPokemonMove(move.id)?.name ?? move.name;
     // "{pokemonNameWithAffix}'s {moveName} was bounced back by Magic Coat!"
     return i18next.t("battlerTags:magicCoatOnApply", {
       pokemonNameWithAffix: getPokemonNameWithAffix(attacker),

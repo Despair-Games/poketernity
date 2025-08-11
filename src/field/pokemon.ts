@@ -1461,7 +1461,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
   }
 
-  public getMove(moveId: MoveId, bypassSummonData: boolean = false): PokemonMove | undefined {
+  /**
+   * Obtains the {@linkcode PokemonMove} matching the given {@linkcode MoveId} in this Pokemon's moveset.
+   * @param moveId - The {@linkcode MoveId} to search for
+   * @param bypassSummonData - If `true`, ignores any temporary moveset overrides.
+   * @returns The matching {@linkcode PokemonMove}, or `undefined` if no matching move is found.
+   */
+  public getPokemonMove(moveId: MoveId, bypassSummonData: boolean = false): PokemonMove | undefined {
     return this.getMoveset(bypassSummonData).find((mv) => mv.moveId === moveId);
   }
 

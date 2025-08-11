@@ -11,7 +11,7 @@ import { BooleanHolder } from "#utils/common-utils";
  */
 export const failIfDampCondition: MoveConditionFunc = (user, _target, move) => {
   const cancelled = new BooleanHolder(false);
-  const moveName = user.getMove(move.id)?.name ?? move.name;
+  const moveName = user.getPokemonMove(move.id)?.name ?? move.name;
   globalScene
     .getField(true)
     .map((p) =>
