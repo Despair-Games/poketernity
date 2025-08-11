@@ -237,7 +237,7 @@ export class EncounterPhase extends BattlePhase {
       loadEnemyAssets.push(
         new Promise<void>((resolve) => {
           globalScene.loadSe("GEN8- Exclaim", "battle_anims", "GEN8- Exclaim.wav");
-          globalScene.loadImage("encounter_exclaim", ImagesFolder.BATTLE_ANIMS);
+          globalScene.loadImage("encounter_exclaim", ImagesFolder.ME);
           load.once(Phaser.Loader.Events.COMPLETE, () => resolve());
           if (!load.isLoading()) {
             load.start();

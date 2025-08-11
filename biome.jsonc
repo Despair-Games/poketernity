@@ -106,7 +106,8 @@
           "options": {
             "accessibility": "explicit"
           }
-        }
+        },
+        "useShorthandAssign": "error"
       },
       "suspicious": {
         "noDoubleEquals": "error",

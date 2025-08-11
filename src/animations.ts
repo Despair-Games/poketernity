@@ -396,7 +396,7 @@ export class Animation {
       }
       particle.x = x + this.sin(trigIndex, f * xSpeed);
       particle.y = y + this.cos(trigIndex, f * ySpeed);
-      trigIndex = trigIndex + angle;
+      trigIndex += angle;
       f++;
     };
 
