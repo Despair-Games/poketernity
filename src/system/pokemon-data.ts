@@ -166,11 +166,16 @@ export class PokemonData implements PokemonOptions {
     // #endregion
   }
 
-  toPokemon(battleType?: BattleType, partyMemberIndex: number = 0, double: boolean = false): Pokemon {
+  toPokemon(
+    skipInit: boolean = false,
+    battleType?: BattleType,
+    partyMemberIndex: number = 0,
+    double: boolean = false,
+  ): Pokemon {
     const species = getPokemonSpecies(this.speciesId);
     let ret: Pokemon;
     if (this.player) {
-      ret = globalScene.addPlayerPokemon(species, this.level, this, (playerPokemon) => {
+      ret = globalScene.addPlayerPokemon(species, this.level, this, skipInit, (playerPokemon) => {
         if (this.nickname) {
           playerPokemon.nickname = this.nickname;
         }
@@ -184,7 +189,7 @@ export class PokemonData implements PokemonOptions {
           trainerSlot = TrainerSlot.TRAINER_PARTNER;
         }
       }
-      ret = globalScene.addEnemyPokemon(species, this.level, { ...this, trainerSlot });
+      ret = globalScene.addEnemyPokemon(species, this.level, { ...this, trainerSlot }, skipInit);
     }
     ret.primeSummonData(this.summonData);
     return ret;

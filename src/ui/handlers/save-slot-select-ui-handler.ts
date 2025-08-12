@@ -392,7 +392,7 @@ class SessionSlot extends Phaser.GameObjects.Container {
       const iconContainer = globalScene.add.container(26 * i, 0);
       iconContainer.setScale(0.75);
 
-      const pokemon = p.toPokemon();
+      const pokemon = p.toPokemon(); // todo: can we skip init here?
       const icon = globalScene.addPokemonIcon(pokemon, 0, 0, 0, 0);
 
       const text = addTextObject(32, 20, getPokemonLevelText(pokemon), TextStyle.POKEMON_LEVEL);

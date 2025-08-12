@@ -305,7 +305,7 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
           enemyIconContainer.setScale(0.75);
           enemyData.boss = false;
           enemyData["player"] = true;
-          const enemy = enemyData.toPokemon();
+          const enemy = enemyData.toPokemon(true);
           const enemyIcon = globalScene.addPokemonIcon(enemy, 0, 0, 0, 0);
           const enemyLevel = addTextObject(32, 20, getPokemonLevelText(enemy), TextStyle.POKEMON_LEVEL);
           enemyLevel.setOrigin(1, 0);
@@ -379,7 +379,7 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
     data.party.forEach((p: PokemonData, i: number) => {
       const iconContainer = globalScene.add.container(26 * i, 0);
       iconContainer.setScale(0.75);
-      const pokemon = p.toPokemon();
+      const pokemon = p.toPokemon(true);
       const icon = globalScene.addPokemonIcon(pokemon, 0, 0, 0, 0);
 
       const text = addTextObject(32, 20, getPokemonLevelText(pokemon), TextStyle.POKEMON_LEVEL);

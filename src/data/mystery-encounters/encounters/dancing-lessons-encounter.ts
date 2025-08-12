@@ -263,7 +263,7 @@ export const DancingLessonsEncounter: MysteryEncounter = MysteryEncounterBuilder
       .withOptionPhase(async () => {
         // Show the Oricorio a dance, and recruit it
         const encounter = globalScene.currentBattle.mysteryEncounter!;
-        const oricorio = encounter.misc.oricorioData.toPokemon() as EnemyPokemon;
+        const oricorio = encounter.misc.oricorioData.toPokemon() as EnemyPokemon; // todo: can we skip init here?
         const moveset = oricorio.getMoveset(true);
         oricorio.passive = true;
 

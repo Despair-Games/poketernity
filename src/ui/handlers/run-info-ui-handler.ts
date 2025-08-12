@@ -399,7 +399,7 @@ export class RunInfoUiHandler extends UiHandler {
     enemyData.boss = false;
     enemyData["player"] = true;
     //addPokemonIcon() throws an error if the Pokemon used is a boss
-    const enemy = enemyData.toPokemon();
+    const enemy = enemyData.toPokemon(true);
     const enemyIcon = globalScene.addPokemonIcon(enemy, 0, 0, 0, 0);
     const enemyLevelStyle = isBoss ? TextStyle.BOSS_POKEMON_LEVEL_SMALL : TextStyle.POKEMON_LEVEL_SMALL;
     const enemyLevel = addTextObject(36, 26, getPokemonLevelText(enemy), enemyLevelStyle);
@@ -422,7 +422,7 @@ export class RunInfoUiHandler extends UiHandler {
       const isBoss = enemyData.boss;
       enemyData.boss = false;
       enemyData["player"] = true;
-      const enemy = enemyData.toPokemon();
+      const enemy = enemyData.toPokemon(true);
       const enemyIcon = globalScene.addPokemonIcon(enemy, 0, 0, 0, 0);
       const enemyLevelStyle = isBoss ? TextStyle.BOSS_POKEMON_LEVEL_SMALL : TextStyle.POKEMON_LEVEL_SMALL;
       const enemyLevel = addTextObject(36, 26, getPokemonLevelText(enemy), enemyLevelStyle);
@@ -511,7 +511,7 @@ export class RunInfoUiHandler extends UiHandler {
       const isBoss = enemyData.boss;
       enemyData.boss = false;
       enemyData["player"] = true;
-      const enemy = enemyData.toPokemon();
+      const enemy = enemyData.toPokemon(true);
       const enemyIcon = globalScene.addPokemonIcon(enemy, 0, 0, 0, 0);
 
       // Applying Terastallizing Type tint to Pokemon icon
@@ -696,7 +696,7 @@ export class RunInfoUiHandler extends UiHandler {
     party.forEach((pokemonData: PokemonData, index: number) => {
       const pokemonInfoWindow = new RoundRectangle(globalScene, 0, 14, this.statsBgWidth * 2 + 10, windowHeight - 2, 3);
 
-      const pokemon = pokemonData.toPokemon();
+      const pokemon = pokemonData.toPokemon(true);
       const pokemonInfoContainer = globalScene.add.container(this.statsBgWidth + 5, (windowHeight - 0.5) * index);
 
       const types = pokemon.getTypes();
@@ -944,7 +944,7 @@ export class RunInfoUiHandler extends UiHandler {
     hallofFameText.setPosition(GAME_WIDTH / 2, GAME_HEIGHT - 16);
     this.hallofFameContainer.add(hallofFameText);
     this.runInfo.party.forEach((p, i) => {
-      const pkmn = p.toPokemon();
+      const pkmn = p.toPokemon(true); // is skipping init correct in the case of hall of fame?
       const row = i % 2;
       const id = pkmn.id;
       const shiny = pkmn.shiny;

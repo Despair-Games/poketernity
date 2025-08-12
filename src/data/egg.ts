@@ -257,10 +257,11 @@ export class Egg {
           abilityIndex = 2;
         }
 
+        // Todo: why force shiny to false rather than set it to this._isShiny (along with variant)?
         ret = globalScene.addPlayerPokemon(pokemonSpecies, 1, {
           abilityIndex,
           shiny: false,
-        });
+        }); // TODO skip init?
         ret.shiny = this._isShiny;
         ret.variant = this._variantTier;
 

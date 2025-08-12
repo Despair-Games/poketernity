@@ -381,7 +381,7 @@ function getTeamTransformations(): PokemonTransformation[] {
       transformation.newSpecies,
       transformation.previousPokemon.level,
       { abilityIndex },
-    );
+    ); // TODO: can we skip init?
   }
 
   return pokemonTransformations;

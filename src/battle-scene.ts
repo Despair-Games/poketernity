@@ -915,6 +915,7 @@ export class BattleScene extends SceneBase {
     species: PokemonSpecies,
     level: number,
     options: PokemonOptions | Pokemon = {},
+    skipInit: boolean = false,
     postProcess?: (playerPokemon: PlayerPokemon) => void,
   ): PlayerPokemon {
     const pokemon = new PlayerPokemon(species, level, options);
@@ -922,7 +923,9 @@ export class BattleScene extends SceneBase {
       postProcess(pokemon);
     }
 
-    pokemon.init();
+    if (!skipInit) {
+      pokemon.init();
+    }
     return pokemon;
   }
 
@@ -930,6 +933,7 @@ export class BattleScene extends SceneBase {
     species: PokemonSpecies,
     level: number,
     options: EnemyPokemonOptions | Pokemon = {},
+    skipInit: boolean = false,
     postProcess?: (enemyPokemon: EnemyPokemon) => void,
   ): EnemyPokemon {
     const pokemon = new EnemyPokemon(species, level, options);
@@ -955,7 +959,9 @@ export class BattleScene extends SceneBase {
       postProcess(pokemon);
     }
 
+  if (!skipInit) {
     pokemon.init();
+  }
     return pokemon;
   }
 

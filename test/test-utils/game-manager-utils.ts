@@ -35,13 +35,13 @@ export function generateStarter(scene: BattleScene, species: SpeciesId[]): Start
   const starters = getTestRunStarters(species);
   const startingLevel = scene.gameMode.getStartingLevel();
   if (species.length > 6) {
-    console.warn("Don't pass more than 6 starters to `runToSummon` or `startBattle`! Recieved length:", species.length);
+    console.warn("Don't pass more than 6 starters to `runToSummon` or `startBattle`! Received length:", species.length);
     species.splice(6);
   }
   for (const starter of starters) {
-    const { abilityIndex, nature } = starter;
     const starterProps = scene.gameData.getSpeciesDexAttrProps(starter.species, starter.dexAttr);
     const formIndex = Math.min(starterProps.formIndex, Math.max(starter.species.forms.length - 1, 0));
+    const { abilityIndex, nature } = starter;
     const { gender, shiny, variant } = starterProps;
     const starterPokemon = scene.addPlayerPokemon(starter.species, startingLevel, {
       abilityIndex,
@@ -50,7 +50,7 @@ export function generateStarter(scene: BattleScene, species: SpeciesId[]): Start
       shiny,
       variant,
       nature,
-    });
+    }, true);
     const moveset: MoveId[] = [];
     for (const move of starterPokemon.getMoveset(true)) {
       moveset.push(move.getMove().id);
@@ -96,10 +96,10 @@ export function getMovePosition(scene: BattleScene, pokemonIndex: 0 | 1, moveId:
 export function initSceneWithoutEncounterPhase(scene: BattleScene, species: SpeciesId[]): void {
   const starters = generateStarter(scene, species);
   starters.forEach((starter) => {
-    const { abilityIndex, nature } = starter;
     const starterProps = scene.gameData.getSpeciesDexAttrProps(starter.species, starter.dexAttr);
     const formIndex = Math.min(starterProps.formIndex, Math.max(starter.species.forms.length - 1, 0));
     const { shiny, variant } = starterProps;
+    const { abilityIndex, nature } = starter;
     const starterSpeciesId = starter.species.getRootSpeciesId(true);
     const ivs = scene.gameData.starterData[starterSpeciesId].ivs.slice(0);
     const starterPokemon = scene.addPlayerPokemon(starter.species, scene.gameMode.getStartingLevel(), {
@@ -110,7 +110,7 @@ export function initSceneWithoutEncounterPhase(scene: BattleScene, species: Spec
       variant,
       ivs,
       nature,
-    });
+    }, true);
     starter.moveset && starterPokemon.tryPopulateMoveset(starter.moveset);
     scene.getPlayerParty().push(starterPokemon);
   });

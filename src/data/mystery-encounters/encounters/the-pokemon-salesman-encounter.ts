@@ -159,6 +159,7 @@ export const ThePokemonSalesmanEncounter: MysteryEncounter = MysteryEncounterBui
         // "Catch" purchased pokemon
         const data = new PokemonData(purchasedPokemon);
         data.player = false;
+        // TODO: should the toPokemon result be destroyed here? | can we skip init here?
         await catchPokemon(data.toPokemon() as EnemyPokemon, null, PokeballType.POKEBALL, true, true);
 
         leaveEncounterWithoutBattle(true);

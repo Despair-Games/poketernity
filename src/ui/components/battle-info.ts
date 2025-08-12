@@ -84,6 +84,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
 
   constructor(x: number, y: number, player: boolean) {
     super(globalScene, x, y);
+    console.log("create battle info");
     this.type = "BattleInfo";
     this.baseY = y;
     this.player = player;
@@ -321,6 +322,11 @@ export class BattleInfo extends Phaser.GameObjects.Container {
     }
   }
 
+  override destroy(fromScene?: boolean): void {
+    console.log("destroy battle info - before delayed call");
+    globalScene.time.delayedCall(1500, () => super.destroy(fromScene));
+  }
+
   getStatsValueContainer(): Phaser.GameObjects.Container {
     return this.statValuesContainer;
   }
@@ -331,6 +337,8 @@ export class BattleInfo extends Phaser.GameObjects.Container {
 
     this.name = pokemon.getNameToRender();
     this.box.name = pokemon.getNameToRender();
+
+    console.log("init battle info", this.name);
 
     this.flyoutMenu?.initInfo(pokemon);
 
@@ -343,7 +351,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
     this.teraIcon.setPositionRelative(this.nameText, nameTextWidth + this.genderText.displayWidth + 1, 2);
     this.teraIcon.setVisible(pokemon.isTerastallized);
     this.teraIcon.setTintFill(Phaser.Display.Color.GetColor(...getTypeRgb(this.lastTeraType)));
-    this.teraIcon.on("pointerover", () => {
+    /*this.teraIcon.on("pointerover", () => {
       if (pokemon.isTerastallized) {
         globalScene.ui.showTooltip(
           "",
@@ -353,7 +361,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
         );
       }
     });
-    this.teraIcon.on("pointerout", () => globalScene.ui.hideTooltip());
+    this.teraIcon.on("pointerout", () => globalScene.ui.hideTooltip());*/
 
     const baseVariant = pokemon.getVariant();
 
@@ -362,7 +370,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
       nameTextWidth + this.genderText.displayWidth + 1 + (this.teraIcon.visible ? this.teraIcon.displayWidth + 1 : 0),
       2.5,
     );
-    this.shinyIcon.setTexture("shiny_star");
+    //this.shinyIcon.setTexture("shiny_star");
     this.shinyIcon.setVisible(pokemon.isShiny());
     this.shinyIcon.setTint(getVariantTint(baseVariant));
     if (this.shinyIcon.visible) {
