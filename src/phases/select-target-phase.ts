@@ -5,6 +5,7 @@ import { MoveId } from "#enums/move-id";
 import { UiMode } from "#enums/ui-mode";
 import { PokemonPhase } from "#phases/base/pokemon-phase";
 import type { TargetSelectUiHandler } from "#ui/target-select-ui-handler";
+import { getPokemonMoveName } from "#utils/pokemon-utils";
 import i18next from "i18next";
 
 export class SelectTargetPhase extends PokemonPhase {
@@ -33,9 +34,10 @@ export class SelectTargetPhase extends PokemonPhase {
           .getRestrictingTag(moveId, user, firstTarget)
           ?.getSelectionDeniedText(user, moveObject.id);
 
+        const moveName = getPokemonMoveName(user, moveId);
         globalScene.phaseManager.createAndUnshiftPhase(
           "MessagePhase",
-          errorMessage ?? i18next.t("battle:moveCannotBeSelected", { moveName: allMoves.get(moveId).name }),
+          errorMessage ?? i18next.t("battle:moveCannotBeSelected", { moveName }),
           0,
           true,
         );

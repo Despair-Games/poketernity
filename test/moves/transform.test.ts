@@ -102,8 +102,8 @@ describe("Moves - Transform", () => {
     await game.phaseInterceptor.to("PostActionPhase");
 
     const moveset = player.getMoveset();
-    const playerMovesetNames = moveset.map((m) => m.getName());
-    const enemyMovesetNames = enemy.getMoveset().map((m) => m.getName());
+    const playerMovesetNames = moveset.map((m) => m.name);
+    const enemyMovesetNames = enemy.getMoveset().map((m) => m.name);
     expect(moveset, `Player moveset: ${playerMovesetNames} | Enemy moveset: ${enemyMovesetNames}`).toHaveLength(4);
 
     for (const move of moveset) {

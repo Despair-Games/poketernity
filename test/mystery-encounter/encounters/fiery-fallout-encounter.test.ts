@@ -169,7 +169,7 @@ describe("Fiery Fallout - Mystery Encounter", () => {
 
       const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is("MovePhase")).map((p) => p[0]);
       expect(movePhases.length).toBe(2);
-      expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.FIRE_SPIN).length).toBe(2); // Fire spin used twice before battle
+      expect(movePhases.filter((p) => (p as MovePhase).pokemonMove.moveId === MoveId.FIRE_SPIN).length).toBe(2); // Fire spin used twice before battle
     });
 
     it("should give attack type boosting item to lead pokemon", async () => {

@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
+import { allMoves } from "#data/data-lists";
 import type { MoveId } from "#enums/move-id";
 import type { PlayerPokemon } from "#field/player-pokemon";
-import { PokemonMove } from "#field/pokemon-move";
 import { EncounterPokemonRequirement } from "#mystery-encounters/mystery-encounter-requirements";
 import { coerceArray, isNil } from "#utils/common-utils";
 
@@ -66,7 +66,7 @@ export class CanLearnMoveRequirement extends EncounterPokemonRequirement {
   }
 
   override getDialogueToken(__pokemon?: PlayerPokemon): [string, string] {
-    return ["requiredMoves", this.requiredMoves.map((m) => new PokemonMove(m).getName()).join(", ")];
+    return ["requiredMoves", this.requiredMoves.map((m) => allMoves.get(m).name).join(", ")];
   }
 
   private getPokemonLevelMoves(pkm: PlayerPokemon): MoveId[] {

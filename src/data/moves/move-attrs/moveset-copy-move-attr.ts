@@ -29,7 +29,7 @@ export class MovesetCopyMoveAttr extends OverrideMoveEffectAttr {
     }
 
     user.summonData.moveset = user.getMoveset().slice(0);
-    user.summonData.moveset[thisMoveIndex] = new PokemonMove(copiedMove.move.id, 0, 0);
+    user.summonData.moveset[thisMoveIndex] = new PokemonMove(copiedMove.move.id, { pokemonId: user.id });
 
     globalScene.phaseManager.createAndUnshiftPhase(
       "MessagePhase",

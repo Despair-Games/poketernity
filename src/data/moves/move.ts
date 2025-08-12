@@ -125,7 +125,9 @@ export abstract class Move {
    * Used to localize the move's {@linkcode name} and {@linkcode effect}.
    */
   private get i18nKey(): string {
-    return toCamelCaseString(MoveId[this.id]);
+    const moveKey = MoveId[this.id];
+    const gMaxPrefix = "G_MAX_";
+    return toCamelCaseString(moveKey.replace(gMaxPrefix, ""));
   }
 
   get type() {

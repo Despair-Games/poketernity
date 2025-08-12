@@ -4,7 +4,8 @@ import type { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
-import { coerceArray } from "#utils/common-utils";
+import { coerceArray, isNil } from "#utils/common-utils";
+import { getPokemonMoveName } from "#utils/pokemon-utils";
 
 /**
  * Represents an ongoing in-battle effect associated with a {@linkcode Pokemon}.
@@ -138,9 +139,19 @@ export class BattlerTag {
     return false;
   }
 
-  /** @returns the localized name of the move that created this tag */
-  getMoveName(): string | null {
-    return this.sourceMoveId ? allMoves.get(this.sourceMoveId).name : null;
+  /**
+   * @returns the localized name of the move that created this tag
+   */
+  getMoveName(): string | undefined {
+    if (!this.sourceMoveId) {
+      return undefined;
+    }
+
+    const pokemon = this.getSourcePokemon();
+    if (isNil(pokemon)) {
+      return allMoves.get(this.sourceMoveId).name;
+    }
+    return getPokemonMoveName(pokemon, this.sourceMoveId);
   }
 
   /**

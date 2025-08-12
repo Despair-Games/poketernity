@@ -140,7 +140,7 @@ describe("Absolute Avarice - Mystery Encounter", () => {
 
       const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is("MovePhase")).map((p) => p[0]);
       expect(movePhases.length).toBe(1);
-      expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.STUFF_CHEEKS).length).toBe(1); // Stuff Cheeks used before battle
+      expect(movePhases.filter((p) => (p as MovePhase).pokemonMove.moveId === MoveId.STUFF_CHEEKS).length).toBe(1); // Stuff Cheeks used before battle
     });
 
     it("should give reviver seed to each pokemon after battle", async () => {
