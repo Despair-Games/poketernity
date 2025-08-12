@@ -206,7 +206,7 @@ export class RunInfoUiHandler extends UiHandler {
    */
   private async parseRunResult() {
     const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
-    const genderStr = enumValueToKey(PlayerGender, genderIndex);
+    const genderStr = enumValueToKey(PlayerGender, genderIndex).toLowerCase();
     const runResultTextStyle = this.isVictory ? TextStyle.RUN_HISTORY_VICTORY : TextStyle.RUN_HISTORY_DEFEAT;
     const runResultTitle = this.isVictory
       ? i18next.t("runHistory:victory")
