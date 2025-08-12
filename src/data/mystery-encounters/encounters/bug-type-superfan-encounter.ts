@@ -724,7 +724,7 @@ function doBugTypeMoveTutor(): Promise<void> {
 
     const optionSelectItems = moveOptions.map((move: PokemonMove) => {
       const option: OptionSelectItem = {
-        label: move.getName(),
+        label: move.name,
         handler: () => {
           moveInfoOverlay.active = false;
           moveInfoOverlay.setVisible(false);

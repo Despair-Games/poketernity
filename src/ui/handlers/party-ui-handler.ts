@@ -970,9 +970,9 @@ export class PartyUiHandler extends MessageUiHandler {
             if (this.showMovePp) {
               const maxPP = move.getMovePp();
               const currPP = maxPP - move.ppUsed;
-              optionName = `${move.getName()} ${currPP}/${maxPP}`;
+              optionName = `${move.name} ${currPP}/${maxPP}`;
             } else {
-              optionName = move.getName();
+              optionName = move.name;
             }
             break;
           }

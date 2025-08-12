@@ -33,6 +33,7 @@ export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
     if (move && attacker && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)) {
       //If the mon didn't die to indirect damage
       const cancelled = new BooleanHolder(false);
+      const moveName = pokemon.getPokemonMove(move.id)?.name ?? move.name;
       globalScene
         .getField(true)
         .map((p) =>
@@ -42,7 +43,7 @@ export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
             simulated,
             cancelled,
             getPokemonNameWithAffix(attacker),
-            move.name,
+            moveName,
           ),
         );
 

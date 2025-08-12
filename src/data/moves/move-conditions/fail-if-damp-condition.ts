@@ -11,6 +11,7 @@ import { BooleanHolder } from "#utils/common-utils";
  */
 export const failIfDampCondition: MoveConditionFunc = (user, _target, move) => {
   const cancelled = new BooleanHolder(false);
+  const moveName = user.getPokemonMove(move.id)?.name ?? move.name;
   globalScene
     .getField(true)
     .map((p) =>
@@ -20,7 +21,7 @@ export const failIfDampCondition: MoveConditionFunc = (user, _target, move) => {
         false,
         cancelled,
         getPokemonNameWithAffix(user),
-        move.name,
+        moveName,
       ),
     );
   return !cancelled.value;

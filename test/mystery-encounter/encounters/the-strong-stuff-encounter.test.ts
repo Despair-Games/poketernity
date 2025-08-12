@@ -11,7 +11,6 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Nature } from "#enums/nature";
 import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
-import { PokemonMove } from "#field/pokemon-move";
 import * as InitMoveAnim from "#init/init-move-anim";
 import { PokemonBaseStatTotalModifier } from "#modifier/modifier";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
@@ -193,30 +192,29 @@ describe("The Strong Stuff - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.THE_STRONG_STUFF, defaultParty);
       await runMysteryEncounterToEnd(game, 2, undefined, true);
 
-      const enemyField = scene.getEnemyField();
+      const enemy = game.field.getEnemyPokemon();
       expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
-      expect(enemyField.length).toBe(1);
-      expect(enemyField[0].species.speciesId).toBe(SpeciesId.SHUCKLE);
-      expect(enemyField[0].summonData.statStages).toEqual([0, 2, 0, 2, 0, 0, 0]);
-      const shuckleItems = enemyField[0].getHeldItems();
+      expect(enemy.species.speciesId).toBe(SpeciesId.SHUCKLE);
+      expect(enemy.summonData.statStages).toEqual([0, 2, 0, 2, 0, 0, 0]);
+      const shuckleItems = enemy.getHeldItems();
       expect(shuckleItems.length).toBe(5);
       expect(shuckleItems.find((m) => m.isBerryModifier() && m.berryType === BerryType.SITRUS)?.stackCount).toBe(1);
       expect(shuckleItems.find((m) => m.isBerryModifier() && m.berryType === BerryType.ENIGMA)?.stackCount).toBe(1);
       expect(shuckleItems.find((m) => m.isBerryModifier() && m.berryType === BerryType.GANLON)?.stackCount).toBe(1);
       expect(shuckleItems.find((m) => m.isBerryModifier() && m.berryType === BerryType.APICOT)?.stackCount).toBe(1);
       expect(shuckleItems.find((m) => m.isBerryModifier() && m.berryType === BerryType.LUM)?.stackCount).toBe(2);
-      expect(enemyField[0].getMoveset(true)).toEqual([
-        new PokemonMove(MoveId.INFESTATION),
-        new PokemonMove(MoveId.SALT_CURE),
-        new PokemonMove(MoveId.GASTRO_ACID),
-        new PokemonMove(MoveId.HEAL_ORDER),
+      expect(enemy.getMoveset(true).map((m) => m.moveId)).toEqual([
+        MoveId.INFESTATION,
+        MoveId.SALT_CURE,
+        MoveId.GASTRO_ACID,
+        MoveId.HEAL_ORDER,
       ]);
 
       // Should have used moves pre-battle
       const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is("MovePhase")).map((p) => p[0]);
       expect(movePhases.length).toBe(2);
-      expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.GASTRO_ACID).length).toBe(1);
-      expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.STEALTH_ROCK).length).toBe(1);
+      expect(movePhases.filter((p) => (p as MovePhase).pokemonMove.moveId === MoveId.GASTRO_ACID).length).toBe(1);
+      expect(movePhases.filter((p) => (p as MovePhase).pokemonMove.moveId === MoveId.STEALTH_ROCK).length).toBe(1);
     });
 
     it("should have Soul Dew in rewards", async () => {

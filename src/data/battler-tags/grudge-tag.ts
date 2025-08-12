@@ -43,7 +43,7 @@ export class GrudgeTag extends BattlerTag {
             "MessagePhase",
             i18next.t("battlerTags:grudgeLapse", {
               pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-              moveName: lastMoveData.getName(),
+              moveName: lastMoveData.name,
             }),
           );
         }

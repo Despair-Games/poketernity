@@ -45,7 +45,7 @@ export class PowderTag extends BattlerTag {
     if (lapseType === BattlerTagLapseType.PRE_MOVE) {
       const currPhase = globalScene.phaseManager.getCurrentPhase();
       if (currPhase?.is("MovePhase")) {
-        const move = currPhase.move.getMove();
+        const move = currPhase.pokemonMove.getMove();
         const weather = globalScene.arena.weather;
         if (
           pokemon.getMoveType(move) === ElementalType.FIRE
@@ -71,7 +71,7 @@ export class PowderTag extends BattlerTag {
           // "When the flame touched the powder\non the Pokémon, it exploded!"
           globalScene.phaseManager.createAndUnshiftPhase(
             "MessagePhase",
-            i18next.t("battlerTags:powderLapse", { moveName: move.name }),
+            i18next.t("battlerTags:powderLapse", { moveName: currPhase.pokemonMove.name }),
           );
         }
       }

@@ -46,7 +46,7 @@ describe("Abilities - Unaware", () => {
     for (const stat of EFFECTIVE_STATS) {
       let expectedStat = enemyPokemon.getStat(stat);
       if (stat === Stat.SPD) {
-        expectedStat = expectedStat * 2; // Should not ignore stat stages in Speed
+        expectedStat *= 2; // Should not ignore stat stages in Speed
       }
 
       const actualStat = enemyPokemon.getEffectiveStat(stat, { opponent: playerPokemon });
@@ -66,7 +66,7 @@ describe("Abilities - Unaware", () => {
     for (const stat of EFFECTIVE_STATS) {
       let expectedStat = playerPokemon.getStat(stat);
       if ([Stat.ATK, Stat.SPATK, Stat.SPD].includes(stat)) {
-        expectedStat = expectedStat * 2;
+        expectedStat *= 2;
       } else if ([Stat.DEF, Stat.SPDEF].includes(stat)) {
         expectedStat = Math.floor(expectedStat * (2 / 3));
       }

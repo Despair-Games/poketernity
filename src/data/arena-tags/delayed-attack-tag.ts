@@ -47,15 +47,19 @@ export class DelayedAttackTag extends ArenaTag {
   override lapse(): boolean {
     this.delayedAttacks.forEach((attack) => {
       attack.turnCount--;
+      const attacker = globalScene.getPokemonById(attack.sourceId);
 
-      if (!isNil(globalScene.getPokemonById(attack.sourceId)) && attack.turnCount <= 0) {
+      if (!isNil(attacker) && attack.turnCount <= 0) {
         const target = globalScene.getField(true).find((p) => attack.targetIndex === p.getBattlerIndex());
         if (target) {
           globalScene.phaseManager.createAndUnshiftPhase(
             "MoveEffectPhase",
             attack.sourceId,
             [attack.targetIndex],
-            new PokemonMove(attack.moveId, 0, 0, true),
+            new PokemonMove(attack.moveId, {
+              pokemonId: attacker.id,
+              virtual: true,
+            }),
           );
         } else if (globalScene.currentBattle.double) {
           const redirectIndex = attack.targetIndex + (attack.targetIndex % 2 === 0 ? 1 : -1);
@@ -63,7 +67,10 @@ export class DelayedAttackTag extends ArenaTag {
             "MoveEffectPhase",
             attack.sourceId,
             [redirectIndex],
-            new PokemonMove(attack.moveId, 0, 0, true),
+            new PokemonMove(attack.moveId, {
+              pokemonId: attacker.id,
+              virtual: true,
+            }),
           );
         }
       }

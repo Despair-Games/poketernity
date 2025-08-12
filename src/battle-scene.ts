@@ -3002,9 +3002,9 @@ export class BattleScene extends SceneBase {
     // Adjust tier weights by previously encountered events to lower odds of only Common/Great in run
     this.mysteryEncounterSaveData.encounteredEvents.forEach((seenEncounterData) => {
       if (seenEncounterData.tier === MysteryEncounterTier.COMMON) {
-        tierWeights[0] = tierWeights[0] - 6;
+        tierWeights[0] -= 6;
       } else if (seenEncounterData.tier === MysteryEncounterTier.GREAT) {
-        tierWeights[1] = tierWeights[1] - 4;
+        tierWeights[1] -= 4;
       }
     });
 

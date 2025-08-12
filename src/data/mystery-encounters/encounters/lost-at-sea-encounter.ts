@@ -46,8 +46,8 @@ export const LostAtSeaEncounter: MysteryEncounter = MysteryEncounterBuilder.with
     const encounter = globalScene.currentBattle.mysteryEncounter!;
 
     encounter.setDialogueToken("damagePercentage", String(DAMAGE_PERCENTAGE));
-    encounter.setDialogueToken("option1RequiredMove", new PokemonMove(OPTION_1_REQUIRED_MOVE).getName());
-    encounter.setDialogueToken("option2RequiredMove", new PokemonMove(OPTION_2_REQUIRED_MOVE).getName());
+    encounter.setDialogueToken("option1RequiredMove", new PokemonMove(OPTION_1_REQUIRED_MOVE).name);
+    encounter.setDialogueToken("option2RequiredMove", new PokemonMove(OPTION_2_REQUIRED_MOVE).name);
 
     return true;
   })
