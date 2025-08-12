@@ -720,28 +720,6 @@ export class BattleScene extends SceneBase {
             starterColors[key] = sc[key];
           });
 
-          /*const loadPokemonAssets: Promise<void>[] = [];
-
-                for (let s of Object.keys(speciesStarters)) {
-                    const species = getPokemonSpecies(parseInt(s));
-                    loadPokemonAssets.push(species.loadAssets(this, false, 0, false));
-                }
-
-                Promise.all(loadPokemonAssets).then(() => {
-                    const starterCandyColors = {};
-                    const rgbaToHexFunc = (r, g, b) => [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
-
-                    for (let s of Object.keys(speciesStarters)) {
-                        const species = getPokemonSpecies(parseInt(s));
-
-                        starterCandyColors[species.speciesId] = species.generateCandyColors(this).map(c => rgbaToHexFunc(c[0], c[1], c[2]));
-                    }
-
-                    console.log(JSON.stringify(starterCandyColors));
-
-                    resolve();
-                });*/
-
           resolve();
         });
     });
@@ -3024,9 +3002,9 @@ export class BattleScene extends SceneBase {
     // Adjust tier weights by previously encountered events to lower odds of only Common/Great in run
     this.mysteryEncounterSaveData.encounteredEvents.forEach((seenEncounterData) => {
       if (seenEncounterData.tier === MysteryEncounterTier.COMMON) {
-        tierWeights[0] = tierWeights[0] - 6;
+        tierWeights[0] -= 6;
       } else if (seenEncounterData.tier === MysteryEncounterTier.GREAT) {
-        tierWeights[1] = tierWeights[1] - 4;
+        tierWeights[1] -= 4;
       }
     });
 

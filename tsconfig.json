@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     // Modifying this option requires all values to be set manually because the defaults get overridden
-    // Values other than "ES2022.Object" taken from https://github.com/microsoft/TypeScript/blob/main/src/lib/es2020.full.d.ts
-    "lib": ["ES2020", "ES2022.Object", "DOM", "DOM.AsyncIterable", "DOM.Iterable", "ScriptHost", "WebWorker.ImportScripts"],
-    "target": "ES2020",
+    // Values other than "ES2024.Promise" taken from https://github.com/microsoft/TypeScript/blob/main/src/lib/es2023.full.d.ts
+    "lib": ["ES2023", "ES2024.Promise", "DOM", "DOM.AsyncIterable", "DOM.Iterable", "ScriptHost", "WebWorker.ImportScripts"],
+    "target": "ES2023",
     "module": "ES2022",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,

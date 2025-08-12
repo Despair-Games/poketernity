@@ -159,29 +159,24 @@ export class EnemyPokemon extends Pokemon {
   override generateAndPopulateMoveset(formIndex?: number): void {
     switch (this.species.speciesId) {
       case SpeciesId.SMEARGLE:
-        this.moveset = [
-          new PokemonMove(MoveId.SKETCH),
-          new PokemonMove(MoveId.SKETCH),
-          new PokemonMove(MoveId.SKETCH),
-          new PokemonMove(MoveId.SKETCH),
-        ];
+        this.setMoveset(...Array(4).fill(MoveId.SKETCH));
         break;
       case SpeciesId.ETERNATUS:
         this.moveset = (formIndex !== undefined ? formIndex : this.formIndex)
           ? [
-              new PokemonMove(MoveId.DYNAMAX_CANNON),
-              new PokemonMove(MoveId.CROSS_POISON),
-              new PokemonMove(MoveId.FLAMETHROWER),
-              new PokemonMove(MoveId.RECOVER, 0, -4),
+              new PokemonMove(MoveId.DYNAMAX_CANNON, { pokemonId: this.id }),
+              new PokemonMove(MoveId.CROSS_POISON, { pokemonId: this.id }),
+              new PokemonMove(MoveId.FLAMETHROWER, { pokemonId: this.id }),
+              new PokemonMove(MoveId.RECOVER, { pokemonId: this.id, ppUp: -4 }),
             ]
           : [
-              new PokemonMove(MoveId.ETERNABEAM),
-              new PokemonMove(MoveId.SLUDGE_BOMB),
-              new PokemonMove(MoveId.FLAMETHROWER),
-              new PokemonMove(MoveId.COSMIC_POWER),
+              new PokemonMove(MoveId.ETERNABEAM, { pokemonId: this.id }),
+              new PokemonMove(MoveId.SLUDGE_BOMB, { pokemonId: this.id }),
+              new PokemonMove(MoveId.FLAMETHROWER, { pokemonId: this.id }),
+              new PokemonMove(MoveId.COSMIC_POWER, { pokemonId: this.id }),
             ];
         if (globalScene.gameMode.hasChallenge(Challenges.INVERSE_BATTLE)) {
-          this.moveset[2] = new PokemonMove(MoveId.THUNDERBOLT);
+          this.moveset[2] = new PokemonMove(MoveId.THUNDERBOLT, { pokemonId: this.id });
         }
         break;
       default:
@@ -383,10 +378,10 @@ export class EnemyPokemon extends Pokemon {
             }
           }
           console.log(
-            movePool.map((m) => m.getName()),
+            movePool.map((m) => m.name),
             moveScores,
             r,
-            sortedMovePool.map((m) => m.getName()),
+            sortedMovePool.map((m) => m.name),
           );
           const retMove = sortedMovePool[r].getMove();
           return { move: retMove, targets: moveTargets[retMove.id], type: this.getMoveType(retMove) };

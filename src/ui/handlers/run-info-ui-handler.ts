@@ -818,11 +818,12 @@ export class RunInfoUiHandler extends UiHandler {
         moveContainer.add(moveBg);
         moveContainer.add(moveLabel);
         movesetContainer.add(moveContainer);
-        const move = pokemonMoveset[m]?.getMove();
-        pokemonMoveBgs[m].setFrame(
-          enumValueToKey(ElementalType, move ? move.type : ElementalType.UNKNOWN).toLowerCase(),
-        );
-        pokemonMoveLabels[m].setText(move ? move.name : "-");
+        const pokemonMove = pokemonMoveset[m];
+        // TODO: the name doesn't get the GMax prefix if the Pokemon is Gigantamaxed
+        const moveName = pokemonMove?.name ?? "-";
+        const moveType = pokemonMove?.getMove()?.type ?? ElementalType.UNKNOWN;
+        pokemonMoveBgs[m].setFrame(enumValueToKey(ElementalType, moveType).toLowerCase());
+        pokemonMoveLabels[m].setText(moveName);
       }
 
       // Pokemon Held Items - not displayed by default

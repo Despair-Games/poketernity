@@ -20,6 +20,7 @@
       "**",
       "!**/*.d.ts",
       "!**/.github/**/*",
+      "**/.github/**/*.ts",
       "!**/.vscode/**/*",
       "!**/build/**/*",
       "!**/coverage/**/*",
@@ -105,7 +106,8 @@
           "options": {
             "accessibility": "explicit"
           }
-        }
+        },
+        "useShorthandAssign": "error"
       },
       "suspicious": {
         "noDoubleEquals": "error",

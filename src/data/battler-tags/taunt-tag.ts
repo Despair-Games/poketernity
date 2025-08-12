@@ -7,6 +7,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveCategory } from "#enums/move-category";
 import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
+import { getPokemonMoveName } from "#utils/pokemon-utils";
 import i18next from "i18next";
 
 /**
@@ -37,16 +38,18 @@ export class TauntTag extends MoveRestrictionBattlerTag {
   }
 
   override getSelectionDeniedText(pokemon: Pokemon, moveId: MoveId): string {
+    const moveName = getPokemonMoveName(pokemon, moveId);
     return i18next.t("battle:moveDisabledTaunt", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-      moveName: allMoves.get(moveId).name,
+      moveName,
     });
   }
 
   override getInterruptedText(pokemon: Pokemon, moveId: MoveId): string {
+    const moveName = getPokemonMoveName(pokemon, moveId);
     return i18next.t("battle:moveDisabledTaunt", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-      moveName: allMoves.get(moveId).name,
+      moveName,
     });
   }
 }

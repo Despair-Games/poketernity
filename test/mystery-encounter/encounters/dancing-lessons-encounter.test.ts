@@ -111,7 +111,7 @@ describe("Dancing Lessons - Mystery Encounter", () => {
 
       const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is("MovePhase")).map((p) => p[0]);
       expect(movePhases.length).toBe(1);
-      expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.REVELATION_DANCE).length).toBe(1); // Revelation Dance used before battle
+      expect(movePhases.filter((p) => (p as MovePhase).pokemonMove.moveId === MoveId.REVELATION_DANCE).length).toBe(1); // Revelation Dance used before battle
     });
 
     it("should have a Baton in the rewards after battle", async () => {
@@ -193,7 +193,8 @@ describe("Dancing Lessons - Mystery Encounter", () => {
     it("should add Oricorio to the party", async () => {
       await game.runToMysteryEncounter(MysteryEncounterType.DANCING_LESSONS, defaultParty);
       const partyCountBefore = scene.getPlayerParty().length;
-      game.move.changeMoveset(scene.getPlayerParty()[0], MoveId.DRAGON_DANCE);
+      const player = game.field.getPlayerPokemon();
+      game.move.changeMoveset(player, MoveId.DRAGON_DANCE);
       await runMysteryEncounterToEnd(game, 3, { partySlot: 1, optionNumber: 1 });
       const partyCountAfter = scene.getPlayerParty().length;
 
@@ -234,7 +235,8 @@ describe("Dancing Lessons - Mystery Encounter", () => {
       const leaveEncounterWithoutBattleSpy = vi.spyOn(EncounterPhaseUtils, "leaveEncounterWithoutBattle");
 
       await game.runToMysteryEncounter(MysteryEncounterType.DANCING_LESSONS, defaultParty);
-      game.move.changeMoveset(scene.getPlayerParty()[0], MoveId.DRAGON_DANCE);
+      const player = game.field.getPlayerPokemon();
+      game.move.changeMoveset(player, MoveId.DRAGON_DANCE);
       await runMysteryEncounterToEnd(game, 3, { partySlot: 1, optionNumber: 1 });
 
       expect(leaveEncounterWithoutBattleSpy).toBeCalled();

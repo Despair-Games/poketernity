@@ -72,7 +72,7 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
       "MessagePhase",
       i18next.t("moveTriggers:tookMoveAttack", {
         pokemonName: getPokemonNameWithAffix(globalScene.getPokemonById(target.id) ?? undefined),
-        moveName: move.name,
+        moveName: user.getPokemonMove(move.id)?.name ?? move.name,
       }),
     );
     return true;
