@@ -1064,7 +1064,7 @@ export class SummaryUiHandler extends UiHandler {
             moveRowContainer.add(typeIcon);
           }
 
-          const moveText = addTextObject(35, 0, move ? move.getName() : "-", TextStyle.SUMMARY);
+          const moveText = addTextObject(35, 0, move ? move.name : "-", TextStyle.SUMMARY);
           moveText.setOrigin(0, 1);
           moveRowContainer.add(moveText);
 

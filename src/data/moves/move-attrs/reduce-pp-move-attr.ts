@@ -26,7 +26,7 @@ export class ReducePpMoveAttr extends MoveEffectAttr {
 
     const message = i18next.t("battle:ppReduced", {
       targetName: getPokemonNameWithAffix(target),
-      moveName: movesetMove.getName(),
+      moveName: movesetMove.name,
       reduction: movesetMove.ppUsed - lastPpUsed,
     });
     globalScene.eventTarget.dispatchEvent(new MoveUsedEvent(target.id, movesetMove.getMove(), movesetMove.ppUsed));

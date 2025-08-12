@@ -1,8 +1,11 @@
+import { globalScene } from "#app/global-scene";
 import { allMoves } from "#data/data-lists";
+import { MoveFlags } from "#enums/move-flags";
 import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import { toDmgValue } from "#utils/common-utils";
+import { isNil, toDmgValue } from "#utils/common-utils";
+import i18next from "i18next";
 
 /**
  * Wrapper class for the {@linkcode Move} class for Pokemon to interact with.
@@ -17,8 +20,9 @@ import { toDmgValue } from "#utils/common-utils";
  * @see {@linkcode getPpRatio} - returns the current PP amount / max PP amount.
  * @see {@linkcode getName} - returns name of the {@linkcode Move}.
  **/
-
 export class PokemonMove {
+  /** The ID of the {@linkcode Pokemon} whose moveset this move is part of. Used for localization of the move name. */
+  private readonly pokemonId: number;
   public moveId: MoveId;
   public ppUsed: number;
   public ppUp: number;
@@ -30,12 +34,44 @@ export class PokemonMove {
    */
   public maxPpOverride?: number;
 
-  constructor(moveId: MoveId, ppUsed: number = 0, ppUp: number = 0, virtual: boolean = false, maxPpOverride?: number) {
+  constructor(
+    moveId: MoveId,
+    {
+      pokemonId = 0,
+      ppUsed = 0,
+      ppUp = 0,
+      virtual = false,
+      maxPpOverride,
+    }: {
+      pokemonId?: number;
+      ppUsed?: number;
+      ppUp?: number;
+      virtual?: boolean;
+      maxPpOverride?: number;
+    } = {},
+  ) {
+    this.pokemonId = pokemonId;
     this.moveId = moveId;
     this.ppUsed = ppUsed;
     this.ppUp = ppUp;
     this.virtual = virtual;
     this.maxPpOverride = maxPpOverride;
+  }
+
+  private get pokemon(): Pokemon | undefined {
+    return globalScene.getPokemonById(this.pokemonId) ?? undefined;
+  }
+
+  public get name(): string {
+    if (isNil(this.pokemon)) {
+      return this.getMove().name;
+    }
+    const moveName = this.getMove().name;
+    const isMax = this.getMove().checkFlag(MoveFlags.G_MAX_MOVE, this.pokemon) && this.pokemon.isMax();
+    if (isMax) {
+      return i18next.t("move:moveFormatWithGMax", { moveName });
+    }
+    return moveName;
   }
 
   /**
@@ -79,16 +115,13 @@ export class PokemonMove {
     return 1 - this.ppUsed / this.getMovePp();
   }
 
-  getName(): string {
-    return this.getMove().name;
-  }
-
   /**
    * Copies an existing move or creates a valid PokemonMove object from json representing one
    * @param source The data for the {@linkcode PokemonMove | move} to copy
    * @returns A valid {@linkcode PokemonMove} object
    */
   static loadMove(source: PokemonMove | any): PokemonMove {
-    return new PokemonMove(source.moveId, source.ppUsed, source.ppUp, source.virtual, source.maxPpOverride);
+    const { pokemonId, moveId, ppUsed, ppUp, virtual, maxPpOverride } = source;
+    return new PokemonMove(moveId, { pokemonId, ppUsed, ppUp, virtual, maxPpOverride });
   }
 }

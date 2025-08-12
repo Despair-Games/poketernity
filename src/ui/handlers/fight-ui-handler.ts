@@ -329,8 +329,8 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
 
       if (moveIndex < moveset.length) {
         const pokemonMove = moveset[moveIndex]!; // TODO is the bang correct?
-        moveText.setText(pokemonMove.getName());
-        moveText.setName(pokemonMove.getName());
+        moveText.setText(pokemonMove.name);
+        moveText.setName(pokemonMove.name);
         moveText.setColor(this.getMoveColor(pokemon, pokemonMove) ?? moveText.style.color);
       }
 

@@ -413,7 +413,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
     ];
     const moveset: string[] = [];
     enemyPokemon.getMoveset().forEach((move) => {
-      moveset.push(move.getName());
+      moveset.push(move.name);
     });
 
     console.log(

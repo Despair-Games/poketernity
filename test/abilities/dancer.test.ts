@@ -47,7 +47,7 @@ describe("Abilities - Dancer", () => {
     let currentPhase = game.scene.phaseManager.getCurrentPhase() as MovePhase;
     expect(currentPhase.pokemon).toBe(oricorio);
     expect(currentPhase.targets).toEqual([BattlerIndex.ENEMY]);
-    expect(currentPhase.move.moveId).toBe(MoveId.FEATHER_DANCE);
+    expect(currentPhase.pokemonMove.moveId).toBe(MoveId.FEATHER_DANCE);
     await game.phaseInterceptor.to("PostActionPhase");
     await game.phaseInterceptor.to("MovePhase");
     // immediately copies enemy move Victory Dance, and uses it on itself
@@ -55,7 +55,7 @@ describe("Abilities - Dancer", () => {
     currentPhase = game.scene.phaseManager.getCurrentPhase() as MovePhase;
     expect(currentPhase.pokemon).toBe(oricorio);
     expect(currentPhase.targets).toEqual([BattlerIndex.PLAYER]);
-    expect(currentPhase.move.moveId).toBe(MoveId.VICTORY_DANCE);
+    expect(currentPhase.pokemonMove.moveId).toBe(MoveId.VICTORY_DANCE);
     await game.toEndOfTurn();
 
     // doesn't use PP if copied move is also in moveset
