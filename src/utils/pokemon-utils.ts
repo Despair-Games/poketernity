@@ -103,7 +103,9 @@ export function summonDataToJSON(this: PokemonSummonData): SerializedPokemonSumm
     // the "as omit" is required to avoid TS resolving the overwritten properties to `never`
     // We coerce `null` to `undefined` in the type, as the for loop below replaces `null` with `undefined`
     ...(this as Omit<CoerceNullPropertiesToUndefined<PokemonSummonData>, "speciesForm">),
-    speciesForm: isNil(speciesForm) ? undefined : { id: speciesForm.speciesId, formIdx: speciesForm.formIndex },
+    speciesForm: isNil(speciesForm)
+      ? undefined
+      : { speciesId: speciesForm.speciesId, formIndex: speciesForm.formIndex },
   };
   // Replace `null` with `undefined`, as `undefined` never gets serialized
   for (const [key, value] of Object.entries(t)) {

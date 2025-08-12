@@ -20,24 +20,20 @@ import { clamp, isNil, isPokemon } from "#utils/common-utils";
 import { getPokemonSpecies, getPokemonSpeciesForm, summonDataToJSON } from "#utils/pokemon-utils";
 
 /**
- * Deserialize a pokemon species form from an object containing `id` and `formIdx` properties.
+ * Deserialize a pokemon species form from an object containing `speciesId` and `formIndex` properties.
  * @param value - The value to deserialize
  * @returns The `PokemonSpeciesForm`, or `null` if the fields could not be properly discerned
  */
 function deserializePokemonSpeciesForm(value: SerializedSpeciesForm | PokemonSpeciesForm): PokemonSpeciesForm | null {
-  // @ts-expect-error: We may be deserializing a PokemonSpeciesForm, but we catch later on
-  let { id, formIdx } = value;
+  const { speciesId } = value;
+  const formIndex = value.formIndex ?? value["_formIndex"];
 
-  if (isNil(id) || isNil(formIdx)) {
-    // `["..."]` used due to TypeScript being unable to properly infer the type, plus `_formIndex` is `protected`
-    id = value["speciesId"];
-    formIdx = value["_formIndex"];
-  }
-  // If for some reason either of these fields are null/undefined, we cannot reconstruct the species form
-  if (isNil(id) || isNil(formIdx)) {
+  // If for some reason either of these fields are `null`/`undefined`, we cannot reconstruct the species form
+  if (isNil(speciesId) || isNil(formIndex)) {
+    console.warn(`Error when deserializing Pokemon Species Form\nSpecies ID: ${speciesId} | Form index: ${formIndex}`);
     return null;
   }
-  return getPokemonSpeciesForm(id, formIdx);
+  return getPokemonSpeciesForm(speciesId, formIndex);
 }
 
 export class PokemonData {

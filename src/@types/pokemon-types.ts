@@ -20,8 +20,8 @@ import type { AttackMoveResult, TurnMove } from "#types/move-types";
  * The type that {@linkcode PokemonSpeciesForm} is converted to when an object containing it serializes it.
  */
 export type SerializedSpeciesForm = {
-  id: SpeciesId;
-  formIdx: number;
+  speciesId: SpeciesId;
+  formIndex: number;
 };
 
 export interface SerializedPokemonSummonData {
