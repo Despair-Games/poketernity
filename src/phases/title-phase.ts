@@ -45,7 +45,7 @@ export class TitlePhase extends Phase {
       .then((sessionData) => {
         if (sessionData) {
           this.lastSessionData = sessionData;
-          const biomeKey = getBiomeKey(sessionData.arena.biome);
+          const biomeKey = getBiomeKey(sessionData.arena.biomeId);
           const bgTexture = `${biomeKey}_bg`;
           arenaBg.setTexture(bgTexture);
         }

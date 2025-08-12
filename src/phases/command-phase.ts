@@ -349,7 +349,7 @@ export class CommandPhase extends FieldPhase {
           const trapTag =
             pokemon.getTag<TrappedTag>(...TRAPPED_BATTLER_TAG_TYPES)
             ?? pokemon.getTag<SkyDropTag>(BattlerTagType.SKY_DROP);
-          const fairyLockTag = arena.findTag(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER);
+          const fairyLockTag = arena.findTag<FairyLockTag>(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER);
 
           if (!isSwitch) {
             ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);
@@ -362,7 +362,7 @@ export class CommandPhase extends FieldPhase {
             }
             return i18next.t("battle:noEscapePokemon", {
               pokemonName:
-                tag.sourceId && globalScene.getPokemonById(tag.sourceId)
+                !isNil(tag.sourceId) && globalScene.getPokemonById(tag.sourceId)
                   ? getPokemonNameWithAffix(globalScene.getPokemonById(tag.sourceId))
                   : "",
               moveName: tag.getMoveName(),

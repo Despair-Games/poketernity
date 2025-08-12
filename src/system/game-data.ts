@@ -67,6 +67,7 @@ import { TrainerData } from "#system/trainer-data";
 import { applySessionVersionMigration, applySystemVersionMigration } from "#system/version-converter";
 import { vouchers } from "#system/voucher";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
+import type { SerializedArenaData } from "#types/arena-types";
 import type { DexData, DexEntry } from "#types/dex-data";
 import type { InputInterfaceConfig } from "#types/inputs-types";
 import type { SessionSaveData } from "#types/session-data";
@@ -825,7 +826,7 @@ export class GameData {
 
           globalScene.mysteryEncounterSaveData = new MysteryEncounterSaveData(sessionData.mysteryEncounterSaveData);
 
-          globalScene.newArena(sessionData.arena.biome);
+          globalScene.newArena(sessionData.arena.biomeId);
 
           const battleType = sessionData.battleType || 0;
           const trainerConfig = sessionData.trainer ? allTrainerConfigs[sessionData.trainer.trainerType] : null;
@@ -891,7 +892,9 @@ export class GameData {
                   new TagAddedEvent(tagType, side, turnCount, layers, maxLayers),
                 );
               } else {
-                globalScene.arena.eventTarget.dispatchEvent(new TagAddedEvent(tag.tagType, tag.side, tag.turnCount));
+                globalScene.arena.eventTarget.dispatchEvent(
+                  new TagAddedEvent(tag.tagType, tag.side, tag.turnCount, 0, 0),
+                );
               }
             }
           }
@@ -1077,7 +1080,7 @@ export class GameData {
       }
 
       if (k === "arena") {
-        return new ArenaData(v);
+        return new ArenaData(v as SerializedArenaData);
       }
 
       if (k === "challenges") {
