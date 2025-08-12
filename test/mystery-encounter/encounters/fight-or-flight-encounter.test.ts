@@ -173,7 +173,8 @@ describe("Fight or Flight - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.FIGHT_OR_FLIGHT, defaultParty);
 
       // Mock moveset
-      game.move.changeMoveset(scene.getPlayerParty()[0], MoveId.KNOCK_OFF);
+      const player = game.field.getPlayerPokemon();
+      game.move.changeMoveset(player, MoveId.KNOCK_OFF);
       const item = game.scene.currentBattle.mysteryEncounter!.misc;
 
       await runMysteryEncounterToEnd(game, 2);

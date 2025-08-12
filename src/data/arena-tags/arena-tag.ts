@@ -97,6 +97,7 @@ export abstract class ArenaTag {
   /**
    * @returns The name of the move corresponding with the tag's {@linkcode sourceMoveId},
    * or `null` if `sourceMoveId` isn't defined.
+   * @todo Should this use `PokemonMove.name`?
    */
   public getMoveName(): string | null {
     return this.sourceMoveId ? allMoves.get(this.sourceMoveId).name : null;

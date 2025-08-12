@@ -7,7 +7,6 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
-import { PokemonMove } from "#field/pokemon-move";
 import * as InitMoveAnim from "#init/init-move-anim";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
 import * as MysteryEncounters from "#mystery-encounters/mystery-encounters";
@@ -168,22 +167,21 @@ describe("Trash to Treasure - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.TRASH_TO_TREASURE, defaultParty);
       await runMysteryEncounterToEnd(game, 2, undefined, true);
 
-      const enemyField = scene.getEnemyField();
+      const enemy = game.field.getEnemyPokemon();
       expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
-      expect(enemyField.length).toBe(1);
-      expect(enemyField[0].species.speciesId).toBe(SpeciesId.GARBODOR);
-      expect(enemyField[0].getMoveset(true)).toEqual([
-        new PokemonMove(MoveId.PAYBACK),
-        new PokemonMove(MoveId.GUNK_SHOT),
-        new PokemonMove(MoveId.STOMPING_TANTRUM),
-        new PokemonMove(MoveId.DRAIN_PUNCH),
+      expect(enemy.species.speciesId).toBe(SpeciesId.GARBODOR);
+      expect(enemy.getMoveset(true).map((m) => m.moveId)).toEqual([
+        MoveId.PAYBACK,
+        MoveId.GUNK_SHOT,
+        MoveId.STOMPING_TANTRUM,
+        MoveId.DRAIN_PUNCH,
       ]);
 
       // Should have used moves pre-battle
       const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is("MovePhase")).map((p) => p[0]);
       expect(movePhases.length).toBe(2);
-      expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.TOXIC).length).toBe(1);
-      expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.AMNESIA).length).toBe(1);
+      expect(movePhases.filter((p) => (p as MovePhase).pokemonMove.moveId === MoveId.TOXIC).length).toBe(1);
+      expect(movePhases.filter((p) => (p as MovePhase).pokemonMove.moveId === MoveId.AMNESIA).length).toBe(1);
     });
 
     it("should have 2 Epic, 1 Ultra, 1 Great in rewards", async () => {

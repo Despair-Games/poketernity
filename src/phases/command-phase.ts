@@ -233,12 +233,12 @@ export class CommandPhase extends FieldPhase {
             errorMessageKey =
               pokemon.getRestrictingTag(move.moveId, pokemon)?.getSelectionDeniedText(pokemon, move.moveId)
               ?? "battle:moveDisabled";
-          } else if (move.getName().endsWith(" (N)")) {
+          } else if (move.name.endsWith(" (N)")) {
             errorMessageKey = "battle:moveNotImplemented";
           } else {
             errorMessageKey = "battle:moveNoPP";
           }
-          const moveName = move.getName().replace(" (N)", ""); // Trims off the "unimplemented move" indicator
+          const moveName = move.name.replace(" (N)", ""); // Trims off the "unimplemented move" indicator
 
           ui.showText(i18next.t(errorMessageKey, { moveName: moveName }), {
             callback: () => {

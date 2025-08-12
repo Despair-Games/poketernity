@@ -257,7 +257,8 @@ describe("Part-Timer - Mystery Encounter", () => {
 
       await game.runToMysteryEncounter(MysteryEncounterType.PART_TIMER, defaultParty);
       // Mock moveset
-      game.move.changeMoveset(scene.getPlayerParty()[0], MoveId.ATTRACT);
+      const player = game.field.getPlayerPokemon();
+      game.move.changeMoveset(player, MoveId.ATTRACT);
       await runMysteryEncounterToEnd(game, 3);
 
       expect(EncounterPhaseUtils.updatePlayerMoney).toHaveBeenCalledWith(scene.getWaveMoneyAmount(2.5), true, false);

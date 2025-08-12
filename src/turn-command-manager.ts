@@ -427,7 +427,7 @@ export class TurnCommandManager {
 
     const move =
       pokemon.getMoveset().find((m) => m.moveId === turnMove.move.id && m.ppUsed < m.getMovePp())
-      ?? new PokemonMove(turnMove.move.id);
+      ?? new PokemonMove(turnMove.move.id, { pokemonId: pokemon.id });
 
     phaseManager.appendToPhase(
       "PostActionPhase",
@@ -565,7 +565,8 @@ export class TurnCommandManager {
         return;
       }
       const pokemonMove =
-        pokemon.getMoveset().find((mv) => mv.moveId === turnMove.move.id) ?? new PokemonMove(turnMove.move.id);
+        pokemon.getMoveset().find((mv) => mv.moveId === turnMove.move.id)
+        ?? new PokemonMove(turnMove.move.id, { pokemonId: pokemon.id });
 
       if (pokemonMove.getMove().hasAttr(MoveHeaderAttr)) {
         globalScene.phaseManager.createAndUnshiftPhase("MoveHeaderPhase", pokemon, pokemonMove);
