@@ -1203,7 +1203,7 @@ export class BattleScene extends SceneBase {
           this.children.removeAll(true);
           this.game.domContainer.innerHTML = "";
 
-          // TODO: launchBattle will call reset(false, false, true) too, this can probably be done better
+          // TODO: `launchBattle()` will call `reset()` too, this can probably be done better
           this.launchBattle();
         },
       });
