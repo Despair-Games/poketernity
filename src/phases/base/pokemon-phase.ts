@@ -45,7 +45,7 @@ export abstract class PokemonPhase extends FieldPhase {
    * refactored, this method should be removed in favor of a more flexible {@linkcode getPokemon}
    * @see {@link https://github.com/Despair-Games/poketernity/pull/1236#pullrequestreview-3046453380}
    */
-  public getPokemonAtFieldIndex(): Pokemon | undefined {
+  protected getPokemonAtFieldIndex(): Pokemon | undefined {
     return this.getAlliedParty()[this.fieldIndex];
   }
 

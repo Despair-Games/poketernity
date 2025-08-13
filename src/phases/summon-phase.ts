@@ -182,7 +182,9 @@ export class SummonPhase extends PokemonPhase {
       currentBattle.battleType === BattleType.TRAINER
       || currentBattle.mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE
     ) {
-      if (this.playTrainerAnim) {
+      // TODO: In battles against 2 Trainers, the second Trainer may not show itself
+      // when both enemy Pokemon faint on the same turn.
+      if (this.playTrainerAnim && !globalScene.getEnemyParty().some((p) => p.isOnField())) {
         await this.playEnemyTrainerThrowSequence();
       }
       await this.playPokeBallSummonFX();
