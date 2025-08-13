@@ -47,6 +47,10 @@ const allTextStyles: Record<TextStyle, ModularTextStyleOptions> = {
     fontStyle: FontStyle.DEFAULT_FONT_60PX,
   },
 
+  [TextStyle.WINDOW_HEADER]: {
+    color: TextColor.ORANGE_DARK_SHADOW,
+    fontStyle: FontStyle.DEFAULT_FONT_96PX_BIG_SHADOW,
+  },
   [TextStyle.WINDOW_MODAL_INFO]: {
     color: {
       [UiTheme.DARK]: TextColor.WHITE_DARK_PURPLE_SHADOW,
@@ -352,11 +356,11 @@ const allTextStyles: Record<TextStyle, ModularTextStyleOptions> = {
       [UiTheme.DARK]: TextColor.WHITE_DARK_PURPLE_SHADOW,
       [UiTheme.LIGHT]: TextColor.DARK_GREY_LIGHT_SHADOW,
     },
-    fontStyle: FontStyle.DEFAULT_FONT_96PX_BIG_SHADOW,
+    fontStyle: FontStyle.DEFAULT_FONT_96PX_BIG_SHADOW_EXTRA_SPACING,
   },
   [TextStyle.SETTINGS_LABEL]: {
     color: TextColor.ORANGE_DARK_SHADOW,
-    fontStyle: FontStyle.DEFAULT_FONT_96PX_BIG_SHADOW,
+    fontStyle: FontStyle.DEFAULT_FONT_96PX_BIG_SHADOW_EXTRA_SPACING,
   },
   [TextStyle.SETTINGS_SELECTED]: {
     color: TextColor.PINK_DARK_RED_SHADOW,

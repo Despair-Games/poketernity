@@ -1,45 +1,39 @@
 import { globalScene } from "#app/global-scene";
 import { Device } from "#enums/device";
-import type { SettingGamepad } from "#enums/setting-gamepad";
 import { TextStyle } from "#enums/text-style";
-import type { UiMode } from "#enums/ui-mode";
+import { UiMode } from "#enums/ui-mode";
+import type { GamepadKeys } from "#types/inputs-types";
 import { BindingUiHandler } from "#ui/binding-ui-handler";
 import { addTextObject } from "#ui/text-utils";
+import { isNil } from "#utils/common-utils";
 import { getIconWithSettingName, getKeyWithKeycode } from "#utils/inputs-utils";
+import i18next from "i18next";
 
 export class GamepadBindingUiHandler extends BindingUiHandler {
-  constructor(mode: UiMode | null = null) {
-    super(mode);
+  constructor() {
+    super(UiMode.GAMEPAD_BINDING, Device.GAMEPAD);
+
+    this.pressButtonText = i18next.t("settings:pressButton");
+    this.buttonPressedText = i18next.t("settings:buttonPressed");
+    this.confirmAssignText = i18next.t("settings:confirmSwap");
   }
   protected override setup() {
     super.setup();
 
-    // New button icon setup.
-    this.newButtonIcon = globalScene.add.sprite(0, 0, "xbox");
-    this.newButtonIcon.setPositionRelative(this.optionSelectBg, 78, 16);
-    this.newButtonIcon.setOrigin(0.5);
-    this.newButtonIcon.setVisible(false);
+    const windowCenterX = this.optionSelectBg.x;
+    const windowCenterY = this.optionSelectBg.y;
 
-    this.swapText = addTextObject(0, 0, "will swap with", TextStyle.WINDOW);
+    // Move the selected icon button up to accomodate the other icon and text
+    this.newButtonIcon.setY(this.newButtonIcon.y - 16);
+
+    this.swapText = addTextObject(windowCenterX, windowCenterY, i18next.t("settings:willSwapWith"), TextStyle.WINDOW);
     this.swapText.setOrigin(0.5);
-    this.swapText.setPositionRelative(
-      this.optionSelectBg,
-      this.optionSelectBg.width / 2 - 2,
-      this.optionSelectBg.height / 2 - 2,
-    );
     this.swapText.setVisible(false);
 
-    this.targetButtonIcon = globalScene.add.sprite(0, 0, "xbox");
-    this.targetButtonIcon.setPositionRelative(this.optionSelectBg, 78, 48);
+    this.targetButtonIcon = globalScene.add.sprite(windowCenterX, windowCenterY + 16, "xbox");
     this.targetButtonIcon.setOrigin(0.5);
     this.targetButtonIcon.setVisible(false);
 
-    this.actionLabel = addTextObject(0, 0, "Confirm swap", TextStyle.SETTINGS_LABEL);
-    this.actionLabel.setOrigin(0, 0.5);
-    this.actionLabel.setPositionRelative(this.actionBg, this.actionBg.width - 75, this.actionBg.height / 2);
-    this.actionsContainer.add(this.actionLabel);
-
-    this.optionSelectContainer.add(this.newButtonIcon);
     this.optionSelectContainer.add(this.swapText);
     this.optionSelectContainer.add(this.targetButtonIcon);
 
@@ -54,61 +48,41 @@ export class GamepadBindingUiHandler extends BindingUiHandler {
     super.tearDown();
   }
 
-  public override show(target: SettingGamepad, cancelHandler: (success: boolean) => boolean): boolean {
-    return super.show(target, cancelHandler);
-  }
-
-  private getSelectedDevice() {
-    return globalScene.inputController?.selectedDevice[Device.GAMEPAD];
-  }
-
   private gamepadButtonDown(
     pad: Phaser.Input.Gamepad.Gamepad,
     button: Phaser.Input.Gamepad.Button,
     _value: number,
   ): void {
-    const blacklist = [12, 13, 14, 15]; // d-pad buttons are blacklisted.
     // Check conditions before processing the button press.
     if (
       !this.listening
+      || !this.target
       || pad.id.toLowerCase() !== this.getSelectedDevice()
-      || blacklist.includes(button.index)
       || this.buttonPressed !== null
     ) {
       return;
     }
-    const activeConfig = globalScene.inputController.getActiveConfig(Device.GAMEPAD);
+
+    const activeConfig = globalScene.inputController.getActiveConfig(this.device);
     if (!activeConfig) {
       return;
     }
-    const type = activeConfig.padType;
+
     const key = getKeyWithKeycode(activeConfig, button.index);
-    if (!key) {
+    if (isNil(key) || activeConfig.keysBlacklist?.includes(key as GamepadKeys)) {
       return;
     }
+    const type = activeConfig.padType;
     const buttonIcon = activeConfig.icons[key];
-    if (!buttonIcon) {
+    if (isNil(buttonIcon)) {
       return;
     }
     this.buttonPressed = button.index;
     const assignedButtonIcon = getIconWithSettingName(activeConfig, this.target);
-    if (!assignedButtonIcon) {
+    if (isNil(assignedButtonIcon)) {
       return;
     }
     this.onInputDown(buttonIcon, assignedButtonIcon, type);
-  }
-
-  protected override swapAction(): boolean {
-    const activeConfig = globalScene.inputController.getActiveConfig(Device.GAMEPAD);
-    const selectedDevice = this.getSelectedDevice();
-    if (!selectedDevice || !activeConfig || !this.buttonPressed) {
-      return false;
-    }
-    if (globalScene.inputController.assignBinding(activeConfig, this.target, this.buttonPressed)) {
-      globalScene.gameData.saveMappingConfigs(selectedDevice, activeConfig);
-      return true;
-    }
-    return false;
   }
 
   /**

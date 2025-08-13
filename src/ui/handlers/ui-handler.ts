@@ -148,7 +148,7 @@ export abstract class UiHandler {
    *  - calling `getUi().hideTooltip()` if the handler displays any sort of tooltip
    *  - removing any event listener related to destroyed objects
    *  - stopping any ongoing animation or timed event/callback
-   *  - emptying arrays or other attributes contained destroyed objects
+   *  - emptying arrays or other attributes containing destroyed objects
    */
   protected abstract clear(): void;
 

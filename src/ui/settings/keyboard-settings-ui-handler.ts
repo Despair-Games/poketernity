@@ -1,20 +1,17 @@
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import { Device } from "#enums/device";
+import { KeyboardLayout } from "#enums/keyboard-layout";
 import { SettingKeyboard } from "#enums/setting-keyboard";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
-import { cfg_keyboard_qwerty } from "#inputs/keyboard-configs";
-import {
-  setSettingKeyboard,
-  settingKeyboardBlackList,
-  settingKeyboardDefaults,
-  settingKeyboardOptions,
-} from "#system/settings-keyboard";
-import type { InputInterfaceConfig } from "#types/inputs-types";
+import { settings } from "#system/settings-manager";
+import type { SettingsUiItem } from "#types/settings";
 import { ControlsSettingsUiHandler } from "#ui/controls-settings-ui-handler";
-import { NavigationManager } from "#ui/navigation-menu";
-import { addTextObject } from "#ui/text-utils";
+import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
+import { keyboardSettingsUiItems } from "#ui/settings-ui-items";
+import { setTextColor } from "#ui/text-utils";
+import { enumValueToKey } from "#utils/common-utils";
 import { deleteBind } from "#utils/inputs-utils";
 import { truncateString } from "#utils/string-utils";
 import i18next from "i18next";
@@ -24,81 +21,99 @@ import i18next from "i18next";
  */
 export class KeyboardSettingsUiHandler extends ControlsSettingsUiHandler {
   private deleteKey: Phaser.Input.Keyboard.Key | undefined;
-  private homeKey: Phaser.Input.Keyboard.Key | undefined;
 
   constructor() {
-    super(UiMode.SETTINGS_KEYBOARD);
-    this.titleSelected = "Keyboard";
-    this.setting = SettingKeyboard;
-    this.settingDeviceDefaults = settingKeyboardDefaults;
-    this.settingDeviceOptions = settingKeyboardOptions;
-    this.configs = [cfg_keyboard_qwerty];
-    this.commonSettingsCount = 0;
-    this.textureOverride = "keyboard";
-    this.settingBlacklisted = settingKeyboardBlackList;
-    this.device = Device.KEYBOARD;
+    super(UiMode.SETTINGS_KEYBOARD, "keyboard", keyboardSettingsUiItems, Device.KEYBOARD, UiMode.KEYBOARD_BINDING);
   }
 
-  setSetting = setSettingKeyboard;
-
-  /**
-   * Setup UI elements.
-   */
   protected override setup() {
     super.setup();
-    // If no gamepads are detected, set up a default UI prompt in the settings container.
-    this.layout["noKeyboard"] = new Map();
-    const optionsContainer = globalScene.add.container(0, 0);
-    optionsContainer.setVisible(false); // Initially hide the container as no gamepads are connected.
-    const label = addTextObject(8, 28, i18next.t("settings:keyboardPleasePress"), TextStyle.SETTINGS_LABEL);
-    label.setOrigin(0, 0);
-    optionsContainer.add(label);
-    this.settingsContainer.add(optionsContainer);
 
-    const iconDelete = globalScene.add.sprite(0, 0, "keyboard");
-    iconDelete.setOrigin(0, -0.1);
-    iconDelete.setPositionRelative(this.actionsBg, this.navigationContainer.width - 260, 4);
-    this.navigationIcons["BUTTON_DELETE"] = iconDelete;
-
-    const deleteText = addTextObject(0, 0, i18next.t("settings:delete"), TextStyle.SETTINGS_LABEL);
-    deleteText.setOrigin(0, 0.15);
-    deleteText.setPositionRelative(iconDelete, -deleteText.displayWidth - 2, 0);
-
-    this.settingsContainer.add(iconDelete);
-    this.settingsContainer.add(deleteText);
-
-    // Map the 'noKeyboard' layout options for easy access.
-    this.layout["noKeyboard"].optionsContainer = optionsContainer;
-    this.layout["noKeyboard"].label = label;
-
-    // Listen to the home and delete key presses
-    this.deleteKey = globalScene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.DELETE);
-    this.homeKey = globalScene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.HOME);
-    this.deleteKey?.on("up", this.deleteBinding, this);
-    this.homeKey?.on("up", this.resetBindings, this);
+    // Add instructions for deleting a mapping
+    this.addInstructionText("BUTTON_DELETE", i18next.t("settings:delete"));
 
     eventBus.on("keyboard/init", this.updateChosenKeyboardDisplay, this);
   }
 
   protected override tearDown(): void {
-    this.deleteKey?.off("up", this.deleteBinding, this);
-    this.homeKey?.off("up", this.resetBindings, this);
-
     eventBus.off("keyboard/init", this.updateChosenKeyboardDisplay, this);
 
     super.tearDown();
   }
 
-  /**
-   * Handle the home key press event: reset mappings for the current device
-   */
-  private resetBindings(): void {
-    if (![UiMode.SETTINGS_KEYBOARD, UiMode.SETTINGS_GAMEPAD].includes(globalScene.ui.getMode())) {
-      return;
+  public override show(): boolean {
+    if (super.show()) {
+      // If a keyboard is connected but the view hasn't been initialized for it, do it
+      if (this.noDeviceText.visible && globalScene.inputController.getActiveConfig(this.device)) {
+        this.updateChosenKeyboardDisplay();
+      }
+      // Listen to the "delete" key presses to clear an existing mapping
+      this.deleteKey = globalScene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.DELETE);
+      this.deleteKey?.on("up", this.deleteBinding, this);
+      return true;
     }
-    const isKeyboard = globalScene.ui.getMode() === UiMode.SETTINGS_KEYBOARD;
-    globalScene.gameData.resetMappingToFactory(isKeyboard ? Device.KEYBOARD : Device.GAMEPAD);
-    NavigationManager.getInstance().updateIcons();
+    return false;
+  }
+
+  protected override clear(): void {
+    this.deleteKey?.off("up", this.deleteBinding, this);
+
+    super.clear();
+  }
+
+  /**
+   * Update the display of the chosen keyboard layout.
+   */
+  private updateChosenKeyboardDisplay(): void {
+    this.noDeviceText.setVisible(false);
+    this.optionsContainer.setVisible(true);
+
+    // Update any bindings that might have changed since the last update.
+    this.initBindings();
+    this.updateInstructionIcons();
+
+    // Iterate over the keys in the settingDevice enumeration.
+    for (const [index, value] of Object.values(SettingKeyboard).entries()) {
+      if (value === "layout") {
+        // Update the text of the first option label under the current setting to the name of the chosen layout
+        const layoutLabel = truncateString(enumValueToKey(KeyboardLayout, settings.keyboard.layout), 25);
+        this.updateOptionValueLabel(index, 0, layoutLabel);
+      }
+    }
+  }
+
+  protected override handleSaveSetting<V = any>(uiItem: SettingsUiItem, newValue: V): void {
+    if (uiItem.key === "layout") {
+      // Show menu with the available keyboard layouts
+      const cancelHandler = () => {
+        globalScene.ui.revertMode();
+        this.setOptionCursor(-1, 0);
+        return true;
+      };
+      const changeLayoutHandler = (layout: KeyboardLayout) => {
+        if (settings.keyboard.layout !== layout) {
+          settings.update("keyboard", "layout", layout);
+        }
+        return cancelHandler();
+      };
+      globalScene.ui.setOverlayMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, {
+        options: [
+          ...Object.keys(KeyboardLayout).map((layout) => {
+            return {
+              label: layout,
+              handler: () => changeLayoutHandler(KeyboardLayout[layout]),
+            };
+          }),
+          {
+            label: i18next.t("menu:cancel"),
+            handler: cancelHandler,
+          },
+        ],
+        yOffset: 48,
+      });
+    } else {
+      super.handleSaveSetting(uiItem, newValue);
+    }
   }
 
   /**
@@ -108,65 +123,70 @@ export class KeyboardSettingsUiHandler extends ControlsSettingsUiHandler {
     if (globalScene.ui.getMode() !== UiMode.SETTINGS_KEYBOARD) {
       return;
     }
-    const cursor = this.cursor + this.scrollCursor; // Calculate the absolute cursor position.
-    const target = this.setting[Object.keys(this.setting)[cursor]];
-    const activeConfig = this.getActiveConfig();
-    const success = activeConfig && deleteBind(activeConfig, target);
+
+    if (this.cursor + this.scrollCursor < this.uiItems.length) {
+      // We are currently not hovering a binding setting, ignore the input
+      return;
+    }
+
+    let success = false;
+    const config = globalScene.inputController.getActiveConfig(this.device);
+    if (config) {
+      const settingIndex = this.cursor + this.scrollCursor - this.uiItems.length;
+      const settingKey = Object.keys(config.settings)[settingIndex] as SettingKeyboard;
+
+      success = deleteBind(config, settingKey);
+      const deviceId = globalScene.inputController.selectedDevice[this.device];
+      if (success && deviceId) {
+        globalScene.gameData.saveMappingConfigs(deviceId, config);
+        this.updateBindingIcons();
+      }
+    }
+
     if (success) {
-      globalScene.gameData.saveMappingConfigs(
-        globalScene.inputController?.selectedDevice[Device.KEYBOARD] ?? "", // temporary until handler refactor
-        activeConfig,
-      );
-      this.updateBindings();
-      NavigationManager.getInstance().updateIcons();
+      this.getUi().playSelect();
+    } else {
+      this.getUi().playError();
     }
   }
 
-  /**
-   * Set the layout for the active configuration.
-   *
-   * @param activeConfig - The active keyboard configuration.
-   * @returns `true` if the layout was successfully applied, otherwise `false`.
-   */
-  protected override setLayout(activeConfig: InputInterfaceConfig): boolean {
-    // Check if there is no active configuration (e.g., no gamepad connected).
-    if (!activeConfig) {
-      // Retrieve the layout for when no gamepads are connected.
-      const layout = this.layout["noKeyboard"];
-      // Make the options container visible to show message.
-      layout.optionsContainer.setVisible(true);
-      // Return false indicating the layout application was not successful due to lack of gamepad.
-      return false;
+  public override setCursor(cursor: number): boolean {
+    if (super.setCursor(cursor)) {
+      this.updateDeleteInstruction();
+      return true;
     }
+    return false;
+  }
 
-    return super.setLayout(activeConfig);
+  protected override setScrollCursor(scrollCursor: number): boolean {
+    if (super.setScrollCursor(scrollCursor)) {
+      this.updateDeleteInstruction();
+      return true;
+    }
+    return false;
   }
 
   /**
-   * Update the display of the chosen keyboard layout.
+   * Make the "delete" instruction text grayed out if the current setting cannot be deleted.
    */
-  private updateChosenKeyboardDisplay(): void {
-    // Update any bindings that might have changed since the last update.
-    this.updateBindings();
-
-    // Iterate over the keys in the settingDevice enumeration.
-    for (const [index, key] of Object.keys(this.setting).entries()) {
-      const setting = this.setting[key]; // Get the actual setting value using the key.
-
-      // Check if the current setting corresponds to the layout setting.
-      if (setting === this.setting.Default_Layout) {
-        // Iterate over all layouts excluding the 'noGamepads' special case.
-        for (const _key of Object.keys(this.layout)) {
-          if (_key === "noKeyboard") {
-            continue;
-          } // Skip updating the no gamepad layout.
-          // Update the text of the first option label under the current setting to the name of the chosen gamepad,
-          // truncating the name to 30 characters if necessary.
-          this.layout[_key].optionValueLabels[index][0].setText(
-            truncateString(globalScene.inputController.selectedDevice[Device.KEYBOARD] ?? "", 22),
-          );
+  private updateDeleteInstruction(): void {
+    let isLocked = false;
+    const settingIndex = this.cursor + this.scrollCursor;
+    if (settingIndex < this.uiItems.length) {
+      isLocked = true;
+    } else {
+      const config = globalScene.inputController.getActiveConfig(this.device);
+      if (config) {
+        const settingKey = Object.keys(config.settings)[settingIndex - this.uiItems.length] as SettingKeyboard;
+        if (config.settingsBlacklist?.includes(settingKey)) {
+          isLocked = true;
         }
       }
+    }
+
+    const textStyle = isLocked ? TextStyle.SETTINGS_LOCKED : TextStyle.SETTINGS_LABEL;
+    if (this.instructionIcons["BUTTON_DELETE"]?.label) {
+      setTextColor(this.instructionIcons["BUTTON_DELETE"].label, textStyle);
     }
   }
 }
