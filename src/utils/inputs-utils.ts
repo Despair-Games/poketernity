@@ -3,6 +3,9 @@ import { Device } from "#enums/device";
 import type { InputInterfaceConfig, InputKeys, InputSettings } from "#types/inputs-types";
 import { isNil } from "#utils/common-utils";
 
+// TODO: Most of these are only used in the inputs controller and tests,
+// should they really be here rather than in the inputs controller?
+
 /**
  * Retrieves the key associated with the specified keycode from the mapping.
  *
@@ -77,17 +80,6 @@ export function getSettingNameWithKey(config: InputInterfaceConfig, key: InputKe
 }
 
 /**
- * Retrieves the icon associated with the specified key.
- *
- * @param config - The configuration object containing icons.
- * @param key - The key to search for.
- * @returns The icon associated with the specified key.
- */
-export function getIconWithKey(config: InputInterfaceConfig, key: InputKeys): string | undefined {
-  return config.icons[key];
-}
-
-/**
  * Retrieves the icon associated with the specified setting name.
  *
  * @param config - The configuration object containing icons.
@@ -96,12 +88,12 @@ export function getIconWithKey(config: InputInterfaceConfig, key: InputKeys): st
  */
 export function getIconWithSettingName(config: InputInterfaceConfig, settingName: InputSettings): string | undefined {
   const key = getKeyWithSettingName(config, settingName);
-  return key ? getIconWithKey(config, key) : undefined;
+  return key ? config.icons[key] : undefined;
 }
 
-// TODO: refactor this function. It should probably be part of inputsController to have access to its configs directly
-// and remove the need for the configs parameter. It's only called from the inputs controller and tests,
-// and shouldn't be exported/made public just for tests.
+/* TODO: refactor this function. It should probably be part of inputsController to have access to its configs directly
+ * and remove the need for the configs parameter. It's only called from the inputs controller and tests,
+ * and shouldn't be exported/made public just for tests. */
 export function getIconForLatestInput(
   configs: Record<Device, InputInterfaceConfig | undefined>,
   source: string,

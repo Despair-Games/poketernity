@@ -328,6 +328,8 @@ export class InputsController {
 
   /**
    * Initializes or updates configurations for connected keyboards.
+   * @param layout - The {@linkcode KeyboardLayout} to use for configuration.
+   *   If not provided, uses the layout defined in settings (by default, QWERTY)
    */
   private setupKeyboard(layout: KeyboardLayout = settings.keyboard.layout): void {
     const layoutKey = enumValueToKey(KeyboardLayout, layout).toLowerCase();
@@ -435,7 +437,7 @@ export class InputsController {
       return;
     }
 
-    // Create interval for repeating inputs when the button keeps being pressed
+    // Create interval for repeating inputs when the button stays pressed
     this.createInputDownInterval(buttonDown, "keyboard");
 
     /* Emit input down event *after* the interval was created in case the event results

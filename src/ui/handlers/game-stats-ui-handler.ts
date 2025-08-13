@@ -252,7 +252,7 @@ export class GameStatsUiHandler extends UiHandler {
     headerBg.setOrigin(0, 0);
     this.gameStatsContainer.add(headerBg);
 
-    const headerText = addTextObject(0, 0, i18next.t("gameStatsUiHandler:stats"), TextStyle.SETTINGS_LABEL)
+    const headerText = addTextObject(0, 0, i18next.t("gameStatsUiHandler:stats"), TextStyle.WINDOW_HEADER)
       .setOrigin(0, 0)
       .setPositionRelative(headerBg, 8, 4);
     this.gameStatsContainer.add(headerText);

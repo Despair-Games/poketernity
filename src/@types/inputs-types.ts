@@ -44,7 +44,10 @@ export interface InputInterfaceConfig<K extends InputKeys = InputKeys, S extends
   deviceMapping: Record<K, number>;
   /** Mapping of each key to an icon file. */
   icons: Record<K, string>;
-  /** Mapping of each Setting for this input interface to a button. */
+  /**
+   * Mapping of each Setting for this input interface to a button.
+   * The order these are defined in will get reflected in the rebinding UI.
+   */
   settings: Partial<Record<S, Button>>;
   /** Default mappings of each key to a setting. -1 means no mapping. */
   default: InputMappings<K, S>;
