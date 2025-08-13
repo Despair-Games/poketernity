@@ -1,9 +1,9 @@
-import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import { LANGUAGE_MAX_OPTIONS } from "#constants/ui-constants";
 import { UiMode } from "#enums/ui-mode";
 import { supportedLanguages } from "#system/supported-languages";
 import type { SupportedLanguage } from "#types/language";
+import type { SettingsUiItem } from "#types/settings";
 import type { OptionSelectItem } from "#ui/option-select-config";
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 import { SettingsUiHandler } from "#ui/settings-ui-handler";
@@ -12,19 +12,15 @@ import i18next from "i18next";
 
 export class DisplaySettingsUiHandler extends SettingsUiHandler {
   constructor() {
-    super("display", displaySettingUiItems);
+    super(UiMode.SETTINGS_DISPLAY, "display", displaySettingUiItems);
   }
 
-  protected override setup(): void {
-    super.setup();
-
-    eventBus.on("language/change", this.showLanguageOptions, this);
-  }
-
-  protected override tearDown(): void {
-    eventBus.off("language/change", this.showLanguageOptions, this);
-
-    super.tearDown();
+  protected override handleSaveSetting<V = any>(uiItem: SettingsUiItem, newValue: V): void {
+    if (uiItem.key === "language" && newValue) {
+      this.showLanguageOptions();
+    } else {
+      super.handleSaveSetting(uiItem, newValue);
+    }
   }
 
   private showLanguageOptions() {

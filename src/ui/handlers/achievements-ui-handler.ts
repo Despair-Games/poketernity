@@ -69,7 +69,7 @@ export class AchievementsUiHandler extends MessageUiHandler {
     this.headerBg = addWindow(0, 0, GAME_WIDTH - 2, 24);
     this.headerBg.setOrigin(0, 0);
 
-    this.headerText = addTextObject(0, 0, "", TextStyle.SETTINGS_LABEL);
+    this.headerText = addTextObject(0, 0, "", TextStyle.WINDOW_HEADER);
     this.headerText.setOrigin(0, 0);
     this.headerText.setPositionRelative(this.headerBg, 8, 4);
     this.headerActionButton = new Phaser.GameObjects.Sprite(globalScene, 0, 0, "keyboard", "ACTION.png");

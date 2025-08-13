@@ -14,6 +14,7 @@ export class MockText implements MockGameObject {
   public style;
   public text = "";
   public name: string;
+  public maxLines: number;
   public color?: string;
   public active = true;
 
@@ -194,6 +195,11 @@ export class MockText implements MockGameObject {
     // Sets the text this Game Object will display.
     // return this.phaserText.setText\(text);
     this.text = text;
+    return this;
+  }
+
+  setMaxLines(maxLines: number): this {
+    this.maxLines = maxLines;
     return this;
   }
 

@@ -1,4 +1,7 @@
+import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
+import { UiMode } from "#enums/ui-mode";
+import type { SettingsUiItem } from "#types/settings";
 import { SettingsUiHandler } from "#ui/settings-ui-handler";
 import { generalSettingsUiItems } from "#ui/settings-ui-items";
 import { hasTouchscreen, isLandscapeMode } from "#utils/app-utils";
@@ -10,7 +13,7 @@ export class GeneralSettingsUiHandler extends SettingsUiHandler {
   private onOrientationChange = () => this.updateMoveTouchControlsSettingsLabel();
 
   constructor() {
-    super("general", generalSettingsUiItems);
+    super(UiMode.SETTINGS, "general", generalSettingsUiItems);
   }
 
   protected override setup(): void {
@@ -34,6 +37,17 @@ export class GeneralSettingsUiHandler extends SettingsUiHandler {
       this.updateMoveTouchControlsSettingsLabel();
     }
     return true;
+  }
+
+  protected override handleSaveSetting<V = any>(uiItem: SettingsUiItem, newValue: V): void {
+    if (uiItem.key === "moveTouchControls" && newValue) {
+      eventBus.emit("touchControls/move/start");
+      eventBus.once("touchControls/move/end", () => {
+        this.setOptionCursor(-1, 0, false);
+      });
+    } else {
+      super.handleSaveSetting(uiItem, newValue);
+    }
   }
 
   private updateMoveTouchControlsSettingsLabel() {
