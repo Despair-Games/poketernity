@@ -266,8 +266,12 @@ export class BattleScene extends SceneBase {
    */
   public readonly eventTarget: EventTarget = new EventTarget();
 
-  /** The next ID to assign to a Pokemon. */
-  private nextPokemonID: number = 1;
+  /**
+   * The next ID to assign to a Pokemon.
+   * @privateRemarks
+   * This must start at 4 due to the insane `if (this.battlerIndex > BattlerIndex.ENEMY_2)` check in `PokemonPhase`/etc.
+   */
+  private nextPokemonID: number = 4;
 
   constructor() {
     super("battle");
@@ -1106,7 +1110,8 @@ export class BattleScene extends SceneBase {
     this.score = 0;
     this.money = 0;
     this.playerTerasUsed = 0;
-    this.nextPokemonID = 1;
+    // must start at 4 until the mixing of battler index and id are removed from `PokemonPhase`/etc
+    this.nextPokemonID = 4;
 
     this.lockModifierTiers = false;
 
