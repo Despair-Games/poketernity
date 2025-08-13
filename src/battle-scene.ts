@@ -1106,6 +1106,7 @@ export class BattleScene extends SceneBase {
     this.score = 0;
     this.money = 0;
     this.playerTerasUsed = 0;
+    this.nextPokemonID = 1;
 
     this.lockModifierTiers = false;
 
