@@ -1,8 +1,14 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import {
+  MAJOR_EFFECT_SCORE_BONUS,
+  MINOR_EFFECT_SCORE_BONUS,
+  MINOR_EFFECT_SCORE_PENALTY,
+} from "#constants/ai-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { MoveId } from "#enums/move-id";
 import type { StatusEffect } from "#enums/status-effect";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { getMoveTargets, type Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
@@ -21,11 +27,14 @@ export class HealStatusEffectAttr extends MoveEffectAttr {
    * @param effects - status effect or list of status effects to cure
    */
   constructor(selfTarget: boolean, effects: StatusEffect | StatusEffect[]) {
-    super(selfTarget, { lastHitOnly: true });
+    super(selfTarget, {
+      lastHitOnly: true,
+      overridesAllyTargetPenalty: true,
+    });
     this.effects = [effects].flat(1);
   }
 
-  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
+  public override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     // Special edge case for shield dust blocking Sparkling Aria curing burn
     const moveTargets = getMoveTargets(user, move.id);
     if (
@@ -51,11 +60,26 @@ export class HealStatusEffectAttr extends MoveEffectAttr {
     return false;
   }
 
-  isOfEffect(effect: StatusEffect): boolean {
+  public isOfEffect(effect: StatusEffect): boolean {
     return this.effects.includes(effect);
   }
 
-  override getUserBenefitScore(user: Pokemon, _target: Pokemon, _move: Move): number {
-    return user.hasNonVolatileStatusEffect(false, true) ? 10 : 0;
+  /**
+   * @returns This attribute's Effect Score modifier as follows:
+   * - If the affected Pokemon doesn't have a relevant status effect, grant (+0).
+   * - Otherwise, if the affected Pokemon is either the user or its ally, grant (+1) + 50%(+1)
+   * - Otherwise, grant (-1) [using the move would cure an opponent's status effect]
+   */
+  public override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+    const pokemon = this.selfTarget ? user : target;
+
+    if (!pokemon.hasStatusEffect(this.effects)) {
+      return 0;
+    }
+
+    if (!pokemon.isOpponent(user)) {
+      return this.getRandomScore(user, 50, MAJOR_EFFECT_SCORE_BONUS, MINOR_EFFECT_SCORE_BONUS);
+    }
+    return MINOR_EFFECT_SCORE_PENALTY;
   }
 }
