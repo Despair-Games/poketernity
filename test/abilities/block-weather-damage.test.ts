@@ -31,6 +31,7 @@ describe("Ability Attribute - Block Weather Damage", () => {
       .enemyMoveset(MoveId.SPLASH);
   });
 
+  // biome-ignore format: Manually formatted
   // prettier-ignore
   it.each([
     { ability: AbilityId.OVERCOAT, abilityName: "Overcoat", weatherName: "Sandstorm", weather: WeatherType.SANDSTORM },
