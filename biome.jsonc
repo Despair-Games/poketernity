@@ -7,7 +7,7 @@
     "defaultBranch": "beta"
   },
   "formatter": {
-    "enabled": false, // TODO: enable when https://github.com/biomejs/biome/issues/5879 is implemented
+    "enabled": true,
     "useEditorconfig": true,
     "indentStyle": "space",
     "lineWidth": 120
@@ -29,6 +29,7 @@
       "!**/node_modules/**/*",
       "!**/public/**/*",
       "!**/typedoc/**/*",
+      "!**/pnpm-lock.yml",
       // this file is too big
       "!**/src/data/tms.ts"
     ]
@@ -156,11 +157,15 @@
   },
   "javascript": {
     "formatter": {
-      "quoteStyle": "double",
-      "arrowParentheses": "always"
+      "operatorLinebreak": "before"
     },
     "parser": {
       "jsxEverywhere": false
+    }
+  },
+  "css": {
+    "formatter": {
+      "enabled": false
     }
   },
   "overrides": [
