@@ -1139,9 +1139,9 @@ export class FormChangeItemModifierType extends PokemonModifierType implements G
       (_type, args) => new PokemonFormChangeItemModifier(this, (args[0] as PlayerPokemon).id, formChangeItem, true),
       (pokemon: PlayerPokemon) => {
         // Make sure the Pokemon has alternate forms
+        // Get all form changes for this species with an item trigger, including any compound triggers
         if (
           Object.hasOwn(pokemonFormChanges, pokemon.species.speciesId)
-          // Get all form changes for this species with an item trigger, including any compound triggers
           && pokemonFormChanges[pokemon.species.speciesId]
             .filter(
               (fc) => fc.trigger.hasTriggerType(SpeciesFormChangeItemTrigger) && fc.preFormKey === pokemon.getFormKey(),

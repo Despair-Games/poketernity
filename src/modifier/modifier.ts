@@ -527,7 +527,7 @@ export abstract class LapsingPersistentModifier extends PersistentModifier {
  * @see {@linkcode apply}
  */
 export class DoubleBattleChanceBoosterModifier extends LapsingPersistentModifier {
-  declare public type: DoubleBattleChanceBoosterModifierType;
+  public declare type: DoubleBattleChanceBoosterModifierType;
 
   override match(modifier: Modifier): boolean {
     return modifier instanceof DoubleBattleChanceBoosterModifier && modifier.getMaxBattles() === this.getMaxBattles();
@@ -1014,7 +1014,7 @@ export class EvoTrackerModifier extends PokemonHeldItemModifier {
  * Currently used by Shuckle Juice item
  */
 export class PokemonBaseStatTotalModifier extends PokemonHeldItemModifier {
-  declare public type: PokemonBaseStatTotalModifierType;
+  public declare type: PokemonBaseStatTotalModifierType;
   public override isTransferable: boolean = false;
 
   private statModifier: number;
@@ -1389,7 +1389,7 @@ export class SpeciesStatBoosterModifier extends StatBoosterModifier {
  * Applies Specific Type item boosts (e.g., Magnet)
  */
 export class AttackTypeBoosterModifier extends PokemonHeldItemModifier {
-  declare public type: AttackTypeBoosterModifierType;
+  public declare type: AttackTypeBoosterModifierType;
   public moveType: ElementalType;
   private boostMultiplier: number;
 
@@ -2225,7 +2225,7 @@ export class PokemonLevelIncrementModifier extends ConsumablePokemonModifier {
 }
 
 export class TmModifier extends ConsumablePokemonModifier {
-  declare public type: TmModifierType;
+  public declare type: TmModifierType;
 
   /**
    * Applies {@linkcode TmModifier}
@@ -2272,7 +2272,7 @@ export class RememberMoveModifier extends ConsumablePokemonModifier {
 }
 
 export class EvolutionItemModifier extends ConsumablePokemonModifier {
-  declare public type: EvolutionItemModifierType;
+  public declare type: EvolutionItemModifierType;
 
   /**
    * Applies {@linkcode EvolutionItemModifier}
@@ -2404,7 +2404,7 @@ export class ExpBoosterModifier extends PersistentModifier {
 }
 
 export class PokemonExpBoosterModifier extends PokemonHeldItemModifier {
-  declare public type: PokemonExpBoosterModifierType;
+  public declare type: PokemonExpBoosterModifierType;
 
   private boostMultiplier: number;
 
@@ -2501,7 +2501,7 @@ export class ExpBalanceModifier extends PersistentModifier {
 }
 
 export class PokemonFriendshipBoosterModifier extends PokemonHeldItemModifier {
-  declare public type: PokemonFriendshipBoosterModifierType;
+  public declare type: PokemonFriendshipBoosterModifierType;
 
   matchType(modifier: Modifier): boolean {
     return modifier instanceof PokemonFriendshipBoosterModifier;
@@ -2558,7 +2558,7 @@ export class PokemonNatureWeightModifier extends PokemonHeldItemModifier {
 }
 
 export class PokemonFormChangeItemModifier extends PokemonHeldItemModifier {
-  declare public type: FormChangeItemModifierType;
+  public declare type: FormChangeItemModifierType;
   public formChangeItem: FormChangeItem;
   public active: boolean;
   public override isTransferable: boolean = false;

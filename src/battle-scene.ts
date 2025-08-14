@@ -1405,10 +1405,10 @@ export class BattleScene extends SceneBase {
 
           applyAbAttrs<PostBattleInitAbAttr>(AbAttrFlag.POST_BATTLE_INIT, pokemon, false);
 
+          // In Scarlet/Violet, the player's Tera Orb automatically recharges after every battle once they've caught Terapagos
+          // The player's Tera Orb also automatically recharges when fighting the Elite 4 or in Area Zero (the endgame area)
           if (
-            // In Scarlet/Violet, the player's Tera Orb automatically recharges after every battle once they've caught Terapagos
             (pokemon.species.speciesId === SpeciesId.TERAPAGOS && pokemon.isAllowedInChallenge())
-            // The player's Tera Orb also automatically recharges when fighting the Elite 4 or in Area Zero (the endgame area)
             || (this.gameMode.isClassic && this.currentBattle.waveIndex >= ELITE_FOUR_1_WAVE)
           ) {
             this.playerTerasUsed = 0;

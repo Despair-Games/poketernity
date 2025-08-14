@@ -19,14 +19,12 @@ const tutorialHandlers = {
       if (settings.general.enableTouchControls) {
         return resolve();
       }
-      globalScene
-        .showFieldOverlay(1000)
-        .then(() =>
-          globalScene.ui.showText(i18next.t("tutorial:accessMenu"), {
-            callback: () => globalScene.hideFieldOverlay(1000).then(() => resolve()),
-            prompt: true,
-          }),
-        );
+      globalScene.showFieldOverlay(1000).then(() =>
+        globalScene.ui.showText(i18next.t("tutorial:accessMenu"), {
+          callback: () => globalScene.hideFieldOverlay(1000).then(() => resolve()),
+          prompt: true,
+        }),
+      );
     });
   },
   [Tutorial.MENU]: () => {
@@ -56,15 +54,13 @@ const tutorialHandlers = {
   },
   [Tutorial.STAT_CHANGE]: () => {
     return new Promise<void>((resolve) => {
-      globalScene
-        .showFieldOverlay(1000)
-        .then(() =>
-          globalScene.ui.showText(i18next.t("tutorial:statChange"), {
-            callback: () =>
-              globalScene.ui.showText("", { callback: () => globalScene.hideFieldOverlay(1000).then(() => resolve()) }),
-            prompt: true,
-          }),
-        );
+      globalScene.showFieldOverlay(1000).then(() =>
+        globalScene.ui.showText(i18next.t("tutorial:statChange"), {
+          callback: () =>
+            globalScene.ui.showText("", { callback: () => globalScene.hideFieldOverlay(1000).then(() => resolve()) }),
+          prompt: true,
+        }),
+      );
     });
   },
   [Tutorial.SELECT_ITEM]: () => {

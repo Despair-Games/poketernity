@@ -542,7 +542,7 @@ interface monotypeOverride {
 export class SingleTypeChallenge extends Challenge {
   private static TYPE_OVERRIDES: monotypeOverride[] = [{ species: SpeciesId.CASTFORM, type: ElementalType.NORMAL }];
   private static SPECIES_OVERRIDES: SpeciesId[] = [SpeciesId.MELOETTA];
-  declare public value: ElementalType;
+  public declare value: ElementalType;
 
   constructor() {
     super(Challenges.SINGLE_TYPE, 18);

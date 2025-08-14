@@ -774,13 +774,17 @@ export class CanFormChangeWithItemRequirement extends EncounterPokemonRequiremen
     return this.queryParty(partyPokemon).length >= this.minNumberOfPokemon;
   }
 
-  filterByForm(pokemon, formChangeItem) {
+  /**
+   * Get all form changes for this species with an item trigger, including any compound triggers.
+   * @param pokemon - The {@linkcode PlayerPokemon} to check
+   * @param formChangeItem - The {@linkcode FormChangeItem} to check for
+   * @returns `true` if any form changes match this item
+   */
+  filterByForm(pokemon: PlayerPokemon, formChangeItem: FormChangeItem): boolean {
     if (
       Object.hasOwn(pokemonFormChanges, pokemon.species.speciesId)
-      // Get all form changes for this species with an item trigger, including any compound triggers
       && pokemonFormChanges[pokemon.species.speciesId]
         .filter((fc) => fc.trigger.hasTriggerType(SpeciesFormChangeItemTrigger))
-        // Returns true if any form changes match this item
         .flatMap((fc) => fc.findTrigger(SpeciesFormChangeItemTrigger) as SpeciesFormChangeItemTrigger)
         .flatMap((fc) => fc.item)
         .includes(formChangeItem)
@@ -804,7 +808,11 @@ export class CanFormChangeWithItemRequirement extends EncounterPokemonRequiremen
     );
   }
 
+  // TODO: surely `pokemon` shouldn't be able to be `undefined`?
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
+    if (!pokemon) {
+      return ["formChangeItem", ""];
+    }
     const requiredItems = this.requiredFormChangeItem.filter((formChangeItem) =>
       this.filterByForm(pokemon, formChangeItem),
     );
