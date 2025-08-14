@@ -1519,7 +1519,7 @@ export function initMoves() {
       .bounceable(),
     new AttackMove(MoveId.WAKE_UP_SLAP, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 70, 100, 10, -1, 0, 4)
       .attr(MovePowerMultiplierAttr, (user, target, move) =>
-        targetSleptOrComatoseCondition(user, target, move, true) ? 2 : 1,
+        targetSleptOrComatoseCondition(user, target, move) ? 2 : 1,
       )
       .attr(HealStatusEffectAttr, false, StatusEffect.SLEEP),
     new AttackMove(MoveId.HAMMER_ARM, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 100, 90, 10, -1, 0, 4)
