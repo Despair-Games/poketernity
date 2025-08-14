@@ -71,13 +71,13 @@ export abstract class MoveEffectAttr extends MoveAttr {
 
   /**
    * Determines whether the {@linkcode Move}'s effects are valid to {@linkcode apply}
-   * @virtual
-   * @param user the {@linkcode Pokemon} using the move
-   * @param target the {@linkcode Pokemon} targeted by the move
-   * @param move the {@linkcode Move} being used
+   * @param user - The {@linkcode Pokemon} using the move
+   * @param target - The {@linkcode Pokemon} targeted by the move
+   * @param move - The {@linkcode Move} being used
+   * @param simulated - If `true`, suppresses changes to game state
    * @returns `true` if effects can apply
    */
-  canApply(user: Pokemon, target: Pokemon | null, _move: Move): boolean {
+  public canApply(user: Pokemon, target: Pokemon | null, _move: Move, _simulated: boolean = false): boolean {
     const affectedPokemon = this.selfTarget ? user : target;
     return !!affectedPokemon && !affectedPokemon.isFainted();
   }
@@ -91,7 +91,7 @@ export abstract class MoveEffectAttr extends MoveAttr {
    * @param move the {@linkcode Move} being used
    * @sealed
    */
-  override apply(user: Pokemon, target: Pokemon | null, move: Move): boolean {
+  public override apply(user: Pokemon, target: Pokemon | null, move: Move): boolean {
     if (this.canApply(user, target, move)) {
       return this.applyEffect(user, target, move);
     }
@@ -107,5 +107,5 @@ export abstract class MoveEffectAttr extends MoveAttr {
    * @param move the {@linkcode Move} being used
    * @returns `true` if effects successfully applied.
    */
-  abstract applyEffect(_user: Pokemon, _target: Pokemon | null, _move: Move): boolean;
+  public abstract applyEffect(_user: Pokemon, _target: Pokemon | null, _move: Move): boolean;
 }

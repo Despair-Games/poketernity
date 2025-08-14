@@ -908,10 +908,8 @@ export abstract class Move {
    * @see {@linkcode getEffectScore}
    */
   public getBattleAccuracyPenalty(user: EnemyPokemon, target: Pokemon): number {
-    /**
-     * If any ongoing effect would cause the move to bypass accuracy checks, assign no penalty.
-     * @todo the target's No Guard can be discovered prematurely here
-     */
+    // If any ongoing effect would cause the move to bypass accuracy checks, assign no penalty.
+    // TODO: the target's No Guard can be discovered prematurely here
     if (
       [user, target].some((p) => p.hasAbilityWithAttr(AbAttrFlag.ALWAYS_HIT))
       || user.getTag(BattlerTagType.IGNORE_ACCURACY)
