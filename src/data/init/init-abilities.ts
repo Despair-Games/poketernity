@@ -199,7 +199,6 @@ import { applyMoveAttrs } from "#utils/move-utils";
 import i18next from "i18next";
 
 // biome-ignore format: Manually formatted
-// prettier-ignore
 export function initAbilities() {
   allAbilities.push(
     new Ability(AbilityId.NONE, 3),

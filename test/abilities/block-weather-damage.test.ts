@@ -32,7 +32,6 @@ describe("Ability Attribute - Block Weather Damage", () => {
   });
 
   // biome-ignore format: Manually formatted
-  // prettier-ignore
   it.each([
     { ability: AbilityId.OVERCOAT, abilityName: "Overcoat", weatherName: "Sandstorm", weather: WeatherType.SANDSTORM },
     { ability: AbilityId.OVERCOAT, abilityName: "Overcoat", weatherName: "Hail", weather: WeatherType.HAIL },

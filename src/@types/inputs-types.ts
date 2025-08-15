@@ -4,7 +4,6 @@ import type { SettingKeyboard } from "#enums/setting-keyboard";
 
 /** All keyboard keys that the game recognizes or allows to map to an action. */
 // biome-ignore format: Manually formatted
-// prettier-ignore
 export type KeyboardKeys = "KEY_A" | "KEY_B" | "KEY_C" | "KEY_D" | "KEY_E" | "KEY_F" | "KEY_G" | "KEY_H"
   | "KEY_I" | "KEY_J" | "KEY_K" | "KEY_L" | "KEY_M" | "KEY_N" | "KEY_O" | "KEY_P" | "KEY_Q" | "KEY_R"
   | "KEY_S" | "KEY_T" | "KEY_U" | "KEY_V" | "KEY_W" | "KEY_X" | "KEY_Y" | "KEY_Z"
@@ -17,7 +16,6 @@ export type KeyboardKeys = "KEY_A" | "KEY_B" | "KEY_C" | "KEY_D" | "KEY_E" | "KE
   | "KEY_LEFT_BRACKET" | "KEY_RIGHT_BRACKET" | "KEY_SEMICOLON" | "KEY_BACKSPACE" | "KEY_ALT";
 
 // biome-ignore format: Manually formatted
-// prettier-ignore
 export type BasicGamepadKeys = "RC_S" | "RC_E" | "RC_W" | "RC_N" | "START" | "SELECT"
   | "LB" | "RB" | "LC_N" | "LC_S" | "LC_W" | "LC_E";
 export type ModernGamepadKeys = BasicGamepadKeys | "LT" | "RT" | "LS" | "RS";
