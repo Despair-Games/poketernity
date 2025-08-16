@@ -114,7 +114,8 @@
         "useGroupedAccessorPairs": "error",
         "useObjectSpread": "error",
         "useNumericSeparators": "off", // TODO: enable?
-        "noNamespace": "error"
+        "noNamespace": "error",
+        "noDefaultExport": "error"
       },
       "suspicious": {
         "noDoubleEquals": "error",
@@ -198,6 +199,22 @@
           },
           "style": {
             "useImportType": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "**/src/overrides.ts",
+        "**/src/plugins/i18n.ts",
+        "**/eslint.config.js",
+        "**/vite.config.ts",
+        "**/vitest.config.ts"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noDefaultExport": "off"
           }
         }
       }
