@@ -141,7 +141,8 @@
         "noTsIgnore": "error",
         "useIterableCallbackReturn": "off", // TODO: re-enable if the rule is changed to be type-aware
         "useErrorMessage": "error",
-        "useGuardForIn": "error"
+        "useGuardForIn": "error",
+        "useNumberToFixedDigitsArgument": "error"
       },
       "complexity": {
         "noExcessiveCognitiveComplexity": "info",
