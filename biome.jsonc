@@ -122,7 +122,8 @@
         "noYodaExpression": "error",
         "useThrowNewError": "error",
         "useThrowOnlyError": "error",
-        "useTrimStartEnd": "error"
+        "useTrimStartEnd": "error",
+        "useForOf": "error"
       },
       "suspicious": {
         "noDoubleEquals": "error",

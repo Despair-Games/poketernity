@@ -654,14 +654,14 @@ export class RunInfoUiHandler extends UiHandler {
    */
   private challengeParser(): string[] {
     const rules: string[] = [];
-    for (let i = 0; i < this.runInfo.challenges.length; i++) {
-      if (this.runInfo.challenges[i].value !== 0) {
-        switch (this.runInfo.challenges[i].id) {
+    for (const challenge of this.runInfo.challenges) {
+      if (challenge.value !== 0) {
+        switch (challenge.id) {
           case Challenges.SINGLE_GENERATION:
-            rules.push(i18next.t(`runHistory:challengeMonoGen${this.runInfo.challenges[i].value}`));
+            rules.push(i18next.t(`runHistory:challengeMonoGen${challenge.value}`));
             break;
           case Challenges.SINGLE_TYPE: {
-            const typeRule = enumValueToKey(ElementalType, this.runInfo.challenges[i].value as ElementalType);
+            const typeRule = enumValueToKey(ElementalType, challenge.value as ElementalType);
             const typeTextColor = `[color=${TypeColor[typeRule]}]`;
             const typeShadowColor = `[shadow=${TypeShadowColor[typeRule]}]`;
             const typeText =
@@ -673,7 +673,7 @@ export class RunInfoUiHandler extends UiHandler {
             rules.push(i18next.t("challenges:inverseBattle.shortName"));
             break;
           default: {
-            const localisationKey = enumValueToKey(Challenges, this.runInfo.challenges[i].id as Challenges)
+            const localisationKey = enumValueToKey(Challenges, challenge.id as Challenges)
               .split("_")
               .map((f, i) => (i ? `${f[0]}${f.slice(1).toLowerCase()}` : f.toLowerCase()))
               .join("");

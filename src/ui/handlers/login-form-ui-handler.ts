@@ -243,9 +243,9 @@ export class LoginFormUiHandler extends FormModalUiHandler {
       const dataKeys = localStorageKeys.filter((ls) => ls.indexOf(keyToFind) >= 0);
       if (dataKeys.length > 0 && dataKeys.length <= 2) {
         const options: OptionSelectItem[] = [];
-        for (let i = 0; i < dataKeys.length; i++) {
+        for (const dataKey of dataKeys) {
           options.push({
-            label: dataKeys[i].replace(keyToFind, ""),
+            label: dataKey.replace(keyToFind, ""),
             handler: () => {
               globalScene.ui.revertMode();
               return true;
@@ -275,14 +275,11 @@ export class LoginFormUiHandler extends FormModalUiHandler {
       const sessionKeys = localStorageKeys.filter((ls) => ls.indexOf(sessionKeyToFind) >= 0);
       if (dataKeys.length > 0 || sessionKeys.length > 0) {
         const zip = new JSZip();
-        for (let i = 0; i < dataKeys.length; i++) {
-          zip.file(dataKeys[i] + `.${APP_ABBREVIATION}.${SAVE_FILE_EXTENSION}`, localStorage.getItem(dataKeys[i])!);
+        for (const dataKey of dataKeys) {
+          zip.file(dataKey + `.${APP_ABBREVIATION}.${SAVE_FILE_EXTENSION}`, localStorage.getItem(dataKey)!);
         }
-        for (let i = 0; i < sessionKeys.length; i++) {
-          zip.file(
-            sessionKeys[i] + `.${APP_ABBREVIATION}.${SAVE_FILE_EXTENSION}`,
-            localStorage.getItem(sessionKeys[i])!,
-          );
+        for (const sessionKey of sessionKeys) {
+          zip.file(sessionKey + `.${APP_ABBREVIATION}.${SAVE_FILE_EXTENSION}`, localStorage.getItem(sessionKey)!);
         }
         zip.generateAsync({ type: "blob" }).then((content) => {
           const url = URL.createObjectURL(content);

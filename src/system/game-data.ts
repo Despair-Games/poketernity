@@ -1367,8 +1367,8 @@ export class GameData {
 
     const defaultStarterAttr = DexAttr.NON_SHINY | DexAttr.MALE | DexAttr.FEMALE | DexAttr.DEFAULT_FORM;
 
-    for (let ds = 0; ds < defaultStarterSpecies.length; ds++) {
-      const entry = data[defaultStarterSpecies[ds]] as DexEntry;
+    for (const defaultStarter of defaultStarterSpecies) {
+      const entry = data[defaultStarter] as DexEntry;
       entry.seenAttr = defaultStarterAttr;
       entry.caughtAttr = defaultStarterAttr;
     }

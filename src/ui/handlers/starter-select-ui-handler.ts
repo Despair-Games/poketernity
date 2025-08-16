@@ -2654,9 +2654,8 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     }
 
     // this updates icons for previously saved pokemon
-    for (let i = 0; i < this.validStarterContainers.length; i++) {
-      const currentFilteredContainer = this.validStarterContainers[i];
-      const starterSprite = currentFilteredContainer.icon as Phaser.GameObjects.Sprite;
+    for (const currentFilteredContainer of this.validStarterContainers) {
+      const starterSprite = currentFilteredContainer.icon;
 
       const currentDexAttr = this.getCurrentDexProps(currentFilteredContainer.species.speciesId);
       const props = globalScene.gameData.getSpeciesDexAttrProps(currentFilteredContainer.species, currentDexAttr);
@@ -4047,14 +4046,14 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     return true;
   }
 
-  /* This block checks to see if your party is valid
-   * It checks each pokemon against the challenge - noting that due to monotype challenges it needs to check the pokemon while ignoring their evolutions/form change items
+  /**
+   * Check to see if your party is valid, ignoring evolutions and alternate forms.
+   * @todo Simplify this a bit
    */
-  isPartyValid(): boolean {
+  private isPartyValid(): boolean {
     let canStart = false;
-    for (let s = 0; s < this.starterSpecies.length; s++) {
+    for (const species of this.starterSpecies) {
       const isValidForChallenge = new BooleanHolder(true);
-      const species = this.starterSpecies[s];
       applyChallenges(
         globalScene.gameMode,
         ChallengeType.STARTER_CHOICE,

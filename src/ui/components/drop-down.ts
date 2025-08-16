@@ -593,11 +593,11 @@ export class DropDown extends Phaser.GameObjects.Container {
   autoSize(): void {
     let maxWidth = 0;
     let x = 0;
-    for (let i = 0; i < this.options.length; i++) {
-      const optionWidth = this.options[i].getWidth();
+    for (const option of this.options) {
+      const optionWidth = option.getWidth();
       if (optionWidth > maxWidth) {
         maxWidth = optionWidth;
-        x = this.options[i].getCurrentLabelX() ?? 0;
+        x = option.getCurrentLabelX() ?? 0;
       }
     }
     this.window.width = maxWidth + x - this.window.x + 6;

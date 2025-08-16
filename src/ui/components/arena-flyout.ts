@@ -227,9 +227,7 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
 
     this.fieldEffectInfo.sort((infoA, infoB) => infoA.duration - infoB.duration);
 
-    for (let i = 0; i < this.fieldEffectInfo.length; i++) {
-      const fieldEffectInfo = this.fieldEffectInfo[i];
-
+    for (const fieldEffectInfo of this.fieldEffectInfo) {
       // Creates a proxy object to decide which text object needs to be updated
       let textObject: Phaser.GameObjects.Text;
       switch (fieldEffectInfo.effectType) {
@@ -395,9 +393,7 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
     const fieldEffectInfo: ArenaEffectInfo[] = [];
     this.fieldEffectInfo.forEach((i) => fieldEffectInfo.push(i));
 
-    for (let i = 0; i < fieldEffectInfo.length; i++) {
-      const info = fieldEffectInfo[i];
-
+    for (const info of fieldEffectInfo) {
       if (info.maxDuration === 0) {
         continue;
       }
@@ -423,7 +419,9 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
       duration: fixedNumber(125),
       ease: "Sine.easeInOut",
       alpha: visible ? 1 : 0,
-      onComplete: () => (this.timeOfDayWidget.parentVisible = visible),
+      onComplete: () => {
+        this.timeOfDayWidget.parentVisible = visible;
+      },
     });
   }
 

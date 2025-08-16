@@ -1059,11 +1059,11 @@ export class PartyUiHandler extends MessageUiHandler {
     this.transferMode = false;
     this.transferAll = false;
     this.partySlots[this.transferCursor].setTransfer(false);
-    for (let i = 0; i < this.partySlots.length; i++) {
-      this.partySlots[i].slotDescriptionLabel.setVisible(false);
-      this.partySlots[i].slotHpBar.setVisible(true);
-      this.partySlots[i].slotHpOverlay.setVisible(true);
-      this.partySlots[i].slotHpText.setVisible(true);
+    for (const partySlot of this.partySlots) {
+      partySlot.slotDescriptionLabel.setVisible(false);
+      partySlot.slotHpBar.setVisible(true);
+      partySlot.slotHpOverlay.setVisible(true);
+      partySlot.slotHpText.setVisible(true);
     }
   }
 

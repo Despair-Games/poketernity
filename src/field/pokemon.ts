@@ -2441,8 +2441,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return;
     }
 
-    for (let m = 0; m < allLevelMoves.length; m++) {
-      const levelMove = allLevelMoves[m];
+    for (const levelMove of allLevelMoves) {
       if (this.level < levelMove[0]) {
         break;
       }

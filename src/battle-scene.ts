@@ -70,7 +70,6 @@ import { Trainer } from "#field/trainer";
 import { SpeciesFormChangeManualTrigger } from "#form-change-triggers/species-form-change-manual-trigger";
 import { SpeciesFormChangeTimeOfDayTrigger } from "#form-change-triggers/species-form-change-time-of-day-trigger";
 import type { SpeciesFormChangeTrigger } from "#form-change-triggers/species-form-change-trigger";
-import { populateAnims } from "#init/init-anims";
 import { initCommonAnims } from "#init/init-common-anims";
 import { initMoveAnim } from "#init/init-move-anim";
 import { InputsController } from "#inputs/inputs-controller";
@@ -387,7 +386,7 @@ export class BattleScene extends SceneBase {
       };
     }
 
-    populateAnims();
+    // populateAnims();
 
     await this.initVariantData();
   }
