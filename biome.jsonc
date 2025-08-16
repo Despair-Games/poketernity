@@ -140,7 +140,8 @@
         "noConstantBinaryExpressions": "error",
         "noTsIgnore": "error",
         "useIterableCallbackReturn": "off", // TODO: re-enable if the rule is changed to be type-aware
-        "useErrorMessage": "error"
+        "useErrorMessage": "error",
+        "useGuardForIn": "error"
       },
       "complexity": {
         "noExcessiveCognitiveComplexity": "info",

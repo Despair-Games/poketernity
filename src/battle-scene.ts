@@ -2113,12 +2113,10 @@ export class BattleScene extends SceneBase {
       }
 
       if (modifier instanceof ConsumablePokemonModifier) {
-        for (const p in this.party) {
-          const pokemon = this.party[p];
-
+        for (const pokemon of this.party) {
           const args: unknown[] = [];
           if (modifier instanceof PokemonHpRestoreModifier) {
-            if (!(modifier as PokemonHpRestoreModifier).fainted) {
+            if (!modifier.fainted) {
               const hpRestoreMultiplier = new NumberHolder(1);
               this.applyModifiers(HealingBoosterModifier, true, hpRestoreMultiplier);
               args.push(hpRestoreMultiplier.value);

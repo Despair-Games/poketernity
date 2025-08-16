@@ -664,16 +664,15 @@ export class PartyUiHandler extends MessageUiHandler {
       this.lastCursor = party.length - 1;
     }
 
-    for (const p in party) {
-      const slotIndex = Number.parseInt(p);
-      const partySlot = new PartySlot(slotIndex, party[p], this.iconAnimHandler, this.partyUiMode, this.tmMoveId);
+    party.forEach((pokemon, slotIndex) => {
+      const partySlot = new PartySlot(slotIndex, pokemon, this.iconAnimHandler, this.partyUiMode, this.tmMoveId);
       globalScene.add.existing(partySlot);
       this.partySlotsContainer.add(partySlot);
       this.partySlots.push(partySlot);
       if (this.cursor === slotIndex) {
         partySlot.select();
       }
-    }
+    });
   }
 
   public override setCursor(cursor: number): boolean {

@@ -1306,6 +1306,7 @@ export class SpeciesStatBoosterModifierTypeGenerator extends ModifierTypeGenerat
         const speciesId = p.getSpeciesForm(true).speciesId;
         const hasFling = p.getMoveset(true).some((m) => m.moveId === MoveId.FLING);
 
+        // biome-ignore lint/suspicious/useGuardForIn: Not necessary
         for (const i in values) {
           const checkedSpecies = values[i].species;
           const checkedStats = values[i].stats;

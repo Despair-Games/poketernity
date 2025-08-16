@@ -513,6 +513,7 @@ export class GameData {
   }
 
   convertSystemDataStr(dataStr: string, shorten: boolean = false): string {
+    // TODO: is this `if` block necessary anymore?
     if (!shorten) {
       // Account for past key oversight
       dataStr = dataStr.replace(/\$pAttr/g, "$pa");
@@ -521,6 +522,7 @@ export class GameData {
     dataStr = dataStr.replace(/"secretId":\d+/g, `"secretId":${this.secretId}`);
     const fromKeys = shorten ? Object.keys(systemShortKeys) : Object.values(systemShortKeys);
     const toKeys = shorten ? Object.values(systemShortKeys) : Object.keys(systemShortKeys);
+    // biome-ignore lint/suspicious/useGuardForIn: Not necessary
     for (const k in fromKeys) {
       dataStr = dataStr.replace(new RegExp(`${fromKeys[k].replace("$", "\\$")}`, "g"), toKeys[k]);
     }
