@@ -37,16 +37,13 @@ export class PartyStatusCureAttr extends MoveEffectAttr {
    * Tries to cure the status of the given {@linkcode Pokemon}
    * @param pokemon The {@linkcode Pokemon} to cure.
    * @param userId The ID of the (move) {@linkcode Pokemon | user}.
+   * @todo This doesn't actually apply abilities that negate the effect (i.e. Soundproof)
    */
   private cureStatus(pokemon: Pokemon, userId: number) {
-    if (!pokemon.isOnField() || pokemon.id === userId) {
-      // user always cures its own status, regardless of ability
+    if (this.hasRemovableStatusEffect(pokemon, userId)) {
       pokemon.resetStatus();
       pokemon.updateInfo();
-    } else if (!pokemon.hasAbility(this.abilityCondition)) {
-      pokemon.resetStatus();
-      pokemon.updateInfo();
-    } else {
+    } else if (pokemon.hasAbility(this.abilityCondition)) {
       globalScene.phaseManager.createAndUnshiftPhase(
         "ShowAbilityPhase",
         pokemon.id,
@@ -56,14 +53,26 @@ export class PartyStatusCureAttr extends MoveEffectAttr {
   }
 
   /**
+   * Determines whether a given Pokemon has a non-volatile status effect that
+   * can be cured by this attribute's effect.
+   * @param pokemon - The {@linkcode Pokemon} to check
+   * @param userId - The ID of the Pokemon that originally used the move with this effect
+   * @returns `true` if the given {@linkcode pokemon} has a curable status effect
+   */
+  private hasRemovableStatusEffect(pokemon: Pokemon, userId: number): boolean {
+    return (
+      pokemon.hasNonVolatileStatusEffect(false, true)
+      && (!pokemon.isOnField() || pokemon.id === userId || !pokemon.hasAbility(this.abilityCondition))
+    );
+  }
+
+  /**
    * @returns (+1) for each party member that would have its status effect cured by this effect,
    * up to the {@linkcode SOFT_EFFECT_SCORE_LIMIT}.
    */
   public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     const party = user.getParty();
-    const numPartyMembersWithRemovableStatus = party.filter(
-      (p) => p.hasNonVolatileStatusEffect(false, true) && (p.id === user.id || !p.hasAbility(this.abilityCondition)),
-    ).length;
+    const numPartyMembersWithRemovableStatus = party.filter((p) => this.hasRemovableStatusEffect(p, user.id)).length;
 
     return Math.min(numPartyMembersWithRemovableStatus, SOFT_EFFECT_SCORE_LIMIT);
   }
