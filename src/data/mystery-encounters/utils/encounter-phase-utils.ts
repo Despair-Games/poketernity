@@ -207,8 +207,8 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
   battle.enemyLevels = battle.enemyLevels.map((level) => level + additive);
 
   battle.enemyLevels.forEach((level, e) => {
-    let enemySpecies;
-    let dataSource;
+    let enemySpecies: PokemonSpecies | undefined;
+    let dataSource: PokemonData | undefined;
     let isBoss = false;
     if (!loaded) {
       if ((!isNil(trainerType) || trainerConfig) && battle.trainer) {
@@ -280,9 +280,12 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
       }
 
       // Generate new id, reset status and HP in case using data source
-      if (config.dataSource) {
-        enemyPokemon.generateId();
-      }
+      // TODO: figure out if this is necessary
+      // if (config.dataSource) {
+      //   // remove old id from battlescene active id list here
+      //   enemyPokemon.id = enemyPokemon.generateId();
+      //   // add new id to battlescene active id list here
+      // }
 
       // Set form
       if (!isNil(config.formIndex)) {
