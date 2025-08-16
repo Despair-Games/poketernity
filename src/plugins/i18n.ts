@@ -112,10 +112,12 @@ async function initFonts(language: string | undefined) {
 }
 
 /**
- * I18n money formatter with. (useful for BBCode coloring of text)\
- * *If you don't want the BBCode tag applied, just use 'number' formatter*
- * @example Input: `{{myMoneyValue, money}}`
- *          Output: `@[MONEY]{₽100,000,000}`
+ * I18n money formatter with, useful for BBCode coloring of text.
+ *
+ * **Note:** If you don't want the BBCode tag applied, just use 'number' formatter.
+ * @example
+ *   Input: `{{myMoneyValue, money}}`
+ *   Output: `@[MONEY]{₽100,000,000}`
  * @param amount the money amount
  * @returns a money formatted string
  */

@@ -11,7 +11,7 @@ export const DexAttr = {
   /**
    * Marks the first flag of a species' forms. It must be the last attribute since
    * it will be followed by the flags for the other forms, depending on the species.
-   * */
+   */
   DEFAULT_FORM: 64n,
 };
 

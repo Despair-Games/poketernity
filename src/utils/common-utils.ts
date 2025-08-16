@@ -205,7 +205,7 @@ export function clamp(value: number, min: number, max: number): number {
  * Calculates the accuracy multiplier
  * based on the user's accuracy stage and the target's evasion stage.
  *
- * *The difference is {@linkcode clamp | clamped} to [{@linkcode MIN_STAT_STAGE | -6}, {@linkcode MAX_STAT_STAGE | +6}].*
+ * **Note:** The difference is {@linkcode clamp | clamped} to [{@linkcode MIN_STAT_STAGE | -6}, {@linkcode MAX_STAT_STAGE | +6}].
  *
  * @param userAccStage - The user's accuracy stage
  * @param targetEvaStage - The target's evasion stage

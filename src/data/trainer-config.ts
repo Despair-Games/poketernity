@@ -506,7 +506,7 @@ export class TrainerConfig {
    * @param nameFemale The name of the female trainer. If 'Ivy', a localized name will be assigned.
    * @param femaleEncounterBgm The encounter BGM for the female trainer, which can be a TrainerType or a string.
    * @returns The updated TrainerConfig instance.
-   **/
+   */
   setHasGenders(nameFemale?: string, femaleEncounterBgm?: TrainerType | string): TrainerConfig {
     // If the female name is 'Ivy' (the rival), assign a localized name.
     if (nameFemale === "Ivy") {
@@ -1150,7 +1150,7 @@ export class TrainerConfig {
    * @param poolName The evil team the admin belongs to.
    * @param signatureSpecies The signature species for the evil team leader.
    * @returns The updated TrainerConfig instance.
-   * **/
+   */
   initForEvilTeamAdmin(title: string, poolName: string, signatureSpecies: (SpeciesId | SpeciesId[])[]): TrainerConfig {
     if (!getIsInitialized()) {
       initI18n();
@@ -1183,7 +1183,7 @@ export class TrainerConfig {
    * @param specialtyTypes The specialty types for the Stat Trainer.
    * @param isMale Whether the Elite Four Member is Male or Female (for localization of the title).
    * @returns The updated TrainerConfig instance.
-   **/
+   */
   initForStatTrainer(
     signatureSpecies: (SpeciesId | SpeciesId[])[],
     _isMale: boolean,
@@ -1222,7 +1222,7 @@ export class TrainerConfig {
    * @param rematch Whether or not this is the rematch fight
    * @param battleBgm the string representation of the battle bgm
    * @returns The updated TrainerConfig instance.
-   * **/
+   */
   initForEvilTeamLeader(title: string, name: string, rematch: boolean, battleBgm: string): TrainerConfig {
     if (!getIsInitialized()) {
       initI18n();
@@ -1251,7 +1251,7 @@ export class TrainerConfig {
    * @param specialtyTypes The specialty types for the Gym Leader.
    * @param isMale Whether the Gym Leader is Male or Not (for localization of the title).
    * @returns The updated TrainerConfig instance.
-   * **/
+   */
   initForGymLeader(
     signatureSpecies: (SpeciesId | SpeciesId[])[],
     isMale: boolean,
@@ -1335,7 +1335,7 @@ export class TrainerConfig {
    * @param specialtyTypes The specialty types for the Elite Four member.
    * @param isMale Whether the Elite Four Member is Male or Female (for localization of the title).
    * @returns The updated TrainerConfig instance.
-   **/
+   */
   initForEliteFour(
     signatureSpecies: (SpeciesId | SpeciesId[])[],
     isMale: boolean,
@@ -1390,7 +1390,7 @@ export class TrainerConfig {
    * @param variant The {@linkcode TrainerVariant} of the Champion (used for localization of the title).
    * @param battleBgm Array of strings representing the battle music. One is chosen at random.
    * @returns The updated TrainerConfig instance.
-   **/
+   */
   initForChampion(variant: TrainerVariant, battleBgm: string[]): TrainerConfig {
     // Check if the internationalization (i18n) system is initialized.
     if (!getIsInitialized()) {
@@ -1461,7 +1461,7 @@ export class TrainerConfig {
    * @param trainerSlot - The slot to determine which title to use. Defaults to TrainerSlot.NONE.
    * @param variant - The variant of the trainer to determine the specific title.
    * @returns - The title of the trainer.
-   **/
+   */
   getTitle(trainerSlot: TrainerSlot, variant: TrainerVariant): string {
     const ret = this.name;
 

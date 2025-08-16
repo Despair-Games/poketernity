@@ -512,7 +512,7 @@ export class Egg {
   /**
    * Rolls whether the egg is shiny or not.
    * @returns `true` if the egg is shiny
-   **/
+   */
   private rollShiny(): boolean {
     let shinyChance = GACHA_DEFAULT_SHINY_RATE;
     switch (this._sourceType) {

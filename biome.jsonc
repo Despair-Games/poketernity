@@ -64,7 +64,8 @@
         "noUnusedFunctionParameters": "error",
         "noUnusedLabels": "error",
         "noPrivateImports": "error",
-        "useJsonImportAttributes": "off" // "Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'. ts(2823)"
+        "useJsonImportAttributes": "off", // "Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'. ts(2823)"
+        "useSingleJsDocAsterisk": "error"
       },
       "style": {
         "useEnumInitializers": "off", // large enums like Moves/Species would make this cumbersome

@@ -136,7 +136,7 @@ export class Trainer extends Phaser.GameObjects.Container {
    * @param trainerSlot - The slot to determine which name to use. Defaults to TrainerSlot.NONE.
    * @param includeTitle - Whether to include the title in the returned name. Defaults to false.
    * @returns - The formatted name of the trainer.
-   **/
+   */
   getName(trainerSlot: TrainerSlot = TrainerSlot.NONE, includeTitle: boolean = false): string {
     if (this.config.hasDouble && this.config.spriteNameLeft && this.config.spriteNameRight) {
       if (trainerSlot === TrainerSlot.TRAINER) {
