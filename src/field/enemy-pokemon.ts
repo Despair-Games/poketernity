@@ -339,8 +339,6 @@ export class EnemyPokemon extends Pokemon {
             moveScores[moveIndex] = Math.max(...targetScores);
           });
 
-          console.log(moveScores);
-
           // Sort the move pool in decreasing order of move score
           const sortedMovePool = movePool.slice(0);
           sortedMovePool.sort((a, b) => {
@@ -370,12 +368,13 @@ export class EnemyPokemon extends Pokemon {
               r++;
             }
           }
-          console.log(
-            movePool.map((m) => m.name),
-            moveScores,
-            r,
-            sortedMovePool.map((m) => m.name),
-          );
+          // biome-ignore format: For some reason this gets broken into multiple lines
+          console.log("Move Pool:", movePool.map((m) => m.name));
+          console.log("Move Scores:", moveScores);
+          console.log("`r` value:", r);
+          // biome-ignore format: For some reason this gets broken into multiple lines
+          console.log("Sorted Move Pool:", sortedMovePool.map((m) => m.name));
+
           const retMove = sortedMovePool[r].getMove();
           return { move: retMove, targets: moveTargets[retMove.id], type: this.getMoveType(retMove) };
         }
