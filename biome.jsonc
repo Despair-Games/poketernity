@@ -145,7 +145,8 @@
         "noUselessThisAlias": "error",
         "noUselessTernary": "error",
         "useIndexOf": "error",
-        "noVoid": "error"
+        "noVoid": "error",
+        "useWhile": "error"
       },
       "nursery": {
         "noShadow": "warn" // TODO: refactor and make "error"
