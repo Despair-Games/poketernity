@@ -119,7 +119,8 @@
         "noDoneCallback": "error",
         "noShoutyConstants": "error",
         "noSubstr": "error",
-        "noYodaExpression": "error"
+        "noYodaExpression": "error",
+        "useThrowNewError": "error"
       },
       "suspicious": {
         "noDoubleEquals": "error",
