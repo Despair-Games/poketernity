@@ -393,6 +393,7 @@ export class Trainer extends Phaser.GameObjects.Container {
             })
             .flat();
 
+          // biome-ignore-start lint/style/useCollapsedElseIf: TODO: surely this can be done better?
           // If the index is even, use the species pool for the main trainer (that way he only uses his own pokemon in battle)
           if (!(index % 2)) {
             // Since the only currently allowed double battle with named trainers is Tate & Liza, we need to make sure that Solrock is the first pokemon in the party for Tate and Lunatone for Liza
@@ -414,6 +415,7 @@ export class Trainer extends Phaser.GameObjects.Container {
               newSpeciesPool = speciesPoolPartnerFiltered;
             }
           }
+          // biome-ignore-end lint/style/useCollapsedElseIf: range comment used because biome gets confused by `if`/`else` chains
         }
 
         let species: PokemonSpecies;

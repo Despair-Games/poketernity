@@ -767,12 +767,10 @@ export class GameData {
 
           await handleSessionData(response);
         });
+      } else if (sessionData) {
+        await handleSessionData(decrypt(sessionData, BYPASS_LOGIN));
       } else {
-        if (sessionData) {
-          await handleSessionData(decrypt(sessionData, BYPASS_LOGIN));
-        } else {
-          return resolve(null);
-        }
+        return resolve(null);
       }
     });
   }
@@ -1893,19 +1891,16 @@ export class GameData {
       } else {
         ret |= DexAttr.NON_SHINY;
       }
+    } else if (attr & DexAttr.NON_SHINY) {
+      ret |= DexAttr.NON_SHINY; // Default to non shiny. Fallback to shiny if it's the only thing that's unlocked
+    } else if (attr & DexAttr.SHINY_BASE_VARIANT) {
+      ret |= DexAttr.SHINY_BASE_VARIANT;
+    } else if (attr & DexAttr.SHINY_RARE_VARIANT) {
+      ret |= DexAttr.SHINY_RARE_VARIANT;
+    } else if (attr & DexAttr.SHINY_EPIC_VARIANT) {
+      ret |= DexAttr.SHINY_EPIC_VARIANT;
     } else {
-      // Default to non shiny. Fallback to shiny if it's the only thing that's unlocked
-      if (attr & DexAttr.NON_SHINY) {
-        ret |= DexAttr.NON_SHINY;
-      } else if (attr & DexAttr.SHINY_BASE_VARIANT) {
-        ret |= DexAttr.SHINY_BASE_VARIANT;
-      } else if (attr & DexAttr.SHINY_RARE_VARIANT) {
-        ret |= DexAttr.SHINY_RARE_VARIANT;
-      } else if (attr & DexAttr.SHINY_EPIC_VARIANT) {
-        ret |= DexAttr.SHINY_EPIC_VARIANT;
-      } else {
-        ret |= DexAttr.NON_SHINY; // Neither shiny and non shiny unlocked, fallback to non shiny
-      }
+      ret |= DexAttr.NON_SHINY; // Somehow nothing is unlocked, fallback to non shiny
     }
 
     ret |= attr & DexAttr.MALE || !(attr & DexAttr.FEMALE) ? DexAttr.MALE : DexAttr.FEMALE;

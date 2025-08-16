@@ -126,7 +126,8 @@
         "useForOf": "error",
         "useConsistentObjectDefinitions": "error",
         "useConsistentBuiltinInstantiation": "error",
-        "useCollapsedIf": "error"
+        "useCollapsedIf": "error",
+        "useCollapsedElseIf": "error"
       },
       "suspicious": {
         "noDoubleEquals": "error",

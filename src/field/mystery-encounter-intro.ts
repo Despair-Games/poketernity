@@ -166,17 +166,15 @@ export class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Container {
           sprite.setPosition(sprite.x, sprite.y + y);
           tintSprite.setPosition(tintSprite.x, tintSprite.y + y);
         }
-      } else {
+      } else if (this.spriteConfigs.length === 1) {
         // Single sprite
-        if (this.spriteConfigs.length === 1) {
-          sprite.x = origin;
-          tintSprite.x = origin;
-        } else {
-          // Do standard sprite spacing (not including offset sprites)
-          sprite.x = minX + (n + 0.5) * spacingValue + origin;
-          tintSprite.x = minX + (n + 0.5) * spacingValue + origin;
-          n++;
-        }
+        sprite.x = origin;
+        tintSprite.x = origin;
+      } else {
+        // Do standard sprite spacing (not including offset sprites)
+        sprite.x = minX + (n + 0.5) * spacingValue + origin;
+        tintSprite.x = minX + (n + 0.5) * spacingValue + origin;
+        n++;
       }
 
       if (!isNil(pokemonShinySparkle)) {

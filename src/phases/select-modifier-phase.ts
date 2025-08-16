@@ -339,12 +339,10 @@ export class SelectModifierPhase extends BattlePhase {
           tmMoveId,
           isPpRestoreModifier,
         );
-      } else {
-        if (modifierType) {
-          const newModifier = modifierType.newModifier();
-          if (newModifier) {
-            applyModifier(newModifier);
-          }
+      } else if (modifierType) {
+        const newModifier = modifierType.newModifier();
+        if (newModifier) {
+          applyModifier(newModifier);
         }
       }
 

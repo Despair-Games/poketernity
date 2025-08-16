@@ -113,13 +113,11 @@ export class CommandPhase extends FieldPhase {
           ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);
         }
       }
+    } else if (currentBattle.isBattleMysteryEncounter() && currentBattle.mysteryEncounter?.skipToFightInput) {
+      ui.clearText();
+      ui.setMode<FightUiHandler>(UiMode.FIGHT, this.fieldIndex);
     } else {
-      if (currentBattle.isBattleMysteryEncounter() && currentBattle.mysteryEncounter?.skipToFightInput) {
-        ui.clearText();
-        ui.setMode<FightUiHandler>(UiMode.FIGHT, this.fieldIndex);
-      } else {
-        ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);
-      }
+      ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);
     }
   }
 

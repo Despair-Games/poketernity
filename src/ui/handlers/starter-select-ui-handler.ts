@@ -2074,10 +2074,8 @@ export class StarterSelectUiHandler extends MessageUiHandler {
                     newAbilityIndex = (newAbilityIndex + 1) % abilityCount;
                   }
                   break;
-                } else {
-                  if (abilityAttr & AbilityAttr.ABILITY_HIDDEN) {
-                    break;
-                  }
+                } else if (abilityAttr & AbilityAttr.ABILITY_HIDDEN) {
+                  break;
                 }
               } while (newAbilityIndex !== this.abilityCursor);
               starterAttributes.ability = newAbilityIndex; // store the selected ability
@@ -2129,15 +2127,13 @@ export class StarterSelectUiHandler extends MessageUiHandler {
                 const closestFilter = this.filterBar.getNearestFilter(this.filteredStarterContainers[this.cursor]);
                 success = this.setMode(StarterSelectMode.FILTER, closestFilter);
               }
+            } else if (this.starterIconsCursorIndex === 0) {
+              // Up from first Pokemon in the team => go to filter
+              success = this.setMode(StarterSelectMode.FILTER, Math.max(1, this.filterBar.numFilters - 1));
             } else {
-              if (this.starterIconsCursorIndex === 0) {
-                // Up from first Pokemon in the team => go to filter
-                success = this.setMode(StarterSelectMode.FILTER, Math.max(1, this.filterBar.numFilters - 1));
-              } else {
-                this.starterIconsCursorIndex--;
-                this.moveStarterIconsCursor(this.starterIconsCursorIndex);
-                success = true;
-              }
+              this.starterIconsCursorIndex--;
+              this.moveStarterIconsCursor(this.starterIconsCursorIndex);
+              success = true;
             }
             break;
           case Button.DOWN:
@@ -2160,34 +2156,31 @@ export class StarterSelectUiHandler extends MessageUiHandler {
                 const closestFilter = this.filterBar.getNearestFilter(this.filteredStarterContainers[this.cursor]);
                 success = this.setMode(StarterSelectMode.FILTER, closestFilter);
               }
+            } else if (this.starterIconsCursorIndex <= this.starterSpecies.length - 2) {
+              this.starterIconsCursorIndex++;
+              this.moveStarterIconsCursor(this.starterIconsCursorIndex);
+              success = true;
             } else {
-              if (this.starterIconsCursorIndex <= this.starterSpecies.length - 2) {
-                this.starterIconsCursorIndex++;
-                this.moveStarterIconsCursor(this.starterIconsCursorIndex);
-                success = true;
-              } else {
-                // DOWN from last Pokemon in party => Move to Start button
-                success = this.setMode(StarterSelectMode.START);
-              }
+              // DOWN from last Pokemon in party => Move to Start button
+              success = this.setMode(StarterSelectMode.START);
             }
             break;
           case Button.LEFT:
             if (this.currentMode !== StarterSelectMode.PARTY) {
               if (this.cursor % 9 !== 0) {
                 success = this.setCursor(this.cursor - 1);
-              } else {
+              } else if (this.starterSpecies.length === 0) {
                 // LEFT from filtered Pokemon, on the left edge
-                if (this.starterSpecies.length === 0) {
-                  // no starter in team => wrap around to the last column
-                  success = this.setCursor(this.cursor + Math.min(8, numberOfStarters - this.cursor));
-                } else if (onScreenCurrentRow < 7) {
-                  // at least one pokemon in team => for the first 7 rows, go to closest mon in party
-                  const closestStarter = findClosestStarterIndex(this.cursorObj.y - 1, this.starterSpecies.length);
-                  success = this.setMode(StarterSelectMode.PARTY, closestStarter);
-                } else {
-                  // at least one pokemon in team => from the bottom 2 rows, go to start run button
-                  success = this.setMode(StarterSelectMode.START);
-                }
+
+                // no starter in team => wrap around to the last column
+                success = this.setCursor(this.cursor + Math.min(8, numberOfStarters - this.cursor));
+              } else if (onScreenCurrentRow < 7) {
+                // at least one pokemon in team => for the first 7 rows, go to closest mon in party
+                const closestStarter = findClosestStarterIndex(this.cursorObj.y - 1, this.starterSpecies.length);
+                success = this.setMode(StarterSelectMode.PARTY, closestStarter);
+              } else {
+                // at least one pokemon in team => from the bottom 2 rows, go to start run button
+                success = this.setMode(StarterSelectMode.START);
               }
             } else if (numberOfStarters > 0) {
               // LEFT from team => Go to closest filtered Pokemon
@@ -2204,19 +2197,18 @@ export class StarterSelectUiHandler extends MessageUiHandler {
               // is not right edge
               if (this.cursor % 9 < (currentRow < numOfRows - 1 ? 8 : (numberOfStarters - 1) % 9)) {
                 success = this.setCursor(this.cursor + 1);
-              } else {
+              } else if (this.starterSpecies.length === 0) {
                 // RIGHT from filtered Pokemon, on the right edge
-                if (this.starterSpecies.length === 0) {
-                  // no selected starter in team > wrap around to the first column
-                  success = this.setCursor(this.cursor - Math.min(8, this.cursor % 9));
-                } else if (onScreenCurrentRow < 7) {
-                  // at least one pokemon in team > for the first 7 rows, go to closest mon in party
-                  const closestStarter = findClosestStarterIndex(this.cursorObj.y - 1, this.starterSpecies.length);
-                  success = this.setMode(StarterSelectMode.PARTY, closestStarter);
-                } else {
-                  // at least one pokemon in team > from the bottom 2 rows, go to start run button
-                  success = this.setMode(StarterSelectMode.START);
-                }
+
+                // no selected starter in team > wrap around to the first column
+                success = this.setCursor(this.cursor - Math.min(8, this.cursor % 9));
+              } else if (onScreenCurrentRow < 7) {
+                // at least one pokemon in team > for the first 7 rows, go to closest mon in party
+                const closestStarter = findClosestStarterIndex(this.cursorObj.y - 1, this.starterSpecies.length);
+                success = this.setMode(StarterSelectMode.PARTY, closestStarter);
+              } else {
+                // at least one pokemon in team > from the bottom 2 rows, go to start run button
+                success = this.setMode(StarterSelectMode.START);
               }
             } else if (numberOfStarters > 0) {
               // RIGHT from team > Go to closest filtered Pokemon
