@@ -124,7 +124,8 @@
         "useThrowOnlyError": "error",
         "useTrimStartEnd": "error",
         "useForOf": "error",
-        "useConsistentObjectDefinitions": "error"
+        "useConsistentObjectDefinitions": "error",
+        "useConsistentBuiltinInstantiation": "error"
       },
       "suspicious": {
         "noDoubleEquals": "error",

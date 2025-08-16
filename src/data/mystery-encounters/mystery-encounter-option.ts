@@ -220,7 +220,7 @@ export class MysteryEncounterOptionBuilder implements Partial<IMysteryEncounterO
     requirement: EncounterSceneRequirement,
   ): this & Required<Pick<IMysteryEncounterOption, "requirements">> {
     if (requirement instanceof EncounterPokemonRequirement) {
-      Error("Incorrectly added pokemon requirement as scene requirement.");
+      throw new Error("Incorrectly added pokemon requirement as scene requirement.");
     }
 
     this.requirements.push(requirement);
@@ -265,7 +265,7 @@ export class MysteryEncounterOptionBuilder implements Partial<IMysteryEncounterO
     requirement: EncounterPokemonRequirement,
   ): this & Required<Pick<IMysteryEncounterOption, "primaryPokemonRequirements">> {
     if (requirement instanceof EncounterSceneRequirement) {
-      Error("Incorrectly added scene requirement as pokemon requirement.");
+      throw new Error("Incorrectly added scene requirement as pokemon requirement.");
     }
 
     this.primaryPokemonRequirements.push(requirement);
@@ -313,7 +313,7 @@ export class MysteryEncounterOptionBuilder implements Partial<IMysteryEncounterO
     excludePrimaryFromSecondaryRequirements: boolean = true,
   ): this & Required<Pick<IMysteryEncounterOption, "secondaryPokemonRequirements">> {
     if (requirement instanceof EncounterSceneRequirement) {
-      Error("Incorrectly added scene requirement as pokemon requirement.");
+      throw new Error("Incorrectly added scene requirement as pokemon requirement.");
     }
 
     this.secondaryPokemonRequirements.push(requirement);

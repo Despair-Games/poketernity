@@ -72,7 +72,7 @@ describe("UI - Transfer Items", () => {
       ).toBe(true);
       expect(
         handler.optionsContainer.list.some((option) =>
-          RegExp(/Lum Berry\[color.*(2)/).exec((option as BBCodeText).text),
+          new RegExp(/Lum Berry\[color.*(2)/).exec((option as BBCodeText).text),
         ),
       ).toBe(true);
 

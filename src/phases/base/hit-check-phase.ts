@@ -45,7 +45,7 @@ export abstract class HitCheckPhase extends PokemonPhase {
 
     this.move = move;
     this.targets = targets;
-    this.hitChecks = Array(targets.length).fill(HitCheckResult.PENDING);
+    this.hitChecks = new Array(targets.length).fill(HitCheckResult.PENDING);
   }
 
   /**
