@@ -144,7 +144,8 @@
         "noThisInStatic": "error",
         "noUselessThisAlias": "error",
         "noUselessTernary": "error",
-        "useIndexOf": "error"
+        "useIndexOf": "error",
+        "noVoid": "error"
       },
       "nursery": {
         "noShadow": "warn" // TODO: refactor and make "error"
