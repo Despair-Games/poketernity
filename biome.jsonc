@@ -118,7 +118,8 @@
         "noDefaultExport": "error",
         "noDoneCallback": "error",
         "noShoutyConstants": "error",
-        "noSubstr": "error"
+        "noSubstr": "error",
+        "noYodaExpression": "error"
       },
       "suspicious": {
         "noDoubleEquals": "error",
