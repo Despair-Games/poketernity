@@ -8,6 +8,7 @@ import i18next from "i18next";
 
 /** Base class for any special effects that apply to the {@linkcode Arena | field} during battle. */
 export abstract class ArenaTag {
+  /** biome-ignore-start lint/style/noParameterProperties: Fixed in a different PR */
   constructor(
     /** An {@linkcode ArenaTagType | identifier} for the tag's effect. */
     public tagType: ArenaTagType,
@@ -26,6 +27,7 @@ export abstract class ArenaTag {
      */
     public side: ArenaTagSide = ArenaTagSide.BOTH,
   ) {}
+  /** biome-ignore-end lint/style/noParameterProperties: Fixed in a different PR */
 
   /**
    * Used to obtain localized keys for the tag's messages based on what

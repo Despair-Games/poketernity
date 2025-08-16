@@ -123,7 +123,11 @@ export function calculateShellBellRecovery(pokemon: Pokemon): number {
 //#region Helpers
 
 class ForceSwitchOutHelper {
-  constructor(private switchType: SwitchType) {}
+  private switchType: SwitchType;
+
+  constructor(switchType: SwitchType) {
+    this.switchType = switchType;
+  }
 
   /**
    * Handles the logic for switching out a Pokémon based on battle conditions, HP, and the switch type.

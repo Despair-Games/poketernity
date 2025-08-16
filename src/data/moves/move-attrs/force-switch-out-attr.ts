@@ -22,11 +22,14 @@ import i18next from "i18next";
  * off the field, prompting a switch.
  */
 export class ForceSwitchOutAttr extends MoveEffectAttr {
-  constructor(
-    private selfSwitch: boolean = false,
-    private switchType: SwitchType = SwitchType.SWITCH,
-  ) {
+  private selfSwitch: boolean;
+  private switchType: SwitchType;
+
+  constructor(selfSwitch: boolean = false, switchType: SwitchType = SwitchType.SWITCH) {
     super(selfSwitch, { lastHitOnly: true });
+
+    this.selfSwitch = selfSwitch;
+    this.switchType = switchType;
   }
 
   isBatonPass() {
