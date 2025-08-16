@@ -115,7 +115,8 @@
         "useObjectSpread": "error",
         "useNumericSeparators": "off", // TODO: enable?
         "noNamespace": "error",
-        "noDefaultExport": "error"
+        "noDefaultExport": "error",
+        "noDoneCallback": "error"
       },
       "suspicious": {
         "noDoubleEquals": "error",
