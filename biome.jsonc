@@ -113,7 +113,8 @@
         "useShorthandAssign": "error",
         "useGroupedAccessorPairs": "error",
         "useObjectSpread": "error",
-        "useNumericSeparators": "off" // TODO: enable?
+        "useNumericSeparators": "off", // TODO: enable?
+        "noNamespace": "error"
       },
       "suspicious": {
         "noDoubleEquals": "error",
