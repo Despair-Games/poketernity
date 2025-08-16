@@ -225,7 +225,7 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
   }
 
   public override getCursor(): number {
-    return !this.fieldIndex ? this.cursor : this.cursor2;
+    return this.fieldIndex ? this.cursor2 : this.cursor;
   }
 
   public override setCursor(cursor: number): boolean {
@@ -234,10 +234,10 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
     this.moveInfoOverlay.clear();
     const changed = this.getCursor() !== cursor;
     if (changed) {
-      if (!this.fieldIndex) {
-        this.cursor = cursor;
-      } else {
+      if (this.fieldIndex) {
         this.cursor2 = cursor;
+      } else {
+        this.cursor = cursor;
       }
     }
 

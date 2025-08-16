@@ -1279,7 +1279,7 @@ export class BattleScene extends SceneBase {
           : randSeedInt(2)
             ? TrainerVariant.FEMALE
             : TrainerVariant.DEFAULT;
-        newTrainer = !isNil(trainerData) ? trainerData.toTrainer() : new Trainer(trainerType, variant);
+        newTrainer = isNil(trainerData) ? new Trainer(trainerType, variant) : trainerData.toTrainer();
         this.field.add(newTrainer);
       }
 
@@ -1476,7 +1476,7 @@ export class BattleScene extends SceneBase {
         scale,
         x: (defaultWidth - scaledWidth) / 2,
         y: defaultHeight - scaledHeight,
-        duration: !instant ? fixedNumber(Math.abs(this.field.scale - scale) * 200) : 0,
+        duration: instant ? 0 : fixedNumber(Math.abs(this.field.scale - scale) * 200),
         ease: "Sine.easeInOut",
         onComplete: () => resolve(),
       });
@@ -2110,12 +2110,12 @@ export class BattleScene extends SceneBase {
         for (const pokemon of this.party) {
           const args: unknown[] = [];
           if (modifier instanceof PokemonHpRestoreModifier) {
-            if (!modifier.fainted) {
+            if (modifier.fainted) {
+              args.push(1);
+            } else {
               const hpRestoreMultiplier = new NumberHolder(1);
               this.applyModifiers(HealingBoosterModifier, true, hpRestoreMultiplier);
               args.push(hpRestoreMultiplier.value);
-            } else {
-              args.push(1);
             }
           } else if (modifier instanceof RememberMoveModifier && !isNil(cost)) {
             args.push(cost);
@@ -2408,7 +2408,7 @@ export class BattleScene extends SceneBase {
    * @returns `true` if the item exists and was successfully removed, `false` otherwise.
    */
   removeModifier(modifier: PersistentModifier, enemy: boolean = false): boolean {
-    const modifiers = !enemy ? this.modifiers : this.enemyModifiers;
+    const modifiers = enemy ? this.enemyModifiers : this.modifiers;
     const modifierIndex = modifiers.indexOf(modifier);
     if (modifierIndex > -1) {
       modifiers.splice(modifierIndex, 1);
@@ -2516,7 +2516,7 @@ export class BattleScene extends SceneBase {
     const appliedModifiers: T[] = [];
     for (const modifier of modifiers) {
       if (modifier.apply(...args)) {
-        logModifiers("Applied", modifier.type.name, !player ? "(enemy)" : "");
+        logModifiers("Applied", modifier.type.name, player ? "" : "(enemy)");
         appliedModifiers.push(modifier);
       }
     }
@@ -2541,7 +2541,7 @@ export class BattleScene extends SceneBase {
     );
     for (const modifier of modifiers) {
       if (modifier.apply(...args)) {
-        logModifiers("Applied", modifier.type.name, !player ? "(enemy)" : "");
+        logModifiers("Applied", modifier.type.name, player ? "" : "(enemy)");
         return modifier;
       }
     }
@@ -2981,7 +2981,7 @@ export class BattleScene extends SceneBase {
       encounter = allMysteryEncounters[encounterType ?? -1];
       return encounter;
     } else {
-      encounter = !isNil(encounterType) ? allMysteryEncounters[encounterType] : null;
+      encounter = isNil(encounterType) ? null : allMysteryEncounters[encounterType];
     }
 
     // Check for queued encounters first

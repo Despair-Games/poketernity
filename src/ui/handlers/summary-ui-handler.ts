@@ -549,10 +549,10 @@ export class SummaryUiHandler extends UiHandler {
           selectCallback();
         }
 
-        if (!this.fromPartyMenu) {
-          ui.setMessageMode();
-        } else {
+        if (this.fromPartyMenu) {
           ui.setMode<PartyUiHandler>(UiMode.PARTY);
+        } else {
+          ui.setMessageMode();
         }
       }
       success = true;
@@ -765,9 +765,9 @@ export class SummaryUiHandler extends UiHandler {
 
         const getTypeIcon = (index: number, type: ElementalType, tera: boolean = false) => {
           const xCoord = typeLabel.width * typeLabel.scale + 9 + 34 * index;
-          const typeIcon = !tera
-            ? globalScene.add.sprite(xCoord, 42, "type_icons", enumValueToKey(ElementalType, type).toLowerCase())
-            : globalScene.add.sprite(xCoord, 42, "type_tera");
+          const typeIcon = tera
+            ? globalScene.add.sprite(xCoord, 42, "type_tera")
+            : globalScene.add.sprite(xCoord, 42, "type_icons", enumValueToKey(ElementalType, type).toLowerCase());
           if (tera) {
             typeIcon.setScale(0.5);
             const typeRgb = getTypeRgb(type);
@@ -831,7 +831,7 @@ export class SummaryUiHandler extends UiHandler {
           this.abilityPrompt = globalScene.add.image(
             0,
             0,
-            !globalScene.inputController?.gamepadSupport ? "summary_profile_prompt_z" : "summary_profile_prompt_a",
+            globalScene.inputController?.gamepadSupport ? "summary_profile_prompt_a" : "summary_profile_prompt_z",
           );
           this.abilityPrompt.setPosition(8, 43);
           this.abilityPrompt.setVisible(true);

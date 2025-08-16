@@ -243,7 +243,11 @@ export class GameData {
 
       localStorage.setItem(getLocalStorageKey(GameDataType.SYSTEM), encrypt(systemData, BYPASS_LOGIN));
 
-      if (!BYPASS_LOGIN) {
+      if (BYPASS_LOGIN) {
+        globalScene.ui.savingIcon.hide();
+
+        resolve(true);
+      } else {
         api.savedata.system.update({ clientSessionId }, systemData).then((error) => {
           globalScene.ui.savingIcon.hide();
           if (error) {
@@ -256,10 +260,6 @@ export class GameData {
           }
           resolve(true);
         });
-      } else {
-        globalScene.ui.savingIcon.hide();
-
-        resolve(true);
       }
     });
   }
@@ -272,7 +272,11 @@ export class GameData {
         return resolve(false);
       }
 
-      if (!BYPASS_LOGIN) {
+      if (BYPASS_LOGIN) {
+        this.initSystem(decrypt(localStorage.getItem(getLocalStorageKey(GameDataType.SYSTEM))!, BYPASS_LOGIN)).then(
+          resolve,
+        ); // TODO: is this bang correct?
+      } else {
         api.savedata.system.get({ clientSessionId }).then((saveDataOrErr) => {
           if (!saveDataOrErr || saveDataOrErr.length === 0 || saveDataOrErr[0] !== "{") {
             if (saveDataOrErr?.startsWith("sql: no rows in result set")) {
@@ -303,10 +307,6 @@ export class GameData {
             cachedSystem ? AES.decrypt(cachedSystem, saveKey).toString(enc.Utf8) : undefined,
           ).then(resolve);
         });
-      } else {
-        this.initSystem(decrypt(localStorage.getItem(getLocalStorageKey(GameDataType.SYSTEM))!, BYPASS_LOGIN)).then(
-          resolve,
-        ); // TODO: is this bang correct?
       }
     });
   }
@@ -647,7 +647,7 @@ export class GameData {
     if (lsItem) {
       try {
         const lsTutorials: Tutorial[] = JSON.parse(lsItem);
-        lsTutorials.forEach((lsTutorial) => (!isNil(lsTutorial) ? tutorials.add(lsTutorial) : null));
+        lsTutorials.forEach((lsTutorial) => (isNil(lsTutorial) ? null : tutorials.add(lsTutorial)));
       } catch (err) {
         console.warn("Failed to parse tutorial data from local storage", err);
       }
@@ -1019,13 +1019,7 @@ export class GameData {
       const { trainerId } = this;
       const jsonResponse = await api.savedata.session.clear({ slot: slotId, trainerId, clientSessionId }, sessionData);
 
-      if (!jsonResponse?.error) {
-        result = [true, jsonResponse?.success ?? false];
-        if (loggedInUser) {
-          loggedInUser!.lastSessionSlot = -1;
-        }
-        localStorage.removeItem(getLocalStorageKey(GameDataType.SESSION, slotId));
-      } else {
+      if (jsonResponse?.error) {
         if (jsonResponse?.error?.startsWith("session out of date")) {
           globalScene.phaseManager.clearPhaseQueue();
           globalScene.phaseManager.createAndUnshiftPhase("ReloadSessionPhase");
@@ -1033,6 +1027,12 @@ export class GameData {
 
         console.error(jsonResponse);
         result = [false, false];
+      } else {
+        result = [true, jsonResponse?.success ?? false];
+        if (loggedInUser) {
+          loggedInUser!.lastSessionSlot = -1;
+        }
+        localStorage.removeItem(getLocalStorageKey(GameDataType.SESSION, slotId));
       }
     }
 
@@ -1593,14 +1593,14 @@ export class GameData {
 
       if (newCatch && Object.hasOwn(speciesStarterCosts, species.speciesId)) {
         unlockedStarters.push(species.speciesId);
-        if (!showMessage) {
-          checkPreEvolution(unlockedStarters);
-        } else {
+        if (showMessage) {
           globalScene.audioManager.playSound("level_up_fanfare");
           globalScene.ui.showText(i18next.t("battle:addedAsAStarter", { pokemonName: species.name }), {
             callback: () => checkPreEvolution(unlockedStarters),
             prompt: true,
           });
+        } else {
+          checkPreEvolution(unlockedStarters);
         }
       } else {
         checkPreEvolution(unlockedStarters);

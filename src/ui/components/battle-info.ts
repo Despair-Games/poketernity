@@ -624,7 +624,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
           this.statusIndicator.setFrame(StatusEffect[this.lastStatus].toLowerCase());
         }
 
-        const offsetX = !this.player ? (this.ownedIcon.visible ? 8 : 0) + (this.championRibbon.visible ? 8 : 0) : 0;
+        const offsetX = this.player ? 0 : (this.ownedIcon.visible ? 8 : 0) + (this.championRibbon.visible ? 8 : 0);
         this.statusIndicator.setPositionRelative(this.nameText, offsetX, 11.5);
 
         this.statusIndicator.setVisible(!!this.lastStatus);
@@ -653,7 +653,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
 
       // Plays the animation of the Pokemon's HP bar increasing or decreasing.
       const updatePokemonHp = () => {
-        let duration = !instant ? clamp(Math.abs(this.lastHp - pokemon.hp) * 5, 250, 5000) : 0;
+        let duration = instant ? 0 : clamp(Math.abs(this.lastHp - pokemon.hp) * 5, 250, 5000);
         const speed = settings.general.hpBarSpeed;
         const speedMap = {
           [HpBarSpeed.DEFAULT]: 1,

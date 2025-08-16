@@ -100,10 +100,10 @@ export class SelectStarterPhase extends Phase {
         starterPokemon.nickname = nickname;
       }
 
-      if (!isNil(starter.teraType)) {
-        starterPokemon.teraType = starter.teraType;
-      } else {
+      if (isNil(starter.teraType)) {
         starterPokemon.teraType = starterPokemon.species.type1;
+      } else {
+        starterPokemon.teraType = starter.teraType;
       }
 
       starterPokemon.setVisible(false);

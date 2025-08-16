@@ -35,7 +35,7 @@ export default defineConfig(({ mode }) => {
       keepNames: true,
     },
     server: {
-      port: !Number.isNaN(envPort) ? envPort : 8000,
+      port: Number.isNaN(envPort) ? 8000 : envPort,
     },
   };
 });

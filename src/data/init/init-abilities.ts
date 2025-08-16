@@ -1502,7 +1502,7 @@ export function initAbilities() {
       .unreplaceable()
       .noTransform()
       .attr(PostBattleInitFormChangeAbAttr, () => 0)
-      .attr(PreSwitchOutFormChangeAbAttr, (pokemon) => (!pokemon.isFainted() ? 1 : pokemon.formIndex))
+      .attr(PreSwitchOutFormChangeAbAttr, (pokemon) => (pokemon.isFainted() ? pokemon.formIndex : 1))
       .bypassFaint(),
     new Ability(AbilityId.COMMANDER, 9)
       .attr(CommanderAbAttr)

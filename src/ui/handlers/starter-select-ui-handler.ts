@@ -1482,10 +1482,10 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           }
           break;
         case Button.ACTION:
-          if (!this.filterBar.openDropDown) {
-            this.filterBar.toggleDropDown(this.filterBarCursor);
-          } else {
+          if (this.filterBar.openDropDown) {
             this.filterBar.toggleOptionState();
+          } else {
+            this.filterBar.toggleDropDown(this.filterBarCursor);
           }
           success = true;
           break;
@@ -1780,11 +1780,11 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
           // if container.favorite is false, show the favorite option
           const isFavorite = starterAttributes?.favorite ?? false;
-          if (!isFavorite) {
+          if (isFavorite) {
             options.push({
-              label: i18next.t("starterSelectUiHandler:addToFavorites"),
+              label: i18next.t("starterSelectUiHandler:removeFromFavorites"),
               handler: () => {
-                starterAttributes.favorite = true;
+                starterAttributes.favorite = false;
                 // if the starter container not exists, it means the species is not in the filtered starters
                 if (starterContainer) {
                   starterContainer.favoriteIcon.setVisible(starterAttributes.favorite);
@@ -1795,9 +1795,9 @@ export class StarterSelectUiHandler extends MessageUiHandler {
             });
           } else {
             options.push({
-              label: i18next.t("starterSelectUiHandler:removeFromFavorites"),
+              label: i18next.t("starterSelectUiHandler:addToFavorites"),
               handler: () => {
-                starterAttributes.favorite = false;
+                starterAttributes.favorite = true;
                 // if the starter container not exists, it means the species is not in the filtered starters
                 if (starterContainer) {
                   starterContainer.favoriteIcon.setVisible(starterAttributes.favorite);
@@ -3253,7 +3253,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           }
           props.formIndex = starterAttributes?.form ?? props.formIndex;
           const female = starterAttributes?.female ?? props.gender === Gender.FEMALE;
-          props.gender = female ? Gender.FEMALE : !isNil(species.malePercent) ? Gender.MALE : Gender.GENDERLESS;
+          props.gender = female ? Gender.FEMALE : isNil(species.malePercent) ? Gender.GENDERLESS : Gender.MALE;
 
           this.setSpeciesDetails(species, {
             shiny: props.shiny,
@@ -3408,7 +3408,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       this.abilityCursor = abilityIndex !== undefined ? abilityIndex : (abilityIndex = oldAbilityIndex);
       this.passiveEnabled = passiveEnabled ?? this.passiveEnabled;
       this.natureCursor = natureIndex !== undefined ? natureIndex : (natureIndex = oldNatureIndex);
-      this.teraCursor = !isNil(teraType) ? teraType : (teraType = oldTeraType);
+      this.teraCursor = isNil(teraType) ? (teraType = oldTeraType) : teraType;
       const [isInParty, partyIndex]: [boolean, number] = this.isInParty(species);
       if (isInParty) {
         this.updatePartyIcon(species, partyIndex);
@@ -3554,7 +3554,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       }
 
       if (dexEntry.caughtAttr && species.malePercent !== null) {
-        const gender = !female ? Gender.MALE : Gender.FEMALE;
+        const gender = female ? Gender.FEMALE : Gender.MALE;
         this.pokemonGenderText.setText(getGenderSymbol(gender));
         setTextColor(this.pokemonGenderText, getGenderTextStyle(gender));
       } else {
@@ -3566,7 +3566,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         this.pokemonAbilityText.setText(ability.name);
 
         const isHiddenAbility = abilityIndex === (this.lastSpecies.ability2 ? 2 : 1);
-        setTextColor(this.pokemonAbilityText, !isHiddenAbility ? TextStyle.SUMMARY_ALT : TextStyle.SUMMARY_GOLD);
+        setTextColor(this.pokemonAbilityText, isHiddenAbility ? TextStyle.SUMMARY_GOLD : TextStyle.SUMMARY_ALT);
 
         if (this.pokemonAbilityText.visible) {
           if (this.activeTooltip === "ABILITY") {
@@ -3857,7 +3857,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       newValueStr = newValueStr.slice(1);
     }
     this.valueLimitLabel.setText(`${newValueStr}/${valueLimit}`);
-    setTextColor(this.valueLimitLabel, !overLimit ? TextStyle.TOOLTIP_CONTENT : TextStyle.SUMMARY_PINK);
+    setTextColor(this.valueLimitLabel, overLimit ? TextStyle.SUMMARY_PINK : TextStyle.TOOLTIP_CONTENT);
     if (overLimit) {
       globalScene.time.delayedCall(fixedNumber(500), () => this.tryUpdateValue());
       return false;

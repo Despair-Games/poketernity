@@ -436,7 +436,9 @@ export class EggGachaUiHandler extends MessageUiHandler {
         });
       };
 
-      if (!count) {
+      if (count) {
+        doPullAnim();
+      } else {
         globalScene.audioManager.playSound("se/gacha_dial");
         globalScene.tweens.add({
           targets: this.gachaKnobs[this.gachaCursor],
@@ -453,8 +455,6 @@ export class EggGachaUiHandler extends MessageUiHandler {
             globalScene.time.delayedCall(this.getDelayValue(350), doPullAnim);
           },
         });
-      } else {
-        doPullAnim();
       }
     };
 
@@ -550,7 +550,7 @@ export class EggGachaUiHandler extends MessageUiHandler {
 
           const eggText = addTextObject(0, 14, egg.getEggDescriptor(), TextStyle.PARTY, { align: "center" });
           eggText.setOrigin(0.5, 0);
-          eggText.setTint(getEggTierTextTint(!egg.isManaphyEgg() ? egg.tier : EggTier.EPIC));
+          eggText.setTint(getEggTierTextTint(egg.isManaphyEgg() ? EggTier.EPIC : egg.tier));
           ret.add(eggText);
 
           this.eggGachaSummaryContainer.addAt(ret, 0);
@@ -560,7 +560,7 @@ export class EggGachaUiHandler extends MessageUiHandler {
         // If action/cancel was pressed when the overlay was easing in, show all eggs at once
         // Otherwise show the eggs one by one with a small delay between each
         eggContainers.forEach((eggContainer, index) => {
-          const delay = !this.transitionCancelled ? this.getDelayValue(index * 100) : 0;
+          const delay = this.transitionCancelled ? 0 : this.getDelayValue(index * 100);
           globalScene.time.delayedCall(delay, () =>
             globalScene.tweens.add({
               targets: eggContainer,

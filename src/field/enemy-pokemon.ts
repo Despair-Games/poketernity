@@ -128,12 +128,12 @@ export class EnemyPokemon extends Pokemon {
   }
 
   initBattleInfo(): void {
-    if (!this.battleInfo) {
+    if (this.battleInfo) {
+      this.battleInfo.updateBossSegments(this);
+    } else {
       this.battleInfo = new EnemyBattleInfo();
       this.battleInfo.updateBossSegments(this);
       this.battleInfo.initInfo(this);
-    } else {
-      this.battleInfo.updateBossSegments(this);
     }
   }
 

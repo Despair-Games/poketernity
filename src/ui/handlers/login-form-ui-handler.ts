@@ -175,10 +175,10 @@ export class LoginFormUiHandler extends FormModalUiHandler {
       const [usernameInput, passwordInput] = this.inputs;
 
       api.account.login({ username: usernameInput.text, password: passwordInput.text }).then((error) => {
-        if (!error) {
-          originalLoginAction?.();
-        } else {
+        if (error) {
           onFail(error);
+        } else {
+          originalLoginAction?.();
         }
       });
     };

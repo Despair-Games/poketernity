@@ -1043,12 +1043,12 @@ export class RunInfoUiHandler extends UiHandler {
         break;
       case Button.CYCLE_SHINY:
         if (this.isVictory && this.pageMode !== RunInfoUiMode.ENDING_ART) {
-          if (!this.hallofFameContainer.visible) {
-            this.hallofFameContainer.setVisible(true);
-            this.pageMode = RunInfoUiMode.HALL_OF_FAME;
-          } else {
+          if (this.hallofFameContainer.visible) {
             this.hallofFameContainer.setVisible(false);
             this.pageMode = RunInfoUiMode.MAIN;
+          } else {
+            this.hallofFameContainer.setVisible(true);
+            this.pageMode = RunInfoUiMode.HALL_OF_FAME;
           }
         }
         break;

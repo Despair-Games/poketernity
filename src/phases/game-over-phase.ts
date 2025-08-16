@@ -190,7 +190,9 @@ export class GameOverPhase extends BattlePhase {
             };
 
             const playerGender = settings.display.playerGender;
-            if (!ui.shouldSkipDialogue(dialogueKey)) {
+            if (ui.shouldSkipDialogue(dialogueKey)) {
+              displayEndCard();
+            } else {
               ui.fadeIn(500).then(() => {
                 const genderIndex = playerGender ?? PlayerGender.UNSET;
                 const genderStr = PlayerGender[genderIndex].toLowerCase();
@@ -216,8 +218,6 @@ export class GameOverPhase extends BattlePhase {
                     });
                   });
               });
-            } else {
-              displayEndCard();
             }
           } else {
             clear();

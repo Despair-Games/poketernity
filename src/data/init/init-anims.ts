@@ -65,13 +65,13 @@ export async function populateAnims(): Promise<void> {
     if (commonAnimId) {
       commonAnims.set(commonAnimId, anim);
     } else if (chargeAnimId) {
-      chargeAnims.set(chargeAnimId, !isOppMove ? anim : [chargeAnims.get(chargeAnimId) as LegacyAnimConfig, anim]);
+      chargeAnims.set(chargeAnimId, isOppMove ? [chargeAnims.get(chargeAnimId) as LegacyAnimConfig, anim] : anim);
     } else {
       moveAnims.set(
         moveNameToId[animName],
-        !isOppMove
-          ? (anim as LegacyAnimConfig)
-          : [moveAnims.get(moveNameToId[animName]) as LegacyAnimConfig, anim as LegacyAnimConfig],
+        isOppMove
+          ? [moveAnims.get(moveNameToId[animName]) as LegacyAnimConfig, anim as LegacyAnimConfig]
+          : (anim as LegacyAnimConfig),
       );
     }
     for (const field of fields) {
