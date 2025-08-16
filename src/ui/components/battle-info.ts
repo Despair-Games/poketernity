@@ -393,13 +393,12 @@ export class BattleInfo extends Phaser.GameObjects.Container {
       const dexEntry = globalScene.gameData.dexData[pokemon.species.speciesId];
       this.ownedIcon.setVisible(dexEntry.caughtAttr > 0);
       const opponentPokemonDexAttr = pokemon.getDexAttr();
-      if (globalScene.gameMode.isClassic) {
-        if (
-          globalScene.gameData.starterData[pokemon.species.getRootSpeciesId()].classicWinCount > 0
-          && globalScene.gameData.starterData[pokemon.species.getRootSpeciesId(true)].classicWinCount > 0
-        ) {
-          this.championRibbon.setVisible(true);
-        }
+      if (
+        globalScene.gameMode.isClassic
+        && globalScene.gameData.starterData[pokemon.species.getRootSpeciesId()].classicWinCount > 0
+        && globalScene.gameData.starterData[pokemon.species.getRootSpeciesId(true)].classicWinCount > 0
+      ) {
+        this.championRibbon.setVisible(true);
       }
 
       // Check if Player owns all genders, variants and forms of the Pokemon

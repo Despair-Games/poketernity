@@ -122,12 +122,10 @@ export class FilterBar extends Phaser.GameObjects.Container {
   }
 
   setCursor(cursor: number): void {
-    if (this.lastCursor > -1) {
-      if (this.dropDowns[this.lastCursor].visible) {
-        this.dropDowns[this.lastCursor].setVisible(false);
-        this.dropDowns[cursor].setVisible(true);
-        this.dropDowns[cursor].resetCursor();
-      }
+    if (this.lastCursor > -1 && this.dropDowns[this.lastCursor].visible) {
+      this.dropDowns[this.lastCursor].setVisible(false);
+      this.dropDowns[cursor].setVisible(true);
+      this.dropDowns[cursor].resetCursor();
     }
 
     const cursorOffset = 8;

@@ -1184,24 +1184,24 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       delete starterAttributes.shiny;
     }
 
-    if (starterAttributes.variant !== undefined) {
-      if (
-        Number.isNaN(starterAttributes.variant)
+    if (
+      starterAttributes.variant !== undefined
+      && (Number.isNaN(starterAttributes.variant)
         || starterAttributes.variant < 0
-        || !variantUnlocks[starterAttributes.variant]
-      ) {
-        // variant value is invalid or requested variant wasn't unlocked, purging setting
-        // biome-ignore lint/performance/noDelete: Optimizes local storage size
-        delete starterAttributes.variant;
-      }
+        || !variantUnlocks[starterAttributes.variant])
+    ) {
+      // variant value is invalid or requested variant wasn't unlocked, purging setting
+      // biome-ignore lint/performance/noDelete: Optimizes local storage size
+      delete starterAttributes.variant;
     }
 
-    if (starterAttributes.female !== undefined) {
-      if (!(starterAttributes.female ? caughtAttr & DexAttr.FEMALE : caughtAttr & DexAttr.MALE)) {
-        // requested gender wasn't unlocked, purging setting
-        // biome-ignore lint/performance/noDelete: Optimizes local storage size
-        delete starterAttributes.female;
-      }
+    if (
+      starterAttributes.female !== undefined
+      && !(starterAttributes.female ? caughtAttr & DexAttr.FEMALE : caughtAttr & DexAttr.MALE)
+    ) {
+      // requested gender wasn't unlocked, purging setting
+      // biome-ignore lint/performance/noDelete: Optimizes local storage size
+      delete starterAttributes.female;
     }
 
     const abilityAttr = starterData.abilityAttr;
@@ -3256,10 +3256,8 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           // load default nature from stater save data, if set
           const defaultNature = starterAttributes?.nature || globalScene.gameData.getSpeciesDefaultNature(species);
           props = globalScene.gameData.getSpeciesDexAttrProps(species, defaultDexAttr);
-          if (starterAttributes?.variant && !Number.isNaN(starterAttributes.variant)) {
-            if (props.shiny) {
-              props.variant = starterAttributes.variant as Variant;
-            }
+          if (starterAttributes?.variant && !Number.isNaN(starterAttributes.variant) && props.shiny) {
+            props.variant = starterAttributes.variant as Variant;
           }
           props.formIndex = starterAttributes?.form ?? props.formIndex;
           const female = starterAttributes?.female ?? props.gender === Gender.FEMALE;

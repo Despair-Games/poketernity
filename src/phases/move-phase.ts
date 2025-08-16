@@ -197,10 +197,8 @@ export class MovePhase extends BattlePhase {
     this.pokemon.turnData.hitCount = 0;
 
     // Check move to see if arena.ignoreAbilities should be true.
-    if (!this.followUp) {
-      if (this.pokemonMove.getMove().checkFlag(MoveFlags.IGNORE_ABILITIES, this.pokemon)) {
-        globalScene.arena.setIgnoreAbilities(true, this.pokemon.getBattlerIndex());
-      }
+    if (!this.followUp && this.pokemonMove.getMove().checkFlag(MoveFlags.IGNORE_ABILITIES, this.pokemon)) {
+      globalScene.arena.setIgnoreAbilities(true, this.pokemon.getBattlerIndex());
     }
 
     this.resolvePreMoveStatusEffects();
@@ -697,10 +695,8 @@ export class MovePhase extends BattlePhase {
    * @param success - Whether the move was successful or not.
    */
   protected updateLastMoveId(success: boolean): void {
-    if (!allMoves.get(this.pokemonMove.moveId).hasAttr(CopycatAttr)) {
-      if (success) {
-        globalScene.currentBattle.lastMove = this.pokemonMove.getMove();
-      }
+    if (!allMoves.get(this.pokemonMove.moveId).hasAttr(CopycatAttr) && success) {
+      globalScene.currentBattle.lastMove = this.pokemonMove.getMove();
     }
   }
 
@@ -803,11 +799,10 @@ export class MovePhase extends BattlePhase {
         if (
           globalScene.currentBattle.double
           && this.pokemonMove.getMove().checkFlag(MoveFlags.REDIRECT_COUNTER, this.pokemon, targetPkm)
+          && !targetPkm?.hp
         ) {
-          if (!targetPkm?.hp) {
-            const opposingField = this.pokemon.getOpposingField();
-            this.targets[0] = opposingField.find((p) => p.hp > 0)?.getBattlerIndex() ?? BattlerIndex.ATTACKER;
-          }
+          const opposingField = this.pokemon.getOpposingField();
+          this.targets[0] = opposingField.find((p) => p.hp > 0)?.getBattlerIndex() ?? BattlerIndex.ATTACKER;
         }
       }
 

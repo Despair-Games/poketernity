@@ -566,10 +566,8 @@ export class EnemyPokemon extends Pokemon {
      */
     amount = this.isMax(false) && !ignoreDynamaxReduction ? toDmgValue(amount / DYNAMAX_DAMAGE_TAKEN_FACTOR) : amount;
 
-    if (globalScene.currentBattle.isClassicFinalBoss) {
-      if (!this.formIndex && this.bossSegmentIndex < 1) {
-        amount = Math.min(amount, this.hp - 1);
-      }
+    if (globalScene.currentBattle.isClassicFinalBoss && !this.formIndex && this.bossSegmentIndex < 1) {
+      amount = Math.min(amount, this.hp - 1);
     }
 
     const damage = super.damage(amount, { preventEndure, ignoreFaintPhase, ignoreDynamaxReduction });
@@ -589,10 +587,8 @@ export class EnemyPokemon extends Pokemon {
   }
 
   canBypassBossSegments(segmentCount: number = 1): boolean {
-    if (globalScene.currentBattle.isClassicFinalBoss) {
-      if (!this.formIndex && this.bossSegmentIndex - segmentCount < 1) {
-        return false;
-      }
+    if (globalScene.currentBattle.isClassicFinalBoss && !this.formIndex && this.bossSegmentIndex - segmentCount < 1) {
+      return false;
     }
 
     return true;

@@ -2112,17 +2112,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
               defType,
             );
           }
-          if (ignoreImmunity.value) {
-            if (multiplier.value === 0) {
-              return 1;
-            }
+          if (ignoreImmunity.value && multiplier.value === 0) {
+            return 1;
           }
 
           const exposedTags = this.findTags<ExposedTag>((tag) => tag.isType<ExposedTag>(...EXPOSED_TAG_TYPES));
-          if (exposedTags.some((t) => t.ignoreImmunity(defType, moveType))) {
-            if (multiplier.value === 0) {
-              return 1;
-            }
+          if (exposedTags.some((t) => t.ignoreImmunity(defType, moveType)) && multiplier.value === 0) {
+            return 1;
           }
         }
         return multiplier.value;
@@ -2192,13 +2188,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (Object.hasOwn(pokemonEvolutions, this.species.speciesId)) {
       const evolutions = pokemonEvolutions[this.species.speciesId];
       for (const e of evolutions) {
-        if (!e.item && this.level >= e.level && (isNil(e.preFormKey) || this.getFormKey() === e.preFormKey)) {
-          if (
-            e.conditions === null
-            || (e.conditions as SpeciesEvolutionCondition[]).every((condition) => condition.predicate(this))
-          ) {
-            return e;
-          }
+        if (
+          !e.item
+          && this.level >= e.level
+          && (isNil(e.preFormKey) || this.getFormKey() === e.preFormKey)
+          && (e.conditions === null
+            || (e.conditions as SpeciesEvolutionCondition[]).every((condition) => condition.predicate(this)))
+        ) {
+          return e;
         }
       }
     }
@@ -3248,18 +3245,16 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     /** Halves damage if the attacker is using a physical attack while burned */
     const burnMultiplier = new NumberHolder(1);
-    if (isPhysical && source.hasStatusEffect(StatusEffect.BURN)) {
-      if (!move.hasAttr(BypassBurnDamageReductionAttr)) {
-        const burnDamageReductionCancelled = new BooleanHolder(false);
-        applyAbFunc<BypassBurnDamageReductionAbAttr>(
-          AbAttrFlag.BYPASS_BURN_DAMAGE_REDUCTION,
-          source,
-          simulated,
-          burnDamageReductionCancelled,
-        );
-        if (!burnDamageReductionCancelled.value) {
-          burnMultiplier.value = 0.5;
-        }
+    if (isPhysical && source.hasStatusEffect(StatusEffect.BURN) && !move.hasAttr(BypassBurnDamageReductionAttr)) {
+      const burnDamageReductionCancelled = new BooleanHolder(false);
+      applyAbFunc<BypassBurnDamageReductionAbAttr>(
+        AbAttrFlag.BYPASS_BURN_DAMAGE_REDUCTION,
+        source,
+        simulated,
+        burnDamageReductionCancelled,
+      );
+      if (!burnDamageReductionCancelled.value) {
+        burnMultiplier.value = 0.5;
       }
     }
 
@@ -4083,10 +4078,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           return true;
         });
 
-        if (this.isOfType(ElementalType.POISON) || this.isOfType(ElementalType.STEEL)) {
-          if (poisonImmunity.includes(true)) {
-            return false;
-          }
+        if (
+          (this.isOfType(ElementalType.POISON) || this.isOfType(ElementalType.STEEL))
+          && poisonImmunity.includes(true)
+        ) {
+          return false;
         }
         break;
       }

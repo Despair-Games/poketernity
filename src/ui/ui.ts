@@ -580,10 +580,12 @@ export class UI extends Phaser.GameObjects.Container {
    * @todo why is this here?
    */
   public shouldSkipDialogue(i18nKey: string): boolean {
-    if (i18next.exists(i18nKey)) {
-      if (settings.general.skipSeenDialogues && globalScene.gameData.getSeenDialogues()[i18nKey] === true) {
-        return true;
-      }
+    if (
+      i18next.exists(i18nKey)
+      && settings.general.skipSeenDialogues
+      && globalScene.gameData.getSeenDialogues()[i18nKey] === true
+    ) {
+      return true;
     }
     return false;
   }

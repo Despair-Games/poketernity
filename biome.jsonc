@@ -125,7 +125,8 @@
         "useTrimStartEnd": "error",
         "useForOf": "error",
         "useConsistentObjectDefinitions": "error",
-        "useConsistentBuiltinInstantiation": "error"
+        "useConsistentBuiltinInstantiation": "error",
+        "useCollapsedIf": "error"
       },
       "suspicious": {
         "noDoubleEquals": "error",
