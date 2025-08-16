@@ -120,7 +120,8 @@
         "noShoutyConstants": "error",
         "noSubstr": "error",
         "noYodaExpression": "error",
-        "useThrowNewError": "error"
+        "useThrowNewError": "error",
+        "useThrowOnlyError": "error"
       },
       "suspicious": {
         "noDoubleEquals": "error",
