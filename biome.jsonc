@@ -121,7 +121,8 @@
         "noSubstr": "error",
         "noYodaExpression": "error",
         "useThrowNewError": "error",
-        "useThrowOnlyError": "error"
+        "useThrowOnlyError": "error",
+        "useTrimStartEnd": "error"
       },
       "suspicious": {
         "noDoubleEquals": "error",
