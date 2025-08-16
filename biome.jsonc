@@ -116,7 +116,8 @@
         "useNumericSeparators": "off", // TODO: enable?
         "noNamespace": "error",
         "noDefaultExport": "error",
-        "noDoneCallback": "error"
+        "noDoneCallback": "error",
+        "noShoutyConstants": "error"
       },
       "suspicious": {
         "noDoubleEquals": "error",
