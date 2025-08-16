@@ -705,7 +705,7 @@ export class UI extends Phaser.GameObjects.Container {
       globalScene.tweens.add({
         targets: this.overlay,
         alpha: 1,
-        duration: duration,
+        duration,
         ease: "Sine.easeOut",
         onComplete: () => resolve(),
       });
@@ -725,7 +725,7 @@ export class UI extends Phaser.GameObjects.Container {
       globalScene.tweens.add({
         targets: this.overlay,
         alpha: 0,
-        duration: duration,
+        duration,
         ease: "Sine.easeIn",
         onComplete: () => {
           this.overlay.setVisible(false);

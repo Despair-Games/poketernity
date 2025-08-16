@@ -1096,7 +1096,7 @@ export function initAbilities() {
         (pokemon, abilityName) =>
           i18next.t("abilityTriggers:disguiseAvoidedDamage", {
             pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-            abilityName: abilityName,
+            abilityName,
           }),
         (pokemon) => toDmgValue(pokemon.getMaxHp() / 8),
       )
@@ -1351,7 +1351,7 @@ export function initAbilities() {
         (pokemon, abilityName) =>
           i18next.t("abilityTriggers:iceFaceAvoidedDamage", {
             pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-            abilityName: abilityName,
+            abilityName,
           }),
       )
       .attr(PostBattleInitFormChangeAbAttr, () => 0)

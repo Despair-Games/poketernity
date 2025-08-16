@@ -650,12 +650,12 @@ export class EncounterPhase extends BattlePhase {
           // The line below checks if an English ordinal is necessary or not based on whether an entry for encounterLocalizationKey exists in the language or not.
           const ordinalUsed =
             !i18next.exists(localizationKey, { fallbackLng: [] }) || i18next.resolvedLanguage === "en"
-              ? i18next.t("battleSpecDialogue:key", { count: count, ordinal: true })
+              ? i18next.t("battleSpecDialogue:key", { count, ordinal: true })
               : "";
           const cycleCount = count.toLocaleString() + ordinalUsed;
           const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
           const genderStr = PlayerGender[genderIndex].toLowerCase();
-          const encounterDialogue = i18next.t(localizationKey, { context: genderStr, cycleCount: cycleCount });
+          const encounterDialogue = i18next.t(localizationKey, { context: genderStr, cycleCount });
           if (!gameData.getSeenDialogues()[localizationKey]) {
             gameData.saveSeenDialogue(localizationKey);
           }

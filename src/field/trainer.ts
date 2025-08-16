@@ -733,7 +733,7 @@ export class Trainer extends Phaser.GameObjects.Container {
         globalScene.tweens.add({
           targets: tintSprite,
           alpha: alpha || 1,
-          duration: duration,
+          duration,
           ease: ease || "Linear",
         });
       } else {
@@ -749,7 +749,7 @@ export class Trainer extends Phaser.GameObjects.Container {
         globalScene.tweens.add({
           targets: tintSprite,
           alpha: 0,
-          duration: duration,
+          duration,
           ease: ease || "Linear",
           onComplete: () => {
             tintSprite.setVisible(false);

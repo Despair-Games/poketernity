@@ -1473,7 +1473,7 @@ export class BattleScene extends SceneBase {
 
       this.tweens.add({
         targets: this.field,
-        scale: scale,
+        scale,
         x: (defaultWidth - scaledWidth) / 2,
         y: defaultHeight - scaledHeight,
         duration: !instant ? fixedNumber(Math.abs(this.field.scale - scale) * 200) : 0,
@@ -1756,8 +1756,8 @@ export class BattleScene extends SceneBase {
   ): Phaser.GameObjects.Sprite {
     sprite.setPipeline(this.spritePipeline, {
       tone: [0.0, 0.0, 0.0, 0.0],
-      hasShadow: hasShadow,
-      ignoreOverride: ignoreOverride,
+      hasShadow,
+      ignoreOverride,
       teraColor: pokemon ? getTypeRgb(pokemon.teraType) : undefined,
       isTerastallized: pokemon?.isTerastallized ?? false,
     });
@@ -1778,7 +1778,7 @@ export class BattleScene extends SceneBase {
         targets: this.fieldOverlay,
         alpha: 0.5,
         ease: "Sine.easeOut",
-        duration: duration,
+        duration,
         onComplete: () => resolve(),
       });
     });
@@ -1789,7 +1789,7 @@ export class BattleScene extends SceneBase {
       this.tweens.add({
         targets: this.fieldOverlay,
         alpha: 0,
-        duration: duration,
+        duration,
         ease: "Cubic.easeIn",
         onComplete: () => resolve(),
       });
@@ -1821,7 +1821,7 @@ export class BattleScene extends SceneBase {
       this.tweens.add({
         targets: this.shopOverlay,
         alpha: 0,
-        duration: duration,
+        duration,
         ease: "Cubic.easeIn",
         onComplete: () => resolve(),
       });
@@ -1898,7 +1898,7 @@ export class BattleScene extends SceneBase {
     this.luckLabelText.setX(GAME_WIDTH - 2 - (this.luckText.displayWidth + 2));
     this.tweens.add({
       targets: labels,
-      duration: duration,
+      duration,
       alpha: 1,
       onComplete: () => {
         labels.forEach((t) => t.setVisible(true));
@@ -1913,7 +1913,7 @@ export class BattleScene extends SceneBase {
     const labels = [this.luckLabelText, this.luckText];
     this.tweens.add({
       targets: labels,
-      duration: duration,
+      duration,
       alpha: 0,
       onComplete: () => {
         labels.forEach((l) => l.setVisible(false));

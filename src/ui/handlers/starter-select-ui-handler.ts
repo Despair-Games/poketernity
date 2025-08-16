@@ -141,7 +141,7 @@ function calcStarterPosition(index: number, scrollCursor: number = 0): { x: numb
   const x = (index % 9) * 18;
   const y = yOffset + (Math.floor(index / 9) - scrollCursor) * height;
 
-  return { x: x, y: y };
+  return { x, y };
 }
 
 /**
@@ -1625,7 +1625,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
               });
 
               return {
-                options: options,
+                options,
                 maxOptions: 8,
                 yOffset: 29,
               };
@@ -1990,7 +1990,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
               },
             });
             ui.setModeWithoutClear<OptionSelectUiHandler>(UiMode.OPTION_SELECT, {
-              options: options,
+              options,
             });
           };
           if (!Object.hasOwn(pokemonPreEvolutions, this.lastSpecies.speciesId)) {
@@ -2010,7 +2010,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
             },
           });
           ui.setModeWithoutClear<OptionSelectUiHandler>(UiMode.OPTION_SELECT, {
-            options: options,
+            options,
           });
           success = true;
         }
@@ -3268,10 +3268,10 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           this.setSpeciesDetails(species, {
             shiny: props.shiny,
             formIndex: props.formIndex,
-            female: female,
+            female,
             variant: props.variant,
             abilityIndex: defaultAbilityIndex,
-            passiveEnabled: passiveEnabled,
+            passiveEnabled,
             natureIndex: defaultNature,
           });
         }

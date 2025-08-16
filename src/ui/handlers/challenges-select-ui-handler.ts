@@ -164,10 +164,10 @@ export class ChallengeSelectUiHandler extends UiHandler {
       this.valuesContainer.add(value);
 
       this.challengeLabels[i] = {
-        label: label,
-        value: value,
-        leftArrow: leftArrow,
-        rightArrow: rightArrow,
+        label,
+        value,
+        leftArrow,
+        rightArrow,
       };
     }
 

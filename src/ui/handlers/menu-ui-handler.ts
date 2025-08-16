@@ -491,7 +491,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
             },
           });
           globalScene.ui.setOverlayMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, {
-            options: options,
+            options,
             xOffset: this.optionSelectBg.displayWidth + this.communityWindowWidth,
             yOffset: this.menuMessageBox.displayHeight + 1,
           });

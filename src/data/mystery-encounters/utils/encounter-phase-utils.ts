@@ -711,7 +711,7 @@ export function selectOptionThenPokemon(
             globalScene.ui.setMode<UiHandler>(modeToSetOnExit).then(() => {
               const result: PokemonAndOptionSelected = {
                 selectedPokemonIndex: slotIndex,
-                selectedOptionIndex: selectedOptionIndex,
+                selectedOptionIndex,
               };
               resolve(result);
             });

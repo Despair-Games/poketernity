@@ -233,7 +233,7 @@ export class GameOverPhase extends BattlePhase {
      */
     if (!api.isLocal || api.isConnected) {
       api.savedata.session
-        .newclear({ slot: globalScene.sessionSlotId, isVictory: this.isVictory, clientSessionId: clientSessionId })
+        .newclear({ slot: globalScene.sessionSlotId, isVictory: this.isVictory, clientSessionId })
         .then((success) => doGameOver(success));
     } else if (this.isVictory) {
       gameData.offlineNewClear().then((result) => {

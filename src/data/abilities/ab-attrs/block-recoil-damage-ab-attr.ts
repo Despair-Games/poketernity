@@ -19,7 +19,7 @@ export class BlockRecoilDamageAbAttr extends AbAttr {
   public override getTriggerMessage(pokemon: Pokemon, abilityName: string) {
     return i18next.t("abilityTriggers:blockRecoilDamage", {
       pokemonName: getPokemonNameWithAffix(pokemon),
-      abilityName: abilityName,
+      abilityName,
     });
   }
 }

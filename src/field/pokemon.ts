@@ -1011,10 +1011,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           targets.push(subTag.sprite);
         }
         globalScene.tweens.add({
-          targets: targets,
+          targets,
           x: (_target, _key, value: number) => value + relX,
           y: (_target, _key, value: number) => value + relY,
-          duration: duration,
+          duration,
           ease: "Sine.easeOut",
           onComplete: () => resolve(),
         });
@@ -3914,7 +3914,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   faintCry(callback: VoidFunction): void {
     const key = this.species.getCryKey(this.formIndex);
     let rate = 0.85;
-    const cry = globalScene.audioManager.playSound(key, { rate: rate }) as AnySound;
+    const cry = globalScene.audioManager.playSound(key, { rate }) as AnySound;
     if (!cry || settings.effectiveFieldVolume === 0) {
       callback();
       return;
@@ -4411,7 +4411,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       globalScene.tweens.add({
         targets: tintSprite,
         alpha: alpha || 1,
-        duration: duration,
+        duration,
         ease: ease || "Linear",
       });
     } else {
@@ -4426,7 +4426,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       globalScene.tweens.add({
         targets: tintSprite,
         alpha: 0,
-        duration: duration,
+        duration,
         ease: ease || "Linear",
         onComplete: () => {
           tintSprite?.setVisible(false);

@@ -287,7 +287,7 @@ export class SpritePipeline extends FieldSpritePipeline {
 
   constructor(game: Phaser.Game) {
     super(game, {
-      game: game,
+      game,
       name: "sprite",
       fragShader: spriteFragShader,
       vertShader: spriteVertShader,

@@ -326,7 +326,7 @@ export class RunInfoUiHandler extends UiHandler {
       }
       const boxString = i18next
         .t(trainerObj.variant !== TrainerVariant.DOUBLE ? "battle:trainerAppeared" : "battle:trainerAppearedDouble", {
-          trainerName: trainerName,
+          trainerName,
         })
         .replace(/\n/g, " ");
       const descContainer = globalScene.add.container(0, 0);

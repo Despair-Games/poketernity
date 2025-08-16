@@ -237,7 +237,7 @@ export const WeirdDreamEncounter: MysteryEncounter = MysteryEncounterBuilder.wit
           species: transformation.newSpecies,
           isBoss: newPokemon.getSpeciesForm().getBaseStatTotal() > NON_LEGENDARY_BST_THRESHOLD,
           level: previousPokemon.level,
-          dataSource: dataSource,
+          dataSource,
           modifierConfigs: newPokemonHeldItemConfigs,
         };
 
@@ -251,7 +251,7 @@ export const WeirdDreamEncounter: MysteryEncounter = MysteryEncounterBuilder.wit
         ].clone();
       trainerConfig.setPartyTemplates(new TrainerPartyTemplate(transformations.length, PartyMemberStrength.STRONG));
       const enemyPartyConfig: EnemyPartyConfig = {
-        trainerConfig: trainerConfig,
+        trainerConfig,
         pokemonConfigs: enemyPokemonConfigs,
         female: genderIndex === PlayerGender.FEMALE,
       };

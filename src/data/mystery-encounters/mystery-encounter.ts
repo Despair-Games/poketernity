@@ -662,7 +662,7 @@ export class MysteryEncounterBuilder implements Partial<IMysteryEncounter> {
   withIntroSpriteConfigs(
     spriteConfigs: MysteryEncounterSpriteConfig[],
   ): this & Pick<IMysteryEncounter, "spriteConfigs"> {
-    return Object.assign(this, { spriteConfigs: spriteConfigs });
+    return Object.assign(this, { spriteConfigs });
   }
 
   withIntroDialogue(dialogue: MysteryEncounterDialogue["intro"] = []): this {
@@ -707,7 +707,7 @@ export class MysteryEncounterBuilder implements Partial<IMysteryEncounter> {
    * @returns
    */
   withEncounterTier(encounterTier: MysteryEncounterTier): this & Pick<IMysteryEncounter, "encounterTier"> {
-    return Object.assign(this, { encounterTier: encounterTier });
+    return Object.assign(this, { encounterTier });
   }
 
   /**
@@ -757,7 +757,7 @@ export class MysteryEncounterBuilder implements Partial<IMysteryEncounter> {
   withContinuousEncounter(
     continuousEncounter: boolean,
   ): this & Required<Pick<IMysteryEncounter, "continuousEncounter">> {
-    return Object.assign(this, { continuousEncounter: continuousEncounter });
+    return Object.assign(this, { continuousEncounter });
   }
 
   /**
@@ -811,7 +811,7 @@ export class MysteryEncounterBuilder implements Partial<IMysteryEncounter> {
   withMaxAllowedEncounters(
     maxAllowedEncounters: number,
   ): this & Required<Pick<IMysteryEncounter, "maxAllowedEncounters">> {
-    return Object.assign(this, { maxAllowedEncounters: maxAllowedEncounters });
+    return Object.assign(this, { maxAllowedEncounters });
   }
 
   /**
@@ -941,7 +941,7 @@ export class MysteryEncounterBuilder implements Partial<IMysteryEncounter> {
    * @returns
    */
   withRewards(doEncounterRewards: () => boolean): this & Required<Pick<IMysteryEncounter, "doEncounterRewards">> {
-    return Object.assign(this, { doEncounterRewards: doEncounterRewards });
+    return Object.assign(this, { doEncounterRewards });
   }
 
   /**
@@ -955,7 +955,7 @@ export class MysteryEncounterBuilder implements Partial<IMysteryEncounter> {
    * @returns
    */
   withExp(doEncounterExp: () => boolean): this & Required<Pick<IMysteryEncounter, "doEncounterExp">> {
-    return Object.assign(this, { doEncounterExp: doEncounterExp });
+    return Object.assign(this, { doEncounterExp });
   }
 
   /**
@@ -976,7 +976,7 @@ export class MysteryEncounterBuilder implements Partial<IMysteryEncounter> {
    * @returns
    */
   withOnVisualsStart(onVisualsStart: () => boolean): this & Required<Pick<IMysteryEncounter, "onVisualsStart">> {
-    return Object.assign(this, { onVisualsStart: onVisualsStart });
+    return Object.assign(this, { onVisualsStart });
   }
 
   /**
@@ -986,7 +986,7 @@ export class MysteryEncounterBuilder implements Partial<IMysteryEncounter> {
    * @returns
    */
   withCatchAllowed(catchAllowed: boolean): this & Required<Pick<IMysteryEncounter, "catchAllowed">> {
-    return Object.assign(this, { catchAllowed: catchAllowed });
+    return Object.assign(this, { catchAllowed });
   }
 
   /**
@@ -1005,7 +1005,7 @@ export class MysteryEncounterBuilder implements Partial<IMysteryEncounter> {
   withHideWildIntroMessage(
     hideBattleIntroMessage: boolean,
   ): this & Required<Pick<IMysteryEncounter, "hideBattleIntroMessage">> {
-    return Object.assign(this, { hideBattleIntroMessage: hideBattleIntroMessage });
+    return Object.assign(this, { hideBattleIntroMessage });
   }
 
   /**
@@ -1015,7 +1015,7 @@ export class MysteryEncounterBuilder implements Partial<IMysteryEncounter> {
   withAutoHideIntroVisuals(
     autoHideIntroVisuals: boolean,
   ): this & Required<Pick<IMysteryEncounter, "autoHideIntroVisuals">> {
-    return Object.assign(this, { autoHideIntroVisuals: autoHideIntroVisuals });
+    return Object.assign(this, { autoHideIntroVisuals });
   }
 
   /**
@@ -1026,7 +1026,7 @@ export class MysteryEncounterBuilder implements Partial<IMysteryEncounter> {
   withEnterIntroVisualsFromRight(
     enterIntroVisualsFromRight: boolean,
   ): this & Required<Pick<IMysteryEncounter, "enterIntroVisualsFromRight">> {
-    return Object.assign(this, { enterIntroVisualsFromRight: enterIntroVisualsFromRight });
+    return Object.assign(this, { enterIntroVisualsFromRight });
   }
 
   /**

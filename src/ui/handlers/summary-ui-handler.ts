@@ -903,7 +903,7 @@ export class SummaryUiHandler extends UiHandler {
               wave: `${getBBCodeFragment(this.pokemon?.metWave ? this.pokemon.metWave.toString()! : i18next.t("pokemonSummary:unknownTrainer"), TextStyle.SUMMARY_RED)}${closeFragment}`,
             },
           ),
-          natureFragment: i18next.t(`pokemonSummary:natureFragment.${rawNature}`, { nature: nature }),
+          natureFragment: i18next.t(`pokemonSummary:natureFragment.${rawNature}`, { nature }),
         });
 
         const memoText = addBBCodeTextObject(7, 113, String(memoString), TextStyle.WINDOW_ALT);

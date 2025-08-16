@@ -119,7 +119,7 @@ export class TitlePhase extends Phase {
             ui.showText(i18next.t("menu:selectGameMode"), {
               callback: () =>
                 ui.setOverlayMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, {
-                  options: options,
+                  options,
                   yOffset: 48,
                 }),
             });
@@ -162,7 +162,7 @@ export class TitlePhase extends Phase {
       },
     );
     const config: OptionSelectModeConfig = {
-      options: options,
+      options,
       blockCancelButton: true,
     };
     globalScene.ui.setMode<TitleUiHandler>(UiMode.TITLE, config);

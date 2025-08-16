@@ -668,7 +668,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
           targets: this.hpBar,
           ease: "Sine.easeOut",
           scaleX: pokemon.getHpRatio(),
-          duration: duration,
+          duration,
           onUpdate: () => {
             if (this.player && this.lastHp !== pokemon.hp) {
               const tweenHp = Math.ceil(this.hpBar.scaleX * pokemon.getMaxHp());
@@ -804,7 +804,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
         targets: this.expMaskRect,
         ease: "Sine.easeIn",
         x: ratio * 85 * CANVAS_SCALE,
-        duration: duration,
+        duration,
         onComplete: () => {
           if (!globalScene) {
             return resolve();

@@ -518,8 +518,8 @@ export class MoveEffectPhase extends HitCheckPhase {
         const attackResult: AttackMoveResult = {
           moveId: move.id,
           result: result as DamageResult,
-          damage: damage,
-          isCritical: isCritical,
+          damage,
+          isCritical,
           sourceId: user.id,
           sourceBattlerIndex: user.getBattlerIndex(),
         };

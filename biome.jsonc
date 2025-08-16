@@ -123,7 +123,8 @@
         "useThrowNewError": "error",
         "useThrowOnlyError": "error",
         "useTrimStartEnd": "error",
-        "useForOf": "error"
+        "useForOf": "error",
+        "useConsistentObjectDefinitions": "error"
       },
       "suspicious": {
         "noDoubleEquals": "error",
