@@ -38,6 +38,7 @@ function deserializePokemonSpeciesForm(value: SerializedSpeciesForm | PokemonSpe
 
 export class PokemonData {
   public id: number;
+  public personalityValue: number;
   public player: boolean;
   public speciesId: SpeciesId;
   public nickname: string;
@@ -87,6 +88,7 @@ export class PokemonData {
    */
   constructor(source: Pokemon | PokemonData) {
     this.id = source.id;
+    this.personalityValue = source.personalityValue ?? source.id; // TODO: temporary `??` to handle dev saves from before this was added, remove in the future
     this.player = isPokemon(source) ? source.isPlayer() : source.player;
     this.speciesId = isPokemon(source) ? source.species.speciesId : source.speciesId;
     this.nickname = source.nickname;

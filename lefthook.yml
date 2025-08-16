@@ -2,17 +2,8 @@ skip_lfs: true
 
 pre-commit:
   commands:
-    prettier:
-      glob: "*.{js,jsx,ts,tsx}"
-      run: pnpm exec prettier --write {staged_files}
-      priority: 2
-      stage_fixed: true
-      skip:
-        - merge
-        - rebase
     biome-lint:
       run: pnpm exec biome check --write --reporter=summary --staged --no-errors-on-unmatched
-      priority: 1
       stage_fixed: true
       skip:
         - merge

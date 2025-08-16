@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.0.5/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
   "vcs": {
     "enabled": false,
     "clientKind": "git",
@@ -7,7 +7,7 @@
     "defaultBranch": "beta"
   },
   "formatter": {
-    "enabled": false, // TODO: enable when https://github.com/biomejs/biome/issues/5879 is implemented
+    "enabled": true,
     "useEditorconfig": true,
     "indentStyle": "space",
     "lineWidth": 120
@@ -29,6 +29,7 @@
       "!**/node_modules/**/*",
       "!**/public/**/*",
       "!**/typedoc/**/*",
+      "!**/pnpm-lock.yml",
       // this file is too big
       "!**/src/data/tms.ts"
     ]
@@ -57,11 +58,13 @@
         "noVoidTypeReturn": "warn", // TODO: Refactor and make this an error
         "noUnusedImports": {
           "level": "error",
-          "fix": "safe"
+          "fix": "safe",
+          "options": {}
         },
         "noUnusedFunctionParameters": "error",
         "noUnusedLabels": "error",
-        "noPrivateImports": "error"
+        "noPrivateImports": "error",
+        "useJsonImportAttributes": "off" // "Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'. ts(2823)"
       },
       "style": {
         "useEnumInitializers": "off", // large enums like Moves/Species would make this cumbersome
@@ -107,7 +110,10 @@
             "accessibility": "explicit"
           }
         },
-        "useShorthandAssign": "error"
+        "useShorthandAssign": "error",
+        "useGroupedAccessorPairs": "error",
+        "useObjectSpread": "error",
+        "useNumericSeparators": "off" // TODO: enable?
       },
       "suspicious": {
         "noDoubleEquals": "error",
@@ -121,7 +127,10 @@
         "noAsyncPromiseExecutor": "warn", // TODO: Refactor and make this an error
         "useDefaultSwitchClauseLast": "warn", // TODO: make error?
         "noVar": "error",
-        "noDocumentCookie": "off" // Firefox has minimal support for the "Cookie Store API"
+        "noDocumentCookie": "off", // Firefox has minimal support for the "Cookie Store API"
+        "noConstantBinaryExpressions": "error",
+        "noTsIgnore": "error",
+        "useIterableCallbackReturn": "off" // TODO: re-enable if the rule is changed to be type-aware
       },
       "complexity": {
         "noExcessiveCognitiveComplexity": "info",
@@ -133,33 +142,30 @@
         "useRegexLiterals": "off", // Was broken for some reason; TODO: re-enable
         "noThisInStatic": "error",
         "noUselessThisAlias": "error",
-        "noUselessTernary": "error"
+        "noUselessTernary": "error",
+        "useIndexOf": "error"
       },
       "nursery": {
-        "useAdjacentGetterSetter": "error",
-        "noConstantBinaryExpression": "error",
-        "noTsIgnore": "error",
-        "noAwaitInLoop": "off",
-        "useJsonImportAttribute": "off", // "Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'. ts(2823)"
-        "useIndexOf": "error",
-        "useObjectSpread": "error",
-        "useNumericSeparators": "off", // TODO: enable?
-        "useIterableCallbackReturn": "off", // TODO: re-enable if the rule is changed to be type-aware
         "noShadow": "warn" // TODO: refactor and make "error"
       },
       "performance": {
         "noNamespaceImport": "error",
-        "noDelete": "error"
+        "noDelete": "error",
+        "noAwaitInLoops": "off" // Necessary for our codebase
       }
     }
   },
   "javascript": {
     "formatter": {
-      "quoteStyle": "double",
-      "arrowParentheses": "always"
+      "operatorLinebreak": "before"
     },
     "parser": {
       "jsxEverywhere": false
+    }
+  },
+  "css": {
+    "formatter": {
+      "enabled": false
     }
   },
   "overrides": [

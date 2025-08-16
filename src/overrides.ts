@@ -65,7 +65,7 @@ class DefaultOverrides {
    */
   readonly WEATHER_OVERRIDE: WeatherType = WeatherType.NONE;
   /**
-   * Override the new weather duration. 
+   * Override the new weather duration.
    * **Will ALSO affect primal weathers!**
    * **Can NOT be combined with {@linkcode WEATHER_OVERRIDE}!**
    * - `-1` to disable the override

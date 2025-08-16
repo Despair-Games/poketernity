@@ -33,7 +33,7 @@ describe("Ability Attribute - Weather Heal", () => {
       .enemyMoveset(MoveId.SPLASH);
   });
 
-  // prettier-ignore
+  // biome-ignore format: Manually formatted
   it.each([
     { ability: AbilityId.RAIN_DISH, abilityName: "Rain Dish", healRatio: 1/16, healStr: "1/16", weather: "Rain", weatherType: WeatherType.RAIN },
     { ability: AbilityId.RAIN_DISH, abilityName: "Rain Dish", healRatio: 1/16, healStr: "1/16", weather: "Heavy Rain", weatherType: WeatherType.HEAVY_RAIN },

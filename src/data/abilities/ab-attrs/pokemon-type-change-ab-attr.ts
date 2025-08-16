@@ -20,15 +20,9 @@ export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
   }
 
   public override apply(pokemon: Pokemon, simulated: boolean, move: Move): boolean {
-    if (
-      !pokemon.isTerastallized
-      && move.id !== MoveId.STRUGGLE
-      /**
-       * Skip moves that call other moves because these moves generate a following move that will trigger this ability attribute
-       * @see {@link https://bulbapedia.bulbagarden.net/wiki/Category:Moves_that_call_other_moves}
-       */
-      && !move.findAttr((attr) => attr.callsOtherMoves)
-    ) {
+    // Skip moves that call other moves because these moves generate a following move that will trigger this ability attribute
+    // See: https://bulbapedia.bulbagarden.net/wiki/Category:Moves_that_call_other_moves
+    if (!pokemon.isTerastallized && move.id !== MoveId.STRUGGLE && !move.findAttr((attr) => attr.callsOtherMoves)) {
       const moveType = pokemon.getMoveType(move);
 
       if (pokemon.getTypes().some((t) => t !== moveType)) {

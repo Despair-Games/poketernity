@@ -2,6 +2,7 @@ import Phaser from "phaser";
 
 // #region Types
 
+// biome-ignore format: The formatter is bugged here
 type GuideObject = Phaser.GameObjects.Components.Origin
   & Phaser.GameObjects.Components.Size
   & Phaser.GameObjects.Components.Transform;

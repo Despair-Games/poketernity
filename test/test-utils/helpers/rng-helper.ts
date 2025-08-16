@@ -36,13 +36,11 @@ export class RngHelper extends GameManagerHelper {
       return Math.floor(min + range * sampleProgress);
     });
 
-    // Perform the trials
     for (let i = 0; i < numTrials; i++) {
       sampleProgress = (2 * i + 1) / (2 * numTrials); // The midpoint of the i^th interval
       await fn();
     }
 
-    // Restore both RNG functions
     vi.spyOn(Phaser.Math.RND, "realInRange").mockRestore();
     vi.spyOn(this.game.scene, "randBattleSeedInt").mockRestore();
   }
