@@ -10,12 +10,13 @@ import type {
   UnlinkAccountFromGoogledIdRequest,
 } from "#types/api-types";
 import { HttpResponse, http } from "msw";
+import type { SetupServerApi } from "msw/node";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const apiBase = getApiBaseUrl();
 const adminApi = new AdminApi(apiBase);
 
-let server;
+let server: SetupServerApi;
 beforeAll(async () => {
   server = await initServerForApiTests();
 });

@@ -54,6 +54,7 @@ import { UiMode } from "#enums/ui-mode";
 import type { DexAttrProps, StarterAttributes, StarterPreferences } from "#system/game-data";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
 import type { DexEntry } from "#types/dex-data";
+import type { InputSettings } from "#types/inputs-types";
 import type { StarterConfig, StarterDataEntry, StarterMoveset } from "#types/starter-data";
 import type { ShowTextOptions } from "#types/ui-types";
 import type { EnumValues } from "#types/utility-types";
@@ -2486,8 +2487,13 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     }
   }
 
-  updateFilterButtonIcon(iconSetting, gamepadType, iconElement, controlLabel): void {
-    let iconPath;
+  updateFilterButtonIcon(
+    iconSetting: InputSettings,
+    gamepadType: string,
+    iconElement: Phaser.GameObjects.Sprite,
+    controlLabel: Phaser.GameObjects.Text,
+  ): void {
+    let iconPath: string | undefined;
     // touch controls cannot be rebound as is, and are just emulating a keyboard event.
     // Additionally, since keyboard controls can be rebound (and will be displayed when they are), we need to have special handling for the touch controls
     if (gamepadType === "touch") {
@@ -2517,7 +2523,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     this.hideInstructions();
     this.instructionsContainer.removeAll();
     this.filterInstructionsContainer.removeAll();
-    let gamepadType;
+    let gamepadType: string;
     if (globalScene.inputMethod === "gamepad") {
       gamepadType = globalScene.inputController.getActiveConfig(Device.GAMEPAD)?.padType ?? globalScene.inputMethod;
     } else {

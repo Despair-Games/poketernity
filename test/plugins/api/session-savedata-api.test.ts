@@ -11,12 +11,13 @@ import type {
 } from "#types/api-types";
 import type { SessionSaveData } from "#types/session-data";
 import { HttpResponse, http } from "msw";
+import type { SetupServerApi } from "msw/node";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const apiBase = getApiBaseUrl();
 const sessionSavedataApi = new SessionSavedataApi(apiBase);
 
-let server;
+let server: SetupServerApi;
 beforeAll(async () => {
   server = await initServerForApiTests();
 });
