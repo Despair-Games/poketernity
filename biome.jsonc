@@ -154,7 +154,8 @@
       "performance": {
         "noNamespaceImport": "error",
         "noDelete": "error",
-        "noAwaitInLoops": "off" // Necessary for our codebase
+        "noAwaitInLoops": "off", // Necessary for our codebase
+        "noBarrelFile": "error"
       }
     }
   },
