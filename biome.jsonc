@@ -117,7 +117,8 @@
         "noNamespace": "error",
         "noDefaultExport": "error",
         "noDoneCallback": "error",
-        "noShoutyConstants": "error"
+        "noShoutyConstants": "error",
+        "noSubstr": "error"
       },
       "suspicious": {
         "noDoubleEquals": "error",
