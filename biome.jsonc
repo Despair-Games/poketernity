@@ -166,7 +166,8 @@
         "useWhile": "error"
       },
       "nursery": {
-        "noShadow": "warn" // TODO: refactor and make "error"
+        "noShadow": "warn", // TODO: refactor and make "error"
+        "noUselessUndefined": "error"
       },
       "performance": {
         "noNamespaceImport": "error",

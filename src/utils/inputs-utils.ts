@@ -63,7 +63,7 @@ export function getButtonWithKeycode(config: InputInterfaceConfig, keycode: numb
 export function getKeyWithSettingName(config: InputInterfaceConfig, settingName: InputSettings): InputKeys | undefined {
   const { custom } = config;
   if (isNil(custom)) {
-    return undefined;
+    return;
   }
   return Object.keys(custom).find((key) => custom[key] === settingName) as InputKeys;
 }
@@ -106,7 +106,7 @@ export function getIconForLatestInput(
     config = configs[Device.KEYBOARD];
   }
   if (!config) {
-    return undefined;
+    return;
   }
 
   const icon = getIconWithSettingName(config, settingName);

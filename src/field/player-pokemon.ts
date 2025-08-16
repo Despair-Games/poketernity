@@ -120,7 +120,7 @@ export class PlayerPokemon extends Pokemon {
     if (ally?.isAllowedInChallenge()) {
       return ally;
     }
-    return undefined;
+    return;
   }
 
   generateCompatibleTms(): void {

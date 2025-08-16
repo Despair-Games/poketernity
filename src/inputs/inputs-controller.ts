@@ -638,7 +638,7 @@ export class InputsController {
     if (selectedDevice && this.configs[selectedDevice]) {
       return this.configs[selectedDevice];
     }
-    return undefined;
+    return;
   }
 
   public getIconForLatestInputRecorded(settingName: InputSettings): string | undefined {

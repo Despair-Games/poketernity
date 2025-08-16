@@ -313,7 +313,7 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
   private getEffectivenessText(pokemon: Pokemon, opponent: Pokemon, pokemonMove: PokemonMove): string | undefined {
     const effectiveness = opponent.getMoveEffectiveness(pokemon, pokemonMove.getMove(), AbilityApplyMode.REVEALED);
     if (effectiveness === undefined) {
-      return undefined;
+      return;
     }
 
     return `${effectiveness}x`;
@@ -345,12 +345,12 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
    */
   private getMoveColor(pokemon: Pokemon, pokemonMove: PokemonMove): string | undefined {
     if (!settings.display.enableTypeHints) {
-      return undefined;
+      return;
     }
 
     const opponents = pokemon.getOpponents();
     if (opponents.length <= 0) {
-      return undefined;
+      return;
     }
 
     const moveColors = opponents
