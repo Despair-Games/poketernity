@@ -1,7 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import i18next from "#app/plugins/i18n";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
-import { CustomPokemonData } from "#data/custom-pokemon-data";
 import { allSpecies } from "#data/data-lists";
 import { getLevelTotalExp } from "#data/exp";
 import type { PokemonSpecies } from "#data/pokemon-species";
@@ -515,9 +514,6 @@ async function postProcessTransformedPokemon(
     newType = getRandomElementalType();
   }
   newTypes.push(newType);
-  if (!newPokemon.customPokemonData) {
-    newPokemon.customPokemonData = new CustomPokemonData();
-  }
   newPokemon.customPokemonData.types = newTypes;
 
   // Enable passive if previous had it

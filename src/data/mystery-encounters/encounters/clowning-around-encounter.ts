@@ -2,7 +2,6 @@ import { Ability } from "#abilities/ability";
 import { EncounterBattleAnim } from "#animations/encounter-battle-anim";
 import { globalScene } from "#app/global-scene";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
-import { CustomPokemonData } from "#data/custom-pokemon-data";
 import { TrainerPartyCompoundTemplate, TrainerPartyTemplate } from "#data/trainer-config";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
@@ -151,10 +150,10 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
         {
           // Blacephalon has the random ability from pool, and 2 entirely random types to fit with the theme of the encounter
           species: getPokemonSpecies(SpeciesId.BLACEPHALON),
-          customPokemonData: new CustomPokemonData({
+          customPokemonData: {
             ability: ability,
             types: [getRandomElementalType(), getRandomElementalType()],
-          }),
+          },
           isBoss: true,
           moveSet: [MoveId.TRICK, MoveId.HYPNOSIS, MoveId.SHADOW_BALL, MoveId.MIND_BLOWN],
         },
@@ -390,9 +389,6 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
           newTypes.push(secondType);
 
           // Apply the type changes
-          if (!pokemon.customPokemonData) {
-            pokemon.customPokemonData = new CustomPokemonData();
-          }
           pokemon.customPokemonData.types = newTypes;
         }
       })

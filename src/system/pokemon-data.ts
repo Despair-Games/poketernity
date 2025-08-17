@@ -1,6 +1,5 @@
 import { globalScene } from "#app/global-scene";
 import { loadBattlerTag } from "#battler-tags/load-battler-tag";
-import { CustomPokemonData } from "#data/custom-pokemon-data";
 import { allMoves } from "#data/data-lists";
 import type { Variant } from "#data/variant";
 import { BattleType } from "#enums/battle-type";
@@ -14,7 +13,7 @@ import type { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
-import type { PokemonSummonData, Status } from "#types/pokemon-types";
+import type { CustomPokemonData, PokemonSummonData, Status } from "#types/pokemon-types";
 import { clamp, isPokemon } from "#utils/common-utils";
 import { getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
 
@@ -101,10 +100,9 @@ export class PokemonData {
     this.teraType = source.teraType;
     this.isTerastallized = source.isTerastallized ?? false;
     this.stellarTypesBoosted = source.stellarTypesBoosted ?? [];
-    // @ts-expect-error - `Pokemon#status` is protected
-    this.status = source.status;
+    this.status = source["status"];
 
-    this.customPokemonData = new CustomPokemonData(source.customPokemonData);
+    this.customPokemonData = source.customPokemonData;
 
     if (!isPokemon(source) || source.isEnemy()) {
       this.boss = (source.bossSegments ?? 0) > 0;

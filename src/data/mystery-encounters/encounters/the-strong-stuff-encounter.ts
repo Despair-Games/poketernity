@@ -1,6 +1,5 @@
 import { globalScene } from "#app/global-scene";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
-import { CustomPokemonData } from "#data/custom-pokemon-data";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
@@ -89,7 +88,7 @@ export const TheStrongStuffEncounter: MysteryEncounter = MysteryEncounterBuilder
           isBoss: true,
           bossSegments: 5,
           shiny: false, // Shiny lock because shiny is rolled only if the battle option is picked
-          customPokemonData: new CustomPokemonData({ spriteScale: 1.25 }),
+          customPokemonData: { spriteScale: 1.25 },
           nature: Nature.BOLD,
           moveSet: [MoveId.INFESTATION, MoveId.SALT_CURE, MoveId.GASTRO_ACID, MoveId.HEAL_ORDER],
           modifierConfigs: [
