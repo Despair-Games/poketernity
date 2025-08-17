@@ -278,13 +278,11 @@ export class EnemyPokemon extends Pokemon {
            * best possible target(s) (as determined by {@linkcode getNextTargets}).
            * For more information on how benefit scores are calculated, see `docs/enemy-ai.md`.
            */
-          const moveScores = movePool.map(() => 0);
+          const moveScores: number[] = new Array(movePool.length).fill(0);
           const moveTargets = Object.fromEntries(movePool.map((m) => [m.moveId, this.getNextTargets(m.moveId)]));
-          for (const m in movePool) {
-            const pokemonMove = movePool[m];
+          movePool.forEach((pokemonMove, moveIndex) => {
             const move = pokemonMove.getMove();
 
-            let moveScore = moveScores[m];
             const targetScores: number[] = [];
 
             for (const mt of moveTargets[move.id]) {
@@ -306,10 +304,7 @@ export class EnemyPokemon extends Pokemon {
                 console.error(`Move ${move.name} returned score of NaN`);
                 targetScore = 0;
               }
-              /**
-               * If this move is unimplemented, or the move is known to fail when used, set its
-               * target score to -20
-               */
+              // If this move is unimplemented, or the move is known to fail when used, set its target score to -20
               if (
                 (move.name.endsWith(" (N)") || !move.applyConditions(this, target, move))
                 && ![MoveId.SUCKER_PUNCH, MoveId.UPPER_HAND, MoveId.THUNDERCLAP].includes(move.id)
@@ -332,7 +327,7 @@ export class EnemyPokemon extends Pokemon {
                     targetScore /= 1.5;
                   }
                 }
-                /** If a move has a base benefit score of 0, its benefit score is assumed to be unimplemented at this point */
+                // If a move has a base benefit score of 0, its benefit score is assumed to be unimplemented at this point
                 if (!targetScore) {
                   targetScore = -20;
                 }
@@ -340,13 +335,9 @@ export class EnemyPokemon extends Pokemon {
               targetScores.push(targetScore);
             }
             // When a move has multiple targets, its score is equal to the maximum target score across all targets
-            moveScore += Math.max(...targetScores);
-
-            // could make smarter by checking opponent def/spdef
-            moveScores[m] = moveScore;
-          }
-
-          console.log(moveScores);
+            // (could make smarter by checking opponent def/spdef)
+            moveScores[moveIndex] = Math.max(...targetScores);
+          });
 
           // Sort the move pool in decreasing order of move score
           const sortedMovePool = movePool.slice(0);
@@ -377,12 +368,13 @@ export class EnemyPokemon extends Pokemon {
               r++;
             }
           }
-          console.log(
-            movePool.map((m) => m.name),
-            moveScores,
-            r,
-            sortedMovePool.map((m) => m.name),
-          );
+          // biome-ignore format: For some reason this gets broken into multiple lines
+          console.log("Move Pool:", movePool.map((m) => m.name));
+          console.log("Move Scores:", moveScores);
+          console.log("`r` value:", r);
+          // biome-ignore format: For some reason this gets broken into multiple lines
+          console.log("Sorted Move Pool:", sortedMovePool.map((m) => m.name));
+
           const retMove = sortedMovePool[r].getMove();
           return { move: retMove, targets: moveTargets[retMove.id], type: this.getMoveType(retMove) };
         }
@@ -611,7 +603,8 @@ export class EnemyPokemon extends Pokemon {
    * The base boost is 1 to a random stat that's not already maxed out per broken shield
    * For Pokemon with 3 health segments or more, breaking the last shield gives +2 instead
    * For Pokemon with 5 health segments or more, breaking the last two shields give +2 each
-   * @param segmentIndex index of the segment to get down to (0 = no shield left, 1 = 1 shield left, etc.)
+   * @param segmentIndex - Index of the segment to get down to (0 = no shield left, 1 = 1 shield left, etc.)
+   * @todo Handle boss bars differently
    */
   handleBossSegmentCleared(segmentIndex: number): void {
     while (this.bossSegmentIndex > 0 && segmentIndex - 1 < this.bossSegmentIndex) {
@@ -623,8 +616,8 @@ export class EnemyPokemon extends Pokemon {
       const statThresholds: number[] = [];
       let totalWeight = 0;
 
-      for (const i in statWeights) {
-        totalWeight += statWeights[i];
+      for (const weight of statWeights) {
+        totalWeight += weight;
         statThresholds.push(totalWeight);
       }
 
