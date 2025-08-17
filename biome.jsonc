@@ -75,7 +75,7 @@
         "noParameterAssign": "off", // TODO: add this?
         "useExponentiationOperator": "off", // Too typo-prone and easy to mixup with standard multiplication (* vs **)
         "useDefaultParameterLast": "error",
-        "useSingleVarDeclarator": "off",
+        "useSingleVarDeclarator": "error",
         "useNodejsImportProtocol": "error",
         "useTemplate": "off", // string concatenation is faster: https://stackoverflow.com/questions/29055518/are-es6-template-literals-faster-than-string-concatenation
         "noInferrableTypes": "off", // Explicit > Implicit
@@ -113,7 +113,16 @@
         "useShorthandAssign": "error",
         "useGroupedAccessorPairs": "error",
         "useObjectSpread": "error",
-        "useNumericSeparators": "off" // TODO: enable?
+        "useNumericSeparators": "off", // TODO: enable?
+        "noNamespace": "error",
+        "noDefaultExport": "error",
+        "noDoneCallback": "error",
+        "noShoutyConstants": "error",
+        "noSubstr": "error",
+        "noYodaExpression": "error",
+        "useThrowNewError": "error",
+        "useThrowOnlyError": "error",
+        "useTrimStartEnd": "error"
       },
       "suspicious": {
         "noDoubleEquals": "error",
@@ -130,7 +139,10 @@
         "noDocumentCookie": "off", // Firefox has minimal support for the "Cookie Store API"
         "noConstantBinaryExpressions": "error",
         "noTsIgnore": "error",
-        "useIterableCallbackReturn": "off" // TODO: re-enable if the rule is changed to be type-aware
+        "useIterableCallbackReturn": "off", // TODO: re-enable if the rule is changed to be type-aware
+        "useErrorMessage": "error",
+        "useGuardForIn": "error",
+        "useNumberToFixedDigitsArgument": "error"
       },
       "complexity": {
         "noExcessiveCognitiveComplexity": "info",
@@ -143,7 +155,9 @@
         "noThisInStatic": "error",
         "noUselessThisAlias": "error",
         "noUselessTernary": "error",
-        "useIndexOf": "error"
+        "useIndexOf": "error",
+        "noVoid": "error",
+        "useWhile": "error"
       },
       "nursery": {
         "noShadow": "warn" // TODO: refactor and make "error"
@@ -151,7 +165,8 @@
       "performance": {
         "noNamespaceImport": "error",
         "noDelete": "error",
-        "noAwaitInLoops": "off" // Necessary for our codebase
+        "noAwaitInLoops": "off", // Necessary for our codebase
+        "noBarrelFile": "error"
       }
     }
   },
@@ -194,6 +209,22 @@
           },
           "style": {
             "useImportType": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "**/src/overrides.ts",
+        "**/src/plugins/i18n.ts",
+        "**/eslint.config.js",
+        "**/vite.config.ts",
+        "**/vitest.config.ts"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noDefaultExport": "off"
           }
         }
       }

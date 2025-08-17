@@ -1306,6 +1306,7 @@ export class SpeciesStatBoosterModifierTypeGenerator extends ModifierTypeGenerat
         const speciesId = p.getSpeciesForm(true).speciesId;
         const hasFling = p.getMoveset(true).some((m) => m.moveId === MoveId.FLING);
 
+        // biome-ignore lint/suspicious/useGuardForIn: Not necessary
         for (const i in values) {
           const checkedSpecies = values[i].species;
           const checkedStats = values[i].stats;
@@ -1455,9 +1456,9 @@ export class FormChangeItemModifierTypeGenerator extends ModifierTypeGenerator {
               if (p.species.speciesId === SpeciesId.NECROZMA) {
                 // technically we could use a simplified version and check for formChanges.length > 3, but in case any code changes later, this might break...
 
-                let foundULTRA_Z = false,
-                  foundN_LUNA = false,
-                  foundN_SOLAR = false;
+                let foundULTRA_Z = false;
+                let foundN_LUNA = false;
+                let foundN_SOLAR = false;
                 formChangeItemTriggers.forEach((fc, _i) => {
                   switch (fc.item) {
                     case FormChangeItem.ULTRANECROZIUM_Z:

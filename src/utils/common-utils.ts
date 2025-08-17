@@ -130,7 +130,7 @@ export function deepCopy<T>(obj: T): T {
 
 /** @returns Whether the input is `null` or `undefined` */
 export function isNil(obj: any): obj is nil {
-  return null === obj || undefined === obj;
+  return obj === null || obj === undefined;
 }
 
 /**

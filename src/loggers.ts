@@ -26,6 +26,7 @@ export class CallSourceLogger {
    * If no such line exists, return an empty string.
    */
   private getStackTraceLine(): string {
+    // biome-ignore lint/suspicious/useErrorMessage: The `Error` class is being used for the stack trace only
     const stack = Error().stack?.split("\n") as string[];
 
     for (const line of stack) {
