@@ -3,6 +3,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { ANY_STATUS_SYNERGY_ABILITIES } from "#constants/ability-constants";
 import {
   MAJOR_EFFECT_SCORE_BONUS,
+  MAJOR_EFFECT_SCORE_PENALTY,
   MINOR_EFFECT_SCORE_BONUS,
   MINOR_EFFECT_SCORE_PENALTY,
 } from "#constants/ai-constants";
@@ -70,9 +71,9 @@ export class HealStatusEffectAttr extends MoveEffectAttr {
    * - If the user has an ability that synergizes with their status effect, and the effects
    * of this attribute would cure said status, grant (-1).
    * - Otherwise, if the affected Pokemon doesn't have a relevant status effect OR it can't feasibly
-   * cure itself due to being asleep or frozen, grant (+0).
+   * cure itself due to being asleep, grant (+0).
    * - Otherwise, if the affected Pokemon is either the user or its ally, grant (+1) + 50%(+1)
-   * - Otherwise, grant (-1) [using the move would cure an opponent's status effect]
+   * - Otherwise, grant (-2) [using the move would cure an opponent's status effect]
    */
   public override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
     const pokemon = this.selfTarget ? user : target;
@@ -91,6 +92,6 @@ export class HealStatusEffectAttr extends MoveEffectAttr {
     if (!pokemon.isOpponent(user)) {
       return this.getRandomScore(user, 50, MAJOR_EFFECT_SCORE_BONUS, MINOR_EFFECT_SCORE_BONUS);
     }
-    return MINOR_EFFECT_SCORE_PENALTY;
+    return MAJOR_EFFECT_SCORE_PENALTY;
   }
 }
