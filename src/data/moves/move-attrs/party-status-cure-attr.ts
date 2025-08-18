@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { SOFT_EFFECT_SCORE_LIMIT } from "#constants/ai-constants";
+import { BAD_MOVE_PENALTY, SOFT_EFFECT_SCORE_LIMIT } from "#constants/ai-constants";
 import type { AbilityId } from "#enums/ability-id";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
@@ -73,6 +73,10 @@ export class PartyStatusCureAttr extends MoveEffectAttr {
   public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     const party = user.getParty();
     const numPartyMembersWithRemovableStatus = party.filter((p) => this.hasRemovableStatusEffect(p, user.id)).length;
+
+    if (numPartyMembersWithRemovableStatus === 0) {
+      return BAD_MOVE_PENALTY;
+    }
 
     return Math.min(numPartyMembersWithRemovableStatus, SOFT_EFFECT_SCORE_LIMIT);
   }

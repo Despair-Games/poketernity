@@ -5,7 +5,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/test-utils/game-manager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
-describe("Move Effect Scores - Snore", () => {
+describe("Move Effect Scores - Heal Bell", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
@@ -23,36 +23,44 @@ describe("Move Effect Scores - Snore", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("single")
+      .startingWave(8) // Forces a Trainer battle w/ 2 Pokemon
       .enemySpecies(SpeciesId.MAGIKARP)
       .enemyAbility(AbilityId.BALL_FETCH)
-      .enemyMoveset([MoveId.SNORE, MoveId.TACKLE, MoveId.SPLASH])
+      .enemyMoveset([MoveId.HEAL_BELL, MoveId.TACKLE, MoveId.SPLASH])
       .ability(AbilityId.BALL_FETCH)
       .startingLevel(100)
       .enemyLevel(100);
   });
 
-  it("should be avoided when the user is not asleep", async () => {
+  it("should be avoided when none of the user's party are afflicted with a status", async () => {
     await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
-    expect(enemy).toNeverSelectMove(MoveId.SNORE);
+    expect(enemy).toNeverSelectMove(MoveId.HEAL_BELL);
   });
 
-  it("should be strongly preferred when the user is asleep", async () => {
-    game.override.enemyStatusEffect(StatusEffect.SLEEP);
+  it("should be strongly preferred when the user and a party member are afflicted with a status", async () => {
+    game.override.enemyStatusEffect(StatusEffect.BURN);
 
     await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.field.getEnemyPokemon();
-    expect(enemy).toNeverSelectMove((move) => move.id !== MoveId.SNORE);
+    expect(enemy).toNeverSelectMove((move) => move.id !== MoveId.HEAL_BELL);
   });
 
-  it("should not be avoided when the user has Comatose", async () => {
-    game.override.enemyAbility(AbilityId.COMATOSE);
+  it("should not count active allies with Soundproof towards effect score", async () => {
+    game.override
+      .battleType("double")
+      .enemyAbility(AbilityId.SOUNDPROOF)
+      .enemyStatusEffect(StatusEffect.BURN)
+      .startingWave(1);
 
     await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
-    const enemy = game.field.getEnemyPokemon();
-    expect(enemy).not.toNeverSelectMove(MoveId.SNORE);
+    const [enemy] = game.scene.getEnemyField();
+    // Heal Bell should have exactly (+1) ES
+    expect(enemy).toPreferSelectingMove(MoveId.HEAL_BELL);
+    // Tackle's ES is in the interval [0, 1], so it should still be used sometimes
+    expect(enemy).not.toNeverSelectMove(MoveId.TACKLE);
   });
 });
