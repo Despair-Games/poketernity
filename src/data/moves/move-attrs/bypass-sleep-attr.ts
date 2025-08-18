@@ -1,4 +1,3 @@
-import { BAD_MOVE_PENALTY } from "#constants/ai-constants";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { StatusEffect } from "#enums/status-effect";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
@@ -22,15 +21,12 @@ export class BypassSleepAttr extends MoveAttr {
   }
 
   /**
-   * @returns
-   * - (+6) if the user is asleep, minus (2) for each turn the user has already slept.
-   * - A {@linkcode BAD_MOVE_PENALTY} if the user is not asleep
-   * @todo Should the penalty be enforced by Snore/Sleep Talk's conditions instead?
+   * @returns (+6) if the user is asleep, minus (2) for each turn the user has already slept.
    */
   public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
-    if (user.hasStatusEffect(StatusEffect.SLEEP)) {
+    if (user.hasStatusEffect(StatusEffect.SLEEP, false, true)) {
       return 6 - 2 * user.turnsAsleep;
     }
-    return BAD_MOVE_PENALTY;
+    return 0;
   }
 }
