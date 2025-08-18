@@ -52,7 +52,7 @@ export class DelayedAttackTag extends SerializableArenaTag {
    * @param targetIndex - The {@linkcode FieldBattlerIndex} targeted by the attack
    */
   public addAttack(source: Pokemon, moveId: MoveId, targetIndex: FieldBattlerIndex): void {
-    (this.delayedAttacks as DelayedAttack[]).push({ sourceId: source.id, moveId: moveId, targetIndex, turnCount: 3 });
+    (this.delayedAttacks as DelayedAttack[]).push({ sourceId: source.id, moveId, targetIndex, turnCount: 3 });
   }
 
   override lapse(): boolean {

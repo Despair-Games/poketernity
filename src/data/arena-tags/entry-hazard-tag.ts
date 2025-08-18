@@ -12,6 +12,11 @@ export abstract class EntryHazardTag extends SerializableArenaTag {
   public abstract override readonly tagType: EntryHazardTagType;
   public readonly layers: number = 1;
 
+  /**
+   * The max layers the entry hazard can have.
+   * @privateRemarks
+   * This is a getter so that it will not be serialized to save data, since it's a static value.
+   */
   public abstract get maxLayers(): number;
 
   /**

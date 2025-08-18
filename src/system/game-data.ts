@@ -886,16 +886,11 @@ export class GameData {
           globalScene.arena.tags = sessionData.arena.tags;
           if (globalScene.arena.tags) {
             for (const tag of globalScene.arena.tags) {
-              if (tag instanceof EntryHazardTag) {
-                const { tagType, side, turnCount, layers, maxLayers } = tag as EntryHazardTag;
-                globalScene.arena.eventTarget.dispatchEvent(
-                  new TagAddedEvent(tagType, side, turnCount, layers, maxLayers),
-                );
-              } else {
-                globalScene.arena.eventTarget.dispatchEvent(
-                  new TagAddedEvent(tag.tagType, tag.side, tag.turnCount, 0, 0),
-                );
-              }
+              const { tagType, side, turnCount } = tag;
+              const { layers = 0, maxLayers = 0 } = tag instanceof EntryHazardTag ? tag : {};
+              globalScene.arena.eventTarget.dispatchEvent(
+                new TagAddedEvent(tagType, side, turnCount, layers, maxLayers),
+              );
             }
           }
 
