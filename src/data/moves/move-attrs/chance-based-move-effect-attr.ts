@@ -98,7 +98,7 @@ export abstract class ChanceBasedMoveEffectAttr extends MoveEffectAttr {
      * This may be a decimal number; the final output is either
      * `floor(chanceWeightedScore)` or `floor(chanceWeightedScore) + 1`
      */
-    const chanceWeightedScore = chance * rawScore;
+    const chanceWeightedScore = (chance * rawScore) / 100;
     /** The minimum integer score this function can return */
     const minScore = Math.floor(chanceWeightedScore);
     /**
