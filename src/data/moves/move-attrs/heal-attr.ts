@@ -89,7 +89,7 @@ export class HealAttr extends MoveEffectAttr {
    * @returns The ES for using the given move against the given target
    */
   protected getAllyTargetScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
-    if (target.hasTag(BattlerTagType.HEAL_BLOCK)) {
+    if (target.hasTag(BattlerTagType.HEAL_BLOCK) || target.isFullHp()) {
       return BAD_MOVE_PENALTY;
     }
 
