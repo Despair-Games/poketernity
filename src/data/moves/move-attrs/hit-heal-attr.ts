@@ -70,8 +70,8 @@ export class HitHealAttr extends MoveEffectAttr {
    * - Otherwise, if the user is under the effects of Heal Block, grant no bonus.
    * - Otherwise, grant a bonus based on the expected HP restored by this move action.
    *   This bonus is "tiered" based on the expected heal ratio similarly to {@linkcode ChanceBasedMoveEffectAttr}'s scoring.
-   *   Given expected heal ratio H = 0.5m + c, the resulting minimum score is m, and the chance to grant the maximum
-   *   score (m + 1) is (c / 0.5)
+   *   Given expected heal ratio H = 0.4m + c, the resulting minimum score is m, and the chance to grant the maximum
+   *   score (m + 1) is (c / 0.4)
    */
   public override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     if (user.getOpponents().some((opp) => opp.hasRevealedAbility(AbilityId.LIQUID_OOZE))) {
@@ -85,9 +85,10 @@ export class HitHealAttr extends MoveEffectAttr {
     const expectedDamage = !isNil(this.healStat)
       ? target.getEffectiveStat(this.healStat, { abilityApplyMode: AbilityApplyMode.REVEALED })
       : target.getAttackDamage(user, move, AbilityApplyMode.REVEALED, false, true).damage;
-    const expectedHealRatio = Math.min(expectedDamage * this.healRatio, user.getInverseHp()) / user.getMaxHp();
+    const expectedHealRatio =
+      Math.min(Math.floor(expectedDamage * this.healRatio), user.getInverseHp()) / user.getMaxHp();
 
-    const healBonusThreshold = 0.5;
+    const healBonusThreshold = 0.4;
     const minScore = Math.floor(expectedHealRatio / healBonusThreshold);
     const tierUpChance = (expectedHealRatio % healBonusThreshold) / healBonusThreshold;
 
