@@ -1,3 +1,9 @@
+import {
+  MAJOR_EFFECT_SCORE_BONUS,
+  MAJOR_EFFECT_SCORE_PENALTY,
+  MINOR_EFFECT_SCORE_BONUS,
+} from "#constants/ai-constants";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
@@ -21,5 +27,22 @@ export class HpSplitAttr extends MoveEffectAttr {
     });
 
     return true;
+  }
+
+  /**
+   * @returns An Effect Score modifier as follows:
+   * - If the target has at least twice as much HP as the user, and the user is damaged, grant either
+   * a {@link MAJOR_EFFECT_SCORE_BONUS | major bonus} or a {@link MINOR_EFFECT_SCORE_BONUS | minor bonus}
+   * depending on whether or not the user outspeeds the target.
+   * - Otherwise, grant a {@link MAJOR_EFFECT_SCORE_PENALTY | major penalty}.
+   */
+  public override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+    const relativeHpRatio = target.hp / user.hp;
+
+    if (!user.isFullHp() && relativeHpRatio >= 2) {
+      return user.outspeeds(target, true) ? MAJOR_EFFECT_SCORE_BONUS : MINOR_EFFECT_SCORE_BONUS;
+    }
+
+    return MAJOR_EFFECT_SCORE_PENALTY;
   }
 }
