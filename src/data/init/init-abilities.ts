@@ -198,7 +198,7 @@ import { NumberHolder, toDmgValue } from "#utils/common-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
 import i18next from "i18next";
 
-// prettier-ignore
+// biome-ignore format: Manually formatted
 export function initAbilities() {
   allAbilities.push(
     new Ability(AbilityId.NONE, 3),

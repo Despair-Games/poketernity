@@ -42,12 +42,12 @@ export interface DamageCalculationResult {
 }
 
 export type DamageResult =
-  | HitResult.EFFECTIVE
-  | HitResult.SUPER_EFFECTIVE
-  | HitResult.NOT_VERY_EFFECTIVE
-  | HitResult.ONE_HIT_KO
-  | HitResult.OTHER
-  | HitResult.SELF_KO;
+  | typeof HitResult.EFFECTIVE
+  | typeof HitResult.SUPER_EFFECTIVE
+  | typeof HitResult.NOT_VERY_EFFECTIVE
+  | typeof HitResult.ONE_HIT_KO
+  | typeof HitResult.OTHER
+  | typeof HitResult.SELF_KO;
 
 // TODO: Can these be combined into one? Should all of the params be optional in PAC?
 export type PokemonAttackCondition = (user?: Pokemon, target?: Pokemon, move?: Move) => boolean;

@@ -134,13 +134,13 @@ describe("Absolute Avarice - Mystery Encounter", () => {
       expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
       expect(enemyField.length).toBe(1);
       expect(enemyField[0].species.speciesId).toBe(SpeciesId.GREEDENT);
-      const moveset = enemyField[0].moveset.map((m) => m.moveId);
-      expect(moveset?.length).toBe(4);
+      const moveset = enemyField[0].getMoveset(true).map((m) => m.moveId);
+      expect(moveset.length).toBe(4);
       expect(moveset).toEqual([MoveId.THRASH, MoveId.BODY_PRESS, MoveId.STUFF_CHEEKS, MoveId.CRUNCH]);
 
       const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is("MovePhase")).map((p) => p[0]);
       expect(movePhases.length).toBe(1);
-      expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.STUFF_CHEEKS).length).toBe(1); // Stuff Cheeks used before battle
+      expect(movePhases.filter((p) => (p as MovePhase).pokemonMove.moveId === MoveId.STUFF_CHEEKS).length).toBe(1); // Stuff Cheeks used before battle
     });
 
     it("should give reviver seed to each pokemon after battle", async () => {
@@ -257,8 +257,8 @@ describe("Absolute Avarice - Mystery Encounter", () => {
       expect(partyCountBefore + 1).toBe(partyCountAfter);
       const greedent = scene.getPlayerParty()[scene.getPlayerParty().length - 1];
       expect(greedent.species.speciesId).toBe(SpeciesId.GREEDENT);
-      const moveset = greedent.moveset.map((m) => m.moveId);
-      expect(moveset?.length).toBe(4);
+      const moveset = greedent.getMoveset(true).map((m) => m.moveId);
+      expect(moveset.length).toBe(4);
       expect(moveset).toEqual([MoveId.THRASH, MoveId.BODY_PRESS, MoveId.STUFF_CHEEKS, MoveId.SLACK_OFF]);
     });
 

@@ -198,7 +198,7 @@ export class NightEvolutionCondition extends SpeciesEvolutionCondition {
  */
 export class TypeKnownEvoCondition extends SpeciesEvolutionCondition {
   constructor(requiredType: ElementalType) {
-    super((p) => p.moveset.filter((m) => m.getMove().type === requiredType).length > 0);
+    super((p) => p.getMoveset(true).filter((m) => m.getMove().type === requiredType).length > 0);
     this.description = "Needs to know a type move";
   }
 }
@@ -223,7 +223,7 @@ export class TypeKnownEvoCondition extends SpeciesEvolutionCondition {
  */
 export class MoveKnownEvoCondition extends SpeciesEvolutionCondition {
   constructor(requiredMoveId: MoveId) {
-    super((p) => p.moveset.filter((m) => m.moveId === requiredMoveId).length > 0);
+    super((p) => p.getMoveset(true).filter((m) => m.moveId === requiredMoveId).length > 0);
     // TODO: Needs to load call initMoves befeore this
     this.description = "needs to know "; // + allMoves.get(requiredMoveId).name;
   }

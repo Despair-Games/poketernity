@@ -1,11 +1,13 @@
 import { globalScene } from "#app/global-scene";
-import { allSpecies } from "#data/data-lists";
+import { allMoves, allSpecies } from "#data/data-lists";
 import type { PokemonSpecies } from "#data/pokemon-species";
 import type { PokemonSpeciesForm } from "#data/pokemon-species-form";
 import { POKERUS_STARTER_COUNT, speciesStarterCosts } from "#data/starters";
 import type { ElementalType } from "#enums/elemental-type";
+import type { MoveId } from "#enums/move-id";
 import { SpeciesGroups } from "#enums/species-groups";
 import { SpeciesId } from "#enums/species-id";
+import type { Pokemon } from "#field/pokemon";
 import { isNil } from "#utils/common-utils";
 import { randSeedIntRange, randSeedItem } from "#utils/random-utils";
 
@@ -92,4 +94,15 @@ export function getPokerusStarters(): PokemonSpecies[] {
 /** @returns A random {@linkcode ElementalType} (excluding `Unknown` and `Stellar`) */
 export function getRandomElementalType(): ElementalType {
   return randSeedIntRange(1, 18) as ElementalType;
+}
+
+/**
+ * @param pokemon - The {@linkcode Pokemon} with the move of interest
+ * @param moveId - The {@linkcode MoveId} to search for within the given Pokemon's moveset
+ * @param bypassSummonData - If `true`, ignores the Pokemon's temporary moveset overrides
+ * @returns The name of the given move as used by the given Pokemon, or the move's base name
+ * if a matching move isn't found within the Pokemon's moveset.
+ */
+export function getPokemonMoveName(pokemon: Pokemon, moveId: MoveId, bypassSummonData: boolean = false): string {
+  return pokemon.getPokemonMove(moveId, bypassSummonData)?.name ?? allMoves.get(moveId).name;
 }

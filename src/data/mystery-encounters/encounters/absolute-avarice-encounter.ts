@@ -377,12 +377,7 @@ export const AbsoluteAvariceEncounter: MysteryEncounter = MysteryEncounterBuilde
         // Greedent joins the team, level equal to 2 below highest party member (shiny locked)
         const level = getHighestLevelPlayerPokemon(false, true).level - 2;
         const greedent = new EnemyPokemon(getPokemonSpecies(SpeciesId.GREEDENT), level, TrainerSlot.NONE, false, true);
-        greedent.moveset = [
-          new PokemonMove(MoveId.THRASH),
-          new PokemonMove(MoveId.BODY_PRESS),
-          new PokemonMove(MoveId.STUFF_CHEEKS),
-          new PokemonMove(MoveId.SLACK_OFF),
-        ];
+        greedent.setMoveset(MoveId.THRASH, MoveId.BODY_PRESS, MoveId.STUFF_CHEEKS, MoveId.SLACK_OFF);
         greedent.passive = true;
 
         await transitionMysteryEncounterIntroVisuals(true, true, 500);
@@ -525,7 +520,8 @@ function doBerrySpritePile(isEat: boolean = false) {
   const encounter = globalScene.currentBattle.mysteryEncounter!;
   animationOrder.forEach((berry, i) => {
     const introVisualsIndex = encounter.spriteConfigs.findIndex((config) => config.spriteKey?.includes(berry));
-    let sprite: Phaser.GameObjects.Sprite, tintSprite: Phaser.GameObjects.Sprite;
+    let sprite: Phaser.GameObjects.Sprite;
+    let tintSprite: Phaser.GameObjects.Sprite;
     const sprites = encounter.introVisuals?.getSpriteAtIndex(introVisualsIndex);
     if (sprites) {
       sprite = sprites[0];
@@ -564,7 +560,7 @@ function doBerryBounce(berrySprites: Phaser.GameObjects.Sprite[], yd: number, ba
         bouncePower = bouncePower > 0.01 ? bouncePower * 0.5 : 0;
 
         if (bouncePower) {
-          bounceYOffset = bounceYOffset * bouncePower;
+          bounceYOffset *= bouncePower;
 
           globalScene.tweens.add({
             targets: berrySprites,

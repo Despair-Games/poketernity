@@ -22,7 +22,6 @@ import { SwitchType } from "#enums/switch-type";
 import { UiMode } from "#enums/ui-mode";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import { Pokemon } from "#field/pokemon";
-import { PokemonMove } from "#field/pokemon-move";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import { EvoTrackerModifier, PokemonFriendshipBoosterModifier, type PokemonHeldItemModifier } from "#modifier/modifier";
 import { achvs } from "#system/achievements";
@@ -162,7 +161,7 @@ export class PlayerPokemon extends Pokemon {
       return false;
     }
 
-    this.moveset = moveset.map((m) => new PokemonMove(m));
+    this.setMoveset(...moveset);
 
     return true;
   }
@@ -369,8 +368,7 @@ export class PlayerPokemon extends Pokemon {
           this.nature,
         );
         newPokemon.passive = this.passive;
-        newPokemon.moveset = this.moveset.slice();
-        newPokemon.moveset = this.copyMoveset();
+        this.copyMoveset(newPokemon);
         newPokemon.luck = this.luck;
         newPokemon.gender = Gender.GENDERLESS;
         newPokemon.metLevel = this.metLevel;
@@ -468,13 +466,12 @@ export class PlayerPokemon extends Pokemon {
     });
   }
 
-  /** Returns a deep copy of this Pokemon's moveset array */
-  copyMoveset(): PokemonMove[] {
-    const newMoveset: PokemonMove[] = [];
-    this.moveset.forEach((move) => {
-      newMoveset.push(new PokemonMove(move.moveId, 0, move.ppUp, move.virtual, move.maxPpOverride));
-    });
-
-    return newMoveset;
+  /**
+   * Copies this Pokemon's moveset array onto the given Pokemon.
+   * @param pokemon - The {@linkcode Pokemon} receiving the copied moveset
+   * @todo This doesn't deeply copy each move (e.g. copied moves always have full PP)
+   */
+  copyMoveset(pokemon: Pokemon): void {
+    pokemon.setMoveset(...this.getMoveset(true).map((mv) => mv.moveId));
   }
 }

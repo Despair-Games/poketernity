@@ -87,7 +87,7 @@ export class LoginFormUiHandler extends FormModalUiHandler {
       new Phaser.Geom.Rectangle(0, 0, GAME_WIDTH / 2, GAME_HEIGHT / 2),
       Phaser.Geom.Rectangle.Contains,
     );
-    this.externalPartyTitle = addTextObject(0, 4, "", TextStyle.SETTINGS_LABEL);
+    this.externalPartyTitle = addTextObject(0, 4, "", TextStyle.WINDOW_HEADER);
     this.externalPartyTitle.setOrigin(0.5, 0);
     this.externalPartyBg = addWindow(0, 0, 0, 0);
     this.externalPartyContainer.add(this.externalPartyBg);

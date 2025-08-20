@@ -1139,9 +1139,9 @@ export class FormChangeItemModifierType extends PokemonModifierType implements G
       (_type, args) => new PokemonFormChangeItemModifier(this, (args[0] as PlayerPokemon).id, formChangeItem, true),
       (pokemon: PlayerPokemon) => {
         // Make sure the Pokemon has alternate forms
+        // Get all form changes for this species with an item trigger, including any compound triggers
         if (
           Object.hasOwn(pokemonFormChanges, pokemon.species.speciesId)
-          // Get all form changes for this species with an item trigger, including any compound triggers
           && pokemonFormChanges[pokemon.species.speciesId]
             .filter(
               (fc) => fc.trigger.hasTriggerType(SpeciesFormChangeItemTrigger) && fc.preFormKey === pokemon.getFormKey(),
@@ -1306,6 +1306,7 @@ export class SpeciesStatBoosterModifierTypeGenerator extends ModifierTypeGenerat
         const speciesId = p.getSpeciesForm(true).speciesId;
         const hasFling = p.getMoveset(true).some((m) => m.moveId === MoveId.FLING);
 
+        // biome-ignore lint/suspicious/useGuardForIn: Not necessary
         for (const i in values) {
           const checkedSpecies = values[i].species;
           const checkedStats = values[i].stats;
@@ -1363,7 +1364,7 @@ export class TmModifierTypeGenerator extends ModifierTypeGenerator {
         return new TmModifierType(pregenArgs[0] as MoveId);
       }
       const partyMemberCompatibleTms = party.map((p) =>
-        (p as PlayerPokemon).compatibleTms.filter((tm) => !p.moveset.find((m) => m.moveId === tm)),
+        (p as PlayerPokemon).compatibleTms.filter((tm) => !p.getMoveset(true).find((m) => m.moveId === tm)),
       );
       const tierUniqueCompatibleTms = partyMemberCompatibleTms
         .flat()
@@ -1455,9 +1456,9 @@ export class FormChangeItemModifierTypeGenerator extends ModifierTypeGenerator {
               if (p.species.speciesId === SpeciesId.NECROZMA) {
                 // technically we could use a simplified version and check for formChanges.length > 3, but in case any code changes later, this might break...
 
-                let foundULTRA_Z = false,
-                  foundN_LUNA = false,
-                  foundN_SOLAR = false;
+                let foundULTRA_Z = false;
+                let foundN_LUNA = false;
+                let foundN_SOLAR = false;
                 formChangeItemTriggers.forEach((fc, _i) => {
                   switch (fc.item) {
                     case FormChangeItem.ULTRANECROZIUM_Z:

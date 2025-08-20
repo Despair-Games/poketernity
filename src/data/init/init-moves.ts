@@ -312,7 +312,7 @@ import { isNil } from "#utils/common-utils";
 import { crashDamageFunc } from "#utils/move-utils";
 import i18next from "i18next";
 
-// prettier-ignore
+// biome-ignore format: Manually formatted
 export function initMoves() {
   const rawAllMoves: Move[] = [
     SelfStatusMove.none(),

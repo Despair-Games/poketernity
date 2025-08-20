@@ -2,7 +2,7 @@ import { BattleStyle } from "#enums/battle-style";
 import { DamageNumbersMode } from "#enums/damage-numbers-mode";
 import { EaseType } from "#enums/ease-type";
 import { EggSkipPreference } from "#enums/egg-skip-preference";
-import { ExpGainsSpeed } from "#enums/exp-gains-speed";
+import { ExpGainSpeed } from "#enums/exp-gain-speed";
 import { ExpNotification } from "#enums/exp-notification";
 import { HpBarSpeed } from "#enums/hp-bar-speed";
 import { KeyboardLayout } from "#enums/keyboard-layout";
@@ -23,7 +23,7 @@ import type {
 export const defaultGeneralSettings: GeneralSettings = {
   gameSpeed: 2,
   hpBarSpeed: HpBarSpeed.DEFAULT,
-  expGainsSpeed: ExpGainsSpeed.DEFAULT,
+  expGainSpeed: ExpGainSpeed.DEFAULT,
   partyExpNotificationMode: ExpNotification.DEFAULT,
   skipSeenDialogues: false,
   eggSkipPreference: EggSkipPreference.ASK,

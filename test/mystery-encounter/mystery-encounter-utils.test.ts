@@ -57,12 +57,12 @@ describe("Mystery Encounter Utils", () => {
       expect(result.species.speciesId).toBe(SpeciesId.ARCEUS);
     });
 
-    it("gets a fainted pokemon from player party if isAllowedInBattle is false", () => {
+    it("gets a fainted pokemon from player party if isAllowedInBattle is false", async () => {
       // Both pokemon fainted
-      scene.getPlayerParty().forEach((p) => {
-        p.faint();
-        void p.updateInfo();
-      });
+      for (const pkmn of scene.getPlayerParty()) {
+        pkmn.faint();
+        await pkmn.updateInfo();
+      }
 
       // Seeds are calculated to return index 0 first, 1 second (if both pokemon are legal)
       game.override.seed("random");

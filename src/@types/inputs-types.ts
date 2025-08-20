@@ -3,7 +3,7 @@ import type { SettingGamepad } from "#enums/setting-gamepad";
 import type { SettingKeyboard } from "#enums/setting-keyboard";
 
 /** All keyboard keys that the game recognizes or allows to map to an action. */
-// prettier-ignore
+// biome-ignore format: Manually formatted
 export type KeyboardKeys = "KEY_A" | "KEY_B" | "KEY_C" | "KEY_D" | "KEY_E" | "KEY_F" | "KEY_G" | "KEY_H"
   | "KEY_I" | "KEY_J" | "KEY_K" | "KEY_L" | "KEY_M" | "KEY_N" | "KEY_O" | "KEY_P" | "KEY_Q" | "KEY_R"
   | "KEY_S" | "KEY_T" | "KEY_U" | "KEY_V" | "KEY_W" | "KEY_X" | "KEY_Y" | "KEY_Z"
@@ -15,7 +15,7 @@ export type KeyboardKeys = "KEY_A" | "KEY_B" | "KEY_C" | "KEY_D" | "KEY_E" | "KE
   | "KEY_ARROW_UP" | "KEY_ARROW_DOWN" | "KEY_ARROW_LEFT" | "KEY_ARROW_RIGHT"
   | "KEY_LEFT_BRACKET" | "KEY_RIGHT_BRACKET" | "KEY_SEMICOLON" | "KEY_BACKSPACE" | "KEY_ALT";
 
-// prettier-ignore
+// biome-ignore format: Manually formatted
 export type BasicGamepadKeys = "RC_S" | "RC_E" | "RC_W" | "RC_N" | "START" | "SELECT"
   | "LB" | "RB" | "LC_N" | "LC_S" | "LC_W" | "LC_E";
 export type ModernGamepadKeys = BasicGamepadKeys | "LT" | "RT" | "LS" | "RS";
@@ -44,7 +44,10 @@ export interface InputInterfaceConfig<K extends InputKeys = InputKeys, S extends
   deviceMapping: Record<K, number>;
   /** Mapping of each key to an icon file. */
   icons: Record<K, string>;
-  /** Mapping of each Setting for this input interface to a button. */
+  /**
+   * Mapping of each Setting for this input interface to a button.
+   * The order these are defined in will get reflected in the rebinding UI.
+   */
   settings: Partial<Record<S, Button>>;
   /** Default mappings of each key to a setting. -1 means no mapping. */
   default: InputMappings<K, S>;

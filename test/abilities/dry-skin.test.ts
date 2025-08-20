@@ -145,7 +145,7 @@ describe("Abilities - Dry Skin", () => {
     await classicMode.startBattle(SpeciesId.CHANDELURE);
     const enemy = field.getEnemyPokemon();
     move.use(MoveId.WATER_GUN);
-    enemy.hp = enemy.hp - 1;
+    enemy.hp -= 1;
     await phaseInterceptor.to("MoveEffectPhase");
     await move.forceMiss();
     await game.toEndOfTurn();

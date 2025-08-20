@@ -29,9 +29,7 @@ export class PartyHealPhase extends BattlePhase {
       for (const pokemon of globalScene.getPlayerParty()) {
         pokemon.hp = pokemon.getMaxHp();
         pokemon.resetStatus();
-        for (const move of pokemon.moveset) {
-          move.ppUsed = 0;
-        }
+        pokemon.restoreMovePP();
         pokemon.updateInfo(true);
       }
       globalScene.playerTerasUsed = 0;

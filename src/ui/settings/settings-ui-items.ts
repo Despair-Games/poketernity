@@ -7,7 +7,7 @@ import { BattleStyle } from "#enums/battle-style";
 import { DamageNumbersMode } from "#enums/damage-numbers-mode";
 import { EaseType } from "#enums/ease-type";
 import { EggSkipPreference } from "#enums/egg-skip-preference";
-import { ExpGainsSpeed } from "#enums/exp-gains-speed";
+import { ExpGainSpeed } from "#enums/exp-gain-speed";
 import { ExpNotification } from "#enums/exp-notification";
 import { HpBarSpeed } from "#enums/hp-bar-speed";
 import { MoneyFormat } from "#enums/money-format";
@@ -19,7 +19,9 @@ import { supportedLanguages } from "#system/supported-languages";
 import type {
   AudioSettingsKey,
   DisplaySettingsKey,
+  GamepadSettingsKey,
   GeneralSettingsKey,
+  KeyboardSettingsKey,
   SettingsUiItem,
   SettingUiItemOption,
 } from "#types/settings";
@@ -102,13 +104,13 @@ export const generalSettingsUiItems: SettingsUiItem<GeneralSettingsKey>[] = [
     doWrap: true,
   },
   {
-    key: "expGainsSpeed",
-    label: t("settings:expGainsSpeed"),
+    key: "expGainSpeed",
+    label: t("settings:expGainsSpeed"), // TODO: rename i18n key
     options: [
-      { value: ExpGainsSpeed.DEFAULT, label: t("settings:normal") },
-      { value: ExpGainsSpeed.FAST, label: t("settings:fast") },
-      { value: ExpGainsSpeed.FASTER, label: t("settings:faster") },
-      { value: ExpGainsSpeed.SKIP, label: t("settings:skip") },
+      { value: ExpGainSpeed.DEFAULT, label: t("settings:normal") },
+      { value: ExpGainSpeed.FAST, label: t("settings:fast") },
+      { value: ExpGainSpeed.FASTER, label: t("settings:faster") },
+      { value: ExpGainSpeed.SKIP, label: t("settings:skip") },
     ],
     doWrap: true,
   },
@@ -215,6 +217,7 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
         value: 1,
       },
     ],
+    overrideSelectedIndex: 0,
     requiresReload: true,
   },
   {
@@ -367,5 +370,46 @@ export const audioSettingsUiItems: SettingsUiItem<AudioSettingsKey>[] = [
     key: "uiVolume",
     label: t("settings:uiVolume"),
     options: useVolumeOptions(),
+  },
+];
+
+export const gamepadSettingsUiItems: SettingsUiItem<GamepadSettingsKey>[] = [
+  {
+    key: "activeIndex",
+    label: t("settings:controller"),
+    options: [
+      {
+        label: "Default", // Will be overridden with the proper gamepad id at runtime
+        value: 0,
+      },
+      {
+        label: t("settings:change"),
+        value: 1,
+      },
+    ],
+    overrideSelectedIndex: 0,
+  },
+  {
+    key: "enabled",
+    label: t("settings:gamepadSupport"),
+    options: useAutoDisabledOptions(),
+  },
+];
+
+export const keyboardSettingsUiItems: SettingsUiItem<KeyboardSettingsKey>[] = [
+  {
+    key: "layout",
+    label: t("settings:keyboardLayout"),
+    options: [
+      {
+        label: "Default", // Will be overridden with the currently set layout name at runtime
+        value: 0,
+      },
+      {
+        label: t("settings:change"),
+        value: 1,
+      },
+    ],
+    overrideSelectedIndex: 0,
   },
 ];

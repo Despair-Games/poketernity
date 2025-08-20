@@ -9,7 +9,6 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
-import { PokemonMove } from "#field/pokemon-move";
 import type { BerryModifier } from "#modifier/modifier";
 import { modifierTypes } from "#modifier/modifier-types";
 import * as EncounterPhaseUtils from "#mystery-encounters/encounter-phase-utils";
@@ -132,7 +131,7 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is("MovePhase")).map((p) => p[0]);
       expect(movePhases.length).toBe(1);
       const eggMoves: MoveId[] = speciesEggMoves[getPokemonSpecies(speciesToSpawn).getRootSpeciesId()];
-      const usedMove = (movePhases[0] as MovePhase).move.moveId;
+      const usedMove = (movePhases[0] as MovePhase).pokemonMove.moveId;
       expect(eggMoves.includes(usedMove)).toBe(true);
     });
 
@@ -159,7 +158,7 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is("MovePhase")).map((p) => p[0]);
       expect(movePhases.length).toBe(1);
       const eggMoves: MoveId[] = speciesEggMoves[getPokemonSpecies(speciesToSpawn).getRootSpeciesId()];
-      const usedMove = (movePhases[0] as MovePhase).move.moveId;
+      const usedMove = (movePhases[0] as MovePhase).pokemonMove.moveId;
       expect(eggMoves.includes(usedMove)).toBe(true);
     });
   });
@@ -248,7 +247,9 @@ describe("Uncommon Breed - Mystery Encounter", () => {
 
     it("should NOT be selectable if the player doesn't have an Attracting move", async () => {
       await game.runToMysteryEncounter(MysteryEncounterType.UNCOMMON_BREED, defaultParty);
-      scene.getPlayerParty().forEach((p) => (p.moveset = []));
+      scene.getPlayerParty().forEach((p) => {
+        game.move.changeMoveset(p, []);
+      });
       await game.phaseInterceptor.to("MysteryEncounterPhase", false);
 
       const encounterPhase = scene.phaseManager.getCurrentPhase();
@@ -270,7 +271,8 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       const leaveEncounterWithoutBattleSpy = vi.spyOn(EncounterPhaseUtils, "leaveEncounterWithoutBattle");
       await game.runToMysteryEncounter(MysteryEncounterType.UNCOMMON_BREED, defaultParty);
       // Mock moveset
-      scene.getPlayerParty()[0].moveset = [new PokemonMove(MoveId.CHARM)];
+      const player = game.field.getPlayerPokemon();
+      game.move.changeMoveset(player, MoveId.CHARM);
       await runMysteryEncounterToEnd(game, 3);
 
       expect(leaveEncounterWithoutBattleSpy).toBeCalled();

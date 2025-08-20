@@ -37,7 +37,6 @@ import { TrainerVariant } from "#enums/trainer-variant";
 import { UiMode } from "#enums/ui-mode";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
-import { PokemonMove } from "#field/pokemon-move";
 import { Trainer } from "#field/trainer";
 import { initMoveAnim } from "#init/init-move-anim";
 import {
@@ -208,8 +207,8 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
   battle.enemyLevels = battle.enemyLevels.map((level) => level + additive);
 
   battle.enemyLevels.forEach((level, e) => {
-    let enemySpecies;
-    let dataSource;
+    let enemySpecies: PokemonSpecies | undefined;
+    let dataSource: PokemonData | undefined;
     let isBoss = false;
     if (!loaded) {
       if ((!isNil(trainerType) || trainerConfig) && battle.trainer) {
@@ -281,9 +280,12 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
       }
 
       // Generate new id, reset status and HP in case using data source
-      if (config.dataSource) {
-        enemyPokemon.generateId();
-      }
+      // TODO: figure out if this is necessary
+      // if (config.dataSource) {
+      //   // remove old id from battlescene active id list here
+      //   enemyPokemon.id = enemyPokemon.generateId();
+      //   // add new id to battlescene active id list here
+      // }
 
       // Set form
       if (!isNil(config.formIndex)) {
@@ -366,9 +368,8 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
 
       // Set moves
       if (config?.moveSet && config.moveSet.length > 0) {
-        const moves = config.moveSet.map((m) => new PokemonMove(m));
-        enemyPokemon.moveset = moves;
-        enemyPokemon.summonData.moveset = moves;
+        enemyPokemon.summonData.moveset = [];
+        enemyPokemon.setMoveset(...config.moveSet);
       }
 
       // Set tags
@@ -412,7 +413,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
     ];
     const moveset: string[] = [];
     enemyPokemon.getMoveset().forEach((move) => {
-      moveset.push(move.getName());
+      moveset.push(move.name);
     });
 
     console.log(
@@ -1105,8 +1106,8 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
         const tierWeights = [66, 40, 19, 3];
 
         // Adjust tier weights by currently encountered events (pity system that lowers odds of multiple Common/Great)
-        tierWeights[0] = tierWeights[0] - 6 * numEncounters[0];
-        tierWeights[1] = tierWeights[1] - 4 * numEncounters[1];
+        tierWeights[0] -= 6 * numEncounters[0];
+        tierWeights[1] -= 4 * numEncounters[1];
 
         const totalWeight = tierWeights.reduce((a, b) => a + b);
         const tierValue = randSeedInt(totalWeight);
@@ -1182,8 +1183,7 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
   );
   meanEncountersPerRunPerBiomeSorted.forEach(
     (value) =>
-      (stats =
-        stats + `${value[0]}: avg valid floors ${meanMEFloorsPerRunPerBiome.get(value[0])}, avg MEs ${value[1]},\n`),
+      (stats += `${value[0]}: avg valid floors ${meanMEFloorsPerRunPerBiome.get(value[0])}, avg MEs ${value[1]},\n`),
   );
 
   console.log(stats);

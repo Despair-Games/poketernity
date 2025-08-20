@@ -5,7 +5,6 @@ import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
-import { PokemonMove } from "#field/pokemon-move";
 import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -42,15 +41,15 @@ describe("Moves - Powder", () => {
     game.override.enemyMoveset([]);
     await game.classicMode.startBattle(SpeciesId.CHARIZARD);
 
-    const enemyPokemon = game.scene.getEnemyPokemon()!;
-    enemyPokemon.moveset = [new PokemonMove(MoveId.EMBER)];
+    const enemyPokemon = game.field.getEnemyPokemon();
+    game.move.changeMoveset(enemyPokemon, MoveId.EMBER);
 
     game.move.select(MoveId.POWDER);
 
     await game.phaseInterceptor.to("BerryPhase", false);
     expect(enemyPokemon).toHaveMoveResult(MoveResult.FAIL);
     expect(enemyPokemon.hp).toBe(Math.ceil((3 * enemyPokemon.getMaxHp()) / 4));
-    expect(enemyPokemon.moveset[0]!.ppUsed).toBe(1);
+    expect(enemyPokemon.getMoveset(true)[0].ppUsed).toBe(1);
 
     await game.toNextTurn();
 
@@ -59,7 +58,7 @@ describe("Moves - Powder", () => {
     await game.phaseInterceptor.to("BerryPhase", false);
     expect(enemyPokemon).toHaveMoveResult(MoveResult.SUCCESS);
     expect(enemyPokemon.hp).toBe(Math.ceil((3 * enemyPokemon.getMaxHp()) / 4));
-    expect(enemyPokemon.moveset[0]!.ppUsed).toBe(2);
+    expect(enemyPokemon.getMoveset(true)[0].ppUsed).toBe(2);
   });
 
   it("should have no effect against Grass-type Pokemon", async () => {

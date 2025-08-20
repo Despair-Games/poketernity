@@ -48,7 +48,7 @@ describe("Form Change Phase", () => {
     // Before the form change: Should be normal form
     const pokemon = game.scene.getPlayerParty()[0];
     expect(pokemon.getFormKey()).toBe("");
-    expect(pokemon.moveset.map((m) => m.moveId)).not.toContain(learnedMoveId);
+    expect(pokemon.getMoveset(true).map((m) => m.moveId)).not.toContain(learnedMoveId);
 
     // Give a form change item to activate the form change
     const formChangeItemType =
@@ -63,7 +63,12 @@ describe("Form Change Phase", () => {
     // After the form change: Should be the desired new form
     expect(game.phaseInterceptor.log.includes("FormChangePhase")).toBe(true);
     expect(pokemon.getFormKey()).toBe(newFormKey);
-    expect(pokemon.moveset.map((m) => m.moveId).includes(learnedMoveId)).toBe(expectedToLearn);
+    expect(
+      pokemon
+        .getMoveset(true)
+        .map((m) => m.moveId)
+        .includes(learnedMoveId),
+    ).toBe(expectedToLearn);
     expect(game.phaseInterceptor.log.includes("LearnMovePhase")).toBe(expectedToLearn);
   }
 
@@ -75,7 +80,7 @@ describe("Form Change Phase", () => {
     expect(zacian.getFormKey()).toBe("hero-of-many-battles");
     expect(zacian.getTypes()).toStrictEqual([ElementalType.FAIRY]);
     expect(zacian.calculateBaseStats()).toStrictEqual([92, 120, 115, 80, 115, 138]);
-    expect(zacian.moveset.map((m) => m.moveId)).not.toContain(MoveId.BEHEMOTH_BLADE);
+    expect(zacian.getMoveset(true).map((m) => m.moveId)).not.toContain(MoveId.BEHEMOTH_BLADE);
 
     // Prevent form change from finishing instantly, so that the player can attempt to cancel it
     const originalDoCycle = game.scene.animations.doCycle;
@@ -103,7 +108,7 @@ describe("Form Change Phase", () => {
     expect(zacian.getFormKey()).toBe("crowned");
     expect(zacian.getTypes()).toStrictEqual([ElementalType.FAIRY, ElementalType.STEEL]);
     expect(zacian.calculateBaseStats()).toStrictEqual([92, 150, 115, 80, 115, 148]);
-    expect(zacian.moveset.map((m) => m.moveId)).toContain(MoveId.BEHEMOTH_BLADE);
+    expect(zacian.getMoveset(true).map((m) => m.moveId)).toContain(MoveId.BEHEMOTH_BLADE);
   });
 
   it("should allow a G-Max Pokemon to learn its respective G-Max move at any level", async () => {
@@ -172,8 +177,8 @@ describe("Form Change Phase", () => {
     await game.toNextWave();
 
     // Expect no new moves to be learned
-    expect(rillaboom.moveset.map((m) => m.moveId)).not.toContain(MoveId.G_MAX_DRUM_SOLO);
-    expect(rillaboom.moveset.map((m) => m.moveId)).not.toContain(MoveId.DRUM_BEATING);
+    expect(rillaboom.getMoveset(true).map((m) => m.moveId)).not.toContain(MoveId.G_MAX_DRUM_SOLO);
+    expect(rillaboom.getMoveset(true).map((m) => m.moveId)).not.toContain(MoveId.DRUM_BEATING);
     expect(game.phaseInterceptor.log.includes("LearnMovePhase")).toBe(false);
   });
 });

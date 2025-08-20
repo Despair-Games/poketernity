@@ -56,7 +56,7 @@ export class HitHealAttr extends MoveEffectAttr {
         healAmount = 0;
         message = "";
       } else {
-        healAmount = healAmount * -1;
+        healAmount *= -1;
         message = "";
       }
     }

@@ -55,7 +55,7 @@ export class GameWrapper {
       let moveId = MoveId.NONE;
       if (currentPhase?.is("MoveEffectPhase")) {
         const move = currentPhase.move;
-        moveName = move.getName();
+        moveName = move.name;
         moveId = move.moveId;
       }
       const isLowHpMove = lowHpMoves.includes(moveId);

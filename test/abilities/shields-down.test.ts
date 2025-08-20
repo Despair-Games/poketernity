@@ -28,8 +28,8 @@ describe("Abilities - SHIELDS DOWN", () => {
   });
 
   test("check if fainted pokemon switched to base form on arena reset", async () => {
-    const meteorForm = 0,
-      coreForm = 7;
+    const meteorForm = 0;
+    const coreForm = 7;
     game.override.startingWave(4);
     game.override.starterForms({
       [SpeciesId.MINIOR]: coreForm,

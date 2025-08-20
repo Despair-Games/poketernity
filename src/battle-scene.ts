@@ -262,9 +262,16 @@ export class BattleScene extends SceneBase {
    * Allows subscribers to listen for events
    *
    * @see `src/events/`
-   * @todo Migrate to using {@linkcode eventBus} instead.
+   * @todo Migrate to only using {@linkcode eventBus} instead of a mix of both.
    */
   public readonly eventTarget: EventTarget = new EventTarget();
+
+  /**
+   * The next ID to assign to a Pokemon.
+   * @privateRemarks
+   * This must start at 4 due to the insane `if (this.battlerIndex > BattlerIndex.ENEMY_2)` check in `PokemonPhase`/etc.
+   */
+  private nextPokemonID: number = 4;
 
   constructor() {
     super("battle");
@@ -279,6 +286,8 @@ export class BattleScene extends SceneBase {
   private initSettingsEventListeners() {
     const updateSoundKeys: AnySettingKey[] = ["masterVolume", "bgmVolume", "fieldVolume", "soundEffectsVolume"];
 
+    // TODO: add early returns in the `if` statements
+    // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Necessary to change behavior depending on the key being modified
     eventBus.on("settings/updated", ({ key, value }: SettingsUpdateEventArgs) => {
       if (updateSoundKeys.includes(key)) {
         //TODO: check if the effective volume changed to optimize
@@ -720,31 +729,22 @@ export class BattleScene extends SceneBase {
             starterColors[key] = sc[key];
           });
 
-          /*const loadPokemonAssets: Promise<void>[] = [];
-
-                for (let s of Object.keys(speciesStarters)) {
-                    const species = getPokemonSpecies(parseInt(s));
-                    loadPokemonAssets.push(species.loadAssets(this, false, 0, false));
-                }
-
-                Promise.all(loadPokemonAssets).then(() => {
-                    const starterCandyColors = {};
-                    const rgbaToHexFunc = (r, g, b) => [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
-
-                    for (let s of Object.keys(speciesStarters)) {
-                        const species = getPokemonSpecies(parseInt(s));
-
-                        starterCandyColors[species.speciesId] = species.generateCandyColors(this).map(c => rgbaToHexFunc(c[0], c[1], c[2]));
-                    }
-
-                    console.log(JSON.stringify(starterCandyColors));
-
-                    resolve();
-                });*/
-
           resolve();
         });
     });
+  }
+
+  /** Gets the next available Pokemon ID value and then updates the counter. */
+  public getNextPokemonID(): number {
+    return this.nextPokemonID++;
+  }
+
+  /**
+   * Sets {@linkcode nextPokemonID} to the maximum of its current value and the passed in value plus 1. \
+   * Used when loading Pokemon from a save to ensure there are no ID collisions.
+   */
+  public updateNextPokemonID(id: number): void {
+    this.nextPokemonID = Math.max(id + 1, this.nextPokemonID);
   }
 
   public getPlayerParty(): PlayerPokemon[] {
@@ -1110,6 +1110,8 @@ export class BattleScene extends SceneBase {
     this.score = 0;
     this.money = 0;
     this.playerTerasUsed = 0;
+    // must start at 4 until the mixing of battler index and id are removed from `PokemonPhase`/etc
+    this.nextPokemonID = 4;
 
     this.lockModifierTiers = false;
 
@@ -1206,7 +1208,7 @@ export class BattleScene extends SceneBase {
           this.children.removeAll(true);
           this.game.domContainer.innerHTML = "";
 
-          // TODO: launchBattle will call reset(false, false, true) too, this can probably be done better
+          // TODO: `launchBattle()` will call `reset()` too, this can probably be done better
           this.launchBattle();
         },
       });
@@ -1403,10 +1405,10 @@ export class BattleScene extends SceneBase {
 
           applyAbAttrs<PostBattleInitAbAttr>(AbAttrFlag.POST_BATTLE_INIT, pokemon, false);
 
+          // In Scarlet/Violet, the player's Tera Orb automatically recharges after every battle once they've caught Terapagos
+          // The player's Tera Orb also automatically recharges when fighting the Elite 4 or in Area Zero (the endgame area)
           if (
-            // In Scarlet/Violet, the player's Tera Orb automatically recharges after every battle once they've caught Terapagos
             (pokemon.species.speciesId === SpeciesId.TERAPAGOS && pokemon.isAllowedInChallenge())
-            // The player's Tera Orb also automatically recharges when fighting the Elite 4 or in Area Zero (the endgame area)
             || (this.gameMode.isClassic && this.currentBattle.waveIndex >= ELITE_FOUR_1_WAVE)
           ) {
             this.playerTerasUsed = 0;
@@ -2111,12 +2113,10 @@ export class BattleScene extends SceneBase {
       }
 
       if (modifier instanceof ConsumablePokemonModifier) {
-        for (const p in this.party) {
-          const pokemon = this.party[p];
-
+        for (const pokemon of this.party) {
           const args: unknown[] = [];
           if (modifier instanceof PokemonHpRestoreModifier) {
-            if (!(modifier as PokemonHpRestoreModifier).fainted) {
+            if (!modifier.fainted) {
               const hpRestoreMultiplier = new NumberHolder(1);
               this.applyModifiers(HealingBoosterModifier, true, hpRestoreMultiplier);
               args.push(hpRestoreMultiplier.value);
@@ -3024,9 +3024,9 @@ export class BattleScene extends SceneBase {
     // Adjust tier weights by previously encountered events to lower odds of only Common/Great in run
     this.mysteryEncounterSaveData.encounteredEvents.forEach((seenEncounterData) => {
       if (seenEncounterData.tier === MysteryEncounterTier.COMMON) {
-        tierWeights[0] = tierWeights[0] - 6;
+        tierWeights[0] -= 6;
       } else if (seenEncounterData.tier === MysteryEncounterTier.GREAT) {
-        tierWeights[1] = tierWeights[1] - 4;
+        tierWeights[1] -= 4;
       }
     });
 

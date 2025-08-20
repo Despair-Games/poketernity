@@ -1,20 +1,24 @@
 import { globalScene } from "#app/global-scene";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { Button } from "#enums/button";
+import type { Device } from "#enums/device";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
-import { NavigationManager } from "#ui/navigation-menu";
+import type { InputSettings } from "#types/inputs-types";
 import { addTextObject, setTextColor } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";
 import { addWindow } from "#ui/ui-theme";
+import { isNil } from "#utils/common-utils";
 import i18next from "i18next";
 
-type CancelFn = (succes?: boolean) => boolean;
+type FinishCallback = (succes?: boolean) => boolean;
 
 /**
  * Abstract class for handling UI elements related to button bindings.
  */
 export abstract class BindingUiHandler extends UiHandler {
+  protected device: Device;
+
   // Containers for different segments of the UI.
   protected optionSelectContainer: Phaser.GameObjects.Container;
   protected actionsContainer: Phaser.GameObjects.Container;
@@ -25,8 +29,7 @@ export abstract class BindingUiHandler extends UiHandler {
   protected optionSelectBg: Phaser.GameObjects.NineSlice;
 
   // Text elements for displaying instructions and actions.
-  protected unlockText: Phaser.GameObjects.Text;
-  protected timerText: Phaser.GameObjects.Text;
+  protected promptText: Phaser.GameObjects.Text; // prompt for pressing a button with timer
   protected swapText: Phaser.GameObjects.Text;
   protected actionLabel: Phaser.GameObjects.Text;
   protected cancelLabel: Phaser.GameObjects.Text;
@@ -39,25 +42,26 @@ export abstract class BindingUiHandler extends UiHandler {
   protected targetButtonIcon: Phaser.GameObjects.Sprite;
 
   // Function to call on cancel or completion of binding.
-  protected cancelFn: CancelFn | null;
-  protected abstract swapAction(): boolean;
+  protected callback: FinishCallback | null;
 
   protected timeLeftAutoClose: number = 5;
-  protected countdownTimer;
+  protected countdownTimer: NodeJS.Timeout;
 
   // The specific setting being modified.
-  protected target;
+  protected target: InputSettings | null;
 
-  /**
-   * @param mode - The UI mode.
-   */
-  constructor(mode: UiMode | null = null) {
+  /** text to display while waiting for a button to be pressed */
+  protected pressButtonText = i18next.t("settings:pressButton");
+  /** text to display once a button has been pressed */
+  protected buttonPressedText = i18next.t("settings:buttonPressed");
+  /** text to display to confirm the selected mapping */
+  protected confirmAssignText = i18next.t("settings:confirmAssign");
+
+  constructor(mode: UiMode, device: Device) {
     super(mode);
+    this.device = device;
   }
 
-  /**
-   * Setup UI elements.
-   */
   protected override setup() {
     const ui = this.getUi();
     this.optionSelectContainer = globalScene.add.container(0, 0);
@@ -70,31 +74,16 @@ export abstract class BindingUiHandler extends UiHandler {
     ui.add(this.optionSelectContainer);
     ui.add(this.actionsContainer);
 
-    // Setup backgrounds and text objects for UI.
+    // Top window with instructions
     this.titleBg = addWindow(GAME_WIDTH - this.getWindowWidth(), -GAME_HEIGHT + 28 + 21, this.getWindowWidth(), 24);
     this.titleBg.setOrigin(0.5);
     this.optionSelectContainer.add(this.titleBg);
 
-    this.actionBg = addWindow(
-      GAME_WIDTH - this.getWindowWidth(),
-      -GAME_HEIGHT + this.getWindowHeight() + 28 + 21 + 21,
-      this.getWindowWidth(),
-      24,
-    );
-    this.actionBg.setOrigin(0.5);
-    this.actionsContainer.add(this.actionBg);
+    this.promptText = addTextObject(this.titleBg.x, this.titleBg.y, `${this.pressButtonText} (5)`, TextStyle.WINDOW);
+    this.promptText.setOrigin(0.5, 0.5);
+    this.optionSelectContainer.add(this.promptText);
 
-    // Text prompts and instructions for the user.
-    this.unlockText = addTextObject(0, 0, i18next.t("settings:pressButton"), TextStyle.WINDOW);
-    this.unlockText.setOrigin(0, 0);
-    this.unlockText.setPositionRelative(this.titleBg, 36, 4);
-    this.optionSelectContainer.add(this.unlockText);
-
-    this.timerText = addTextObject(0, 0, "(5)", TextStyle.WINDOW);
-    this.timerText.setOrigin(0, 0);
-    this.timerText.setPositionRelative(this.unlockText, this.unlockText.displayWidth + 5, 0);
-    this.optionSelectContainer.add(this.timerText);
-
+    // Center window with the selected button
     this.optionSelectBg = addWindow(
       GAME_WIDTH - this.getWindowWidth(),
       -GAME_HEIGHT + this.getWindowHeight() + 28,
@@ -104,10 +93,30 @@ export abstract class BindingUiHandler extends UiHandler {
     this.optionSelectBg.setOrigin(0.5);
     this.optionSelectContainer.add(this.optionSelectBg);
 
-    this.cancelLabel = addTextObject(0, 0, i18next.t("settings:back"), TextStyle.SETTINGS_LABEL);
+    this.newButtonIcon = globalScene.add.sprite(this.optionSelectBg.x, this.optionSelectBg.y, "xbox");
+    this.newButtonIcon.setOrigin(0.5);
+    this.newButtonIcon.setVisible(false);
+    this.optionSelectContainer.add(this.newButtonIcon);
+
+    // Window at the bottom with cancel and confirm labels
+    this.actionBg = addWindow(
+      GAME_WIDTH - this.getWindowWidth(),
+      -GAME_HEIGHT + this.getWindowHeight() + 29 + 21 + 21,
+      this.getWindowWidth(),
+      24,
+    );
+    this.actionBg.setOrigin(0.5);
+    this.actionsContainer.add(this.actionBg);
+
+    this.cancelLabel = addTextObject(0, 0, i18next.t("menu:cancel"), TextStyle.SETTINGS_LABEL);
     this.cancelLabel.setOrigin(0, 0.5);
-    this.cancelLabel.setPositionRelative(this.actionBg, 10, this.actionBg.height / 2);
+    this.cancelLabel.setPositionRelative(this.actionBg, 6, this.actionBg.height / 2);
     this.actionsContainer.add(this.cancelLabel);
+
+    const labelX = this.actionBg.getRightCenter().x - 6;
+    this.actionLabel = addTextObject(labelX, this.actionBg.y, this.confirmAssignText, TextStyle.SETTINGS_LABEL);
+    this.actionLabel.setOrigin(1, 0.5);
+    this.actionsContainer.add(this.actionLabel);
   }
 
   protected override tearDown(): void {
@@ -119,11 +128,11 @@ export abstract class BindingUiHandler extends UiHandler {
     clearTimeout(this.countdownTimer);
     this.countdownTimer = setTimeout(() => {
       this.timeLeftAutoClose -= 1;
-      this.timerText.setText(`(${this.timeLeftAutoClose})`);
+      this.promptText.setText(`${this.pressButtonText} (${this.timeLeftAutoClose})`);
       if (this.timeLeftAutoClose >= 0) {
         this.manageAutoCloseTimer();
       } else {
-        this.cancelFn?.();
+        this.callback?.();
       }
     }, 1000);
   }
@@ -132,13 +141,13 @@ export abstract class BindingUiHandler extends UiHandler {
    * Show the UI with the provided arguments.
    *
    * @param target - The binding to update
-   * @param cancelHandler - Handler to call if the binding gets cancelled
+   * @param finishHandler - Handler to call when the binding gets changed or cancelled
    * @returns `true` if successful.
    */
-  public override show(target: string, cancelHandler: (success: boolean) => boolean): boolean {
+  public override show(target: InputSettings, finishHandler: FinishCallback): boolean {
     this.buttonPressed = null;
     this.timeLeftAutoClose = 5;
-    this.cancelFn = cancelHandler;
+    this.callback = finishHandler;
     this.target = target;
 
     // Bring the option and action containers to the front of the UI.
@@ -158,7 +167,7 @@ export abstract class BindingUiHandler extends UiHandler {
    *
    * @returns The window width.
    */
-  getWindowWidth(): number {
+  private getWindowWidth(): number {
     return 160;
   }
 
@@ -167,7 +176,7 @@ export abstract class BindingUiHandler extends UiHandler {
    *
    * @returns The window height.
    */
-  getWindowHeight(): number {
+  private getWindowHeight(): number {
     return 64;
   }
 
@@ -181,36 +190,44 @@ export abstract class BindingUiHandler extends UiHandler {
     if (this.buttonPressed === null) {
       return false; // TODO: is false correct as default? (previously was `undefined`)
     }
-    const ui = this.getUi();
-    let success = false;
+
+    let playSuccess = false;
+    let playError = false;
     switch (button) {
       case Button.LEFT:
       case Button.RIGHT: {
         // Toggle between action and cancel options.
         const cursor = this.cursor ? 0 : 1;
-        success = this.setCursor(cursor);
+        playSuccess = this.setCursor(cursor);
         break;
       }
       case Button.ACTION:
-        // Process actions based on current cursor position.
         if (this.cursor === 0) {
-          this.cancelFn?.();
+          playSuccess = true;
+          this.callback?.(); // Cancel out without remapping
         } else {
-          success = this.swapAction();
-          NavigationManager.getInstance().updateIcons();
-          this.cancelFn?.(success);
+          // Validate the remap
+          const remapSuccess = this.swapAction();
+          playSuccess = remapSuccess;
+          playError = !remapSuccess;
+          this.callback?.(remapSuccess);
         }
+        break;
+      case Button.CANCEL:
+        playSuccess = true;
+        this.callback?.(); // Cancel out without remapping
         break;
     }
 
-    // Plays a select sound effect if an action was successfully processed.
-    if (success) {
+    // Plays success or error sound effect, depending.
+    const ui = this.getUi();
+    if (playSuccess) {
       ui.playSelect();
-    } else {
+    } else if (playError) {
       ui.playError();
     }
 
-    return success;
+    return playSuccess;
   }
 
   /**
@@ -231,16 +248,13 @@ export abstract class BindingUiHandler extends UiHandler {
     return true;
   }
 
-  /**
-   * Clear the UI elements and state.
-   */
   protected override clear() {
     clearTimeout(this.countdownTimer);
-    this.timerText.setText("(5)");
+    this.promptText.setText(`${this.pressButtonText} (5)`);
     this.timeLeftAutoClose = 5;
     this.listening = false;
     this.target = null;
-    this.cancelFn = null;
+    this.callback = null;
     this.optionSelectContainer.setVisible(false);
     this.actionsContainer.setVisible(false);
     this.newButtonIcon.setVisible(false);
@@ -256,7 +270,7 @@ export abstract class BindingUiHandler extends UiHandler {
    */
   onInputDown(buttonIcon: string, assignedButtonIcon: string | null, type: string): void {
     clearTimeout(this.countdownTimer);
-    this.timerText.setText("");
+    this.promptText.setText(this.buttonPressedText);
     this.newButtonIcon.setTexture(type);
     this.newButtonIcon.setFrame(buttonIcon);
     if (assignedButtonIcon) {
@@ -268,5 +282,22 @@ export abstract class BindingUiHandler extends UiHandler {
     this.newButtonIcon.setVisible(true);
     this.setCursor(0);
     this.actionsContainer.setVisible(true);
+  }
+
+  protected getSelectedDevice(): string | null {
+    return globalScene.inputController?.selectedDevice[this.device];
+  }
+
+  protected swapAction(): boolean {
+    const selectedDevice = this.getSelectedDevice();
+    if (isNil(selectedDevice) || isNil(this.target) || isNil(this.buttonPressed)) {
+      return false;
+    }
+    const activeConfig = globalScene.inputController.getActiveConfig(this.device);
+    if (activeConfig && globalScene.inputController.assignBinding(activeConfig, this.target, this.buttonPressed)) {
+      globalScene.gameData.saveMappingConfigs(selectedDevice, activeConfig);
+      return true;
+    }
+    return false;
   }
 }

@@ -2,7 +2,7 @@ import { LegacyAnimConfig } from "#animations/anim-config";
 import { encounterAnims } from "#animations/encounter-anims";
 import { globalScene } from "#app/global-scene";
 import { EncounterAnim } from "#enums/encounter-anim";
-import { coerceArray, getTSEnumKeys, isNil } from "#utils/common-utils";
+import { coerceArray, isNil } from "#utils/common-utils";
 
 /**
  * Fetches animation configs to be used in a Mystery Encounter
@@ -10,7 +10,7 @@ import { coerceArray, getTSEnumKeys, isNil } from "#utils/common-utils";
  */
 export async function initEncounterAnims(encounterAnim: EncounterAnim | EncounterAnim[]): Promise<void> {
   const anims = coerceArray(encounterAnim);
-  const encounterAnimNames = getTSEnumKeys(EncounterAnim);
+  const encounterAnimNames = Object.keys(EncounterAnim);
   const encounterAnimFetches: Promise<Map<EncounterAnim, LegacyAnimConfig>>[] = [];
   for (const anim of anims) {
     if (encounterAnims.has(anim) && !isNil(encounterAnims.get(anim))) {
@@ -18,7 +18,7 @@ export async function initEncounterAnims(encounterAnim: EncounterAnim | Encounte
     }
     encounterAnimFetches.push(
       globalScene
-        .cachedFetch(`./battle-anims/encounter-${encounterAnimNames[anim].toLowerCase().replace(/_/g, "-")}.json`)
+        .cachedFetch(`./battle-anims/encounter-${encounterAnimNames[anim - 1].toLowerCase().replace(/_/g, "-")}.json`)
         .then((response) => response.json())
         .then((cas) => encounterAnims.set(anim, new LegacyAnimConfig(cas))),
     );

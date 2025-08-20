@@ -166,29 +166,24 @@ export class EnemyPokemon extends Pokemon {
   override generateAndPopulateMoveset(formIndex?: number): void {
     switch (this.species.speciesId) {
       case SpeciesId.SMEARGLE:
-        this.moveset = [
-          new PokemonMove(MoveId.SKETCH),
-          new PokemonMove(MoveId.SKETCH),
-          new PokemonMove(MoveId.SKETCH),
-          new PokemonMove(MoveId.SKETCH),
-        ];
+        this.setMoveset(...Array(4).fill(MoveId.SKETCH));
         break;
       case SpeciesId.ETERNATUS:
         this.moveset = (formIndex !== undefined ? formIndex : this.formIndex)
           ? [
-              new PokemonMove(MoveId.DYNAMAX_CANNON),
-              new PokemonMove(MoveId.CROSS_POISON),
-              new PokemonMove(MoveId.FLAMETHROWER),
-              new PokemonMove(MoveId.RECOVER, 0, -4),
+              new PokemonMove(MoveId.DYNAMAX_CANNON, { pokemonId: this.id }),
+              new PokemonMove(MoveId.CROSS_POISON, { pokemonId: this.id }),
+              new PokemonMove(MoveId.FLAMETHROWER, { pokemonId: this.id }),
+              new PokemonMove(MoveId.RECOVER, { pokemonId: this.id, ppUp: -4 }),
             ]
           : [
-              new PokemonMove(MoveId.ETERNABEAM),
-              new PokemonMove(MoveId.SLUDGE_BOMB),
-              new PokemonMove(MoveId.FLAMETHROWER),
-              new PokemonMove(MoveId.COSMIC_POWER),
+              new PokemonMove(MoveId.ETERNABEAM, { pokemonId: this.id }),
+              new PokemonMove(MoveId.SLUDGE_BOMB, { pokemonId: this.id }),
+              new PokemonMove(MoveId.FLAMETHROWER, { pokemonId: this.id }),
+              new PokemonMove(MoveId.COSMIC_POWER, { pokemonId: this.id }),
             ];
         if (globalScene.gameMode.hasChallenge(Challenges.INVERSE_BATTLE)) {
-          this.moveset[2] = new PokemonMove(MoveId.THUNDERBOLT);
+          this.moveset[2] = new PokemonMove(MoveId.THUNDERBOLT, { pokemonId: this.id });
         }
         break;
       default:
@@ -760,7 +755,8 @@ export class EnemyPokemon extends Pokemon {
    * The base boost is 1 to a random stat that's not already maxed out per broken shield
    * For Pokemon with 3 health segments or more, breaking the last shield gives +2 instead
    * For Pokemon with 5 health segments or more, breaking the last two shields give +2 each
-   * @param segmentIndex index of the segment to get down to (0 = no shield left, 1 = 1 shield left, etc.)
+   * @param segmentIndex - Index of the segment to get down to (0 = no shield left, 1 = 1 shield left, etc.)
+   * @todo Handle boss bars differently
    */
   handleBossSegmentCleared(segmentIndex: number): void {
     while (this.bossSegmentIndex > 0 && segmentIndex - 1 < this.bossSegmentIndex) {
@@ -772,8 +768,8 @@ export class EnemyPokemon extends Pokemon {
       const statThresholds: number[] = [];
       let totalWeight = 0;
 
-      for (const i in statWeights) {
-        totalWeight += statWeights[i];
+      for (const weight of statWeights) {
+        totalWeight += weight;
         statThresholds.push(totalWeight);
       }
 

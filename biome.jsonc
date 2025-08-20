@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.0.5/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
   "vcs": {
     "enabled": false,
     "clientKind": "git",
@@ -7,7 +7,7 @@
     "defaultBranch": "beta"
   },
   "formatter": {
-    "enabled": false, // TODO: enable when https://github.com/biomejs/biome/issues/5879 is implemented
+    "enabled": true,
     "useEditorconfig": true,
     "indentStyle": "space",
     "lineWidth": 120
@@ -20,6 +20,7 @@
       "**",
       "!**/*.d.ts",
       "!**/.github/**/*",
+      "**/.github/**/*.ts",
       "!**/.vscode/**/*",
       "!**/build/**/*",
       "!**/coverage/**/*",
@@ -28,6 +29,7 @@
       "!**/node_modules/**/*",
       "!**/public/**/*",
       "!**/typedoc/**/*",
+      "!**/pnpm-lock.yml",
       // this file is too big
       "!**/src/data/tms.ts"
     ]
@@ -56,11 +58,13 @@
         "noVoidTypeReturn": "warn", // TODO: Refactor and make this an error
         "noUnusedImports": {
           "level": "error",
-          "fix": "safe"
+          "fix": "safe",
+          "options": {}
         },
         "noUnusedFunctionParameters": "error",
         "noUnusedLabels": "error",
-        "noPrivateImports": "error"
+        "noPrivateImports": "error",
+        "useJsonImportAttributes": "off" // "Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'. ts(2823)"
       },
       "style": {
         "useEnumInitializers": "off", // large enums like Moves/Species would make this cumbersome
@@ -71,7 +75,7 @@
         "noParameterAssign": "off", // TODO: add this?
         "useExponentiationOperator": "off", // Too typo-prone and easy to mixup with standard multiplication (* vs **)
         "useDefaultParameterLast": "error",
-        "useSingleVarDeclarator": "off",
+        "useSingleVarDeclarator": "error",
         "useNodejsImportProtocol": "error",
         "useTemplate": "off", // string concatenation is faster: https://stackoverflow.com/questions/29055518/are-es6-template-literals-faster-than-string-concatenation
         "noInferrableTypes": "off", // Explicit > Implicit
@@ -99,7 +103,26 @@
               }
             }
           }
-        }
+        },
+        "useConsistentMemberAccessibility": {
+          "level": "off", // TODO: refactor and make this an error
+          "options": {
+            "accessibility": "explicit"
+          }
+        },
+        "useShorthandAssign": "error",
+        "useGroupedAccessorPairs": "error",
+        "useObjectSpread": "error",
+        "useNumericSeparators": "off", // TODO: enable?
+        "noNamespace": "error",
+        "noDefaultExport": "error",
+        "noDoneCallback": "error",
+        "noShoutyConstants": "error",
+        "noSubstr": "error",
+        "noYodaExpression": "error",
+        "useThrowNewError": "error",
+        "useThrowOnlyError": "error",
+        "useTrimStartEnd": "error"
       },
       "suspicious": {
         "noDoubleEquals": "error",
@@ -113,10 +136,16 @@
         "noAsyncPromiseExecutor": "warn", // TODO: Refactor and make this an error
         "useDefaultSwitchClauseLast": "warn", // TODO: make error?
         "noVar": "error",
-        "noDocumentCookie": "off" // Firefox has minimal support for the "Cookie Store API"
+        "noDocumentCookie": "off", // Firefox has minimal support for the "Cookie Store API"
+        "noConstantBinaryExpressions": "error",
+        "noTsIgnore": "error",
+        "useIterableCallbackReturn": "off", // TODO: re-enable if the rule is changed to be type-aware
+        "useErrorMessage": "error",
+        "useGuardForIn": "error",
+        "useNumberToFixedDigitsArgument": "error"
       },
       "complexity": {
-        "noExcessiveCognitiveComplexity": "info", // TODO: Refactor and make this an error
+        "noExcessiveCognitiveComplexity": "info",
         "useLiteralKeys": "off",
         "noForEach": "off", // Foreach vs for of is not that simple.
         "noUselessSwitchCase": "off", // Explicit > Implicit
@@ -125,33 +154,33 @@
         "useRegexLiterals": "off", // Was broken for some reason; TODO: re-enable
         "noThisInStatic": "error",
         "noUselessThisAlias": "error",
-        "noUselessTernary": "error"
+        "noUselessTernary": "error",
+        "useIndexOf": "error",
+        "noVoid": "error",
+        "useWhile": "error"
       },
       "nursery": {
-        "useAdjacentGetterSetter": "error",
-        "noConstantBinaryExpression": "error",
-        "noTsIgnore": "error",
-        "noAwaitInLoop": "off",
-        "useJsonImportAttribute": "off", // "Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'. ts(2823)"
-        "useIndexOf": "error",
-        "useObjectSpread": "error",
-        "useNumericSeparators": "off", // TODO: enable?
-        "useIterableCallbackReturn": "off", // TODO: re-enable if the rule is changed to be type-aware
         "noShadow": "warn" // TODO: refactor and make "error"
       },
       "performance": {
         "noNamespaceImport": "error",
-        "noDelete": "error"
+        "noDelete": "error",
+        "noAwaitInLoops": "off", // Necessary for our codebase
+        "noBarrelFile": "error"
       }
     }
   },
   "javascript": {
     "formatter": {
-      "quoteStyle": "double",
-      "arrowParentheses": "always"
+      "operatorLinebreak": "before"
     },
     "parser": {
       "jsxEverywhere": false
+    }
+  },
+  "css": {
+    "formatter": {
+      "enabled": false
     }
   },
   "overrides": [
@@ -180,6 +209,22 @@
           },
           "style": {
             "useImportType": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "**/src/overrides.ts",
+        "**/src/plugins/i18n.ts",
+        "**/eslint.config.js",
+        "**/vite.config.ts",
+        "**/vitest.config.ts"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noDefaultExport": "off"
           }
         }
       }

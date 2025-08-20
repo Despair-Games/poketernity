@@ -3154,7 +3154,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         this.pokemonLuckLabelText.setVisible(this.pokemonLuckText.visible);
 
         //Growth translate
-        let growthReadable = toReadableString(GrowthRate[species.growthRate]);
+        let growthReadable = toReadableString(enumValueToKey(GrowthRate, species.growthRate));
         const growthAux = growthReadable.replace(" ", "_");
         if (i18next.exists("growth:" + growthAux)) {
           growthReadable = i18next.t(("growth:" + growthAux) as any);
@@ -3553,9 +3553,9 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         this.canCycleNature = globalScene.gameData.getNaturesForAttr(starterEntry.natureAttr).length > 1;
 
         this.canCycleTera =
-          !this.statsMode
-          // && Object.hasOwn(globalScene.gameData.achvUnlocks, achvs.TERASTALLIZE.id)
-          && !isNil(getPokemonSpeciesForm(species.speciesId, formIndex ?? 0).type2);
+          !this.statsMode /*
+          && Object.hasOwn(globalScene.gameData.achvUnlocks, achvs.TERASTALLIZE.id)
+          */ && !isNil(getPokemonSpeciesForm(species.speciesId, formIndex ?? 0).type2);
       }
 
       if (dexEntry.caughtAttr && species.malePercent !== null) {
@@ -4133,9 +4133,9 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     );
     const formIndex = props.formIndex;
     this.canCycleTera =
-      !this.statsMode
-      // && Object.hasOwn(globalScene.gameData.achvUnlocks, achvs.TERASTALLIZE.id)
-      && !isNil(getPokemonSpeciesForm(this.lastSpecies.speciesId, formIndex ?? 0).type2);
+      !this.statsMode /*
+      && Object.hasOwn(globalScene.gameData.achvUnlocks, achvs.TERASTALLIZE.id)
+      */ && !isNil(getPokemonSpeciesForm(this.lastSpecies.speciesId, formIndex ?? 0).type2);
     this.updateInstructions();
   }
 

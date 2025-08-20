@@ -583,12 +583,14 @@ export class MoveEffectPhase extends HitCheckPhase {
     const move = this.move.getMove();
 
     /** Does {@linkcode hitResult} indicate that damage was dealt to the target? */
-    const dealsDamage = [
-      HitResult.EFFECTIVE,
-      HitResult.SUPER_EFFECTIVE,
-      HitResult.NOT_VERY_EFFECTIVE,
-      HitResult.ONE_HIT_KO,
-    ].includes(hitResult);
+    const dealsDamage = (
+      [
+        HitResult.EFFECTIVE,
+        HitResult.SUPER_EFFECTIVE,
+        HitResult.NOT_VERY_EFFECTIVE,
+        HitResult.ONE_HIT_KO,
+      ] as HitResult[]
+    ).includes(hitResult);
 
     this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, firstTarget, false);
     this.applyHeldItemFlinchCheck(user, target, dealsDamage);
