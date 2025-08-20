@@ -1,11 +1,20 @@
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
+import type { ChanceBasedMoveEffectAttr } from "#moves/chance-based-move-effect-attr";
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
+
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { MAJOR_EFFECT_SCORE_PENALTY } from "#constants/ai-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
+import { AbilityId } from "#enums/ability-id";
+import { BattlerTagType } from "#enums/battler-tag-type";
 import type { EffectiveStat } from "#enums/stat";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import { toDmgValue } from "#utils/common-utils";
+import { isNil, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -60,17 +69,33 @@ export class HitHealAttr extends MoveEffectAttr {
   }
 
   /**
-   * Used by the Enemy AI to rank an attack based on a given user
-   * @param user {@linkcode Pokemon} using this move
-   * @param target {@linkcode Pokemon} target of this move
-   * @param move {@linkcode Move} being used
-   * @returns an integer. Higher means enemy is more likely to use that move.
+   * @returns An Effect Score modifier as follows:
+   * - If any of the user's opponents has Liquid Ooze, grant a {@linkcode MAJOR_EFFECT_SCORE_PENALTY}.
+   * - Otherwise, if the user is under the effects of Heal Block, grant no bonus.
+   * - Otherwise, grant a bonus based on the expected HP restored by this move action.
+   *   This bonus is "tiered" based on the expected heal ratio similarly to {@linkcode ChanceBasedMoveEffectAttr}'s scoring.
+   *   Given expected heal ratio `H = 0.4m + c`, the resulting minimum score is `m`, and the chance to grant the maximum
+   *   score `(m + 1)` is `(c / 0.4)`
    */
-  override getUserBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {
-    if (this.healStat) {
-      const healAmount = target.getEffectiveStat(this.healStat);
-      return Math.floor(Math.max(0, Math.min(1, (healAmount + user.hp) / user.getMaxHp() - 0.33)) / user.getHpRatio());
+  public override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    if (user.getOpponents().some((opp) => opp.hasRevealedAbility(AbilityId.LIQUID_OOZE))) {
+      return MAJOR_EFFECT_SCORE_PENALTY;
     }
-    return Math.floor(Math.max(1 - user.getHpRatio() - 0.33, 0) * (move.power / 4));
+
+    if (user.hasTag(BattlerTagType.HEAL_BLOCK)) {
+      return 0;
+    }
+
+    const expectedDamage = !isNil(this.healStat)
+      ? target.getEffectiveStat(this.healStat, { abilityApplyMode: AbilityApplyMode.REVEALED })
+      : target.getAttackDamage(user, move, AbilityApplyMode.REVEALED, false, true).damage;
+    const expectedHealRatio =
+      Math.min(Math.floor(expectedDamage * this.healRatio), user.getInverseHp()) / user.getMaxHp();
+
+    const healBonusThreshold = 0.4;
+    const minScore = Math.floor(expectedHealRatio / healBonusThreshold);
+    const tierUpChance = (expectedHealRatio % healBonusThreshold) / healBonusThreshold;
+
+    return minScore + this.getRandomScore(user, tierUpChance);
   }
 }
