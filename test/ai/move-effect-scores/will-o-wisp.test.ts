@@ -24,7 +24,7 @@ describe("Move Effect Scores - Will-O-Wisp", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("single")
-      .enemySpecies(SpeciesId.GYARADOS)
+      .enemySpecies(SpeciesId.MAGIKARP)
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset([MoveId.WILL_O_WISP, MoveId.SUPER_FANG])
       .ability(AbilityId.BALL_FETCH)
