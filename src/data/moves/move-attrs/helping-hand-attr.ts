@@ -29,7 +29,7 @@ export class HelpingHandAttr extends AddBattlerTagAttr {
    * **NOTE:** In this method, {@linkcode target} is assumed to be the user's ally.
    * this is guaranteed via Helping Hand's {@linkcode Move.moveTarget | target restriction}.
    */
-  public override getAllyTargetScore(_user: EnemyPokemon, target: Pokemon, _move: Move): number | null {
+  public override getAllyTargetScore(_user: EnemyPokemon, target: Pokemon, _move: Move): number {
     /** The target's highest EAS against any opposing Pokemon */
     const targetMaxEAS = Math.max(
       ...target
