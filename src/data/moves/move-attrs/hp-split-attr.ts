@@ -31,15 +31,16 @@ export class HpSplitAttr extends MoveEffectAttr {
 
   /**
    * @returns An Effect Score modifier as follows:
-   * - If the target has at least twice as much HP as the user, and the user is damaged, grant either
-   * a {@link MAJOR_EFFECT_SCORE_BONUS | major bonus} or a {@link MINOR_EFFECT_SCORE_BONUS | minor bonus}
+   * - If the expected HP gained from using this move is greater than a given {@linkcode scoringHpThreshold},
+   * grant either a {@link MAJOR_EFFECT_SCORE_BONUS | major bonus} or a {@link MINOR_EFFECT_SCORE_BONUS | minor bonus}
    * depending on whether or not the user outspeeds the target.
    * - Otherwise, grant a {@link MAJOR_EFFECT_SCORE_PENALTY | major penalty}.
    */
   public override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
-    const relativeHpRatio = target.hp / user.hp;
+    const relativeHpRatio = Math.min(target.hp - user.hp, user.getInverseHp()) / user.getMaxHp();
+    const scoringHpThreshold = 0.3;
 
-    if (!user.isFullHp() && relativeHpRatio >= 2) {
+    if (!user.isFullHp() && relativeHpRatio >= scoringHpThreshold) {
       return user.outspeeds(target, true) ? MAJOR_EFFECT_SCORE_BONUS : MINOR_EFFECT_SCORE_BONUS;
     }
 
