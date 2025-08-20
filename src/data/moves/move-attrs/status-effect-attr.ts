@@ -11,7 +11,7 @@ import {
   POISON_SYNERGY_ABILITIES,
   POISONING_SYNERGY_ABILITIES,
 } from "#constants/ability-constants";
-import { ALLY_TARGET_PENALTY, BAD_MOVE_PENALTY, MAJOR_EFFECT_SCORE_BONUS } from "#constants/ai-constants";
+import { BAD_MOVE_PENALTY, MAJOR_EFFECT_SCORE_BONUS } from "#constants/ai-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { MoveCategory } from "#enums/move-category";
@@ -40,10 +40,7 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
     overrideStatus: boolean = false,
     effectChanceOverride?: number,
   ) {
-    super(selfTarget, {
-      effectChanceOverride: effectChanceOverride,
-      overridesAllyTargetPenalty: true,
-    });
+    super(selfTarget, { effectChanceOverride });
 
     this.effect = effect;
     this.turnsRemaining = turnsRemaining;
@@ -94,26 +91,20 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
    * This score is inverted for self-targeted effects (i.e. Rest).
    */
   public override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
-    if (target === user.getAlly()) {
-      return this.getAllyTargetScore(user, target, move);
-    }
-
     return (this.selfTarget ? -1 : 1) * super.getEffectScore(user, target, move);
   }
 
   /**
-   * Computes the Effect Score from this attribute when targeting the user's ally.
-   * This accounts for the ally's abilties, which may benefit from the ally being afflicted with
-   * certain status effects. In these cases, the move is generally awarded a X%(+2) bonus, where
-   * the bonus chance X reflects the damage per turn of the status effect.
-   * @param user - The {@linkcode Pokemon} evaluating the move
-   * @param ally - The user's ally
-   * @param move - The {@linkcode Move} being evaluated
-   * @returns The overriding Effect Score when targeting the given ally.
+   * @returns An Effect Score bonus to incentivize afflicting allies with status effects under certain conditions.
+   * These bonuses only apply to {@linkcode StatusEffect.BURN | BURN}, {@linkcode StatusEffect.POISON | POISON}, and
+   * {@linkcode StatusEffect.TOXIC | TOXIC}, and only when the ally has an ability that synergizes with being afflicted
+   * by that effect.
+   * @see {@linkcode BURN_SYNERGY_ABILITIES}
+   * @see {@linkcode POISON_SYNERGY_ABILITIES}
    */
-  private getAllyTargetScore(user: EnemyPokemon, ally: Pokemon, move: Move): number {
-    if (!move.isStatusMove() || !ally.canSetStatus(this.effect, true, this.overrideStatus, user)) {
-      return ALLY_TARGET_PENALTY;
+  public override getAllyTargetScore(user: EnemyPokemon, ally: Pokemon, _move: Move): number | null {
+    if (!ally.canSetStatus(this.effect, true, this.overrideStatus, user)) {
+      return null;
     }
 
     if (this.effect === StatusEffect.BURN && BURN_SYNERGY_ABILITIES.some((abId) => ally.hasAbility(abId))) {
@@ -133,7 +124,7 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
       return this.getRandomScore(user, bonusChance, MAJOR_EFFECT_SCORE_BONUS);
     }
 
-    return ALLY_TARGET_PENALTY;
+    return null;
   }
 
   /**

@@ -13,18 +13,23 @@ import { isBetween } from "#utils/common-utils";
  */
 export class HelpingHandAttr extends AddBattlerTagAttr {
   constructor() {
-    super(BattlerTagType.HELPING_HAND, false, { overridesAllyTargetPenalty: true });
+    super(BattlerTagType.HELPING_HAND, false);
+  }
+
+  /** @returns 0. The score for this effect is entirely implemented in {@linkcode getAllyTargetScore} */
+  public override getRawEffectScore(_user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+    return 0;
   }
 
   /**
-   * Grants a {@link MAJOR_EFFECT_SCORE_BONUS | major bonus} if the targeted ally
+   * @returns a {@link MAJOR_EFFECT_SCORE_BONUS | major bonus} if the targeted ally
    * has an attack with a high {@linkcode Pokemon.getExpectedAttackScore | EAS} against at least one opponent,
    * but cannot KO any opponent with any of its attacks.
    *
    * **NOTE:** In this method, {@linkcode target} is assumed to be the user's ally.
    * this is guaranteed via Helping Hand's {@linkcode Move.moveTarget | target restriction}.
    */
-  public override getRawEffectScore(_user: EnemyPokemon, target: Pokemon, _move: Move): number {
+  public override getAllyTargetScore(_user: EnemyPokemon, target: Pokemon, _move: Move): number | null {
     /** The target's highest EAS against any opposing Pokemon */
     const targetMaxEAS = Math.max(
       ...target

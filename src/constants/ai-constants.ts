@@ -1,5 +1,6 @@
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { Pokemon } from "#field/pokemon";
+import type { MoveAttr } from "#moves/move-attr";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 /** The {@link Pokemon.getAttackScore | Attack Score} granted to moves that KO an opponent. */
@@ -62,7 +63,7 @@ export const BAD_MOVE_PENALTY = -5;
 /**
  * The score penalty granted by default when targeting an ally in a double battle.
  * This should prevent the AI from deciding to attack their ally, for example.
- * Certain move attributes may {@link MoveAttrOptions.overridesAllyTargetPenalty | override this penalty}.
+ * Certain move attributes may {@link MoveAttr.getAllyTargetScore | override this penalty}.
  */
 export const ALLY_TARGET_PENALTY = -20;
 

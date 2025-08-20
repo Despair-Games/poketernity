@@ -1,3 +1,7 @@
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
+import type { ALLY_TARGET_PENALTY } from "#constants/ai-constants";
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
+
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
@@ -8,8 +12,6 @@ import type { BooleanHolder } from "#utils/common-utils";
 export interface MoveAttrOptions {
   /** Does this attribute contribute to AI effect score when the move fails or has no effect? */
   appliesScoreOnFail?: boolean;
-  /** Does this attribute override the AI's (-20) penalty when targeting an ally? */
-  overridesAllyTargetPenalty?: boolean;
 }
 
 /**
@@ -35,16 +37,6 @@ export abstract class MoveAttr {
    */
   public get appliesScoreOnFail(): boolean {
     return this.options?.appliesScoreOnFail ?? false;
-  }
-
-  /**
-   * Defines whether or not this attribute overrides the generic ally target penalty of
-   * (-20) and implements its own effect score against allies.
-   * @default false
-   * @see {@linkcode Move.getEffectScore}
-   */
-  public get overridesAllyTargetPenalty(): boolean {
-    return this.options?.overridesAllyTargetPenalty ?? false;
   }
 
   /**
@@ -115,6 +107,21 @@ export abstract class MoveAttr {
    */
   public getEffectScore(_user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     return 0;
+  }
+
+  /**
+   * Defines the integer Effect Score bonus (or penalty) granted by this attribute based on the
+   * current game state when targeting an ally.
+   * @param user - The {@linkcode EnemyPokemon} evaluating the move
+   * @param target - The {@linkcode Pokemon} the move is evaluated against. This can be assumed to be
+   * the {@linkcode user}'s ally.
+   * @param move - The {@linkcode Move} being evaluated. This can be assumed to be a Status move since
+   * all Attack moves are automatically given an {@linkcode ALLY_TARGET_PENALTY}.
+   * @returns `null` by default. `null` scores do not contribute to Effect Score, but can warrant an
+   * {@linkcode ALLY_TARGET_PENALTY} if none of the move's other attributes have a defined score.
+   */
+  public getAllyTargetScore(_user: EnemyPokemon, _target: Pokemon, _move: Move): number | null {
+    return null;
   }
 
   /**

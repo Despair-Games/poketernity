@@ -16,7 +16,6 @@ export class FaintCountdownAttr extends AddBattlerTagAttr {
     super(BattlerTagType.PERISH_SONG, false, {
       failOnOverlap: true,
       turnCountMin: 4,
-      overridesAllyTargetPenalty: true,
     });
   }
 
@@ -44,5 +43,10 @@ export class FaintCountdownAttr extends AddBattlerTagAttr {
   public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
     const allyTargetMultiplier = target.isOpponent(user) ? 1 : -1;
     return allyTargetMultiplier * (target.isTrapped() ? MINOR_EFFECT_SCORE_BONUS : 0);
+  }
+
+  /** @returns The inverted output of {@linkcode getRawEffectScore} */
+  public override getAllyTargetScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    return -this.getRawEffectScore(user, target, move);
   }
 }
