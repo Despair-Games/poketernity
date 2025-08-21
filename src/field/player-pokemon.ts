@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import Overrides from "#app/overrides";
+import { activeOverrides } from "#app/overrides";
 import { timedEventManager } from "#app/timed-event-manager";
 import { FRIENDSHIP_GAIN_CUTOFF } from "#constants/friendship-constants";
 import type { SpeciesFormEvolution } from "#data/pokemon-evolutions";
@@ -50,25 +50,25 @@ export class PlayerPokemon extends Pokemon {
   ) {
     super(106, 148, species, level, abilityIndex, formIndex, gender, shiny, variant, ivs, nature, dataSource);
 
-    if (Overrides.STATUS_OVERRIDE) {
-      this.setStatus(Overrides.STATUS_OVERRIDE, { sleepTurnsRemaining: 4 });
+    if (activeOverrides.STATUS_OVERRIDE) {
+      this.setStatus(activeOverrides.STATUS_OVERRIDE, { sleepTurnsRemaining: 4 });
     }
 
-    if (Overrides.SHINY_OVERRIDE) {
+    if (activeOverrides.SHINY_OVERRIDE) {
       this.shiny = true;
       this.initShinySparkle();
-    } else if (Overrides.SHINY_OVERRIDE === false) {
+    } else if (activeOverrides.SHINY_OVERRIDE === false) {
       this.shiny = false;
     }
 
-    if (Overrides.VARIANT_OVERRIDE !== null && this.shiny) {
-      this.variant = Overrides.VARIANT_OVERRIDE;
+    if (activeOverrides.VARIANT_OVERRIDE !== null && this.shiny) {
+      this.variant = activeOverrides.VARIANT_OVERRIDE;
     }
 
     if (!dataSource) {
       if (
         globalScene.gameMode.isDaily
-        || (Overrides.STARTER_SPECIES_OVERRIDE && Overrides.STARTER_SPECIES_OVERRIDE !== SpeciesId.KELDEO)
+        || (activeOverrides.STARTER_SPECIES_OVERRIDE && activeOverrides.STARTER_SPECIES_OVERRIDE !== SpeciesId.KELDEO)
       ) {
         this.generateAndPopulateMoveset();
       } else {

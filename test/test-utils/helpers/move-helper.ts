@@ -1,5 +1,5 @@
 import { getPokemonNameWithAffix } from "#app/messages";
-import Overrides from "#app/overrides";
+import { activeOverrides } from "#app/overrides";
 import { allMoves } from "#data/data-lists";
 import { BattleCommand } from "#enums/battle-command";
 import { BattlerIndex } from "#enums/battler-index";
@@ -107,8 +107,8 @@ export class MoveHelper extends GameManagerHelper {
    * @param useTera - If `true`, the Pokemon also chooses to Terastallize. This does not require a Tera Orb. Default: `false`.
    */
   public use(moveId: MoveId, pkmIndex: 0 | 1 = 0, targetIndex?: BattlerIndex | null, useTera: boolean = false): void {
-    if (coerceArray(Overrides.MOVESET_OVERRIDE).length > 0) {
-      vi.spyOn(Overrides, "MOVESET_OVERRIDE", "get").mockReturnValue([]);
+    if (coerceArray(activeOverrides.MOVESET_OVERRIDE).length > 0) {
+      vi.spyOn(activeOverrides, "MOVESET_OVERRIDE", "get").mockReturnValue([]);
       console.warn("Warning: `use` overwrites the Pokemon's moveset and disables the player moveset override!");
     }
 
@@ -119,14 +119,14 @@ export class MoveHelper extends GameManagerHelper {
   }
 
   /**
-   * Forces the statuses Paralysis, Freeze, Sleep, Confusion, or Infatuation to activate on the next move by temporarily mocking {@linkcode Overrides.STATUS_ACTIVATION_OVERRIDE},
+   * Forces the statuses Paralysis, Freeze, Sleep, Confusion, or Infatuation to activate on the next move by temporarily mocking {@linkcode activeOverrides.STATUS_ACTIVATION_OVERRIDE},
    * advancing to the next `MovePhase`, and then resetting the override to `null`
    * @param activated - `true` to force the status to activate, `false` to force the status to not activate (will cause Freeze to heal)
    */
   public async forceStatusActivation(activated: boolean): Promise<void> {
-    vi.spyOn(Overrides, "STATUS_ACTIVATION_OVERRIDE", "get").mockReturnValue(activated);
+    vi.spyOn(activeOverrides, "STATUS_ACTIVATION_OVERRIDE", "get").mockReturnValue(activated);
     await this.game.phaseInterceptor.to("MovePhase");
-    vi.spyOn(Overrides, "STATUS_ACTIVATION_OVERRIDE", "get").mockReturnValue(null);
+    vi.spyOn(activeOverrides, "STATUS_ACTIVATION_OVERRIDE", "get").mockReturnValue(null);
   }
 
   /**
@@ -140,13 +140,13 @@ export class MoveHelper extends GameManagerHelper {
    */
   public changeMoveset(pokemon: Pokemon, moveset: MoveId | MoveId[]): void {
     if (pokemon.isPlayer()) {
-      if (coerceArray(Overrides.MOVESET_OVERRIDE).length > 0) {
-        vi.spyOn(Overrides, "MOVESET_OVERRIDE", "get").mockReturnValue([]);
+      if (coerceArray(activeOverrides.MOVESET_OVERRIDE).length > 0) {
+        vi.spyOn(activeOverrides, "MOVESET_OVERRIDE", "get").mockReturnValue([]);
         console.warn("Player moveset override disabled due to use of `game.move.changeMoveset`!");
       }
     } else {
-      if (coerceArray(Overrides.ENEMY_MOVESET_OVERRIDE).length > 0) {
-        vi.spyOn(Overrides, "ENEMY_MOVESET_OVERRIDE", "get").mockReturnValue([]);
+      if (coerceArray(activeOverrides.ENEMY_MOVESET_OVERRIDE).length > 0) {
+        vi.spyOn(activeOverrides, "ENEMY_MOVESET_OVERRIDE", "get").mockReturnValue([]);
         console.warn("Enemy moveset override disabled due to use of `game.move.changeMoveset`!");
       }
     }
@@ -205,8 +205,8 @@ export class MoveHelper extends GameManagerHelper {
     const enemy =
       this.game.scene.getEnemyField()[this.game.scene.phaseManager.getCurrentPhase<EnemyCommandPhase>()!.fieldIndex];
 
-    if (coerceArray(Overrides.ENEMY_MOVESET_OVERRIDE).length > 0) {
-      vi.spyOn(Overrides, "ENEMY_MOVESET_OVERRIDE", "get").mockReturnValue([]);
+    if (coerceArray(activeOverrides.ENEMY_MOVESET_OVERRIDE).length > 0) {
+      vi.spyOn(activeOverrides, "ENEMY_MOVESET_OVERRIDE", "get").mockReturnValue([]);
       console.warn(
         "Warning: `forceEnemyMove` overwrites the Pokemon's moveset and disables the enemy moveset override!",
       );

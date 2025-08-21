@@ -2,7 +2,7 @@ import { api } from "#api/api";
 import { clientSessionId, getLocalStorageKey, loggedInUser, updateUserInfo } from "#app/account";
 import { getGameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
-import Overrides from "#app/overrides";
+import { activeOverrides } from "#app/overrides";
 import { EntryHazardTag } from "#arena-tags/entry-hazard-tag";
 import {
   APP_ABBREVIATION,
@@ -226,7 +226,7 @@ export class GameData {
    * @returns `true` if the player has unlocked this `Unlockable` or an override has enabled it
    */
   public isUnlocked(unlockable: Unlockables): boolean {
-    if (Overrides.ITEM_UNLOCK_OVERRIDE.includes(unlockable)) {
+    if (activeOverrides.ITEM_UNLOCK_OVERRIDE.includes(unlockable)) {
       return true;
     }
     return this.unlocks[unlockable];
@@ -809,8 +809,8 @@ export class GameData {
           Object.keys(globalScene.pokeballCounts).forEach((key: string) => {
             globalScene.pokeballCounts[key] = sessionData.pokeballCounts[key] || 0;
           });
-          if (Overrides.POKEBALL_OVERRIDE.active) {
-            globalScene.pokeballCounts = Overrides.POKEBALL_OVERRIDE.pokeballs;
+          if (activeOverrides.POKEBALL_OVERRIDE.active) {
+            globalScene.pokeballCounts = activeOverrides.POKEBALL_OVERRIDE.pokeballs;
           }
 
           globalScene.money = Math.floor(sessionData.money || 0);

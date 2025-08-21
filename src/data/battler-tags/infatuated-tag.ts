@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import Overrides from "#app/overrides";
+import { activeOverrides } from "#app/overrides";
 import { BattlerTag } from "#battler-tags/battler-tag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -68,8 +68,8 @@ export class InfatuatedTag extends BattlerTag {
       globalScene.phaseManager.createAndUnshiftPhase("CommonAnimPhase", CommonAnim.ATTRACT, pokemon.getBattlerIndex());
 
       if (
-        (pokemon.randSeedInt(100) < this.ACTIVATION_CHANCE && Overrides.STATUS_ACTIVATION_OVERRIDE !== false)
-        || Overrides.STATUS_ACTIVATION_OVERRIDE === true
+        (pokemon.randSeedInt(100) < this.ACTIVATION_CHANCE && activeOverrides.STATUS_ACTIVATION_OVERRIDE !== false)
+        || activeOverrides.STATUS_ACTIVATION_OVERRIDE === true
       ) {
         globalScene.phaseManager.createAndUnshiftPhase(
           "MessagePhase",

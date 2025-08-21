@@ -4,7 +4,7 @@ import type { Pokemon } from "#field/pokemon";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { globalScene } from "#app/global-scene";
-import Overrides from "#app/overrides";
+import { activeOverrides } from "#app/overrides";
 import { AbilityId } from "#enums/ability-id";
 import { BattleCommand } from "#enums/battle-command";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -98,7 +98,7 @@ export class EnemyCommandPhase extends FieldPhase {
     }
 
     const command =
-      (Overrides.FORCE_ENEMY_TERA_OVERRIDE && !pokemon.isTerastallized) || trainer?.shouldTera(pokemon)
+      (activeOverrides.FORCE_ENEMY_TERA_OVERRIDE && !pokemon.isTerastallized) || trainer?.shouldTera(pokemon)
         ? BattleCommand.TERA
         : BattleCommand.FIGHT;
 

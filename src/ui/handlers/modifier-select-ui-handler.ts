@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import Overrides from "#app/overrides";
+import { activeOverrides } from "#app/overrides";
 import { handleTutorial } from "#app/tutorial";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { allMoves } from "#data/data-lists";
@@ -931,7 +931,7 @@ class ModifierOption extends Phaser.GameObjects.Container {
   }
 
   updateCostText(): void {
-    const cost = Overrides.WAIVE_SHOP_FEES_OVERRIDE ? 0 : this.modifierTypeOption.cost;
+    const cost = activeOverrides.WAIVE_SHOP_FEES_OVERRIDE ? 0 : this.modifierTypeOption.cost;
     const textStyle = cost <= globalScene.money ? TextStyle.MONEY : TextStyle.PARTY_RED;
 
     const formattedMoney = formatMoney(settings.display.moneyFormat, cost);

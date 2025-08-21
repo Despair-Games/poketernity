@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import Overrides from "#app/overrides";
+import { activeOverrides } from "#app/overrides";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import type { ModifierTier } from "#enums/modifier-tier";
 import { PartyOption } from "#enums/party-option";
@@ -156,7 +156,7 @@ export class SelectModifierPhase extends BattlePhase {
               ui.clearText();
               ui.setMessageMode().then(() => super.end());
 
-              if (!Overrides.WAIVE_SHOP_FEES_OVERRIDE) {
+              if (!activeOverrides.WAIVE_SHOP_FEES_OVERRIDE) {
                 globalScene.money -= rerollCost;
                 globalScene.updateMoneyText();
                 globalScene.animateMoneyChanged(false);
@@ -259,7 +259,7 @@ export class SelectModifierPhase extends BattlePhase {
         }
       }
 
-      if (cost && money < cost && !Overrides.WAIVE_SHOP_FEES_OVERRIDE) {
+      if (cost && money < cost && !activeOverrides.WAIVE_SHOP_FEES_OVERRIDE) {
         ui.playError();
         return false;
       }
@@ -275,7 +275,7 @@ export class SelectModifierPhase extends BattlePhase {
 
         if (cost && !(modifier.type instanceof RememberMoveModifierType)) {
           if (result) {
-            if (!Overrides.WAIVE_SHOP_FEES_OVERRIDE) {
+            if (!activeOverrides.WAIVE_SHOP_FEES_OVERRIDE) {
               globalScene.money -= cost;
               globalScene.updateMoneyText();
               globalScene.animateMoneyChanged(false);
@@ -375,7 +375,7 @@ export class SelectModifierPhase extends BattlePhase {
     }
 
     let baseValue = 0;
-    if (Overrides.WAIVE_SHOP_FEES_OVERRIDE) {
+    if (activeOverrides.WAIVE_SHOP_FEES_OVERRIDE) {
       return baseValue;
     }
     if (lockRarities) {
