@@ -3356,12 +3356,12 @@ export function initMoves() {
       .attr(TargetHalfHpDamageAttr),
     new AttackMove(MoveId.COLLISION_COURSE, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 100, 100, 5, -1, 0, 9)
       .attr(
-        MovePowerMultiplierAttr, // TODO: replace fraction with decimal
-        (user, target, move) => (target.getAttackTypeEffectiveness(move.type, user) >= 2 ? 5461 / 4096 : 1),
+        MovePowerMultiplierAttr,
+        (user, target, move) => (target.getAttackTypeEffectiveness(move.type, user) >= 2 ? 4 / 3 : 1),
       ),
     new AttackMove(MoveId.ELECTRO_DRIFT, ElementalType.ELECTRIC, MoveCategory.SPECIAL, 100, 100, 5, -1, 0, 9)
       .attr(MovePowerMultiplierAttr, (user, target, move) =>
-        target.getAttackTypeEffectiveness(move.type, user) >= 2 ? 5461 / 4096 : 1,
+        target.getAttackTypeEffectiveness(move.type, user) >= 2 ? 4 / 3 : 1,
       )
       .makesContact(),
     new SelfStatusMove(MoveId.SHED_TAIL, ElementalType.NORMAL, -1, 10, -1, 0, 9)
