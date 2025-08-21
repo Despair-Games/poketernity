@@ -3336,6 +3336,7 @@ export function initMoves() {
     new AttackMove(MoveId.RUINATION, ElementalType.DARK, MoveCategory.SPECIAL, -1, 90, 10, -1, 0, 9) //
       .attr(TargetHalfHpDamageAttr),
     new AttackMove(MoveId.COLLISION_COURSE, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 100, 100, 5, -1, 0, 9) //
+      // TODO: replace fraction with decimal
       .attr(MovePowerMultiplierAttr, (user, target, move) =>
         target.getAttackTypeEffectiveness(move.type, user) >= 2 ? 5461 / 4096 : 1,
       ),
