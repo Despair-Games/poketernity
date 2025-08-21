@@ -47,7 +47,7 @@ export function getEnemyMoveChoices(pokemon: EnemyPokemon): MoveChoiceSet {
   }
 
   for (const [key, count] of Object.entries(moveChoices)) {
-    const moveId = Number.parseInt(key) as MoveId;
+    const moveId = Number.parseInt(key, 10) as MoveId;
     console.log(`Move: ${allMoves.get(moveId).name}   Count: ${count} (${Math.round((count / NUM_TRIALS) * 100)}%)`);
   }
 
