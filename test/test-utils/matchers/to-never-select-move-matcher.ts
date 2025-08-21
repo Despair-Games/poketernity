@@ -46,7 +46,7 @@ export function toNeverSelectMoveMatcher(
   const moveChoices = getEnemyMoveChoices(received);
   const actualUnusedMoveIds = Object.entries(moveChoices)
     .filter(([, count]) => count === 0)
-    .map(([moveId]) => Number.parseInt(moveId));
+    .map(([moveId]) => Number.parseInt(moveId, 10));
 
   const errorMoveIds = expectedUnusedMoveIds.filter((mvId) => !actualUnusedMoveIds.includes(mvId));
   const invErrorMoveIds = expectedUnusedMoveIds.filter((mvId) => !errorMoveIds.includes(mvId));
