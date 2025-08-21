@@ -3979,11 +3979,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Helper function that determines if a Pokemon has a specified non-volatile status effect and/or is Confused
-   * @param statusList the status(es) to be checked
-   * @param includeConfusion whether Confusion should also be considered
-   * @param ignoreMockAbility whether a status effect-mocking ability should be considered
-   * @returns `true` if the Pokemon has a status effect | `false` if it does not
+   * Helper function that determines if a Pokemon has a specified non-volatile status effect and/or is confused
+   * @param statusList - The status(es) to be checked
+   * @param includeConfusion - (Default `false`) Whether Confusion should also be considered
+   * @param ignoreMockAbility - (Default `false`) Whether abilities that act as a status effect (e.g. Comatose) should be ignored
+   * @returns Whether the Pokemon has a status effect
    */
   hasStatusEffect(
     statusList: StatusEffect | StatusEffect[],
@@ -4001,10 +4001,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Helper function that checks if a Pokemon has one of any non-volatile status effects and/or is confused (which is a volatile status effect but is lumped into this category for some status-recovery effects)
-   * @param includeConfusion whether Confusion should also be considered
-   * @param ignoreMockAbility whether a status effect-mocking ability should be considered
-   * @returns `true` if the Pokemon has any of the non-volatile status effects | `false` if not
+   * Helper function that checks if a Pokemon has one of any non-volatile status effects
+   * and/or is confused (which is a volatile status effect but is lumped into this category for some status-recovery effects)
+   * @param includeConfusion - (Default `false`) Whether Confusion should also be considered
+   * @param ignoreMockAbility - (Default `false`) Whether abilities that act as a status effect (e.g. Comatose) should be ignored
+   * @returns Whether the Pokemon has any non-volatile status effect
    */
   hasNonVolatileStatusEffect(includeConfusion: boolean = false, ignoreMockAbility: boolean = false): boolean {
     return this.hasStatusEffect([...NON_VOLATILE_STATUS_EFFECTS], includeConfusion, ignoreMockAbility);
@@ -4012,8 +4013,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   /**
    * Helper function that retrieves the Pokemon's non-volatile status effect
-   * @param ignoreMockAbility whether a status effect-mocking ability should be applied
-   * @returns {@linkcode StatusEffect} the status effect held by the Pokemon
+   * @param ignoreMockAbility - (Default `false`) Whether abilities that act as a status effect (e.g. Comatose) should be ignored
+   * @returns The Pokemon's current {@linkcode StatusEffect | status effect}
    */
   getStatusEffect(ignoreMockAbility: boolean = false): StatusEffect {
     const statusEffect = new NumberHolder(StatusEffect.NONE);
@@ -4028,12 +4029,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   /**
    * Checks if a status effect can be applied to the Pokemon.
-   *
-   * @param effect The {@linkcode StatusEffect} whose applicability is being checked
-   * @param quiet Whether in-battle messages should trigger or not
-   * @param overrideStatus Whether the Pokemon's current status can be overriden
-   * @param sourcePokemon The Pokemon that is setting the status effect
-   * @param ignoreField Whether any field effects (weather, terrain, etc.) should be considered
+   * @param effect - The {@linkcode StatusEffect | status effect} to check
+   * @param quiet - (Default `false`) Whether in-battle messages should trigger or not
+   * @param overrideStatus - (Default `false`) Whether the Pokemon's current status can be overriden
+   * @param sourcePokemon - (Default `null`) The Pokemon that is setting the status effect, if applicable
+   * @param ignoreField - (Default `false`) Whether to ignore field effects (weather, terrain, etc.)
    */
   canSetStatus(
     effect: StatusEffect,
@@ -4257,8 +4257,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   /**
    * Resets the status of a pokemon.
-   * @param confusion Whether resetStatus should include confusion or not; defaults to `false`.
-   * @param reloadAssets Whether to reload the assets or not; defaults to `false`.
+   * @param confusion - (Default `false`) Whether to include confusion
+   * @param reloadAssets - (Default `false`) Whether to reload the assets
    */
   resetStatus(confusion: boolean = false, reloadAssets: boolean = false): void {
     const lastStatus = this.getStatusEffect(true);
@@ -4277,8 +4277,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   /**
    * Checks if this Pokemon is protected by Safeguard
-   * @param attacker the {@linkcode Pokemon} inflicting status on this Pokemon
-   * @returns `true` if this Pokemon is protected by Safeguard; `false` otherwise.
+   * @param attacker - The {@linkcode Pokemon} inflicting a status on this Pokemon
+   * @returns Whether this Pokemon is protected by Safeguard
    */
   isSafeguarded(attacker: Pokemon): boolean {
     const defendingSide = this.getArenaTagSide();
