@@ -1985,14 +1985,13 @@ export function initMoves() {
       .attr(MovePowerMultiplierAttr, (user, _target, _move) => {
         const { currentBattle } = globalScene;
         const { turn, enemyFaintsHistory, playerFaintsHistory } = currentBattle;
-        const lastPlayerFaint = playerFaintsHistory.at(-1);
-        const lastEnemyFaint = enemyFaintsHistory.at(-1);
 
-        if (user.isPlayer()) {
-          return lastPlayerFaint !== undefined && turn - lastPlayerFaint.turn === 1 ? 2 : 1;
+        const lastFaint = user.isPlayer() ? playerFaintsHistory.at(-1) : enemyFaintsHistory.at(-1);
+
+        if (lastFaint !== undefined && turn - lastFaint.turn === 1) {
+          return 2;
         }
-
-        return lastEnemyFaint !== undefined && turn - lastEnemyFaint.turn === 1 ? 2 : 1;
+        return 1;
       }),
     new AttackMove(MoveId.FINAL_GAMBIT, ElementalType.FIGHTING, MoveCategory.SPECIAL, -1, 100, 5, -1, 0, 5) //
       .attr(UserHpDamageAttr)
@@ -2389,25 +2388,16 @@ export function initMoves() {
       .unimplemented(),
     new AttackMove(MoveId.BREAKNECK_BLITZ__SPECIAL, ElementalType.NORMAL, MoveCategory.SPECIAL, -1, -1, 1, -1, 0, 7) //
       .unimplemented(),
-    new AttackMove(
-      MoveId.ALL_OUT_PUMMELING__PHYSICAL,
-      ElementalType.FIGHTING,
-      MoveCategory.PHYSICAL,
-      -1,
-      -1,
-      1,
-      -1,
-      0,
-      7,
-    ) //
+    // biome-ignore format: just barely too long
+    new AttackMove(MoveId.ALL_OUT_PUMMELING__PHYSICAL, ElementalType.FIGHTING, MoveCategory.PHYSICAL, -1, -1, 1, -1, 0, 7)
       .unimplemented(),
     new AttackMove(MoveId.ALL_OUT_PUMMELING__SPECIAL, ElementalType.FIGHTING, MoveCategory.SPECIAL, -1, -1, 1, -1, 0, 7) //
       .unimplemented(),
     // biome-ignore format: just barely too long
-    new AttackMove(MoveId.SUPERSONIC_SKYSTRIKE__PHYSICAL, ElementalType.FLYING, MoveCategory.PHYSICAL, -1, -1, 1, -1, 0, 7) //
+    new AttackMove(MoveId.SUPERSONIC_SKYSTRIKE__PHYSICAL, ElementalType.FLYING, MoveCategory.PHYSICAL, -1, -1, 1, -1, 0, 7)
       .unimplemented(),
     // biome-ignore format: just barely too long
-    new AttackMove(MoveId.SUPERSONIC_SKYSTRIKE__SPECIAL, ElementalType.FLYING, MoveCategory.SPECIAL, -1, -1, 1, -1, 0, 7) //
+    new AttackMove(MoveId.SUPERSONIC_SKYSTRIKE__SPECIAL, ElementalType.FLYING, MoveCategory.SPECIAL, -1, -1, 1, -1, 0, 7)
       .unimplemented(),
     new AttackMove(MoveId.ACID_DOWNPOUR__PHYSICAL, ElementalType.POISON, MoveCategory.PHYSICAL, -1, -1, 1, -1, 0, 7) //
       .unimplemented(),
@@ -2426,10 +2416,10 @@ export function initMoves() {
     new AttackMove(MoveId.SAVAGE_SPIN_OUT__SPECIAL, ElementalType.BUG, MoveCategory.SPECIAL, -1, -1, 1, -1, 0, 7) //
       .unimplemented(),
     // biome-ignore format: just barely too long
-    new AttackMove(MoveId.NEVER_ENDING_NIGHTMARE__PHYSICAL, ElementalType.GHOST, MoveCategory.PHYSICAL, -1, -1, 1, -1, 0, 7) //
+    new AttackMove(MoveId.NEVER_ENDING_NIGHTMARE__PHYSICAL, ElementalType.GHOST, MoveCategory.PHYSICAL, -1, -1, 1, -1, 0, 7)
       .unimplemented(),
     // biome-ignore format: just barely too long
-    new AttackMove(MoveId.NEVER_ENDING_NIGHTMARE__SPECIAL, ElementalType.GHOST, MoveCategory.SPECIAL, -1, -1, 1, -1, 0, 7) //
+    new AttackMove(MoveId.NEVER_ENDING_NIGHTMARE__SPECIAL, ElementalType.GHOST, MoveCategory.SPECIAL, -1, -1, 1, -1, 0, 7)
       .unimplemented(),
     new AttackMove(MoveId.CORKSCREW_CRASH__PHYSICAL, ElementalType.STEEL, MoveCategory.PHYSICAL, -1, -1, 1, -1, 0, 7) //
       .unimplemented(),
@@ -2686,7 +2676,7 @@ export function initMoves() {
       .attr(FormChangeItemTypeAttr),
     // #region Pikachu signature Z-Move (unused)
     // biome-ignore format: just barely too long
-    new AttackMove(MoveId.TEN_MILLION_VOLT_THUNDERBOLT, ElementalType.ELECTRIC, MoveCategory.SPECIAL, 195, -1, 1, -1, 0, 7) //
+    new AttackMove(MoveId.TEN_MILLION_VOLT_THUNDERBOLT, ElementalType.ELECTRIC, MoveCategory.SPECIAL, 195, -1, 1, -1, 0, 7)
       .unimplemented()
       .edgeCase(), // I assume it's because it needs thunderbolt and pikachu in a cap
     // #endregion
@@ -3347,11 +3337,11 @@ export function initMoves() {
       .attr(TargetHalfHpDamageAttr),
     new AttackMove(MoveId.COLLISION_COURSE, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 100, 100, 5, -1, 0, 9) //
       .attr(MovePowerMultiplierAttr, (user, target, move) =>
-        target.getAttackTypeEffectiveness(move.type, user) >= 2 ? 1.33 : 1,
+        target.getAttackTypeEffectiveness(move.type, user) >= 2 ? 5461 / 4096 : 1,
       ),
     new AttackMove(MoveId.ELECTRO_DRIFT, ElementalType.ELECTRIC, MoveCategory.SPECIAL, 100, 100, 5, -1, 0, 9) //
       .attr(MovePowerMultiplierAttr, (user, target, move) =>
-        target.getAttackTypeEffectiveness(move.type, user) >= 2 ? 1.33 : 1,
+        target.getAttackTypeEffectiveness(move.type, user) >= 2 ? 5461 / 4096 : 1,
       )
       .makesContact(),
     new SelfStatusMove(MoveId.SHED_TAIL, ElementalType.NORMAL, -1, 10, -1, 0, 9) //
