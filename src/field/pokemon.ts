@@ -200,7 +200,7 @@ import {
 } from "#utils/common-utils";
 import { loadMoveAnimAssets } from "#utils/move-anim-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
-import { getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
+import { getPokemonSpecies, getPokemonSpeciesForm, summonDataToJSON } from "#utils/pokemon-utils";
 import { randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
 
@@ -4321,6 +4321,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       turnCount: 0,
       waveTurnCount: 0,
       moveHistory: [],
+      toJSON: summonDataToJSON,
     };
     this.setSwitchOutStatus(false);
     if (globalScene) {
