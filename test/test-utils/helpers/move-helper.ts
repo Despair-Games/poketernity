@@ -144,11 +144,9 @@ export class MoveHelper extends GameManagerHelper {
         vi.spyOn(activeOverrides, "MOVESET_OVERRIDE", "get").mockReturnValue([]);
         console.warn("Player moveset override disabled due to use of `game.move.changeMoveset`!");
       }
-    } else {
-      if (coerceArray(activeOverrides.ENEMY_MOVESET_OVERRIDE).length > 0) {
-        vi.spyOn(activeOverrides, "ENEMY_MOVESET_OVERRIDE", "get").mockReturnValue([]);
-        console.warn("Enemy moveset override disabled due to use of `game.move.changeMoveset`!");
-      }
+    } else if (coerceArray(activeOverrides.ENEMY_MOVESET_OVERRIDE).length > 0) {
+      vi.spyOn(activeOverrides, "ENEMY_MOVESET_OVERRIDE", "get").mockReturnValue([]);
+      console.warn("Enemy moveset override disabled due to use of `game.move.changeMoveset`!");
     }
 
     const newMoveset = coerceArray(moveset);
