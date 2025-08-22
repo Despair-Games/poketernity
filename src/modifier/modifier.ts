@@ -2,7 +2,7 @@ import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { CommanderAbAttr } from "#abilities/commander-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import Overrides from "#app/overrides";
+import { activeOverrides } from "#app/overrides";
 import { FRIENDSHIP_GAIN_FROM_CANDY } from "#constants/friendship-constants";
 import { getBerryEffectFunc, getBerryPredicate } from "#data/berry";
 import { getLevelTotalExp } from "#data/exp";
@@ -3248,8 +3248,8 @@ export class TempExtraModifierModifier extends LapsingPersistentModifier {
  */
 export function overrideModifiers(isPlayer: boolean = true): void {
   const modifiersOverride: ModifierOverride[] = isPlayer
-    ? Overrides.STARTING_MODIFIER_OVERRIDE
-    : Overrides.ENEMY_MODIFIER_OVERRIDE;
+    ? activeOverrides.STARTING_MODIFIER_OVERRIDE
+    : activeOverrides.ENEMY_MODIFIER_OVERRIDE;
   if (!modifiersOverride || modifiersOverride.length === 0 || !globalScene) {
     return;
   }
@@ -3290,8 +3290,8 @@ export function overrideModifiers(isPlayer: boolean = true): void {
  */
 export function overrideHeldItems(pokemon: Pokemon, isPlayer: boolean = true): void {
   const heldItemsOverride: ModifierOverride[] = isPlayer
-    ? Overrides.STARTING_HELD_ITEMS_OVERRIDE
-    : Overrides.ENEMY_HELD_ITEMS_OVERRIDE;
+    ? activeOverrides.STARTING_HELD_ITEMS_OVERRIDE
+    : activeOverrides.ENEMY_HELD_ITEMS_OVERRIDE;
   if (!heldItemsOverride || heldItemsOverride.length === 0 || !globalScene) {
     return;
   }

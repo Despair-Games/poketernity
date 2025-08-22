@@ -1,6 +1,6 @@
 import { getLocalStorageKey } from "#app/account";
 import { globalScene } from "#app/global-scene";
-import Overrides from "#app/overrides";
+import { activeOverrides } from "#app/overrides";
 import { handleTutorial } from "#app/tutorial";
 import { PLAYER_PARTY_MAX_SIZE } from "#constants/game-constants";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
@@ -1868,9 +1868,9 @@ export class StarterSelectUiHandler extends MessageUiHandler {
                   allAbilities[starterPassiveAbilities[this.lastSpecies.speciesId]].name
                 })`,
                 handler: () => {
-                  if (Overrides.FREE_CANDY_UPGRADE_OVERRIDE || candyCount >= passiveCost) {
+                  if (activeOverrides.FREE_CANDY_UPGRADE_OVERRIDE || candyCount >= passiveCost) {
                     starterData.abilityAttr |= AbilityAttr.PASSIVE;
-                    if (!Overrides.FREE_CANDY_UPGRADE_OVERRIDE) {
+                    if (!activeOverrides.FREE_CANDY_UPGRADE_OVERRIDE) {
                       starterData.candyCount -= passiveCost;
                     }
                     this.pokemonCandyCountText.setText(`x${starterData.candyCount}`);
@@ -1907,9 +1907,9 @@ export class StarterSelectUiHandler extends MessageUiHandler {
               options.push({
                 label: `x${reductionCost} ${i18next.t("starterSelectUiHandler:reduceCost")}`,
                 handler: () => {
-                  if (Overrides.FREE_CANDY_UPGRADE_OVERRIDE || candyCount >= reductionCost) {
+                  if (activeOverrides.FREE_CANDY_UPGRADE_OVERRIDE || candyCount >= reductionCost) {
                     starterData.valueReduction++;
-                    if (!Overrides.FREE_CANDY_UPGRADE_OVERRIDE) {
+                    if (!activeOverrides.FREE_CANDY_UPGRADE_OVERRIDE) {
                       starterData.candyCount -= reductionCost;
                     }
                     this.pokemonCandyCountText.setText(`x${starterData.candyCount}`);
@@ -1939,8 +1939,8 @@ export class StarterSelectUiHandler extends MessageUiHandler {
             options.push({
               label: `x${sameSpeciesEggCost} ${i18next.t("starterSelectUiHandler:sameSpeciesEgg")}`,
               handler: () => {
-                if (Overrides.FREE_CANDY_UPGRADE_OVERRIDE || candyCount >= sameSpeciesEggCost) {
-                  if (globalScene.gameData.eggs.length >= 99 && !Overrides.UNLIMITED_EGG_COUNT_OVERRIDE) {
+                if (activeOverrides.FREE_CANDY_UPGRADE_OVERRIDE || candyCount >= sameSpeciesEggCost) {
+                  if (globalScene.gameData.eggs.length >= 99 && !activeOverrides.UNLIMITED_EGG_COUNT_OVERRIDE) {
                     // Egg list full, show error message at the top of the screen and abort
                     this.showText(i18next.t("egg:tooManyEggs"), {
                       callback: () =>
@@ -1956,7 +1956,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
                     });
                     return false;
                   }
-                  if (!Overrides.FREE_CANDY_UPGRADE_OVERRIDE) {
+                  if (!activeOverrides.FREE_CANDY_UPGRADE_OVERRIDE) {
                     starterData.candyCount -= sameSpeciesEggCost;
                   }
                   this.pokemonCandyCountText.setText(`x${starterData.candyCount}`);

@@ -6,7 +6,7 @@ import type { Pokemon } from "#field/pokemon";
 import { ChangeMultiHitTypeAttr } from "#moves/change-multi-hit-type-attr";
 import type { Move } from "#moves/move";
 import { MoveAttr } from "#moves/move-attr";
-import { NumberHolder } from "#utils/common-utils";
+import { NumberHolder, ValueHolder } from "#utils/common-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
 
 /**
@@ -42,7 +42,7 @@ export class MultiHitAttr extends MoveAttr {
    * @returns True
    */
   override apply(user: Pokemon, target: Pokemon, move: Move, hitCount: NumberHolder): boolean {
-    const hitType = new NumberHolder(this.intrinsicMultiHitType);
+    const hitType = new ValueHolder(this.intrinsicMultiHitType);
     applyMoveAttrs(ChangeMultiHitTypeAttr, user, target, move, hitType);
     this.multiHitType = hitType.value;
 

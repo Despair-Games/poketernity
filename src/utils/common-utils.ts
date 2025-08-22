@@ -54,6 +54,7 @@ export function executeIf<T>(condition: boolean, promiseFunc: () => Promise<T>):
   return condition ? promiseFunc() : new Promise<T | null>((resolve) => resolve(null));
 }
 
+/** @deprecated Use {@linkcode ValueHolder} */
 export class BooleanHolder {
   public value: boolean;
 
@@ -62,10 +63,20 @@ export class BooleanHolder {
   }
 }
 
+/** @deprecated Use {@linkcode ValueHolder} */
 export class NumberHolder {
   public value: number;
 
   constructor(value: number) {
+    this.value = value;
+  }
+}
+
+/** Used to pass values by reference (such as for `applyAbAttrs`/etc). */
+export class ValueHolder<T> {
+  public value: T;
+
+  constructor(value: T) {
     this.value = value;
   }
 }
@@ -89,6 +100,7 @@ export class FixedNumber {
 /**
  * Helper method to create a {@linkcode FixedNumber}
  * @param value - The value to be stored in the {@linkcode FixedNumber}
+ * @todo Remove the need for the typecasting
  */
 export function fixedNumber(value: number): number {
   return new FixedNumber(value) as unknown as number;

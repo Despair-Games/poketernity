@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import Overrides from "#app/overrides";
+import { activeOverrides } from "#app/overrides";
 import { handleTutorial } from "#app/tutorial";
 import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
 import type { EggOptions } from "#data/egg";
@@ -368,8 +368,8 @@ export class EggGachaUiHandler extends MessageUiHandler {
   }
 
   pull(pullCount: number = 0, count: number = 0, eggs?: Egg[]): void {
-    if (Overrides.EGG_GACHA_PULL_COUNT_OVERRIDE && !count) {
-      pullCount = Overrides.EGG_GACHA_PULL_COUNT_OVERRIDE;
+    if (activeOverrides.EGG_GACHA_PULL_COUNT_OVERRIDE && !count) {
+      pullCount = activeOverrides.EGG_GACHA_PULL_COUNT_OVERRIDE;
     }
 
     this.eggGachaOptionsContainer.setVisible(false);
@@ -683,12 +683,12 @@ export class EggGachaUiHandler extends MessageUiHandler {
               case 0:
                 if (
                   !globalScene.gameData.voucherCounts[VoucherType.REGULAR]
-                  && !Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE
+                  && !activeOverrides.EGG_FREE_GACHA_PULLS_OVERRIDE
                 ) {
                   error = true;
                   this.showError(i18next.t("egg:notEnoughVouchers"));
-                } else if (globalScene.gameData.eggs.length < 99 || Overrides.UNLIMITED_EGG_COUNT_OVERRIDE) {
-                  if (!Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE) {
+                } else if (globalScene.gameData.eggs.length < 99 || activeOverrides.UNLIMITED_EGG_COUNT_OVERRIDE) {
+                  if (!activeOverrides.EGG_FREE_GACHA_PULLS_OVERRIDE) {
                     this.consumeVouchers(VoucherType.REGULAR, 1);
                   }
                   this.pull();
@@ -699,11 +699,14 @@ export class EggGachaUiHandler extends MessageUiHandler {
                 }
                 break;
               case 2:
-                if (!globalScene.gameData.voucherCounts[VoucherType.PLUS] && !Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE) {
+                if (
+                  !globalScene.gameData.voucherCounts[VoucherType.PLUS]
+                  && !activeOverrides.EGG_FREE_GACHA_PULLS_OVERRIDE
+                ) {
                   error = true;
                   this.showError(i18next.t("egg:notEnoughVouchers"));
-                } else if (globalScene.gameData.eggs.length < 95 || Overrides.UNLIMITED_EGG_COUNT_OVERRIDE) {
-                  if (!Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE) {
+                } else if (globalScene.gameData.eggs.length < 95 || activeOverrides.UNLIMITED_EGG_COUNT_OVERRIDE) {
+                  if (!activeOverrides.EGG_FREE_GACHA_PULLS_OVERRIDE) {
                     this.consumeVouchers(VoucherType.PLUS, 1);
                   }
                   this.pull(5);
@@ -718,20 +721,20 @@ export class EggGachaUiHandler extends MessageUiHandler {
                 if (
                   (this.cursor === 1
                     && globalScene.gameData.voucherCounts[VoucherType.REGULAR] < 10
-                    && !Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE)
+                    && !activeOverrides.EGG_FREE_GACHA_PULLS_OVERRIDE)
                   || (this.cursor === 3
                     && !globalScene.gameData.voucherCounts[VoucherType.PREMIUM]
-                    && !Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE)
+                    && !activeOverrides.EGG_FREE_GACHA_PULLS_OVERRIDE)
                 ) {
                   error = true;
                   this.showError(i18next.t("egg:notEnoughVouchers"));
-                } else if (globalScene.gameData.eggs.length < 90 || Overrides.UNLIMITED_EGG_COUNT_OVERRIDE) {
+                } else if (globalScene.gameData.eggs.length < 90 || activeOverrides.UNLIMITED_EGG_COUNT_OVERRIDE) {
                   if (this.cursor === 3) {
-                    if (!Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE) {
+                    if (!activeOverrides.EGG_FREE_GACHA_PULLS_OVERRIDE) {
                       this.consumeVouchers(VoucherType.PREMIUM, 1);
                     }
                   } else {
-                    if (!Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE) {
+                    if (!activeOverrides.EGG_FREE_GACHA_PULLS_OVERRIDE) {
                       this.consumeVouchers(VoucherType.REGULAR, 10);
                     }
                   }
@@ -745,12 +748,12 @@ export class EggGachaUiHandler extends MessageUiHandler {
               case 4:
                 if (
                   !globalScene.gameData.voucherCounts[VoucherType.GOLDEN]
-                  && !Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE
+                  && !activeOverrides.EGG_FREE_GACHA_PULLS_OVERRIDE
                 ) {
                   error = true;
                   this.showError(i18next.t("egg:notEnoughVouchers"));
-                } else if (globalScene.gameData.eggs.length < 75 || Overrides.UNLIMITED_EGG_COUNT_OVERRIDE) {
-                  if (!Overrides.EGG_FREE_GACHA_PULLS_OVERRIDE) {
+                } else if (globalScene.gameData.eggs.length < 75 || activeOverrides.UNLIMITED_EGG_COUNT_OVERRIDE) {
+                  if (!activeOverrides.EGG_FREE_GACHA_PULLS_OVERRIDE) {
                     this.consumeVouchers(VoucherType.GOLDEN, 1);
                   }
                   this.pull(25);

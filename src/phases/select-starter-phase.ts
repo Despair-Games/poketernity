@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import Overrides from "#app/overrides";
+import { activeOverrides } from "#app/overrides";
 import { Phase } from "#app/phase";
 import { ChallengeType } from "#enums/challenge-type";
 import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
@@ -48,8 +48,8 @@ export class SelectStarterPhase extends Phase {
     const loadPokemonAssets: Promise<void>[] = [];
 
     starters.forEach((starter: StarterConfig, i: number) => {
-      if (!i && Overrides.STARTER_SPECIES_OVERRIDE) {
-        starter.species = getPokemonSpecies(Overrides.STARTER_SPECIES_OVERRIDE);
+      if (!i && activeOverrides.STARTER_SPECIES_OVERRIDE) {
+        starter.species = getPokemonSpecies(activeOverrides.STARTER_SPECIES_OVERRIDE);
       }
 
       const { abilityIndex, dexAttr, moveset, nature, nickname, passive, pokerus, species } = starter;
@@ -59,14 +59,14 @@ export class SelectStarterPhase extends Phase {
       let starterFormIndex = Math.min(starterProps.formIndex, Math.max(species.forms.length - 1, 0));
 
       if (
-        speciesId in Overrides.STARTER_FORM_OVERRIDES
-        && !isNil(Overrides.STARTER_FORM_OVERRIDES[speciesId])
-        && species.forms[Overrides.STARTER_FORM_OVERRIDES[speciesId]]
+        speciesId in activeOverrides.STARTER_FORM_OVERRIDES
+        && !isNil(activeOverrides.STARTER_FORM_OVERRIDES[speciesId])
+        && species.forms[activeOverrides.STARTER_FORM_OVERRIDES[speciesId]]
       ) {
-        starterFormIndex = Overrides.STARTER_FORM_OVERRIDES[speciesId];
+        starterFormIndex = activeOverrides.STARTER_FORM_OVERRIDES[speciesId];
       }
 
-      const starterGender = Overrides.GENDER_OVERRIDE ?? starterProps.gender;
+      const starterGender = activeOverrides.GENDER_OVERRIDE ?? starterProps.gender;
 
       // Get ivs from the root species in case of an override to a non starter species
       const starterSpeciesId = species.getRootSpeciesId(true);
