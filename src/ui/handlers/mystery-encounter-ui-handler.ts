@@ -511,11 +511,8 @@ export class MysteryEncounterUiHandler extends UiHandler {
     this.descriptionContainer.add(titleTextObject);
 
     // Rarity of encounter
-    let pokeBallType = PokeballType.POKEBALL;
+    let pokeBallType: PokeballType = PokeballType.POKEBALL; // Common = Pokeball
     switch (mysteryEncounter.encounterTier) {
-      case MysteryEncounterTier.COMMON:
-        pokeBallType = PokeballType.POKEBALL;
-        break;
       case MysteryEncounterTier.GREAT:
         pokeBallType = PokeballType.GREAT_BALL;
         break;
