@@ -386,8 +386,6 @@ export class BattleScene extends SceneBase {
       };
     }
 
-    // populateAnims();
-
     await this.initVariantData();
   }
 

@@ -14,7 +14,6 @@ import i18next from "i18next";
  * @param procChance - Chance to create an item
  */
 export class PostTurnLootAbAttr extends PostTurnAbAttr {
-  /** Extend itemType to add more options */
   private readonly itemType: "EATEN_BERRIES" | "HELD_BERRIES";
   private readonly procChance: (pokemon: Pokemon) => number;
 
