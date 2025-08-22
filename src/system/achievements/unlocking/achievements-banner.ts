@@ -8,7 +8,7 @@ import { PlayerGender } from "#enums/player-gender";
 import { TextStyle } from "#enums/text-style";
 import i18next from "i18next";
 
-export default class AchvBanner extends Phaser.GameObjects.Container {
+export class AchvBanner extends Phaser.GameObjects.Container {
   private defaultWidth: number;
   private defaultHeight: number;
   private bannerScale: number = CANVAS_SCALE / 2;

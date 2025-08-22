@@ -2,7 +2,7 @@ import { battleSceneBus } from "#app/battle-scene-bus";
 import { SceneBase } from "#app/scene-base";
 import { newAchvs } from "#app/system/achievements/achievements";
 import { achievementsBus } from "#app/system/achievements/achievements-events";
-import AchvBanner from "#app/system/achievements/unlocking/achievements-banner";
+import { AchvBanner } from "#app/system/achievements/unlocking/achievements-banner";
 import type { AchvCategory } from "#enums/achv-category";
 
 type UnlockAchievementsSceneData = {
