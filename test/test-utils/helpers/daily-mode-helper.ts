@@ -1,4 +1,4 @@
-import overrides from "#app/overrides";
+import { activeOverrides } from "#app/overrides";
 import { BattleStyle } from "#enums/battle-style";
 import { Button } from "#enums/button";
 import { UiMode } from "#enums/ui-mode";
@@ -33,7 +33,7 @@ export class DailyModeHelper extends GameManagerHelper {
 
     await this.game.phaseInterceptor.to("EncounterPhase");
 
-    if (overrides.ENEMY_HELD_ITEMS_OVERRIDE.length === 0 && this.game.override.removeEnemyStartingItems) {
+    if (activeOverrides.ENEMY_HELD_ITEMS_OVERRIDE.length === 0 && this.game.override.removeEnemyStartingItems) {
       this.game.removeEnemyHeldItems();
     }
   }

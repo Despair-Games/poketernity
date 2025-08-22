@@ -1,5 +1,6 @@
 import { MoveResult } from "#enums/move-result";
 import { isPokemonInstance, receivedStr } from "#test/test-utils/test-utils";
+import { enumValueToKey } from "#utils/common-utils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
 //#region Types
@@ -43,8 +44,8 @@ export function toHaveMoveResultMatcher(
   const pass = move?.result === expectedResult;
 
   const moveIndexStr = index === 0 ? "latest move" : `move no. ${index}`;
-  const expectedResultStr = `${MoveResult[expectedResult]} (=${expectedResult})`;
-  const actualResultStr = move.result ? `${MoveResult[move.result]} (=${move.result})` : "undefined";
+  const expectedResultStr = `${enumValueToKey(MoveResult, expectedResult)} (=${expectedResult})`;
+  const actualResultStr = move.result ? `${enumValueToKey(MoveResult, move.result)} (=${move.result})` : "undefined";
 
   return {
     pass,

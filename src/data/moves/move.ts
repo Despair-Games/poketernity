@@ -50,7 +50,7 @@ import { VariablePowerAttr } from "#moves/variable-power-attr";
 import { VariableTargetAttr } from "#moves/variable-target-attr";
 import type { MoveConditionFunc } from "#types/move-types";
 import type { AbstractConstructor, Constructor, nil } from "#types/utility-types";
-import { BooleanHolder, NumberHolder } from "#utils/common-utils";
+import { BooleanHolder, NumberHolder, ValueHolder } from "#utils/common-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
 import { toCamelCaseString } from "#utils/string-utils";
 import i18next from "i18next";
@@ -329,10 +329,13 @@ export abstract class Move {
    * @returns `true` if the move can bypass the target's Substitute; `false` otherwise.
    */
   hitsSubstitute(user: Pokemon, target: Pokemon | nil): boolean {
-    if (
-      [MoveTarget.USER, MoveTarget.USER_SIDE, MoveTarget.ENEMY_SIDE, MoveTarget.BOTH_SIDES].includes(this.moveTarget)
-      || !target?.hasTag(BattlerTagType.SUBSTITUTE)
-    ) {
+    const substituteBypassTargets: MoveTarget[] = [
+      MoveTarget.USER,
+      MoveTarget.USER_SIDE,
+      MoveTarget.ENEMY_SIDE,
+      MoveTarget.BOTH_SIDES,
+    ];
+    if (substituteBypassTargets.includes(this.moveTarget) || !target?.hasTag(BattlerTagType.SUBSTITUTE)) {
       return false;
     }
 
@@ -1048,7 +1051,7 @@ export interface MoveTargetSet {
 }
 
 export function getMoveTargets(user: Pokemon, moveId: MoveId, replaceTarget?: MoveTarget): MoveTargetSet {
-  const variableTarget = new NumberHolder(0);
+  const variableTarget = new ValueHolder<MoveTarget>(MoveTarget.USER);
   user.getOpponents().forEach((p) => applyMoveAttrs(VariableTargetAttr, user, p, allMoves.get(moveId), variableTarget));
 
   let moveTarget: MoveTarget | undefined;

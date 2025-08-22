@@ -259,7 +259,9 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
       this.typeIcon.setTexture("type_icons", enumValueToKey(ElementalType, moveType).toLowerCase()).setScale(0.8);
 
       const moveCategory = pokemonMove.getMove().category;
-      this.moveCategoryIcon.setTexture("categories", MoveCategory[moveCategory].toLowerCase()).setScale(1.0);
+      this.moveCategoryIcon
+        .setTexture("categories", enumValueToKey(MoveCategory, moveCategory).toLowerCase())
+        .setScale(1.0);
       const power = pokemonMove.getMove().power;
       const accuracy = pokemonMove.getMove().accuracy;
       const maxPP = pokemonMove.getMovePp();

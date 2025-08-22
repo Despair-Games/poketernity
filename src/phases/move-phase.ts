@@ -6,7 +6,7 @@ import type { ReduceSleepDurationAbAttr } from "#abilities/reduce-sleep-duration
 import type { ReflectMovesAbAttr } from "#abilities/reflect-moves-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import Overrides from "#app/overrides";
+import { activeOverrides } from "#app/overrides";
 import { applyBattlerTags } from "#battler-tags/apply-battler-tags";
 import type { CenterOfAttentionTag } from "#battler-tags/center-of-attention-tag";
 import type { ImprisoningTag } from "#battler-tags/imprisoning-tag";
@@ -282,8 +282,8 @@ export class MovePhase extends BattlePhase {
       switch (statusEffect) {
         case StatusEffect.PARALYSIS:
           activated =
-            (!this.pokemon.randSeedInt(4) || Overrides.STATUS_ACTIVATION_OVERRIDE === true)
-            && Overrides.STATUS_ACTIVATION_OVERRIDE !== false;
+            (!this.pokemon.randSeedInt(4) || activeOverrides.STATUS_ACTIVATION_OVERRIDE === true)
+            && activeOverrides.STATUS_ACTIVATION_OVERRIDE !== false;
           break;
         case StatusEffect.SLEEP:
           applyMoveAttrs(BypassSleepAttr, this.pokemon, null, this.pokemonMove.getMove());
@@ -299,8 +299,8 @@ export class MovePhase extends BattlePhase {
                 (attr) =>
                   attr instanceof HealStatusEffectAttr && attr.selfTarget && attr.isOfEffect(StatusEffect.FREEZE),
               )
-            || (!this.pokemon.randSeedInt(5) && Overrides.STATUS_ACTIVATION_OVERRIDE !== true)
-            || Overrides.STATUS_ACTIVATION_OVERRIDE === false;
+            || (!this.pokemon.randSeedInt(5) && activeOverrides.STATUS_ACTIVATION_OVERRIDE !== true)
+            || activeOverrides.STATUS_ACTIVATION_OVERRIDE === false;
 
           activated = !healed;
           break;

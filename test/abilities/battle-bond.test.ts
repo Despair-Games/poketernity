@@ -71,7 +71,7 @@ describe("Abilities - BATTLE BOND", () => {
 
     // Wave 4: Use Water Shuriken in Ash form
     let expectedBattlePower = 20;
-    let expectedMultiHitType = MultiHitType._3;
+    let expectedMultiHitType: MultiHitType = MultiHitType._3;
 
     game.move.select(MoveId.WATER_SHURIKEN);
     await game.phaseInterceptor.to("BerryPhase", false);

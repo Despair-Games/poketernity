@@ -1,6 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { loadBattlerTag } from "#battler-tags/load-battler-tag";
 import { allMoves } from "#data/data-lists";
+import type { PokemonSpeciesForm } from "#data/pokemon-species-form";
 import type { Variant } from "#data/variant";
 import { BattleType } from "#enums/battle-type";
 import type { BiomeId } from "#enums/biome-id";
@@ -13,9 +14,26 @@ import type { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
-import type { CustomPokemonData, PokemonSummonData, Status } from "#types/pokemon-types";
-import { clamp, isPokemon } from "#utils/common-utils";
-import { getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
+import type { CustomPokemonData, PokemonSummonData, SerializedSpeciesForm, Status } from "#types/pokemon-types";
+import { clamp, isNil, isPokemon } from "#utils/common-utils";
+import { getPokemonSpecies, getPokemonSpeciesForm, summonDataToJSON } from "#utils/pokemon-utils";
+
+/**
+ * Deserialize a pokemon species form from an object containing `speciesId` and `formIndex` properties.
+ * @param value - The value to deserialize
+ * @returns The `PokemonSpeciesForm`, or `null` if the fields could not be properly discerned
+ */
+function deserializePokemonSpeciesForm(value: SerializedSpeciesForm | PokemonSpeciesForm): PokemonSpeciesForm | null {
+  const { speciesId } = value;
+  const formIndex = value.formIndex ?? value["_formIndex"];
+
+  // If for some reason either of these fields are `null`/`undefined`, we cannot reconstruct the species form
+  if (isNil(speciesId) || isNil(formIndex)) {
+    console.warn(`Error when deserializing Pokemon Species Form\nSpecies ID: ${speciesId} | Form index: ${formIndex}`);
+    return null;
+  }
+  return getPokemonSpeciesForm(speciesId, formIndex);
+}
 
 export class PokemonData {
   public id: number;
@@ -123,16 +141,13 @@ export class PokemonData {
     ];
 
     this.summonData = source.summonData;
+    this.summonData.toJSON = summonDataToJSON;
     // This is required because the full class object doesn't exist in save data
     this.summonData.moveset = source.summonData.moveset?.map((m) => PokemonMove.loadMove(m)) ?? [];
     // This is required because the full class object doesn't exist in save data
     this.summonData.tags = source.summonData.tags?.map((t) => loadBattlerTag(t)) ?? [];
     if (source.summonData.speciesForm) {
-      this.summonData.speciesForm = getPokemonSpeciesForm(
-        source.summonData.speciesForm.speciesId,
-        // @ts-expect-error - `_formIndex` is protected but we can't use `.formIndex` because it's a getter and the class data is lost
-        source.summonData.speciesForm._formIndex,
-      );
+      this.summonData.speciesForm = deserializePokemonSpeciesForm(source.summonData.speciesForm);
     }
     for (const turnMove of this.summonData.moveHistory) {
       // This is required because the full class object doesn't exist in save data

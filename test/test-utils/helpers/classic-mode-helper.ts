@@ -1,5 +1,5 @@
 import { getGameMode } from "#app/game-mode";
-import overrides from "#app/overrides";
+import { activeOverrides } from "#app/overrides";
 import { BattleStyle } from "#enums/battle-style";
 import { GameModes } from "#enums/game-modes";
 import { Nature } from "#enums/nature";
@@ -20,7 +20,7 @@ export class ClassicModeHelper extends GameManagerHelper {
    * @returns A promise that resolves when the summon phase is reached.
    */
   async runToSummon(species: SpeciesId, ...extraSpecies: SpeciesId[]): Promise<void> {
-    if (overrides.STARTER_SPECIES_OVERRIDE) {
+    if (activeOverrides.STARTER_SPECIES_OVERRIDE) {
       throw new Error(
         "The player species override should not be used for classic mode tests. Pass the species you want to use to the `runToSummon` or `startBattle` function.",
       );
@@ -48,7 +48,7 @@ export class ClassicModeHelper extends GameManagerHelper {
     });
 
     await this.game.phaseInterceptor.to("EncounterPhase");
-    if (overrides.ENEMY_HELD_ITEMS_OVERRIDE.length === 0 && this.game.override.removeEnemyStartingItems) {
+    if (activeOverrides.ENEMY_HELD_ITEMS_OVERRIDE.length === 0 && this.game.override.removeEnemyStartingItems) {
       this.game.removeEnemyHeldItems();
     }
   }
@@ -84,7 +84,7 @@ export class ClassicModeHelper extends GameManagerHelper {
     }
 
     if (this.game.override.disableExpGain) {
-      vi.spyOn(overrides, "LEVEL_CAP_OVERRIDE", "get").mockReturnValue(1);
+      vi.spyOn(activeOverrides, "LEVEL_CAP_OVERRIDE", "get").mockReturnValue(1);
     }
 
     await this.game.phaseInterceptor.to("CommandPhase");
