@@ -2,7 +2,7 @@ import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { SturdyAbAttr } from "#abilities/sturdy-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import Overrides from "#app/overrides";
+import { activeOverrides } from "#app/overrides";
 import { BattlerTag } from "#battler-tags/battler-tag";
 import { allMoves } from "#data/data-lists";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -70,7 +70,7 @@ export class ConfusedTag extends BattlerTag {
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     const ret =
       (lapseType !== BattlerTagLapseType.CUSTOM && super.lapse(pokemon, lapseType))
-      || !isNil(Overrides.STATUS_ACTIVATION_OVERRIDE);
+      || !isNil(activeOverrides.STATUS_ACTIVATION_OVERRIDE);
 
     if (ret) {
       const pokemonNameWithAffix = getPokemonNameWithAffix(pokemon);
@@ -121,8 +121,8 @@ export class ConfusedTag extends BattlerTag {
   public getDamage(pokemon: Pokemon): number {
     // 33% chance of hitting self with a 40 base power move
     if (
-      (pokemon.randSeedInt(100) < this.ACTIVATION_CHANCE && Overrides.STATUS_ACTIVATION_OVERRIDE !== false)
-      || Overrides.STATUS_ACTIVATION_OVERRIDE === true
+      (pokemon.randSeedInt(100) < this.ACTIVATION_CHANCE && activeOverrides.STATUS_ACTIVATION_OVERRIDE !== false)
+      || activeOverrides.STATUS_ACTIVATION_OVERRIDE === true
     ) {
       const atk = pokemon.getEffectiveStat(Stat.ATK, { abilityApplyMode: AbilityApplyMode.IGNORE });
       const def = pokemon.getEffectiveStat(Stat.DEF, { abilityApplyMode: AbilityApplyMode.IGNORE });

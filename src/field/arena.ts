@@ -3,7 +3,7 @@ import type { PostTerrainChangeAbAttr } from "#abilities/post-terrain-change-ab-
 import type { PostWeatherChangeAbAttr } from "#abilities/post-weather-change-ab-attr";
 import type { TerrainEventTypeChangeAbAttr } from "#abilities/terrain-event-type-change-ab-attr";
 import { globalScene } from "#app/global-scene";
-import Overrides from "#app/overrides";
+import { activeOverrides } from "#app/overrides";
 import type { ArenaTag } from "#arena-tags/arena-tag";
 import type { EntryHazardTag } from "#arena-tags/entry-hazard-tag";
 import { getArenaTag } from "#arena-tags/utils/get-arena-tag";
@@ -431,8 +431,8 @@ export class Arena {
     /**
      * TODO: Refactor into if(this.tryOverrideWeather()) { return true }
      */
-    if (Overrides.WEATHER_OVERRIDE) {
-      return this.tryOverrideWeather(Overrides.WEATHER_OVERRIDE);
+    if (activeOverrides.WEATHER_OVERRIDE) {
+      return this.tryOverrideWeather(activeOverrides.WEATHER_OVERRIDE);
     }
 
     if (!this.canSetWeather(newWeatherType)) {
@@ -443,8 +443,8 @@ export class Arena {
 
     let newWeatherDuration = DEFAULT_NEW_WEATHER_DURATION;
 
-    if (Overrides.NEW_WEATHER_DURATION_OVERRIDE >= 0) {
-      newWeatherDuration = Overrides.NEW_WEATHER_DURATION_OVERRIDE;
+    if (activeOverrides.NEW_WEATHER_DURATION_OVERRIDE >= 0) {
+      newWeatherDuration = activeOverrides.NEW_WEATHER_DURATION_OVERRIDE;
     } else if (!hasPokemonSource || PRIMAL_WEATHER_TYPES.includes(newWeatherType)) {
       newWeatherDuration = 0;
     }
@@ -521,8 +521,8 @@ export class Arena {
     /**
      * TODO: Refactor into if(this.tryOverrideTerrain()) { return true }
      */
-    if (Overrides.TERRAIN_OVERRIDE) {
-      return this.tryOverrideTerrain(Overrides.TERRAIN_OVERRIDE);
+    if (activeOverrides.TERRAIN_OVERRIDE) {
+      return this.tryOverrideTerrain(activeOverrides.TERRAIN_OVERRIDE);
     }
 
     if (this.terrain?.terrainType === (terrain || undefined)) {
@@ -533,8 +533,8 @@ export class Arena {
 
     let newTerrainDuration = DEFAULT_NEW_TERRAIN_DURATION;
 
-    if (Overrides.NEW_TERRAIN_DURATION_OVERRIDE >= 0) {
-      newTerrainDuration = Overrides.NEW_TERRAIN_DURATION_OVERRIDE;
+    if (activeOverrides.NEW_TERRAIN_DURATION_OVERRIDE >= 0) {
+      newTerrainDuration = activeOverrides.NEW_TERRAIN_DURATION_OVERRIDE;
     } else if (!hasPokemonSource) {
       newTerrainDuration = 0;
     }
@@ -619,10 +619,10 @@ export class Arena {
    * @returns A number `n` such that the probability of a trainer battle is `1/n`.
    * Returns `0` if the {@linkcode Biome} does not support trainers; this disables random trainer spawns.
    *
-   * Returns the value of {@linkcode Overrides.RANDOM_TRAINER_CHANCE_OVERRIDE} if it is set; this sets trainer spawn rates as above.
+   * Returns the value of {@linkcode activeOverrides.RANDOM_TRAINER_CHANCE_OVERRIDE} if it is set; this sets trainer spawn rates as above.
    */
   getTrainerChance(): number {
-    return Overrides.RANDOM_TRAINER_CHANCE_OVERRIDE ?? allBiomes.get(this.biomeId).trainerChance;
+    return activeOverrides.RANDOM_TRAINER_CHANCE_OVERRIDE ?? allBiomes.get(this.biomeId).trainerChance;
   }
 
   /**
@@ -700,7 +700,7 @@ export class Arena {
 
   // @todo these tints feel like they belong in their own class somewhere
   overrideTint(): [number, number, number] {
-    switch (Overrides.ARENA_TINT_OVERRIDE) {
+    switch (activeOverrides.ARENA_TINT_OVERRIDE) {
       case TimeOfDay.DUSK:
         return [98, 48, 73].map((c) => Math.round((c + 128) / 2)) as [number, number, number];
       case TimeOfDay.NIGHT:
@@ -713,7 +713,7 @@ export class Arena {
   }
 
   getDayTint(): [number, number, number] {
-    if (Overrides.ARENA_TINT_OVERRIDE !== null) {
+    if (activeOverrides.ARENA_TINT_OVERRIDE !== null) {
       return this.overrideTint();
     }
     switch (this.biomeId) {
@@ -725,7 +725,7 @@ export class Arena {
   }
 
   getDuskTint(): [number, number, number] {
-    if (Overrides.ARENA_TINT_OVERRIDE) {
+    if (activeOverrides.ARENA_TINT_OVERRIDE) {
       return this.overrideTint();
     }
     if (!this.isOutside()) {
@@ -739,7 +739,7 @@ export class Arena {
   }
 
   getNightTint(): [number, number, number] {
-    if (Overrides.ARENA_TINT_OVERRIDE) {
+    if (activeOverrides.ARENA_TINT_OVERRIDE) {
       return this.overrideTint();
     }
     switch (this.biomeId) {

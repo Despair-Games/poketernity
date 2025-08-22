@@ -15,6 +15,7 @@ import { ScrollBar } from "#ui/scroll-bar";
 import { ScrollableGridController } from "#ui/scrollable-grid-controller";
 import { addTextObject } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
+import { enumValueToKey } from "#utils/common-utils";
 import i18next from "i18next";
 
 const Page = {
@@ -80,7 +81,7 @@ export class AchievementsUiHandler extends MessageUiHandler {
 
     // We need to get the player gender from the game data to add the correct prefix to the achievement name
     const genderIndex = settings.display.playerGender ?? PlayerGender.MALE;
-    const genderStr = PlayerGender[genderIndex].toLowerCase();
+    const genderStr = enumValueToKey(PlayerGender, genderIndex).toLowerCase();
 
     this.achvsName = i18next.t("achv:Achievements.name", { context: genderStr });
     this.vouchersName = i18next.t("voucher:vouchers");

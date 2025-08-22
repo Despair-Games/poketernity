@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { logModifiers } from "#app/loggers";
 import { getPokemonNameWithAffix } from "#app/messages";
-import Overrides from "#app/overrides";
+import { activeOverrides } from "#app/overrides";
 import { PARTY_UI_NO_EFFECT_MSG_i18N_KEY } from "#constants/ui-constants";
 import { allMoves } from "#data/data-lists";
 import { getNatureName, getNatureStatMultiplier } from "#data/nature";
@@ -1872,15 +1872,15 @@ function getModifierTypeOptionWithRetry(
 
 /**
  * Replaces the {@linkcode ModifierType} of the entries within {@linkcode options} with any
- * {@linkcode ModifierOverride} entries listed in {@linkcode Overrides.ITEM_REWARD_OVERRIDE}
+ * {@linkcode ModifierOverride} entries listed in {@linkcode activeOverrides.ITEM_REWARD_OVERRIDE}
  * up to the smallest amount of entries between {@linkcode options} and the override array.
  * @param options Array of naturally rolled {@linkcode ModifierTypeOption}s
  * @param party Array of the player's current party
  */
 export function overridePlayerModifierTypeOptions(options: ModifierTypeOption[], party: PlayerPokemon[]) {
-  const minLength = Math.min(options.length, Overrides.ITEM_REWARD_OVERRIDE.length);
+  const minLength = Math.min(options.length, activeOverrides.ITEM_REWARD_OVERRIDE.length);
   for (let i = 0; i < minLength; i++) {
-    const override: ModifierOverride = Overrides.ITEM_REWARD_OVERRIDE[i];
+    const override: ModifierOverride = activeOverrides.ITEM_REWARD_OVERRIDE[i];
     const modifierFunc = modifierTypes[override.name];
     let modifierType: ModifierType | null = modifierFunc();
 

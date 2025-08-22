@@ -11,9 +11,37 @@ import type { AbilityId } from "#enums/ability-id";
 import type { BerryType } from "#enums/berry-type";
 import type { ElementalType } from "#enums/elemental-type";
 import type { Gender } from "#enums/gender";
+import type { SpeciesId } from "#enums/species-id";
 import type { StatusEffect } from "#enums/status-effect";
 import type { PokemonMove } from "#field/pokemon-move";
 import type { AttackMoveResult, TurnMove } from "#types/move-types";
+
+/**
+ * The type that {@linkcode PokemonSpeciesForm} is converted to when an object containing it serializes it.
+ */
+export type SerializedSpeciesForm = {
+  speciesId: SpeciesId;
+  formIndex: number;
+};
+
+export interface SerializedPokemonSummonData {
+  statStages: number[];
+  moveQueue: TurnMove[];
+  tags: BattlerTag[];
+  abilitySuppressed: boolean;
+  abilitiesApplied: AbilityId[];
+  speciesForm?: SerializedSpeciesForm;
+  ability: AbilityId;
+  passiveAbility: AbilityId;
+  gender?: Gender;
+  stats: number[];
+  moveset: PokemonMove[];
+  types: ElementalType[];
+  addedType?: ElementalType;
+  turnCount: number;
+  waveTurnCount: number; // temporary
+  moveHistory: TurnMove[];
+}
 
 /**
  * Data that resets whenever a Pokemon is switched out.
@@ -51,6 +79,14 @@ export interface PokemonSummonData {
   waveTurnCount: number;
   /** The list of moves the pokemon has used since entering the field */
   moveHistory: TurnMove[];
+  /**
+   * Serialize this `PokemonSummonData` to JSON, converting {@linkcode PokemonSpeciesForm}
+   * into simpler types instead of serializing all of their fields.
+   *
+   * @remarks
+   * `PokemonSpeciesForm` is converted into {@linkcode SerializedSpeciesForm} objects
+   */
+  toJSON(): SerializedPokemonSummonData;
 }
 
 export interface PokemonTurnData {

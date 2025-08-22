@@ -58,7 +58,7 @@ import { TitleUiHandler } from "#ui/title-ui-handler";
 import type { UiHandler } from "#ui/ui-handler";
 import { addWindow } from "#ui/ui-theme";
 import { UnavailableModalUiHandler } from "#ui/unavailable-modal-ui-handler";
-import { executeIf, isNil } from "#utils/common-utils";
+import { enumValueToKey, executeIf, isNil } from "#utils/common-utils";
 import i18next from "i18next";
 
 /** All modes that are part of the settings UI. */
@@ -534,7 +534,7 @@ export class UI extends Phaser.GameObjects.Container {
     let hasi18n = false;
     let text = keyOrText;
     const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
-    const genderStr = PlayerGender[genderIndex].toLowerCase();
+    const genderStr = enumValueToKey(PlayerGender, genderIndex).toLowerCase();
 
     if (i18next.exists(keyOrText)) {
       const i18nKey = keyOrText;

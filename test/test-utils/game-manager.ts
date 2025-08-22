@@ -7,7 +7,7 @@ import { updateUserInfo } from "#app/account";
 import { BattleScene } from "#app/battle-scene";
 import { getGameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
-import overrides from "#app/overrides";
+import { activeOverrides } from "#app/overrides";
 import type { TurnCommand } from "#app/turn-command-manager";
 import type { AbilityId } from "#enums/ability-id";
 import { BattleCommand } from "#enums/battle-command";
@@ -222,7 +222,7 @@ export class GameManager {
 
     await this.phaseInterceptor.to("EncounterPhase");
 
-    if (overrides.ENEMY_HELD_ITEMS_OVERRIDE.length === 0 && this.override.removeEnemyStartingItems) {
+    if (activeOverrides.ENEMY_HELD_ITEMS_OVERRIDE.length === 0 && this.override.removeEnemyStartingItems) {
       this.removeEnemyHeldItems();
     }
 
@@ -275,7 +275,7 @@ export class GameManager {
     }
 
     if (this.override.disableExpGain) {
-      vi.spyOn(overrides, "LEVEL_CAP_OVERRIDE", "get").mockReturnValue(1);
+      vi.spyOn(activeOverrides, "LEVEL_CAP_OVERRIDE", "get").mockReturnValue(1);
     }
   }
 

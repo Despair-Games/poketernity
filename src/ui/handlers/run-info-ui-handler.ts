@@ -206,7 +206,7 @@ export class RunInfoUiHandler extends UiHandler {
    */
   private async parseRunResult() {
     const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
-    const genderStr = PlayerGender[genderIndex];
+    const genderStr = enumValueToKey(PlayerGender, genderIndex).toLowerCase();
     const runResultTextStyle = this.isVictory ? TextStyle.RUN_HISTORY_VICTORY : TextStyle.RUN_HISTORY_DEFEAT;
     const runResultTitle = this.isVictory
       ? i18next.t("runHistory:victory")
@@ -932,7 +932,7 @@ export class RunInfoUiHandler extends UiHandler {
   private createHallofFame(): void {
     const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
     const isFemale = genderIndex === PlayerGender.FEMALE;
-    const genderStr = PlayerGender[genderIndex].toLowerCase();
+    const genderStr = enumValueToKey(PlayerGender, genderIndex).toLowerCase();
     this.hallofFameContainer = globalScene.add.container(0, 0);
     const overlayColor = isFemale ? "red" : "blue";
     const hallofFameBg = globalScene.add.image(-1, -1, "hall_of_fame_" + overlayColor);

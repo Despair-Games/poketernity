@@ -11,7 +11,7 @@ import { type GameMode, getGameMode } from "#app/game-mode";
 import { initGlobalScene } from "#app/global-scene";
 import { LoadingScene } from "#app/loading-scene";
 import { CallSourceLogger, logModifiers } from "#app/loggers";
-import Overrides from "#app/overrides";
+import { activeOverrides } from "#app/overrides";
 import type { Phase } from "#app/phase";
 import { PhaseManager } from "#app/phase-manager";
 import { SceneBase } from "#app/scene-base";
@@ -132,15 +132,7 @@ import { addTextObject } from "#ui/text-utils";
 import { UI } from "#ui/ui";
 import { setDocumentUiTheme, updateWindowStyle } from "#ui/ui-theme";
 import { loadCommonAnimAssets } from "#utils/anim-utils";
-import {
-  BooleanHolder,
-  enumValueToKey,
-  fixedNumber,
-  getTSEnumValues,
-  isBetween,
-  isNil,
-  NumberHolder,
-} from "#utils/common-utils";
+import { BooleanHolder, enumValueToKey, fixedNumber, isBetween, isNil, NumberHolder } from "#utils/common-utils";
 import { getModifierType } from "#utils/modifier-type-utils";
 import { loadMoveAnimAssets } from "#utils/move-anim-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
@@ -165,7 +157,7 @@ export interface InfoToggle {
 
 const DEBUG_RNG = false;
 
-const startingWave = Overrides.STARTING_WAVE_OVERRIDE || 1;
+const startingWave = activeOverrides.STARTING_WAVE_OVERRIDE || 1;
 
 //#endregion
 
@@ -918,25 +910,25 @@ export class BattleScene extends SceneBase {
       postProcess(pokemon);
     }
 
-    if (Overrides.IVS_OVERRIDE === null) {
+    if (activeOverrides.IVS_OVERRIDE === null) {
       // do nothing
-    } else if (Array.isArray(Overrides.IVS_OVERRIDE)) {
-      if (Overrides.IVS_OVERRIDE.length !== 6) {
+    } else if (Array.isArray(activeOverrides.IVS_OVERRIDE)) {
+      if (activeOverrides.IVS_OVERRIDE.length !== 6) {
         throw new Error("The Player IVs override must be an array of length 6 or a number!");
       }
-      if (Overrides.IVS_OVERRIDE.some((value) => !isBetween(value, IV_MIN, IV_MAX))) {
+      if (activeOverrides.IVS_OVERRIDE.some((value) => !isBetween(value, IV_MIN, IV_MAX))) {
         throw new Error(`All IVs in the player IV override must be between ${IV_MIN} and ${IV_MAX}!`);
       }
-      pokemon.ivs = Overrides.IVS_OVERRIDE;
+      pokemon.ivs = activeOverrides.IVS_OVERRIDE;
     } else {
-      if (!isBetween(Overrides.IVS_OVERRIDE, IV_MIN, IV_MAX)) {
+      if (!isBetween(activeOverrides.IVS_OVERRIDE, IV_MIN, IV_MAX)) {
         throw new Error(`The Player IV override must be a value between ${IV_MIN} and ${IV_MAX}!`);
       }
-      pokemon.ivs = new Array(6).fill(Overrides.IVS_OVERRIDE);
+      pokemon.ivs = new Array(6).fill(activeOverrides.IVS_OVERRIDE);
     }
 
-    if (Overrides.NATURE_OVERRIDE !== null) {
-      pokemon.nature = Overrides.NATURE_OVERRIDE;
+    if (activeOverrides.NATURE_OVERRIDE !== null) {
+      pokemon.nature = activeOverrides.NATURE_OVERRIDE;
     }
 
     pokemon.init();
@@ -952,11 +944,11 @@ export class BattleScene extends SceneBase {
     dataSource?: PokemonData,
     postProcess?: (enemyPokemon: EnemyPokemon) => void,
   ): EnemyPokemon {
-    if (Overrides.ENEMY_LEVEL_OVERRIDE > 0) {
-      level = Overrides.ENEMY_LEVEL_OVERRIDE;
+    if (activeOverrides.ENEMY_LEVEL_OVERRIDE > 0) {
+      level = activeOverrides.ENEMY_LEVEL_OVERRIDE;
     }
-    if (Overrides.ENEMY_SPECIES_OVERRIDE) {
-      species = getPokemonSpecies(Overrides.ENEMY_SPECIES_OVERRIDE);
+    if (activeOverrides.ENEMY_SPECIES_OVERRIDE) {
+      species = getPokemonSpecies(activeOverrides.ENEMY_SPECIES_OVERRIDE);
 
       // The fact that a Pokemon is a boss or not can change based on its Species and level
       boss = this.getEncounterBossSegments(this.currentBattle.waveIndex, level, species) > 1;
@@ -990,25 +982,25 @@ export class BattleScene extends SceneBase {
       postProcess(pokemon);
     }
 
-    if (Overrides.ENEMY_IVS_OVERRIDE === null) {
+    if (activeOverrides.ENEMY_IVS_OVERRIDE === null) {
       // do nothing
-    } else if (Array.isArray(Overrides.ENEMY_IVS_OVERRIDE)) {
-      if (Overrides.ENEMY_IVS_OVERRIDE.length !== 6) {
+    } else if (Array.isArray(activeOverrides.ENEMY_IVS_OVERRIDE)) {
+      if (activeOverrides.ENEMY_IVS_OVERRIDE.length !== 6) {
         throw new Error("The Enemy IVs override must be an array of length 6 or a number!");
       }
-      if (Overrides.ENEMY_IVS_OVERRIDE.some((value) => !isBetween(value, IV_MIN, IV_MAX))) {
+      if (activeOverrides.ENEMY_IVS_OVERRIDE.some((value) => !isBetween(value, IV_MIN, IV_MAX))) {
         throw new Error(`All IVs in the enemy IV override must be between ${IV_MIN} and ${IV_MAX}!`);
       }
-      pokemon.ivs = Overrides.ENEMY_IVS_OVERRIDE;
+      pokemon.ivs = activeOverrides.ENEMY_IVS_OVERRIDE;
     } else {
-      if (!isBetween(Overrides.ENEMY_IVS_OVERRIDE, IV_MIN, IV_MAX)) {
+      if (!isBetween(activeOverrides.ENEMY_IVS_OVERRIDE, IV_MIN, IV_MAX)) {
         throw new Error(`The Enemy IV override must be a value between ${IV_MIN} and ${IV_MAX}!`);
       }
-      pokemon.ivs = new Array(6).fill(Overrides.ENEMY_IVS_OVERRIDE);
+      pokemon.ivs = new Array(6).fill(activeOverrides.ENEMY_IVS_OVERRIDE);
     }
 
-    if (Overrides.ENEMY_NATURE_OVERRIDE !== null) {
-      pokemon.nature = Overrides.ENEMY_NATURE_OVERRIDE;
+    if (activeOverrides.ENEMY_NATURE_OVERRIDE !== null) {
+      pokemon.nature = activeOverrides.ENEMY_NATURE_OVERRIDE;
     }
 
     pokemon.init();
@@ -1110,13 +1102,13 @@ export class BattleScene extends SceneBase {
     this.lockModifierTiers = false;
 
     this.pokeballCounts = Object.fromEntries(
-      getTSEnumValues(PokeballType)
+      Object.values(PokeballType)
         .filter((p) => p <= PokeballType.MASTER_BALL)
         .map((t) => [t, 0]),
     );
     this.pokeballCounts[PokeballType.POKEBALL] += 5;
-    if (Overrides.POKEBALL_OVERRIDE.active) {
-      this.pokeballCounts = Overrides.POKEBALL_OVERRIDE.pokeballs;
+    if (activeOverrides.POKEBALL_OVERRIDE.active) {
+      this.pokeballCounts = activeOverrides.POKEBALL_OVERRIDE.pokeballs;
     }
 
     this.modifiers = [];
@@ -1142,7 +1134,7 @@ export class BattleScene extends SceneBase {
 
     // Reset RNG after end of game or save & quit.
     // This needs to happen after clearing this.currentBattle or the seed will be affected by the last wave played
-    this.setSeed(Overrides.SEED_OVERRIDE || randomString(24));
+    this.setSeed(activeOverrides.SEED_OVERRIDE || randomString(24));
     console.log("Seed:", this.seed);
     this.resetSeed();
 
@@ -1157,7 +1149,7 @@ export class BattleScene extends SceneBase {
 
     [this.luckLabelText, this.luckText].map((t) => t.setVisible(false));
 
-    this.newArena(Overrides.STARTING_BIOME_OVERRIDE || BiomeId.TOWN);
+    this.newArena(activeOverrides.STARTING_BIOME_OVERRIDE || BiomeId.TOWN);
 
     this.field.setVisible(true);
 
@@ -1225,7 +1217,7 @@ export class BattleScene extends SceneBase {
     double?: boolean,
     mysteryEncounterType?: MysteryEncounterType,
   ): Battle {
-    const _startingWave = Overrides.STARTING_WAVE_OVERRIDE || startingWave;
+    const _startingWave = activeOverrides.STARTING_WAVE_OVERRIDE || startingWave;
     const newWaveIndex = waveIndex || (this.currentBattle?.waveIndex || _startingWave - 1) + 1;
     let newDouble: boolean | undefined;
     let newBattleType: BattleType;
@@ -1258,7 +1250,7 @@ export class BattleScene extends SceneBase {
       }
 
       if (newBattleType === BattleType.TRAINER) {
-        const trainerType = Overrides.TRAINER_TYPE_OVERRIDE ?? this.arena.randomTrainerType(newWaveIndex);
+        const trainerType = activeOverrides.TRAINER_TYPE_OVERRIDE ?? this.arena.randomTrainerType(newWaveIndex);
         let doubleTrainer = false;
         if (allTrainerConfigs[trainerType].doubleOnly) {
           doubleTrainer = true;
@@ -1305,10 +1297,10 @@ export class BattleScene extends SceneBase {
       newDouble = false;
     }
 
-    if (!isNil(Overrides.BATTLE_TYPE_OVERRIDE)) {
+    if (!isNil(activeOverrides.BATTLE_TYPE_OVERRIDE)) {
       let doubleOverrideForWave: "single" | "double" | null = null;
 
-      switch (Overrides.BATTLE_TYPE_OVERRIDE) {
+      switch (activeOverrides.BATTLE_TYPE_OVERRIDE) {
         case "double":
           doubleOverrideForWave = "double";
           break;
@@ -1618,10 +1610,10 @@ export class BattleScene extends SceneBase {
     species?: PokemonSpecies,
     forceBoss: boolean = false,
   ): number {
-    if (Overrides.ENEMY_HEALTH_SEGMENTS_OVERRIDE > 1) {
-      return Overrides.ENEMY_HEALTH_SEGMENTS_OVERRIDE;
+    if (activeOverrides.ENEMY_HEALTH_SEGMENTS_OVERRIDE > 1) {
+      return activeOverrides.ENEMY_HEALTH_SEGMENTS_OVERRIDE;
     }
-    if (Overrides.ENEMY_HEALTH_SEGMENTS_OVERRIDE === 1) {
+    if (activeOverrides.ENEMY_HEALTH_SEGMENTS_OVERRIDE === 1) {
       // The rest of the code expects to be returned 0 and not 1 if the enemy is not a boss
       return 0;
     }
@@ -1969,10 +1961,10 @@ export class BattleScene extends SceneBase {
    * @returns the level cap
    */
   getMaxExpLevel(ignoreLevelCap: boolean = false): number {
-    if (Overrides.LEVEL_CAP_OVERRIDE > 0) {
-      return Overrides.LEVEL_CAP_OVERRIDE;
+    if (activeOverrides.LEVEL_CAP_OVERRIDE > 0) {
+      return activeOverrides.LEVEL_CAP_OVERRIDE;
     }
-    if (ignoreLevelCap || Overrides.LEVEL_CAP_OVERRIDE < 0) {
+    if (ignoreLevelCap || activeOverrides.LEVEL_CAP_OVERRIDE < 0) {
       return Number.MAX_SAFE_INTEGER;
     }
 
@@ -2622,7 +2614,7 @@ export class BattleScene extends SceneBase {
 
   validateAchv(achv: Achievement, ...args: unknown[]): boolean {
     if (
-      (!Object.hasOwn(this.gameData.achvUnlocks, achv.id) || Overrides.ACHIEVEMENTS_REUNLOCK_OVERRIDE)
+      (!Object.hasOwn(this.gameData.achvUnlocks, achv.id) || activeOverrides.ACHIEVEMENTS_REUNLOCK_OVERRIDE)
       && achv.validate(...args)
     ) {
       this.gameData.achvUnlocks[achv.id] = Date.now();
@@ -2798,8 +2790,8 @@ export class BattleScene extends SceneBase {
         if (partyMember.pokerus) {
           expMultiplier *= 1.5;
         }
-        if (Overrides.XP_MULTIPLIER_OVERRIDE !== null) {
-          expMultiplier = Overrides.XP_MULTIPLIER_OVERRIDE;
+        if (activeOverrides.XP_MULTIPLIER_OVERRIDE !== null) {
+          expMultiplier = activeOverrides.XP_MULTIPLIER_OVERRIDE;
         }
         const pokemonExp = new NumberHolder(expValue * expMultiplier);
         this.applyModifiers(PokemonExpBoosterModifier, true, partyMember, pokemonExp);
@@ -2932,15 +2924,15 @@ export class BattleScene extends SceneBase {
         sessionEncounterRate
         + Math.min(currentRunDiffFromAvg * ME_ANTI_VARIANCE_WEIGHT_MODIFIER, ME_MAX_SPAWN_WEIGHT / 2);
 
-      const successRate = isNil(Overrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE)
+      const successRate = isNil(activeOverrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE)
         ? favoredEncounterRate
-        : Overrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE!;
+        : activeOverrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE!;
 
       // If the most recent ME was 3 or fewer waves ago, can never spawn a ME
       const canSpawn =
         encounteredEvents.length === 0
         || waveIndex - encounteredEvents[encounteredEvents.length - 1].waveIndex > 3
-        || !isNil(Overrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE);
+        || !isNil(activeOverrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE);
 
       if (canSpawn) {
         let roll = ME_MAX_SPAWN_WEIGHT;
@@ -2968,10 +2960,10 @@ export class BattleScene extends SceneBase {
     // Loading override or session encounter
     let encounter: MysteryEncounter | null;
     if (
-      !isNil(Overrides.MYSTERY_ENCOUNTER_OVERRIDE)
-      && Object.hasOwn(allMysteryEncounters, Overrides.MYSTERY_ENCOUNTER_OVERRIDE)
+      !isNil(activeOverrides.MYSTERY_ENCOUNTER_OVERRIDE)
+      && Object.hasOwn(allMysteryEncounters, activeOverrides.MYSTERY_ENCOUNTER_OVERRIDE)
     ) {
-      encounter = allMysteryEncounters[Overrides.MYSTERY_ENCOUNTER_OVERRIDE];
+      encounter = allMysteryEncounters[activeOverrides.MYSTERY_ENCOUNTER_OVERRIDE];
       if (canBypass) {
         return encounter;
       }
@@ -3012,7 +3004,7 @@ export class BattleScene extends SceneBase {
       MysteryEncounterTier.GREAT,
       MysteryEncounterTier.ULTRA,
       MysteryEncounterTier.EPIC,
-    ];
+    ] as number[];
 
     // Adjust tier weights by previously encountered events to lower odds of only Common/Great in run
     this.mysteryEncounterSaveData.encounteredEvents.forEach((seenEncounterData) => {
@@ -3037,8 +3029,8 @@ export class BattleScene extends SceneBase {
             ? MysteryEncounterTier.ULTRA
             : MysteryEncounterTier.EPIC;
 
-    if (!isNil(Overrides.MYSTERY_ENCOUNTER_TIER_OVERRIDE)) {
-      tier = Overrides.MYSTERY_ENCOUNTER_TIER_OVERRIDE;
+    if (!isNil(activeOverrides.MYSTERY_ENCOUNTER_TIER_OVERRIDE)) {
+      tier = activeOverrides.MYSTERY_ENCOUNTER_TIER_OVERRIDE;
     }
 
     let availableEncounters: MysteryEncounter[] = [];
@@ -3051,8 +3043,8 @@ export class BattleScene extends SceneBase {
     // If no valid encounters exist at tier, checks next tier down, continuing until there are some encounters available
     while (availableEncounters.length === 0 && tier !== null) {
       availableEncounters = biomeMysteryEncounters
-        .filter((encounterType) => {
-          const encounterCandidate = allMysteryEncounters[encounterType];
+        .filter((encType) => {
+          const encounterCandidate = allMysteryEncounters[encType];
           if (!encounterCandidate) {
             return false;
           }
@@ -3080,14 +3072,14 @@ export class BattleScene extends SceneBase {
           if (!encounterCandidate.meetsRequirements()) {
             return false;
           }
-          if (previousEncounter !== null && encounterType === previousEncounter) {
+          if (previousEncounter !== null && encType === previousEncounter) {
             return false;
           }
           if (
             this.mysteryEncounterSaveData.encounteredEvents.length > 0
             && encounterCandidate.maxAllowedEncounters
             && encounterCandidate.maxAllowedEncounters > 0
-            && this.mysteryEncounterSaveData.encounteredEvents.filter((e) => e.type === encounterType).length
+            && this.mysteryEncounterSaveData.encounteredEvents.filter((e) => e.type === encType).length
               >= encounterCandidate.maxAllowedEncounters
           ) {
             return false;

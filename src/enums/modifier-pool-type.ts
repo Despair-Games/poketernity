@@ -1,3 +1,4 @@
+// not converted pending item refactor
 export enum ModifierPoolType {
   PLAYER,
   WILD,

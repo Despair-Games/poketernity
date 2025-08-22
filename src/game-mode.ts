@@ -1,7 +1,7 @@
 import type { FixedBattleConfigs } from "#app/battle";
 import { classicFixedBattles, FixedBattleConfig } from "#app/battle";
 import { globalScene } from "#app/global-scene";
-import Overrides from "#app/overrides";
+import { activeOverrides } from "#app/overrides";
 import { DEFAULT_STARTING_MONEY } from "#constants/game-constants";
 import {
   CHALLENGE_MODE_MYSTERY_ENCOUNTER_WAVES,
@@ -84,8 +84,8 @@ export class GameMode implements GameModeConfig {
    * - 5 for all other modes
    */
   getStartingLevel(): number {
-    if (Overrides.STARTING_LEVEL_OVERRIDE) {
-      return Overrides.STARTING_LEVEL_OVERRIDE;
+    if (activeOverrides.STARTING_LEVEL_OVERRIDE) {
+      return activeOverrides.STARTING_LEVEL_OVERRIDE;
     }
     switch (this.modeId) {
       case GameModes.DAILY:
@@ -101,7 +101,7 @@ export class GameMode implements GameModeConfig {
    * - 1000
    */
   getStartingMoney(): number {
-    return Overrides.STARTING_MONEY_OVERRIDE || DEFAULT_STARTING_MONEY;
+    return activeOverrides.STARTING_MONEY_OVERRIDE || DEFAULT_STARTING_MONEY;
   }
 
   /**
@@ -115,7 +115,7 @@ export class GameMode implements GameModeConfig {
       case GameModes.DAILY:
         return globalScene.generateRandomBiome(this.getWaveForDifficulty(1));
       default:
-        return Overrides.STARTING_BIOME_OVERRIDE || BiomeId.TOWN;
+        return activeOverrides.STARTING_BIOME_OVERRIDE || BiomeId.TOWN;
     }
   }
 

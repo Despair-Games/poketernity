@@ -42,7 +42,7 @@ import type { UserFieldStatusEffectImmunityAbAttr } from "#abilities/user-field-
 import type { WeightMultiplierAbAttr } from "#abilities/weight-multiplier-ab-attr";
 import type { AnySound } from "#app/audio-manager";
 import { globalScene } from "#app/global-scene";
-import Overrides from "#app/overrides";
+import { activeOverrides } from "#app/overrides";
 import { timedEventManager } from "#app/timed-event-manager";
 import type { IonDelugeTag } from "#arena-tags/ion-deluge-tag";
 import type { WeakenMoveScreenTag } from "#arena-tags/weaken-move-screen-tag";
@@ -196,10 +196,11 @@ import {
   isNil,
   NumberHolder,
   toDmgValue,
+  ValueHolder,
 } from "#utils/common-utils";
 import { loadMoveAnimAssets } from "#utils/move-anim-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
-import { getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
+import { getPokemonSpecies, getPokemonSpeciesForm, summonDataToJSON } from "#utils/pokemon-utils";
 import { randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
 
@@ -434,11 +435,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * - Shedinja is always Bug
    */
   public get teraType(): ElementalType {
-    if (this.isPlayer() && Overrides.TERA_TYPE_OVERRIDE !== ElementalType.UNKNOWN) {
-      return Overrides.TERA_TYPE_OVERRIDE;
+    if (this.isPlayer() && activeOverrides.TERA_TYPE_OVERRIDE !== ElementalType.UNKNOWN) {
+      return activeOverrides.TERA_TYPE_OVERRIDE;
     }
-    if (this.isEnemy() && Overrides.ENEMY_TERA_TYPE_OVERRIDE !== ElementalType.UNKNOWN) {
-      return Overrides.ENEMY_TERA_TYPE_OVERRIDE;
+    if (this.isEnemy() && activeOverrides.ENEMY_TERA_TYPE_OVERRIDE !== ElementalType.UNKNOWN) {
+      return activeOverrides.ENEMY_TERA_TYPE_OVERRIDE;
     }
 
     switch (this.species.speciesId) {
@@ -1400,8 +1401,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     // Overrides moveset based on arrays specified in overrides.ts
     let overrideArray: MoveId | MoveId[] = this.isPlayer()
-      ? Overrides.MOVESET_OVERRIDE
-      : Overrides.ENEMY_MOVESET_OVERRIDE;
+      ? activeOverrides.MOVESET_OVERRIDE
+      : activeOverrides.ENEMY_MOVESET_OVERRIDE;
 
     overrideArray = coerceArray(overrideArray);
     if (overrideArray.length === 0) {
@@ -1625,11 +1626,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (!bypassSummonData && this.summonData.ability) {
       return allAbilities[this.summonData.ability];
     }
-    if (Overrides.ABILITY_OVERRIDE && this.isPlayer()) {
-      return allAbilities[Overrides.ABILITY_OVERRIDE];
+    if (activeOverrides.ABILITY_OVERRIDE && this.isPlayer()) {
+      return allAbilities[activeOverrides.ABILITY_OVERRIDE];
     }
-    if (Overrides.ENEMY_ABILITY_OVERRIDE && !this.isPlayer()) {
-      return allAbilities[Overrides.ENEMY_ABILITY_OVERRIDE];
+    if (activeOverrides.ENEMY_ABILITY_OVERRIDE && !this.isPlayer()) {
+      return allAbilities[activeOverrides.ENEMY_ABILITY_OVERRIDE];
     }
     if (!isNil(this.customPokemonData.ability) && this.customPokemonData.ability !== -1) {
       return allAbilities[this.customPokemonData.ability];
@@ -1649,11 +1650,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns The passive {@linkcode Ability} of the pokemon
    */
   public getPassiveAbility(): Ability {
-    if (Overrides.PASSIVE_ABILITY_OVERRIDE && this.isPlayer()) {
-      return allAbilities[Overrides.PASSIVE_ABILITY_OVERRIDE];
+    if (activeOverrides.PASSIVE_ABILITY_OVERRIDE && this.isPlayer()) {
+      return allAbilities[activeOverrides.PASSIVE_ABILITY_OVERRIDE];
     }
-    if (Overrides.ENEMY_PASSIVE_ABILITY_OVERRIDE && !this.isPlayer()) {
-      return allAbilities[Overrides.ENEMY_PASSIVE_ABILITY_OVERRIDE];
+    if (activeOverrides.ENEMY_PASSIVE_ABILITY_OVERRIDE && !this.isPlayer()) {
+      return allAbilities[activeOverrides.ENEMY_PASSIVE_ABILITY_OVERRIDE];
     }
     if (!isNil(this.customPokemonData.passive) && this.customPokemonData.passive !== -1) {
       return allAbilities[this.customPokemonData.passive];
@@ -1735,8 +1736,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public hasPassive(): boolean {
     // returns override if valid for current case
     if (
-      (Overrides.PASSIVE_ABILITY_OVERRIDE !== AbilityId.NONE && this.isPlayer())
-      || (Overrides.ENEMY_PASSIVE_ABILITY_OVERRIDE !== AbilityId.NONE && !this.isPlayer())
+      (activeOverrides.PASSIVE_ABILITY_OVERRIDE !== AbilityId.NONE && this.isPlayer())
+      || (activeOverrides.ENEMY_PASSIVE_ABILITY_OVERRIDE !== AbilityId.NONE && !this.isPlayer())
     ) {
       return true;
     }
@@ -1951,7 +1952,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns The given move's final category when used against the target
    */
   public getMoveCategory(target: Pokemon, move: Move): MoveCategory {
-    const moveCategory = new NumberHolder(move.category);
+    const moveCategory = new ValueHolder(move.category);
     applyMoveAttrs(VariableMoveCategoryAttr, this, target, move, moveCategory);
     return moveCategory.value;
   }
@@ -3388,7 +3389,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   getCriticalHitResult(source: Pokemon, move: Move, simulated: boolean = true): boolean {
     const defendingSide = this.getArenaTagSide();
     const noCritTag = globalScene.arena.hasTag(ArenaTagType.NO_CRIT, defendingSide);
-    if (noCritTag || Overrides.NEVER_CRIT_OVERRIDE || move.hasAttr(FixedDamageAttr)) {
+    if (noCritTag || activeOverrides.NEVER_CRIT_OVERRIDE || move.hasAttr(FixedDamageAttr)) {
       return false;
     }
 
@@ -4226,11 +4227,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         this.status.toxicTurnCount++;
         break;
       case StatusEffect.SLEEP:
-        if (Overrides.STATUS_ACTIVATION_OVERRIDE === true) {
+        if (activeOverrides.STATUS_ACTIVATION_OVERRIDE === true) {
           this.status.sleepTurnsRemaining = Math.max(this.status.sleepTurnsRemaining, 1);
           break;
         }
-        if (Overrides.STATUS_ACTIVATION_OVERRIDE === false) {
+        if (activeOverrides.STATUS_ACTIVATION_OVERRIDE === false) {
           this.status.sleepTurnsRemaining = 0;
           break;
         }
@@ -4315,6 +4316,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       turnCount: 0,
       waveTurnCount: 0,
       moveHistory: [],
+      toJSON: summonDataToJSON,
     };
     this.setSwitchOutStatus(false);
     if (globalScene) {

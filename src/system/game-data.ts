@@ -2,7 +2,7 @@ import { api } from "#api/api";
 import { clientSessionId, getLocalStorageKey, loggedInUser, updateUserInfo } from "#app/account";
 import { getGameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
-import Overrides from "#app/overrides";
+import { activeOverrides } from "#app/overrides";
 import { EntryHazardTag } from "#arena-tags/entry-hazard-tag";
 import {
   APP_ABBREVIATION,
@@ -226,7 +226,7 @@ export class GameData {
    * @returns `true` if the player has unlocked this `Unlockable` or an override has enabled it
    */
   public isUnlocked(unlockable: Unlockables): boolean {
-    if (Overrides.ITEM_UNLOCK_OVERRIDE.includes(unlockable)) {
+    if (activeOverrides.ITEM_UNLOCK_OVERRIDE.includes(unlockable)) {
       return true;
     }
     return this.unlocks[unlockable];
@@ -714,7 +714,7 @@ export class GameData {
   public getSessionSaveData(): SessionSaveData {
     return {
       seed: globalScene.seed,
-      playTime: globalScene.sessionPlayTime,
+      playTime: globalScene.sessionPlayTime ?? 0,
       gameMode: globalScene.gameMode.modeId,
       party: globalScene.getPlayerParty().map((p) => new PokemonData(p)),
       enemyParty: globalScene.getEnemyParty().map((p) => new PokemonData(p)),
@@ -736,10 +736,11 @@ export class GameData {
       mysteryEncounterType: globalScene.currentBattle.mysteryEncounter?.encounterType ?? -1,
       mysteryEncounterSaveData: globalScene.mysteryEncounterSaveData,
       playerTerasUsed: globalScene.playerTerasUsed,
-    } as SessionSaveData;
+    };
   }
 
   getSession(slotId: number): Promise<SessionSaveData | null> {
+    // biome-ignore lint/suspicious/noAsyncPromiseExecutor: There's an `await` in this. TODO: can this be fixed?
     return new Promise(async (resolve, reject) => {
       if (slotId < 0) {
         return resolve(null);
@@ -776,7 +777,7 @@ export class GameData {
   }
 
   loadSession(slotId: number, sessionData?: SessionSaveData): Promise<boolean> {
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
       try {
         const initSessionFromData = async (sessionData: SessionSaveData) => {
           globalScene.gameMode = getGameMode(sessionData.gameMode || GameModes.CLASSIC);
@@ -807,8 +808,8 @@ export class GameData {
           Object.keys(globalScene.pokeballCounts).forEach((key: string) => {
             globalScene.pokeballCounts[key] = sessionData.pokeballCounts[key] || 0;
           });
-          if (Overrides.POKEBALL_OVERRIDE.active) {
-            globalScene.pokeballCounts = Overrides.POKEBALL_OVERRIDE.pokeballs;
+          if (activeOverrides.POKEBALL_OVERRIDE.active) {
+            globalScene.pokeballCounts = activeOverrides.POKEBALL_OVERRIDE.pokeballs;
           }
 
           globalScene.money = Math.floor(sessionData.money || 0);
@@ -1148,7 +1149,8 @@ export class GameData {
           ),
         );
 
-        localStorage.setItem(sessionStorageKey, encrypt(JSON.stringify(sessionData), BYPASS_LOGIN));
+        const sessionDataJSON = JSON.stringify(sessionData);
+        localStorage.setItem(sessionStorageKey, encrypt(sessionDataJSON, BYPASS_LOGIN));
 
         console.debug("Session data saved");
 
