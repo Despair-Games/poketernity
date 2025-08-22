@@ -13,7 +13,7 @@ import i18next from "i18next";
 export class LightScreenTag extends WeakenMoveScreenTag {
   public override readonly tagType = ArenaTagType.LIGHT_SCREEN;
 
-  protected override get weakenedCategories(): [MoveCategory.SPECIAL] {
+  protected override get weakenedCategories(): [typeof MoveCategory.SPECIAL] {
     return [MoveCategory.SPECIAL];
   }
 

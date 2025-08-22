@@ -13,7 +13,7 @@ import i18next from "i18next";
 export class AuroraVeilTag extends WeakenMoveScreenTag {
   public override readonly tagType = ArenaTagType.AURORA_VEIL;
 
-  protected get weakenedCategories(): [MoveCategory.PHYSICAL, MoveCategory.SPECIAL] {
+  protected get weakenedCategories(): [typeof MoveCategory.PHYSICAL, typeof MoveCategory.SPECIAL] {
     return [MoveCategory.PHYSICAL, MoveCategory.SPECIAL];
   }
 

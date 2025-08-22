@@ -13,7 +13,7 @@ import i18next from "i18next";
 export class ReflectTag extends WeakenMoveScreenTag {
   public override readonly tagType = ArenaTagType.REFLECT;
 
-  protected override get weakenedCategories(): [MoveCategory.PHYSICAL] {
+  protected override get weakenedCategories(): [typeof MoveCategory.PHYSICAL] {
     return [MoveCategory.PHYSICAL];
   }
 
