@@ -196,6 +196,7 @@ import {
   isNil,
   NumberHolder,
   toDmgValue,
+  ValueHolder,
 } from "#utils/common-utils";
 import { loadMoveAnimAssets } from "#utils/move-anim-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
@@ -1951,7 +1952,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns The given move's final category when used against the target
    */
   public getMoveCategory(target: Pokemon, move: Move): MoveCategory {
-    const moveCategory = new NumberHolder(move.category);
+    const moveCategory = new ValueHolder(move.category);
     applyMoveAttrs(VariableMoveCategoryAttr, this, target, move, moveCategory);
     return moveCategory.value;
   }

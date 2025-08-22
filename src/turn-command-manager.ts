@@ -14,6 +14,7 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleCommand } from "#enums/battle-command";
 import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import type { PokeballType } from "#enums/pokeball-type";
 import { Stat } from "#enums/stat";
 import { SwitchType } from "#enums/switch-type";
 import type { Pokemon } from "#field/pokemon";
@@ -457,7 +458,7 @@ export class TurnCommandManager {
 
     phaseManager.appendToPhase(
       "PostActionPhase",
-      phaseManager.createPhase("AttemptCapturePhase", targets[0] % 2, cursor),
+      phaseManager.createPhase("AttemptCapturePhase", targets[0] % 2, cursor as PokeballType),
       phaseManager.createPhase("PostActionPhase", pokemon.getBattlerIndex()),
     );
 

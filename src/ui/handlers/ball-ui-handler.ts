@@ -3,6 +3,7 @@ import { GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
 import { getPokeballName } from "#data/pokeball";
 import { BattleCommand } from "#enums/battle-command";
 import { Button } from "#enums/button";
+import type { PokeballType } from "#enums/pokeball-type";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import type { CommandPhase } from "#phases/command-phase";
@@ -34,7 +35,7 @@ export class BallUiHandler extends UiHandler {
     const pokeballTypeCount = Object.keys(globalScene.pokeballCounts).length;
 
     for (let pb = 0; pb < pokeballTypeCount; pb++) {
-      optionsTextContent += `${getPokeballName(pb)}\n`;
+      optionsTextContent += `${getPokeballName(pb as PokeballType)}\n`;
     }
     optionsTextContent += "Cancel";
     const optionsText = addTextObject(0, 0, optionsTextContent, TextStyle.WINDOW, { align: "right", maxLines: 6 });

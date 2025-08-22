@@ -87,7 +87,7 @@ describe("All Moves", async () => {
 
       expect(pktyMove.pp, `PP of "${pktyMove.name}" should be "${move.pp}" but is "${pktyMove.pp}"`).toBe(move.pp);
 
-      const categoryCompareMessage = `Move category of "${pktyMove.name}" should be "${MoveCategory[move.damage_class_id]}" but is "${MoveCategory[pktyMove.category]}"`;
+      const categoryCompareMessage = `Move category of "${pktyMove.name}" should be "${enumValueToKey(MoveCategory, move.damage_class_id)}" but is "${enumValueToKey(MoveCategory, pktyMove.category)}"`;
       expect(pktyMove.category, categoryCompareMessage).toBe(move.damage_class_id);
 
       const chanceCompareMessage = `Chance of "${pktyMove.name}" should be "${move.effect_chance}" but is "${pktyMove.chance}"`;
@@ -98,7 +98,7 @@ describe("All Moves", async () => {
           // @ts-expect-error - `hasFlag()` is private but we need to check for the existence of the flag
           const actualHasFlag = pktyMove.hasFlag(flagsToCheck[f]);
           const expectedHasFlag = move.flags.includes(Number(f));
-          const errOutput = `Expected flag "${MoveFlags[flagsToCheck[f]]}" of "${pktyMove.name}" to be "${expectedHasFlag}" but got "${actualHasFlag}"!`;
+          const errOutput = `Expected flag "${enumValueToKey(MoveFlags, flagsToCheck[f])}" of "${pktyMove.name}" to be "${expectedHasFlag}" but got "${actualHasFlag}"!`;
           expect(actualHasFlag, errOutput).toBe(expectedHasFlag);
         }
       }

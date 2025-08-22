@@ -44,6 +44,7 @@ import { achvs } from "#system/achievements";
 import { settings } from "#system/settings-manager";
 import type { PhaseKey } from "#types/phase-types";
 import { loadEncounterAnimAssets } from "#utils/anim-utils";
+import { enumValueToKey } from "#utils/common-utils";
 import { randSeedInt, randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
@@ -654,7 +655,7 @@ export class EncounterPhase extends BattlePhase {
               : "";
           const cycleCount = count.toLocaleString() + ordinalUsed;
           const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
-          const genderStr = PlayerGender[genderIndex].toLowerCase();
+          const genderStr = enumValueToKey(PlayerGender, genderIndex).toLowerCase();
           const encounterDialogue = i18next.t(localizationKey, { context: genderStr, cycleCount: cycleCount });
           if (!gameData.getSeenDialogues()[localizationKey]) {
             gameData.saveSeenDialogue(localizationKey);

@@ -38,7 +38,7 @@ export class SettingsHelper extends GameManagerHelper {
    */
   playerGender(gender: PlayerGender) {
     settings.update("display", "playerGender", gender);
-    this.log(`Gender set to: ${PlayerGender[gender]} (=${gender})`);
+    this.log(`Gender set to: ${enumValueToKey(PlayerGender, gender)} (=${gender})`);
   }
 
   /**
