@@ -55,7 +55,7 @@ import { VariablePowerAttr } from "#moves/variable-power-attr";
 import { VariableTargetAttr } from "#moves/variable-target-attr";
 import type { MoveConditionFunc } from "#types/move-types";
 import type { AbstractConstructor, Constructor, nil } from "#types/utility-types";
-import { BooleanHolder, NumberHolder } from "#utils/common-utils";
+import { BooleanHolder, isNil, NumberHolder } from "#utils/common-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
 import { toCamelCaseString } from "#utils/string-utils";
 import i18next from "i18next";
@@ -823,27 +823,37 @@ export abstract class Move {
     isFail: boolean,
   ): number {
     if (target === user.getAlly()) {
+      /*
+       * Attacks (other than Pollen Puff) are always penalized against allies
+       * TODO:
+       * - Reduce this penalty for multi-target moves
+       * - Use attribute flags instead of specific move IDs for more flexibility
+       */
+      if (this.id !== MoveId.POLLEN_PUFF && !this.isStatusMove()) {
+        return ALLY_TARGET_PENALTY;
+      }
+
       /**
        * ALLY TARGET PENALTY:
        *
        * If the user is the target's ally, a {@link ALLY_TARGET_PENALTY | massive score penalty} is applied
        * unless the move has at least one attribute that overrides the penalty.
-       * In that case, the total score is the sum of effect scores from those
+       * In that case, the total score is the sum of {@link MoveAttr.getAllyTargetScore | ally target scores} from those
        * overriding attributes.
        *
        * **NOTE:** if at least one attribute overrides the Ally Target Penalty, ONLY
        * the overriding attributes are accounted for in scoring. Score contributions
        * from other non-overriding attributes are ignored.
        */
-      const allyTargetAttrs = this.attrs.filter((attr) => attr.overridesAllyTargetPenalty);
+      const allyTargetScores = this.attrs
+        .map((attr) => attr.getAllyTargetScore(user, target, this))
+        .filter((score) => !isNil(score));
 
-      if (allyTargetAttrs.length === 0) {
+      if (allyTargetScores.length === 0) {
         return ALLY_TARGET_PENALTY;
       }
 
-      return allyTargetAttrs
-        .map((attr) => attr.getEffectScore(user, target, this))
-        .reduce((total, score) => total + score, 0);
+      return allyTargetScores.reduce((total, score) => total + score, 0);
     }
 
     let attrs: MoveAttr[] = this.attrs;

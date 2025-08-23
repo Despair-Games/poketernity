@@ -22,7 +22,7 @@ export class HealAttr extends MoveEffectAttr {
   private showAnim: boolean;
 
   constructor(healRatio: number = 1, showAnim: boolean = false, selfTarget: boolean = true) {
-    super(selfTarget, { overridesAllyTargetPenalty: true });
+    super(selfTarget);
 
     this.healRatio = healRatio;
     this.showAnim = showAnim;
@@ -88,7 +88,7 @@ export class HealAttr extends MoveEffectAttr {
    * @param move - The {@linkcode Move} being evaluated
    * @returns The ES for using the given move against the given target
    */
-  protected getAllyTargetScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+  public override getAllyTargetScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     if (target.hasTag(BattlerTagType.HEAL_BLOCK) || target.isFullHp()) {
       return BAD_MOVE_PENALTY;
     }

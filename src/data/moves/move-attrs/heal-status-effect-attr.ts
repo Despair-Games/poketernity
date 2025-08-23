@@ -1,12 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { ANY_STATUS_SYNERGY_ABILITIES } from "#constants/ability-constants";
-import {
-  MAJOR_EFFECT_SCORE_BONUS,
-  MAJOR_EFFECT_SCORE_PENALTY,
-  MINOR_EFFECT_SCORE_BONUS,
-  MINOR_EFFECT_SCORE_PENALTY,
-} from "#constants/ai-constants";
+import { BURN_SYNERGY_ABILITIES, POISON_SYNERGY_ABILITIES } from "#constants/ability-constants";
+import { MAJOR_EFFECT_SCORE_PENALTY } from "#constants/ai-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { MoveId } from "#enums/move-id";
 import { StatusEffect } from "#enums/status-effect";
@@ -14,6 +9,7 @@ import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { getMoveTargets, type Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
+import { coerceArray } from "#utils/common-utils";
 import { getStatusEffectHealText } from "#utils/status-effect-utils";
 
 /**
@@ -29,11 +25,8 @@ export class HealStatusEffectAttr extends MoveEffectAttr {
    * @param effects - status effect or list of status effects to cure
    */
   constructor(selfTarget: boolean, effects: StatusEffect | StatusEffect[]) {
-    super(selfTarget, {
-      lastHitOnly: true,
-      overridesAllyTargetPenalty: true,
-    });
-    this.effects = [effects].flat(1);
+    super(selfTarget, { lastHitOnly: true });
+    this.effects = coerceArray(effects);
   }
 
   public override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
@@ -68,30 +61,48 @@ export class HealStatusEffectAttr extends MoveEffectAttr {
 
   /**
    * @returns This attribute's Effect Score modifier as follows:
-   * - If the user has an ability that synergizes with their status effect, and the effects
-   * of this attribute would cure said status, grant (-1).
-   * - Otherwise, if the affected Pokemon doesn't have a relevant status effect OR it can't feasibly
-   * cure itself due to being asleep, grant (+0).
-   * - Otherwise, if the affected Pokemon is either the user or its ally, grant (+1) + 50%(+1)
-   * - Otherwise, grant (-2) [using the move would cure an opponent's status effect]
+   * - If the target of this effect is the user, defer scoring to {@linkcode getAllyTargetScore}
+   * (*unless the user is asleep, and therefore cannot cure its own status*).
+   * - Otherwise, grant a {@link MAJOR_EFFECT_SCORE_PENALTY | major penalty}
+   * (*using the move would cure an opponent's status effect*)
    */
-  public override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
-    const pokemon = this.selfTarget ? user : target;
-
-    if (this.selfTarget && ANY_STATUS_SYNERGY_ABILITIES.some((abId) => pokemon.hasAbility(abId))) {
-      return MINOR_EFFECT_SCORE_PENALTY;
+  public override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    if (this.selfTarget) {
+      if (user.hasStatusEffect(StatusEffect.SLEEP, false, true)) {
+        return 0;
+      }
+      return this.getAllyTargetScore(user, user, move);
     }
 
-    if (
-      !pokemon.hasStatusEffect(this.effects, false, true)
-      || (this.selfTarget && pokemon.hasStatusEffect(StatusEffect.SLEEP, false, true))
-    ) {
+    if (!target.hasStatusEffect(this.effects, false, true)) {
       return 0;
     }
 
-    if (!pokemon.isOpponent(user)) {
-      return this.getRandomScore(user, 50, MAJOR_EFFECT_SCORE_BONUS, MINOR_EFFECT_SCORE_BONUS);
-    }
     return MAJOR_EFFECT_SCORE_PENALTY;
+  }
+
+  /**
+   * @returns This attribute's Ally Target Score modifier as follows:
+   * - If the target doesn't have a relevant status effect for this effect, grant (+0).
+   * - If the target is burned or poisoned, and it has an ability that synergizes with that
+   * status effect, grant a {@link MAJOR_EFFECT_SCORE_PENALTY | major penalty}.
+   * - Otherwise, grant (+1) + 50%(+1)
+   */
+  public override getAllyTargetScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+    const effect = target.getStatusEffect(true);
+
+    if (!this.effects.includes(effect)) {
+      return 0;
+    }
+
+    if (
+      (effect === StatusEffect.BURN && BURN_SYNERGY_ABILITIES.some((abId) => target.hasAbility(abId)))
+      || ([StatusEffect.POISON, StatusEffect.TOXIC].includes(effect)
+        && POISON_SYNERGY_ABILITIES.some((abId) => target.hasAbility(abId)))
+    ) {
+      return MAJOR_EFFECT_SCORE_PENALTY;
+    }
+
+    return this.getRandomScore(user, 50, 2, 1);
   }
 }
