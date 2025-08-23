@@ -24,7 +24,7 @@ export class RageTag extends BattlerTag {
    */
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     if (lapseType === BattlerTagLapseType.AFTER_HIT) {
-      const lastAttackReceived = pokemon.turnData.attacksReceived[pokemon.turnData.attacksReceived.length - 1];
+      const lastAttackReceived = pokemon.turnData.attacksReceived.at(-1);
       const damageReceived = lastAttackReceived?.damage ?? 0;
       if (damageReceived > 0) {
         globalScene.phaseManager.createAndUnshiftPhase(

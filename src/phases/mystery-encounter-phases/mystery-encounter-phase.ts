@@ -80,9 +80,8 @@ export class MysteryEncounterPhase extends Phase {
     if (!this.optionSelectSettings) {
       // Saves the selected option in the ME save data, only if this is not a followup option select phase
       // Can be used for analytics purposes to track what options are popular on certain encounters
-      const encounterSaveData =
-        mysteryEncounterSaveData.encounteredEvents[mysteryEncounterSaveData.encounteredEvents.length - 1];
-      if (encounterSaveData.type === mysteryEncounter?.encounterType) {
+      const encounterSaveData = mysteryEncounterSaveData.encounteredEvents.at(-1);
+      if (!isNil(encounterSaveData) && encounterSaveData.type === mysteryEncounter?.encounterType) {
         encounterSaveData.selectedOption = index;
       }
     }

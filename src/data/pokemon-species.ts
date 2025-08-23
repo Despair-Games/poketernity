@@ -206,6 +206,7 @@ export class PokemonSpecies extends PokemonSpeciesForm {
   }
 
   // TODO: This could definitely be written better and more accurate to the getEnemySpeciesForLevel logic, but it is only for generating movesets for evolved Pokemon
+  // TODO: evaluate all these `!` for correctness
   getSimulatedEvolutionChain(
     currentLevel: number,
     forTrainer: boolean = false,
@@ -234,9 +235,7 @@ export class PokemonSpecies extends PokemonSpeciesForm {
         ]); // TODO: are those bangs correct?
       }
       const lastPreEvolutionLevel = ret[preEvolutionLevels.length - 1][1];
-      const evolution = pokemonEvolutions[preEvolutionLevels[preEvolutionLevels.length - 1][0]].find(
-        (e) => e.speciesId === this.speciesId,
-      );
+      const evolution = pokemonEvolutions[preEvolutionLevels.at(-1)![0]].find((e) => e.speciesId === this.speciesId);
       ret.push([
         this.speciesId,
         Math.min(

@@ -324,7 +324,7 @@ export class DropDown extends Phaser.GameObjects.Container {
       0,
       0,
       optionWidth,
-      options[options.length - 1].y + optionHeight + optionPaddingY,
+      options.at(-1)!.y + optionHeight + optionPaddingY,
       false,
       false,
       undefined,

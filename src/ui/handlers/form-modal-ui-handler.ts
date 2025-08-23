@@ -90,7 +90,7 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
       label.name = "formLabel" + f;
 
       this.formLabels.push(label);
-      this.modalContainer.add(this.formLabels[this.formLabels.length - 1]);
+      this.modalContainer.add(label);
 
       const inputContainer = globalScene.add.container(70, (hasTitle ? 28 : 2) + 20 * f);
       inputContainer.setVisible(false);

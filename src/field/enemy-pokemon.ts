@@ -436,7 +436,7 @@ export class EnemyPokemon extends Pokemon {
     }
 
     let targetWeights = sortedBenefitScores.map((s) => s[1]);
-    const lowestWeight = targetWeights[targetWeights.length - 1];
+    const lowestWeight = targetWeights.at(-1)!;
 
     // If the lowest target weight (i.e. benefit score) is negative, add abs(lowestWeight) to all target weights
     if (lowestWeight < 1) {

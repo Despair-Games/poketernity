@@ -835,11 +835,8 @@ export class PartyUiHandler extends MessageUiHandler {
             const isBatonPassMove =
               this.partyUiMode === PartyUiMode.FAINT_SWITCH
               && moveHistory.length
-              && allMoves
-                .get(moveHistory[moveHistory.length - 1].move.id)
-                .getAttrs(ForceSwitchOutAttr)[0]
-                ?.isBatonPass()
-              && moveHistory[moveHistory.length - 1].result === MoveResult.SUCCESS;
+              && allMoves.get(moveHistory.at(-1)!.move.id).getAttrs(ForceSwitchOutAttr)[0]?.isBatonPass()
+              && moveHistory.at(-1)!.result === MoveResult.SUCCESS;
 
             // isBatonPassMove and allowBatonModifierSwitch shouldn't ever be true
             // at the same time, because they both explicitly check for a mutually
@@ -944,7 +941,7 @@ export class PartyUiHandler extends MessageUiHandler {
     const optionTexts: BBCodeText[] = [];
 
     for (let o = optionStartIndex; o < optionEndIndex; o++) {
-      const option = this.options[this.options.length - (o + 1)];
+      const option = this.options.at(-(o + 1))!;
       let altText = false;
       let optionName: string;
       if (option === PartyOption.SCROLL_UP) {

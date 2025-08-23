@@ -2071,7 +2071,7 @@ function getNewModifierTypeOption(
   }
 
   const tierThresholds = Object.keys(thresholds[tier]);
-  const totalWeight = Number.parseInt(tierThresholds[tierThresholds.length - 1]);
+  const totalWeight = Number.parseInt(tierThresholds.at(-1) ?? "0");
   const value = randSeedInt(totalWeight);
   let index: number | undefined;
   for (const t of tierThresholds) {
