@@ -14,7 +14,7 @@ import i18next from "i18next";
  */
 export class SwapStatStagesAttr extends MoveEffectAttr {
   /** The stat stages to be swapped between the user and the target */
-  private stats: readonly BattleStat[];
+  private readonly stats: readonly BattleStat[];
 
   constructor(stats: readonly BattleStat[]) {
     super();

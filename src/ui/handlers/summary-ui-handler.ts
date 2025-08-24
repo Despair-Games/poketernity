@@ -70,6 +70,7 @@ export class SummaryUiHandler extends UiHandler {
   private championRibbon: Phaser.GameObjects.Image;
   private statusContainer: Phaser.GameObjects.Container;
   private status: Phaser.GameObjects.Image;
+  // biome-ignore-start lint/style/useReadonlyClassProperties: false positive
   /** The pixel button prompt indicating a passive is unlocked */
   private abilityPrompt: Phaser.GameObjects.Image;
   /** Object holding everything needed to display an ability */
@@ -83,6 +84,7 @@ export class SummaryUiHandler extends UiHandler {
   private selectedMoveCursorObj: Phaser.GameObjects.Sprite | null;
   private moveRowsContainer: Phaser.GameObjects.Container;
   private extraMoveRowContainer: Phaser.GameObjects.Container;
+  // biome-ignore-end lint/style/useReadonlyClassProperties: false positive
   private moveEffectContainer: Phaser.GameObjects.Container;
   private movePowerText: Phaser.GameObjects.Text;
   private moveAccuracyText: Phaser.GameObjects.Text;

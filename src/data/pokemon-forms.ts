@@ -164,7 +164,7 @@ export class SpeciesFormChangeCondition {
 }
 
 export class SpeciesDefaultFormMatchTrigger extends SpeciesFormChangeTrigger {
-  private formKey: string;
+  private readonly formKey: string;
 
   constructor(formKey: string) {
     super();

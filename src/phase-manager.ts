@@ -222,12 +222,12 @@ export class PhaseManager {
    * The first Phase in this queue is {@linkcode Phase.start | run} whenever
    * {@linkcode shiftPhase} is called.
    */
-  private phaseQueue: Phase[] = [];
+  private readonly phaseQueue: Phase[] = [];
   /**
    * When {@linkcode shiftPhase} is called, the Phases in this queue are inserted
    * in queue order to the front of {@linkcode phaseQueue}.
    */
-  private phaseQueuePrepend: Phase[] = [];
+  private readonly phaseQueuePrepend: Phase[] = [];
   /** overrides default of inserting phases to end of phaseQueuePrepend array, useful for inserting Phases "out of order" */
   private phaseQueuePrependSpliceIndex: number = -1;
   /** @deprecated see {@link https://github.com/Despair-Games/poketernity/pull/910#discussion_r2029764830} */

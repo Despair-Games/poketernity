@@ -32,7 +32,7 @@ export class MysteryEncounterUiHandler extends UiHandler {
 
   private optionsContainer: Phaser.GameObjects.Container;
   // Length = max number of allowable options (4)
-  private optionScrollTweens: (Phaser.Tweens.Tween | null)[] = new Array(4).fill(null);
+  private readonly optionScrollTweens: (Phaser.Tweens.Tween | null)[] = new Array(4).fill(null);
 
   private tooltipWindow: Phaser.GameObjects.NineSlice;
   private tooltipContainer: Phaser.GameObjects.Container;

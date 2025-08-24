@@ -131,7 +131,8 @@
         "useCollapsedElseIf": "error",
         "noNegationElse": "error",
         "noParameterProperties": "error", // a step toward enabling `erasableSyntaxOnly` in `tsconfig.json`
-        "useAtIndex": "error"
+        "useAtIndex": "error",
+        "useReadonlyClassProperties": "error"
       },
       "suspicious": {
         "noDoubleEquals": "error",

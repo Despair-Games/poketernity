@@ -35,7 +35,7 @@ export class TextListContainer extends Phaser.GameObjects.Container {
   /** The maximum number of lines shown at once on screen. */
   private maxLines: number;
 
-  private textObject: Phaser.GameObjects.Text | BBCodeText;
+  private readonly textObject: Phaser.GameObjects.Text | BBCodeText;
 
   /**
    * @param x - The x position of the TextObject in its parent container.

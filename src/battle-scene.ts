@@ -244,7 +244,7 @@ export class BattleScene extends SceneBase {
   public rngOffset: number = 0;
 
   public inputMethod: string;
-  private infoToggles: InfoToggle[] = [];
+  private readonly infoToggles: InfoToggle[] = [];
 
   /** Handler for general {@linkcode Animation | animations} */
   public animations: Animation;
@@ -268,8 +268,8 @@ export class BattleScene extends SceneBase {
     super("battle");
     this.phaseManager = new PhaseManager();
     this.updateGameInfo();
-    this.animations = new Animation(this);
-    this.audioManager = new AudioManager(this);
+    this.animations = new Animation();
+    this.audioManager = new AudioManager();
     initGlobalScene(this);
     this.initSettingsEventListeners();
   }

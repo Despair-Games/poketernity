@@ -9,7 +9,7 @@ export class MockContainer implements MockGameObject {
   protected height: number;
   protected visible: boolean;
   private alpha: number;
-  private style;
+  private readonly style;
   public frame;
   protected textureManager;
   public list: MockGameObject[] = [];

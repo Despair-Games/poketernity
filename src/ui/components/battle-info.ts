@@ -26,13 +26,14 @@ export class BattleInfo extends Phaser.GameObjects.Container {
 
   private baseY: number;
 
-  private player: boolean;
+  private readonly player: boolean;
   private mini: boolean;
   private boss: boolean;
   private bossSegments: number;
   private offset: boolean;
   private lastName: string | null;
   private lastTeraType: ElementalType;
+  // biome-ignore lint/style/useReadonlyClassProperties: false positive
   private lastStatus: StatusEffect;
   private lastHp: number;
   private lastMaxHp: number;
@@ -40,44 +41,45 @@ export class BattleInfo extends Phaser.GameObjects.Container {
   private lastExp: number;
   private lastLevelExp: number;
   private lastLevel: number;
+  // biome-ignore lint/style/useReadonlyClassProperties: false positive
   private lastLevelCapped: boolean;
   private lastStats: string;
 
-  private box: Phaser.GameObjects.Sprite;
-  private nameText: Phaser.GameObjects.Text;
-  private genderText: Phaser.GameObjects.Text;
-  private ownedIcon: Phaser.GameObjects.Sprite;
-  private championRibbon: Phaser.GameObjects.Sprite;
-  private teraIcon: Phaser.GameObjects.Sprite;
-  private shinyIcon: Phaser.GameObjects.Sprite;
-  private statusIndicator: Phaser.GameObjects.Sprite;
-  private levelContainer: Phaser.GameObjects.Container;
-  private hpBar: Phaser.GameObjects.Image;
-  private hpBarSegmentDividers: Phaser.GameObjects.Rectangle[];
-  private levelNumbersContainer: Phaser.GameObjects.Container;
-  private hpNumbersContainer: Phaser.GameObjects.Container;
-  private type1Icon: Phaser.GameObjects.Sprite;
-  private type2Icon: Phaser.GameObjects.Sprite;
-  private type3Icon: Phaser.GameObjects.Sprite;
-  private expBar: Phaser.GameObjects.Image;
+  private readonly box: Phaser.GameObjects.Sprite;
+  private readonly nameText: Phaser.GameObjects.Text;
+  private readonly genderText: Phaser.GameObjects.Text;
+  private readonly ownedIcon: Phaser.GameObjects.Sprite;
+  private readonly championRibbon: Phaser.GameObjects.Sprite;
+  private readonly teraIcon: Phaser.GameObjects.Sprite;
+  private readonly shinyIcon: Phaser.GameObjects.Sprite;
+  private readonly statusIndicator: Phaser.GameObjects.Sprite;
+  private readonly levelContainer: Phaser.GameObjects.Container;
+  private readonly hpBar: Phaser.GameObjects.Image;
+  private readonly hpBarSegmentDividers: Phaser.GameObjects.Rectangle[];
+  private readonly levelNumbersContainer: Phaser.GameObjects.Container;
+  private readonly hpNumbersContainer: Phaser.GameObjects.Container;
+  private readonly type1Icon: Phaser.GameObjects.Sprite;
+  private readonly type2Icon: Phaser.GameObjects.Sprite;
+  private readonly type3Icon: Phaser.GameObjects.Sprite;
+  private readonly expBar: Phaser.GameObjects.Image;
 
   // #region Type effectiveness hint objects
-  private effectivenessContainer: Phaser.GameObjects.Container;
-  private effectivenessWindow: Phaser.GameObjects.NineSlice;
-  private effectivenessText: Phaser.GameObjects.Text;
+  private readonly effectivenessContainer: Phaser.GameObjects.Container;
+  private readonly effectivenessWindow: Phaser.GameObjects.NineSlice;
+  private readonly effectivenessText: Phaser.GameObjects.Text;
   private currentEffectiveness?: string;
   // #endregion
 
   public expMaskRect: Phaser.GameObjects.Graphics;
 
-  private statsContainer: Phaser.GameObjects.Container;
-  private statsBox: Phaser.GameObjects.Sprite;
-  private statValuesContainer: Phaser.GameObjects.Container;
-  private statNumbers: Phaser.GameObjects.Sprite[];
+  private readonly statsContainer: Phaser.GameObjects.Container;
+  private readonly statsBox: Phaser.GameObjects.Sprite;
+  private readonly statValuesContainer: Phaser.GameObjects.Container;
+  private readonly statNumbers: Phaser.GameObjects.Sprite[];
 
   public flyoutMenu?: BattleFlyout;
 
-  private statOrder: Stat[];
+  private readonly statOrder: Stat[];
   private readonly statOrderPlayer = [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.ACC, Stat.EVA, Stat.SPD];
   private readonly statOrderEnemy = [Stat.HP, Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.ACC, Stat.EVA, Stat.SPD];
 

@@ -102,7 +102,7 @@ export class PartyUiHandler extends MessageUiHandler {
    * @param pokemon The pokemon to check.
    * @returns
    */
-  private FilterChallengeLegal = (pokemon: PlayerPokemon) => {
+  private readonly FilterChallengeLegal = (pokemon: PlayerPokemon) => {
     const challengeAllowed = new BooleanHolder(true);
     applyChallenges(globalScene.gameMode, ChallengeType.POKEMON_IN_BATTLE, pokemon, challengeAllowed);
     if (!challengeAllowed.value) {
@@ -121,7 +121,7 @@ export class PartyUiHandler extends MessageUiHandler {
     return null;
   };
 
-  private localizedOptions = [
+  private readonly localizedOptions = [
     PartyOption.SEND_OUT,
     PartyOption.SUMMARY,
     PartyOption.CANCEL,
@@ -1160,8 +1160,8 @@ export class PartyUiHandler extends MessageUiHandler {
 class PartySlot extends Phaser.GameObjects.Container {
   private selected: boolean;
   private transfer: boolean;
-  private slotIndex: number;
-  private pokemon: PlayerPokemon;
+  private readonly slotIndex: number;
+  private readonly pokemon: PlayerPokemon;
 
   private slotBg: Phaser.GameObjects.Image;
   public slotName: Phaser.GameObjects.Text;
@@ -1171,7 +1171,7 @@ class PartySlot extends Phaser.GameObjects.Container {
   public slotDescriptionLabel: Phaser.GameObjects.Text; // this is used to show text instead of the HP bar i.e. for showing "Able"/"Not Able" for TMs when you try to learn them
 
   private pokemonIcon: Phaser.GameObjects.Container;
-  private iconAnimHandler: PokemonIconAnimHelper;
+  private readonly iconAnimHandler: PokemonIconAnimHelper;
 
   constructor(
     slotIndex: number,

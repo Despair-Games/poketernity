@@ -9,7 +9,7 @@ import type { NumberHolder } from "#utils/common-utils";
  */
 export class MultiHitPowerIncrementAttr extends VariablePowerAttr {
   /** The max number of base power increments allowed for this move */
-  private maxHits: number;
+  private readonly maxHits: number;
 
   constructor(maxHits: number) {
     super();

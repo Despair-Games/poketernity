@@ -26,8 +26,8 @@ import i18next from "i18next";
  * @see {@linkcode applyPostDamage}
  */
 export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
-  private helper: ForceSwitchOutHelper = new ForceSwitchOutHelper(SwitchType.SWITCH);
-  private hpRatio: number;
+  private readonly helper: ForceSwitchOutHelper = new ForceSwitchOutHelper(SwitchType.SWITCH);
+  private readonly hpRatio: number;
 
   constructor(hpRatio: number = 0.5) {
     super();
@@ -123,7 +123,7 @@ export function calculateShellBellRecovery(pokemon: Pokemon): number {
 //#region Helpers
 
 class ForceSwitchOutHelper {
-  private switchType: SwitchType;
+  private readonly switchType: SwitchType;
 
   constructor(switchType: SwitchType) {
     this.switchType = switchType;

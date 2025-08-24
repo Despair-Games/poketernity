@@ -14,13 +14,13 @@ interface LogEntry {
 }
 
 export class InputsHandler {
-  private scene: BattleScene;
+  private readonly scene: BattleScene;
   private events: Phaser.Events.EventEmitter;
-  private inputController: InputsController;
+  private readonly inputController: InputsController;
   public log: LogEntry[] = [];
   public logUp: LogEntry[] = [];
-  private fakePad: Fakepad;
-  private fakeMobile: FakeMobile;
+  private readonly fakePad: Fakepad;
+  private readonly fakeMobile: FakeMobile;
 
   constructor(scene: BattleScene) {
     this.scene = scene;

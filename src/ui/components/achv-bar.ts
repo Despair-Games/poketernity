@@ -15,7 +15,7 @@ export class AchvBar extends Phaser.GameObjects.Container {
   private scoreText: Phaser.GameObjects.Text;
   private descriptionText: Phaser.GameObjects.Text;
 
-  private queue: (Achievement | Voucher)[] = [];
+  private readonly queue: (Achievement | Voucher)[] = [];
 
   public shown: boolean;
 

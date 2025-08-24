@@ -11,9 +11,9 @@ type MoveIncrementFunc = (pokemon: Pokemon) => boolean;
  */
 export class IncrementMovePriorityAttr extends MoveAttr {
   /** The condition for a move's priority being incremented */
-  private moveIncrementFunc: MoveIncrementFunc;
+  private readonly moveIncrementFunc: MoveIncrementFunc;
   /** The amount to increment priority by, if condition passes. */
-  private increaseAmount: number;
+  private readonly increaseAmount: number;
 
   constructor(moveIncrementFunc: MoveIncrementFunc, increaseAmount = 1) {
     super();

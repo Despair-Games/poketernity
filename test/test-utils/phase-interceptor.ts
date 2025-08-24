@@ -165,16 +165,19 @@ export class PhaseInterceptor {
   // @ts-expect-error - Initialized in `this.initPhases`
   public phases: Record<PhaseKey, PhaseStub> = {};
   public log: PhaseKey[];
+  // biome-ignore lint/style/useReadonlyClassProperties: requires refactor
   private onHold: PhaseClass[];
-  private interval: NodeJS.Timeout;
+  private readonly interval: NodeJS.Timeout;
   private promptInterval: NodeJS.Timeout;
+  // biome-ignore lint/style/useReadonlyClassProperties: false positive
   private intervalRun: NodeJS.Timeout;
+  // biome-ignore lint/style/useReadonlyClassProperties: requires refactor
   private prompts: PromptHandler[];
   private inProgress?: InProgressStub;
   private originalSetMode: UI["setMode"];
   private originalSuperEnd: Phase["end"];
 
-  private endBySetMode: PhaseClass[] = [
+  private readonly endBySetMode: PhaseClass[] = [
     TitlePhase,
     SelectGenderPhase,
     CommandPhase,

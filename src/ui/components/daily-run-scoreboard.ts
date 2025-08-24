@@ -19,6 +19,7 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
   private pageNumberLabel: Phaser.GameObjects.Text;
   private nextPageButton: Phaser.GameObjects.Sprite;
 
+  // biome-ignore lint/style/useReadonlyClassProperties: false positive
   private pageCount: number;
   private page: number;
   private category: ScoreboardCategory;
@@ -200,7 +201,9 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
     }
 
     executeIf(category !== this.category || this.pageCount === undefined, () =>
-      api.daily.getRankingsPageCount({ category }).then((count) => (this.pageCount = count)),
+      api.daily.getRankingsPageCount({ category }).then((count) => {
+        this.pageCount = count;
+      }),
     )
       .then(() => {
         api.daily

@@ -10,10 +10,10 @@ import type { MoveConditionFunc } from "#types/move-types";
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Fell_Stinger_(move) | Fell Stinger}.
  */
 export class PostVictoryStatStageChangeAttr extends MoveAttr {
-  private stats: BattleStat[];
-  private stages: number;
-  private condition?: MoveConditionFunc;
-  private showMessage: boolean;
+  private readonly stats: BattleStat[];
+  private readonly stages: number;
+  private readonly condition?: MoveConditionFunc;
+  private readonly showMessage: boolean;
 
   constructor(
     stats: BattleStat[],

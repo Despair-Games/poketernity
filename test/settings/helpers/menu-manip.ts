@@ -12,12 +12,12 @@ import {
 import { expect } from "vitest";
 
 export class MenuManip {
-  private config;
+  private readonly config;
   private settingName;
   private keycode;
-  private icon;
+  private readonly icon;
   private iconDisplayed;
-  private specialCaseIcon;
+  private readonly specialCaseIcon;
 
   constructor(config) {
     this.config = config;

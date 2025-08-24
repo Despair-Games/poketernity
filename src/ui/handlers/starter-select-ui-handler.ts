@@ -242,7 +242,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
   private filterBarContainer: Phaser.GameObjects.Container;
   private filterBar: FilterBar;
   private shinyOverlay: Phaser.GameObjects.Image;
-  private starterContainers: StarterContainer[] = [];
+  private readonly starterContainers: StarterContainer[] = [];
   private filteredStarterContainers: StarterContainer[] = [];
   private validStarterContainers: StarterContainer[] = [];
   private pokemonNumberText: Phaser.GameObjects.Text;
@@ -312,8 +312,8 @@ export class StarterSelectUiHandler extends MessageUiHandler {
   private moveInfoOverlay: MoveInfoOverlay;
 
   private statsMode: boolean;
-  private starterIconsCursorXOffset: number = -3;
-  private starterIconsCursorYOffset: number = 1;
+  private readonly starterIconsCursorXOffset: number = -3;
+  private readonly starterIconsCursorYOffset: number = 1;
   private starterIconsCursorIndex: number;
   private dexAttrCursor: bigint = 0n;
   private abilityCursor: number = -1;
@@ -324,17 +324,17 @@ export class StarterSelectUiHandler extends MessageUiHandler {
   private starterMoveset: StarterMoveset | null;
   private scrollCursor: number;
 
-  private allSpecies: PokemonSpecies[] = [];
+  private readonly allSpecies: PokemonSpecies[] = [];
   private lastSpecies: PokemonSpecies;
-  private speciesLoaded: Map<SpeciesId, boolean> = new Map<SpeciesId, boolean>();
+  private readonly speciesLoaded: Map<SpeciesId, boolean> = new Map<SpeciesId, boolean>();
   public starterSpecies: PokemonSpecies[] = [];
   private pokerusSpecies: PokemonSpecies[] = [];
-  private starterAttr: bigint[] = [];
-  private starterAbilityIndexes: number[] = [];
-  private starterPassives: boolean[] = [];
-  private starterNatures: Nature[] = [];
-  private starterTeras: ElementalType[] = [];
-  private starterMovesets: StarterMoveset[] = [];
+  private readonly starterAttr: bigint[] = [];
+  private readonly starterAbilityIndexes: number[] = [];
+  private readonly starterPassives: boolean[] = [];
+  private readonly starterNatures: Nature[] = [];
+  private readonly starterTeras: ElementalType[] = [];
+  private readonly starterMovesets: StarterMoveset[] = [];
   private speciesStarterDexEntry: DexEntry | null;
   private speciesStarterDataEntry: StarterDataEntry | null;
   private speciesStarterMoves: MoveId[];
@@ -359,7 +359,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
   //variables to keep track of the dynamically rendered list of instruction prompts for starter select
   private instructionRowX = 0;
   private instructionRowY = 0;
-  private instructionRowTextOffset = 9;
+  private readonly instructionRowTextOffset = 9;
   private filterInstructionRowX = 0;
   private filterInstructionRowY = 0;
 

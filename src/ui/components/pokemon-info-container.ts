@@ -52,9 +52,9 @@ export class PokemonInfoContainer extends Phaser.GameObjects.Container {
   private pokemonMoveLabels: Phaser.GameObjects.Text[];
   private infoBg;
 
-  private numCharsBeforeCutoff = 16;
+  private readonly numCharsBeforeCutoff = 16;
 
-  private initialX: number;
+  private readonly initialX: number;
   private movesContainerInitialX: number;
 
   protected defaultTextStyle: TextStyle;

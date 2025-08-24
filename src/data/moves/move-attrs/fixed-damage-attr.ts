@@ -8,7 +8,7 @@ import type { NumberHolder } from "#utils/common-utils";
  * @see {@linkcode getDamage}
  */
 export class FixedDamageAttr extends MoveAttr {
-  private damage: number;
+  private readonly damage: number;
 
   constructor(damage: number) {
     super();

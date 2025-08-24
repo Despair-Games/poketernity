@@ -106,7 +106,7 @@ export class Egg {
 
   private _overrideHiddenAbility: boolean;
 
-  private _eggDescriptor?: string;
+  private readonly _eggDescriptor?: string;
 
   ////
   // #endregion

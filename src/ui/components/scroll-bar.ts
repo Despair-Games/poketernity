@@ -11,10 +11,10 @@ export class ScrollBar extends Phaser.GameObjects.Container {
   /** The total number of rows in the list/grid gettings displayed. */
   private totalRows: number;
   /** The maximum number of rows shown at once on screen. */
-  private maxRows: number;
+  private readonly maxRows: number;
 
-  private bg: Phaser.GameObjects.NineSlice;
-  private handle: Phaser.GameObjects.NineSlice;
+  private readonly bg: Phaser.GameObjects.NineSlice;
+  private readonly handle: Phaser.GameObjects.NineSlice;
   private scrollHeight: number;
   private maxHandleY: number;
 

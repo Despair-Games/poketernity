@@ -2,7 +2,7 @@
 import type { BattleAnim } from "#animations/battle-anims";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
-import type { BattleScene } from "#app/battle-scene";
+import { globalScene } from "#app/global-scene";
 import type { Variant } from "#data/variant";
 import { PokeballType } from "#enums/pokeball-type";
 import { settings } from "#system/settings-manager";
@@ -14,11 +14,6 @@ import { randGauss, randInt } from "#utils/random-utils";
  * For battle animations, see {@linkcode BattleAnim}.
  */
 export class Animation {
-  private scene: BattleScene;
-  constructor(scene: BattleScene) {
-    this.scene = scene;
-  }
-
   /**
    * Animates particles that "spiral" upwards at start of transform animation
    * @param transformationBaseBg - The background image
@@ -34,7 +29,7 @@ export class Animation {
   ): void {
     let f = 0;
 
-    this.scene.tweens.addCounter({
+    globalScene.tweens.addCounter({
       repeat: 64,
       duration: getFrameMs(1),
       onRepeat: () => {
@@ -71,7 +66,7 @@ export class Animation {
   ): void {
     let f = 0;
 
-    this.scene.tweens.addCounter({
+    globalScene.tweens.addCounter({
       repeat: 96,
       duration: getFrameMs(1),
       onRepeat: () => {
@@ -104,14 +99,14 @@ export class Animation {
   ): Promise<void> {
     return new Promise((resolve) => {
       const isLastCycle = l === lastCycle;
-      this.scene.tweens.add({
+      globalScene.tweens.add({
         targets: pokemonTintSprite,
         scale: 0.25,
         ease: "Cubic.easeInOut",
         duration: 500 / l,
         yoyo: !isLastCycle,
       });
-      this.scene.tweens.add({
+      globalScene.tweens.add({
         targets: pokemonNewFormTintSprite,
         scale: 1,
         ease: "Cubic.easeInOut",
@@ -147,7 +142,7 @@ export class Animation {
   ): void {
     let f = 0;
 
-    this.scene.tweens.addCounter({
+    globalScene.tweens.addCounter({
       repeat: 48,
       duration: getFrameMs(1),
       onRepeat: () => {
@@ -171,7 +166,7 @@ export class Animation {
   ): void {
     let f = 0;
 
-    this.scene.tweens.addCounter({
+    globalScene.tweens.addCounter({
       repeat: 48,
       duration: getFrameMs(1),
       onRepeat: () => {
@@ -206,18 +201,18 @@ export class Animation {
 
   public addPokeballCaptureStars(pokeball: Phaser.GameObjects.Sprite): void {
     const addParticle = (): void => {
-      const particle = this.scene.add.sprite(pokeball.x, pokeball.y, "pb_particles", "4.png");
+      const particle = globalScene.add.sprite(pokeball.x, pokeball.y, "pb_particles", "4.png");
       particle.setOrigin(pokeball.originX, pokeball.originY);
       particle.setAlpha(0.5);
-      this.scene.field.add(particle);
+      globalScene.field.add(particle);
 
-      this.scene.tweens.add({
+      globalScene.tweens.add({
         targets: particle,
         y: pokeball.y - 10,
         ease: "Sine.easeOut",
         duration: 250,
         onComplete: () => {
-          this.scene.tweens.add({
+          globalScene.tweens.add({
             targets: particle,
             y: pokeball.y,
             alpha: 0,
@@ -228,13 +223,13 @@ export class Animation {
       });
 
       const dist = randGauss(25);
-      this.scene.tweens.add({
+      globalScene.tweens.add({
         targets: particle,
         x: pokeball.x + dist,
         duration: 500,
       });
 
-      this.scene.tweens.add({
+      globalScene.tweens.add({
         targets: particle,
         alpha: 0,
         delay: 425,
@@ -261,9 +256,9 @@ export class Animation {
     const animationKey = `sparkle${keySuffix}`;
 
     // Make sure the animation exists, and create it if not
-    if (!this.scene.anims.exists(animationKey)) {
-      const frameNames = this.scene.anims.generateFrameNames(spriteKey, { suffix: ".png", end: 34 });
-      this.scene.anims.create({
+    if (!globalScene.anims.exists(animationKey)) {
+      const frameNames = globalScene.anims.generateFrameNames(spriteKey, { suffix: ".png", end: 34 });
+      globalScene.anims.create({
         key: `sparkle${keySuffix}`,
         frames: frameNames,
         frameRate: 32,
@@ -274,7 +269,7 @@ export class Animation {
 
     // Play the animation
     sparkleSprite.play(animationKey);
-    this.scene.audioManager.playSound("se/sparkle");
+    globalScene.audioManager.playSound("se/sparkle");
   }
 
   public cos(index: number, amplitude: number): number {
@@ -286,13 +281,13 @@ export class Animation {
   }
 
   private doDefaultPbOpenParticles(x: number, y: number, radius: number): void {
-    const pbOpenParticlesFrameNames = this.scene.anims.generateFrameNames("pb_particles", {
+    const pbOpenParticlesFrameNames = globalScene.anims.generateFrameNames("pb_particles", {
       start: 0,
       end: 3,
       suffix: ".png",
     });
-    if (!this.scene.anims.exists("pb_open_particle")) {
-      this.scene.anims.create({
+    if (!globalScene.anims.exists("pb_open_particle")) {
+      globalScene.anims.create({
         key: "pb_open_particle",
         frames: pbOpenParticlesFrameNames,
         frameRate: 16,
@@ -301,11 +296,11 @@ export class Animation {
     }
 
     const addParticle = (index: number) => {
-      const particle = this.scene.add.sprite(x, y, "pb_open_particle");
-      this.scene.field.add(particle);
+      const particle = globalScene.add.sprite(x, y, "pb_open_particle");
+      globalScene.field.add(particle);
       const angle = index * 45;
       const [xCoord, yCoord] = [radius * Math.cos((angle * Math.PI) / 180), radius * Math.sin((angle * Math.PI) / 180)];
-      this.scene.tweens.add({
+      globalScene.tweens.add({
         targets: particle,
         x: x + xCoord,
         y: y + yCoord,
@@ -316,7 +311,7 @@ export class Animation {
         startFrame: (index + 3) % 4,
         frameRate: Math.floor(16 * settings.general.gameSpeed),
       });
-      this.scene.tweens.add({
+      globalScene.tweens.add({
         targets: particle,
         delay: 500,
         duration: 75,
@@ -327,7 +322,7 @@ export class Animation {
     };
 
     let particleCount = 0;
-    this.scene.time.addEvent({
+    globalScene.time.addEvent({
       delay: 20,
       repeat: 16,
       callback: () => addParticle(++particleCount),
@@ -341,7 +336,7 @@ export class Animation {
         particles.push(this.doFanOutParticle(i * 32, x, y, j ? 1 : 2, j ? 2 : 1, 8, 4));
       }
 
-      this.scene.tweens.add({
+      globalScene.tweens.add({
         targets: particles,
         delay: 750,
         duration: 250,
@@ -362,7 +357,7 @@ export class Animation {
       particles.push(this.doFanOutParticle(i * 25, x, y, 1, 1, 5, frameIndex));
     }
 
-    this.scene.tweens.add({
+    globalScene.tweens.add({
       targets: particles,
       delay: 750,
       duration: 250,
@@ -387,8 +382,8 @@ export class Animation {
   ): Phaser.GameObjects.Image {
     let f = 0;
 
-    const particle = this.scene.add.image(x, y, "pb_particles", `${frameIndex}.png`);
-    this.scene.field.add(particle);
+    const particle = globalScene.add.image(x, y, "pb_particles", `${frameIndex}.png`);
+    globalScene.field.add(particle);
 
     const updateParticle = () => {
       if (!particle.scene) {
@@ -400,7 +395,7 @@ export class Animation {
       f++;
     };
 
-    const particleTimer = this.scene.tweens.addCounter({
+    const particleTimer = globalScene.tweens.addCounter({
       repeat: -1,
       duration: getFrameMs(1),
       onRepeat: () => {
@@ -418,7 +413,7 @@ export class Animation {
   ): void {
     const initialX = transformationBaseBg.displayWidth / 2;
     const initialY = transformationBaseBg.displayHeight / 2;
-    const particle = this.scene.add.image(initialX, initialY, "evo_sparkle");
+    const particle = globalScene.add.image(initialX, initialY, "evo_sparkle");
     transformationContainer.add(particle);
 
     let f = 0;
@@ -426,7 +421,7 @@ export class Animation {
     const speed = 3 - randInt(8);
     const amp = 48 + randInt(64);
 
-    const particleTimer = this.scene.tweens.addCounter({
+    const particleTimer = globalScene.tweens.addCounter({
       repeat: -1,
       duration: getFrameMs(1),
       onRepeat: () => {
@@ -471,13 +466,13 @@ export class Animation {
     yOffset: number,
   ): void {
     const initialX = transformationBaseBg.displayWidth / 2 + xOffset;
-    const particle = this.scene.add.image(initialX, 0, "evo_sparkle");
+    const particle = globalScene.add.image(initialX, 0, "evo_sparkle");
     transformationContainer.add(particle);
 
     let f = 0;
     let amp = 48;
 
-    const particleTimer = this.scene.tweens.addCounter({
+    const particleTimer = globalScene.tweens.addCounter({
       repeat: -1,
       duration: getFrameMs(1),
       onRepeat: () => {
@@ -521,14 +516,14 @@ export class Animation {
     yOffset: number,
   ): void {
     const initialX = transformationBaseBg.displayWidth / 2 + xOffset;
-    const particle = this.scene.add.image(initialX, 0, "evo_sparkle");
+    const particle = globalScene.add.image(initialX, 0, "evo_sparkle");
     particle.setScale(0.5);
     transformationContainer.add(particle);
 
     let f = 0;
     let amp = 8;
 
-    const particleTimer = this.scene.tweens.addCounter({
+    const particleTimer = globalScene.tweens.addCounter({
       repeat: -1,
       duration: getFrameMs(1),
       onRepeat: () => {
@@ -571,12 +566,12 @@ export class Animation {
   ): void {
     const initialX = transformationBaseBg.displayWidth / 2 + xOffset;
     const initialY = transformationBaseBg.displayHeight / 2 + yOffset;
-    const particle = this.scene.add.image(initialX, initialY, "evo_sparkle");
+    const particle = globalScene.add.image(initialX, initialY, "evo_sparkle");
     transformationContainer.add(particle);
 
     let amp = 120;
 
-    const particleTimer = this.scene.tweens.addCounter({
+    const particleTimer = globalScene.tweens.addCounter({
       repeat: -1,
       duration: getFrameMs(1),
       onRepeat: () => {

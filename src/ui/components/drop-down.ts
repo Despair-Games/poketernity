@@ -27,12 +27,12 @@ export class DropDownOption extends Phaser.GameObjects.Container {
   public val: any;
   public dir: SortDirection = SortDirection.ASC;
   private currentLabelIndex: number;
-  private labels: DropDownLabel[];
-  private onColor = 0x33bbff;
-  private partialColor = 0xffff00;
-  private offColor = 0x272727;
-  private excludeColor = 0xff5555;
-  private unlockableColor = 0xffff00;
+  private readonly labels: DropDownLabel[];
+  private readonly onColor = 0x33bbff;
+  private readonly partialColor = 0xffff00;
+  private readonly offColor = 0x272727;
+  private readonly excludeColor = 0xff5555;
+  private readonly unlockableColor = 0xffff00;
 
   constructor(val: any, labels: DropDownLabel | DropDownLabel[]) {
     super(globalScene);
@@ -251,15 +251,15 @@ export class DropDownOption extends Phaser.GameObjects.Container {
 
 export class DropDown extends Phaser.GameObjects.Container {
   public options: DropDownOption[];
-  private window: Phaser.GameObjects.NineSlice;
-  private cursorObj: Phaser.GameObjects.Image;
+  private readonly window: Phaser.GameObjects.NineSlice;
+  private readonly cursorObj: Phaser.GameObjects.Image;
   public dropDownType: DropDownType = DropDownType.MULTI;
   public cursor: number = 0;
   private lastCursor: number = -1;
   public defaultCursor: number = 0;
-  private onChange: () => void;
+  private readonly onChange: () => void;
   private lastDir: SortDirection = SortDirection.ASC;
-  private defaultSettings: any[];
+  private readonly defaultSettings: any[];
 
   constructor(
     x: number,
