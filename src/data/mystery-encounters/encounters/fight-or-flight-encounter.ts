@@ -58,11 +58,12 @@ export const FightOrFlightEncounter: MysteryEncounter = MysteryEncounterBuilder.
   ])
   .withOnInit(() => {
     const encounter = globalScene.currentBattle.mysteryEncounter!;
+    const { waveIndex } = globalScene.currentBattle;
 
     // Calculate boss mon
     const level = getEncounterPokemonLevelForWave(STANDARD_ENCOUNTER_BOOSTED_LEVEL_MODIFIER);
     const bossSpecies = globalScene.arena.randomSpecies(
-      globalScene.currentBattle.waveIndex,
+      waveIndex,
       level,
       0,
       getPartyLuckValue(globalScene.getPlayerParty()),
@@ -95,15 +96,15 @@ export const FightOrFlightEncounter: MysteryEncounter = MysteryEncounterBuilder.
     encounter.enemyPartyConfigs = [config];
 
     // Calculate item
-    // Waves 10-40 GREAT, 60-120 ULTRA, 120-160 EPIC, 160-180 MASTER
-    const tier =
-      globalScene.currentBattle.waveIndex > 160
-        ? ModifierTier.MASTER
-        : globalScene.currentBattle.waveIndex > 120
-          ? ModifierTier.EPIC
-          : globalScene.currentBattle.waveIndex > 40
-            ? ModifierTier.ULTRA
-            : ModifierTier.GREAT;
+    // Waves <=40: GREAT, 41-120: ULTRA, 121-160: EPIC, 161+: MASTER
+    let tier: ModifierTier = ModifierTier.GREAT;
+    if (waveIndex > 160) {
+      tier = ModifierTier.MASTER;
+    } else if (waveIndex > 120) {
+      tier = ModifierTier.EPIC;
+    } else if (waveIndex > 40) {
+      tier = ModifierTier.ULTRA;
+    }
     regenerateModifierPoolThresholds(globalScene.getPlayerParty(), ModifierPoolType.PLAYER, 0);
     let item: ModifierTypeOption | null = null;
     // TMs and Candy Jar excluded from possible rewards as they're too swingy in value for a singular item reward

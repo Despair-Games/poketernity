@@ -31,6 +31,12 @@ const userFocusY = 148 - 32;
 const targetFocusX = 234;
 const targetFocusY = 84 - 32;
 
+const blendModeMap = {
+  [AnimBlendType.NORMAL]: Phaser.BlendModes.NORMAL,
+  [AnimBlendType.ADD]: Phaser.BlendModes.ADD,
+  [AnimBlendType.SUBTRACT]: Phaser.BlendModes.DIFFERENCE,
+};
+
 //#endregion
 //#region Export
 
@@ -166,7 +172,14 @@ export abstract class BattleAnim {
         }
       }
       const angle = -frame.angle;
-      const key = frame.target === AnimFrameTarget.IMAGE ? g++ : frame.target === AnimFrameTarget.SOURCE ? u++ : t++;
+      let key: number;
+      if (frame.target === AnimFrameTarget.IMAGE) {
+        key = g++;
+      } else if (frame.target === AnimFrameTarget.SOURCE) {
+        key = u++;
+      } else {
+        key = t++;
+      }
       ret.get(frame.target)!.set(key, { x, y, zoomX, zoomY, angle }); // TODO: is the bang correct?
     }
 
@@ -375,13 +388,7 @@ export abstract class BattleAnim {
               pokemonSprite.setAlpha(frame.opacity / 255);
               pokemonSprite.pipelineData["tone"] = frame.tone;
               pokemonSprite.setVisible(frame.visible && (isUser ? user.visible : target.visible));
-              pokemonSprite.setBlendMode(
-                frame.blendType === AnimBlendType.NORMAL
-                  ? Phaser.BlendModes.NORMAL
-                  : frame.blendType === AnimBlendType.ADD
-                    ? Phaser.BlendModes.ADD
-                    : Phaser.BlendModes.DIFFERENCE,
-              );
+              pokemonSprite.setBlendMode(blendModeMap[frame.blendType]);
             } else {
               const sprites = spriteCache[AnimFrameTarget.IMAGE];
               if (g === sprites.length) {
@@ -446,13 +453,7 @@ export abstract class BattleAnim {
 
               moveSprite.setAlpha(frame.opacity / 255);
               moveSprite.setVisible(frame.visible);
-              moveSprite.setBlendMode(
-                frame.blendType === AnimBlendType.NORMAL
-                  ? Phaser.BlendModes.NORMAL
-                  : frame.blendType === AnimBlendType.ADD
-                    ? Phaser.BlendModes.ADD
-                    : Phaser.BlendModes.DIFFERENCE,
-              );
+              moveSprite.setBlendMode(blendModeMap[frame.blendType]);
             }
           }
           if (anim?.frameTimedEvents.has(f)) {
@@ -463,7 +464,13 @@ export abstract class BattleAnim {
           }
           const targets = Object.values(AnimFrameTarget);
           for (const i of targets) {
-            const count = i === AnimFrameTarget.IMAGE ? g : i === AnimFrameTarget.SOURCE ? u : t;
+            let count: number = t;
+            if (i === AnimFrameTarget.IMAGE) {
+              count = g;
+            } else if (i === AnimFrameTarget.SOURCE) {
+              count = u;
+            }
+
             if (count < spriteCache[i].length) {
               const spritesToRemove = spriteCache[i].slice(count, spriteCache[i].length);
               for (const rs of spritesToRemove) {
@@ -525,7 +532,14 @@ export abstract class BattleAnim {
       x += targetInitialX;
       y += targetInitialY;
       const angle = -frame.angle;
-      const key = frame.target === AnimFrameTarget.IMAGE ? g++ : frame.target === AnimFrameTarget.SOURCE ? u++ : t++;
+      let key: number;
+      if (frame.target === AnimFrameTarget.IMAGE) {
+        key = g++;
+      } else if (frame.target === AnimFrameTarget.SOURCE) {
+        key = u++;
+      } else {
+        key = t++;
+      }
       ret.get(frame.target)?.set(key, { x, y, zoomX, zoomY, angle });
     }
 
@@ -639,13 +653,7 @@ export abstract class BattleAnim {
 
             moveSprite.setAlpha(frame.opacity / 255);
             moveSprite.setVisible(frame.visible);
-            moveSprite.setBlendMode(
-              frame.blendType === AnimBlendType.NORMAL
-                ? Phaser.BlendModes.NORMAL
-                : frame.blendType === AnimBlendType.ADD
-                  ? Phaser.BlendModes.ADD
-                  : Phaser.BlendModes.DIFFERENCE,
-            );
+            moveSprite.setBlendMode(blendModeMap[frame.blendType]);
           }
         }
         if (anim?.frameTimedEvents.get(frameCount)) {

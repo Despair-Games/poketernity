@@ -1,3 +1,5 @@
+/** biome-ignore-all lint/style/noNestedTernary: all of this is going to be deleted soon anyway */
+
 import { globalScene } from "#app/global-scene";
 import { logModifiers } from "#app/loggers";
 import { getPokemonNameWithAffix } from "#app/messages";

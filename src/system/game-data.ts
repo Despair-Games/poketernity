@@ -1973,7 +1973,13 @@ export class GameData {
    */
   public getStarterSpeciesDefaultAbilityIndex(species: PokemonSpecies): number {
     const abilityAttr = this.starterData[species.speciesId].abilityAttr;
-    return abilityAttr & AbilityAttr.ABILITY_1 ? 0 : !species.ability2 || abilityAttr & AbilityAttr.ABILITY_2 ? 1 : 2;
+    if (abilityAttr & AbilityAttr.ABILITY_1) {
+      return 0;
+    }
+    if (!species.ability2 || abilityAttr & AbilityAttr.ABILITY_2) {
+      return 1;
+    }
+    return 2;
   }
 
   /**

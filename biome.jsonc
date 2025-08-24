@@ -133,7 +133,8 @@
         "noParameterProperties": "error", // a step toward enabling `erasableSyntaxOnly` in `tsconfig.json`
         "useAtIndex": "error",
         "useReadonlyClassProperties": "error",
-        "useExplicitLengthCheck": "info"
+        "useExplicitLengthCheck": "info",
+        "noNestedTernary": "error"
       },
       "suspicious": {
         "noDoubleEquals": "error",

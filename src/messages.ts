@@ -11,21 +11,18 @@ import i18next from "i18next";
 export function getPokemonNameWithAffix(pokemon: Pokemon | nil): string {
   if (!pokemon) {
     console.warn("Pokemon missing when trying to retrieve name.");
-    return "Missigno";
+    return "MissingNo.";
   }
 
-  if (!globalScene.currentBattle.isClassicFinalBoss) {
-    return pokemon.isPlayer()
-      ? pokemon.getNameToRender()
-      : pokemon.hasTrainer()
-        ? i18next.t("battle:foePokemonWithAffix", {
-            pokemonName: pokemon.getNameToRender(),
-          })
-        : i18next.t("battle:wildPokemonWithAffix", {
-            pokemonName: pokemon.getNameToRender(),
-          });
+  const pokemonName = pokemon.getNameToRender();
+
+  if (pokemon.isPlayer()) {
+    return pokemonName;
   }
-  return pokemon.isPlayer()
-    ? pokemon.getNameToRender()
-    : i18next.t("battle:foePokemonWithAffix", { pokemonName: pokemon.getNameToRender() });
+
+  if (globalScene.currentBattle.isClassicFinalBoss || pokemon.hasTrainer()) {
+    return i18next.t("battle:foePokemonWithAffix", { pokemonName });
+  }
+
+  return i18next.t("battle:wildPokemonWithAffix", { pokemonName });
 }

@@ -216,7 +216,14 @@ export class PokemonSpecies extends PokemonSpeciesForm {
     const ret: EvolutionLevel[] = [];
     if (Object.hasOwn(pokemonPreEvolutions, this.speciesId)) {
       const preEvolutionLevels = this.getPreEvolutionLevels().reverse();
-      const levelDiff = player ? 0 : forTrainer || isBoss ? (forTrainer && isBoss ? 2.5 : 5) : 10;
+      let levelDiff: number = 10;
+      if (player) {
+        levelDiff = 0;
+      } else if (forTrainer && isBoss) {
+        levelDiff = 2.5;
+      } else if (forTrainer || isBoss) {
+        levelDiff = 5;
+      }
       ret.push([preEvolutionLevels[0][0], 1]);
       for (let l = 1; l < preEvolutionLevels.length; l++) {
         const evolution = pokemonEvolutions[preEvolutionLevels[l - 1][0]].find(

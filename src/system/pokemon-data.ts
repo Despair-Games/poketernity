@@ -162,36 +162,36 @@ export class PokemonData {
 
   toPokemon(battleType?: BattleType, partyMemberIndex: number = 0, double: boolean = false): Pokemon {
     const species = getPokemonSpecies(this.speciesId);
-    const ret: Pokemon = this.player
-      ? globalScene.addPlayerPokemon(
-          species,
-          this.level,
-          this.abilityIndex,
-          this.formIndex,
-          this.gender,
-          this.shiny,
-          this.variant,
-          this.ivs,
-          this.nature,
-          this,
-          (playerPokemon) => {
-            if (this.nickname) {
-              playerPokemon.nickname = this.nickname;
-            }
-          },
-        )
-      : globalScene.addEnemyPokemon(
-          species,
-          this.level,
-          battleType === BattleType.TRAINER
-            ? !double || !(partyMemberIndex % 2)
-              ? TrainerSlot.TRAINER
-              : TrainerSlot.TRAINER_PARTNER
-            : TrainerSlot.NONE,
-          this.boss,
-          false,
-          this,
-        );
+    let ret: Pokemon;
+    if (this.player) {
+      ret = globalScene.addPlayerPokemon(
+        species,
+        this.level,
+        this.abilityIndex,
+        this.formIndex,
+        this.gender,
+        this.shiny,
+        this.variant,
+        this.ivs,
+        this.nature,
+        this,
+        (playerPokemon) => {
+          if (this.nickname) {
+            playerPokemon.nickname = this.nickname;
+          }
+        },
+      );
+    } else {
+      let trainerSlot: TrainerSlot = TrainerSlot.NONE;
+      if (battleType === BattleType.TRAINER) {
+        if (!double || partyMemberIndex % 2 === 0) {
+          trainerSlot = TrainerSlot.TRAINER;
+        } else {
+          trainerSlot = TrainerSlot.TRAINER_PARTNER;
+        }
+      }
+      ret = globalScene.addEnemyPokemon(species, this.level, trainerSlot, this.boss, false, this);
+    }
     ret.primeSummonData(this.summonData);
     return ret;
   }

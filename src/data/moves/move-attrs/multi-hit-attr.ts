@@ -2,6 +2,7 @@ import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { MaxMultiHitAbAttr } from "#abilities/max-multi-hit-ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { MultiHitType } from "#enums/multi-hit-type";
+import { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#field/pokemon";
 import { ChangeMultiHitTypeAttr } from "#moves/change-multi-hit-type-attr";
 import type { Move } from "#moves/move";
@@ -99,7 +100,7 @@ export class MultiHitAttr extends MoveAttr {
         const party = user.getParty();
         // No status means the ally pokemon can contribute to Beat Up
         return party.reduce((total, pokemon) => {
-          return total + (pokemon.id === user.id ? 1 : pokemon.getStatusEffect(true) ? 0 : 1);
+          return total + (pokemon.id === user.id || pokemon.getStatusEffect(true) === StatusEffect.NONE ? 1 : 0);
         }, 0);
       }
     }

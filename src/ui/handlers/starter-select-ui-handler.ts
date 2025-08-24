@@ -2924,12 +2924,12 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         const hasVariant = unlockedVariants.length > v;
         container.shinyIcons[v].setVisible(hasVariant);
         if (hasVariant) {
-          const variant =
-            unlockedVariants[v] === DexAttr.SHINY_BASE_VARIANT
-              ? 0
-              : unlockedVariants[v] === DexAttr.SHINY_RARE_VARIANT
-                ? 1
-                : 2;
+          let variant: Variant = 2;
+          if (unlockedVariants[v] === DexAttr.SHINY_BASE_VARIANT) {
+            variant = 0;
+          } else if (unlockedVariants[v] === DexAttr.SHINY_RARE_VARIANT) {
+            variant = 1;
+          }
           container.shinyIcons[v].setTint(getVariantTint(variant));
         }
       }
@@ -3254,7 +3254,13 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           }
           props.formIndex = starterAttributes?.form ?? props.formIndex;
           const female = starterAttributes?.female ?? props.gender === Gender.FEMALE;
-          props.gender = female ? Gender.FEMALE : isNil(species.malePercent) ? Gender.GENDERLESS : Gender.MALE;
+          if (female) {
+            props.gender = Gender.FEMALE;
+          } else if (isNil(species.malePercent)) {
+            props.gender = Gender.GENDERLESS;
+          } else {
+            props.gender = Gender.MALE;
+          }
 
           this.setSpeciesDetails(species, {
             shiny: props.shiny,
@@ -3652,11 +3658,14 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         }
 
         const speciesMoveData = globalScene.gameData.starterData[species.speciesId].moveset;
-        const moveData: StarterMoveset | null = speciesMoveData
-          ? Array.isArray(speciesMoveData)
-            ? speciesMoveData
-            : speciesMoveData[formIndex!] // TODO: is this bang correct?
-          : null;
+        let moveData: StarterMoveset | undefined;
+        if (speciesMoveData) {
+          if (Array.isArray(speciesMoveData)) {
+            moveData = speciesMoveData;
+          } else {
+            moveData = speciesMoveData[formIndex!]; // TODO: is this bang correct?
+          }
+        }
         const availableStarterMoves = this.speciesStarterMoves.concat(
           Object.hasOwn(speciesEggMoves, species.speciesId)
             ? speciesEggMoves[species.speciesId].filter(
@@ -3664,7 +3673,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
               )
             : [],
         );
-        this.starterMoveset = (moveData || (this.speciesStarterMoves.slice(0, 4) as StarterMoveset)).filter((m) =>
+        this.starterMoveset = (moveData ?? (this.speciesStarterMoves.slice(0, 4) as StarterMoveset)).filter((m) =>
           availableStarterMoves.find((sm) => sm === m),
         ) as StarterMoveset;
         // Consolidate move data if it contains an incompatible move

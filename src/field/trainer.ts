@@ -454,16 +454,16 @@ export class Trainer extends Phaser.GameObjects.Container {
     let baseSpecies: PokemonSpecies;
     if (this.config.speciesPools) {
       const tierValue = randSeedInt(512);
-      let tier =
-        tierValue >= 156
-          ? TrainerPoolTier.COMMON
-          : tierValue >= 32
-            ? TrainerPoolTier.UNCOMMON
-            : tierValue >= 6
-              ? TrainerPoolTier.RARE
-              : tierValue >= 1
-                ? TrainerPoolTier.SUPER_RARE
-                : TrainerPoolTier.ULTRA_RARE;
+      let tier: TrainerPoolTier = TrainerPoolTier.ULTRA_RARE;
+      if (tierValue >= 156) {
+        tier = TrainerPoolTier.COMMON;
+      } else if (tierValue >= 32) {
+        tier = TrainerPoolTier.UNCOMMON;
+      } else if (tierValue >= 6) {
+        tier = TrainerPoolTier.RARE;
+      } else if (tierValue >= 1) {
+        tier = TrainerPoolTier.SUPER_RARE;
+      }
       console.log(TrainerPoolTier[tier]);
       while (!Object.hasOwn(this.config.speciesPools, tier) || !this.config.speciesPools[tier].length) {
         console.log(
@@ -579,7 +579,13 @@ export class Trainer extends Phaser.GameObjects.Container {
     sortedPartyMemberScores.sort((a, b) => {
       const scoreA = a[1];
       const scoreB = b[1];
-      return scoreA < scoreB ? 1 : scoreA > scoreB ? -1 : 0;
+      if (scoreA < scoreB) {
+        return 1;
+      }
+      if (scoreA > scoreB) {
+        return -1;
+      }
+      return 0;
     });
 
     return sortedPartyMemberScores;
@@ -601,10 +607,9 @@ export class Trainer extends Phaser.GameObjects.Container {
 
     if (maxScorePartyMemberIndexes.length > 1) {
       let rand: number;
-      globalScene.executeWithSeedOffset(
-        () => (rand = randSeedInt(maxScorePartyMemberIndexes.length)),
-        globalScene.currentBattle.turn << 2,
-      );
+      globalScene.executeWithSeedOffset(() => {
+        rand = randSeedInt(maxScorePartyMemberIndexes.length);
+      }, globalScene.currentBattle.turn << 2);
       return maxScorePartyMemberIndexes[rand!];
     }
 

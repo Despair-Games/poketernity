@@ -1,3 +1,5 @@
+/** biome-ignore-all lint/style/noNestedTernary: all of this is going to be deleted soon anyway */
+
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { CommanderAbAttr } from "#abilities/commander-ab-attr";
 import { globalScene } from "#app/global-scene";

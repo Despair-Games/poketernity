@@ -31,6 +31,7 @@ import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } f
 import { UiHandler } from "#ui/ui-handler";
 import { rgbHexToRgba } from "#utils/color-utils";
 import { enumValueToKey, fixedNumber, getTSEnumValues, isNil } from "#utils/common-utils";
+import { getShinyDescriptor } from "#utils/pokemon-utils";
 import { formatStat, leftPad, toReadableString } from "#utils/string-utils";
 import { argbFromRgba } from "@material/material-color-utilities";
 import i18next from "i18next";
@@ -401,15 +402,9 @@ export class SummaryUiHandler extends UiHandler {
     this.shinyIcon.setVisible(this.pokemon.isShiny());
     this.shinyIcon.setTint(getVariantTint(baseVariant));
     if (this.shinyIcon.visible) {
-      const shinyDescriptor = baseVariant
-        ? `${baseVariant === 2 ? i18next.t("common:epicShiny") : baseVariant === 1 ? i18next.t("common:rareShiny") : i18next.t("common:commonShiny")}`
-        : "";
+      const shinyDescriptor = getShinyDescriptor(baseVariant);
       this.shinyIcon.on("pointerover", () =>
-        globalScene.ui.showTooltip(
-          "",
-          `${i18next.t("common:shinyOnHover")}${shinyDescriptor ? ` (${shinyDescriptor})` : ""}`,
-          true,
-        ),
+        globalScene.ui.showTooltip("", `${i18next.t("common:shinyOnHover")} (${shinyDescriptor})`, true),
       );
       this.shinyIcon.on("pointerout", () => globalScene.ui.hideTooltip());
     }
@@ -920,15 +915,17 @@ export class SummaryUiHandler extends UiHandler {
 
           const natureStatMultiplier = getNatureStatMultiplier(this.pokemon?.getNature()!, s); // TODO: is this bang correct?
 
+          let textStyle: TextStyle = TextStyle.SUMMARY_BLUE;
+          if (natureStatMultiplier === 1) {
+            textStyle = TextStyle.SUMMARY;
+          } else if (natureStatMultiplier > 1) {
+            textStyle = TextStyle.SUMMARY_PINK;
+          }
           const statLabel = addTextObject(
             27 + 115 * colIndex + (colIndex === 1 ? 5 : 0),
             56 + 16 * rowIndex,
             statName,
-            natureStatMultiplier === 1
-              ? TextStyle.SUMMARY
-              : natureStatMultiplier > 1
-                ? TextStyle.SUMMARY_PINK
-                : TextStyle.SUMMARY_BLUE,
+            textStyle,
           );
           statLabel.setOrigin(0.5, 0);
           statsContainer.add(statLabel);

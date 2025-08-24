@@ -1264,11 +1264,12 @@ export class BattleScene extends SceneBase {
             doubleTrainer = false;
           }
         }
-        const variant = doubleTrainer
-          ? TrainerVariant.DOUBLE
-          : randSeedInt(2)
-            ? TrainerVariant.FEMALE
-            : TrainerVariant.DEFAULT;
+        let variant: TrainerVariant = TrainerVariant.DEFAULT;
+        if (doubleTrainer) {
+          variant = TrainerVariant.DOUBLE;
+        } else if (randSeedInt(2)) {
+          variant = TrainerVariant.FEMALE;
+        }
         newTrainer = isNil(trainerData) ? new Trainer(trainerType, variant) : trainerData.toTrainer();
         this.field.add(newTrainer);
       }
@@ -2550,7 +2551,7 @@ export class BattleScene extends SceneBase {
       const matchingFormChangeOpts = pokemonFormChanges[pokemon.species.speciesId].filter(
         (fc) => fc.findTrigger(formChangeTriggerType) && fc.canChange(pokemon),
       );
-      let matchingFormChange: SpeciesFormChange | null;
+      let matchingFormChange: SpeciesFormChange | undefined;
       if (pokemon.species.speciesId === SpeciesId.NECROZMA && matchingFormChangeOpts.length > 1) {
         // Ultra Necrozma is changing its form back, so we need to figure out into which form it devolves.
         const formChangeItemModifiers = (
@@ -2561,11 +2562,11 @@ export class BattleScene extends SceneBase {
           .filter((m) => m.active)
           .map((m) => m.formChangeItem);
 
-        matchingFormChange = formChangeItemModifiers.includes(FormChangeItem.N_LUNARIZER)
-          ? matchingFormChangeOpts[0]
-          : formChangeItemModifiers.includes(FormChangeItem.N_SOLARIZER)
-            ? matchingFormChangeOpts[1]
-            : null;
+        if (formChangeItemModifiers.includes(FormChangeItem.N_LUNARIZER)) {
+          matchingFormChange = matchingFormChangeOpts[0];
+        } else if (formChangeItemModifiers.includes(FormChangeItem.N_SOLARIZER)) {
+          matchingFormChange = matchingFormChangeOpts[1];
+        }
       } else {
         matchingFormChange = matchingFormChangeOpts[0];
       }
@@ -3018,14 +3019,14 @@ export class BattleScene extends SceneBase {
     const commonThreshold = totalWeight - tierWeights[0];
     const greatThreshold = totalWeight - tierWeights[0] - tierWeights[1];
     const ultraThreshold = totalWeight - tierWeights[0] - tierWeights[1] - tierWeights[2];
-    let tier: MysteryEncounterTier | null =
-      tierValue > commonThreshold
-        ? MysteryEncounterTier.COMMON
-        : tierValue > greatThreshold
-          ? MysteryEncounterTier.GREAT
-          : tierValue > ultraThreshold
-            ? MysteryEncounterTier.ULTRA
-            : MysteryEncounterTier.EPIC;
+    let tier: MysteryEncounterTier | null = MysteryEncounterTier.EPIC;
+    if (tierValue > commonThreshold) {
+      tier = MysteryEncounterTier.COMMON;
+    } else if (tierValue > greatThreshold) {
+      tier = MysteryEncounterTier.GREAT;
+    } else if (tierValue > ultraThreshold) {
+      tier = MysteryEncounterTier.ULTRA;
+    }
 
     if (!isNil(activeOverrides.MYSTERY_ENCOUNTER_TIER_OVERRIDE)) {
       tier = activeOverrides.MYSTERY_ENCOUNTER_TIER_OVERRIDE;

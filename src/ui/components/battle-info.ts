@@ -19,6 +19,7 @@ import { BattleFlyout } from "#ui/battle-flyout";
 import { addTextObject, setTextColor } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
 import { clamp, enumValueToKey, fixedNumber } from "#utils/common-utils";
+import { getShinyDescriptor } from "#utils/pokemon-utils";
 import i18next from "i18next";
 
 export class BattleInfo extends Phaser.GameObjects.Container {
@@ -367,14 +368,9 @@ export class BattleInfo extends Phaser.GameObjects.Container {
     this.shinyIcon.setVisible(pokemon.isShiny());
     this.shinyIcon.setTint(getVariantTint(baseVariant));
     if (this.shinyIcon.visible) {
-      const shinyDescriptor = baseVariant
-        ? `${baseVariant === 2 ? i18next.t("common:epicShiny") : baseVariant === 1 ? i18next.t("common:rareShiny") : i18next.t("common:commonShiny")}`
-        : "";
+      const shinyDescriptor = getShinyDescriptor(baseVariant);
       this.shinyIcon.on("pointerover", () =>
-        globalScene.ui.showTooltip(
-          "",
-          `${i18next.t("common:shinyOnHover")}${shinyDescriptor ? ` (${shinyDescriptor})` : ""}`,
-        ),
+        globalScene.ui.showTooltip("", `${i18next.t("common:shinyOnHover")} (${shinyDescriptor})`),
       );
       this.shinyIcon.on("pointerout", () => globalScene.ui.hideTooltip());
     }
@@ -421,7 +417,13 @@ export class BattleInfo extends Phaser.GameObjects.Container {
     }
 
     this.hpBar.setScale(pokemon.getHpRatio(), 1);
-    this.lastHpFrame = this.hpBar.scaleX > 0.5 ? "high" : this.hpBar.scaleX > 0.25 ? "medium" : "low";
+    if (this.hpBar.scaleX > 0.5) {
+      this.lastHpFrame = "high";
+    } else if (this.hpBar.scaleX > 0.25) {
+      this.lastHpFrame = "medium";
+    } else {
+      this.lastHpFrame = "low";
+    }
     this.hpBar.setFrame(this.lastHpFrame);
     if (this.player) {
       this.setHpNumbers(pokemon.hp, pokemon.getMaxHp());
@@ -461,7 +463,10 @@ export class BattleInfo extends Phaser.GameObjects.Container {
   }
 
   getTextureName(): string {
-    return `pbinfo_${this.player ? "player" : "enemy"}${!this.player && this.boss ? "_boss" : this.mini ? "_mini" : ""}`;
+    const side = this.player ? "player" : "enemy";
+    const boss = !this.player && this.boss ? "_boss" : "";
+    const mini = this.mini ? "_mini" : "";
+    return `pbinfo_${side}${boss}${mini}`;
   }
 
   setMini(mini: boolean): void {
@@ -646,7 +651,12 @@ export class BattleInfo extends Phaser.GameObjects.Container {
 
       // Updates the color of the HP bar (50-100% HP: Green, 25-50% HP: Yellow, 0-25% HP: Red)
       const updateHpFrame = () => {
-        const hpFrame = this.hpBar.scaleX > 0.5 ? "high" : this.hpBar.scaleX > 0.25 ? "medium" : "low";
+        let hpFrame = "low";
+        if (this.hpBar.scaleX > 0.5) {
+          hpFrame = "high";
+        } else if (this.hpBar.scaleX > 0.25) {
+          hpFrame = "medium";
+        }
         if (hpFrame !== this.lastHpFrame) {
           this.hpBar.setFrame(hpFrame);
           this.lastHpFrame = hpFrame;
