@@ -1,11 +1,21 @@
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
+import type { StatStageChangePhase } from "#phases/stat-stage-change-phase";
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
+
+import { getAbApplyFunc } from "#abilities/apply-ab-attrs";
+import type { ProtectStatAbAttr } from "#abilities/protect-stat-ab-attr";
+import type { StatStageChangeMultiplierAbAttr } from "#abilities/stat-stage-change-multiplier-ab-attr";
 import { globalScene } from "#app/global-scene";
+import type { MistTag } from "#arena-tags/mist-tag";
 import {
   LOW_ACCURACY_PENALTY_THRESHOLD,
   MINOR_EFFECT_SCORE_BONUS,
   MINOR_EFFECT_SCORE_PENALTY,
   SOFT_EFFECT_SCORE_LIMIT,
 } from "#constants/ai-constants";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
+import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveCategory } from "#enums/move-category";
 import { type BattleStat, Stat } from "#enums/stat";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
@@ -13,7 +23,7 @@ import type { Pokemon } from "#field/pokemon";
 import { ChanceBasedMoveEffectAttr, type ChanceBasedMoveEffectAttrOptions } from "#moves/chance-based-move-effect-attr";
 import type { Move } from "#moves/move";
 import type { MoveConditionFunc } from "#types/move-types";
-import { isBetween } from "#utils/common-utils";
+import { BooleanHolder, isBetween, NumberHolder } from "#utils/common-utils";
 
 /**
  * Set of optional parameters that may be applied to stat stage changing effects
@@ -93,6 +103,11 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
     return Math.min(super.getEffectScore(user, target, move), SOFT_EFFECT_SCORE_LIMIT);
   }
 
+  /**
+   * @returns The combined raw Effect Score for each of this attribute's stats.
+   * @see {@linkcode getAllyTargetScoreByStat}
+   * @see {@linkcode getOpposingTargetScoreByStat}
+   */
   public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
     if (this.selfTarget) {
       return this.stats.reduce((score, stat) => score + this.getAllyTargetScoreByStat(user, user, stat), 0);
@@ -101,18 +116,46 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
     return this.stats.reduce((score, stat) => score + this.getOpposingTargetScoreByStat(user, target, stat), 0);
   }
 
+  /**
+   * @returns The combined Effect Score for each of this attribute's stats, {@link getTieredScore | tiered} and
+   * upper-bounded by {@linkcode SOFT_EFFECT_SCORE_LIMIT} to yield the final score.
+   * @see {@linkcode getAllyTargetScoreByStat}
+   */
   public override getAllyTargetScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     const rawScore = this.stats.reduce((score, stat) => score + this.getAllyTargetScoreByStat(user, target, stat), 0);
 
     return Math.min(this.getTieredScore(user, target, move, rawScore), SOFT_EFFECT_SCORE_LIMIT);
   }
 
+  /**
+   * Calculates the Effect Score gained (before factoring in effect chance) from modifying a single
+   * stat stage with this effect on either the user or its ally. The heuristic for this scoring varies based
+   * on the stat changed:
+   * - `ATK` / `SPATK`: If the target has a move of matching {@linkcode MoveCategory}, grant (+0.5) per stat stage.
+   * - `DEF` / `SPDEF`: Check the offensive stat affinities of each opponent (i.e. which is higher between
+   * `ATK` and `SPATK`). This grants (+0.5) per stat stage, per opponent with a matching affinity.
+   * - `SPD`: Grants (+1) per opponent that the target would outspeed as a result of this effect.
+   * - `ACC`: If the target has at least one move whose accuracy falls below the {@linkcode LOW_ACCURACY_PENALTY_THRESHOLD},
+   * grant, (+0.5) per stat stage.
+   * - `EVA`: Grants (+0.5) per stat stage.
+   * @param user - The {@linkcode Pokemon} evaluating this effect
+   * @param target - The {@linkcode Pokemon} this effect is evaluated against. This can be assumed to be either the
+   * user or its ally.
+   * @param stat - The {@linkcode BattleStat} being evaluated
+   * @returns The "raw" Effect Score bonus (or penalty) for the given stat. This score is combined with other
+   * stats and {@link getTieredScore | tiered} to yield the final Effect Score.
+   */
   private getAllyTargetScoreByStat(user: EnemyPokemon, target: Pokemon, stat: BattleStat): number {
     const effectiveStatOptions = { simulated: true };
     const oppEffectiveStatOptions = {
       abilityApplyMode: AbilityApplyMode.REVEALED,
       simulated: true,
     };
+
+    const levels = this.getAdjustedLevels(user, target, stat);
+    if (levels === 0) {
+      return 0;
+    }
 
     switch (stat) {
       case Stat.ATK:
@@ -121,7 +164,7 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
         const moveset = target.getMoveset().map((mv) => mv.getMove());
 
         if (moveset.some((mv) => mv.category === category)) {
-          return 0.5 * this.getLevels(user);
+          return 0.5 * levels;
         }
         return 0;
       }
@@ -138,10 +181,10 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
               > opp.getEffectiveStat(otherStat, oppEffectiveStatOptions),
           ).length;
 
-        return 0.5 * numOppsWithMatchingAffinity * this.getLevels(user);
+        return 0.5 * numOppsWithMatchingAffinity * levels;
       }
       case Stat.SPD: {
-        if (this.getLevels(user) < 0) {
+        if (levels < 0) {
           return MINOR_EFFECT_SCORE_PENALTY;
         }
 
@@ -149,7 +192,7 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
         const startingSpdStage = target.getStatStage(stat);
         const startingSpdMultiplier = Math.max(2, 2 + startingSpdStage) / Math.max(2, 2 - startingSpdStage);
 
-        const finalSpdStage = startingSpdStage + this.getLevels(user);
+        const finalSpdStage = startingSpdStage + levels;
         const finalSpdMultiplier = Math.max(2, 2 + finalSpdStage) / Math.max(2, 2 - finalSpdStage);
 
         const relativeSpdMultiplier = finalSpdMultiplier / startingSpdMultiplier;
@@ -162,7 +205,7 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
         return numOpponentsToOutspeed * MINOR_EFFECT_SCORE_BONUS;
       }
       case Stat.ACC: {
-        if (this.getLevels(user) < 0) {
+        if (levels < 0) {
           return MINOR_EFFECT_SCORE_PENALTY;
         }
 
@@ -170,19 +213,43 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
           .getMoveset()
           .some((pkmMove) => pkmMove.getMove().accuracy < LOW_ACCURACY_PENALTY_THRESHOLD);
 
-        return (targetHasInaccurateMove ? 0.5 : 0) * this.getLevels(user);
+        return (targetHasInaccurateMove ? 0.5 : 0) * levels;
       }
       case Stat.EVA:
-        return 0.5 * this.getLevels(user);
+        return 0.5 * levels;
     }
   }
 
+  /**
+   * Calculates the Effect Score gained (before factoring in effect chance) from modifying a single
+   * stat stage with this effect on one of the user's opponents. The heuristic for this scoring varies based
+   * on the stat changed:
+   * - `ATK` / `SPATK`: If the target has a move of matching {@linkcode MoveCategory}, grant (-0.5) per stat stage.
+   * - `DEF` / `SPDEF`: Check the offensive stat affinities (i.e. which is higher between
+   * `ATK` and `SPATK`) of each of the target's opponents (i.e. the user and its ally, if active).
+   * This grants (-0.5) per stat stage, per opponent with a matching affinity.
+   * - `SPD`: Grants (+1) for each of the target's opponents that would outspeed the target as a result of this effect.
+   * - `ACC`: Grants (-0.5) per stat stage.
+   * - `EVA`: If any of the target's opponents has at least one move whose accuracy falls below the {@linkcode LOW_ACCURACY_PENALTY_THRESHOLD},
+   * grant (+0.5) per stat stage.
+   * @param user - The {@linkcode Pokemon} evaluating this effect
+   * @param target - The {@linkcode Pokemon} this effect is evaluated against. This can be assumed to be one of
+   * the user's opponents.
+   * @param stat - The {@linkcode BattleStat} being evaluated
+   * @returns The "raw" Effect Score bonus (or penalty) for the given stat. This score is combined with other
+   * stats and {@link getTieredScore | tiered} to yield the final Effect Score.
+   */
   private getOpposingTargetScoreByStat(user: EnemyPokemon, target: Pokemon, stat: BattleStat): number {
     const effectiveStatOptions = {
       abilityApplyMode: AbilityApplyMode.REVEALED,
       simulated: true,
     };
     const oppEffectiveStatOptions = { simulated: true };
+
+    const levels = this.getAdjustedLevels(user, target, stat);
+    if (levels === 0) {
+      return 0;
+    }
 
     switch (stat) {
       case Stat.ATK:
@@ -191,7 +258,7 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
         const moveset = target.estimateAttackMoves();
 
         if (moveset.some((mv) => mv.category === category)) {
-          return -0.5 * this.getLevels(user);
+          return -0.5 * levels;
         }
         return 0;
       }
@@ -208,10 +275,10 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
               > opp.getEffectiveStat(otherStat, oppEffectiveStatOptions),
           ).length;
 
-        return -0.5 * numOppsWithMatchingAffinity * this.getLevels(user);
+        return -0.5 * numOppsWithMatchingAffinity * levels;
       }
       case Stat.SPD: {
-        if (this.getLevels(user) > 0) {
+        if (levels > 0) {
           return MINOR_EFFECT_SCORE_PENALTY;
         }
 
@@ -219,7 +286,7 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
         const startingSpdStage = target.getStatStage(stat);
         const startingSpdMultiplier = Math.max(2, 2 + startingSpdStage) / Math.max(2, 2 - startingSpdStage);
 
-        const finalSpdStage = startingSpdStage + this.getLevels(user);
+        const finalSpdStage = startingSpdStage + levels;
         const finalSpdMultiplier = Math.max(2, 2 + finalSpdStage) / Math.max(2, 2 - finalSpdStage);
 
         const relativeSpdMultiplier = finalSpdMultiplier / startingSpdMultiplier;
@@ -232,9 +299,9 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
         return numOpponentsToOutspeed * MINOR_EFFECT_SCORE_BONUS;
       }
       case Stat.ACC:
-        return -0.5 * this.getLevels(user);
+        return -0.5 * levels;
       case Stat.EVA: {
-        if (this.getLevels(user) > 0) {
+        if (levels > 0) {
           return MINOR_EFFECT_SCORE_PENALTY;
         }
 
@@ -244,8 +311,42 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
             opp.getMoveset().some((pkmMove) => pkmMove.getMove().accuracy < LOW_ACCURACY_PENALTY_THRESHOLD),
           );
 
-        return (oppHasInaccurateMove ? -0.5 : 0) * this.getLevels(user);
+        return (oppHasInaccurateMove ? -0.5 : 0) * levels;
       }
     }
+  }
+
+  /**
+   * Computes the final amount of stat stages changed for the given stat based on
+   * the target's known abilities. This accounts for cancelling effects such as
+   * Mist and Clear Body and multipliers such as Simple and Contrary.
+   * @param user - The {@linkcode EnemyPokemon} evaluating a move with this effect
+   * @param target - The {@linkcode Pokemon} the effect is evaluated against
+   * @param stat - The {@linkcode Stat} for which the stages are evaluated
+   * @returns The final stat stage change after external effects are accounted for
+   *
+   * @privateRemarks This is only to be used in Enemy AI Effect Score calculations.
+   * @todo Much of this is replicated from {@linkcode StatStageChangePhase}, which
+   * should be refactored to make this logic more easily accessible outside of the Phase itself
+   */
+  private getAdjustedLevels(user: EnemyPokemon, target: Pokemon, stat: BattleStat): number {
+    const abApplyFunc = getAbApplyFunc(target.isOpponent(user) ? AbilityApplyMode.REVEALED : AbilityApplyMode.DEFAULT);
+    const stages = new NumberHolder(this.getLevels(user));
+
+    if (!this.selfTarget && stages.value < 0) {
+      const cancelled = new BooleanHolder(false);
+      globalScene.arena.applyTags<MistTag>(ArenaTagType.MIST, target.getArenaTagSide(), true, user, cancelled);
+
+      if (!cancelled.value) {
+        abApplyFunc<ProtectStatAbAttr>(AbAttrFlag.PROTECT_STAT, target, true, stat, cancelled);
+      }
+
+      if (cancelled.value) {
+        return 0;
+      }
+    }
+
+    abApplyFunc<StatStageChangeMultiplierAbAttr>(AbAttrFlag.STAT_STAGE_CHANGE_MULTIPLIER, target, true, stages);
+    return stages.value;
   }
 }
