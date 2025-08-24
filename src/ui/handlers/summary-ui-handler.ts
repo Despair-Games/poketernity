@@ -774,7 +774,7 @@ export class SummaryUiHandler extends UiHandler {
           return typeIcon;
         };
 
-        const types = this.pokemon?.getTypes(false, false, true)!; // TODO: is this bang correct?
+        const types = this.pokemon!.getTypes(false, false, true); // TODO: is this bang correct?
         profileContainer.add(getTypeIcon(0, types[0]));
         if (types.length > 1) {
           profileContainer.add(getTypeIcon(1, types[1]));
@@ -808,7 +808,7 @@ export class SummaryUiHandler extends UiHandler {
 
         this.abilityContainer = {
           labelImage: globalScene.add.image(0, 0, "summary_profile_ability"),
-          ability: this.pokemon?.getAbility(true)!, // TODO: is this bang correct?
+          ability: this.pokemon!.getAbility(true), // TODO: is this bang correct?
           nameText: null,
           descriptionText: null,
         };
@@ -842,11 +842,11 @@ export class SummaryUiHandler extends UiHandler {
           abilityInfo.labelImage.setOrigin(0, 0);
           profileContainer.add(abilityInfo.labelImage);
 
-          abilityInfo.nameText = addTextObject(7, 66, abilityInfo.ability?.name!, TextStyle.SUMMARY_ALT); // TODO: is this bang correct?
+          abilityInfo.nameText = addTextObject(7, 66, abilityInfo.ability!.name, TextStyle.SUMMARY_ALT); // TODO: is this bang correct?
           abilityInfo.nameText.setOrigin(0, 1);
           profileContainer.add(abilityInfo.nameText);
 
-          abilityInfo.descriptionText = addTextObject(7, 69, abilityInfo.ability?.description!, TextStyle.WINDOW_ALT, {
+          abilityInfo.descriptionText = addTextObject(7, 69, abilityInfo.ability!.description, TextStyle.WINDOW_ALT, {
             wordWrap: { width: 204 * TEXT_SCALE },
           }); // TODO: is this bang correct?
           abilityInfo.descriptionText.setOrigin(0, 0);
@@ -884,16 +884,16 @@ export class SummaryUiHandler extends UiHandler {
         this.passiveContainer?.descriptionText?.setVisible(false);
 
         const closeFragment = getBBCodeFragment("", TextStyle.WINDOW_ALT);
-        const rawNature = toReadableString(Nature[this.pokemon?.getNature()!]); // TODO: is this bang correct?
-        const nature = `${getBBCodeFragment(toReadableString(getNatureName(this.pokemon?.getNature()!)), TextStyle.SUMMARY_RED)}${closeFragment}`; // TODO: is this bang correct?
+        const rawNature = toReadableString(Nature[this.pokemon!.getNature()]); // TODO: is this bang correct?
+        const nature = `${getBBCodeFragment(toReadableString(getNatureName(this.pokemon!.getNature())), TextStyle.SUMMARY_RED)}${closeFragment}`; // TODO: is this bang correct?
 
         const memoString = i18next.t("pokemonSummary:memoString", {
           metFragment: i18next.t(
             `pokemonSummary:metFragment.${this.pokemon?.metBiome === -1 ? "apparently" : "normal"}`,
             {
-              biome: `${getBBCodeFragment(getBiomeName(this.pokemon?.metBiome!), TextStyle.SUMMARY_RED)}${closeFragment}`, // TODO: is this bang correct?
-              level: `${getBBCodeFragment(this.pokemon?.metLevel.toString()!, TextStyle.SUMMARY_RED)}${closeFragment}`, // TODO: is this bang correct?
-              wave: `${getBBCodeFragment(this.pokemon?.metWave ? this.pokemon.metWave.toString()! : i18next.t("pokemonSummary:unknownTrainer"), TextStyle.SUMMARY_RED)}${closeFragment}`,
+              biome: `${getBBCodeFragment(getBiomeName(this.pokemon!.metBiome), TextStyle.SUMMARY_RED)}${closeFragment}`, // TODO: is this bang correct?
+              level: `${getBBCodeFragment(this.pokemon!.metLevel.toString(), TextStyle.SUMMARY_RED)}${closeFragment}`, // TODO: is this bang correct?
+              wave: `${getBBCodeFragment(this.pokemon?.metWave ? this.pokemon.metWave.toString() : i18next.t("pokemonSummary:unknownTrainer"), TextStyle.SUMMARY_RED)}${closeFragment}`,
             },
           ),
           natureFragment: i18next.t(`pokemonSummary:natureFragment.${rawNature}`, { nature }),
@@ -913,7 +913,7 @@ export class SummaryUiHandler extends UiHandler {
           const rowIndex = s % 3;
           const colIndex = Math.floor(s / 3);
 
-          const natureStatMultiplier = getNatureStatMultiplier(this.pokemon?.getNature()!, s); // TODO: is this bang correct?
+          const natureStatMultiplier = getNatureStatMultiplier(this.pokemon!.getNature(), s); // TODO: is this bang correct?
 
           let textStyle: TextStyle = TextStyle.SUMMARY_BLUE;
           if (natureStatMultiplier === 1) {
@@ -932,8 +932,8 @@ export class SummaryUiHandler extends UiHandler {
 
           const statValueText =
             stat !== Stat.HP
-              ? formatStat(this.pokemon?.getStat(stat)!) // TODO: is this bang correct?
-              : `${formatStat(this.pokemon?.hp!, true)}/${formatStat(this.pokemon?.getMaxHp()!, true)}`; // TODO: are those bangs correct?
+              ? formatStat(this.pokemon!.getStat(stat)) // TODO: is this bang correct?
+              : `${formatStat(this.pokemon!.hp, true)}/${formatStat(this.pokemon!.getMaxHp(), true)}`; // TODO: are those bangs correct?
 
           const statValue = addTextObject(120 + 88 * colIndex, 56 + 16 * rowIndex, statValueText, TextStyle.WINDOW_ALT);
           statValue.setOrigin(1, 0);
@@ -958,10 +958,10 @@ export class SummaryUiHandler extends UiHandler {
           icon.on("pointerout", () => globalScene.ui.hideTooltip());
         });
 
-        const pkmLvl = this.pokemon?.level!; // TODO: is this bang correct?
-        const pkmLvlExp = this.pokemon?.levelExp!; // TODO: is this bang correct?
-        const pkmExp = this.pokemon?.exp!; // TODO: is this bang correct?
-        const pkmSpeciesGrowthRate = this.pokemon?.species.growthRate!; // TODO: is this bang correct?
+        const pkmLvl = this.pokemon!.level; // TODO: is this bang correct?
+        const pkmLvlExp = this.pokemon!.levelExp; // TODO: is this bang correct?
+        const pkmExp = this.pokemon!.exp; // TODO: is this bang correct?
+        const pkmSpeciesGrowthRate = this.pokemon!.species.growthRate; // TODO: is this bang correct?
         const relLvExp = getLevelRelExp(pkmLvl + 1, pkmSpeciesGrowthRate);
         const expRatio = pkmLvl < globalScene.getMaxExpLevel() ? pkmLvlExp / relLvExp : 0;
 
@@ -1034,7 +1034,7 @@ export class SummaryUiHandler extends UiHandler {
           ppOverlay.setOrigin(0, 1);
           this.extraMoveRowContainer.add(ppOverlay);
 
-          const pp = leftPad(this.newMove?.pp!, 2, "  "); // TODO: is this bang correct?
+          const pp = leftPad(this.newMove?.pp ?? 0, 2, "  ");
           const ppText = addTextObject(173, 1, `${pp}/${pp}`, TextStyle.SUMMARY);
           ppText.setOrigin(0, 1);
           this.extraMoveRowContainer.add(ppText);

@@ -174,7 +174,8 @@
       },
       "nursery": {
         "noShadow": "warn", // TODO: refactor and make "error"
-        "noUselessUndefined": "error"
+        "noUselessUndefined": "error",
+        "noNonNullAssertedOptionalChain": "error"
       },
       "performance": {
         "noNamespaceImport": "error",

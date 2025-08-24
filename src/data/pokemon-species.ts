@@ -206,7 +206,6 @@ export class PokemonSpecies extends PokemonSpeciesForm {
   }
 
   // TODO: This could definitely be written better and more accurate to the getEnemySpeciesForLevel logic, but it is only for generating movesets for evolved Pokemon
-  // TODO: evaluate all these `!` for correctness
   getSimulatedEvolutionChain(
     currentLevel: number,
     forTrainer: boolean = false,
@@ -228,32 +227,32 @@ export class PokemonSpecies extends PokemonSpeciesForm {
       for (let l = 1; l < preEvolutionLevels.length; l++) {
         const evolution = pokemonEvolutions[preEvolutionLevels[l - 1][0]].find(
           (e) => e.speciesId === preEvolutionLevels[l][0],
-        );
+        )!; // TODO: resolve `!`
         ret.push([
           preEvolutionLevels[l][0],
           Math.min(
             Math.max(
-              evolution?.enemyEvolveLevel! + Math.round(randSeedGauss(0.5, 1 + levelDiff * 0.2) * 0.5 * 5) - 1,
+              evolution.enemyEvolveLevel + Math.round(randSeedGauss(0.5, 1 + levelDiff * 0.2) * 0.5 * 5) - 1,
               2,
-              evolution?.enemyEvolveLevel!,
+              evolution.enemyEvolveLevel,
             ),
             currentLevel - 1,
           ),
-        ]); // TODO: are those bangs correct?
+        ]);
       }
       const lastPreEvolutionLevel = ret[preEvolutionLevels.length - 1][1];
-      const evolution = pokemonEvolutions[preEvolutionLevels.at(-1)![0]].find((e) => e.speciesId === this.speciesId);
+      const evolution = pokemonEvolutions[preEvolutionLevels.at(-1)![0]].find((e) => e.speciesId === this.speciesId)!; // TODO: resolve `!` on `.find()`
       ret.push([
         this.speciesId,
         Math.min(
           Math.max(
             lastPreEvolutionLevel + Math.round(randSeedGauss(0.5, 1 + levelDiff * 0.2) * 0.5 * 5),
             lastPreEvolutionLevel + 1,
-            evolution?.enemyEvolveLevel!,
+            evolution.enemyEvolveLevel,
           ),
           currentLevel,
         ),
-      ]); // TODO: are those bangs correct?
+      ]);
     } else {
       ret.push([this.speciesId, 1]);
     }

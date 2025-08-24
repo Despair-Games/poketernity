@@ -153,7 +153,7 @@ export abstract class MessageUiHandler extends AwaitableUiHandler {
       this.textTimer = globalScene.time.addEvent({
         delay,
         callback: () => {
-          const charIndex = text.length - this.textTimer?.repeatCount!; // TODO: is this bang correct?
+          const charIndex = text.length - this.textTimer!.repeatCount;
           const charVar = charVarMap.get(charIndex);
           const charSound = soundMap.get(charIndex);
           const charDelay = delayMap.get(charIndex);
@@ -181,11 +181,11 @@ export abstract class MessageUiHandler extends AwaitableUiHandler {
             }
           };
           if (charDelay) {
-            this.textTimer!.paused = true; // TODO: is the bang correct?
+            this.textTimer!.paused = true;
             globalScene.tweens.addCounter({
               duration: getFrameMs(charDelay),
               onComplete: () => {
-                this.textTimer!.paused = false; // TODO: is the bang correct?
+                this.textTimer!.paused = false;
                 advance();
               },
             });

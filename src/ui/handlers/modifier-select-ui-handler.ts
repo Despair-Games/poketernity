@@ -756,12 +756,13 @@ class ModifierOption extends Phaser.GameObjects.Container {
       this.itemContainer.add(this.itemTint);
     }
 
-    this.itemText = addTextObject(0, 35, this.modifierTypeOption.type?.name!, TextStyle.PARTY, { align: "center" }); // TODO: is this bang correct?
-    this.itemText.setOrigin(0.5, 0);
-    this.itemText.setAlpha(0);
-    this.itemText.setTint(
-      this.modifierTypeOption.type?.tier ? getModifierTierTextTint(this.modifierTypeOption.type.tier) : undefined,
-    );
+    this.itemText = //
+      addTextObject(0, 35, this.modifierTypeOption.type.name ?? "missing", TextStyle.PARTY, { align: "center" })
+        .setOrigin(0.5, 0)
+        .setAlpha(0)
+        .setTint(
+          this.modifierTypeOption.type?.tier ? getModifierTierTextTint(this.modifierTypeOption.type.tier) : undefined,
+        );
     this.add(this.itemText);
 
     if (this.modifierTypeOption.cost) {

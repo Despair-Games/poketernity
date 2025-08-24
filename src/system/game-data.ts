@@ -1250,9 +1250,9 @@ export class GameData {
       const reader = new FileReader();
 
       reader.onload = ((_) => {
-        return (e) => {
+        return (pe) => {
           let dataName: string;
-          let dataStr = AES.decrypt(e.target?.result?.toString()!, saveKey).toString(enc.Utf8); // TODO: is this bang correct?
+          let dataStr = AES.decrypt(pe.target!.result!.toString()!, saveKey).toString(enc.Utf8); // TODO: is this bang correct?
           let valid = false;
           try {
             dataName = enumValueToKey(GameDataType, dataType).toLowerCase();
@@ -1351,7 +1351,7 @@ export class GameData {
             callback: () => globalScene.ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, importDataConfirmOptions),
           });
         };
-      })((e.target as any).files[0]);
+      })(e.target.files[0]);
 
       reader.readAsText((e.target as any).files[0]);
     });
