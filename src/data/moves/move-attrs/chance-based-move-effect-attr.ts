@@ -81,16 +81,21 @@ export abstract class ChanceBasedMoveEffectAttr extends MoveEffectAttr {
    * and {@linkcode getMoveChance | chance to apply}.
    */
   public override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    /** The attribute's effect score, assuming its effect always applies */
+    const rawScore = this.getRawEffectScore(user, target, move);
+
+    return this.getTieredScore(user, target, move, rawScore);
+  }
+
+  protected getTieredScore(user: EnemyPokemon, target: Pokemon, move: Move, score: number): number {
     /**
      * The attribute's chance to apply its effect
      * @todo this chance calculation may prematurely reveal abilities
      */
     const chance = this.getMoveChance(user, target, move);
-    /** The attribute's effect score, assuming its effect always applies */
-    const rawScore = this.getRawEffectScore(user, target, move);
 
     if (chance < 0) {
-      return rawScore;
+      return score;
     }
 
     /**
@@ -98,7 +103,7 @@ export abstract class ChanceBasedMoveEffectAttr extends MoveEffectAttr {
      * This may be a decimal number; the final output is either
      * `floor(chanceWeightedScore)` or `floor(chanceWeightedScore) + 1`
      */
-    const chanceWeightedScore = (chance * rawScore) / 100;
+    const chanceWeightedScore = (chance * score) / 100;
     /** The minimum integer score this function can return */
     const minScore = Math.floor(chanceWeightedScore);
     /**

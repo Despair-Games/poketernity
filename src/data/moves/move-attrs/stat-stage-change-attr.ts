@@ -1,10 +1,19 @@
 import { globalScene } from "#app/global-scene";
+import {
+  LOW_ACCURACY_PENALTY_THRESHOLD,
+  MINOR_EFFECT_SCORE_BONUS,
+  MINOR_EFFECT_SCORE_PENALTY,
+  SOFT_EFFECT_SCORE_LIMIT,
+} from "#constants/ai-constants";
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { MoveCategory } from "#enums/move-category";
 import { type BattleStat, Stat } from "#enums/stat";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { ChanceBasedMoveEffectAttr, type ChanceBasedMoveEffectAttrOptions } from "#moves/chance-based-move-effect-attr";
 import type { Move } from "#moves/move";
 import type { MoveConditionFunc } from "#types/move-types";
+import { isBetween } from "#utils/common-utils";
 
 /**
  * Set of optional parameters that may be applied to stat stage changing effects
@@ -76,49 +85,167 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
     return true;
   }
 
-  getLevels(_user: Pokemon): number {
+  protected getLevels(_user: Pokemon): number {
     return this.stages;
   }
 
-  override getTargetBenefitScore(user: Pokemon, target: Pokemon, _move: Move): number {
-    let ret = 0;
-    const moveLevels = this.getLevels(user);
-    for (const stat of this.stats) {
-      let levels = moveLevels;
-      const statStage = target.getStatStage(stat);
-      if (levels > 0) {
-        levels = Math.min(statStage + levels, 6) - statStage;
-      } else {
-        levels = Math.max(statStage + levels, -6) - statStage;
-      }
-      let noEffect = false;
-      switch (stat) {
-        case Stat.ATK:
-          if (this.selfTarget) {
-            noEffect = !user.getMoveset().find((m) => m.getMove().category === MoveCategory.PHYSICAL);
-          }
-          break;
-        case Stat.DEF:
-          if (!this.selfTarget) {
-            noEffect = !user.getMoveset().find((m) => m.getMove().category === MoveCategory.PHYSICAL);
-          }
-          break;
-        case Stat.SPATK:
-          if (this.selfTarget) {
-            noEffect = !user.getMoveset().find((m) => m.getMove().category === MoveCategory.SPECIAL);
-          }
-          break;
-        case Stat.SPDEF:
-          if (!this.selfTarget) {
-            noEffect = !user.getMoveset().find((m) => m.getMove().category === MoveCategory.SPECIAL);
-          }
-          break;
-      }
-      if (noEffect) {
-        continue;
-      }
-      ret += levels * 4 + (levels > 0 ? -2 : 2);
+  public override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    return Math.min(super.getEffectScore(user, target, move), SOFT_EFFECT_SCORE_LIMIT);
+  }
+
+  public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+    if (this.selfTarget) {
+      return this.stats.reduce((score, stat) => score + this.getAllyTargetScoreByStat(user, user, stat), 0);
     }
-    return ret;
+
+    return this.stats.reduce((score, stat) => score + this.getOpposingTargetScoreByStat(user, target, stat), 0);
+  }
+
+  public override getAllyTargetScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const rawScore = this.stats.reduce((score, stat) => score + this.getAllyTargetScoreByStat(user, target, stat), 0);
+
+    return Math.min(this.getTieredScore(user, target, move, rawScore), SOFT_EFFECT_SCORE_LIMIT);
+  }
+
+  private getAllyTargetScoreByStat(user: EnemyPokemon, target: Pokemon, stat: BattleStat): number {
+    const effectiveStatOptions = { simulated: true };
+    const oppEffectiveStatOptions = {
+      abilityApplyMode: AbilityApplyMode.REVEALED,
+      simulated: true,
+    };
+
+    switch (stat) {
+      case Stat.ATK:
+      case Stat.SPATK: {
+        const category = stat === Stat.ATK ? MoveCategory.PHYSICAL : MoveCategory.SPECIAL;
+        const moveset = target.getMoveset().map((mv) => mv.getMove());
+
+        if (moveset.some((mv) => mv.category === category)) {
+          return 0.5 * this.getLevels(user);
+        }
+        return 0;
+      }
+      case Stat.DEF:
+      case Stat.SPDEF: {
+        const [relevantStat, otherStat]: BattleStat[] =
+          stat === Stat.DEF ? [Stat.ATK, Stat.SPATK] : [Stat.SPATK, Stat.ATK];
+
+        const numOppsWithMatchingAffinity = target
+          .getOpponents()
+          .filter(
+            (opp) =>
+              opp.getEffectiveStat(relevantStat, oppEffectiveStatOptions)
+              > opp.getEffectiveStat(otherStat, oppEffectiveStatOptions),
+          ).length;
+
+        return 0.5 * numOppsWithMatchingAffinity * this.getLevels(user);
+      }
+      case Stat.SPD: {
+        if (this.getLevels(user) < 0) {
+          return MINOR_EFFECT_SCORE_PENALTY;
+        }
+
+        const targetStartingSpd = target.getEffectiveStat(stat, effectiveStatOptions);
+        const startingSpdStage = target.getStatStage(stat);
+        const startingSpdMultiplier = Math.max(2, 2 + startingSpdStage) / Math.max(2, 2 - startingSpdStage);
+
+        const finalSpdStage = startingSpdStage + this.getLevels(user);
+        const finalSpdMultiplier = Math.max(2, 2 + finalSpdStage) / Math.max(2, 2 - finalSpdStage);
+
+        const relativeSpdMultiplier = finalSpdMultiplier / startingSpdMultiplier;
+
+        const numOpponentsToOutspeed = target.getOpponents().filter((opp) => {
+          const oppSpd = opp.getEffectiveStat(stat, oppEffectiveStatOptions);
+          return isBetween(oppSpd + 1, targetStartingSpd, targetStartingSpd * relativeSpdMultiplier);
+        }).length;
+
+        return numOpponentsToOutspeed * MINOR_EFFECT_SCORE_BONUS;
+      }
+      case Stat.ACC: {
+        if (this.getLevels(user) < 0) {
+          return MINOR_EFFECT_SCORE_PENALTY;
+        }
+
+        const targetHasInaccurateMove = target
+          .getMoveset()
+          .some((pkmMove) => pkmMove.getMove().accuracy < LOW_ACCURACY_PENALTY_THRESHOLD);
+
+        return (targetHasInaccurateMove ? 0.5 : 0) * this.getLevels(user);
+      }
+      case Stat.EVA:
+        return 0.5 * this.getLevels(user);
+    }
+  }
+
+  private getOpposingTargetScoreByStat(user: EnemyPokemon, target: Pokemon, stat: BattleStat): number {
+    const effectiveStatOptions = {
+      abilityApplyMode: AbilityApplyMode.REVEALED,
+      simulated: true,
+    };
+    const oppEffectiveStatOptions = { simulated: true };
+
+    switch (stat) {
+      case Stat.ATK:
+      case Stat.SPATK: {
+        const category = stat === Stat.ATK ? MoveCategory.PHYSICAL : MoveCategory.SPECIAL;
+        const moveset = target.estimateAttackMoves();
+
+        if (moveset.some((mv) => mv.category === category)) {
+          return -0.5 * this.getLevels(user);
+        }
+        return 0;
+      }
+      case Stat.DEF:
+      case Stat.SPDEF: {
+        const [relevantStat, otherStat]: BattleStat[] =
+          stat === Stat.DEF ? [Stat.ATK, Stat.SPATK] : [Stat.SPATK, Stat.ATK];
+
+        const numOppsWithMatchingAffinity = target
+          .getOpponents()
+          .filter(
+            (opp) =>
+              opp.getEffectiveStat(relevantStat, oppEffectiveStatOptions)
+              > opp.getEffectiveStat(otherStat, oppEffectiveStatOptions),
+          ).length;
+
+        return -0.5 * numOppsWithMatchingAffinity * this.getLevels(user);
+      }
+      case Stat.SPD: {
+        if (this.getLevels(user) > 0) {
+          return MINOR_EFFECT_SCORE_PENALTY;
+        }
+
+        const targetStartingSpd = target.getEffectiveStat(stat, effectiveStatOptions);
+        const startingSpdStage = target.getStatStage(stat);
+        const startingSpdMultiplier = Math.max(2, 2 + startingSpdStage) / Math.max(2, 2 - startingSpdStage);
+
+        const finalSpdStage = startingSpdStage + this.getLevels(user);
+        const finalSpdMultiplier = Math.max(2, 2 + finalSpdStage) / Math.max(2, 2 - finalSpdStage);
+
+        const relativeSpdMultiplier = finalSpdMultiplier / startingSpdMultiplier;
+
+        const numOpponentsToOutspeed = target.getOpponents().filter((opp) => {
+          const oppSpd = opp.getEffectiveStat(stat, oppEffectiveStatOptions);
+          return isBetween(oppSpd + 1, targetStartingSpd * relativeSpdMultiplier, targetStartingSpd);
+        }).length;
+
+        return numOpponentsToOutspeed * MINOR_EFFECT_SCORE_BONUS;
+      }
+      case Stat.ACC:
+        return -0.5 * this.getLevels(user);
+      case Stat.EVA: {
+        if (this.getLevels(user) > 0) {
+          return MINOR_EFFECT_SCORE_PENALTY;
+        }
+
+        const oppHasInaccurateMove = target
+          .getOpponents()
+          .some((opp) =>
+            opp.getMoveset().some((pkmMove) => pkmMove.getMove().accuracy < LOW_ACCURACY_PENALTY_THRESHOLD),
+          );
+
+        return (oppHasInaccurateMove ? -0.5 : 0) * this.getLevels(user);
+      }
+    }
   }
 }

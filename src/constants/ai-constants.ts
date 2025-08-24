@@ -84,3 +84,6 @@ export const STRONG_MATCHUP_SCORE_THRESHOLD = 4;
  * Pokemon is favored against its opponent
  */
 export const FAVORABLE_MATCHUP_SCORE_THRESHOLD = 3;
+
+/** The minimum accuracy a move can have before a Low Accuracy Penalty applies */
+export const LOW_ACCURACY_PENALTY_THRESHOLD = 80;
