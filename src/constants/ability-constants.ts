@@ -70,3 +70,9 @@ export const POISONING_SYNERGY_ABILITIES = Object.freeze<AbilityId[]>([
   AbilityId.MERCILESS,
   AbilityId.POISON_PUPPETEER,
 ]);
+
+/** Abilities that grant a benefit when receiving a negative stat stage change */
+export const POST_STAT_STAGE_REDUCTION_ABILITIES = Object.freeze<AbilityId[]>([
+  AbilityId.DEFIANT,
+  AbilityId.COMPETITIVE,
+]);

@@ -7,8 +7,10 @@ import type { ProtectStatAbAttr } from "#abilities/protect-stat-ab-attr";
 import type { StatStageChangeMultiplierAbAttr } from "#abilities/stat-stage-change-multiplier-ab-attr";
 import { globalScene } from "#app/global-scene";
 import type { MistTag } from "#arena-tags/mist-tag";
+import { POST_STAT_STAGE_REDUCTION_ABILITIES } from "#constants/ability-constants";
 import {
   LOW_ACCURACY_PENALTY_THRESHOLD,
+  MAJOR_EFFECT_SCORE_PENALTY,
   MINOR_EFFECT_SCORE_BONUS,
   MINOR_EFFECT_SCORE_PENALTY,
   SOFT_EFFECT_SCORE_LIMIT,
@@ -249,6 +251,10 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
     const levels = this.getAdjustedLevels(user, target, stat);
     if (levels === 0) {
       return 0;
+    }
+
+    if (levels < 0 && POST_STAT_STAGE_REDUCTION_ABILITIES.some((abId) => target.hasRevealedAbility(abId))) {
+      return MAJOR_EFFECT_SCORE_PENALTY;
     }
 
     switch (stat) {
