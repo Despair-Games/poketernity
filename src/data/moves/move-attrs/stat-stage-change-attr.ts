@@ -19,6 +19,7 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveCategory } from "#enums/move-category";
+import { MoveId } from "#enums/move-id";
 import { type BattleStat, Stat } from "#enums/stat";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
@@ -135,7 +136,8 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
    * on the stat changed:
    * - `ATK` / `SPATK`: If the target has a move of matching {@linkcode MoveCategory}, grant (+0.5) per stat stage.
    * - `DEF` / `SPDEF`: Check the offensive stat affinities of each opponent (i.e. which is higher between
-   * `ATK` and `SPATK`). This grants (+0.5) per stat stage, per opponent with a matching affinity.
+   * `ATK` and `SPATK`). This grants (+0.5) per stat stage, per opponent with a matching affinity. For `DEF`
+   * boosts, if the target has Body Press, this grants an additional (+1).
    * - `SPD`: Grants (+1) per opponent that the target would outspeed as a result of this effect.
    * - `ACC`: If the target has at least one move whose accuracy falls below the {@linkcode LOW_ACCURACY_PENALTY_THRESHOLD},
    * grant, (+0.5) per stat stage.
@@ -183,7 +185,9 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
               > opp.getEffectiveStat(otherStat, oppEffectiveStatOptions),
           ).length;
 
-        return 0.5 * numOppsWithMatchingAffinity * levels;
+        const bodyPressBonus = levels > 0 && target.hasMove(MoveId.BODY_PRESS) ? MINOR_EFFECT_SCORE_BONUS : 0;
+
+        return 0.5 * numOppsWithMatchingAffinity * levels + bodyPressBonus;
       }
       case Stat.SPD: {
         if (levels < 0) {
