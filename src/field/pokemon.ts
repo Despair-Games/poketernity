@@ -83,7 +83,6 @@ import {
 } from "#constants/game-constants";
 import { CustomPokemonData } from "#data/custom-pokemon-data";
 import { allAbilities, allMoves } from "#data/data-lists";
-import { AbilityAttr, DexAttr } from "#data/dex-attributes";
 import { speciesEggMoves } from "#data/egg-moves";
 import { getLevelTotalExp } from "#data/exp";
 import { getNatureStatMultiplier } from "#data/nature";
@@ -100,6 +99,7 @@ import { getTypeDamageMultiplier, getTypeRgb, type TypeDamageMultiplier } from "
 import { type Variant, variantData } from "#data/variant";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
+import { AbilityAttr } from "#enums/ability-attr";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -108,6 +108,7 @@ import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BiomeId } from "#enums/biome-id";
 import { ChallengeType } from "#enums/challenge-type";
+import { DexAttr } from "#enums/dex-attr";
 import { ElementalType } from "#enums/elemental-type";
 import { EventModifierType } from "#enums/event-modifier-type";
 import { FieldPosition } from "#enums/field-position";
