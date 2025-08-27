@@ -1,7 +1,6 @@
 import type { FixedBattleConfig } from "#app/battle";
 import type { GameMode } from "#app/game-mode";
-import { DEFAULT_STARTER_IVS } from "#constants/game-constants";
-import { defaultStarterSpecies } from "#data/default-starters";
+import { DEFAULT_STARTER_IVS, DEFAULT_STARTER_SPECIES } from "#constants/game-constants";
 import { pokemonFormChanges } from "#data/pokemon-forms";
 import type { PokemonSpecies } from "#data/pokemon-species";
 import { speciesStarterCosts } from "#data/starters";
@@ -649,7 +648,7 @@ export class FreshStartChallenge extends Challenge {
   }
 
   override applyStarterChoice(pokemon: PokemonSpecies, valid: BooleanHolder): boolean {
-    if (!defaultStarterSpecies.includes(pokemon.speciesId)) {
+    if (!DEFAULT_STARTER_SPECIES.includes(pokemon.speciesId)) {
       valid.value = false;
       return true;
     }
@@ -657,7 +656,7 @@ export class FreshStartChallenge extends Challenge {
   }
 
   override applyStarterCost(species: SpeciesId, cost: NumberHolder): boolean {
-    if (defaultStarterSpecies.includes(species)) {
+    if (DEFAULT_STARTER_SPECIES.includes(species)) {
       cost.value = speciesStarterCosts[species];
       return true;
     }
