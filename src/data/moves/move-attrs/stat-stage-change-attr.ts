@@ -301,15 +301,7 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
   /**
    * Calculates the Effect Score gained (before factoring in effect chance) from modifying a single
    * stat stage with this effect on one of the user's opponents. The heuristic for this scoring varies based
-   * on the stat changed:
-   * - `ATK` / `SPATK`: If the target has a move of matching {@linkcode MoveCategory}, grant (-0.5) per stat stage.
-   * - `DEF` / `SPDEF`: Check the offensive stat affinities (i.e. which is higher between
-   * `ATK` and `SPATK`) of each of the target's opponents (i.e. the user and its ally, if active).
-   * This grants (-0.5) per stat stage, per opponent with a matching affinity.
-   * - `SPD`: Grants (+1) for each of the target's opponents that would outspeed the target as a result of this effect.
-   * - `ACC`: Grants (-0.5) per stat stage unless the target's `ACC` stat stage is at or below the {@linkcode ACCURACY_REDUCTION_STAGE_LIMIT}.
-   * - `EVA`: If any of the target's opponents has at least one move whose accuracy falls below the {@linkcode LOW_ACCURACY_PENALTY_THRESHOLD},
-   * grant (+0.5) per stat stage.
+   * on the stat changed.
    * @param user - The {@linkcode Pokemon} evaluating this effect
    * @param target - The {@linkcode Pokemon} this effect is evaluated against. This can be assumed to be one of
    * the user's opponents.
