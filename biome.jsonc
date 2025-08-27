@@ -176,7 +176,8 @@
       "nursery": {
         "noShadow": "warn", // TODO: refactor and make "error"
         "noUselessUndefined": "error",
-        "noNonNullAssertedOptionalChain": "error"
+        "noNonNullAssertedOptionalChain": "error",
+        "useExplicitType": "off" // TODO: refactor and make "error"
       },
       "performance": {
         "noNamespaceImport": "error",
