@@ -1,7 +1,12 @@
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { MoveAttr } from "#moves/move-attr";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
+
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
+import type { EffectiveStatOptions } from "#field/pokemon";
 
 /** The {@link Pokemon.getAttackScore | Attack Score} granted to moves that KO an opponent. */
 export const KO_ATTACK_SCORE = 4;
@@ -106,3 +111,18 @@ export const EVASION_BOOST_STAGE_LIMIT = 2;
  * moves (e.g. Sand Attack) are no longer incentivized by the AI
  */
 export const ACCURACY_REDUCTION_STAGE_LIMIT = -EVASION_BOOST_STAGE_LIMIT;
+
+/**
+ * The {@linkcode EffectiveStatOptions} to be passed to {@linkcode Pokemon.getEffectiveStat}
+ * when evaluating the effective stat of an allied {@linkcode EnemyPokemon}
+ */
+export const ALLY_EFFECTIVE_STAT_OPTIONS: EffectiveStatOptions = { simulated: true } as const;
+
+/**
+ * The {@linkcode EffectiveStatOptions} to be passed to {@linkcode Pokemon.getEffectiveStat}
+ * when evaluating the effective stat of an opposing {@linkcode PlayerPokemon}
+ */
+export const OPP_EFFECTIVE_STAT_OPTIONS: EffectiveStatOptions = {
+  abilityApplyMode: AbilityApplyMode.REVEALED,
+  simulated: true,
+} as const;

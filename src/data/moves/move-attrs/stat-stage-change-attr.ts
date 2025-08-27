@@ -10,6 +10,7 @@ import type { MistTag } from "#arena-tags/mist-tag";
 import { POST_STAT_STAGE_REDUCTION_ABILITIES } from "#constants/ability-constants";
 import {
   ACCURACY_REDUCTION_STAGE_LIMIT,
+  ALLY_EFFECTIVE_STAT_OPTIONS,
   BAD_MOVE_PENALTY,
   DEFENSE_LOW_INCENTIVE_THRESHOLD,
   EVASION_BOOST_STAGE_LIMIT,
@@ -17,6 +18,7 @@ import {
   MAJOR_EFFECT_SCORE_PENALTY,
   MINOR_EFFECT_SCORE_BONUS,
   MINOR_EFFECT_SCORE_PENALTY,
+  OPP_EFFECTIVE_STAT_OPTIONS,
   SOFT_EFFECT_SCORE_LIMIT,
 } from "#constants/ai-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -208,11 +210,6 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
    * @returns The raw Effect Score (can be a decimal value)
    */
   private getAllyDefenseStageChangeScore(target: EnemyPokemon, stat: Stat.DEF | Stat.SPDEF, levels: number): number {
-    const oppEffectiveStatOptions = {
-      abilityApplyMode: AbilityApplyMode.REVEALED,
-      simulated: true,
-    };
-
     const [relevantStat, otherStat]: BattleStat[] = stat === Stat.DEF ? [Stat.ATK, Stat.SPATK] : [Stat.SPATK, Stat.ATK];
 
     const scoreMultiplier = target.getStatStage(stat) < DEFENSE_LOW_INCENTIVE_THRESHOLD ? 0.5 : 0.25;
@@ -221,8 +218,8 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
       .getOpponents()
       .filter(
         (opp) =>
-          opp.getEffectiveStat(relevantStat, oppEffectiveStatOptions)
-          > opp.getEffectiveStat(otherStat, oppEffectiveStatOptions),
+          opp.getEffectiveStat(relevantStat, OPP_EFFECTIVE_STAT_OPTIONS)
+          > opp.getEffectiveStat(otherStat, OPP_EFFECTIVE_STAT_OPTIONS),
       ).length;
 
     const bodyPressBonus = levels > 0 && target.hasMove(MoveId.BODY_PRESS) ? MINOR_EFFECT_SCORE_BONUS : 0;
@@ -241,17 +238,11 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
    * @returns The raw Effect Score (can be a decimal value)
    */
   private getAllySpeedStageChangeScore(target: EnemyPokemon, stat: Stat.SPD, levels: number): number {
-    const effectiveStatOptions = { simulated: true };
-    const oppEffectiveStatOptions = {
-      abilityApplyMode: AbilityApplyMode.REVEALED,
-      simulated: true,
-    };
-
     if (levels < 0) {
       return MINOR_EFFECT_SCORE_PENALTY;
     }
 
-    const targetStartingSpd = target.getEffectiveStat(stat, effectiveStatOptions);
+    const targetStartingSpd = target.getEffectiveStat(stat, ALLY_EFFECTIVE_STAT_OPTIONS);
     const startingSpdStage = target.getStatStage(stat);
     const startingSpdMultiplier = Math.max(2, 2 + startingSpdStage) / Math.max(2, 2 - startingSpdStage);
 
@@ -261,7 +252,7 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
     const relativeSpdMultiplier = finalSpdMultiplier / startingSpdMultiplier;
 
     const numOpponentsToOutspeed = target.getOpponents().filter((opp) => {
-      const oppSpd = opp.getEffectiveStat(stat, oppEffectiveStatOptions);
+      const oppSpd = opp.getEffectiveStat(stat, OPP_EFFECTIVE_STAT_OPTIONS);
       return isBetween(oppSpd + 1, targetStartingSpd, targetStartingSpd * relativeSpdMultiplier);
     }).length;
 
@@ -398,16 +389,14 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
     stat: Stat.DEF | Stat.SPDEF,
     levels: number,
   ): number {
-    const oppEffectiveStatOptions = { simulated: true };
-
     const [relevantStat, otherStat]: BattleStat[] = stat === Stat.DEF ? [Stat.ATK, Stat.SPATK] : [Stat.SPATK, Stat.ATK];
 
     const numOppsWithMatchingAffinity = target
       .getOpponents()
       .filter(
         (opp) =>
-          opp.getEffectiveStat(relevantStat, oppEffectiveStatOptions)
-          > opp.getEffectiveStat(otherStat, oppEffectiveStatOptions),
+          opp.getEffectiveStat(relevantStat, ALLY_EFFECTIVE_STAT_OPTIONS)
+          > opp.getEffectiveStat(otherStat, ALLY_EFFECTIVE_STAT_OPTIONS),
       ).length;
 
     return -0.5 * numOppsWithMatchingAffinity * levels;
@@ -424,17 +413,11 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
    * @returns The raw Effect Score (can be a decimal value)
    */
   private getOpponentSpeedStageChangeScore(target: PlayerPokemon, stat: Stat.SPD, levels: number): number {
-    const effectiveStatOptions = {
-      abilityApplyMode: AbilityApplyMode.REVEALED,
-      simulated: true,
-    };
-    const oppEffectiveStatOptions = { simulated: true };
-
     if (levels > 0) {
       return MINOR_EFFECT_SCORE_PENALTY;
     }
 
-    const targetStartingSpd = target.getEffectiveStat(stat, effectiveStatOptions);
+    const targetStartingSpd = target.getEffectiveStat(stat, OPP_EFFECTIVE_STAT_OPTIONS);
     const startingSpdStage = target.getStatStage(stat);
     const startingSpdMultiplier = Math.max(2, 2 + startingSpdStage) / Math.max(2, 2 - startingSpdStage);
 
@@ -444,7 +427,7 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
     const relativeSpdMultiplier = finalSpdMultiplier / startingSpdMultiplier;
 
     const numOpponentsToOutspeed = target.getOpponents().filter((opp) => {
-      const oppSpd = opp.getEffectiveStat(stat, oppEffectiveStatOptions);
+      const oppSpd = opp.getEffectiveStat(stat, ALLY_EFFECTIVE_STAT_OPTIONS);
       return isBetween(oppSpd + 1, targetStartingSpd * relativeSpdMultiplier, targetStartingSpd);
     }).length;
 

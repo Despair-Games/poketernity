@@ -219,7 +219,7 @@ interface DamageFunctionOptions {
   source?: Pokemon;
 }
 
-interface EffectiveStatOptions {
+export interface EffectiveStatOptions {
   /** The opposing {@linkcode Pokemon}, usually involved in an incoming or outgoing attack */
   opponent?: Pokemon;
   /** The {@linkcode Move} being used */
