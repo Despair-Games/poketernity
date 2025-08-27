@@ -65,7 +65,9 @@ export class CutHpStatStageBoostAttr extends StatStageChangeAttr {
       }, 0),
     );
 
-    const meetsHpCutThreshold = oppMaxEas.every((eas) => eas < (this.cutRatio * 100) / ATTACK_SCORE_HP_THRESHOLD);
+    const meetsHpCutThreshold = oppMaxEas.every(
+      (eas) => eas < ((user.getHpRatio() - 1 / this.cutRatio) * 100) / ATTACK_SCORE_HP_THRESHOLD,
+    );
     const hpCutPenalty = meetsHpCutThreshold ? 0 : BAD_MOVE_PENALTY;
 
     return hpCutPenalty + super.getRawEffectScore(user, target, move);

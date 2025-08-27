@@ -27,7 +27,7 @@ import type { Pokemon } from "#field/pokemon";
 import { ChanceBasedMoveEffectAttr, type ChanceBasedMoveEffectAttrOptions } from "#moves/chance-based-move-effect-attr";
 import type { Move } from "#moves/move";
 import type { MoveConditionFunc } from "#types/move-types";
-import { BooleanHolder, isBetween, NumberHolder } from "#utils/common-utils";
+import { BooleanHolder, clamp, isBetween, NumberHolder } from "#utils/common-utils";
 
 /**
  * Set of optional parameters that may be applied to stat stage changing effects
@@ -363,6 +363,9 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
     }
 
     abApplyFunc<StatStageChangeMultiplierAbAttr>(AbAttrFlag.STAT_STAGE_CHANGE_MULTIPLIER, target, true, stages);
+
+    const currentStages = target.getStatStage(stat);
+    stages.value = clamp(stages.value, -6 - currentStages, 6 - currentStages);
     return stages.value;
   }
 }
