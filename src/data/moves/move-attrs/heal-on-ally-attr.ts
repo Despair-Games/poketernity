@@ -22,7 +22,7 @@ export class HealOnAllyAttr extends HealAttr {
    * This is the same scoring logic as in {@linkcode HealAttr.getEffectScore}, except
    * that the penalty for targeting an opponent with the effect is removed.
    */
-  public override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+  public override getEffectScore(user: EnemyPokemon, target: EnemyPokemon, move: Move): number {
     if (target.isOpponent(user)) {
       return 0;
     }

@@ -58,8 +58,8 @@ export class CutHpStatStageBoostAttr extends StatStageChangeAttr {
    */
   public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     const oppMaxEas = user.getOpponents().map((opp) =>
-      opp.estimateAttackMoves().reduce((maxEas, move) => {
-        const eas = opp.getExpectedAttackScore(user, move);
+      opp.estimateAttackMoves().reduce((maxEas, mv) => {
+        const eas = opp.getExpectedAttackScore(user, mv);
 
         return Math.max(maxEas, eas);
       }, 0),

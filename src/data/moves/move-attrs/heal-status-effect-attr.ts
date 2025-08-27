@@ -88,7 +88,7 @@ export class HealStatusEffectAttr extends MoveEffectAttr {
    * status effect, grant a {@link MAJOR_EFFECT_SCORE_PENALTY | major penalty}.
    * - Otherwise, grant (+1) + 50%(+1)
    */
-  public override getAllyTargetScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+  public override getAllyTargetScore(user: EnemyPokemon, target: EnemyPokemon, _move: Move): number {
     const effect = target.getStatusEffect(true);
 
     if (!this.effects.includes(effect)) {

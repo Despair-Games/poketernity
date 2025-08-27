@@ -87,6 +87,22 @@ export abstract class ChanceBasedMoveEffectAttr extends MoveEffectAttr {
     return this.getTieredScore(user, target, move, rawScore);
   }
 
+  /**
+   * Translates the given "raw" decimal Effect Score into a final integer Effect Score, accounting for the
+   * effect's chance to apply. This is done by multiplying the raw score by the effect chance, then
+   * randomly "tiering" the product into either `floor(score)` or `floor(score) + 1`.
+   *
+   * **Example:**
+   *
+   * If an effect's raw score is `1.5`, and the chance to apply said effect is 50 percent, the resulting
+   * chance-adjusted score is `0.75`. In turn, the final score has a 25% chance of being (+0) and a 75%
+   * chance of being (+1)
+   * @param user - The {@linkcode EnemyPokemon} evaluating the move
+   * @param target - The {@linkcode Pokemon} the move is evaluated against
+   * @param move - The {@linkcode Move} being evaluated
+   * @param score - The previously calculated "raw" Effect Score for the move action
+   * @returns The final integer score after tiering
+   */
   protected getTieredScore(user: EnemyPokemon, target: Pokemon, move: Move, score: number): number {
     /**
      * The attribute's chance to apply its effect

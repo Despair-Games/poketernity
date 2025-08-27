@@ -119,7 +119,7 @@ export abstract class MoveAttr {
    * @returns `null` by default. `null` scores do not contribute to Effect Score, but can warrant an
    * {@linkcode ALLY_TARGET_PENALTY} if none of the move's other attributes have a defined score.
    */
-  public getAllyTargetScore(_user: EnemyPokemon, _target: Pokemon, _move: Move): number | null {
+  public getAllyTargetScore(_user: EnemyPokemon, _target: EnemyPokemon, _move: Move): number | null {
     return null;
   }
 

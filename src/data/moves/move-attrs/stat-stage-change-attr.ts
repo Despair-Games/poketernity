@@ -23,6 +23,7 @@ import { MoveCategory } from "#enums/move-category";
 import { MoveId } from "#enums/move-id";
 import { type BattleStat, Stat } from "#enums/stat";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { ChanceBasedMoveEffectAttr, type ChanceBasedMoveEffectAttrOptions } from "#moves/chance-based-move-effect-attr";
 import type { Move } from "#moves/move";
@@ -117,7 +118,10 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
       return this.stats.reduce((score, stat) => score + this.getAllyTargetScoreByStat(user, user, move, stat), 0);
     }
 
-    return this.stats.reduce((score, stat) => score + this.getOpposingTargetScoreByStat(user, target, move, stat), 0);
+    return this.stats.reduce(
+      (score, stat) => score + this.getOpposingTargetScoreByStat(user, target as PlayerPokemon, move, stat),
+      0,
+    );
   }
 
   /**
@@ -125,7 +129,7 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
    * upper-bounded by {@linkcode SOFT_EFFECT_SCORE_LIMIT} to yield the final score.
    * @see {@linkcode getAllyTargetScoreByStat}
    */
-  public override getAllyTargetScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+  public override getAllyTargetScore(user: EnemyPokemon, target: EnemyPokemon, move: Move): number {
     const rawScore = this.stats.reduce(
       (score, stat) => score + this.getAllyTargetScoreByStat(user, target, move, stat),
       0,
@@ -154,7 +158,7 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
    * @returns The "raw" Effect Score bonus (or penalty) for the given stat. This score is combined with other
    * stats and {@link getTieredScore | tiered} to yield the final Effect Score.
    */
-  private getAllyTargetScoreByStat(user: EnemyPokemon, target: Pokemon, move: Move, stat: BattleStat): number {
+  private getAllyTargetScoreByStat(user: EnemyPokemon, target: EnemyPokemon, move: Move, stat: BattleStat): number {
     const effectiveStatOptions = { simulated: true };
     const oppEffectiveStatOptions = {
       abilityApplyMode: AbilityApplyMode.REVEALED,
@@ -251,7 +255,12 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
    * @returns The "raw" Effect Score bonus (or penalty) for the given stat. This score is combined with other
    * stats and {@link getTieredScore | tiered} to yield the final Effect Score.
    */
-  private getOpposingTargetScoreByStat(user: EnemyPokemon, target: Pokemon, move: Move, stat: BattleStat): number {
+  private getOpposingTargetScoreByStat(
+    user: EnemyPokemon,
+    target: PlayerPokemon,
+    move: Move,
+    stat: BattleStat,
+  ): number {
     const effectiveStatOptions = {
       abilityApplyMode: AbilityApplyMode.REVEALED,
       simulated: true,
