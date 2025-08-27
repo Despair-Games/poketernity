@@ -13,10 +13,14 @@ import {
   SAVE_FILE_EXTENSION,
   SAVE_SLOT_LIMIT,
 } from "#constants/app-constants";
-import { DEFAULT_STARTER_IVS, IV_MAX, IV_MIN, MAX_INT_ATTR_VALUE } from "#constants/game-constants";
+import {
+  DEFAULT_STARTER_IVS,
+  DEFAULT_STARTER_SPECIES,
+  IV_MAX,
+  IV_MIN,
+  MAX_INT_ATTR_VALUE,
+} from "#constants/game-constants";
 import { allMoves, allSpecies } from "#data/data-lists";
-import { defaultStarterSpecies } from "#data/default-starters";
-import { AbilityAttr, DexAttr } from "#data/dex-attributes";
 import type { Egg } from "#data/egg";
 import { speciesEggMoves } from "#data/egg-moves";
 import { starterPassiveAbilities } from "#data/passives";
@@ -30,9 +34,11 @@ import {
   speciesStarterCosts,
 } from "#data/starters";
 import type { Variant } from "#data/variant";
+import { AbilityAttr } from "#enums/ability-attr";
 import { BattleType } from "#enums/battle-type";
 import { ChallengeType } from "#enums/challenge-type";
 import type { Device } from "#enums/device";
+import { DexAttr } from "#enums/dex-attr";
 import type { ElementalType } from "#enums/elemental-type";
 import { GameDataType } from "#enums/game-data-type";
 import { GameModes } from "#enums/game-modes";
@@ -1367,7 +1373,7 @@ export class GameData {
 
     const defaultStarterAttr = DexAttr.NON_SHINY | DexAttr.MALE | DexAttr.FEMALE | DexAttr.DEFAULT_FORM;
 
-    for (const defaultStarter of defaultStarterSpecies) {
+    for (const defaultStarter of DEFAULT_STARTER_SPECIES) {
       const entry = data[defaultStarter] as DexEntry;
       entry.seenAttr = defaultStarterAttr;
       entry.caughtAttr = defaultStarterAttr;
@@ -1389,7 +1395,7 @@ export class GameData {
     const starterSpeciesIds = Object.keys(speciesStarterCosts).map((k) => Number.parseInt(k) as SpeciesId);
 
     for (const speciesId of starterSpeciesIds) {
-      const isDefaultStarter = defaultStarterSpecies.includes(speciesId);
+      const isDefaultStarter = DEFAULT_STARTER_SPECIES.includes(speciesId);
 
       starterData[speciesId] = {
         moveset: null,
