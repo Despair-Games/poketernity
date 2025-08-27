@@ -110,7 +110,7 @@ export const NON_VOLATILE_STATUS_EFFECTS = Object.freeze([
 ]);
 
 /** A list of Pokemon species that are unlocked when making a new account. */
-export const DEFAULT_STARTER_SPECIES = Object.freeze([
+export const DEFAULT_STARTER_SPECIES = Object.freeze<SpeciesId[]>([
   SpeciesId.BULBASAUR,
   SpeciesId.CHARMANDER,
   SpeciesId.SQUIRTLE,
