@@ -87,3 +87,22 @@ export const FAVORABLE_MATCHUP_SCORE_THRESHOLD = 3;
 
 /** The minimum accuracy a move can have before a Low Accuracy Penalty applies */
 export const LOW_ACCURACY_PENALTY_THRESHOLD = 80;
+
+/**
+ * The amount of stat stages an Enemy Pokemon can have before Defense- or
+ * Sp. Def-boosting moves (e.g. from Iron Defense) are significantly less
+ * incentivized by the AI
+ */
+export const DEFENSE_LOW_INCENTIVE_THRESHOLD = 2;
+
+/**
+ * The amount of stat stages an Enemy Pokemon can have before Evasion-boosting
+ * moves (e.g. Double Team) are no longer incentivized by the AI
+ */
+export const EVASION_BOOST_STAGE_LIMIT = 2;
+
+/**
+ * The amount of stat stages a Player Pokemon can have before Accuracy-reducing
+ * moves (e.g. Sand Attack) are no longer incentivized by the AI
+ */
+export const ACCURACY_REDUCTION_STAGE_LIMIT = -EVASION_BOOST_STAGE_LIMIT;

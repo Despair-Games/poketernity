@@ -9,7 +9,10 @@ import { globalScene } from "#app/global-scene";
 import type { MistTag } from "#arena-tags/mist-tag";
 import { POST_STAT_STAGE_REDUCTION_ABILITIES } from "#constants/ability-constants";
 import {
+  ACCURACY_REDUCTION_STAGE_LIMIT,
   BAD_MOVE_PENALTY,
+  DEFENSE_LOW_INCENTIVE_THRESHOLD,
+  EVASION_BOOST_STAGE_LIMIT,
   LOW_ACCURACY_PENALTY_THRESHOLD,
   MAJOR_EFFECT_SCORE_PENALTY,
   MINOR_EFFECT_SCORE_BONUS,
@@ -144,12 +147,14 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
    * on the stat changed:
    * - `ATK` / `SPATK`: If the target has a move of matching {@linkcode MoveCategory}, grant (+0.5) per stat stage.
    * - `DEF` / `SPDEF`: Check the offensive stat affinities of each opponent (i.e. which is higher between
-   * `ATK` and `SPATK`). This grants (+0.5) per stat stage, per opponent with a matching affinity. For `DEF`
-   * boosts, if the target has Body Press, this grants an additional (+1).
+   * `ATK` and `SPATK`). This grants (+0.5) per stat stage, per opponent with a matching affinity. If the
+   * target's stage for the affected stat is at or above the {@linkcode DEFENSE_LOW_INCENTIVE_THRESHOLD},
+   * this bonus is halved. For `DEF` boosts, if the target has Body Press, this grants an additional (+1).
    * - `SPD`: Grants (+1) per opponent that the target would outspeed as a result of this effect.
    * - `ACC`: If the target has at least one move whose accuracy falls below the {@linkcode LOW_ACCURACY_PENALTY_THRESHOLD},
    * grant, (+0.5) per stat stage.
-   * - `EVA`: Grants (+0.5) per stat stage.
+   * - `EVA`: Grants (+0.5) per stat stage unless the target's `EVA` stat stage is at or above the
+   * {@linkcode EVASION_BOOST_STAGE_LIMIT}.
    * @param user - The {@linkcode Pokemon} evaluating this effect
    * @param target - The {@linkcode Pokemon} this effect is evaluated against. This can be assumed to be either the
    * user or its ally.
@@ -186,6 +191,8 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
         const [relevantStat, otherStat]: BattleStat[] =
           stat === Stat.DEF ? [Stat.ATK, Stat.SPATK] : [Stat.SPATK, Stat.ATK];
 
+        const scoreMultiplier = target.getStatStage(stat) < DEFENSE_LOW_INCENTIVE_THRESHOLD ? 0.5 : 0.25;
+
         const numOppsWithMatchingAffinity = target
           .getOpponents()
           .filter(
@@ -196,7 +203,7 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
 
         const bodyPressBonus = levels > 0 && target.hasMove(MoveId.BODY_PRESS) ? MINOR_EFFECT_SCORE_BONUS : 0;
 
-        return 0.5 * numOppsWithMatchingAffinity * levels + bodyPressBonus;
+        return scoreMultiplier * numOppsWithMatchingAffinity * levels + bodyPressBonus;
       }
       case Stat.SPD: {
         if (levels < 0) {
@@ -230,8 +237,12 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
 
         return (targetHasInaccurateMove ? 0.5 : 0) * levels;
       }
-      case Stat.EVA:
-        return 0.5 * levels;
+      case Stat.EVA: {
+        if (target.getStatStage(stat) < EVASION_BOOST_STAGE_LIMIT) {
+          return 0.5 * levels;
+        }
+        return 0;
+      }
     }
   }
 
@@ -244,7 +255,7 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
    * `ATK` and `SPATK`) of each of the target's opponents (i.e. the user and its ally, if active).
    * This grants (-0.5) per stat stage, per opponent with a matching affinity.
    * - `SPD`: Grants (+1) for each of the target's opponents that would outspeed the target as a result of this effect.
-   * - `ACC`: Grants (-0.5) per stat stage.
+   * - `ACC`: Grants (-0.5) per stat stage unless the target's `ACC` stat stage is at or below the {@linkcode ACCURACY_REDUCTION_STAGE_LIMIT}.
    * - `EVA`: If any of the target's opponents has at least one move whose accuracy falls below the {@linkcode LOW_ACCURACY_PENALTY_THRESHOLD},
    * grant (+0.5) per stat stage.
    * @param user - The {@linkcode Pokemon} evaluating this effect
@@ -323,8 +334,12 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
 
         return numOpponentsToOutspeed * MINOR_EFFECT_SCORE_BONUS;
       }
-      case Stat.ACC:
-        return -0.5 * levels;
+      case Stat.ACC: {
+        if (target.getStatStage(stat) > ACCURACY_REDUCTION_STAGE_LIMIT) {
+          return -0.5 * levels;
+        }
+        return 0;
+      }
       case Stat.EVA: {
         if (levels > 0) {
           return MINOR_EFFECT_SCORE_PENALTY;
