@@ -9,6 +9,7 @@ import { globalScene } from "#app/global-scene";
 import type { MistTag } from "#arena-tags/mist-tag";
 import { POST_STAT_STAGE_REDUCTION_ABILITIES } from "#constants/ability-constants";
 import {
+  BAD_MOVE_PENALTY,
   LOW_ACCURACY_PENALTY_THRESHOLD,
   MAJOR_EFFECT_SCORE_PENALTY,
   MINOR_EFFECT_SCORE_BONUS,
@@ -111,12 +112,12 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
    * @see {@linkcode getAllyTargetScoreByStat}
    * @see {@linkcode getOpposingTargetScoreByStat}
    */
-  public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+  public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     if (this.selfTarget) {
-      return this.stats.reduce((score, stat) => score + this.getAllyTargetScoreByStat(user, user, stat), 0);
+      return this.stats.reduce((score, stat) => score + this.getAllyTargetScoreByStat(user, user, move, stat), 0);
     }
 
-    return this.stats.reduce((score, stat) => score + this.getOpposingTargetScoreByStat(user, target, stat), 0);
+    return this.stats.reduce((score, stat) => score + this.getOpposingTargetScoreByStat(user, target, move, stat), 0);
   }
 
   /**
@@ -125,7 +126,10 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
    * @see {@linkcode getAllyTargetScoreByStat}
    */
   public override getAllyTargetScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
-    const rawScore = this.stats.reduce((score, stat) => score + this.getAllyTargetScoreByStat(user, target, stat), 0);
+    const rawScore = this.stats.reduce(
+      (score, stat) => score + this.getAllyTargetScoreByStat(user, target, move, stat),
+      0,
+    );
 
     return Math.min(this.getTieredScore(user, target, move, rawScore), SOFT_EFFECT_SCORE_LIMIT);
   }
@@ -145,11 +149,12 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
    * @param user - The {@linkcode Pokemon} evaluating this effect
    * @param target - The {@linkcode Pokemon} this effect is evaluated against. This can be assumed to be either the
    * user or its ally.
+   * @param move - The {@linkcode Move} whose effect is evaluated.
    * @param stat - The {@linkcode BattleStat} being evaluated
    * @returns The "raw" Effect Score bonus (or penalty) for the given stat. This score is combined with other
    * stats and {@link getTieredScore | tiered} to yield the final Effect Score.
    */
-  private getAllyTargetScoreByStat(user: EnemyPokemon, target: Pokemon, stat: BattleStat): number {
+  private getAllyTargetScoreByStat(user: EnemyPokemon, target: Pokemon, move: Move, stat: BattleStat): number {
     const effectiveStatOptions = { simulated: true };
     const oppEffectiveStatOptions = {
       abilityApplyMode: AbilityApplyMode.REVEALED,
@@ -158,7 +163,7 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
 
     const levels = this.getAdjustedLevels(user, target, stat);
     if (levels === 0) {
-      return 0;
+      return move.isStatusMove() ? BAD_MOVE_PENALTY : 0;
     }
 
     switch (stat) {
@@ -241,11 +246,12 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
    * @param user - The {@linkcode Pokemon} evaluating this effect
    * @param target - The {@linkcode Pokemon} this effect is evaluated against. This can be assumed to be one of
    * the user's opponents.
+   * @param move - The {@linkcode Move} whose effect is evaluated
    * @param stat - The {@linkcode BattleStat} being evaluated
    * @returns The "raw" Effect Score bonus (or penalty) for the given stat. This score is combined with other
    * stats and {@link getTieredScore | tiered} to yield the final Effect Score.
    */
-  private getOpposingTargetScoreByStat(user: EnemyPokemon, target: Pokemon, stat: BattleStat): number {
+  private getOpposingTargetScoreByStat(user: EnemyPokemon, target: Pokemon, move: Move, stat: BattleStat): number {
     const effectiveStatOptions = {
       abilityApplyMode: AbilityApplyMode.REVEALED,
       simulated: true,
@@ -254,7 +260,7 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
 
     const levels = this.getAdjustedLevels(user, target, stat);
     if (levels === 0) {
-      return 0;
+      return move.isStatusMove() ? BAD_MOVE_PENALTY : 0;
     }
 
     if (levels < 0 && POST_STAT_STAGE_REDUCTION_ABILITIES.some((abId) => target.hasRevealedAbility(abId))) {
