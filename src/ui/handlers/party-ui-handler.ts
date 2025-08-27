@@ -279,9 +279,9 @@ export class PartyUiHandler extends MessageUiHandler {
             // this for look goes through each of the party pokemon
             const newPokemon = globalScene.getPlayerParty()[p];
             // this next line gets all of the transferable items from pokemon [p]; it does this by getting all the held modifiers that are transferable and checking to see if they belong to pokemon [p]
-            const getTransferrableItemsFromPokemon = (newPokemon: PlayerPokemon) =>
+            const getTransferrableItemsFromPokemon = (pkmn: PlayerPokemon) =>
               globalScene.findModifiers(
-                (m) => m.isPokemonHeldItemModifier() && m.isTransferable && m.pokemonId === newPokemon.id,
+                (m) => m.isPokemonHeldItemModifier() && m.isTransferable && m.pokemonId === pkmn.id,
               );
             // this next bit checks to see if the the selected item from the original transfer pokemon exists on the new pokemon [p]; this returns undefined if the new pokemon doesn't have the item at all, otherwise it returns the pokemonHeldItemModifier for that item
             const matchingModifier = globalScene.findModifier(
@@ -344,9 +344,9 @@ export class PartyUiHandler extends MessageUiHandler {
           || (option === PartyOption.RELEASE && this.partyUiMode === PartyUiMode.RELEASE)
         ) {
           let filterResult: string | null;
-          const getTransferrableItemsFromPokemon = (pokemon: PlayerPokemon) =>
+          const getTransferrableItemsFromPokemon = (pkmn: PlayerPokemon) =>
             globalScene.findModifiers<PokemonHeldItemModifier>(
-              (m) => m.isPokemonHeldItemModifier() && m.isTransferable && m.pokemonId === pokemon.id,
+              (m) => m.isPokemonHeldItemModifier() && m.isTransferable && m.pokemonId === pkmn.id,
             );
           if (option !== PartyOption.TRANSFER) {
             filterResult = (this.selectFilter as PokemonSelectFilter)(pokemon);
@@ -559,9 +559,9 @@ export class PartyUiHandler extends MessageUiHandler {
 
         // show move description
         if (this.partyUiMode === PartyUiMode.REMEMBER_MOVE_MODIFIER) {
-          const option = this.options[this.optionsCursor];
+          const opt = this.options[this.optionsCursor];
           const pokemon = globalScene.getPlayerParty()[this.cursor];
-          const move = allMoves.get(pokemon.getLearnableLevelMoves()[option]);
+          const move = allMoves.get(pokemon.getLearnableLevelMoves()[opt]);
           if (move) {
             this.moveInfoOverlay.show(move);
           } else {

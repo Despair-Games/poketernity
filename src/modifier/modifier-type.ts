@@ -1,4 +1,5 @@
 /** biome-ignore-all lint/style/noNestedTernary: all of this is going to be deleted soon anyway */
+/** biome-ignore-all lint/nursery/noShadow: see above */
 
 import { globalScene } from "#app/global-scene";
 import { logModifiers } from "#app/loggers";

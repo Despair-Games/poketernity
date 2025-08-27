@@ -113,10 +113,11 @@ export class EnemyPokemon extends Pokemon {
         }
       }
 
-      let preEvolution: SpeciesId;
-      let speciesId = species.speciesId;
-      while ((preEvolution = pokemonPreEvolutions[speciesId])) {
-        speciesId = preEvolution;
+      let sId = species.speciesId;
+      let preEvolution: SpeciesId = pokemonPreEvolutions[sId];
+      while (preEvolution) {
+        sId = preEvolution;
+        preEvolution = pokemonPreEvolutions[sId];
       }
 
       this.teraType = randSeedItem(this.getTypes(false, false, true));

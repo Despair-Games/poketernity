@@ -62,10 +62,10 @@ export class TitlePhase extends Phase {
 
   protected showOptions(): void {
     const { gameData, ui } = globalScene;
-    const options: OptionSelectItem[] = [];
+    const titleOptions: OptionSelectItem[] = [];
 
     if (loggedInUser && loggedInUser.lastSessionSlot > -1) {
-      options.push({
+      titleOptions.push({
         label: i18next.t("continue", { ns: "menu" }),
         handler: () => {
           this.loadSaveSlot(this.lastSessionData || !loggedInUser ? -1 : loggedInUser.lastSessionSlot);
@@ -74,7 +74,7 @@ export class TitlePhase extends Phase {
       });
     }
 
-    options.push(
+    titleOptions.push(
       {
         label: i18next.t("menu:newGame"),
         handler: () => {
@@ -165,7 +165,7 @@ export class TitlePhase extends Phase {
       },
     );
     const config: OptionSelectModeConfig = {
-      options,
+      options: titleOptions,
       blockCancelButton: true,
     };
     globalScene.ui.setMode<TitleUiHandler>(UiMode.TITLE, config);

@@ -90,14 +90,14 @@ import i18next from "i18next";
 const saveKey = "x0i2O7WRiANTqPmZ"; // Temporary; secure encryption is not yet necessary
 
 function encrypt(data: string, bypassLogin: boolean): string {
-  const localFunc = (data: string): string => btoa(encodeURIComponent(data));
-  const serverFunc = (data: string): string => AES.encrypt(data, saveKey) as unknown as string; // TODO: is this correct?
+  const localFunc = (d: string): string => btoa(encodeURIComponent(d));
+  const serverFunc = (d: string): string => AES.encrypt(d, saveKey) as unknown as string; // TODO: is this correct?
   return (bypassLogin ? localFunc : serverFunc)(data);
 }
 
 function decrypt(data: string, bypassLogin: boolean): string {
-  const localFunc = (data: string): string => decodeURIComponent(atob(data));
-  const serverFunc = (data: string): string => AES.decrypt(data, saveKey).toString(enc.Utf8);
+  const localFunc = (d: string): string => decodeURIComponent(atob(d));
+  const serverFunc = (d: string): string => AES.decrypt(d, saveKey).toString(enc.Utf8);
   return (bypassLogin ? localFunc : serverFunc)(data);
 }
 
@@ -785,18 +785,18 @@ export class GameData {
   loadSession(slotId: number, sessionData?: SessionSaveData): Promise<boolean> {
     return new Promise((resolve, reject) => {
       try {
-        const initSessionFromData = async (sessionData: SessionSaveData) => {
-          globalScene.gameMode = getGameMode(sessionData.gameMode || GameModes.CLASSIC);
-          if (sessionData.challenges) {
-            globalScene.gameMode.challenges = sessionData.challenges.map((c) => c.toChallenge());
+        const initSessionFromData = async (data: SessionSaveData) => {
+          globalScene.gameMode = getGameMode(data.gameMode || GameModes.CLASSIC);
+          if (data.challenges) {
+            globalScene.gameMode.challenges = data.challenges.map((c) => c.toChallenge());
           }
 
-          globalScene.setSeed(sessionData.seed || globalScene.game.config.seed[0]);
+          globalScene.setSeed(data.seed || globalScene.game.config.seed[0]);
           globalScene.resetSeed();
 
           console.log("Seed:", globalScene.seed);
 
-          globalScene.sessionPlayTime = sessionData.playTime || 0;
+          globalScene.sessionPlayTime = data.playTime || 0;
           globalScene.lastSavePlayTime = 0;
 
           const loadPokemonAssets: Promise<void>[] = [];
@@ -804,7 +804,7 @@ export class GameData {
           const party = globalScene.getPlayerParty();
           party.splice(0, party.length);
 
-          for (const p of sessionData.party) {
+          for (const p of data.party) {
             const pokemon = p.toPokemon() as PlayerPokemon;
             pokemon.setVisible(false);
             loadPokemonAssets.push(pokemon.loadAssets());
@@ -812,48 +812,47 @@ export class GameData {
           }
 
           Object.keys(globalScene.pokeballCounts).forEach((key: string) => {
-            globalScene.pokeballCounts[key] = sessionData.pokeballCounts[key] || 0;
+            globalScene.pokeballCounts[key] = data.pokeballCounts[key] || 0;
           });
           if (activeOverrides.POKEBALL_OVERRIDE.active) {
             globalScene.pokeballCounts = activeOverrides.POKEBALL_OVERRIDE.pokeballs;
           }
 
-          globalScene.money = Math.floor(sessionData.money || 0);
+          globalScene.money = Math.floor(data.money || 0);
           globalScene.updateMoneyText();
 
           if (globalScene.money > this.gameStats.highestMoney) {
             this.gameStats.highestMoney = globalScene.money;
           }
 
-          globalScene.score = sessionData.score;
+          globalScene.score = data.score;
           globalScene.updateScoreText();
 
-          globalScene.mysteryEncounterSaveData = new MysteryEncounterSaveData(sessionData.mysteryEncounterSaveData);
+          globalScene.mysteryEncounterSaveData = new MysteryEncounterSaveData(data.mysteryEncounterSaveData);
 
-          globalScene.newArena(sessionData.arena.biome);
+          globalScene.newArena(data.arena.biome);
 
-          const battleType = sessionData.battleType || 0;
-          const trainerConfig = sessionData.trainer ? allTrainerConfigs[sessionData.trainer.trainerType] : null;
-          const mysteryEncounterType =
-            sessionData.mysteryEncounterType !== -1 ? sessionData.mysteryEncounterType : undefined;
+          const battleType = data.battleType || 0;
+          const trainerConfig = data.trainer ? allTrainerConfigs[data.trainer.trainerType] : null;
+          const mysteryEncounterType = data.mysteryEncounterType !== -1 ? data.mysteryEncounterType : undefined;
           const battle = globalScene.newBattle(
-            sessionData.waveIndex,
+            data.waveIndex,
             battleType,
-            sessionData.trainer,
+            data.trainer,
             battleType === BattleType.TRAINER
-              ? trainerConfig?.doubleOnly || sessionData.trainer?.variant === TrainerVariant.DOUBLE
-              : sessionData.enemyParty.length > 1,
+              ? trainerConfig?.doubleOnly || data.trainer?.variant === TrainerVariant.DOUBLE
+              : data.enemyParty.length > 1,
             mysteryEncounterType,
           );
-          battle.enemyLevels = sessionData.enemyParty.map((p) => p.level);
+          battle.enemyLevels = data.enemyParty.map((p) => p.level);
 
           globalScene.arena.init();
 
-          sessionData.enemyParty.forEach((enemyData, e) => {
+          data.enemyParty.forEach((enemyData, e) => {
             const enemyPokemon = enemyData.toPokemon(
               battleType,
               e,
-              sessionData.trainer?.variant === TrainerVariant.DOUBLE,
+              data.trainer?.variant === TrainerVariant.DOUBLE,
             ) as EnemyPokemon;
             battle.enemyParty[e] = enemyPokemon;
             if (battleType === BattleType.WILD) {
@@ -863,7 +862,7 @@ export class GameData {
             loadPokemonAssets.push(enemyPokemon.loadAssets());
           });
 
-          globalScene.arena.weather = sessionData.arena.weather;
+          globalScene.arena.weather = data.arena.weather;
           if (globalScene.arena.weather) {
             globalScene.arena.eventTarget.dispatchEvent(
               new WeatherChangedEvent(
@@ -874,7 +873,7 @@ export class GameData {
             );
           }
 
-          globalScene.arena.terrain = sessionData.arena.terrain;
+          globalScene.arena.terrain = data.arena.terrain;
           if (globalScene.arena.terrain) {
             globalScene.arena.eventTarget.dispatchEvent(
               new TerrainChangedEvent(
@@ -885,9 +884,9 @@ export class GameData {
             );
           }
 
-          globalScene.playerTerasUsed = sessionData.playerTerasUsed;
+          globalScene.playerTerasUsed = data.playerTerasUsed;
 
-          globalScene.arena.tags = sessionData.arena.tags;
+          globalScene.arena.tags = data.arena.tags;
           if (globalScene.arena.tags) {
             for (const tag of globalScene.arena.tags) {
               if (tag instanceof EntryHazardTag) {
@@ -901,7 +900,7 @@ export class GameData {
             }
           }
 
-          for (const modifierData of sessionData.modifiers) {
+          for (const modifierData of data.modifiers) {
             const modifier = modifierData.toModifier(Modifier[modifierData.className]);
             if (modifier) {
               globalScene.addModifier(modifier, true);
@@ -910,7 +909,7 @@ export class GameData {
 
           globalScene.updateModifiers(true);
 
-          for (const enemyModifierData of sessionData.enemyModifiers) {
+          for (const enemyModifierData of data.enemyModifiers) {
             const modifier = enemyModifierData.toModifier(Modifier[enemyModifierData.className]);
             if (modifier) {
               globalScene.addEnemyModifier(modifier, true);
@@ -1119,8 +1118,8 @@ export class GameData {
     useCachedSystem: boolean = false,
   ): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
-      executeIf(!skipVerification, updateUserInfo).then((success) => {
-        if (success !== null && !success) {
+      executeIf(!skipVerification, updateUserInfo).then((isSuccess) => {
+        if (isSuccess !== null && !isSuccess) {
           return resolve(false);
         }
         if (sync) {
@@ -1574,7 +1573,7 @@ export class GameData {
         this.addStarterCandy(species, STARTER_CANDY_GAIN_FROM_CATCH * candyMultiplier);
       }
 
-      const checkPreEvolution = (unlockedStarters: SpeciesId[]) => {
+      const checkPreEvolution = (starters: SpeciesId[]): void => {
         if (hasPreEvolution) {
           const preEvolutionSpecies = pokemonPreEvolutions[species.speciesId];
           this.setPokemonSpeciesCaught(
@@ -1584,7 +1583,7 @@ export class GameData {
             giveCandy,
             fromEgg,
             showMessage,
-            unlockedStarters,
+            starters,
           ).then((result) => {
             // Give the caught pokemon its correct form and gender back
             pokemon.formIndex = currentFormIndex;
@@ -1595,7 +1594,7 @@ export class GameData {
           // Give the caught pokemon its correct form and gender back
           pokemon.formIndex = currentFormIndex;
           pokemon.gender = currentGender;
-          resolve(unlockedStarters);
+          resolve(starters);
         }
       };
 
@@ -1813,10 +1812,10 @@ export class GameData {
    * Update the maximum IVs for the given Pokemon {@linkcode SpeciesId} and its pre-evolutions.
    */
   public updateSpeciesDexIvs(speciesId: SpeciesId, ivs: number[]): void {
-    const doUpdateIvs = (speciesId: SpeciesId) => {
+    const doUpdateIvs = (sId: SpeciesId) => {
       // If it's a starter, update its IVs
-      if (Object.hasOwn(speciesStarterCosts, speciesId)) {
-        const starterEntry = globalScene.gameData.starterData[speciesId];
+      if (Object.hasOwn(speciesStarterCosts, sId)) {
+        const starterEntry = globalScene.gameData.starterData[sId];
         const starterIvs = starterEntry.ivs;
         for (let i = 0; i < starterIvs.length; i++) {
           if (starterIvs[i] < ivs[i]) {
@@ -1829,8 +1828,8 @@ export class GameData {
       }
 
       // If it has a pre-evolution, recursively update its IVs
-      if (Object.hasOwn(pokemonPreEvolutions, speciesId)) {
-        doUpdateIvs(pokemonPreEvolutions[speciesId]);
+      if (Object.hasOwn(pokemonPreEvolutions, sId)) {
+        doUpdateIvs(pokemonPreEvolutions[sId]);
       }
     };
 
@@ -2082,13 +2081,11 @@ export class GameData {
     const baseValue = speciesStarterCosts[speciesId];
     let value = baseValue;
 
-    const decrementValue = (value: number) => {
-      if (value > 1) {
-        value--;
-      } else {
-        value /= 2;
+    const decrementValue = (val: number) => {
+      if (val > 1) {
+        return val - 1;
       }
-      return value;
+      return val / 2;
     };
 
     for (let v = 0; v < this.starterData[speciesId].valueReduction; v++) {

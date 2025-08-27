@@ -31,17 +31,17 @@ export function minifyPublicJsonFiles(): VitePlugin {
       logger.info(cyan(`\t→ Plugin: ${NAME} v${VERSION}`));
     },
     async generateBundle(options, _bundle) {
-      function minifyJsonFiles(dir: string, outputDir: string) {
+      function minifyJsonFiles(dir: string, outDir: string) {
         const files = fs.readdirSync(dir);
 
         for (const file of files) {
           const fullPath = path.join(dir, file);
-          const outputFilePath = path.join(outputDir, file);
+          const outputFilePath = path.join(outDir, file);
           const stat = fs.statSync(fullPath);
 
           if (stat.isDirectory()) {
             // Recurse into subdirectories
-            const nestedOutputDir = path.join(outputDir, file);
+            const nestedOutputDir = path.join(outDir, file);
             fs.mkdirSync(nestedOutputDir, { recursive: true });
             minifyJsonFiles(fullPath, nestedOutputDir);
           } else if (file.endsWith(".json")) {

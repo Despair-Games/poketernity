@@ -114,12 +114,12 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
               break;
             case SaveSlotUiMode.SAVE: {
               const saveAndCallback = () => {
-                const originalCallback = this.saveSlotSelectCallback;
+                const originalCb = this.saveSlotSelectCallback;
                 this.saveSlotSelectCallback = null;
                 ui.revertMode();
                 ui.showText("", { delay: 0 });
                 ui.setMessageMode();
-                originalCallback?.(cursor);
+                originalCb?.(cursor);
               };
               if (this.sessionSlots[cursor].hasData) {
                 const overwriteDataOptions: ConfirmModeConfig = {

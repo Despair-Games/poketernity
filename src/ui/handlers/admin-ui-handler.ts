@@ -230,13 +230,13 @@ export class AdminUiHandler extends FormModalUiHandler {
                   }
                   // success, reload panel with new results
                   globalScene.ui.setMode<LoadingModalUiHandler>(UiMode.LOADING, { buttonActions: [] });
-                  this.adminSearch(adminResult).then((response) => {
-                    if (response.error) {
-                      return this.showMessage(response.errorType, adminResult, true);
+                  this.adminSearch(adminResult).then((res) => {
+                    if (res.error) {
+                      return this.showMessage(res.errorType, adminResult, true);
                     }
                     return this.showMessage(
                       this.SUCCESS_SERVICE_MODE(service, mode),
-                      response.adminSearchResult ?? adminResult,
+                      res.adminSearchResult ?? adminResult,
                       false,
                     );
                   });

@@ -468,7 +468,7 @@ export class Arena {
       .filter((p) => p.isOnField())
       .map((pokemon) => {
         pokemon.findAndRemoveTags(
-          (t) => "weatherTypes" in t && !(t.weatherTypes as WeatherType[]).find((t) => t === newWeatherType),
+          (tag) => "weatherTypes" in tag && !(tag.weatherTypes as WeatherType[]).find((wt) => wt === newWeatherType),
         );
         applyAbAttrs<PostWeatherChangeAbAttr>(AbAttrFlag.POST_WEATHER_CHANGE, pokemon, false, newWeatherType);
       });
@@ -560,7 +560,7 @@ export class Arena {
       .filter((p) => p.isOnField())
       .map((pokemon) => {
         pokemon.findAndRemoveTags(
-          (t) => "terrainTypes" in t && !(t.terrainTypes as TerrainType[]).find((t) => t === terrain),
+          (tag) => "terrainTypes" in tag && !(tag.terrainTypes as TerrainType[]).find((tt) => tt === terrain),
         );
         applyAbAttrs<PostTerrainChangeAbAttr>(AbAttrFlag.POST_TERRAIN_CHANGE, pokemon, false, terrain);
         applyAbAttrs<TerrainEventTypeChangeAbAttr>(AbAttrFlag.TERRAIN_EVENT_TYPE_CHANGE, pokemon, false, false);
@@ -810,8 +810,15 @@ export class Arena {
       existingTag.onOverlap();
 
       if (ENTRY_HAZARD_ARENA_TAG_TYPES.includes(existingTag.tagType)) {
-        const { tagType, side, turnCount, layers, maxLayers } = existingTag as EntryHazardTag;
-        this.eventTarget.dispatchEvent(new TagAddedEvent(tagType, side, turnCount, layers, maxLayers));
+        const { layers, maxLayers } = existingTag as EntryHazardTag;
+        const tagEvent = new TagAddedEvent(
+          existingTag.tagType,
+          existingTag.side,
+          existingTag.turnCount,
+          layers,
+          maxLayers,
+        );
+        this.eventTarget.dispatchEvent(tagEvent);
       }
 
       return false;
@@ -827,9 +834,8 @@ export class Arena {
         ? (newTag as EntryHazardTag)
         : {};
 
-      this.eventTarget.dispatchEvent(
-        new TagAddedEvent(newTag.tagType, newTag.side, newTag.turnCount, layers, maxLayers),
-      );
+      const tagEvent = new TagAddedEvent(newTag.tagType, newTag.side, newTag.turnCount, layers, maxLayers);
+      this.eventTarget.dispatchEvent(tagEvent);
     }
 
     return true;
