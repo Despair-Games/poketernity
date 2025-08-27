@@ -170,7 +170,8 @@
         "noUselessTernary": "error",
         "useIndexOf": "error",
         "noVoid": "error",
-        "useWhile": "error"
+        "useWhile": "error",
+        "noUselessStringConcat": "error"
       },
       "nursery": {
         "noShadow": "warn", // TODO: refactor and make "error"
@@ -240,6 +241,16 @@
         "rules": {
           "style": {
             "noDefaultExport": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": [".dependency-cruiser.cjs"],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noUselessStringConcat": "off" // disabled for readability of this particular file
           }
         }
       }
