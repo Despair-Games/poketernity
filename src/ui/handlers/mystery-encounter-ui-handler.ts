@@ -203,15 +203,15 @@ export class MysteryEncounterUiHandler extends UiHandler {
       }
     } else {
       switch (this.optionsContainer.getAll()?.length) {
-        default:
-        case 3:
-          success = this.handleTwoOptionMoveInput(button);
+        case 5:
+          success = this.handleFourOptionMoveInput(button);
           break;
         case 4:
           success = this.handleThreeOptionMoveInput(button);
           break;
-        case 5:
-          success = this.handleFourOptionMoveInput(button);
+        case 3:
+        default:
+          success = this.handleTwoOptionMoveInput(button);
           break;
       }
 
@@ -411,15 +411,13 @@ export class MysteryEncounterUiHandler extends UiHandler {
 
       let optionText: BBCodeText;
       switch (this.encounterOptions.length) {
-        default:
-        case 2:
-          optionText = addBBCodeTextObject(i % 2 === 0 ? 0 : 100, 8, "-", TextStyle.ME_OPTION_DEFAULT);
-          break;
+        case 4:
         case 3:
           optionText = addBBCodeTextObject(i % 2 === 0 ? 0 : 100, i < 2 ? 0 : 16, "-", TextStyle.ME_OPTION_DEFAULT);
           break;
-        case 4:
-          optionText = addBBCodeTextObject(i % 2 === 0 ? 0 : 100, i < 2 ? 0 : 16, "-", TextStyle.ME_OPTION_DEFAULT);
+        case 2:
+        default:
+          optionText = addBBCodeTextObject(i % 2 === 0 ? 0 : 100, 8, "-", TextStyle.ME_OPTION_DEFAULT);
           break;
       }
 

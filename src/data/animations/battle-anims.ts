@@ -231,7 +231,7 @@ export abstract class BattleAnim {
      * isn't meant to hide the user/target). Once animation assets are
      * cleaned, this calls the given {@linkcode callback} with no arguments.
      */
-    const cleanUpAndComplete = () => {
+    const cleanUpAndComplete = (): void => {
       userSprite.setPosition(0, 0);
       userSprite.setScale(1);
       userSprite.setAlpha(1);
@@ -284,7 +284,8 @@ export abstract class BattleAnim {
     };
 
     if (!settings.display.enableMoveAnimations && !this.playRegardlessOfIssues) {
-      return cleanUpAndComplete();
+      cleanUpAndComplete();
+      return;
     }
 
     const anim = this.getAnim();

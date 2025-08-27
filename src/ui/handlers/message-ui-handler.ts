@@ -2,6 +2,7 @@ import { globalScene } from "#app/global-scene";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
 import type { ShowTextOptions } from "#types/ui-types";
+import type { AnyFn } from "#types/utility-types";
 import { AwaitableUiHandler } from "#ui/awaitable-ui-handler";
 import { addTextObject } from "#ui/text-utils";
 import { getFrameMs, isNil } from "#utils/common-utils";
@@ -219,7 +220,7 @@ export abstract class MessageUiHandler extends AwaitableUiHandler {
     }
   }
 
-  private showPrompt(callback?: Function | null, callbackDelay?: number | null) {
+  private showPrompt(callback?: AnyFn | null, callbackDelay?: number | null) {
     const wrappedTextLines = this.message.runWordWrap(this.message.text).split(/\n/g);
     const textLinesCount = wrappedTextLines.length;
     const lastTextLine = wrappedTextLines[textLinesCount - 1];

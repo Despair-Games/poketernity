@@ -30,3 +30,9 @@ export type EnumValues<T> = T[keyof T];
 export type CoerceNullPropertiesToUndefined<T extends object> = {
   [K in keyof T]: null extends T[K] ? Exclude<T[K], null> | undefined : T[K];
 };
+
+/**
+ * Type helper that matches any `Function` type.
+ * Equivalent to `Function`, but will not raise a warning from Biome.
+ */
+export type AnyFn = (...args: any[]) => any;

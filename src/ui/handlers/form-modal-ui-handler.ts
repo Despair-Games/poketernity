@@ -3,6 +3,7 @@ import { Button } from "#enums/button";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
 import { WindowVariant } from "#enums/window-variant";
+import type { AnyFn } from "#types/utility-types";
 import type { FormModalConfig, InputFieldConfig, ModalConfig } from "#ui/modal-config";
 import { ModalUiHandler } from "#ui/modal-ui-handler";
 import { addTextInputObject, addTextObject } from "#ui/text-utils";
@@ -15,7 +16,7 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
   protected inputContainers: Phaser.GameObjects.Container[];
   protected inputs: InputText[];
   protected errorMessage: Phaser.GameObjects.Text;
-  protected submitAction: Function | null;
+  protected submitAction: AnyFn | null;
   protected tween: Phaser.Tweens.Tween;
   protected formLabels: Phaser.GameObjects.Text[];
 
