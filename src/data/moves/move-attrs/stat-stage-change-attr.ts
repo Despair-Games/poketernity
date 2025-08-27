@@ -222,7 +222,7 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
 
         const targetHasInaccurateMove = target
           .getMoveset()
-          .some((pkmMove) => pkmMove.getMove().accuracy < LOW_ACCURACY_PENALTY_THRESHOLD);
+          .some((pkmMove) => isBetween(pkmMove.getMove().accuracy, 0, LOW_ACCURACY_PENALTY_THRESHOLD));
 
         return (targetHasInaccurateMove ? 0.5 : 0) * levels;
       }
@@ -324,7 +324,9 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
         const oppHasInaccurateMove = target
           .getOpponents()
           .some((opp) =>
-            opp.getMoveset().some((pkmMove) => pkmMove.getMove().accuracy < LOW_ACCURACY_PENALTY_THRESHOLD),
+            opp
+              .getMoveset()
+              .some((pkmMove) => isBetween(pkmMove.getMove().accuracy, 0, LOW_ACCURACY_PENALTY_THRESHOLD)),
           );
 
         return (oppHasInaccurateMove ? -0.5 : 0) * levels;
