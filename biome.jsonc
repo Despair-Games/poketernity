@@ -142,7 +142,7 @@
         "noAssignInExpressions": "warn",
         "noPrototypeBuiltins": "error",
         "noFallthroughSwitchClause": "error", // Prevents accidental automatic fallthroughs in switch cases (use disable comment if needed)
-        "noImplicitAnyLet": "warn", // TODO: Refactor and make this an error
+        "noImplicitAnyLet": "error",
         "noRedeclare": "error",
         "noGlobalIsNan": "error",
         "noAsyncPromiseExecutor": "warn", // TODO: Refactor and make this an error
