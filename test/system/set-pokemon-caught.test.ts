@@ -1,4 +1,5 @@
-import { AbilityAttr, DexAttr } from "#data/dex-attributes";
+import { AbilityAttr } from "#enums/ability-attr";
+import { DexAttr } from "#enums/dex-attr";
 import { Gender } from "#enums/gender";
 import { Nature } from "#enums/nature";
 import { SpeciesId } from "#enums/species-id";

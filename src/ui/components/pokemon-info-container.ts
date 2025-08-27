@@ -1,8 +1,8 @@
 import { globalScene } from "#app/global-scene";
-import { DexAttr } from "#data/dex-attributes";
 import { getGenderSymbol, getGenderTextStyle } from "#data/gender";
 import { getNatureName } from "#data/nature";
 import { getVariantTint } from "#data/variant";
+import { DexAttr } from "#enums/dex-attr";
 import { ElementalType } from "#enums/elemental-type";
 import { Gender } from "#enums/gender";
 import { SpeciesId } from "#enums/species-id";

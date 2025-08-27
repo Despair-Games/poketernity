@@ -1,6 +1,4 @@
-/**
- * Flags used to mark seen/caught elements of each species in dex data.
- */
+/** Flags used to mark seen/caught elements of each species in dex data. */
 export const DexAttr = {
   NON_SHINY: 1n,
   SHINY_BASE_VARIANT: 2n,
@@ -11,16 +9,6 @@ export const DexAttr = {
   /**
    * Marks the first flag of a species' forms. It must be the last attribute since
    * it will be followed by the flags for the other forms, depending on the species.
-   * */
+   */
   DEFAULT_FORM: 64n,
-};
-
-/**
- * Flags used to mark unlocked abilities of each species in dex data.
- */
-export const AbilityAttr = {
-  ABILITY_1: 1,
-  ABILITY_2: 2,
-  ABILITY_HIDDEN: 4,
-  PASSIVE: 8,
-};
+} as const;
