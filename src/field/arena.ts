@@ -686,7 +686,7 @@ export class Arena {
   setRandomTerrain(): void {
     const terrainPool = allBiomes.get(this.biomeId).terrainPool;
     const terrainMap = new Map<TerrainType, number>();
-    for (const id of getTSEnumValues(TerrainType)) {
+    for (const id of Object.values(TerrainType)) {
       terrainMap.set(id, terrainPool[id] ?? 0);
     }
 

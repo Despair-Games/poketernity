@@ -1,6 +1,6 @@
 import { TerrainType } from "#enums/terrain-type";
 import { isGameManagerInstance, receivedStr } from "#test/test-utils/test-utils";
-import { isNil } from "#utils/common-utils";
+import { enumValueToKey, isNil } from "#utils/common-utils";
 import { capitalizeString } from "#utils/string-utils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
@@ -53,7 +53,7 @@ function toTerrainStr(terrainType?: TerrainType) {
   if (isNil(terrainType)) {
     return "undefined";
   }
-  return capitalizeString(TerrainType[terrainType], "_", false, true);
+  return capitalizeString(enumValueToKey(TerrainType, terrainType), "_", false, true);
 }
 
 //#endregion
