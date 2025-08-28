@@ -30,7 +30,7 @@ import type { PartyUiHandler } from "#ui/party-ui-handler";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";
 import { rgbHexToRgba } from "#utils/color-utils";
-import { enumValueToKey, fixedNumber, getTSEnumValues, isNil } from "#utils/common-utils";
+import { enumValueToKey, fixedNumber, isNil } from "#utils/common-utils";
 import { formatStat, leftPad, toReadableString } from "#utils/string-utils";
 import { argbFromRgba } from "@material/material-color-utilities";
 import i18next from "i18next";
@@ -292,7 +292,7 @@ export class SummaryUiHandler extends UiHandler {
     if (page === undefined) {
       page = this.cursor;
     }
-    return `summary_${SummaryUiPage[page].toLowerCase()}`;
+    return `summary_${enumValueToKey(SummaryUiPage, page as SummaryUiPage).toLowerCase()}`;
   }
 
   /**
@@ -557,7 +557,7 @@ export class SummaryUiHandler extends UiHandler {
       }
       success = true;
     } else {
-      const pages = getTSEnumValues(SummaryUiPage);
+      const pages = Object.values(SummaryUiPage);
       switch (button) {
         case Button.UP:
         case Button.DOWN: {
@@ -568,7 +568,7 @@ export class SummaryUiHandler extends UiHandler {
           const party = globalScene.getPlayerParty();
           const partyMemberIndex = this.pokemon?.isPlayer() ? party.indexOf(this.pokemon) : -1;
           if ((isDown && partyMemberIndex < party.length - 1) || (!isDown && partyMemberIndex)) {
-            const page = this.cursor;
+            const page = this.cursor as SummaryUiPage;
             this.clear();
             this.show(party[partyMemberIndex + (isDown ? 1 : -1)], this.summaryUiMode, page);
           }
@@ -683,7 +683,10 @@ export class SummaryUiHandler extends UiHandler {
 
         if (this.summaryPageContainer.visible) {
           this.transitioning = true;
-          this.populatePageContainer(this.summaryPageTransitionContainer, forward ? cursor : cursor + 1);
+          this.populatePageContainer(
+            this.summaryPageTransitionContainer,
+            (forward ? cursor : cursor + 1) as SummaryUiPage,
+          );
           if (forward) {
             this.summaryPageTransitionContainer.x += 214;
           } else {
@@ -719,11 +722,10 @@ export class SummaryUiHandler extends UiHandler {
     return changed;
   }
 
-  populatePageContainer(pageContainer: Phaser.GameObjects.Container, page?: SummaryUiPage) {
-    if (page === undefined) {
-      page = this.cursor;
-    }
-
+  populatePageContainer(
+    pageContainer: Phaser.GameObjects.Container,
+    page: SummaryUiPage = this.cursor as SummaryUiPage,
+  ) {
     if (pageContainer.getAll().length > 1) {
       pageContainer.each((o: Phaser.GameObjects.GameObject) => {
         if (o instanceof Phaser.GameObjects.Container) {
