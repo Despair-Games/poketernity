@@ -1,9 +1,13 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { type EffectiveStat, getStatKey } from "#enums/stat";
-import type { Pokemon } from "#field/pokemon";
+import { BAD_MOVE_PENALTY, MINOR_EFFECT_SCORE_BONUS } from "#constants/ai-constants";
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
+import { type EffectiveStat, getStatKey, Stat } from "#enums/stat";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { EffectiveStatOptions, Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
+import { isBetween } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -34,5 +38,32 @@ export class SwapStatAttr extends MoveEffectAttr {
     );
 
     return true;
+  }
+
+  /**
+   * @returns A {@link MINOR_EFFECT_SCORE_BONUS | minor bonus} for each opponent the user
+   * would outspeed as a result of applying this attribute's effect on the target. All
+   * abilities (including revealed abilities) are ignored for the stat calculations in this scoring.
+   */
+  public override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+    const effectiveStatOptions: EffectiveStatOptions = {
+      abilityApplyMode: AbilityApplyMode.IGNORE,
+      simulated: true,
+    };
+
+    const startingSpeed = user.getEffectiveStat(Stat.SPD, effectiveStatOptions);
+    const projectedSpeed = target.getEffectiveStat(Stat.SPD, effectiveStatOptions);
+
+    if (projectedSpeed <= startingSpeed) {
+      return BAD_MOVE_PENALTY;
+    }
+
+    const numOpponentsToOutspeed = user
+      .getOpponents()
+      .filter((opp) =>
+        isBetween(opp.getEffectiveStat(Stat.SPD, effectiveStatOptions), startingSpeed, projectedSpeed),
+      ).length;
+
+    return numOpponentsToOutspeed * MINOR_EFFECT_SCORE_BONUS;
   }
 }
