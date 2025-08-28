@@ -3,7 +3,7 @@ import { BattleSceneEventType } from "#enums/battle-scene-event-type";
 import { EaseType } from "#enums/ease-type";
 import { TimeOfDay } from "#enums/time-of-day";
 import { settings } from "#system/settings-manager";
-import { fixedNumber } from "#utils/common-utils";
+import { enumValueToKey, fixedNumber, wrap } from "#utils/common-utils";
 
 /** A small self contained UI element that displays the time of day as an icon */
 export class TimeOfDayWidget extends Phaser.GameObjects.Container {
@@ -127,8 +127,8 @@ export class TimeOfDayWidget extends Phaser.GameObjects.Container {
     this.moveBelow(this.timeOfDayIconFgs[0], this.timeOfDayIconFgs[1]);
 
     this.timeOfDayIconPairs.forEach((icons, key) => {
-      icons[0].setTexture(TimeOfDay[this.currentTime].toLowerCase() + "_icon_" + key);
-      icons[1].setTexture(TimeOfDay[this.previousTime].toLowerCase() + "_icon_" + key);
+      icons[0].setTexture(enumValueToKey(TimeOfDay, this.currentTime).toLowerCase() + "_icon_" + key);
+      icons[1].setTexture(enumValueToKey(TimeOfDay, this.previousTime).toLowerCase() + "_icon_" + key);
     });
     this.timeOfDayIconMgs[0].setRotation(-90 * (3.14 / 180));
 
@@ -166,10 +166,7 @@ export class TimeOfDayWidget extends Phaser.GameObjects.Container {
     }
 
     this.currentTime = newTime;
-    this.previousTime = this.currentTime - 1;
-    if (this.previousTime < TimeOfDay.DAWN) {
-      this.previousTime = TimeOfDay.NIGHT;
-    }
+    this.previousTime = wrap(this.currentTime - 1, TimeOfDay.DAWN, TimeOfDay.NIGHT) as TimeOfDay;
 
     this.tweenTimeOfDayIcon();
   }

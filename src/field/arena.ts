@@ -672,7 +672,7 @@ export class Arena {
     }
 
     // If the time is dusk or night, set the chance of sun to 0
-    if ([TimeOfDay.DUSK, TimeOfDay.NIGHT].includes(this.getTimeOfDay())) {
+    if (([TimeOfDay.DUSK, TimeOfDay.NIGHT] as TimeOfDay[]).includes(this.getTimeOfDay())) {
       weatherMap.set(WeatherType.SUNNY, 0);
     }
 
