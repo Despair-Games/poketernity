@@ -174,24 +174,22 @@ export class DropDownOption extends Phaser.GameObjects.Container {
 
   /**
    * Set the current SortDirection to the provided value and update icon accordingly
-   * @param SortDirection the new SortDirection to use
+   * @param dir - The new {@linkcode SortDirection} to use
    */
   public setDirection(dir: SortDirection): void {
     this.dir = dir;
     this.toggle.flipX = this.dir === SortDirection.DESC;
   }
 
-  /**
-   * Toggle the current SortDirection value
-   */
+  /** Toggle the current SortDirection value */
   public toggleDirection(): void {
-    this.setDirection(this.dir * -1);
+    this.setDirection((this.dir * -1) as SortDirection);
   }
 
   /**
    * Place the label elements (text and sprite if there is one) to the provided x and y position
-   * @param x the horizontal position
-   * @param y the vertical position
+   * @param x - The horizontal position
+   * @param y - The vertical position
    */
   setLabelPosition(x: number, y: number) {
     let textX = x;
@@ -213,8 +211,8 @@ export class DropDownOption extends Phaser.GameObjects.Container {
 
   /**
    * Place the toggle icon at the provided position
-   * @param x the horizontal position
-   * @param y the vertical position
+   * @param x - The horizontal position
+   * @param y - The vertical position
    */
   setTogglePosition(x: number, y: number) {
     if (this.toggle) {
