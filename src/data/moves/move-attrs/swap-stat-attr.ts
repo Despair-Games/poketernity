@@ -44,6 +44,10 @@ export class SwapStatAttr extends MoveEffectAttr {
    * @returns A {@link MINOR_EFFECT_SCORE_BONUS | minor bonus} for each opponent the user
    * would outspeed as a result of applying this attribute's effect on the target. All
    * abilities (including revealed abilities) are ignored for the stat calculations in this scoring.
+   *
+   * @privateRemarks
+   * This scoring is specific to Speed Swap. It may need to be generalized if other moves with
+   * this attribute are implemented.
    */
   public override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
     const effectiveStatOptions: EffectiveStatOptions = {

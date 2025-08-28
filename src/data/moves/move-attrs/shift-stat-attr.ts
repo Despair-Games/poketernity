@@ -40,15 +40,4 @@ export class ShiftStatAttr extends MoveEffectAttr {
 
     return true;
   }
-
-  /**
-   * Encourages the user to use the move if the stat to switch with is greater than the stat to switch.
-   * @param user the {@linkcode Pokemon} that used the move
-   * @param _target n/a
-   * @param _move n/a
-   * @returns number of points to add to the user's benefit score
-   */
-  override getUserBenefitScore(user: Pokemon, _target: Pokemon, _move: Move): number {
-    return user.getStat(this.statToSwitchWith, false) > user.getStat(this.statToSwitch, false) ? 10 : 0;
-  }
 }

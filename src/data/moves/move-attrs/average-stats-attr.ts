@@ -1,6 +1,8 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { ALLY_EFFECTIVE_STAT_OPTIONS, OPP_EFFECTIVE_STAT_OPTIONS } from "#constants/ai-constants";
 import type { EffectiveStat } from "#enums/stat";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
@@ -24,7 +26,7 @@ export class AverageStatsAttr extends MoveEffectAttr {
     this.msgKey = msgKey;
   }
 
-  override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
+  public override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     for (const s of this.stats) {
       const avg = Math.floor((user.getStat(s, false) + target.getStat(s, false)) / 2);
 
@@ -38,5 +40,23 @@ export class AverageStatsAttr extends MoveEffectAttr {
     );
 
     return true;
+  }
+
+  /**
+   * @returns A bonus that scales with the number of {@linkcode stats} where the user is
+   * expected to benefit from this attribute's effect against the target.
+   *
+   * @privateRemarks
+   * All moves that use this attribute (namely Power/Guard Split) only affect two stats,
+   * so the score from this attribute cannot exceed (+2).
+   */
+  public override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+    const benefitStats = this.stats.filter(
+      (stat) =>
+        user.getEffectiveStat(stat, ALLY_EFFECTIVE_STAT_OPTIONS)
+        < target.getEffectiveStat(stat, OPP_EFFECTIVE_STAT_OPTIONS),
+    ).length;
+
+    return this.getRandomScore(user, 55, benefitStats, benefitStats - 1);
   }
 }
