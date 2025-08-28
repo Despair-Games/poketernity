@@ -1,7 +1,9 @@
 import { globalScene } from "#app/global-scene";
 import type { CommandedTag } from "#battler-tags/commanded-tag";
+import { MINOR_EFFECT_SCORE_BONUS } from "#constants/ai-constants";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { type EffectiveStat, Stat } from "#enums/stat";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
@@ -55,5 +57,10 @@ export class OrderUpStatBoostAttr extends MoveEffectAttr {
       1,
     );
     return true;
+  }
+
+  /** @returns A {@linkcode MINOR_EFFECT_SCORE_BONUS} if the user is Commanded by its ally */
+  public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+    return user.hasTag(BattlerTagType.COMMANDED) ? MINOR_EFFECT_SCORE_BONUS : 0;
   }
 }
