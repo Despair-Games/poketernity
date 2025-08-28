@@ -15,7 +15,7 @@ import type { AwaitableUiHandler } from "#ui/awaitable-ui-handler";
  *     Will be marked as no longer `ready` once done. Any remaining element should get destroyed here.
  */
 export abstract class UiHandler {
-  protected mode: number | null;
+  protected mode: UiMode | null;
   protected cursor: number = 0;
 
   /**
