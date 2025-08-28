@@ -46,7 +46,7 @@ export class FaintCountdownAttr extends AddBattlerTagAttr {
   }
 
   /** @returns The inverted output of {@linkcode getRawEffectScore} */
-  public override getAllyTargetScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+  public override getAllyTargetScore(user: EnemyPokemon, target: EnemyPokemon, move: Move): number {
     return -this.getRawEffectScore(user, target, move);
   }
 }

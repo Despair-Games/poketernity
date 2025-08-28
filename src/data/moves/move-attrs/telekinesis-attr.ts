@@ -1,3 +1,4 @@
+import { LOW_ACCURACY_PENALTY_THRESHOLD } from "#constants/ai-constants";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
@@ -22,7 +23,11 @@ export class TelekinesisAttr extends AddBattlerTagAttr {
     if (
       user
         .getField()
-        .some((p) => p.getMoveset().some((mv) => mv.getMove().calculateBattleAccuracy(p, target, true) < 80))
+        .some((p) =>
+          p
+            .getMoveset()
+            .some((mv) => mv.getMove().calculateBattleAccuracy(p, target, true) < LOW_ACCURACY_PENALTY_THRESHOLD),
+        )
     ) {
       return this.getRandomScore(user, 40);
     }

@@ -1,7 +1,12 @@
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { MoveAttr } from "#moves/move-attr";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
+
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
+import type { EffectiveStatOptions } from "#field/pokemon";
 
 /** The {@link Pokemon.getAttackScore | Attack Score} granted to moves that KO an opponent. */
 export const KO_ATTACK_SCORE = 4;
@@ -84,3 +89,40 @@ export const STRONG_MATCHUP_SCORE_THRESHOLD = 4;
  * Pokemon is favored against its opponent
  */
 export const FAVORABLE_MATCHUP_SCORE_THRESHOLD = 3;
+
+/** The minimum accuracy a move can have before a Low Accuracy Penalty applies */
+export const LOW_ACCURACY_PENALTY_THRESHOLD = 80;
+
+/**
+ * The amount of stat stages an Enemy Pokemon can have before Defense- or
+ * Sp. Def-boosting moves (e.g. from Iron Defense) are significantly less
+ * incentivized by the AI
+ */
+export const DEFENSE_LOW_INCENTIVE_THRESHOLD = 2;
+
+/**
+ * The amount of stat stages an Enemy Pokemon can have before Evasion-boosting
+ * moves (e.g. Double Team) are no longer incentivized by the AI
+ */
+export const EVASION_BOOST_STAGE_LIMIT = 2;
+
+/**
+ * The amount of stat stages a Player Pokemon can have before Accuracy-reducing
+ * moves (e.g. Sand Attack) are no longer incentivized by the AI
+ */
+export const ACCURACY_REDUCTION_STAGE_LIMIT = -EVASION_BOOST_STAGE_LIMIT;
+
+/**
+ * The {@linkcode EffectiveStatOptions} to be passed to {@linkcode Pokemon.getEffectiveStat}
+ * when evaluating the effective stat of an allied {@linkcode EnemyPokemon}
+ */
+export const ALLY_EFFECTIVE_STAT_OPTIONS: EffectiveStatOptions = { simulated: true } as const;
+
+/**
+ * The {@linkcode EffectiveStatOptions} to be passed to {@linkcode Pokemon.getEffectiveStat}
+ * when evaluating the effective stat of an opposing {@linkcode PlayerPokemon}
+ */
+export const OPP_EFFECTIVE_STAT_OPTIONS: EffectiveStatOptions = {
+  abilityApplyMode: AbilityApplyMode.REVEALED,
+  simulated: true,
+} as const;

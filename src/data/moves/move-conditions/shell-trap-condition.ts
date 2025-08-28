@@ -1,6 +1,5 @@
 import type { ShellTrapTag } from "#battler-tags/shell-trap-tag";
-import { MAJOR_EFFECT_SCORE_PENALTY } from "#constants/ai-constants";
-import { AbilityApplyMode } from "#enums/ability-apply-mode";
+import { MAJOR_EFFECT_SCORE_PENALTY, OPP_EFFECTIVE_STAT_OPTIONS } from "#constants/ai-constants";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Stat } from "#enums/stat";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
@@ -30,7 +29,7 @@ export class ShellTrapCondition extends MoveCondition {
     const effectiveStatOptions = {
       opponent: user,
       move,
-      abilityApplyMode: AbilityApplyMode.REVEALED,
+      ...OPP_EFFECTIVE_STAT_OPTIONS,
     };
 
     return opponents

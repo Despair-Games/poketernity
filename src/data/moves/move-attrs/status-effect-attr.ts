@@ -11,9 +11,8 @@ import {
   POISON_SYNERGY_ABILITIES,
   POISONING_SYNERGY_ABILITIES,
 } from "#constants/ability-constants";
-import { BAD_MOVE_PENALTY, MAJOR_EFFECT_SCORE_BONUS } from "#constants/ai-constants";
+import { BAD_MOVE_PENALTY, MAJOR_EFFECT_SCORE_BONUS, OPP_EFFECTIVE_STAT_OPTIONS } from "#constants/ai-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { MoveCategory } from "#enums/move-category";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
@@ -102,18 +101,18 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
    * @see {@linkcode BURN_SYNERGY_ABILITIES}
    * @see {@linkcode POISON_SYNERGY_ABILITIES}
    */
-  public override getAllyTargetScore(user: EnemyPokemon, ally: Pokemon, _move: Move): number | null {
-    if (!ally.canSetStatus(this.effect, true, this.overrideStatus, user)) {
+  public override getAllyTargetScore(user: EnemyPokemon, target: EnemyPokemon, _move: Move): number | null {
+    if (!target.canSetStatus(this.effect, true, this.overrideStatus, user)) {
       return null;
     }
 
-    if (this.effect === StatusEffect.BURN && BURN_SYNERGY_ABILITIES.some((abId) => ally.hasAbility(abId))) {
+    if (this.effect === StatusEffect.BURN && BURN_SYNERGY_ABILITIES.some((abId) => target.hasAbility(abId))) {
       return this.getRandomScore(user, 80, MAJOR_EFFECT_SCORE_BONUS);
     }
 
     if (
       [StatusEffect.POISON, StatusEffect.TOXIC].includes(this.effect)
-      && POISON_SYNERGY_ABILITIES.some((abId) => ally.hasAbility(abId))
+      && POISON_SYNERGY_ABILITIES.some((abId) => target.hasAbility(abId))
     ) {
       /**
        * The chance to grant a bonus for poisoning the user's ally (with a status move).
@@ -162,12 +161,8 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
       case StatusEffect.FREEZE:
         return 2.5;
       case StatusEffect.BURN: {
-        const effectiveStatOptions = {
-          abilityApplyMode: AbilityApplyMode.REVEALED,
-          simulated: true,
-        };
-        return target.getEffectiveStat(Stat.ATK, effectiveStatOptions)
-          > target.getEffectiveStat(Stat.SPATK, effectiveStatOptions)
+        return target.getEffectiveStat(Stat.ATK, OPP_EFFECTIVE_STAT_OPTIONS)
+          > target.getEffectiveStat(Stat.SPATK, OPP_EFFECTIVE_STAT_OPTIONS)
           ? 2
           : 1;
       }

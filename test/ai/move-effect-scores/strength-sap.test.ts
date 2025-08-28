@@ -52,8 +52,7 @@ describe("Move Effect Scores - Strength Sap", () => {
     expect(enemy).toNeverSelectMove(MoveId.STRENGTH_SAP);
   });
 
-  // TODO: the AI should be aware of Clear Body once stat stage changes are scored
-  it.todo("should be avoided when the opponent has Clear Body", async () => {
+  it("should be avoided when the opponent has Clear Body", async () => {
     game.override.ability(AbilityId.CLEAR_BODY);
 
     await game.classicMode.startBattle(SpeciesId.EXCADRILL);

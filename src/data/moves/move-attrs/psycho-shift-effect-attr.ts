@@ -1,5 +1,4 @@
-import { BAD_MOVE_PENALTY } from "#constants/ai-constants";
-import { AbilityApplyMode } from "#enums/ability-apply-mode";
+import { BAD_MOVE_PENALTY, OPP_EFFECTIVE_STAT_OPTIONS } from "#constants/ai-constants";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
@@ -65,12 +64,8 @@ export class PsychoShiftEffectAttr extends MoveEffectAttr {
       case StatusEffect.PARALYSIS:
         return user.outspeeds(target, true) ? 2 : 3;
       case StatusEffect.BURN: {
-        const effectiveStatOptions = {
-          abilityApplyMode: AbilityApplyMode.REVEALED,
-          simulated: true,
-        };
-        return target.getEffectiveStat(Stat.ATK, effectiveStatOptions)
-          > target.getEffectiveStat(Stat.SPATK, effectiveStatOptions)
+        return target.getEffectiveStat(Stat.ATK, OPP_EFFECTIVE_STAT_OPTIONS)
+          > target.getEffectiveStat(Stat.SPATK, OPP_EFFECTIVE_STAT_OPTIONS)
           ? 3
           : 2;
       }

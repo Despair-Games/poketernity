@@ -219,7 +219,7 @@ interface DamageFunctionOptions {
   source?: Pokemon;
 }
 
-interface EffectiveStatOptions {
+export interface EffectiveStatOptions {
   /** The opposing {@linkcode Pokemon}, usually involved in an incoming or outgoing attack */
   opponent?: Pokemon;
   /** The {@linkcode Move} being used */
@@ -3045,12 +3045,24 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Compares if `this` and {@linkcode target} are on the same team.
+   * Compares if `this` and {@linkcode target} are opponents to each other.
    * @param target the {@linkcode Pokemon} to compare against.
-   * @returns `true` if the two pokemon are allies, `false` otherwise
+   * @returns `true` if the two pokemon are opponents, `false` otherwise
    */
   public isOpponent(target: Pokemon): boolean {
     return this.isPlayer() !== target.isPlayer();
+  }
+
+  /**
+   * Checks if `this` and a given active {@linkcode target} are allies. This can
+   * also be used to assert if `this` is of the same class as the target.
+   * @param target - The active {@linkcode Pokemon} to check
+   * @returns `true` if the two pokemon are allies
+   */
+  public isAlly(target: PlayerPokemon): this is PlayerPokemon;
+  public isAlly(target: EnemyPokemon): this is EnemyPokemon;
+  public isAlly(target: PlayerPokemon | EnemyPokemon): this is typeof target {
+    return this === target.getAlly();
   }
 
   /**

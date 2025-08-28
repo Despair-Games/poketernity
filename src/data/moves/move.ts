@@ -822,7 +822,7 @@ export abstract class Move {
     isKnockOut: boolean,
     isFail: boolean,
   ): number {
-    if (target === user.getAlly()) {
+    if (target.isAlly(user)) {
       /*
        * Attacks (other than Pollen Puff) are always penalized against allies
        * TODO:

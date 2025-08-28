@@ -64,14 +64,12 @@ export class HealAttr extends MoveEffectAttr {
    * - If the target is an opponent to the user, grant double the {@linkcode BAD_MOVE_PENALTY}
    * - Otherwise, grant a bonus as defined in {@linkcode getAllyTargetScore}
    */
-  public override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
-    const pokemon = this.selfTarget ? user : target;
-
-    if (pokemon.isOpponent(user)) {
-      return 2 * BAD_MOVE_PENALTY;
+  public override getEffectScore(user: EnemyPokemon, _target: Pokemon, move: Move): number {
+    if (this.selfTarget) {
+      return this.getAllyTargetScore(user, user, move);
     }
 
-    return this.getAllyTargetScore(user, target, move);
+    return 2 * BAD_MOVE_PENALTY;
   }
 
   /**
@@ -88,7 +86,7 @@ export class HealAttr extends MoveEffectAttr {
    * @param move - The {@linkcode Move} being evaluated
    * @returns The ES for using the given move against the given target
    */
-  public override getAllyTargetScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+  public override getAllyTargetScore(user: EnemyPokemon, target: EnemyPokemon, move: Move): number {
     if (target.hasTag(BattlerTagType.HEAL_BLOCK) || target.isFullHp()) {
       return BAD_MOVE_PENALTY;
     }
