@@ -609,7 +609,7 @@ export class OverridesHelper extends GameManagerHelper {
    * @returns `this`
    */
   public enemyDisableSwitching(disable: boolean = true): this {
-    vi.spyOn(Overrides, "ENEMY_DISABLE_SWITCHING_OVERRIDE", "get").mockReturnValue(disable);
+    vi.spyOn(activeOverrides, "ENEMY_DISABLE_SWITCHING_OVERRIDE", "get").mockReturnValue(disable);
     this.log(`Enemy Trainer switching ${disable ? "disabled" : "enabled"}!`);
     return this;
   }
