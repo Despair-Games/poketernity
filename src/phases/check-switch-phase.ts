@@ -84,7 +84,7 @@ export class CheckSwitchPhase extends BattlePhase {
             noHandler: () => this.onCancel(),
           };
           globalScene.ui.setMode<ConfirmUiHandler>(UiMode.CONFIRM, options);
-        }
+        },
       },
     );
   }

@@ -16,7 +16,7 @@ import i18next from "i18next";
  */
 export class TailwindTag extends ArenaTag {
   // This asserts to the compiler that `sourceId` is defined at all times for this tag
-  declare public sourceId: number;
+  public declare sourceId: number;
 
   constructor(turnCount: number, sourceId: number, side: ArenaTagSide) {
     super(ArenaTagType.TAILWIND, turnCount, MoveId.TAILWIND, sourceId, side);
