@@ -50,7 +50,7 @@ export class InvertStatsAttr extends MoveEffectAttr {
    * @returns The effective change (in number of stat stages) this attribute's effect is expected
    * to apply to the given target
    */
-  private getProjectedStatChange(target: Pokemon) {
+  private getProjectedStatChange(target: Pokemon): number {
     return BATTLE_STATS.reduce((total, stat) => total + target.getStatStage(stat) * -2, 0);
   }
 }
