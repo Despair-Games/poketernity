@@ -205,7 +205,21 @@ function pokemonAndMoveChosen(pokemon: PlayerPokemon, move: PokemonMove, correct
   const correctMove = move.getMove().category === correctMoveCategory;
   encounter.setDialogueToken("pokeName", pokemon.getNameToRender());
   encounter.setDialogueToken("move", move.name);
-  if (!correctMove) {
+  if (correctMove) {
+    encounter.selectedOption!.dialogue!.selected = [
+      {
+        text: `${namespace}:option.selected`,
+      },
+      {
+        text: `${namespace}:correct`,
+        speaker: `${namespace}:speaker`,
+      },
+      {
+        text: `${namespace}:correct_exp`,
+      },
+    ];
+    setEncounterExp([pokemon.id], 100);
+  } else {
     encounter.selectedOption!.dialogue!.selected = [
       {
         text: `${namespace}:option.selected`,
@@ -222,22 +236,8 @@ function pokemonAndMoveChosen(pokemon: PlayerPokemon, move: PokemonMove, correct
       globalScene.getPlayerParty().map((p) => p.id),
       50,
     );
-  } else {
-    encounter.selectedOption!.dialogue!.selected = [
-      {
-        text: `${namespace}:option.selected`,
-      },
-      {
-        text: `${namespace}:correct`,
-        speaker: `${namespace}:speaker`,
-      },
-      {
-        text: `${namespace}:correct_exp`,
-      },
-    ];
-    setEncounterExp([pokemon.id], 100);
   }
   encounter.misc = {
-    correctMove: correctMove,
+    correctMove,
   };
 }

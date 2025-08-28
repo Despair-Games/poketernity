@@ -47,7 +47,7 @@ export const MysteriousChallengersEncounter: MysteryEncounter = MysteryEncounter
     const normalSpriteKey = normalConfig.getSpriteKey(female, normalConfig.doubleOnly);
     encounter.enemyPartyConfigs.push({
       trainerConfig: normalConfig,
-      female: female,
+      female,
     });
 
     // Hard difficulty trainer is another random trainer, but with AVERAGE_BALANCED config
@@ -78,7 +78,7 @@ export const MysteriousChallengersEncounter: MysteryEncounter = MysteryEncounter
     encounter.enemyPartyConfigs.push({
       trainerConfig: hardConfig,
       levelAdditiveModifier: 1,
-      female: female,
+      female,
     });
 
     // Brutal trainer is pulled from pool of boss trainers (gym leaders) for the biome
@@ -98,7 +98,7 @@ export const MysteriousChallengersEncounter: MysteryEncounter = MysteryEncounter
     encounter.enemyPartyConfigs.push({
       trainerConfig: brutalConfig,
       levelAdditiveModifier: 1.5,
-      female: female,
+      female,
     });
 
     encounter.spriteConfigs = [

@@ -400,20 +400,19 @@ export class DropDown extends Phaser.GameObjects.Container {
       if (index === 0) {
         // we are on the All option > put all other options to the newState
         this.setAllOptions(newState);
+      } else if (newState === DropDownState.ON && this.checkForAllOn()) {
+        // select the "all" option if all others are selected
+        this.options[0].setOptionState(DropDownState.ON);
       } else {
-        // select the "all" option if all others are selected, other unselect it
-        if (newState === DropDownState.ON && this.checkForAllOn()) {
-          this.options[0].setOptionState(DropDownState.ON);
-        } else {
-          this.options[0].setOptionState(DropDownState.OFF);
-        }
+        // otherwise unselect it
+        this.options[0].setOptionState(DropDownState.OFF);
       }
     } else if (this.dropDownType === DropDownType.SINGLE) {
       if (option.state === DropDownState.OFF) {
-        this.options.forEach((option) => {
-          option.setOptionState(DropDownState.OFF);
-          option.setDirection(SortDirection.ASC);
-          option.toggle.setVisible(false);
+        this.options.forEach((opt) => {
+          opt.setOptionState(DropDownState.OFF);
+          opt.setDirection(SortDirection.ASC);
+          opt.toggle.setVisible(false);
         });
         option.setOptionState(DropDownState.ON);
         option.setDirection(this.lastDir);
@@ -549,10 +548,8 @@ export class DropDown extends Phaser.GameObjects.Container {
             this.options[i].setDirection(SortDirection.ASC);
             this.options[i].toggle.setVisible(true);
           }
-        } else {
-          if (this.defaultSettings[i]) {
-            this.options[i].setOptionState(this.defaultSettings[i]["state"]);
-          }
+        } else if (this.defaultSettings[i]) {
+          this.options[i].setOptionState(this.defaultSettings[i]["state"]);
         }
       }
     }
@@ -593,11 +590,11 @@ export class DropDown extends Phaser.GameObjects.Container {
   autoSize(): void {
     let maxWidth = 0;
     let x = 0;
-    for (let i = 0; i < this.options.length; i++) {
-      const optionWidth = this.options[i].getWidth();
+    for (const option of this.options) {
+      const optionWidth = option.getWidth();
       if (optionWidth > maxWidth) {
         maxWidth = optionWidth;
-        x = this.options[i].getCurrentLabelX() ?? 0;
+        x = option.getCurrentLabelX() ?? 0;
       }
     }
     this.window.width = maxWidth + x - this.window.x + 6;

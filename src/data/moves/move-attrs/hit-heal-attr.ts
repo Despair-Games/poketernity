@@ -86,9 +86,9 @@ export class HitHealAttr extends MoveEffectAttr {
       return 0;
     }
 
-    const expectedDamage = !isNil(this.healStat)
-      ? target.getEffectiveStat(this.healStat, { abilityApplyMode: AbilityApplyMode.REVEALED })
-      : target.getAttackDamage(user, move, AbilityApplyMode.REVEALED, false, true).damage;
+    const expectedDamage = isNil(this.healStat)
+      ? target.getAttackDamage(user, move, AbilityApplyMode.REVEALED, false, true).damage
+      : target.getEffectiveStat(this.healStat, { abilityApplyMode: AbilityApplyMode.REVEALED });
     const expectedHealRatio =
       Math.min(Math.floor(expectedDamage * this.healRatio), user.getInverseHp()) / user.getMaxHp();
 

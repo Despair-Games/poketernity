@@ -2,7 +2,7 @@ import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { CommanderAbAttr } from "#abilities/commander-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import Overrides from "#app/overrides";
+import { activeOverrides } from "#app/overrides";
 import { FRIENDSHIP_GAIN_FROM_CANDY } from "#constants/friendship-constants";
 import { getBerryEffectFunc, getBerryPredicate } from "#data/berry";
 import { getLevelTotalExp } from "#data/exp";
@@ -283,10 +283,10 @@ export abstract class PersistentModifier extends Modifier {
 
   incrementStack(amount: number, virtual: boolean): boolean {
     if (this.getStackCount() + amount <= this.getMaxStackCount()) {
-      if (!virtual) {
-        this.stackCount += amount;
-      } else {
+      if (virtual) {
         this.virtualStackCount += amount;
+      } else {
+        this.stackCount += amount;
       }
       return true;
     }
@@ -765,9 +765,11 @@ export abstract class PokemonHeldItemModifier extends PersistentModifier {
   }
 
   override getIcon(forSummary?: boolean): Phaser.GameObjects.Container {
-    const container = !forSummary ? globalScene.add.container(0, 0) : super.getIcon();
+    const container = forSummary ? super.getIcon() : globalScene.add.container(0, 0);
 
-    if (!forSummary) {
+    if (forSummary) {
+      container.setScale(0.5);
+    } else {
       const pokemon = this.getPokemon();
       if (pokemon) {
         const pokemonIcon = globalScene.addPokemonIcon(pokemon, -2, 10, 0, 0.5);
@@ -790,8 +792,6 @@ export abstract class PokemonHeldItemModifier extends PersistentModifier {
       if (virtualStackText) {
         container.add(virtualStackText);
       }
-    } else {
-      container.setScale(0.5);
     }
 
     return container;
@@ -3248,8 +3248,8 @@ export class TempExtraModifierModifier extends LapsingPersistentModifier {
  */
 export function overrideModifiers(isPlayer: boolean = true): void {
   const modifiersOverride: ModifierOverride[] = isPlayer
-    ? Overrides.STARTING_MODIFIER_OVERRIDE
-    : Overrides.ENEMY_MODIFIER_OVERRIDE;
+    ? activeOverrides.STARTING_MODIFIER_OVERRIDE
+    : activeOverrides.ENEMY_MODIFIER_OVERRIDE;
   if (!modifiersOverride || modifiersOverride.length === 0 || !globalScene) {
     return;
   }
@@ -3290,8 +3290,8 @@ export function overrideModifiers(isPlayer: boolean = true): void {
  */
 export function overrideHeldItems(pokemon: Pokemon, isPlayer: boolean = true): void {
   const heldItemsOverride: ModifierOverride[] = isPlayer
-    ? Overrides.STARTING_HELD_ITEMS_OVERRIDE
-    : Overrides.ENEMY_HELD_ITEMS_OVERRIDE;
+    ? activeOverrides.STARTING_HELD_ITEMS_OVERRIDE
+    : activeOverrides.ENEMY_HELD_ITEMS_OVERRIDE;
   if (!heldItemsOverride || heldItemsOverride.length === 0 || !globalScene) {
     return;
   }

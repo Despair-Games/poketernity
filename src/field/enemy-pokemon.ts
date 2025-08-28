@@ -1,7 +1,7 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { ConditionalCritAbAttr } from "#abilities/conditional-crit-ab-attr";
 import { globalScene } from "#app/global-scene";
-import Overrides from "#app/overrides";
+import { activeOverrides } from "#app/overrides";
 import type { TurnCommand } from "#app/turn-command-manager";
 import { BAD_MOVE_PENALTY } from "#constants/ai-constants";
 import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#constants/game-constants";
@@ -81,42 +81,42 @@ export class EnemyPokemon extends Pokemon {
       this.setBoss(boss, dataSource?.bossSegments);
     }
 
-    if (Overrides.ENEMY_STATUS_OVERRIDE) {
-      this.setStatus(Overrides.ENEMY_STATUS_OVERRIDE, { sleepTurnsRemaining: 4 });
+    if (activeOverrides.ENEMY_STATUS_OVERRIDE) {
+      this.setStatus(activeOverrides.ENEMY_STATUS_OVERRIDE, { sleepTurnsRemaining: 4 });
     }
 
-    if (Overrides.ENEMY_GENDER_OVERRIDE) {
-      this.gender = Overrides.ENEMY_GENDER_OVERRIDE;
+    if (activeOverrides.ENEMY_GENDER_OVERRIDE) {
+      this.gender = activeOverrides.ENEMY_GENDER_OVERRIDE;
     }
 
     const speciesId = this.species.speciesId;
 
     if (
-      speciesId in Overrides.ENEMY_FORM_OVERRIDES
-      && !isNil(Overrides.ENEMY_FORM_OVERRIDES[speciesId])
-      && this.species.forms[Overrides.ENEMY_FORM_OVERRIDES[speciesId]]
+      speciesId in activeOverrides.ENEMY_FORM_OVERRIDES
+      && !isNil(activeOverrides.ENEMY_FORM_OVERRIDES[speciesId])
+      && this.species.forms[activeOverrides.ENEMY_FORM_OVERRIDES[speciesId]]
     ) {
-      this.formIndex = Overrides.ENEMY_FORM_OVERRIDES[speciesId];
+      this.formIndex = activeOverrides.ENEMY_FORM_OVERRIDES[speciesId];
     }
 
     if (!dataSource) {
       this.generateAndPopulateMoveset();
 
-      if (shinyLock || Overrides.ENEMY_SHINY_OVERRIDE === false) {
+      if (shinyLock || activeOverrides.ENEMY_SHINY_OVERRIDE === false) {
         this.shiny = false;
       } else {
         this.trySetShiny();
       }
 
-      if (!this.shiny && Overrides.ENEMY_SHINY_OVERRIDE) {
+      if (!this.shiny && activeOverrides.ENEMY_SHINY_OVERRIDE) {
         this.shiny = true;
         this.initShinySparkle();
       }
 
       if (this.shiny) {
         this.variant = this.generateShinyVariant();
-        if (Overrides.ENEMY_VARIANT_OVERRIDE !== null) {
-          this.variant = Overrides.ENEMY_VARIANT_OVERRIDE;
+        if (activeOverrides.ENEMY_VARIANT_OVERRIDE !== null) {
+          this.variant = activeOverrides.ENEMY_VARIANT_OVERRIDE;
         }
       }
 
@@ -135,12 +135,12 @@ export class EnemyPokemon extends Pokemon {
   }
 
   initBattleInfo(): void {
-    if (!this.battleInfo) {
+    if (this.battleInfo) {
+      this.battleInfo.updateBossSegments(this);
+    } else {
       this.battleInfo = new EnemyBattleInfo();
       this.battleInfo.updateBossSegments(this);
       this.battleInfo.initInfo(this);
-    } else {
-      this.battleInfo.updateBossSegments(this);
     }
   }
 
@@ -166,7 +166,7 @@ export class EnemyPokemon extends Pokemon {
   override generateAndPopulateMoveset(formIndex?: number): void {
     switch (this.species.speciesId) {
       case SpeciesId.SMEARGLE:
-        this.setMoveset(...Array(4).fill(MoveId.SKETCH));
+        this.setMoveset(...new Array(4).fill(MoveId.SKETCH));
         break;
       case SpeciesId.ETERNATUS:
         this.moveset = (formIndex !== undefined ? formIndex : this.formIndex)
@@ -292,7 +292,7 @@ export class EnemyPokemon extends Pokemon {
     // If the current Mystery Encounter is configured to disable enemy moves,
     // skip this command fetch.
     if (battle.mysteryEncounter?.skipEnemyBattleTurns) {
-      return undefined;
+      return;
     }
 
     // If this Pokemon is hidden by its Commander ability, skip this command fetch.
@@ -301,7 +301,7 @@ export class EnemyPokemon extends Pokemon {
       && this.hasAbility(AbilityId.COMMANDER)
       && this.getAlly()?.getTag(BattlerTagType.COMMANDED)?.sourceId === this.id
     ) {
-      return undefined;
+      return;
     }
 
     if (
@@ -338,8 +338,8 @@ export class EnemyPokemon extends Pokemon {
    * @todo Finalize the MUS threshold for switching
    */
   public getSwitchCommand(): TurnCommand | undefined {
-    if (Overrides.ENEMY_DISABLE_SWITCHING_OVERRIDE) {
-      return undefined;
+    if (activeOverrides.ENEMY_DISABLE_SWITCHING_OVERRIDE) {
+      return;
     }
 
     const nonActiveParty = this.getParty().filter((p) => p.isActive() && !p.isOnField());
@@ -348,7 +348,7 @@ export class EnemyPokemon extends Pokemon {
     // If this Pokemon can safely KO at least 1 opponent, it gains an average MUS
     // of Infinity and should never switch out.
     if (matchupScore === Number.POSITIVE_INFINITY) {
-      return undefined;
+      return;
     }
 
     // The switch candidate is the inactive Pokemon with the highest average MUS.
@@ -366,7 +366,7 @@ export class EnemyPokemon extends Pokemon {
         args: [false],
       };
     }
-    return undefined;
+    return;
   }
 
   /**
@@ -494,7 +494,7 @@ export class EnemyPokemon extends Pokemon {
        */
       return {
         moveId: move.id,
-        targets: targets,
+        targets,
         score: targetScores.map((ts) => ts[1]).reduce((total, score) => total + score),
       };
     }
@@ -510,7 +510,7 @@ export class EnemyPokemon extends Pokemon {
 
       return {
         moveId: move.id,
-        targets: targets,
+        targets,
         score: averageScore,
       };
     }
@@ -536,7 +536,7 @@ export class EnemyPokemon extends Pokemon {
     }
 
     const { trainer } = globalScene.currentBattle;
-    return Overrides.FORCE_ENEMY_TERA_OVERRIDE || (!isNil(trainer) && trainer.shouldTera(this));
+    return activeOverrides.FORCE_ENEMY_TERA_OVERRIDE || (!isNil(trainer) && trainer.shouldTera(this));
   }
 
   /**
@@ -718,10 +718,8 @@ export class EnemyPokemon extends Pokemon {
      */
     amount = this.isMax(false) && !ignoreDynamaxReduction ? toDmgValue(amount / DYNAMAX_DAMAGE_TAKEN_FACTOR) : amount;
 
-    if (globalScene.currentBattle.isClassicFinalBoss) {
-      if (!this.formIndex && this.bossSegmentIndex < 1) {
-        amount = Math.min(amount, this.hp - 1);
-      }
+    if (globalScene.currentBattle.isClassicFinalBoss && !this.formIndex && this.bossSegmentIndex < 1) {
+      amount = Math.min(amount, this.hp - 1);
     }
 
     const damage = super.damage(amount, { preventEndure, ignoreFaintPhase, ignoreDynamaxReduction });
@@ -741,10 +739,8 @@ export class EnemyPokemon extends Pokemon {
   }
 
   canBypassBossSegments(segmentCount: number = 1): boolean {
-    if (globalScene.currentBattle.isClassicFinalBoss) {
-      if (!this.formIndex && this.bossSegmentIndex - segmentCount < 1) {
-        return false;
-      }
+    if (globalScene.currentBattle.isClassicFinalBoss && !this.formIndex && this.bossSegmentIndex - segmentCount < 1) {
+      return false;
     }
 
     return true;

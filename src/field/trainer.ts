@@ -136,7 +136,7 @@ export class Trainer extends Phaser.GameObjects.Container {
    * @param trainerSlot - The slot to determine which name to use. Defaults to TrainerSlot.NONE.
    * @param includeTitle - Whether to include the title in the returned name. Defaults to false.
    * @returns - The formatted name of the trainer.
-   **/
+   */
   getName(trainerSlot: TrainerSlot = TrainerSlot.NONE, includeTitle: boolean = false): string {
     if (this.config.hasDouble && this.config.spriteNameLeft && this.config.spriteNameRight) {
       if (trainerSlot === TrainerSlot.TRAINER) {
@@ -176,18 +176,18 @@ export class Trainer extends Phaser.GameObjects.Container {
       }
 
       // If no specific trainer slot is set.
-      if (!trainerSlot) {
+      if (trainerSlot) {
+        // Assign the name based on the trainer slot:
+        // Use 'this.name' if 'trainerSlot' is TRAINER.
+        // Otherwise, use 'this.partnerName' if it exists, or 'this.name' if it doesn't.
+        name = trainerSlot === TrainerSlot.TRAINER ? this.name : this.partnerName || this.name;
+      } else {
         // Use the trainer's name.
         name = this.name;
         // If there is a partner name, concatenate it with the trainer's name using "&".
         if (this.partnerName) {
           name = `${name} & ${this.partnerName}`;
         }
-      } else {
-        // Assign the name based on the trainer slot:
-        // Use 'this.name' if 'trainerSlot' is TRAINER.
-        // Otherwise, use 'this.partnerName' if it exists, or 'this.name' if it doesn't.
-        name = trainerSlot === TrainerSlot.TRAINER ? this.name : this.partnerName || this.name;
       }
     }
 
@@ -211,32 +211,32 @@ export class Trainer extends Phaser.GameObjects.Container {
   }
 
   getEncounterBgm(): string {
-    return !this.variant
-      ? this.config.encounterBgm
-      : (this.variant === TrainerVariant.DOUBLE ? this.config.doubleEncounterBgm : this.config.femaleEncounterBgm)
-          || this.config.encounterBgm;
+    return this.variant
+      ? (this.variant === TrainerVariant.DOUBLE ? this.config.doubleEncounterBgm : this.config.femaleEncounterBgm)
+          || this.config.encounterBgm
+      : this.config.encounterBgm;
   }
 
   getEncounterMessages(): string[] {
-    return !this.variant
-      ? this.config.encounterMessages
-      : (this.variant === TrainerVariant.DOUBLE
+    return this.variant
+      ? (this.variant === TrainerVariant.DOUBLE
           ? this.config.doubleEncounterMessages
-          : this.config.femaleEncounterMessages) || this.config.encounterMessages;
+          : this.config.femaleEncounterMessages) || this.config.encounterMessages
+      : this.config.encounterMessages;
   }
 
   getVictoryMessages(): string[] {
-    return !this.variant
-      ? this.config.victoryMessages
-      : (this.variant === TrainerVariant.DOUBLE ? this.config.doubleVictoryMessages : this.config.femaleVictoryMessages)
-          || this.config.victoryMessages;
+    return this.variant
+      ? (this.variant === TrainerVariant.DOUBLE ? this.config.doubleVictoryMessages : this.config.femaleVictoryMessages)
+          || this.config.victoryMessages
+      : this.config.victoryMessages;
   }
 
   getDefeatMessages(): string[] {
-    return !this.variant
-      ? this.config.defeatMessages
-      : (this.variant === TrainerVariant.DOUBLE ? this.config.doubleDefeatMessages : this.config.femaleDefeatMessages)
-          || this.config.defeatMessages;
+    return this.variant
+      ? (this.variant === TrainerVariant.DOUBLE ? this.config.doubleDefeatMessages : this.config.femaleDefeatMessages)
+          || this.config.defeatMessages
+      : this.config.defeatMessages;
   }
 
   getPartyTemplate(): TrainerPartyTemplate {
@@ -393,17 +393,9 @@ export class Trainer extends Phaser.GameObjects.Container {
             })
             .flat();
 
+          // biome-ignore-start lint/style/useCollapsedElseIf: TODO: surely this can be done better?
           // If the index is even, use the species pool for the main trainer (that way he only uses his own pokemon in battle)
-          if (!(index % 2)) {
-            // Since the only currently allowed double battle with named trainers is Tate & Liza, we need to make sure that Solrock is the first pokemon in the party for Tate and Lunatone for Liza
-            if (index === 0 && TrainerType[this.config.trainerType] === TrainerType[TrainerType.TATE]) {
-              newSpeciesPool = [SpeciesId.SOLROCK];
-            } else if (index === 0 && TrainerType[this.config.trainerType] === TrainerType[TrainerType.LIZA]) {
-              newSpeciesPool = [SpeciesId.LUNATONE];
-            } else {
-              newSpeciesPool = speciesPoolFiltered;
-            }
-          } else {
+          if (index % 2) {
             // If the index is odd, use the species pool for the partner trainer (that way he only uses his own pokemon in battle)
             // Since the only currently allowed double battle with named trainers is Tate & Liza, we need to make sure that Solrock is the first pokemon in the party for Tate and Lunatone for Liza
             if (index === 1 && TrainerType[this.config.trainerTypeDouble] === TrainerType[TrainerType.TATE]) {
@@ -413,7 +405,17 @@ export class Trainer extends Phaser.GameObjects.Container {
             } else {
               newSpeciesPool = speciesPoolPartnerFiltered;
             }
+          } else {
+            // Since the only currently allowed double battle with named trainers is Tate & Liza, we need to make sure that Solrock is the first pokemon in the party for Tate and Lunatone for Liza
+            if (index === 0 && TrainerType[this.config.trainerType] === TrainerType[TrainerType.TATE]) {
+              newSpeciesPool = [SpeciesId.SOLROCK];
+            } else if (index === 0 && TrainerType[this.config.trainerType] === TrainerType[TrainerType.LIZA]) {
+              newSpeciesPool = [SpeciesId.LUNATONE];
+            } else {
+              newSpeciesPool = speciesPoolFiltered;
+            }
           }
+          // biome-ignore-end lint/style/useCollapsedElseIf: range comment used because biome gets confused by `if`/`else` chains
         }
 
         let species: PokemonSpecies;
@@ -439,7 +441,7 @@ export class Trainer extends Phaser.GameObjects.Container {
         ? this.config.getDerivedType() + ((index + 1) << 8)
         : globalScene.currentBattle.waveIndex
             + (this.config.getDerivedType() << 10)
-            + (((!this.config.useSameSeedForAllMembers ? index : 0) + 1) << 8),
+            + (((this.config.useSameSeedForAllMembers ? 0 : index) + 1) << 8),
     );
 
     return ret!; // TODO: is this bang correct?
@@ -733,7 +735,7 @@ export class Trainer extends Phaser.GameObjects.Container {
         globalScene.tweens.add({
           targets: tintSprite,
           alpha: alpha || 1,
-          duration: duration,
+          duration,
           ease: ease || "Linear",
         });
       } else {
@@ -749,7 +751,7 @@ export class Trainer extends Phaser.GameObjects.Container {
         globalScene.tweens.add({
           targets: tintSprite,
           alpha: 0,
-          duration: duration,
+          duration,
           ease: ease || "Linear",
           onComplete: () => {
             tintSprite.setVisible(false);

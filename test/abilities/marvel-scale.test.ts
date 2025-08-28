@@ -15,7 +15,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 const nonVolatileStatusEffects = NON_VOLATILE_STATUS_EFFECTS.map((statusEffectId) => ({
   statusEffectName: capitalizeString(StatusEffect[statusEffectId], "_", false, true),
-  statusEffectId: statusEffectId,
+  statusEffectId,
 }));
 
 //#endregion

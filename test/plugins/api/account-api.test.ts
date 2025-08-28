@@ -6,12 +6,13 @@ import type { AccountInfoResponse } from "#types/api-types";
 import * as AppUtils from "#utils/app-utils";
 import { removeCookie, setCookie } from "#utils/app-utils";
 import { HttpResponse, http } from "msw";
+import type { SetupServerApi } from "msw/node";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const apiBase = getApiBaseUrl();
 const accountApi = new AccountApi(apiBase);
 
-let server;
+let server: SetupServerApi;
 beforeAll(async () => {
   server = await initServerForApiTests();
 });

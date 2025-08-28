@@ -107,8 +107,8 @@ function getTextStyleOptions(
   const { fontFamily, fontSize, shadow, strokeThickness, lineSpacing } = textStyleOptions.fontStyle;
 
   let styleOptions: Phaser.Types.GameObjects.Text.TextStyle = {
-    fontFamily: fontFamily,
-    fontSize: fontSize,
+    fontFamily,
+    fontSize,
     color: mainColor,
     padding: {
       bottom: 6,

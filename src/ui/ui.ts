@@ -58,7 +58,7 @@ import { TitleUiHandler } from "#ui/title-ui-handler";
 import type { UiHandler } from "#ui/ui-handler";
 import { addWindow } from "#ui/ui-theme";
 import { UnavailableModalUiHandler } from "#ui/unavailable-modal-ui-handler";
-import { executeIf, isNil } from "#utils/common-utils";
+import { enumValueToKey, executeIf, isNil } from "#utils/common-utils";
 import i18next from "i18next";
 
 /** All modes that are part of the settings UI. */
@@ -534,7 +534,7 @@ export class UI extends Phaser.GameObjects.Container {
     let hasi18n = false;
     let text = keyOrText;
     const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
-    const genderStr = PlayerGender[genderIndex].toLowerCase();
+    const genderStr = enumValueToKey(PlayerGender, genderIndex).toLowerCase();
 
     if (i18next.exists(keyOrText)) {
       const i18nKey = keyOrText;
@@ -580,10 +580,12 @@ export class UI extends Phaser.GameObjects.Container {
    * @todo why is this here?
    */
   public shouldSkipDialogue(i18nKey: string): boolean {
-    if (i18next.exists(i18nKey)) {
-      if (settings.general.skipSeenDialogues && globalScene.gameData.getSeenDialogues()[i18nKey] === true) {
-        return true;
-      }
+    if (
+      i18next.exists(i18nKey)
+      && settings.general.skipSeenDialogues
+      && globalScene.gameData.getSeenDialogues()[i18nKey] === true
+    ) {
+      return true;
     }
     return false;
   }
@@ -604,10 +606,10 @@ export class UI extends Phaser.GameObjects.Container {
   public showTooltip(title: string, content: string, overlap: boolean = false): void {
     this.tooltipContainer.setVisible(true);
     this.editTooltip(title, content);
-    if (!overlap) {
-      globalScene.uiContainer.moveAbove(this.tooltipContainer, this);
-    } else {
+    if (overlap) {
       globalScene.uiContainer.moveBelow(this.tooltipContainer, this);
+    } else {
+      globalScene.uiContainer.moveAbove(this.tooltipContainer, this);
     }
   }
 
@@ -705,7 +707,7 @@ export class UI extends Phaser.GameObjects.Container {
       globalScene.tweens.add({
         targets: this.overlay,
         alpha: 1,
-        duration: duration,
+        duration,
         ease: "Sine.easeOut",
         onComplete: () => resolve(),
       });
@@ -725,7 +727,7 @@ export class UI extends Phaser.GameObjects.Container {
       globalScene.tweens.add({
         targets: this.overlay,
         alpha: 0,
-        duration: duration,
+        duration,
         ease: "Sine.easeIn",
         onComplete: () => {
           this.overlay.setVisible(false);
@@ -907,15 +909,15 @@ export class UI extends Phaser.GameObjects.Container {
         resolve(true);
       };
 
-      if (!noTransitionModes.includes(lastMode)) {
+      if (noTransitionModes.includes(lastMode)) {
+        doRevertMode();
+      } else {
         this.fadeOut(250).then(() => {
           globalScene.time.delayedCall(100, () => {
             doRevertMode();
             this.fadeIn(250);
           });
         });
-      } else {
-        doRevertMode();
       }
     });
   }

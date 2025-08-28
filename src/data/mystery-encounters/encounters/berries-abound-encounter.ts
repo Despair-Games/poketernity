@@ -80,7 +80,7 @@ export const BerriesAboundEncounter: MysteryEncounter = MysteryEncounterBuilder.
     const config: EnemyPartyConfig = {
       pokemonConfigs: [
         {
-          level: level,
+          level,
           species: bossSpecies,
           dataSource: new PokemonData(bossPokemon),
           isBoss: true,
@@ -114,8 +114,8 @@ export const BerriesAboundEncounter: MysteryEncounter = MysteryEncounterBuilder.
         hasShadow: true,
       },
       {
-        spriteKey: spriteKey,
-        fileRoot: fileRoot,
+        spriteKey,
+        fileRoot,
         hasShadow: true,
         tint: 0.25,
         x: -5,

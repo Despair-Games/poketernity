@@ -27,9 +27,8 @@ export abstract class CallMoveAttr extends OverrideMoveEffectAttr {
   public override readonly callsOtherMoves: boolean = true;
 
   override apply(user: Pokemon, target: Pokemon, move: Move, overridden: BooleanHolder): boolean {
-    const replaceMoveTarget = [MoveTarget.NEAR_OTHER, MoveTarget.DRAGON_DARTS].includes(move.moveTarget)
-      ? MoveTarget.NEAR_ENEMY
-      : undefined;
+    const replaceTargets: MoveTarget[] = [MoveTarget.NEAR_OTHER, MoveTarget.DRAGON_DARTS];
+    const replaceMoveTarget = replaceTargets.includes(move.moveTarget) ? MoveTarget.NEAR_ENEMY : undefined;
     const moveTargets = getMoveTargets(user, move.id, replaceMoveTarget);
 
     if (moveTargets.targets.length === 0) {
@@ -45,7 +44,7 @@ export abstract class CallMoveAttr extends OverrideMoveEffectAttr {
       targets = [moveTargets.targets[user.randSeedInt(moveTargets.targets.length)]];
     }
 
-    user.getMoveQueue().push({ move: move, targets, virtual: true, ignorePP: true, type: user.getMoveType(move) });
+    user.getMoveQueue().push({ move, targets, virtual: true, ignorePP: true, type: user.getMoveType(move) });
     globalScene.phaseManager.createAndUnshiftPhase("LoadMoveAnimPhase", move.id);
     globalScene.phaseManager.createAndUnshiftPhase("MovePhase", user, targets, move.id, {
       followUp: true,

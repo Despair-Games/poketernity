@@ -32,6 +32,6 @@ export class RedirectMoveAbAttr extends AbAttr {
 
   canRedirect(moveId: MoveId, _user: Pokemon): boolean {
     const move = allMoves.get(moveId);
-    return [MoveTarget.NEAR_OTHER, MoveTarget.OTHER].includes(move.moveTarget);
+    return ([MoveTarget.NEAR_OTHER, MoveTarget.OTHER] as MoveTarget[]).includes(move.moveTarget);
   }
 }

@@ -51,7 +51,7 @@ export class SwitchSummonPhase extends SummonPhase {
     if (!this.isPlayer) {
       if (this.slotIndex === -1 && trainer) {
         this.slotIndex = trainer.getNextSummonIndex(
-          !this.fieldIndex ? TrainerSlot.TRAINER : TrainerSlot.TRAINER_PARTNER,
+          this.fieldIndex ? TrainerSlot.TRAINER_PARTNER : TrainerSlot.TRAINER,
         );
       }
 

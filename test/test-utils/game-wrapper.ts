@@ -228,7 +228,7 @@ export class GameWrapper {
       return new Promise((resolve) => {
         // need to remove that if later we want to test battle-anims
         const newUrl = url.includes("./battle-anims/") ? prependPath("./battle-anims/tackle.json") : prependPath(url);
-        let raw;
+        let raw: string;
         try {
           raw = fs.readFileSync(newUrl, { encoding: "utf8", flag: "r" });
         } catch (e) {

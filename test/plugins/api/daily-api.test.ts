@@ -4,12 +4,13 @@ import { initServerForApiTests } from "#test/test-utils/test-file-initialization
 import { getApiBaseUrl } from "#test/test-utils/test-utils";
 import type { GetDailyRankingsPageCountRequest, GetDailyRankingsRequest, RankingEntry } from "#types/api-types";
 import { HttpResponse, http } from "msw";
+import type { SetupServerApi } from "msw/node";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const apiBase = getApiBaseUrl();
 const dailyApi = new DailyApi(apiBase);
 
-let server;
+let server: SetupServerApi;
 beforeAll(async () => {
   server = await initServerForApiTests();
 });

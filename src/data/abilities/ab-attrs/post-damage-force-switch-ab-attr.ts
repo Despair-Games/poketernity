@@ -123,7 +123,11 @@ export function calculateShellBellRecovery(pokemon: Pokemon): number {
 //#region Helpers
 
 class ForceSwitchOutHelper {
-  constructor(private switchType: SwitchType) {}
+  private switchType: SwitchType;
+
+  constructor(switchType: SwitchType) {
+    this.switchType = switchType;
+  }
 
   /**
    * Handles the logic for switching out a Pokémon based on battle conditions, HP, and the switch type.
@@ -217,11 +221,13 @@ class ForceSwitchOutHelper {
   /**
    * Determines if a Pokémon can switch out based on its status, the opponent's status, and battle conditions.
    *
-   * @param pokemon The Pokémon attempting to switch out.
-   * @param opponent The opponent Pokémon.
+   * @param pokemon - The Pokémon attempting to switch out.
+   * @param opponent - The opponent Pokémon.
    * @returns `true` if the switch-out condition is met
    */
   public getSwitchOutCondition(pokemon: Pokemon, _opponent: Pokemon): boolean {
+    const { currentBattle } = globalScene;
+    const { battleType, waveIndex, mysteryEncounter } = currentBattle;
     const switchOutTarget = pokemon;
     const player = switchOutTarget.isPlayer();
 
@@ -236,28 +242,22 @@ class ForceSwitchOutHelper {
       return !blockedByAbility.value;
     }
 
-    if (!player && globalScene.currentBattle.battleType === BattleType.WILD) {
-      if (!globalScene.currentBattle.waveIndex && globalScene.currentBattle.waveIndex % 10 === 0) {
-        return false;
-      }
+    if (!player && battleType === BattleType.WILD && waveIndex % 10 === 0) {
+      return false;
     }
 
-    if (
-      !player
-      && globalScene.currentBattle.isBattleMysteryEncounter()
-      && !globalScene.currentBattle.mysteryEncounter?.fleeAllowed
-    ) {
+    if (!player && currentBattle.isBattleMysteryEncounter() && !mysteryEncounter?.fleeAllowed) {
       return false;
     }
 
     const party = player ? globalScene.getPlayerParty() : globalScene.getEnemyParty();
     return (
-      (!player && globalScene.currentBattle.battleType === BattleType.WILD)
+      (!player && battleType === BattleType.WILD)
       || party.filter(
         (p) =>
           p.isAllowedInBattle()
           && (player || (p as EnemyPokemon).trainerSlot === (switchOutTarget as EnemyPokemon).trainerSlot),
-      ).length > globalScene.currentBattle.getBattlerCount()
+      ).length > currentBattle.getBattlerCount()
     );
   }
 

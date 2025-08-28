@@ -52,20 +52,22 @@ export class ScanIvsPhase extends PokemonPhase {
       const ivsToShow = messageUiHandler.getTopIvs(enemyIvs, this.shownIvs);
 
       statsContainer = enemyPokemon.getBattleInfo().getStatsValueContainer().list as Phaser.GameObjects.Sprite[];
-      statsContainerLabels = statsContainer.filter((m) => m.name.indexOf("icon_stat_label") >= 0);
+      statsContainerLabels = statsContainer.filter((m) => m.name.includes("icon_stat_label"));
 
-      for (let s = 0; s < statsContainerLabels.length; s++) {
-        const ivStat = Stat[statsContainerLabels[s].frame.name];
+      for (const label of statsContainerLabels) {
+        const ivStat = Stat[label.frame.name];
         if (enemyIvs[ivStat] > currentIvs[ivStat] && ivsToShow.indexOf(Number(ivStat)) >= 0) {
           const hexColour = enemyIvs[ivStat] === 31 ? CommonColor.SOFT_ORANGE : CommonColor.LIGHT_GREEN;
           const hexTextColour = Phaser.Display.Color.HexStringToColor(hexColour).color;
-          statsContainerLabels[s].setTint(hexTextColour);
+          label.setTint(hexTextColour);
         }
-        statsContainerLabels[s].setVisible(true);
+        label.setVisible(true);
       }
     }
 
-    if (!settings.general.hideIvScanner) {
+    if (settings.general.hideIvScanner) {
+      this.end();
+    } else {
       ui.showText(i18next.t("battle:ivScannerUseQuestion", { pokemonName: getPokemonNameWithAffix(pokemon) }), {
         callback: () => {
           const options: ConfirmModeConfig = {
@@ -85,8 +87,6 @@ export class ScanIvsPhase extends PokemonPhase {
           ui.setMode<ConfirmUiHandler>(UiMode.CONFIRM, options);
         },
       });
-    } else {
-      this.end();
     }
   }
 }

@@ -191,14 +191,12 @@ export class MysteryEncounterUiHandler extends UiHandler {
               || selected.optionMode === MysteryEncounterOptionMode.DISABLED_OR_SPECIAL))
         ) {
           success = false;
+        } else if (
+          (globalScene.phaseManager.getCurrentPhase() as MysteryEncounterPhase).handleOptionSelect(selected, cursor)
+        ) {
+          success = true;
         } else {
-          if (
-            (globalScene.phaseManager.getCurrentPhase() as MysteryEncounterPhase).handleOptionSelect(selected, cursor)
-          ) {
-            success = true;
-          } else {
-            ui.playError();
-          }
+          ui.playError();
         }
       } else {
         // TODO: If we need to handle cancel option? Maybe default logic to leave/run from encounter idk
@@ -511,11 +509,8 @@ export class MysteryEncounterUiHandler extends UiHandler {
     this.descriptionContainer.add(titleTextObject);
 
     // Rarity of encounter
-    let pokeBallType = PokeballType.POKEBALL;
+    let pokeBallType: PokeballType = PokeballType.POKEBALL; // Common = Pokeball
     switch (mysteryEncounter.encounterTier) {
-      case MysteryEncounterTier.COMMON:
-        pokeBallType = PokeballType.POKEBALL;
-        break;
       case MysteryEncounterTier.GREAT:
         pokeBallType = PokeballType.GREAT_BALL;
         break;

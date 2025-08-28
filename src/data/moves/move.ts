@@ -55,7 +55,7 @@ import { VariablePowerAttr } from "#moves/variable-power-attr";
 import { VariableTargetAttr } from "#moves/variable-target-attr";
 import type { MoveConditionFunc } from "#types/move-types";
 import type { AbstractConstructor, Constructor, nil } from "#types/utility-types";
-import { BooleanHolder, isNil, NumberHolder } from "#utils/common-utils";
+import { BooleanHolder, isNil, NumberHolder, ValueHolder } from "#utils/common-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
 import { toCamelCaseString } from "#utils/string-utils";
 import i18next from "i18next";
@@ -334,10 +334,13 @@ export abstract class Move {
    * @returns `true` if the move can bypass the target's Substitute; `false` otherwise.
    */
   hitsSubstitute(user: Pokemon, target: Pokemon | nil): boolean {
-    if (
-      [MoveTarget.USER, MoveTarget.USER_SIDE, MoveTarget.ENEMY_SIDE, MoveTarget.BOTH_SIDES].includes(this.moveTarget)
-      || !target?.hasTag(BattlerTagType.SUBSTITUTE)
-    ) {
+    const substituteBypassTargets: MoveTarget[] = [
+      MoveTarget.USER,
+      MoveTarget.USER_SIDE,
+      MoveTarget.ENEMY_SIDE,
+      MoveTarget.BOTH_SIDES,
+    ];
+    if (substituteBypassTargets.includes(this.moveTarget) || !target?.hasTag(BattlerTagType.SUBSTITUTE)) {
       return false;
     }
 
@@ -740,7 +743,7 @@ export abstract class Move {
     for (const attr of this.attrs) {
       // conditionals to check if the move is self targeting (if so then you are applying the move to yourself, not the target)
       score +=
-        attr.getTargetBenefitScore(user, !attr.selfTarget ? target : user, move)
+        attr.getTargetBenefitScore(user, attr.selfTarget ? user : target, move)
         * (target !== user && attr.selfTarget ? -1 : 1);
     }
 
@@ -1270,7 +1273,7 @@ export function getMoveTargets(user: Pokemon, moveId: MoveId, replaceTarget?: Mo
     };
   }
 
-  const variableTarget = new NumberHolder(0);
+  const variableTarget = new ValueHolder<MoveTarget>(MoveTarget.USER);
   const move = allMoves.get(moveId);
   user.getOpponents().forEach((p) => applyMoveAttrs(VariableTargetAttr, user, p, move, variableTarget));
 

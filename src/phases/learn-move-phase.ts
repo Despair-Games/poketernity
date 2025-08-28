@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import Overrides from "#app/overrides";
+import { activeOverrides } from "#app/overrides";
 import { allMoves } from "#data/data-lists";
 import { LearnMoveType } from "#enums/learn-move-type";
 import { MoveId } from "#enums/move-id";
@@ -225,7 +225,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
       globalScene.phaseManager.tryRemovePhase((phase) => phase.is("SelectModifierPhase"));
     } else if (this.learnMoveType === LearnMoveType.MEMORY) {
       if (this.cost !== -1) {
-        if (!Overrides.WAIVE_SHOP_FEES_OVERRIDE) {
+        if (!activeOverrides.WAIVE_SHOP_FEES_OVERRIDE) {
           globalScene.money -= this.cost;
           globalScene.updateMoneyText();
           globalScene.animateMoneyChanged(false);

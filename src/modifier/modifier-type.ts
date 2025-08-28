@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { logModifiers } from "#app/loggers";
 import { getPokemonNameWithAffix } from "#app/messages";
-import Overrides from "#app/overrides";
+import { activeOverrides } from "#app/overrides";
 import { PARTY_UI_NO_EFFECT_MSG_i18N_KEY } from "#constants/ui-constants";
 import { allMoves } from "#data/data-lists";
 import { getNatureName, getNatureStatMultiplier } from "#data/nature";
@@ -1551,7 +1551,7 @@ export class WeightedModifierType {
     this.modifierType = modifierTypeFunc();
     this.modifierType.id = Object.keys(modifierTypes).find((k) => modifierTypes[k] === modifierTypeFunc)!; // TODO: is this bang correct?
     this.weight = weight;
-    this.maxWeight = maxWeight || (!(weight instanceof Function) ? weight : 0);
+    this.maxWeight = maxWeight || (weight instanceof Function ? 0 : weight);
   }
 
   setTier(tier: ModifierTier) {
@@ -1777,11 +1777,7 @@ export function getPlayerModifierTypeOptions(
 ): ModifierTypeOption[] {
   const options: ModifierTypeOption[] = [];
   const retryCount = Math.min(count * 5, 50);
-  if (!customModifierSettings) {
-    for (let i = 0; i < count; i++) {
-      options.push(getModifierTypeOptionWithRetry(options, retryCount, party, modifierTiers?.[i]));
-    }
-  } else {
+  if (customModifierSettings) {
     // Guaranteed mod options first
     if (
       customModifierSettings?.guaranteedModifierTypeOptions
@@ -1826,6 +1822,10 @@ export function getPlayerModifierTypeOptions(
       while (options.length < count) {
         options.push(getModifierTypeOptionWithRetry(options, retryCount, party, undefined));
       }
+    }
+  } else {
+    for (let i = 0; i < count; i++) {
+      options.push(getModifierTypeOptionWithRetry(options, retryCount, party, modifierTiers?.[i]));
     }
   }
 
@@ -1872,15 +1872,15 @@ function getModifierTypeOptionWithRetry(
 
 /**
  * Replaces the {@linkcode ModifierType} of the entries within {@linkcode options} with any
- * {@linkcode ModifierOverride} entries listed in {@linkcode Overrides.ITEM_REWARD_OVERRIDE}
+ * {@linkcode ModifierOverride} entries listed in {@linkcode activeOverrides.ITEM_REWARD_OVERRIDE}
  * up to the smallest amount of entries between {@linkcode options} and the override array.
  * @param options Array of naturally rolled {@linkcode ModifierTypeOption}s
  * @param party Array of the player's current party
  */
 export function overridePlayerModifierTypeOptions(options: ModifierTypeOption[], party: PlayerPokemon[]) {
-  const minLength = Math.min(options.length, Overrides.ITEM_REWARD_OVERRIDE.length);
+  const minLength = Math.min(options.length, activeOverrides.ITEM_REWARD_OVERRIDE.length);
   for (let i = 0; i < minLength; i++) {
-    const override: ModifierOverride = Overrides.ITEM_REWARD_OVERRIDE[i];
+    const override: ModifierOverride = activeOverrides.ITEM_REWARD_OVERRIDE[i];
     const modifierFunc = modifierTypes[override.name];
     let modifierType: ModifierType | null = modifierFunc();
 
@@ -2100,7 +2100,7 @@ function getNewModifierTypeOption(
     }
   }
 
-  logModifiers(modifierType, !player ? "(enemy)" : "");
+  logModifiers(modifierType, player ? "" : "(enemy)");
 
   return new ModifierTypeOption(modifierType as ModifierType, upgradeCount!); // TODO: is this bang correct?
 }

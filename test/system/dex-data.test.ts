@@ -1,6 +1,6 @@
-import { DEFAULT_STARTER_IVS } from "#constants/game-constants";
-import { defaultStarterSpecies } from "#data/default-starters";
-import { AbilityAttr, DexAttr } from "#data/dex-attributes";
+import { DEFAULT_STARTER_IVS, DEFAULT_STARTER_SPECIES } from "#constants/game-constants";
+import { AbilityAttr } from "#enums/ability-attr";
+import { DexAttr } from "#enums/dex-attr";
 import { Nature } from "#enums/nature";
 import type { GameData } from "#system/game-data";
 import { GameManager } from "#test/test-utils/game-manager";
@@ -31,9 +31,9 @@ describe("Dex Data", () => {
     const defaultIVs = new Array(6).fill(DEFAULT_STARTER_IVS);
 
     const caughtCount = gameData.getSpeciesCount((dexEntry) => dexEntry.caughtAttr > 0);
-    expect(caughtCount).toBe(defaultStarterSpecies.length);
+    expect(caughtCount).toBe(DEFAULT_STARTER_SPECIES.length);
 
-    for (const speciesId of defaultStarterSpecies) {
+    for (const speciesId of DEFAULT_STARTER_SPECIES) {
       const dexData = gameData.dexData[speciesId];
       const starterData = gameData.starterData[speciesId];
       expect(dexData).toBeDefined();

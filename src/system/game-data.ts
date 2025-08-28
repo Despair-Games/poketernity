@@ -2,7 +2,7 @@ import { api } from "#api/api";
 import { clientSessionId, getLocalStorageKey, loggedInUser, updateUserInfo } from "#app/account";
 import { getGameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
-import Overrides from "#app/overrides";
+import { activeOverrides } from "#app/overrides";
 import { EntryHazardTag } from "#arena-tags/entry-hazard-tag";
 import {
   APP_ABBREVIATION,
@@ -13,10 +13,14 @@ import {
   SAVE_FILE_EXTENSION,
   SAVE_SLOT_LIMIT,
 } from "#constants/app-constants";
-import { DEFAULT_STARTER_IVS, IV_MAX, IV_MIN, MAX_INT_ATTR_VALUE } from "#constants/game-constants";
+import {
+  DEFAULT_STARTER_IVS,
+  DEFAULT_STARTER_SPECIES,
+  IV_MAX,
+  IV_MIN,
+  MAX_INT_ATTR_VALUE,
+} from "#constants/game-constants";
 import { allMoves, allSpecies } from "#data/data-lists";
-import { defaultStarterSpecies } from "#data/default-starters";
-import { AbilityAttr, DexAttr } from "#data/dex-attributes";
 import type { Egg } from "#data/egg";
 import { speciesEggMoves } from "#data/egg-moves";
 import { starterPassiveAbilities } from "#data/passives";
@@ -30,9 +34,11 @@ import {
   speciesStarterCosts,
 } from "#data/starters";
 import type { Variant } from "#data/variant";
+import { AbilityAttr } from "#enums/ability-attr";
 import { BattleType } from "#enums/battle-type";
 import { ChallengeType } from "#enums/challenge-type";
 import type { Device } from "#enums/device";
+import { DexAttr } from "#enums/dex-attr";
 import type { ElementalType } from "#enums/elemental-type";
 import { GameDataType } from "#enums/game-data-type";
 import { GameModes } from "#enums/game-modes";
@@ -226,7 +232,7 @@ export class GameData {
    * @returns `true` if the player has unlocked this `Unlockable` or an override has enabled it
    */
   public isUnlocked(unlockable: Unlockables): boolean {
-    if (Overrides.ITEM_UNLOCK_OVERRIDE.includes(unlockable)) {
+    if (activeOverrides.ITEM_UNLOCK_OVERRIDE.includes(unlockable)) {
       return true;
     }
     return this.unlocks[unlockable];
@@ -243,7 +249,11 @@ export class GameData {
 
       localStorage.setItem(getLocalStorageKey(GameDataType.SYSTEM), encrypt(systemData, BYPASS_LOGIN));
 
-      if (!BYPASS_LOGIN) {
+      if (BYPASS_LOGIN) {
+        globalScene.ui.savingIcon.hide();
+
+        resolve(true);
+      } else {
         api.savedata.system.update({ clientSessionId }, systemData).then((error) => {
           globalScene.ui.savingIcon.hide();
           if (error) {
@@ -256,10 +266,6 @@ export class GameData {
           }
           resolve(true);
         });
-      } else {
-        globalScene.ui.savingIcon.hide();
-
-        resolve(true);
       }
     });
   }
@@ -272,7 +278,11 @@ export class GameData {
         return resolve(false);
       }
 
-      if (!BYPASS_LOGIN) {
+      if (BYPASS_LOGIN) {
+        this.initSystem(decrypt(localStorage.getItem(getLocalStorageKey(GameDataType.SYSTEM))!, BYPASS_LOGIN)).then(
+          resolve,
+        ); // TODO: is this bang correct?
+      } else {
         api.savedata.system.get({ clientSessionId }).then((saveDataOrErr) => {
           if (!saveDataOrErr || saveDataOrErr.length === 0 || saveDataOrErr[0] !== "{") {
             if (saveDataOrErr?.startsWith("sql: no rows in result set")) {
@@ -303,10 +313,6 @@ export class GameData {
             cachedSystem ? AES.decrypt(cachedSystem, saveKey).toString(enc.Utf8) : undefined,
           ).then(resolve);
         });
-      } else {
-        this.initSystem(decrypt(localStorage.getItem(getLocalStorageKey(GameDataType.SYSTEM))!, BYPASS_LOGIN)).then(
-          resolve,
-        ); // TODO: is this bang correct?
       }
     });
   }
@@ -468,7 +474,7 @@ export class GameData {
     const timestamp = runEntry.timestamp.toString();
     runHistoryData[timestamp] = {
       entry: runEntry,
-      isVictory: isVictory,
+      isVictory,
       isFavorite: false,
     };
     localStorage.setItem(
@@ -647,7 +653,7 @@ export class GameData {
     if (lsItem) {
       try {
         const lsTutorials: Tutorial[] = JSON.parse(lsItem);
-        lsTutorials.forEach((lsTutorial) => (!isNil(lsTutorial) ? tutorials.add(lsTutorial) : null));
+        lsTutorials.forEach((lsTutorial) => (isNil(lsTutorial) ? null : tutorials.add(lsTutorial)));
       } catch (err) {
         console.warn("Failed to parse tutorial data from local storage", err);
       }
@@ -714,7 +720,7 @@ export class GameData {
   public getSessionSaveData(): SessionSaveData {
     return {
       seed: globalScene.seed,
-      playTime: globalScene.sessionPlayTime,
+      playTime: globalScene.sessionPlayTime ?? 0,
       gameMode: globalScene.gameMode.modeId,
       party: globalScene.getPlayerParty().map((p) => new PokemonData(p)),
       enemyParty: globalScene.getEnemyParty().map((p) => new PokemonData(p)),
@@ -736,10 +742,11 @@ export class GameData {
       mysteryEncounterType: globalScene.currentBattle.mysteryEncounter?.encounterType ?? -1,
       mysteryEncounterSaveData: globalScene.mysteryEncounterSaveData,
       playerTerasUsed: globalScene.playerTerasUsed,
-    } as SessionSaveData;
+    };
   }
 
   getSession(slotId: number): Promise<SessionSaveData | null> {
+    // biome-ignore lint/suspicious/noAsyncPromiseExecutor: There's an `await` in this. TODO: can this be fixed?
     return new Promise(async (resolve, reject) => {
       if (slotId < 0) {
         return resolve(null);
@@ -767,18 +774,16 @@ export class GameData {
 
           await handleSessionData(response);
         });
+      } else if (sessionData) {
+        await handleSessionData(decrypt(sessionData, BYPASS_LOGIN));
       } else {
-        if (sessionData) {
-          await handleSessionData(decrypt(sessionData, BYPASS_LOGIN));
-        } else {
-          return resolve(null);
-        }
+        return resolve(null);
       }
     });
   }
 
   loadSession(slotId: number, sessionData?: SessionSaveData): Promise<boolean> {
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
       try {
         const initSessionFromData = async (sessionData: SessionSaveData) => {
           globalScene.gameMode = getGameMode(sessionData.gameMode || GameModes.CLASSIC);
@@ -809,8 +814,8 @@ export class GameData {
           Object.keys(globalScene.pokeballCounts).forEach((key: string) => {
             globalScene.pokeballCounts[key] = sessionData.pokeballCounts[key] || 0;
           });
-          if (Overrides.POKEBALL_OVERRIDE.active) {
-            globalScene.pokeballCounts = Overrides.POKEBALL_OVERRIDE.pokeballs;
+          if (activeOverrides.POKEBALL_OVERRIDE.active) {
+            globalScene.pokeballCounts = activeOverrides.POKEBALL_OVERRIDE.pokeballs;
           }
 
           globalScene.money = Math.floor(sessionData.money || 0);
@@ -1021,13 +1026,7 @@ export class GameData {
       const { trainerId } = this;
       const jsonResponse = await api.savedata.session.clear({ slot: slotId, trainerId, clientSessionId }, sessionData);
 
-      if (!jsonResponse?.error) {
-        result = [true, jsonResponse?.success ?? false];
-        if (loggedInUser) {
-          loggedInUser!.lastSessionSlot = -1;
-        }
-        localStorage.removeItem(getLocalStorageKey(GameDataType.SESSION, slotId));
-      } else {
+      if (jsonResponse?.error) {
         if (jsonResponse?.error?.startsWith("session out of date")) {
           globalScene.phaseManager.clearPhaseQueue();
           globalScene.phaseManager.createAndUnshiftPhase("ReloadSessionPhase");
@@ -1035,6 +1034,12 @@ export class GameData {
 
         console.error(jsonResponse);
         result = [false, false];
+      } else {
+        result = [true, jsonResponse?.success ?? false];
+        if (loggedInUser) {
+          loggedInUser!.lastSessionSlot = -1;
+        }
+        localStorage.removeItem(getLocalStorageKey(GameDataType.SESSION, slotId));
       }
     }
 
@@ -1137,7 +1142,7 @@ export class GameData {
           system: systemData,
           session: sessionData,
           sessionSlotId: globalScene.sessionSlotId,
-          clientSessionId: clientSessionId,
+          clientSessionId,
         };
 
         localStorage.setItem(
@@ -1150,7 +1155,8 @@ export class GameData {
           ),
         );
 
-        localStorage.setItem(sessionStorageKey, encrypt(JSON.stringify(sessionData), BYPASS_LOGIN));
+        const sessionDataJSON = JSON.stringify(sessionData);
+        localStorage.setItem(sessionStorageKey, encrypt(sessionDataJSON, BYPASS_LOGIN));
 
         console.debug("Session data saved");
 
@@ -1367,8 +1373,8 @@ export class GameData {
 
     const defaultStarterAttr = DexAttr.NON_SHINY | DexAttr.MALE | DexAttr.FEMALE | DexAttr.DEFAULT_FORM;
 
-    for (let ds = 0; ds < defaultStarterSpecies.length; ds++) {
-      const entry = data[defaultStarterSpecies[ds]] as DexEntry;
+    for (const defaultStarter of DEFAULT_STARTER_SPECIES) {
+      const entry = data[defaultStarter] as DexEntry;
       entry.seenAttr = defaultStarterAttr;
       entry.caughtAttr = defaultStarterAttr;
     }
@@ -1389,7 +1395,7 @@ export class GameData {
     const starterSpeciesIds = Object.keys(speciesStarterCosts).map((k) => Number.parseInt(k) as SpeciesId);
 
     for (const speciesId of starterSpeciesIds) {
-      const isDefaultStarter = defaultStarterSpecies.includes(speciesId);
+      const isDefaultStarter = DEFAULT_STARTER_SPECIES.includes(speciesId);
 
       starterData[speciesId] = {
         moveset: null,
@@ -1398,7 +1404,7 @@ export class GameData {
         candyProgress: 0,
         abilityAttr: isDefaultStarter ? AbilityAttr.ABILITY_1 : 0,
         natureAttr: isDefaultStarter ? defaultNaturesAttr : 0,
-        ivs: Array(6).fill(isDefaultStarter ? DEFAULT_STARTER_IVS : IV_MIN),
+        ivs: new Array(6).fill(isDefaultStarter ? DEFAULT_STARTER_IVS : IV_MIN),
         valueReduction: 0,
         classicWinCount: 0,
       };
@@ -1595,14 +1601,14 @@ export class GameData {
 
       if (newCatch && Object.hasOwn(speciesStarterCosts, species.speciesId)) {
         unlockedStarters.push(species.speciesId);
-        if (!showMessage) {
-          checkPreEvolution(unlockedStarters);
-        } else {
+        if (showMessage) {
           globalScene.audioManager.playSound("level_up_fanfare");
           globalScene.ui.showText(i18next.t("battle:addedAsAStarter", { pokemonName: species.name }), {
             callback: () => checkPreEvolution(unlockedStarters),
             prompt: true,
           });
+        } else {
+          checkPreEvolution(unlockedStarters);
         }
       } else {
         checkPreEvolution(unlockedStarters);
@@ -1765,8 +1771,8 @@ export class GameData {
       let message = prependSpeciesToMessage ? species.getName() + " " : "";
       message +=
         eggMoveIndex === 3
-          ? i18next.t("egg:rareEggMoveUnlock", { moveName: moveName })
-          : i18next.t("egg:eggMoveUnlock", { moveName: moveName });
+          ? i18next.t("egg:rareEggMoveUnlock", { moveName })
+          : i18next.t("egg:eggMoveUnlock", { moveName });
 
       globalScene.ui.showText(message, { callback: () => resolve(true), prompt: true });
     });
@@ -1893,19 +1899,16 @@ export class GameData {
       } else {
         ret |= DexAttr.NON_SHINY;
       }
+    } else if (attr & DexAttr.NON_SHINY) {
+      ret |= DexAttr.NON_SHINY; // Default to non shiny. Fallback to shiny if it's the only thing that's unlocked
+    } else if (attr & DexAttr.SHINY_BASE_VARIANT) {
+      ret |= DexAttr.SHINY_BASE_VARIANT;
+    } else if (attr & DexAttr.SHINY_RARE_VARIANT) {
+      ret |= DexAttr.SHINY_RARE_VARIANT;
+    } else if (attr & DexAttr.SHINY_EPIC_VARIANT) {
+      ret |= DexAttr.SHINY_EPIC_VARIANT;
     } else {
-      // Default to non shiny. Fallback to shiny if it's the only thing that's unlocked
-      if (attr & DexAttr.NON_SHINY) {
-        ret |= DexAttr.NON_SHINY;
-      } else if (attr & DexAttr.SHINY_BASE_VARIANT) {
-        ret |= DexAttr.SHINY_BASE_VARIANT;
-      } else if (attr & DexAttr.SHINY_RARE_VARIANT) {
-        ret |= DexAttr.SHINY_RARE_VARIANT;
-      } else if (attr & DexAttr.SHINY_EPIC_VARIANT) {
-        ret |= DexAttr.SHINY_EPIC_VARIANT;
-      } else {
-        ret |= DexAttr.NON_SHINY; // Neither shiny and non shiny unlocked, fallback to non shiny
-      }
+      ret |= DexAttr.NON_SHINY; // Somehow nothing is unlocked, fallback to non shiny
     }
 
     ret |= attr & DexAttr.MALE || !(attr & DexAttr.FEMALE) ? DexAttr.MALE : DexAttr.FEMALE;

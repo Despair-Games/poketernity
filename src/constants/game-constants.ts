@@ -4,6 +4,7 @@ import type { SystemSaveData } from "#types/system-data";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { SpeciesFormKey } from "#enums/species-form-key";
+import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 
 /** Max value for an integer attribute in {@linkcode SystemSaveData} */
@@ -53,7 +54,7 @@ export const FOG_ACCURACY_MULTIPLIER = 0.9;
 export const SCREEN_SINGLES_DMG_FACTOR = 0.5;
 
 /** The damage multiplier applied by Reflect, Light Screen, and Aurora Veil in double battles.*/
-export const SCREEN_DOUBLES_DMG_FACTOR = 2732 / 4096;
+export const SCREEN_DOUBLES_DMG_FACTOR = 2 / 3;
 
 /** The scaling factor by how much higher the level cap is compared to the average Pokemon of a wave */
 export const LEVEL_CAP_SCALE_FACTOR = 1.2;
@@ -106,4 +107,35 @@ export const NON_VOLATILE_STATUS_EFFECTS = Object.freeze([
   StatusEffect.SLEEP,
   StatusEffect.FREEZE,
   StatusEffect.BURN,
+]);
+
+/** A list of Pokemon species that are unlocked when making a new account. */
+export const DEFAULT_STARTER_SPECIES = Object.freeze<SpeciesId[]>([
+  SpeciesId.BULBASAUR,
+  SpeciesId.CHARMANDER,
+  SpeciesId.SQUIRTLE,
+  SpeciesId.CHIKORITA,
+  SpeciesId.CYNDAQUIL,
+  SpeciesId.TOTODILE,
+  SpeciesId.TREECKO,
+  SpeciesId.TORCHIC,
+  SpeciesId.MUDKIP,
+  SpeciesId.TURTWIG,
+  SpeciesId.CHIMCHAR,
+  SpeciesId.PIPLUP,
+  SpeciesId.SNIVY,
+  SpeciesId.TEPIG,
+  SpeciesId.OSHAWOTT,
+  SpeciesId.CHESPIN,
+  SpeciesId.FENNEKIN,
+  SpeciesId.FROAKIE,
+  SpeciesId.ROWLET,
+  SpeciesId.LITTEN,
+  SpeciesId.POPPLIO,
+  SpeciesId.GROOKEY,
+  SpeciesId.SCORBUNNY,
+  SpeciesId.SOBBLE,
+  SpeciesId.SPRIGATITO,
+  SpeciesId.FUECOCO,
+  SpeciesId.QUAXLY,
 ]);

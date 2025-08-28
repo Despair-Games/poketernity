@@ -39,7 +39,7 @@ describe("Moves - Foul Play", () => {
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
-    vi.spyOn(enemy, "stats", "get").mockReturnValue(Array(6).fill(100));
+    vi.spyOn(enemy, "stats", "get").mockReturnValue(new Array(6).fill(100));
 
     const { damage: preDamage } = enemy.getAttackDamage(player, foulPlay);
 

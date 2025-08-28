@@ -49,6 +49,9 @@ export class PartyStatusCureAttr extends MoveEffectAttr {
         pokemon.id,
         pokemon.getPassiveAbility()?.id === this.abilityCondition,
       );
+    } else {
+      pokemon.resetStatus();
+      pokemon.updateInfo();
     }
   }
 
