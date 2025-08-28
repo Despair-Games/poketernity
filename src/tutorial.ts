@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import Overrides from "#app/overrides";
+import { activeOverrides } from "#app/overrides";
 import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
 import { settings } from "#system/settings-manager";
@@ -19,14 +19,12 @@ const tutorialHandlers = {
       if (settings.general.enableTouchControls) {
         return resolve();
       }
-      globalScene
-        .showFieldOverlay(1000)
-        .then(() =>
-          globalScene.ui.showText(i18next.t("tutorial:accessMenu"), {
-            callback: () => globalScene.hideFieldOverlay(1000).then(() => resolve()),
-            prompt: true,
-          }),
-        );
+      globalScene.showFieldOverlay(1000).then(() =>
+        globalScene.ui.showText(i18next.t("tutorial:accessMenu"), {
+          callback: () => globalScene.hideFieldOverlay(1000).then(() => resolve()),
+          prompt: true,
+        }),
+      );
     });
   },
   [Tutorial.MENU]: () => {
@@ -56,15 +54,13 @@ const tutorialHandlers = {
   },
   [Tutorial.STAT_CHANGE]: () => {
     return new Promise<void>((resolve) => {
-      globalScene
-        .showFieldOverlay(1000)
-        .then(() =>
-          globalScene.ui.showText(i18next.t("tutorial:statChange"), {
-            callback: () =>
-              globalScene.ui.showText("", { callback: () => globalScene.hideFieldOverlay(1000).then(() => resolve()) }),
-            prompt: true,
-          }),
-        );
+      globalScene.showFieldOverlay(1000).then(() =>
+        globalScene.ui.showText(i18next.t("tutorial:statChange"), {
+          callback: () =>
+            globalScene.ui.showText("", { callback: () => globalScene.hideFieldOverlay(1000).then(() => resolve()) }),
+          prompt: true,
+        }),
+      );
     });
   },
   [Tutorial.SELECT_ITEM]: () => {
@@ -102,11 +98,11 @@ const tutorialHandlers = {
  * @returns a promise with result `true` if the tutorial was run and finished, `false` otherwise
  */
 export async function handleTutorial(tutorial: Tutorial): Promise<boolean> {
-  if (!settings.general.enableTutorials && !Overrides.BYPASS_TUTORIAL_SKIP_OVERRIDE) {
+  if (!settings.general.enableTutorials && !activeOverrides.BYPASS_TUTORIAL_SKIP_OVERRIDE) {
     return false;
   }
 
-  if (globalScene.gameData.isSeenTutorial(tutorial) && !Overrides.BYPASS_TUTORIAL_SKIP_OVERRIDE) {
+  if (globalScene.gameData.isSeenTutorial(tutorial) && !activeOverrides.BYPASS_TUTORIAL_SKIP_OVERRIDE) {
     return false;
   }
 

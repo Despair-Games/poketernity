@@ -15,6 +15,7 @@ import { ScrollBar } from "#ui/scroll-bar";
 import { ScrollableGridController } from "#ui/scrollable-grid-controller";
 import { addTextObject } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
+import { enumValueToKey } from "#utils/common-utils";
 import i18next from "i18next";
 
 const Page = {
@@ -69,7 +70,7 @@ export class AchievementsUiHandler extends MessageUiHandler {
     this.headerBg = addWindow(0, 0, GAME_WIDTH - 2, 24);
     this.headerBg.setOrigin(0, 0);
 
-    this.headerText = addTextObject(0, 0, "", TextStyle.SETTINGS_LABEL);
+    this.headerText = addTextObject(0, 0, "", TextStyle.WINDOW_HEADER);
     this.headerText.setOrigin(0, 0);
     this.headerText.setPositionRelative(this.headerBg, 8, 4);
     this.headerActionButton = new Phaser.GameObjects.Sprite(globalScene, 0, 0, "keyboard", "ACTION.png");
@@ -80,7 +81,7 @@ export class AchievementsUiHandler extends MessageUiHandler {
 
     // We need to get the player gender from the game data to add the correct prefix to the achievement name
     const genderIndex = settings.display.playerGender ?? PlayerGender.MALE;
-    const genderStr = PlayerGender[genderIndex].toLowerCase();
+    const genderStr = enumValueToKey(PlayerGender, genderIndex).toLowerCase();
 
     this.achvsName = i18next.t("achv:Achievements.name", { context: genderStr });
     this.vouchersName = i18next.t("voucher:vouchers");
@@ -203,7 +204,7 @@ export class AchievementsUiHandler extends MessageUiHandler {
     const unlocked = Object.hasOwn(achvUnlocks, achv.id);
     const hidden = !unlocked && achv.secret && (!achv.parentId || !Object.hasOwn(achvUnlocks, achv.parentId));
     this.titleText.setText(unlocked ? achv.name : "???");
-    this.showText(!hidden ? achv.description : "");
+    this.showText(hidden ? "" : achv.description);
     this.unlockText.setText(
       unlocked ? new Date(achvUnlocks[achv.id]).toLocaleDateString() : i18next.t("achv:Locked.name"),
     );
@@ -297,7 +298,7 @@ export class AchievementsUiHandler extends MessageUiHandler {
       const hidden = !unlocked && achv.secret && (!achv.parentId || !Object.hasOwn(achvUnlocks, achv.parentId));
       const tinted = !hidden && !unlocked;
 
-      icon.setFrame(!hidden ? achv.iconImage : "unknown");
+      icon.setFrame(hidden ? "unknown" : achv.iconImage);
       icon.setVisible(true);
       if (tinted) {
         icon.setTintFill(0);
@@ -333,10 +334,10 @@ export class AchievementsUiHandler extends MessageUiHandler {
 
       icon.setFrame(getVoucherTypeIcon(voucher.voucherType));
       icon.setVisible(true);
-      if (!unlocked) {
-        icon.setTintFill(0);
-      } else {
+      if (unlocked) {
         icon.clearTint();
+      } else {
+        icon.setTintFill(0);
       }
     });
 

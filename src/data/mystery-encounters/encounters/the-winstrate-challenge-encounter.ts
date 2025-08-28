@@ -150,7 +150,9 @@ export const TheWinstrateChallengeEncounter: MysteryEncounter = MysteryEncounter
 async function spawnNextTrainerOrEndEncounter() {
   const encounter = globalScene.currentBattle.mysteryEncounter!;
   const nextConfig = encounter.enemyPartyConfigs.pop();
-  if (!nextConfig) {
+  if (nextConfig) {
+    await initBattleWithEnemyConfig(nextConfig);
+  } else {
     await transitionMysteryEncounterIntroVisuals(false, false);
     await showEncounterDialogue(`${namespace}:victory`, `${namespace}:speaker`);
 
@@ -167,8 +169,6 @@ async function spawnNextTrainerOrEndEncounter() {
     setEncounterRewards({ guaranteedModifierTypeOptions: [machoBrace], fillRemaining: false });
     encounter.doContinueEncounter = undefined;
     leaveEncounterWithoutBattle(false, MysteryEncounterMode.NO_BATTLE);
-  } else {
-    await initBattleWithEnemyConfig(nextConfig);
   }
 }
 

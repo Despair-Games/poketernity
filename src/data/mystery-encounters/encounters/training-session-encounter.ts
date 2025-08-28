@@ -110,7 +110,7 @@ export const TrainingSessionEncounter: MysteryEncounter = MysteryEncounterBuilde
           let ivIndexes: any[] = [];
           playerPokemon.ivs.forEach((iv, index) => {
             if (iv < 31) {
-              ivIndexes.push({ iv: iv, index: index });
+              ivIndexes.push({ iv, index });
             }
           });
 
@@ -374,7 +374,7 @@ function getEnemyConfig(playerPokemon: PlayerPokemon, segments: number, modifier
         formIndex: playerPokemon.formIndex,
         level: playerPokemon.level,
         dataSource: data,
-        modifierConfigs: modifierConfigs,
+        modifierConfigs,
       },
     ],
   };

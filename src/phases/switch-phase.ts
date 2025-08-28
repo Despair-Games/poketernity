@@ -110,7 +110,7 @@ export class SwitchPhase extends PokemonPhase {
     }
 
     this.switchInIndex = trainer.getNextSummonIndex(
-      !this.fieldIndex ? TrainerSlot.TRAINER : TrainerSlot.TRAINER_PARTNER,
+      this.fieldIndex ? TrainerSlot.TRAINER_PARTNER : TrainerSlot.TRAINER,
     );
 
     this.updatePokemonData();

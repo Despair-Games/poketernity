@@ -128,7 +128,7 @@ export class TestDialogueUiHandler extends FormModalUiHandler {
 
       if (options.length > 0) {
         const modalOpts: OptionSelectModeConfig = {
-          options: options,
+          options,
           maxOptions: 5,
         };
         ui.setOverlayMode<AutoCompleteUiHandler>(UiMode.AUTO_COMPLETE, modalOpts, this.modalContainer);

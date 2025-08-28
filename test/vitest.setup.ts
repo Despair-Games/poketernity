@@ -11,7 +11,7 @@ vi.mock("#app/overrides", async (importOriginal) => {
   const { defaultOverrides } = await importOriginal<typeof import("#app/overrides")>();
 
   return {
-    default: defaultOverrides,
+    activeOverrides: defaultOverrides,
     // Export `defaultOverrides` as a *copy*.
     // This ensures we can easily reset `overrides` back to its default values after modifying it.
     defaultOverrides: { ...defaultOverrides },

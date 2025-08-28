@@ -1,8 +1,8 @@
 import { globalScene } from "#app/global-scene";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
-import { DexAttr } from "#data/dex-attributes";
 import { speciesStarterCosts } from "#data/starters";
 import { Button } from "#enums/button";
+import { DexAttr } from "#enums/dex-attr";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import type { GameData } from "#system/game-data";
@@ -252,7 +252,7 @@ export class GameStatsUiHandler extends UiHandler {
     headerBg.setOrigin(0, 0);
     this.gameStatsContainer.add(headerBg);
 
-    const headerText = addTextObject(0, 0, i18next.t("gameStatsUiHandler:stats"), TextStyle.SETTINGS_LABEL)
+    const headerText = addTextObject(0, 0, i18next.t("gameStatsUiHandler:stats"), TextStyle.WINDOW_HEADER)
       .setOrigin(0, 0)
       .setPositionRelative(headerBg, 8, 4);
     this.gameStatsContainer.add(headerText);

@@ -144,7 +144,7 @@ export class BattlerTag {
    */
   getMoveName(): string | undefined {
     if (!this.sourceMoveId) {
-      return undefined;
+      return;
     }
 
     const pokemon = this.getSourcePokemon();

@@ -120,7 +120,7 @@ export class TitlePhase extends Phase {
             ui.showText(i18next.t("menu:selectGameMode"), {
               callback: () =>
                 ui.setOverlayMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, {
-                  options: options,
+                  options,
                   yOffset: 48,
                 }),
             });
@@ -163,7 +163,7 @@ export class TitlePhase extends Phase {
       },
     );
     const config: OptionSelectModeConfig = {
-      options: options,
+      options,
       blockCancelButton: true,
     };
     globalScene.ui.setMode<TitleUiHandler>(UiMode.TITLE, config);
@@ -237,11 +237,11 @@ export class TitlePhase extends Phase {
 
         regenerateModifierPoolThresholds(party, ModifierPoolType.DAILY_STARTER);
 
-        const modifiers: Modifier[] = Array(3)
+        const modifiers: Modifier[] = new Array(3)
           .fill(null)
           .map(() => modifierTypes.EXP_SHARE().withIdFromFunc(modifierTypes.EXP_SHARE).newModifier())
           .concat(
-            Array(3)
+            new Array(3)
               .fill(null)
               .map(() => modifierTypes.GOLDEN_EXP_CHARM().withIdFromFunc(modifierTypes.GOLDEN_EXP_CHARM).newModifier()),
           )

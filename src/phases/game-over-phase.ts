@@ -22,6 +22,7 @@ import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import type { SessionSaveData } from "#types/session-data";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
+import { enumValueToKey } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import i18next from "i18next";
 
@@ -63,7 +64,7 @@ export class GameOverPhase extends BattlePhase {
 
     if (this.isVictory && gameMode.isEndless) {
       const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
-      const genderStr = PlayerGender[genderIndex].toLowerCase();
+      const genderStr = enumValueToKey(PlayerGender, genderIndex).toLowerCase();
       ui.showDialogue(
         i18next.t("miscDialogue:ending_endless", { context: genderStr }),
         i18next.t("miscDialogue:ending_name"),
@@ -197,10 +198,12 @@ export class GameOverPhase extends BattlePhase {
             };
 
             const playerGender = settings.display.playerGender;
-            if (!ui.shouldSkipDialogue(dialogueKey)) {
+            if (ui.shouldSkipDialogue(dialogueKey)) {
+              displayEndCard();
+            } else {
               ui.fadeIn(500).then(() => {
                 const genderIndex = playerGender ?? PlayerGender.UNSET;
-                const genderStr = PlayerGender[genderIndex].toLowerCase();
+                const genderStr = enumValueToKey(PlayerGender, genderIndex).toLowerCase();
                 // Dialogue has to be retrieved so that the rival's expressions can be loaded and shown via getCharVariantFromDialogue
                 const dialogue = i18next.t(dialogueKey, { context: genderStr });
                 const rivalName =
@@ -223,8 +226,6 @@ export class GameOverPhase extends BattlePhase {
                     });
                   });
               });
-            } else {
-              displayEndCard();
             }
           } else {
             clear();
@@ -240,7 +241,7 @@ export class GameOverPhase extends BattlePhase {
      */
     if (!api.isLocal || api.isConnected) {
       api.savedata.session
-        .newclear({ slot: globalScene.sessionSlotId, isVictory: this.isVictory, clientSessionId: clientSessionId })
+        .newclear({ slot: globalScene.sessionSlotId, isVictory: this.isVictory, clientSessionId })
         .then((success) => doGameOver(success));
     } else if (this.isVictory) {
       gameData.offlineNewClear().then((result) => {

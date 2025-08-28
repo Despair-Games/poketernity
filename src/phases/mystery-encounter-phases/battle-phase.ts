@@ -80,10 +80,10 @@ export class MysteryEncounterBattlePhase extends Phase {
         globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.ENEMY_2, { delayPostSummon: true });
       }
 
-      if (!mysteryEncounter?.hideBattleIntroMessage) {
-        ui.showText(this.getBattleMessage(), { callback: () => this.endBattleSetup(), callbackDelay: 0 });
-      } else {
+      if (mysteryEncounter?.hideBattleIntroMessage) {
         this.endBattleSetup();
+      } else {
+        ui.showText(this.getBattleMessage(), { callback: () => this.endBattleSetup(), callbackDelay: 0 });
       }
     } else if (encounterMode === MysteryEncounterMode.TRAINER_BATTLE) {
       this.showEnemyTrainer();
@@ -103,10 +103,10 @@ export class MysteryEncounterBattlePhase extends Phase {
           }
           this.endBattleSetup();
         };
-        if (!mysteryEncounter?.hideBattleIntroMessage) {
-          ui.showText(this.getBattleMessage(), { callback: doTrainerSummon, callbackDelay: 1000, prompt: true });
-        } else {
+        if (mysteryEncounter?.hideBattleIntroMessage) {
           doTrainerSummon();
+        } else {
+          ui.showText(this.getBattleMessage(), { callback: doTrainerSummon, callbackDelay: 1000, prompt: true });
         }
       };
 

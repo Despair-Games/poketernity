@@ -19,7 +19,7 @@ import i18next from "i18next";
  * @see {@linkcode getMovePp} - returns amount of PP a move currently has.
  * @see {@linkcode getPpRatio} - returns the current PP amount / max PP amount.
  * @see {@linkcode getName} - returns name of the {@linkcode Move}.
- **/
+ */
 export class PokemonMove {
   /** The ID of the {@linkcode Pokemon} whose moveset this move is part of. Used for localization of the move name. */
   private readonly pokemonId: number;

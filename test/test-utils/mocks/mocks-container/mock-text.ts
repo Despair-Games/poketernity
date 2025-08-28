@@ -14,6 +14,7 @@ export class MockText implements MockGameObject {
   public style;
   public text = "";
   public name: string;
+  public maxLines: number;
   public color?: string;
   public active = true;
 
@@ -57,13 +58,11 @@ export class MockText implements MockGameObject {
           wordWidthWithSpace += whiteSpaceWidth;
         }
 
-        if (wordWidthWithSpace > spaceLeft) {
-          // Skip printing the newline if it's the first word of the line that is greater
-          // than the word wrap width.
-          if (j > 0) {
-            result += "\n";
-            spaceLeft = this.wordWrapWidth;
-          }
+        // Skip printing the newline if it's the first word of the line that is greater
+        // than the word wrap width.
+        if (wordWidthWithSpace > spaceLeft && j > 0) {
+          result += "\n";
+          spaceLeft = this.wordWrapWidth;
         }
 
         result += word;
@@ -194,6 +193,11 @@ export class MockText implements MockGameObject {
     // Sets the text this Game Object will display.
     // return this.phaserText.setText\(text);
     this.text = text;
+    return this;
+  }
+
+  setMaxLines(maxLines: number): this {
+    this.maxLines = maxLines;
     return this;
   }
 

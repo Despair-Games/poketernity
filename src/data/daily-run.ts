@@ -46,10 +46,9 @@ export function getDailyRunStarters(seed: string): StarterConfig[] {
       starterCosts.push(randSeedInt(9 - starterCosts[0], 1));
       starterCosts.push(10 - (starterCosts[0] + starterCosts[1]));
 
-      for (let c = 0; c < starterCosts.length; c++) {
-        const cost = starterCosts[c];
+      for (const cost of starterCosts) {
         const costSpecies = Object.keys(speciesStarterCosts)
-          .map((s) => Number.parseInt(s) as SpeciesId)
+          .map((s) => Number.parseInt(s, 10) as SpeciesId)
           .filter((s) => speciesStarterCosts[s] === cost);
         const randPkmSpecies = getPokemonSpecies(randSeedItem(costSpecies));
         const starterSpecies = getPokemonSpecies(randPkmSpecies.getEnemySpeciesForLevel(startingLevel, true));

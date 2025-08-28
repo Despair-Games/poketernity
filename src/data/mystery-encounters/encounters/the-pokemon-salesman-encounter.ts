@@ -94,8 +94,8 @@ export const ThePokemonSalesmanEncounter: MysteryEncounter = MysteryEncounterBui
 
     const { spriteKey, fileRoot } = getSpriteKeysFromPokemon(pokemon);
     encounter.spriteConfigs.push({
-      spriteKey: spriteKey,
-      fileRoot: fileRoot,
+      spriteKey,
+      fileRoot,
       hasShadow: true,
       repeat: true,
       isPokemon: true,
@@ -117,8 +117,8 @@ export const ThePokemonSalesmanEncounter: MysteryEncounter = MysteryEncounterBui
     encounter.setDialogueToken("purchasePokemon", pokemon.getNameToRender());
     encounter.setDialogueToken("price", price.toString());
     encounter.misc = {
-      price: price,
-      pokemon: pokemon,
+      price,
+      pokemon,
     };
 
     pokemon.calculateStats();

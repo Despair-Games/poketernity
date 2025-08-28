@@ -142,10 +142,10 @@ export class FaintPhase extends PokemonPhase {
     // Track total times pokemon have been KO'd for supreme overlord/last respects
     if (pokemon.isPlayer()) {
       currentBattle.playerFaints += 1;
-      playerFaintsHistory.push({ pokemon: pokemon, turn: turn });
+      playerFaintsHistory.push({ pokemon, turn });
     } else {
       currentBattle.enemyFaints += 1;
-      enemyFaintsHistory.push({ pokemon: pokemon, turn: turn });
+      enemyFaintsHistory.push({ pokemon, turn });
     }
 
     globalScene.phaseManager.createAndUnshiftPhase(

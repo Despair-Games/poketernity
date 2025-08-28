@@ -55,7 +55,7 @@ export class SecretPowerAttr extends ChanceBasedMoveEffectAttr {
       case TerrainType.PSYCHIC:
         return new StatStageChangeAttr([Stat.SPD], -1, false);
       default:
-        return undefined;
+        return;
     }
   }
 

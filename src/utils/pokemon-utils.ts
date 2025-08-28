@@ -8,6 +8,8 @@ import type { MoveId } from "#enums/move-id";
 import { SpeciesGroups } from "#enums/species-groups";
 import { SpeciesId } from "#enums/species-id";
 import type { Pokemon } from "#field/pokemon";
+import type { PokemonSummonData, SerializedPokemonSummonData } from "#types/pokemon-types";
+import type { CoerceNullPropertiesToUndefined } from "#types/utility-types";
 import { isNil } from "#utils/common-utils";
 import { randSeedIntRange, randSeedItem } from "#utils/random-utils";
 
@@ -105,4 +107,24 @@ export function getRandomElementalType(): ElementalType {
  */
 export function getPokemonMoveName(pokemon: Pokemon, moveId: MoveId, bypassSummonData: boolean = false): string {
   return pokemon.getPokemonMove(moveId, bypassSummonData)?.name ?? allMoves.get(moveId).name;
+}
+
+export function summonDataToJSON(this: PokemonSummonData): SerializedPokemonSummonData {
+  // Pokemon species forms are never saved, only the species ID.
+  const speciesForm = this.speciesForm;
+  const t = {
+    // the "as omit" is required to avoid TS resolving the overwritten properties to `never`
+    // We coerce `null` to `undefined` in the type, as the for loop below replaces `null` with `undefined`
+    ...(this as Omit<CoerceNullPropertiesToUndefined<PokemonSummonData>, "speciesForm">),
+    speciesForm: isNil(speciesForm)
+      ? undefined
+      : { speciesId: speciesForm.speciesId, formIndex: speciesForm.formIndex },
+  };
+  // Replace `null` with `undefined`, as `undefined` never gets serialized
+  for (const [key, value] of Object.entries(t)) {
+    if (value === null) {
+      t[key] = undefined;
+    }
+  }
+  return t;
 }

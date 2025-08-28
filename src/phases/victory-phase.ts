@@ -88,7 +88,7 @@ export class VictoryPhase extends PokemonPhase {
       if (waveIndex % 50 === 0) {
         phaseManager.createAndPushPhase(
           "ModifierRewardPhase",
-          !(waveIndex % 250) ? modifierTypes.VOUCHER_PREMIUM : modifierTypes.VOUCHER_PLUS,
+          waveIndex % 250 ? modifierTypes.VOUCHER_PLUS : modifierTypes.VOUCHER_PREMIUM,
         );
       }
     } else {

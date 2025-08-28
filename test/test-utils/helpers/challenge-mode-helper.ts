@@ -1,4 +1,4 @@
-import overrides from "#app/overrides";
+import { activeOverrides } from "#app/overrides";
 import type { Challenge } from "#data/challenge";
 import { BattleStyle } from "#enums/battle-style";
 import type { Challenges } from "#enums/challenges";
@@ -33,7 +33,7 @@ export class ChallengeModeHelper extends GameManagerHelper {
    * @returns A promise that resolves when the summon phase is reached.
    */
   async runToSummon(species: SpeciesId, ...extraSpecies: SpeciesId[]): Promise<void> {
-    if (overrides.STARTER_SPECIES_OVERRIDE) {
+    if (activeOverrides.STARTER_SPECIES_OVERRIDE) {
       throw new Error(
         "The player species override should not be used for challenge mode tests. Pass the species you want to use to the `runToSummon` or `startBattle` function.",
       );
@@ -55,7 +55,7 @@ export class ChallengeModeHelper extends GameManagerHelper {
     });
 
     await this.game.phaseInterceptor.to("EncounterPhase");
-    if (overrides.ENEMY_HELD_ITEMS_OVERRIDE.length === 0 && this.game.override.removeEnemyStartingItems) {
+    if (activeOverrides.ENEMY_HELD_ITEMS_OVERRIDE.length === 0 && this.game.override.removeEnemyStartingItems) {
       this.game.removeEnemyHeldItems();
     }
   }
@@ -91,7 +91,7 @@ export class ChallengeModeHelper extends GameManagerHelper {
     }
 
     if (this.game.override.disableExpGain) {
-      vi.spyOn(overrides, "LEVEL_CAP_OVERRIDE", "get").mockReturnValue(1);
+      vi.spyOn(activeOverrides, "LEVEL_CAP_OVERRIDE", "get").mockReturnValue(1);
     }
 
     await this.game.phaseInterceptor.to("CommandPhase");

@@ -41,7 +41,7 @@ export class DelayedAttackTag extends ArenaTag {
    * @param targetIndex - The {@linkcode FieldBattlerIndex} targeted by the attack
    */
   public addAttack(source: Pokemon, moveId: MoveId, targetIndex: FieldBattlerIndex): void {
-    this.delayedAttacks.push({ sourceId: source.id, moveId: moveId, targetIndex, turnCount: 3 });
+    this.delayedAttacks.push({ sourceId: source.id, moveId, targetIndex, turnCount: 3 });
   }
 
   override lapse(): boolean {

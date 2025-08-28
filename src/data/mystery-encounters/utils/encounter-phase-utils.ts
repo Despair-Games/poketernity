@@ -202,13 +202,13 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
   // This can be amplified or counteracted by setting levelAdditiveModifier in config
   // levelAdditiveModifier value of 0.5 will halve the modifier scaling, 2 will double it, etc.
   // Leaving null/undefined will disable level scaling
-  const mult: number = !isNil(partyConfig.levelAdditiveModifier) ? partyConfig.levelAdditiveModifier : 0;
+  const mult: number = isNil(partyConfig.levelAdditiveModifier) ? 0 : partyConfig.levelAdditiveModifier;
   const additive = Math.max(Math.round((globalScene.currentBattle.waveIndex / 10) * mult), 0);
   battle.enemyLevels = battle.enemyLevels.map((level) => level + additive);
 
   battle.enemyLevels.forEach((level, e) => {
-    let enemySpecies;
-    let dataSource;
+    let enemySpecies: PokemonSpecies | undefined;
+    let dataSource: PokemonData | undefined;
     let isBoss = false;
     if (!loaded) {
       if ((!isNil(trainerType) || trainerConfig) && battle.trainer) {
@@ -280,9 +280,12 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
       }
 
       // Generate new id, reset status and HP in case using data source
-      if (config.dataSource) {
-        enemyPokemon.generateId();
-      }
+      // TODO: figure out if this is necessary
+      // if (config.dataSource) {
+      //   // remove old id from battlescene active id list here
+      //   enemyPokemon.id = enemyPokemon.generateId();
+      //   // add new id to battlescene active id list here
+      // }
 
       // Set form
       if (!isNil(config.formIndex)) {
@@ -306,9 +309,9 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
 
       // Set Boss
       if (config.isBoss) {
-        let segments = !isNil(config.bossSegments)
-          ? config.bossSegments!
-          : globalScene.getEncounterBossSegments(globalScene.currentBattle.waveIndex, level, enemySpecies, true);
+        let segments = isNil(config.bossSegments)
+          ? globalScene.getEncounterBossSegments(globalScene.currentBattle.waveIndex, level, enemySpecies, true)
+          : config.bossSegments!;
         if (!isNil(config.bossSegmentModifier)) {
           segments += config.bossSegmentModifier;
         }
@@ -626,10 +629,10 @@ export function selectPokemonForOption(
 
               const textPromptKey =
                 globalScene.currentBattle.mysteryEncounter?.selectedOption?.dialogue?.secondOptionPrompt;
-              if (!textPromptKey) {
-                displayOptions();
-              } else {
+              if (textPromptKey) {
                 showEncounterText(textPromptKey).then(() => displayOptions());
+              } else {
+                displayOptions();
               }
             });
           });
@@ -676,13 +679,7 @@ export function selectOptionThenPokemon(
 
     const displayOptions = (config: OptionSelectModeConfig) => {
       globalScene.ui.setMessageMode().then(() => {
-        if (!optionSelectPromptKey) {
-          // Do hover over the starting selection option
-          if (fullOptions[0].onHover) {
-            fullOptions[0].onHover();
-          }
-          globalScene.ui.setMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, config);
-        } else {
+        if (optionSelectPromptKey) {
           showEncounterText(optionSelectPromptKey).then(() => {
             // Do hover over the starting selection option
             if (fullOptions[0].onHover) {
@@ -690,6 +687,12 @@ export function selectOptionThenPokemon(
             }
             globalScene.ui.setMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, config);
           });
+        } else {
+          // Do hover over the starting selection option
+          if (fullOptions[0].onHover) {
+            fullOptions[0].onHover();
+          }
+          globalScene.ui.setMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, config);
         }
       });
     };
@@ -708,7 +711,7 @@ export function selectOptionThenPokemon(
             globalScene.ui.setMode<UiHandler>(modeToSetOnExit).then(() => {
               const result: PokemonAndOptionSelected = {
                 selectedPokemonIndex: slotIndex,
-                selectedOptionIndex: selectedOptionIndex,
+                selectedOptionIndex,
               };
               resolve(result);
             });
@@ -968,10 +971,10 @@ export function handleMysteryEncounterBattleStartEffects() {
       let source: Pokemon;
       if (effect.sourcePokemon) {
         source = effect.sourcePokemon;
-      } else if (!isNil(effect.sourceBattlerIndex)) {
-        source = globalScene.getPokemonByBattlerIndex(effect.sourceBattlerIndex) ?? globalScene.getEnemyField()[0];
-      } else {
+      } else if (isNil(effect.sourceBattlerIndex)) {
         source = globalScene.getEnemyField()[0];
+      } else {
+        source = globalScene.getPokemonByBattlerIndex(effect.sourceBattlerIndex) ?? globalScene.getEnemyField()[0];
       }
       const { targets, move, followUp, ignorePp } = effect;
       globalScene.phaseManager.createAndPushPhase("MovePhase", source, targets, move, {
@@ -1045,7 +1048,7 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
               .filter((b) => {
                 return !Array.isArray(b) || !randSeedInt(b[1]);
               })
-              .map((b) => (!Array.isArray(b) ? b : b[0]));
+              .map((b) => (Array.isArray(b) ? b[0] : b));
           }, i * 100);
           if (biomes! && biomes.length > 0) {
             const specialBiomes = biomes.filter((b) => alwaysPickTheseBiomes.includes(b));
@@ -1057,13 +1060,11 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
           }
         } else if (Object.hasOwn(biomeLinks, currentBiome)) {
           currentBiome = biomeLinks[currentBiome] as BiomeId;
+        } else if (i % 50) {
+          currentBiome = globalScene.generateRandomBiome(i);
         } else {
           // Special logic for endless mode
-          if (!(i % 50)) {
-            currentBiome = BiomeId.END;
-          } else {
-            currentBiome = globalScene.generateRandomBiome(i);
-          }
+          currentBiome = BiomeId.END;
         }
 
         globalScene.newArena(currentBiome);

@@ -14,12 +14,14 @@ import i18next from "i18next";
  * @param procChance - Chance to create an item
  */
 export class PostTurnLootAbAttr extends PostTurnAbAttr {
-  constructor(
-    /** Extend itemType to add more options */
-    private readonly itemType: "EATEN_BERRIES" | "HELD_BERRIES",
-    private readonly procChance: (pokemon: Pokemon) => number,
-  ) {
+  private readonly itemType: "EATEN_BERRIES" | "HELD_BERRIES";
+  private readonly procChance: (pokemon: Pokemon) => number;
+
+  constructor(itemType: "EATEN_BERRIES" | "HELD_BERRIES", procChance: (pokemon: Pokemon) => number) {
     super();
+
+    this.itemType = itemType;
+    this.procChance = procChance;
   }
 
   public override apply(pokemon: Pokemon, simulated: boolean): boolean {

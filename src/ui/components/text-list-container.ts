@@ -85,6 +85,21 @@ export class TextListContainer extends Phaser.GameObjects.Container {
   }
 
   /**
+   * Update the maximum amount of lines to show.
+   * Call {@linkcode updateList} to refresh the text.
+   *
+   * @param maxLines - How many lines to cut the text at.
+   * @param show - Optional. Set to `true` to immediately display the content of the array.
+   */
+  public setMaxLines(maxLines: number, show: boolean = false): void {
+    this.maxLines = maxLines;
+    this.textObject.setMaxLines(maxLines);
+    if (show) {
+      this.updateList();
+    }
+  }
+
+  /**
    * Change the index of the first element in the list that should be displayed
    * and redraw the list if it changed.
    *

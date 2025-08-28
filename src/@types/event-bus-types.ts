@@ -1,9 +1,7 @@
-export type LanguageEvent = "language/change";
-
 /**
- * Keys for input related event.
+ * Keys for input related events.
  *  - `keyboard/init`, for when a keyboard is first detected.
- *  - `gamepad/init`, for when a specific gamepad is first used in a session.
+ *  - `gamepad/init`, for when a gamepad is being used for the first time.
  */
 export type InputsEvent = "keyboard/init" | "gamepad/init";
 

@@ -38,17 +38,20 @@ export class TimedEventDisplay extends Phaser.GameObjects.Container {
     const padding = 5;
     const xPosition = Math.floor(this.availableWidth / 2 + (xOffset ?? 0));
     const yPosition = GAME_HEIGHT - padding - (showTimer ? 10 : 0) - (yOffset ?? 0);
-    if (!this.banner) {
+    if (this.banner) {
+      this.banner.setTexture(key);
+      this.banner.setVisible(true);
+    } else {
       this.banner = globalScene.add.image(xPosition, yPosition - padding, key);
       this.banner.setName("img-event-banner");
       this.banner.setOrigin(0.5, 1);
       this.add(this.banner);
-    } else {
-      this.banner.setTexture(key);
-      this.banner.setVisible(true);
     }
     if (showTimer) {
-      if (!this.eventTimerText) {
+      if (this.eventTimerText) {
+        this.eventTimerText.setText(this.timeToGo(this.event.endDate));
+        this.eventTimerText.setVisible(true);
+      } else {
         this.eventTimerText = addTextObject(
           this.banner.x,
           this.banner.y + 2,
@@ -58,9 +61,6 @@ export class TimedEventDisplay extends Phaser.GameObjects.Container {
         this.eventTimerText.setName("text-event-timer");
         this.eventTimerText.setOrigin(0.5, 0);
         this.add(this.eventTimerText);
-      } else {
-        this.eventTimerText.setText(this.timeToGo(this.event.endDate));
-        this.eventTimerText.setVisible(true);
       }
     }
     return true;

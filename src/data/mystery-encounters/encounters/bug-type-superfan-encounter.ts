@@ -216,7 +216,8 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
       female: true,
     });
 
-    let beedrillKeys: { spriteKey: string; fileRoot: string }, butterfreeKeys: { spriteKey: string; fileRoot: string };
+    let beedrillKeys: { spriteKey: string; fileRoot: string };
+    let butterfreeKeys: { spriteKey: string; fileRoot: string };
     if (globalScene.currentBattle.waveIndex < WAVE_LEVEL_BREAKPOINTS[3]) {
       beedrillKeys = getSpriteKeysFromSpecies(SpeciesId.BEEDRILL, false);
       butterfreeKeys = getSpriteKeysFromSpecies(SpeciesId.BUTTERFREE, false);
@@ -250,7 +251,7 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
         yShadow: -4,
       },
       {
-        spriteKey: spriteKey,
+        spriteKey,
         fileRoot: "trainer",
         hasShadow: true,
         x: 4,

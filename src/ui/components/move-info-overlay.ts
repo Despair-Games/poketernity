@@ -176,7 +176,7 @@ export class MoveInfoOverlay extends Phaser.GameObjects.Container implements Inf
     this.acc.setText(move.accuracy >= 0 ? move.accuracy.toString() : "---");
     this.pp.setText(move.pp >= 0 ? move.pp.toString() : "---");
     this.typ.setTexture("type_icons", enumValueToKey(ElementalType, move.type).toLowerCase());
-    this.cat.setFrame(MoveCategory[move.category].toLowerCase());
+    this.cat.setFrame(enumValueToKey(MoveCategory, move.category).toLowerCase());
 
     this.desc.setText(move?.effect || "");
 

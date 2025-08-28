@@ -22,11 +22,14 @@ import i18next from "i18next";
  * off the field, prompting a switch.
  */
 export class ForceSwitchOutAttr extends MoveEffectAttr {
-  constructor(
-    private selfSwitch: boolean = false,
-    private switchType: SwitchType = SwitchType.SWITCH,
-  ) {
+  private selfSwitch: boolean;
+  private switchType: SwitchType;
+
+  constructor(selfSwitch: boolean = false, switchType: SwitchType = SwitchType.SWITCH) {
     super(selfSwitch, { lastHitOnly: true });
+
+    this.selfSwitch = selfSwitch;
+    this.switchType = switchType;
   }
 
   public isBatonPass() {
@@ -56,10 +59,9 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
       if (
         target.getAbility().hasAttrFlag(AbAttrFlag.POST_DAMAGE_FORCE_SWITCH)
         && [MoveId.U_TURN, MoveId.VOLT_SWITCH, MoveId.FLIP_TURN].includes(move.id)
+        && this.hpDroppedBelowHalf(target)
       ) {
-        if (this.hpDroppedBelowHalf(target)) {
-          return false;
-        }
+        return false;
       }
 
       // Find indices of off-field Pokemon that are eligible to be switched into
@@ -134,10 +136,9 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
       if (
         target.getAbility().hasAttrFlag(AbAttrFlag.POST_DAMAGE_FORCE_SWITCH)
         && [MoveId.U_TURN, MoveId.VOLT_SWITCH, MoveId.FLIP_TURN].includes(move.id)
+        && this.hpDroppedBelowHalf(target)
       ) {
-        if (this.hpDroppedBelowHalf(target)) {
-          return false;
-        }
+        return false;
       }
 
       if (waveIndex % 10 === 0) {

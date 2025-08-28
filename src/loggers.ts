@@ -26,14 +26,15 @@ export class CallSourceLogger {
    * If no such line exists, return an empty string.
    */
   private getStackTraceLine(): string {
-    const stack = Error().stack?.split("\n") as string[];
+    // biome-ignore lint/suspicious/useErrorMessage: The `Error` class is being used for the stack trace only
+    const stack = new Error().stack?.split("\n") as string[];
 
     for (const line of stack) {
       // On Chrome, each line is of the form "at <functionName> (.../<fileName>.ts?t=<timestamp>:<lineNumbers>)"
-      const chromeRegex = RegExp("at (.*?(\\w+)) \\(.*\\/(.*\\.ts).*:(\\d*:\\d*)\\)");
+      const chromeRegex = new RegExp("at (.*?(\\w+)) \\(.*\\/(.*\\.ts).*:(\\d*:\\d*)\\)");
       // On Firefox, each line is of the form "<functionName>@.../<fileName>.ts?t=<timestamp>:<lineNumbers>",
       // or "<functionName>/<@.../<fileName>.ts?t=<timestamp>:<lineNumbers>"
-      const firefoxRegex = RegExp("(.*?(\\w+))(?:\\/<|)@.*\\/(.*\\.ts).*:(\\d*:\\d*)");
+      const firefoxRegex = new RegExp("(.*?(\\w+))(?:\\/<|)@.*\\/(.*\\.ts).*:(\\d*:\\d*)");
       const match = line.match(chromeRegex) ?? line.match(firefoxRegex);
       if (match) {
         const fullFunctionName = match[1]; // e.g., "BattleScene.reset"

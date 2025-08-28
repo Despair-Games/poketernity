@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { logModifiers } from "#app/loggers";
 import { getPokemonNameWithAffix } from "#app/messages";
-import Overrides from "#app/overrides";
+import { activeOverrides } from "#app/overrides";
 import { PARTY_UI_NO_EFFECT_MSG_i18N_KEY } from "#constants/ui-constants";
 import { allMoves } from "#data/data-lists";
 import { getNatureName, getNatureStatMultiplier } from "#data/nature";
@@ -1139,9 +1139,9 @@ export class FormChangeItemModifierType extends PokemonModifierType implements G
       (_type, args) => new PokemonFormChangeItemModifier(this, (args[0] as PlayerPokemon).id, formChangeItem, true),
       (pokemon: PlayerPokemon) => {
         // Make sure the Pokemon has alternate forms
+        // Get all form changes for this species with an item trigger, including any compound triggers
         if (
           Object.hasOwn(pokemonFormChanges, pokemon.species.speciesId)
-          // Get all form changes for this species with an item trigger, including any compound triggers
           && pokemonFormChanges[pokemon.species.speciesId]
             .filter(
               (fc) => fc.trigger.hasTriggerType(SpeciesFormChangeItemTrigger) && fc.preFormKey === pokemon.getFormKey(),
@@ -1306,6 +1306,7 @@ export class SpeciesStatBoosterModifierTypeGenerator extends ModifierTypeGenerat
         const speciesId = p.getSpeciesForm(true).speciesId;
         const hasFling = p.getMoveset(true).some((m) => m.moveId === MoveId.FLING);
 
+        // biome-ignore lint/suspicious/useGuardForIn: Not necessary
         for (const i in values) {
           const checkedSpecies = values[i].species;
           const checkedStats = values[i].stats;
@@ -1455,9 +1456,9 @@ export class FormChangeItemModifierTypeGenerator extends ModifierTypeGenerator {
               if (p.species.speciesId === SpeciesId.NECROZMA) {
                 // technically we could use a simplified version and check for formChanges.length > 3, but in case any code changes later, this might break...
 
-                let foundULTRA_Z = false,
-                  foundN_LUNA = false,
-                  foundN_SOLAR = false;
+                let foundULTRA_Z = false;
+                let foundN_LUNA = false;
+                let foundN_SOLAR = false;
                 formChangeItemTriggers.forEach((fc, _i) => {
                   switch (fc.item) {
                     case FormChangeItem.ULTRANECROZIUM_Z:
@@ -1550,7 +1551,7 @@ export class WeightedModifierType {
     this.modifierType = modifierTypeFunc();
     this.modifierType.id = Object.keys(modifierTypes).find((k) => modifierTypes[k] === modifierTypeFunc)!; // TODO: is this bang correct?
     this.weight = weight;
-    this.maxWeight = maxWeight || (!(weight instanceof Function) ? weight : 0);
+    this.maxWeight = maxWeight || (weight instanceof Function ? 0 : weight);
   }
 
   setTier(tier: ModifierTier) {
@@ -1776,11 +1777,7 @@ export function getPlayerModifierTypeOptions(
 ): ModifierTypeOption[] {
   const options: ModifierTypeOption[] = [];
   const retryCount = Math.min(count * 5, 50);
-  if (!customModifierSettings) {
-    for (let i = 0; i < count; i++) {
-      options.push(getModifierTypeOptionWithRetry(options, retryCount, party, modifierTiers?.[i]));
-    }
-  } else {
+  if (customModifierSettings) {
     // Guaranteed mod options first
     if (
       customModifierSettings?.guaranteedModifierTypeOptions
@@ -1825,6 +1822,10 @@ export function getPlayerModifierTypeOptions(
       while (options.length < count) {
         options.push(getModifierTypeOptionWithRetry(options, retryCount, party, undefined));
       }
+    }
+  } else {
+    for (let i = 0; i < count; i++) {
+      options.push(getModifierTypeOptionWithRetry(options, retryCount, party, modifierTiers?.[i]));
     }
   }
 
@@ -1871,15 +1872,15 @@ function getModifierTypeOptionWithRetry(
 
 /**
  * Replaces the {@linkcode ModifierType} of the entries within {@linkcode options} with any
- * {@linkcode ModifierOverride} entries listed in {@linkcode Overrides.ITEM_REWARD_OVERRIDE}
+ * {@linkcode ModifierOverride} entries listed in {@linkcode activeOverrides.ITEM_REWARD_OVERRIDE}
  * up to the smallest amount of entries between {@linkcode options} and the override array.
  * @param options Array of naturally rolled {@linkcode ModifierTypeOption}s
  * @param party Array of the player's current party
  */
 export function overridePlayerModifierTypeOptions(options: ModifierTypeOption[], party: PlayerPokemon[]) {
-  const minLength = Math.min(options.length, Overrides.ITEM_REWARD_OVERRIDE.length);
+  const minLength = Math.min(options.length, activeOverrides.ITEM_REWARD_OVERRIDE.length);
   for (let i = 0; i < minLength; i++) {
-    const override: ModifierOverride = Overrides.ITEM_REWARD_OVERRIDE[i];
+    const override: ModifierOverride = activeOverrides.ITEM_REWARD_OVERRIDE[i];
     const modifierFunc = modifierTypes[override.name];
     let modifierType: ModifierType | null = modifierFunc();
 
@@ -2099,7 +2100,7 @@ function getNewModifierTypeOption(
     }
   }
 
-  logModifiers(modifierType, !player ? "(enemy)" : "");
+  logModifiers(modifierType, player ? "" : "(enemy)");
 
   return new ModifierTypeOption(modifierType as ModifierType, upgradeCount!); // TODO: is this bang correct?
 }

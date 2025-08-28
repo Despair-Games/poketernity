@@ -32,12 +32,12 @@ describe("Abilities - Mycelium Might", () => {
     game.override.moveset([MoveId.QUICK_ATTACK, MoveId.BABY_DOLL_EYES]);
   });
 
-  /**
+  /*
    * References:
    * https://bulbapedia.bulbagarden.net/wiki/Mycelium_Might_(Ability)
    * https://bulbapedia.bulbagarden.net/wiki/Priority
    * https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/page-24
-   **/
+   */
 
   it("should make the source move last in its priority bracket and ignore protective abilities when using a status move", async () => {
     await game.classicMode.startBattle(SpeciesId.REGIELEKI);

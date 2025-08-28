@@ -50,6 +50,7 @@ describe("UI - Transfer Items", () => {
       handler.setCursor(1);
       handler.processInput(Button.ACTION);
 
+      // biome-ignore lint/complexity/noVoid: Unable to use `await` here
       void game.scene.ui.setModeWithoutClear<PartyUiHandler>(UiMode.PARTY, PartyUiMode.MODIFIER_TRANSFER);
     });
 
@@ -71,7 +72,7 @@ describe("UI - Transfer Items", () => {
       ).toBe(true);
       expect(
         handler.optionsContainer.list.some((option) =>
-          RegExp(/Lum Berry\[color.*(2)/).exec((option as BBCodeText).text),
+          new RegExp(/Lum Berry\[color.*(2)/).exec((option as BBCodeText).text),
         ),
       ).toBe(true);
 

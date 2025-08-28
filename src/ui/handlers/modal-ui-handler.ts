@@ -53,7 +53,7 @@ export abstract class ModalUiHandler extends UiHandler {
 
     this.modalContainer.add(this.modalBg);
 
-    this.titleText = addTextObject(0, 4, "", TextStyle.SETTINGS_LABEL);
+    this.titleText = addTextObject(0, 4, "", TextStyle.WINDOW_HEADER);
     this.titleText.setOrigin(0.5, 0);
 
     this.modalContainer.add(this.titleText);

@@ -42,7 +42,8 @@ export class TypeImmunityAbAttr extends PreDefendAbAttr {
     typeMultiplier: NumberHolder,
   ): boolean {
     // Field moves should ignore immunity
-    if ([MoveTarget.BOTH_SIDES, MoveTarget.ENEMY_SIDE, MoveTarget.USER_SIDE].includes(move.moveTarget)) {
+    const fieldTargets: MoveTarget[] = [MoveTarget.BOTH_SIDES, MoveTarget.ENEMY_SIDE, MoveTarget.USER_SIDE];
+    if (fieldTargets.includes(move.moveTarget)) {
       return false;
     }
     if (attacker !== pokemon && attacker.getMoveType(move) === this.immuneType) {

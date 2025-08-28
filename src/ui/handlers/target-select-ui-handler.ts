@@ -70,11 +70,12 @@ export class TargetSelectUiHandler extends UiHandler {
    * @param user the Pokemon using the move
    */
   resetCursor(cursorN: number, user: Pokemon): void {
-    if (!isNil(cursorN)) {
-      if ([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2].includes(cursorN) || user.summonData.waveTurnCount === 1) {
-        // Reset cursor on the first turn of a fight or if an ally was targeted last turn
-        cursorN = -1;
-      }
+    if (
+      !isNil(cursorN)
+      && ([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2].includes(cursorN) || user.summonData.waveTurnCount === 1)
+    ) {
+      // Reset cursor on the first turn of a fight or if an ally was targeted last turn
+      cursorN = -1;
     }
     this.setCursor(this.targets.includes(cursorN) ? cursorN : this.targets[0]);
   }
@@ -92,10 +93,8 @@ export class TargetSelectUiHandler extends UiHandler {
         if (isNil(this.cursor0) || this.cursor0 !== this.cursor) {
           this.cursor0 = this.cursor;
         }
-      } else if (this.fieldIndex === BattlerIndex.PLAYER_2) {
-        if (isNil(this.cursor1) || this.cursor1 !== this.cursor) {
-          this.cursor1 = this.cursor;
-        }
+      } else if (this.fieldIndex === BattlerIndex.PLAYER_2 && (isNil(this.cursor1) || this.cursor1 !== this.cursor)) {
+        this.cursor1 = this.cursor;
       }
     } else if (this.isMultipleTargets || this.isFieldTarget) {
       success = false;

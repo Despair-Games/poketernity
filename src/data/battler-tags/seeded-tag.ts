@@ -71,11 +71,11 @@ export class SeededTag extends BattlerTag {
           globalScene.phaseManager.createAndUnshiftPhase(
             "PokemonHealPhase",
             source.getBattlerIndex(),
-            !reverseDrain ? damage : damage * -1,
+            reverseDrain ? damage * -1 : damage,
             {
-              message: !reverseDrain
-                ? i18next.t("battlerTags:seededLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) })
-                : i18next.t("battlerTags:seededLapseShed", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+              message: reverseDrain
+                ? i18next.t("battlerTags:seededLapseShed", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) })
+                : i18next.t("battlerTags:seededLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
               showFullHpMessage: false,
               skipAnim: true,
             },
