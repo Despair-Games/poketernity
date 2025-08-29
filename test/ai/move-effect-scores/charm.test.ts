@@ -1,7 +1,6 @@
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
-import { revealAllAbilities } from "#test/test-utils/enemy-command-utils";
 import { GameManager } from "#test/test-utils/game-manager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -50,7 +49,7 @@ describe("Move Effect Scores - Charm", () => {
 
     await game.classicMode.startBattle(SpeciesId.DRILBUR);
 
-    revealAllAbilities(game.scene);
+    game.field.revealAllAbilities();
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).toNeverSelectMove((move) => move.id !== MoveId.CHARM);
   });
@@ -65,7 +64,7 @@ describe("Move Effect Scores - Charm", () => {
 
     await game.classicMode.startBattle(SpeciesId.DRILBUR);
 
-    revealAllAbilities(game.scene);
+    game.field.revealAllAbilities();
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).toNeverSelectMove(MoveId.CHARM);
   });

@@ -53,16 +53,3 @@ export function getEnemyMoveChoices(pokemon: EnemyPokemon): MoveChoiceSet {
 
   return moveChoices;
 }
-
-/** Reveals the abilities of all Pokemon on the field */
-export function revealAllAbilities(scene: BattleScene): void {
-  scene.getField(true).forEach((p) => {
-    const abilityIds = p.getAbilities().map((ab) => ab.ability.id);
-    p.waveData.abilitiesRevealed.push(...abilityIds);
-  });
-}
-
-/** Reveals the moves of all Pokemon on the field */
-export function revealAllMoves(scene: BattleScene): void {
-  scene.getField(true).forEach((p) => p.getMoveset().forEach((mv) => p.waveData.revealedMoves.add(mv.moveId)));
-}
