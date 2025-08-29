@@ -1,7 +1,6 @@
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
-import { revealAllMoves } from "#test/test-utils/enemy-command-utils";
 import { GameManager } from "#test/test-utils/game-manager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -36,7 +35,7 @@ describe("Move Condition Scores - Upper Hand", () => {
 
     await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
-    revealAllMoves(game.scene);
+    game.field.revealAllMoves();
     const enemy = game.field.getEnemyPokemon();
 
     expect(enemy).toNeverSelectMove(MoveId.UPPER_HAND);
@@ -47,7 +46,7 @@ describe("Move Condition Scores - Upper Hand", () => {
 
     await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
-    revealAllMoves(game.scene);
+    game.field.revealAllMoves();
     const enemy = game.field.getEnemyPokemon();
     // Set Enemy to 1 HP to allow all of the Player's attacks to KO.
     // High-priority moves gain a major bonus to AS when they can KO opponents

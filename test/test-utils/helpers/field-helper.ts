@@ -90,4 +90,19 @@ export class FieldHelper extends GameManagerHelper {
     teraType ??= pokemon.getSpeciesForm(true).type1;
     vi.spyOn(pokemon, "teraType", "get").mockReturnValue(teraType);
   }
+
+  /** Reveals the abilities of all Pokemon on the field to the Enemy AI */
+  public revealAllAbilities(): void {
+    this.game.scene.getField(true).forEach((p) => {
+      const abilityIds = p.getAbilities().map((ab) => ab.ability.id);
+      p.waveData.abilitiesRevealed.push(...abilityIds);
+    });
+  }
+
+  /** Reveals the moves of all Pokemon on the field to the Enemy AI */
+  public revealAllMoves(): void {
+    this.game.scene
+      .getField(true)
+      .forEach((p) => p.getMoveset().forEach((mv) => p.waveData.revealedMoves.add(mv.moveId)));
+  }
 }

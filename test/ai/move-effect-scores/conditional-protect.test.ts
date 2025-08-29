@@ -2,7 +2,6 @@ import { allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
-import { revealAllMoves } from "#test/test-utils/enemy-command-utils";
 import { GameManager } from "#test/test-utils/game-manager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -46,7 +45,7 @@ describe("Move Effect Scores - Conditional Protection", () => {
 
       await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
-      revealAllMoves(game.scene);
+      game.field.revealAllMoves();
       const enemy = game.field.getEnemyPokemon();
       expect(enemy).not.toPreferSelectingMove(moveId);
     });
@@ -56,7 +55,7 @@ describe("Move Effect Scores - Conditional Protection", () => {
 
       await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
-      revealAllMoves(game.scene);
+      game.field.revealAllMoves();
       const [enemy] = game.scene.getEnemyField();
       expect(enemy).toPreferSelectingMove(moveId);
     });
@@ -66,7 +65,7 @@ describe("Move Effect Scores - Conditional Protection", () => {
 
       await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
-      revealAllMoves(game.scene);
+      game.field.revealAllMoves();
       const [enemy] = game.scene.getEnemyField();
       expect(enemy).not.toPreferSelectingMove(moveId);
     });

@@ -2,7 +2,6 @@ import { HIGH_VALUE_ABILITIES } from "#constants/ability-constants";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
-import { revealAllAbilities } from "#test/test-utils/enemy-command-utils";
 import { GameManager } from "#test/test-utils/game-manager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -41,7 +40,7 @@ describe("Move Effect Scores - Ability Suppression", () => {
 
     await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
-    revealAllAbilities(game.scene);
+    game.field.revealAllAbilities();
     const enemy = game.field.getEnemyPokemon();
 
     expect(enemy).toPreferSelectingMove(MoveId.GASTRO_ACID);
@@ -50,7 +49,7 @@ describe("Move Effect Scores - Ability Suppression", () => {
   it("Enemy should not prefer selecting Gastro Acid if the opponent has Torrent", async () => {
     await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
-    revealAllAbilities(game.scene);
+    game.field.revealAllAbilities();
     const enemy = game.field.getEnemyPokemon();
 
     expect(enemy).not.toPreferSelectingMove(MoveId.GASTRO_ACID);
@@ -71,7 +70,7 @@ describe("Move Effect Scores - Ability Suppression", () => {
 
     await game.classicMode.startBattle(SpeciesId.WISHIWASHI);
 
-    revealAllAbilities(game.scene);
+    game.field.revealAllAbilities();
     const enemy = game.field.getEnemyPokemon();
 
     expect(enemy).toNeverSelectMove(MoveId.GASTRO_ACID);
