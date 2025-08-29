@@ -1,6 +1,10 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { ALLY_EFFECTIVE_STAT_OPTIONS, OPP_EFFECTIVE_STAT_OPTIONS } from "#constants/ai-constants";
+import {
+  ALLY_EFFECTIVE_STAT_OPTIONS,
+  MAJOR_EFFECT_SCORE_PENALTY,
+  OPP_EFFECTIVE_STAT_OPTIONS,
+} from "#constants/ai-constants";
 import type { EffectiveStat } from "#enums/stat";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
@@ -51,11 +55,20 @@ export class AverageStatsAttr extends MoveEffectAttr {
    * so the score from this attribute cannot exceed (+2).
    */
   public override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+    /**
+     * For this effect to be considered beneficial to the user for a specific stat,
+     * the target's stat must be greater than the user's by at least this factor.
+     */
+    const minStatFactor = 2;
     const benefitStats = this.stats.filter(
       (stat) =>
-        user.getEffectiveStat(stat, ALLY_EFFECTIVE_STAT_OPTIONS)
+        user.getEffectiveStat(stat, ALLY_EFFECTIVE_STAT_OPTIONS) * minStatFactor
         < target.getEffectiveStat(stat, OPP_EFFECTIVE_STAT_OPTIONS),
     ).length;
+
+    if (benefitStats === 0) {
+      return MAJOR_EFFECT_SCORE_PENALTY;
+    }
 
     return this.getRandomScore(user, 55, benefitStats, benefitStats - 1);
   }
