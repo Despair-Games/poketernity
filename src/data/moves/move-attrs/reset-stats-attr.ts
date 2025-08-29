@@ -53,11 +53,11 @@ export class ResetStatsAttr extends MoveEffectAttr {
    * This also grants a {@linkcode BAD_MOVE_PENALTY} when the net stat stage change does not
    * favor the user's side of the field.
    */
-  public override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+  public override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
     const affectedPokemon = this.targetAllPokemon ? globalScene.getField(true) : [target];
 
     const uncappedScore = affectedPokemon.reduce((total, p) => total + this.getIndividualEffectScore(user, p), 0);
-    if (uncappedScore <= 0) {
+    if (uncappedScore <= 0 && move.isStatusMove()) {
       return BAD_MOVE_PENALTY;
     }
     return Math.min(uncappedScore, SOFT_EFFECT_SCORE_LIMIT);
