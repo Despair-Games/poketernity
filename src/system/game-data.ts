@@ -81,7 +81,7 @@ import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlock
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { applyChallenges } from "#utils/challenge-utils";
-import { enumValueToKey, executeIf, fixedNumber, getTSEnumKeys, isNil, NumberHolder } from "#utils/common-utils";
+import { enumValueToKey, executeIf, fixedNumber, isNil, NumberHolder } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randInt } from "#utils/random-utils";
 import { AES, enc } from "crypto-js";
@@ -380,9 +380,8 @@ export class GameData {
         }
 
         if (systemData.voucherCounts) {
-          getTSEnumKeys(VoucherType).forEach((key) => {
-            const index = VoucherType[key];
-            this.voucherCounts[index] = systemData.voucherCounts[index] || 0;
+          Object.values(VoucherType).forEach((_, index) => {
+            this.voucherCounts[index] = systemData.voucherCounts[index] ?? 0;
           });
         }
 
