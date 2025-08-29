@@ -22,11 +22,11 @@ import type { NumberHolder } from "#utils/common-utils";
  * ```
  */
 export class WeatherBasedSpeedDoublerAbAttr extends EffectiveStatMultiplier {
-  private readonly weather: WeatherType[] = [];
+  private readonly weatherTypes: readonly WeatherType[];
 
-  constructor(weather: WeatherType | WeatherType[]) {
+  constructor(...weatherTypes: WeatherType[]) {
     super(Stat.SPD, 2);
-    this.weather = this.weather.concat(weather);
+    this.weatherTypes = weatherTypes;
   }
 
   public override apply(
@@ -36,7 +36,7 @@ export class WeatherBasedSpeedDoublerAbAttr extends EffectiveStatMultiplier {
     statValue: NumberHolder,
     move: Move,
   ): boolean {
-    if (getWeatherCondition(...this.weather)(pokemon)) {
+    if (getWeatherCondition(...this.weatherTypes)(pokemon)) {
       return super.apply(pokemon, simulated, stat, statValue, move);
     }
     return false;

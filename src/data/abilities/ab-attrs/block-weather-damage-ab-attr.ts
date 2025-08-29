@@ -18,7 +18,7 @@ import type { BooleanHolder } from "#utils/common-utils";
  * ```
  */
 export class BlockWeatherDamageAbAttr extends PreWeatherDamageAbAttr {
-  private readonly weatherTypes: WeatherType[];
+  private readonly weatherTypes: readonly WeatherType[];
 
   constructor(...weatherTypes: WeatherType[]) {
     super();

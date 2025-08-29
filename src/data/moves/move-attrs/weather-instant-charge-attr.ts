@@ -12,7 +12,7 @@ import { InstantChargeAttr } from "#moves/instant-charge-attr";
  * Should only be used for {@linkcode ChargingMove | charge moves} via `.chargeAttr()`.
  */
 export class WeatherInstantChargeAttr extends InstantChargeAttr {
-  constructor(weatherTypes: WeatherType[]) {
+  constructor(...weatherTypes: WeatherType[]) {
     super((_user, _move) => {
       const currentWeather = globalScene.arena.weather;
 

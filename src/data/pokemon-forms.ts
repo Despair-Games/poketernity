@@ -6,6 +6,7 @@ import type { QuietFormChangePhase } from "#phases/quiet-form-change-phase";
 
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { RAINY_WEATHER_TYPES, SNOWY_WEATHER_TYPES, SUNNY_WEATHER_TYPES } from "#constants/weather-constants";
 import { allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { FormChangeItem } from "#enums/form-change-item";
@@ -205,9 +206,9 @@ export class SpeciesFormChangeWeatherTrigger extends SpeciesFormChangeTrigger {
   /** The ability that  triggers the form change */
   public ability: AbilityId;
   /** The list of weathers that trigger the form change */
-  public weathers: WeatherType[];
+  public readonly weathers: readonly WeatherType[];
 
-  constructor(ability: AbilityId, weathers: WeatherType[]) {
+  constructor(ability: AbilityId, ...weathers: readonly WeatherType[]) {
     super();
     this.ability = ability;
     this.weathers = weathers;
@@ -702,63 +703,63 @@ export const pokemonFormChanges: PokemonFormChanges = {
       SpeciesId.CASTFORM,
       "",
       "sunny",
-      new SpeciesFormChangeWeatherTrigger(AbilityId.FORECAST, [WeatherType.SUNNY, WeatherType.HARSH_SUN]),
+      new SpeciesFormChangeWeatherTrigger(AbilityId.FORECAST, ...SUNNY_WEATHER_TYPES),
       true,
     ),
     new SpeciesFormChange(
       SpeciesId.CASTFORM,
       "rainy",
       "sunny",
-      new SpeciesFormChangeWeatherTrigger(AbilityId.FORECAST, [WeatherType.SUNNY, WeatherType.HARSH_SUN]),
+      new SpeciesFormChangeWeatherTrigger(AbilityId.FORECAST, ...SUNNY_WEATHER_TYPES),
       true,
     ),
     new SpeciesFormChange(
       SpeciesId.CASTFORM,
       "snowy",
       "sunny",
-      new SpeciesFormChangeWeatherTrigger(AbilityId.FORECAST, [WeatherType.SUNNY, WeatherType.HARSH_SUN]),
+      new SpeciesFormChangeWeatherTrigger(AbilityId.FORECAST, ...SUNNY_WEATHER_TYPES),
       true,
     ),
     new SpeciesFormChange(
       SpeciesId.CASTFORM,
       "",
       "rainy",
-      new SpeciesFormChangeWeatherTrigger(AbilityId.FORECAST, [WeatherType.RAIN, WeatherType.HEAVY_RAIN]),
+      new SpeciesFormChangeWeatherTrigger(AbilityId.FORECAST, ...RAINY_WEATHER_TYPES),
       true,
     ),
     new SpeciesFormChange(
       SpeciesId.CASTFORM,
       "sunny",
       "rainy",
-      new SpeciesFormChangeWeatherTrigger(AbilityId.FORECAST, [WeatherType.RAIN, WeatherType.HEAVY_RAIN]),
+      new SpeciesFormChangeWeatherTrigger(AbilityId.FORECAST, ...RAINY_WEATHER_TYPES),
       true,
     ),
     new SpeciesFormChange(
       SpeciesId.CASTFORM,
       "snowy",
       "rainy",
-      new SpeciesFormChangeWeatherTrigger(AbilityId.FORECAST, [WeatherType.RAIN, WeatherType.HEAVY_RAIN]),
+      new SpeciesFormChangeWeatherTrigger(AbilityId.FORECAST, ...RAINY_WEATHER_TYPES),
       true,
     ),
     new SpeciesFormChange(
       SpeciesId.CASTFORM,
       "",
       "snowy",
-      new SpeciesFormChangeWeatherTrigger(AbilityId.FORECAST, [WeatherType.HAIL, WeatherType.SNOW]),
+      new SpeciesFormChangeWeatherTrigger(AbilityId.FORECAST, ...SNOWY_WEATHER_TYPES),
       true,
     ),
     new SpeciesFormChange(
       SpeciesId.CASTFORM,
       "sunny",
       "snowy",
-      new SpeciesFormChangeWeatherTrigger(AbilityId.FORECAST, [WeatherType.HAIL, WeatherType.SNOW]),
+      new SpeciesFormChangeWeatherTrigger(AbilityId.FORECAST, ...SNOWY_WEATHER_TYPES),
       true,
     ),
     new SpeciesFormChange(
       SpeciesId.CASTFORM,
       "rainy",
       "snowy",
-      new SpeciesFormChangeWeatherTrigger(AbilityId.FORECAST, [WeatherType.HAIL, WeatherType.SNOW]),
+      new SpeciesFormChangeWeatherTrigger(AbilityId.FORECAST, ...SNOWY_WEATHER_TYPES),
       true,
     ),
     new SpeciesFormChange(
@@ -906,7 +907,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       SpeciesId.CHERRIM,
       "overcast",
       "sunshine",
-      new SpeciesFormChangeWeatherTrigger(AbilityId.FLOWER_GIFT, [WeatherType.SUNNY, WeatherType.HARSH_SUN]),
+      new SpeciesFormChangeWeatherTrigger(AbilityId.FLOWER_GIFT, ...SUNNY_WEATHER_TYPES),
       true,
     ),
     new SpeciesFormChange(

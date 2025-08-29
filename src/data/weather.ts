@@ -1,7 +1,7 @@
 import type { SuppressWeatherEffectAbAttr } from "#abilities/suppress-weather-effect-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { PRIMAL_WEATHER_TYPES } from "#constants/weather-constants";
+import { DAMAGING_WEATHER_TYPES, PRIMAL_WEATHER_TYPES } from "#constants/weather-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { CommonAnim } from "#enums/common-anim";
 import { ElementalType } from "#enums/elemental-type";
@@ -52,7 +52,7 @@ export class Weather {
    * @returns true for sandstorm or hail, false otherwise
    */
   isDamaging(): boolean {
-    return [WeatherType.SANDSTORM, WeatherType.HAIL].includes(this.weatherType);
+    return DAMAGING_WEATHER_TYPES.includes(this.weatherType);
   }
 
   /**

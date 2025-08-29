@@ -6,14 +6,13 @@ import { Stat } from "#enums/stat";
 import { WeatherType } from "#enums/weather-type";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import { GameManager } from "#test/test-utils/game-manager";
-import { getTSEnumKeys } from "#utils/common-utils";
 import { capitalizeString } from "#utils/string-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 //#region Test Constants
 
-const allWeathers = getTSEnumKeys(WeatherType).map((key) => ({
+const allWeathers = Object.keys(WeatherType).map((key) => ({
   weatherName: key === "NONE" ? "no" : capitalizeString(key, "_", false, true),
   weatherType: WeatherType[key],
 }));

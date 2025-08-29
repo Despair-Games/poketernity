@@ -330,8 +330,8 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
 
       case WeatherChangedEvent: {
         const weatherEvent = arenaEffectChangedEvent as WeatherChangedEvent;
-        const oldWeatherName = getFieldEffectText(WeatherType[weatherEvent.oldWeatherType]);
-        const newWeatherName = getFieldEffectText(WeatherType[weatherEvent.newWeatherType]);
+        const oldWeatherName = getFieldEffectText(enumValueToKey(WeatherType, weatherEvent.oldWeatherType));
+        const newWeatherName = getFieldEffectText(enumValueToKey(WeatherType, weatherEvent.newWeatherType));
         const newWeatherInfo = {
           name: newWeatherName,
           effectType: ArenaEffectType.WEATHER,

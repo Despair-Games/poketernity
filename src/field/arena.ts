@@ -33,7 +33,7 @@ import { WeatherType } from "#enums/weather-type";
 import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#events/arena";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import { coerceArray, enumValueToKey, getTSEnumValues } from "#utils/common-utils";
+import { coerceArray, enumValueToKey } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedInt, weightedPick } from "#utils/random-utils";
 
@@ -186,7 +186,7 @@ export class Arena {
    * @param weather - {@linkcode WeatherType} or array of {@linkcode WeatherType} to check against
    * @returns `true` if the arena is of the specified weather, `false` otherwise
    */
-  public hasWeather(weather: WeatherType | WeatherType[]): boolean {
+  public hasWeather(weather: WeatherType | readonly WeatherType[]): boolean {
     return coerceArray(weather).includes(this.weatherType);
   }
 
@@ -284,7 +284,7 @@ export class Arena {
   public setRandomWeather(): void {
     const weatherPool = allBiomes.get(this.biomeId).weatherPool;
     const weatherMap = new Map<WeatherType, number>();
-    for (const id of getTSEnumValues(WeatherType)) {
+    for (const id of Object.values(WeatherType)) {
       weatherMap.set(id, weatherPool[id] ?? 0);
     }
 

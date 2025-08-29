@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { WeatherType } from "#enums/weather-type";
+import { SNOWY_WEATHER_TYPES } from "#constants/weather-constants";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { VariableAccuracyAttr } from "#moves/variable-accuracy-attr";
@@ -11,10 +11,7 @@ import type { NumberHolder } from "#utils/common-utils";
  */
 export class BlizzardAccuracyAttr extends VariableAccuracyAttr {
   override apply(_user: Pokemon, _target: Pokemon, _move: Move, accuracy: NumberHolder): boolean {
-    if (
-      !globalScene.arena.weather?.isEffectSuppressed()
-      && globalScene.arena.hasWeather([WeatherType.HAIL, WeatherType.SNOW])
-    ) {
+    if (!globalScene.arena.weather?.isEffectSuppressed() && globalScene.arena.hasWeather(SNOWY_WEATHER_TYPES)) {
       accuracy.value = -1;
       return true;
     }

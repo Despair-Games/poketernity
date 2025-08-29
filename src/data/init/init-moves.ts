@@ -5,6 +5,7 @@ import type { StockpilingTag } from "#battler-tags/stockpiling-tag";
 import { CONDITIONAL_PROTECT_ARENA_TAG_TYPES, COURT_CHANGE_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
 import { SEMI_INVULNERABLE_BATTLER_TAG_TYPES, TRAPPED_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
 import { NON_VOLATILE_STATUS_EFFECTS } from "#constants/game-constants";
+import { RAINY_WEATHER_TYPES, SNOWY_WEATHER_TYPES, SUNNY_WEATHER_TYPES } from "#constants/weather-constants";
 import { allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
@@ -471,7 +472,7 @@ export function initMoves() {
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new ChargingAttackMove(MoveId.SOLAR_BEAM, ElementalType.GRASS, MoveCategory.SPECIAL, 120, 100, 10, -1, 0, 1) //
       .chargeText(i18next.t("moveTriggers:tookInSunlight", { pokemonName: "{USER}" }))
-      .chargeAttr(WeatherInstantChargeAttr, [WeatherType.SUNNY, WeatherType.HARSH_SUN])
+      .chargeAttr(WeatherInstantChargeAttr, ...SUNNY_WEATHER_TYPES)
       .attr(AntiSunlightPowerDecreaseAttr),
     new StatusMove(MoveId.POISON_POWDER, ElementalType.POISON, 75, 35, -1, 0, 1) //
       .attr(StatusEffectAttr, StatusEffect.POISON)
@@ -1285,7 +1286,7 @@ export function initMoves() {
         if (!weather) {
           return 1;
         }
-        const weatherTypes = [
+        const weatherTypes: readonly WeatherType[] = [
           WeatherType.SUNNY,
           WeatherType.RAIN,
           WeatherType.SANDSTORM,
@@ -1294,7 +1295,7 @@ export function initMoves() {
           WeatherType.FOG,
           WeatherType.HEAVY_RAIN,
           WeatherType.HARSH_SUN,
-        ];
+        ] as const;
         if (weatherTypes.includes(weather.weatherType) && !weather.isEffectSuppressed()) {
           return 2;
         }
@@ -2501,7 +2502,7 @@ export function initMoves() {
       .bounceable(),
     new ChargingAttackMove(MoveId.SOLAR_BLADE, ElementalType.GRASS, MoveCategory.PHYSICAL, 125, 100, 10, -1, 0, 7) //
       .chargeText(i18next.t("moveTriggers:isGlowing", { pokemonName: "{USER}" }))
-      .chargeAttr(WeatherInstantChargeAttr, [WeatherType.SUNNY, WeatherType.HARSH_SUN])
+      .chargeAttr(WeatherInstantChargeAttr, ...SUNNY_WEATHER_TYPES)
       .attr(AntiSunlightPowerDecreaseAttr)
       .slicingMove(),
     new AttackMove(MoveId.LEAFAGE, ElementalType.GRASS, MoveCategory.PHYSICAL, 40, 100, 40, -1, 0, 7) //
@@ -2597,8 +2598,7 @@ export function initMoves() {
     new StatusMove(MoveId.AURORA_VEIL, ElementalType.ICE, -1, 20, -1, 0, 7) //
       .condition(
         (_user, _target, _move) =>
-          globalScene.arena.hasWeather([WeatherType.HAIL, WeatherType.SNOW])
-          && !globalScene.arena.weather?.isEffectSuppressed(),
+          globalScene.arena.hasWeather(SNOWY_WEATHER_TYPES) && !globalScene.arena.weather?.isEffectSuppressed(),
       )
       .attr(AddArenaTagAttr, ArenaTagType.AURORA_VEIL, ArenaTagRelativeSide.USER, { turnCount: 5, failOnOverlap: true })
       .target(MoveTarget.USER_SIDE)
@@ -3440,7 +3440,7 @@ export function initMoves() {
     new ChargingAttackMove(MoveId.ELECTRO_SHOT, ElementalType.ELECTRIC, MoveCategory.SPECIAL, 130, 100, 10, 100, 0, 9) //
       .chargeText(i18next.t("moveTriggers:absorbedElectricity", { pokemonName: "{USER}" }))
       .chargeAttr(StatStageChangeAttr, [Stat.SPATK], 1, true)
-      .chargeAttr(WeatherInstantChargeAttr, [WeatherType.RAIN, WeatherType.HEAVY_RAIN]),
+      .chargeAttr(WeatherInstantChargeAttr, ...RAINY_WEATHER_TYPES),
     new AttackMove(MoveId.TERA_STARSTORM, ElementalType.NORMAL, MoveCategory.SPECIAL, 120, 100, 5, -1, 0, 9) //
       .attr(TeraMoveCategoryAttr)
       .attr(TeraStarstormTypeAttr)
