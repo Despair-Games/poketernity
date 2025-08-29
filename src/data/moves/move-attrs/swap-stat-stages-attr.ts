@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { SOFT_EFFECT_SCORE_LIMIT } from "#constants/ai-constants";
+import { BAD_MOVE_PENALTY, SOFT_EFFECT_SCORE_LIMIT } from "#constants/ai-constants";
 import type { BattleStat } from "#enums/stat";
 import { getStatKey } from "#enums/stat";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
@@ -54,10 +54,14 @@ export class SwapStatStagesAttr extends MoveEffectAttr {
 
   /**
    * @returns (+0.5) per stat stage the user would gain from this effect, rounded down. The
-   * total bonus cannot exceed the {@linkcode SOFT_EFFECT_SCORE_LIMIT}.
+   * total bonus cannot exceed the {@linkcode SOFT_EFFECT_SCORE_LIMIT}. If the user would not gain stat stages
+   * from this effect, this grants a {@linkcode BAD_MOVE_PENALTY} instead.
    */
   public override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
     const uncappedScore = Math.floor(this.getProjectedStatGain(user, target) * 0.5);
+    if (uncappedScore <= 0) {
+      return BAD_MOVE_PENALTY;
+    }
     return Math.min(uncappedScore, SOFT_EFFECT_SCORE_LIMIT);
   }
 
