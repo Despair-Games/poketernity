@@ -183,8 +183,8 @@ class SettingsManager {
         }
 
         if (display) {
-          // @ts-expect-error: TODO: temporary "migration" for dev saves, remove later
-          if (display.uiTheme === 0) {
+          // TODO: temporary "migration" for dev saves, remove later
+          if ((display.uiTheme as number) === 0) {
             display.uiTheme = UiTheme.DARK;
           }
           this._settings.display = { ...this._settings.display, ...display };

@@ -43,13 +43,6 @@ export function getTSEnumValues(enumType: any): number[] {
     .map((v) => Number.parseInt(v!.toString()));
 }
 
-/**
- * @returns length of the TypeScript enum
- */
-export function getTSEnumLength(input: any): number {
-  return getTSEnumKeys(input).length;
-}
-
 export function executeIf<T>(condition: boolean, promiseFunc: () => Promise<T>): Promise<T | null> {
   return condition ? promiseFunc() : new Promise<T | null>((resolve) => resolve(null));
 }
