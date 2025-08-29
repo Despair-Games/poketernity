@@ -4,6 +4,7 @@ import { UiTheme } from "#enums/ui-theme";
 import { UiWindowStyle } from "#enums/ui-window-style";
 import { WindowVariant } from "#enums/window-variant";
 import { settings } from "#system/settings-manager";
+import { enumValueToKey } from "#utils/common-utils";
 
 /**
  * Texture keys of atlases that need to be updated when the {@linkcode UiWindowStyle} changes.
@@ -73,7 +74,7 @@ export function addWindow(
 }
 
 export function setDocumentUiTheme() {
-  document.documentElement.dataset.uiTheme = UiTheme[settings.display.uiTheme];
+  document.documentElement.dataset.uiTheme = enumValueToKey(UiTheme, settings.display.uiTheme);
   document.documentElement.dataset.windowStyle = UiWindowStyle[settings.display.uiWindowStyle];
 }
 
