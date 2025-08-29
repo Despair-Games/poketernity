@@ -26,7 +26,7 @@ export class PostVictoryStatStageChangeAttr extends MoveAttr {
     showMessage: boolean = true,
     _firstHitOnly: boolean = false,
   ) {
-    super();
+    super(true);
     this.stats = stats;
     this.stages = stages;
     this.condition = condition;
