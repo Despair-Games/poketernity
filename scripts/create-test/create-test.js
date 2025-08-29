@@ -25,6 +25,8 @@ const choices = [
   { label: "Mystery Encounter", dir: "mystery-encounter/encounters" },
   { label: "Utils", dir: "utils" },
   { label: "UI", dir: "ui" },
+  { label: "AI (Move Effect Scores)", dir: "ai/move-effect-scores" },
+  { label: "AI (Move Condition Scores)", dir: "ai/move-condition-scores" },
 ];
 
 //#endregion
