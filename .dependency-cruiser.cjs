@@ -132,6 +132,13 @@ module.exports = {
         dependencyTypesNot: ["type-only"],
       },
     },
+    {
+      name: "no-test-in-src",
+      comment: "Don't import anything from tests into production code.",
+      severity: "error",
+      from: { path: "(^|/)src/" },
+      to: { path: "(^|/)test/" },
+    },
 
     // rules you might want to tweak for your specific situation:
 
