@@ -39,7 +39,7 @@ export class CopyStatsAttr extends MoveEffectAttr {
   }
 
   /**
-   * @returns (+0.5) for each stat stage the user would gain from this effect against the given
+   * @returns (+1) for every `2` stat stages the user would gain from this effect against the given
    * target. If the projected gain is 0 or less, this grants a {@linkcode BAD_MOVE_PENALTY} instead.
    */
   public override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {

@@ -863,6 +863,11 @@ export abstract class Move {
 
     let attrs: MoveAttr[] = this.attrs;
     if (isKnockOut) {
+      /*
+       * If the move KOs the target, only the following attributes contribute to score:
+       * - Self-targeted attributes
+       * - Effects that apply to the target before the target is hit
+       */
       attrs = attrs.filter(
         (attr) => attr.selfTarget || (attr instanceof MoveEffectAttr && attr.trigger !== MoveEffectTrigger.POST_APPLY),
       );
