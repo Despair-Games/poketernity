@@ -6,17 +6,30 @@ import path from "node:path";
 import i18next, { type ParseKeys } from "i18next";
 import { vi } from "vitest";
 
-//#region Types
+// #region Types
 
 type TypeOfResult = "undefined" | "object" | "boolean" | "number" | "bigint" | "string" | "symbol" | "function";
 
-//#endregion
-//#region Constants
+// #endregion
+// #region Helpers
+
+/**
+ * Checks if the received object is an {@linkcode Object}
+ * @param received - The object to check
+ * @returns Whether the object is an {@linkcode Object}
+ */
+function isObject(received: unknown): received is object {
+  return !!received && typeof received === "object";
+}
+
+// #endregion
+// #region Constants
 
 export const RESOURCES_FOLDER_PATH = "test/test-utils/resources";
 export const EVERYTHING_SAVE_FILE_PATH = `${RESOURCES_FOLDER_PATH}/saves/everything.${APP_ABBREVIATION}.${SAVE_FILE_EXTENSION}`;
 
-//#endregion
+// #endregion
+// #region Exports
 
 /**
  * Sets up the i18next mock.
@@ -81,15 +94,6 @@ export function receivedStr(received: unknown, expectedType: TypeOfResult = "obj
 }
 
 /**
- * Checks if the received object is an {@linkcode Object}
- * @param received - The object to check
- * @returns Whether the object is an {@linkcode Object}
- */
-export function isObject(received: unknown): received is object {
-  return !!received && typeof received === "object";
-}
-
-/**
  * Checks if an object is a {@linkcode Pokemon} instance
  * @param received - The object to check
  * @returns Whether the object is a {@linkcode Pokemon} instance
@@ -106,3 +110,5 @@ export function isPokemonInstance(received: unknown): received is Pokemon {
 export function isGameManagerInstance(received: unknown): received is GameManager {
   return isObject(received) && (received as GameManager).constructor.name === "GameManager";
 }
+
+// #endregion
