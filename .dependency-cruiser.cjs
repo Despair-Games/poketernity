@@ -44,6 +44,7 @@ module.exports = {
           "(^|/)tsconfig[.]json$", // TypeScript config
           "(^|/)(?:babel|webpack)[.]config[.](?:js|cjs|mjs|ts|cts|mts|json)$", // other configs
           "(^|/)test/.+[.]setup[.]ts", // Vitest setup files
+          "(^|/)src/utils/debug-utils.ts",
         ],
       },
       to: {},
@@ -138,6 +139,13 @@ module.exports = {
       severity: "error",
       from: { path: "(^|/)src/" },
       to: { path: "(^|/)test/" },
+    },
+    {
+      name: "no-debug-utils-in-production",
+      comment: "Debug-only utility functions should only be used while testing, and not imported in production.",
+      severity: "error",
+      from: { path: "(^|/)src/" },
+      to: { path: "(^|/)src/utils/debug-utils.ts" },
     },
 
     // rules you might want to tweak for your specific situation:
