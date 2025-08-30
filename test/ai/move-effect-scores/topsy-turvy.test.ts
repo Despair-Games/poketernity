@@ -50,6 +50,16 @@ describe("AI (Move Effect Scores) - Topsy Turvy", () => {
     expect(enemy).toPreferSelectingMove(MoveId.TOPSY_TURVY);
   });
 
+  it("should be avoided when the target has a decreased stat stage", async () => {
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
+
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
+    player.setStatStage(Stat.ATK, -1);
+
+    expect(enemy).toNeverSelectMove(MoveId.TOPSY_TURVY);
+  });
+
   it("should not be prioritized over KO moves", async () => {
     await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
@@ -70,5 +80,18 @@ describe("AI (Move Effect Scores) - Topsy Turvy", () => {
     enemy2.setStatStage(Stat.ATK, -1);
 
     expect(enemy1).toPreferSelectingMove(MoveId.TOPSY_TURVY);
+  });
+
+  it("should be avoided when an ally has an increased stat stage", async () => {
+    game.override.battleType("double");
+
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
+
+    const [enemy1, enemy2] = game.scene.getEnemyField();
+    // Set opponents to -1 ATK to make them unfavorable targets
+    game.scene.getPlayerField().forEach((p) => p.setStatStage(Stat.ATK, -1));
+    enemy2.setStatStage(Stat.ATK, 1);
+
+    expect(enemy1).toNeverSelectMove(MoveId.TOPSY_TURVY);
   });
 });
