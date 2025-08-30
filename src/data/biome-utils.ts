@@ -35,20 +35,8 @@ export interface PokemonPools {
   [key: number]: SpeciesId[];
 }
 
-export interface BiomeTierPokemonPools {
-  [key: number]: PokemonPools;
-}
-
-export interface BiomePokemonPools {
-  [key: number]: BiomeTierPokemonPools;
-}
-
 export interface BiomeTierTrainerPools {
   [key: number]: TrainerType[];
-}
-
-export interface BiomeTrainerPools {
-  [key: number]: BiomeTierTrainerPools;
 }
 
 // #region Indoor biomes
