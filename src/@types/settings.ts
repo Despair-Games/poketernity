@@ -12,6 +12,10 @@ import type { ShopCursorTarget } from "#enums/shop-cursor-target";
 import type { UiTheme } from "#enums/ui-theme";
 import type { UiWindowStyle } from "#enums/ui-window-style";
 
+interface MetaSettings {
+  gameVersion: string;
+}
+
 export interface Settings extends UserFacingSettings {
   meta: MetaSettings;
 }
@@ -22,10 +26,6 @@ export interface UserFacingSettings {
   display: DisplaySettings;
   gamepad: GamepadSettings;
   keyboard: KeyboardSettings;
-}
-
-export interface MetaSettings {
-  gameVersion: string;
 }
 
 export interface GeneralSettings {

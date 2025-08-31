@@ -66,7 +66,7 @@ import type { PhaseClass, PhaseKey } from "#types/phase-types";
 import { UI } from "#ui/ui";
 import { expect } from "vitest";
 
-export interface PromptHandler {
+interface PromptHandler {
   phaseTarget?: string;
   mode?: UiMode;
   callback?: () => void;
@@ -147,7 +147,7 @@ const PHASES = [
   PostKnockoutPhase,
 ] as const;
 
-export type PhaseInterceptorPhase = PhaseClass | PhaseKey;
+type PhaseInterceptorPhase = PhaseClass | PhaseKey;
 
 interface PhaseStub {
   start(): void;

@@ -112,7 +112,7 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
  * @param pokemon - The Pokémon whose Shell Bell recovery is being calculated.
  * @returns The amount of health recovered by Shell Bell.
  */
-export function calculateShellBellRecovery(pokemon: Pokemon): number {
+function calculateShellBellRecovery(pokemon: Pokemon): number {
   const shellBellModifier = pokemon.getHeldItems().find((m) => m.isHitHealModifier());
   if (shellBellModifier) {
     return toDmgValue(pokemon.turnData.totalDamageDealt / 8) * shellBellModifier.stackCount;

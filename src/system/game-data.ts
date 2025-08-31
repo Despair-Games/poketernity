@@ -89,13 +89,13 @@ import i18next from "i18next";
 
 const saveKey = "x0i2O7WRiANTqPmZ"; // Temporary; secure encryption is not yet necessary
 
-export function encrypt(data: string, bypassLogin: boolean): string {
+function encrypt(data: string, bypassLogin: boolean): string {
   const localFunc = (data: string): string => btoa(encodeURIComponent(data));
   const serverFunc = (data: string): string => AES.encrypt(data, saveKey) as unknown as string; // TODO: is this correct?
   return (bypassLogin ? localFunc : serverFunc)(data);
 }
 
-export function decrypt(data: string, bypassLogin: boolean): string {
+function decrypt(data: string, bypassLogin: boolean): string {
   const localFunc = (data: string): string => decodeURIComponent(atob(data));
   const serverFunc = (data: string): string => AES.decrypt(data, saveKey).toString(enc.Utf8);
   return (bypassLogin ? localFunc : serverFunc)(data);
@@ -111,7 +111,7 @@ export interface DexAttrProps {
   formIndex: number;
 }
 
-export type RunHistoryData = Record<number, RunEntry>;
+type RunHistoryData = Record<number, RunEntry>;
 
 export interface RunEntry {
   entry: SessionSaveData;
@@ -137,7 +137,7 @@ export interface StarterPreferences {
   [key: number]: StarterAttributes;
 }
 
-export interface SeenDialogues {
+interface SeenDialogues {
   [key: string]: boolean;
 }
 

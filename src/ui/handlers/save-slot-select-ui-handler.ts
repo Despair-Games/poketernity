@@ -24,7 +24,7 @@ import i18next from "i18next";
 
 const SLOTS_ON_SCREEN = 3;
 
-export type SaveSlotSelectCallback = (cursor: number) => void;
+type SaveSlotSelectCallback = (cursor: number) => void;
 
 export class SaveSlotSelectUiHandler extends MessageUiHandler {
   private saveSlotSelectContainer: Phaser.GameObjects.Container;

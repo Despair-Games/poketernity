@@ -51,7 +51,7 @@ export function getPlayTimeString(totalSeconds: number): string {
  * @param fractionDigits - (Default `1000`) The threshold under which not to abbreviate the number.
  * @returns the formatted string
  */
-export function formatLargeNumber(count: number, threshold: number = 1000): string {
+function formatLargeNumber(count: number, threshold: number = 1000): string {
   if (count < threshold) {
     return count.toString();
   }

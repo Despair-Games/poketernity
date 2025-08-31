@@ -20,7 +20,7 @@ import type {
   UserFacingSettings,
 } from "#types/settings";
 
-export const defaultGeneralSettings: GeneralSettings = {
+const defaultGeneralSettings: GeneralSettings = {
   gameSpeed: 2,
   hpBarSpeed: HpBarSpeed.DEFAULT,
   expGainSpeed: ExpGainSpeed.DEFAULT,
@@ -35,7 +35,7 @@ export const defaultGeneralSettings: GeneralSettings = {
   enableVibration: false,
 };
 
-export const defaultDisplaySettings: DisplaySettings = {
+const defaultDisplaySettings: DisplaySettings = {
   uiTheme: UiTheme.DARK,
   uiWindowStyle: UiWindowStyle.RED_ORANGE,
   moneyFormat: MoneyFormat.NORMAL,
@@ -54,7 +54,7 @@ export const defaultDisplaySettings: DisplaySettings = {
   shopOverlayOpacity: 0.8,
 };
 
-export const defaultAudioSettings: AudioSettings = {
+const defaultAudioSettings: AudioSettings = {
   masterVolume: 0.5,
   bgmVolume: 1,
   fieldVolume: 1,
@@ -62,12 +62,12 @@ export const defaultAudioSettings: AudioSettings = {
   uiVolume: 1,
 };
 
-export const defaultGamepadSettings: GamepadSettings = {
+const defaultGamepadSettings: GamepadSettings = {
   activeIndex: 0,
   enabled: true,
 };
 
-export const defaultKeyboardSettings: KeyboardSettings = {
+const defaultKeyboardSettings: KeyboardSettings = {
   layout: KeyboardLayout.QWERTY,
 };
 

@@ -11,7 +11,7 @@ import { NumberHolder } from "#utils/common-utils";
 import { getStatusEffectHealText } from "#utils/status-effect-utils";
 import i18next from "i18next";
 
-export interface PokemonHealPhaseOptions {
+interface PokemonHealPhaseOptions {
   message?: string;
   showFullHpMessage?: boolean;
   skipAnim?: boolean;

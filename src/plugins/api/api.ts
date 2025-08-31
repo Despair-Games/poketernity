@@ -8,7 +8,7 @@ import type { TitleStatsResponse } from "#types/api-types";
 /**
  * A wrapper for API requests.
  */
-export class Api extends ApiBase {
+class Api extends ApiBase {
   //#region Fields
 
   public readonly ERR_SERVER_NOT_CONNECTED: string = "The server is not connected";
