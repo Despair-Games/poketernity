@@ -550,9 +550,9 @@ export class EnemyPokemon extends Pokemon {
       // Multi-target moves are evaluated by their cumulative score across all valid targets
       return {
         moveId: move.id,
-        targets,
+        targets: activeTargets,
         score: this.getMultiTargetMoveScore(
-          targets.map((bi) => globalScene.getPokemonByBattlerIndex(bi)).filter((p) => !isNil(p)),
+          activeTargets.map((bi) => globalScene.getPokemonByBattlerIndex(bi)!),
           move,
         ),
       };
