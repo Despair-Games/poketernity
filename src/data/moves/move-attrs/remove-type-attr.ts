@@ -1,5 +1,7 @@
+import { MINOR_EFFECT_SCORE_PENALTY } from "#constants/ai-constants";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveEffectTrigger } from "#enums/move-effect-trigger";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
@@ -23,7 +25,7 @@ export class RemoveTypeAttr extends MoveEffectAttr {
     this.messageCallback = messageCallback;
   }
 
-  override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
+  public override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
     if (user.isTerastallized && user.teraType === this.removedType) {
       // active tera types cannot be removed
       return false;
@@ -42,5 +44,10 @@ export class RemoveTypeAttr extends MoveEffectAttr {
     }
 
     return true;
+  }
+
+  /** @returns a {@linkcode MINOR_EFFECT_SCORE_PENALTY} if the user isn't Terastallized */
+  public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+    return user.isTerastallized ? 0 : MINOR_EFFECT_SCORE_PENALTY;
   }
 }

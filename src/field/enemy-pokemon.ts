@@ -226,6 +226,7 @@ export class EnemyPokemon extends Pokemon {
     return (
       (isFail ? BAD_MOVE_PENALTY : conditionScore + attackScore + this.getCriticalHitBonus(target, move, attackScore))
       + move.getEffectScore(this, target, isKnockOut, isFail)
+      + move.getPostTargetEffectScore(this, isFail)
     );
   }
 
@@ -289,6 +290,7 @@ export class EnemyPokemon extends Pokemon {
     return (
       (isBadMove ? BAD_MOVE_PENALTY : conditionScore + totalAttackScore + critBonus)
       + targets.reduce((score, target, i) => score + move.getEffectScore(this, target, isKnockOut[i], isFail, true), 0)
+      + move.getPostTargetEffectScore(this, isFail)
     );
   }
 

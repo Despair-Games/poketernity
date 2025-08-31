@@ -23,6 +23,13 @@ export const KO_ATTACK_SCORE = 4;
 export const ATTACK_SCORE_HP_THRESHOLD = 40;
 
 /**
+ * A relatively minor bonus to a move attribute's {@link MoveAttr.getEffectScore | Effect Score}.
+ * Used when a move with the attribute gains a slight advantage in
+ * a given battle state.
+ */
+export const MINOR_EFFECT_SCORE_BONUS = 1;
+
+/**
  * A relatively major bonus to a move attribute's {@link MoveAttr.getEffectScore | Effect Score}.
  * Used when a move with the attribute gains a decisive advantage in
  * a given battle state.
@@ -30,11 +37,19 @@ export const ATTACK_SCORE_HP_THRESHOLD = 40;
 export const MAJOR_EFFECT_SCORE_BONUS = 2;
 
 /**
- * A relatively minor bonus to a move attribute's {@link MoveAttr.getEffectScore | Effect Score}.
- * Used when a move with the attribute gains a slight advantage in
- * a given battle state.
+ * A drastic bonus to a move attribute's {@link MoveAttr.getEffectScore | Effect Score}.
+ * This should be used very sparingly; it tows the line of Effect Scores'
+ * {@link SOFT_EFFECT_SCORE_LIMIT | soft limit} and may cause some moves
+ * to surpass the scores of moves that can KO if not used carefully.
  */
-export const MINOR_EFFECT_SCORE_BONUS = 1;
+export const DRASTIC_EFFECT_SCORE_BONUS = 3;
+
+/**
+ * A relatively minor penalty to a move's score. Used when a move has
+ * a potential drawback or has a chance of failing from an unresolvable condition
+ * in a given battle state.
+ */
+export const MINOR_EFFECT_SCORE_PENALTY = -MINOR_EFFECT_SCORE_BONUS;
 
 /**
  * A relatively major penalty to a move's score. Used when a move has
@@ -44,11 +59,10 @@ export const MINOR_EFFECT_SCORE_BONUS = 1;
 export const MAJOR_EFFECT_SCORE_PENALTY = -MAJOR_EFFECT_SCORE_BONUS;
 
 /**
- * A relatively minor penalty to a move's score. Used when a move has
- * a potential drawback or has a chance of failing from an unresolvable condition
- * in a given battle state.
+ * A drastic penalty to a move attribute's {@link MoveAttr.getEffectScore | Effect Score}.
+ * The AI should avoid moves with this penalty outside of extreme circumstances.
  */
-export const MINOR_EFFECT_SCORE_PENALTY = -MINOR_EFFECT_SCORE_BONUS;
+export const DRASTIC_EFFECT_SCORE_PENALTY = -DRASTIC_EFFECT_SCORE_BONUS;
 
 /**
  * A weakly enforced upper limit for move attributes' {@link MoveAttr.getEffectScore | Effect Scores}.
