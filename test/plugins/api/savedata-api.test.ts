@@ -3,12 +3,13 @@ import { initServerForApiTests } from "#test/test-utils/test-file-initialization
 import { getApiBaseUrl } from "#test/test-utils/test-utils";
 import type { UpdateAllSavedataRequest } from "#types/api-types";
 import { HttpResponse, http } from "msw";
+import type { SetupServerApi } from "msw/node";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const apiBase = getApiBaseUrl();
 const savedataApi = new SavedataApi(apiBase);
 
-let server;
+let server: SetupServerApi;
 beforeAll(async () => {
   server = await initServerForApiTests();
 });

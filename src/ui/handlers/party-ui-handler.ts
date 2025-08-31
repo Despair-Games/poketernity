@@ -396,24 +396,22 @@ export class PartyUiHandler extends MessageUiHandler {
                 this.selectCallback = null;
                 selectCallback(this.cursor, option);
               }
-            } else {
-              if (
-                option >= PartyOption.FORM_CHANGE_ITEM
-                && globalScene.phaseManager.getCurrentPhase()?.is("SelectModifierPhase")
-              ) {
-                if (this.partyUiMode === PartyUiMode.CHECK) {
-                  const formChangeItemModifiers = this.getFormChangeItemsModifiers(pokemon);
-                  const modifier = formChangeItemModifiers[option - PartyOption.FORM_CHANGE_ITEM];
-                  modifier.active = !modifier.active;
-                  globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeItemTrigger, false, true);
-                }
-              } else if (this.cursor) {
-                (globalScene.phaseManager.getCurrentPhase() as CommandPhase).handleCommand(
-                  BattleCommand.POKEMON,
-                  this.cursor,
-                  option === PartyOption.PASS_BATON,
-                );
+            } else if (
+              option >= PartyOption.FORM_CHANGE_ITEM
+              && globalScene.phaseManager.getCurrentPhase()?.is("SelectModifierPhase")
+            ) {
+              if (this.partyUiMode === PartyUiMode.CHECK) {
+                const formChangeItemModifiers = this.getFormChangeItemsModifiers(pokemon);
+                const modifier = formChangeItemModifiers[option - PartyOption.FORM_CHANGE_ITEM];
+                modifier.active = !modifier.active;
+                globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeItemTrigger, false, true);
               }
+            } else if (this.cursor) {
+              (globalScene.phaseManager.getCurrentPhase() as CommandPhase).handleCommand(
+                BattleCommand.POKEMON,
+                this.cursor,
+                option === PartyOption.PASS_BATON,
+              );
             }
             if (
               this.partyUiMode !== PartyUiMode.MODIFIER
@@ -692,11 +690,9 @@ export class PartyUiHandler extends MessageUiHandler {
               isScroll = true;
               this.optionsScrollCursor++;
             }
-          } else {
-            if (!cursor && this.optionsScrollCursor) {
-              isScroll = true;
-              this.optionsScrollCursor--;
-            }
+          } else if (!cursor && this.optionsScrollCursor) {
+            isScroll = true;
+            this.optionsScrollCursor--;
           }
           if (isScroll && this.optionsScrollCursor === 1) {
             this.optionsScrollCursor += isDown ? 1 : -1;
@@ -981,12 +977,10 @@ export class PartyUiHandler extends MessageUiHandler {
               optionName = `${modifier.active ? i18next.t("partyUiHandler:DEACTIVATE") : i18next.t("partyUiHandler:ACTIVATE")} ${modifier.type.name}`;
             } else if (option === PartyOption.UNPAUSE_EVOLUTION) {
               optionName = `${pokemon.pauseEvolutions ? i18next.t("partyUiHandler:UNPAUSE_EVOLUTION") : i18next.t("partyUiHandler:PAUSE_EVOLUTION")}`;
+            } else if (this.localizedOptions.includes(option)) {
+              optionName = i18next.t(`partyUiHandler:${PartyOption[option]}`);
             } else {
-              if (this.localizedOptions.includes(option)) {
-                optionName = i18next.t(`partyUiHandler:${PartyOption[option]}`);
-              } else {
-                optionName = toReadableString(PartyOption[option]);
-              }
+              optionName = toReadableString(PartyOption[option]);
             }
             break;
         }
@@ -1059,11 +1053,11 @@ export class PartyUiHandler extends MessageUiHandler {
     this.transferMode = false;
     this.transferAll = false;
     this.partySlots[this.transferCursor].setTransfer(false);
-    for (let i = 0; i < this.partySlots.length; i++) {
-      this.partySlots[i].slotDescriptionLabel.setVisible(false);
-      this.partySlots[i].slotHpBar.setVisible(true);
-      this.partySlots[i].slotHpOverlay.setVisible(true);
-      this.partySlots[i].slotHpText.setVisible(true);
+    for (const partySlot of this.partySlots) {
+      partySlot.slotDescriptionLabel.setVisible(false);
+      partySlot.slotHpBar.setVisible(true);
+      partySlot.slotHpOverlay.setVisible(true);
+      partySlot.slotHpText.setVisible(true);
     }
   }
 

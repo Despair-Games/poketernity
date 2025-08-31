@@ -16,7 +16,9 @@ import { CommonAnim } from "#enums/common-anim";
 import { MoveId } from "#enums/move-id";
 import { getTSEnumValues } from "#utils/common-utils";
 
-export async function populateAnims() {
+// this converts essentials (?) animation data to json files usable by the game
+// TODO: convert to a proper script and put in `scripts/`
+export async function populateAnims(): Promise<void> {
   const commonAnimNames = Object.keys(CommonAnim).map((k) => k.toLowerCase());
   const commonAnimMatchNames = commonAnimNames.map((k) => k.replace(/_/g, ""));
   const commonAnimIds: CommonAnim[] = Object.values(CommonAnim);
@@ -32,9 +34,9 @@ export async function populateAnims() {
 
   const seNames: string[] = []; //(await fs.readdir('./public/audio/se/battle_anims/')).map(se => se.toString());
 
-  const animsData: any[] = []; //battleAnimRawData.split('!ruby/array:PBAnimation').slice(1); // TODO: add a proper type
-  for (let a = 0; a < animsData.length; a++) {
-    const fields = animsData[a].split("@").slice(1);
+  const animsData: any[] = []; //battleAnimRawData.split('!ruby/array:PBAnimation').slice(1);
+  for (const animData of animsData) {
+    const fields = animData.split("@").slice(1);
 
     const nameField = fields.find((f) => f.startsWith("name: "));
 
@@ -63,17 +65,16 @@ export async function populateAnims() {
     if (commonAnimId) {
       commonAnims.set(commonAnimId, anim);
     } else if (chargeAnimId) {
-      chargeAnims.set(chargeAnimId, !isOppMove ? anim : [chargeAnims.get(chargeAnimId) as LegacyAnimConfig, anim]);
+      chargeAnims.set(chargeAnimId, isOppMove ? [chargeAnims.get(chargeAnimId) as LegacyAnimConfig, anim] : anim);
     } else {
       moveAnims.set(
         moveNameToId[animName],
-        !isOppMove
-          ? (anim as LegacyAnimConfig)
-          : [moveAnims.get(moveNameToId[animName]) as LegacyAnimConfig, anim as LegacyAnimConfig],
+        isOppMove
+          ? [moveAnims.get(moveNameToId[animName]) as LegacyAnimConfig, anim as LegacyAnimConfig]
+          : (anim as LegacyAnimConfig),
       );
     }
-    for (let f = 0; f < fields.length; f++) {
-      const field = fields[f];
+    for (const field of fields) {
       const fieldName = field.slice(0, field.indexOf(":"));
       const fieldData = field.slice(fieldName.length + 1, field.lastIndexOf("\n")).trim();
       switch (fieldName) {
@@ -83,8 +84,8 @@ export async function populateAnims() {
             anim.frames.push([]);
             const frameData = framesData[fd];
             const focusFramesData = frameData.split("    - - ");
-            for (let tf = 0; tf < focusFramesData.length; tf++) {
-              const values = focusFramesData[tf].replace(/ {6}- /g, "").split("\n");
+            for (const focusFrame of focusFramesData) {
+              const values = focusFrame.replace(/ {6}- /g, "").split("\n");
               const targetFrame = new AnimFrame(
                 Number.parseFloat(values[0]),
                 Number.parseFloat(values[1]),
@@ -124,8 +125,8 @@ export async function populateAnims() {
         }
         case "timing": {
           const timingEntries = fieldData.split("- !ruby/object:PBAnimTiming ").slice(1);
-          for (let t = 0; t < timingEntries.length; t++) {
-            const timingData = timingEntries[t]
+          for (const timingEntry of timingEntries) {
+            const timingData = timingEntry
               .replace(/\n/g, " ")
               .replace(/[ ]{2,}/g, " ")
               .replace(/[a-z]+: ! '', /gi, "")
@@ -167,9 +168,8 @@ export async function populateAnims() {
               continue;
             }
             const propPattern = /([a-z]+): (.*?)(?:,|\})/gi;
-            let propMatch: RegExpExecArray;
-            while ((propMatch = propPattern.exec(timingData)!)) {
-              // TODO: is this bang correct?
+            let propMatch = propPattern.exec(timingData);
+            while (propMatch) {
               const prop = propMatch[1];
               let value: any = propMatch[2];
               switch (prop) {
@@ -197,6 +197,7 @@ export async function populateAnims() {
               if (Object.hasOwn(timedEvent, prop)) {
                 timedEvent[prop] = value;
               }
+              propMatch = propPattern.exec(timingData);
             }
             if (!anim.frameTimedEvents.has(frameIndex)) {
               anim.frameTimedEvents.set(frameIndex, []);

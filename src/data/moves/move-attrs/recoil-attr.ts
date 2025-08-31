@@ -38,7 +38,7 @@ export class RecoilAttr extends MoveEffectAttr {
       return false;
     }
 
-    const damageValue = (!this.useHp ? user.turnData.totalDamageDealt : user.getMaxHp()) * this.damageRatio;
+    const damageValue = (this.useHp ? user.getMaxHp() : user.turnData.totalDamageDealt) * this.damageRatio;
     const minValue = user.turnData.totalDamageDealt ? 1 : 0;
     const recoilDamage = toDmgValue(damageValue, minValue);
     if (!recoilDamage) {

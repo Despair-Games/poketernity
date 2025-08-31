@@ -16,7 +16,7 @@ import { randSeedInt } from "#utils/random-utils";
 import { getStatusEffectHealText } from "#utils/status-effect-utils";
 import i18next from "i18next";
 
-export type BerryPredicate = (pokemon: Pokemon) => boolean;
+type BerryPredicate = (pokemon: Pokemon) => boolean;
 
 export function getBerryPredicate(berryType: BerryType): BerryPredicate {
   switch (berryType) {
@@ -59,7 +59,7 @@ export function getBerryPredicate(berryType: BerryType): BerryPredicate {
   }
 }
 
-export type BerryEffectFunc = (pokemon: Pokemon, berryOwner?: Pokemon) => void;
+type BerryEffectFunc = (pokemon: Pokemon, berryOwner?: Pokemon) => void;
 
 // TODO: simplify this
 export function getBerryEffectFunc(berryType: BerryType): BerryEffectFunc {

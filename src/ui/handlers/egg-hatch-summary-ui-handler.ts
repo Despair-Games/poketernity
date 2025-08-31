@@ -229,14 +229,14 @@ export class EggHatchSummaryUiHandler extends MessageUiHandler {
     let success = false;
     let error = false;
     if (button === Button.CANCEL) {
-      if (!this.blockExit) {
+      if (this.blockExit) {
+        error = true;
+      } else {
         const phase = globalScene.phaseManager.getCurrentPhase();
         if (phase?.is("EggSummaryPhase")) {
           phase.end();
         }
         success = true;
-      } else {
-        error = true;
       }
     } else {
       this.scrollGridHandler.processInput(button);

@@ -61,10 +61,10 @@ export class SubstituteTag extends BattlerTag {
   /** Queues an on-remove battle animation that removes the Substitute's sprite. */
   override onRemove(pokemon: Pokemon): void {
     // Only play the animation if the cause of removal isn't from the source's own move
-    if (!this.sourceInFocus) {
-      globalScene.triggerPokemonBattleAnim(pokemon, PokemonAnimType.SUBSTITUTE_REMOVE, [this.sprite]);
-    } else {
+    if (this.sourceInFocus) {
       this.sprite.destroy();
+    } else {
+      globalScene.triggerPokemonBattleAnim(pokemon, PokemonAnimType.SUBSTITUTE_REMOVE, [this.sprite]);
     }
     globalScene.phaseManager.createAndUnshiftPhase(
       "MessagePhase",

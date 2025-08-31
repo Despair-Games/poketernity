@@ -23,10 +23,8 @@ export class MysteryEncounterPostSummonTag extends BattlerTag {
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     const ret = super.lapse(pokemon, lapseType);
 
-    if (lapseType === BattlerTagLapseType.CUSTOM) {
-      if (pokemon.mysteryEncounterBattleEffects) {
-        pokemon.mysteryEncounterBattleEffects(pokemon);
-      }
+    if (lapseType === BattlerTagLapseType.CUSTOM && pokemon.mysteryEncounterBattleEffects) {
+      pokemon.mysteryEncounterBattleEffects(pokemon);
     }
 
     return ret;

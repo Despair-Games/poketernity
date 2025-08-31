@@ -19,7 +19,7 @@ export class BideMessageAttr extends VariableMoveMessageAttr {
       switch (bideTag?.turnCount) {
         case undefined:
           // Use the default message
-          return undefined;
+          return;
         case 1:
           // "{Pokemon} unleashed its energy!"
           return i18next.t("moveTriggers:bideUnleashedEnergy", {

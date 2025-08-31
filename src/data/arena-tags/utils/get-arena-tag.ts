@@ -144,6 +144,6 @@ export function getArenaTag(
       return new SharpSteelTag(sourceId, side);
     default:
       console.warn(`getArenaTag: Failed to generate tag of type ${ArenaTagType[tagType]}`);
-      return undefined;
+      return;
   }
 }

@@ -7,13 +7,17 @@ import type { PokemonAttackCondition } from "#types/move-types";
 import type { NumberHolder } from "#utils/common-utils";
 
 export class MoveTypeChangeAbAttr extends PreAttackAbAttr {
-  constructor(
-    private readonly newType: ElementalType,
-    private readonly powerMultiplier: number,
-    private readonly condition?: PokemonAttackCondition,
-  ) {
+  private readonly newType: ElementalType;
+  private readonly powerMultiplier: number;
+  private readonly condition?: PokemonAttackCondition;
+
+  constructor(newType: ElementalType, powerMultiplier: number, condition?: PokemonAttackCondition) {
     super(true);
     this._flags.add(AbAttrFlag.MOVE_TYPE_CHANGE);
+
+    this.newType = newType;
+    this.powerMultiplier = powerMultiplier;
+    this.condition = condition;
   }
 
   // TODO: Decouple this into two attributes (type change / power boost)

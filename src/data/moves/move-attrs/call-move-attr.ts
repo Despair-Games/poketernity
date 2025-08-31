@@ -44,7 +44,7 @@ export abstract class CallMoveAttr extends OverrideMoveEffectAttr {
       targets = [moveTargets.targets[user.randSeedInt(moveTargets.targets.length)]];
     }
 
-    user.getMoveQueue().push({ move: move, targets, virtual: true, ignorePP: true, type: user.getMoveType(move) });
+    user.getMoveQueue().push({ move, targets, virtual: true, ignorePP: true, type: user.getMoveType(move) });
     globalScene.phaseManager.createAndUnshiftPhase("LoadMoveAnimPhase", move.id);
     globalScene.phaseManager.createAndUnshiftPhase("MovePhase", user, targets, move.id, {
       followUp: true,

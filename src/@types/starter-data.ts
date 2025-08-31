@@ -3,6 +3,10 @@ import type { ElementalType } from "#enums/elemental-type";
 import type { MoveId } from "#enums/move-id";
 import type { Nature } from "#enums/nature";
 
+interface StarterFormMoveData {
+  [key: number]: StarterMoveset;
+}
+
 /** Data for a single starter species */
 export interface StarterDataEntry {
   moveset: StarterMoveset | StarterFormMoveData | null;
@@ -21,10 +25,6 @@ export interface StarterData {
 }
 
 export type StarterMoveset = [MoveId] | [MoveId, MoveId] | [MoveId, MoveId, MoveId] | [MoveId, MoveId, MoveId, MoveId];
-
-export interface StarterFormMoveData {
-  [key: number]: StarterMoveset;
-}
 
 export interface StarterConfig {
   species: PokemonSpecies;

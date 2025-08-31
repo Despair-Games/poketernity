@@ -128,12 +128,12 @@ export class EnemyPokemon extends Pokemon {
   }
 
   initBattleInfo(): void {
-    if (!this.battleInfo) {
+    if (this.battleInfo) {
+      this.battleInfo.updateBossSegments(this);
+    } else {
       this.battleInfo = new EnemyBattleInfo();
       this.battleInfo.updateBossSegments(this);
       this.battleInfo.initInfo(this);
-    } else {
-      this.battleInfo.updateBossSegments(this);
     }
   }
 
@@ -159,7 +159,7 @@ export class EnemyPokemon extends Pokemon {
   override generateAndPopulateMoveset(formIndex?: number): void {
     switch (this.species.speciesId) {
       case SpeciesId.SMEARGLE:
-        this.setMoveset(...Array(4).fill(MoveId.SKETCH));
+        this.setMoveset(...new Array(4).fill(MoveId.SKETCH));
         break;
       case SpeciesId.ETERNATUS:
         this.moveset = (formIndex !== undefined ? formIndex : this.formIndex)
@@ -566,10 +566,8 @@ export class EnemyPokemon extends Pokemon {
      */
     amount = this.isMax(false) && !ignoreDynamaxReduction ? toDmgValue(amount / DYNAMAX_DAMAGE_TAKEN_FACTOR) : amount;
 
-    if (globalScene.currentBattle.isClassicFinalBoss) {
-      if (!this.formIndex && this.bossSegmentIndex < 1) {
-        amount = Math.min(amount, this.hp - 1);
-      }
+    if (globalScene.currentBattle.isClassicFinalBoss && !this.formIndex && this.bossSegmentIndex < 1) {
+      amount = Math.min(amount, this.hp - 1);
     }
 
     const damage = super.damage(amount, { preventEndure, ignoreFaintPhase, ignoreDynamaxReduction });
@@ -589,10 +587,8 @@ export class EnemyPokemon extends Pokemon {
   }
 
   canBypassBossSegments(segmentCount: number = 1): boolean {
-    if (globalScene.currentBattle.isClassicFinalBoss) {
-      if (!this.formIndex && this.bossSegmentIndex - segmentCount < 1) {
-        return false;
-      }
+    if (globalScene.currentBattle.isClassicFinalBoss && !this.formIndex && this.bossSegmentIndex - segmentCount < 1) {
+      return false;
     }
 
     return true;

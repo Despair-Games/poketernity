@@ -225,7 +225,7 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
   }
 
   public override getCursor(): number {
-    return !this.fieldIndex ? this.cursor : this.cursor2;
+    return this.fieldIndex ? this.cursor2 : this.cursor;
   }
 
   public override setCursor(cursor: number): boolean {
@@ -234,10 +234,10 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
     this.moveInfoOverlay.clear();
     const changed = this.getCursor() !== cursor;
     if (changed) {
-      if (!this.fieldIndex) {
-        this.cursor = cursor;
-      } else {
+      if (this.fieldIndex) {
         this.cursor2 = cursor;
+      } else {
+        this.cursor = cursor;
       }
     }
 
@@ -315,7 +315,7 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
   private getEffectivenessText(pokemon: Pokemon, opponent: Pokemon, pokemonMove: PokemonMove): string | undefined {
     const effectiveness = opponent.getMoveEffectiveness(pokemon, pokemonMove.getMove(), AbilityApplyMode.REVEALED);
     if (effectiveness === undefined) {
-      return undefined;
+      return;
     }
 
     return `${effectiveness}x`;
@@ -347,12 +347,12 @@ export class FightUiHandler extends UiHandler implements InfoToggle {
    */
   private getMoveColor(pokemon: Pokemon, pokemonMove: PokemonMove): string | undefined {
     if (!settings.display.enableTypeHints) {
-      return undefined;
+      return;
     }
 
     const opponents = pokemon.getOpponents();
     if (opponents.length <= 0) {
-      return undefined;
+      return;
     }
 
     const moveColors = opponents

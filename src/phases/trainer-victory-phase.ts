@@ -40,15 +40,17 @@ export class TrainerVictoryPhase extends BattlePhase {
 
     const trainerType = trainer.config.trainerType;
     // Validate Voucher for boss trainers
-    if (Object.hasOwn(vouchers, TrainerType[trainerType])) {
-      if (!globalScene.validateVoucher(vouchers[TrainerType[trainerType]]) && trainer.config.isBoss) {
-        globalScene.phaseManager.createAndUnshiftPhase(
-          "ModifierRewardPhase",
-          [modifierTypes.VOUCHER, modifierTypes.VOUCHER, modifierTypes.VOUCHER_PLUS, modifierTypes.VOUCHER_PREMIUM][
-            vouchers[TrainerType[trainerType]].voucherType
-          ],
-        );
-      }
+    if (
+      Object.hasOwn(vouchers, TrainerType[trainerType])
+      && !globalScene.validateVoucher(vouchers[TrainerType[trainerType]])
+      && trainer.config.isBoss
+    ) {
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "ModifierRewardPhase",
+        [modifierTypes.VOUCHER, modifierTypes.VOUCHER, modifierTypes.VOUCHER_PLUS, modifierTypes.VOUCHER_PREMIUM][
+          vouchers[TrainerType[trainerType]].voucherType
+        ],
+      );
     }
 
     ui.showText(

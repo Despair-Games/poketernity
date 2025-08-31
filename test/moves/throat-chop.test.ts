@@ -23,11 +23,10 @@ describe("Moves - Throat Chop", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset(Array(4).fill(MoveId.GROWL))
       .battleType("single")
       .ability(AbilityId.BALL_FETCH)
       .enemyAbility(AbilityId.BALL_FETCH)
-      .enemyMoveset(Array(4).fill(MoveId.THROAT_CHOP))
+      .enemyMoveset(MoveId.THROAT_CHOP)
       .enemySpecies(SpeciesId.MAGIKARP);
   });
 
@@ -36,20 +35,19 @@ describe("Moves - Throat Chop", () => {
 
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(MoveId.GROWL);
+    game.move.use(MoveId.GROWL);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     // First turn, move is interrupted
-    await game.toEndOfTurn();
+    await game.toNextTurn();
     expect(enemy.getStatStage(Stat.ATK)).toBe(0);
 
     // Second turn, struggle if no valid moves
-    await game.toNextTurn();
-
-    game.move.select(MoveId.GROWL);
+    game.move.use(MoveId.GROWL);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("PostActionPhase");
     expect(enemy.isFullHp()).toBe(false);
+    expect(game.field.getPlayerPokemon()).toHaveUsedMove(MoveId.STRUGGLE);
   });
 });

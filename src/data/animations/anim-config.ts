@@ -368,8 +368,8 @@ export class AnimFrame {
     focus: AnimFocus,
     init?: boolean,
   ) {
-    this.x = !init ? ((x || 0) - 128) * 0.5 : x;
-    this.y = !init ? ((y || 0) - 224) * 0.5 : y;
+    this.x = init ? x : ((x || 0) - 128) * 0.5;
+    this.y = init ? y : ((y || 0) - 224) * 0.5;
     if (zoomX) {
       this.zoomX = zoomX;
     } else if (init) {

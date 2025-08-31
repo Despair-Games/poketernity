@@ -336,7 +336,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
               const interpolatorOptions: any = {};
               const splitArr = dialogueName.split(" "); // this splits our inputted text into words to cycle through later
               const translatedString = splitArr[0]; // this is our outputted i18 string
-              const regex = RegExp("\\{\\{(\\w*)\\}\\}", "g"); // this is a regex expression to find all the text between {{ }} in the i18 output
+              const regex = new RegExp("\\{\\{(\\w*)\\}\\}", "g"); // this is a regex expression to find all the text between {{ }} in the i18 output
               const matches = i18next.t(translatedString).match(regex) ?? [];
               if (matches.length > 0) {
                 for (let match = 0; match < matches.length; match++) {
@@ -491,7 +491,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
             },
           });
           globalScene.ui.setOverlayMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, {
-            options: options,
+            options,
             xOffset: this.optionSelectBg.displayWidth + this.communityWindowWidth,
             yOffset: this.menuMessageBox.displayHeight + 1,
           });

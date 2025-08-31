@@ -1,8 +1,8 @@
-export const MockFetch = (input, _init) => {
-  const url = typeof input === "string" ? input : input.url;
+export const MockFetch = (resource: string | { url: string }, _options: Request) => {
+  const url = typeof resource === "string" ? resource : resource.url;
 
-  let responseHandler;
-  let responseText;
+  let responseHandler!: () => Promise<any>;
+  let responseText!: () => Promise<any>;
 
   const handlers = {
     "account/info": { username: "greenlamp", lastSessionSlot: 0 },

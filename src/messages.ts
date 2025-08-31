@@ -15,17 +15,17 @@ export function getPokemonNameWithAffix(pokemon: Pokemon | nil): string {
   }
 
   if (!globalScene.currentBattle.isClassicFinalBoss) {
-    return !pokemon.isPlayer()
-      ? pokemon.hasTrainer()
+    return pokemon.isPlayer()
+      ? pokemon.getNameToRender()
+      : pokemon.hasTrainer()
         ? i18next.t("battle:foePokemonWithAffix", {
             pokemonName: pokemon.getNameToRender(),
           })
         : i18next.t("battle:wildPokemonWithAffix", {
             pokemonName: pokemon.getNameToRender(),
-          })
-      : pokemon.getNameToRender();
+          });
   }
-  return !pokemon.isPlayer()
-    ? i18next.t("battle:foePokemonWithAffix", { pokemonName: pokemon.getNameToRender() })
-    : pokemon.getNameToRender();
+  return pokemon.isPlayer()
+    ? pokemon.getNameToRender()
+    : i18next.t("battle:foePokemonWithAffix", { pokemonName: pokemon.getNameToRender() });
 }

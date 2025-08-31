@@ -308,13 +308,13 @@ export abstract class BaseOptionSelectUiHandler<T extends OptionSelectItem> exte
         const iconX = Math.floor((option.iconsWidth ?? 0) / 2);
         for (const config of option.iconsConfig!) {
           let iconSprite = this.optionSelectIcons[currentIconIndex++];
-          if (!iconSprite) {
+          if (iconSprite) {
+            iconSprite.setTexture(config.name, config.frame);
+            iconSprite.setVisible(true);
+          } else {
             iconSprite = globalScene.add.sprite(0, 0, config.name, config.frame);
             this.optionSelectIcons.push(iconSprite);
             this.optionSelectContainer.add(iconSprite);
-          } else {
-            iconSprite.setTexture(config.name, config.frame);
-            iconSprite.setVisible(true);
           }
 
           iconSprite.setScale(config.scale);

@@ -298,7 +298,7 @@ export class Arena {
       && (globalScene.gameMode.isTrainerBoss(waveIndex, this.biomeId) || isBoss);
 
     // @todo Right now there are no super/ultra or rare boss trainers
-    const tierValue = randSeedInt(!isTrainerBoss ? 512 : 64);
+    const tierValue = randSeedInt(isTrainerBoss ? 64 : 512);
     let tier = isTrainerBoss ? this.generateBossBiomeTier(tierValue) : this.generateNonBossBiomeTier(tierValue);
 
     while (tier > BiomePoolTier.COMMON && !this.trainerPool[tier].length) {
@@ -308,7 +308,7 @@ export class Arena {
       tier--;
     }
     const tierPool = this.trainerPool[tier] || [];
-    return !tierPool.length ? TrainerType.BREEDER : tierPool[randSeedInt(tierPool.length)];
+    return tierPool.length ? tierPool[randSeedInt(tierPool.length)] : TrainerType.BREEDER;
   }
 
   /**

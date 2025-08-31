@@ -237,7 +237,7 @@ export const WeirdDreamEncounter: MysteryEncounter = MysteryEncounterBuilder.wit
           species: transformation.newSpecies,
           isBoss: newPokemon.getSpeciesForm().getBaseStatTotal() > NON_LEGENDARY_BST_THRESHOLD,
           level: previousPokemon.level,
-          dataSource: dataSource,
+          dataSource,
           modifierConfigs: newPokemonHeldItemConfigs,
         };
 
@@ -251,7 +251,7 @@ export const WeirdDreamEncounter: MysteryEncounter = MysteryEncounterBuilder.wit
         ].clone();
       trainerConfig.setPartyTemplates(new TrainerPartyTemplate(transformations.length, PartyMemberStrength.STRONG));
       const enemyPartyConfig: EnemyPartyConfig = {
-        trainerConfig: trainerConfig,
+        trainerConfig,
         pokemonConfigs: enemyPokemonConfigs,
         female: genderIndex === PlayerGender.FEMALE,
       };
@@ -707,12 +707,12 @@ async function addEggMoveToNewPokemonMoveset(
   if (eggMoves) {
     const eggMoveIndices = randSeedShuffle([0, 1, 2, 3]);
     let randomEggMoveIndex = eggMoveIndices.pop();
-    let randomEggMove = !isNil(randomEggMoveIndex) ? eggMoves[randomEggMoveIndex] : null;
+    let randomEggMove = isNil(randomEggMoveIndex) ? null : eggMoves[randomEggMoveIndex];
     let retries = 0;
     while (retries < 3 && (!randomEggMove || newPokemon.getMoveset(true).some((m) => m.moveId === randomEggMove))) {
       // If Pokemon already knows this move, roll for another egg move
       randomEggMoveIndex = eggMoveIndices.pop();
-      randomEggMove = !isNil(randomEggMoveIndex) ? eggMoves[randomEggMoveIndex] : null;
+      randomEggMove = isNil(randomEggMoveIndex) ? null : eggMoves[randomEggMoveIndex];
       retries++;
     }
 

@@ -64,7 +64,8 @@
         "noUnusedFunctionParameters": "error",
         "noUnusedLabels": "error",
         "noPrivateImports": "error",
-        "useJsonImportAttributes": "off" // "Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'. ts(2823)"
+        "useJsonImportAttributes": "off", // "Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'. ts(2823)"
+        "useSingleJsDocAsterisk": "error"
       },
       "style": {
         "useEnumInitializers": "off", // large enums like Moves/Species would make this cumbersome
@@ -122,7 +123,14 @@
         "noYodaExpression": "error",
         "useThrowNewError": "error",
         "useThrowOnlyError": "error",
-        "useTrimStartEnd": "error"
+        "useTrimStartEnd": "error",
+        "useForOf": "error",
+        "useConsistentObjectDefinitions": "error",
+        "useConsistentBuiltinInstantiation": "error",
+        "useCollapsedIf": "error",
+        "useCollapsedElseIf": "error",
+        "noNegationElse": "error",
+        "noParameterProperties": "error" // a step toward enabling `erasableSyntaxOnly` in `tsconfig.json`
       },
       "suspicious": {
         "noDoubleEquals": "error",
@@ -142,7 +150,8 @@
         "useIterableCallbackReturn": "off", // TODO: re-enable if the rule is changed to be type-aware
         "useErrorMessage": "error",
         "useGuardForIn": "error",
-        "useNumberToFixedDigitsArgument": "error"
+        "useNumberToFixedDigitsArgument": "error",
+        "noEvolvingTypes": "error"
       },
       "complexity": {
         "noExcessiveCognitiveComplexity": "info",
@@ -160,7 +169,8 @@
         "useWhile": "error"
       },
       "nursery": {
-        "noShadow": "warn" // TODO: refactor and make "error"
+        "noShadow": "warn", // TODO: refactor and make "error"
+        "noUselessUndefined": "error"
       },
       "performance": {
         "noNamespaceImport": "error",

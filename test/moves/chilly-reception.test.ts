@@ -24,16 +24,16 @@ describe("Moves - Chilly Reception", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("single")
-      .moveset([MoveId.CHILLY_RECEPTION, MoveId.SNOWSCAPE])
-      .enemyMoveset(Array(4).fill(MoveId.SPLASH))
-      .enemyAbility(AbilityId.NONE)
-      .ability(AbilityId.NONE);
+      .enemyMoveset(MoveId.SPLASH)
+      .enemyAbility(AbilityId.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
+      .enemySpecies(SpeciesId.MAGIKARP);
   });
 
   it("should still change the weather if user can't switch out", async () => {
     await game.classicMode.startBattle(SpeciesId.SLOWKING);
 
-    game.move.select(MoveId.CHILLY_RECEPTION);
+    game.move.use(MoveId.CHILLY_RECEPTION);
 
     await game.toEndOfTurn();
     expect(game.scene.arena.weather?.weatherType).toBe(WeatherType.SNOW);
@@ -41,83 +41,77 @@ describe("Moves - Chilly Reception", () => {
 
   it("should switch out even if it's snowing", async () => {
     await game.classicMode.startBattle(SpeciesId.SLOWKING, SpeciesId.MEOWTH);
-    // first turn set up snow with snowscape, try chilly reception on second turn
-    game.move.select(MoveId.SNOWSCAPE);
-    await game.toEndOfTurn();
-    expect(game.scene.arena.weather?.weatherType).toBe(WeatherType.SNOW);
 
-    await game.phaseInterceptor.to("TurnInitPhase", false);
-    game.move.select(MoveId.CHILLY_RECEPTION);
+    game.move.use(MoveId.SNOWSCAPE);
+    await game.toNextTurn();
+    expect(game).toHaveWeather(WeatherType.SNOW);
+
+    game.move.use(MoveId.CHILLY_RECEPTION);
     game.selectPartyPokemon(1);
-
     await game.toEndOfTurn();
-    expect(game.scene.arena.weather?.weatherType).toBe(WeatherType.SNOW);
-    expect(game.scene.getPlayerField()[0].species.speciesId).toBe(SpeciesId.MEOWTH);
+
+    expect(game).toHaveWeather(WeatherType.SNOW);
+    expect(game.field.getPlayerPokemon().species.speciesId).toBe(SpeciesId.MEOWTH);
   });
 
-  it("happy case - switch out and weather changes", async () => {
+  it("should switch the user out and change the weather", async () => {
     await game.classicMode.startBattle(SpeciesId.SLOWKING, SpeciesId.MEOWTH);
 
-    game.move.select(MoveId.CHILLY_RECEPTION);
+    game.move.use(MoveId.CHILLY_RECEPTION);
     game.selectPartyPokemon(1);
 
     await game.toEndOfTurn();
-    expect(game.scene.arena.weather?.weatherType).toBe(WeatherType.SNOW);
-    expect(game.scene.getPlayerField()[0].species.speciesId).toBe(SpeciesId.MEOWTH);
+    expect(game).toHaveWeather(WeatherType.SNOW);
+    expect(game.field.getPlayerPokemon().species.speciesId).toBe(SpeciesId.MEOWTH);
   });
 
-  // enemy uses another move and weather doesn't change
-  it("check case - enemy not selecting chilly reception doesn't change weather ", async () => {
+  it("shouldn't change the weather when the enemy simulates move usage", async () => {
     game.override
       .battleType("single")
       .enemyMoveset([MoveId.CHILLY_RECEPTION, MoveId.TACKLE])
-      .enemyAbility(AbilityId.NONE)
-      .moveset(Array(4).fill(MoveId.SPLASH));
+      .enemyAbility(AbilityId.NONE);
 
     await game.classicMode.startBattle(SpeciesId.SLOWKING, SpeciesId.MEOWTH);
 
-    game.move.select(MoveId.SPLASH);
+    game.move.use(MoveId.SPLASH);
     await game.move.selectEnemyMove(MoveId.TACKLE);
 
     await game.toEndOfTurn();
-    expect(game.scene.arena.weather?.weatherType).toBe(undefined);
+    expect(game).toHaveWeather(WeatherType.NONE);
   });
 
-  it("enemy trainer - expected behavior ", async () => {
+  it("should work normally in trainer battles", async () => {
     game.override
       .battleType("single")
       .startingWave(8)
-      .enemyMoveset(Array(4).fill(MoveId.CHILLY_RECEPTION))
-      .enemyAbility(AbilityId.NONE)
-      .enemySpecies(SpeciesId.MAGIKARP)
-      .moveset([MoveId.SPLASH, MoveId.THUNDERBOLT]);
+      .enemyMoveset(MoveId.CHILLY_RECEPTION)
+      .enemyAbility(AbilityId.BALL_FETCH)
+      .enemySpecies(SpeciesId.MAGIKARP);
 
     await game.classicMode.startBattle(SpeciesId.JOLTEON);
-    const RIVAL_MAGIKARP1 = game.scene.getEnemyPokemon()?.id;
+    const RIVAL_MAGIKARP1 = game.field.getEnemyPokemon().id;
 
-    game.move.select(MoveId.SPLASH);
-    await game.toEndOfTurn();
-    expect(game.scene.arena.weather?.weatherType).toBe(WeatherType.SNOW);
-    expect(game.scene.getEnemyPokemon()?.id !== RIVAL_MAGIKARP1);
+    game.move.use(MoveId.SPLASH);
+    await game.toNextTurn();
 
-    await game.phaseInterceptor.to("TurnInitPhase", false);
-    game.move.select(MoveId.SPLASH);
+    expect(game).toHaveWeather(WeatherType.SNOW);
+    expect(game.field.getEnemyPokemon().id !== RIVAL_MAGIKARP1);
 
+    game.move.use(MoveId.SPLASH);
+    await game.toNextTurn();
     // second chilly reception should still switch out
-    await game.toEndOfTurn();
-    expect(game.scene.arena.weather?.weatherType).toBe(WeatherType.SNOW);
-    await game.phaseInterceptor.to("TurnInitPhase", false);
-    expect(game.scene.getEnemyPokemon()?.id === RIVAL_MAGIKARP1);
-    game.move.select(MoveId.THUNDERBOLT);
+    expect(game).toHaveWeather(WeatherType.SNOW);
+    expect(game.field.getEnemyPokemon().id === RIVAL_MAGIKARP1);
 
     // enemy chilly recep move should fail: it's snowing and no option to switch out
     // no crashing
+    game.move.use(MoveId.THUNDERBOLT);
+    await game.toNextTurn();
+    expect(game).toHaveWeather(WeatherType.SNOW);
+
+    game.move.use(MoveId.SPLASH);
     await game.toEndOfTurn();
-    expect(game.scene.arena.weather?.weatherType).toBe(WeatherType.SNOW);
-    await game.phaseInterceptor.to("TurnInitPhase", false);
-    expect(game.scene.arena.weather?.weatherType).toBe(WeatherType.SNOW);
-    game.move.select(MoveId.SPLASH);
-    await game.toEndOfTurn();
-    expect(game.scene.arena.weather?.weatherType).toBe(WeatherType.SNOW);
+
+    expect(game).toHaveWeather(WeatherType.SNOW);
   });
 });

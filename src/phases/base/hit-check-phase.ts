@@ -45,7 +45,7 @@ export abstract class HitCheckPhase extends PokemonPhase {
 
     this.move = move;
     this.targets = targets;
-    this.hitChecks = Array(targets.length).fill(HitCheckResult.PENDING);
+    this.hitChecks = new Array(targets.length).fill(HitCheckResult.PENDING);
   }
 
   /**
@@ -153,13 +153,11 @@ export abstract class HitCheckPhase extends PokemonPhase {
 
     // Strikes after the first in a multi-strike move are guaranteed to hit,
     // unless the move is flagged to check all hits and the user does not have Skill Link.
-    if (user.turnData.hitsLeft < user.turnData.hitCount) {
-      if (
-        !move.checkFlag(MoveFlags.CHECK_ALL_HITS, user, target)
-        || user.hasAbilityWithAttr(AbAttrFlag.MAX_MULTI_HIT)
-      ) {
-        return [HitCheckResult.HIT, effectiveness];
-      }
+    if (
+      user.turnData.hitsLeft < user.turnData.hitCount
+      && (!move.checkFlag(MoveFlags.CHECK_ALL_HITS, user, target) || user.hasAbilityWithAttr(AbAttrFlag.MAX_MULTI_HIT))
+    ) {
+      return [HitCheckResult.HIT, effectiveness];
     }
 
     if (alwaysHit || (target.hasTag(BattlerTagType.TELEKINESIS) && !move.hasAttr(OneHitKOAttr))) {

@@ -116,10 +116,10 @@ export class EvolutionPhase extends FormChangeBasePhase {
                         animations
                           .doCycle(1, 15, this.pokemonTintSprite, this.pokemonNewFormTintSprite, this.cancelled)
                           .then(() => {
-                            if (!this.cancelled.value) {
-                              this.handleSuccessEvolution(evolvedPokemon);
-                            } else {
+                            if (this.cancelled.value) {
                               this.handleFailedEvolution(evolvedPokemon);
+                            } else {
+                              this.handleSuccessEvolution(evolvedPokemon);
                             }
                           });
                       });

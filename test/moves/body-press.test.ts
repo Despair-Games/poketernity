@@ -38,7 +38,7 @@ describe("Moves - Body Press", () => {
     const bodyPress = allMoves.get(MoveId.BODY_PRESS);
 
     const player = game.field.getPlayerPokemon();
-    vi.spyOn(player, "stats", "get").mockReturnValue(Array(6).fill(100));
+    vi.spyOn(player, "stats", "get").mockReturnValue(new Array(6).fill(100));
 
     const enemy = game.field.getEnemyPokemon();
 

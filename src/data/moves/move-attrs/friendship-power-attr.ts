@@ -22,7 +22,7 @@ export class FriendshipPowerAttr extends VariablePowerAttr {
     const friendshipPower = Math.floor(
       Math.min(user.isPlayer() ? user.friendship : user.species.baseFriendship, 255) / 2.5,
     );
-    power.value = Math.max(!this.invert ? friendshipPower : 102 - friendshipPower, 1);
+    power.value = Math.max(this.invert ? 102 - friendshipPower : friendshipPower, 1);
 
     return true;
   }
