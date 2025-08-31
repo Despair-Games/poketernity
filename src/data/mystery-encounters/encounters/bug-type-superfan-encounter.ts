@@ -251,7 +251,7 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
         yShadow: -4,
       },
       {
-        spriteKey: spriteKey,
+        spriteKey,
         fileRoot: "trainer",
         hasShadow: true,
         x: 4,

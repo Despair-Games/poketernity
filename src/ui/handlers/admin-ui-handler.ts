@@ -315,7 +315,7 @@ export class AdminUiHandler extends FormModalUiHandler {
       const [adminInfo, errorType] = await api.admin.searchAccount({ username: adminSearchResult.username });
       if (errorType || !adminInfo) {
         // error - if adminInfo.status === this.httpUserNotFoundErrorCode that means the username can't be found in the db
-        return { adminSearchResult: adminSearchResult, error: true, errorType };
+        return { adminSearchResult, error: true, errorType };
       }
       // success
       return { adminSearchResult: adminInfo, error: false };
@@ -367,10 +367,10 @@ export class AdminUiHandler extends FormModalUiHandler {
 
       if (errorType) {
         // error - if response.status === this.httpUserNotFoundErrorCode that means the username can't be found in the db
-        return { adminSearchResult: adminSearchResult, error: true, errorType };
+        return { adminSearchResult, error: true, errorType };
       }
       // success!
-      return { adminSearchResult: adminSearchResult, error: false };
+      return { adminSearchResult, error: false };
     } catch (err) {
       console.error(err);
       return { error: true, errorType: err };

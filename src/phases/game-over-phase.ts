@@ -191,7 +191,9 @@ export class GameOverPhase extends BattlePhase {
             };
 
             const playerGender = settings.display.playerGender;
-            if (!ui.shouldSkipDialogue(dialogueKey)) {
+            if (ui.shouldSkipDialogue(dialogueKey)) {
+              displayEndCard();
+            } else {
               ui.fadeIn(500).then(() => {
                 const genderIndex = playerGender ?? PlayerGender.UNSET;
                 const genderStr = enumValueToKey(PlayerGender, genderIndex).toLowerCase();
@@ -217,8 +219,6 @@ export class GameOverPhase extends BattlePhase {
                     });
                   });
               });
-            } else {
-              displayEndCard();
             }
           } else {
             clear();
@@ -234,7 +234,7 @@ export class GameOverPhase extends BattlePhase {
      */
     if (!api.isLocal || api.isConnected) {
       api.savedata.session
-        .newclear({ slot: globalScene.sessionSlotId, isVictory: this.isVictory, clientSessionId: clientSessionId })
+        .newclear({ slot: globalScene.sessionSlotId, isVictory: this.isVictory, clientSessionId })
         .then((success) => doGameOver(success));
     } else if (this.isVictory) {
       gameData.offlineNewClear().then((result) => {

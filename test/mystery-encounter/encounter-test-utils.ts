@@ -121,10 +121,10 @@ export async function runSelectMysteryEncounterOption(
       break;
   }
 
-  if (!isNil(secondaryOptionSelect?.partySlot)) {
-    await handleSecondaryOptionSelect(game, secondaryOptionSelect.partySlot, secondaryOptionSelect.optionNumber);
-  } else {
+  if (isNil(secondaryOptionSelect?.partySlot)) {
     uiHandler.processInput(Button.ACTION);
+  } else {
+    await handleSecondaryOptionSelect(game, secondaryOptionSelect.partySlot, secondaryOptionSelect.optionNumber);
   }
 }
 

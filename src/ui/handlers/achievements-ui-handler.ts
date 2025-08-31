@@ -204,7 +204,7 @@ export class AchievementsUiHandler extends MessageUiHandler {
     const unlocked = Object.hasOwn(achvUnlocks, achv.id);
     const hidden = !unlocked && achv.secret && (!achv.parentId || !Object.hasOwn(achvUnlocks, achv.parentId));
     this.titleText.setText(unlocked ? achv.name : "???");
-    this.showText(!hidden ? achv.description : "");
+    this.showText(hidden ? "" : achv.description);
     this.unlockText.setText(
       unlocked ? new Date(achvUnlocks[achv.id]).toLocaleDateString() : i18next.t("achv:Locked.name"),
     );
@@ -298,7 +298,7 @@ export class AchievementsUiHandler extends MessageUiHandler {
       const hidden = !unlocked && achv.secret && (!achv.parentId || !Object.hasOwn(achvUnlocks, achv.parentId));
       const tinted = !hidden && !unlocked;
 
-      icon.setFrame(!hidden ? achv.iconImage : "unknown");
+      icon.setFrame(hidden ? "unknown" : achv.iconImage);
       icon.setVisible(true);
       if (tinted) {
         icon.setTintFill(0);
@@ -334,10 +334,10 @@ export class AchievementsUiHandler extends MessageUiHandler {
 
       icon.setFrame(getVoucherTypeIcon(voucher.voucherType));
       icon.setVisible(true);
-      if (!unlocked) {
-        icon.setTintFill(0);
-      } else {
+      if (unlocked) {
         icon.clearTint();
+      } else {
+        icon.setTintFill(0);
       }
     });
 

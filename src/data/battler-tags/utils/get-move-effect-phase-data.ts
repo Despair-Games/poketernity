@@ -16,7 +16,7 @@ export function getMoveEffectPhaseData(
   const phase = globalScene.phaseManager.getCurrentPhase();
   if (phase?.is("MoveEffectPhase")) {
     return {
-      phase: phase,
+      phase,
       attacker: phase.getPokemon(),
       move: phase.move.getMove(),
     };

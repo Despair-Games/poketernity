@@ -12,7 +12,7 @@ export default tseslint.config(
     files: ["src/**/*.{ts,tsx,js,jsx}", "test/**/*.{ts,tsx,js,jsx}"],
     ignores: ["dist/*", "build/*", "coverage/*", "public/*", ".github/*", "node_modules/*", ".vscode/*"],
     languageOptions: {
-      parser: parser,
+      parser,
     },
     plugins: {
       "import-x": importX,
@@ -37,7 +37,7 @@ export default tseslint.config(
     name: "eslint-tests",
     files: ["test/**/**.test.ts"],
     languageOptions: {
-      parser: parser,
+      parser,
       parserOptions: {
         project: ["./tsconfig.json"],
       },

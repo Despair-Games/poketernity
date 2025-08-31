@@ -104,8 +104,8 @@ export abstract class BattleAnim {
     ]);
 
     const isOppAnim = this.isOppAnim();
-    const user = !isOppAnim ? this.user : this.target;
-    const target = !isOppAnim ? this.target : this.user;
+    const user = isOppAnim ? this.target : this.user;
+    const target = isOppAnim ? this.user : this.target;
 
     const targetSubstitute =
       onSubstitute && user !== target ? target?.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE) : null;
@@ -129,7 +129,7 @@ export abstract class BattleAnim {
        */
       let x = frame.x + userFocusX;
       let y = frame.y + userFocusY;
-      let zoomX = (frame.zoomX / 100) * (!frame.mirror ? 1 : -1);
+      let zoomX = (frame.zoomX / 100) * (frame.mirror ? -1 : 1);
       const zoomY = frame.zoomY / 100;
       switch (frame.focus) {
         case AnimFocus.TARGET:
@@ -189,8 +189,8 @@ export abstract class BattleAnim {
    */
   play(onSubstitute?: boolean, callback?: () => void): void {
     const isOppAnim = this.isOppAnim();
-    const user = !isOppAnim ? this.user! : this.target!; // TODO: are those bangs correct?
-    const target = !isOppAnim ? this.target! : this.user!;
+    const user = isOppAnim ? this.target! : this.user!; // TODO: are those bangs correct?
+    const target = isOppAnim ? this.user! : this.target!;
 
     if (!target?.isOnField() && !this.playRegardlessOfIssues) {
       if (callback) {
@@ -224,16 +224,16 @@ export abstract class BattleAnim {
       userSprite.setAlpha(1);
       userSprite.pipelineData["tone"] = [0.0, 0.0, 0.0, 0.0];
       userSprite.setAngle(0);
-      if (!targetSubstitute) {
-        targetSprite.setPosition(0, 0);
-        targetSprite.setScale(1);
-        targetSprite.setAlpha(1);
-      } else {
+      if (targetSubstitute) {
         targetSprite.setPosition(
           target.x - target.getSubstituteOffset()[0],
           target.y - target.getSubstituteOffset()[1],
         );
         targetSprite.setScale(target.getSpriteScale() * (target.isPlayer() ? 0.5 : 1));
+        targetSprite.setAlpha(1);
+      } else {
+        targetSprite.setPosition(0, 0);
+        targetSprite.setScale(1);
         targetSprite.setAlpha(1);
       }
       targetSprite.pipelineData["tone"] = [0.0, 0.0, 0.0, 0.0];
@@ -249,8 +249,8 @@ export abstract class BattleAnim {
        * and `this.target` prevent the target's Substitute doll from disappearing
        * after being the target of an animation.
        */
-      const userSpriteToShow = !isOppAnim ? userSprite : targetSprite;
-      const targetSpriteToShow = !isOppAnim ? targetSprite : userSprite;
+      const userSpriteToShow = isOppAnim ? targetSprite : userSprite;
+      const targetSpriteToShow = isOppAnim ? userSprite : targetSprite;
       if (!this.isHideUser() && userSpriteToShow) {
         userSpriteToShow.setVisible(true);
       }

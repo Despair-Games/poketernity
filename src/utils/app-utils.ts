@@ -26,6 +26,7 @@ export function getCookie(cName: string): string {
   }
   const name = `${cName}=`;
   const ca = document.cookie.split(";");
+  // biome-ignore lint/style/useForOf: TODO: this is just a reimplemented trim function, don't do that (thanks Sam...)
   for (let i = 0; i < ca.length; i++) {
     let c = ca[i];
     while (c.charAt(0) === " ") {

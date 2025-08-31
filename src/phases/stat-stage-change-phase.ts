@@ -25,7 +25,7 @@ import i18next from "i18next";
 
 export type StatStageChangeCallback = (changed: BattleStat[], relativeChanges: number[], target?: Pokemon) => void;
 
-export interface SSCPhaseOptions {
+interface StatStageChangePhaseOptions {
   showMessage?: boolean;
   ignoreAbilities?: boolean;
   canBeCopied?: boolean;
@@ -47,7 +47,7 @@ export class StatStageChangePhase extends PokemonPhase {
   protected readonly canBeCopied: boolean;
   protected readonly bypassReflect: boolean;
   protected readonly onChange?: StatStageChangeCallback;
-  private readonly options: SSCPhaseOptions;
+  private readonly options: StatStageChangePhaseOptions;
 
   /**
    * Sticky Web has an edge case where its source gets ignored by Defiant/Competitive, but not Mirror Armor.
@@ -68,7 +68,7 @@ export class StatStageChangePhase extends PokemonPhase {
       bypassReflect = false,
       isStickyWeb = false,
       onChange,
-    }: SSCPhaseOptions = {},
+    }: StatStageChangePhaseOptions = {},
   ) {
     super(battlerIndex);
 
@@ -114,13 +114,12 @@ export class StatStageChangePhase extends PokemonPhase {
 
     // Check if multiple stats are being changed at the same time, then run SSCPhase for each of them
     if (this.stats.length > 1) {
-      for (let i = 0; i < this.stats.length; i++) {
-        const stat = [this.stats[i]];
+      for (const stat of this.stats) {
         globalScene.phaseManager.createAndUnshiftPhase(
           "StatStageChangePhase",
           this.battlerIndex,
           this.source,
-          stat,
+          [stat],
           this.stages,
           this.options,
         );

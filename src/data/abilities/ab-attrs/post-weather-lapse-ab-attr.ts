@@ -1,10 +1,10 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { globalScene } from "#app/global-scene";
 import type { Weather } from "#data/weather";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
 import type { AbAttrCondition } from "#types/ability-types";
+import { getWeatherCondition } from "#utils/ability-utils";
 
 export abstract class PostWeatherLapseAbAttr extends AbAttr {
   protected readonly weatherTypes: WeatherType[];
@@ -31,19 +31,3 @@ export abstract class PostWeatherLapseAbAttr extends AbAttr {
     return getWeatherCondition(...this.weatherTypes);
   }
 }
-
-//#region Helpers
-
-export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondition {
-  return () => {
-    if (!globalScene?.arena) {
-      return false;
-    }
-    if (globalScene.arena.weather?.isEffectSuppressed()) {
-      return false;
-    }
-    return globalScene.arena.hasWeather([...weatherTypes]);
-  };
-}
-
-//#endregion

@@ -82,10 +82,10 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
     super(mode);
     this.category = category;
 
-    if (!hasTouchscreen()) {
-      this.uiItems = uiItems.filter((uiItem) => !uiItem.touchscreenOnly);
-    } else {
+    if (hasTouchscreen()) {
       this.uiItems = uiItems;
+    } else {
+      this.uiItems = uiItems.filter((uiItem) => !uiItem.touchscreenOnly);
     }
     this.useBBCodeLabels = useBBCodeLabels;
     this.setTotalRows(this.uiItems.length);

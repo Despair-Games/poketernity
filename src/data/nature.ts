@@ -29,9 +29,9 @@ export function getNatureName(
       }
     }
 
-    const getTextFrag = !ignoreBBCode
-      ? (text: string, style: TextStyle) => getBBCodeFragment(text, style, true)
-      : (text: string, _style: TextStyle) => text;
+    const getTextFrag = ignoreBBCode
+      ? (text: string, _style: TextStyle) => text
+      : (text: string, style: TextStyle) => getBBCodeFragment(text, style, true);
 
     if (increasedStat && decreasedStat) {
       ret =

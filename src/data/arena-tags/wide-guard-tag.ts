@@ -28,8 +28,8 @@ const WideGuardConditionFunc: ProtectConditionFunc = (moveId): boolean => {
 /**
  * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Wide_Guard_(move) Wide Guard}.
  *
- * *Condition:* The incoming move can target multiple Pokemon. The move's source
- * can be an ally or enemy.
+ * **Condition:** The incoming move can target multiple Pokemon. \
+ * The move's source can be an ally or enemy.
  */
 export class WideGuardTag extends ConditionalProtectTag {
   constructor(sourceId: number, side: ArenaTagSide) {

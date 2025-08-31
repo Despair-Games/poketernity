@@ -60,18 +60,21 @@ export const TSAREENA_EVO_LEVEL = 28;
 export const NAGANADEL_EVO_LEVEL = ADVANCED_ITEM_EVO_LEVEL;
 /** Learns taunt at level 35 in gen 8 */
 export const GRAPPLOCT_EVO_LEVEL = 35;
-/** Dipplin learns dragon cheer at level 1 (custom implementation)
+/**
+ * Dipplin learns dragon cheer at level 1 (custom implementation)
  * and should have a different enemy evolve level than Applin
  */
 export const HYDRAPPLE_EVO_LEVEL = ADVANCED_ITEM_EVO_LEVEL;
-/** Completely custom implementation.
- * Using 25 for air cutter, the first high crit move
- * that Farfetch'd learns. Also learns slash at 40
- * */
+/**
+ * Custom implementation.
+ *
+ * Using `25` for air cutter, the first high crit move that Farfetch'd learns.
+ * Also learns slash at `40`.
+ */
 export const SIRFETCHD_EVO_LEVEL = 25;
 /** Learns barb barage at level 28 in gen 9 */
 export const OVERQWIL_EVO_LEVEL = 28;
-/** All 3 of these pokemon evolve with the let's go walking 1000 steps feature */
+// All 3 of these pokemon evolve with the let's go walking 1000 steps feature
 /** Chosen because that's when Pawmot learns arm thrust */
 export const PAWMOT_EVO_LEVEL = 25;
 /** Bramblin and Brambleghast have the same learnset... */

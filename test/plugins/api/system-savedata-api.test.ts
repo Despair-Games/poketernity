@@ -9,12 +9,13 @@ import type {
 } from "#types/api-types";
 import type { SystemSaveData } from "#types/system-data";
 import { HttpResponse, http } from "msw";
+import type { SetupServerApi } from "msw/node";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const apiBase = getApiBaseUrl();
 const systemSavedataApi = new SystemSavedataApi(getApiBaseUrl());
 
-let server;
+let server: SetupServerApi;
 beforeAll(async () => {
   server = await initServerForApiTests();
 });

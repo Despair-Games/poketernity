@@ -223,9 +223,9 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
     const removeHealShop = globalScene.gameMode.hasNoShop;
     const baseShopCost = new NumberHolder(globalScene.getWaveMoneyAmount(1));
     globalScene.applyModifier(HealShopCostModifier, true, baseShopCost);
-    const shopTypeOptions = !removeHealShop
-      ? getPlayerShopModifierTypeOptionsForWave(globalScene.currentBattle.waveIndex, baseShopCost.value)
-      : [];
+    const shopTypeOptions = removeHealShop
+      ? []
+      : getPlayerShopModifierTypeOptionsForWave(globalScene.currentBattle.waveIndex, baseShopCost.value);
     const optionsYOffset =
       shopTypeOptions.length > SHOP_OPTIONS_ROW_LIMIT ? -SINGLE_SHOP_ROW_YOFFSET : -DOUBLE_SHOP_ROW_YOFFSET;
 
@@ -382,13 +382,13 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
         const originalOnActionInput = this.onActionInput;
         this.awaitingActionInput = false;
         this.onActionInput = null;
-        if (!originalOnActionInput(this.rowCursor, this.cursor)) {
-          this.awaitingActionInput = true;
-          this.onActionInput = originalOnActionInput;
-        } else {
+        if (originalOnActionInput(this.rowCursor, this.cursor)) {
           this.moveInfoOverlayActive = this.moveInfoOverlay.active;
           this.moveInfoOverlay.setVisible(false);
           this.moveInfoOverlay.active = false; // this is likely unnecessary, but it should help future prove the UI
+        } else {
+          this.awaitingActionInput = true;
+          this.onActionInput = originalOnActionInput;
         }
       }
     } else if (button === Button.CANCEL) {
@@ -683,10 +683,10 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
           duration: 250,
           ease: "Cubic.easeIn",
           onComplete: () => {
-            if (!this.options.length) {
-              container.setVisible(false);
-            } else {
+            if (this.options.length) {
               container.setAlpha(1);
+            } else {
+              container.setVisible(false);
             }
           },
         });

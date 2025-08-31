@@ -55,6 +55,7 @@ import { UiMode } from "#enums/ui-mode";
 import type { DexAttrProps, StarterAttributes, StarterPreferences } from "#system/game-data";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
 import type { DexEntry } from "#types/dex-data";
+import type { InputSettings } from "#types/inputs-types";
 import type { StarterConfig, StarterDataEntry, StarterMoveset } from "#types/starter-data";
 import type { ShowTextOptions } from "#types/ui-types";
 import type { EnumValues } from "#types/utility-types";
@@ -141,7 +142,7 @@ function calcStarterPosition(index: number, scrollCursor: number = 0): { x: numb
   const x = (index % 9) * 18;
   const y = yOffset + (Math.floor(index / 9) - scrollCursor) * height;
 
-  return { x: x, y: y };
+  return { x, y };
 }
 
 /**
@@ -1184,24 +1185,24 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       delete starterAttributes.shiny;
     }
 
-    if (starterAttributes.variant !== undefined) {
-      if (
-        Number.isNaN(starterAttributes.variant)
+    if (
+      starterAttributes.variant !== undefined
+      && (Number.isNaN(starterAttributes.variant)
         || starterAttributes.variant < 0
-        || !variantUnlocks[starterAttributes.variant]
-      ) {
-        // variant value is invalid or requested variant wasn't unlocked, purging setting
-        // biome-ignore lint/performance/noDelete: Optimizes local storage size
-        delete starterAttributes.variant;
-      }
+        || !variantUnlocks[starterAttributes.variant])
+    ) {
+      // variant value is invalid or requested variant wasn't unlocked, purging setting
+      // biome-ignore lint/performance/noDelete: Optimizes local storage size
+      delete starterAttributes.variant;
     }
 
-    if (starterAttributes.female !== undefined) {
-      if (!(starterAttributes.female ? caughtAttr & DexAttr.FEMALE : caughtAttr & DexAttr.MALE)) {
-        // requested gender wasn't unlocked, purging setting
-        // biome-ignore lint/performance/noDelete: Optimizes local storage size
-        delete starterAttributes.female;
-      }
+    if (
+      starterAttributes.female !== undefined
+      && !(starterAttributes.female ? caughtAttr & DexAttr.FEMALE : caughtAttr & DexAttr.MALE)
+    ) {
+      // requested gender wasn't unlocked, purging setting
+      // biome-ignore lint/performance/noDelete: Optimizes local storage size
+      delete starterAttributes.female;
     }
 
     const abilityAttr = starterData.abilityAttr;
@@ -1482,10 +1483,10 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           }
           break;
         case Button.ACTION:
-          if (!this.filterBar.openDropDown) {
-            this.filterBar.toggleDropDown(this.filterBarCursor);
-          } else {
+          if (this.filterBar.openDropDown) {
             this.filterBar.toggleOptionState();
+          } else {
+            this.filterBar.toggleDropDown(this.filterBarCursor);
           }
           success = true;
           break;
@@ -1625,7 +1626,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
               });
 
               return {
-                options: options,
+                options,
                 maxOptions: 8,
                 yOffset: 29,
               };
@@ -1780,11 +1781,11 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
           // if container.favorite is false, show the favorite option
           const isFavorite = starterAttributes?.favorite ?? false;
-          if (!isFavorite) {
+          if (isFavorite) {
             options.push({
-              label: i18next.t("starterSelectUiHandler:addToFavorites"),
+              label: i18next.t("starterSelectUiHandler:removeFromFavorites"),
               handler: () => {
-                starterAttributes.favorite = true;
+                starterAttributes.favorite = false;
                 // if the starter container not exists, it means the species is not in the filtered starters
                 if (starterContainer) {
                   starterContainer.favoriteIcon.setVisible(starterAttributes.favorite);
@@ -1795,9 +1796,9 @@ export class StarterSelectUiHandler extends MessageUiHandler {
             });
           } else {
             options.push({
-              label: i18next.t("starterSelectUiHandler:removeFromFavorites"),
+              label: i18next.t("starterSelectUiHandler:addToFavorites"),
               handler: () => {
-                starterAttributes.favorite = false;
+                starterAttributes.favorite = true;
                 // if the starter container not exists, it means the species is not in the filtered starters
                 if (starterContainer) {
                   starterContainer.favoriteIcon.setVisible(starterAttributes.favorite);
@@ -1990,7 +1991,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
               },
             });
             ui.setModeWithoutClear<OptionSelectUiHandler>(UiMode.OPTION_SELECT, {
-              options: options,
+              options,
             });
           };
           if (!Object.hasOwn(pokemonPreEvolutions, this.lastSpecies.speciesId)) {
@@ -2010,7 +2011,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
             },
           });
           ui.setModeWithoutClear<OptionSelectUiHandler>(UiMode.OPTION_SELECT, {
-            options: options,
+            options,
           });
           success = true;
         }
@@ -2074,10 +2075,8 @@ export class StarterSelectUiHandler extends MessageUiHandler {
                     newAbilityIndex = (newAbilityIndex + 1) % abilityCount;
                   }
                   break;
-                } else {
-                  if (abilityAttr & AbilityAttr.ABILITY_HIDDEN) {
-                    break;
-                  }
+                } else if (abilityAttr & AbilityAttr.ABILITY_HIDDEN) {
+                  break;
                 }
               } while (newAbilityIndex !== this.abilityCursor);
               starterAttributes.ability = newAbilityIndex; // store the selected ability
@@ -2129,15 +2128,13 @@ export class StarterSelectUiHandler extends MessageUiHandler {
                 const closestFilter = this.filterBar.getNearestFilter(this.filteredStarterContainers[this.cursor]);
                 success = this.setMode(StarterSelectMode.FILTER, closestFilter);
               }
+            } else if (this.starterIconsCursorIndex === 0) {
+              // Up from first Pokemon in the team => go to filter
+              success = this.setMode(StarterSelectMode.FILTER, Math.max(1, this.filterBar.numFilters - 1));
             } else {
-              if (this.starterIconsCursorIndex === 0) {
-                // Up from first Pokemon in the team => go to filter
-                success = this.setMode(StarterSelectMode.FILTER, Math.max(1, this.filterBar.numFilters - 1));
-              } else {
-                this.starterIconsCursorIndex--;
-                this.moveStarterIconsCursor(this.starterIconsCursorIndex);
-                success = true;
-              }
+              this.starterIconsCursorIndex--;
+              this.moveStarterIconsCursor(this.starterIconsCursorIndex);
+              success = true;
             }
             break;
           case Button.DOWN:
@@ -2160,34 +2157,31 @@ export class StarterSelectUiHandler extends MessageUiHandler {
                 const closestFilter = this.filterBar.getNearestFilter(this.filteredStarterContainers[this.cursor]);
                 success = this.setMode(StarterSelectMode.FILTER, closestFilter);
               }
+            } else if (this.starterIconsCursorIndex <= this.starterSpecies.length - 2) {
+              this.starterIconsCursorIndex++;
+              this.moveStarterIconsCursor(this.starterIconsCursorIndex);
+              success = true;
             } else {
-              if (this.starterIconsCursorIndex <= this.starterSpecies.length - 2) {
-                this.starterIconsCursorIndex++;
-                this.moveStarterIconsCursor(this.starterIconsCursorIndex);
-                success = true;
-              } else {
-                // DOWN from last Pokemon in party => Move to Start button
-                success = this.setMode(StarterSelectMode.START);
-              }
+              // DOWN from last Pokemon in party => Move to Start button
+              success = this.setMode(StarterSelectMode.START);
             }
             break;
           case Button.LEFT:
             if (this.currentMode !== StarterSelectMode.PARTY) {
               if (this.cursor % 9 !== 0) {
                 success = this.setCursor(this.cursor - 1);
-              } else {
+              } else if (this.starterSpecies.length === 0) {
                 // LEFT from filtered Pokemon, on the left edge
-                if (this.starterSpecies.length === 0) {
-                  // no starter in team => wrap around to the last column
-                  success = this.setCursor(this.cursor + Math.min(8, numberOfStarters - this.cursor));
-                } else if (onScreenCurrentRow < 7) {
-                  // at least one pokemon in team => for the first 7 rows, go to closest mon in party
-                  const closestStarter = findClosestStarterIndex(this.cursorObj.y - 1, this.starterSpecies.length);
-                  success = this.setMode(StarterSelectMode.PARTY, closestStarter);
-                } else {
-                  // at least one pokemon in team => from the bottom 2 rows, go to start run button
-                  success = this.setMode(StarterSelectMode.START);
-                }
+
+                // no starter in team => wrap around to the last column
+                success = this.setCursor(this.cursor + Math.min(8, numberOfStarters - this.cursor));
+              } else if (onScreenCurrentRow < 7) {
+                // at least one pokemon in team => for the first 7 rows, go to closest mon in party
+                const closestStarter = findClosestStarterIndex(this.cursorObj.y - 1, this.starterSpecies.length);
+                success = this.setMode(StarterSelectMode.PARTY, closestStarter);
+              } else {
+                // at least one pokemon in team => from the bottom 2 rows, go to start run button
+                success = this.setMode(StarterSelectMode.START);
               }
             } else if (numberOfStarters > 0) {
               // LEFT from team => Go to closest filtered Pokemon
@@ -2204,19 +2198,18 @@ export class StarterSelectUiHandler extends MessageUiHandler {
               // is not right edge
               if (this.cursor % 9 < (currentRow < numOfRows - 1 ? 8 : (numberOfStarters - 1) % 9)) {
                 success = this.setCursor(this.cursor + 1);
-              } else {
+              } else if (this.starterSpecies.length === 0) {
                 // RIGHT from filtered Pokemon, on the right edge
-                if (this.starterSpecies.length === 0) {
-                  // no selected starter in team > wrap around to the first column
-                  success = this.setCursor(this.cursor - Math.min(8, this.cursor % 9));
-                } else if (onScreenCurrentRow < 7) {
-                  // at least one pokemon in team > for the first 7 rows, go to closest mon in party
-                  const closestStarter = findClosestStarterIndex(this.cursorObj.y - 1, this.starterSpecies.length);
-                  success = this.setMode(StarterSelectMode.PARTY, closestStarter);
-                } else {
-                  // at least one pokemon in team > from the bottom 2 rows, go to start run button
-                  success = this.setMode(StarterSelectMode.START);
-                }
+
+                // no selected starter in team > wrap around to the first column
+                success = this.setCursor(this.cursor - Math.min(8, this.cursor % 9));
+              } else if (onScreenCurrentRow < 7) {
+                // at least one pokemon in team > for the first 7 rows, go to closest mon in party
+                const closestStarter = findClosestStarterIndex(this.cursorObj.y - 1, this.starterSpecies.length);
+                success = this.setMode(StarterSelectMode.PARTY, closestStarter);
+              } else {
+                // at least one pokemon in team > from the bottom 2 rows, go to start run button
+                success = this.setMode(StarterSelectMode.START);
               }
             } else if (numberOfStarters > 0) {
               // RIGHT from team > Go to closest filtered Pokemon
@@ -2487,8 +2480,13 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     }
   }
 
-  updateFilterButtonIcon(iconSetting, gamepadType, iconElement, controlLabel): void {
-    let iconPath;
+  updateFilterButtonIcon(
+    iconSetting: InputSettings,
+    gamepadType: string,
+    iconElement: Phaser.GameObjects.Sprite,
+    controlLabel: Phaser.GameObjects.Text,
+  ): void {
+    let iconPath: string | undefined;
     // touch controls cannot be rebound as is, and are just emulating a keyboard event.
     // Additionally, since keyboard controls can be rebound (and will be displayed when they are), we need to have special handling for the touch controls
     if (gamepadType === "touch") {
@@ -2518,7 +2516,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     this.hideInstructions();
     this.instructionsContainer.removeAll();
     this.filterInstructionsContainer.removeAll();
-    let gamepadType;
+    let gamepadType: string;
     if (globalScene.inputMethod === "gamepad") {
       gamepadType = globalScene.inputController.getActiveConfig(Device.GAMEPAD)?.padType ?? globalScene.inputMethod;
     } else {
@@ -2649,9 +2647,8 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     }
 
     // this updates icons for previously saved pokemon
-    for (let i = 0; i < this.validStarterContainers.length; i++) {
-      const currentFilteredContainer = this.validStarterContainers[i];
-      const starterSprite = currentFilteredContainer.icon as Phaser.GameObjects.Sprite;
+    for (const currentFilteredContainer of this.validStarterContainers) {
+      const starterSprite = currentFilteredContainer.icon;
 
       const currentDexAttr = this.getCurrentDexProps(currentFilteredContainer.species.speciesId);
       const props = globalScene.gameData.getSpeciesDexAttrProps(currentFilteredContainer.species, currentDexAttr);
@@ -3252,22 +3249,20 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           // load default nature from stater save data, if set
           const defaultNature = starterAttributes?.nature || globalScene.gameData.getSpeciesDefaultNature(species);
           props = globalScene.gameData.getSpeciesDexAttrProps(species, defaultDexAttr);
-          if (starterAttributes?.variant && !Number.isNaN(starterAttributes.variant)) {
-            if (props.shiny) {
-              props.variant = starterAttributes.variant as Variant;
-            }
+          if (starterAttributes?.variant && !Number.isNaN(starterAttributes.variant) && props.shiny) {
+            props.variant = starterAttributes.variant as Variant;
           }
           props.formIndex = starterAttributes?.form ?? props.formIndex;
           const female = starterAttributes?.female ?? props.gender === Gender.FEMALE;
-          props.gender = female ? Gender.FEMALE : !isNil(species.malePercent) ? Gender.MALE : Gender.GENDERLESS;
+          props.gender = female ? Gender.FEMALE : isNil(species.malePercent) ? Gender.GENDERLESS : Gender.MALE;
 
           this.setSpeciesDetails(species, {
             shiny: props.shiny,
             formIndex: props.formIndex,
-            female: female,
+            female,
             variant: props.variant,
             abilityIndex: defaultAbilityIndex,
-            passiveEnabled: passiveEnabled,
+            passiveEnabled,
             natureIndex: defaultNature,
           });
         }
@@ -3414,7 +3409,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       this.abilityCursor = abilityIndex !== undefined ? abilityIndex : (abilityIndex = oldAbilityIndex);
       this.passiveEnabled = passiveEnabled ?? this.passiveEnabled;
       this.natureCursor = natureIndex !== undefined ? natureIndex : (natureIndex = oldNatureIndex);
-      this.teraCursor = !isNil(teraType) ? teraType : (teraType = oldTeraType);
+      this.teraCursor = isNil(teraType) ? (teraType = oldTeraType) : teraType;
       const [isInParty, partyIndex]: [boolean, number] = this.isInParty(species);
       if (isInParty) {
         this.updatePartyIcon(species, partyIndex);
@@ -3560,7 +3555,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       }
 
       if (dexEntry.caughtAttr && species.malePercent !== null) {
-        const gender = !female ? Gender.MALE : Gender.FEMALE;
+        const gender = female ? Gender.FEMALE : Gender.MALE;
         this.pokemonGenderText.setText(getGenderSymbol(gender));
         setTextColor(this.pokemonGenderText, getGenderTextStyle(gender));
       } else {
@@ -3572,7 +3567,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         this.pokemonAbilityText.setText(ability.name);
 
         const isHiddenAbility = abilityIndex === (this.lastSpecies.ability2 ? 2 : 1);
-        setTextColor(this.pokemonAbilityText, !isHiddenAbility ? TextStyle.SUMMARY_ALT : TextStyle.SUMMARY_GOLD);
+        setTextColor(this.pokemonAbilityText, isHiddenAbility ? TextStyle.SUMMARY_GOLD : TextStyle.SUMMARY_ALT);
 
         if (this.pokemonAbilityText.visible) {
           if (this.activeTooltip === "ABILITY") {
@@ -3863,7 +3858,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       newValueStr = newValueStr.slice(1);
     }
     this.valueLimitLabel.setText(`${newValueStr}/${valueLimit}`);
-    setTextColor(this.valueLimitLabel, !overLimit ? TextStyle.TOOLTIP_CONTENT : TextStyle.SUMMARY_PINK);
+    setTextColor(this.valueLimitLabel, overLimit ? TextStyle.SUMMARY_PINK : TextStyle.TOOLTIP_CONTENT);
     if (overLimit) {
       globalScene.time.delayedCall(fixedNumber(500), () => this.tryUpdateValue());
       return false;
@@ -4042,14 +4037,14 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     return true;
   }
 
-  /* This block checks to see if your party is valid
-   * It checks each pokemon against the challenge - noting that due to monotype challenges it needs to check the pokemon while ignoring their evolutions/form change items
+  /**
+   * Check to see if your party is valid, ignoring evolutions and alternate forms.
+   * @todo Simplify this a bit
    */
-  isPartyValid(): boolean {
+  private isPartyValid(): boolean {
     let canStart = false;
-    for (let s = 0; s < this.starterSpecies.length; s++) {
+    for (const species of this.starterSpecies) {
       const isValidForChallenge = new BooleanHolder(true);
-      const species = this.starterSpecies[s];
       applyChallenges(
         globalScene.gameMode,
         ChallengeType.STARTER_CHOICE,

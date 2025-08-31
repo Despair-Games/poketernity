@@ -264,7 +264,7 @@ export function initModifierPools() {
     new WeightedModifierType(modifierTypes.BASE_STAT_BOOSTER, 3),
     new WeightedModifierType(
       modifierTypes.VOUCHER,
-      (_party: Pokemon[], rerollCount: number) => (!globalScene.gameMode.isDaily ? Math.max(1 - rerollCount, 0) : 0),
+      (_party: Pokemon[], rerollCount: number) => (globalScene.gameMode.isDaily ? 0 : Math.max(1 - rerollCount, 0)),
       1,
     ),
   ].map((m) => {
@@ -473,8 +473,7 @@ export function initModifierPools() {
     ),
     new WeightedModifierType(
       modifierTypes.VOUCHER_PLUS,
-      (_party: Pokemon[], rerollCount: number) =>
-        !globalScene.gameMode.isDaily ? Math.max(3 - rerollCount * 1, 0) : 0,
+      (_party: Pokemon[], rerollCount: number) => (globalScene.gameMode.isDaily ? 0 : Math.max(3 - rerollCount * 1, 0)),
       3,
     ),
   ].map((m) => {

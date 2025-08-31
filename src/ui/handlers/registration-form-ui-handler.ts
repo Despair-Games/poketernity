@@ -100,16 +100,16 @@ export class RegistrationFormUiHandler extends FormModalUiHandler {
       }
       const [usernameInput, passwordInput] = this.inputs;
       api.account.register({ username: usernameInput.text, password: passwordInput.text }).then((registerError) => {
-        if (!registerError) {
+        if (registerError) {
+          onFail(registerError);
+        } else {
           api.account.login({ username: usernameInput.text, password: passwordInput.text }).then((loginError) => {
-            if (!loginError) {
-              originalRegistrationAction?.();
-            } else {
+            if (loginError) {
               onFail(loginError);
+            } else {
+              originalRegistrationAction?.();
             }
           });
-        } else {
-          onFail(registerError);
         }
       });
     };

@@ -296,7 +296,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
   }
 
   public getTrainerSlot(): TrainerSlot {
-    return !(this.fieldIndex % 2) ? TrainerSlot.TRAINER : TrainerSlot.TRAINER_PARTNER;
+    return this.fieldIndex % 2 ? TrainerSlot.TRAINER_PARTNER : TrainerSlot.TRAINER;
   }
 
   public override end(): void {

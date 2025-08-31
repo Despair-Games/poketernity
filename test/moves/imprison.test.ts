@@ -93,7 +93,7 @@ describe("Moves - Imprison", () => {
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.toNextTurn();
-    expect(enemy.getMoveHistory().map((turnMove) => turnMove.result)).toEqual(Array(2).fill(MoveResult.SUCCESS));
+    expect(enemy.getMoveHistory().map((turnMove) => turnMove.result)).toEqual(new Array(2).fill(MoveResult.SUCCESS));
   });
 
   it("should not interfere with the effects of an ally's Imprison", async () => {

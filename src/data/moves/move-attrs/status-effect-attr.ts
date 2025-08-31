@@ -27,7 +27,7 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
     overrideStatus: boolean = false,
     effectChanceOverride?: number,
   ) {
-    super(selfTarget, { effectChanceOverride: effectChanceOverride });
+    super(selfTarget, { effectChanceOverride });
 
     this.effect = effect;
     this.turnsRemaining = turnsRemaining;
