@@ -1,9 +1,14 @@
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
+import type { ALLY_TARGET_PENALTY } from "#constants/ai-constants";
+import type { MovePhase } from "#phases/move-phase";
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
+
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { ConditionalCritAbAttr } from "#abilities/conditional-crit-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { activeOverrides } from "#app/overrides";
 import type { TurnCommand } from "#app/turn-command-manager";
-import { BAD_MOVE_PENALTY } from "#constants/ai-constants";
+import { BAD_MOVE_PENALTY, KO_ATTACK_SCORE } from "#constants/ai-constants";
 import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#constants/game-constants";
 import { allMoves } from "#data/data-lists";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
@@ -216,11 +221,74 @@ export class EnemyPokemon extends Pokemon {
     const attackScore = this.getAttackScore(target, move);
 
     const isFail = conditionScore <= BAD_MOVE_PENALTY || attackScore === -1;
-    const isKnockOut = !isFail && attackScore >= 4;
+    const isKnockOut = !isFail && attackScore >= KO_ATTACK_SCORE;
 
     return (
       (isFail ? BAD_MOVE_PENALTY : conditionScore + attackScore + this.getCriticalHitBonus(target, move, attackScore))
       + move.getEffectScore(this, target, isKnockOut, isFail)
+    );
+  }
+
+  /**
+   * Obtains the total score for the given multi-target move across
+   * all given targets when used by this Pokemon. The components of this score
+   * are much like that of {@link getMoveScore | single-target move scoring},
+   * but there are a few key differences:
+   * - Attack Score (AS) is based on the combined individual AS of each target.
+   * targeted allies to the user have their AS inverted when added to the combined score.
+   * - The {@linkcode BAD_MOVE_PENALTY} applies if the move is expected to fail
+   * OR the move is expected to deal more damage to allies than opponents (approximated by AS).
+   * - The {@linkcode ALLY_TARGET_PENALTY} does not apply to Effect Score (ES) calculations.
+   * @param targets - An array of all {@linkcode Pokemon} targeted by the move
+   * @param move - The {@linkcode Move} to evaluate
+   * @returns The sum of this move's score components across all targets
+   */
+  private getMultiTargetMoveScore(targets: Pokemon[], move: Move): number {
+    /**
+     * CS is equal to the highest individual CS across all targets,
+     * i.e. if the move is expected to succeed against at least one Pokemon,
+     * the move won't be penalized.
+     */
+    const conditionScore = Math.max(...targets.map((target) => move.getConditionScore(this, target)));
+    /**
+     * AS for multi-targeted moves is accumulated from all active Pokemon
+     * targeted by the move. Allied targets' AS is inverted before it is
+     * added to the total AS. Since {@linkcode getAttackScore} codifies
+     * 0-damage attacks with an AS of (-1), targeted allies that are immune
+     * effectively grant a {@linkcode MINOR_EFFECT_SCORE_BONUS} to the move action.
+     *
+     * Assuming the attack doesn't have high priority, this score has a maximum
+     * value of (+9) (2 opponent KOs + 1 immune ally in a double battle). Status
+     * moves still receive an AS of (+0) in all cases.
+     */
+    const attackScores = targets.map(
+      (target) => (target.isOpponent(this) ? 1 : -1) * this.getAttackScore(target, move),
+    );
+
+    const isFail = conditionScore <= BAD_MOVE_PENALTY;
+    const isKnockOut = attackScores.map((score) => !isFail && score >= KO_ATTACK_SCORE);
+    const totalAttackScore = attackScores.reduce((total, score) => total + score);
+
+    /**
+     * A multi-target move action is considered "bad" if the move is expected
+     * to fail or deal more damage to allies than opponents.
+     */
+    const isBadMove = isFail || totalAttackScore < 0;
+
+    /**
+     * The critical hit bonus for this move action is the sum of
+     * single-target critical hit bonuses against all opponent targets.
+     */
+    const critBonus = targets.reduce((score, target, i) => {
+      if (!target.isOpponent(this)) {
+        return score;
+      }
+      return score + this.getCriticalHitBonus(target, move, attackScores[i]);
+    }, 0);
+
+    return (
+      (isBadMove ? BAD_MOVE_PENALTY : conditionScore + totalAttackScore + critBonus)
+      + targets.reduce((score, target, i) => score + move.getEffectScore(this, target, isKnockOut[i], isFail, true), 0)
     );
   }
 
@@ -449,11 +517,10 @@ export class EnemyPokemon extends Pokemon {
         score,
       };
     }
+
     if (move.isFieldTarget()) {
-      /**
-       * Field-targeting effects are internally self-targeted during
-       * score evaluation.
-       */
+      // Field-targeting effects are internally self-targeted during
+      // score evaluation.
       const score = this.getMoveScore(this, move);
 
       return {
@@ -471,11 +538,23 @@ export class EnemyPokemon extends Pokemon {
      */
     const activeTargets = targets.filter((bi) => !isNil(globalScene.getPokemonByBattlerIndex(bi)));
     if (activeTargets.length === 0) {
-      /** Moves with no valid targets are given a "fail penalty" of (-5). */
+      // Moves with no valid targets are given a "fail penalty" of (-5).
       return {
         moveId: move.id,
         targets: [],
         score: BAD_MOVE_PENALTY,
+      };
+    }
+
+    if (multiple) {
+      // Multi-target moves are evaluated by their cumulative score across all valid targets
+      return {
+        moveId: move.id,
+        targets,
+        score: this.getMultiTargetMoveScore(
+          targets.map((bi) => globalScene.getPokemonByBattlerIndex(bi)).filter((p) => !isNil(p)),
+          move,
+        ),
       };
     }
 
@@ -487,17 +566,6 @@ export class EnemyPokemon extends Pokemon {
       (bi) => [bi, this.getMoveScore(globalScene.getPokemonByBattlerIndex(bi)!, move)], // TODO: find a way to get rid of this bang
     );
 
-    if (multiple) {
-      /**
-       * Multi-targeted moves use the full target set and the sum of move scores
-       * for each target.
-       */
-      return {
-        moveId: move.id,
-        targets,
-        score: targetScores.map((ts) => ts[1]).reduce((total, score) => total + score),
-      };
-    }
     if (move.moveTarget === MoveTarget.RANDOM_NEAR_ENEMY) {
       /**
        * Moves with random targeting resolve their final target within {@linkcode getMoveTargets},
@@ -514,6 +582,7 @@ export class EnemyPokemon extends Pokemon {
         score: averageScore,
       };
     }
+
     /**
      * Single-target moves form an optimal move action with the highest-scoring
      * {@linkcode BattlerIndex}. {@linkcode targetScores} is shuffled here so
