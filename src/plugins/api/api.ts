@@ -8,7 +8,7 @@ import type { TitleStatsResponse } from "#types/api-types";
 /**
  * A wrapper for API requests.
  */
-export class Api extends ApiBase {
+class Api extends ApiBase {
   //#region Fields
 
   public readonly ERR_SERVER_NOT_CONNECTED: string = "The server is not connected";
@@ -113,8 +113,8 @@ export class Api extends ApiBase {
 
   /**
    * Pings the server (via {@linkcode getGameTitleStats}) and updates {@linkcode _isConnected} accordingly.
-   *
-   * *We have no dedicated ping/status endpoint yet, so we ping the game title stats endpoint, but without printing any errors.*
+   * @remarks
+   * We have no dedicated ping/status endpoint yet, so we ping the game title stats endpoint, but without printing any errors by default.
    */
   async ping() {
     try {

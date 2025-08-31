@@ -246,10 +246,10 @@ export class InputsController {
 
     const layoutKey = enumValueToKey(KeyboardLayout, layout).toLowerCase();
     this.selectedDevice[Device.KEYBOARD] = layoutKey;
-    if (!this.configs[layoutKey]) {
-      this.setupKeyboard(layout);
-    } else {
+    if (this.configs[layoutKey]) {
       this.initChosenLayoutKeyboard(layoutKey);
+    } else {
+      this.setupKeyboard(layout);
     }
   }
 
@@ -638,7 +638,7 @@ export class InputsController {
     if (selectedDevice && this.configs[selectedDevice]) {
       return this.configs[selectedDevice];
     }
-    return undefined;
+    return;
   }
 
   public getIconForLatestInputRecorded(settingName: InputSettings): string | undefined {

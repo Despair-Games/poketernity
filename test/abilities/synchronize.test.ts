@@ -66,10 +66,10 @@ describe("Abilities - Synchronize", () => {
   });
 
   it("does not trigger when Pokemon is statused by Toxic Spikes", async () => {
-    game.override
+    game.override //
       .ability(AbilityId.SYNCHRONIZE)
       .enemyAbility(AbilityId.BALL_FETCH)
-      .enemyMoveset(Array(4).fill(MoveId.TOXIC_SPIKES));
+      .enemyMoveset(MoveId.TOXIC_SPIKES);
 
     await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.MILOTIC);
 

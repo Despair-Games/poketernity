@@ -150,7 +150,7 @@ export class EncounterPhase extends BattlePhase {
           }
           globalScene
             .getPlayerParty()
-            .slice(0, !double ? 1 : 2)
+            .slice(0, double ? 2 : 1)
             .reverse()
             .forEach((playerPokemon) => {
               applyAbAttrs<SyncEncounterNatureAbAttr>(
@@ -304,7 +304,10 @@ export class EncounterPhase extends BattlePhase {
       }
 
       ui.setMessageMode().then(() => {
-        if (!this.loaded) {
+        if (this.loaded) {
+          this.doEncounter();
+          globalScene.resetSeed();
+        } else {
           // Set weather and terrain before session gets saved to ensure it's properly added to session data
           this.trySetWeatherIfNewBiome();
           this.trySetTerrainIfNewBiome();
@@ -317,9 +320,6 @@ export class EncounterPhase extends BattlePhase {
             this.doEncounter();
             globalScene.resetSeed();
           });
-        } else {
-          this.doEncounter();
-          globalScene.resetSeed();
         }
       });
     });
@@ -454,9 +454,7 @@ export class EncounterPhase extends BattlePhase {
 
       const encounterMessages = trainer.getEncounterMessages();
 
-      if (!encounterMessages.length) {
-        doSummon();
-      } else {
+      if (encounterMessages.length) {
         let message = "";
         globalScene.executeWithSeedOffset(() => {
           message = randSeedItem(encounterMessages);
@@ -479,6 +477,8 @@ export class EncounterPhase extends BattlePhase {
         } else {
           showDialogueAndSummon();
         }
+      } else {
+        doSummon();
       }
     } else if (currentBattle.isBattleMysteryEncounter() && mysteryEncounter) {
       const { introVisuals } = mysteryEncounter;
@@ -502,9 +502,7 @@ export class EncounterPhase extends BattlePhase {
 
         if (showEncounterMessage) {
           const introDialogue = mysteryEncounter.dialogue.intro;
-          if (!introDialogue) {
-            doShowEncounterOptions();
-          } else {
+          if (introDialogue) {
             const FIRST_DIALOGUE_PROMPT_DELAY = 750;
             let i = 0;
             const showNextDialogue = (): void => {
@@ -527,6 +525,8 @@ export class EncounterPhase extends BattlePhase {
             if (introDialogue.length > 0) {
               showNextDialogue();
             }
+          } else {
+            doShowEncounterOptions();
           }
         } else {
           doShowEncounterOptions();
@@ -535,13 +535,13 @@ export class EncounterPhase extends BattlePhase {
 
       const encounterMessage = i18next.t("battle:mysteryEncounterAppeared");
 
-      if (!encounterMessage) {
-        doEncounter();
-      } else {
+      if (encounterMessage) {
         doTrainerExclamation();
         ui.showDialogue(encounterMessage, "???", () => {
           charSprite.hide().then(() => globalScene.hideFieldOverlay(250).then(() => doEncounter()));
         });
+      } else {
+        doEncounter();
       }
     }
   }
@@ -651,12 +651,12 @@ export class EncounterPhase extends BattlePhase {
           // The line below checks if an English ordinal is necessary or not based on whether an entry for encounterLocalizationKey exists in the language or not.
           const ordinalUsed =
             !i18next.exists(localizationKey, { fallbackLng: [] }) || i18next.resolvedLanguage === "en"
-              ? i18next.t("battleSpecDialogue:key", { count: count, ordinal: true })
+              ? i18next.t("battleSpecDialogue:key", { count, ordinal: true })
               : "";
           const cycleCount = count.toLocaleString() + ordinalUsed;
           const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
           const genderStr = enumValueToKey(PlayerGender, genderIndex).toLowerCase();
-          const encounterDialogue = i18next.t(localizationKey, { context: genderStr, cycleCount: cycleCount });
+          const encounterDialogue = i18next.t(localizationKey, { context: genderStr, cycleCount });
           if (!gameData.getSeenDialogues()[localizationKey]) {
             gameData.saveSeenDialogue(localizationKey);
           }

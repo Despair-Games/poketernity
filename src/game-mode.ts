@@ -132,7 +132,7 @@ export class GameMode implements GameModeConfig {
   getWaveForDifficulty(waveIndex: number, ignoreCurveChanges: boolean = false): number {
     switch (this.modeId) {
       case GameModes.DAILY:
-        return waveIndex + 30 + (!ignoreCurveChanges ? Math.floor(waveIndex / 5) : 0);
+        return waveIndex + 30 + (ignoreCurveChanges ? 0 : Math.floor(waveIndex / 5));
       default:
         return waveIndex;
     }
@@ -326,9 +326,9 @@ export class GameMode implements GameModeConfig {
       case GameModes.CLASSIC:
       case GameModes.CHALLENGE:
       case GameModes.DAILY:
-        return !isBoss ? 18 : 6;
+        return isBoss ? 6 : 18;
       case GameModes.ENDLESS:
-        return !isBoss ? 12 : 4;
+        return isBoss ? 4 : 12;
     }
   }
 

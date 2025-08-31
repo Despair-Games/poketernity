@@ -30,11 +30,11 @@ describe("Abilities - Stall", () => {
     game.override.moveset([MoveId.QUICK_ATTACK, MoveId.TACKLE]);
   });
 
-  /**
+  /*
    * References:
    * https://bulbapedia.bulbagarden.net/wiki/Stall_(Ability)
    * https://bulbapedia.bulbagarden.net/wiki/Priority
-   **/
+   */
 
   it("should cause the source to move last in its priority bracket", async () => {
     await game.classicMode.startBattle(SpeciesId.SHUCKLE);

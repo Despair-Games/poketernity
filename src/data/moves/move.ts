@@ -746,7 +746,7 @@ export abstract class Move {
     for (const attr of this.attrs) {
       // conditionals to check if the move is self targeting (if so then you are applying the move to yourself, not the target)
       score +=
-        attr.getTargetBenefitScore(user, !attr.selfTarget ? target : user, move)
+        attr.getTargetBenefitScore(user, attr.selfTarget ? user : target, move)
         * (target !== user && attr.selfTarget ? -1 : 1);
     }
 

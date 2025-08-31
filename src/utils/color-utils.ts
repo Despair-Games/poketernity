@@ -1,26 +1,3 @@
-export function rgbToHsv(r: number, g: number, b: number): number[] {
-  const v = Math.max(r, g, b);
-  const c = v - Math.min(r, g, b);
-  const h = c && (v === r ? (g - b) / c : v === g ? 2 + (b - r) / c : 4 + (r - g) / c);
-  return [60 * (h < 0 ? h + 6 : h), v && c / v, v];
-}
-
-/**
- * Compare color difference in RGB
- * @param rgb1 - First RGB color in array
- * @param rgb2 - Second RGB color in array
- */
-export function deltaRgb(rgb1: number[], rgb2: number[]): number {
-  const [r1, g1, b1] = rgb1;
-  const [r2, g2, b2] = rgb2;
-  const drp2 = Math.pow(r1 - r2, 2);
-  const dgp2 = Math.pow(g1 - g2, 2);
-  const dbp2 = Math.pow(b1 - b2, 2);
-  const t = (r1 + r2) / 2;
-
-  return Math.ceil(Math.sqrt(2 * drp2 + 4 * dgp2 + 3 * dbp2 + (t * (drp2 - dbp2)) / 256));
-}
-
 export function rgbHexToRgba(hex: string): { r: number; g: number; b: number; a: number } {
   const color = hex.match(/^([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i) ?? ["000000", "00", "00", "00"];
   return {
@@ -29,10 +6,6 @@ export function rgbHexToRgba(hex: string): { r: number; g: number; b: number; a:
     b: Number.parseInt(color[3], 16),
     a: 255,
   };
-}
-
-export function rgbaToInt(rgba: number[]): number {
-  return (rgba[0] << 24) + (rgba[1] << 16) + (rgba[2] << 8) + rgba[3];
 }
 
 /**

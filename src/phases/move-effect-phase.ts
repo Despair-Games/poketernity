@@ -506,10 +506,8 @@ export class MoveEffectPhase extends HitCheckPhase {
       });
 
       if (damage > 0) {
-        if (user.isPlayer()) {
-          if (damage > globalScene.gameData.gameStats.highestDamage) {
-            globalScene.gameData.gameStats.highestDamage = damage;
-          }
+        if (user.isPlayer() && damage > globalScene.gameData.gameStats.highestDamage) {
+          globalScene.gameData.gameStats.highestDamage = damage;
         }
         user.turnData.totalDamageDealt += damage;
         user.turnData.singleHitDamageDealt = damage;
@@ -518,8 +516,8 @@ export class MoveEffectPhase extends HitCheckPhase {
         const attackResult: AttackMoveResult = {
           moveId: move.id,
           result: result as DamageResult,
-          damage: damage,
-          isCritical: isCritical,
+          damage,
+          isCritical,
           sourceId: user.id,
           sourceBattlerIndex: user.getBattlerIndex(),
         };

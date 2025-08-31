@@ -468,31 +468,29 @@ export class SummaryUiHandler extends UiHandler {
         if (this.pokemon && this.moveCursor < this.pokemon.getMoveset(true).length) {
           if (this.summaryUiMode === SummaryUiMode.LEARN_MOVE) {
             this.moveSelectFunction?.(this.moveCursor);
+          } else if (this.selectedMoveIndex === -1) {
+            this.selectedMoveIndex = this.moveCursor;
+            this.setCursor(this.moveCursor);
           } else {
-            if (this.selectedMoveIndex === -1) {
-              this.selectedMoveIndex = this.moveCursor;
-              this.setCursor(this.moveCursor);
-            } else {
-              if (this.selectedMoveIndex !== this.moveCursor) {
-                this.pokemon.swapMoves(this.selectedMoveIndex, this.moveCursor);
+            if (this.selectedMoveIndex !== this.moveCursor) {
+              this.pokemon.swapMoves(this.selectedMoveIndex, this.moveCursor);
 
-                const selectedMoveRow = this.moveRowsContainer.getAt(
-                  this.selectedMoveIndex,
-                ) as Phaser.GameObjects.Container;
-                const switchMoveRow = this.moveRowsContainer.getAt(this.moveCursor) as Phaser.GameObjects.Container;
+              const selectedMoveRow = this.moveRowsContainer.getAt(
+                this.selectedMoveIndex,
+              ) as Phaser.GameObjects.Container;
+              const switchMoveRow = this.moveRowsContainer.getAt(this.moveCursor) as Phaser.GameObjects.Container;
 
-                this.moveRowsContainer.moveTo(selectedMoveRow, this.moveCursor);
-                this.moveRowsContainer.moveTo(switchMoveRow, this.selectedMoveIndex);
+              this.moveRowsContainer.moveTo(selectedMoveRow, this.moveCursor);
+              this.moveRowsContainer.moveTo(switchMoveRow, this.selectedMoveIndex);
 
-                selectedMoveRow.setY(this.moveCursor * 16);
-                switchMoveRow.setY(this.selectedMoveIndex * 16);
-              }
+              selectedMoveRow.setY(this.moveCursor * 16);
+              switchMoveRow.setY(this.selectedMoveIndex * 16);
+            }
 
-              this.selectedMoveIndex = -1;
-              if (this.selectedMoveCursorObj) {
-                this.selectedMoveCursorObj.destroy();
-                this.selectedMoveCursorObj = null;
-              }
+            this.selectedMoveIndex = -1;
+            if (this.selectedMoveCursorObj) {
+              this.selectedMoveCursorObj.destroy();
+              this.selectedMoveCursorObj = null;
             }
           }
           success = true;
@@ -526,71 +524,69 @@ export class SummaryUiHandler extends UiHandler {
             break;
         }
       }
-    } else {
-      if (button === Button.ACTION) {
-        if (this.cursor === SummaryUiPage.MOVES) {
-          this.showMoveSelect();
-          success = true;
-        } else if (this.cursor === SummaryUiPage.PROFILE && this.pokemon?.hasPassive()) {
-          // if we're on the PROFILE page and this pokemon has a passive unlocked..
-          // Since abilities are displayed by default, all we need to do is toggle visibility on all elements to show passives
-          this.abilityContainer.nameText?.setVisible(!this.abilityContainer.descriptionText?.visible);
-          this.abilityContainer.descriptionText?.setVisible(!this.abilityContainer.descriptionText.visible);
-          this.abilityContainer.labelImage.setVisible(!this.abilityContainer.labelImage.visible);
-
-          this.passiveContainer.nameText?.setVisible(!this.passiveContainer.descriptionText?.visible);
-          this.passiveContainer.descriptionText?.setVisible(!this.passiveContainer.descriptionText.visible);
-          this.passiveContainer.labelImage.setVisible(!this.passiveContainer.labelImage.visible);
-        }
-      } else if (button === Button.CANCEL) {
-        if (this.summaryUiMode === SummaryUiMode.LEARN_MOVE) {
-          this.hideMoveSelect();
-        } else {
-          if (this.exitCallback instanceof Function) {
-            const selectCallback = this.exitCallback;
-            this.exitCallback = null;
-            selectCallback();
-          }
-
-          if (!this.fromPartyMenu) {
-            ui.setMessageMode();
-          } else {
-            ui.setMode<PartyUiHandler>(UiMode.PARTY);
-          }
-        }
+    } else if (button === Button.ACTION) {
+      if (this.cursor === SummaryUiPage.MOVES) {
+        this.showMoveSelect();
         success = true;
+      } else if (this.cursor === SummaryUiPage.PROFILE && this.pokemon?.hasPassive()) {
+        // if we're on the PROFILE page and this pokemon has a passive unlocked..
+        // Since abilities are displayed by default, all we need to do is toggle visibility on all elements to show passives
+        this.abilityContainer.nameText?.setVisible(!this.abilityContainer.descriptionText?.visible);
+        this.abilityContainer.descriptionText?.setVisible(!this.abilityContainer.descriptionText.visible);
+        this.abilityContainer.labelImage.setVisible(!this.abilityContainer.labelImage.visible);
+
+        this.passiveContainer.nameText?.setVisible(!this.passiveContainer.descriptionText?.visible);
+        this.passiveContainer.descriptionText?.setVisible(!this.passiveContainer.descriptionText.visible);
+        this.passiveContainer.labelImage.setVisible(!this.passiveContainer.labelImage.visible);
+      }
+    } else if (button === Button.CANCEL) {
+      if (this.summaryUiMode === SummaryUiMode.LEARN_MOVE) {
+        this.hideMoveSelect();
       } else {
-        const pages = getTSEnumValues(SummaryUiPage);
-        switch (button) {
-          case Button.UP:
-          case Button.DOWN: {
-            if (this.summaryUiMode === SummaryUiMode.LEARN_MOVE || !this.fromPartyMenu) {
-              break;
-            }
-            const isDown = button === Button.DOWN;
-            const party = globalScene.getPlayerParty();
-            const partyMemberIndex = this.pokemon?.isPlayer() ? party.indexOf(this.pokemon) : -1;
-            if ((isDown && partyMemberIndex < party.length - 1) || (!isDown && partyMemberIndex)) {
-              const page = this.cursor;
-              this.clear();
-              this.show(party[partyMemberIndex + (isDown ? 1 : -1)], this.summaryUiMode, page);
-            }
+        if (this.exitCallback instanceof Function) {
+          const selectCallback = this.exitCallback;
+          this.exitCallback = null;
+          selectCallback();
+        }
+
+        if (this.fromPartyMenu) {
+          ui.setMode<PartyUiHandler>(UiMode.PARTY);
+        } else {
+          ui.setMessageMode();
+        }
+      }
+      success = true;
+    } else {
+      const pages = getTSEnumValues(SummaryUiPage);
+      switch (button) {
+        case Button.UP:
+        case Button.DOWN: {
+          if (this.summaryUiMode === SummaryUiMode.LEARN_MOVE || !this.fromPartyMenu) {
             break;
           }
-          case Button.LEFT:
-            if (this.cursor) {
-              success = this.setCursor(this.cursor - 1);
-            }
-            break;
-          case Button.RIGHT:
-            if (this.cursor < pages.length - 1) {
-              success = this.setCursor(this.cursor + 1);
-              if (this.summaryUiMode === SummaryUiMode.LEARN_MOVE && this.cursor === SummaryUiPage.MOVES) {
-                this.moveSelect = true;
-              }
-            }
-            break;
+          const isDown = button === Button.DOWN;
+          const party = globalScene.getPlayerParty();
+          const partyMemberIndex = this.pokemon?.isPlayer() ? party.indexOf(this.pokemon) : -1;
+          if ((isDown && partyMemberIndex < party.length - 1) || (!isDown && partyMemberIndex)) {
+            const page = this.cursor;
+            this.clear();
+            this.show(party[partyMemberIndex + (isDown ? 1 : -1)], this.summaryUiMode, page);
+          }
+          break;
         }
+        case Button.LEFT:
+          if (this.cursor) {
+            success = this.setCursor(this.cursor - 1);
+          }
+          break;
+        case Button.RIGHT:
+          if (this.cursor < pages.length - 1) {
+            success = this.setCursor(this.cursor + 1);
+            if (this.summaryUiMode === SummaryUiMode.LEARN_MOVE && this.cursor === SummaryUiPage.MOVES) {
+              this.moveSelect = true;
+            }
+          }
+          break;
       }
     }
 
@@ -769,9 +765,9 @@ export class SummaryUiHandler extends UiHandler {
 
         const getTypeIcon = (index: number, type: ElementalType, tera: boolean = false) => {
           const xCoord = typeLabel.width * typeLabel.scale + 9 + 34 * index;
-          const typeIcon = !tera
-            ? globalScene.add.sprite(xCoord, 42, "type_icons", enumValueToKey(ElementalType, type).toLowerCase())
-            : globalScene.add.sprite(xCoord, 42, "type_tera");
+          const typeIcon = tera
+            ? globalScene.add.sprite(xCoord, 42, "type_tera")
+            : globalScene.add.sprite(xCoord, 42, "type_icons", enumValueToKey(ElementalType, type).toLowerCase());
           if (tera) {
             typeIcon.setScale(0.5);
             const typeRgb = getTypeRgb(type);
@@ -835,7 +831,7 @@ export class SummaryUiHandler extends UiHandler {
           this.abilityPrompt = globalScene.add.image(
             0,
             0,
-            !globalScene.inputController?.gamepadSupport ? "summary_profile_prompt_z" : "summary_profile_prompt_a",
+            globalScene.inputController?.gamepadSupport ? "summary_profile_prompt_a" : "summary_profile_prompt_z",
           );
           this.abilityPrompt.setPosition(8, 43);
           this.abilityPrompt.setVisible(true);
@@ -903,7 +899,7 @@ export class SummaryUiHandler extends UiHandler {
               wave: `${getBBCodeFragment(this.pokemon?.metWave ? this.pokemon.metWave.toString()! : i18next.t("pokemonSummary:unknownTrainer"), TextStyle.SUMMARY_RED)}${closeFragment}`,
             },
           ),
-          natureFragment: i18next.t(`pokemonSummary:natureFragment.${rawNature}`, { nature: nature }),
+          natureFragment: i18next.t(`pokemonSummary:natureFragment.${rawNature}`, { nature }),
         });
 
         const memoText = addBBCodeTextObject(7, 113, String(memoString), TextStyle.WINDOW_ALT);

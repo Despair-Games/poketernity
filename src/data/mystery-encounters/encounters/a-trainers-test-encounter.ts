@@ -46,10 +46,9 @@ export const ATrainersTestEncounter: MysteryEncounter = MysteryEncounterBuilder.
 
     // Randomly pick from 1 of the 5 stat trainers to spawn
     let trainerType: TrainerType;
-    let spriteKeys;
+    let spriteKeys: { spriteKey: string; fileRoot: string };
     let trainerNameKey: string;
-    switch (randSeedInt(5)) {
-      default:
+    switch (randSeedInt(5) as 0 | 1 | 2 | 3 | 4) {
       case 0:
         trainerType = TrainerType.BUCK;
         spriteKeys = getSpriteKeysFromSpecies(SpeciesId.CLAYDOL);
@@ -106,7 +105,7 @@ export const ATrainersTestEncounter: MysteryEncounter = MysteryEncounterBuilder.
     const trainerSpriteKey = trainerConfig.getSpriteKey();
     encounter.enemyPartyConfigs.push({
       levelAdditiveModifier: 1,
-      trainerConfig: trainerConfig,
+      trainerConfig,
     });
 
     encounter.spriteConfigs = [

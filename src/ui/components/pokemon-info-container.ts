@@ -305,19 +305,19 @@ export class PokemonInfoContainer extends Phaser.GameObjects.Container {
 
       // Check if the player owns ability for the root form
       const playerOwnsThisAbility = pokemon.checkIfPlayerHasAbilityOfStarter(starterEntry.abilityAttr);
-      if (!playerOwnsThisAbility) {
-        setTextColor(this.pokemonAbilityLabelText, TextStyle.SUMMARY_BLUE);
-      } else {
+      if (playerOwnsThisAbility) {
         setTextColor(this.pokemonAbilityLabelText, this.defaultTextStyle);
+      } else {
+        setTextColor(this.pokemonAbilityLabelText, TextStyle.SUMMARY_BLUE);
       }
 
       this.pokemonNatureText.setText(getNatureName(pokemon.getNature(), true, false, false, this.defaultTextStyle));
       const dexNatures = starterEntry.natureAttr;
       const newNature = 1 << pokemon.nature;
-      if (!(dexNatures & newNature)) {
-        setTextColor(this.pokemonNatureLabelText, TextStyle.SUMMARY_BLUE);
-      } else {
+      if (dexNatures & newNature) {
         setTextColor(this.pokemonNatureLabelText, this.defaultTextStyle);
+      } else {
+        setTextColor(this.pokemonNatureLabelText, TextStyle.SUMMARY_BLUE);
       }
 
       const baseVariant = pokemon.getVariant();

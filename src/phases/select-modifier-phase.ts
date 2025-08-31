@@ -315,11 +315,11 @@ export class SelectModifierPhase extends BattlePhase {
           (slotIndex: number, option: PartyOption) => {
             if (slotIndex < 6) {
               ui.setMode<ModifierSelectUiHandler>(UiMode.MODIFIER_SELECT, this.isPlayer()).then(() => {
-                const modifier = !isMoveModifier
-                  ? !isRememberMoveModifier
-                    ? modifierType.newModifier(party[slotIndex])
-                    : modifierType.newModifier(party[slotIndex], option as number)
-                  : modifierType.newModifier(party[slotIndex], option - PartyOption.MOVE_1);
+                const modifier = isMoveModifier
+                  ? modifierType.newModifier(party[slotIndex], option - PartyOption.MOVE_1)
+                  : isRememberMoveModifier
+                    ? modifierType.newModifier(party[slotIndex], option as number)
+                    : modifierType.newModifier(party[slotIndex]);
                 applyModifier(modifier!, true); // TODO: is the bang correct?
               });
             } else {
@@ -339,12 +339,10 @@ export class SelectModifierPhase extends BattlePhase {
           tmMoveId,
           isPpRestoreModifier,
         );
-      } else {
-        if (modifierType) {
-          const newModifier = modifierType.newModifier();
-          if (newModifier) {
-            applyModifier(newModifier);
-          }
+      } else if (modifierType) {
+        const newModifier = modifierType.newModifier();
+        if (newModifier) {
+          applyModifier(newModifier);
         }
       }
 

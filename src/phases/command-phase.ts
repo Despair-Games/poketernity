@@ -113,13 +113,11 @@ export class CommandPhase extends FieldPhase {
           ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);
         }
       }
+    } else if (currentBattle.isBattleMysteryEncounter() && currentBattle.mysteryEncounter?.skipToFightInput) {
+      ui.clearText();
+      ui.setMode<FightUiHandler>(UiMode.FIGHT, this.fieldIndex);
     } else {
-      if (currentBattle.isBattleMysteryEncounter() && currentBattle.mysteryEncounter?.skipToFightInput) {
-        ui.clearText();
-        ui.setMode<FightUiHandler>(UiMode.FIGHT, this.fieldIndex);
-      } else {
-        ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);
-      }
+      ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);
     }
   }
 
@@ -240,7 +238,7 @@ export class CommandPhase extends FieldPhase {
           }
           const moveName = move.name.replace(" (N)", ""); // Trims off the "unimplemented move" indicator
 
-          ui.showText(i18next.t(errorMessageKey, { moveName: moveName }), {
+          ui.showText(i18next.t(errorMessageKey, { moveName }), {
             callback: () => {
               ui.clearText();
               ui.setMode<FightUiHandler>(UiMode.FIGHT, this.fieldIndex);
@@ -287,10 +285,10 @@ export class CommandPhase extends FieldPhase {
               failCatchRun("battle:noPokeballStrong");
             } else {
               turnManager.addCommand({
-                pokemon: pokemon,
+                pokemon,
                 command: BattleCommand.BALL,
-                cursor: cursor,
-                targets: targets,
+                cursor,
+                targets,
               });
               if (this.fieldIndex) {
                 turnManager.tryRemoveCommand((tc) => tc.pokemon === pokemon.getAlly());
@@ -333,8 +331,8 @@ export class CommandPhase extends FieldPhase {
 
         if (batonPass || !pokemon.isTrapped(trappedAbMessages)) {
           const turnCommand: TurnCommand = isSwitch
-            ? { pokemon: pokemon, command: BattleCommand.POKEMON, cursor: cursor, args: args }
-            : { pokemon: pokemon, command: BattleCommand.RUN };
+            ? { pokemon, command: BattleCommand.POKEMON, cursor, args }
+            : { pokemon, command: BattleCommand.RUN };
           turnManager.addCommand(turnCommand);
           success = true;
           if (!isSwitch && this.fieldIndex) {

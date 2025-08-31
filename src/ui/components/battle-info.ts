@@ -393,13 +393,12 @@ export class BattleInfo extends Phaser.GameObjects.Container {
       const dexEntry = globalScene.gameData.dexData[pokemon.species.speciesId];
       this.ownedIcon.setVisible(dexEntry.caughtAttr > 0);
       const opponentPokemonDexAttr = pokemon.getDexAttr();
-      if (globalScene.gameMode.isClassic) {
-        if (
-          globalScene.gameData.starterData[pokemon.species.getRootSpeciesId()].classicWinCount > 0
-          && globalScene.gameData.starterData[pokemon.species.getRootSpeciesId(true)].classicWinCount > 0
-        ) {
-          this.championRibbon.setVisible(true);
-        }
+      if (
+        globalScene.gameMode.isClassic
+        && globalScene.gameData.starterData[pokemon.species.getRootSpeciesId()].classicWinCount > 0
+        && globalScene.gameData.starterData[pokemon.species.getRootSpeciesId(true)].classicWinCount > 0
+      ) {
+        this.championRibbon.setVisible(true);
       }
 
       // Check if Player owns all genders, variants and forms of the Pokemon
@@ -625,7 +624,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
           this.statusIndicator.setFrame(StatusEffect[this.lastStatus].toLowerCase());
         }
 
-        const offsetX = !this.player ? (this.ownedIcon.visible ? 8 : 0) + (this.championRibbon.visible ? 8 : 0) : 0;
+        const offsetX = this.player ? 0 : (this.ownedIcon.visible ? 8 : 0) + (this.championRibbon.visible ? 8 : 0);
         this.statusIndicator.setPositionRelative(this.nameText, offsetX, 11.5);
 
         this.statusIndicator.setVisible(!!this.lastStatus);
@@ -654,7 +653,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
 
       // Plays the animation of the Pokemon's HP bar increasing or decreasing.
       const updatePokemonHp = () => {
-        let duration = !instant ? clamp(Math.abs(this.lastHp - pokemon.hp) * 5, 250, 5000) : 0;
+        let duration = instant ? 0 : clamp(Math.abs(this.lastHp - pokemon.hp) * 5, 250, 5000);
         const speed = settings.general.hpBarSpeed;
         const speedMap = {
           [HpBarSpeed.DEFAULT]: 1,
@@ -668,7 +667,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
           targets: this.hpBar,
           ease: "Sine.easeOut",
           scaleX: pokemon.getHpRatio(),
-          duration: duration,
+          duration,
           onUpdate: () => {
             if (this.player && this.lastHp !== pokemon.hp) {
               const tweenHp = Math.ceil(this.hpBar.scaleX * pokemon.getMaxHp());
@@ -804,7 +803,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
         targets: this.expMaskRect,
         ease: "Sine.easeIn",
         x: ratio * 85 * CANVAS_SCALE,
-        duration: duration,
+        duration,
         onComplete: () => {
           if (!globalScene) {
             return resolve();

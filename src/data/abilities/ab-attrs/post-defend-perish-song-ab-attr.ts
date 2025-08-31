@@ -30,7 +30,7 @@ export class PostDefendPerishSongAbAttr extends PostDefendAbAttr {
   public override getTriggerMessage(pokemon: Pokemon, abilityName: string): string {
     return i18next.t("abilityTriggers:perishBody", {
       pokemonName: getPokemonNameWithAffix(pokemon),
-      abilityName: abilityName,
+      abilityName,
     });
   }
 }

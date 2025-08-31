@@ -69,7 +69,7 @@ export function getVoucherTypeIcon(voucherType: VoucherType): string {
   }
 }
 
-export interface Vouchers {
+interface Vouchers {
   [key: string]: Voucher;
 }
 

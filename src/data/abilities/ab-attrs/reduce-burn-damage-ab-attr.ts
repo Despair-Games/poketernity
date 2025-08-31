@@ -8,9 +8,13 @@ import { type NumberHolder, toDmgValue } from "#utils/common-utils";
  * @param multiplier Multiplied with the damage taken
  */
 export class ReduceBurnDamageAbAttr extends AbAttr {
-  constructor(protected multiplier: number) {
+  protected multiplier: number;
+
+  constructor(multiplier: number) {
     super(false);
     this._flags.add(AbAttrFlag.REDUCE_BURN_DAMAGE);
+
+    this.multiplier = multiplier;
   }
 
   /**

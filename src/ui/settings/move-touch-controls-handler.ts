@@ -167,10 +167,8 @@ export class MoveTouchControlsHandler {
    * Checks for updated orientation and updates the positions of the touch controls if necessary.
    */
   private updateOrientation() {
-    if (this.inConfigurationMode) {
-      if (this.orientationEl) {
-        this.orientationEl.textContent = t(`settings:${this.isLandscape ? "landscape" : "portrait"}`);
-      }
+    if (this.inConfigurationMode && this.orientationEl) {
+      this.orientationEl.textContent = t(`settings:${this.isLandscape ? "landscape" : "portrait"}`);
     }
     const positions = this.getSavedPositionsOfCurrentOrientation() ?? [];
     this.setPositions(positions);

@@ -51,7 +51,7 @@ const SEASONAL_WEIGHT_MULTIPLIER = 10;
 //#region Common Messages
 
 const commonSplashMessages = [
-  ...Array(BATTLES_WON_WEIGHT_MULTIPLIER).fill("battlesWon"),
+  ...new Array(BATTLES_WON_WEIGHT_MULTIPLIER).fill("battlesWon"),
   "joinTheDiscord",
   "infiniteLevels",
   "everythingIsStackable",
@@ -225,7 +225,7 @@ export function getSplashMessages(): string[] {
       if (now >= startDate && now <= endDate) {
         console.log(`Adding ${messages.length} ${name} splash messages (weight: x${SEASONAL_WEIGHT_MULTIPLIER})`);
         messages.forEach((message) => {
-          const weightedMessage = Array(SEASONAL_WEIGHT_MULTIPLIER).fill(message);
+          const weightedMessage = new Array(SEASONAL_WEIGHT_MULTIPLIER).fill(message);
           splashMessages.push(...weightedMessage);
         });
       }

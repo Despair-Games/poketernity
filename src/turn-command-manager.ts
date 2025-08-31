@@ -334,10 +334,11 @@ export class TurnCommandManager {
         const priorityBrackets = priority.map((p) => Math.ceil(p));
         const bypassSpeed = [a, b].map((tc) => tc.pokemon.hasTag(BattlerTagType.BYPASS_SPEED));
 
-        if (priority[0] !== priority[1]) {
-          if (priorityBrackets[0] !== priorityBrackets[1] || bypassSpeed[0] === bypassSpeed[1]) {
-            return priority[1] - priority[0];
-          }
+        if (
+          priority[0] !== priority[1]
+          && (priorityBrackets[0] !== priorityBrackets[1] || bypassSpeed[0] === bypassSpeed[1])
+        ) {
+          return priority[1] - priority[0];
         }
 
         if (bypassSpeed[0] !== bypassSpeed[1]) {

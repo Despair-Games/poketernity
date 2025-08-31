@@ -62,7 +62,7 @@ export function getStatusEffectActivationText(statusEffect: StatusEffect, pokemo
     return "";
   }
   const i18nKey = `${getStatusEffectMessageKey(statusEffect)}.activation` as ParseKeys;
-  return i18next.t(i18nKey, { pokemonNameWithAffix: pokemonNameWithAffix });
+  return i18next.t(i18nKey, { pokemonNameWithAffix });
 }
 
 /**
@@ -76,7 +76,7 @@ export function getStatusEffectOverlapText(statusEffect: StatusEffect, pokemonNa
     return "";
   }
   const i18nKey = `${getStatusEffectMessageKey(statusEffect)}.overlap` as ParseKeys;
-  return i18next.t(i18nKey, { pokemonNameWithAffix: pokemonNameWithAffix });
+  return i18next.t(i18nKey, { pokemonNameWithAffix });
 }
 
 /**
@@ -90,7 +90,7 @@ export function getStatusEffectHealText(statusEffect: StatusEffect, pokemonNameW
     return "";
   }
   const i18nKey = `${getStatusEffectMessageKey(statusEffect)}.heal` as ParseKeys;
-  return i18next.t(i18nKey, { pokemonNameWithAffix: pokemonNameWithAffix });
+  return i18next.t(i18nKey, { pokemonNameWithAffix });
 }
 
 /**
