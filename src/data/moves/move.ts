@@ -787,6 +787,7 @@ export abstract class Move {
    * @param target - The {@linkcode Pokemon} targeted by the move
    * @param isKnockOut - `true` if the move is already known to KO the target (default `false`)
    * @param isFail - `true` if the move is already known to fail or have no effect (default `false`)
+   * @param isMultiTarget - `true` if the move is expected to apply to multiple Pokemon (default `false`)
    * @returns a score value accumulated from effect score modifiers.
    */
   public getEffectScore(
@@ -794,14 +795,15 @@ export abstract class Move {
     target: Pokemon,
     isKnockOut: boolean = false,
     isFail: boolean = false,
+    isMultiTarget: boolean = false,
   ): number {
     // penalize targeting Pokemon that are hidden by Commander
-    if (target && target.getAlly()?.getTag(BattlerTagType.COMMANDED)?.getSourcePokemon() === target) {
+    if (target && !isMultiTarget && target.getAlly()?.getTag(BattlerTagType.COMMANDED)?.getSourcePokemon() === target) {
       return COMMANDING_TARGET_PENALTY;
     }
 
     /** The combined score from all attributes of the move */
-    const attrScore = this.getCombinedAttributeScore(user, target, isKnockOut, isFail);
+    const attrScore = this.getCombinedAttributeScore(user, target, isKnockOut, isFail, isMultiTarget);
 
     /** The penalty given if the move is inaccurate */
     const accuracyPenalty = this.getBattleAccuracyPenalty(user, target);
@@ -817,6 +819,7 @@ export abstract class Move {
    * {@linkcode Pokemon.getAttackScore | Attack Score})
    * @param isFail - `true` if this move would fail or have no effect against the target
    * (as determined by {@linkcode getConditionScore | Condition Score})
+   * @param isMultiTarget - `true` if this move is expected to apply to multiple targets
    * @returns the cumulative integer score from this move's attributes
    * @see {@linkcode getEffectScore}
    * @see {@linkcode MoveAttr.getEffectScore}
@@ -826,15 +829,14 @@ export abstract class Move {
     target: Pokemon,
     isKnockOut: boolean,
     isFail: boolean,
+    isMultiTarget: boolean,
   ): number {
     if (target.isAlly(user)) {
       /*
-       * Attacks (other than Pollen Puff) are always penalized against allies
-       * TODO:
-       * - Reduce this penalty for multi-target moves
-       * - Use attribute flags instead of specific move IDs for more flexibility
+       * Single-target attacks (other than Pollen Puff) are always penalized against allies
+       * TODO: Use attribute flags instead of specific move IDs for more flexibility
        */
-      if (this.id !== MoveId.POLLEN_PUFF && !this.isStatusMove()) {
+      if (!isMultiTarget && this.id !== MoveId.POLLEN_PUFF && !this.isStatusMove()) {
         return ALLY_TARGET_PENALTY;
       }
 
@@ -842,20 +844,16 @@ export abstract class Move {
        * ALLY TARGET PENALTY:
        *
        * If the user is the target's ally, a {@link ALLY_TARGET_PENALTY | massive score penalty} is applied
-       * unless the move has at least one attribute that overrides the penalty.
+       * unless the move is multi-target or has at least one attribute that overrides the penalty.
        * In that case, the total score is the sum of {@link MoveAttr.getAllyTargetScore | ally target scores} from those
        * overriding attributes.
-       *
-       * **NOTE:** if at least one attribute overrides the Ally Target Penalty, ONLY
-       * the overriding attributes are accounted for in scoring. Score contributions
-       * from other non-overriding attributes are ignored.
        */
       const allyTargetScores = this.attrs
         .map((attr) => attr.getAllyTargetScore(user, target, this))
         .filter((score) => !isNil(score));
 
       if (allyTargetScores.length === 0) {
-        return ALLY_TARGET_PENALTY;
+        return isMultiTarget ? 0 : ALLY_TARGET_PENALTY;
       }
 
       return allyTargetScores.reduce((total, score) => total + score, 0);
