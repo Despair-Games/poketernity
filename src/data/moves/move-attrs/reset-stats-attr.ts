@@ -1,6 +1,8 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { BAD_MOVE_PENALTY, SOFT_EFFECT_SCORE_LIMIT } from "#constants/ai-constants";
 import { BATTLE_STATS } from "#enums/stat";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
@@ -42,5 +44,36 @@ export class ResetStatsAttr extends MoveEffectAttr {
       pokemon.setStatStage(s, 0);
     }
     pokemon.updateInfo();
+  }
+
+  /**
+   * @returns An Effect Score modifier based on the effective stat stage changes for all
+   * affected allies and opponents as a result of this move action. This effect is rewarded
+   * when affected opponents have positive stat stages and/or allies have negative stat stages.
+   * This also grants a {@linkcode BAD_MOVE_PENALTY} when the net stat stage change does not
+   * favor the user's side of the field.
+   */
+  public override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    const affectedPokemon = this.targetAllPokemon ? globalScene.getField(true) : [target];
+
+    const uncappedScore = affectedPokemon.reduce((total, p) => total + this.getIndividualEffectScore(user, p), 0);
+    if (uncappedScore <= 0 && move.isStatusMove()) {
+      return BAD_MOVE_PENALTY;
+    }
+    return Math.min(uncappedScore, SOFT_EFFECT_SCORE_LIMIT);
+  }
+
+  /**
+   * @param user - The {@linkcode EnemyPokemon} evaluating this attribute's effect
+   * @param target - The {@linkcode Pokemon} this effect is evaluated against
+   * @returns The Effect Score bonus or penalty for resetting the given target's current stat stages. This
+   * score scales with the target's current stat stage for each stat. If the target is an opponent to the user,
+   * this grants (+0.5) times the combined number of stat stages across all {@linkcode BATTLE_STATS}. This scoring
+   * logic is inverted for ally targets (including the user itself).
+   */
+  private getIndividualEffectScore(user: EnemyPokemon, target: Pokemon): number {
+    const scoreMultiplier = target.isOpponent(user) ? 0.5 : -0.5;
+
+    return Math.floor(BATTLE_STATS.reduce((total, stat) => total + target.getStatStage(stat) * scoreMultiplier, 0));
   }
 }

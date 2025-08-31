@@ -27,6 +27,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";
+import { MoveEffectTrigger } from "#enums/move-effect-trigger";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
 import { MoveTarget } from "#enums/move-target";
@@ -43,6 +44,7 @@ import { GMaxPowerAttr } from "#moves/gmax-power-attr";
 import { IncrementMovePriorityAttr } from "#moves/increment-move-priority-attr";
 import type { MoveAttr } from "#moves/move-attr";
 import { MoveCondition } from "#moves/move-condition";
+import { MoveEffectAttr } from "#moves/move-effect-attr";
 import { MultiHitAttr } from "#moves/multi-hit-attr";
 import { MultiHitPowerIncrementAttr } from "#moves/multi-hit-power-increment-attr";
 import { OneHitKOAccuracyAttr } from "#moves/one-hit-ko-accuracy-attr";
@@ -861,7 +863,14 @@ export abstract class Move {
 
     let attrs: MoveAttr[] = this.attrs;
     if (isKnockOut) {
-      attrs = attrs.filter((attr) => attr.selfTarget);
+      /*
+       * If the move KOs the target, only the following attributes contribute to score:
+       * - Self-targeted attributes
+       * - Effects that apply to the target before the target is hit
+       */
+      attrs = attrs.filter(
+        (attr) => attr.selfTarget || (attr instanceof MoveEffectAttr && attr.trigger !== MoveEffectTrigger.POST_APPLY),
+      );
     }
 
     if (isFail) {
