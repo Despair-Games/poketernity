@@ -1,6 +1,12 @@
 import { getPokemonNameWithAffix } from "#app/messages";
+import {
+  MAJOR_EFFECT_SCORE_BONUS,
+  MINOR_EFFECT_SCORE_BONUS,
+  STRONG_MATCHUP_SCORE_THRESHOLD,
+} from "#constants/ai-constants";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitResult } from "#enums/hit-result";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
@@ -26,14 +32,7 @@ export class AddSubstituteAttr extends MoveEffectAttr {
     this.isShedTail = isShedTail;
   }
 
-  private getHpCost(user: Pokemon): number {
-    if (this.isShedTail) {
-      return Math.ceil(user.getMaxHp() * 0.5);
-    }
-    return Math.floor(user.getMaxHp() * 0.25);
-  }
-
-  override applyEffect(user: Pokemon, _target: Pokemon, move: Move): boolean {
+  public override applyEffect(user: Pokemon, _target: Pokemon, move: Move): boolean {
     const hpCost = this.getHpCost(user);
     user.damageAndUpdate(hpCost, {
       result: HitResult.OTHER,
@@ -44,14 +43,14 @@ export class AddSubstituteAttr extends MoveEffectAttr {
     return true;
   }
 
-  override getUserBenefitScore(user: Pokemon, _target: Pokemon, _move: Move): number {
-    if (user.isBoss()) {
-      return -10;
+  private getHpCost(user: Pokemon): number {
+    if (this.isShedTail) {
+      return Math.ceil(user.getMaxHp() * 0.5);
     }
-    return 5;
+    return Math.floor(user.getMaxHp() * 0.25);
   }
 
-  override getCondition(): MoveConditionFunc {
+  public override getCondition(): MoveConditionFunc {
     /**
      * Only works if
      * - The user does not have a substitute out already
@@ -62,7 +61,12 @@ export class AddSubstituteAttr extends MoveEffectAttr {
       !user.hasTag(BattlerTagType.SUBSTITUTE) && user.hp > this.getHpCost(user) && user.getMaxHp() > 1;
   }
 
-  override getFailedText(user: Pokemon, _target: Pokemon, _move: Move, _cancelled: BooleanHolder): string | null {
+  public override getFailedText(
+    user: Pokemon,
+    _target: Pokemon,
+    _move: Move,
+    _cancelled: BooleanHolder,
+  ): string | null {
     if (user.hasTag(BattlerTagType.SUBSTITUTE)) {
       return i18next.t("moveTriggers:substituteOnOverlap", { pokemonName: getPokemonNameWithAffix(user) });
     }
@@ -70,5 +74,25 @@ export class AddSubstituteAttr extends MoveEffectAttr {
       return i18next.t("moveTriggers:substituteNotEnoughHp");
     }
     return i18next.t("battle:attackFailed");
+  }
+
+  /**
+   * @returns
+   * - (-10) if the user is a Boss Pokemon
+   * - A {@linkcode MINOR_EFFECT_SCORE_BONUS} if this attribute is for Shed Tail's substitute effect
+   * - A {@linkcode MAJOR_EFFECT_SCORE_BONUS} if this attribute is for Substitute and the
+   *   user has a {@link STRONG_MATCHUP_SCORE_THRESHOLD | strong matchup} against its opponents
+   * - (+0) if none of the above conditions apply
+   */
+  public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+    if (user.isBoss()) {
+      return -10;
+    }
+
+    if (this.isShedTail) {
+      return MINOR_EFFECT_SCORE_BONUS;
+    }
+
+    return user.getAverageMatchupScore() >= STRONG_MATCHUP_SCORE_THRESHOLD ? MAJOR_EFFECT_SCORE_BONUS : 0;
   }
 }
