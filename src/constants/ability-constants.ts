@@ -76,3 +76,9 @@ export const POST_STAT_STAGE_REDUCTION_ABILITIES = Object.freeze<AbilityId[]>([
   AbilityId.DEFIANT,
   AbilityId.COMPETITIVE,
 ]);
+
+/** Abilities that grant the source immunity to recoil damage from its attacks */
+export const RECOIL_DAMAGE_PREVENTION_ABILITIES = Object.freeze<AbilityId[]>([
+  AbilityId.ROCK_HEAD,
+  AbilityId.MAGIC_GUARD,
+]);
