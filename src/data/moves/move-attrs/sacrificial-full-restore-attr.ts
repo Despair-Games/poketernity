@@ -77,10 +77,12 @@ export class SacrificialFullRestoreAttr extends SacrificialAttr {
 
     const maxHealPercentage = Math.max(...possibleHealTargets.map((p) => p.getInverseHp() / p.getMaxHp()), 0);
 
-    const healScore =
-      Math.floor((maxHealPercentage * 100) / ATTACK_SCORE_HP_THRESHOLD)
-      + (this.restorePP ? MINOR_EFFECT_SCORE_BONUS : 0);
+    const healScore = Math.floor((maxHealPercentage * 100) / ATTACK_SCORE_HP_THRESHOLD);
 
-    return healScore === 0 ? BAD_MOVE_PENALTY : healScore;
+    if (healScore === 0) {
+      return BAD_MOVE_PENALTY;
+    }
+
+    return healScore + (this.restorePP ? MINOR_EFFECT_SCORE_BONUS : 0);
   }
 }
