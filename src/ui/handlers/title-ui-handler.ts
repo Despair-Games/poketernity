@@ -1,6 +1,7 @@
 import { api } from "#api/api";
 import { globalScene } from "#app/global-scene";
 import { timedEventManager } from "#app/timed-event-manager";
+import { IS_BETA, IS_DEV } from "#constants/app-constants";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { getSplashMessages } from "#data/splash-messages";
 import { TextStyle } from "#enums/text-style";
@@ -110,7 +111,8 @@ export class TitleUiHandler extends OptionSelectUiHandler {
       this.splashMessage = randItem(getSplashMessages());
       this.splashMessageText.setText(i18next.t(this.splashMessage, { count: TitleUiHandler.BATTLES_WON_FALLBACK }));
 
-      this.appVersionText.setText("v" + version);
+      const betaText = IS_DEV || IS_BETA ? " (Beta)" : "";
+      this.appVersionText.setText("v" + version + betaText);
 
       const ui = this.getUi();
 

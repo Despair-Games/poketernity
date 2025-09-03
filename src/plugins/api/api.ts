@@ -18,8 +18,6 @@ class Api extends ApiBase {
   public readonly admin: AdminApi;
   public readonly savedata: SavedataApi;
 
-  /** Wheter the hostname is 'localhost' or an IP address, and ensure a port is specified. */
-  private readonly _isLocal: boolean;
   /** Whether the server/api is connected. By default we assume `true`. */
   private _isConnected: boolean;
 
@@ -31,20 +29,11 @@ class Api extends ApiBase {
     this.daily = new DailyApi(base);
     this.admin = new AdminApi(base);
     this.savedata = new SavedataApi(base);
-    this._isLocal =
-      ((window.location.hostname === "localhost" || /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/.test(window.location.hostname))
-        && window.location.port !== "")
-      || window.location.hostname === "";
   }
 
   /** Whether the server/api is connected. By default we assume `true`. */
   public get isConnected() {
     return this._isConnected;
-  }
-
-  /** Wheter the hostname is 'localhost' or an IP address, and ensure a port is specified. */
-  public get isLocal() {
-    return this._isLocal;
   }
 
   /**
@@ -129,7 +118,7 @@ class Api extends ApiBase {
       }
     }
     if (import.meta.env.VITE_API_DEBUG === "1") {
-      console.log("isLocalServerConnected:", this.isConnected);
+      console.log("`Api#isConnected`:", this.isConnected);
     }
   }
 

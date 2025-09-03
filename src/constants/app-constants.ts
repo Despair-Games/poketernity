@@ -64,8 +64,19 @@ export const RUN_HISTORY_LIMIT: number = 25;
 /** The number of save slots available to players. */
 export const SAVE_SLOT_LIMIT: number = 5;
 
-/** Whether the app is running in beta (or development) mode. */
+/**
+ * `true` if running in "beta" mode via either of:
+ * - `pnpm start:beta` (which runs `vite --mode beta`)
+ * - A build created via `pnpm build:beta`
+ */
 export const IS_BETA = import.meta.env.MODE === "beta";
+
+/**
+ * `true` if running in "development" mode via either of:
+ * - `pnpm start:dev` (which runs `vite --mode development`)
+ * - A build created via `pnpm build:dev`
+ */
+export const IS_DEV = import.meta.env.MODE === "development";
 
 /** Whether the app is running in a test environment */
 export const IS_TEST = import.meta.env.NODE_ENV === "test";

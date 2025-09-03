@@ -1,20 +1,20 @@
 import "#app/polyfills"; // polyfills must be first
 import "#app/phaser-extensions";
 
-// Catch global errors and display them in an alert so users can report the issue.
+import { IS_BETA, IS_DEV } from "#constants/app-constants";
+
+if (IS_DEV || IS_BETA) {
+  document.title += " (Beta)";
+}
+
 window.onerror = (_message, _source, _lineno, _colno, error) => {
   console.error(error);
-  // const errorString = `Received unhandled error. Open browser console and click OK to see details.\nError: ${message}\nSource: ${source}\nLine: ${lineno}\nColumn: ${colno}\nStack: ${error.stack}`;
-  //alert(errorString);
   // Avoids logging the error a second time.
   return true;
 };
 
-// Catch global promise rejections and display them in an alert so users can report the issue.
 window.addEventListener("unhandledrejection", (event) => {
-  // const errorString = `Received unhandled promise rejection. Open browser console and click OK to see details.\nReason: ${event.reason}`;
   console.error(event.reason);
-  //alert(errorString);
 });
 
 document.fonts.load("16px emerald").then(() => document.fonts.load("10px pkmnems"));
@@ -36,17 +36,14 @@ const startGame = async (manifest?: any) => {
   }
 };
 
-fetch("/manifest.json")
-  .then((res) => res.json())
-  .then((jsonResponse) => {
-    startGame(jsonResponse.manifest);
-  })
-  .catch(() => {
-    // Manifest not found (likely local build)
-    startGame();
-  })
-  .finally(() => {
-    if (import.meta.env.MODE === "development") {
-      import("./dev");
-    }
-  });
+try {
+  const json = await (await fetch("/manifest.json")).json();
+  await startGame(json.manifest);
+} catch {
+  // The manifest wasn't found, likely due to running locally
+  await startGame();
+}
+
+if (IS_DEV) {
+  await import("./dev");
+}
