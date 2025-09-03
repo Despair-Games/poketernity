@@ -2,7 +2,7 @@ import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { ATTACK_SCORE_HP_THRESHOLD, BAD_MOVE_PENALTY } from "#constants/ai-constants";
+import { ATTACK_SCORE_HP_THRESHOLD, BAD_MOVE_PENALTY, MINOR_EFFECT_SCORE_PENALTY } from "#constants/ai-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { HitResult } from "#enums/hit-result";
 import { MoveEffectTrigger } from "#enums/move-effect-trigger";
@@ -51,6 +51,10 @@ export class HalfSacrificialAttr extends MoveEffectAttr {
    * penalty from this effect and therefore should virtually never use moves with it.
    */
   public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+    if (user.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)) {
+      return 0;
+    }
+
     if (user.isBoss()) {
       return -10;
     }
@@ -66,7 +70,7 @@ export class HalfSacrificialAttr extends MoveEffectAttr {
     const meetsHpCutThreshold = oppMaxEas.every(
       (eas) => eas < ((user.getHpRatio() - 0.5) * 100) / ATTACK_SCORE_HP_THRESHOLD,
     );
-    const hpCutPenalty = meetsHpCutThreshold ? 0 : BAD_MOVE_PENALTY;
+    const hpCutPenalty = meetsHpCutThreshold ? MINOR_EFFECT_SCORE_PENALTY : BAD_MOVE_PENALTY;
 
     return hpCutPenalty;
   }
