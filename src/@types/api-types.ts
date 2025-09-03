@@ -1,4 +1,3 @@
-import type { ScoreboardCategory } from "#enums/scoreboard-category";
 import type { SessionSaveData } from "#types/session-data";
 import type { SystemSaveData } from "#types/system-data";
 
@@ -66,25 +65,6 @@ export interface SearchAccountResponse {
   googleId: string;
   lastLoggedIn: string;
   registered: string;
-}
-
-// #endregion
-// #region Daily API
-
-export interface GetDailyRankingsRequest {
-  category: ScoreboardCategory;
-  page?: number;
-}
-
-export interface GetDailyRankingsPageCountRequest {
-  category: ScoreboardCategory;
-}
-
-export interface RankingEntry {
-  rank: number;
-  username: string;
-  score: number;
-  wave: number;
 }
 
 // #endregion

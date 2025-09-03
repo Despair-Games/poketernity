@@ -1,8 +1,6 @@
 import { DailyApi } from "#api/daily-api";
-import { ScoreboardCategory } from "#enums/scoreboard-category";
 import { initServerForApiTests } from "#test/test-utils/test-file-initialization";
 import { getApiBaseUrl } from "#test/test-utils/test-utils";
-import type { GetDailyRankingsPageCountRequest, GetDailyRankingsRequest, RankingEntry } from "#types/api-types";
 import { HttpResponse, http } from "msw";
 import type { SetupServerApi } from "msw/node";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -40,56 +38,6 @@ describe("Daily API", () => {
 
       expect(seed).toBeNull();
       expect(console.warn).toHaveBeenCalledWith("Could not get daily-run seed!", expect.any(Error));
-    });
-  });
-
-  describe("Get Rankings", () => {
-    const params: GetDailyRankingsRequest = {
-      category: ScoreboardCategory.DAILY,
-    };
-
-    it("should return ranking entries on SUCCESS", async () => {
-      const expectedRankings: RankingEntry[] = [
-        { rank: 1, score: 999, username: "Player 1", wave: 200 },
-        { rank: 2, score: 10, username: "Player 2", wave: 1 },
-      ];
-      server.use(http.get(`${apiBase}/daily/rankings`, () => HttpResponse.json(expectedRankings)));
-
-      const rankings = await dailyApi.getRankings(params);
-
-      expect(rankings).toStrictEqual(expectedRankings);
-    });
-
-    it("should return null and report a warning on ERROR", async () => {
-      server.use(http.get(`${apiBase}/daily/rankings`, () => HttpResponse.error()));
-
-      const rankings = await dailyApi.getRankings(params);
-
-      expect(rankings).toBeNull();
-      expect(console.warn).toHaveBeenCalledWith("Could not get daily rankings!", expect.any(Error));
-    });
-  });
-
-  describe("Get Rankings Page Count", () => {
-    const params: GetDailyRankingsPageCountRequest = {
-      category: ScoreboardCategory.DAILY,
-    };
-
-    it("should return a number on SUCCESS", async () => {
-      server.use(http.get(`${apiBase}/daily/rankingpagecount`, () => HttpResponse.json(5)));
-
-      const pageCount = await dailyApi.getRankingsPageCount(params);
-
-      expect(pageCount).toBe(5);
-    });
-
-    it("should return 1 and report a warning on ERROR", async () => {
-      server.use(http.get(`${apiBase}/daily/rankingpagecount`, () => HttpResponse.error()));
-
-      const pageCount = await dailyApi.getRankingsPageCount(params);
-
-      expect(pageCount).toBe(1);
-      expect(console.warn).toHaveBeenCalledWith("Could not get daily rankings page count!", expect.any(Error));
     });
   });
 });
