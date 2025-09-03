@@ -601,7 +601,7 @@ export class EnemyPokemon extends Pokemon {
   }
 
   /** @returns `true` if this Pokemon should Terastallize on its next action */
-  private shouldTera(): boolean {
+  public shouldTera(): boolean {
     if (this.isTerastallized) {
       return false;
     }

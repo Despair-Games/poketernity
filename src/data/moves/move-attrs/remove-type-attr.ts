@@ -48,6 +48,13 @@ export class RemoveTypeAttr extends MoveEffectAttr {
 
   /** @returns a {@linkcode MINOR_EFFECT_SCORE_PENALTY} if the user isn't Terastallized */
   public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
-    return user.isTerastallized ? 0 : MINOR_EFFECT_SCORE_PENALTY;
+    /**
+     * Whether or not the user is set to Terastallize into the type matching this effect
+     * @todo {@linkcode EnemyPokemon.shouldTera}'s output may need to be cached in the future to
+     * make this and the user's final decision to Tera consistent
+     */
+    const willTera = user.shouldTera() && user.teraType === this.removedType;
+
+    return user.isTerastallized || willTera ? 0 : MINOR_EFFECT_SCORE_PENALTY;
   }
 }
