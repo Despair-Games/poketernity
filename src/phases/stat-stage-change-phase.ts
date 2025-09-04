@@ -40,7 +40,7 @@ export class StatStageChangePhase extends PokemonPhase {
   public override readonly phaseName = "StatStageChangePhase";
 
   protected readonly stats: BattleStat[];
-  protected readonly source: Pokemon | null;
+  protected readonly source?: Pokemon;
   protected stages: number;
   protected readonly showMessage: boolean;
   protected readonly ignoreAbilities: boolean;
@@ -58,7 +58,7 @@ export class StatStageChangePhase extends PokemonPhase {
 
   constructor(
     battlerIndex: FieldBattlerIndex,
-    source: Pokemon | null,
+    source: Pokemon | undefined,
     stats: BattleStat[],
     stages: number,
     {

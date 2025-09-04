@@ -15,11 +15,7 @@ import { EventModifierType } from "#enums/event-modifier-type";
 import { Gender } from "#enums/gender";
 import type { MoveId } from "#enums/move-id";
 import type { Nature } from "#enums/nature";
-import type { PartyOption } from "#enums/party-option";
-import { PartyUiMode } from "#enums/party-ui-mode";
 import { SpeciesId } from "#enums/species-id";
-import { SwitchType } from "#enums/switch-type";
-import { UiMode } from "#enums/ui-mode";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import { Pokemon } from "#field/pokemon";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
@@ -28,9 +24,7 @@ import { achvs } from "#system/achievements";
 import type { PokemonData } from "#system/pokemon-data";
 import type { StarterMoveset } from "#types/starter-data";
 import { PlayerBattleInfo } from "#ui/battle-info";
-import type { PartyUiHandler } from "#ui/party-ui-handler";
 import { isNil, NumberHolder } from "#utils/common-utils";
-import { PartyFilterNonFainted } from "#utils/party-ui-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 
 export class PlayerPokemon extends Pokemon {
@@ -164,39 +158,6 @@ export class PlayerPokemon extends Pokemon {
     this.setMoveset(...moveset);
 
     return true;
-  }
-
-  /**
-   * Causes this mon to leave the field (via {@linkcode leaveField}) and then
-   * opens the party switcher UI to switch a new mon in
-   * @param switchType the {@linkcode SwitchType} for this switch-out. If this is
-   * `BATON_PASS` or `SHED_TAIL`, this Pokemon's effects are not cleared upon leaving
-   * the field.
-   */
-  switchOut(switchType: SwitchType = SwitchType.SWITCH): Promise<void> {
-    return new Promise((resolve) => {
-      this.leaveField(switchType === SwitchType.SWITCH);
-
-      globalScene.ui.setMode<PartyUiHandler>(
-        UiMode.PARTY,
-        PartyUiMode.FAINT_SWITCH,
-        this.getFieldIndex(),
-        (slotIndex: number, _option: PartyOption) => {
-          if (slotIndex >= globalScene.currentBattle.getBattlerCount() && slotIndex < 6) {
-            globalScene.phaseManager.createAndPrependPhase(
-              "PostActionPhase",
-              "SwitchSummonPhase",
-              switchType,
-              this.getFieldIndex(),
-              slotIndex,
-              false,
-            );
-          }
-          globalScene.ui.setMessageMode().then(resolve);
-        },
-        PartyFilterNonFainted,
-      );
-    });
   }
 
   /**

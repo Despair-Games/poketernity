@@ -4,6 +4,7 @@ import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
+import { isNil } from "#utils/common-utils";
 import i18next from "i18next";
 
 /** Base class for any special effects that apply to the {@linkcode Arena | field} during battle. */
@@ -119,10 +120,12 @@ export abstract class ArenaTag {
 
   /**
    * Helper function that retrieves the source Pokemon
-   * @returns The source {@linkcode Pokemon} or `null` if none is found
+   * @returns The source {@linkcode Pokemon} or `undefined` if none is found
    */
-  public getSourcePokemon(): Pokemon | null {
-    return this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
+  public getSourcePokemon(): Pokemon | undefined {
+    if (!isNil(this.sourceId)) {
+      return globalScene.getPokemonById(this.sourceId);
+    }
   }
 
   /**

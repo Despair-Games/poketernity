@@ -2,6 +2,7 @@ import type { Phase } from "#app/phase";
 import type { DestinyBondTag } from "#battler-tags/destiny-bond-tag";
 import type { GrudgeTag } from "#battler-tags/grudge-tag";
 import type { FieldBattlerIndex } from "#enums/battler-index";
+import { SwitchType } from "#enums/switch-type";
 import type { Pokemon } from "#field/pokemon";
 import { AttemptCapturePhase } from "#phases/attempt-capture-phase";
 import { AttemptRunPhase } from "#phases/attempt-run-phase";
@@ -59,8 +60,8 @@ import { PostKnockoutPhase } from "#phases/post-knockout-phase";
 import { PostSummonPhase } from "#phases/post-summon-phase";
 import { PostTurnStatusEffectPhase } from "#phases/post-turn-status-effect-phase";
 import { QuietFormChangePhase } from "#phases/quiet-form-change-phase";
+import { RecallPhase } from "#phases/recall-phase";
 import { ReloadSessionPhase } from "#phases/reload-session-phase";
-import { ReturnPhase } from "#phases/return-phase";
 import { RevivalBlessingPhase } from "#phases/revival-blessing-phase";
 import { RibbonModifierRewardPhase } from "#phases/ribbon-modifier-reward-phase";
 import { ScanIvsPhase } from "#phases/scan-ivs-phase";
@@ -75,11 +76,9 @@ import { ShowAbilityPhase } from "#phases/show-ability-phase";
 import { ShowPartyExpBarPhase } from "#phases/show-party-exp-bar-phase";
 import { ShowTrainerPhase } from "#phases/show-trainer-phase";
 import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
-import { SummonMissingPhase } from "#phases/summon-missing-phase";
 import { SummonPhase } from "#phases/summon-phase";
 import { SwitchBiomePhase } from "#phases/switch-biome-phase";
 import { SwitchPhase } from "#phases/switch-phase";
-import { SwitchSummonPhase } from "#phases/switch-summon-phase";
 import { TerastallizationPhase } from "#phases/terastallization-phase";
 import { TitlePhase } from "#phases/title-phase";
 import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase";
@@ -159,7 +158,7 @@ const PHASES = {
   PostTurnStatusEffectPhase,
   QuietFormChangePhase,
   ReloadSessionPhase,
-  ReturnPhase,
+  RecallPhase,
   RevivalBlessingPhase,
   RibbonModifierRewardPhase,
   ScanIvsPhase,
@@ -174,11 +173,9 @@ const PHASES = {
   ShowPartyExpBarPhase,
   ShowTrainerPhase,
   StatStageChangePhase,
-  SummonMissingPhase,
   SummonPhase,
   SwitchBiomePhase,
   SwitchPhase,
-  SwitchSummonPhase,
   TerastallizationPhase,
   TitlePhase,
   ToggleDoublePositionPhase,
@@ -211,6 +208,13 @@ interface PokemonFaintInit {
   destinyTag?: DestinyBondTag | null;
   grudgeTag?: GrudgeTag | null;
   source?: Pokemon;
+}
+
+interface BattlerSwitchOutInit {
+  switchType?: SwitchType;
+  switchInIndex?: number;
+  when?: "eager" | "before" | "after";
+  phaseKey?: PhaseKey;
 }
 
 /**
@@ -609,6 +613,44 @@ export class PhaseManager {
   ): void {
     this.setPhaseQueueSplice();
     this.createAndUnshiftPhase("FaintPhase", battlerIndex, preventEndure, destinyTag, grudgeTag, source);
+  }
+
+  /**
+   * Unshifts a sequence of phases to switch out a Pokemon on the field
+   * @param battlerIndex - The {@linkcode BattlerIndex} of the Pokemon to switch out
+   * @param switchType - (Default {@linkcode SwitchType.SWITCH}) The {@linkcode SwitchType | type} of switch to apply
+   * @param switchInIndex - (Default `-1`) The index of the party Pokemon to switch into
+   * the target Pokemon's place. If set to `-1`, the Pokemon to switch in is instead resolved
+   * during the {@linkcode SwitchPhase}.
+   */
+  public queueBattlerSwitchOut(
+    battlerIndex: FieldBattlerIndex,
+    { switchType = SwitchType.SWITCH, switchInIndex = -1, when = "eager", phaseKey }: BattlerSwitchOutInit = {},
+  ): void {
+    const phases = [
+      this.createPhase("RecallPhase", battlerIndex, switchType),
+      this.createPhase("SwitchPhase", battlerIndex, switchType, switchInIndex),
+    ] as const;
+
+    const validatePhaseId = () => {
+      if (!phaseKey) {
+        throw new Error("`phaseId` is required if `when` is 'before' or 'after'");
+      }
+    };
+
+    switch (when) {
+      case "eager":
+        this.unshiftPhase(...phases);
+        break;
+      case "before":
+        validatePhaseId();
+        this.prependToPhase(phaseKey!, ...phases);
+        break;
+      case "after":
+        validatePhaseId();
+        this.appendToPhase(phaseKey!, ...phases);
+        break;
+    }
   }
 
   /**
