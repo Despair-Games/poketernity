@@ -7,8 +7,10 @@ import type { LegacyAnimConfig } from "#animations/anim-config";
 import { commonAnims } from "#animations/common-anims";
 import { encounterAnims } from "#animations/encounter-anims";
 import { globalScene } from "#app/global-scene";
+import type { SceneBase } from "#app/scene-base";
 import { ImagesFolder } from "#enums/images-folder";
-import Phaser from "phaser";
+
+type TweenBuilderConfig = Phaser.Types.Tweens.TweenBuilderConfig;
 
 export function loadAnimAssets(anims: LegacyAnimConfig[], startLoad?: boolean): Promise<void> {
   return new Promise((resolve) => {
@@ -65,4 +67,24 @@ export function loadCommonAnimAssets(startLoad?: boolean): Promise<void> {
  */
 export async function loadEncounterAnimAssets(startLoad?: boolean): Promise<void> {
   await loadAnimAssets(Array.from(encounterAnims.values()), startLoad);
+}
+
+/**
+ * Plays a Tween animation, resolving once the animation completes.
+ * @param config - The config for a single Tween
+ * @param scene - The {@linkcode SceneBase} on which the Tween plays (Default {@linkcode globalScene})
+ *
+ * @privateRemarks
+ * The `config` input should not include an `onComplete` field as that callback is
+ * used to resolve the Promise containing the Tween animation. However, `config`'s type
+ * cannot be changed to something like `Omit<TweenBuilderConfig, "onComplete">` due to
+ * how Phaser interprets `TweenBuilderConfig` inputs.
+ */
+export async function playTween(config: TweenBuilderConfig, scene: SceneBase = globalScene): Promise<void> {
+  await new Promise((resolve) =>
+    scene.tweens.add({
+      ...config,
+      onComplete: resolve,
+    }),
+  );
 }

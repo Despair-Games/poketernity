@@ -29,6 +29,8 @@ export class RevivalBlessingAttr extends MoveEffectAttr {
       const faintedPokemon = globalScene.getEnemyParty().filter((p) => p.isFainted() && !p.isBoss());
       const pokemon = faintedPokemon[user.randSeedInt(faintedPokemon.length)];
       const slotIndex = globalScene.getEnemyParty().findIndex((p) => pokemon.id === p.id);
+      const { currentBattle, phaseManager } = globalScene;
+
       pokemon.resetStatus();
       pokemon.heal(Math.min(toDmgValue(0.5 * pokemon.getMaxHp()), pokemon.getMaxHp()));
       globalScene.phaseManager.createAndUnshiftPhase(
@@ -38,25 +40,15 @@ export class RevivalBlessingAttr extends MoveEffectAttr {
         true,
       );
 
-      if (globalScene.currentBattle.double && globalScene.getEnemyParty().length > 1) {
+      if (currentBattle.double && globalScene.getEnemyParty().length > 1) {
         const allyPokemon = user.getAlly();
         if (slotIndex <= 1) {
-          globalScene.phaseManager.createAndUnshiftPhase(
-            "SwitchSummonPhase",
-            SwitchType.SWITCH,
-            pokemon.getFieldIndex(),
-            slotIndex,
-            false,
-            false,
-          );
+          phaseManager.createAndUnshiftPhase("SummonPhase", pokemon.getBattlerIndex());
         } else if (allyPokemon?.isFainted()) {
-          globalScene.phaseManager.createAndUnshiftPhase(
-            "SwitchSummonPhase",
-            SwitchType.SWITCH,
-            allyPokemon.getFieldIndex(),
-            slotIndex,
-            false,
-            false,
+          globalScene.phaseManager.unshiftPhase(
+            // SummonPhase is queued separately from SwitchPhase to disable the Enemy Trainer anim
+            phaseManager.createPhase("SwitchPhase", allyPokemon.getBattlerIndex(), SwitchType.SWITCH, slotIndex, false),
+            phaseManager.createPhase("SummonPhase", allyPokemon.getBattlerIndex(), { playTrainerAnim: false }),
           );
         }
       }
