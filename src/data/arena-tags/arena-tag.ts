@@ -178,7 +178,7 @@ export abstract class ArenaTag implements BaseArenaTag {
   public getSourcePokemon(): Pokemon | undefined {
     if (!isNil(this.sourceId)) {
       return globalScene.getPokemonById(this.sourceId);
-  }
+    }
   }
 
   /**
