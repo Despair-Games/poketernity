@@ -92,6 +92,27 @@ describe("Double Battles", () => {
     expect(singleCount).toBe(DOUBLE_CHANCE - 1);
   });
 
+  it("should transition to and from double battles without crashing", async () => {
+    game.override.battleType("even-doubles");
+    await game.classicMode.startBattle(SpeciesId.BULBASAUR, SpeciesId.CHARMANDER);
+
+    // Run 2 single -> double transitions and 2 double -> single transitions
+    for (let waveNumber = 1; waveNumber < 5; waveNumber++) {
+      const isDouble = waveNumber % 2 === 0;
+      expect(game.scene.currentBattle.double).toBe(isDouble);
+      expect(game.scene.currentBattle.waveIndex).toBe(waveNumber);
+
+      game.move.select(MoveId.SPLASH);
+      if (isDouble) {
+        game.move.select(MoveId.SPLASH, 1);
+      }
+      await game.faintOpponents();
+      await game.toNextWave();
+
+      expect(game.scene.currentBattle.double).toBe(!isDouble);
+    }
+  });
+
   it("shouldn't hit itself if ally dies before move", async () => {
     await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.MILOTIC);
 

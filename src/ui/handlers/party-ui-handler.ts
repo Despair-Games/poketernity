@@ -586,7 +586,7 @@ export class PartyUiHandler extends MessageUiHandler {
           }
           this.showOptions();
           ui.playSelect();
-        } else if (this.partyUiMode === PartyUiMode.FAINT_SWITCH || this.partyUiMode === PartyUiMode.REVIVAL_BLESSING) {
+        } else if (this.partyUiMode === PartyUiMode.MODAL_SWITCH || this.partyUiMode === PartyUiMode.REVIVAL_BLESSING) {
           ui.playError();
         } else {
           return this.processInput(Button.CANCEL);
@@ -597,7 +597,7 @@ export class PartyUiHandler extends MessageUiHandler {
         if (this.partyUiMode === PartyUiMode.MODIFIER_TRANSFER && this.transferMode) {
           this.clearTransfer();
           ui.playSelect();
-        } else if (this.partyUiMode !== PartyUiMode.FAINT_SWITCH && this.partyUiMode !== PartyUiMode.REVIVAL_BLESSING) {
+        } else if (this.partyUiMode !== PartyUiMode.MODAL_SWITCH && this.partyUiMode !== PartyUiMode.REVIVAL_BLESSING) {
           if (this.selectCallback) {
             const selectCallback = this.selectCallback;
             this.selectCallback = null;
@@ -820,11 +820,11 @@ export class PartyUiHandler extends MessageUiHandler {
     ) {
       switch (this.partyUiMode) {
         case PartyUiMode.SWITCH:
-        case PartyUiMode.FAINT_SWITCH:
+        case PartyUiMode.MODAL_SWITCH:
         case PartyUiMode.POST_BATTLE_SWITCH:
           if (this.cursor >= globalScene.currentBattle.getBattlerCount()) {
             const allowBatonModifierSwitch =
-              this.partyUiMode !== PartyUiMode.FAINT_SWITCH
+              this.partyUiMode !== PartyUiMode.MODAL_SWITCH
               && globalScene.findModifier(
                 (m) =>
                   m.isSwitchEffectTransferModifier()
@@ -833,7 +833,7 @@ export class PartyUiHandler extends MessageUiHandler {
 
             const moveHistory = globalScene.getPlayerField()[this.fieldIndex].getMoveHistory();
             const isBatonPassMove =
-              this.partyUiMode === PartyUiMode.FAINT_SWITCH
+              this.partyUiMode === PartyUiMode.MODAL_SWITCH
               && moveHistory.length
               && allMoves
                 .get(moveHistory[moveHistory.length - 1].move.id)

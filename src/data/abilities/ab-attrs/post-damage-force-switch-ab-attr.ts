@@ -1,3 +1,7 @@
+/** biome-ignore-start lint/correctness/noUnusedImports: TSDoc imports */
+import type { BattleScene } from "#app/battle-scene";
+/** biome-ignore-end lint/correctness/noUnusedImports: TSDoc imports */
+
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { ForceSwitchOutImmunityAbAttr } from "#abilities/force-switch-out-immunity-ab-attr";
 import { PostDamageAbAttr } from "#abilities/post-damage-ab-attr";
@@ -134,9 +138,10 @@ class ForceSwitchOutHelper {
    *
    * @param pokemon The {@linkcode Pokemon} attempting to switch out.
    * @returns `true` if the switch is successful
+   * @todo Nuke this. The logic for all switch-out effects should be centralized, e.g. as a {@linkcode BattleScene} method
    */
   public switchOutLogic(switchOutTarget: Pokemon): boolean {
-    const { battleType, double, trainer, waveIndex } = globalScene.currentBattle;
+    const { battleType, double, waveIndex } = globalScene.currentBattle;
     /**
      * If the switch-out target is a player-controlled Pokémon, the function checks:
      * - Whether there are available party members to switch in.
@@ -148,37 +153,27 @@ class ForceSwitchOutHelper {
       }
 
       if (switchOutTarget.hp > 0) {
-        switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
-        globalScene.phaseManager.createAndPrependPhase(
-          "PostActionPhase",
-          "SwitchPhase",
-          this.switchType,
-          switchOutTarget.getFieldIndex(),
-          true,
-          true,
-        );
+        globalScene.phaseManager.queueBattlerSwitchOut(switchOutTarget.getBattlerIndex(), {
+          switchType: this.switchType,
+          when: "before",
+          phaseKey: "PostActionPhase",
+        });
         return true;
       }
       /**
        * For non-wild battles, it checks if the opposing party has any available Pokémon to switch in.
-       * If yes, the Pokémon leaves the field and a new SwitchSummonPhase is initiated.
+       * If yes, the Pokémon leaves the field and a new switch sequence is initiated.
        */
     } else if (battleType !== BattleType.WILD) {
       if (globalScene.getEnemyParty().filter((p) => p.isAllowedInBattle() && !p.isOnField()).length < 1) {
         return false;
       }
       if (switchOutTarget.hp > 0) {
-        switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
-        const summonIndex = trainer ? trainer.getNextSummonIndex((switchOutTarget as EnemyPokemon).trainerSlot) : 0;
-        globalScene.phaseManager.createAndPrependPhase(
-          "PostActionPhase",
-          "SwitchSummonPhase",
-          this.switchType,
-          switchOutTarget.getFieldIndex(),
-          summonIndex,
-          false,
-          false,
-        );
+        globalScene.phaseManager.queueBattlerSwitchOut(switchOutTarget.getBattlerIndex(), {
+          switchType: this.switchType,
+          when: "before",
+          phaseKey: "PostActionPhase",
+        });
         return true;
       }
       /**

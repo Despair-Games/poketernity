@@ -32,7 +32,7 @@ export class ReflectStatStageChangeAbAttr extends AbAttr {
   public override apply(
     pokemon: Pokemon,
     simulated: boolean,
-    source: Pokemon | null,
+    source: Pokemon | undefined,
     stats: BattleStat[],
     stages: number,
     reflected: BooleanHolder,

@@ -15,6 +15,9 @@ import i18next from "i18next";
  * Applies this arena tag for 4 turns (including the turn the move was used).
  */
 export class TailwindTag extends ArenaTag {
+  // This asserts to the compiler that `sourceId` is defined at all times for this tag
+  public declare sourceId: number;
+
   constructor(turnCount: number, sourceId: number, side: ArenaTagSide) {
     super(ArenaTagType.TAILWIND, turnCount, MoveId.TAILWIND, sourceId, side);
   }
@@ -27,7 +30,7 @@ export class TailwindTag extends ArenaTag {
       );
     }
 
-    const source = globalScene.getPokemonById(this.sourceId!); //TODO: this bang is questionable!
+    const source = globalScene.getPokemonById(this.sourceId);
     const party = source?.getField() ?? [];
 
     for (const pokemon of party) {

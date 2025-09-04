@@ -66,7 +66,7 @@ export class MysteryEncounterBattleStartCleanupPhase extends Phase {
     const playerField = globalScene.getPlayerField();
     playerField.forEach((pokemon, i) => {
       if (!pokemon.isAllowedInBattle() && legalPlayerPartyPokemon.length > i) {
-        globalScene.phaseManager.createAndUnshiftPhase("SwitchPhase", SwitchType.SWITCH, i, true, false);
+        globalScene.phaseManager.createAndUnshiftPhase("SwitchPhase", i, SwitchType.SWITCH);
       }
     });
 
