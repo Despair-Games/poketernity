@@ -71,7 +71,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
   }
 
   /**
-   * Used to override the generic "But it failed!" with Suction Cups et al's activation
+   * Overrides the generic "But it failed!" with Suction Cups et al's activation
    * text if the move failed because of the ability's effect
    */
   public override getFailedText(
