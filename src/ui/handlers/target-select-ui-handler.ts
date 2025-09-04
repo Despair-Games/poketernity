@@ -11,7 +11,7 @@ import { UiHandler } from "#ui/ui-handler";
 import { fixedNumber, isNil } from "#utils/common-utils";
 import { isFieldTargeted } from "#utils/move-utils";
 
-export type TargetSelectCallback = (targets: BattlerIndex[]) => void;
+type TargetSelectCallback = (targets: BattlerIndex[]) => void;
 
 export class TargetSelectUiHandler extends UiHandler {
   private fieldIndex: number;

@@ -19,7 +19,7 @@ import { randSeedInt } from "#utils/random-utils";
  */
 export type EvolutionLevel = [species: SpeciesId, level: number];
 
-export type EvolutionConditionPredicate = (p: Pokemon) => boolean;
+type EvolutionConditionPredicate = (p: Pokemon) => boolean;
 
 export interface PokemonEvolutions {
   [key: string]: SpeciesFormEvolution[];

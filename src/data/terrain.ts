@@ -100,6 +100,9 @@ export function getTerrainName(terrainType: TerrainType): string {
       return i18next.t("terrain:grassy");
     case TerrainType.PSYCHIC:
       return i18next.t("terrain:psychic");
+    default:
+      terrainType satisfies TerrainType.NONE;
+      break;
   }
 
   return "";

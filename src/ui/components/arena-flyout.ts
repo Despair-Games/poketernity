@@ -42,7 +42,7 @@ interface ArenaEffectInfo {
   tagType?: ArenaTagType;
 }
 
-export function getFieldEffectText(arenaTagType: string): string {
+function getFieldEffectText(arenaTagType: string): string {
   if (!arenaTagType) {
     return "";
   }

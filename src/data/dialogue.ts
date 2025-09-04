@@ -1,17 +1,13 @@
 import { TrainerType } from "#enums/trainer-type";
 
-export interface TrainerTypeMessages {
+interface TrainerTypeMessages {
   encounter?: string | string[];
   victory?: string | string[];
   defeat?: string | string[];
 }
 
-export interface TrainerTypeDialogue {
+interface TrainerTypeDialogue {
   [key: number]: TrainerTypeMessages | TrainerTypeMessages[];
-}
-
-export function getTrainerTypeDialogue(): TrainerTypeDialogue {
-  return trainerTypeDialogue;
 }
 
 export const trainerTypeDialogue: TrainerTypeDialogue = {
@@ -1652,10 +1648,6 @@ export const classicFinalBossDialogue = {
   encounter: "battleSpecDialogue:encounter",
   firstStageWin: "battleSpecDialogue:firstStageWin",
   secondStageWin: "battleSpecDialogue:secondStageWin",
-};
-
-export const miscDialogue = {
-  ending: ["miscDialogue:ending", "miscDialogue:ending_female"],
 };
 
 export function getCharVariantFromDialogue(message: string): string {

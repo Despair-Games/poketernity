@@ -11,16 +11,25 @@ import { addWindow } from "#ui/ui-theme";
 import { enumValueToKey, fixedNumber } from "#utils/common-utils";
 import i18next from "i18next";
 
-export interface MoveInfoOverlaySettings {
-  delayVisibility?: boolean; // if true, showing the overlay will only set it to active and populate the fields and the handler using this field has to manually call setVisible later.
-  scale?: number; // scale the box? A scale of 0.5 is recommended
-  top?: boolean; // should the effect box be on top?
-  right?: boolean; // should the effect box be on the right?
-  onSide?: boolean; // should the effect be on the side? ignores top argument if true
-  //location and width of the component; unaffected by scaling
+interface MoveInfoOverlaySettings {
+  /**
+   * If true, showing the overlay will only set it to active and populate the fields
+   * and the handler using this field has to manually call `setVisible` later.
+   */
+  delayVisibility?: boolean;
+  /** @todo Remove this (cf https://github.com/pagefaultgames/pokerogue/pull/6165) */
+  scale?: number;
+  /** Whether the effect box should be on top */
+  top?: boolean;
+  /** Whether the effect box should be on the right */
+  right?: boolean;
+  /** Whether the effect box should be on the side. Overrides the `top` param if `true`. */
+  onSide?: boolean;
+  /** `x` position of the component, unaffected by scaling */
   x?: number;
+  /** `y` position of the component, unaffected by scaling */
   y?: number;
-  /** Default is always half the screen, regardless of scale */
+  /** Width of the component, unaffected by scaling. Defaults to half the screen width. */
   width?: number;
   /** Determines whether to display the small secondary box */
   hideEffectBox?: boolean;

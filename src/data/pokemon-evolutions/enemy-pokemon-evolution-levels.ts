@@ -60,7 +60,8 @@ export const TSAREENA_EVO_LEVEL = 28;
 export const NAGANADEL_EVO_LEVEL = ADVANCED_ITEM_EVO_LEVEL;
 /** Learns taunt at level 35 in gen 8 */
 export const GRAPPLOCT_EVO_LEVEL = 35;
-/** Dipplin learns dragon cheer at level 1 (custom implementation)
+/**
+ * Dipplin learns dragon cheer at level 1 (custom implementation)
  * and should have a different enemy evolve level than Applin
  */
 export const HYDRAPPLE_EVO_LEVEL = ADVANCED_ITEM_EVO_LEVEL;
