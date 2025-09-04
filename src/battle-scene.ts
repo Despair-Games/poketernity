@@ -2853,25 +2853,21 @@ export class BattleScene extends SceneBase {
   }
 
   /**
-   * Switches out the active Pokemon at the given battler index. A forced switch
-   * may not trigger if any of the following conditions are met:
+   * Determines if the given Pokemon can be forced to switch out of the field.
+   * A Pokemon can generally be force-switched out as long as none of the following conditions are met:
    * - The Pokemon is a Dondozo with an ally in its mouth via Commander
    * - The Pokemon doesn't have an inactive party member that is allowed to take
    * its place on the field
    * - This effect is a {@link SwitchType.FORCE_SWITCH | forced random switch}, and
    * the affected Pokemon either has an {@link ForceSwitchOutImmunityAbAttr | ability attribute}
    * that nullifies the effect or is of a Max form.
-   *
-   * Successful switches are scheduled as Phases, and will occur at the end of the
-   * ongoing turn action (or as the next Phase if no turn action is ongoing).
-   * @param battlerIndex - The {@linkcode FieldBattlerIndex} of the active Pokemon to switch
-   * @param switchType - The {@link SwitchType | type} of switch to carry out,
-   * assuming the switch is scheduled successfully (Default {@linkcode SwitchType.SWITCH})
-   * @returns `true` if a forced switch sequence is successfully scheduled
+   * @param pokemon - The {@linkcode Pokemon} to switch out
+   * @param switchType - The {@link SwitchType | type} of switch to check
+   * (Default {@linkcode SwitchType.SWITCH})
+   * @returns `true` if the Pokemon can be force-switched out
    */
-  public tryForceSwitchPokemon(battlerIndex: FieldBattlerIndex, switchType: SwitchType = SwitchType.SWITCH): boolean {
-    const pokemon = this.getPokemonByBattlerIndex(battlerIndex);
-    if (isNil(pokemon)) {
+  public canForceSwitchPokemon(pokemon: Pokemon, switchType: SwitchType = SwitchType.SWITCH): boolean {
+    if (!pokemon.isActive(true)) {
       return false;
     }
 
@@ -2899,9 +2895,31 @@ export class BattleScene extends SceneBase {
       if (blockedByAbility || pokemon.isMax()) {
         return false;
       }
+    }
 
+    return true;
+  }
+
+  /**
+   * Switches out the active Pokemon at the given battler index, provided that
+   * {@link canForceSwitchPokemon | conditions are met} to do so.
+   *
+   * Successful switches are scheduled as Phases, and will occur at the end of the
+   * ongoing turn action (or as the next Phase if no turn action is ongoing).
+   * @param battlerIndex - The {@linkcode FieldBattlerIndex} of the active Pokemon to switch
+   * @param switchType - The {@link SwitchType | type} of switch to carry out,
+   * assuming the switch is scheduled successfully (Default {@linkcode SwitchType.SWITCH})
+   * @returns `true` if a forced switch sequence is successfully scheduled
+   */
+  public tryForceSwitchPokemon(battlerIndex: FieldBattlerIndex, switchType: SwitchType = SwitchType.SWITCH): boolean {
+    const pokemon = this.getPokemonByBattlerIndex(battlerIndex);
+    if (isNil(pokemon) || !this.canForceSwitchPokemon(pokemon, switchType)) {
+      return false;
+    }
+
+    if (switchType === SwitchType.FORCE_SWITCH) {
       const eligibleSwitchIndices: number[] = [];
-      party.forEach((p, i) => {
+      pokemon.getParty().forEach((p, i) => {
         if (p.isAllowedInBattle() && !p.isOnField()) {
           eligibleSwitchIndices.push(i);
         }
@@ -2914,7 +2932,6 @@ export class BattleScene extends SceneBase {
         when: "before",
         phaseKey: "PostActionPhase",
       });
-
       return true;
     }
 
@@ -2927,24 +2944,25 @@ export class BattleScene extends SceneBase {
   }
 
   /**
-   * Forces the active enemy Pokemon at the given battler index to flee. The Pokemon
-   * may not flee if any of the following conditions are met:
+   * Determines if the given Pokemon can be forced to flee from battle. Enemy Pokemon
+   * can be forced to flee as long as none of the following conditions are met:
    * - The current battle is not a Wild battle
    * - The Pokemon is a Boss Pokemon
    * - The current Mystery Encounter doesn't allow the Pokemon to flee
    * - The Pokemon either has an {@link ForceSwitchOutImmunityAbAttr | ability attribute} that
    * nullifies this effect or is of a Max form
-   * @param battlerIndex - The {@linkcode FieldBattlerIndex} of the enemy Pokemon to make flee
-   * @returns `true` if a Pokemon was successfully forced to flee
+   * @param pokemon - The {@linkcode Pokemon} to check
+   * @returns `true` if the given Pokemon can be forced to flee
    */
-  public tryForceFleePokemon(battlerIndex: BattlerIndex.ENEMY | BattlerIndex.ENEMY_2): boolean {
-    if (this.currentBattle.battleType !== BattleType.WILD) {
+  public canForceFleePokemon(pokemon: Pokemon): boolean {
+    if (this.currentBattle.battleType !== BattleType.WILD || !pokemon.isEnemy() || pokemon.isBoss()) {
       return false;
     }
 
-    const pokemon = this.getPokemonByBattlerIndex(battlerIndex);
-
-    if (!pokemon?.isEnemy() || pokemon.isBoss()) {
+    // Wild Dondozo with an active allied Tatsugiri in its mouth cannot
+    // flee under any circumstance
+    const commandedTag = pokemon.getTag(BattlerTagType.COMMANDED);
+    if (commandedTag?.getSourcePokemon()?.isActive(true)) {
       return false;
     }
 
@@ -2955,7 +2973,18 @@ export class BattleScene extends SceneBase {
     const blockedByAbility = new ValueHolder(false);
     applyAbAttrs<ForceSwitchOutImmunityAbAttr>(AbAttrFlag.FORCE_SWITCH_OUT_IMMUNITY, pokemon, false, blockedByAbility);
 
-    if (blockedByAbility && pokemon.isMax()) {
+    return !(blockedByAbility || pokemon.isMax());
+  }
+
+  /**
+   * Forces the active enemy Pokemon at the given battler index to flee.
+   * @param battlerIndex - The {@linkcode FieldBattlerIndex} of the enemy Pokemon to make flee
+   * @returns `true` if a Pokemon was successfully forced to flee
+   */
+  public tryForceFleePokemon(battlerIndex: FieldBattlerIndex): boolean {
+    const pokemon = this.getPokemonByBattlerIndex(battlerIndex);
+
+    if (isNil(pokemon) || !this.canForceFleePokemon(pokemon)) {
       return false;
     }
 
