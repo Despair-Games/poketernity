@@ -5,6 +5,7 @@ import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { fetchDailyRunSeed, getDailyRunStarters } from "#data/daily-run";
 import { BattleType } from "#enums/battle-type";
+import { BattlerIndex } from "#enums/battler-index";
 import { GameModes } from "#enums/game-modes";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
@@ -306,9 +307,9 @@ export class TitlePhase extends Phase {
       const { battleType, double, waveIndex } = currentBattle;
       const availablePartyMembers = globalScene.getPokemonAllowedInBattle().length;
 
-      globalScene.phaseManager.createAndPushPhase("SummonPhase", 0, true, true);
+      globalScene.phaseManager.createAndPushPhase("SummonPhase", BattlerIndex.PLAYER, { loaded: true });
       if (double && availablePartyMembers > 1) {
-        globalScene.phaseManager.createAndPushPhase("SummonPhase", 1, true, true);
+        globalScene.phaseManager.createAndPushPhase("SummonPhase", BattlerIndex.PLAYER_2, { loaded: true });
       }
 
       if (battleType !== BattleType.TRAINER && (waveIndex > 1 || !globalScene.gameMode.isDaily)) {

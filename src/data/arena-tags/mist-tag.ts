@@ -47,7 +47,7 @@ export class MistTag extends SerializableArenaTag {
    * to flag the stat reduction as cancelled
    * @returns `true` if a stat reduction was cancelled; `false` otherwise
    */
-  override apply(simulated: boolean, attacker: Pokemon | null, cancelled: BooleanHolder): boolean {
+  override apply(simulated: boolean, attacker: Pokemon | undefined, cancelled: BooleanHolder): boolean {
     if (attacker?.isActive(true)) {
       const bypassed = new BooleanHolder(false);
       applyAbAttrs<InfiltratorAbAttr>(AbAttrFlag.INFILTRATOR, attacker, simulated, bypassed);

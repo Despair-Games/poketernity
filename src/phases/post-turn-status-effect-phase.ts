@@ -1,7 +1,6 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
 import type { BlockStatusDamageAbAttr } from "#abilities/block-status-damage-ab-attr";
-import type { PostDamageAbAttr } from "#abilities/post-damage-ab-attr";
 import type { ReduceBurnDamageAbAttr } from "#abilities/reduce-burn-damage-ab-attr";
 import { CommonBattleAnim } from "#animations/common-battle-anim";
 import { globalScene } from "#app/global-scene";
@@ -61,7 +60,6 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
     if (damage.value) {
       // Set preventEndure flag to avoid pokemon surviving thanks to focus band, sturdy, endure ...
       pokemon.damageAndUpdate(toDmgValue(damage.value), { preventEndure: true });
-      applyAbAttrs<PostDamageAbAttr>(AbAttrFlag.POST_DAMAGE, pokemon, false, damage.value);
     }
 
     // TODO: this should be handled by some sort of animation manager instead of instantiating a new `CommonBattleAnim` class

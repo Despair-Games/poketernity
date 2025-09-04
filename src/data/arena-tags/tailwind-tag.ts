@@ -17,8 +17,10 @@ import i18next from "i18next";
  */
 export class TailwindTag extends SerializableArenaTag {
   public override readonly tagType = ArenaTagType.TAILWIND;
+  // This asserts to the compiler that `sourceId` is defined at all times for this tag
+  public declare sourceId: number;
 
-  constructor(turnCount: number, sourceId: number | undefined, side: ArenaTagSide) {
+  constructor(turnCount: number, sourceId: number, side: ArenaTagSide) {
     super(turnCount, MoveId.TAILWIND, sourceId, side);
   }
 

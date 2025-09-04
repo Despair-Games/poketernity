@@ -37,7 +37,7 @@ import { type Variant, variantData } from "#data/variant";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { AchvCategory } from "#enums/achv-category";
 import { BattleType } from "#enums/battle-type";
-import type { BattlerIndex } from "#enums/battler-index";
+import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BiomeId } from "#enums/biome-id";
 import { CommonColor, ShadowColor } from "#enums/color";
@@ -876,9 +876,9 @@ export class BattleScene extends SceneBase {
     return activeOnly ? this.infoToggles.filter((t) => t?.isActive()) : this.infoToggles;
   }
 
-  getPokemonById(pokemonId: number): Pokemon | null {
+  getPokemonById(pokemonId: number): Pokemon | undefined {
     const findInParty = (party: Pokemon[]) => party.find((p) => p.id === pokemonId);
-    return (findInParty(this.getPlayerParty()) || findInParty(this.getEnemyParty())) ?? null;
+    return findInParty(this.getPlayerParty()) || findInParty(this.getEnemyParty());
   }
 
   addPlayerPokemon(
@@ -1381,7 +1381,7 @@ export class BattleScene extends SceneBase {
 
         playerField.forEach((pokemon, p) => {
           if (pokemon.isOnField()) {
-            this.phaseManager.createAndPushPhase("ReturnPhase", p);
+            this.phaseManager.createAndPushPhase("RecallPhase", p);
           }
         });
 
@@ -2706,7 +2706,7 @@ export class BattleScene extends SceneBase {
         if (availablePartyMembers.length > 1) {
           this.phaseManager.createAndPushPhase("ToggleDoublePositionPhase", true);
           if (!availablePartyMembers[1].isOnField()) {
-            this.phaseManager.createAndPushPhase("SummonPhase", 1);
+            this.phaseManager.createAndPushPhase("SummonPhase", BattlerIndex.PLAYER_2, { delayPostSummon: true });
           }
         }
 

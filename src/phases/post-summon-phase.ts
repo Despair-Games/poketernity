@@ -10,6 +10,7 @@ import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { StatusEffect } from "#enums/status-effect";
+import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
 import { PokemonPhase } from "#phases/base/pokemon-phase";
 
 export class PostSummonPhase extends PokemonPhase {
@@ -24,7 +25,7 @@ export class PostSummonPhase extends PokemonPhase {
       pokemon.resetToxicTurnCounter();
     }
 
-    // Apply pending heal effects from Healing Wish and Lunar Dance.
+    // Apply pending heal effects from Healing Wish and Lunar Dance
     globalScene.arena.applyTags<PendingHealTag>(ArenaTagType.PENDING_HEAL, ArenaTagSide.BOTH, false, pokemon);
 
     globalScene.arena.applyTags<EntryHazardTag>([...ENTRY_HAZARD_ARENA_TAG_TYPES], ArenaTagSide.BOTH, false, pokemon);
@@ -37,6 +38,13 @@ export class PostSummonPhase extends PokemonPhase {
     applyAbAttrs<PostSummonAbAttr>(AbAttrFlag.POST_SUMMON, pokemon, false);
     const field = pokemon.getField();
     field.forEach((p) => applyAbAttrs<CommanderAbAttr>(AbAttrFlag.COMMANDER, p, false));
+
+    // If the Pokemon takes a different form when active, change its form
+    globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeActiveTrigger, true);
+    // Update weather-based forms in case the summoned Pokemon's Cloud Nine activated.
+    // Other weather-changing effects are already accounted for.
+    // TODO: Make Cloud Nine's ability attribute do this
+    globalScene.arena.triggerWeatherBasedFormChanges();
 
     this.end();
   }

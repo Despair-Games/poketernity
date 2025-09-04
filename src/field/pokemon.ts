@@ -186,6 +186,7 @@ import type { AbilityFilterOptions } from "#types/ability-types";
 import type { DamageCalculationResult, DamageResult, TurnMove } from "#types/move-types";
 import type { PokemonSummonData, PokemonTurnData, PokemonWaveData, Status } from "#types/pokemon-types";
 import type { BattleInfo } from "#ui/battle-info";
+import { playTween } from "#utils/anim-utils";
 import { applyChallenges } from "#utils/challenge-utils";
 import {
   BooleanHolder,
@@ -985,50 +986,46 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
   }
 
-  setFieldPosition(fieldPosition: FieldPosition, duration?: number): Promise<void> {
-    return new Promise((resolve) => {
-      if (fieldPosition === this.fieldPosition) {
-        resolve();
-        return;
+  public async setFieldPosition(fieldPosition: FieldPosition, duration: number = 0): Promise<void> {
+    if (fieldPosition === this.fieldPosition) {
+      return;
+    }
+
+    const initialOffset = this.getFieldPositionOffset();
+
+    this.fieldPosition = fieldPosition;
+
+    this.battleInfo.setMini(fieldPosition !== FieldPosition.CENTER);
+    this.battleInfo.setOffset(fieldPosition === FieldPosition.RIGHT);
+
+    const newOffset = this.getFieldPositionOffset();
+
+    const relX = newOffset[0] - initialOffset[0];
+    const relY = newOffset[1] - initialOffset[1];
+
+    const subTag = this.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
+
+    if (duration > 0) {
+      // TODO: can this use stricter typing?
+      const targets: any[] = [this];
+      if (subTag?.sprite) {
+        targets.push(subTag.sprite);
       }
-
-      const initialOffset = this.getFieldPositionOffset();
-
-      this.fieldPosition = fieldPosition;
-
-      this.battleInfo.setMini(fieldPosition !== FieldPosition.CENTER);
-      this.battleInfo.setOffset(fieldPosition === FieldPosition.RIGHT);
-
-      const newOffset = this.getFieldPositionOffset();
-
-      const relX = newOffset[0] - initialOffset[0];
-      const relY = newOffset[1] - initialOffset[1];
-
-      const subTag = this.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
-
-      if (duration) {
-        // TODO: can this use stricter typing?
-        const targets: any[] = [this];
-        if (subTag?.sprite) {
-          targets.push(subTag.sprite);
-        }
-        globalScene.tweens.add({
-          targets,
-          x: (_target, _key, value: number) => value + relX,
-          y: (_target, _key, value: number) => value + relY,
-          duration,
-          ease: "Sine.easeOut",
-          onComplete: () => resolve(),
-        });
-      } else {
-        this.x += relX;
-        this.y += relY;
-        if (subTag?.sprite) {
-          subTag.sprite.x += relX;
-          subTag.sprite.y += relY;
-        }
+      await playTween({
+        targets,
+        x: (_target, _key, value: number) => value + relX,
+        y: (_target, _key, value: number) => value + relY,
+        duration,
+        ease: "Sine.easeOut",
+      });
+    } else {
+      this.x += relX;
+      this.y += relY;
+      if (subTag?.sprite) {
+        subTag.sprite.x += relX;
+        subTag.sprite.y += relY;
       }
-    });
+    }
   }
 
   /**
@@ -4294,9 +4291,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Resets {@linkcode Pokemon.summonData} to the default values.
+   * Resets {@linkcode summonData} to the default values.
    *
-   * @todo This currently checks for the existence of {@linkcode Pokemon.summonDataPrimer} and
+   * @todo This currently checks for the existence of {@linkcode summonDataPrimer} and
    * applies its values to `summonData` if it exists. `summonDataPrimer` should be removed.
    */
   public resetSummonData(): void {
