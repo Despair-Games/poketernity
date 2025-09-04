@@ -96,7 +96,7 @@ export function getArenaTag(
     case ArenaTagType.AURORA_VEIL:
       return new AuroraVeilTag(turnCount, sourceId, side);
     case ArenaTagType.TAILWIND:
-      return new TailwindTag(turnCount, sourceId, side);
+      return new TailwindTag(turnCount, sourceId!, side);
     case ArenaTagType.HAPPY_HOUR:
       return new HappyHourTag(sourceId, side);
     case ArenaTagType.SAFEGUARD:

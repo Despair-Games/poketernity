@@ -11,8 +11,8 @@ import { isNil } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
- * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Tailwind_(move) Tailwind}.
- * Doubles the Speed of the Pokémon who created this arena tag, as well as all allied Pokémon.
+ * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Tailwind_(move) Tailwind}. \
+ * Doubles the Speed of the Pokémon who created this arena tag, as well as all allied Pokémon. \
  * Applies this arena tag for 4 turns (including the turn the move was used).
  */
 export class TailwindTag extends SerializableArenaTag {
@@ -25,10 +25,6 @@ export class TailwindTag extends SerializableArenaTag {
   }
 
   override onAdd(quiet: boolean = false): void {
-    if (isNil(this.sourceId)) {
-      return;
-    }
-
     if (!quiet) {
       globalScene.phaseManager.createAndUnshiftPhase(
         "MessagePhase",
