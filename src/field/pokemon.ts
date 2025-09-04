@@ -2365,8 +2365,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     let score: number = 0;
     if (damage >= opponent.hp) {
       score = this.getAttackScoreOnKnockOut(move);
-    } else if (damage <= 0) {
-      score = -1;
     } else {
       const damagePct = Math.floor((damage / opponent.getMaxHp()) * 100);
       score = damagePct / ATTACK_SCORE_HP_THRESHOLD;

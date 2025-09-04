@@ -1,8 +1,8 @@
 import { getPokemonNameWithAffix } from "#app/messages";
 import {
+  FAVORABLE_MATCHUP_SCORE_THRESHOLD,
   MAJOR_EFFECT_SCORE_BONUS,
   MINOR_EFFECT_SCORE_BONUS,
-  STRONG_MATCHUP_SCORE_THRESHOLD,
 } from "#constants/ai-constants";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitResult } from "#enums/hit-result";
@@ -81,7 +81,7 @@ export class AddSubstituteAttr extends MoveEffectAttr {
    * - (-10) if the user is a Boss Pokemon
    * - A {@linkcode MINOR_EFFECT_SCORE_BONUS} if this attribute is for Shed Tail's substitute effect
    * - A {@linkcode MAJOR_EFFECT_SCORE_BONUS} if this attribute is for Substitute and the
-   *   user has a {@link STRONG_MATCHUP_SCORE_THRESHOLD | strong matchup} against its opponents
+   *   user has a {@link FAVORABLE_MATCHUP_SCORE_THRESHOLD | favorable matchup} against its opponents
    * - (+0) if none of the above conditions apply
    */
   public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
@@ -93,6 +93,6 @@ export class AddSubstituteAttr extends MoveEffectAttr {
       return MINOR_EFFECT_SCORE_BONUS;
     }
 
-    return user.getAverageMatchupScore() >= STRONG_MATCHUP_SCORE_THRESHOLD ? MAJOR_EFFECT_SCORE_BONUS : 0;
+    return user.getAverageMatchupScore() >= FAVORABLE_MATCHUP_SCORE_THRESHOLD ? MAJOR_EFFECT_SCORE_BONUS : 0;
   }
 }
