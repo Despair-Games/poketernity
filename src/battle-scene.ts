@@ -2892,7 +2892,7 @@ export class BattleScene extends SceneBase {
         blockedByAbility,
       );
 
-      if (blockedByAbility || pokemon.isMax()) {
+      if (blockedByAbility.value || pokemon.isMax()) {
         return false;
       }
     }
@@ -2973,7 +2973,7 @@ export class BattleScene extends SceneBase {
     const blockedByAbility = new ValueHolder(false);
     applyAbAttrs<ForceSwitchOutImmunityAbAttr>(AbAttrFlag.FORCE_SWITCH_OUT_IMMUNITY, pokemon, false, blockedByAbility);
 
-    return !(blockedByAbility || pokemon.isMax());
+    return !(blockedByAbility.value || pokemon.isMax());
   }
 
   /**
@@ -2989,7 +2989,7 @@ export class BattleScene extends SceneBase {
     }
 
     const ally = pokemon.getAlly();
-    pokemon.leaveField(false);
+    pokemon.leaveField();
     this.phaseManager.createAndUnshiftPhase(
       "MessagePhase",
       i18next.t("moveTriggers:fled", { pokemonName: getPokemonNameWithAffix(pokemon) }),

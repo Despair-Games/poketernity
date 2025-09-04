@@ -80,7 +80,7 @@ describe("Abilities - Wimp Out", () => {
     confirmSwitch();
   });
 
-  it("It makes wild pokemon flee if triggered", async () => {
+  it("makes wild pokemon flee if triggered", async () => {
     game.override.enemyAbility(AbilityId.WIMP_OUT);
     await game.classicMode.startBattle(SpeciesId.GOLISOPOD, SpeciesId.TYRUNT);
 

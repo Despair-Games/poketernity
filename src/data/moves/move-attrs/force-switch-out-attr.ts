@@ -31,7 +31,6 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
   }
 
   public override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
-    const { currentBattle, tryForceSwitchPokemon, tryForceFleePokemon } = globalScene;
     const switchOutTarget = this.selfTarget ? user : target;
 
     // If Wimp Out/Emergency Exit activates as a result of U-turn, Volt Switch, or Flip Turn,
@@ -46,10 +45,10 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
 
     const switchOutIndex = switchOutTarget.getBattlerIndex();
 
-    if (switchOutTarget.isEnemy() && currentBattle.battleType === BattleType.WILD) {
-      return tryForceFleePokemon(switchOutIndex);
+    if (switchOutTarget.isEnemy() && globalScene.currentBattle.battleType === BattleType.WILD) {
+      return globalScene.tryForceFleePokemon(switchOutIndex);
     }
-    return tryForceSwitchPokemon(switchOutIndex, this.switchType);
+    return globalScene.tryForceSwitchPokemon(switchOutIndex, this.switchType);
   }
 
   /**
@@ -57,7 +56,6 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
    * switch out or flee, depending on the current {@linkcode BattleType}
    */
   public override getCondition(): MoveConditionFunc {
-    const { currentBattle, canForceSwitchPokemon, canForceFleePokemon } = globalScene;
     return (user, target, move) => {
       if (move.isAttackMove(user, target)) {
         return true;
@@ -65,10 +63,10 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
 
       const switchOutTarget = this.selfTarget ? user : target;
 
-      if (switchOutTarget.isEnemy() && currentBattle.battleType === BattleType.WILD) {
-        return canForceFleePokemon(switchOutTarget);
+      if (switchOutTarget.isEnemy() && globalScene.currentBattle.battleType === BattleType.WILD) {
+        return globalScene.canForceFleePokemon(switchOutTarget);
       }
-      return canForceSwitchPokemon(switchOutTarget);
+      return globalScene.canForceSwitchPokemon(switchOutTarget);
     };
   }
 

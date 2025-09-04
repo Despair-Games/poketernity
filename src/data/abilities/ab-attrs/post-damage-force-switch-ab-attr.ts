@@ -69,13 +69,12 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
       // TODO: This is a bandaid fix for on-hit effects being applied in the wrong order
       const shellBellHeal = calculateShellBellRecovery(pokemon);
       if (pokemon.hp - shellBellHeal < pokemon.getMaxHp() * this.hpRatio) {
-        const { currentBattle, tryForceFleePokemon, tryForceSwitchPokemon } = globalScene;
         const pokemonIndex = pokemon.getBattlerIndex();
 
-        if (pokemon.isEnemy() && currentBattle.battleType === BattleType.WILD) {
-          return tryForceFleePokemon(pokemonIndex);
+        if (pokemon.isEnemy() && globalScene.currentBattle.battleType === BattleType.WILD) {
+          return globalScene.tryForceFleePokemon(pokemonIndex);
         }
-        return tryForceSwitchPokemon(pokemonIndex);
+        return globalScene.tryForceSwitchPokemon(pokemonIndex);
       }
     }
     return false;
