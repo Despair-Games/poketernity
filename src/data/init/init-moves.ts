@@ -113,7 +113,7 @@ import { FriendshipPowerAttr } from "#moves/friendship-power-attr";
 import { GrowthStatStageChangeAttr } from "#moves/growth-stat-stage-change-attr";
 import { GulpMissileTagAttr } from "#moves/gulp-missile-tag-attr";
 import { GyroBallPowerAttr } from "#moves/gyro-ball-power-attr";
-import { HalfSacrificialAttr } from "#moves/half-sacrificial-attr";
+import { HalfMaxHpRecoilAttr } from "#moves/half-max-hp-recoil-attr";
 import { hasStockpileStacksCondition } from "#moves/has-stockpile-stacks-condition";
 import { HealAttr } from "#moves/heal-attr";
 import { HealOnAllyAttr } from "#moves/heal-on-ally-attr";
@@ -2682,7 +2682,7 @@ export function initMoves() {
     // #endregion
     new AttackMove(MoveId.MIND_BLOWN, ElementalType.FIRE, MoveCategory.SPECIAL, 150, 100, 5, -1, 0, 7) //
       .condition(failIfDampCondition)
-      .attr(HalfSacrificialAttr)
+      .attr(HalfMaxHpRecoilAttr)
       .target(MoveTarget.ALL_NEAR_OTHERS),
     new AttackMove(MoveId.PLASMA_FISTS, ElementalType.ELECTRIC, MoveCategory.PHYSICAL, 100, 100, 15, -1, 0, 7) //
       .attr(AddArenaTagAttr, ArenaTagType.ION_DELUGE, ArenaTagRelativeSide.ALL, { turnCount: 1 })
@@ -2928,7 +2928,7 @@ export function initMoves() {
     new AttackMove(MoveId.ETERNABEAM, ElementalType.DRAGON, MoveCategory.SPECIAL, 160, 90, 5, -1, 0, 8) //
       .attr(RechargeAttr),
     new AttackMove(MoveId.STEEL_BEAM, ElementalType.STEEL, MoveCategory.SPECIAL, 140, 95, 5, -1, 0, 8) //
-      .attr(HalfSacrificialAttr),
+      .attr(HalfMaxHpRecoilAttr),
     new AttackMove(MoveId.EXPANDING_FORCE, ElementalType.PSYCHIC, MoveCategory.SPECIAL, 80, 100, 10, -1, 0, 8) //
       .attr(MovePowerMultiplierAttr, (user, _target, _move) =>
         globalScene.arena.hasTerrain(TerrainType.PSYCHIC) && user.isGrounded() ? 1.5 : 1,
