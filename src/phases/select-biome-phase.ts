@@ -16,7 +16,7 @@ export class SelectBiomePhase extends BattlePhase {
     super.start();
 
     const { arena, currentBattle, gameMode, ui } = globalScene;
-    const { isClassic, isDaily, hasRandomBiomes, hasShortBiomes } = gameMode;
+    const { isClassic, isDaily, hasRandomBiomes } = gameMode;
     const { waveIndex } = currentBattle;
 
     const currentBiome = arena.biomeId;
@@ -30,11 +30,7 @@ export class SelectBiomePhase extends BattlePhase {
       this.end();
     };
 
-    if (
-      (isClassic && gameMode.isWaveFinal(waveIndex + 9))
-      || (isDaily && gameMode.isWaveFinal(waveIndex))
-      || (hasShortBiomes && !(waveIndex % 50))
-    ) {
+    if ((isClassic && gameMode.isWaveFinal(waveIndex + 9)) || (isDaily && gameMode.isWaveFinal(waveIndex))) {
       setNextBiome(BiomeId.END);
     } else if (hasRandomBiomes) {
       setNextBiome(this.generateNextBiome());

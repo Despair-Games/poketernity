@@ -357,14 +357,14 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
       case GameModes.DAILY:
         mode = i18next.t("gameMode:dailyRun");
         break;
-      case GameModes.ENDLESS:
-        mode = i18next.t("gameMode:endless");
-        break;
       case GameModes.CLASSIC:
         mode = i18next.t("gameMode:classic");
         break;
       case GameModes.CHALLENGE:
         mode = i18next.t("gameMode:challenge");
+        break;
+      default:
+        data.gameMode satisfies never;
         break;
     }
     gameModeLabel.appendText(mode, false);

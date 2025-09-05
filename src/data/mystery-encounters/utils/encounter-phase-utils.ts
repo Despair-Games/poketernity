@@ -913,7 +913,7 @@ export function handleMysteryEncounterVictory(addHealPhase: boolean = false, doN
     if (encounter.encounterMode === MysteryEncounterMode.TRAINER_BATTLE) {
       globalScene.phaseManager.createAndPushPhase("TrainerVictoryPhase");
     }
-    if (globalScene.gameMode.isEndless || !globalScene.gameMode.isWaveFinal(globalScene.currentBattle.waveIndex)) {
+    if (!globalScene.gameMode.isWaveFinal(globalScene.currentBattle.waveIndex)) {
       globalScene.phaseManager.createAndPushPhase("MysteryEncounterRewardsPhase", addHealPhase);
       if (!encounter.doContinueEncounter) {
         // Only lapse eggs once for multi-battle encounters
@@ -1062,9 +1062,6 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
           currentBiome = biomeLinks[currentBiome] as BiomeId;
         } else if (i % 50) {
           currentBiome = globalScene.generateRandomBiome(i);
-        } else {
-          // Special logic for endless mode
-          currentBiome = BiomeId.END;
         }
 
         globalScene.newArena(currentBiome);

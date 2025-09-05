@@ -1,7 +1,5 @@
-import { getGameMode } from "#app/game-mode";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
-import { GameModes } from "#enums/game-modes";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
@@ -36,12 +34,11 @@ describe("Double Battles", () => {
       .enemyAbility(AbilityId.BALL_FETCH);
   });
 
-  /**
+  /*
    * Tests the following sequence in a wild double battle:
    * - All Pokemon on the field faint in the same turn. The Player has a third Pokemon in their party
    * - The Player revives one of their Pokemon in the following rewards phase (i.e. the Player now has 2 non-fainted Pokemon)
    * - The Player advances to another wild double battle in the next wave. The Player should automatically resummon the revived Pokemon
-   * @todo This test is currently disabled because of stability issues with {@linkcode gameManager.faintOpponents} in double battles
    */
   it("3v2 edge case: player summons 2 pokemon on the next battle after being fainted and revived", async () => {
     await game.classicMode.startBattle(SpeciesId.BULBASAUR, SpeciesId.CHARIZARD, SpeciesId.SQUIRTLE);
@@ -67,18 +64,21 @@ describe("Double Battles", () => {
   });
 
   it("randomly chooses between single and double battles if there is no battle type override", async () => {
-    game.override.battleType(null);
+    game.override
+      .battleType(null)
+      .startingWave(11)
+      .trainerChance(0)
+      .mysteryEncounterChance(0)
+      .enemyMoveset(MoveId.MEMENTO);
 
     await game.classicMode.startBattle(SpeciesId.BULBASAUR);
-    game.scene.gameMode = getGameMode(GameModes.ENDLESS);
 
     let doubleCount = 0;
     let singleCount = 0;
 
-    // Play through endless, waves 1 to 9, counting number of double battles from waves 2 to 9
+    // Play through waves 11 to 19, counting number of double battles from waves 12 to 19
     await game.rng.equalSample(DOUBLE_CHANCE, async () => {
-      game.move.select(MoveId.SPLASH);
-      await game.faintOpponents();
+      game.move.use(MoveId.HAZE);
       await game.toNextWave();
 
       if (game.scene.getEnemyParty().length === 1) {

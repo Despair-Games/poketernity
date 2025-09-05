@@ -2575,14 +2575,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
   }
 
   getValueLimit(): number {
-    const valueLimit = new NumberHolder(0);
-    switch (globalScene.gameMode.modeId) {
-      case GameModes.ENDLESS:
-        valueLimit.value = 15;
-        break;
-      default:
-        valueLimit.value = 10;
-    }
+    const valueLimit = new NumberHolder(10);
 
     applyChallenges(globalScene.gameMode, ChallengeType.STARTER_POINTS, valueLimit);
 
@@ -2606,8 +2599,10 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         let allFormsValid = false;
         if (species.forms?.length > 0) {
           for (let i = 0; i < species.forms.length; i++) {
-            /* Here we are making a fake form index dex props for challenges
-             * Since some pokemon rely on forms to be valid (i.e. blaze tauros for fire challenges), we make a fake form and dex props to use in the challenge
+            /*
+             * Here we are making a fake form index dex props for challenges.
+             * Since some pokemon rely on forms to be valid (i.e. blaze tauros for fire challenges),
+             * we make a fake form and dex props to use in the challenge
              */
             const tempFormProps = globalScene.gameData.getFormAttr(i);
             const isValidForChallenge = new BooleanHolder(true);
