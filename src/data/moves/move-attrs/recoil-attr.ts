@@ -3,8 +3,11 @@ import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-dam
 import type { BlockRecoilDamageAbAttr } from "#abilities/block-recoil-damage-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { RECOIL_DAMAGE_PREVENTION_ABILITIES } from "#constants/ability-constants";
+import { ATTACK_SCORE_HP_THRESHOLD, BAD_MOVE_PENALTY } from "#constants/ai-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { HitResult } from "#enums/hit-result";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
@@ -27,7 +30,7 @@ export class RecoilAttr extends MoveEffectAttr {
     this.unblockable = unblockable;
   }
 
-  override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
+  public override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
     const cancelled = new BooleanHolder(false);
     if (!this.unblockable) {
       applyAbAttrs<BlockRecoilDamageAbAttr>(AbAttrFlag.BLOCK_RECOIL_DAMAGE, user, false, cancelled);
@@ -62,7 +65,34 @@ export class RecoilAttr extends MoveEffectAttr {
     return true;
   }
 
-  override getUserBenefitScore(_user: Pokemon, _target: Pokemon, move: Move): number {
-    return Math.floor(move.power / 5 / -4);
+  /**
+   * @returns An Effect Score penalty that reflects the Attack Score given for
+   * dealing the estimated recoil damage to the user.
+   * - If the user has an ability that prevents recoil damage, this grants (+0).
+   * - Otherwise, estimate the damage dealt to the user from this effect
+   *   - If the user is expected to faint from this effect,
+   *   grant a {@linkcode BAD_MOVE_PENALTY}
+   *   - Otherwise, the penalty from this effect is roughly equal to the EAS
+   *   for the estimated damage dealt to the user, inverted and rounded to the
+   *   nearest integer. If the user is a Boss Pokemon, this penalty is doubled.
+   */
+  public override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    if (RECOIL_DAMAGE_PREVENTION_ABILITIES.some((abId) => user.hasAbility(abId))) {
+      return 0;
+    }
+
+    const approxSelfDamage = toDmgValue(
+      user.getExpectedAttackScore(target, move)
+        * (ATTACK_SCORE_HP_THRESHOLD / 100)
+        * target.getMaxHp()
+        * this.damageRatio,
+    );
+
+    if (approxSelfDamage > user.hp) {
+      return BAD_MOVE_PENALTY;
+    }
+
+    const selfDamagePenalty = ((-approxSelfDamage / user.getMaxHp()) * 100) / ATTACK_SCORE_HP_THRESHOLD;
+    return Math.round(selfDamagePenalty) * (user.isBoss() ? 2 : 1);
   }
 }

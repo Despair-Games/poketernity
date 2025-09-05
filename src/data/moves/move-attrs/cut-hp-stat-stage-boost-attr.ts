@@ -57,6 +57,10 @@ export class CutHpStatStageBoostAttr extends StatStageChangeAttr {
    * grants a {@linkcode BAD_MOVE_PENALTY}.
    */
   public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    if (user.isBoss()) {
+      return -10;
+    }
+
     const oppMaxEas = user.getOpponents().map((opp) =>
       opp.estimateAttackMoves().reduce((maxEas, mv) => {
         const eas = opp.getExpectedAttackScore(user, mv);

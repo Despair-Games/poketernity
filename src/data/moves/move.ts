@@ -831,6 +831,10 @@ export abstract class Move {
     isFail: boolean,
     isMultiTarget: boolean,
   ): number {
+    let attrs = this.attrs.filter(
+      (attr) => !(attr instanceof MoveEffectAttr && attr.trigger === MoveEffectTrigger.POST_TARGET),
+    );
+
     if (target.isAlly(user)) {
       /*
        * Single-target attacks (other than Pollen Puff) are always penalized against allies
@@ -859,7 +863,6 @@ export abstract class Move {
       return allyTargetScores.reduce((total, score) => total + score, 0);
     }
 
-    let attrs: MoveAttr[] = this.attrs;
     if (isKnockOut) {
       /*
        * If the move KOs the target, only the following attributes contribute to score:
@@ -875,7 +878,27 @@ export abstract class Move {
       attrs = attrs.filter((attr) => attr.appliesScoreOnFail);
     }
 
-    return attrs.map((attr) => attr.getEffectScore(user, target, this)).reduce((total, score) => total + score, 0);
+    return attrs.reduce((score, attr) => score + attr.getEffectScore(user, target, this), 0);
+  }
+
+  /**
+   * Calculates the Effect Score gained (or lost) from all move effects
+   * with a {@linkcode MoveEffectTrigger.POST_TARGET | POST_TARGET} effect trigger.
+   * These effects trigger exactly once instead of once per target.
+   * @param user - The {@linkcode EnemyPokemon} evaluating this move
+   * @param isFail - `true` if the move is expected to fail.
+   * @returns - The integer "post-target" Effect Score component
+   */
+  public getPostTargetEffectScore(user: EnemyPokemon, isFail: boolean): number {
+    let attrs: MoveAttr[] = this.attrs.filter(
+      (attr) => attr instanceof MoveEffectAttr && attr.trigger === MoveEffectTrigger.POST_TARGET,
+    );
+
+    if (isFail) {
+      attrs = attrs.filter((attr) => attr.appliesScoreOnFail);
+    }
+
+    return attrs.reduce((score, attr) => score + attr.getEffectScore(user, user, this), 0);
   }
 
   /**
