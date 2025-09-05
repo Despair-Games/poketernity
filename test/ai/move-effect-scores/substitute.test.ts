@@ -37,7 +37,7 @@ describe("AI (Move Effect Scores) - Substitute", () => {
     await game.classicMode.startBattle(SpeciesId.BELLIBOLT);
 
     const enemy = game.field.getEnemyPokemon();
-    // console.log(enemy.getAverageMatchupScore());
+
     expect(enemy).toPreferSelectingMove(MoveId.SUBSTITUTE);
   });
 
@@ -47,7 +47,7 @@ describe("AI (Move Effect Scores) - Substitute", () => {
     await game.classicMode.startBattle(SpeciesId.GYARADOS);
 
     const enemy = game.field.getEnemyPokemon();
-    // console.log(enemy.getAverageMatchupScore());
+
     expect(enemy).not.toPreferSelectingMove(MoveId.SUBSTITUTE);
   });
 

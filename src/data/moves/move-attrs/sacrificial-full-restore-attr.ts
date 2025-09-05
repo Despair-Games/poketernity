@@ -4,7 +4,6 @@ import {
   ATTACK_SCORE_HP_THRESHOLD,
   BAD_MOVE_PENALTY,
   FAVORABLE_MATCHUP_SCORE_THRESHOLD,
-  MINOR_EFFECT_SCORE_BONUS,
 } from "#constants/ai-constants";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
@@ -63,6 +62,10 @@ export class SacrificialFullRestoreAttr extends SacrificialAttr {
    * against its opponents, this grants a {@linkcode BAD_MOVE_PENALTY}.
    * - Otherwise, this attribute's Effect Score scales with the damage taken by the
    * most damaged non-fainted Pokemon in the user's party (in terms of % max HP).
+   *
+   * Note that Lunar Dance's PP-restoring effect does not contribute to Effect Score.
+   * Because enemies only appear for a single battle, an individual Pokemon's PP isn't
+   * expected to have a significant impact in battle.
    */
   public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     if (user.isBoss()) {
@@ -83,6 +86,6 @@ export class SacrificialFullRestoreAttr extends SacrificialAttr {
       return BAD_MOVE_PENALTY;
     }
 
-    return healScore + (this.restorePP ? MINOR_EFFECT_SCORE_BONUS : 0);
+    return healScore;
   }
 }
