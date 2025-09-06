@@ -205,6 +205,7 @@ import { loadMoveAnimAssets } from "#utils/move-anim-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
 import { getPokemonSpecies, getPokemonSpeciesForm, summonDataToJSON } from "#utils/pokemon-utils";
 import { randSeedInt } from "#utils/random-utils";
+import { getWeatherSynergyAbilities, getWeatherSynergyMoves, getWeatherTypeSynergyScore } from "#utils/weather-utils";
 import i18next from "i18next";
 
 interface AbilityData {
@@ -2477,6 +2478,37 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public getAverageMatchupScore(): number {
     const opponents = this.getOpponents();
     return opponents.map((opp) => this.getMatchupScore(opp)).reduce((total, mus) => total + mus) / opponents.length;
+  }
+
+  /**
+   * Calculates a score to measure how much this Pokemon benefits from the
+   * given type of weather. The final score consists of three components:
+   * - An assigned score for the Pokemon's type(s) according to {@linkcode getWeatherTypeSynergyScore}.
+   * - (+1) for each Ability the Pokemon has (and can apply) that benefits from the weather.
+   * - (+0.5) for each Move the Pokemon knows that benefits from the weather.
+   * @param weatherType - The {@link WeatherType | type} of weather to evaluate this Pokemon against
+   * @param estimate - If `true`, limits checked abilities and moves to those revealed in battle
+   * @returns A decimal score approximating the Pokemon's potential synergy with the given weather
+   */
+  public getWeatherBenefitScore(weatherType: WeatherType, estimate: boolean = false): number {
+    const typeScore = this.getTypes(true, true).reduce(
+      (score, elemType) => score + getWeatherTypeSynergyScore(weatherType, elemType),
+      0,
+    );
+
+    const abilityScore = getWeatherSynergyAbilities(weatherType).reduce((score, abilityId) => {
+      if (estimate) {
+        return score + (this.hasRevealedAbility(abilityId) ? 1 : 0);
+      }
+      return score + (this.hasAbility(abilityId) ? 1 : 0);
+    }, 0);
+
+    const moveScore = getWeatherSynergyMoves(weatherType).reduce(
+      (score, moveId) => score + (this.hasMove(moveId, estimate) ? 0.5 : 0),
+      0,
+    );
+
+    return typeScore + abilityScore + moveScore;
   }
 
   getEvolution(): SpeciesFormEvolution | null {

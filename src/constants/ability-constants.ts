@@ -1,6 +1,7 @@
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { Ability } from "#abilities/ability";
 import type { SuppressWeatherEffectAbAttr } from "#abilities/suppress-weather-effect-ab-attr";
+import type { WeatherType } from "#enums/weather-type";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { AbilityId } from "#enums/ability-id";
@@ -81,4 +82,52 @@ export const POST_STAT_STAGE_REDUCTION_ABILITIES = Object.freeze<AbilityId[]>([
 export const RECOIL_DAMAGE_PREVENTION_ABILITIES = Object.freeze<AbilityId[]>([
   AbilityId.ROCK_HEAD,
   AbilityId.MAGIC_GUARD,
+]);
+
+/**
+ * Abilities that grant a benefit when {@link WeatherType.SUNNY | harsh sunlight}
+ * or {@link WeatherType.HARSH_SUN | extremely harsh sunlight} is in effect
+ */
+export const SUN_SYNERGY_ABILITIES = Object.freeze<AbilityId[]>([
+  AbilityId.CHLOROPHYLL,
+  AbilityId.SOLAR_POWER,
+  AbilityId.FLOWER_GIFT,
+  AbilityId.LEAF_GUARD,
+  AbilityId.PROTOSYNTHESIS,
+  AbilityId.FORECAST,
+]);
+
+/**
+ * Abilities that grant a benefit when {@link WeatherType.RAIN | rain}
+ * or {@link WeatherType.HEAVY_RAIN | heavy rain} is in effect
+ */
+export const RAIN_SYNERGY_ABILITIES = Object.freeze<AbilityId[]>([
+  AbilityId.SWIFT_SWIM,
+  AbilityId.RAIN_DISH,
+  AbilityId.DRY_SKIN,
+  AbilityId.HYDRATION,
+  AbilityId.FORECAST,
+]);
+
+/**
+ * Abilities that grant a benefit when a {@link WeatherType.SANDSTORM | sandstorm}
+ * is in effect
+ */
+export const SAND_SYNERGY_ABILITIES = Object.freeze<AbilityId[]>([
+  AbilityId.SAND_FORCE,
+  AbilityId.SAND_RUSH,
+  AbilityId.SAND_VEIL,
+  AbilityId.MAGIC_GUARD,
+  AbilityId.OVERCOAT,
+]);
+
+/**
+ * Abilities that grant a benefit when {@link WeatherType.HAIL | hail}
+ * or {@link WeatherType.SNOW | snow} is in effect
+ */
+export const SNOW_SYNERGY_ABILITIES = Object.freeze<AbilityId[]>([
+  AbilityId.ICE_BODY,
+  AbilityId.SNOW_CLOAK,
+  AbilityId.SLUSH_RUSH,
+  AbilityId.ICE_FACE,
 ]);
