@@ -72,7 +72,7 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
         const pokemonIndex = pokemon.getBattlerIndex();
 
         if (pokemon.isEnemy() && globalScene.currentBattle.battleType === BattleType.WILD) {
-          return globalScene.tryForceFleePokemon(pokemonIndex);
+          return globalScene.tryForceFleePokemon(pokemonIndex, pokemon);
         }
         return globalScene.tryForceSwitchPokemon(pokemonIndex);
       }

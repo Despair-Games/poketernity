@@ -2948,14 +2948,21 @@ export class BattleScene extends SceneBase {
    * can be forced to flee as long as none of the following conditions are met:
    * - The current battle is not a Wild battle
    * - The Pokemon is a Boss Pokemon
+   * - The Pokemon is a higher level than the source of this effect
    * - The current Mystery Encounter doesn't allow the Pokemon to flee
    * - The Pokemon either has an {@link ForceSwitchOutImmunityAbAttr | ability attribute} that
    * nullifies this effect or is of a Max form
    * @param pokemon - The {@linkcode Pokemon} to check
+   * @param source - The {@linkcode Pokemon} that initiated this effect
    * @returns `true` if the given Pokemon can be forced to flee
    */
-  public canForceFleePokemon(pokemon: Pokemon): boolean {
-    if (this.currentBattle.battleType !== BattleType.WILD || !pokemon.isEnemy() || pokemon.isBoss()) {
+  public canForceFleePokemon(pokemon: Pokemon, source: Pokemon): boolean {
+    if (
+      this.currentBattle.battleType !== BattleType.WILD
+      || !pokemon.isEnemy()
+      || pokemon.isBoss()
+      || pokemon.level > source.level
+    ) {
       return false;
     }
 
@@ -2979,12 +2986,13 @@ export class BattleScene extends SceneBase {
   /**
    * Forces the active enemy Pokemon at the given battler index to flee.
    * @param battlerIndex - The {@linkcode FieldBattlerIndex} of the enemy Pokemon to make flee
+   * @param pokemon - The {@linkcode Pokemon} that initiated this effect
    * @returns `true` if a Pokemon was successfully forced to flee
    */
-  public tryForceFleePokemon(battlerIndex: FieldBattlerIndex): boolean {
+  public tryForceFleePokemon(battlerIndex: FieldBattlerIndex, source: Pokemon): boolean {
     const pokemon = this.getPokemonByBattlerIndex(battlerIndex);
 
-    if (isNil(pokemon) || !this.canForceFleePokemon(pokemon)) {
+    if (isNil(pokemon) || !this.canForceFleePokemon(pokemon, source)) {
       return false;
     }
 
