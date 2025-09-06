@@ -1,4 +1,5 @@
 import { AbilityId } from "#enums/ability-id";
+import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
@@ -102,5 +103,19 @@ describe("Moves - U-turn", () => {
     // Check that U-Turn forced a switch
     expect(game.phaseInterceptor.log).toContain("SwitchPhase");
     expect(game.scene.getPlayerPokemon()!.species.speciesId).toBe(SpeciesId.SHUCKLE);
+  });
+
+  it("should not force Wild Pokemon to flee", async () => {
+    game.override.enemyMoveset(MoveId.U_TURN).enemySpecies(SpeciesId.MAGIKARP).enemyLevel(100).startingLevel(100);
+
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
+
+    vi.spyOn(game.scene, "tryForceFleePokemon");
+
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.move.use(MoveId.SPLASH);
+    await game.phaseInterceptor.to("MoveEffectPhase");
+
+    expect(game.scene.tryForceFleePokemon).not.toHaveBeenCalled();
   });
 });
