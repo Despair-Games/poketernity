@@ -205,6 +205,7 @@ import { loadMoveAnimAssets } from "#utils/move-anim-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
 import { getPokemonSpecies, getPokemonSpeciesForm, summonDataToJSON } from "#utils/pokemon-utils";
 import { randSeedInt } from "#utils/random-utils";
+import { getTerrainSynergyAbilities, getTerrainSynergyMoves, getTerrainTypeSynergyScore } from "#utils/terrain-utils";
 import { getWeatherSynergyAbilities, getWeatherSynergyMoves, getWeatherTypeSynergyScore } from "#utils/weather-utils";
 import i18next from "i18next";
 
@@ -1270,7 +1271,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   /**
    * @param target - The {@linkcode Pokemon} to compare Speed against
    * @param estimate - If `true`, estimates the target's Speed, not accounting for unrevealed Abilities
-   * @returns `true` if this Pokemon has higher Speed than
+   * @returns `true` if this Pokemon has higher Speed than the given target Pokemon
    */
   public outspeeds(target: Pokemon, estimate: boolean = false): boolean {
     const abilityApplyMode = estimate ? AbilityApplyMode.REVEALED : AbilityApplyMode.DEFAULT;
@@ -2504,6 +2505,41 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }, 0);
 
     const moveScore = getWeatherSynergyMoves(weatherType).reduce(
+      (score, moveId) => score + (this.hasMove(moveId, estimate) ? 0.5 : 0),
+      0,
+    );
+
+    return typeScore + abilityScore + moveScore;
+  }
+
+  /**
+   * Calculates a score to measure how much this Pokemon benefits from the
+   * given type of terrain. The final score consists of three components:
+   * - An assigned score for the Pokemon's type(s) according to {@linkcode getTerrainTypeSynergyScore}.
+   * - (+1) for each Ability the Pokemon has (and can apply) that benefits from the terrain.
+   * - (+0.5) for each Move the Pokemon knows that benefits from the terrain.
+   * @param weatherType - The {@link WeatherType | type} of weather to evaluate this Pokemon against
+   * @param estimate - If `true`, limits checked abilities and moves to those revealed in battle
+   * @returns A decimal score approximating the Pokemon's potential synergy with the given weather
+   */
+  public getTerrainBenefitScore(terrainType: TerrainType, estimate: boolean = false): number {
+    if (!this.isGrounded()) {
+      return 0;
+    }
+
+    const typeScore = this.getTypes(true, true).reduce(
+      (score, elemType) => score + getTerrainTypeSynergyScore(terrainType, elemType),
+      0,
+    );
+
+    const abilityScore = getTerrainSynergyAbilities(terrainType).reduce((score, abilityId) => {
+      if (estimate) {
+        return score + (this.hasRevealedAbility(abilityId) ? 1 : 0);
+      }
+      return score + (this.hasAbility(abilityId) ? 1 : 0);
+    });
+
+    const moveScore = getTerrainSynergyMoves(terrainType).reduce(
       (score, moveId) => score + (this.hasMove(moveId, estimate) ? 0.5 : 0),
       0,
     );

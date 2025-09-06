@@ -1,4 +1,6 @@
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
+import type { Terrain } from "#data/terrain";
+import type { TerrainType } from "#enums/terrain-type";
 import type { WeatherType } from "#enums/weather-type";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
@@ -82,3 +84,47 @@ export const SAND_SYNERGY_MOVES = Object.freeze<MoveId[]>([MoveId.WEATHER_BALL, 
  * {@link WeatherType.SNOW | snow} is in effect
  */
 export const SNOW_SYNERGY_MOVES = Object.freeze<MoveId[]>([MoveId.WEATHER_BALL, MoveId.BLIZZARD, MoveId.AURORA_VEIL]);
+
+/**
+ * Moves that gain a benefit when used while any {@linkcode Terrain}
+ * is in effect
+ */
+export const ALL_TERRAIN_SYNERGY_MOVES = Object.freeze<MoveId[]>([MoveId.TERRAIN_PULSE]);
+
+/**
+ * Moves that gain a benefit when used while
+ * {@link TerrainType.ELECTRIC | Electric Terrain} is in effect
+ */
+export const ELECTRIC_TERRAIN_SYNERGY_MOVES = Object.freeze<MoveId[]>([
+  ...ALL_TERRAIN_SYNERGY_MOVES,
+  MoveId.RISING_VOLTAGE,
+  MoveId.PSYBLADE,
+]);
+
+/**
+ * Moves that gain a benefit when used while
+ * {@link TerrainType.GRASSY | Grassy Terrain} is in effect
+ */
+export const GRASSY_TERRAIN_SYNERGY_MOVES = Object.freeze<MoveId[]>([
+  ...ALL_TERRAIN_SYNERGY_MOVES,
+  MoveId.GRASSY_GLIDE,
+  MoveId.FLORAL_HEALING,
+]);
+
+/**
+ * Moves that gain a benefit when used while
+ * {@link TerrainType.MISTY | Misty Terrain} is in effect
+ */
+export const MISTY_TERRAIN_SYNERGY_MOVES = Object.freeze<MoveId[]>([
+  ...ALL_TERRAIN_SYNERGY_MOVES,
+  MoveId.MISTY_EXPLOSION,
+]);
+
+/**
+ * Moves that gain a benefit when used while
+ * {@link TerrainType.PSYCHIC | Psychic Terrain} is in effect
+ */
+export const PSYCHIC_TERRAIN_SYNERGY_MOVES = Object.freeze<MoveId[]>([
+  ...ALL_TERRAIN_SYNERGY_MOVES,
+  MoveId.EXPANDING_FORCE,
+]);

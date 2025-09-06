@@ -14,7 +14,7 @@ import { type BiomeTierTrainerPools, getBiomeBgm, IndoorBiomes, type PokemonPool
 import { allBiomes } from "#data/data-lists";
 import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrigger } from "#data/pokemon-forms";
 import type { PokemonSpecies } from "#data/pokemon-species";
-import { getTerrainClearMessage, getTerrainStartMessage, Terrain } from "#data/terrain";
+import { Terrain } from "#data/terrain";
 import { Weather } from "#data/weather";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
@@ -37,6 +37,7 @@ import type { Move } from "#moves/move";
 import { coerceArray, enumValueToKey, getTSEnumValues } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedInt, weightedPick } from "#utils/random-utils";
+import { getTerrainClearMessage, getTerrainStartMessage } from "#utils/terrain-utils";
 import { getWeatherClearMessage, getWeatherStartMessage } from "#utils/weather-utils";
 
 export class Arena {

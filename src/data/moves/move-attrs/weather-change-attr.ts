@@ -42,7 +42,7 @@ export class WeatherChangeAttr extends MoveEffectAttr {
         0,
       );
 
-    const enemyBenefit = user
+    const oppBenefit = user
       .getOpposingParty()
       .filter((p) => p.isAllowedInBattle())
       .reduce(
@@ -51,6 +51,6 @@ export class WeatherChangeAttr extends MoveEffectAttr {
         0,
       );
 
-    return Math.min(Math.floor(userBenefit - enemyBenefit), SOFT_EFFECT_SCORE_LIMIT);
+    return Math.min(Math.floor(userBenefit - oppBenefit), SOFT_EFFECT_SCORE_LIMIT);
   }
 }
