@@ -1,5 +1,5 @@
 import { TerrainType } from "#enums/terrain-type";
-import { TerrainChangeAttr } from "#moves/terrain-change-attr";
+import { ChangeTerrainAttr } from "#moves/change-terrain-attr";
 
 /**
  * Attribute to clear active terrain from the field.
@@ -7,12 +7,12 @@ import { TerrainChangeAttr } from "#moves/terrain-change-attr";
  * {@link https://bulbapedia.bulbagarden.net/wiki/Steel_Roller_(move) | Steel Roller},
  * and {@linkcode https://bulbapedia.bulbagarden.net/wiki/Ice_Spinner_(move) | Ice Spinner}.
  */
-export class ClearTerrainAttr extends TerrainChangeAttr {
+export class ClearTerrainAttr extends ChangeTerrainAttr {
   constructor() {
     super(TerrainType.NONE);
   }
 
-  /** Removes the condition from {@linkcode TerrainChangeAttr} */
+  /** Removes the condition from {@linkcode ChangeTerrainAttr} */
   public override getCondition(): null {
     return null;
   }
