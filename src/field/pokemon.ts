@@ -4383,7 +4383,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   public resetCustomPokemonData(data: Partial<CustomPokemonData> = {}): void {
     const { spriteScale = -1, ability = -1, passive = -1, nature = -1, types = [] } = data;
-    this.customPokemonData = { spriteScale, ability, passive, nature, types };
+    this.customPokemonData = { spriteScale, ability, passive, nature, types: [...types] };
   }
 
   /**
