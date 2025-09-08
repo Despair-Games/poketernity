@@ -50,10 +50,15 @@ export class ChangeTerrainAttr extends MoveEffectAttr {
       .getOpposingParty()
       .filter((p) => p.isAllowedInBattle())
       .reduce(
-        (score, p) => score + p.getTerrainBenefitScore(this.terrainType) - p.getTerrainBenefitScore(currentTerrain),
+        (score, p) =>
+          score + p.getTerrainBenefitScore(this.terrainType, true) - p.getTerrainBenefitScore(currentTerrain, true),
         0,
       );
 
-    return Math.min(Math.floor(userBenefit - oppBenefit), SOFT_EFFECT_SCORE_LIMIT);
+    const rawScore = userBenefit - oppBenefit;
+    const minScore = Math.floor(rawScore);
+    const tierUpChance = Math.floor((rawScore - minScore) * 100);
+
+    return Math.min(this.getRandomScore(user, tierUpChance, minScore + 1, minScore), SOFT_EFFECT_SCORE_LIMIT);
   }
 }

@@ -2561,7 +2561,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         return score + (this.hasRevealedAbility(abilityId) ? 1 : 0);
       }
       return score + (this.hasAbility(abilityId) ? 1 : 0);
-    });
+    }, 0);
 
     const moveScore = getTerrainSynergyMoves(terrainType).reduce(
       (score, moveId) => score + (this.hasMove(moveId, estimate) ? 0.5 : 0),
