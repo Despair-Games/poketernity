@@ -1355,7 +1355,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   protected generateGender(): void {
     if (this.species.malePercent === null) {
       this.gender = Gender.GENDERLESS;
-    } else if (Phaser.Math.RND.frac() * 100 <= this.species.malePercent) {
+    } else if (Phaser.Math.RND.frac() * 100 < this.species.malePercent) {
       this.gender = Gender.MALE;
     } else {
       this.gender = Gender.FEMALE;
