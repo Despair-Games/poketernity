@@ -1,6 +1,6 @@
 import { api } from "#api/api";
 import { loggedInUser } from "#app/account";
-import { GameMode, getGameMode } from "#app/game-mode";
+import { getGameMode, getModeName } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { fetchDailyRunSeed, getDailyRunStarters } from "#data/daily-run";
@@ -85,7 +85,7 @@ export class TitlePhase extends Phase {
 
           const opts: OptionSelectItem[] = [];
           opts.push({
-            label: GameMode.getModeName(GameModes.CLASSIC),
+            label: getModeName(GameModes.CLASSIC),
             handler: () => {
               setModeAndEnd(GameModes.CLASSIC);
               return true;
@@ -93,7 +93,7 @@ export class TitlePhase extends Phase {
           });
           if (gameData.isUnlocked(Unlockables.CLASSIC_CLEAR)) {
             opts.push({
-              label: GameMode.getModeName(GameModes.CHALLENGE),
+              label: getModeName(GameModes.CHALLENGE),
               handler: () => {
                 setModeAndEnd(GameModes.CHALLENGE);
                 return true;
@@ -101,7 +101,7 @@ export class TitlePhase extends Phase {
             });
           }
           opts.push({
-            label: GameMode.getModeName(GameModes.DAILY),
+            label: getModeName(GameModes.DAILY),
             handler: () => {
               this.initDailyRun();
               return true;

@@ -295,14 +295,7 @@ export class GameMode implements GameModeConfig {
   }
 
   getName(): string {
-    switch (this.modeId) {
-      case GameModes.CLASSIC:
-        return i18next.t("gameMode:classic");
-      case GameModes.DAILY:
-        return i18next.t("gameMode:dailyRun");
-      case GameModes.CHALLENGE:
-        return i18next.t("gameMode:challenge");
-    }
+    return getModeName(this.modeId);
   }
 
   /**
@@ -316,17 +309,6 @@ export class GameMode implements GameModeConfig {
         return [...CHALLENGE_MODE_MYSTERY_ENCOUNTER_WAVES];
       default:
         return [0, 0];
-    }
-  }
-
-  static getModeName(modeId: GameModes): string {
-    switch (modeId) {
-      case GameModes.CLASSIC:
-        return i18next.t("gameMode:classic");
-      case GameModes.DAILY:
-        return i18next.t("gameMode:dailyRun");
-      case GameModes.CHALLENGE:
-        return i18next.t("gameMode:challenge");
     }
   }
 }
@@ -347,5 +329,16 @@ export function getGameMode(gameMode: GameModes): GameMode {
         { isClassic: true, hasTrainers: true, isChallenge: true, hasMysteryEncounters: true },
         classicFixedBattles,
       );
+  }
+}
+
+export function getModeName(modeId: GameModes): string {
+  switch (modeId) {
+    case GameModes.CLASSIC:
+      return i18next.t("gameMode:classic");
+    case GameModes.DAILY:
+      return i18next.t("gameMode:dailyRun");
+    case GameModes.CHALLENGE:
+      return i18next.t("gameMode:challenge");
   }
 }

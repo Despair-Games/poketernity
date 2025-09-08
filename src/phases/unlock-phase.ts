@@ -1,4 +1,4 @@
-import { GameMode } from "#app/game-mode";
+import { getModeName } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { GameModes } from "#enums/game-modes";
@@ -8,7 +8,7 @@ import i18next from "i18next";
 function getUnlockableName(unlockable: Unlockables) {
   switch (unlockable) {
     case Unlockables.CLASSIC_CLEAR:
-      return `${GameMode.getModeName(GameModes.CHALLENGE)} Mode`;
+      return `${getModeName(GameModes.CHALLENGE)} Mode`;
     case Unlockables.MINI_BLACK_HOLE:
       return i18next.t("modifierType:ModifierType.MINI_BLACK_HOLE.name");
     case Unlockables.EVIOLITE:
