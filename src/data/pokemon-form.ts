@@ -65,8 +65,8 @@ export class PokemonForm extends PokemonSpeciesForm {
     this.baseFormKey = baseFormKey;
   }
 
-  getFormSpriteKey(_formIndex?: number) {
-    return this.formSpriteKey !== null ? this.formSpriteKey : this.formKey;
+  getFormSpriteKey(_formIndex?: number): string {
+    return this.formSpriteKey ?? this.formKey;
   }
 
   override isPokemonForm(): this is this {
