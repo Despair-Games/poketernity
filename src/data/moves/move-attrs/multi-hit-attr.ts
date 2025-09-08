@@ -19,10 +19,10 @@ export class MultiHitAttr extends MoveAttr {
   /** This move's current multi-hit type. It may be temporarily modified by abilities (e.g., Battle Bond). */
   private multiHitType: MultiHitType;
 
-  constructor(multiHitType?: MultiHitType) {
+  constructor(multiHitType: MultiHitType = MultiHitType._2_TO_5) {
     super();
 
-    this.intrinsicMultiHitType = multiHitType !== undefined ? multiHitType : MultiHitType._2_TO_5;
+    this.intrinsicMultiHitType = multiHitType;
     this.multiHitType = this.intrinsicMultiHitType;
   }
 

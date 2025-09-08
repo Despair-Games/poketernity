@@ -366,7 +366,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.moveset = dataSource.moveset;
       // @ts-expect-error - `Pokemon#status` is `protected`
       this.status = dataSource.status;
-      this.friendship = dataSource.friendship !== undefined ? dataSource.friendship : this.species.baseFriendship;
+      this.friendship = dataSource.friendship ?? this.species.baseFriendship;
       this.metLevel = dataSource.metLevel || 5;
       this.luck = dataSource.luck;
       this.metBiome = dataSource.metBiome;
