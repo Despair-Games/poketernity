@@ -161,6 +161,7 @@ import { BypassBurnDamageReductionAttr } from "#moves/bypass-burn-damage-reducti
 import { CombinedPledgeStabBoostAttr } from "#moves/combined-pledge-stab-boost-attr";
 import { CritOnlyAttr } from "#moves/crit-only-attr";
 import { DoubleDamageToMaxAttr } from "#moves/double-damage-to-max-attr";
+import { DrowsyAttr } from "#moves/drowsy-attr";
 import { FixedDamageAttr } from "#moves/fixed-damage-attr";
 import { HighCritAttr } from "#moves/high-crit-attr";
 import { HitsTagAttr } from "#moves/hits-tag-attr";
@@ -168,12 +169,16 @@ import { IgnoreOpponentStatStagesAttr } from "#moves/ignore-opponent-stat-stages
 import { IgnoreWeatherTypeDebuffAttr } from "#moves/ignore-weather-type-debuff-attr";
 import { ModifiedDamageAttr } from "#moves/modified-damage-attr";
 import { AttackMove, getMoveTargets, type Move } from "#moves/move";
+import type { MoveAttr } from "#moves/move-attr";
+import { MultiStatusEffectAttr } from "#moves/multi-status-effect-attr";
 import { OneHitKOAccuracyAttr } from "#moves/one-hit-ko-accuracy-attr";
 import { OneHitKOAttr } from "#moves/one-hit-ko-attr";
+import { PsychoShiftEffectAttr } from "#moves/psycho-shift-effect-attr";
 import { RechargeAttr } from "#moves/recharge-attr";
 import { RespectAttackTypeImmunityAttr } from "#moves/respect-attack-type-immunity-attr";
 import { SacrificialAttr } from "#moves/sacrificial-attr";
 import { StatStageChangeAttr } from "#moves/stat-stage-change-attr";
+import { StatusEffectAttr } from "#moves/status-effect-attr";
 import { TypelessAttr } from "#moves/typeless-attr";
 import { VariableAtkAttr } from "#moves/variable-atk-attr";
 import { VariableDefAttr } from "#moves/variable-def-attr";
@@ -187,6 +192,7 @@ import type { AbilityFilterOptions } from "#types/ability-types";
 import type { DamageCalculationResult, DamageResult, TurnMove } from "#types/move-types";
 import type { PokemonScoreData } from "#types/pokemon-score-data";
 import type { PokemonSummonData, PokemonTurnData, PokemonWaveData, Status } from "#types/pokemon-types";
+import type { Constructor } from "#types/utility-types";
 import type { BattleInfo } from "#ui/battle-info";
 import { applyChallenges } from "#utils/challenge-utils";
 import {
@@ -1507,16 +1513,32 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Checks whether this Pokemon knows a specific move.
-   * @param moveId - The {@linkcode MoveId} to check.
+   * Checks whether this Pokemon knows a specific move
+   * @param moveId - The {@linkcode MoveId} to check
    * @param revealedOnly - (Default `false`) If `true`, limits the search to
-   * moves that the Pokemon has revealed in battle.
+   * moves that the Pokemon has revealed in battle
    * @returns `true` if the Pokemon knows the given move
    */
   public hasMove(moveId: MoveId, revealedOnly: boolean = false): boolean {
     return revealedOnly
       ? this.waveData.revealedMoves.has(moveId)
       : this.getMoveset().some((mv) => mv.moveId === moveId);
+  }
+
+  /**
+   * Checks whether this Pokemon knows a move with a specific {@linkcode MoveAttr}
+   * @param attr - The type of {@linkcode MoveAttr} to check
+   * @param revealedOnly - (Default `false`) If `true`, limits the search to
+   * moves that the Pokemon has revealed in battle
+   * @returns `true` if the Pokemon knows a move with the given attribute
+   * @todo Use enum flags for move attributes instead to reduce risk of dependency violations
+   */
+  public hasMoveWithAttr(attr: Constructor<MoveAttr>, revealedOnly: boolean = false): boolean {
+    const revealedMoves = revealedOnly
+      ? [...this.waveData.revealedMoves].map((moveId) => allMoves.get(moveId))
+      : this.getMoveset().map((pkMove) => pkMove.getMove());
+
+    return revealedMoves.some((move) => move.hasAttr(attr));
   }
 
   /**
@@ -2514,10 +2536,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   /**
    * Calculates a score to measure how much this Pokemon benefits from the
-   * given type of terrain. The final score consists of three components:
+   * given type of Terrain. The final score consists of three components:
    * - An assigned score for the Pokemon's type(s) according to {@linkcode getTerrainTypeSynergyScore}.
    * - (+1) for each Ability the Pokemon has (and can apply) that benefits from the terrain.
    * - (+0.5) for each Move the Pokemon knows that benefits from the terrain.
+   * - An assigned score for the Terrain's "secondary effect" according to
+   * {@linkcode getTerrainSecondaryEffectScore}.
    * @param weatherType - The {@link WeatherType | type} of weather to evaluate this Pokemon against
    * @param estimate - If `true`, limits checked abilities and moves to those revealed in battle
    * @returns A decimal score approximating the Pokemon's potential synergy with the given weather
@@ -2544,7 +2568,95 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       0,
     );
 
-    return typeScore + abilityScore + moveScore;
+    const secondaryEffectScore = this.getTerrainSecondaryEffectScore(terrainType, estimate);
+
+    return typeScore + abilityScore + moveScore + secondaryEffectScore;
+  }
+
+  /**
+   * Calculates the benefit score component for the given terrain's "secondary" effect. For the purpose
+   * of this score, each Terrain's secondary effect is as follows:
+   * - {@link TerrainType.MISTY | Misty Terrain}: grants immunity to status conditions to all grounded Pokemon
+   * - {@link TerrainType.ELECTRIC | Electric Terrain}: grants immunity to Sleep to all grounded Pokemon
+   * - {@link TerrainType.GRASSY | Grassy Terrain}: halves the power of Earthquake, Bulldoze, and Magnitude
+   * - {@link TerrainType.PSYCHIC | Psychic Terrain}: grants immunity to opponents' high-priority moves
+   * to all grounded Pokemon
+   * @param terrainType - The {@linkcode TerrainType} to check
+   * @param estimate - If `true`, the data used for scoring (i.e. moves, abilities) is limited
+   * to what has been "revealed" to the Enemy AI in the current battle
+   * @returns The decimal secondary effect benefit score component for the given Terrain
+   * @see {@linkcode getTerrainBenefitScore}
+   */
+  private getTerrainSecondaryEffectScore(terrainType: TerrainType, estimate: boolean): number {
+    switch (terrainType) {
+      case TerrainType.MISTY:
+        return this.getMistyTerrainSecondaryEffectScore(estimate);
+      case TerrainType.ELECTRIC:
+        return this.getElectricTerrainSecondaryEffectScore(estimate);
+      case TerrainType.GRASSY:
+        return this.getGrassyTerrainSecondaryEffectScore(estimate);
+      case TerrainType.PSYCHIC:
+        return this.getPsychicTerrainSecondaryEffectScore(estimate);
+      default: {
+        terrainType satisfies TerrainType.NONE;
+        return 0;
+      }
+    }
+  }
+
+  /**
+   * Misty Terrain penalizes Pokemon if they have any status-effect-inflicting moves
+   * @see {@linkcode getTerrainSecondaryEffectScore}
+   */
+  private getMistyTerrainSecondaryEffectScore(estimate: boolean): number {
+    const badMoveAttrs: Constructor<MoveAttr>[] = [StatusEffectAttr, MultiStatusEffectAttr, PsychoShiftEffectAttr];
+
+    return badMoveAttrs.some((attr) => this.hasMoveWithAttr(attr, estimate)) ? -1 : 0;
+  }
+
+  /**
+   * Electric Terrain penalizes Pokemon if they have any Sleep-inducing moves
+   * @see {@linkcode getTerrainSecondaryEffectScore}
+   */
+  private getElectricTerrainSecondaryEffectScore(estimate: boolean): number {
+    const moveset = estimate
+      ? this.getRevealedMoves().map((moveId) => allMoves.get(moveId))
+      : this.getMoveset().map((pkMove) => pkMove.getMove());
+
+    const hasSleepMove = moveset.some(
+      (move) => move.hasAttr(DrowsyAttr) || move.getAttrs(StatusEffectAttr)[0].effect === StatusEffect.SLEEP,
+    );
+
+    return hasSleepMove ? -1 : 0;
+  }
+
+  /**
+   * Grassy Terrain penalizes Pokemon if they know Earthquake, Bulldoze, or Magnitude
+   * @see {@linkcode getTerrainSecondaryEffectScore}
+   */
+  private getGrassyTerrainSecondaryEffectScore(estimate: boolean): number {
+    const badMoves: MoveId[] = [MoveId.EARTHQUAKE, MoveId.BULLDOZE, MoveId.MAGNITUDE];
+
+    return badMoves.some((moveId) => this.hasMove(moveId, estimate)) ? -1 : 0;
+  }
+
+  /**
+   * Psychic Terrain penalizes Pokemon if they know a single-target, high-priority move.
+   * If not, it may reward Pokemon that are faster than any of their active opponents.
+   * @see {@linkcode getTerrainSecondaryEffectScore}
+   */
+  private getPsychicTerrainSecondaryEffectScore(estimate: boolean): number {
+    const moveset = estimate
+      ? this.getRevealedMoves().map((moveId) => allMoves.get(moveId))
+      : this.getMoveset().map((pkMove) => pkMove.getMove());
+
+    const hasPriorityMove = moveset.some((move) => move.getPriority(this) > 0 && move.isSingleEnemyTarget());
+
+    if (hasPriorityMove) {
+      return -1;
+    }
+
+    return this.getOpponents().every((opp) => this.outspeeds(opp, opp.isPlayer())) ? 1 : 0;
   }
 
   getEvolution(): SpeciesFormEvolution | null {
