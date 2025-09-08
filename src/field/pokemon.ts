@@ -2624,7 +2624,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       : this.getMoveset().map((pkMove) => pkMove.getMove());
 
     const hasSleepMove = moveset.some(
-      (move) => move.hasAttr(DrowsyAttr) || move.getAttrs(StatusEffectAttr)[0].effect === StatusEffect.SLEEP,
+      (move) => move.hasAttr(DrowsyAttr) || move.getAttrs(StatusEffectAttr)[0]?.effect === StatusEffect.SLEEP,
     );
 
     return hasSleepMove ? -1 : 0;
