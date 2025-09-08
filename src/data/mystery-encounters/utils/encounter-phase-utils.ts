@@ -1042,25 +1042,25 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
       // New biome
       if (i % 10 === 1) {
         if (Array.isArray(biomeLinks[currentBiome])) {
-          let biomes: BiomeId[];
+          let biomeIds!: BiomeId[];
           globalScene.executeWithSeedOffset(() => {
-            biomes = (biomeLinks[currentBiome] as (BiomeId | [BiomeId, number])[])
+            biomeIds = (biomeLinks[currentBiome] as (BiomeId | [BiomeId, number])[])
               .filter((b) => {
                 return !Array.isArray(b) || !randSeedInt(b[1]);
               })
               .map((b) => (Array.isArray(b) ? b[0] : b));
           }, i * 100);
-          if (biomes! && biomes.length > 0) {
-            const specialBiomes = biomes.filter((b) => alwaysPickTheseBiomes.includes(b));
+          if (biomeIds && biomeIds.length > 0) {
+            const specialBiomes = biomeIds.filter((b) => alwaysPickTheseBiomes.includes(b));
             if (specialBiomes.length > 0) {
               currentBiome = specialBiomes[randSeedInt(specialBiomes.length)];
             } else {
-              currentBiome = biomes[randSeedInt(biomes.length)];
+              currentBiome = biomeIds[randSeedInt(biomeIds.length)];
             }
           }
         } else if (Object.hasOwn(biomeLinks, currentBiome)) {
           currentBiome = biomeLinks[currentBiome] as BiomeId;
-        } else if (i % 50) {
+        } else {
           currentBiome = globalScene.generateRandomBiome(i);
         }
 
