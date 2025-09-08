@@ -245,7 +245,7 @@ export class MoveHelper extends GameManagerHelper {
         const phase = this.game.scene.phaseManager.getCurrentPhase<SelectTargetPhase>()!;
         const move = phase.getPokemon().getMoveset()[movePosition].getMove();
         if (!move.isMultiTarget()) {
-          handler.setCursor(targetIndex !== undefined ? targetIndex : BattlerIndex.ENEMY);
+          handler.setCursor(targetIndex ?? BattlerIndex.ENEMY);
         }
         if (move.isMultiTarget() && targetIndex !== undefined) {
           throw new Error(`targetIndex was passed to selectMove() but move ("${move.name}") is not targetted`);
