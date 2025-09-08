@@ -2656,7 +2656,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return -1;
     }
 
-    return this.getOpponents().every((opp) => this.outspeeds(opp, opp.isPlayer())) ? 1 : 0;
+    return this.getOpponents().every((opp) => this.outspeeds(opp, opp.isPlayer())) ? 0.5 : 0;
   }
 
   getEvolution(): SpeciesFormEvolution | null {
