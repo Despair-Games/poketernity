@@ -149,6 +149,7 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
         },
         {
           // Blacephalon has the random ability from pool, and 2 entirely random types to fit with the theme of the encounter
+          // TODO: should prevent it from rolling the same type twice
           species: getPokemonSpecies(SpeciesId.BLACEPHALON),
           customPokemonData: {
             ability,
