@@ -91,7 +91,7 @@ export class TitlePhase extends Phase {
               return true;
             },
           });
-          if (gameData.isUnlocked(Unlockables.CLASSIC_CLEAR)) {
+          if (gameData.isUnlocked(Unlockables.CHALLENGE_MODE)) {
             opts.push({
               label: getModeName(GameModes.CHALLENGE),
               handler: () => {

@@ -247,8 +247,8 @@ export class GameOverPhase extends BattlePhase {
     const { gameData, gameMode } = globalScene;
 
     if (this.isVictory && gameMode.isClassic) {
-      if (!gameData.unlocks[Unlockables.CLASSIC_CLEAR]) {
-        globalScene.phaseManager.createAndUnshiftPhase("UnlockPhase", Unlockables.CLASSIC_CLEAR);
+      if (!gameData.unlocks[Unlockables.CHALLENGE_MODE]) {
+        globalScene.phaseManager.createAndUnshiftPhase("UnlockPhase", Unlockables.CHALLENGE_MODE);
       }
 
       if (!gameData.unlocks[Unlockables.MINI_BLACK_HOLE]) {
