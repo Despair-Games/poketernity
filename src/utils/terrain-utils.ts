@@ -130,17 +130,17 @@ export function getTerrainTypeSynergyScore(terrainType: TerrainType, elementalTy
 
 /**
  * @param terrainType - The {@linkcode TerrainType} to check
- * @returns An array of {@link AbilityId | IDs} for abilities that benefit from
+ * @returns A set of {@link AbilityId | IDs} for abilities that benefit from
  * the given terrain type
  */
-export function getTerrainSynergyAbilities(terrainType: TerrainType): readonly AbilityId[] {
+export function getTerrainSynergyAbilities(terrainType: TerrainType): Readonly<Set<AbilityId>> {
   switch (terrainType) {
     case TerrainType.ELECTRIC:
-      return [AbilityId.QUARK_DRIVE, AbilityId.SURGE_SURFER, AbilityId.HADRON_ENGINE];
+      return new Set([AbilityId.QUARK_DRIVE, AbilityId.SURGE_SURFER, AbilityId.HADRON_ENGINE]);
     case TerrainType.GRASSY:
-      return [AbilityId.GRASS_PELT];
+      return new Set([AbilityId.GRASS_PELT]);
     default:
-      return [];
+      return new Set([]);
   }
 }
 

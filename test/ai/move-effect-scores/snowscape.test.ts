@@ -58,9 +58,9 @@ describe("AI (Move Effect Scores) - Snowscape", () => {
   type AbilityTestCase = { name: string; id: AbilityId };
   const abilityTestCases: AbilityTestCase[] = [
     { name: "Ice Body", id: AbilityId.ICE_BODY },
-    // { name: "Snow Cloak", id: AbilityId.SNOW_CLOAK },
+    { name: "Snow Cloak", id: AbilityId.SNOW_CLOAK },
     { name: "Slush Rush", id: AbilityId.SLUSH_RUSH },
-    // { name: "Ice Face", id: AbilityId.ICE_FACE },
+    { name: "Ice Face", id: AbilityId.ICE_FACE },
   ];
 
   it.each(abilityTestCases)("should be preferred when the user has $name", async ({ id }) => {
@@ -78,7 +78,10 @@ describe("AI (Move Effect Scores) - Snowscape", () => {
     await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemy = game.field.getEnemyPokemon();
-    expect(enemy).not.toNeverSelectMove(MoveId.SNOWSCAPE);
+    // This needs to be asserted conditionally because Ice Face reveals itself on summon
+    if (!game.field.getPlayerPokemon().hasRevealedAbility(id)) {
+      expect(enemy).not.toNeverSelectMove(MoveId.SNOWSCAPE);
+    }
 
     game.field.revealAllAbilities();
     expect(enemy).toNeverSelectMove(MoveId.SNOWSCAPE);

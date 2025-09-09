@@ -65,11 +65,9 @@ describe("AI (Move Effect Scores) - Sandstorm", () => {
 
   type AbilityTestCase = { name: string; id: AbilityId };
   const abilityTestCases: AbilityTestCase[] = [
-    // TODO: Sand Force's condition interferes with `hasAbility` checks
-    // { name: "Sand Force", id: AbilityId.SAND_FORCE },
+    { name: "Sand Force", id: AbilityId.SAND_FORCE },
     { name: "Sand Rush", id: AbilityId.SAND_RUSH },
-    // TODO: Sand Veil's condition interferes with `hasAbility` checks
-    // { name: "Sand Veil", id: AbilityId.SAND_VEIL },
+    { name: "Sand Veil", id: AbilityId.SAND_VEIL },
     { name: "Magic Guard", id: AbilityId.MAGIC_GUARD },
     { name: "Overcoat", id: AbilityId.OVERCOAT },
   ];

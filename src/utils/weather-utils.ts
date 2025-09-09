@@ -204,10 +204,10 @@ function getStrongWindsSynergyScore(elementalType: ElementalType): number {
 
 /**
  * @param weatherType - The {@linkcode WeatherType} to check
- * @returns An array of {@link AbilityId | IDs} for abilities that benefit from
+ * @returns A set of {@link AbilityId | IDs} for abilities that benefit from
  * the given weather type.
  */
-export function getWeatherSynergyAbilities(weatherType: WeatherType): readonly AbilityId[] {
+export function getWeatherSynergyAbilities(weatherType: WeatherType): Readonly<Set<AbilityId>> {
   switch (weatherType) {
     case WeatherType.SUNNY:
     case WeatherType.HARSH_SUN:
@@ -221,7 +221,7 @@ export function getWeatherSynergyAbilities(weatherType: WeatherType): readonly A
     case WeatherType.SNOW:
       return SNOW_SYNERGY_ABILITIES;
     default:
-      return [];
+      return new Set();
   }
 }
 

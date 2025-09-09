@@ -2519,12 +2519,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       0,
     );
 
-    const abilityScore = getWeatherSynergyAbilities(weatherType).reduce((score, abilityId) => {
-      if (estimate) {
-        return score + (this.hasRevealedAbility(abilityId) ? 1 : 0);
-      }
-      return score + (this.hasAbility(abilityId) ? 1 : 0);
-    }, 0);
+    // TODO: This ability check doesn't account for ability suppression
+    const abilities = this.getAbilities({ revealedOnly: estimate });
+    const synergyAbilities = getWeatherSynergyAbilities(weatherType);
+    const abilityScore = abilities.reduce(
+      (total, { ability }) => total + (synergyAbilities.has(ability.id) ? 1 : 0),
+      0,
+    );
 
     const moveScore = getWeatherSynergyMoves(weatherType).reduce(
       (score, moveId) => score + (this.hasMove(moveId, estimate) ? 0.5 : 0),
@@ -2556,12 +2557,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       0,
     );
 
-    const abilityScore = getTerrainSynergyAbilities(terrainType).reduce((score, abilityId) => {
-      if (estimate) {
-        return score + (this.hasRevealedAbility(abilityId) ? 1 : 0);
-      }
-      return score + (this.hasAbility(abilityId) ? 1 : 0);
-    }, 0);
+    // TODO: This ability check doesn't account for ability suppression
+    const abilities = this.getAbilities({ revealedOnly: estimate });
+    const synergyAbilities = getTerrainSynergyAbilities(terrainType);
+    const abilityScore = abilities.reduce(
+      (total, { ability }) => total + (synergyAbilities.has(ability.id) ? 1 : 0),
+      0,
+    );
 
     const moveScore = getTerrainSynergyMoves(terrainType).reduce(
       (score, moveId) => score + (this.hasMove(moveId, estimate) ? 0.5 : 0),

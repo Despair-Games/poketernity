@@ -86,9 +86,7 @@ describe("AI (Move Effect Scores) - Sunny Day", () => {
     { name: "Chlorophyll", id: AbilityId.CHLOROPHYLL },
     { name: "Solar Power", id: AbilityId.SOLAR_POWER },
     { name: "Flower Gift", id: AbilityId.FLOWER_GIFT },
-    // TODO: Ability conditions interfere with the `hasAbility` checks
-    // used in weather scoring calculations
-    // { name: "Leaf Guard", id: AbilityId.LEAF_GUARD },
+    { name: "Leaf Guard", id: AbilityId.LEAF_GUARD },
     { name: "Protosynthesis", id: AbilityId.PROTOSYNTHESIS },
     { name: "Forecast", id: AbilityId.FORECAST },
   ];

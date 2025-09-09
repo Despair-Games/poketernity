@@ -70,8 +70,7 @@ describe("AI (Move Effect Scores) - Rain Dance", () => {
     { name: "Swift Swim", id: AbilityId.SWIFT_SWIM },
     { name: "Rain Dish", id: AbilityId.RAIN_DISH },
     { name: "Dry Skin", id: AbilityId.DRY_SKIN },
-    // TODO: Hydration's condition interferes with `hasAbility` checks
-    // { name: "Hydration", id: AbilityId.HYDRATION },
+    { name: "Hydration", id: AbilityId.HYDRATION },
     { name: "Forecast", id: AbilityId.FORECAST },
   ];
 
