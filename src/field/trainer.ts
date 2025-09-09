@@ -22,7 +22,7 @@ import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PersistentModifier } from "#modifier/modifier";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
-import { randSeedInt, randSeedItem, randSeedWeightedItem } from "#utils/random-utils";
+import { randSeedInt, randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
 export class Trainer extends Phaser.GameObjects.Container {
@@ -51,12 +51,15 @@ export class Trainer extends Phaser.GameObjects.Container {
     }
 
     this.variant = variant;
+
+    const partyTemplates = this.config.partyTemplates;
+    // This formerly used an undocumented weighted pick function
+    // TODO: assign weights to party templates?
     this.partyTemplateIndex = Math.min(
-      partyTemplateIndex !== undefined
-        ? partyTemplateIndex
-        : randSeedWeightedItem(this.config.partyTemplates.map((_, i) => i)),
-      this.config.partyTemplates.length - 1,
+      partyTemplateIndex ?? randSeedItem(partyTemplates.map((_, i) => i)),
+      partyTemplates.length - 1,
     );
+
     if (Object.hasOwn(trainerNamePools, trainerType)) {
       const namePool = trainerNamePools[trainerType];
       this.name =
@@ -75,20 +78,15 @@ export class Trainer extends Phaser.GameObjects.Container {
       }
     }
 
-    switch (this.variant) {
-      case TrainerVariant.FEMALE:
-        if (!this.config.hasGenders) {
-          variant = TrainerVariant.DEFAULT;
-        }
-        break;
-      case TrainerVariant.DOUBLE:
-        if (!this.config.hasDouble) {
-          variant = TrainerVariant.DEFAULT;
-        }
-        break;
+    if (
+      (this.variant === TrainerVariant.FEMALE && !this.config.hasGenders)
+      || (this.variant === TrainerVariant.DOUBLE && !this.config.hasDouble)
+    ) {
+      variant = TrainerVariant.DEFAULT;
     }
 
     console.log(
+      "trainer party template:",
       Object.keys(trainerPartyTemplates)[Object.values(trainerPartyTemplates).indexOf(this.getPartyTemplate())],
     );
 

@@ -162,19 +162,20 @@ export class EnemyPokemon extends Pokemon {
         this.setMoveset(...new Array(4).fill(MoveId.SKETCH));
         break;
       case SpeciesId.ETERNATUS:
-        this.moveset = (formIndex !== undefined ? formIndex : this.formIndex)
-          ? [
-              new PokemonMove(MoveId.DYNAMAX_CANNON, { pokemonId: this.id }),
-              new PokemonMove(MoveId.CROSS_POISON, { pokemonId: this.id }),
-              new PokemonMove(MoveId.FLAMETHROWER, { pokemonId: this.id }),
-              new PokemonMove(MoveId.RECOVER, { pokemonId: this.id, ppUp: -4 }),
-            ]
-          : [
-              new PokemonMove(MoveId.ETERNABEAM, { pokemonId: this.id }),
-              new PokemonMove(MoveId.SLUDGE_BOMB, { pokemonId: this.id }),
-              new PokemonMove(MoveId.FLAMETHROWER, { pokemonId: this.id }),
-              new PokemonMove(MoveId.COSMIC_POWER, { pokemonId: this.id }),
-            ];
+        this.moveset =
+          (formIndex ?? this.formIndex)
+            ? [
+                new PokemonMove(MoveId.DYNAMAX_CANNON, { pokemonId: this.id }),
+                new PokemonMove(MoveId.CROSS_POISON, { pokemonId: this.id }),
+                new PokemonMove(MoveId.FLAMETHROWER, { pokemonId: this.id }),
+                new PokemonMove(MoveId.RECOVER, { pokemonId: this.id, ppUp: -4 }),
+              ]
+            : [
+                new PokemonMove(MoveId.ETERNABEAM, { pokemonId: this.id }),
+                new PokemonMove(MoveId.SLUDGE_BOMB, { pokemonId: this.id }),
+                new PokemonMove(MoveId.FLAMETHROWER, { pokemonId: this.id }),
+                new PokemonMove(MoveId.COSMIC_POWER, { pokemonId: this.id }),
+              ];
         if (globalScene.gameMode.hasChallenge(Challenges.INVERSE_BATTLE)) {
           this.moveset[2] = new PokemonMove(MoveId.THUNDERBOLT, { pokemonId: this.id });
         }

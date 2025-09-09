@@ -117,7 +117,6 @@
         "useNumericSeparators": "off", // TODO: enable?
         "noNamespace": "error",
         "noDefaultExport": "error",
-        "noDoneCallback": "error",
         "noShoutyConstants": "error",
         "noSubstr": "error",
         "noYodaExpression": "error",
