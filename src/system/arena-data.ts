@@ -1,3 +1,5 @@
+/** biome-ignore-all lint/style/noNestedTernary: modified in another PR */
+
 import type { ArenaTag } from "#arena-tags/arena-tag";
 import { loadArenaTag } from "#arena-tags/utils/load-arena-tag";
 import { Terrain } from "#data/terrain";

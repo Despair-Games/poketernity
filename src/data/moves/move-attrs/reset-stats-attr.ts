@@ -14,7 +14,7 @@ import i18next from "i18next";
  */
 export class ResetStatsAttr extends MoveEffectAttr {
   /** Should this attribute reset the stat stages of *all* Pokemon on the field? */
-  private targetAllPokemon: boolean;
+  private readonly targetAllPokemon: boolean;
   constructor(targetAllPokemon: boolean) {
     super();
     this.targetAllPokemon = targetAllPokemon;

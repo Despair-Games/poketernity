@@ -2,7 +2,7 @@
  * Class will intercept any text or dialogue message calls and log them for test purposes
  */
 export class TextInterceptor {
-  private scene;
+  private readonly scene;
   public logs: string[] = [];
   constructor(scene) {
     this.scene = scene;

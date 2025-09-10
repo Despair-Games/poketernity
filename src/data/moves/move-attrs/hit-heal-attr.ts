@@ -14,8 +14,8 @@ import i18next from "i18next";
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Category:HP-draining_moves | HP-draining moves}
  */
 export class HitHealAttr extends MoveEffectAttr {
-  private healRatio: number;
-  private healStat: EffectiveStat | null;
+  private readonly healRatio: number;
+  private readonly healStat: EffectiveStat | null;
 
   constructor(healRatio?: number | null, healStat?: EffectiveStat) {
     super(true);

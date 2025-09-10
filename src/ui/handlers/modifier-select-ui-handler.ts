@@ -1,3 +1,5 @@
+/** biome-ignore-all lint/style/noNestedTernary: modifiers are being deleted soon anyway */
+
 import { globalScene } from "#app/global-scene";
 import { activeOverrides } from "#app/overrides";
 import { handleTutorial } from "#app/tutorial";
@@ -498,8 +500,7 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
       this.modifierContainer.add(this.cursorObj);
     }
 
-    const options =
-      this.rowCursor === 1 ? this.options : this.shopOptionsRows[this.shopOptionsRows.length - (this.rowCursor - 1)];
+    const options = this.rowCursor === 1 ? this.options : this.shopOptionsRows.at(-(this.rowCursor - 1))!;
 
     this.cursorObj.setScale(this.rowCursor === 1 ? 2 : this.rowCursor >= 2 ? 1.5 : 1);
 
@@ -601,7 +602,7 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
       case 1:
         return this.options.length;
       default:
-        return this.shopOptionsRows[this.shopOptionsRows.length - (rowCursor - 1)].length;
+        return this.shopOptionsRows.at(-(rowCursor - 1))!.length;
     }
   }
 
@@ -755,12 +756,13 @@ class ModifierOption extends Phaser.GameObjects.Container {
       this.itemContainer.add(this.itemTint);
     }
 
-    this.itemText = addTextObject(0, 35, this.modifierTypeOption.type?.name!, TextStyle.PARTY, { align: "center" }); // TODO: is this bang correct?
-    this.itemText.setOrigin(0.5, 0);
-    this.itemText.setAlpha(0);
-    this.itemText.setTint(
-      this.modifierTypeOption.type?.tier ? getModifierTierTextTint(this.modifierTypeOption.type.tier) : undefined,
-    );
+    this.itemText = //
+      addTextObject(0, 35, this.modifierTypeOption.type.name ?? "missing", TextStyle.PARTY, { align: "center" })
+        .setOrigin(0.5, 0)
+        .setAlpha(0)
+        .setTint(
+          this.modifierTypeOption.type?.tier ? getModifierTierTextTint(this.modifierTypeOption.type.tier) : undefined,
+        );
     this.add(this.itemText);
 
     if (this.modifierTypeOption.cost) {

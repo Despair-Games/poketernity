@@ -57,8 +57,8 @@ import i18next from "i18next";
 
 export abstract class Move {
   public id: MoveId;
-  private _type: ElementalType;
-  private _category: MoveCategory;
+  private readonly _type: ElementalType;
+  private readonly _category: MoveCategory;
   public moveTarget: MoveTarget;
   public power: number;
   public accuracy: number;

@@ -7,7 +7,7 @@ import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
 
 export class MoveChargeAnim extends MoveAnim {
-  private chargeAnim: ChargeAnim;
+  private readonly chargeAnim: ChargeAnim;
 
   /**
    * **Note:** The default for {@linkcode targetIndex} being {@linkcode BattlerIndex.PLAYER} is due to `MoveChargeAnim` originally not supporting a target argument.

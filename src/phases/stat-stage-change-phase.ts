@@ -315,7 +315,7 @@ export class StatStageChangePhase extends PokemonPhase {
                 .map((s) => i18next.t(getStatKey(s)))
                 .join(
                   ", ",
-                )}${relStageStats.length > 2 ? "," : ""} ${i18next.t("battle:statsAnd")} ${i18next.t(getStatKey(relStageStats[relStageStats.length - 1]))}`;
+                )}${relStageStats.length > 2 ? "," : ""} ${i18next.t("battle:statsAnd")} ${i18next.t(getStatKey(relStageStats.at(-1)!))}`;
       } else {
         statsFragment = i18next.t(getStatKey(relStageStats[0]));
       }

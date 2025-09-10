@@ -1,3 +1,5 @@
+/** biome-ignore-all lint/style/noNestedTernary: all of this is going to be deleted soon anyway */
+
 import { globalScene } from "#app/global-scene";
 import { logModifiers } from "#app/loggers";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -229,7 +231,7 @@ export class ModifierType {
 type ModifierTypeGeneratorFunc = (party: Pokemon[], pregenArgs?: any[]) => ModifierType | null;
 
 export class ModifierTypeGenerator extends ModifierType {
-  private genTypeFunc: ModifierTypeGeneratorFunc;
+  private readonly genTypeFunc: ModifierTypeGeneratorFunc;
 
   constructor(genTypeFunc: ModifierTypeGeneratorFunc) {
     super(null, null, null);
@@ -255,8 +257,8 @@ export interface GeneratedPersistentModifierType {
 }
 
 export class AddPokeballModifierType extends ModifierType {
-  private pokeballType: PokeballType;
-  private count: number;
+  private readonly pokeballType: PokeballType;
+  private readonly count: number;
 
   constructor(iconImage: string, pokeballType: PokeballType, count: number) {
     super("", iconImage, (_type, _args) => new AddPokeballModifier(this, pokeballType, count), "pb", "se/pb_bounce_1");
@@ -285,8 +287,8 @@ export class AddPokeballModifierType extends ModifierType {
 }
 
 export class AddVoucherModifierType extends ModifierType {
-  private voucherType: VoucherType;
-  private count: number;
+  private readonly voucherType: VoucherType;
+  private readonly count: number;
 
   constructor(voucherType: VoucherType, count: number) {
     super(
@@ -649,7 +651,7 @@ export class RememberMoveModifierType extends PokemonModifierType {
 }
 
 export class DoubleBattleChanceBoosterModifierType extends ModifierType {
-  private maxBattles: number;
+  private readonly maxBattles: number;
 
   constructor(localeKey: string, iconImage: string, maxBattles: number) {
     super(localeKey, iconImage, (_type, _args) => new DoubleBattleChanceBoosterModifier(this, maxBattles), "lure");
@@ -665,9 +667,9 @@ export class DoubleBattleChanceBoosterModifierType extends ModifierType {
 }
 
 export class TempStatStageBoosterModifierType extends ModifierType implements GeneratedPersistentModifierType {
-  private stat: TempBattleStat;
-  private nameKey: string;
-  private quantityKey: string;
+  private readonly stat: TempBattleStat;
+  private readonly nameKey: string;
+  private readonly quantityKey: string;
 
   constructor(stat: TempBattleStat) {
     const nameKey = TempStatStageBoosterModifierTypeGenerator.items[stat];
@@ -695,7 +697,7 @@ export class TempStatStageBoosterModifierType extends ModifierType implements Ge
 }
 
 export class BerryModifierType extends PokemonHeldItemModifierType implements GeneratedPersistentModifierType {
-  private berryType: BerryType;
+  private readonly berryType: BerryType;
 
   constructor(berryType: BerryType) {
     super(
@@ -789,7 +791,7 @@ export class SpeciesStatBoosterModifierType
   extends PokemonHeldItemModifierType
   implements GeneratedPersistentModifierType
 {
-  private key: SpeciesStatBoosterItem;
+  private readonly key: SpeciesStatBoosterItem;
 
   constructor(key: SpeciesStatBoosterItem) {
     const item = SpeciesStatBoosterModifierTypeGenerator.items[key];
@@ -847,8 +849,8 @@ export class BaseStatBoosterModifierType
   extends PokemonHeldItemModifierType
   implements GeneratedPersistentModifierType
 {
-  private stat: PermanentStat;
-  private key: string;
+  private readonly stat: PermanentStat;
+  private readonly key: string;
 
   constructor(stat: PermanentStat) {
     const key = BaseStatBoosterModifierTypeGenerator.items[stat];
@@ -945,7 +947,7 @@ export class PokemonBaseStatFlatModifierType
 }
 
 class AllPokemonFullHpRestoreModifierType extends ModifierType {
-  private descriptionKey: string;
+  private readonly descriptionKey: string;
 
   constructor(localeKey: string, iconImage: string, descriptionKey?: string, newModifierFunc?: NewModifierFunc) {
     super(
@@ -976,8 +978,8 @@ export class AllPokemonFullReviveModifierType extends AllPokemonFullHpRestoreMod
 }
 
 export class MoneyRewardModifierType extends ModifierType {
-  private moneyMultiplier: number;
-  private moneyMultiplierDescriptorKey: string;
+  private readonly moneyMultiplier: number;
+  private readonly moneyMultiplierDescriptorKey: string;
 
   constructor(localeKey: string, iconImage: string, moneyMultiplier: number, moneyMultiplierDescriptorKey: string) {
     super(localeKey, iconImage, (_type, _args) => new MoneyRewardModifier(this, moneyMultiplier), "money", "se/buy");
@@ -999,7 +1001,7 @@ export class MoneyRewardModifierType extends ModifierType {
 }
 
 export class ExpBoosterModifierType extends ModifierType {
-  private boostPercent: number;
+  private readonly boostPercent: number;
 
   constructor(localeKey: string, iconImage: string, boostPercent: number) {
     super(localeKey, iconImage, () => new ExpBoosterModifier(this, boostPercent));
@@ -1015,7 +1017,7 @@ export class ExpBoosterModifierType extends ModifierType {
 }
 
 export class PokemonExpBoosterModifierType extends PokemonHeldItemModifierType {
-  private boostPercent: number;
+  private readonly boostPercent: number;
 
   constructor(localeKey: string, iconImage: string, boostPercent: number) {
     super(
@@ -1498,7 +1500,7 @@ export class FormChangeItemModifierTypeGenerator extends ModifierTypeGenerator {
 }
 
 export class ContactHeldItemTransferChanceModifierType extends PokemonHeldItemModifierType {
-  private chancePercent: number;
+  private readonly chancePercent: number;
 
   constructor(localeKey: string, iconImage: string, chancePercent: number, group?: string, soundName?: string) {
     super(
@@ -2071,7 +2073,7 @@ function getNewModifierTypeOption(
   }
 
   const tierThresholds = Object.keys(thresholds[tier]);
-  const totalWeight = Number.parseInt(tierThresholds[tierThresholds.length - 1]);
+  const totalWeight = Number.parseInt(tierThresholds.at(-1) ?? "0");
   const value = randSeedInt(totalWeight);
   let index: number | undefined;
   for (const t of tierThresholds) {

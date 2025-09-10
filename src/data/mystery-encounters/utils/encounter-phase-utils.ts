@@ -163,9 +163,15 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
     const doubleTrainer = trainerConfig.doubleOnly || (trainerConfig.hasDouble && !!partyConfig.doubleBattle);
     doubleBattle = doubleTrainer;
     const trainerFemale = isNil(partyConfig.female) ? !randSeedInt(2) : partyConfig.female;
+    let trainerVariant: TrainerVariant = TrainerVariant.DEFAULT;
+    if (doubleTrainer) {
+      trainerVariant = TrainerVariant.DOUBLE;
+    } else if (trainerFemale) {
+      trainerVariant = TrainerVariant.FEMALE;
+    }
     const newTrainer = new Trainer(
       trainerConfig.trainerType,
-      doubleTrainer ? TrainerVariant.DOUBLE : trainerFemale ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
+      trainerVariant,
       undefined,
       undefined,
       undefined,
@@ -182,12 +188,12 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
     // Wild
     globalScene.currentBattle.mysteryEncounter!.encounterMode = MysteryEncounterMode.WILD_BATTLE;
 
-    const numEnemies =
-      partyConfig?.pokemonConfigs && partyConfig.pokemonConfigs.length > 0
-        ? partyConfig?.pokemonConfigs?.length
-        : doubleBattle
-          ? 2
-          : 1;
+    let numEnemies = 1;
+    if (partyConfig?.pokemonConfigs?.length) {
+      numEnemies = partyConfig.pokemonConfigs.length;
+    } else if (doubleBattle) {
+      numEnemies = 2;
+    }
     battle.enemyLevels = new Array(numEnemies).fill(null).map(() => globalScene.currentBattle.getLevelForWave());
   }
 
@@ -338,12 +344,13 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
       if (statusEffects) {
         // Default to cureturn 3 for sleep
         const status = Array.isArray(statusEffects) ? statusEffects[0] : statusEffects;
-        const cureTurn = Array.isArray(statusEffects)
-          ? statusEffects[1]
-          : statusEffects === StatusEffect.SLEEP
-            ? 3
-            : undefined;
-        // @ts-expect-error - `Pokemon#setStatus` is protected; TODO: change this?
+        let cureTurn: number | undefined;
+        if (Array.isArray(statusEffects)) {
+          cureTurn = statusEffects[1];
+        } else if (statusEffects === StatusEffect.SLEEP) {
+          cureTurn = 3;
+        }
+        // @ts-expect-error - `Pokemon#setStatus` is `protected`; TODO: change this?
         enemyPokemon.setStatus(status, { sleepTurnsRemaining: cureTurn });
       }
 
@@ -1113,15 +1120,17 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
         const uncommonThreshold = totalWeight - tierWeights[0] - tierWeights[1]; // 64 - 32 - 16 = 16
         const rareThreshold = totalWeight - tierWeights[0] - tierWeights[1] - tierWeights[2]; // 64 - 32 - 16 - 10 = 6
 
-        tierValue > commonThreshold
-          ? ++numEncounters[0]
-          : tierValue > uncommonThreshold
-            ? ++numEncounters[1]
-            : tierValue > rareThreshold
-              ? ++numEncounters[2]
-              : ++numEncounters[3];
-        const biomeKey = enumValueToKey(BiomeId, currentBiome);
-        encountersByBiome.set(biomeKey, (encountersByBiome.get(biomeKey) ?? 0) + 1);
+        if (tierValue > commonThreshold) {
+          ++numEncounters[0];
+        } else if (tierValue > uncommonThreshold) {
+          ++numEncounters[1];
+        } else if (tierValue > rareThreshold) {
+          ++numEncounters[2];
+        } else {
+          ++numEncounters[3];
+        }
+        const biomeName = enumValueToKey(BiomeId, currentBiome);
+        encountersByBiome.set(biomeName, (encountersByBiome.get(biomeName) ?? 0) + 1);
       } else {
         encounterRate += ME_WEIGHT_INCREMENT_ON_SPAWN_MISS;
       }
@@ -1209,17 +1218,16 @@ export function calculateRareSpawnAggregateStats(luckValue: number) {
         luckModifier = luckValue * 0.5;
       }
       const tierValue = randSeedInt(64 - luckModifier);
-      const tier =
-        tierValue >= 20
-          ? BiomePoolTier.BOSS
-          : tierValue >= 6
-            ? BiomePoolTier.BOSS_RARE
-            : tierValue >= 1
-              ? BiomePoolTier.BOSS_SUPER_RARE
-              : BiomePoolTier.BOSS_ULTRA_RARE;
+      let tier: BiomePoolTier = BiomePoolTier.BOSS_ULTRA_RARE;
+      if (tierValue >= 20) {
+        tier = BiomePoolTier.BOSS;
+      } else if (tierValue >= 6) {
+        tier = BiomePoolTier.BOSS_RARE;
+      } else if (tierValue >= 1) {
+        tier = BiomePoolTier.BOSS_SUPER_RARE;
+      }
 
       switch (tier) {
-        default:
         case BiomePoolTier.BOSS:
           ++bossEncountersByRarity[0];
           break;

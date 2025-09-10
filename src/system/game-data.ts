@@ -1250,9 +1250,9 @@ export class GameData {
       const reader = new FileReader();
 
       reader.onload = ((_) => {
-        return (e) => {
+        return (pe) => {
           let dataName: string;
-          let dataStr = AES.decrypt(e.target?.result?.toString()!, saveKey).toString(enc.Utf8); // TODO: is this bang correct?
+          let dataStr = AES.decrypt(pe.target!.result!.toString()!, saveKey).toString(enc.Utf8); // TODO: is this bang correct?
           let valid = false;
           try {
             dataName = enumValueToKey(GameDataType, dataType).toLowerCase();
@@ -1351,7 +1351,7 @@ export class GameData {
             callback: () => globalScene.ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, importDataConfirmOptions),
           });
         };
-      })((e.target as any).files[0]);
+      })(e.target.files[0]);
 
       reader.readAsText((e.target as any).files[0]);
     });
@@ -1973,7 +1973,13 @@ export class GameData {
    */
   public getStarterSpeciesDefaultAbilityIndex(species: PokemonSpecies): number {
     const abilityAttr = this.starterData[species.speciesId].abilityAttr;
-    return abilityAttr & AbilityAttr.ABILITY_1 ? 0 : !species.ability2 || abilityAttr & AbilityAttr.ABILITY_2 ? 1 : 2;
+    if (abilityAttr & AbilityAttr.ABILITY_1) {
+      return 0;
+    }
+    if (!species.ability2 || abilityAttr & AbilityAttr.ABILITY_2) {
+      return 1;
+    }
+    return 2;
   }
 
   /**

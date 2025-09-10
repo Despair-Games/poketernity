@@ -244,7 +244,7 @@ export class BattleScene extends SceneBase {
   public rngOffset: number = 0;
 
   public inputMethod: string;
-  private infoToggles: InfoToggle[] = [];
+  private readonly infoToggles: InfoToggle[] = [];
 
   /** Handler for general {@linkcode Animation | animations} */
   public animations: Animation;
@@ -268,8 +268,8 @@ export class BattleScene extends SceneBase {
     super("battle");
     this.phaseManager = new PhaseManager();
     this.updateGameInfo();
-    this.animations = new Animation(this);
-    this.audioManager = new AudioManager(this);
+    this.animations = new Animation();
+    this.audioManager = new AudioManager();
     initGlobalScene(this);
     this.initSettingsEventListeners();
   }
@@ -1264,11 +1264,12 @@ export class BattleScene extends SceneBase {
             doubleTrainer = false;
           }
         }
-        const variant = doubleTrainer
-          ? TrainerVariant.DOUBLE
-          : randSeedInt(2)
-            ? TrainerVariant.FEMALE
-            : TrainerVariant.DEFAULT;
+        let variant: TrainerVariant = TrainerVariant.DEFAULT;
+        if (doubleTrainer) {
+          variant = TrainerVariant.DOUBLE;
+        } else if (randSeedInt(2)) {
+          variant = TrainerVariant.FEMALE;
+        }
         newTrainer = isNil(trainerData) ? new Trainer(trainerType, variant) : trainerData.toTrainer();
         this.field.add(newTrainer);
       }
@@ -2550,7 +2551,7 @@ export class BattleScene extends SceneBase {
       const matchingFormChangeOpts = pokemonFormChanges[pokemon.species.speciesId].filter(
         (fc) => fc.findTrigger(formChangeTriggerType) && fc.canChange(pokemon),
       );
-      let matchingFormChange: SpeciesFormChange | null;
+      let matchingFormChange: SpeciesFormChange | undefined;
       if (pokemon.species.speciesId === SpeciesId.NECROZMA && matchingFormChangeOpts.length > 1) {
         // Ultra Necrozma is changing its form back, so we need to figure out into which form it devolves.
         const formChangeItemModifiers = (
@@ -2561,11 +2562,11 @@ export class BattleScene extends SceneBase {
           .filter((m) => m.active)
           .map((m) => m.formChangeItem);
 
-        matchingFormChange = formChangeItemModifiers.includes(FormChangeItem.N_LUNARIZER)
-          ? matchingFormChangeOpts[0]
-          : formChangeItemModifiers.includes(FormChangeItem.N_SOLARIZER)
-            ? matchingFormChangeOpts[1]
-            : null;
+        if (formChangeItemModifiers.includes(FormChangeItem.N_LUNARIZER)) {
+          matchingFormChange = matchingFormChangeOpts[0];
+        } else if (formChangeItemModifiers.includes(FormChangeItem.N_SOLARIZER)) {
+          matchingFormChange = matchingFormChangeOpts[1];
+        }
       } else {
         matchingFormChange = matchingFormChangeOpts[0];
       }
@@ -2924,14 +2925,12 @@ export class BattleScene extends SceneBase {
         sessionEncounterRate
         + Math.min(currentRunDiffFromAvg * ME_ANTI_VARIANCE_WEIGHT_MODIFIER, ME_MAX_SPAWN_WEIGHT / 2);
 
-      const successRate = isNil(activeOverrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE)
-        ? favoredEncounterRate
-        : activeOverrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE!;
+      const successRate = activeOverrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE ?? favoredEncounterRate;
 
       // If the most recent ME was 3 or fewer waves ago, can never spawn a ME
       const canSpawn =
         encounteredEvents.length === 0
-        || waveIndex - encounteredEvents[encounteredEvents.length - 1].waveIndex > 3
+        || waveIndex - encounteredEvents.at(-1)!.waveIndex > 3
         || !isNil(activeOverrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE);
 
       if (canSpawn) {
@@ -3020,25 +3019,22 @@ export class BattleScene extends SceneBase {
     const commonThreshold = totalWeight - tierWeights[0];
     const greatThreshold = totalWeight - tierWeights[0] - tierWeights[1];
     const ultraThreshold = totalWeight - tierWeights[0] - tierWeights[1] - tierWeights[2];
-    let tier: MysteryEncounterTier | null =
-      tierValue > commonThreshold
-        ? MysteryEncounterTier.COMMON
-        : tierValue > greatThreshold
-          ? MysteryEncounterTier.GREAT
-          : tierValue > ultraThreshold
-            ? MysteryEncounterTier.ULTRA
-            : MysteryEncounterTier.EPIC;
+    let tier: MysteryEncounterTier | null = MysteryEncounterTier.EPIC;
+    if (tierValue > commonThreshold) {
+      tier = MysteryEncounterTier.COMMON;
+    } else if (tierValue > greatThreshold) {
+      tier = MysteryEncounterTier.GREAT;
+    } else if (tierValue > ultraThreshold) {
+      tier = MysteryEncounterTier.ULTRA;
+    }
 
     if (!isNil(activeOverrides.MYSTERY_ENCOUNTER_TIER_OVERRIDE)) {
       tier = activeOverrides.MYSTERY_ENCOUNTER_TIER_OVERRIDE;
     }
 
     let availableEncounters: MysteryEncounter[] = [];
-    const previousEncounter =
-      this.mysteryEncounterSaveData.encounteredEvents.length > 0
-        ? this.mysteryEncounterSaveData.encounteredEvents[this.mysteryEncounterSaveData.encounteredEvents.length - 1]
-            .type
-        : null;
+    const { encounteredEvents } = this.mysteryEncounterSaveData;
+    const previousEncounter = encounteredEvents.at(-1)?.type;
     const biomeMysteryEncounters = mysteryEncountersByBiome.get(this.arena.biomeId) ?? [];
     // If no valid encounters exist at tier, checks next tier down, continuing until there are some encounters available
     while (availableEncounters.length === 0 && tier !== null) {
@@ -3072,7 +3068,7 @@ export class BattleScene extends SceneBase {
           if (!encounterCandidate.meetsRequirements()) {
             return false;
           }
-          if (previousEncounter !== null && encType === previousEncounter) {
+          if (!isNil(previousEncounter) && encType === previousEncounter) {
             return false;
           }
           if (

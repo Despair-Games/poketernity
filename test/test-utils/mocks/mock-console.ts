@@ -23,7 +23,7 @@ const WHITE_ANSI_CODE = "\u001b[37m";
 
 export class MockConsole {
   private logs: any[] = [];
-  private notified: any[] = [];
+  private readonly notified: any[] = [];
 
   /**
    * A list of warnings that are queued to be displayed after all tests in the same file are finished.

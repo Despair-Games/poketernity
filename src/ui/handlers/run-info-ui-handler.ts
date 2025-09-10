@@ -665,7 +665,7 @@ export class RunInfoUiHandler extends UiHandler {
             const typeTextColor = `[color=${TypeColor[typeRule]}]`;
             const typeShadowColor = `[shadow=${TypeShadowColor[typeRule]}]`;
             const typeText =
-              typeTextColor + typeShadowColor + i18next.t(`pokemonInfo:Type.${typeRule}`) + "[/color]" + "[/shadow]";
+              typeTextColor + typeShadowColor + i18next.t(`pokemonInfo:Type.${typeRule}`) + "[/color][/shadow]";
             rules.push(typeText);
             break;
           }

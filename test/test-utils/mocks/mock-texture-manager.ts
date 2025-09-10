@@ -16,8 +16,8 @@ import { MockTexture } from "#test/test-utils/mocks/mocks-container/mock-texture
  * Stub class for Phaser.Textures.TextureManager
  */
 export class MockTextureManager {
-  private textures: Map<string, any>;
-  private scene: BattleScene;
+  private readonly textures: Map<string, any>;
+  private readonly scene: BattleScene;
   public add;
   public displayList;
   public list: MockGameObject[] = [];

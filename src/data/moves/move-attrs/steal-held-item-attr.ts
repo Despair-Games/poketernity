@@ -24,11 +24,12 @@ export class StealHeldItemAttr extends MoveEffectAttr {
     /** @todo Refactor this mess after items are properly implemented */
     const heldItems = this.getTargetHeldItems(target).filter((i) => i.isTransferable);
     if (heldItems.length) {
-      const poolType = target.isPlayer()
-        ? ModifierPoolType.PLAYER
-        : target.hasTrainer()
-          ? ModifierPoolType.TRAINER
-          : ModifierPoolType.WILD;
+      let poolType: ModifierPoolType = ModifierPoolType.WILD;
+      if (target.isPlayer()) {
+        poolType = ModifierPoolType.PLAYER;
+      } else if (target.hasTrainer()) {
+        poolType = ModifierPoolType.TRAINER;
+      }
       const highestItemTier = heldItems
         .map((m) => m.type.getOrInferTier(poolType))
         .reduce((highestTier, tier) => Math.max(tier!, highestTier), 0); // TODO: is the bang after tier correct?

@@ -14,7 +14,7 @@ import { getStatusEffectHealText } from "#utils/status-effect-utils";
  */
 export class HealStatusEffectAttr extends MoveEffectAttr {
   /** List of Status Effects to cure */
-  private effects: StatusEffect[];
+  private readonly effects: StatusEffect[];
 
   /**
    * @param selfTarget - Whether this move targets the user

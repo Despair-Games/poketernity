@@ -8,7 +8,7 @@ import type { UserMoveConditionFunc } from "#types/move-types";
  * @see {@linkcode noEffectFunc}
  */
 export class NoEffectAttr extends MoveAttr {
-  private noEffectFunc: UserMoveConditionFunc;
+  private readonly noEffectFunc: UserMoveConditionFunc;
 
   constructor(noEffectFunc: UserMoveConditionFunc) {
     super();

@@ -21,21 +21,16 @@ export function doPokemonTransformationSequence(
     transformationBaseBg.setVisible(false);
     transformationContainer.add(transformationBaseBg);
 
-    let pokemonSprite: Phaser.GameObjects.Sprite;
-    let pokemonTintSprite: Phaser.GameObjects.Sprite;
-    let pokemonEvoSprite: Phaser.GameObjects.Sprite;
-    let pokemonEvoTintSprite: Phaser.GameObjects.Sprite;
-
-    const xOffset =
-      screenPosition === TransformationScreenPosition.CENTER
-        ? 0
-        : screenPosition === TransformationScreenPosition.RIGHT
-          ? 100
-          : -100;
+    let xOffset = -100;
+    if (screenPosition === TransformationScreenPosition.CENTER) {
+      xOffset = 0;
+    } else if (screenPosition === TransformationScreenPosition.RIGHT) {
+      xOffset = 100;
+    }
     // Centered transformations occur at a lower y Position
     const yOffset = screenPosition !== TransformationScreenPosition.CENTER ? -15 : 0;
 
-    const getPokemonSprite = () => {
+    const getPokemonSprite = (): Phaser.GameObjects.Sprite => {
       const ret = globalScene.addPokemonSprite(
         previousPokemon,
         transformationBaseBg.displayWidth / 2 + xOffset,
@@ -46,10 +41,12 @@ export function doPokemonTransformationSequence(
       return ret;
     };
 
-    transformationContainer.add((pokemonSprite = getPokemonSprite()));
-    transformationContainer.add((pokemonTintSprite = getPokemonSprite()));
-    transformationContainer.add((pokemonEvoSprite = getPokemonSprite()));
-    transformationContainer.add((pokemonEvoTintSprite = getPokemonSprite()));
+    const pokemonSprite = getPokemonSprite();
+    const pokemonTintSprite = getPokemonSprite();
+    const pokemonEvoSprite = getPokemonSprite();
+    const pokemonEvoTintSprite = getPokemonSprite();
+
+    transformationContainer.add([pokemonSprite, pokemonTintSprite, pokemonEvoSprite, pokemonEvoTintSprite]);
 
     pokemonSprite.setAlpha(0);
     pokemonTintSprite.setAlpha(0);

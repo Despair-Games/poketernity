@@ -106,7 +106,7 @@ export class Egg {
 
   private _overrideHiddenAbility: boolean;
 
-  private _eggDescriptor?: string;
+  private readonly _eggDescriptor?: string;
 
   ////
   // #endregion
@@ -387,13 +387,16 @@ export class Egg {
     const tierValueOffset =
       this._sourceType === EggSourceType.GACHA_LEGENDARY ? GACHA_LEGENDARY_UP_THRESHOLD_OFFSET : 0;
     const tierValue = randInt(256);
-    return tierValue >= GACHA_DEFAULT_COMMON_EGG_THRESHOLD + tierValueOffset
-      ? EggTier.COMMON
-      : tierValue >= GACHA_DEFAULT_RARE_EGG_THRESHOLD + tierValueOffset
-        ? EggTier.RARE
-        : tierValue >= GACHA_DEFAULT_EPIC_EGG_THRESHOLD + tierValueOffset
-          ? EggTier.EPIC
-          : EggTier.LEGENDARY;
+    if (tierValue >= GACHA_DEFAULT_COMMON_EGG_THRESHOLD + tierValueOffset) {
+      return EggTier.COMMON;
+    }
+    if (tierValue >= GACHA_DEFAULT_RARE_EGG_THRESHOLD + tierValueOffset) {
+      return EggTier.RARE;
+    }
+    if (tierValue >= GACHA_DEFAULT_EPIC_EGG_THRESHOLD + tierValueOffset) {
+      return EggTier.EPIC;
+    }
+    return EggTier.LEGENDARY;
   }
 
   private rollSpecies(): SpeciesId | null {

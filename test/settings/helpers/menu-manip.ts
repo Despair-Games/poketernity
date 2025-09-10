@@ -12,12 +12,12 @@ import {
 import { expect } from "vitest";
 
 export class MenuManip {
-  private config;
+  private readonly config;
   private settingName;
   private keycode;
-  private icon;
+  private readonly icon;
   private iconDisplayed;
-  private specialCaseIcon;
+  private readonly specialCaseIcon;
 
   constructor(config) {
     this.config = config;
@@ -79,12 +79,13 @@ export class MenuManip {
     return this;
   }
 
+  // TODO: evaluate `!`s for correctness
   weWantThisBindInstead(keycode) {
     this.keycode = Phaser.Input.Keyboard.KeyCodes[keycode];
-    const icon = getIconWithKeycode(this.config, this.keycode)!; // TODO: is this bang correct?
-    const key = getKeyWithKeycode(this.config, this.keycode)!; // TODO: is this bang correct?
+    const icon = getIconWithKeycode(this.config, this.keycode)!;
+    const key = getKeyWithKeycode(this.config, this.keycode)!;
     const _keys = key.toLowerCase().split("_");
-    const iconIdentifier = _keys[_keys.length - 1];
+    const iconIdentifier = _keys.at(-1)!;
     expect(icon.toLowerCase().includes(iconIdentifier)).toEqual(true);
     return this;
   }

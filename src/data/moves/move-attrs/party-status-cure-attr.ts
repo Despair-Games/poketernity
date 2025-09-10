@@ -9,9 +9,9 @@ import { MoveEffectAttr } from "#moves/move-effect-attr";
  */
 export class PartyStatusCureAttr extends MoveEffectAttr {
   /** Message to display after using move */
-  private message: string | null;
+  private readonly message: string | null;
   /** Skips mons with this ability, ie. Soundproof */
-  private abilityCondition: AbilityId;
+  private readonly abilityCondition: AbilityId;
 
   constructor(message: string | null, abilityCondition: AbilityId) {
     super(true);
