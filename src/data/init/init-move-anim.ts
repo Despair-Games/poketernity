@@ -34,11 +34,12 @@ export function initMoveAnim(move: MoveId): Promise<void> {
       }
     } else {
       moveAnims.set(move, null);
-      const defaultMoveAnim = allMoves.get(move).isAttackMove()
-        ? MoveId.TACKLE
-        : allMoves.get(move).isSelfStatusMove()
-          ? MoveId.FOCUS_ENERGY
-          : MoveId.TAIL_WHIP;
+      let defaultMoveAnim: MoveId = MoveId.TAIL_WHIP;
+      if (allMoves.get(move).isAttackMove()) {
+        defaultMoveAnim = MoveId.TACKLE;
+      } else if (allMoves.get(move).isSelfStatusMove()) {
+        defaultMoveAnim = MoveId.FOCUS_ENERGY;
+      }
 
       const fetchAnimAndResolve = (move: MoveId) => {
         globalScene

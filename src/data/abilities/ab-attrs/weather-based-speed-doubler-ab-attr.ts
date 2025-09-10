@@ -22,7 +22,7 @@ import type { NumberHolder } from "#utils/common-utils";
  * ```
  */
 export class WeatherBasedSpeedDoublerAbAttr extends StatMultiplierAbAttr {
-  private weather: WeatherType[] = [];
+  private readonly weather: WeatherType[] = [];
 
   constructor(weather: WeatherType | WeatherType[]) {
     super(Stat.SPD, 2);

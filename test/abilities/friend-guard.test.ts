@@ -46,7 +46,7 @@ describe("Moves - Friend Guard", () => {
     await game.toNextTurn();
 
     // Get the last return value from `getAttackDamage`
-    const turn1Damage = spy.mock.results[spy.mock.results.length - 1].value.damage;
+    const turn1Damage = spy.mock.results.at(-1)!.value.damage;
     // Making sure the test is controlled; turn 1 damage is equal to base damage (after rounding)
     expect(turn1Damage).toBe(
       Math.floor(player1.getBaseDamage(enemy1, allMoves.get(MoveId.TACKLE), MoveCategory.PHYSICAL)),
@@ -61,7 +61,7 @@ describe("Moves - Friend Guard", () => {
     await game.toNextTurn();
 
     // Get the last return value from `getAttackDamage`
-    const turn2Damage = spy.mock.results[spy.mock.results.length - 1].value.damage;
+    const turn2Damage = spy.mock.results.at(-1)!.value.damage;
     // With the ally's Friend Guard, damage should have been reduced from base damage by 25%
     expect(turn2Damage).toBe(
       Math.floor(player1.getBaseDamage(enemy1, allMoves.get(MoveId.TACKLE), MoveCategory.PHYSICAL) * 0.75),
@@ -80,7 +80,7 @@ describe("Moves - Friend Guard", () => {
     await game.move.forceEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
 
-    const turn1Damage = spy.mock.results[spy.mock.results.length - 1].value.damage;
+    const turn1Damage = spy.mock.results.at(-1)!.value.damage;
 
     game.field.mockAbility(player2, AbilityId.FRIEND_GUARD);
 
@@ -90,7 +90,7 @@ describe("Moves - Friend Guard", () => {
     await game.move.forceEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
 
-    const turn2Damage = spy.mock.results[spy.mock.results.length - 1].value.damage;
+    const turn2Damage = spy.mock.results.at(-1)!.value.damage;
     expect(turn2Damage).toBe(turn1Damage);
   });
 
@@ -106,7 +106,7 @@ describe("Moves - Friend Guard", () => {
     await game.move.forceEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
 
-    const turn1Damage = spy.mock.results[spy.mock.results.length - 1].value.damage;
+    const turn1Damage = spy.mock.results.at(-1)!.value.damage;
     expect(turn1Damage).toBe(40);
 
     game.field.mockAbility(player2, AbilityId.FRIEND_GUARD);
@@ -117,7 +117,7 @@ describe("Moves - Friend Guard", () => {
     await game.move.forceEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
 
-    const turn2Damage = spy.mock.results[spy.mock.results.length - 1].value.damage;
+    const turn2Damage = spy.mock.results.at(-1)!.value.damage;
     expect(turn2Damage).toBe(40);
   });
 });

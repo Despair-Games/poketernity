@@ -242,7 +242,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
   private filterBarContainer: Phaser.GameObjects.Container;
   private filterBar: FilterBar;
   private shinyOverlay: Phaser.GameObjects.Image;
-  private starterContainers: StarterContainer[] = [];
+  private readonly starterContainers: StarterContainer[] = [];
   private filteredStarterContainers: StarterContainer[] = [];
   private validStarterContainers: StarterContainer[] = [];
   private pokemonNumberText: Phaser.GameObjects.Text;
@@ -312,8 +312,8 @@ export class StarterSelectUiHandler extends MessageUiHandler {
   private moveInfoOverlay: MoveInfoOverlay;
 
   private statsMode: boolean;
-  private starterIconsCursorXOffset: number = -3;
-  private starterIconsCursorYOffset: number = 1;
+  private readonly starterIconsCursorXOffset: number = -3;
+  private readonly starterIconsCursorYOffset: number = 1;
   private starterIconsCursorIndex: number;
   private dexAttrCursor: bigint = 0n;
   private abilityCursor: number = -1;
@@ -324,17 +324,17 @@ export class StarterSelectUiHandler extends MessageUiHandler {
   private starterMoveset: StarterMoveset | null;
   private scrollCursor: number;
 
-  private allSpecies: PokemonSpecies[] = [];
+  private readonly allSpecies: PokemonSpecies[] = [];
   private lastSpecies: PokemonSpecies;
-  private speciesLoaded: Map<SpeciesId, boolean> = new Map<SpeciesId, boolean>();
+  private readonly speciesLoaded: Map<SpeciesId, boolean> = new Map<SpeciesId, boolean>();
   public starterSpecies: PokemonSpecies[] = [];
   private pokerusSpecies: PokemonSpecies[] = [];
-  private starterAttr: bigint[] = [];
-  private starterAbilityIndexes: number[] = [];
-  private starterPassives: boolean[] = [];
-  private starterNatures: Nature[] = [];
-  private starterTeras: ElementalType[] = [];
-  private starterMovesets: StarterMoveset[] = [];
+  private readonly starterAttr: bigint[] = [];
+  private readonly starterAbilityIndexes: number[] = [];
+  private readonly starterPassives: boolean[] = [];
+  private readonly starterNatures: Nature[] = [];
+  private readonly starterTeras: ElementalType[] = [];
+  private readonly starterMovesets: StarterMoveset[] = [];
   private speciesStarterDexEntry: DexEntry | null;
   private speciesStarterDataEntry: StarterDataEntry | null;
   private speciesStarterMoves: MoveId[];
@@ -359,7 +359,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
   //variables to keep track of the dynamically rendered list of instruction prompts for starter select
   private instructionRowX = 0;
   private instructionRowY = 0;
-  private instructionRowTextOffset = 9;
+  private readonly instructionRowTextOffset = 9;
   private filterInstructionRowX = 0;
   private filterInstructionRowY = 0;
 
@@ -2924,12 +2924,12 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         const hasVariant = unlockedVariants.length > v;
         container.shinyIcons[v].setVisible(hasVariant);
         if (hasVariant) {
-          const variant =
-            unlockedVariants[v] === DexAttr.SHINY_BASE_VARIANT
-              ? 0
-              : unlockedVariants[v] === DexAttr.SHINY_RARE_VARIANT
-                ? 1
-                : 2;
+          let variant: Variant = 2;
+          if (unlockedVariants[v] === DexAttr.SHINY_BASE_VARIANT) {
+            variant = 0;
+          } else if (unlockedVariants[v] === DexAttr.SHINY_RARE_VARIANT) {
+            variant = 1;
+          }
           container.shinyIcons[v].setTint(getVariantTint(variant));
         }
       }
@@ -3254,7 +3254,13 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           }
           props.formIndex = starterAttributes?.form ?? props.formIndex;
           const female = starterAttributes?.female ?? props.gender === Gender.FEMALE;
-          props.gender = female ? Gender.FEMALE : isNil(species.malePercent) ? Gender.GENDERLESS : Gender.MALE;
+          if (female) {
+            props.gender = Gender.FEMALE;
+          } else if (isNil(species.malePercent)) {
+            props.gender = Gender.GENDERLESS;
+          } else {
+            props.gender = Gender.MALE;
+          }
 
           this.setSpeciesDetails(species, {
             shiny: props.shiny,
@@ -3652,11 +3658,14 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         }
 
         const speciesMoveData = globalScene.gameData.starterData[species.speciesId].moveset;
-        const moveData: StarterMoveset | null = speciesMoveData
-          ? Array.isArray(speciesMoveData)
-            ? speciesMoveData
-            : speciesMoveData[formIndex!] // TODO: is this bang correct?
-          : null;
+        let moveData: StarterMoveset | undefined;
+        if (speciesMoveData) {
+          if (Array.isArray(speciesMoveData)) {
+            moveData = speciesMoveData;
+          } else {
+            moveData = speciesMoveData[formIndex!]; // TODO: is this bang correct?
+          }
+        }
         const availableStarterMoves = this.speciesStarterMoves.concat(
           Object.hasOwn(speciesEggMoves, species.speciesId)
             ? speciesEggMoves[species.speciesId].filter(
@@ -3664,7 +3673,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
               )
             : [],
         );
-        this.starterMoveset = (moveData || (this.speciesStarterMoves.slice(0, 4) as StarterMoveset)).filter((m) =>
+        this.starterMoveset = (moveData ?? (this.speciesStarterMoves.slice(0, 4) as StarterMoveset)).filter((m) =>
           availableStarterMoves.find((sm) => sm === m),
         ) as StarterMoveset;
         // Consolidate move data if it contains an incompatible move

@@ -3,7 +3,7 @@ import { GAME_WIDTH } from "#constants/ui-constants";
 import type { Pokemon } from "#field/pokemon";
 
 export class PokeballTray extends Phaser.GameObjects.Container {
-  private player: boolean;
+  private readonly player: boolean;
 
   private bg: Phaser.GameObjects.NineSlice;
   private balls: Phaser.GameObjects.Sprite[];

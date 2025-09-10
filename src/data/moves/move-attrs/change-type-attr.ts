@@ -15,7 +15,7 @@ import i18next from "i18next";
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Magic_Powder_(move) | Magic Powder}.
  */
 export class ChangeTypeAttr extends MoveEffectAttr {
-  private type: ElementalType;
+  private readonly type: ElementalType;
 
   constructor(type: ElementalType) {
     super(false);

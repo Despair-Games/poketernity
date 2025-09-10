@@ -20,7 +20,7 @@ type ActionKeys = Record<Button, () => void>;
 
 export class UiInputs {
   private events: Phaser.Events.EventEmitter;
-  private inputsController: InputsController;
+  private readonly inputsController: InputsController;
 
   constructor(inputsController: InputsController) {
     this.inputsController = inputsController;

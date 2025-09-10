@@ -22,7 +22,7 @@ export class BallUiHandler extends UiHandler {
 
   private cursorObj: Phaser.GameObjects.Image | null;
 
-  private scale: number = 1 / TEXT_SCALE;
+  private readonly scale: number = 1 / TEXT_SCALE;
 
   constructor() {
     super(UiMode.BALL);

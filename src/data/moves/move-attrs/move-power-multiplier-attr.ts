@@ -8,7 +8,7 @@ import type { NumberHolder } from "#utils/common-utils";
  * a set {@linkcode powerMultiplierFunc | function}.
  */
 export class MovePowerMultiplierAttr extends VariablePowerAttr {
-  private powerMultiplierFunc: (user: Pokemon, target: Pokemon, move: Move) => number;
+  private readonly powerMultiplierFunc: (user: Pokemon, target: Pokemon, move: Move) => number;
 
   constructor(powerMultiplier: (user: Pokemon, target: Pokemon, move: Move) => number) {
     super();

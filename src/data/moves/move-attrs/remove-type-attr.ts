@@ -14,8 +14,8 @@ import { MoveEffectAttr } from "#moves/move-effect-attr";
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Double_Shock_(move) | Double Shock}.
  */
 export class RemoveTypeAttr extends MoveEffectAttr {
-  private removedType: ElementalType;
-  private messageCallback: ((user: Pokemon) => void) | undefined;
+  private readonly removedType: ElementalType;
+  private readonly messageCallback: ((user: Pokemon) => void) | undefined;
 
   constructor(removedType: ElementalType, messageCallback?: (user: Pokemon) => void) {
     super(true, { trigger: MoveEffectTrigger.POST_TARGET });

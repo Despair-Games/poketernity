@@ -21,7 +21,7 @@ import { toDmgValue } from "#utils/common-utils";
  * Used by Wimp Out and Emergency Exit
  */
 export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
-  private hpRatio: number;
+  private readonly hpRatio: number;
 
   constructor(hpRatio: number = 0.5) {
     super();
@@ -34,7 +34,7 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
     // Will not activate when the Pokémon's HP is lowered by cutting its own HP
     const forbiddenAttackingAttrs = [AddSubstituteAttr, CurseAttr, CutHpStatStageBoostAttr, HpSplitAttr];
     if (moveHistory.length > 0) {
-      const lastMoveUsed = moveHistory[moveHistory.length - 1].move;
+      const lastMoveUsed = moveHistory.at(-1)!.move;
       if (forbiddenAttackingAttrs.some((attr) => lastMoveUsed.hasAttr(attr))) {
         return false;
       }
@@ -45,7 +45,7 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
     if (source) {
       const enemyMoveHistory = source.getMoveHistory();
       if (enemyMoveHistory.length > 0) {
-        const enemyLastMoveUsed = enemyMoveHistory[enemyMoveHistory.length - 1];
+        const enemyLastMoveUsed = enemyMoveHistory.at(-1)!;
         // Will not activate if the Pokémon's HP falls below half while it is in the air during Sky Drop.
         if (forbiddenDefendingMoves.includes(enemyLastMoveUsed.move.id) || pokemon.hasTag(BattlerTagType.SKY_DROP)) {
           return false;

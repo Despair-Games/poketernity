@@ -16,7 +16,7 @@ import i18next from "i18next";
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Mind_Blown_(move) | Mind Blown}
  * and {@linkcode https://bulbapedia.bulbagarden.net/wiki/Steel_Beam_(move) | Steel Beam}.
  */
-export class HalfSacrificialAttr extends MoveEffectAttr {
+export class HalfMaxHpRecoilAttr extends MoveEffectAttr {
   constructor() {
     super(true, { trigger: MoveEffectTrigger.POST_TARGET });
   }

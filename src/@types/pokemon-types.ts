@@ -11,6 +11,7 @@ import type { AbilityId } from "#enums/ability-id";
 import type { BerryType } from "#enums/berry-type";
 import type { ElementalType } from "#enums/elemental-type";
 import type { Gender } from "#enums/gender";
+import type { Nature } from "#enums/nature";
 import type { SpeciesId } from "#enums/species-id";
 import type { StatusEffect } from "#enums/status-effect";
 import type { PokemonMove } from "#field/pokemon-move";
@@ -129,6 +130,24 @@ export interface PokemonWaveData {
    * without applying them.
    */
   abilitiesRevealed: AbilityId[];
+}
+
+/**
+ * Data that can customize a Pokemon in non-standard ways from its Species.
+ *
+ * Currently only used by Mystery Encounters and Mints.
+ */
+export interface CustomPokemonData {
+  /** @defaultValue `-1` */
+  spriteScale: number;
+  /** @defaultValue `-1` */
+  ability: AbilityId | -1;
+  /** @defaultValue `-1` */
+  passive: AbilityId | -1;
+  /** @defaultValue `-1` */
+  nature: Nature | -1;
+  /** @defaultValue `[]` */
+  types: ElementalType[];
 }
 
 /** Contains fields related to {@linkcode StatusEffect}s */

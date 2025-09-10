@@ -1,6 +1,5 @@
 import { globalScene } from "#app/global-scene";
 import { loadBattlerTag } from "#battler-tags/load-battler-tag";
-import { CustomPokemonData } from "#data/custom-pokemon-data";
 import { allMoves } from "#data/data-lists";
 import type { PokemonSpeciesForm } from "#data/pokemon-species-form";
 import type { Variant } from "#data/variant";
@@ -15,7 +14,7 @@ import type { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
-import type { PokemonSummonData, SerializedSpeciesForm, Status } from "#types/pokemon-types";
+import type { CustomPokemonData, PokemonSummonData, SerializedSpeciesForm, Status } from "#types/pokemon-types";
 import { clamp, isNil, isPokemon } from "#utils/common-utils";
 import { getPokemonSpecies, getPokemonSpeciesForm, summonDataToJSON } from "#utils/pokemon-utils";
 
@@ -121,7 +120,7 @@ export class PokemonData {
     this.stellarTypesBoosted = source.stellarTypesBoosted ?? [];
     this.status = source["status"];
 
-    this.customPokemonData = new CustomPokemonData(source.customPokemonData);
+    this.customPokemonData = source.customPokemonData;
 
     if (!isPokemon(source) || source.isEnemy()) {
       this.boss = (source.bossSegments ?? 0) > 0;
@@ -162,36 +161,36 @@ export class PokemonData {
 
   toPokemon(battleType?: BattleType, partyMemberIndex: number = 0, double: boolean = false): Pokemon {
     const species = getPokemonSpecies(this.speciesId);
-    const ret: Pokemon = this.player
-      ? globalScene.addPlayerPokemon(
-          species,
-          this.level,
-          this.abilityIndex,
-          this.formIndex,
-          this.gender,
-          this.shiny,
-          this.variant,
-          this.ivs,
-          this.nature,
-          this,
-          (playerPokemon) => {
-            if (this.nickname) {
-              playerPokemon.nickname = this.nickname;
-            }
-          },
-        )
-      : globalScene.addEnemyPokemon(
-          species,
-          this.level,
-          battleType === BattleType.TRAINER
-            ? !double || !(partyMemberIndex % 2)
-              ? TrainerSlot.TRAINER
-              : TrainerSlot.TRAINER_PARTNER
-            : TrainerSlot.NONE,
-          this.boss,
-          false,
-          this,
-        );
+    let ret: Pokemon;
+    if (this.player) {
+      ret = globalScene.addPlayerPokemon(
+        species,
+        this.level,
+        this.abilityIndex,
+        this.formIndex,
+        this.gender,
+        this.shiny,
+        this.variant,
+        this.ivs,
+        this.nature,
+        this,
+        (playerPokemon) => {
+          if (this.nickname) {
+            playerPokemon.nickname = this.nickname;
+          }
+        },
+      );
+    } else {
+      let trainerSlot: TrainerSlot = TrainerSlot.NONE;
+      if (battleType === BattleType.TRAINER) {
+        if (!double || partyMemberIndex % 2 === 0) {
+          trainerSlot = TrainerSlot.TRAINER;
+        } else {
+          trainerSlot = TrainerSlot.TRAINER_PARTNER;
+        }
+      }
+      ret = globalScene.addEnemyPokemon(species, this.level, trainerSlot, this.boss, false, this);
+    }
     ret.primeSummonData(this.summonData);
     return ret;
   }

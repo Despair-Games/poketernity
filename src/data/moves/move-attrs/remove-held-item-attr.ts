@@ -19,7 +19,7 @@ import i18next from "i18next";
  */
 export class RemoveHeldItemAttr extends MoveEffectAttr {
   /** Optional restriction for item pool to berries only i.e. Differentiating Incinerate and Knock Off */
-  private berriesOnly: boolean;
+  private readonly berriesOnly: boolean;
 
   constructor(berriesOnly: boolean) {
     super(false);
