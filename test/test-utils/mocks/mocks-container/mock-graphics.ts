@@ -1,7 +1,7 @@
 import type { MockGameObject } from "#test/test-utils/mocks/mock-game-object";
 
 export class MockGraphics implements MockGameObject {
-  private scene: Phaser.Scene;
+  private readonly scene: Phaser.Scene;
   public list: MockGameObject[] = [];
   public name: string;
   public active = true;

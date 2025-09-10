@@ -9,7 +9,7 @@ import { MoveEffectAttr } from "#moves/move-effect-attr";
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Defog_(move) | Defog}.
  */
 export class ClearWeatherAttr extends MoveEffectAttr {
-  private weatherType: WeatherType;
+  private readonly weatherType: WeatherType;
 
   constructor(weatherType: WeatherType) {
     super();

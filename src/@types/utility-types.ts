@@ -32,7 +32,8 @@ export type CoerceNullPropertiesToUndefined<T extends object> = {
 };
 
 /**
- * Type helper that matches any `Function` type. Equivalent to `Function`, but will not raise a warning from Biome.
+ * Type helper that matches any `Function` type.
+ * Equivalent to `Function`, but will not raise a warning from Biome.
  */
 export type AnyFn = (...args: any[]) => any;
 

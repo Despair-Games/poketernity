@@ -24,7 +24,7 @@ interface TabOptions {
  * preferrably through a singleton pattern.
  */
 export abstract class NavigationManager {
-  private tabs: TabOptions[];
+  private readonly tabs: TabOptions[];
   private cursor: number;
   private navigationMenus: NavigationMenu[];
 

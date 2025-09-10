@@ -113,7 +113,14 @@ export const DarkDealEncounter: MysteryEncounter = MysteryEncounterBuilder.withE
         const bossModifiers: PokemonHeldItemModifier[] = encounter.misc.modifiers;
         // Starter egg tier, 35/50/10/5 %odds for tiers 6/7/8/9+
         const roll = randSeedInt(100);
-        const starterTier: number | [number, number] = roll >= 65 ? 6 : roll >= 15 ? 7 : roll >= 5 ? 8 : [9, 10];
+        let starterTier: number | [number, number] = [9, 10];
+        if (roll >= 65) {
+          starterTier = 6;
+        } else if (roll >= 15) {
+          starterTier = 7;
+        } else if (roll >= 5) {
+          starterTier = 8;
+        }
         /** Exclude Ultra Beasts (includes Cosmog/Solgaleo/Lunala/Necrozma), Paradox (includes Miraidon/Koraidon), Eternatus, and Mythicals */
         const excludedBosses = [
           ...getSpecialSpeciesList(SpeciesGroups.MYTHICAL),

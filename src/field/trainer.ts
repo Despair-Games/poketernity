@@ -326,123 +326,126 @@ export class Trainer extends Phaser.GameObjects.Container {
 
   genPartyMember(index: number): EnemyPokemon {
     const battle = globalScene.currentBattle;
-    const level = battle.enemyLevels?.[index]!; // TODO: is this bang correct?
+    const level = battle.enemyLevels![index]; // TODO: is this bang correct?
 
-    let ret: EnemyPokemon;
+    // Assigned to in `executeWithSeedOffset()`
+    let ret!: EnemyPokemon;
 
-    globalScene.executeWithSeedOffset(
-      () => {
-        const template = this.getPartyTemplate();
-        const strength: PartyMemberStrength = template.getStrength(index);
+    let seedOffset: number;
+    if (this.config.hasStaticParty) {
+      seedOffset = this.config.getDerivedType() + ((index + 1) << 8);
+    } else {
+      seedOffset =
+        battle.waveIndex
+        + (this.config.getDerivedType() << 10)
+        + (((this.config.useSameSeedForAllMembers ? 0 : index) + 1) << 8);
+    }
+    globalScene.executeWithSeedOffset(() => {
+      const template = this.getPartyTemplate();
+      const strength: PartyMemberStrength = template.getStrength(index);
 
-        // If the battle is not one of the named trainer doubles
-        if (!(this.config.trainerTypeDouble && this.isDouble() && !this.config.doubleOnly)) {
-          if (Object.hasOwn(this.config.partyMemberFuncs, index)) {
-            ret = this.config.partyMemberFuncs[index](level, strength);
-            return;
-          }
-          if (Object.hasOwn(this.config.partyMemberFuncs, index - template.size)) {
-            ret = this.config.partyMemberFuncs[index - template.size](level, template.getStrength(index));
-            return;
-          }
+      // If the battle is not one of the named trainer doubles
+      if (!(this.config.trainerTypeDouble && this.isDouble() && !this.config.doubleOnly)) {
+        if (Object.hasOwn(this.config.partyMemberFuncs, index)) {
+          ret = this.config.partyMemberFuncs[index](level, strength);
+          return;
         }
-        let offset = 0;
-
-        if (template instanceof TrainerPartyCompoundTemplate) {
-          for (const innerTemplate of template.templates) {
-            if (offset + innerTemplate.size > index) {
-              break;
-            }
-            offset += innerTemplate.size;
-          }
+        if (Object.hasOwn(this.config.partyMemberFuncs, index - template.size)) {
+          ret = this.config.partyMemberFuncs[index - template.size](level, template.getStrength(index));
+          return;
         }
+      }
+      let offset = 0;
 
-        // Create an empty species pool (which will be set to one of the species pools based on the index, if applicable)
-        let newSpeciesPool: SpeciesId[] = [];
+      if (template instanceof TrainerPartyCompoundTemplate) {
+        for (const innerTemplate of template.templates) {
+          if (offset + innerTemplate.size > index) {
+            break;
+          }
+          offset += innerTemplate.size;
+        }
+      }
 
-        // If we are in a double battle of named trainers, we need to use alternate species pools (generate half the party from each trainer)
-        if (this.config.trainerTypeDouble && this.isDouble() && !this.config.doubleOnly) {
-          // Get the species pool for the partner trainer and the current trainer
-          const speciesPoolPartner = signatureSpecies[TrainerType[this.config.trainerTypeDouble]];
-          const speciesPool = signatureSpecies[TrainerType[this.config.trainerType]];
+      // Create an empty species pool (which will be set to one of the species pools based on the index, if applicable)
+      let newSpeciesPool: SpeciesId[] = [];
 
-          // Get the species that are already in the enemy party so we dont generate the same species twice
-          const AlreadyUsedSpecies = battle.enemyParty.map((p) => p.species.speciesId);
+      // If we are in a double battle of named trainers, we need to use alternate species pools (generate half the party from each trainer)
+      if (this.config.trainerTypeDouble && this.isDouble() && !this.config.doubleOnly) {
+        // Get the species pool for the partner trainer and the current trainer
+        const speciesPoolPartner = signatureSpecies[TrainerType[this.config.trainerTypeDouble]];
+        const speciesPool = signatureSpecies[TrainerType[this.config.trainerType]];
 
-          // Filter out the species that are already in the enemy party from the main trainer species pool
-          const speciesPoolFiltered = speciesPool
-            .filter((species) => {
-              // Since some species pools have arrays in them (use either of those species), we need to check if one of the species is already in the party and filter the whole array if it is
-              if (Array.isArray(species)) {
-                return !species.some((s) => AlreadyUsedSpecies.includes(s));
-              }
-              return !AlreadyUsedSpecies.includes(species);
-            })
-            .flat();
+        // Get the species that are already in the enemy party so we dont generate the same species twice
+        const AlreadyUsedSpecies = battle.enemyParty.map((p) => p.species.speciesId);
 
-          // Filter out the species that are already in the enemy party from the partner trainer species pool
-          const speciesPoolPartnerFiltered = speciesPoolPartner
-            .filter((species) => {
-              // Since some species pools have arrays in them (use either of those species), we need to check if one of the species is already in the party and filter the whole array if it is
-              if (Array.isArray(species)) {
-                return !species.some((s) => AlreadyUsedSpecies.includes(s));
-              }
-              return !AlreadyUsedSpecies.includes(species);
-            })
-            .flat();
-
-          // biome-ignore-start lint/style/useCollapsedElseIf: TODO: surely this can be done better?
-          // If the index is even, use the species pool for the main trainer (that way he only uses his own pokemon in battle)
-          if (index % 2) {
-            // If the index is odd, use the species pool for the partner trainer (that way he only uses his own pokemon in battle)
-            // Since the only currently allowed double battle with named trainers is Tate & Liza, we need to make sure that Solrock is the first pokemon in the party for Tate and Lunatone for Liza
-            if (index === 1 && TrainerType[this.config.trainerTypeDouble] === TrainerType[TrainerType.TATE]) {
-              newSpeciesPool = [SpeciesId.SOLROCK];
-            } else if (index === 1 && TrainerType[this.config.trainerTypeDouble] === TrainerType[TrainerType.LIZA]) {
-              newSpeciesPool = [SpeciesId.LUNATONE];
-            } else {
-              newSpeciesPool = speciesPoolPartnerFiltered;
+        // Filter out the species that are already in the enemy party from the main trainer species pool
+        const speciesPoolFiltered = speciesPool
+          .filter((species) => {
+            // Since some species pools have arrays in them (use either of those species), we need to check if one of the species is already in the party and filter the whole array if it is
+            if (Array.isArray(species)) {
+              return !species.some((s) => AlreadyUsedSpecies.includes(s));
             }
+            return !AlreadyUsedSpecies.includes(species);
+          })
+          .flat();
+
+        // Filter out the species that are already in the enemy party from the partner trainer species pool
+        const speciesPoolPartnerFiltered = speciesPoolPartner
+          .filter((species) => {
+            // Since some species pools have arrays in them (use either of those species), we need to check if one of the species is already in the party and filter the whole array if it is
+            if (Array.isArray(species)) {
+              return !species.some((s) => AlreadyUsedSpecies.includes(s));
+            }
+            return !AlreadyUsedSpecies.includes(species);
+          })
+          .flat();
+
+        // biome-ignore-start lint/style/useCollapsedElseIf: TODO: surely this can be done better?
+        // If the index is even, use the species pool for the main trainer (that way he only uses his own pokemon in battle)
+        if (index % 2) {
+          // If the index is odd, use the species pool for the partner trainer (that way he only uses his own pokemon in battle)
+          // Since the only currently allowed double battle with named trainers is Tate & Liza, we need to make sure that Solrock is the first pokemon in the party for Tate and Lunatone for Liza
+          if (index === 1 && TrainerType[this.config.trainerTypeDouble] === TrainerType[TrainerType.TATE]) {
+            newSpeciesPool = [SpeciesId.SOLROCK];
+          } else if (index === 1 && TrainerType[this.config.trainerTypeDouble] === TrainerType[TrainerType.LIZA]) {
+            newSpeciesPool = [SpeciesId.LUNATONE];
           } else {
-            // Since the only currently allowed double battle with named trainers is Tate & Liza, we need to make sure that Solrock is the first pokemon in the party for Tate and Lunatone for Liza
-            if (index === 0 && TrainerType[this.config.trainerType] === TrainerType[TrainerType.TATE]) {
-              newSpeciesPool = [SpeciesId.SOLROCK];
-            } else if (index === 0 && TrainerType[this.config.trainerType] === TrainerType[TrainerType.LIZA]) {
-              newSpeciesPool = [SpeciesId.LUNATONE];
-            } else {
-              newSpeciesPool = speciesPoolFiltered;
-            }
+            newSpeciesPool = speciesPoolPartnerFiltered;
           }
-          // biome-ignore-end lint/style/useCollapsedElseIf: range comment used because biome gets confused by `if`/`else` chains
-        }
-
-        let species: PokemonSpecies;
-        if (newSpeciesPool.length > 0) {
-          // If the new species pool is non-empty, select a species from it and set it to its correct evolution stage.
-          const rawSpecies = getPokemonSpecies(randSeedItem(newSpeciesPool));
-          species = getPokemonSpecies(rawSpecies.getEnemySpeciesForLevel(level, true));
-        } else if (template.isSameSpecies(index) && index > offset) {
-          // If the template calls for using the same species as the previous Pokemon, then copy the species.
-          species = battle.enemyParty[offset].species;
         } else {
-          // If none of the above applies, pick a random species from the trainer's regular pool.
-          species = this.genNewPartyMemberSpecies(level, strength);
+          // Since the only currently allowed double battle with named trainers is Tate & Liza, we need to make sure that Solrock is the first pokemon in the party for Tate and Lunatone for Liza
+          if (index === 0 && TrainerType[this.config.trainerType] === TrainerType[TrainerType.TATE]) {
+            newSpeciesPool = [SpeciesId.SOLROCK];
+          } else if (index === 0 && TrainerType[this.config.trainerType] === TrainerType[TrainerType.LIZA]) {
+            newSpeciesPool = [SpeciesId.LUNATONE];
+          } else {
+            newSpeciesPool = speciesPoolFiltered;
+          }
         }
+        // biome-ignore-end lint/style/useCollapsedElseIf: range comment used because biome gets confused by `if`/`else` chains
+      }
 
-        ret = globalScene.addEnemyPokemon(
-          species,
-          level,
-          !this.isDouble() || !(index % 2) ? TrainerSlot.TRAINER : TrainerSlot.TRAINER_PARTNER,
-        );
-      },
-      this.config.hasStaticParty
-        ? this.config.getDerivedType() + ((index + 1) << 8)
-        : globalScene.currentBattle.waveIndex
-            + (this.config.getDerivedType() << 10)
-            + (((this.config.useSameSeedForAllMembers ? 0 : index) + 1) << 8),
-    );
+      let species: PokemonSpecies;
+      if (newSpeciesPool.length > 0) {
+        // If the new species pool is non-empty, select a species from it and set it to its correct evolution stage.
+        const rawSpecies = getPokemonSpecies(randSeedItem(newSpeciesPool));
+        species = getPokemonSpecies(rawSpecies.getEnemySpeciesForLevel(level, true));
+      } else if (template.isSameSpecies(index) && index > offset) {
+        // If the template calls for using the same species as the previous Pokemon, then copy the species.
+        species = battle.enemyParty[offset].species;
+      } else {
+        // If none of the above applies, pick a random species from the trainer's regular pool.
+        species = this.genNewPartyMemberSpecies(level, strength);
+      }
 
-    return ret!; // TODO: is this bang correct?
+      ret = globalScene.addEnemyPokemon(
+        species,
+        level,
+        !this.isDouble() || !(index % 2) ? TrainerSlot.TRAINER : TrainerSlot.TRAINER_PARTNER,
+      );
+    }, seedOffset);
+
+    return ret;
   }
 
   genNewPartyMemberSpecies(level: number, strength: PartyMemberStrength, attempt?: number): PokemonSpecies {
@@ -452,16 +455,16 @@ export class Trainer extends Phaser.GameObjects.Container {
     let baseSpecies: PokemonSpecies;
     if (this.config.speciesPools) {
       const tierValue = randSeedInt(512);
-      let tier =
-        tierValue >= 156
-          ? TrainerPoolTier.COMMON
-          : tierValue >= 32
-            ? TrainerPoolTier.UNCOMMON
-            : tierValue >= 6
-              ? TrainerPoolTier.RARE
-              : tierValue >= 1
-                ? TrainerPoolTier.SUPER_RARE
-                : TrainerPoolTier.ULTRA_RARE;
+      let tier: TrainerPoolTier = TrainerPoolTier.ULTRA_RARE;
+      if (tierValue >= 156) {
+        tier = TrainerPoolTier.COMMON;
+      } else if (tierValue >= 32) {
+        tier = TrainerPoolTier.UNCOMMON;
+      } else if (tierValue >= 6) {
+        tier = TrainerPoolTier.RARE;
+      } else if (tierValue >= 1) {
+        tier = TrainerPoolTier.SUPER_RARE;
+      }
       console.log(TrainerPoolTier[tier]);
       while (!Object.hasOwn(this.config.speciesPools, tier) || !this.config.speciesPools[tier].length) {
         console.log(
@@ -577,7 +580,13 @@ export class Trainer extends Phaser.GameObjects.Container {
     sortedPartyMemberScores.sort((a, b) => {
       const scoreA = a[1];
       const scoreB = b[1];
-      return scoreA < scoreB ? 1 : scoreA > scoreB ? -1 : 0;
+      if (scoreA < scoreB) {
+        return 1;
+      }
+      if (scoreA > scoreB) {
+        return -1;
+      }
+      return 0;
     });
 
     return sortedPartyMemberScores;
@@ -599,10 +608,9 @@ export class Trainer extends Phaser.GameObjects.Container {
 
     if (maxScorePartyMemberIndexes.length > 1) {
       let rand: number;
-      globalScene.executeWithSeedOffset(
-        () => (rand = randSeedInt(maxScorePartyMemberIndexes.length)),
-        globalScene.currentBattle.turn << 2,
-      );
+      globalScene.executeWithSeedOffset(() => {
+        rand = randSeedInt(maxScorePartyMemberIndexes.length);
+      }, globalScene.currentBattle.turn << 2);
       return maxScorePartyMemberIndexes[rand!];
     }
 

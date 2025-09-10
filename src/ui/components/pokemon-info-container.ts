@@ -15,6 +15,7 @@ import { IVGraph } from "#ui/iv-graph";
 import { addBBCodeTextObject, addTextObject, setTextColor } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
 import { enumValueToKey, fixedNumber } from "#utils/common-utils";
+import { getShinyDescriptor } from "#utils/pokemon-utils";
 import { capitalizeString } from "#utils/string-utils";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
@@ -52,9 +53,9 @@ export class PokemonInfoContainer extends Phaser.GameObjects.Container {
   private pokemonMoveLabels: Phaser.GameObjects.Text[];
   private infoBg;
 
-  private numCharsBeforeCutoff = 16;
+  private readonly numCharsBeforeCutoff = 16;
 
-  private initialX: number;
+  private readonly initialX: number;
   private movesContainerInitialX: number;
 
   protected defaultTextStyle: TextStyle;
@@ -326,15 +327,9 @@ export class PokemonInfoContainer extends Phaser.GameObjects.Container {
       this.pokemonShinyIcon.setVisible(pokemon.isShiny());
       this.pokemonShinyIcon.setTint(getVariantTint(baseVariant));
       if (this.pokemonShinyIcon.visible) {
-        const shinyDescriptor = baseVariant
-          ? `${baseVariant === 2 ? i18next.t("common:epicShiny") : baseVariant === 1 ? i18next.t("common:rareShiny") : i18next.t("common:commonShiny")}`
-          : "";
+        const shinyDescriptor = getShinyDescriptor(baseVariant);
         this.pokemonShinyIcon.on("pointerover", () =>
-          globalScene.ui.showTooltip(
-            "",
-            `${i18next.t("common:shinyOnHover")}${shinyDescriptor ? ` (${shinyDescriptor})` : ""}`,
-            true,
-          ),
+          globalScene.ui.showTooltip("", `${i18next.t("common:shinyOnHover")} (${shinyDescriptor})`, true),
         );
         this.pokemonShinyIcon.on("pointerout", () => globalScene.ui.hideTooltip());
 

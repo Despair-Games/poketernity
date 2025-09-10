@@ -107,7 +107,8 @@ export class EggLapsePhase extends Phase {
   protected hatchEggSilently(egg: Egg): void {
     const eggIndex = globalScene.gameData.eggs.findIndex((e) => e.id === egg.id);
     if (eggIndex === -1) {
-      return this.end();
+      this.end();
+      return;
     }
     globalScene.gameData.eggs.splice(eggIndex, 1);
     this.generatePokemon(egg);

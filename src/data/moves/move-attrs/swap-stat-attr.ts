@@ -12,7 +12,7 @@ import i18next from "i18next";
  */
 export class SwapStatAttr extends MoveEffectAttr {
   /** The stat to be swapped between the user and the target */
-  private stat: EffectiveStat;
+  private readonly stat: EffectiveStat;
 
   constructor(stat: EffectiveStat) {
     super();

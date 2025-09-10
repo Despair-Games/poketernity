@@ -2,7 +2,7 @@ import { MockContainer } from "#test/test-utils/mocks/mocks-container/mock-conta
 
 export class MockImage extends MockContainer {
   // biome-ignore lint/correctness/noUnusedPrivateClassMembers: intentional?
-  private texture;
+  private readonly texture;
 
   constructor(textureManager, x, y, texture) {
     super(textureManager, x, y);

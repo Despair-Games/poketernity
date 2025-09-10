@@ -55,10 +55,11 @@ export class MenuUiHandler extends OptionSelectUiHandler {
   private menuMessageBox: Phaser.GameObjects.NineSlice;
   private menuOverlay: Phaser.GameObjects.Rectangle;
 
-  private excludedMenus: () => ConditionalMenu[];
+  private readonly excludedMenus: () => ConditionalMenu[];
 
   private manageDataConfig: OptionSelectModeConfig;
   private communityConfig: OptionSelectModeConfig;
+  // biome-ignore lint/style/useReadonlyClassProperties: false positive
   private communityWindowWidth: number;
 
   constructor(mode: UiMode = UiMode.MENU) {

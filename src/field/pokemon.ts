@@ -2253,7 +2253,15 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
             || lm[0] > 0,
         );
     }
-    levelMoves.sort((lma: [number, number], lmb: [number, number]) => (lma[0] > lmb[0] ? 1 : lma[0] < lmb[0] ? -1 : 0));
+    levelMoves.sort((lma, lmb) => {
+      if (lma[0] > lmb[0]) {
+        return 1;
+      }
+      if (lma[0] < lmb[0]) {
+        return -1;
+      }
+      return 0;
+    });
 
     /**
      * Filter out moves not within the correct level range(s)
@@ -2661,7 +2669,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       } else {
         globalScene.fieldUI.moveAbove(this.battleInfo, otherBattleInfo);
       }
-      this.battleInfo.setX(this.battleInfo.x + (this.isPlayer() ? 150 : this.isBoss() ? -198 : -150));
+      let xOffset = -150;
+      if (this.isPlayer()) {
+        xOffset = 150;
+      } else if (this.isBoss()) {
+        xOffset = -198;
+      }
+      this.battleInfo.setX(this.battleInfo.x + xOffset);
       this.battleInfo.setVisible(true);
       if (this.isPlayer()) {
         this.battleInfo.expMaskRect.x += 150;
@@ -2688,7 +2702,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
               this.battleInfo.expMaskRect.x -= 150;
             }
             this.battleInfo.setVisible(false);
-            this.battleInfo.setX(this.battleInfo.x - (this.isPlayer() ? 150 : this.isBoss() ? -198 : -150));
+            let xOffset = -150;
+            if (this.isPlayer()) {
+              xOffset = 150;
+            } else if (this.isBoss()) {
+              xOffset = -198;
+            }
+            this.battleInfo.setX(this.battleInfo.x - xOffset);
             resolve();
           },
         });

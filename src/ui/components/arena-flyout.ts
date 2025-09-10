@@ -54,45 +54,45 @@ function getFieldEffectText(arenaTagType: string): string {
 
 export class ArenaFlyout extends Phaser.GameObjects.Container {
   /** The restricted width of the flyout which should be drawn to */
-  private flyoutWidth = 170;
+  private readonly flyoutWidth = 170;
   /** The restricted height of the flyout which should be drawn to */
-  private flyoutHeight = 51;
+  private readonly flyoutHeight = 51;
 
   /** The amount of translation animation on the x-axis */
-  private translationX: number;
+  private readonly translationX: number;
   /** The x-axis point where the flyout should sit when activated */
-  private anchorX: number;
+  private readonly anchorX: number;
   /** The y-axis point where the flyout should sit when activated */
-  private anchorY: number;
+  private readonly anchorY: number;
 
   /** The initial container which defines where the flyout should be attached */
-  private flyoutParent: Phaser.GameObjects.Container;
+  private readonly flyoutParent: Phaser.GameObjects.Container;
   /** The container which defines the drawable dimensions of the flyout */
-  private flyoutContainer: Phaser.GameObjects.Container;
+  private readonly flyoutContainer: Phaser.GameObjects.Container;
 
   /** The background {@linkcode Phaser.GameObjects.NineSlice} window for the flyout */
-  private flyoutWindow: Phaser.GameObjects.NineSlice;
+  private readonly flyoutWindow: Phaser.GameObjects.NineSlice;
 
   /** The header {@linkcode Phaser.GameObjects.NineSlice} window for the flyout */
-  private flyoutWindowHeader: Phaser.GameObjects.NineSlice;
+  private readonly flyoutWindowHeader: Phaser.GameObjects.NineSlice;
   /** The {@linkcode Phaser.GameObjects.Text} that goes inside of the header */
-  private flyoutTextHeader: Phaser.GameObjects.Text;
+  private readonly flyoutTextHeader: Phaser.GameObjects.Text;
 
-  private timeOfDayWidget: TimeOfDayWidget;
+  private readonly timeOfDayWidget: TimeOfDayWidget;
 
   /** The {@linkcode Phaser.GameObjects.Text} header used to indicate the player's effects */
-  private flyoutTextHeaderPlayer: Phaser.GameObjects.Text;
+  private readonly flyoutTextHeaderPlayer: Phaser.GameObjects.Text;
   /** The {@linkcode Phaser.GameObjects.Text} header used to indicate the enemy's effects */
-  private flyoutTextHeaderEnemy: Phaser.GameObjects.Text;
+  private readonly flyoutTextHeaderEnemy: Phaser.GameObjects.Text;
   /** The {@linkcode Phaser.GameObjects.Text} header used to indicate neutral effects */
-  private flyoutTextHeaderField: Phaser.GameObjects.Text;
+  private readonly flyoutTextHeaderField: Phaser.GameObjects.Text;
 
   /** The {@linkcode Phaser.GameObjects.Text} used to indicate the player's effects */
-  private flyoutTextPlayer: Phaser.GameObjects.Text;
+  private readonly flyoutTextPlayer: Phaser.GameObjects.Text;
   /** The {@linkcode Phaser.GameObjects.Text} used to indicate the enemy's effects */
-  private flyoutTextEnemy: Phaser.GameObjects.Text;
+  private readonly flyoutTextEnemy: Phaser.GameObjects.Text;
   /** The {@linkcode Phaser.GameObjects.Text} used to indicate neutral effects */
-  private flyoutTextField: Phaser.GameObjects.Text;
+  private readonly flyoutTextField: Phaser.GameObjects.Text;
 
   /** Container for all field effects observed by this object */
   private readonly fieldEffectInfo: ArenaEffectInfo[] = [];

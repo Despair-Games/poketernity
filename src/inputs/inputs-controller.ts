@@ -90,12 +90,12 @@ export class InputsController {
   private buttonLock: Button[] = [];
 
   // TODO: interactions is defined as a map but used as an object
-  private interactions: Map<Button, Map<string, boolean>> = new Map();
+  private readonly interactions: Map<Button, Map<string, boolean>> = new Map();
 
   /** Configurations for device that have been used within the current session. */
-  private configs: { [key: string]: InputInterfaceConfig } = {};
+  private readonly configs: { [key: string]: InputInterfaceConfig } = {};
   /** Used to store custom mappings from local storage until the proper configuration gets initialized. */
-  private customMappings: { [key: string]: InputMappings } = {};
+  private readonly customMappings: { [key: string]: InputMappings } = {};
 
   public gamepadSupport: boolean = true;
   public selectedDevice: Record<Device, string | null>;
@@ -104,7 +104,7 @@ export class InputsController {
 
   // TODO: add proper typing and handle touch
   public lastSource: string = "keyboard";
-  private inputInterval: Partial<Record<Button, NodeJS.Timeout>> = {};
+  private readonly inputInterval: Partial<Record<Button, NodeJS.Timeout>> = {};
   private touchControls: TouchControl;
   public moveTouchControlsHandler: MoveTouchControlsHandler;
 
