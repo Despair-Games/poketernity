@@ -117,7 +117,7 @@ describe("Clowning Around - Mystery Encounter", () => {
       isBoss: true,
       moveSet: [MoveId.TRICK, MoveId.HYPNOSIS, MoveId.SHADOW_BALL, MoveId.MIND_BLOWN],
     });
-    expect(config.pokemonConfigs?.[1].customPokemonData?.types.length).toBe(2);
+    expect(config.pokemonConfigs?.[1].customPokemonData?.types?.length).toBe(2);
     expect([
       AbilityId.STURDY,
       AbilityId.PICKUP,
@@ -234,7 +234,7 @@ describe("Clowning Around - Mystery Encounter", () => {
       await game.phaseInterceptor.to("NewBattlePhase", false);
 
       const leadPokemon = scene.getPlayerParty()[0];
-      expect(leadPokemon.customPokemonData?.ability).toBe(abilityToTrain);
+      expect(leadPokemon.customPokemonData.ability).toBe(abilityToTrain);
     });
   });
 
@@ -359,8 +359,8 @@ describe("Clowning Around - Mystery Encounter", () => {
       game.move.changeMoveset(player2, [MoveId.GRASS_KNOT, MoveId.ELECTRO_BALL]);
       await runMysteryEncounterToEnd(game, 3);
 
-      const leadTypesAfter = scene.getPlayerParty()[0].customPokemonData?.types;
-      const secondaryTypesAfter = scene.getPlayerParty()[1].customPokemonData?.types;
+      const leadTypesAfter = scene.getPlayerParty()[0].customPokemonData.types;
+      const secondaryTypesAfter = scene.getPlayerParty()[1].customPokemonData.types;
 
       expect(leadTypesAfter.length).toBe(2);
       expect(leadTypesAfter[0]).toBe(ElementalType.WATER);

@@ -10,7 +10,6 @@ import {
   ME_WEIGHT_INCREMENT_ON_SPAWN_MISS,
 } from "#constants/mystery-encounter-constants";
 import { biomeLinks } from "#data/biome-links";
-import type { CustomPokemonData } from "#data/custom-pokemon-data";
 import { Egg, type EggOptions } from "#data/egg";
 import { getNatureName } from "#data/nature";
 import type { PokemonSpecies } from "#data/pokemon-species";
@@ -52,6 +51,7 @@ import type { MysteryEncounterOption } from "#mystery-encounters/mystery-encount
 import type { PokemonData } from "#system/pokemon-data";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import type { HeldModifierConfig } from "#types/modifiers-types";
+import type { CustomPokemonData } from "#types/pokemon-types";
 import type { PokemonSelectFilter } from "#types/ui-types";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#ui/option-select-config";
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
@@ -94,7 +94,7 @@ export interface EnemyPokemonConfig {
   nickname?: string;
   bossSegments?: number;
   bossSegmentModifier?: number; // Additive to the determined segment number
-  customPokemonData?: CustomPokemonData;
+  customPokemonData?: Partial<CustomPokemonData>;
   formIndex?: number;
   abilityIndex?: number;
   level?: number;
@@ -310,7 +310,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
 
       // Set custom mystery encounter data fields (such as sprite scale, custom abilities, types, etc.)
       if (!isNil(config.customPokemonData)) {
-        enemyPokemon.customPokemonData = config.customPokemonData;
+        enemyPokemon.resetCustomPokemonData(config.customPokemonData);
       }
 
       // Set Boss
