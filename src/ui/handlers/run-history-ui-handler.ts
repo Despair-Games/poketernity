@@ -259,7 +259,7 @@ export class RunHistoryUiHandler extends MessageUiHandler {
  * entryData: the data of an individual run
  */
 class RunEntryContainer extends Phaser.GameObjects.Container {
-  private slotId: number;
+  private readonly slotId: number;
   public entryData: RunEntry;
 
   constructor(entryData: RunEntry, slotId: number) {

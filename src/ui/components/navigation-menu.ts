@@ -13,7 +13,7 @@ import { addWindow } from "#ui/ui-theme";
 export class NavigationMenu extends Phaser.GameObjects.Container {
   private cursor: number;
   private navigationIcons: Partial<Record<InputSettings, Phaser.GameObjects.Sprite>>;
-  private headerTitles: Phaser.GameObjects.Text[] = [];
+  private readonly headerTitles: Phaser.GameObjects.Text[] = [];
 
   /**
    * Creates an instance of NavigationMenu.

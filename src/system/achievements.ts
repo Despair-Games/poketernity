@@ -23,7 +23,7 @@ export class Achievement {
   public hasParent: boolean;
   public readonly parentId: string;
 
-  private conditionFunc?: ConditionFn;
+  private readonly conditionFunc?: ConditionFn;
 
   constructor(localizationKey: string, iconImage: string, conditionFunc?: ConditionFn) {
     this._category = AchvCategory.UNSPECIFIED;

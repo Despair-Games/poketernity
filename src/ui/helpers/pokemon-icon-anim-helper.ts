@@ -8,7 +8,7 @@ type PokemonIcon = Phaser.GameObjects.Container | Phaser.GameObjects.Sprite;
  * Helper class that handles up and down / jumping animation of Pokemon icons.
  */
 export class PokemonIconAnimHelper {
-  private icons: Map<PokemonIcon, PokemonIconAnimMode>;
+  private readonly icons: Map<PokemonIcon, PokemonIconAnimMode>;
   private toggled: boolean;
   private counterTween: Phaser.Tweens.Tween | undefined;
 

@@ -19,7 +19,7 @@ type UpdateDetailsCallbackFunction = (index: number) => void;
 export class ScrollableGridController {
   private readonly ROWS: number;
   private readonly COLUMNS: number;
-  private handler: UiHandler;
+  private readonly handler: UiHandler;
   private totalElements: number;
   private cursor: number;
   private scrollCursor: number;

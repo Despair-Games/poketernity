@@ -64,7 +64,7 @@ export class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Container {
   public encounter: MysteryEncounter;
   public spriteConfigs: MysteryEncounterSpriteConfig[];
   public enterFromRight: boolean;
-  private shinySparkleSprites: { sprite: Phaser.GameObjects.Sprite; variant: Variant }[];
+  private readonly shinySparkleSprites: { sprite: Phaser.GameObjects.Sprite; variant: Variant }[];
 
   constructor(encounter: MysteryEncounter) {
     super(globalScene, -72, 76);

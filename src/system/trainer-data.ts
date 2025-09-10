@@ -12,11 +12,13 @@ export class TrainerData {
   constructor(source: Trainer | any) {
     const sourceTrainer = source.type === "Trainer" ? (source as Trainer) : null;
     this.trainerType = sourceTrainer ? sourceTrainer.config.trainerType : source.trainerType;
-    this.variant = Object.hasOwn(source, "variant")
-      ? source.variant
-      : source.female
-        ? TrainerVariant.FEMALE
-        : TrainerVariant.DEFAULT;
+    if (Object.hasOwn(source, "variant")) {
+      this.variant = source.variant;
+    } else if (source.female) {
+      this.variant = TrainerVariant.FEMALE;
+    } else {
+      this.variant = TrainerVariant.DEFAULT;
+    }
     this.partyTemplateIndex = source.partyMemberTemplateIndex;
     this.name = source.name;
     this.partnerName = source.partnerName;

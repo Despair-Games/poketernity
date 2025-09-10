@@ -15,7 +15,7 @@ import { formatStat } from "#utils/string-utils";
 type TextAndShadowArr = [string | null, string | null];
 
 export class DamageNumberHandler {
-  private damageNumbers: Map<FieldBattlerIndex, Phaser.GameObjects.Text[]>;
+  private readonly damageNumbers: Map<FieldBattlerIndex, Phaser.GameObjects.Text[]>;
 
   constructor() {
     this.damageNumbers = new Map();

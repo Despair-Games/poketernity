@@ -31,8 +31,8 @@ export class PositiveStatStagePowerAttr extends VariablePowerAttr {
  * up to a maximum of 200 base power in total.
  */
 export class PunishmentPowerAttr extends VariablePowerAttr {
-  private PUNISHMENT_MIN_BASE_POWER = 60;
-  private PUNISHMENT_MAX_BASE_POWER = 200;
+  private readonly PUNISHMENT_MIN_BASE_POWER = 60;
+  private readonly PUNISHMENT_MAX_BASE_POWER = 200;
 
   /** Increases power by 20 * the number of the target's stat stages */
   override apply(_user: Pokemon, target: Pokemon, _move: Move, power: NumberHolder): boolean {

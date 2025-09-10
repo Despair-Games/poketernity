@@ -18,7 +18,7 @@ import i18next from "i18next";
  * @see {@linkcode apply}
  */
 export class AddSubstituteAttr extends MoveEffectAttr {
-  private isShedTail: boolean;
+  private readonly isShedTail: boolean;
 
   constructor(isShedTail: boolean = false) {
     super(true);

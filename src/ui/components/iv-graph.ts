@@ -23,12 +23,12 @@ const ivChartStatIndexes = [0, 1, 2, 5, 4, 3]; // swap special attack and speed
 const defaultIvChartData: number[] = new Array(12).fill(0);
 
 export class IVGraph extends Phaser.GameObjects.Container {
-  private showDiff: boolean;
+  private readonly showDiff: boolean;
   private statsIvsCache: number[];
   private ivChart: Phaser.GameObjects.Polygon;
   private ivStatValueTexts: BBCodeText[];
 
-  private defaultTextStyle: TextStyle;
+  private readonly defaultTextStyle: TextStyle;
 
   constructor(
     x: number,

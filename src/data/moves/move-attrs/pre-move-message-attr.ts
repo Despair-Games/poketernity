@@ -8,7 +8,7 @@ import type { MoveMessageFunc } from "#types/move-types";
  * Attribute to queue a message before a move deals damage
  */
 export class PreMoveMessageAttr extends MoveAttr {
-  private message: string | MoveMessageFunc;
+  private readonly message: string | MoveMessageFunc;
 
   constructor(message: string | MoveMessageFunc) {
     super();

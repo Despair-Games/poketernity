@@ -230,8 +230,8 @@ const MAX_CURSOR = Math.ceil((Object.keys(displayStats).length - MAX_STATS_ON_SC
 export class GameStatsUiHandler extends UiHandler {
   private gameStatsContainer: Phaser.GameObjects.Container;
 
-  private statLabels: TextListContainer[];
-  private statValues: TextListContainer[];
+  private readonly statLabels: TextListContainer[];
+  private readonly statValues: TextListContainer[];
 
   private arrowUp: Phaser.GameObjects.Sprite;
   private arrowDown: Phaser.GameObjects.Sprite;

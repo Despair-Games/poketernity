@@ -142,12 +142,12 @@ export const TheExpertPokemonBreederEncounter: MysteryEncounter = MysteryEncount
     // If player is in space biome, uses special "Space" version of the trainer
     encounter.enemyPartyConfigs = [getPartyConfig()];
 
-    const cleffaSpecies =
-      waveIndex < FIRST_STAGE_EVOLUTION_WAVE
-        ? SpeciesId.CLEFFA
-        : waveIndex < FINAL_STAGE_EVOLUTION_WAVE
-          ? SpeciesId.CLEFAIRY
-          : SpeciesId.CLEFABLE;
+    let cleffaSpecies: SpeciesId = SpeciesId.CLEFABLE;
+    if (waveIndex < FIRST_STAGE_EVOLUTION_WAVE) {
+      cleffaSpecies = SpeciesId.CLEFFA;
+    } else if (waveIndex < FINAL_STAGE_EVOLUTION_WAVE) {
+      cleffaSpecies = SpeciesId.CLEFAIRY;
+    }
     encounter.spriteConfigs = [
       {
         spriteKey: cleffaSpecies.toString(),
@@ -431,12 +431,12 @@ function getPartyConfig(): EnemyPartyConfig {
   breederConfig.name = i18next.t(trainerNameKey);
 
   // First mon is *always* this special cleffa
-  const cleffaSpecies =
-    waveIndex < FIRST_STAGE_EVOLUTION_WAVE
-      ? SpeciesId.CLEFFA
-      : waveIndex < FINAL_STAGE_EVOLUTION_WAVE
-        ? SpeciesId.CLEFAIRY
-        : SpeciesId.CLEFABLE;
+  let cleffaSpecies: SpeciesId = SpeciesId.CLEFABLE;
+  if (waveIndex < FIRST_STAGE_EVOLUTION_WAVE) {
+    cleffaSpecies = SpeciesId.CLEFFA;
+  } else if (waveIndex < FINAL_STAGE_EVOLUTION_WAVE) {
+    cleffaSpecies = SpeciesId.CLEFAIRY;
+  }
   const baseConfig: EnemyPartyConfig = {
     trainerType: TrainerType.EXPERT_POKEMON_BREEDER,
     pokemonConfigs: [

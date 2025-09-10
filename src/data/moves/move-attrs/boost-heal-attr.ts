@@ -10,11 +10,11 @@ import type { MoveConditionFunc } from "#types/move-types";
  */
 export class BoostHealAttr extends HealAttr {
   /** Healing received when {@linkcode condition} is false */
-  private normalHealRatio: number;
+  private readonly normalHealRatio: number;
   /** Healing received when {@linkcode condition} is true */
-  private boostedHealRatio: number;
+  private readonly boostedHealRatio: number;
   /** The lambda expression to check against when boosting the healing value */
-  private condition?: MoveConditionFunc;
+  private readonly condition?: MoveConditionFunc;
 
   constructor(
     normalHealRatio: number,

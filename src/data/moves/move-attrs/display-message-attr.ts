@@ -8,7 +8,7 @@ import { MoveEffectAttr } from "#moves/move-effect-attr";
  * Attribute to display a message
  */
 export class DisplayMessageAttr extends MoveEffectAttr {
-  private displayMessage: string;
+  private readonly displayMessage: string;
 
   constructor(displayMessage: string) {
     super();

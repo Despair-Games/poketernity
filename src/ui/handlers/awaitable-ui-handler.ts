@@ -2,11 +2,12 @@ import { globalScene } from "#app/global-scene";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { Button } from "#enums/button";
 import type { UiMode } from "#enums/ui-mode";
+import type { AnyFn } from "#types/utility-types";
 import { UiHandler } from "#ui/ui-handler";
 
 export abstract class AwaitableUiHandler extends UiHandler {
   protected awaitingActionInput: boolean;
-  protected onActionInput: Function | null;
+  protected onActionInput: AnyFn | null;
   public tutorialActive: boolean = false;
   public tutorialOverlay: Phaser.GameObjects.Rectangle;
 

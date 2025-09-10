@@ -31,7 +31,7 @@ export class StockpilingTag extends BattlerTag {
     super(BattlerTagType.STOCKPILING, BattlerTagLapseType.CUSTOM, 1, sourceMoveId);
   }
 
-  private onStatStagesChanged: StatStageChangeCallback = (statsChanged, statChanges) => {
+  private readonly onStatStagesChanged: StatStageChangeCallback = (statsChanged, statChanges) => {
     const defChange = statChanges[statsChanged.indexOf(Stat.DEF)] ?? 0;
     const spDefChange = statChanges[statsChanged.indexOf(Stat.SPDEF)] ?? 0;
 

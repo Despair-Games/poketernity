@@ -8,7 +8,7 @@ const repeatInputDelayMillis = 250;
 export class TouchControl {
   events: Phaser.Events.EventEmitter;
   private buttonLock: string[] = [];
-  private inputInterval: NodeJS.Timeout[] = [];
+  private readonly inputInterval: NodeJS.Timeout[] = [];
   /** Whether touch controls are disabled */
   private disabled: boolean = false;
   /** Whether the last touch event has finished before disabling */

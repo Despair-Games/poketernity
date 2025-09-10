@@ -66,11 +66,12 @@ export const BerriesAboundEncounter: MysteryEncounter = MysteryEncounterBuilder.
   ])
   .withOnInit(() => {
     const encounter = globalScene.currentBattle.mysteryEncounter!;
+    const { waveIndex } = globalScene.currentBattle;
 
     // Calculate boss mon
     const level = getEncounterPokemonLevelForWave(STANDARD_ENCOUNTER_BOOSTED_LEVEL_MODIFIER);
     const bossSpecies = globalScene.arena.randomSpecies(
-      globalScene.currentBattle.waveIndex,
+      waveIndex,
       level,
       0,
       getPartyLuckValue(globalScene.getPlayerParty()),
@@ -90,15 +91,15 @@ export const BerriesAboundEncounter: MysteryEncounter = MysteryEncounterBuilder.
     encounter.enemyPartyConfigs = [config];
 
     // Calculate the number of extra berries that player receives
-    // 10-40: 2, 40-120: 4, 120-160: 5, 160-180: 7
-    const numBerries =
-      globalScene.currentBattle.waveIndex > 160
-        ? 7
-        : globalScene.currentBattle.waveIndex > 120
-          ? 5
-          : globalScene.currentBattle.waveIndex > 40
-            ? 4
-            : 2;
+    // <=40: 2, 41-120: 4, 121-160: 5, 161+: 7
+    let numBerries = 2;
+    if (waveIndex > 160) {
+      numBerries = 7;
+    } else if (waveIndex > 120) {
+      numBerries = 5;
+    } else if (waveIndex > 40) {
+      numBerries = 4;
+    }
     regenerateModifierPoolThresholds(globalScene.getPlayerParty(), ModifierPoolType.PLAYER, 0);
     encounter.misc = { numBerries };
 

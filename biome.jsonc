@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.2.2/schema.json",
   "vcs": {
     "enabled": false,
     "clientKind": "git",
@@ -55,7 +55,7 @@
         "noUndeclaredVariables": "off", // handled by TypeScript
         "noUnusedVariables": "error",
         "noSwitchDeclarations": "error",
-        "noVoidTypeReturn": "warn", // TODO: Refactor and make this an error
+        "noVoidTypeReturn": "error",
         "noUnusedImports": {
           "level": "error",
           "fix": "safe",
@@ -73,7 +73,7 @@
         "useConst": "error",
         "useImportType": "error",
         "noNonNullAssertion": "off", // TODO: fix all non-null assertions in non-test files and turn this on
-        "noParameterAssign": "off", // TODO: add this?
+        "noParameterAssign": "info",
         "useExponentiationOperator": "off", // Too typo-prone and easy to mixup with standard multiplication (* vs **)
         "useDefaultParameterLast": "error",
         "useSingleVarDeclarator": "error",
@@ -129,7 +129,11 @@
         "useCollapsedIf": "error",
         "useCollapsedElseIf": "error",
         "noNegationElse": "error",
-        "noParameterProperties": "error" // a step toward enabling `erasableSyntaxOnly` in `tsconfig.json`
+        "noParameterProperties": "error", // a step toward enabling `erasableSyntaxOnly` in `tsconfig.json`
+        "useAtIndex": "error",
+        "useReadonlyClassProperties": "error",
+        "useExplicitLengthCheck": "info",
+        "noNestedTernary": "error"
       },
       "suspicious": {
         "noDoubleEquals": "error",
@@ -137,11 +141,11 @@
         "noAssignInExpressions": "warn",
         "noPrototypeBuiltins": "error",
         "noFallthroughSwitchClause": "error", // Prevents accidental automatic fallthroughs in switch cases (use disable comment if needed)
-        "noImplicitAnyLet": "warn", // TODO: Refactor and make this an error
+        "noImplicitAnyLet": "error",
         "noRedeclare": "error",
         "noGlobalIsNan": "error",
         "noAsyncPromiseExecutor": "warn", // TODO: Refactor and make this an error
-        "useDefaultSwitchClauseLast": "warn", // TODO: make error?
+        "useDefaultSwitchClauseLast": "error",
         "noVar": "error",
         "noDocumentCookie": "off", // Firefox has minimal support for the "Cookie Store API"
         "noConstantBinaryExpressions": "error",
@@ -158,18 +162,21 @@
         "noForEach": "off", // Foreach vs for of is not that simple.
         "noUselessSwitchCase": "off", // Explicit > Implicit
         "noUselessConstructor": "error",
-        "noBannedTypes": "warn", // TODO: refactor and make an error
+        "noBannedTypes": "error",
         "useRegexLiterals": "off", // Was broken for some reason; TODO: re-enable
         "noThisInStatic": "error",
         "noUselessThisAlias": "error",
         "noUselessTernary": "error",
         "useIndexOf": "error",
         "noVoid": "error",
-        "useWhile": "error"
+        "useWhile": "error",
+        "noUselessStringConcat": "error"
       },
       "nursery": {
         "noShadow": "warn", // TODO: refactor and make "error"
-        "noUselessUndefined": "error"
+        "noUselessUndefined": "error",
+        "noNonNullAssertedOptionalChain": "error",
+        "useExplicitType": "off" // TODO: refactor and make "error"
       },
       "performance": {
         "noNamespaceImport": "error",
@@ -234,6 +241,16 @@
         "rules": {
           "style": {
             "noDefaultExport": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": [".dependency-cruiser.cjs"],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noUselessStringConcat": "off" // disabled for readability of this particular file
           }
         }
       }

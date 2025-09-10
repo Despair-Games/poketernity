@@ -22,17 +22,19 @@ export abstract class BattlePhase extends Phase {
     const tintSprites = trainer.getTintSprites();
     for (let i = 0; i < sprites.length; i++) {
       const visible = !trainerSlot || !i === (trainerSlot === TrainerSlot.TRAINER) || sprites.length < 2;
-      [sprites[i], tintSprites[i]].map((sprite) => {
+      [sprites[i], tintSprites[i]].forEach((sprite) => {
         if (visible) {
-          sprite.x = trainerSlot || sprites.length < 2 ? 0 : i ? 16 : -16;
+          let xOffset = -16;
+          if (trainerSlot || sprites.length < 2) {
+            xOffset = 0;
+          } else if (i) {
+            xOffset = 16;
+          }
+          sprite.x = xOffset;
         }
         sprite.setVisible(visible);
         sprite.clearTint();
       });
-      sprites[i].setVisible(visible);
-      tintSprites[i].setVisible(visible);
-      sprites[i].clearTint();
-      tintSprites[i].clearTint();
     }
 
     await playTween({

@@ -13,7 +13,7 @@ import type { NumberHolder } from "#utils/common-utils";
  */
 export class LastMoveDoublePowerAttr extends VariablePowerAttr {
   /** The move that must precede the current move */
-  private moveId: MoveId;
+  private readonly moveId: MoveId;
 
   constructor(moveId: MoveId) {
     super();

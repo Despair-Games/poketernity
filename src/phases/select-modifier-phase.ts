@@ -1,3 +1,5 @@
+/** biome-ignore-all lint/style/noNestedTernary: modifiers are being deleted soon anyway */
+
 import { globalScene } from "#app/global-scene";
 import { activeOverrides } from "#app/overrides";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
