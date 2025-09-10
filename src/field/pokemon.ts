@@ -81,7 +81,6 @@ import {
   MIN_STAT_STAGE,
   NON_VOLATILE_STATUS_EFFECTS,
 } from "#constants/game-constants";
-import { CustomPokemonData } from "#data/custom-pokemon-data";
 import { allAbilities, allMoves } from "#data/data-lists";
 import { speciesEggMoves } from "#data/egg-moves";
 import { getLevelTotalExp } from "#data/exp";
@@ -184,7 +183,13 @@ import type { PokemonData } from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
 import type { AbilityFilterOptions } from "#types/ability-types";
 import type { DamageCalculationResult, DamageResult, TurnMove } from "#types/move-types";
-import type { PokemonSummonData, PokemonTurnData, PokemonWaveData, Status } from "#types/pokemon-types";
+import type {
+  CustomPokemonData,
+  PokemonSummonData,
+  PokemonTurnData,
+  PokemonWaveData,
+  Status,
+} from "#types/pokemon-types";
 import type { BattleInfo } from "#ui/battle-info";
 import { playTween } from "#utils/anim-utils";
 import { applyChallenges } from "#utils/challenge-utils";
@@ -362,10 +367,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       }
       this.nature = dataSource.nature || (0 as Nature);
       this.nickname = dataSource.nickname;
-      // @ts-expect-error - `Pokemon#moveset` is `protected`
-      this.moveset = dataSource.moveset;
-      // @ts-expect-error - `Pokemon#status` is `protected`
-      this.status = dataSource.status;
+      this.moveset = dataSource["moveset"];
+      this.status = dataSource["status"];
       this.friendship = dataSource.friendship ?? this.species.baseFriendship;
       this.metLevel = dataSource.metLevel || 5;
       this.luck = dataSource.luck;
@@ -377,7 +380,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.pokerus = dataSource.pokerus;
       this.evoCounter = dataSource.evoCounter ?? 0;
       this.usedTMs = dataSource.usedTMs ?? [];
-      this.customPokemonData = new CustomPokemonData(dataSource.customPokemonData);
+      this.resetCustomPokemonData(dataSource.customPokemonData);
       this.teraType = dataSource.teraType;
       this.isTerastallized = dataSource.isTerastallized;
       this.stellarTypesBoosted = dataSource.stellarTypesBoosted ?? [];
@@ -402,7 +405,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         this.variant = this.shiny ? this.generateShinyVariant() : 0;
       }
 
-      this.customPokemonData = new CustomPokemonData();
+      this.resetCustomPokemonData();
 
       if (nature !== undefined) {
         this.setNature(nature);
@@ -1538,7 +1541,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (!types.length || !includeTeraType) {
       if (!bypassSummonData && this.summonData.types.length > 0) {
         this.summonData.types.forEach((t) => types.push(t));
-      } else if (this.customPokemonData.types && this.customPokemonData.types.length > 0) {
+      } else if (this.customPokemonData.types.length > 0) {
         // "Permanent" override for a Pokemon's normal types, currently only used by Mystery Encounters
         types.push(this.customPokemonData.types[0]);
 
@@ -1630,7 +1633,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (activeOverrides.ENEMY_ABILITY_OVERRIDE && !this.isPlayer()) {
       return allAbilities[activeOverrides.ENEMY_ABILITY_OVERRIDE];
     }
-    if (!isNil(this.customPokemonData.ability) && this.customPokemonData.ability !== -1) {
+    if (this.customPokemonData.ability !== -1) {
       return allAbilities[this.customPokemonData.ability];
     }
     let abilityId = this.getSpeciesForm(bypassSummonData).getAbility(this.abilityIndex);
@@ -1654,7 +1657,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (activeOverrides.ENEMY_PASSIVE_ABILITY_OVERRIDE && !this.isPlayer()) {
       return allAbilities[activeOverrides.ENEMY_PASSIVE_ABILITY_OVERRIDE];
     }
-    if (!isNil(this.customPokemonData.passive) && this.customPokemonData.passive !== -1) {
+    if (this.customPokemonData.passive !== -1) {
       return allAbilities[this.customPokemonData.passive];
     }
 
@@ -4396,6 +4399,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       failedRunAway: false,
       joinedRound: false,
     };
+  }
+
+  public resetCustomPokemonData(data: Partial<CustomPokemonData> = {}): void {
+    const { spriteScale = -1, ability = -1, passive = -1, nature = -1, types = [] } = data;
+    this.customPokemonData = { spriteScale, ability, passive, nature, types: [...types] };
   }
 
   /**

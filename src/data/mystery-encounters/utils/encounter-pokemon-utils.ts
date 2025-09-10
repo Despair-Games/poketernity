@@ -1,6 +1,5 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { CustomPokemonData } from "#data/custom-pokemon-data";
 import {
   doPokeballBounceAnim,
   getPokeballAtlasKey,
@@ -1004,8 +1003,5 @@ export function isPokemonValidForEncounterOptionSelection(
  * @param ability - The ability that is overriding
  */
 export function applyAbilityOverrideToPokemon(pokemon: Pokemon, ability: AbilityId) {
-  if (!pokemon.customPokemonData) {
-    pokemon.customPokemonData = new CustomPokemonData();
-  }
   pokemon.customPokemonData.ability = ability;
 }
