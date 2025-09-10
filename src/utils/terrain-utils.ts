@@ -133,7 +133,7 @@ export function getTerrainTypeSynergyScore(terrainType: TerrainType, elementalTy
  * @returns A set of {@link AbilityId | IDs} for abilities that benefit from
  * the given terrain type
  */
-export function getTerrainSynergyAbilities(terrainType: TerrainType): Readonly<Set<AbilityId>> {
+export function getTerrainSynergyAbilities(terrainType: TerrainType): ReadonlySet<AbilityId> {
   switch (terrainType) {
     case TerrainType.ELECTRIC:
       return new Set([AbilityId.QUARK_DRIVE, AbilityId.SURGE_SURFER, AbilityId.HADRON_ENGINE]);
