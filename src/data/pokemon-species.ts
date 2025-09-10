@@ -215,39 +215,44 @@ export class PokemonSpecies extends PokemonSpeciesForm {
     const ret: EvolutionLevel[] = [];
     if (Object.hasOwn(pokemonPreEvolutions, this.speciesId)) {
       const preEvolutionLevels = this.getPreEvolutionLevels().reverse();
-      const levelDiff = player ? 0 : forTrainer || isBoss ? (forTrainer && isBoss ? 2.5 : 5) : 10;
+      let levelDiff: number = 10;
+      if (player) {
+        levelDiff = 0;
+      } else if (forTrainer && isBoss) {
+        levelDiff = 2.5;
+      } else if (forTrainer || isBoss) {
+        levelDiff = 5;
+      }
       ret.push([preEvolutionLevels[0][0], 1]);
       for (let l = 1; l < preEvolutionLevels.length; l++) {
         const evolution = pokemonEvolutions[preEvolutionLevels[l - 1][0]].find(
           (e) => e.speciesId === preEvolutionLevels[l][0],
-        );
+        )!; // TODO: resolve `!`
         ret.push([
           preEvolutionLevels[l][0],
           Math.min(
             Math.max(
-              evolution?.enemyEvolveLevel! + Math.round(randSeedGauss(0.5, 1 + levelDiff * 0.2) * 0.5 * 5) - 1,
+              evolution.enemyEvolveLevel + Math.round(randSeedGauss(0.5, 1 + levelDiff * 0.2) * 0.5 * 5) - 1,
               2,
-              evolution?.enemyEvolveLevel!,
+              evolution.enemyEvolveLevel,
             ),
             currentLevel - 1,
           ),
-        ]); // TODO: are those bangs correct?
+        ]);
       }
       const lastPreEvolutionLevel = ret[preEvolutionLevels.length - 1][1];
-      const evolution = pokemonEvolutions[preEvolutionLevels[preEvolutionLevels.length - 1][0]].find(
-        (e) => e.speciesId === this.speciesId,
-      );
+      const evolution = pokemonEvolutions[preEvolutionLevels.at(-1)![0]].find((e) => e.speciesId === this.speciesId)!; // TODO: resolve `!` on `.find()`
       ret.push([
         this.speciesId,
         Math.min(
           Math.max(
             lastPreEvolutionLevel + Math.round(randSeedGauss(0.5, 1 + levelDiff * 0.2) * 0.5 * 5),
             lastPreEvolutionLevel + 1,
-            evolution?.enemyEvolveLevel!,
+            evolution.enemyEvolveLevel,
           ),
           currentLevel,
         ),
-      ]); // TODO: are those bangs correct?
+      ]);
     } else {
       ret.push([this.speciesId, 1]);
     }

@@ -10,7 +10,7 @@ import Phaser from "phaser";
 
 export class GeneralSettingsUiHandler extends SettingsUiHandler {
   /** Buffer to be able to unsubscribe on {@linkcode tearDown} */
-  private onOrientationChange = () => this.updateMoveTouchControlsSettingsLabel();
+  private readonly onOrientationChange = () => this.updateMoveTouchControlsSettingsLabel();
 
   constructor() {
     super(UiMode.SETTINGS, "general", generalSettingsUiItems);

@@ -107,7 +107,7 @@ export const TrainingSessionEncounter: MysteryEncounter = MysteryEncounterBuilde
           encounter.setDialogueToken("stat1", "-");
           encounter.setDialogueToken("stat2", "-");
           // Add the pokemon back to party with IV boost
-          let ivIndexes: any[] = [];
+          let ivIndexes: { iv: number; index: number }[] = [];
           playerPokemon.ivs.forEach((iv, index) => {
             if (iv < 31) {
               ivIndexes.push({ iv, index });
@@ -124,7 +124,7 @@ export const TrainingSessionEncounter: MysteryEncounter = MysteryEncounterBuilde
           let improvedCount = 0;
           while (ivIndexes.length > 0 && improvedCount < 2) {
             ivIndexes = randSeedShuffle(ivIndexes);
-            const ivToChange = ivIndexes.pop();
+            const ivToChange = ivIndexes.pop()!;
             let newVal = ivToChange.iv;
             if (improvedCount === 0) {
               encounter.setDialogueToken("stat1", i18next.t(getStatKey(ivToChange.index)) ?? "");
@@ -137,7 +137,13 @@ export const TrainingSessionEncounter: MysteryEncounter = MysteryEncounterBuilde
               newVal += 1;
             }
 
-            newVal += ivToChange.iv <= 10 ? 10 : ivToChange.iv <= 20 ? 5 : 3;
+            if (ivToChange.iv <= 10) {
+              newVal += 10;
+            } else if (ivToChange.iv <= 20) {
+              newVal += 5;
+            } else {
+              newVal += 3;
+            }
             newVal = Math.min(newVal, 31);
             playerPokemon.ivs[ivToChange.index] = newVal;
             improvedCount++;

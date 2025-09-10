@@ -1,3 +1,5 @@
+/** biome-ignore-all lint/style/noNestedTernary: all of this is going to be deleted soon anyway */
+
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { CommanderAbAttr } from "#abilities/commander-ab-attr";
 import { globalScene } from "#app/global-scene";
@@ -71,7 +73,7 @@ export const modifierSortFunc = (a: Modifier, b: Modifier): number => {
 };
 
 export class ModifierBar extends Phaser.GameObjects.Container {
-  private player: boolean;
+  private readonly player: boolean;
   private modifierCache: PersistentModifier[];
 
   constructor(enemy?: boolean) {
@@ -352,8 +354,8 @@ export abstract class ConsumableModifier extends Modifier {
 }
 
 export class AddPokeballModifier extends ConsumableModifier {
-  private pokeballType: PokeballType;
-  private count: number;
+  private readonly pokeballType: PokeballType;
+  private readonly count: number;
 
   constructor(type: ModifierType, pokeballType: PokeballType, count: number) {
     super(type);
@@ -378,8 +380,8 @@ export class AddPokeballModifier extends ConsumableModifier {
 }
 
 export class AddVoucherModifier extends ConsumableModifier {
-  private voucherType: VoucherType;
-  private count: number;
+  private readonly voucherType: VoucherType;
+  private readonly count: number;
 
   constructor(type: ModifierType, voucherType: VoucherType, count: number) {
     super(type);
@@ -564,9 +566,9 @@ export class DoubleBattleChanceBoosterModifier extends LapsingPersistentModifier
  */
 export class TempStatStageBoosterModifier extends LapsingPersistentModifier {
   /** The stat whose stat stage multiplier will be temporarily increased */
-  private stat: TempBattleStat;
+  private readonly stat: TempBattleStat;
   /** The amount by which the stat stage itself or its multiplier will be increased by */
-  private boost: number;
+  private readonly boost: number;
 
   constructor(type: ModifierType, stat: TempBattleStat, maxBattles: number, battleCount?: number, stackCount?: number) {
     super(type, maxBattles, battleCount, stackCount);
@@ -1017,7 +1019,7 @@ export class PokemonBaseStatTotalModifier extends PokemonHeldItemModifier {
   public declare type: PokemonBaseStatTotalModifierType;
   public override isTransferable: boolean = false;
 
-  private statModifier: number;
+  private readonly statModifier: number;
 
   constructor(type: PokemonBaseStatTotalModifierType, pokemonId: number, statModifier: number, stackCount?: number) {
     super(type, pokemonId, stackCount);
@@ -1076,8 +1078,8 @@ export class PokemonBaseStatTotalModifier extends PokemonHeldItemModifier {
  * Currently used by Old Gateau item
  */
 export class PokemonBaseStatFlatModifier extends PokemonHeldItemModifier {
-  private statModifier: number;
-  private stats: Stat[];
+  private readonly statModifier: number;
+  private readonly stats: Stat[];
   public override isTransferable: boolean = false;
 
   constructor(type: ModifierType, pokemonId: number, statModifier: number, stats: Stat[], stackCount?: number) {
@@ -1322,7 +1324,7 @@ export class EvolutionStatBoosterModifier extends StatBoosterModifier {
  */
 export class SpeciesStatBoosterModifier extends StatBoosterModifier {
   /** The species that the held item's stat boost(s) apply to */
-  private species: SpeciesId[];
+  private readonly species: SpeciesId[];
 
   constructor(
     type: ModifierType,
@@ -1391,7 +1393,7 @@ export class SpeciesStatBoosterModifier extends StatBoosterModifier {
 export class AttackTypeBoosterModifier extends PokemonHeldItemModifier {
   public declare type: AttackTypeBoosterModifierType;
   public moveType: ElementalType;
-  private boostMultiplier: number;
+  private readonly boostMultiplier: number;
 
   constructor(
     type: ModifierType,
@@ -1569,7 +1571,7 @@ export class BypassSpeedChanceModifier extends PokemonHeldItemModifier {
  * Because King's Rock can be stacked in the game, unlike mainline, it does not receive a boost from Serene Grace
  */
 export class FlinchChanceModifier extends PokemonHeldItemModifier {
-  private chance: number;
+  private readonly chance: number;
   constructor(type: ModifierType, pokemonId: number, stackCount?: number) {
     super(type, pokemonId, stackCount);
 
@@ -1663,7 +1665,7 @@ export class TurnHealModifier extends PokemonHeldItemModifier {
  */
 export class TurnStatusEffectModifier extends PokemonHeldItemModifier {
   /** The status effect to be applied by the held item */
-  private effect: StatusEffect;
+  private readonly effect: StatusEffect;
 
   constructor(type: ModifierType, pokemonId: number, stackCount?: number) {
     super(type, pokemonId, stackCount);
@@ -2016,9 +2018,9 @@ export abstract class ConsumablePokemonModifier extends ConsumableModifier {
 }
 
 export class PokemonHpRestoreModifier extends ConsumablePokemonModifier {
-  private restorePoints: number;
-  private restorePercent: number;
-  private healStatus: boolean;
+  private readonly restorePoints: number;
+  private readonly restorePercent: number;
+  private readonly healStatus: boolean;
   public fainted: boolean;
 
   constructor(
@@ -2099,7 +2101,7 @@ export abstract class ConsumablePokemonMoveModifier extends ConsumablePokemonMod
 }
 
 export class PokemonPpRestoreModifier extends ConsumablePokemonMoveModifier {
-  private restorePoints: number;
+  private readonly restorePoints: number;
 
   constructor(type: ModifierType, pokemonId: number, moveIndex: number, restorePoints: number) {
     super(type, pokemonId, moveIndex);
@@ -2124,7 +2126,7 @@ export class PokemonPpRestoreModifier extends ConsumablePokemonMoveModifier {
 }
 
 export class PokemonAllMovePpRestoreModifier extends ConsumablePokemonModifier {
-  private restorePoints: number;
+  private readonly restorePoints: number;
 
   constructor(type: ModifierType, pokemonId: number, restorePoints: number) {
     super(type, pokemonId);
@@ -2149,7 +2151,7 @@ export class PokemonAllMovePpRestoreModifier extends ConsumablePokemonModifier {
 }
 
 export class PokemonPpUpModifier extends ConsumablePokemonMoveModifier {
-  private upPoints: number;
+  private readonly upPoints: number;
 
   constructor(type: ModifierType, pokemonId: number, moveIndex: number, upPoints: number) {
     super(type, pokemonId, moveIndex);
@@ -2326,7 +2328,7 @@ export class MultipleParticipantExpBonusModifier extends PersistentModifier {
 }
 
 export class HealingBoosterModifier extends PersistentModifier {
-  private multiplier: number;
+  private readonly multiplier: number;
 
   constructor(type: ModifierType, multiplier: number, stackCount?: number) {
     super(type, stackCount);
@@ -2363,7 +2365,7 @@ export class HealingBoosterModifier extends PersistentModifier {
 }
 
 export class ExpBoosterModifier extends PersistentModifier {
-  private boostMultiplier: number;
+  private readonly boostMultiplier: number;
 
   constructor(type: ModifierType, boostPercent: number, stackCount?: number) {
     super(type, stackCount);
@@ -2406,7 +2408,7 @@ export class ExpBoosterModifier extends PersistentModifier {
 export class PokemonExpBoosterModifier extends PokemonHeldItemModifier {
   public declare type: PokemonExpBoosterModifierType;
 
-  private boostMultiplier: number;
+  private readonly boostMultiplier: number;
 
   constructor(type: PokemonExpBoosterModifierType, pokemonId: number, boostPercent: number, stackCount?: number) {
     super(type, pokemonId, stackCount);
@@ -2625,7 +2627,7 @@ export class PokemonFormChangeItemModifier extends PokemonHeldItemModifier {
 }
 
 export class MoneyRewardModifier extends ConsumableModifier {
-  private moneyMultiplier: number;
+  private readonly moneyMultiplier: number;
 
   constructor(type: ModifierType, moneyMultiplier: number) {
     super(type);

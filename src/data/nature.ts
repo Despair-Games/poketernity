@@ -35,6 +35,7 @@ export function getNatureName(
 
     if (increasedStat && decreasedStat) {
       ret =
+        // biome-ignore lint/complexity/noUselessStringConcat: intentional for improved readability
         `${ret}${singleLine ? " " : "\n"}`
         + `(${getTextFrag(`+${i18next.t(getShortenedStatKey(increasedStat))}`, TextStyle.SUMMARY_PINK)}`
         + `/${getTextFrag(`-${i18next.t(getShortenedStatKey(decreasedStat))}`, TextStyle.SUMMARY_BLUE)})`;

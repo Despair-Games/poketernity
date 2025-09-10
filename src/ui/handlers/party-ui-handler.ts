@@ -102,7 +102,7 @@ export class PartyUiHandler extends MessageUiHandler {
    * @param pokemon The pokemon to check.
    * @returns
    */
-  private FilterChallengeLegal = (pokemon: PlayerPokemon) => {
+  private readonly FilterChallengeLegal = (pokemon: PlayerPokemon) => {
     const challengeAllowed = new BooleanHolder(true);
     applyChallenges(globalScene.gameMode, ChallengeType.POKEMON_IN_BATTLE, pokemon, challengeAllowed);
     if (!challengeAllowed.value) {
@@ -121,7 +121,7 @@ export class PartyUiHandler extends MessageUiHandler {
     return null;
   };
 
-  private localizedOptions = [
+  private readonly localizedOptions = [
     PartyOption.SEND_OUT,
     PartyOption.SUMMARY,
     PartyOption.CANCEL,
@@ -835,11 +835,8 @@ export class PartyUiHandler extends MessageUiHandler {
             const isBatonPassMove =
               this.partyUiMode === PartyUiMode.MODAL_SWITCH
               && moveHistory.length
-              && allMoves
-                .get(moveHistory[moveHistory.length - 1].move.id)
-                .getAttrs(ForceSwitchOutAttr)[0]
-                ?.isBatonPass()
-              && moveHistory[moveHistory.length - 1].result === MoveResult.SUCCESS;
+              && allMoves.get(moveHistory.at(-1)!.move.id).getAttrs(ForceSwitchOutAttr)[0]?.isBatonPass()
+              && moveHistory.at(-1)!.result === MoveResult.SUCCESS;
 
             // isBatonPassMove and allowBatonModifierSwitch shouldn't ever be true
             // at the same time, because they both explicitly check for a mutually
@@ -944,7 +941,7 @@ export class PartyUiHandler extends MessageUiHandler {
     const optionTexts: BBCodeText[] = [];
 
     for (let o = optionStartIndex; o < optionEndIndex; o++) {
-      const option = this.options[this.options.length - (o + 1)];
+      const option = this.options.at(-(o + 1))!;
       let altText = false;
       let optionName: string;
       if (option === PartyOption.SCROLL_UP) {
@@ -1163,8 +1160,8 @@ export class PartyUiHandler extends MessageUiHandler {
 class PartySlot extends Phaser.GameObjects.Container {
   private selected: boolean;
   private transfer: boolean;
-  private slotIndex: number;
-  private pokemon: PlayerPokemon;
+  private readonly slotIndex: number;
+  private readonly pokemon: PlayerPokemon;
 
   private slotBg: Phaser.GameObjects.Image;
   public slotName: Phaser.GameObjects.Text;
@@ -1174,7 +1171,7 @@ class PartySlot extends Phaser.GameObjects.Container {
   public slotDescriptionLabel: Phaser.GameObjects.Text; // this is used to show text instead of the HP bar i.e. for showing "Able"/"Not Able" for TMs when you try to learn them
 
   private pokemonIcon: Phaser.GameObjects.Container;
-  private iconAnimHandler: PokemonIconAnimHelper;
+  private readonly iconAnimHandler: PokemonIconAnimHelper;
 
   constructor(
     slotIndex: number,
@@ -1309,17 +1306,18 @@ class PartySlot extends Phaser.GameObjects.Container {
     this.slotHpBar.setVisible(false);
 
     const hpRatio = this.pokemon.getHpRatio();
-
-    this.slotHpOverlay = globalScene.add.sprite(
-      0,
-      0,
-      "party_slot_hp_overlay",
-      hpRatio > 0.5 ? "high" : hpRatio > 0.25 ? "medium" : "low",
-    );
-    this.slotHpOverlay.setPositionRelative(this.slotHpBar, 16, 2);
-    this.slotHpOverlay.setOrigin(0, 0);
-    this.slotHpOverlay.setScale(hpRatio, 1);
-    this.slotHpOverlay.setVisible(false);
+    let hpFrame = "low";
+    if (hpRatio > 0.5) {
+      hpFrame = "high";
+    } else if (hpRatio > 0.25) {
+      hpFrame = "medium";
+    }
+    this.slotHpOverlay = globalScene.add
+      .sprite(0, 0, "party_slot_hp_overlay", hpFrame)
+      .setPositionRelative(this.slotHpBar, 16, 2)
+      .setOrigin(0)
+      .setScale(hpRatio, 1)
+      .setVisible(false);
 
     this.slotHpText = addTextObject(0, 0, `${this.pokemon.hp}/${this.pokemon.getMaxHp()}`, TextStyle.PARTY);
     this.slotHpText.setPositionRelative(this.slotHpBar, this.slotHpBar.width - 3, this.slotHpBar.height - 2);
@@ -1394,10 +1392,19 @@ class PartySlot extends Phaser.GameObjects.Container {
 
   private updateSlotTexture(): void {
     const battlerCount = globalScene.currentBattle.getBattlerCount();
-    this.slotBg.setTexture(
-      `party_slot${this.slotIndex >= battlerCount ? "" : "_main"}`,
-      `party_slot${this.slotIndex >= battlerCount ? "" : "_main"}${this.transfer ? "_swap" : this.pokemon.hp ? "" : "_fnt"}${this.selected ? "_sel" : ""}`,
-    );
+
+    const partySlot = `party_slot${this.slotIndex >= battlerCount ? "" : "_main"}`;
+
+    let swapOrFaint = "_fnt";
+    if (this.transfer) {
+      swapOrFaint = "_swap";
+    } else if (this.pokemon.hp > 0) {
+      swapOrFaint = "";
+    }
+
+    const selected = this.selected ? "_sel" : "";
+
+    this.slotBg.setTexture(partySlot, `${partySlot}${swapOrFaint}${selected}`);
   }
 }
 

@@ -14,8 +14,8 @@ type MoveFilter = (moveId: MoveId) => boolean;
  * including Metal Burst and Comeuppance.
  */
 export class CounterDamageAttr extends FixedDamageAttr {
-  private moveFilter: MoveFilter;
-  private multiplier: number;
+  private readonly moveFilter: MoveFilter;
+  private readonly multiplier: number;
 
   constructor(moveFilter: MoveFilter, multiplier: number) {
     super(0);

@@ -44,18 +44,18 @@ const BORDER = 8;
 export class MoveInfoOverlay extends Phaser.GameObjects.Container implements InfoToggle {
   public override active: boolean = false;
 
-  private desc: Phaser.GameObjects.Text;
+  private readonly desc: Phaser.GameObjects.Text;
   private descScroll: Phaser.Tweens.Tween | null = null;
 
-  private val: Phaser.GameObjects.Container;
-  private pp: Phaser.GameObjects.Text;
-  private pow: Phaser.GameObjects.Text;
-  private acc: Phaser.GameObjects.Text;
-  private typ: Phaser.GameObjects.Sprite;
-  private cat: Phaser.GameObjects.Sprite;
-  private descBg: Phaser.GameObjects.NineSlice;
+  private readonly val: Phaser.GameObjects.Container;
+  private readonly pp: Phaser.GameObjects.Text;
+  private readonly pow: Phaser.GameObjects.Text;
+  private readonly acc: Phaser.GameObjects.Text;
+  private readonly typ: Phaser.GameObjects.Sprite;
+  private readonly cat: Phaser.GameObjects.Sprite;
+  private readonly descBg: Phaser.GameObjects.NineSlice;
 
-  private options: MoveInfoOverlaySettings;
+  private readonly options: MoveInfoOverlaySettings;
 
   constructor(options?: MoveInfoOverlaySettings) {
     if (options?.onSide) {

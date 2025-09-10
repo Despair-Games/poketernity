@@ -1,5 +1,7 @@
+import type { AnyFn } from "#types/utility-types";
+
 export interface ModalConfig {
-  buttonActions: Function[];
+  buttonActions: AnyFn[];
   fadeOut?: () => void;
 }
 

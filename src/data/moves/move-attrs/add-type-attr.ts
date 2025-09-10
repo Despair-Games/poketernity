@@ -16,7 +16,7 @@ import i18next from "i18next";
  * and {@linkcode https://bulbapedia.bulbagarden.net/wiki/Trick-or-Treat_(move) | Trick-or-Treat}.
  */
 export class AddTypeAttr extends MoveEffectAttr {
-  private type: ElementalType;
+  private readonly type: ElementalType;
 
   constructor(type: ElementalType) {
     super(false);

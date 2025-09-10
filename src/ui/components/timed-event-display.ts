@@ -8,7 +8,7 @@ import i18next from "i18next";
 export class TimedEventDisplay extends Phaser.GameObjects.Container {
   private event?: TimedEvent;
 
-  private availableWidth: number;
+  private readonly availableWidth: number;
   private eventTimerText?: Phaser.GameObjects.Text;
   private banner?: Phaser.GameObjects.Image;
   private eventTimer: NodeJS.Timeout | null;

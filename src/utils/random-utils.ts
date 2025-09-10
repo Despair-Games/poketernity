@@ -81,16 +81,6 @@ export function randSeedItem<T>(items: T[]): T {
 }
 
 /**
- * This picks items out of an array with a higher weight for earlier entries
- *
- * Only used for Trainer `partyTemplateIndex` generation
- * @todo figure out how that actually works
- */
-export function randSeedWeightedItem<T>(items: T[]): T {
-  return items.length === 1 ? items[0] : Phaser.Math.RND.weightedPick(items);
-}
-
-/**
  * Function for picking an item out of a mapping based on the given weights
  * @param items - The mapping of item to weight
  * @returns a randomly picked item according to the weights

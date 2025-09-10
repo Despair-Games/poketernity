@@ -23,7 +23,7 @@ import type { PersistentModifier } from "#modifier/modifier";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import { enumValueToKey } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
-import { randSeedInt, randSeedItem, randSeedWeightedItem } from "#utils/random-utils";
+import { randSeedInt, randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
 export class Trainer extends Phaser.GameObjects.Container {
@@ -52,12 +52,15 @@ export class Trainer extends Phaser.GameObjects.Container {
     }
 
     this.variant = variant;
+
+    const partyTemplates = this.config.partyTemplates;
+    // This formerly used an undocumented weighted pick function
+    // TODO: assign weights to party templates?
     this.partyTemplateIndex = Math.min(
-      partyTemplateIndex !== undefined
-        ? partyTemplateIndex
-        : randSeedWeightedItem(this.config.partyTemplates.map((_, i) => i)),
-      this.config.partyTemplates.length - 1,
+      partyTemplateIndex ?? randSeedItem(partyTemplates.map((_, i) => i)),
+      partyTemplates.length - 1,
     );
+
     if (Object.hasOwn(trainerNamePools, trainerType)) {
       const namePool = trainerNamePools[trainerType];
       this.name =
@@ -76,20 +79,15 @@ export class Trainer extends Phaser.GameObjects.Container {
       }
     }
 
-    switch (this.variant) {
-      case TrainerVariant.FEMALE:
-        if (!this.config.hasGenders) {
+    if (
+      (this.variant === TrainerVariant.FEMALE && !this.config.hasGenders)
+      || (this.variant === TrainerVariant.DOUBLE && !this.config.hasDouble)
+    ) {
           variant = TrainerVariant.DEFAULT;
         }
-        break;
-      case TrainerVariant.DOUBLE:
-        if (!this.config.hasDouble) {
-          variant = TrainerVariant.DEFAULT;
-        }
-        break;
-    }
 
     console.log(
+      "trainer party template:",
       Object.keys(trainerPartyTemplates)[Object.values(trainerPartyTemplates).indexOf(this.getPartyTemplate())],
     );
 
@@ -329,12 +327,21 @@ export class Trainer extends Phaser.GameObjects.Container {
 
   genPartyMember(index: number): EnemyPokemon {
     const battle = globalScene.currentBattle;
-    const level = battle.enemyLevels?.[index]!; // TODO: is this bang correct?
+    const level = battle.enemyLevels![index]; // TODO: is this bang correct?
 
-    let ret: EnemyPokemon;
+    // Assigned to in `executeWithSeedOffset()`
+    let ret!: EnemyPokemon;
 
-    globalScene.executeWithSeedOffset(
-      () => {
+    let seedOffset: number;
+    if (this.config.hasStaticParty) {
+      seedOffset = this.config.getDerivedType() + ((index + 1) << 8);
+    } else {
+      seedOffset =
+        battle.waveIndex
+        + (this.config.getDerivedType() << 10)
+        + (((this.config.useSameSeedForAllMembers ? 0 : index) + 1) << 8);
+    }
+    globalScene.executeWithSeedOffset(() => {
         const template = this.getPartyTemplate();
         const strength: PartyMemberStrength = template.getStrength(index);
 
@@ -437,15 +444,9 @@ export class Trainer extends Phaser.GameObjects.Container {
           level,
           !this.isDouble() || !(index % 2) ? TrainerSlot.TRAINER : TrainerSlot.TRAINER_PARTNER,
         );
-      },
-      this.config.hasStaticParty
-        ? this.config.getDerivedType() + ((index + 1) << 8)
-        : globalScene.currentBattle.waveIndex
-            + (this.config.getDerivedType() << 10)
-            + (((this.config.useSameSeedForAllMembers ? 0 : index) + 1) << 8),
-    );
+    }, seedOffset);
 
-    return ret!; // TODO: is this bang correct?
+    return ret;
   }
 
   genNewPartyMemberSpecies(level: number, strength: PartyMemberStrength, attempt?: number): PokemonSpecies {
@@ -455,16 +456,16 @@ export class Trainer extends Phaser.GameObjects.Container {
     let baseSpecies: PokemonSpecies;
     if (this.config.speciesPools) {
       const tierValue = randSeedInt(512);
-      let tier =
-        tierValue >= 156
-          ? TrainerPoolTier.COMMON
-          : tierValue >= 32
-            ? TrainerPoolTier.UNCOMMON
-            : tierValue >= 6
-              ? TrainerPoolTier.RARE
-              : tierValue >= 1
-                ? TrainerPoolTier.SUPER_RARE
-                : TrainerPoolTier.ULTRA_RARE;
+      let tier: TrainerPoolTier = TrainerPoolTier.ULTRA_RARE;
+      if (tierValue >= 156) {
+        tier = TrainerPoolTier.COMMON;
+      } else if (tierValue >= 32) {
+        tier = TrainerPoolTier.UNCOMMON;
+      } else if (tierValue >= 6) {
+        tier = TrainerPoolTier.RARE;
+      } else if (tierValue >= 1) {
+        tier = TrainerPoolTier.SUPER_RARE;
+      }
       console.log("trainer pool tier:", enumValueToKey(TrainerPoolTier, tier));
       while (!Object.hasOwn(this.config.speciesPools, tier) || !this.config.speciesPools[tier].length) {
         console.log(
@@ -580,7 +581,13 @@ export class Trainer extends Phaser.GameObjects.Container {
     sortedPartyMemberScores.sort((a, b) => {
       const scoreA = a[1];
       const scoreB = b[1];
-      return scoreA < scoreB ? 1 : scoreA > scoreB ? -1 : 0;
+      if (scoreA < scoreB) {
+        return 1;
+      }
+      if (scoreA > scoreB) {
+        return -1;
+      }
+      return 0;
     });
 
     return sortedPartyMemberScores;
@@ -602,10 +609,9 @@ export class Trainer extends Phaser.GameObjects.Container {
 
     if (maxScorePartyMemberIndexes.length > 1) {
       let rand: number;
-      globalScene.executeWithSeedOffset(
-        () => (rand = randSeedInt(maxScorePartyMemberIndexes.length)),
-        globalScene.currentBattle.turn << 2,
-      );
+      globalScene.executeWithSeedOffset(() => {
+        rand = randSeedInt(maxScorePartyMemberIndexes.length);
+      }, globalScene.currentBattle.turn << 2);
       return maxScorePartyMemberIndexes[rand!];
     }
 

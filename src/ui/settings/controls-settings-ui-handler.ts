@@ -23,7 +23,7 @@ export abstract class ControlsSettingsUiHandler extends SettingsUiHandler {
   /** Single text object for all "press action to bind" labels. */
   private mappingValuesText: TextListContainer;
   /** Rotating array of sprites for the button mappings. */
-  private mappingIcons: Phaser.GameObjects.Sprite[];
+  private readonly mappingIcons: Phaser.GameObjects.Sprite[];
 
   private homeKey: Phaser.Input.Keyboard.Key | undefined;
 

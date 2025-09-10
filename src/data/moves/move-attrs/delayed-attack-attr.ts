@@ -19,7 +19,7 @@ import i18next from "i18next";
  */
 export class DelayedAttackAttr extends OverrideMoveEffectAttr {
   public chargeAnim: ChargeAnim;
-  private chargeText: string;
+  private readonly chargeText: string;
 
   constructor(chargeAnim: ChargeAnim, chargeText: string) {
     super();

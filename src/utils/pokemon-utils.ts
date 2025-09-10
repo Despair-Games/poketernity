@@ -3,6 +3,7 @@ import { allMoves, allSpecies } from "#data/data-lists";
 import type { PokemonSpecies } from "#data/pokemon-species";
 import type { PokemonSpeciesForm } from "#data/pokemon-species-form";
 import { POKERUS_STARTER_COUNT, speciesStarterCosts } from "#data/starters";
+import type { Variant } from "#data/variant";
 import type { ElementalType } from "#enums/elemental-type";
 import type { MoveId } from "#enums/move-id";
 import { SpeciesGroups } from "#enums/species-groups";
@@ -12,6 +13,7 @@ import type { PokemonSummonData, SerializedPokemonSummonData } from "#types/poke
 import type { CoerceNullPropertiesToUndefined } from "#types/utility-types";
 import { isNil } from "#utils/common-utils";
 import { randSeedIntRange, randSeedItem } from "#utils/random-utils";
+import i18next from "i18next";
 
 /**
  * Gets the {@linkcode PokemonSpecies} object associated with the {@linkcode SpeciesId} enum given
@@ -127,4 +129,20 @@ export function summonDataToJSON(this: PokemonSummonData): SerializedPokemonSumm
     }
   }
   return t;
+}
+
+/**
+ * Get the localized shiny descriptor for the provided variant
+ * @param variant - The variant to get the shiny descriptor for
+ * @returns The localized shiny descriptor
+ */
+export function getShinyDescriptor(variant: Variant): string {
+  switch (variant) {
+    case 2:
+      return i18next.t("common:epicShiny");
+    case 1:
+      return i18next.t("common:rareShiny");
+    case 0:
+      return i18next.t("common:commonShiny");
+  }
 }
