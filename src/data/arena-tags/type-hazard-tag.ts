@@ -23,9 +23,9 @@ import i18next from "i18next";
 export abstract class TypeHazardTag extends EntryHazardTag {
   public override readonly tagType: TypeHazardTagType;
 
-  #damagingType: ElementalType;
-  #onAddKey: string;
-  #activateTrapKey: string;
+  readonly #damagingType: ElementalType;
+  readonly #onAddKey: string;
+  readonly #activateTrapKey: string;
 
   constructor(
     damagingType: ElementalType,

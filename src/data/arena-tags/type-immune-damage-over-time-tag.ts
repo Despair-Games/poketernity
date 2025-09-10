@@ -26,7 +26,7 @@ import i18next from "i18next";
 export class TypeImmuneDamageOverTimeTag extends SerializableArenaTag {
   public override readonly tagType: TypeImmuneDamageOverTimeTagType;
 
-  #immuneType: ElementalType;
+  readonly #immuneType: ElementalType;
 
   constructor(
     tagType: TypeImmuneDamageOverTimeTagType,
