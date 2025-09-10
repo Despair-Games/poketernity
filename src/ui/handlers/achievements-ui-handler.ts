@@ -44,9 +44,9 @@ export class AchievementsUiHandler extends MessageUiHandler {
   private unlockText: Phaser.GameObjects.Text;
 
   private achvsName: string;
-  private achvsTotal: number;
+  private readonly achvsTotal: number;
   private vouchersName: string;
-  private vouchersTotal: number;
+  private readonly vouchersTotal: number;
   private currentTotal: number;
 
   private scrollGridHandler: ScrollableGridController;

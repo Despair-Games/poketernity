@@ -10,7 +10,7 @@ import type { NumberHolder } from "#utils/common-utils";
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Veevee_Volley_(move) | Veevee Volley}.
  */
 export class FriendshipPowerAttr extends VariablePowerAttr {
-  private invert: boolean;
+  private readonly invert: boolean;
 
   constructor(invert: boolean = false) {
     super();

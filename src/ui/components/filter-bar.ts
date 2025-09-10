@@ -9,10 +9,10 @@ import { addTextObject, setTextColor } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
 
 export class FilterBar extends Phaser.GameObjects.Container {
-  private window: Phaser.GameObjects.NineSlice;
-  private labels: Phaser.GameObjects.Text[] = [];
-  private dropDowns: DropDown[] = [];
-  private columns: DropDownColumn[] = [];
+  private readonly window: Phaser.GameObjects.NineSlice;
+  private readonly labels: Phaser.GameObjects.Text[] = [];
+  private readonly dropDowns: DropDown[] = [];
+  private readonly columns: DropDownColumn[] = [];
   public cursorObj: Phaser.GameObjects.Image;
   public numFilters: number = 0;
   public openDropDown: boolean = false;

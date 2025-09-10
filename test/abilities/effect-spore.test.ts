@@ -39,9 +39,9 @@ describe("Abilities - Effect Spore", () => {
   it("should have a chance of inflicting a status effect if user is hit with a contact move", async () => {
     await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
-    const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0]!;
+    const abilityAttr = game.field.getPlayerPokemon().getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0];
     vi.spyOn(abilityAttr, "apply");
-    const enemyPokemon = game.scene.getEnemyPokemon()!;
+    const enemyPokemon = game.field.getEnemyPokemon();
 
     game.move.select(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.TACKLE);
@@ -56,7 +56,7 @@ describe("Abilities - Effect Spore", () => {
     game.override.enemyAbility(AbilityId.OVERCOAT);
     await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
-    const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0]!;
+    const abilityAttr = game.field.getPlayerPokemon().getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0];
     vi.spyOn(abilityAttr, "apply");
 
     game.move.select(MoveId.SPLASH);
@@ -71,7 +71,7 @@ describe("Abilities - Effect Spore", () => {
     game.override.enemySpecies(SpeciesId.TREECKO);
     await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
-    const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0]!;
+    const abilityAttr = game.field.getPlayerPokemon().getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0];
     vi.spyOn(abilityAttr, "apply");
 
     game.move.select(MoveId.SPLASH);
@@ -85,7 +85,7 @@ describe("Abilities - Effect Spore", () => {
   it("should require contact to activate", async () => {
     await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
-    const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0]!;
+    const abilityAttr = game.field.getPlayerPokemon().getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0];
     vi.spyOn(abilityAttr, "apply");
 
     game.move.select(MoveId.SPLASH);
@@ -99,9 +99,9 @@ describe("Abilities - Effect Spore", () => {
   it("should have correct chances of inflicting sleep (11%), paralysis (10%), and poison (9%)", async () => {
     await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
-    const playerPokemon = game.scene.getPlayerPokemon()!;
-    const enemyPokemon = game.scene.getEnemyPokemon()!;
-    const abilityAttr = playerPokemon.getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0]!;
+    const playerPokemon = game.field.getPlayerPokemon();
+    const enemyPokemon = game.field.getEnemyPokemon();
+    const abilityAttr = playerPokemon.getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0];
 
     // Setup for counting number of times each status gets inflicted
     let sleepCount = 0;

@@ -9,7 +9,7 @@ import type { MoveConditionFunc } from "#types/move-types";
  * Attribute to set weather of a specified type on the field.
  */
 export class WeatherChangeAttr extends MoveEffectAttr {
-  private weatherType: WeatherType;
+  private readonly weatherType: WeatherType;
 
   constructor(weatherType: WeatherType) {
     super(true);

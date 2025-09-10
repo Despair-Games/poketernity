@@ -22,8 +22,8 @@ import i18next from "i18next";
  * off the field, prompting a switch.
  */
 export class ForceSwitchOutAttr extends MoveEffectAttr {
-  private selfSwitch: boolean;
-  private switchType: SwitchType;
+  private readonly selfSwitch: boolean;
+  private readonly switchType: SwitchType;
 
   constructor(selfSwitch: boolean = false, switchType: SwitchType = SwitchType.SWITCH) {
     super(selfSwitch, { lastHitOnly: true });

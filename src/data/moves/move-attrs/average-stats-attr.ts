@@ -13,9 +13,9 @@ import i18next from "i18next";
  */
 export class AverageStatsAttr extends MoveEffectAttr {
   /** The stats to be averaged individually between the user and the target */
-  private stats: readonly EffectiveStat[];
+  private readonly stats: readonly EffectiveStat[];
   /** The key to a localized message to show after the effect applies */
-  private msgKey: string;
+  private readonly msgKey: string;
 
   constructor(stats: readonly EffectiveStat[], msgKey: string) {
     super();

@@ -43,9 +43,9 @@ export class MoveTouchControlsHandler {
 
   private overlay: Phaser.GameObjects.Container;
 
-  private touchControls: TouchControl;
+  private readonly touchControls: TouchControl;
 
-  private currentOrientation: Phaser.Scale.Orientation = globalScene.scale.orientation;
+  private readonly currentOrientation: Phaser.Scale.Orientation = globalScene.scale.orientation;
 
   constructor(touchControls: TouchControl) {
     this.touchControls = touchControls;
@@ -234,14 +234,14 @@ export class MoveTouchControlsHandler {
    * @param element Either an element in the left div or the right div.
    * @returns Whether the given element is inside the left div.
    */
-  private isLeft = (element: HTMLElement) => this.leftTouchControlsEl?.contains(element);
+  private readonly isLeft = (element: HTMLElement) => this.leftTouchControlsEl?.contains(element);
 
   /**
    * Start dragging the given button.
    * @param controlGroup The button that is being dragged.
    * @param touch The touch event that started the drag.
    */
-  private startDrag = (controlGroup: HTMLElement): void => {
+  private readonly startDrag = (controlGroup: HTMLElement): void => {
     this.draggingElement = controlGroup;
   };
 
@@ -250,7 +250,7 @@ export class MoveTouchControlsHandler {
    * @param touch The touch event that is currently happening.
    * @param isLeft Whether the dragged element is a left button.
    */
-  private drag = (touch: Touch): void => {
+  private readonly drag = (touch: Touch): void => {
     if (!this.draggingElement) {
       return;
     }
@@ -266,7 +266,7 @@ export class MoveTouchControlsHandler {
   /**
    * Stops dragging the currently dragged element.
    */
-  private stopDrag = () => {
+  private readonly stopDrag = () => {
     this.draggingElement = null;
   };
 

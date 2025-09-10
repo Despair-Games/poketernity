@@ -22,7 +22,7 @@ class SettingsManager {
   public readonly lsKey: string;
 
   /** Internal buffer for current settings. */
-  private _settings: Settings;
+  private readonly _settings: Settings;
 
   constructor(init: SettingsManagerInit) {
     const { localStorageKey, settings } = init;

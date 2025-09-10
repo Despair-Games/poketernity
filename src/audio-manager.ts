@@ -1,4 +1,4 @@
-import type { BattleScene } from "#app/battle-scene";
+import { globalScene } from "#app/global-scene";
 import { PRSFX_SOUND_ADJUSTMENT_RATIO } from "#constants/app-constants";
 import { bgmLoopPoint } from "#data/bgm-loop-point";
 import { settings } from "#system/settings-manager";
@@ -13,20 +13,14 @@ export type AnySound = Phaser.Sound.WebAudioSound | Phaser.Sound.HTML5AudioSound
 export class AudioManager {
   private bgm: AnySound;
   private bgmResumeTimer: Phaser.Time.TimerEvent | null;
-  private bgmCache: Set<string> = new Set();
-
-  private scene: BattleScene;
-
-  constructor(scene: BattleScene) {
-    this.scene = scene;
-  }
+  private readonly bgmCache: Set<string> = new Set();
 
   /**
    * Updates the volume of a sound based on its key.
    */
   public updateSoundVolume(): void {
-    if (this.scene.sound) {
-      for (const sound of this.scene.sound.getAllPlaying() as AnySound[]) {
+    if (globalScene.sound) {
+      for (const sound of globalScene.sound.getAllPlaying() as AnySound[]) {
         if (this.bgmCache.has(sound.key)) {
           sound.setVolume(settings.effectiveBgmVolume);
         } else {
@@ -87,8 +81,8 @@ export class AudioManager {
           config["volume"] *= settings.effectiveSoundEffectsVolume;
           break;
       }
-      this.scene.sound.play(key, config);
-      return this.scene.sound.get(key) as AnySound;
+      globalScene.sound.play(key, config);
+      return globalScene.sound.get(key) as AnySound;
     } catch {
       console.log(`${key} not found`);
       return sound as AnySound;
@@ -105,12 +99,12 @@ export class AudioManager {
     this.bgmCache.add(soundName);
     const isBgmPaused = this.pauseBgm();
     this.playSound(soundName);
-    const sound = this.scene.sound.get(soundName) as AnySound;
+    const sound = globalScene.sound.get(soundName) as AnySound;
     if (this.bgmResumeTimer) {
       this.bgmResumeTimer.destroy();
     }
     if (isBgmPaused) {
-      this.bgmResumeTimer = this.scene.time.delayedCall(
+      this.bgmResumeTimer = globalScene.time.delayedCall(
         pauseDuration || fixedNumber(sound.totalDuration * 1000),
         () => {
           this.resumeBgm();
@@ -131,9 +125,9 @@ export class AudioManager {
     if (!this.bgm) {
       return false;
     }
-    const bgm = this.scene.sound.getAllPlaying().find((bgm) => bgm.key === this.bgm.key);
+    const bgm = globalScene.sound.getAllPlaying().find((bgm) => bgm.key === this.bgm.key);
     if (bgm) {
-      SoundFade.fadeOut(this.scene, this.bgm, duration, destroy);
+      SoundFade.fadeOut(globalScene, this.bgm, duration, destroy);
       return true;
     }
 
@@ -148,7 +142,7 @@ export class AudioManager {
    */
   public fadeAndSwitchBgm(newBgmKey: string, destroy: boolean = false, delay: number = 2000) {
     this.fadeOutBgm(delay, destroy);
-    this.scene.time.delayedCall(delay, () => {
+    globalScene.time.delayedCall(delay, () => {
       this.playBgm(newBgmKey);
     });
   }
@@ -160,7 +154,7 @@ export class AudioManager {
    */
   public playBgm(bgmName?: string, fadeOut?: boolean): void {
     if (bgmName === undefined) {
-      bgmName = this.scene.currentBattle?.getBgmOverride() || this.scene.arena?.bgm;
+      bgmName = globalScene.currentBattle?.getBgmOverride() || globalScene.arena?.bgm;
     }
     if (this.bgm && bgmName === this.bgm.key) {
       if (!this.bgm.isPlaying) {
@@ -174,12 +168,12 @@ export class AudioManager {
       fadeOut = false;
     }
     this.bgmCache.add(bgmName);
-    this.scene.loadBgm(bgmName);
+    globalScene.loadBgm(bgmName);
     let loopPoint = 0;
-    loopPoint = bgmName === this.scene.arena.bgm ? this.scene.arena.getBgmLoopPoint() : this.getBgmLoopPoint(bgmName);
+    loopPoint = bgmName === globalScene.arena.bgm ? globalScene.arena.getBgmLoopPoint() : this.getBgmLoopPoint(bgmName);
     let loaded = false;
     const playNewBgm = () => {
-      this.scene.ui.bgmBar.setBgmToBgmBar(bgmName);
+      globalScene.ui.bgmBar.setBgmToBgmBar(bgmName);
       if (bgmName === null && this.bgm && !this.bgm.pendingRemove) {
         this.bgm.play({
           volume: settings.effectiveBgmVolume,
@@ -189,7 +183,7 @@ export class AudioManager {
       if (this.bgm && !this.bgm.pendingRemove && this.bgm.isPlaying) {
         this.bgm.stop();
       }
-      this.bgm = this.scene.sound.add(bgmName, { loop: true });
+      this.bgm = globalScene.sound.add(bgmName, { loop: true });
       this.bgm.play({
         volume: settings.effectiveBgmVolume,
       });
@@ -197,7 +191,7 @@ export class AudioManager {
         this.bgm.on("looped", () => this.bgm.play({ seek: loopPoint }));
       }
     };
-    this.scene.load.once(Phaser.Loader.Events.COMPLETE, () => {
+    globalScene.load.once(Phaser.Loader.Events.COMPLETE, () => {
       loaded = true;
       if (!fadeOut || !this.bgm.isPlaying) {
         playNewBgm();
@@ -209,10 +203,10 @@ export class AudioManager {
           playNewBgm();
         }
       };
-      this.scene.time.delayedCall(this.fadeOutBgm(500, true) ? 750 : 250, onBgmFaded);
+      globalScene.time.delayedCall(this.fadeOutBgm(500, true) ? 750 : 250, onBgmFaded);
     }
-    if (!this.scene.load.isLoading()) {
-      this.scene.load.start();
+    if (!globalScene.load.isLoading()) {
+      globalScene.load.start();
     }
   }
 

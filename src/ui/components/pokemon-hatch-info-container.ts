@@ -30,7 +30,7 @@ export class PokemonHatchInfoContainer extends PokemonInfoContainer {
   private pokemonEggMoveBgs: Phaser.GameObjects.NineSlice[];
   private pokemonEggMoveLabels: Phaser.GameObjects.Text[];
   private pokemonHatchedIcon: Phaser.GameObjects.Sprite;
-  private pokemonListContainer: Phaser.GameObjects.Container;
+  private readonly pokemonListContainer: Phaser.GameObjects.Container;
   private pokemonCandyIcon: Phaser.GameObjects.Sprite;
   private pokemonCandyOverlayIcon: Phaser.GameObjects.Sprite;
   private pokemonCandyCountText: Phaser.GameObjects.Text;

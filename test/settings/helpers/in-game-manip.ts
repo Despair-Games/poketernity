@@ -5,11 +5,11 @@ import { getIconForLatestInput, getSettingNameWithKeycode } from "#utils/inputs-
 import { expect } from "vitest";
 
 export class InGameManip {
-  private config: InputInterfaceConfig;
+  private readonly config: InputInterfaceConfig;
   private keycode;
   private settingName;
   private icon;
-  private configs: Record<Device, InputInterfaceConfig | undefined>;
+  private readonly configs: Record<Device, InputInterfaceConfig | undefined>;
   private latestSource;
 
   constructor(configs: Record<Device, InputInterfaceConfig | undefined>, config: InputInterfaceConfig) {

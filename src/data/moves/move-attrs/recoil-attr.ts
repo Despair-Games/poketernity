@@ -15,9 +15,9 @@ import i18next from "i18next";
  * Attribute to apply {@link https://bulbapedia.bulbagarden.net/wiki/Recoil | recoil damage} to the user.
  */
 export class RecoilAttr extends MoveEffectAttr {
-  private useHp: boolean;
-  private damageRatio: number;
-  private unblockable: boolean;
+  private readonly useHp: boolean;
+  private readonly damageRatio: number;
+  private readonly unblockable: boolean;
 
   constructor(useHp: boolean = false, damageRatio: number = 0.25, unblockable: boolean = false) {
     super(true, { lastHitOnly: true });

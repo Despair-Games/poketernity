@@ -23,7 +23,7 @@ import i18next from "i18next";
  * - G-Max Volcalith: Rock
  */
 export class TypeImmuneDamageOverTimeTag extends ArenaTag {
-  private immuneType: ElementalType;
+  private readonly immuneType: ElementalType;
 
   constructor(tagType, sourceMoveId: MoveId, sourceId: number, side: ArenaTagSide, immuneType: ElementalType) {
     super(tagType, 4, sourceMoveId, sourceId, side);

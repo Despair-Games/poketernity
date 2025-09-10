@@ -8,9 +8,11 @@ import { addTextObject } from "#ui/text-utils";
 
 export class PartyExpBar extends Phaser.GameObjects.Container {
   private bg: Phaser.GameObjects.NineSlice;
+  // biome-ignore lint/style/useReadonlyClassProperties: false positive
   private pokemonIcon: Phaser.GameObjects.Container;
   private expText: Phaser.GameObjects.Text;
 
+  // biome-ignore lint/style/useReadonlyClassProperties: false positive
   private tween: Phaser.Tweens.Tween | null;
 
   public shown: boolean;

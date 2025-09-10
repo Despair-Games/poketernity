@@ -161,7 +161,7 @@ const DEFAULT_MODE = UiMode.MESSAGE;
 export class UI extends Phaser.GameObjects.Container {
   private mode: UiMode;
   private modeChain: UiMode[];
-  private handlers: Map<UiMode, UiHandler>;
+  private readonly handlers: Map<UiMode, UiHandler>;
   private overlay: Phaser.GameObjects.Rectangle;
   public achvBar: AchvBar; // TODO: make private and add helper functions
   public bgmBar: BgmBar; // TODO: make private and add helper functions
@@ -172,6 +172,7 @@ export class UI extends Phaser.GameObjects.Container {
   private tooltipTitle: Phaser.GameObjects.Text;
   private tooltipContent: Phaser.GameObjects.Text;
 
+  // biome-ignore lint/style/useReadonlyClassProperties: false positive
   private overlayActive: boolean;
 
   /** Callback used to destroy no longer needed handlers on new encounters. */

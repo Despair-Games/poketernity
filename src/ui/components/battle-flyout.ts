@@ -24,35 +24,35 @@ interface MoveInfo {
 /** A Flyout Menu attached to each {@linkcode BattleInfo} object on the field UI */
 export class BattleFlyout extends Phaser.GameObjects.Container {
   /** Is this object linked to a player's Pokemon? */
-  private player: boolean;
+  private readonly player: boolean;
 
   /** The Pokemon this object is linked to */
   private pokemon: Pokemon;
 
   /** The restricted width of the flyout which should be drawn to */
-  private flyoutWidth = 118;
+  private readonly flyoutWidth = 118;
   /** The restricted height of the flyout which should be drawn to */
-  private flyoutHeight = 23;
+  private readonly flyoutHeight = 23;
 
   /** The amount of translation animation on the x-axis */
-  private translationX: number;
+  private readonly translationX: number;
   /** The x-axis point where the flyout should sit when activated */
-  private anchorX: number;
+  private readonly anchorX: number;
   /** The y-axis point where the flyout should sit when activated */
-  private anchorY: number;
+  private readonly anchorY: number;
 
   /** The initial container which defines where the flyout should be attached */
-  private flyoutParent: Phaser.GameObjects.Container;
+  private readonly flyoutParent: Phaser.GameObjects.Container;
   /** The background {@linkcode Phaser.GameObjects.Sprite;} for the flyout */
-  private flyoutBackground: Phaser.GameObjects.Sprite;
+  private readonly flyoutBackground: Phaser.GameObjects.Sprite;
 
   /** The container which defines the drawable dimensions of the flyout */
-  private flyoutContainer: Phaser.GameObjects.Container;
+  private readonly flyoutContainer: Phaser.GameObjects.Container;
 
   /** The array of {@linkcode Phaser.GameObjects.Text} objects which are drawn on the flyout */
-  private flyoutText: Phaser.GameObjects.Text[] = new Array(4);
+  private readonly flyoutText: Phaser.GameObjects.Text[] = new Array(4);
   /** The array of {@linkcode MoveInfo} used to track moves for the {@linkcode Pokemon} linked to the flyout */
-  private moveInfo: MoveInfo[] = [];
+  private readonly moveInfo: MoveInfo[] = [];
 
   /** Current state of the flyout's visibility */
   public flyoutVisible: boolean = false;

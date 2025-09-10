@@ -13,8 +13,8 @@ import { toDmgValue } from "#utils/common-utils";
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Clangorous_Soul_(move) | Clangorous Soul}.
  */
 export class CutHpStatStageBoostAttr extends StatStageChangeAttr {
-  private cutRatio: number;
-  private messageCallback: ((user: Pokemon) => void) | undefined;
+  private readonly cutRatio: number;
+  private readonly messageCallback: ((user: Pokemon) => void) | undefined;
 
   constructor(
     stat: BattleStat[],

@@ -345,7 +345,13 @@ export class EnemyPokemon extends Pokemon {
           sortedMovePool.sort((a, b) => {
             const scoreA = moveScores[movePool.indexOf(a)];
             const scoreB = moveScores[movePool.indexOf(b)];
-            return scoreA < scoreB ? 1 : scoreA > scoreB ? -1 : 0;
+            if (scoreA < scoreB) {
+              return 1;
+            }
+            if (scoreA > scoreB) {
+              return -1;
+            }
+            return 0;
           });
           let r = 0;
           if (this.aiType === AiType.SMART_RANDOM) {
@@ -423,7 +429,13 @@ export class EnemyPokemon extends Pokemon {
     sortedBenefitScores.sort((a, b) => {
       const scoreA = a[1];
       const scoreB = b[1];
-      return scoreA < scoreB ? 1 : scoreA > scoreB ? -1 : 0;
+      if (scoreA < scoreB) {
+        return 1;
+      }
+      if (scoreA > scoreB) {
+        return -1;
+      }
+      return 0;
     });
 
     if (!sortedBenefitScores.length) {
@@ -437,7 +449,7 @@ export class EnemyPokemon extends Pokemon {
     }
 
     let targetWeights = sortedBenefitScores.map((s) => s[1]);
-    const lowestWeight = targetWeights[targetWeights.length - 1];
+    const lowestWeight = targetWeights.at(-1)!;
 
     // If the lowest target weight (i.e. benefit score) is negative, add abs(lowestWeight) to all target weights
     if (lowestWeight < 1) {
