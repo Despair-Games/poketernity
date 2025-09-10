@@ -11,14 +11,14 @@ import i18next from "i18next";
 export class AchvBanner extends Phaser.GameObjects.Container {
   private defaultWidth: number;
   private defaultHeight: number;
-  private bannerScale: number = CANVAS_SCALE / 2;
+  private readonly bannerScale: number = CANVAS_SCALE / 2;
 
   private bg: Phaser.GameObjects.NineSlice;
   private icon: Phaser.GameObjects.Sprite;
   private titleText: Phaser.GameObjects.Text;
   private descriptionText: Phaser.GameObjects.Text;
 
-  private achv: Achievement;
+  private readonly achv: Achievement;
 
   public shown: boolean;
   public tween: Phaser.Tweens.Tween;
