@@ -31,9 +31,6 @@ export class ChangeTerrainAttr extends MoveEffectAttr {
   /**
    * @returns An Effect Score based on how much the user's non-fainted party benefits
    * from the Terrain to set compared to the opponents' benefit.
-   *
-   * @todo Expand upon terrain benefit score calculation. It generally isn't aware of
-   * terrain-specific effects (aside from power multipliers).
    */
   public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     const currentTerrain = globalScene.arena.terrain?.terrainType ?? TerrainType.NONE;

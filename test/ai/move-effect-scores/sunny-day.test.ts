@@ -1,4 +1,6 @@
 import { AbilityId } from "#enums/ability-id";
+import { Challenges } from "#enums/challenges";
+import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { WeatherType } from "#enums/weather-type";
@@ -26,7 +28,7 @@ describe("AI (Move Effect Scores) - Sunny Day", () => {
       .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(SpeciesId.WHISMUR)
+      .enemySpecies(SpeciesId.WOOLOO)
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset([MoveId.SUNNY_DAY, MoveId.SPLASH, MoveId.TACKLE])
       .startingLevel(100)
@@ -34,7 +36,7 @@ describe("AI (Move Effect Scores) - Sunny Day", () => {
   });
 
   it("should not be preferred when no synergy is on the field", async () => {
-    await game.classicMode.startBattle(SpeciesId.WHISMUR);
+    await game.classicMode.startBattle(SpeciesId.WOOLOO);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).not.toPreferSelectingMove(MoveId.SUNNY_DAY);
@@ -43,10 +45,21 @@ describe("AI (Move Effect Scores) - Sunny Day", () => {
   it("should be preferred when the user is Fire-type", async () => {
     game.override.enemySpecies(SpeciesId.MAGBY);
 
-    await game.classicMode.startBattle(SpeciesId.WHISMUR);
+    await game.classicMode.startBattle(SpeciesId.WOOLOO);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).toPreferSelectingMove(MoveId.SUNNY_DAY);
+  });
+
+  it("should be preferred when the user's ally is Fire-type", async () => {
+    game.override.battleType("double");
+
+    await game.classicMode.startBattle(SpeciesId.WOOLOO);
+
+    const [enemy1, enemy2] = game.scene.getEnemyField();
+    enemy2.setTemporaryTypes(ElementalType.FIRE);
+
+    expect(enemy1).toPreferSelectingMove(MoveId.SUNNY_DAY);
   });
 
   it("should be avoided when the opponent is Fire-type", async () => {
@@ -59,7 +72,7 @@ describe("AI (Move Effect Scores) - Sunny Day", () => {
   it("should be avoided when the user is Water-type", async () => {
     game.override.enemySpecies(SpeciesId.MAGIKARP);
 
-    await game.classicMode.startBattle(SpeciesId.WHISMUR);
+    await game.classicMode.startBattle(SpeciesId.WOOLOO);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).toNeverSelectMove(MoveId.SUNNY_DAY);
@@ -75,7 +88,7 @@ describe("AI (Move Effect Scores) - Sunny Day", () => {
   it("should be strongly preferred when the user is Fire-type and under Rain", async () => {
     game.override.enemySpecies(SpeciesId.MAGBY).weather(WeatherType.RAIN);
 
-    await game.classicMode.startBattle(SpeciesId.WHISMUR);
+    await game.classicMode.startBattle(SpeciesId.WOOLOO);
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).toNeverSelectMove((move) => move.id !== MoveId.SUNNY_DAY);
@@ -132,5 +145,16 @@ describe("AI (Move Effect Scores) - Sunny Day", () => {
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).toPreferSelectingMove(MoveId.SUNNY_DAY);
+  });
+
+  it("should not factor challenge-ineligible Pokemon into scoring", async () => {
+    game.challengeMode.addChallenge(Challenges.SINGLE_TYPE, ElementalType.NORMAL, 0);
+
+    await game.challengeMode.startBattle(SpeciesId.WOOLOO, SpeciesId.MAGIKARP);
+
+    const enemy = game.field.getEnemyPokemon();
+    // Magikarp in the player's party would normally incentivize the enemy to use
+    // Sunny Day, but the Mono-Normal challenge should cause the enemy to ignore it
+    expect(enemy).not.toPreferSelectingMove(MoveId.SUNNY_DAY);
   });
 });

@@ -711,6 +711,10 @@ export class EnemyPokemon extends Pokemon {
     return true;
   }
 
+  public override isAllowedInBattle(): boolean {
+    return !this.isFainted();
+  }
+
   hasTrainer(): boolean {
     return this.trainerSlot !== TrainerSlot.NONE;
   }

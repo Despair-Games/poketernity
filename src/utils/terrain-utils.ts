@@ -111,6 +111,13 @@ export function getTerrainBlockMessage(pokemon: Pokemon, terrainType: TerrainTyp
   });
 }
 
+/**
+ * Determines the benefit score assigned to Pokemon of the given {@linkcode ElementalType}
+ * under the given {@linkcode TerrainType}. This score is used for the Enemy AI's
+ * command selection.
+ * @returns A decimal score for the given elemental type under the given terrain type
+ * @see {@linkcode Pokemon.getTerrainBenefitScore}
+ */
 export function getTerrainTypeSynergyScore(terrainType: TerrainType, elementalType: ElementalType): number {
   switch (terrainType) {
     case TerrainType.MISTY:

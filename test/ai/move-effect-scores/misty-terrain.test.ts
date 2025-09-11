@@ -1,4 +1,6 @@
 import { AbilityId } from "#enums/ability-id";
+import { Challenges } from "#enums/challenges";
+import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/game-manager";
@@ -62,6 +64,16 @@ describe("AI (Move Effect Scores) - Misty Terrain", () => {
     expect(enemy).toNeverSelectMove(MoveId.MISTY_TERRAIN);
   });
 
+  it("should be avoided when the user's ally is Dragon-type", async () => {
+    game.override.battleType("double");
+
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
+    const [enemy1, enemy2] = game.scene.getEnemyField();
+    enemy2.setTemporaryTypes(ElementalType.DRAGON);
+
+    expect(enemy1).toNeverSelectMove(MoveId.MISTY_TERRAIN);
+  });
+
   it.each([
     { moveName: "Terrain Pulse", moveId: MoveId.TERRAIN_PULSE },
     { moveName: "Misty Explosion", moveId: MoveId.MISTY_EXPLOSION },
@@ -93,5 +105,17 @@ describe("AI (Move Effect Scores) - Misty Terrain", () => {
 
     const enemy = game.field.getEnemyPokemon();
     expect(enemy).toNeverSelectMove(MoveId.MISTY_TERRAIN);
+  });
+
+  it("should not factor challenge-ineligible Pokemon into scoring", async () => {
+    game.challengeMode.addChallenge(Challenges.SINGLE_TYPE, ElementalType.NORMAL, 0);
+
+    await game.challengeMode.startBattle(SpeciesId.WOOLOO, SpeciesId.AXEW);
+
+    const enemy = game.field.getEnemyPokemon();
+
+    // Axew in the player's party would normally incentivize the enemy to use
+    // Misty Terrain, but the Mono-Normal challenge should cause the enemy to ignore it
+    expect(enemy).not.toPreferSelectingMove(MoveId.MISTY_TERRAIN);
   });
 });

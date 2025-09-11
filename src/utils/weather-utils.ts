@@ -128,11 +128,11 @@ export function getWeatherClearMessage(weatherType: WeatherType): string | null 
 }
 
 /**
- * Scores a weather-type pairing based on how well the type synergizes with the weather
+ * Scores a weather-type pairing based on how well the given {@linkcode ElementalType}
+ * synergizes with the given {@linkcode WeatherType}.
+ * This score is used for the Enemy AI's command selection.
  * @returns A decimal score representing the given weather's synergy with the given type
- *
- * @privateRemarks
- * The score from this function is intended for use in Enemy AI command selection only.
+ * @see {@linkcode Pokemon.getWeatherBenefitScore}
  */
 export function getWeatherTypeSynergyScore(weatherType: WeatherType, elementalType: ElementalType): number {
   switch (weatherType) {
