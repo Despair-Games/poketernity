@@ -187,7 +187,6 @@ describe("Global Trade System - Mystery Encounter", () => {
 
       expect(receivedPokemon.shiny).toBeTruthy();
       expect(receivedPokemon.variant).toBeDefined();
-      expect(receivedPokemon.luck).toBe(receivedPokemon.variant + 1);
     });
 
     it("should leave encounter without battle", async () => {

@@ -110,7 +110,6 @@ export class PokemonData {
     this.metBiome = source.metBiome ?? -1;
     this.metSpecies = source.metSpecies;
     this.metWave = source.metWave ?? (this.metBiome === -1 ? -1 : 0);
-    this.luck = source.luck ?? (source.shiny ? source.variant + 1 : 0);
     this.pauseEvolutions = source.pauseEvolutions;
     this.evoCounter = source.evoCounter ?? 0;
     this.pokerus = source.pokerus;
@@ -128,8 +127,7 @@ export class PokemonData {
     }
 
     if (isPokemon(source)) {
-      // @ts-expect-error - `Pokemon#moveset` is `protected`
-      this.moveset = source.moveset;
+      this.moveset = source["moveset"];
       this.summonData = source.summonData;
       return;
     }

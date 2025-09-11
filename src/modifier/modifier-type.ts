@@ -73,7 +73,7 @@ import type { PokemonMoveSelectFilter, PokemonSelectFilter } from "#types/ui-typ
 import type { EnumValues } from "#types/utility-types";
 import { getModifierTierTextTint } from "#ui/text-utils";
 import { getBerryEffectDescription, getBerryName } from "#utils/berry-utils";
-import { clamp, enumValueToKey, getTSEnumKeys, getTSEnumValues, isNil, NumberHolder } from "#utils/common-utils";
+import { enumValueToKey, getTSEnumKeys, getTSEnumValues, isNil, NumberHolder } from "#utils/common-utils";
 import { getModifierPoolForType } from "#utils/modifier-pool-utils";
 import { getModifierType } from "#utils/modifier-type-utils";
 import { randSeedInt } from "#utils/random-utils";
@@ -2132,7 +2132,7 @@ export class ModifierTypeOption {
  * @param party The player's party.
  * @returns A number between 0 and 14 based on the party's total luck value, or a random number between 0 and 14 if the player is in Daily Run mode.
  */
-export function getPartyLuckValue(party: Pokemon[]): number {
+export function getPartyLuckValue(_party: Pokemon[]): number {
   if (globalScene.gameMode.isDaily) {
     const DailyLuck = new NumberHolder(0);
     globalScene.executeWithSeedOffset(
@@ -2144,13 +2144,7 @@ export function getPartyLuckValue(party: Pokemon[]): number {
     );
     return DailyLuck.value;
   }
-  const luck = clamp(
-    party
-      .map((p) => (p.isAllowedInBattle() ? p.getLuck() : 0))
-      .reduce((total: number, value: number) => (total += value), 0),
-    0,
-    14,
-  );
+  const luck = 0; // TODO: temporary until luck is reworked
   return luck ?? 0;
 }
 

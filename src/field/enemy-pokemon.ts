@@ -113,8 +113,6 @@ export class EnemyPokemon extends Pokemon {
         }
       }
 
-      this.luck = this.shiny ? this.variant + 1 : 0;
-
       let preEvolution: SpeciesId;
       let speciesId = species.speciesId;
       while ((preEvolution = pokemonPreEvolutions[speciesId])) {

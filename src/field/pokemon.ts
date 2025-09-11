@@ -278,7 +278,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public metBiome: BiomeId | -1;
   public metSpecies: SpeciesId;
   public metWave: number;
-  public luck: number;
   public pauseEvolutions: boolean;
   public pokerus: boolean;
   public switchOutStatus: boolean;
@@ -371,7 +370,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.status = dataSource["status"];
       this.friendship = dataSource.friendship ?? this.species.baseFriendship;
       this.metLevel = dataSource.metLevel || 5;
-      this.luck = dataSource.luck;
       this.metBiome = dataSource.metBiome;
       this.metSpecies =
         dataSource.metSpecies ?? (this.metBiome !== -1 ? this.species.speciesId : this.species.getRootSpeciesId(true));
@@ -419,7 +417,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.metSpecies = species.speciesId;
       this.metWave = globalScene.currentBattle ? globalScene.currentBattle.waveIndex : -1;
       this.pokerus = false;
-      this.luck = this.shiny ? this.variant + 1 : 0;
     }
 
     this.generateName();
@@ -1380,10 +1377,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   getVariant(): Variant {
     return this.variant;
-  }
-
-  getLuck(): number {
-    return this.luck;
   }
 
   abstract isBoss(): boolean;
@@ -2391,7 +2384,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     if (this.shiny) {
       this.variant = this.generateShinyVariant();
-      this.luck = this.variant + 1;
       this.initShinySparkle();
     }
 
