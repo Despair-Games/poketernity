@@ -31,7 +31,7 @@ import type { SessionSaveData } from "#types/session-data";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";
 import { addWindow } from "#ui/ui-theme";
-import { clamp, enumValueToKey, isNil } from "#utils/common-utils";
+import { enumValueToKey, isNil } from "#utils/common-utils";
 import { formatLargeNumberFixedDigits, formatMoney, getPlayTimeString, getPokemonLevelText } from "#utils/string-utils";
 import i18next from "i18next";
 import RoundRectangle from "phaser3-rex-plugins/plugins/roundrectangle";
@@ -594,13 +594,8 @@ export class RunInfoUiHandler extends UiHandler {
     runInfoTextContainer.add(runInfoText);
 
     // Luck
-    const luckValue = clamp(
-      this.runInfo.party
-        .map((p) => p.toPokemon().getLuck())
-        .reduce((total: number, value: number) => (total += value), 0),
-      0,
-      14,
-    );
+    // TODO: update when luck design is finalized
+    const luckValue = 0;
     const luckText = addTextObject(windowX - 6, windowY - 4, "", TextStyle.SCORE);
     luckText.setOrigin(1, 1);
     luckText.setText(i18next.t("runHistory:luck") + ": " + getLuckString(luckValue)); // TODO: localize properly

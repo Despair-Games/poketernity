@@ -330,7 +330,6 @@ export class PlayerPokemon extends Pokemon {
         );
         newPokemon.passive = this.passive;
         this.copyMoveset(newPokemon);
-        newPokemon.luck = this.luck;
         newPokemon.gender = Gender.GENDERLESS;
         newPokemon.metLevel = this.metLevel;
         newPokemon.metBiome = this.metBiome;
