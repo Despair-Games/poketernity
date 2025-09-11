@@ -485,9 +485,6 @@ async function postProcessTransformedPokemon(
   // If the previous pokemon had pokerus, transfer to new pokemon
   newPokemon.pokerus = previousPokemon.pokerus;
 
-  // Transfer previous Pokemon's luck value
-  newPokemon.luck = previousPokemon.getLuck();
-
   // If the previous pokemon had higher IVs, override to those (after updating dex IVs > prevents perfect 31s on a new unlock)
   newPokemon.ivs = newPokemon.ivs.map((iv, index) => {
     return previousPokemon.ivs[index] > iv ? previousPokemon.ivs[index] : iv;

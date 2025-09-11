@@ -10,7 +10,7 @@ import { getPokeballAtlasKey } from "#data/pokeball";
 import { starterColors } from "#data/starter-colors";
 import { getCandyProgressRequirement, speciesStarterCosts } from "#data/starters";
 import { getTypeRgb } from "#data/type";
-import { getVariantTint, type Variant } from "#data/variant";
+import { getVariantTint } from "#data/variant";
 import { Button } from "#enums/button";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";
@@ -778,22 +778,6 @@ export class SummaryUiHandler extends UiHandler {
         profileContainer.add(getTypeIcon(0, types[0]));
         if (types.length > 1) {
           profileContainer.add(getTypeIcon(1, types[1]));
-        }
-
-        if (this.pokemon?.getLuck()) {
-          const luckLabelText = addTextObject(141, 28, i18next.t("common:luckIndicator"), TextStyle.SUMMARY_ALT);
-          luckLabelText.setOrigin(0, 0);
-          profileContainer.add(luckLabelText);
-
-          const luckText = addTextObject(
-            141 + luckLabelText.displayWidth + 2,
-            28,
-            this.pokemon.getLuck().toString(),
-            TextStyle.SUMMARY,
-          );
-          luckText.setOrigin(0, 0);
-          luckText.setTint(getVariantTint(Math.min(this.pokemon.getLuck() - 1, 2) as Variant));
-          profileContainer.add(luckText);
         }
 
         if (
