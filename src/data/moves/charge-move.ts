@@ -1,8 +1,11 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { MAJOR_EFFECT_SCORE_PENALTY } from "#constants/ai-constants";
 import { ChargeAnim } from "#enums/charge-anim";
 import { MoveId } from "#enums/move-id";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
+import { InstantChargeAttr } from "#moves/instant-charge-attr";
 import type { ChargingMove } from "#moves/move";
 import type { MoveAttr } from "#moves/move-attr";
 import { MoveCondition } from "#moves/move-condition";
@@ -96,6 +99,35 @@ export function ChargeMove<TBase extends SubMove>(Base: TBase) {
     doesHitCheckOnCharge(): this {
       this.hitCheckOnCharge = true;
       return this;
+    }
+
+    /**
+     * Charge moves have two additional Effect Score components compared to other moves:
+     * 1. The combined Effect Score from all attributes that apply on the "charge turn" of the move.
+     * 2. A {@linkcode MAJOR_EFFECT_SCORE_PENALTY} if the move cannot charge instantly under current conditions.
+     *
+     * All attributes are individually evaluated as if applied on the turn the move is selected.
+     * Charge attributes contribute to score regardless of whether the move is expected to KO or fail.
+     */
+    protected override getCombinedAttributeScore(
+      user: EnemyPokemon,
+      target: Pokemon,
+      isKnockOut: boolean,
+      isFail: boolean,
+      isMultiTarget: boolean,
+    ): number {
+      const baseScore = this.getCombinedAttributeScore(user, target, isKnockOut, isFail, isMultiTarget);
+
+      const chargeAttrScore = this.chargeAttrs.reduce(
+        (score, attr) => score + attr.getEffectScore(user, target, this),
+        0,
+      );
+
+      const canInstantCharge = this.chargeAttrs
+        .filter((attr) => attr instanceof InstantChargeAttr)
+        .some((attr) => attr.condition(user, this));
+
+      return baseScore + chargeAttrScore + (canInstantCharge ? 0 : MAJOR_EFFECT_SCORE_PENALTY);
     }
   };
 }
