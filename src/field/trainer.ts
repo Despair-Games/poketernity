@@ -380,12 +380,12 @@ export class Trainer extends Phaser.GameObjects.Container {
 
         // Filter out the species that are already in the enemy party from the main trainer species pool
         const speciesPoolFiltered = speciesPool
-          .filter((speciesId) => {
+          .filter((pool) => {
             // Since some species pools have arrays in them (use either of those species), we need to check if one of the species is already in the party and filter the whole array if it is
-            if (Array.isArray(speciesId)) {
-              return !speciesId.some((s) => AlreadyUsedSpecies.includes(s));
+            if (Array.isArray(pool)) {
+              return !pool.some((s) => AlreadyUsedSpecies.includes(s));
             }
-            return !AlreadyUsedSpecies.includes(speciesId);
+            return !AlreadyUsedSpecies.includes(pool);
           })
           .flat();
 
