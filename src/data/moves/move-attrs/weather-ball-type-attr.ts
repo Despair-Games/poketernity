@@ -12,29 +12,28 @@ import type { NumberHolder } from "#utils/common-utils";
  */
 export class WeatherBallTypeAttr extends VariableMoveTypeAttr {
   override apply(_user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {
-    if (!globalScene.arena.weather?.isEffectSuppressed()) {
-      switch (globalScene.arena.weather?.weatherType) {
-        case WeatherType.SUNNY:
-        case WeatherType.HARSH_SUN:
-          moveType.value = ElementalType.FIRE;
-          break;
-        case WeatherType.RAIN:
-        case WeatherType.HEAVY_RAIN:
-          moveType.value = ElementalType.WATER;
-          break;
-        case WeatherType.SANDSTORM:
-          moveType.value = ElementalType.ROCK;
-          break;
-        case WeatherType.HAIL:
-        case WeatherType.SNOW:
-          moveType.value = ElementalType.ICE;
-          break;
-        default:
-          return false;
-      }
-      return true;
+    if (globalScene.arena.weather?.isEffectSuppressed()) {
+      return false;
     }
 
-    return false;
+    switch (globalScene.arena.weatherType) {
+      case WeatherType.SUNNY:
+      case WeatherType.HARSH_SUN:
+        moveType.value = ElementalType.FIRE;
+        return true;
+      case WeatherType.RAIN:
+      case WeatherType.HEAVY_RAIN:
+        moveType.value = ElementalType.WATER;
+        return true;
+      case WeatherType.SANDSTORM:
+        moveType.value = ElementalType.ROCK;
+        return true;
+      case WeatherType.HAIL:
+      case WeatherType.SNOW:
+        moveType.value = ElementalType.ICE;
+        return true;
+      default:
+        return false;
+    }
   }
 }

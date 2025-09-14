@@ -3,6 +3,7 @@ import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
+import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -87,6 +88,6 @@ describe("Weather - Strong Winds", () => {
     game.move.select(MoveId.SPLASH);
     await game.toEndOfTurn();
 
-    expect(game.scene.arena.weather?.weatherType).toBeUndefined();
+    expect(game).toHaveWeather(WeatherType.NONE);
   });
 });
