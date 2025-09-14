@@ -1,4 +1,5 @@
 import type { ElementalType } from "#enums/elemental-type";
+import type { Pokemon } from "#field/pokemon";
 import { ChangeTypeAttr } from "#moves/change-type-attr";
 import type { MoveConditionFunc } from "#types/move-types";
 
@@ -16,12 +17,12 @@ export class SetTypeAttr extends ChangeTypeAttr {
     this.type = type;
   }
 
-  protected override getType(): ElementalType {
+  protected override getType(_user: Pokemon, _target: Pokemon): ElementalType {
     return this.type;
   }
 
   public override getCondition(): MoveConditionFunc {
     return (user, target, move) =>
-      super.getCondition()(user, target, move) && target.getTypes().some((type) => type !== this.getType());
+      super.getCondition()(user, target, move) && target.getTypes().some((type) => type !== this.getType(user, target));
   }
 }

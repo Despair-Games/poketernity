@@ -3,6 +3,7 @@ import { globalScene } from "#app/global-scene";
 import { getTypeDamageMultiplier } from "#data/type";
 import { ChallengeType } from "#enums/challenge-type";
 import { ElementalType } from "#enums/elemental-type";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { ChangeTypeAttr } from "#moves/change-type-attr";
 import type { Move } from "#moves/move";
@@ -22,7 +23,7 @@ export class ResistLastMoveTypeAttr extends ChangeTypeAttr {
     super(true);
   }
 
-  protected override getType(user: Pokemon, target: Pokemon, _move: Move): ElementalType {
+  protected override getType(user: Pokemon, target: Pokemon): ElementalType {
     const [{ type: targetMoveType }] = target.getLastXMoves(1);
     const userTypes = user.getTypes();
     const validTypes = this.getTypeResistances(globalScene.gameMode, targetMoveType).filter(
@@ -73,5 +74,16 @@ export class ResistLastMoveTypeAttr extends ChangeTypeAttr {
       const validTypes = this.getTypeResistances(globalScene.gameMode, moveType).filter((t) => !userTypes.includes(t));
       return validTypes.length > 0;
     };
+  }
+
+  /**
+   * @returns `0`.
+   *
+   * The base scoring for type-changing effects is disabled for Conversion 2 because
+   * the effect's resolved type is random. Under the base logic, the user may become
+   * stuck repeatedly using Conversion 2 in some game states.
+   */
+  public override getEffectScore(_user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+    return 0;
   }
 }
