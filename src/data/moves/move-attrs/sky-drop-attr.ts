@@ -1,5 +1,8 @@
+import { MAJOR_EFFECT_SCORE_BONUS } from "#constants/ai-constants";
 import { MOVE_LOCK_TAG_TYPES, SEMI_INVULNERABLE_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { failOnGravityCondition } from "#moves/fail-on-gravity-condition";
 import type { Move } from "#moves/move";
@@ -43,5 +46,20 @@ export class SkyDropAttr extends MoveEffectAttr {
       && !target.hasTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES, BattlerTagType.SUBSTITUTE)
       && target.getAlly()?.getTag(BattlerTagType.COMMANDED)?.getSourcePokemon()?.id !== target.id
       && (!target.hasTag(BattlerTagType.SKY_DROP) || target.getTag(BattlerTagType.SKY_DROP)?.sourceId === user.id);
+  }
+
+  /**
+   * @returns A {@linkcode MAJOR_EFFECT_SCORE_BONUS} if the user is faster than all of its opponents.
+   * This effectively negates the penalty applied to charge moves under favorable conditions.
+   */
+  public override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+    const oppAlly = target.getAlly();
+    const canBypass =
+      oppAlly?.isActive(true)
+      && (user.hasAbilityWithAttr(AbAttrFlag.ALWAYS_HIT)
+        || oppAlly.hasAbilityWithAttr(AbAttrFlag.ALWAYS_HIT)
+        || oppAlly.hasTag(BattlerTagType.IGNORE_ACCURACY));
+
+    return !canBypass && user.getOpponents().every((opp) => user.outspeeds(opp, true)) ? MAJOR_EFFECT_SCORE_BONUS : 0;
   }
 }
