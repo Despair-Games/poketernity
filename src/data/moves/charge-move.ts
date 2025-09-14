@@ -116,7 +116,7 @@ export function ChargeMove<TBase extends SubMove>(Base: TBase) {
       isFail: boolean,
       isMultiTarget: boolean,
     ): number {
-      const baseScore = this.getCombinedAttributeScore(user, target, isKnockOut, isFail, isMultiTarget);
+      const baseScore = super.getCombinedAttributeScore(user, target, isKnockOut, isFail, isMultiTarget);
 
       const chargeAttrScore = this.chargeAttrs.reduce(
         (score, attr) => score + attr.getEffectScore(user, target, this),
