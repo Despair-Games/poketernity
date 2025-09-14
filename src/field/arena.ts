@@ -524,18 +524,17 @@ export class Arena {
    * @returns whether or not the terrain was successfully set
    */
   trySetTerrain(terrain: TerrainType, hasPokemonSource: boolean, ignoreAnim: boolean = false): boolean {
-    /**
-     * TODO: Refactor into if(this.tryOverrideTerrain()) { return true }
-     */
+    // TODO: Refactor into `if(this.tryOverrideTerrain()) { return true }`
     if (activeOverrides.TERRAIN_OVERRIDE) {
       return this.tryOverrideTerrain(activeOverrides.TERRAIN_OVERRIDE);
     }
 
+    // TODO: create `Arena#canSetTerrain` method
     if (this.terrain?.terrainType === (terrain || undefined)) {
       return false;
     }
 
-    const oldTerrainType = this.terrain?.terrainType || TerrainType.NONE;
+    const oldTerrainType = this.terrainType;
 
     let newTerrainDuration = DEFAULT_NEW_TERRAIN_DURATION;
 

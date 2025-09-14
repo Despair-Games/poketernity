@@ -29,7 +29,7 @@ export class TurnEndPhase extends FieldPhase {
 
         globalScene.applyModifiers(TurnHealModifier, pokemon.isPlayer(), pokemon);
 
-        if (terrain?.terrainType === TerrainType.GRASSY && pokemon.isGrounded()) {
+        if (arena.hasTerrain(TerrainType.GRASSY) && pokemon.isGrounded()) {
           globalScene.phaseManager.createAndUnshiftPhase(
             "PokemonHealPhase",
             pokemon.getBattlerIndex(),
@@ -40,7 +40,7 @@ export class TurnEndPhase extends FieldPhase {
           );
         }
         applyAbAttrs<PostTurnAbAttr>(AbAttrFlag.POST_TURN, pokemon, false);
-        // TODO: Temporary workaround so that bad dreams doesn't hurt Pokemon waking up in the same turn. Has to be fixed with #1211
+        // TODO: Temporary workaround so that bad dreams doesn't hurt Pokemon waking up in the same turn. cf https://github.com/Despair-Games/poketernity/issues/1211
         applyAbAttrs<PostTurnAbAttr>(AbAttrFlag.BAD_DREAMS, pokemon, false);
       }
 
@@ -53,6 +53,7 @@ export class TurnEndPhase extends FieldPhase {
 
     arena.lapseTags();
 
+    // TODO: is this `if` necessary?
     if (terrain && !terrain.lapse()) {
       arena.trySetTerrain(TerrainType.NONE, false);
     }
