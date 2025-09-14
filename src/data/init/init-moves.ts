@@ -67,7 +67,6 @@ import { BypassSleepAttr } from "#moves/bypass-sleep-attr";
 import { CaptivateAttr } from "#moves/captivate-attr";
 import { CenterOfAttentionAttr } from "#moves/center-of-attention-attr";
 import { ChangeTerrainAttr } from "#moves/change-terrain-attr";
-import { ChangeTypeAttr } from "#moves/change-type-attr";
 import { ChangeWeatherAttr } from "#moves/change-weather-attr";
 import { ChargedAttr } from "#moves/charged-attr";
 import { ChargingAttackMove } from "#moves/charging-attack-move";
@@ -244,6 +243,7 @@ import { SandHealAttr } from "#moves/sand-heal-attr";
 import { ScreenAttr } from "#moves/screen-attr";
 import { SecretPowerAttr } from "#moves/secret-power-attr";
 import { SemiInvulnerableAttr } from "#moves/semi-invulnerable-attr";
+import { SetTypeAttr } from "#moves/set-type-attr";
 import { SheerColdAccuracyAttr } from "#moves/sheer-cold-accuracy-attr";
 import { ShellSideArmCategoryAttr } from "#moves/shell-side-arm-category-attr";
 import { ShellTrapCondition } from "#moves/shell-trap-condition";
@@ -1940,7 +1940,7 @@ export function initMoves() {
       .attr(ElectroBallPowerAttr)
       .bulletMove(),
     new StatusMove(MoveId.SOAK, ElementalType.WATER, 100, 20, -1, 0, 5) //
-      .attr(ChangeTypeAttr, ElementalType.WATER)
+      .attr(SetTypeAttr, ElementalType.WATER)
       .bounceable(),
     new AttackMove(MoveId.FLAME_CHARGE, ElementalType.FIRE, MoveCategory.PHYSICAL, 50, 100, 20, 100, 0, 5) //
       .attr(StatStageChangeAttr, [Stat.SPD], 1, true),
@@ -2838,7 +2838,7 @@ export function initMoves() {
       .attr(TarShotAttr)
       .bounceable(),
     new StatusMove(MoveId.MAGIC_POWDER, ElementalType.PSYCHIC, 100, 20, -1, 0, 8) //
-      .attr(ChangeTypeAttr, ElementalType.PSYCHIC)
+      .attr(SetTypeAttr, ElementalType.PSYCHIC)
       .powderMove()
       .bounceable(),
     new AttackMove(MoveId.DRAGON_DARTS, ElementalType.DRAGON, MoveCategory.PHYSICAL, 50, 100, 10, -1, 0, 8) //

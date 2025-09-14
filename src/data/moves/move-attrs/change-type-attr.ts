@@ -10,39 +10,43 @@ import { enumValueToKey } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
- * Attribute to change the target's type to a set type.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Soak_(move) | Soak}
- * and {@link https://bulbapedia.bulbagarden.net/wiki/Magic_Powder_(move) | Magic Powder}.
+ * Abstract attribute to change a Pokemon's type to a single type.
+ * This effect may apply to the move's user or target.
+ * @abstract
  */
-export class ChangeTypeAttr extends MoveEffectAttr {
-  private readonly type: ElementalType;
+export abstract class ChangeTypeAttr extends MoveEffectAttr {
+  public override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
+    const pokemon = this.selfTarget ? user : target;
+    const targetType = this.getType(user, target, move);
 
-  constructor(type: ElementalType) {
-    super(false);
-
-    this.type = type;
-  }
-
-  override applyEffect(_user: Pokemon, target: Pokemon, _move: Move): boolean {
-    target.setTemporaryTypes(this.type);
-    target.updateInfo();
+    pokemon.setTemporaryTypes(targetType);
+    pokemon.updateInfo();
 
     globalScene.phaseManager.createAndUnshiftPhase(
       "MessagePhase",
       i18next.t("moveTriggers:transformedIntoType", {
-        pokemonName: getPokemonNameWithAffix(target),
-        typeName: i18next.t(`pokemonInfo:Type.${enumValueToKey(ElementalType, this.type)}`),
+        pokemonName: getPokemonNameWithAffix(pokemon),
+        typeName: i18next.t(`pokemonInfo:Type.${enumValueToKey(ElementalType, targetType)}`),
       }),
     );
 
     return true;
   }
 
-  override getCondition(): MoveConditionFunc {
-    return (_user, target, _move) =>
-      !target.isTerastallized
-      && !target.hasAbility(AbilityId.MULTITYPE)
-      && !target.hasAbility(AbilityId.RKS_SYSTEM)
-      && !(target.getTypes().length === 1 && target.getTypes()[0] === this.type);
+  protected abstract getType(_user: Pokemon, _target: Pokemon, _move: Move): ElementalType;
+
+  /**
+   * All moves that change type fail if the effect's target
+   * is Terastallized or has Multitype or RKS System as an ability
+   */
+  public override getCondition(): MoveConditionFunc {
+    return (user, target, _move) => {
+      const pokemon = this.selfTarget ? user : target;
+      return (
+        !pokemon.isTerastallized
+        && !pokemon.hasAbility(AbilityId.MULTITYPE)
+        && !pokemon.hasAbility(AbilityId.RKS_SYSTEM)
+      );
+    };
   }
 }

@@ -1,32 +1,24 @@
-import { globalScene } from "#app/global-scene";
-import { getPokemonNameWithAffix } from "#app/messages";
-import { ElementalType } from "#enums/elemental-type";
+import type { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#field/pokemon";
+import { ChangeTypeAttr } from "#moves/change-type-attr";
 import type { Move } from "#moves/move";
-import { MoveEffectAttr } from "#moves/move-effect-attr";
-import { enumValueToKey } from "#utils/common-utils";
-import i18next from "i18next";
+import type { MoveConditionFunc } from "#types/move-types";
 
 /**
  * Attribute to change the user's type to match that of the first move in its moveset.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Conversion_(move) | Conversion}.
  */
-export class FirstMoveTypeAttr extends MoveEffectAttr {
+export class FirstMoveTypeAttr extends ChangeTypeAttr {
   constructor() {
     super(true);
   }
 
-  override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
-    const firstMoveType = target.getMoveset()[0].getMove().type;
-    user.setTemporaryTypes(firstMoveType);
-    globalScene.phaseManager.createAndUnshiftPhase(
-      "MessagePhase",
-      i18next.t("battle:transformedIntoType", {
-        pokemonName: getPokemonNameWithAffix(user),
-        type: i18next.t(`pokemonInfo:Type.${enumValueToKey(ElementalType, firstMoveType)}`),
-      }),
-    );
+  protected override getType(user: Pokemon, _target: Pokemon, _move: Move): ElementalType {
+    return user.getMoveset()[0].getMove().type;
+  }
 
-    return true;
+  public override getCondition(): MoveConditionFunc {
+    return (user, target, move) =>
+      super.getCondition()(user, target, move) && target.getTypes().some((t) => t !== this.getType(user, target, move));
   }
 }
