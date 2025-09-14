@@ -232,10 +232,7 @@ export abstract class Move {
     return (this.flags & flag) > 0;
   }
 
-  /**
-   * Getter function that returns if the move hits multiple targets
-   * @returns boolean
-   */
+  /** @returns `true` if this move can hit multiple targets in a single attack */
   isMultiTarget(): boolean {
     switch (this.moveTarget) {
       case MoveTarget.ALL_OTHERS:
@@ -252,10 +249,7 @@ export abstract class Move {
     return false;
   }
 
-  /**
-   * Getter function that returns if the move targets the user or its ally
-   * @returns boolean
-   */
+  /** @returns `true` if this move targets the user and/or its ally */
   isAllyTarget(): boolean {
     switch (this.moveTarget) {
       case MoveTarget.USER:
@@ -269,6 +263,19 @@ export abstract class Move {
     return false;
   }
 
+  /** @returns `true` if this move targets a single enemy */
+  isSingleEnemyTarget(): boolean {
+    switch (this.moveTarget) {
+      case MoveTarget.OTHER:
+      case MoveTarget.NEAR_OTHER:
+      case MoveTarget.NEAR_ENEMY:
+      case MoveTarget.RANDOM_NEAR_ENEMY:
+        return true;
+    }
+    return false;
+  }
+
+  /** @returns `true` if this move targets one or both sides of the field */
   isFieldTarget(): boolean {
     switch (this.moveTarget) {
       case MoveTarget.BOTH_SIDES:

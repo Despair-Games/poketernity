@@ -66,7 +66,9 @@ import { BypassRedirectAttr } from "#moves/bypass-redirect-attr";
 import { BypassSleepAttr } from "#moves/bypass-sleep-attr";
 import { CaptivateAttr } from "#moves/captivate-attr";
 import { CenterOfAttentionAttr } from "#moves/center-of-attention-attr";
+import { ChangeTerrainAttr } from "#moves/change-terrain-attr";
 import { ChangeTypeAttr } from "#moves/change-type-attr";
+import { ChangeWeatherAttr } from "#moves/change-weather-attr";
 import { ChargedAttr } from "#moves/charged-attr";
 import { ChargingAttackMove } from "#moves/charging-attack-move";
 import { ChargingSelfStatusMove } from "#moves/charging-self-status-move";
@@ -281,7 +283,6 @@ import { TeraBlastPowerAttr } from "#moves/tera-blast-power-attr";
 import { TeraBlastTypeAttr } from "#moves/tera-blast-type-attr";
 import { TeraMoveCategoryAttr } from "#moves/tera-move-category-attr";
 import { TeraStarstormTypeAttr } from "#moves/tera-starstorm-type-attr";
-import { TerrainChangeAttr } from "#moves/terrain-change-attr";
 import { TerrainPulseTypeAttr } from "#moves/terrain-pulse-type-attr";
 import { ThroatChopAttr } from "#moves/throat-chop-attr";
 import { ThunderAccuracyAttr } from "#moves/thunder-accuracy-attr";
@@ -304,7 +305,6 @@ import { WaterShurikenMultiHitTypeAttr } from "#moves/water-shuriken-multi-hit-t
 import { WaterShurikenPowerAttr } from "#moves/water-shuriken-power-attr";
 import { WeakenMoveTypeAttr } from "#moves/weaken-move-type-attr";
 import { WeatherBallTypeAttr } from "#moves/weather-ball-type-attr";
-import { WeatherChangeAttr } from "#moves/weather-change-attr";
 import { WeatherInstantChargeAttr } from "#moves/weather-instant-charge-attr";
 import { WeightPowerAttr } from "#moves/weight-power-attr";
 import { WishAttr } from "#moves/wish-attr";
@@ -956,7 +956,7 @@ export function initMoves() {
       .attr(FrenzyAttr)
       .target(MoveTarget.RANDOM_NEAR_ENEMY),
     new StatusMove(MoveId.SANDSTORM, ElementalType.ROCK, -1, 10, -1, 0, 2) //
-      .attr(WeatherChangeAttr, WeatherType.SANDSTORM)
+      .attr(ChangeWeatherAttr, WeatherType.SANDSTORM)
       .target(MoveTarget.BOTH_SIDES),
     new AttackMove(MoveId.GIGA_DRAIN, ElementalType.GRASS, MoveCategory.SPECIAL, 75, 100, 10, -1, 0, 2) //
       .attr(HitHealAttr)
@@ -1086,10 +1086,10 @@ export function initMoves() {
       .windMove()
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new StatusMove(MoveId.RAIN_DANCE, ElementalType.WATER, -1, 5, -1, 0, 2) //
-      .attr(WeatherChangeAttr, WeatherType.RAIN)
+      .attr(ChangeWeatherAttr, WeatherType.RAIN)
       .target(MoveTarget.BOTH_SIDES),
     new StatusMove(MoveId.SUNNY_DAY, ElementalType.FIRE, -1, 5, -1, 0, 2) //
-      .attr(WeatherChangeAttr, WeatherType.SUNNY)
+      .attr(ChangeWeatherAttr, WeatherType.SUNNY)
       .target(MoveTarget.BOTH_SIDES),
     new AttackMove(MoveId.CRUNCH, ElementalType.DARK, MoveCategory.PHYSICAL, 80, 100, 15, 20, 0, 2) //
       .attr(StatStageChangeAttr, [Stat.DEF], -1)
@@ -1156,7 +1156,7 @@ export function initMoves() {
       .windMove()
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new StatusMove(MoveId.HAIL, ElementalType.ICE, -1, 10, -1, 0, 3) //
-      .attr(WeatherChangeAttr, WeatherType.HAIL)
+      .attr(ChangeWeatherAttr, WeatherType.HAIL)
       .target(MoveTarget.BOTH_SIDES),
     new StatusMove(MoveId.TORMENT, ElementalType.DARK, 100, 15, -1, 0, 3) //
       .attr(TormentAttr)
@@ -2280,10 +2280,10 @@ export function initMoves() {
           target.getTypes().includes(ElementalType.GRASS) && !target.hasTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES),
       }),
     new StatusMove(MoveId.GRASSY_TERRAIN, ElementalType.GRASS, -1, 10, -1, 0, 6) //
-      .attr(TerrainChangeAttr, TerrainType.GRASSY)
+      .attr(ChangeTerrainAttr, TerrainType.GRASSY)
       .target(MoveTarget.BOTH_SIDES),
     new StatusMove(MoveId.MISTY_TERRAIN, ElementalType.FAIRY, -1, 10, -1, 0, 6) //
-      .attr(TerrainChangeAttr, TerrainType.MISTY)
+      .attr(ChangeTerrainAttr, TerrainType.MISTY)
       .target(MoveTarget.BOTH_SIDES),
     new StatusMove(MoveId.ELECTRIFY, ElementalType.ELECTRIC, -1, 20, -1, 0, 6) //
       .attr(ElectrifyAttr),
@@ -2370,7 +2370,7 @@ export function initMoves() {
       .attr(HappyHourAttr)
       .target(MoveTarget.USER_SIDE),
     new StatusMove(MoveId.ELECTRIC_TERRAIN, ElementalType.ELECTRIC, -1, 10, -1, 0, 6) //
-      .attr(TerrainChangeAttr, TerrainType.ELECTRIC)
+      .attr(ChangeTerrainAttr, TerrainType.ELECTRIC)
       .target(MoveTarget.BOTH_SIDES),
     new AttackMove(MoveId.DAZZLING_GLEAM, ElementalType.FAIRY, MoveCategory.SPECIAL, 80, 100, 10, -1, 0, 6) //
       .target(MoveTarget.ALL_NEAR_ENEMIES),
@@ -2587,7 +2587,7 @@ export function initMoves() {
     new AttackMove(MoveId.ANCHOR_SHOT, ElementalType.STEEL, MoveCategory.PHYSICAL, 80, 100, 20, 100, 0, 7) //
       .attr(TrapAttr, true),
     new StatusMove(MoveId.PSYCHIC_TERRAIN, ElementalType.PSYCHIC, -1, 10, -1, 0, 7) //
-      .attr(TerrainChangeAttr, TerrainType.PSYCHIC)
+      .attr(ChangeTerrainAttr, TerrainType.PSYCHIC)
       .target(MoveTarget.BOTH_SIDES),
     new AttackMove(MoveId.LUNGE, ElementalType.BUG, MoveCategory.PHYSICAL, 80, 100, 15, 100, 0, 7) //
       .attr(StatStageChangeAttr, [Stat.ATK], -1),
@@ -2679,7 +2679,7 @@ export function initMoves() {
       .unimplemented()
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD], 2, true),
     new AttackMove(MoveId.GENESIS_SUPERNOVA, ElementalType.PSYCHIC, MoveCategory.SPECIAL, 185, -1, 1, 100, 0, 7) //
-      .attr(TerrainChangeAttr, TerrainType.PSYCHIC)
+      .attr(ChangeTerrainAttr, TerrainType.PSYCHIC)
       .unimplemented(),
     // #endregion
     new AttackMove(MoveId.SHELL_TRAP, ElementalType.FIRE, MoveCategory.SPECIAL, 150, 100, 5, -1, -3, 7) //
@@ -3418,7 +3418,7 @@ export function initMoves() {
       .attr(RemoveAllSubstitutesAttr)
       .snatchable(), // Custom
     new StatusMove(MoveId.SNOWSCAPE, ElementalType.ICE, -1, 10, -1, 0, 9) //
-      .attr(WeatherChangeAttr, WeatherType.SNOW)
+      .attr(ChangeWeatherAttr, WeatherType.SNOW)
       .target(MoveTarget.BOTH_SIDES),
     new AttackMove(MoveId.POUNCE, ElementalType.BUG, MoveCategory.PHYSICAL, 50, 100, 20, 100, 0, 9) //
       .attr(StatStageChangeAttr, [Stat.SPD], -1),

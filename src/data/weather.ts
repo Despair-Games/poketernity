@@ -1,13 +1,11 @@
 import type { SuppressWeatherEffectAbAttr } from "#abilities/suppress-weather-effect-ab-attr";
 import { globalScene } from "#app/global-scene";
-import { getPokemonNameWithAffix } from "#app/messages";
 import { PRIMAL_WEATHER_TYPES } from "#constants/weather-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ElementalType } from "#enums/elemental-type";
 import { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import i18next from "i18next";
 
 /** Class representing Weather effects */
 export class Weather {
@@ -149,113 +147,4 @@ export class Weather {
 
     return false;
   }
-}
-
-// TODO: Should localization return null or "" as a default? Inconsistencies in the codebase
-
-/**
- * Function to get the starting message for weather
- * @param weatherType - the {@linkcode WeatherType} starting
- * @returns the associated string
- */
-export function getWeatherStartMessage(weatherType: WeatherType): string | null {
-  switch (weatherType) {
-    case WeatherType.SUNNY:
-      return i18next.t("weather:sunnyStartMessage");
-    case WeatherType.RAIN:
-      return i18next.t("weather:rainStartMessage");
-    case WeatherType.SANDSTORM:
-      return i18next.t("weather:sandstormStartMessage");
-    case WeatherType.HAIL:
-      return i18next.t("weather:hailStartMessage");
-    case WeatherType.SNOW:
-      return i18next.t("weather:snowStartMessage");
-    case WeatherType.FOG:
-      return i18next.t("weather:fogStartMessage");
-    case WeatherType.HEAVY_RAIN:
-      return i18next.t("weather:heavyRainStartMessage");
-    case WeatherType.HARSH_SUN:
-      return i18next.t("weather:harshSunStartMessage");
-    case WeatherType.STRONG_WINDS:
-      return i18next.t("weather:strongWindsStartMessage");
-  }
-
-  return null;
-}
-
-/**
- * Function to get the lapsing message for weather
- * @param weatherType - the {@linkcode WeatherType} lapsing
- * @returns the associated string
- */
-export function getWeatherLapseMessage(weatherType: WeatherType): string {
-  switch (weatherType) {
-    case WeatherType.SUNNY:
-      return i18next.t("weather:sunnyLapseMessage");
-    case WeatherType.RAIN:
-      return i18next.t("weather:rainLapseMessage");
-    case WeatherType.SANDSTORM:
-      return i18next.t("weather:sandstormLapseMessage");
-    case WeatherType.HAIL:
-      return i18next.t("weather:hailLapseMessage");
-    case WeatherType.SNOW:
-      return i18next.t("weather:snowLapseMessage");
-    case WeatherType.FOG:
-      return i18next.t("weather:fogLapseMessage");
-    case WeatherType.HEAVY_RAIN:
-      return i18next.t("weather:heavyRainLapseMessage");
-    case WeatherType.HARSH_SUN:
-      return i18next.t("weather:harshSunLapseMessage");
-    case WeatherType.STRONG_WINDS:
-      return i18next.t("weather:strongWindsLapseMessage");
-    case WeatherType.NONE:
-      return "";
-  }
-}
-
-/**
- * Function to get the associated message for when a Pokemon is damaged by weather (sandstorm or hail)
- * @param weatherType - The {@linkcode WeatherType}
- * @param pokemon - The {@linkcode Pokemon} being damaged
- * @returns the corresponding string
- */
-export function getWeatherDamageMessage(weatherType: WeatherType, pokemon: Pokemon): string | null {
-  switch (weatherType) {
-    case WeatherType.SANDSTORM:
-      return i18next.t("weather:sandstormDamageMessage", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) });
-    case WeatherType.HAIL:
-      return i18next.t("weather:hailDamageMessage", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) });
-  }
-
-  return null;
-}
-
-/**
- * Function to get the ending message for weather
- * @param weatherType - the {@linkcode WeatherType} ending
- * @returns the associated string
- */
-export function getWeatherClearMessage(weatherType: WeatherType): string | null {
-  switch (weatherType) {
-    case WeatherType.SUNNY:
-      return i18next.t("weather:sunnyClearMessage");
-    case WeatherType.RAIN:
-      return i18next.t("weather:rainClearMessage");
-    case WeatherType.SANDSTORM:
-      return i18next.t("weather:sandstormClearMessage");
-    case WeatherType.HAIL:
-      return i18next.t("weather:hailClearMessage");
-    case WeatherType.SNOW:
-      return i18next.t("weather:snowClearMessage");
-    case WeatherType.FOG:
-      return i18next.t("weather:fogClearMessage");
-    case WeatherType.HEAVY_RAIN:
-      return i18next.t("weather:heavyRainClearMessage");
-    case WeatherType.HARSH_SUN:
-      return i18next.t("weather:harshSunClearMessage");
-    case WeatherType.STRONG_WINDS:
-      return i18next.t("weather:strongWindsClearMessage");
-  }
-
-  return null;
 }
