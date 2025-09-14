@@ -55,9 +55,10 @@ export class SkyDropAttr extends MoveEffectAttr {
   public override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
     const oppAlly = target.getAlly();
     const canBypass =
-      user.hasAbilityWithAttr(AbAttrFlag.ALWAYS_HIT)
-      || (oppAlly?.isActive(true)
-        && (oppAlly.hasAbilityWithAttr(AbAttrFlag.ALWAYS_HIT) || oppAlly.hasTag(BattlerTagType.IGNORE_ACCURACY)));
+      oppAlly?.isActive(true)
+      && (user.hasAbilityWithAttr(AbAttrFlag.ALWAYS_HIT)
+        || oppAlly.hasAbilityWithAttr(AbAttrFlag.ALWAYS_HIT)
+        || oppAlly.hasTag(BattlerTagType.IGNORE_ACCURACY));
 
     return !canBypass && user.getOpponents().every((opp) => user.outspeeds(opp, true)) ? MAJOR_EFFECT_SCORE_BONUS : 0;
   }
