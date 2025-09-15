@@ -107,7 +107,7 @@ export abstract class ChangeTypeAttr extends MoveEffectAttr {
     const avgDefEffectiveness = defEffectiveness.reduce((total, de) => total + de) / defEffectiveness.length;
     const avgModDefEffectiveness = modDefEffectiveness.reduce((total, de) => total + de) / modDefEffectiveness.length;
 
-    if (avgDefEffectiveness === 0 || avgModDefEffectiveness / avgDefEffectiveness >= 1) {
+    if (avgModDefEffectiveness >= avgDefEffectiveness) {
       return MINOR_EFFECT_SCORE_PENALTY;
     }
 
