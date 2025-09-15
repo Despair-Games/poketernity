@@ -1,45 +1,25 @@
 import { globalScene } from "#app/global-scene";
-import { getPokemonNameWithAffix } from "#app/messages";
 import { BiomeId } from "#enums/biome-id";
 import { ElementalType } from "#enums/elemental-type";
 import { TerrainType } from "#enums/terrain-type";
 import type { Pokemon } from "#field/pokemon";
-import type { Move } from "#moves/move";
-import { MoveEffectAttr } from "#moves/move-effect-attr";
-import { enumValueToKey } from "#utils/common-utils";
-import i18next from "i18next";
+import { ChangeTypeAttr } from "#moves/change-type-attr";
 
 /**
  * Attribute to change the user's type based on the current biome.
  * If terrain is active, the user's type is changed to match the terrain instead.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Camouflage_(move) | Camouflage}.
  */
-export class CopyBiomeTypeAttr extends MoveEffectAttr {
+export class CopyBiomeTypeAttr extends ChangeTypeAttr {
   constructor() {
     super(true);
   }
 
-  override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
+  protected override getType(_user: Pokemon, _target: Pokemon): ElementalType {
     const terrainType = globalScene.arena.terrainType;
-    let typeChange: ElementalType;
-    if (terrainType !== TerrainType.NONE) {
-      typeChange = this.getTypeForTerrain(globalScene.arena.terrainType);
-    } else {
-      typeChange = this.getTypeForBiome(globalScene.arena.biomeId);
-    }
-
-    user.setTemporaryTypes(typeChange);
-    user.updateInfo();
-
-    globalScene.phaseManager.createAndUnshiftPhase(
-      "MessagePhase",
-      i18next.t("moveTriggers:transformedIntoType", {
-        pokemonName: getPokemonNameWithAffix(user),
-        typeName: i18next.t(`pokemonInfo:Type.${enumValueToKey(ElementalType, typeChange)}`),
-      }),
-    );
-
-    return true;
+    return terrainType !== TerrainType.NONE
+      ? this.getTypeForTerrain(terrainType)
+      : this.getTypeForBiome(globalScene.arena.biomeId);
   }
 
   /**
