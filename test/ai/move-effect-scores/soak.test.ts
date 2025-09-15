@@ -1,7 +1,6 @@
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
-import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -33,18 +32,10 @@ describe("AI (Move Effect Scores) - Soak", () => {
       .enemyLevel(100);
   });
 
-  const setSpeed = (playerSpd: number, enemySpd: number) => {
-    const players = game.scene.getPlayerField();
-    const enemies = game.scene.getEnemyField();
-
-    players.forEach((p) => p.setStat(Stat.SPD, playerSpd));
-    enemies.forEach((p) => p.setStat(Stat.SPD, enemySpd));
-  };
-
   describe("in Single Battles", () => {
     it("should be avoided when the user is Water-type", async () => {
       await game.classicMode.startBattle(SpeciesId.MAGBY);
-      setSpeed(50, 100);
+      game.field.setSpeed(50, 100);
 
       const enemy = game.field.getEnemyPokemon();
       expect(enemy).toNeverSelectMove(MoveId.SOAK);
@@ -54,7 +45,7 @@ describe("AI (Move Effect Scores) - Soak", () => {
       game.override.enemySpecies(SpeciesId.CHIKORITA);
 
       await game.classicMode.startBattle(SpeciesId.MAGBY);
-      setSpeed(50, 100);
+      game.field.setSpeed(50, 100);
 
       const enemy = game.field.getEnemyPokemon();
       expect(enemy).toPreferSelectingMove(MoveId.SOAK);
@@ -64,7 +55,7 @@ describe("AI (Move Effect Scores) - Soak", () => {
       game.override.enemySpecies(SpeciesId.CHIKORITA);
 
       await game.classicMode.startBattle(SpeciesId.MAGBY);
-      setSpeed(100, 50);
+      game.field.setSpeed(100, 50);
 
       const enemy = game.field.getEnemyPokemon();
       expect(enemy).toPreferSelectingMove(MoveId.SOAK);
@@ -74,7 +65,7 @@ describe("AI (Move Effect Scores) - Soak", () => {
       game.override.enemySpecies(SpeciesId.CHIKORITA);
 
       await game.classicMode.startBattle(SpeciesId.MAGIKARP);
-      setSpeed(50, 100);
+      game.field.setSpeed(50, 100);
 
       const enemy = game.field.getEnemyPokemon();
       expect(enemy).toNeverSelectMove(MoveId.SOAK);
@@ -90,7 +81,7 @@ describe("AI (Move Effect Scores) - Soak", () => {
 
     it("should be preferred when an ally's type matchup would improve", async () => {
       await game.classicMode.startBattle(SpeciesId.MAGBY, SpeciesId.SLUGMA);
-      setSpeed(50, 100);
+      game.field.setSpeed(50, 100);
 
       const [enemy] = game.scene.getEnemyField();
       expect(enemy).toPreferSelectingMove(MoveId.SOAK);
@@ -98,7 +89,7 @@ describe("AI (Move Effect Scores) - Soak", () => {
 
     it("should be avoided when an ally's type matchup would worsen", async () => {
       await game.classicMode.startBattle(SpeciesId.CHIKORITA, SpeciesId.PANSAGE);
-      setSpeed(50, 100);
+      game.field.setSpeed(50, 100);
 
       const [enemy] = game.scene.getEnemyField();
       expect(enemy).toNeverSelectMove(MoveId.SOAK);
@@ -106,7 +97,7 @@ describe("AI (Move Effect Scores) - Soak", () => {
 
     it("should not be preferred when the user is slower than its opponents", async () => {
       await game.classicMode.startBattle(SpeciesId.MAGBY, SpeciesId.SLUGMA);
-      setSpeed(100, 50);
+      game.field.setSpeed(100, 50);
 
       const [enemy] = game.scene.getEnemyField();
       expect(enemy).not.toPreferSelectingMove(MoveId.SOAK);
