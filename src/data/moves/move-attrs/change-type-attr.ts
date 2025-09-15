@@ -87,7 +87,7 @@ export abstract class ChangeTypeAttr extends MoveEffectAttr {
    * - The user outspeeds all active opponents
    * - The target has an attack that gains STAB from the type change
    *
-   * Conversely, this effect is penalized if the target's defensive typing is not improved by the type change.
+   * Conversely, this effect is penalized if the target's defensive typing is weakened by the type change.
    * @param user - The {@linkcode EnemyPokemon} evaluating this effect
    * @param target - The {@linkcode Pokemon} this effect is evaluated against
    * @returns An integer score reflecting how much the target benefits from the effect
@@ -108,7 +108,7 @@ export abstract class ChangeTypeAttr extends MoveEffectAttr {
     const avgModDefEffectiveness = modDefEffectiveness.reduce((total, de) => total + de) / modDefEffectiveness.length;
 
     if (avgModDefEffectiveness >= avgDefEffectiveness) {
-      return MINOR_EFFECT_SCORE_PENALTY;
+      return avgModDefEffectiveness > avgDefEffectiveness ? MINOR_EFFECT_SCORE_PENALTY : 0;
     }
 
     const outspeeds = opponents.every((opp) => user.outspeeds(opp, opp.isOpponent(user)));
