@@ -1,7 +1,6 @@
 import { PostWeatherLapseAbAttr } from "#abilities/post-weather-lapse-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { Weather } from "#data/weather";
 import type { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
 import { toDmgValue } from "#utils/common-utils";
@@ -32,7 +31,7 @@ export class PostWeatherLapseHealAbAttr extends PostWeatherLapseAbAttr {
     this.healRatio = healRatio;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean, _weather: Weather): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
     if (!pokemon.isFullHp()) {
       const abilityName = this.source.name;
       if (!simulated) {
