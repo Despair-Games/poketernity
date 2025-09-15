@@ -71,12 +71,6 @@ export class CopyTypeAttr extends MoveEffectAttr {
     }
 
     const userOutspeeds = opponents.every((opp) => user.outspeeds(opp, true));
-    if (!userOutspeeds) {
-      return 0;
-    }
-
-    const targetTypes = target.getTypes(true, true);
-    const userHasModifiedStab = user.getAttackMoves(true).some((mv) => targetTypes.includes(user.getMoveType(mv)));
-    return userHasModifiedStab ? MINOR_EFFECT_SCORE_BONUS : 0;
+    return userOutspeeds ? MINOR_EFFECT_SCORE_BONUS : 0;
   }
 }
