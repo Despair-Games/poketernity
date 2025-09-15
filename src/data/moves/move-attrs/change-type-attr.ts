@@ -85,7 +85,6 @@ export abstract class ChangeTypeAttr extends MoveEffectAttr {
    * all of the following conditions are met:
    * - The target's defensive typing against active opponents is improved by the type change
    * - The user outspeeds all active opponents
-   * - The target has an attack that gains STAB from the type change
    *
    * Conversely, this effect is penalized if the target's defensive typing is weakened by the type change.
    * @param user - The {@linkcode EnemyPokemon} evaluating this effect
@@ -111,14 +110,7 @@ export abstract class ChangeTypeAttr extends MoveEffectAttr {
       return avgModDefEffectiveness > avgDefEffectiveness ? MINOR_EFFECT_SCORE_PENALTY : 0;
     }
 
-    const outspeeds = opponents.every((opp) => user.outspeeds(opp, opp.isOpponent(user)));
-    if (!outspeeds) {
-      return 0;
-    }
-
-    const targetMoves = target.isAlly(user) ? target.getAttackMoves(true) : target.estimateAttackMoves();
-    const targetHasModifiedStab = targetMoves.some((move) => target.getMoveType(move) === modifiedType);
-
-    return targetHasModifiedStab ? MINOR_EFFECT_SCORE_BONUS : 0;
+    const outspeeds = user.getOpponents().every((opp) => user.outspeeds(opp, opp.isOpponent(user)));
+    return outspeeds ? MINOR_EFFECT_SCORE_BONUS : 0;
   }
 }
