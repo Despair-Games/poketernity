@@ -93,6 +93,6 @@ export class AddTypeAttr extends MoveEffectAttr {
     }
 
     const userOutspeeds = user.getOpponents().every((opp) => user.outspeeds(opp, true));
-    return userOutspeeds ? MINOR_EFFECT_SCORE_BONUS : 0;
+    return userOutspeeds || !globalScene.currentBattle.double ? MINOR_EFFECT_SCORE_BONUS : 0;
   }
 }
