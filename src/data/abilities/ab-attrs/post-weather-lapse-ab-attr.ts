@@ -1,5 +1,4 @@
 import { AbAttr } from "#abilities/ab-attr";
-import type { Weather } from "#data/weather";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
@@ -18,12 +17,11 @@ export abstract class PostWeatherLapseAbAttr extends AbAttr {
 
   /**
    * Applies an effect after the weather on the field lapses.
-   * @param pokemon The {@linkcode Pokemon} with this ability
-   * @param simulated If `true`, suppresses changes to game state
-   * @param weather The {@linkcode Weather} on the field
+   * @param pokemon - The {@linkcode Pokemon} with this ability
+   * @param simulated - If `true`, suppresses changes to game state
    * @returns `true` if effects successfully apply
    */
-  public override apply(_pokemon: Pokemon, _simulated: boolean, _weather: Weather): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean): boolean {
     return false;
   }
 

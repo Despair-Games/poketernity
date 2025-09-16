@@ -1,6 +1,5 @@
 import { TerrainType } from "#enums/terrain-type";
 import { isGameManagerInstance, receivedStr } from "#test/test-utils/test-utils";
-import { isNil } from "#utils/common-utils";
 import { capitalizeString } from "#utils/string-utils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
@@ -31,7 +30,7 @@ export function toHaveTerrainMatcher(
 
   const pass = received.scene.arena.hasTerrain(expectedTerrainType);
   const terrainStr = toTerrainStr(expectedTerrainType);
-  const actualTerrainStr = toTerrainStr(received.scene.arena.terrain?.terrainType);
+  const actualTerrainStr = toTerrainStr(received.scene.arena.terrainType);
 
   return {
     pass,
@@ -49,10 +48,7 @@ export function toHaveTerrainMatcher(
  * @param terrainType - The {@linkcode TerrainType} to transform
  * @returns A human readable string
  */
-function toTerrainStr(terrainType?: TerrainType) {
-  if (isNil(terrainType)) {
-    return "undefined";
-  }
+function toTerrainStr(terrainType: TerrainType) {
   return capitalizeString(TerrainType[terrainType], "_", false, true);
 }
 
