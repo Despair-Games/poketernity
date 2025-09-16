@@ -6,7 +6,6 @@ import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { TerrainType } from "#enums/terrain-type";
 import { GameManager } from "#test/test-utils/game-manager";
-import { isNil } from "#utils/common-utils";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Move Effect Scores - Defog", () => {
@@ -169,7 +168,7 @@ describe("Move Effect Scores - Defog", () => {
       expect(enemy).toPreferSelectingMove(MoveId.DEFOG);
     });
 
-    if (isNil(testAbility)) {
+    if (testAbility == null) {
       return;
     }
 

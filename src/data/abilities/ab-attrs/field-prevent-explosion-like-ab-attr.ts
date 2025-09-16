@@ -3,7 +3,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import { type BooleanHolder, isNil } from "#utils/common-utils";
+import type { BooleanHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -45,7 +45,7 @@ export class FieldPreventExplosionLikeAbAttr extends AbAttr {
     attacker: Pokemon,
     move: Move,
   ): string | null {
-    if (isNil(move)) {
+    if (move == null) {
       return null;
     }
 
