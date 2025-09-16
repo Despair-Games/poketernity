@@ -6,7 +6,6 @@ import type { MessageUiHandler } from "#ui/message-ui-handler";
 import type { MysteryEncounterUiHandler } from "#ui/mystery-encounter-ui-handler";
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
-import { isNil } from "#utils/common-utils";
 import { vi } from "vitest";
 
 /**
@@ -121,7 +120,7 @@ export async function runSelectMysteryEncounterOption(
       break;
   }
 
-  if (isNil(secondaryOptionSelect?.partySlot)) {
+  if (secondaryOptionSelect?.partySlot == null) {
     uiHandler.processInput(Button.ACTION);
   } else {
     await handleSecondaryOptionSelect(game, secondaryOptionSelect.partySlot, secondaryOptionSelect.optionNumber);
@@ -154,7 +153,7 @@ async function handleSecondaryOptionSelect(game: GameManager, partySlot: number,
   );
 
   // Queue prompt reaction to select the requested option in the Option Select menu
-  if (!isNil(optionNumber)) {
+  if (optionNumber != null) {
     game.onNextPrompt(
       "MysteryEncounterPhase",
       UiMode.OPTION_SELECT,

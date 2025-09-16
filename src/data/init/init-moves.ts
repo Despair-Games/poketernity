@@ -249,7 +249,6 @@ import { WeatherBallTypeAttr } from "#moves/weather-ball-type-attr";
 import { WeatherChangeAttr } from "#moves/weather-change-attr";
 import { WeatherInstantChargeAttr } from "#moves/weather-instant-charge-attr";
 import { WeightPowerAttr } from "#moves/weight-power-attr";
-import { isNil } from "#utils/common-utils";
 import { crashDamageFunc } from "#utils/move-utils";
 import i18next from "i18next";
 
@@ -2645,7 +2644,7 @@ export function initMoves() {
     new AttackMove(MoveId.STOMPING_TANTRUM, ElementalType.GROUND, MoveCategory.PHYSICAL, 75, 100, 10, -1, 0, 7) //
       .attr(MovePowerMultiplierAttr, (user, _target, _move) => {
         const result = user.getLastXMoves(2)[1]?.result;
-        if (isNil(result)) {
+        if (result == null) {
           return 1;
         }
         return ([MoveResult.MISS, MoveResult.FAIL] as MoveResult[]).includes(result) ? 2 : 1;
