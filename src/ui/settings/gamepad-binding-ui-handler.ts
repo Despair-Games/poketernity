@@ -5,7 +5,6 @@ import { UiMode } from "#enums/ui-mode";
 import type { GamepadKeys } from "#types/inputs-types";
 import { BindingUiHandler } from "#ui/binding-ui-handler";
 import { addTextObject } from "#ui/text-utils";
-import { isNil } from "#utils/common-utils";
 import { getIconWithSettingName, getKeyWithKeycode } from "#utils/inputs-utils";
 import i18next from "i18next";
 
@@ -69,17 +68,17 @@ export class GamepadBindingUiHandler extends BindingUiHandler {
     }
 
     const key = getKeyWithKeycode(activeConfig, button.index);
-    if (isNil(key) || activeConfig.keysBlacklist?.includes(key as GamepadKeys)) {
+    if (key == null || activeConfig.keysBlacklist?.includes(key as GamepadKeys)) {
       return;
     }
     const type = activeConfig.padType;
     const buttonIcon = activeConfig.icons[key];
-    if (isNil(buttonIcon)) {
+    if (buttonIcon == null) {
       return;
     }
     this.buttonPressed = button.index;
     const assignedButtonIcon = getIconWithSettingName(activeConfig, this.target);
-    if (isNil(assignedButtonIcon)) {
+    if (assignedButtonIcon == null) {
       return;
     }
     this.onInputDown(buttonIcon, assignedButtonIcon, type);

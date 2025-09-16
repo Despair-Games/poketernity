@@ -30,7 +30,7 @@ import type { PartyUiHandler } from "#ui/party-ui-handler";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";
 import { rgbHexToRgba } from "#utils/color-utils";
-import { enumValueToKey, fixedNumber, getTSEnumValues, isNil } from "#utils/common-utils";
+import { enumValueToKey, fixedNumber, getTSEnumValues } from "#utils/common-utils";
 import { getShinyDescriptor } from "#utils/pokemon-utils";
 import { formatStat, leftPad, toReadableString } from "#utils/string-utils";
 import { argbFromRgba } from "@material/material-color-utilities";
@@ -430,7 +430,7 @@ export class SummaryUiHandler extends UiHandler {
         break;
     }
 
-    const fromSummary = !isNil(pageOrMove);
+    const fromSummary = pageOrMove != null;
 
     let statusTextKey: string | undefined;
     if (this.pokemon.isFainted()) {
@@ -781,7 +781,7 @@ export class SummaryUiHandler extends UiHandler {
         }
 
         if (
-          !isNil(this.pokemon) /*
+          this.pokemon != null /*
           && Object.hasOwn(globalScene.gameData.achvUnlocks, achvs.TERASTALLIZE.id) */
         ) {
           const teraIcon = globalScene.add.sprite(123, 26, "button_tera");

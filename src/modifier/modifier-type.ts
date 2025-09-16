@@ -73,7 +73,7 @@ import type { PokemonMoveSelectFilter, PokemonSelectFilter } from "#types/ui-typ
 import type { EnumValues } from "#types/utility-types";
 import { getModifierTierTextTint } from "#ui/text-utils";
 import { getBerryEffectDescription, getBerryName } from "#utils/berry-utils";
-import { enumValueToKey, getTSEnumKeys, getTSEnumValues, isNil, NumberHolder } from "#utils/common-utils";
+import { enumValueToKey, getTSEnumKeys, getTSEnumValues, NumberHolder } from "#utils/common-utils";
 import { getModifierPoolForType } from "#utils/modifier-pool-utils";
 import { getModifierType } from "#utils/modifier-type-utils";
 import { randSeedInt } from "#utils/random-utils";
@@ -199,7 +199,7 @@ export class ModifierType {
             this.tier = modifier.modifierType.tier;
             return this;
           }
-          if (isNil(defaultTier)) {
+          if (defaultTier == null) {
             // If weight is 0, keep track of the first tier where the item was found
             defaultTier = modifier.modifierType.tier;
           }

@@ -49,7 +49,6 @@ import {
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import { MoveInfoOverlay } from "#ui/move-info-overlay";
 import type { OptionSelectItem } from "#ui/option-select-config";
-import { isNil } from "#utils/common-utils";
 import { randSeedInt, randSeedShuffle } from "#utils/random-utils";
 import i18next from "i18next";
 
@@ -567,7 +566,7 @@ function getTrainerConfigForWave(waveIndex: number) {
       .setPartyMemberFunc(
         4,
         getRandomPartyMemberFunc([pool3Mon.species], TrainerSlot.TRAINER, true, (p) => {
-          if (!isNil(pool3Mon.formIndex)) {
+          if (pool3Mon.formIndex != null) {
             p.formIndex = pool3Mon.formIndex;
             p.generateAndPopulateMoveset();
             p.generateName();
@@ -599,7 +598,7 @@ function getTrainerConfigForWave(waveIndex: number) {
       .setPartyMemberFunc(
         3,
         getRandomPartyMemberFunc([pool3Mon.species], TrainerSlot.TRAINER, true, (p) => {
-          if (!isNil(pool3Mon.formIndex)) {
+          if (pool3Mon.formIndex != null) {
             p.formIndex = pool3Mon.formIndex;
             p.generateAndPopulateMoveset();
             p.generateName();
@@ -609,7 +608,7 @@ function getTrainerConfigForWave(waveIndex: number) {
       .setPartyMemberFunc(
         4,
         getRandomPartyMemberFunc([pool3Mon2.species], TrainerSlot.TRAINER, true, (p) => {
-          if (!isNil(pool3Mon2.formIndex)) {
+          if (pool3Mon2.formIndex != null) {
             p.formIndex = pool3Mon2.formIndex;
             p.generateAndPopulateMoveset();
             p.generateName();
@@ -644,7 +643,7 @@ function getTrainerConfigForWave(waveIndex: number) {
       .setPartyMemberFunc(
         3,
         getRandomPartyMemberFunc([pool3Mon.species], TrainerSlot.TRAINER, true, (p) => {
-          if (!isNil(pool3Mon.formIndex)) {
+          if (pool3Mon.formIndex != null) {
             p.formIndex = pool3Mon.formIndex;
             p.generateAndPopulateMoveset();
             p.generateName();
@@ -683,7 +682,7 @@ function getTrainerConfigForWave(waveIndex: number) {
       .setPartyMemberFunc(
         2,
         getRandomPartyMemberFunc([pool3Mon.species], TrainerSlot.TRAINER, true, (p) => {
-          if (!isNil(pool3Mon.formIndex)) {
+          if (pool3Mon.formIndex != null) {
             p.formIndex = pool3Mon.formIndex;
             p.generateAndPopulateMoveset();
             p.generateName();
@@ -693,7 +692,7 @@ function getTrainerConfigForWave(waveIndex: number) {
       .setPartyMemberFunc(
         3,
         getRandomPartyMemberFunc([pool3Mon2.species], TrainerSlot.TRAINER, true, (p) => {
-          if (!isNil(pool3Mon2.formIndex)) {
+          if (pool3Mon2.formIndex != null) {
             p.formIndex = pool3Mon2.formIndex;
             p.generateAndPopulateMoveset();
             p.generateName();

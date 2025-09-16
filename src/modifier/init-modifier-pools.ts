@@ -23,7 +23,6 @@ import {
 } from "#modifier/modifier-pools";
 import { WeightedModifierType, type WeightedModifierTypeWeightFunc } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
-import { isNil } from "#utils/common-utils";
 
 export function initModifierPools() {
   modifierPool[ModifierTier.COMMON] = [
@@ -312,7 +311,7 @@ export function initModifierPools() {
         return party.some((p) => {
           const moveset = p
             .getMoveset(true)
-            .filter((m) => !isNil(m))
+            .filter((m) => m != null)
             .map((m) => m.moveId);
 
           const canSetStatus = p.canSetStatus(StatusEffect.TOXIC, true, true, null, true);
@@ -354,7 +353,7 @@ export function initModifierPools() {
         return party.some((p) => {
           const moveset = p
             .getMoveset(true)
-            .filter((m) => !isNil(m))
+            .filter((m) => m != null)
             .map((m) => m.moveId);
           const canSetStatus = p.canSetStatus(StatusEffect.BURN, true, true, null, true);
           const isHoldingOrb = p.getHeldItems().some((i) => i.type.id === "FLAME_ORB" || i.type.id === "TOXIC_ORB");

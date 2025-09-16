@@ -27,7 +27,7 @@ import {
   StatusEffectRequirement,
   WaveRangeRequirement,
 } from "#mystery-encounters/mystery-encounter-requirements";
-import { coerceArray, isNil } from "#utils/common-utils";
+import { coerceArray } from "#utils/common-utils";
 import { randSeedInt } from "#utils/random-utils";
 import { capitalizeFirstLetter } from "#utils/string-utils";
 
@@ -279,7 +279,7 @@ export class MysteryEncounter implements IMysteryEncounter {
   private seedOffset?: number;
 
   constructor(encounter: IMysteryEncounter | null) {
-    if (!isNil(encounter)) {
+    if (encounter != null) {
       Object.assign(this, encounter);
     }
     this.encounterTier = this.encounterTier ?? MysteryEncounterTier.COMMON;

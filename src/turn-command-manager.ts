@@ -22,7 +22,7 @@ import { PokemonMove } from "#field/pokemon-move";
 import { BypassSpeedChanceModifier } from "#modifier/modifier";
 import { MoveHeaderAttr } from "#moves/move-header-attr";
 import type { TurnMove } from "#types/move-types";
-import { BooleanHolder, isNil } from "#utils/common-utils";
+import { BooleanHolder } from "#utils/common-utils";
 import { randSeedShuffle } from "#utils/random-utils";
 
 /** Lower number = lower priority */
@@ -452,7 +452,7 @@ export class TurnCommandManager {
     const { pokemon, cursor, targets } = turnCommand;
     const { phaseManager } = globalScene;
 
-    if (isNil(cursor) || isNil(targets)) {
+    if (cursor == null || targets == null) {
       console.error("Error encountered when trying to throw Pokeball!");
       console.error(turnCommand);
       return false;
@@ -476,7 +476,7 @@ export class TurnCommandManager {
   private handlePokemonCommand(turnCommand: TurnCommand): boolean {
     const { pokemon, cursor, args } = turnCommand;
     const { phaseManager } = globalScene;
-    if (isNil(cursor)) {
+    if (cursor == null) {
       console.error("Error encountered when trying to switch Pokemon!");
       console.error(turnCommand);
       return false;

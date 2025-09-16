@@ -16,7 +16,7 @@ import { MessageUiHandler } from "#ui/message-ui-handler";
 import type { RunInfoUiHandler } from "#ui/run-info-ui-handler";
 import { addTextObject } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
-import { enumValueToKey, fixedNumber, isNil } from "#utils/common-utils";
+import { enumValueToKey, fixedNumber } from "#utils/common-utils";
 import { getPokemonLevelText } from "#utils/string-utils";
 import i18next from "i18next";
 
@@ -323,7 +323,7 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
         this.add(enemyContainer);
       } else if (
         (data.battleType === BattleType.TRAINER || data.battleType === BattleType.MYSTERY_ENCOUNTER)
-        && !isNil(data.trainer)
+        && data.trainer != null
       ) {
         // Defeats from Trainers show the trainer's title and name
         const tObj = data.trainer.toTrainer();

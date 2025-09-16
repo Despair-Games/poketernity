@@ -38,7 +38,6 @@ import type { OptionSelectModeConfig } from "#ui/option-select-config";
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
 import type { SummaryUiHandler } from "#ui/summary-ui-handler";
-import { isNil } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedInt } from "#utils/random-utils";
 import { getStatusEffectCatchRateMultiplier } from "#utils/status-effect-utils";
@@ -285,7 +284,7 @@ export function getRandomSpeciesByStarterCost(
 
   if (types && types.length > 0) {
     filteredSpecies = filteredSpecies.filter(
-      (s) => types.includes(s[0].type1) || (!isNil(s[0].type2) && types.includes(s[0].type2)),
+      (s) => types.includes(s[0].type1) || (s[0].type2 != null && types.includes(s[0].type2)),
     );
   }
 

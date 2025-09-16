@@ -3,7 +3,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { type BattleStat, getStatKey } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
-import { type BooleanHolder, isNil } from "#utils/common-utils";
+import type { BooleanHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -21,7 +21,7 @@ export class ProtectStatAbAttr extends PreStatStageChangeAbAttr {
   }
 
   public override apply(_pokemon: Pokemon, _simulated: boolean, stat: BattleStat, cancelled: BooleanHolder): boolean {
-    if (isNil(this.protectedStat) || stat === this.protectedStat) {
+    if (this.protectedStat == null || stat === this.protectedStat) {
       cancelled.value = true;
       return true;
     }

@@ -44,7 +44,7 @@ import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encount
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import { PokemonData } from "#system/pokemon-data";
 import type { OptionSelectItem } from "#ui/option-select-config";
-import { isNil, NumberHolder } from "#utils/common-utils";
+import { NumberHolder } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randInt, randItem, randSeedInt, randSeedItem, randSeedShuffle } from "#utils/random-utils";
 import i18next from "i18next";
@@ -430,7 +430,7 @@ function generateTradeOption(alreadyUsedSpecies: PokemonSpecies[], originalBst?:
     bstCap = originalBst + 100;
     bstMin = originalBst - 100;
   }
-  while (isNil(newSpecies)) {
+  while (newSpecies == null) {
     // Get all non-legendary species that fall within the Bst range requirements
     let validSpecies = allSpecies.filter((s) => {
       const isLegendLike = s.isLegendLike();
@@ -443,7 +443,7 @@ function generateTradeOption(alreadyUsedSpecies: PokemonSpecies[], originalBst?:
     if (validSpecies?.length > 20) {
       validSpecies = randSeedShuffle(validSpecies);
       newSpecies = validSpecies.pop();
-      while (isNil(newSpecies) || alreadyUsedSpecies.includes(newSpecies)) {
+      while (newSpecies == null || alreadyUsedSpecies.includes(newSpecies)) {
         newSpecies = validSpecies.pop();
       }
     } else {

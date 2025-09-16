@@ -6,7 +6,6 @@ import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { getEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import type { OptionPhaseCallback } from "#mystery-encounters/mystery-encounter-option";
-import { isNil } from "#utils/common-utils";
 /**
  * Will handle (in order):
  * - {@linkcode MysteryEncounterOption.onPostOptionPhase} logic (based on an option that was selected)
@@ -33,7 +32,7 @@ export class PostMysteryEncounterPhase extends Phase {
       globalScene.executeWithSeedOffset(
         async () => {
           return await this.onPostOptionSelect!().then((result) => {
-            if (isNil(result) || result) {
+            if (result == null || result) {
               this.continueEncounter();
             }
           });
