@@ -73,7 +73,7 @@ export class WeatherEffectPhase extends FieldPhase {
 
     this.executeForAll((pokemon: Pokemon) => {
       if (!pokemon.switchOutStatus) {
-        applyAbAttrs<PostWeatherLapseAbAttr>(AbAttrFlag.POST_WEATHER_LAPSE, pokemon, false, weather);
+        applyAbAttrs<PostWeatherLapseAbAttr>(AbAttrFlag.POST_WEATHER_LAPSE, pokemon, false);
       }
     });
   }

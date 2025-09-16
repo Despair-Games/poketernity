@@ -37,7 +37,7 @@ describe("Abilities - Sand Spit", () => {
     game.move.select(MoveId.TACKLE);
     await game.toNextTurn();
 
-    expect(game.scene.arena.weather?.weatherType).toBe(WeatherType.SANDSTORM);
+    expect(game).toHaveWeather(WeatherType.SANDSTORM);
   });
 
   it("should trigger when KO'd", async () => {
@@ -47,7 +47,7 @@ describe("Abilities - Sand Spit", () => {
     game.move.select(MoveId.WATERFALL);
     await game.phaseInterceptor.to("FaintPhase");
 
-    expect(game.scene.arena.weather?.weatherType).toBe(WeatherType.SANDSTORM);
+    expect(game).toHaveWeather(WeatherType.SANDSTORM);
   });
 
   it("should not trigger when targetted with status moves", async () => {
@@ -55,6 +55,6 @@ describe("Abilities - Sand Spit", () => {
     game.move.select(MoveId.GROWL);
     await game.toNextTurn();
 
-    expect(game.scene.arena.weather).toBeUndefined();
+    expect(game).toHaveWeather(WeatherType.NONE);
   });
 });

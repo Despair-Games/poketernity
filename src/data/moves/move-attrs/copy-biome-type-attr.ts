@@ -20,10 +20,10 @@ export class CopyBiomeTypeAttr extends MoveEffectAttr {
   }
 
   override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
-    const terrainType = globalScene.arena.getTerrainType();
+    const terrainType = globalScene.arena.terrainType;
     let typeChange: ElementalType;
     if (terrainType !== TerrainType.NONE) {
-      typeChange = this.getTypeForTerrain(globalScene.arena.getTerrainType());
+      typeChange = this.getTypeForTerrain(globalScene.arena.terrainType);
     } else {
       typeChange = this.getTypeForBiome(globalScene.arena.biomeId);
     }

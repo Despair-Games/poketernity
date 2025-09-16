@@ -2125,8 +2125,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     // Handle strong winds lowering effectiveness of types super effective against pure flying
     if (
       !ignoreFieldConditions
-      && arena.weather?.weatherType === WeatherType.STRONG_WINDS
-      && !arena.weather.isEffectSuppressed()
+      && arena.weatherType === WeatherType.STRONG_WINDS
+      && !arena.weather?.isEffectSuppressed()
       && this.isOfType(ElementalType.FLYING)
       && typeMultiplierAgainstFlying.value === 2
     ) {
@@ -4119,9 +4119,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       case StatusEffect.FREEZE:
         if (
           this.isOfType(ElementalType.ICE)
-          || (!ignoreField
-            && globalScene?.arena?.weather?.weatherType
-            && [WeatherType.SUNNY, WeatherType.HARSH_SUN].includes(globalScene.arena.weather.weatherType))
+          || (!ignoreField && globalScene.arena.hasWeather([WeatherType.SUNNY, WeatherType.HARSH_SUN]))
         ) {
           return false;
         }

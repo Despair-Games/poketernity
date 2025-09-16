@@ -9,7 +9,7 @@ import type { Pokemon } from "#field/pokemon";
  */
 export class PreSwitchOutClearWeatherAbAttr extends PreSwitchOutAbAttr {
   public override apply(pokemon: Pokemon, simulated: boolean): boolean {
-    const weatherType = globalScene.arena.weather?.weatherType;
+    const weatherType = globalScene.arena.weatherType;
     let turnOffWeather = false;
     let weatherAbility: AbilityId | null = null;
 
