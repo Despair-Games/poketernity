@@ -5,7 +5,6 @@ import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { AddArenaTagAttr } from "#moves/move-attrs/add-arena-tag-attr";
-import { isNil } from "#utils/common-utils";
 
 /**
  * Attribute for moves that set a "screen" with a defensive effect on
@@ -27,7 +26,7 @@ export class ScreenAttr extends AddArenaTagAttr {
    */
   public override getEffectScore(user: EnemyPokemon, _target: Pokemon, _move: Move): number {
     const baseScore = this.getBaseEffectScore();
-    if (isNil(baseScore)) {
+    if (baseScore == null) {
       console.warn(`${this.constructor.name}.getEffectScore: ${ArenaTagType[this.tagType]} tag is not scorable!`);
       return 0;
     }
