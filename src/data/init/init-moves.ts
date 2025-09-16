@@ -2969,7 +2969,7 @@ export function initMoves() {
     new AttackMove(MoveId.TERRAIN_PULSE, ElementalType.NORMAL, MoveCategory.SPECIAL, 50, 100, 10, -1, 0, 8) //
       .attr(TerrainPulseTypeAttr)
       .attr(MovePowerMultiplierAttr, (user, _target, _move) =>
-        globalScene.arena.getTerrainType() !== TerrainType.NONE && user.isGrounded() ? 2 : 1,
+        globalScene.arena.terrainType !== TerrainType.NONE && user.isGrounded() ? 2 : 1,
       )
       .pulseMove(),
     new AttackMove(MoveId.SKITTER_SMACK, ElementalType.BUG, MoveCategory.PHYSICAL, 70, 90, 10, 100, 0, 8) //
@@ -3319,7 +3319,7 @@ export function initMoves() {
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new AttackMove(MoveId.PSYBLADE, ElementalType.PSYCHIC, MoveCategory.PHYSICAL, 80, 100, 15, -1, 0, 9) //
       .attr(MovePowerMultiplierAttr, (user, _target, _move) =>
-        globalScene.arena.getTerrainType() === TerrainType.ELECTRIC && user.isGrounded() ? 1.5 : 1,
+        globalScene.arena.terrainType === TerrainType.ELECTRIC && user.isGrounded() ? 1.5 : 1,
       )
       .slicingMove(),
     new AttackMove(MoveId.HYDRO_STEAM, ElementalType.WATER, MoveCategory.SPECIAL, 80, 100, 15, -1, 0, 9) //

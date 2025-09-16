@@ -23,7 +23,7 @@ export class TerrainEventTypeChangeAbAttr extends PostSummonAbAttr {
       return false;
     }
 
-    const currentTerrain = globalScene.arena.getTerrainType();
+    const currentTerrain = globalScene.arena.terrainType;
 
     // If there is no terrain, only apply ability if the terrain changed to become empty (i.e., `onSummon` is false)
     if (onSummon && currentTerrain === TerrainType.NONE) {
@@ -68,7 +68,7 @@ export class TerrainEventTypeChangeAbAttr extends PostSummonAbAttr {
   }
 
   public override getTriggerMessage(pokemon: Pokemon, _abilityName: string) {
-    const currentTerrain = globalScene.arena.getTerrainType();
+    const currentTerrain = globalScene.arena.terrainType;
     const pokemonNameWithAffix = getPokemonNameWithAffix(pokemon);
     if (currentTerrain === TerrainType.NONE) {
       return i18next.t("abilityTriggers:pokemonTypeChangeRevert", { pokemonNameWithAffix });

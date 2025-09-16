@@ -26,7 +26,7 @@ export class SecretPowerAttr extends ChanceBasedMoveEffectAttr {
   }
 
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
-    const terrain = globalScene.arena.getTerrainType();
+    const terrain = globalScene.arena.terrainType;
     const biome = globalScene.arena.biomeId;
     const secondaryEffect = this.determineTerrainEffect(terrain) ?? this.determineBiomeEffect(biome);
     return secondaryEffect.applyEffect(user, target, move);

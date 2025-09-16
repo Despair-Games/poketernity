@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { WeatherType } from "#enums/weather-type";
+import type { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
 import { HealAttr } from "#moves/heal-attr";
 import type { Move } from "#moves/move";
@@ -16,7 +16,7 @@ export abstract class WeatherHealAttr extends HealAttr {
 
   protected override getHealRatio(_user: Pokemon, _target: Pokemon, _move: Move): number {
     if (!globalScene.arena.weather?.isEffectSuppressed()) {
-      const weatherType = globalScene.arena.weather?.weatherType || WeatherType.NONE;
+      const weatherType = globalScene.arena.weatherType;
       return this.getWeatherHealRatio(weatherType);
     }
     return 0.5;
