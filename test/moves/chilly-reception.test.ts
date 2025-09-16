@@ -36,7 +36,7 @@ describe("Moves - Chilly Reception", () => {
     game.move.use(MoveId.CHILLY_RECEPTION);
 
     await game.toEndOfTurn();
-    expect(game.scene.arena.weather?.weatherType).toBe(WeatherType.SNOW);
+    expect(game).toHaveWeather(WeatherType.SNOW);
   });
 
   it("should switch out even if it's snowing", async () => {

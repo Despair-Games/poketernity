@@ -65,6 +65,14 @@ export class Arena {
     this.updatePoolsForTimeOfDay();
   }
 
+  public get terrainType(): TerrainType {
+    return this.terrain?.terrainType ?? TerrainType.NONE;
+  }
+
+  public get weatherType(): WeatherType {
+    return this.weather?.weatherType ?? WeatherType.NONE;
+  }
+
   init() {
     const biomeKey = getBiomeKey(this.biomeId);
 
@@ -95,8 +103,7 @@ export class Arena {
    * @returns `true` if the arena is of the specified terrain, `false` otherwise
    */
   public hasTerrain(terrain: TerrainType | TerrainType[]): boolean {
-    const terrainType = this.getTerrainType();
-    return coerceArray(terrain).includes(terrainType);
+    return coerceArray(terrain).includes(this.terrainType);
   }
 
   /**
@@ -107,8 +114,7 @@ export class Arena {
    * @returns `true` if the arena is of the specified weather, `false` otherwise
    */
   public hasWeather(weather: WeatherType | WeatherType[]): boolean {
-    const weatherType = this.weather?.weatherType ?? WeatherType.NONE;
-    return coerceArray(weather).includes(weatherType);
+    return coerceArray(weather).includes(this.weatherType);
   }
 
   /**
@@ -439,7 +445,7 @@ export class Arena {
       return false;
     }
 
-    const oldWeatherType = this.weather?.weatherType || WeatherType.NONE;
+    const oldWeatherType = this.weatherType;
 
     let newWeatherDuration = DEFAULT_NEW_WEATHER_DURATION;
 
@@ -518,18 +524,17 @@ export class Arena {
    * @returns whether or not the terrain was successfully set
    */
   trySetTerrain(terrain: TerrainType, hasPokemonSource: boolean, ignoreAnim: boolean = false): boolean {
-    /**
-     * TODO: Refactor into if(this.tryOverrideTerrain()) { return true }
-     */
+    // TODO: Refactor into `if(this.tryOverrideTerrain()) { return true }`
     if (activeOverrides.TERRAIN_OVERRIDE) {
       return this.tryOverrideTerrain(activeOverrides.TERRAIN_OVERRIDE);
     }
 
+    // TODO: create `Arena#canSetTerrain` method
     if (this.terrain?.terrainType === (terrain || undefined)) {
       return false;
     }
 
-    const oldTerrainType = this.terrain?.terrainType || TerrainType.NONE;
+    const oldTerrainType = this.terrainType;
 
     let newTerrainDuration = DEFAULT_NEW_TERRAIN_DURATION;
 
@@ -588,10 +593,6 @@ export class Arena {
    */
   public isMoveTerrainCancelled(user: Pokemon, targets: BattlerIndex[], move: Move): boolean {
     return !!this.terrain?.isMoveTerrainCancelled(user, targets, move);
-  }
-
-  public getTerrainType(): TerrainType {
-    return this.terrain?.terrainType ?? TerrainType.NONE;
   }
 
   /**

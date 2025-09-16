@@ -615,7 +615,7 @@ export class MovePhase extends BattlePhase {
       let failureMessage = move.getFailedText(this.pokemon, targets[0], move, new BooleanHolder(false));
 
       if (failedDueToWeather) {
-        if (globalScene.arena.weather?.weatherType === WeatherType.HARSH_SUN) {
+        if (globalScene.arena.hasWeather(WeatherType.HARSH_SUN)) {
           failureMessage = i18next.t("weather:harshSunStopAttackMessage");
         } else {
           failureMessage = i18next.t("weather:heavyRainStopAttackMessage");
@@ -625,7 +625,7 @@ export class MovePhase extends BattlePhase {
       if (failureMessage) {
         failedText = failureMessage;
       } else if (failedDueToTerrain) {
-        failedText = getTerrainBlockMessage(targets[0], globalScene.arena.getTerrainType());
+        failedText = getTerrainBlockMessage(targets[0], globalScene.arena.terrainType);
       }
 
       this.showFailedText(failedText);

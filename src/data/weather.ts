@@ -11,7 +11,7 @@ import i18next from "i18next";
 
 /** Class representing Weather effects */
 export class Weather {
-  public weatherType: WeatherType;
+  public readonly weatherType: WeatherType;
   public turnsLeft: number;
 
   /**
