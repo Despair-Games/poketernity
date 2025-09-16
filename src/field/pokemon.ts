@@ -1,6 +1,7 @@
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { Battle } from "#app/battle";
 import type { BattleScene } from "#app/battle-scene";
+import type { ArenaTag } from "#arena-tags/arena-tag";
 import type { FaintPhase } from "#phases/faint-phase";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
@@ -2424,16 +2425,18 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   /**
    * Computes this Pokemon's matchup score (MUS) against the given opponent.
-   * This MUS is a reflection of
+   * MUS is a reflection of
    * 1. How effective this Pokemon's attacks are against the opponent, and
    * 2. How many turns this Pokemon will have to act, assuming the opponent
    * attacks with their perceived best attack every turn.
    *
    * If this Pokemon is on the field and can safely KO the opponent, its MUS
-   * against that opponent will be `Infinity`. Otherwise, MUS falls in the
-   * interval [0, 8]
-   * @param opponent The {@linkcode Pokemon} to score this Pokemon against
-   * @returns the calculated score for the matchup.
+   * against that opponent will be `Infinity`. Otherwise, MUS generally falls
+   * in the interval [0, 8]. Ongoing effects on this Pokemon or on the field
+   * may also modify this score.
+   * @param opponent - The {@linkcode Pokemon} to score this Pokemon against
+   * @returns The decimal score for the matchup.
+   * @see {@linkcode applyMatchupScoreModifiers}
    */
   public getMatchupScore(opponent: Pokemon): number {
     const cachedScore = this.turnData.scoreData.get(opponent.id)?.matchupScore;
@@ -2449,21 +2452,48 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const eas = Math.max(...attackMoves.map((mv) => this.getExpectedAttackScore(opponent, mv)));
     const oppEas = Math.max(...oppAttackMoves.map((mv) => opponent.getExpectedAttackScore(this, mv)));
 
-    let score: number = 0;
+    const score = new ValueHolder(0);
     if (this.isActive(true)) {
       if (eas >= 4 && (canOutspeed || oppEas < eas)) {
-        score = Number.POSITIVE_INFINITY;
+        score.value = Number.POSITIVE_INFINITY;
       } else if (oppEas >= 4 && (!canOutspeed || eas < oppEas)) {
-        score = 0;
+        score.value = 0;
       } else {
-        score = eas * (3 - oppEas + (canOutspeed ? 1 : 0));
+        score.value = eas * (3 - oppEas + (canOutspeed ? 1 : 0));
       }
     } else {
-      score = Math.max(eas * (2 - oppEas + (canOutspeed ? 1 : 0)), 0);
+      score.value = Math.max(eas * (2 - oppEas + (canOutspeed ? 1 : 0)), 0);
     }
 
-    this.cacheMatchupScore(opponent, score);
-    return score;
+    if (score.value !== Number.POSITIVE_INFINITY) {
+      this.applyMatchupScoreModifiers(opponent, score);
+    }
+
+    this.cacheMatchupScore(opponent, score.value);
+    return score.value;
+  }
+
+  /**
+   * Applies modifiers from {@linkcode BattlerTag | BattlerTags}, {@linkcode ArenaTag | ArenaTags},
+   * and other ongoing effects onto the given Matchup Score (MUS).
+   * @param opponent - The opposing {@linkcode Pokemon} the MUS is calculated against
+   * @param matchupScore - A {@linkcode ValueHolder} containing the running MUS
+   * @see {@linkcode getMatchupScore}
+   */
+  private applyMatchupScoreModifiers(opponent: Pokemon, matchupScore: ValueHolder<number>): void {
+    for (const tag of globalScene.arena.getTags(() => true, this.getArenaTagSide())) {
+      // If `modifyMatchupScore` returns `true`, it has overridden the running MUS with a fixed value.
+      // This usually happens when a tag sets MUS to -Infinity or Infinity to force or prevent switching.
+      if (tag.modifyMatchupScore(this, matchupScore)) {
+        return;
+      }
+    }
+
+    for (const tag of this.summonData.tags) {
+      if (tag.modifyMatchupScore(this, opponent, matchupScore)) {
+        return;
+      }
+    }
   }
 
   /**

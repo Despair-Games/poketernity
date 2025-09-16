@@ -4,6 +4,7 @@ import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
+import type { ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /** Base class for any special effects that apply to the {@linkcode Arena | field} during battle. */
@@ -141,5 +142,16 @@ export abstract class ArenaTag {
       default:
         return globalScene.getField(true) ?? [];
     }
+  }
+
+  /**
+   * Modifies a running {@link Pokemon.getMatchupScore | Matchup Score} for the given Pokemon
+   * @param pokemon - The {@linkcode Pokemon} being scored. This can be assumed to
+   * be on a side of the field affected by this tag.
+   * @param matchupScore - The running MUS for the evaluation
+   * @returns `true` if this tag's modification is meant to override modifications from other tags (Default `false`)
+   */
+  public modifyMatchupScore(_pokemon: Pokemon, _matchupScore: ValueHolder<number>): boolean {
+    return false;
   }
 }
