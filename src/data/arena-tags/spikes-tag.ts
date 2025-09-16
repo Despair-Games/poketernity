@@ -9,7 +9,7 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import { HitResult } from "#enums/hit-result";
 import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
-import { BooleanHolder, toDmgValue } from "#utils/common-utils";
+import { BooleanHolder, toDmgValue, type ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -59,6 +59,20 @@ export class SpikesTag extends EntryHazardTag {
       }
     }
 
+    return false;
+  }
+
+  /**
+   * Reduces MUS by 0.5 per layer if the Pokemon is inactive, grounded, and does not have Magic Guard
+   */
+  public override modifyMatchupScore(pokemon: Pokemon, matchupScore: ValueHolder<number>): boolean {
+    if (
+      !pokemon.isActive(true)
+      && pokemon.isGrounded()
+      && !pokemon.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)
+    ) {
+      matchupScore.value -= 0.5 * this.layers;
+    }
     return false;
   }
 }

@@ -2,13 +2,14 @@ import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { ProtectStatAbAttr } from "#abilities/protect-stat-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { EntryHazardTag } from "#arena-tags/entry-hazard-tag";
+import { ALLY_EFFECTIVE_STAT_OPTIONS, OPP_EFFECTIVE_STAT_OPTIONS } from "#constants/ai-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveId } from "#enums/move-id";
 import { Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
-import { BooleanHolder, NumberHolder } from "#utils/common-utils";
+import { BooleanHolder, isBetween, NumberHolder, type ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -65,6 +66,32 @@ export class StickyWebTag extends EntryHazardTag {
       }
     }
 
+    return false;
+  }
+
+  /**
+   * Reduces MUS by 1.5 if the Pokemon would be slower than any of its opponents as a result of
+   * this effect's Speed drop.
+   */
+  public override modifyMatchupScore(pokemon: Pokemon, matchupScore: ValueHolder<number>): boolean {
+    if (
+      pokemon.isActive(true)
+      || [AbAttrFlag.REFLECT_STAT_STAGE_CHANGE, AbAttrFlag.PROTECT_STAT].some((attrFlag) =>
+        pokemon.hasAbilityWithAttr(attrFlag),
+      )
+    ) {
+      return false;
+    }
+
+    const preSpeed = pokemon.getEffectiveStat(Stat.SPD, ALLY_EFFECTIVE_STAT_OPTIONS);
+    const postSpeed = Math.floor((preSpeed * 2) / 3);
+    const losesSpeedMatchup = pokemon
+      .getOpponents()
+      .some((opp) => isBetween(opp.getEffectiveStat(Stat.SPD, OPP_EFFECTIVE_STAT_OPTIONS), preSpeed, postSpeed));
+
+    if (losesSpeedMatchup) {
+      matchupScore.value -= 1.5;
+    }
     return false;
   }
 }

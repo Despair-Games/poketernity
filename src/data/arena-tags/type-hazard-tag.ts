@@ -10,7 +10,7 @@ import type { ElementalType } from "#enums/elemental-type";
 import { HitResult } from "#enums/hit-result";
 import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
-import { BooleanHolder, toDmgValue } from "#utils/common-utils";
+import { BooleanHolder, toDmgValue, type ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -87,8 +87,15 @@ export abstract class TypeHazardTag extends EntryHazardTag {
     return false;
   }
 
-  override getMatchupScoreMultiplier(pokemon: Pokemon): number {
-    const damageHpRatio = this.getDamageHpRatio(pokemon);
-    return Phaser.Math.Linear(super.getMatchupScoreMultiplier(pokemon), 1, 1 - Math.pow(damageHpRatio, damageHpRatio));
+  /**
+   * Reduces MUS by 0.5 times the effectiveness of this hazard's attacking type against the Pokemon
+   * (unless the Pokemon has Magic Guard).
+   */
+  public override modifyMatchupScore(pokemon: Pokemon, matchupScore: ValueHolder<number>): boolean {
+    if (!pokemon.isActive(true) && !pokemon.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)) {
+      matchupScore.value -= 0.5 * pokemon.getAttackTypeEffectiveness(this.damagingType, undefined, true, true);
+    }
+
+    return false;
   }
 }

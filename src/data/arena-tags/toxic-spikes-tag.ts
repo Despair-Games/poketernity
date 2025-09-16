@@ -1,12 +1,14 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { EntryHazardTag } from "#arena-tags/entry-hazard-tag";
+import { POISON_SYNERGY_ABILITIES } from "#constants/ability-constants";
 import type { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#field/pokemon";
+import type { ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -76,13 +78,24 @@ export class ToxicSpikesTag extends EntryHazardTag {
     return false;
   }
 
-  override getMatchupScoreMultiplier(pokemon: Pokemon): number {
-    if (pokemon.isGrounded() || !pokemon.canSetStatus(StatusEffect.POISON, true)) {
-      return 1;
+  /**
+   * Modifies MUS as follows:
+   * - If the Pokemon is on the field or is not grounded, this has no effect.
+   * - Otherwise, if the Pokemon is Poison-type, this increases MUS by 1 per layer.
+   * - Otherwise, if the Pokemon doesn't have a non-volatile status effect or an ability
+   * that benefits from being Poisoned, this reduces MUS by 0.5 per layer.
+   */
+  public override modifyMatchupScore(pokemon: Pokemon, matchupScore: ValueHolder<number>): boolean {
+    if (!pokemon.isActive(true) && pokemon.isGrounded()) {
+      if (pokemon.isOfType(ElementalType.POISON, true, true)) {
+        matchupScore.value += this.layers;
+      } else if (
+        !pokemon.hasNonVolatileStatusEffect()
+        && !POISON_SYNERGY_ABILITIES.some((abId) => pokemon.hasAbility(abId))
+      ) {
+        matchupScore.value -= 0.5 * this.layers;
+      }
     }
-    if (pokemon.isOfType(ElementalType.POISON)) {
-      return 1.25;
-    }
-    return super.getMatchupScoreMultiplier(pokemon);
+    return false;
   }
 }
