@@ -57,7 +57,7 @@ import type { OptionSelectItem, OptionSelectModeConfig } from "#ui/option-select
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
 import type { UiHandler } from "#ui/ui-handler";
-import { coerceArray, enumValueToKey, isNil } from "#utils/common-utils";
+import { coerceArray, enumValueToKey } from "#utils/common-utils";
 import { loadMoveAnimAssets } from "#utils/move-anim-utils";
 import { randomString, randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
@@ -151,7 +151,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
   const trainerType = partyConfig?.trainerType;
   const partyTrainerConfig = partyConfig?.trainerConfig;
   let trainerConfig: TrainerConfig;
-  if (!isNil(trainerType) || partyTrainerConfig) {
+  if (trainerType != null || partyTrainerConfig) {
     globalScene.currentBattle.mysteryEncounter!.encounterMode = MysteryEncounterMode.TRAINER_BATTLE;
     if (globalScene.currentBattle.trainer) {
       globalScene.currentBattle.trainer.setVisible(false);
@@ -162,7 +162,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
 
     const doubleTrainer = trainerConfig.doubleOnly || (trainerConfig.hasDouble && !!partyConfig.doubleBattle);
     doubleBattle = doubleTrainer;
-    const trainerFemale = isNil(partyConfig.female) ? !randSeedInt(2) : partyConfig.female;
+    const trainerFemale = partyConfig.female == null ? !randSeedInt(2) : partyConfig.female;
     let trainerVariant: TrainerVariant = TrainerVariant.DEFAULT;
     if (doubleTrainer) {
       trainerVariant = TrainerVariant.DOUBLE;
@@ -208,7 +208,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
   // This can be amplified or counteracted by setting levelAdditiveModifier in config
   // levelAdditiveModifier value of 0.5 will halve the modifier scaling, 2 will double it, etc.
   // Leaving null/undefined will disable level scaling
-  const mult: number = isNil(partyConfig.levelAdditiveModifier) ? 0 : partyConfig.levelAdditiveModifier;
+  const mult: number = partyConfig.levelAdditiveModifier == null ? 0 : partyConfig.levelAdditiveModifier;
   const additive = Math.max(Math.round((globalScene.currentBattle.waveIndex / 10) * mult), 0);
   battle.enemyLevels = battle.enemyLevels.map((level) => level + additive);
 
@@ -217,7 +217,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
     let dataSource: PokemonData | undefined;
     let isBoss = false;
     if (!loaded) {
-      if ((!isNil(trainerType) || trainerConfig) && battle.trainer) {
+      if ((trainerType != null || trainerConfig) && battle.trainer) {
         // Allows overriding a trainer's pokemon to use specific species/data
         if (partyConfig?.pokemonConfigs && e < partyConfig.pokemonConfigs.length) {
           const config = partyConfig.pokemonConfigs[e];
@@ -273,7 +273,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
       enemyPokemon.resetSummonData();
     }
 
-    if ((!loaded && isNil(partyConfig.countAsSeen)) || partyConfig.countAsSeen) {
+    if ((!loaded && partyConfig.countAsSeen == null) || partyConfig.countAsSeen) {
       globalScene.gameData.setPokemonSeen(enemyPokemon, true, !!(trainerType || trainerConfig));
     }
 
@@ -281,7 +281,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
       const config = partyConfig.pokemonConfigs[e];
 
       // Set form
-      if (!isNil(config.nickname)) {
+      if (config.nickname != null) {
         enemyPokemon.nickname = btoa(unescape(encodeURIComponent(config.nickname)));
       }
 
@@ -294,31 +294,32 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
       // }
 
       // Set form
-      if (!isNil(config.formIndex)) {
+      if (config.formIndex != null) {
         enemyPokemon.formIndex = config.formIndex;
       }
 
       // Set shiny
-      if (!isNil(config.shiny)) {
+      if (config.shiny != null) {
         enemyPokemon.shiny = config.shiny;
       }
 
       // Set Variant
-      if (enemyPokemon.shiny && !isNil(config.variant)) {
+      if (enemyPokemon.shiny && config.variant != null) {
         enemyPokemon.variant = config.variant;
       }
 
       // Set custom mystery encounter data fields (such as sprite scale, custom abilities, types, etc.)
-      if (!isNil(config.customPokemonData)) {
+      if (config.customPokemonData != null) {
         enemyPokemon.resetCustomPokemonData(config.customPokemonData);
       }
 
       // Set Boss
       if (config.isBoss) {
-        let segments = isNil(config.bossSegments)
-          ? globalScene.getEncounterBossSegments(globalScene.currentBattle.waveIndex, level, enemySpecies, true)
-          : config.bossSegments!;
-        if (!isNil(config.bossSegmentModifier)) {
+        let segments =
+          config.bossSegments == null
+            ? globalScene.getEncounterBossSegments(globalScene.currentBattle.waveIndex, level, enemySpecies, true)
+            : config.bossSegments!;
+        if (config.bossSegmentModifier != null) {
           segments += config.bossSegmentModifier;
         }
         enemyPokemon.setBoss(true, segments);
@@ -358,18 +359,18 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
       enemyPokemon.resetSummonData();
 
       // Set ability
-      if (!isNil(config.abilityIndex)) {
+      if (config.abilityIndex != null) {
         enemyPokemon.abilityIndex = config.abilityIndex;
       }
 
       // Set gender
-      if (!isNil(config.gender)) {
+      if (config.gender != null) {
         enemyPokemon.gender = config.gender!;
         enemyPokemon.summonData.gender = config.gender;
       }
 
       // Set AI type
-      if (!isNil(config.aiType)) {
+      if (config.aiType != null) {
         enemyPokemon.aiType = config.aiType;
       }
 
@@ -385,7 +386,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
         tags.forEach((tag) => enemyPokemon.addTag(tag));
       }
 
-      if (!isNil(config.teraType) && config.teraType !== ElementalType.UNKNOWN) {
+      if (config.teraType != null && config.teraType !== ElementalType.UNKNOWN) {
         enemyPokemon.teraType = config.teraType;
         if (battle.trainer) {
           battle.trainer.config.setInstantTera(e);
@@ -978,7 +979,7 @@ export function handleMysteryEncounterBattleStartEffects() {
       let source: Pokemon;
       if (effect.sourcePokemon) {
         source = effect.sourcePokemon;
-      } else if (isNil(effect.sourceBattlerIndex)) {
+      } else if (effect.sourceBattlerIndex == null) {
         source = globalScene.getEnemyField()[0];
       } else {
         source = globalScene.getPokemonByBattlerIndex(effect.sourceBattlerIndex) ?? globalScene.getEnemyField()[0];

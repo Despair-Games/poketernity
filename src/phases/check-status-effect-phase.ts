@@ -2,7 +2,6 @@ import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
-import { isNil } from "#utils/common-utils";
 
 /**
  * Queues a {@linkcode PostTurnStatusEffectPhase} for every active pokemon that needs one
@@ -19,7 +18,7 @@ export class CheckStatusEffectPhase extends Phase {
       .sort((a, b) => b.getEffectiveStat(Stat.SPD) - a.getEffectiveStat(Stat.SPD));
 
     pokemon.forEach((p) => {
-      if (!isNil(p) && p.hasStatusEffect([StatusEffect.BURN, StatusEffect.POISON, StatusEffect.TOXIC], false, true)) {
+      if (p != null && p.hasStatusEffect([StatusEffect.BURN, StatusEffect.POISON, StatusEffect.TOXIC], false, true)) {
         globalScene.phaseManager.createAndUnshiftPhase("PostTurnStatusEffectPhase", p.getBattlerIndex());
       }
     });

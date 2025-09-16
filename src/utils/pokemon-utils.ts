@@ -11,7 +11,6 @@ import { SpeciesId } from "#enums/species-id";
 import type { Pokemon } from "#field/pokemon";
 import type { PokemonSummonData, SerializedPokemonSummonData } from "#types/pokemon-types";
 import type { CoerceNullPropertiesToUndefined } from "#types/utility-types";
-import { isNil } from "#utils/common-utils";
 import { randSeedIntRange, randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
@@ -58,7 +57,7 @@ export function getSpecialSpeciesList(group: SpeciesGroups, includeLegends?: boo
         return s.speciesId;
       }
     })
-    .filter((s) => !isNil(s));
+    .filter((s) => s != null);
 
   if (includeLegends && group === SpeciesGroups.ULTRA_BEAST) {
     speciesList.push(SpeciesId.COSMOG, SpeciesId.COSMOEM, SpeciesId.LUNALA, SpeciesId.SOLGALEO, SpeciesId.NECROZMA);
@@ -118,9 +117,8 @@ export function summonDataToJSON(this: PokemonSummonData): SerializedPokemonSumm
     // the "as omit" is required to avoid TS resolving the overwritten properties to `never`
     // We coerce `null` to `undefined` in the type, as the for loop below replaces `null` with `undefined`
     ...(this as Omit<CoerceNullPropertiesToUndefined<PokemonSummonData>, "speciesForm">),
-    speciesForm: isNil(speciesForm)
-      ? undefined
-      : { speciesId: speciesForm.speciesId, formIndex: speciesForm.formIndex },
+    speciesForm:
+      speciesForm == null ? undefined : { speciesId: speciesForm.speciesId, formIndex: speciesForm.formIndex },
   };
   // Replace `null` with `undefined`, as `undefined` never gets serialized
   for (const [key, value] of Object.entries(t)) {
