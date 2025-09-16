@@ -15,7 +15,7 @@ import { Stat } from "#enums/stat";
 import { TerrainType } from "#enums/terrain-type";
 import type { Pokemon } from "#field/pokemon";
 import type { MovePhase } from "#phases/move-phase";
-import { isNil, NumberHolder, toDmgValue } from "#utils/common-utils";
+import { NumberHolder, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -70,7 +70,7 @@ export class ConfusedTag extends BattlerTag {
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     const ret =
       (lapseType !== BattlerTagLapseType.CUSTOM && super.lapse(pokemon, lapseType))
-      || !isNil(activeOverrides.STATUS_ACTIVATION_OVERRIDE);
+      || activeOverrides.STATUS_ACTIVATION_OVERRIDE != null;
 
     if (ret) {
       const pokemonNameWithAffix = getPokemonNameWithAffix(pokemon);

@@ -44,7 +44,7 @@ import type { SummaryUiHandler } from "#ui/summary-ui-handler";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
 import { applyChallenges } from "#utils/challenge-utils";
-import { BooleanHolder, isNil } from "#utils/common-utils";
+import { BooleanHolder } from "#utils/common-utils";
 import { FilterAllMoves } from "#utils/move-utils";
 import { PartyFilterAll } from "#utils/party-ui-utils";
 import { toReadableString } from "#utils/string-utils";
@@ -223,7 +223,7 @@ export class PartyUiHandler extends MessageUiHandler {
     tmMoveId: MoveId = MoveId.NONE,
     showMovePP: boolean = false,
   ): boolean {
-    if (this.active || isNil(mode)) {
+    if (this.active || mode == null) {
       return false;
     }
 

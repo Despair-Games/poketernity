@@ -18,7 +18,7 @@ import { MessageUiHandler } from "#ui/message-ui-handler";
 import type { RunInfoUiHandler } from "#ui/run-info-ui-handler";
 import { addTextObject } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
-import { fixedNumber, isNil } from "#utils/common-utils";
+import { fixedNumber } from "#utils/common-utils";
 import { getPlayTimeString, getPokemonLevelText } from "#utils/string-utils";
 import i18next from "i18next";
 
@@ -274,7 +274,7 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
       }
       this.setArrowVisibility(hasData);
     }
-    if (!isNil(prevSlotIndex)) {
+    if (prevSlotIndex != null) {
       this.revertSessionSlot(prevSlotIndex);
     }
 

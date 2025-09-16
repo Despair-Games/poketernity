@@ -7,7 +7,7 @@ import { AnimFrameTarget } from "#enums/anim-frame-target";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { Pokemon } from "#field/pokemon";
 import { settings } from "#system/settings-manager";
-import { getFrameMs, isNil } from "#utils/common-utils";
+import { getFrameMs } from "#utils/common-utils";
 import Phaser from "phaser";
 
 interface GraphicFrameData {
@@ -628,7 +628,7 @@ export abstract class BattleAnim {
 
           const graphicIndex = graphicFrameCount++;
           const moveSprite = sprites[graphicIndex];
-          if (!isNil(frame.priority)) {
+          if (frame.priority != null) {
             const setSpritePriority = (priority: number) => {
               if (existingFieldSprites.length > priority) {
                 // Move to specified priority index

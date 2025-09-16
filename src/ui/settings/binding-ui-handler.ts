@@ -8,7 +8,6 @@ import type { InputSettings } from "#types/inputs-types";
 import { addTextObject, setTextColor } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";
 import { addWindow } from "#ui/ui-theme";
-import { isNil } from "#utils/common-utils";
 import i18next from "i18next";
 
 type FinishCallback = (succes?: boolean) => boolean;
@@ -290,7 +289,7 @@ export abstract class BindingUiHandler extends UiHandler {
 
   protected swapAction(): boolean {
     const selectedDevice = this.getSelectedDevice();
-    if (isNil(selectedDevice) || isNil(this.target) || isNil(this.buttonPressed)) {
+    if (selectedDevice == null || this.target == null || this.buttonPressed == null) {
       return false;
     }
     const activeConfig = globalScene.inputController.getActiveConfig(this.device);

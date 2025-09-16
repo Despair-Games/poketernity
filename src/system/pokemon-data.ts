@@ -15,7 +15,7 @@ import { TrainerSlot } from "#enums/trainer-slot";
 import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
 import type { CustomPokemonData, PokemonSummonData, SerializedSpeciesForm, Status } from "#types/pokemon-types";
-import { clamp, isNil, isPokemon } from "#utils/common-utils";
+import { clamp, isPokemon } from "#utils/common-utils";
 import { getPokemonSpecies, getPokemonSpeciesForm, summonDataToJSON } from "#utils/pokemon-utils";
 
 /**
@@ -28,7 +28,7 @@ function deserializePokemonSpeciesForm(value: SerializedSpeciesForm | PokemonSpe
   const formIndex = value.formIndex ?? value["_formIndex"];
 
   // If for some reason either of these fields are `null`/`undefined`, we cannot reconstruct the species form
-  if (isNil(speciesId) || isNil(formIndex)) {
+  if (speciesId == null || formIndex == null) {
     console.warn(`Error when deserializing Pokemon Species Form\nSpecies ID: ${speciesId} | Form index: ${formIndex}`);
     return null;
   }

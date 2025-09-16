@@ -13,7 +13,6 @@ import {
   MoneyRequirement,
   TypeRequirement,
 } from "#mystery-encounters/mystery-encounter-requirements";
-import { isNil } from "#utils/common-utils";
 import { randSeedInt } from "#utils/random-utils";
 
 // biome-ignore lint/suspicious/noConfusingVoidType: TODO: change this?
@@ -64,7 +63,7 @@ export class MysteryEncounterOption implements IMysteryEncounterOption {
   onPostOptionPhase?: OptionPhaseCallback;
 
   constructor(option: IMysteryEncounterOption | null) {
-    if (!isNil(option)) {
+    if (option != null) {
       Object.assign(this, option);
     }
     this.hasDexProgress = this.hasDexProgress ?? false;

@@ -10,7 +10,6 @@ import type { StarterConfig } from "#types/starter-data";
 import type { SaveSlotSelectUiHandler } from "#ui/save-slot-select-ui-handler";
 import type { StarterSelectUiHandler } from "#ui/starter-select-ui-handler";
 import { applyChallenges } from "#utils/challenge-utils";
-import { isNil } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 
@@ -61,7 +60,7 @@ export class SelectStarterPhase extends Phase {
       const { STARTER_FORM_OVERRIDES } = activeOverrides;
       if (
         speciesId in STARTER_FORM_OVERRIDES
-        && !isNil(STARTER_FORM_OVERRIDES[speciesId])
+        && STARTER_FORM_OVERRIDES[speciesId] != null
         && species.forms[STARTER_FORM_OVERRIDES[speciesId]]
       ) {
         starterFormIndex = STARTER_FORM_OVERRIDES[speciesId];
@@ -99,7 +98,7 @@ export class SelectStarterPhase extends Phase {
         starterPokemon.nickname = nickname;
       }
 
-      if (isNil(teraType)) {
+      if (teraType == null) {
         starterPokemon.teraType = starterPokemon.species.type1;
       } else {
         starterPokemon.teraType = teraType;

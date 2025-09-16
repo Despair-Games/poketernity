@@ -17,7 +17,7 @@ import type { PartyUiHandler } from "#ui/party-ui-handler";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";
 import { addWindow } from "#ui/ui-theme";
-import { fixedNumber, isNil } from "#utils/common-utils";
+import { fixedNumber } from "#utils/common-utils";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 
@@ -130,12 +130,10 @@ export class MysteryEncounterUiHandler extends UiHandler {
 
   public override show(settings?: OptionSelectSettings): boolean {
     this.overrideSettings = settings;
-    const showDescriptionContainer = isNil(this.overrideSettings?.hideDescription)
-      ? true
-      : !this.overrideSettings.hideDescription;
-    const slideInDescription = isNil(this.overrideSettings?.slideInDescription)
-      ? true
-      : this.overrideSettings.slideInDescription;
+    const showDescriptionContainer =
+      this.overrideSettings?.hideDescription == null ? true : !this.overrideSettings.hideDescription;
+    const slideInDescription =
+      this.overrideSettings?.slideInDescription == null ? true : this.overrideSettings.slideInDescription;
     const startingCursorIndex = this.overrideSettings?.startingCursorIndex ?? 0;
 
     this.cursorContainer.setVisible(true);
@@ -588,7 +586,7 @@ export class MysteryEncounterUiHandler extends UiHandler {
     }
     this.tooltipContainer.setVisible(true);
 
-    if (isNil(cursor) || cursor > this.optionsContainer.length - 2) {
+    if (cursor == null || cursor > this.optionsContainer.length - 2) {
       // Ignore hovers on view party button
       // Hide dex progress if visible
       this.showHideDexProgress(false);
