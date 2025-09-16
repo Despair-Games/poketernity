@@ -1,5 +1,4 @@
 /**
- * @module
  * ArenaTags are are meant for effects that are tied to the arena (as opposed to a specific pokemon).
  * Examples include (but are not limited to)
  * - Cross-turn effects that persist even if the user/target switches out, such as Happy Hour
@@ -42,6 +41,8 @@
  * ```
  * Notes
  * - If the class has any subclasses, then the second form of `loadTag` *must* be used.
+ *
+ * @module
  */
 
 import { globalScene } from "#app/global-scene";

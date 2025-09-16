@@ -7,7 +7,6 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { Stat } from "#enums/stat";
-import { isNil } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -33,7 +32,7 @@ export class TailwindTag extends SerializableArenaTag {
     }
 
     const source = globalScene.getPokemonById(this.sourceId);
-    if (isNil(source)) {
+    if (source == null) {
       return;
     }
     const party = source.getField();

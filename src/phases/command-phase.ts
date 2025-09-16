@@ -359,7 +359,7 @@ export class CommandPhase extends FieldPhase {
             }
             return i18next.t("battle:noEscapePokemon", {
               pokemonName:
-                !isNil(tag.sourceId) && globalScene.getPokemonById(tag.sourceId)
+                tag.sourceId != null && globalScene.getPokemonById(tag.sourceId)
                   ? getPokemonNameWithAffix(globalScene.getPokemonById(tag.sourceId))
                   : "",
               moveName: tag.getMoveName(),

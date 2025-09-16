@@ -7,7 +7,7 @@ import type { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import type { BaseArenaTag } from "#types/arena-tag-types";
 import type { Mutable } from "#types/utility-types";
-import { isNil, toDmgValue } from "#utils/common-utils";
+import { toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -28,13 +28,13 @@ export class WishTag extends SerializableArenaTag {
   }
 
   override onAdd(): void {
-    if (isNil(this.sourceId)) {
+    if (this.sourceId == null) {
       console.warn("Source ID missing for `WishTag`!");
       return;
     }
 
     const source = globalScene.getPokemonById(this.sourceId);
-    if (isNil(source)) {
+    if (source == null) {
       console.warn("Unable to find source Pokemon for `WishTag`!");
       return;
     }
