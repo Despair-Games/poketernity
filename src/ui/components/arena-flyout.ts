@@ -14,7 +14,7 @@ import type { TurnEndEvent } from "#events/battle-scene";
 import { addTextObject } from "#ui/text-utils";
 import { TimeOfDayWidget } from "#ui/time-of-day-widget";
 import { addWindow } from "#ui/ui-theme";
-import { fixedNumber, isNil } from "#utils/common-utils";
+import { fixedNumber } from "#utils/common-utils";
 import { toCamelCaseString, toTitleCase } from "#utils/string-utils";
 import type { ParseKeys } from "i18next";
 import i18next from "i18next";
@@ -365,7 +365,7 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
    * @param oldName - The name of the previous weather or terrain
    */
   private insertFieldEffectInfo(newInfo: ArenaEffectInfo, oldName: string): void {
-    if (isNil(newInfo.name)) {
+    if (newInfo.name == null) {
       return;
     }
     const foundIndex = this.fieldEffectInfo.findIndex((info) => [newInfo.name, oldName].includes(info.name));

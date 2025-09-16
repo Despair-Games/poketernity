@@ -21,7 +21,7 @@ import type {
 } from "#types/inputs-types";
 import type { SettingsUpdateEventArgs } from "#types/settings";
 import { MoveTouchControlsHandler } from "#ui/move-touch-controls-handler";
-import { deepCopy, enumValueToKey, isNil } from "#utils/common-utils";
+import { deepCopy, enumValueToKey } from "#utils/common-utils";
 import { assign, getButtonWithKeycode, getIconForLatestInput, swap } from "#utils/inputs-utils";
 import Phaser from "phaser";
 
@@ -433,7 +433,7 @@ export class InputsController {
     this.ensureKeyboardIsInit(); // ensure the active keyboard config is defined
     // TODO: event.keyCode is deprecated, we should use event.key or event.code
     const buttonDown = getButtonWithKeycode(this.getActiveConfig(Device.KEYBOARD)!, event.keyCode);
-    if (isNil(buttonDown) || this.buttonLock.includes(buttonDown)) {
+    if (buttonDown == null || this.buttonLock.includes(buttonDown)) {
       return;
     }
 
@@ -461,7 +461,7 @@ export class InputsController {
     }
     // TODO: event.keyCode is deprecated, we should use event.key or event.code
     const buttonUp = getButtonWithKeycode(config, event.keyCode);
-    if (!isNil(buttonUp)) {
+    if (buttonUp != null) {
       this.events.emit("input_up", {
         controller_type: "keyboard",
         button: buttonUp,
@@ -523,7 +523,7 @@ export class InputsController {
     }
     const activeConfig = this.getActiveConfig(Device.GAMEPAD);
     const buttonDown = activeConfig && getButtonWithKeycode(activeConfig, button.index);
-    if (isNil(buttonDown) || this.buttonLock.includes(buttonDown)) {
+    if (buttonDown == null || this.buttonLock.includes(buttonDown)) {
       return;
     }
 
@@ -562,7 +562,7 @@ export class InputsController {
     }
 
     const buttonUp = getButtonWithKeycode(config, button.index);
-    if (!isNil(buttonUp)) {
+    if (buttonUp != null) {
       this.events.emit("input_up", {
         controller_type: "gamepad",
         button: buttonUp,

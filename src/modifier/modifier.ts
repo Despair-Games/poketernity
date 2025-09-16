@@ -42,7 +42,7 @@ import type {
 import { modifierTypes } from "#modifier/modifier-types";
 import { addTextObject } from "#ui/text-utils";
 import { hslToHex } from "#utils/color-utils";
-import { BooleanHolder, isNil, NumberHolder, toDmgValue } from "#utils/common-utils";
+import { BooleanHolder, NumberHolder, toDmgValue } from "#utils/common-utils";
 import { getModifierType } from "#utils/modifier-type-utils";
 import i18next from "i18next";
 
@@ -2046,7 +2046,7 @@ export class PokemonHpRestoreModifier extends ConsumablePokemonModifier {
    * @returns `true` if the {@linkcode PokemonHpRestoreModifier} should be applied
    */
   override shouldApply(playerPokemon?: PlayerPokemon, multiplier?: number): boolean {
-    return super.shouldApply(playerPokemon) && (this.fainted || (!isNil(multiplier) && typeof multiplier === "number"));
+    return super.shouldApply(playerPokemon) && (this.fainted || (multiplier != null && typeof multiplier === "number"));
   }
 
   /**

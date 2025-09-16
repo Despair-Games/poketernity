@@ -4,7 +4,6 @@ import type { initGameSpeed } from "#system/game-speed";
 
 import { MAX_STAT_STAGE, MIN_STAT_STAGE } from "#constants/game-constants";
 import type { Pokemon } from "#field/pokemon";
-import type { nil } from "#types/utility-types";
 
 export function getFrameMs(frameCount: number): number {
   return Math.floor((1 / 60) * 1000 * frameCount);
@@ -114,11 +113,6 @@ export function fixedNumber(value: number): number {
  */
 export function deepCopy<T>(obj: T): T {
   return Phaser.Utils.Objects.DeepCopy(obj as unknown as object) as T;
-}
-
-/** @returns Whether the input is `null` or `undefined` */
-export function isNil(obj: any): obj is nil {
-  return obj === null || obj === undefined;
 }
 
 /**

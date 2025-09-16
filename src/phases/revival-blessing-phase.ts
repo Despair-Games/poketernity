@@ -14,7 +14,7 @@ import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { BattlePhase } from "#phases/base/battle-phase";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
-import { isNil, toDmgValue } from "#utils/common-utils";
+import { toDmgValue } from "#utils/common-utils";
 import { PartyFilterFainted } from "#utils/party-ui-utils";
 import i18next from "i18next";
 
@@ -50,7 +50,7 @@ export class RevivalBlessingPhase extends BattlePhase {
   private revivePokemonAtSlotIndex(slotIndex: number): void {
     const { currentBattle, phaseManager, ui } = globalScene;
     const pokemon = globalScene.getPlayerParty()[slotIndex];
-    if (isNil(pokemon) || !pokemon.isFainted()) {
+    if (pokemon == null || !pokemon.isFainted()) {
       this.end();
       return;
     }

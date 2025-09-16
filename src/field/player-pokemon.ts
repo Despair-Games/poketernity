@@ -24,7 +24,7 @@ import { achvs } from "#system/achievements";
 import type { PokemonData } from "#system/pokemon-data";
 import type { StarterMoveset } from "#types/starter-data";
 import { PlayerBattleInfo } from "#ui/battle-info";
-import { isNil, NumberHolder } from "#utils/common-utils";
+import { NumberHolder } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 
 export class PlayerPokemon extends Pokemon {
@@ -399,7 +399,7 @@ export class PlayerPokemon extends Pokemon {
         }
 
         const type2 = this.getSpeciesForm().type2;
-        if (!isNil(type2) && type2 !== baseFormTypes[1]) {
+        if (type2 != null && type2 !== baseFormTypes[1]) {
           if (this.customPokemonData.types.length > 1) {
             this.customPokemonData.types[1] = type2;
           } else {
