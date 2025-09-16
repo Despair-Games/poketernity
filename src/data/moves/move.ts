@@ -57,7 +57,7 @@ import { VariablePowerAttr } from "#moves/variable-power-attr";
 import { VariableTargetAttr } from "#moves/variable-target-attr";
 import type { MoveConditionFunc } from "#types/move-types";
 import type { AbstractConstructor, Constructor, nil } from "#types/utility-types";
-import { BooleanHolder, isNil, NumberHolder, ValueHolder } from "#utils/common-utils";
+import { BooleanHolder, NumberHolder, ValueHolder } from "#utils/common-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
 import { toCamelCaseString } from "#utils/string-utils";
 import i18next from "i18next";
@@ -861,7 +861,7 @@ export abstract class Move {
        */
       const allyTargetScores = this.attrs
         .map((attr) => attr.getAllyTargetScore(user, target, this))
-        .filter((score) => !isNil(score));
+        .filter((score) => score != null);
 
       if (allyTargetScores.length === 0) {
         return isMultiTarget ? 0 : ALLY_TARGET_PENALTY;

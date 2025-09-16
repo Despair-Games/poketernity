@@ -14,7 +14,7 @@ import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import { isNil, toDmgValue } from "#utils/common-utils";
+import { toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -86,9 +86,10 @@ export class HitHealAttr extends MoveEffectAttr {
       return 0;
     }
 
-    const expectedDamage = isNil(this.healStat)
-      ? target.getAttackDamage(user, move, AbilityApplyMode.REVEALED, false, true).damage
-      : target.getEffectiveStat(this.healStat, { abilityApplyMode: AbilityApplyMode.REVEALED });
+    const expectedDamage =
+      this.healStat == null
+        ? target.getAttackDamage(user, move, AbilityApplyMode.REVEALED, false, true).damage
+        : target.getEffectiveStat(this.healStat, { abilityApplyMode: AbilityApplyMode.REVEALED });
     const expectedHealRatio =
       Math.min(Math.floor(expectedDamage * this.healRatio), user.getInverseHp()) / user.getMaxHp();
 
