@@ -142,7 +142,7 @@ import { GrowthStatStageChangeAttr } from "#moves/growth-stat-stage-change-attr"
 import { GrudgeAttr } from "#moves/grudge-attr";
 import { GulpMissileTagAttr } from "#moves/gulp-missile-tag-attr";
 import { GyroBallPowerAttr } from "#moves/gyro-ball-power-attr";
-import { HalfSacrificialAttr } from "#moves/half-sacrificial-attr";
+import { HalfMaxHpRecoilAttr } from "#moves/half-max-hp-recoil-attr";
 import { HappyHourAttr } from "#moves/happy-hour-attr";
 import { hasStockpileStacksCondition } from "#moves/has-stockpile-stacks-condition";
 import { HealAttr } from "#moves/heal-attr";
@@ -2737,7 +2737,7 @@ export function initMoves() {
     // #endregion
     new AttackMove(MoveId.MIND_BLOWN, ElementalType.FIRE, MoveCategory.SPECIAL, 150, 100, 5, -1, 0, 7) //
       .condition(failIfDampCondition)
-      .attr(HalfSacrificialAttr)
+      .attr(HalfMaxHpRecoilAttr)
       .target(MoveTarget.ALL_NEAR_OTHERS),
     new AttackMove(MoveId.PLASMA_FISTS, ElementalType.ELECTRIC, MoveCategory.PHYSICAL, 100, 100, 15, -1, 0, 7) //
       .attr(IonDelugeAttr, false)
@@ -2983,7 +2983,7 @@ export function initMoves() {
     new AttackMove(MoveId.ETERNABEAM, ElementalType.DRAGON, MoveCategory.SPECIAL, 160, 90, 5, -1, 0, 8) //
       .attr(RechargeAttr),
     new AttackMove(MoveId.STEEL_BEAM, ElementalType.STEEL, MoveCategory.SPECIAL, 140, 95, 5, -1, 0, 8) //
-      .attr(HalfSacrificialAttr),
+      .attr(HalfMaxHpRecoilAttr),
     new AttackMove(MoveId.EXPANDING_FORCE, ElementalType.PSYCHIC, MoveCategory.SPECIAL, 80, 100, 10, -1, 0, 8) //
       .attr(MovePowerMultiplierAttr, (user, _target, _move) =>
         globalScene.arena.hasTerrain(TerrainType.PSYCHIC) && user.isGrounded() ? 1.5 : 1,
@@ -3457,7 +3457,7 @@ export function initMoves() {
       .makesContact(false)
       .condition((user, _target, move) => {
         const turnMove = user.getLastXMoves(1);
-        return !turnMove.length || turnMove[0].move.id !== move.id || turnMove[0].result !== MoveResult.SUCCESS;
+        return turnMove.length === 0 || turnMove[0].move.id !== move.id || turnMove[0].result !== MoveResult.SUCCESS;
       }) // TODO Add Instruct/Encore interaction
       .edgeCase(), // should be unselectable the turn after its used
     new AttackMove(MoveId.COMEUPPANCE, ElementalType.DARK, MoveCategory.PHYSICAL, -1, 100, 10, -1, 0, 9) //
@@ -3486,7 +3486,7 @@ export function initMoves() {
     new AttackMove(MoveId.BLOOD_MOON, ElementalType.NORMAL, MoveCategory.SPECIAL, 140, 100, 5, -1, 0, 9) //
       .condition((user, _target, move) => {
         const turnMove = user.getLastXMoves(1);
-        return !turnMove.length || turnMove[0].move.id !== move.id || turnMove[0].result !== MoveResult.SUCCESS;
+        return turnMove.length === 0 || turnMove[0].move.id !== move.id || turnMove[0].result !== MoveResult.SUCCESS;
       }) // TODO Add Instruct/Encore interaction
       .edgeCase(), // should be unselectable the turn after it's used
     new AttackMove(MoveId.MATCHA_GOTCHA, ElementalType.GRASS, MoveCategory.SPECIAL, 80, 90, 15, 20, 0, 9) //

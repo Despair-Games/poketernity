@@ -1,5 +1,4 @@
 import type { BattleScene } from "#app/battle-scene";
-import { CustomPokemonData } from "#data/custom-pokemon-data";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
@@ -111,7 +110,7 @@ describe("The Strong Stuff - Mystery Encounter", () => {
             isBoss: true,
             bossSegments: 5,
             shiny: false,
-            customPokemonData: new CustomPokemonData({ spriteScale: 1.25 }),
+            customPokemonData: { spriteScale: 1.25 },
             nature: Nature.BOLD,
             moveSet: [MoveId.INFESTATION, MoveId.SALT_CURE, MoveId.GASTRO_ACID, MoveId.HEAL_ORDER],
             modifierConfigs: expect.any(Array),

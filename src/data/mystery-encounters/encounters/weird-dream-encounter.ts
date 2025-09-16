@@ -1,7 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import i18next from "#app/plugins/i18n";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
-import { CustomPokemonData } from "#data/custom-pokemon-data";
 import { allSpecies } from "#data/data-lists";
 import { getLevelTotalExp } from "#data/exp";
 import type { PokemonSpecies } from "#data/pokemon-species";
@@ -486,9 +485,6 @@ async function postProcessTransformedPokemon(
   // If the previous pokemon had pokerus, transfer to new pokemon
   newPokemon.pokerus = previousPokemon.pokerus;
 
-  // Transfer previous Pokemon's luck value
-  newPokemon.luck = previousPokemon.getLuck();
-
   // If the previous pokemon had higher IVs, override to those (after updating dex IVs > prevents perfect 31s on a new unlock)
   newPokemon.ivs = newPokemon.ivs.map((iv, index) => {
     return previousPokemon.ivs[index] > iv ? previousPokemon.ivs[index] : iv;
@@ -515,9 +511,6 @@ async function postProcessTransformedPokemon(
     newType = getRandomElementalType();
   }
   newTypes.push(newType);
-  if (!newPokemon.customPokemonData) {
-    newPokemon.customPokemonData = new CustomPokemonData();
-  }
   newPokemon.customPokemonData.types = newTypes;
 
   // Enable passive if previous had it

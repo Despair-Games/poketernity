@@ -42,7 +42,7 @@ export abstract class EncounterSceneRequirement implements EncounterRequirement 
  */
 export class CombinationSceneRequirement extends EncounterSceneRequirement {
   /** If `true`, all requirements must be met (AND). If `false`, any requirement must be met (OR) */
-  private isAnd: boolean;
+  private readonly isAnd: boolean;
   requirements: EncounterSceneRequirement[];
 
   public static Some(...requirements: EncounterSceneRequirement[]): CombinationSceneRequirement {
@@ -117,8 +117,8 @@ export abstract class EncounterPokemonRequirement implements EncounterRequiremen
  */
 export class CombinationPokemonRequirement extends EncounterPokemonRequirement {
   /** If `true`, all requirements must be met (AND). If `false`, any requirement must be met (OR) */
-  private isAnd: boolean;
-  private requirements: EncounterPokemonRequirement[];
+  private readonly isAnd: boolean;
+  private readonly requirements: EncounterPokemonRequirement[];
 
   public static Some(...requirements: EncounterPokemonRequirement[]): CombinationPokemonRequirement {
     return new CombinationPokemonRequirement(false, ...requirements);

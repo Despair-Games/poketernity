@@ -5,6 +5,7 @@ import { getCharVariantFromDialogue } from "#data/dialogue";
 import type { PokemonSpecies } from "#data/pokemon-species";
 import { AchvCategory } from "#enums/achv-category";
 import { BattleType } from "#enums/battle-type";
+import { BattlerIndex } from "#enums/battler-index";
 import { PlayerGender } from "#enums/player-gender";
 import { TrainerType } from "#enums/trainer-type";
 import { UiMode } from "#enums/ui-mode";
@@ -82,9 +83,15 @@ export class GameOverPhase extends BattlePhase {
 
             const availablePartyMembers = globalScene.getPokemonAllowedInBattle().length;
 
-            globalScene.phaseManager.createAndPushPhase("SummonPhase", 0, true, true);
+            globalScene.phaseManager.createAndPushPhase("SummonPhase", BattlerIndex.PLAYER, {
+              loaded: true,
+              delayPostSummon: true,
+            });
             if (currentBattle.double && availablePartyMembers > 1) {
-              globalScene.phaseManager.createAndPushPhase("SummonPhase", 1, true, true);
+              globalScene.phaseManager.createAndPushPhase("SummonPhase", BattlerIndex.PLAYER_2, {
+                loaded: true,
+                delayPostSummon: true,
+              });
             }
             // TODO: Should this also check `!gameMode.isDaily` like in `TitlePhase.end()`?
             if (currentBattle.waveIndex > 1 && currentBattle.battleType !== BattleType.TRAINER) {

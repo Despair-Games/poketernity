@@ -11,7 +11,7 @@ import type { MoveConditionFunc } from "#types/move-types";
  */
 export const targetMoveCopiableCondition: MoveConditionFunc = (_user, target, _move) => {
   const targetMoves = target.getMoveHistory().filter((m) => !m.virtual);
-  if (!targetMoves.length) {
+  if (targetMoves.length === 0) {
     return false;
   }
 

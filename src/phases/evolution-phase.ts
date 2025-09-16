@@ -32,12 +32,13 @@ export class EvolutionPhase extends FormChangeBasePhase {
 
   /** @todo why is this able to be `null`? */
   private readonly evolution: SpeciesFormEvolution | null;
+  // biome-ignore lint/style/useReadonlyClassProperties: false positive
   private evolutionBgm: AnySound;
 
   /**
    * A {@linkcode BooleanHolder} whose value indicates whether or not the player has cancelled the evolution.
    */
-  private cancelled: BooleanHolder = new BooleanHolder(false);
+  private readonly cancelled: BooleanHolder = new BooleanHolder(false);
 
   constructor(pokemon: PlayerPokemon, evolution: SpeciesFormEvolution | null, lastLevel: number) {
     super(pokemon);

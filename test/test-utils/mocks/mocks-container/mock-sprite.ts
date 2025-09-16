@@ -4,7 +4,7 @@ import Phaser from "phaser";
 type Frame = Phaser.Textures.Frame;
 
 export class MockSprite implements MockGameObject {
-  private phaserSprite;
+  private readonly phaserSprite;
   public pipelineData;
   public texture;
   public key;

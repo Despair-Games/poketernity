@@ -49,7 +49,7 @@ import { isBetween, NumberHolder } from "#utils/common-utils";
 import { randInt, randomString, randSeedInt, randSeedItem } from "#utils/random-utils";
 import { shiftCharCodes } from "#utils/string-utils";
 
-export interface FaintLogEntry {
+interface FaintLogEntry {
   pokemon: Pokemon;
   turn: number;
 }
@@ -95,6 +95,7 @@ export class Battle {
   /** If the current battle is a Mystery Encounter, this will always be defined */
   public mysteryEncounter?: MysteryEncounter;
 
+  // biome-ignore lint/style/useReadonlyClassProperties: false positive
   private rngCounter: number = 0;
 
   constructor(gameMode: GameMode, waveIndex: number, battleType: BattleType, trainer?: Trainer, double?: boolean) {
@@ -462,21 +463,6 @@ export class Battle {
     const { battleType, mysteryEncounter } = this;
     const trainerME = includeMEs ? mysteryEncounter?.encounterMode === MysteryEncounterMode.TRAINER_BATTLE : false;
     return battleType === BattleType.TRAINER || trainerME;
-  }
-}
-
-export class FixedBattle extends Battle {
-  constructor(waveIndex: number, config: FixedBattleConfig) {
-    super(
-      globalScene.gameMode,
-      waveIndex,
-      config.battleType,
-      config.battleType === BattleType.TRAINER ? config.getTrainer() : undefined,
-      config.double,
-    );
-    if (config.getEnemyParty) {
-      this.enemyParty = config.getEnemyParty();
-    }
   }
 }
 

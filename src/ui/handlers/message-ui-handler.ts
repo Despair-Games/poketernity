@@ -2,6 +2,7 @@ import { globalScene } from "#app/global-scene";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
 import type { ShowTextOptions } from "#types/ui-types";
+import type { AnyFn } from "#types/utility-types";
 import { AwaitableUiHandler } from "#ui/awaitable-ui-handler";
 import { addTextObject } from "#ui/text-utils";
 import { getFrameMs, isNil } from "#utils/common-utils";
@@ -153,7 +154,7 @@ export abstract class MessageUiHandler extends AwaitableUiHandler {
       this.textTimer = globalScene.time.addEvent({
         delay,
         callback: () => {
-          const charIndex = text.length - this.textTimer?.repeatCount!; // TODO: is this bang correct?
+          const charIndex = text.length - this.textTimer!.repeatCount;
           const charVar = charVarMap.get(charIndex);
           const charSound = soundMap.get(charIndex);
           const charDelay = delayMap.get(charIndex);
@@ -181,11 +182,11 @@ export abstract class MessageUiHandler extends AwaitableUiHandler {
             }
           };
           if (charDelay) {
-            this.textTimer!.paused = true; // TODO: is the bang correct?
+            this.textTimer!.paused = true;
             globalScene.tweens.addCounter({
               duration: getFrameMs(charDelay),
               onComplete: () => {
-                this.textTimer!.paused = false; // TODO: is the bang correct?
+                this.textTimer!.paused = false;
                 advance();
               },
             });
@@ -219,7 +220,7 @@ export abstract class MessageUiHandler extends AwaitableUiHandler {
     }
   }
 
-  private showPrompt(callback?: Function | null, callbackDelay?: number | null) {
+  private showPrompt(callback?: AnyFn | null, callbackDelay?: number | null) {
     const wrappedTextLines = this.message.runWordWrap(this.message.text).split(/\n/g);
     const textLinesCount = wrappedTextLines.length;
     const lastTextLine = wrappedTextLines[textLinesCount - 1];

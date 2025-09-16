@@ -32,14 +32,14 @@ export class EggGachaUiHandler extends MessageUiHandler {
   private eggGachaOptionsContainer: Phaser.GameObjects.Container;
   private eggGachaOptionSelectBg: Phaser.GameObjects.NineSlice;
 
-  private gachaContainers: Phaser.GameObjects.Container[];
-  private gachaKnobs: Phaser.GameObjects.Sprite[];
-  private gachaHatches: Phaser.GameObjects.Sprite[];
-  private gachaInfoContainers: Phaser.GameObjects.Container[];
+  private readonly gachaContainers: Phaser.GameObjects.Container[];
+  private readonly gachaKnobs: Phaser.GameObjects.Sprite[];
+  private readonly gachaHatches: Phaser.GameObjects.Sprite[];
+  private readonly gachaInfoContainers: Phaser.GameObjects.Container[];
   private eggGachaOverlay: Phaser.GameObjects.Rectangle;
   private eggGachaSummaryContainer: Phaser.GameObjects.Container;
 
-  private voucherCountLabels: Phaser.GameObjects.Text[];
+  private readonly voucherCountLabels: Phaser.GameObjects.Text[];
 
   private gachaCursor: number;
 
@@ -47,9 +47,9 @@ export class EggGachaUiHandler extends MessageUiHandler {
   private transitioning: boolean;
   private transitionCancelled: boolean;
   private summaryFinished: boolean;
-  private defaultText: string;
+  private readonly defaultText: string;
 
-  private scale: number = 1 / TEXT_SCALE;
+  private readonly scale: number = 1 / TEXT_SCALE;
 
   constructor() {
     super(UiMode.EGG_GACHA);

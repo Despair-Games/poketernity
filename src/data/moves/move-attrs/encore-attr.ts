@@ -19,7 +19,7 @@ export class EncoreAttr extends AddBattlerTagAttr {
       }
 
       const lastMoves = target.getLastXMoves(-1).filter((mv) => !mv.virtual);
-      if (!lastMoves.length) {
+      if (lastMoves.length === 0) {
         return false;
       }
 

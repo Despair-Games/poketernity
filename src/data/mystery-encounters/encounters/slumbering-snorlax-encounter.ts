@@ -1,6 +1,5 @@
 import { globalScene } from "#app/global-scene";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
-import { CustomPokemonData } from "#data/custom-pokemon-data";
 import { AiType } from "#enums/ai-type";
 import { BattlerIndex } from "#enums/battler-index";
 import { BerryType } from "#enums/berry-type";
@@ -83,7 +82,7 @@ export const SlumberingSnorlaxEncounter: MysteryEncounter = MysteryEncounterBuil
           stackCount: 2,
         },
       ],
-      customPokemonData: new CustomPokemonData({ spriteScale: 1.25 }),
+      customPokemonData: { spriteScale: 1.25 },
       aiType: AiType.SMART, // Required to ensure Snorlax uses Sleep Talk while it is asleep
     };
     const config: EnemyPartyConfig = {

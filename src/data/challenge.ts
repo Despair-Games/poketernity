@@ -673,7 +673,6 @@ export class FreshStartChallenge extends Challenge {
       .map((lm) => lm[1])
       .slice(0, 4); // No egg moves
     pokemon.setMoveset(...moveset);
-    pokemon.luck = 0; // No luck
     pokemon.shiny = false; // Not shiny
     pokemon.variant = 0; // Not shiny
     pokemon.formIndex = 0; // Froakie should be base form

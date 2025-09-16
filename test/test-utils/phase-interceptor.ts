@@ -33,6 +33,7 @@ import { MysteryEncounterRewardsPhase } from "#phases/mystery-encounter-phases/r
 import { NewBattlePhase } from "#phases/new-battle-phase";
 import { NewBiomeEncounterPhase } from "#phases/new-biome-encounter-phase";
 import { NextEncounterPhase } from "#phases/next-encounter-phase";
+import { ObtainStatusEffectPhase } from "#phases/obtain-status-effect-phase";
 import { PartyExpPhase } from "#phases/party-exp-phase";
 import { PartyHealPhase } from "#phases/party-heal-phase";
 import { PostActionPhase } from "#phases/post-action-phase";
@@ -52,7 +53,6 @@ import { ShowAbilityPhase } from "#phases/show-ability-phase";
 import { StatStageChangePhase } from "#phases/stat-stage-change-phase";
 import { SummonPhase } from "#phases/summon-phase";
 import { SwitchPhase } from "#phases/switch-phase";
-import { SwitchSummonPhase } from "#phases/switch-summon-phase";
 import { TitlePhase } from "#phases/title-phase";
 import { ToggleDoublePositionPhase } from "#phases/toggle-double-position-phase";
 import { TurnEndPhase } from "#phases/turn-end-phase";
@@ -66,7 +66,7 @@ import type { PhaseClass, PhaseKey } from "#types/phase-types";
 import { UI } from "#ui/ui";
 import { expect } from "vitest";
 
-export interface PromptHandler {
+interface PromptHandler {
   phaseTarget?: string;
   mode?: UiMode;
   callback?: () => void;
@@ -121,7 +121,6 @@ const PHASES = [
   UnavailablePhase,
   QuietFormChangePhase,
   SwitchPhase,
-  SwitchSummonPhase,
   PartyHealPhase,
   FormChangePhase,
   EvolutionPhase,
@@ -145,9 +144,10 @@ const PHASES = [
   PostGameOverPhase,
   RevivalBlessingPhase,
   PostKnockoutPhase,
+  ObtainStatusEffectPhase,
 ] as const;
 
-export type PhaseInterceptorPhase = PhaseClass | PhaseKey;
+type PhaseInterceptorPhase = PhaseClass | PhaseKey;
 
 interface PhaseStub {
   start(): void;
@@ -165,16 +165,19 @@ export class PhaseInterceptor {
   // @ts-expect-error - Initialized in `this.initPhases`
   public phases: Record<PhaseKey, PhaseStub> = {};
   public log: PhaseKey[];
+  // biome-ignore lint/style/useReadonlyClassProperties: requires refactor
   private onHold: PhaseClass[];
-  private interval: NodeJS.Timeout;
+  private readonly interval: NodeJS.Timeout;
   private promptInterval: NodeJS.Timeout;
+  // biome-ignore lint/style/useReadonlyClassProperties: false positive
   private intervalRun: NodeJS.Timeout;
+  // biome-ignore lint/style/useReadonlyClassProperties: requires refactor
   private prompts: PromptHandler[];
   private inProgress?: InProgressStub;
   private originalSetMode: UI["setMode"];
   private originalSuperEnd: Phase["end"];
 
-  private endBySetMode: PhaseClass[] = [
+  private readonly endBySetMode: PhaseClass[] = [
     TitlePhase,
     SelectGenderPhase,
     CommandPhase,

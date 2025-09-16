@@ -1,8 +1,8 @@
 import type { MockGameObject } from "#test/test-utils/mocks/mock-game-object";
 
 export class MockRectangle implements MockGameObject {
-  private fillColor;
-  private scene: Phaser.Scene;
+  private readonly fillColor;
+  private readonly scene: Phaser.Scene;
   public list: MockGameObject[] = [];
   public name: string;
   public active = true;

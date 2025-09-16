@@ -129,7 +129,7 @@ describe("Moves - Pledge Moves", () => {
     expect(playerPokemon[1].getMoveType).toHaveLastReturnedWith(ElementalType.FIRE);
     expect(grassPledge.calculateBattlePower).toHaveLastReturnedWith(150);
 
-    const baseDmg = baseDmgMock.mock.results[baseDmgMock.mock.results.length - 1].value;
+    const baseDmg = baseDmgMock.mock.results.at(-1)!.value;
     expect(enemyPokemon[0].getMaxHp() - enemyPokemon[0].hp).toBe(toDmgValue(baseDmg * 1.5));
     expect(enemyPokemon[1].hp).toBe(enemyPokemon[1].getMaxHp()); // PLAYER should not have attacked
     expect(game.scene.arena.hasTag(ArenaTagType.FIRE_GRASS_PLEDGE, ArenaTagSide.ENEMY)).toBeTruthy();

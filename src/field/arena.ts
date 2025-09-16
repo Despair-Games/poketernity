@@ -56,7 +56,7 @@ export class Arena {
   private lastTimeOfDay: TimeOfDay;
 
   private pokemonPool: PokemonPools;
-  private trainerPool: BiomeTierTrainerPools;
+  private readonly trainerPool: BiomeTierTrainerPools;
 
   public readonly eventTarget: EventTarget = new EventTarget();
 
@@ -175,7 +175,7 @@ export class Arena {
     console.log(enumValueToKey(BiomePoolTier, tier));
 
     // If the BiomePoolTier is empty, downgrade the rarity
-    while (!this.pokemonPool[tier].length) {
+    while (this.pokemonPool[tier].length === 0) {
       console.log(
         `Downgraded rarity tier from ${enumValueToKey(BiomePoolTier, tier)} to ${enumValueToKey(BiomePoolTier, (tier - 1) as BiomePoolTier)}`,
       );
@@ -303,14 +303,14 @@ export class Arena {
     const tierValue = randSeedInt(isTrainerBoss ? 64 : 512);
     let tier = isTrainerBoss ? this.generateBossBiomeTier(tierValue) : this.generateNonBossBiomeTier(tierValue);
 
-    while (tier > BiomePoolTier.COMMON && !this.trainerPool[tier].length) {
+    while (tier > BiomePoolTier.COMMON && this.trainerPool[tier].length === 0) {
       console.log(
         `Downgraded trainer rarity tier from ${enumValueToKey(BiomePoolTier, tier)} to ${enumValueToKey(BiomePoolTier, (tier - 1) as BiomePoolTier)}`,
       );
       tier--;
     }
     const tierPool = this.trainerPool[tier] || [];
-    return tierPool.length ? tierPool[randSeedInt(tierPool.length)] : TrainerType.BREEDER;
+    return tierPool.length > 0 ? tierPool[randSeedInt(tierPool.length)] : TrainerType.BREEDER;
   }
 
   /**
@@ -913,7 +913,7 @@ export class Arena {
   }
 
   removeAllTags(): void {
-    while (this.tags.length) {
+    while (this.tags.length > 0) {
       this.tags[0].onRemove();
       this.eventTarget.dispatchEvent(
         new TagRemovedEvent(this.tags[0].tagType, this.tags[0].side, this.tags[0].turnCount),

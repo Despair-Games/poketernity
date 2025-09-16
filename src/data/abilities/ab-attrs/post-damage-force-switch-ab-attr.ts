@@ -1,3 +1,7 @@
+/** biome-ignore-start lint/correctness/noUnusedImports: TSDoc imports */
+import type { BattleScene } from "#app/battle-scene";
+/** biome-ignore-end lint/correctness/noUnusedImports: TSDoc imports */
+
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { ForceSwitchOutImmunityAbAttr } from "#abilities/force-switch-out-immunity-ab-attr";
 import { PostDamageAbAttr } from "#abilities/post-damage-ab-attr";
@@ -26,8 +30,8 @@ import i18next from "i18next";
  * @see {@linkcode applyPostDamage}
  */
 export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
-  private helper: ForceSwitchOutHelper = new ForceSwitchOutHelper(SwitchType.SWITCH);
-  private hpRatio: number;
+  private readonly helper: ForceSwitchOutHelper = new ForceSwitchOutHelper(SwitchType.SWITCH);
+  private readonly hpRatio: number;
 
   constructor(hpRatio: number = 0.5) {
     super();
@@ -51,7 +55,7 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
     // Will not activate when the Pokémon's HP is lowered by cutting its own HP
     const forbiddenAttackingMoves = [MoveId.BELLY_DRUM, MoveId.SUBSTITUTE, MoveId.CURSE, MoveId.PAIN_SPLIT];
     if (moveHistory.length > 0) {
-      const lastMoveUsed = moveHistory[moveHistory.length - 1];
+      const lastMoveUsed = moveHistory.at(-1)!;
       if (forbiddenAttackingMoves.includes(lastMoveUsed.move.id)) {
         return false;
       }
@@ -62,7 +66,7 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
     if (source) {
       const enemyMoveHistory = source.getMoveHistory();
       if (enemyMoveHistory.length > 0) {
-        const enemyLastMoveUsed = enemyMoveHistory[enemyMoveHistory.length - 1];
+        const enemyLastMoveUsed = enemyMoveHistory.at(-1)!;
         // Will not activate if the Pokémon's HP falls below half while it is in the air during Sky Drop.
         if (forbiddenDefendingMoves.includes(enemyLastMoveUsed.move.id) || pokemon.hasTag(BattlerTagType.SKY_DROP)) {
           return false;
@@ -112,7 +116,7 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
  * @param pokemon - The Pokémon whose Shell Bell recovery is being calculated.
  * @returns The amount of health recovered by Shell Bell.
  */
-export function calculateShellBellRecovery(pokemon: Pokemon): number {
+function calculateShellBellRecovery(pokemon: Pokemon): number {
   const shellBellModifier = pokemon.getHeldItems().find((m) => m.isHitHealModifier());
   if (shellBellModifier) {
     return toDmgValue(pokemon.turnData.totalDamageDealt / 8) * shellBellModifier.stackCount;
@@ -123,7 +127,7 @@ export function calculateShellBellRecovery(pokemon: Pokemon): number {
 //#region Helpers
 
 class ForceSwitchOutHelper {
-  private switchType: SwitchType;
+  private readonly switchType: SwitchType;
 
   constructor(switchType: SwitchType) {
     this.switchType = switchType;
@@ -134,9 +138,10 @@ class ForceSwitchOutHelper {
    *
    * @param pokemon The {@linkcode Pokemon} attempting to switch out.
    * @returns `true` if the switch is successful
+   * @todo Nuke this. The logic for all switch-out effects should be centralized, e.g. as a {@linkcode BattleScene} method
    */
   public switchOutLogic(switchOutTarget: Pokemon): boolean {
-    const { battleType, double, trainer, waveIndex } = globalScene.currentBattle;
+    const { battleType, double, waveIndex } = globalScene.currentBattle;
     /**
      * If the switch-out target is a player-controlled Pokémon, the function checks:
      * - Whether there are available party members to switch in.
@@ -148,37 +153,27 @@ class ForceSwitchOutHelper {
       }
 
       if (switchOutTarget.hp > 0) {
-        switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
-        globalScene.phaseManager.createAndPrependPhase(
-          "PostActionPhase",
-          "SwitchPhase",
-          this.switchType,
-          switchOutTarget.getFieldIndex(),
-          true,
-          true,
-        );
+        globalScene.phaseManager.queueBattlerSwitchOut(switchOutTarget.getBattlerIndex(), {
+          switchType: this.switchType,
+          when: "before",
+          phaseKey: "PostActionPhase",
+        });
         return true;
       }
       /**
        * For non-wild battles, it checks if the opposing party has any available Pokémon to switch in.
-       * If yes, the Pokémon leaves the field and a new SwitchSummonPhase is initiated.
+       * If yes, the Pokémon leaves the field and a new switch sequence is initiated.
        */
     } else if (battleType !== BattleType.WILD) {
       if (globalScene.getEnemyParty().filter((p) => p.isAllowedInBattle() && !p.isOnField()).length < 1) {
         return false;
       }
       if (switchOutTarget.hp > 0) {
-        switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
-        const summonIndex = trainer ? trainer.getNextSummonIndex((switchOutTarget as EnemyPokemon).trainerSlot) : 0;
-        globalScene.phaseManager.createAndPrependPhase(
-          "PostActionPhase",
-          "SwitchSummonPhase",
-          this.switchType,
-          switchOutTarget.getFieldIndex(),
-          summonIndex,
-          false,
-          false,
-        );
+        globalScene.phaseManager.queueBattlerSwitchOut(switchOutTarget.getBattlerIndex(), {
+          switchType: this.switchType,
+          when: "before",
+          phaseKey: "PostActionPhase",
+        });
         return true;
       }
       /**

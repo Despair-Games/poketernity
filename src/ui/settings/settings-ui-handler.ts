@@ -76,7 +76,7 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
   /** Display information on the settings for this handler. */
   protected uiItems: SettingsUiItem[];
   /** Whether the settings labels should use a BBCodeText object. Default: `false`. */
-  private useBBCodeLabels: boolean;
+  private readonly useBBCodeLabels: boolean;
 
   constructor(mode: UiMode, category: SettingsCategory, uiItems: SettingsUiItem[], useBBCodeLabels: boolean = false) {
     super(mode);

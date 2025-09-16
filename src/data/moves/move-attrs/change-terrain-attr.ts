@@ -12,7 +12,7 @@ import type { MoveConditionFunc } from "#types/move-types";
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Terrain_moves | Terrain moves}
  */
 export class ChangeTerrainAttr extends MoveEffectAttr {
-  private terrainType: TerrainType;
+  private readonly terrainType: TerrainType;
 
   constructor(terrainType: TerrainType) {
     super(true);

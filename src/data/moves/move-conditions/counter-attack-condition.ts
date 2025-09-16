@@ -1,5 +1,6 @@
-/* eslint-enable @typescript-eslint/no-unused-vars */
-// -- end tsdoc imports --
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
+import type { MoveId } from "#enums/move-id";
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { BAD_MOVE_PENALTY, KO_ATTACK_SCORE } from "#constants/ai-constants";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
@@ -9,7 +10,7 @@ import { MoveCondition } from "#moves/move-condition";
 import type { MoveFilter } from "#types/move-filter";
 
 export class CounterAttackCondition extends MoveCondition {
-  private moveFilter: MoveFilter;
+  private readonly moveFilter: MoveFilter;
 
   constructor(moveFilter: MoveFilter) {
     super((user, _target, _move) => user.turnData.attacksReceived.some((ar) => moveFilter(ar.moveId)));

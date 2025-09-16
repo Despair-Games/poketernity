@@ -25,7 +25,7 @@ import i18next from "i18next";
 /** Minimum BST for Pokemon generated onto the Elite Four's teams */
 const ELITE_FOUR_MINIMUM_BST = 460;
 
-export interface TrainerTierPools {
+interface TrainerTierPools {
   [key: number]: SpeciesId[];
 }
 
@@ -274,7 +274,7 @@ type PartyMemberFunc = (level: number, strength: PartyMemberStrength) => EnemyPo
 type GenModifiersFunc = (party: EnemyPokemon[]) => PersistentModifier[];
 type GenAIFunc = (party: EnemyPokemon[]) => void;
 
-export interface PartyMemberFuncs {
+interface PartyMemberFuncs {
   [key: number]: PartyMemberFunc;
 }
 
@@ -1662,7 +1662,7 @@ export function getWavePartyTemplate(...templates: TrainerPartyTemplate[]): Trai
  * Gets the correct team template for a gym leader based on the wave
  * @returns the TrainerPartyTemplate of the correct gym leader
  */
-export function getGymLeaderPartyTemplate(): TrainerPartyTemplate {
+function getGymLeaderPartyTemplate(): TrainerPartyTemplate {
   const { currentBattle } = globalScene;
   const currentWave = currentBattle?.waveIndex ?? Overrides.STARTING_WAVE_OVERRIDE;
   // MEs can trigger a gym leader on any floor so this handles those cases

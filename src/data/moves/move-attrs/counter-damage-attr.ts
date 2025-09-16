@@ -14,8 +14,8 @@ import { type NumberHolder, toDmgValue } from "#utils/common-utils";
  * including Metal Burst and Comeuppance.
  */
 export class CounterDamageAttr extends FixedDamageAttr {
-  private moveFilter: MoveFilter;
-  private multiplier: number;
+  private readonly moveFilter: MoveFilter;
+  private readonly multiplier: number;
 
   constructor(moveFilter: MoveFilter, multiplier: number) {
     super(0);

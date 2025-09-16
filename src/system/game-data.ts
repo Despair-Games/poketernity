@@ -89,13 +89,13 @@ import i18next from "i18next";
 
 const saveKey = "x0i2O7WRiANTqPmZ"; // Temporary; secure encryption is not yet necessary
 
-export function encrypt(data: string, bypassLogin: boolean): string {
+function encrypt(data: string, bypassLogin: boolean): string {
   const localFunc = (data: string): string => btoa(encodeURIComponent(data));
   const serverFunc = (data: string): string => AES.encrypt(data, saveKey) as unknown as string; // TODO: is this correct?
   return (bypassLogin ? localFunc : serverFunc)(data);
 }
 
-export function decrypt(data: string, bypassLogin: boolean): string {
+function decrypt(data: string, bypassLogin: boolean): string {
   const localFunc = (data: string): string => decodeURIComponent(atob(data));
   const serverFunc = (data: string): string => AES.decrypt(data, saveKey).toString(enc.Utf8);
   return (bypassLogin ? localFunc : serverFunc)(data);
@@ -111,7 +111,7 @@ export interface DexAttrProps {
   formIndex: number;
 }
 
-export type RunHistoryData = Record<number, RunEntry>;
+type RunHistoryData = Record<number, RunEntry>;
 
 export interface RunEntry {
   entry: SessionSaveData;
@@ -137,7 +137,7 @@ export interface StarterPreferences {
   [key: number]: StarterAttributes;
 }
 
-export interface SeenDialogues {
+interface SeenDialogues {
   [key: string]: boolean;
 }
 
@@ -1250,9 +1250,9 @@ export class GameData {
       const reader = new FileReader();
 
       reader.onload = ((_) => {
-        return (e) => {
+        return (pe) => {
           let dataName: string;
-          let dataStr = AES.decrypt(e.target?.result?.toString()!, saveKey).toString(enc.Utf8); // TODO: is this bang correct?
+          let dataStr = AES.decrypt(pe.target!.result!.toString()!, saveKey).toString(enc.Utf8); // TODO: is this bang correct?
           let valid = false;
           try {
             dataName = enumValueToKey(GameDataType, dataType).toLowerCase();
@@ -1351,7 +1351,7 @@ export class GameData {
             callback: () => globalScene.ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, importDataConfirmOptions),
           });
         };
-      })((e.target as any).files[0]);
+      })(e.target.files[0]);
 
       reader.readAsText((e.target as any).files[0]);
     });
@@ -1973,7 +1973,13 @@ export class GameData {
    */
   public getStarterSpeciesDefaultAbilityIndex(species: PokemonSpecies): number {
     const abilityAttr = this.starterData[species.speciesId].abilityAttr;
-    return abilityAttr & AbilityAttr.ABILITY_1 ? 0 : !species.ability2 || abilityAttr & AbilityAttr.ABILITY_2 ? 1 : 2;
+    if (abilityAttr & AbilityAttr.ABILITY_1) {
+      return 0;
+    }
+    if (!species.ability2 || abilityAttr & AbilityAttr.ABILITY_2) {
+      return 1;
+    }
+    return 2;
   }
 
   /**

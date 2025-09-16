@@ -82,7 +82,6 @@ import {
   MIN_STAT_STAGE,
   NON_VOLATILE_STATUS_EFFECTS,
 } from "#constants/game-constants";
-import { CustomPokemonData } from "#data/custom-pokemon-data";
 import { allAbilities, allMoves } from "#data/data-lists";
 import { speciesEggMoves } from "#data/egg-moves";
 import { getLevelTotalExp } from "#data/exp";
@@ -191,9 +190,16 @@ import { settings } from "#system/settings-manager";
 import type { AbilityFilterOptions } from "#types/ability-types";
 import type { DamageCalculationResult, DamageResult, TurnMove } from "#types/move-types";
 import type { PokemonScoreData } from "#types/pokemon-score-data";
-import type { PokemonSummonData, PokemonTurnData, PokemonWaveData, Status } from "#types/pokemon-types";
+import type {
+  CustomPokemonData,
+  PokemonSummonData,
+  PokemonTurnData,
+  PokemonWaveData,
+  Status,
+} from "#types/pokemon-types";
 import type { Constructor } from "#types/utility-types";
 import type { BattleInfo } from "#ui/battle-info";
+import { playTween } from "#utils/anim-utils";
 import { applyChallenges } from "#utils/challenge-utils";
 import {
   BooleanHolder,
@@ -282,7 +288,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public metBiome: BiomeId | -1;
   public metSpecies: SpeciesId;
   public metWave: number;
-  public luck: number;
   public pauseEvolutions: boolean;
   public pokerus: boolean;
   public switchOutStatus: boolean;
@@ -371,13 +376,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       }
       this.nature = dataSource.nature || (0 as Nature);
       this.nickname = dataSource.nickname;
-      // @ts-expect-error - `Pokemon#moveset` is `protected`
-      this.moveset = dataSource.moveset;
-      // @ts-expect-error - `Pokemon#status` is `protected`
-      this.status = dataSource.status;
-      this.friendship = dataSource.friendship !== undefined ? dataSource.friendship : this.species.baseFriendship;
+      this.moveset = dataSource["moveset"];
+      this.status = dataSource["status"];
+      this.friendship = dataSource.friendship ?? this.species.baseFriendship;
       this.metLevel = dataSource.metLevel || 5;
-      this.luck = dataSource.luck;
       this.metBiome = dataSource.metBiome;
       this.metSpecies =
         dataSource.metSpecies ?? (this.metBiome !== -1 ? this.species.speciesId : this.species.getRootSpeciesId(true));
@@ -386,7 +388,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.pokerus = dataSource.pokerus;
       this.evoCounter = dataSource.evoCounter ?? 0;
       this.usedTMs = dataSource.usedTMs ?? [];
-      this.customPokemonData = new CustomPokemonData(dataSource.customPokemonData);
+      this.resetCustomPokemonData(dataSource.customPokemonData);
       this.teraType = dataSource.teraType;
       this.isTerastallized = dataSource.isTerastallized;
       this.stellarTypesBoosted = dataSource.stellarTypesBoosted ?? [];
@@ -411,7 +413,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         this.variant = this.shiny ? this.generateShinyVariant() : 0;
       }
 
-      this.customPokemonData = new CustomPokemonData();
+      this.resetCustomPokemonData();
 
       if (nature !== undefined) {
         this.setNature(nature);
@@ -425,7 +427,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.metSpecies = species.speciesId;
       this.metWave = globalScene.currentBattle ? globalScene.currentBattle.waveIndex : -1;
       this.pokerus = false;
-      this.luck = this.shiny ? this.variant + 1 : 0;
     }
 
     this.generateName();
@@ -787,7 +788,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   getFormKey(): string {
-    if (!this.species.forms.length || this.species.forms.length <= this.formIndex) {
+    if (this.species.forms.length === 0 || this.species.forms.length <= this.formIndex) {
       return "";
     }
     return this.species.forms[this.formIndex].formKey;
@@ -1004,50 +1005,46 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
   }
 
-  setFieldPosition(fieldPosition: FieldPosition, duration?: number): Promise<void> {
-    return new Promise((resolve) => {
-      if (fieldPosition === this.fieldPosition) {
-        resolve();
-        return;
+  public async setFieldPosition(fieldPosition: FieldPosition, duration: number = 0): Promise<void> {
+    if (fieldPosition === this.fieldPosition) {
+      return;
+    }
+
+    const initialOffset = this.getFieldPositionOffset();
+
+    this.fieldPosition = fieldPosition;
+
+    this.battleInfo.setMini(fieldPosition !== FieldPosition.CENTER);
+    this.battleInfo.setOffset(fieldPosition === FieldPosition.RIGHT);
+
+    const newOffset = this.getFieldPositionOffset();
+
+    const relX = newOffset[0] - initialOffset[0];
+    const relY = newOffset[1] - initialOffset[1];
+
+    const subTag = this.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
+
+    if (duration > 0) {
+      // TODO: can this use stricter typing?
+      const targets: any[] = [this];
+      if (subTag?.sprite) {
+        targets.push(subTag.sprite);
       }
-
-      const initialOffset = this.getFieldPositionOffset();
-
-      this.fieldPosition = fieldPosition;
-
-      this.battleInfo.setMini(fieldPosition !== FieldPosition.CENTER);
-      this.battleInfo.setOffset(fieldPosition === FieldPosition.RIGHT);
-
-      const newOffset = this.getFieldPositionOffset();
-
-      const relX = newOffset[0] - initialOffset[0];
-      const relY = newOffset[1] - initialOffset[1];
-
-      const subTag = this.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
-
-      if (duration) {
-        // TODO: can this use stricter typing?
-        const targets: any[] = [this];
-        if (subTag?.sprite) {
-          targets.push(subTag.sprite);
-        }
-        globalScene.tweens.add({
-          targets,
-          x: (_target, _key, value: number) => value + relX,
-          y: (_target, _key, value: number) => value + relY,
-          duration,
-          ease: "Sine.easeOut",
-          onComplete: () => resolve(),
-        });
-      } else {
-        this.x += relX;
-        this.y += relY;
-        if (subTag?.sprite) {
-          subTag.sprite.x += relX;
-          subTag.sprite.y += relY;
-        }
+      await playTween({
+        targets,
+        x: (_target, _key, value: number) => value + relX,
+        y: (_target, _key, value: number) => value + relY,
+        duration,
+        ease: "Sine.easeOut",
+      });
+    } else {
+      this.x += relX;
+      this.y += relY;
+      if (subTag?.sprite) {
+        subTag.sprite.x += relX;
+        subTag.sprite.y += relY;
       }
-    });
+    }
   }
 
   /**
@@ -1413,10 +1410,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return this.variant;
   }
 
-  getLuck(): number {
-    return this.luck;
-  }
-
   abstract isBoss(): boolean;
 
   abstract getBossSegments(): number;
@@ -1694,10 +1687,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       }
     }
 
-    if (!types.length || !includeTeraType) {
+    if (types.length === 0 || !includeTeraType) {
       if (!bypassSummonData && this.summonData.types.length > 0) {
         this.summonData.types.forEach((t) => types.push(t));
-      } else if (this.customPokemonData.types && this.customPokemonData.types.length > 0) {
+      } else if (this.customPokemonData.types.length > 0) {
         // "Permanent" override for a Pokemon's normal types, currently only used by Mystery Encounters
         types.push(this.customPokemonData.types[0]);
 
@@ -1716,7 +1709,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     // become UNKNOWN if no types are present
-    if (!types.length) {
+    if (types.length === 0) {
       types.push(ElementalType.UNKNOWN);
     }
 
@@ -1789,7 +1782,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (activeOverrides.ENEMY_ABILITY_OVERRIDE && !this.isPlayer()) {
       return allAbilities[activeOverrides.ENEMY_ABILITY_OVERRIDE];
     }
-    if (!isNil(this.customPokemonData.ability) && this.customPokemonData.ability !== -1) {
+    if (this.customPokemonData.ability !== -1) {
       return allAbilities[this.customPokemonData.ability];
     }
     let abilityId = this.getSpeciesForm(bypassSummonData).getAbility(this.abilityIndex);
@@ -1813,7 +1806,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (activeOverrides.ENEMY_PASSIVE_ABILITY_OVERRIDE && !this.isPlayer()) {
       return allAbilities[activeOverrides.ENEMY_PASSIVE_ABILITY_OVERRIDE];
     }
-    if (!isNil(this.customPokemonData.passive) && this.customPokemonData.passive !== -1) {
+    if (this.customPokemonData.passive !== -1) {
       return allAbilities[this.customPokemonData.passive];
     }
 
@@ -2731,7 +2724,15 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
             || lm[0] > 0,
         );
     }
-    levelMoves.sort((lma: [number, number], lmb: [number, number]) => (lma[0] > lmb[0] ? 1 : lma[0] < lmb[0] ? -1 : 0));
+    levelMoves.sort((lma, lmb) => {
+      if (lma[0] > lmb[0]) {
+        return 1;
+      }
+      if (lma[0] < lmb[0]) {
+        return -1;
+      }
+      return 0;
+    });
 
     /**
      * Filter out moves not within the correct level range(s)
@@ -2858,7 +2859,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     if (this.shiny) {
       this.variant = this.generateShinyVariant();
-      this.luck = this.variant + 1;
       this.initShinySparkle();
     }
 
@@ -3049,7 +3049,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         (m) => allMoves.get(m[0]).category !== MoveCategory.STATUS && this.isOfType(allMoves.get(m[0]).type),
       );
 
-      if (stabMovePool.length) {
+      if (stabMovePool.length > 0) {
         const totalWeight = stabMovePool.reduce((v, m) => v + m[1], 0);
         let rand = randSeedInt(totalWeight);
         let index = 0;
@@ -3061,7 +3061,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     } else {
       // Normal wild pokemon just force a random damaging move
       const attackMovePool = baseWeights.filter((m) => allMoves.get(m[0]).category !== MoveCategory.STATUS);
-      if (attackMovePool.length) {
+      if (attackMovePool.length > 0) {
         const totalWeight = attackMovePool.reduce((v, m) => v + m[1], 0);
         let rand = randSeedInt(totalWeight);
         let index = 0;
@@ -3139,7 +3139,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       } else {
         globalScene.fieldUI.moveAbove(this.battleInfo, otherBattleInfo);
       }
-      this.battleInfo.setX(this.battleInfo.x + (this.isPlayer() ? 150 : this.isBoss() ? -198 : -150));
+      let xOffset = -150;
+      if (this.isPlayer()) {
+        xOffset = 150;
+      } else if (this.isBoss()) {
+        xOffset = -198;
+      }
+      this.battleInfo.setX(this.battleInfo.x + xOffset);
       this.battleInfo.setVisible(true);
       if (this.isPlayer()) {
         this.battleInfo.expMaskRect.x += 150;
@@ -3166,7 +3172,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
               this.battleInfo.expMaskRect.x -= 150;
             }
             this.battleInfo.setVisible(false);
-            this.battleInfo.setX(this.battleInfo.x - (this.isPlayer() ? 150 : this.isBoss() ? -198 : -150));
+            let xOffset = -150;
+            if (this.isPlayer()) {
+              xOffset = 150;
+            } else if (this.isBoss()) {
+              xOffset = -198;
+            }
+            this.battleInfo.setX(this.battleInfo.x - xOffset);
             resolve();
           },
         });
@@ -4786,9 +4798,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Resets {@linkcode Pokemon.summonData} to the default values.
+   * Resets {@linkcode summonData} to the default values.
    *
-   * @todo This currently checks for the existence of {@linkcode Pokemon.summonDataPrimer} and
+   * @todo This currently checks for the existence of {@linkcode summonDataPrimer} and
    * applies its values to `summonData` if it exists. `summonDataPrimer` should be removed.
    */
   public resetSummonData(): void {
@@ -4873,6 +4885,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       joinedRound: false,
       scoreData: new Map<number, PokemonScoreData>(),
     };
+  }
+
+  public resetCustomPokemonData(data: Partial<CustomPokemonData> = {}): void {
+    const { spriteScale = -1, ability = -1, passive = -1, nature = -1, types = [] } = data;
+    this.customPokemonData = { spriteScale, ability, passive, nature, types: [...types] };
   }
 
   /**

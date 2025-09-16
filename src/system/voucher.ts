@@ -9,7 +9,7 @@ export class Voucher {
   public description: string;
 
   /** Currently unused */
-  private conditionFunc?: ConditionFn;
+  private readonly conditionFunc?: ConditionFn;
 
   constructor(voucherType: VoucherType, description: string, conditionFunc?: ConditionFn) {
     this.description = description;
@@ -69,7 +69,7 @@ export function getVoucherTypeIcon(voucherType: VoucherType): string {
   }
 }
 
-export interface Vouchers {
+interface Vouchers {
   [key: string]: Voucher;
 }
 

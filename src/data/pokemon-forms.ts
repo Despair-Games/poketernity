@@ -26,8 +26,8 @@ import { SpeciesFormChangeTrigger } from "#form-change-triggers/species-form-cha
 import type { AbstractConstructor, nil } from "#types/utility-types";
 import i18next from "i18next";
 
-export type SpeciesFormChangeConditionPredicate = (p: Pokemon) => boolean;
-export type SpeciesFormChangeConditionEnforceFunc = (p: Pokemon) => void;
+type SpeciesFormChangeConditionPredicate = (p: Pokemon) => boolean;
+type SpeciesFormChangeConditionEnforceFunc = (p: Pokemon) => void;
 
 export class SpeciesFormChange {
   /**
@@ -163,8 +163,8 @@ export class SpeciesFormChangeCondition {
   }
 }
 
-export class SpeciesDefaultFormMatchTrigger extends SpeciesFormChangeTrigger {
-  private formKey: string;
+class SpeciesDefaultFormMatchTrigger extends SpeciesFormChangeTrigger {
+  private readonly formKey: string;
 
   constructor(formKey: string) {
     super();

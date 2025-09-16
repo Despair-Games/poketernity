@@ -15,7 +15,7 @@ import i18next from "i18next";
  * Used by Power Shift.
  */
 export class ShiftStatAttr extends MoveEffectAttr {
-  private statsToSwitch: [EffectiveStat, EffectiveStat];
+  private readonly statsToSwitch: [EffectiveStat, EffectiveStat];
 
   constructor(...statsToSwitch: [EffectiveStat, EffectiveStat]) {
     super(true);

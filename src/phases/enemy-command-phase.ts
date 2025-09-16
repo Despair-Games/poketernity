@@ -30,12 +30,14 @@ export class EnemyCommandPhase extends FieldPhase {
 
     const pokemon = globalScene.getEnemyField()[this.fieldIndex];
     if (!pokemon) {
-      return this.end();
+      this.end();
+      return;
     }
 
     const nextCommand = pokemon.getNextCommand();
     if (!nextCommand) {
-      return this.end();
+      this.end();
+      return;
     }
 
     const battle = globalScene.currentBattle;

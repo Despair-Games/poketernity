@@ -9,11 +9,6 @@ import type { StarterConfig } from "#types/starter-data";
 import { getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
 import { randSeedGauss, randSeedInt, randSeedItem } from "#utils/random-utils";
 
-export interface DailyRunConfig {
-  seed: number;
-  starters: StarterConfig;
-}
-
 export function fetchDailyRunSeed(): Promise<string | null> {
   return new Promise<string | null>((resolve, _reject) => {
     api.daily.getSeed().then((dailySeed) => {

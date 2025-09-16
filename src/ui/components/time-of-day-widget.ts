@@ -15,10 +15,10 @@ export class TimeOfDayWidget extends Phaser.GameObjects.Container {
   private readonly timeOfDayIconBgs: Phaser.GameObjects.Sprite[] = new Array(2);
 
   /** An array containing all timeOfDayIcon objects for easier iteration */
-  private timeOfDayIcons: Phaser.GameObjects.Sprite[];
+  private readonly timeOfDayIcons: Phaser.GameObjects.Sprite[];
 
   /** A map containing all timeOfDayIcon arrays with a matching string key for easier iteration */
-  private timeOfDayIconPairs: Map<string, Phaser.GameObjects.Sprite[]> = new Map([
+  private readonly timeOfDayIconPairs: Map<string, Phaser.GameObjects.Sprite[]> = new Map([
     ["bg", this.timeOfDayIconBgs],
     ["mg", this.timeOfDayIconMgs],
     ["fg", this.timeOfDayIconFgs],

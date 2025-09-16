@@ -105,7 +105,7 @@ describe("Moves - Focus Punch", () => {
 
     await game.phaseInterceptor.to("TurnStartPhase");
 
-    expect(game.scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SwitchSummonPhase");
+    expect(game.scene.phaseManager.getCurrentPhase()?.phaseName).toBe("RecallPhase");
 
     await game.phaseInterceptor.to("PostActionPhase");
 

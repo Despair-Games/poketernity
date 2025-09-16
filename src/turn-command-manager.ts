@@ -68,6 +68,7 @@ export interface TurnCommand {
 export class TurnCommandManager {
   /** The internal {@linkcode TurnCommand} queue. */
   private turnCommands: TurnCommand[] = [];
+  // biome-ignore lint/style/useReadonlyClassProperties: false positive
   private orderIndex: number = 0;
   private appliedMoveHeaders = false;
   /** Tracks how many pending turn commands are currently in the phase queue */
@@ -468,7 +469,7 @@ export class TurnCommandManager {
 
   /**
    * Validates a given {@linkcode BattleCommand.POKEMON | POKEMON} command
-   * and, if valid, schedules a {@linkcode SwitchSummonPhase} for the command.
+   * and, if valid, schedules a {@linkcode RecallPhase} and {@linkcode SwitchPhase} for the command.
    * @param turnCommand the {@linkcode TurnCommand} to schedule
    * @returns `true` if the turn command is scheduled successfully
    */
@@ -485,14 +486,8 @@ export class TurnCommandManager {
 
     phaseManager.appendToPhase(
       "PostActionPhase",
-      phaseManager.createPhase(
-        "SwitchSummonPhase",
-        switchType,
-        pokemon.getFieldIndex(),
-        cursor,
-        true,
-        pokemon.isPlayer(),
-      ),
+      phaseManager.createPhase("RecallPhase", pokemon.getBattlerIndex(), switchType),
+      phaseManager.createPhase("SwitchPhase", pokemon.getBattlerIndex(), switchType, cursor),
       phaseManager.createPhase("PostActionPhase", pokemon.getBattlerIndex()),
     );
 

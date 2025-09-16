@@ -8,7 +8,7 @@ import type { TitleStatsResponse } from "#types/api-types";
 /**
  * A wrapper for API requests.
  */
-export class Api extends ApiBase {
+class Api extends ApiBase {
   //#region Fields
 
   public readonly ERR_SERVER_NOT_CONNECTED: string = "The server is not connected";
@@ -19,8 +19,9 @@ export class Api extends ApiBase {
   public readonly savedata: SavedataApi;
 
   /** Wheter the hostname is 'localhost' or an IP address, and ensure a port is specified. */
-  private _isLocal: boolean;
+  private readonly _isLocal: boolean;
   /** Whether the server/api is connected. By default we assume `true`. */
+  // biome-ignore lint/style/useReadonlyClassProperties: false positive
   private _isConnected: boolean;
 
   //#region Public

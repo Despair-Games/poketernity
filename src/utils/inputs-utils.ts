@@ -3,6 +3,22 @@ import { Device } from "#enums/device";
 import type { InputInterfaceConfig, InputKeys, InputSettings } from "#types/inputs-types";
 import { isNil } from "#utils/common-utils";
 
+// #region Helpers
+
+/**
+ * Retrieves the setting name associated with the specified key.
+ *
+ * @param config - The configuration object containing custom settings.
+ * @param key - The key to search for.
+ * @returns The setting associated with the specified key, or -1 if none.
+ */
+function getSettingNameWithKey(config: InputInterfaceConfig, key: InputKeys): InputSettings | -1 {
+  return config.custom?.[key] ?? -1;
+}
+
+// #endregion
+// #region Exports
+
 // TODO: Most of these are only used in the inputs controller and tests,
 // should they really be here rather than in the inputs controller?
 
@@ -66,17 +82,6 @@ export function getKeyWithSettingName(config: InputInterfaceConfig, settingName:
     return;
   }
   return Object.keys(custom).find((key) => custom[key] === settingName) as InputKeys;
-}
-
-/**
- * Retrieves the setting name associated with the specified key.
- *
- * @param config - The configuration object containing custom settings.
- * @param key - The key to search for.
- * @returns The setting associated with the specified key, or -1 if none.
- */
-export function getSettingNameWithKey(config: InputInterfaceConfig, key: InputKeys): InputSettings | -1 {
-  return config.custom?.[key] ?? -1;
 }
 
 /**
@@ -204,3 +209,5 @@ export function canOverrideOrDeleteSetting(config: InputInterfaceConfig, setting
   }
   return true;
 }
+
+// #endregion
