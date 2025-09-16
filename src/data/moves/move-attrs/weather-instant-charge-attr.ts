@@ -5,7 +5,6 @@ import type { ChargingMove } from "#moves/move";
 import { globalScene } from "#app/global-scene";
 import type { WeatherType } from "#enums/weather-type";
 import { InstantChargeAttr } from "#moves/instant-charge-attr";
-import { isNil } from "#utils/common-utils";
 
 /**
  * Attribute that allows charge moves to resolve in 1 turn while specific {@linkcode WeatherType | Weather} is active.
@@ -17,7 +16,7 @@ export class WeatherInstantChargeAttr extends InstantChargeAttr {
     super((_user, _move) => {
       const currentWeather = globalScene.arena.weather;
 
-      if (isNil(currentWeather?.weatherType)) {
+      if (currentWeather?.weatherType == null) {
         return false;
       }
       return !currentWeather?.isEffectSuppressed() && weatherTypes.includes(currentWeather?.weatherType);

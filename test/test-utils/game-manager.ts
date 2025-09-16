@@ -52,7 +52,6 @@ import type { CommandUiHandler } from "#ui/command-ui-handler";
 import type { ModifierSelectUiHandler } from "#ui/modifier-select-ui-handler";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
 import type { UiHandler } from "#ui/ui-handler";
-import { isNil } from "#utils/common-utils";
 import fs from "node:fs";
 import { AES, enc } from "crypto-js";
 import { expect, vi } from "vitest";
@@ -237,7 +236,7 @@ export class GameManager {
    * @todo Move to a `MysteryEncounter` helper class
    */
   async runToMysteryEncounter(encounterType?: MysteryEncounterType, species?: SpeciesId[]) {
-    if (!isNil(encounterType)) {
+    if (encounterType != null) {
       this.override.trainerChance(0).mysteryEncounter(encounterType);
     }
     species ??= [SpeciesId.FEEBAS, SpeciesId.MAGIKARP, SpeciesId.FEEBAS];
@@ -270,7 +269,7 @@ export class GameManager {
     );
 
     await this.phaseInterceptor.to("EncounterPhase");
-    if (!isNil(encounterType)) {
+    if (encounterType != null) {
       expect(this.scene.currentBattle?.mysteryEncounter?.encounterType).toBe(encounterType);
     }
 

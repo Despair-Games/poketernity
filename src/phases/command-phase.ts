@@ -26,7 +26,6 @@ import type { TurnMove } from "#types/move-types";
 import type { FightCommand } from "#types/ui-types";
 import type { CommandUiHandler } from "#ui/command-ui-handler";
 import type { FightUiHandler } from "#ui/fight-ui-handler";
-import { isNil } from "#utils/common-utils";
 import { isFieldTargeted } from "#utils/move-utils";
 import i18next from "i18next";
 
@@ -273,7 +272,7 @@ export class CommandPhase extends FieldPhase {
           } else if (cursor < Object.keys(globalScene.pokeballCounts).length) {
             const targetPokemon = globalScene.getEnemyField().find((p) => p.isActive(true));
 
-            if (isNil(targetPokemon)) {
+            if (targetPokemon == null) {
               console.warn("Enemy Pokemon is missing when trying to throw Pokeball!");
               failCatchRun("battle:noPokeballForce");
             } else if (

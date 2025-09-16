@@ -51,7 +51,6 @@ import type { ArenaTagType } from "#enums/arena-tag-type";
 import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
 import type { BaseArenaTag, SerializableArenaTagType } from "#types/arena-tag-types";
-import { isNil } from "#utils/common-utils";
 import i18next from "i18next";
 
 /** Base class for any special effects that apply to the {@linkcode Arena | field} during battle. */
@@ -176,7 +175,7 @@ export abstract class ArenaTag implements BaseArenaTag {
    * @returns The source {@linkcode Pokemon} or `undefined` if none is found
    */
   public getSourcePokemon(): Pokemon | undefined {
-    if (!isNil(this.sourceId)) {
+    if (this.sourceId != null) {
       return globalScene.getPokemonById(this.sourceId);
     }
   }

@@ -20,7 +20,7 @@ import { settings } from "#system/settings-manager";
 import { AwaitableUiHandler } from "#ui/awaitable-ui-handler";
 import { MoveInfoOverlay } from "#ui/move-info-overlay";
 import { addTextObject, getModifierTierTextTint, setTextColor } from "#ui/text-utils";
-import { isNil, NumberHolder } from "#utils/common-utils";
+import { NumberHolder } from "#utils/common-utils";
 import { formatMoney } from "#utils/string-utils";
 import i18next from "i18next";
 import Phaser from "phaser";
@@ -189,7 +189,7 @@ export class ModifierSelectUiHandler extends AwaitableUiHandler {
       return false;
     }
 
-    if (isNil(typeOptions) || isNil(actionCallback) || isNil(rerollCost)) {
+    if (typeOptions == null || actionCallback == null || rerollCost == null) {
       return false;
     }
 

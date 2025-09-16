@@ -17,7 +17,6 @@ import { TextListContainer } from "#ui/text-list-container";
 import { addTextObject, getBBCodeFragment, setTextColor } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
 import { hasTouchscreen } from "#utils/app-utils";
-import { isNil } from "#utils/common-utils";
 import { capitalizeFirstLetter } from "#utils/string-utils";
 import i18next from "i18next";
 
@@ -341,7 +340,7 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
           }
           break;
         case Button.LEFT:
-          if (!isNil(optionCursor)) {
+          if (optionCursor != null) {
             // Moves the option cursor left (wrapping)
             if (uiItem.doWrap) {
               success = this.setOptionCursor(this.cursor, Wrap(optionCursor - 1, 0, optionLabels.length), true);
@@ -352,7 +351,7 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
           break;
         case Button.RIGHT:
           // Moves the option cursor right (wrapping)
-          if (!isNil(optionCursor)) {
+          if (optionCursor != null) {
             if (uiItem.doWrap) {
               success = this.setOptionCursor(this.cursor, Wrap(optionCursor + 1, 0, optionLabels.length), true);
             } else if (optionCursor < optionLabels.length - 1) {
@@ -537,7 +536,7 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
       const uiItem = this.uiItems[i + this.scrollCursor];
 
       // If the handler shows more rows than there are uiItems, hide the scrolled out option values
-      if (isNil(uiItem)) {
+      if (uiItem == null) {
         if (i < this.uiItems.length) {
           for (const text of this.optionValueLabels[i]) {
             text.setVisible(false);
@@ -590,7 +589,7 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
       // Mark the correct option as selected
       const value = settingsManager[this.category][uiItem.key];
       let index = 0;
-      if (!isNil(uiItem.overrideSelectedIndex)) {
+      if (uiItem.overrideSelectedIndex != null) {
         index = uiItem.overrideSelectedIndex;
       } else if (value !== undefined) {
         index = uiItem.options.findIndex((option) => option.value === value);
@@ -686,7 +685,7 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
     this.settingValuesData[settingIndex].labels[optionIndex] = newLabel;
 
     // If the option is currently shown on screen, update the text object
-    if (!isNil(this.optionValueLabels[settingIndex - this.scrollCursor])) {
+    if (this.optionValueLabels[settingIndex - this.scrollCursor] != null) {
       this.optionValueLabels[settingIndex - this.scrollCursor][optionIndex].setText(newLabel);
     }
   }

@@ -7,7 +7,6 @@ import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
 import type { BaseArenaTag } from "#types/arena-tag-types";
 import type { Mutable } from "#types/utility-types";
-import { isNil } from "#utils/common-utils";
 
 /**
  * Interface representing a delayed attack command.
@@ -60,7 +59,7 @@ export class DelayedAttackTag extends SerializableArenaTag {
       (attack as Mutable<DelayedAttack>).turnCount--;
       const attacker = globalScene.getPokemonById(attack.sourceId);
 
-      if (!isNil(attacker) && attack.turnCount <= 0) {
+      if (attacker != null && attack.turnCount <= 0) {
         const target = globalScene.getField(true).find((p) => attack.targetIndex === p.getBattlerIndex());
         if (target) {
           globalScene.phaseManager.createAndUnshiftPhase(
@@ -88,7 +87,7 @@ export class DelayedAttackTag extends SerializableArenaTag {
     }
 
     (this as Mutable<this>).delayedAttacks = this.delayedAttacks.filter(
-      (attack) => !isNil(globalScene.getPokemonById(attack.sourceId)) && attack.turnCount > 0,
+      (attack) => globalScene.getPokemonById(attack.sourceId) != null && attack.turnCount > 0,
     );
     return this.delayedAttacks.length > 0;
   }

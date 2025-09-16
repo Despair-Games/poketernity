@@ -1,7 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import type { TextStyle } from "#enums/text-style";
 import { getTextWithColors } from "#ui/text-utils";
-import { isNil } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -11,7 +10,7 @@ import i18next from "i18next";
  * @param primaryStyle Can define a text style to be applied to the entire string. Must be defined for BBCodeText styles to be applied correctly
  */
 export function getEncounterText(keyOrString?: string, primaryStyle?: TextStyle): string | null {
-  if (isNil(keyOrString)) {
+  if (keyOrString == null) {
     return null;
   }
 

@@ -5,7 +5,7 @@ import type { ShowTextOptions } from "#types/ui-types";
 import type { AnyFn } from "#types/utility-types";
 import { AwaitableUiHandler } from "#ui/awaitable-ui-handler";
 import { addTextObject } from "#ui/text-utils";
-import { getFrameMs, isNil } from "#utils/common-utils";
+import { getFrameMs } from "#utils/common-utils";
 
 export abstract class MessageUiHandler extends AwaitableUiHandler {
   protected textTimer: Phaser.Time.TimerEvent | null;
@@ -45,7 +45,7 @@ export abstract class MessageUiHandler extends AwaitableUiHandler {
    * @see {@linkcode ShowTextOptions} for optional params
    */
   public showText(text: string, { delay, callback, callbackDelay, prompt, promptDelay }: ShowTextOptions = {}) {
-    if (isNil(text)) {
+    if (text == null) {
       console.error(`Missing text parameter in "${this.constructor.name}#showText()"!`);
     }
     this.showTextInternal(text, { delay, callback, callbackDelay, prompt, promptDelay });

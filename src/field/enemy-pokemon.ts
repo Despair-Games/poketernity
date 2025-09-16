@@ -29,7 +29,7 @@ import { getMoveTargets } from "#moves/move";
 import type { PokemonData } from "#system/pokemon-data";
 import type { TurnMove } from "#types/move-types";
 import { EnemyBattleInfo } from "#ui/battle-info";
-import { isBetween, isNil, toDmgValue } from "#utils/common-utils";
+import { isBetween, toDmgValue } from "#utils/common-utils";
 import { randSeedInt, randSeedItem } from "#utils/random-utils";
 
 export class EnemyPokemon extends Pokemon {
@@ -86,7 +86,7 @@ export class EnemyPokemon extends Pokemon {
 
     if (
       speciesId in activeOverrides.ENEMY_FORM_OVERRIDES
-      && !isNil(activeOverrides.ENEMY_FORM_OVERRIDES[speciesId])
+      && activeOverrides.ENEMY_FORM_OVERRIDES[speciesId] != null
       && this.species.forms[activeOverrides.ENEMY_FORM_OVERRIDES[speciesId]]
     ) {
       this.formIndex = activeOverrides.ENEMY_FORM_OVERRIDES[speciesId];
@@ -251,7 +251,7 @@ export class EnemyPokemon extends Pokemon {
 
             const moveTargets = getMoveTargets(this, move.id)
               .targets.map((ind) => globalScene.getPokemonByBattlerIndex(ind))
-              .filter((p) => !isNil(p) && this.isPlayer() !== p.isPlayer()) as Pokemon[];
+              .filter((p) => p != null && this.isPlayer() !== p.isPlayer()) as Pokemon[];
             // Only considers critical hits for crit-only moves or when this Pokemon is under the effect of Laser Focus
             const isCritical = move.hasAttr(CritOnlyAttr) || this.hasTag(BattlerTagType.ALWAYS_CRIT);
 

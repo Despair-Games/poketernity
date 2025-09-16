@@ -29,7 +29,6 @@ import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-fo
 import { PokemonInstantReviveModifier } from "#modifier/modifier";
 import { PostVictoryStatStageChangeAttr } from "#moves/post-victory-stat-stage-change-attr";
 import { PokemonPhase } from "#phases/base/pokemon-phase";
-import { isNil } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -90,12 +89,12 @@ export class FaintPhase extends PokemonPhase {
 
     const faintPokemon = this.getPokemon();
 
-    if (!isNil(this.source)) {
-      if (!isNil(this.destinyTag)) {
+    if (this.source != null) {
+      if (this.destinyTag != null) {
         this.destinyTag.lapse(this.source, BattlerTagLapseType.CUSTOM);
       }
 
-      if (!isNil(this.grudgeTag)) {
+      if (this.grudgeTag != null) {
         this.grudgeTag.lapse(faintPokemon, BattlerTagLapseType.CUSTOM, this.source);
       }
     }

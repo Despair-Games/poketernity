@@ -8,7 +8,6 @@ import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
 import type { BaseArenaTag } from "#types/arena-tag-types";
 import type { Mutable } from "#types/utility-types";
-import { isNil } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -119,7 +118,7 @@ export class PendingHealTag extends SerializableArenaTag {
       (targetEffects as PendingHealEffect[]).splice(targetEffects.indexOf(healEffect), 1);
     }
 
-    return !isNil(healEffect);
+    return healEffect != null;
   }
 
   /**
