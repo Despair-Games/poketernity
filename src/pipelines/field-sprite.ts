@@ -1,5 +1,4 @@
 import { globalScene } from "#app/global-scene";
-import { TerrainType } from "#enums/terrain-type";
 import { getCurrentTime } from "#utils/common-utils";
 import { getTerrainColor } from "#utils/terrain-utils";
 
@@ -255,7 +254,7 @@ export class FieldSpritePipeline extends Phaser.Renderer.WebGL.Pipelines.MultiPi
     );
     this.set3fv(
       "terrainColor",
-      getTerrainColor(globalScene.arena.terrain?.terrainType || TerrainType.NONE).map((c) => c / 255),
+      getTerrainColor(globalScene.arena.terrainType).map((c) => c / 255),
     );
     this.set1f("terrainColorRatio", terrainColorRatio);
   }

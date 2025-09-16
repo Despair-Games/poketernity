@@ -1,7 +1,6 @@
 import { allTimedEvents } from "#data/all-timed-events";
 import { EventModifierType } from "#enums/event-modifier-type";
 import type { EventBanner, TimedEvent } from "#types/timed-event";
-import { isNil } from "#utils/common-utils";
 
 function isActive(event: TimedEvent) {
   return event.startDate < new Date() && new Date() < event.endDate;
@@ -56,10 +55,10 @@ class TimedEventManager {
   public isEventActive(modifier: EventModifierType): boolean {
     switch (modifier) {
       case EventModifierType.WILD_SHINY_CHANCE:
-        return this.events.some((te: TimedEvent) => isActive(te) && !isNil(te.modifiers?.wildShinyMultiplier));
+        return this.events.some((te: TimedEvent) => isActive(te) && te.modifiers?.wildShinyMultiplier != null);
       case EventModifierType.CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER:
         return this.events.some(
-          (te: TimedEvent) => isActive(te) && !isNil(te.modifiers?.classicCandyFriendshipMultiplier),
+          (te: TimedEvent) => isActive(te) && te.modifiers?.classicCandyFriendshipMultiplier != null,
         );
       case EventModifierType.EXTRA_TRAINER_REWARDS:
         return this.events.some((te: TimedEvent) => isActive(te) && te.modifiers?.specialBattleRewards);

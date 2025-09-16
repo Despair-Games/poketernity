@@ -1,6 +1,5 @@
 import { WeatherType } from "#enums/weather-type";
 import { isGameManagerInstance, receivedStr } from "#test/test-utils/test-utils";
-import { isNil } from "#utils/common-utils";
 import { capitalizeString } from "#utils/string-utils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
@@ -32,7 +31,7 @@ export function toHaveWeatherMatcher(
   const pass = received.scene.arena.hasWeather(expectedWeatherType);
 
   const weatherStr = toWeatherStr(expectedWeatherType);
-  const actualWeatherStr = toWeatherStr(received.scene.arena.weather?.weatherType);
+  const actualWeatherStr = toWeatherStr(received.scene.arena.weatherType);
 
   return {
     pass,
@@ -50,10 +49,7 @@ export function toHaveWeatherMatcher(
  * @param weatherType - The {@linkcode WeatherType} to transform
  * @returns A human readable string
  */
-function toWeatherStr(weatherType?: WeatherType) {
-  if (isNil(weatherType)) {
-    return "undefined";
-  }
+function toWeatherStr(weatherType: WeatherType) {
   return capitalizeString(WeatherType[weatherType], "_", false, true);
 }
 

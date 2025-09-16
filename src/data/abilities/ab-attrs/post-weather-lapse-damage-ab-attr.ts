@@ -1,7 +1,6 @@
 import { PostWeatherLapseAbAttr } from "#abilities/post-weather-lapse-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { Weather } from "#data/weather";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { HitResult } from "#enums/hit-result";
 import type { WeatherType } from "#enums/weather-type";
@@ -30,7 +29,7 @@ export class PostWeatherLapseDamageAbAttr extends PostWeatherLapseAbAttr {
     this.damageFactor = damageFactor;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean, _weather: Weather): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
     if (pokemon.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)) {
       return false;
     }

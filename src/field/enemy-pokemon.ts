@@ -40,7 +40,7 @@ import { getMoveTargets, type Move } from "#moves/move";
 import type { PokemonData } from "#system/pokemon-data";
 import type { TurnMove } from "#types/move-types";
 import { EnemyBattleInfo } from "#ui/battle-info";
-import { BooleanHolder, isBetween, isNil, toDmgValue } from "#utils/common-utils";
+import { BooleanHolder, isBetween, toDmgValue } from "#utils/common-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
 import { randSeedInt, randSeedItem, randSeedShuffle } from "#utils/random-utils";
 
@@ -98,7 +98,7 @@ export class EnemyPokemon extends Pokemon {
 
     if (
       speciesId in activeOverrides.ENEMY_FORM_OVERRIDES
-      && !isNil(activeOverrides.ENEMY_FORM_OVERRIDES[speciesId])
+      && activeOverrides.ENEMY_FORM_OVERRIDES[speciesId] != null
       && this.species.forms[activeOverrides.ENEMY_FORM_OVERRIDES[speciesId]]
     ) {
       this.formIndex = activeOverrides.ENEMY_FORM_OVERRIDES[speciesId];
@@ -307,7 +307,7 @@ export class EnemyPokemon extends Pokemon {
     }
 
     const { damage: critDamage } = opponent.getAttackDamage(this, move, AbilityApplyMode.REVEALED, true);
-    if ((isNil(attackScore) || attackScore < 4) && critDamage >= opponent.hp) {
+    if ((attackScore == null || attackScore < 4) && critDamage >= opponent.hp) {
       const critChance = this.getSimulatedCriticalHitChance(opponent, move);
       /**
        * Only grant a bonus if the calculated critical hit chance is over 10%
@@ -537,7 +537,7 @@ export class EnemyPokemon extends Pokemon {
      * The {@linkcode BattlerIndex | BattlerIndexes} of active Pokemon that
      * can legally be targeted with this move.
      */
-    const activeTargets = targets.filter((bi) => !isNil(globalScene.getPokemonByBattlerIndex(bi)));
+    const activeTargets = targets.filter((bi) => globalScene.getPokemonByBattlerIndex(bi) != null);
     if (activeTargets.length === 0) {
       // Moves with no valid targets are given a "fail penalty" of (-5).
       return {
@@ -606,7 +606,7 @@ export class EnemyPokemon extends Pokemon {
     }
 
     const { trainer } = globalScene.currentBattle;
-    return activeOverrides.FORCE_ENEMY_TERA_OVERRIDE || (!isNil(trainer) && trainer.shouldTera(this));
+    return activeOverrides.FORCE_ENEMY_TERA_OVERRIDE || (trainer != null && trainer.shouldTera(this));
   }
 
   /**

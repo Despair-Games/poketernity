@@ -4,7 +4,7 @@ import { MoveFlags } from "#enums/move-flags";
 import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import { isNil, toDmgValue } from "#utils/common-utils";
+import { toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -63,7 +63,7 @@ export class PokemonMove {
   }
 
   public get name(): string {
-    if (isNil(this.pokemon)) {
+    if (this.pokemon == null) {
       return this.getMove().name;
     }
     const moveName = this.getMove().name;

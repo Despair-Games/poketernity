@@ -308,7 +308,6 @@ import { WeatherBallTypeAttr } from "#moves/weather-ball-type-attr";
 import { WeatherInstantChargeAttr } from "#moves/weather-instant-charge-attr";
 import { WeightPowerAttr } from "#moves/weight-power-attr";
 import { WishAttr } from "#moves/wish-attr";
-import { isNil } from "#utils/common-utils";
 import { crashDamageFunc } from "#utils/move-utils";
 import i18next from "i18next";
 
@@ -2700,7 +2699,7 @@ export function initMoves() {
     new AttackMove(MoveId.STOMPING_TANTRUM, ElementalType.GROUND, MoveCategory.PHYSICAL, 75, 100, 10, -1, 0, 7) //
       .attr(MovePowerMultiplierAttr, (user, _target, _move) => {
         const result = user.getLastXMoves(2)[1]?.result;
-        if (isNil(result)) {
+        if (result == null) {
           return 1;
         }
         return ([MoveResult.MISS, MoveResult.FAIL] as MoveResult[]).includes(result) ? 2 : 1;
@@ -3024,7 +3023,7 @@ export function initMoves() {
     new AttackMove(MoveId.TERRAIN_PULSE, ElementalType.NORMAL, MoveCategory.SPECIAL, 50, 100, 10, -1, 0, 8) //
       .attr(TerrainPulseTypeAttr)
       .attr(MovePowerMultiplierAttr, (user, _target, _move) =>
-        globalScene.arena.getTerrainType() !== TerrainType.NONE && user.isGrounded() ? 2 : 1,
+        globalScene.arena.terrainType !== TerrainType.NONE && user.isGrounded() ? 2 : 1,
       )
       .pulseMove(),
     new AttackMove(MoveId.SKITTER_SMACK, ElementalType.BUG, MoveCategory.PHYSICAL, 70, 90, 10, 100, 0, 8) //
@@ -3377,7 +3376,7 @@ export function initMoves() {
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new AttackMove(MoveId.PSYBLADE, ElementalType.PSYCHIC, MoveCategory.PHYSICAL, 80, 100, 15, -1, 0, 9) //
       .attr(MovePowerMultiplierAttr, (user, _target, _move) =>
-        globalScene.arena.getTerrainType() === TerrainType.ELECTRIC && user.isGrounded() ? 1.5 : 1,
+        globalScene.arena.terrainType === TerrainType.ELECTRIC && user.isGrounded() ? 1.5 : 1,
       )
       .slicingMove(),
     new AttackMove(MoveId.HYDRO_STEAM, ElementalType.WATER, MoveCategory.SPECIAL, 80, 100, 15, -1, 0, 9) //

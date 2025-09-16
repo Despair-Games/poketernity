@@ -6,7 +6,6 @@ import type { Pokemon } from "#field/pokemon";
 import { AddBattlerTagAttr } from "#moves/add-battler-tag-attr";
 import type { Move } from "#moves/move";
 import type { MoveConditionFunc } from "#types/move-types";
-import { isNil } from "#utils/common-utils";
 
 /**
  * Attribute to apply {@link https://bulbapedia.bulbagarden.net/wiki/Quash_(move) | Quash's}
@@ -22,7 +21,7 @@ export class QuashAttr extends AddBattlerTagAttr {
   override getCondition(): MoveConditionFunc | null {
     return (_user, target, _move) => {
       const { turnManager } = globalScene.currentBattle;
-      return !target.hasTag(BattlerTagType.QUASHED) && !isNil(turnManager.findCommandFromPokemon(target));
+      return !target.hasTag(BattlerTagType.QUASHED) && turnManager.findCommandFromPokemon(target) != null;
     };
   }
 

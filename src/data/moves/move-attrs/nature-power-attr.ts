@@ -99,7 +99,7 @@ export class NaturePowerAttr extends CallMoveAttr {
           return MoveId.CHARGE_BEAM;
       }
     };
-    switch (globalScene.arena.getTerrainType()) {
+    switch (globalScene.arena.terrainType) {
       // terrain takes priority over biome
       case TerrainType.NONE:
         moveId = getBiomeMoveId();

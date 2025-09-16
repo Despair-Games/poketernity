@@ -6,7 +6,6 @@ import { Terrain } from "#data/terrain";
 import { Weather } from "#data/weather";
 import type { BiomeId } from "#enums/biome-id";
 import { Arena } from "#field/arena";
-import { isNil } from "#utils/common-utils";
 
 export class ArenaData {
   public biome: BiomeId;
@@ -30,7 +29,7 @@ export class ArenaData {
     this.tags = [];
 
     if (source.tags) {
-      this.tags = (source.tags as ArenaTag[]).map((t) => loadArenaTag(t)).filter((t) => !isNil(t));
+      this.tags = (source.tags as ArenaTag[]).map((t) => loadArenaTag(t)).filter((t) => t != null);
     }
   }
 }

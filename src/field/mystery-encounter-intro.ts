@@ -4,7 +4,6 @@ import { ImagesFolder } from "#enums/images-folder";
 import type { SpeciesId } from "#enums/species-id";
 import { getSpriteKeysFromSpecies } from "#mystery-encounters/encounter-pokemon-utils";
 import type { MysteryEncounter } from "#mystery-encounters/mystery-encounter";
-import { isNil } from "#utils/common-utils";
 import Phaser from "phaser";
 
 export class MysteryEncounterSpriteConfig {
@@ -77,7 +76,7 @@ export class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Container {
         ...config,
       };
 
-      if (!isNil(result.species)) {
+      if (result.species != null) {
         const keys = getSpriteKeysFromSpecies(result.species, undefined, undefined, result.isShiny, result.variant);
         result.spriteKey = keys.spriteKey;
         result.fileRoot = keys.fileRoot;
@@ -177,12 +176,12 @@ export class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Container {
         n++;
       }
 
-      if (!isNil(pokemonShinySparkle)) {
+      if (pokemonShinySparkle != null) {
         // Offset the sparkle to match the Pokemon's position
         pokemonShinySparkle.setPosition(sprite.x, sprite.y);
       }
 
-      if (!isNil(alpha)) {
+      if (alpha != null) {
         sprite.setAlpha(alpha);
         tintSprite.setAlpha(alpha);
       }

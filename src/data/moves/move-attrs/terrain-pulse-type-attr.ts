@@ -17,7 +17,7 @@ export class TerrainPulseTypeAttr extends VariableMoveTypeAttr {
       return false;
     }
 
-    const currentTerrain = globalScene.arena.getTerrainType();
+    const currentTerrain = globalScene.arena.terrainType;
     switch (currentTerrain) {
       case TerrainType.MISTY:
         moveType.value = ElementalType.FAIRY;

@@ -9,7 +9,7 @@ import type { Move } from "#moves/move";
 
 /** Class representing Weather effects */
 export class Weather {
-  public weatherType: WeatherType;
+  public readonly weatherType: WeatherType;
   public turnsLeft: number;
 
   /**

@@ -10,7 +10,7 @@ import type { Move } from "#moves/move";
  */
 export class PostFaintClearWeatherAbAttr extends PostFaintAbAttr {
   public override apply(pokemon: Pokemon, simulated: boolean, _attacker?: Pokemon, _move?: Move): boolean {
-    const weatherType = globalScene.arena.weather?.weatherType;
+    const weatherType = globalScene.arena.weatherType;
     let turnOffWeather = false;
     let weatherAbility: AbilityId | null = null;
 

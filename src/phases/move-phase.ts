@@ -37,7 +37,7 @@ import { getMoveTargets, SelfStatusMove } from "#moves/move";
 import { PreMoveMessageAttr } from "#moves/pre-move-message-attr";
 import { VariableMoveMessageAttr } from "#moves/variable-move-message-attr";
 import { BattlePhase } from "#phases/base/battle-phase";
-import { BooleanHolder, isNil, NumberHolder } from "#utils/common-utils";
+import { BooleanHolder, NumberHolder } from "#utils/common-utils";
 import { applyMoveAttrs, isFieldTargeted } from "#utils/move-utils";
 import { getStatusEffectActivationText, getStatusEffectHealText } from "#utils/status-effect-utils";
 import { getTerrainBlockMessage } from "#utils/terrain-utils";
@@ -456,7 +456,7 @@ export class MovePhase extends BattlePhase {
           break;
         default: {
           const target = globalScene.getPokemonByBattlerIndex(t);
-          if (!isNil(target)) {
+          if (target != null) {
             targets.push(target);
           }
           break;
@@ -615,7 +615,7 @@ export class MovePhase extends BattlePhase {
       let failureMessage = move.getFailedText(this.pokemon, targets[0], move, new BooleanHolder(false));
 
       if (failedDueToWeather) {
-        if (globalScene.arena.weather?.weatherType === WeatherType.HARSH_SUN) {
+        if (globalScene.arena.hasWeather(WeatherType.HARSH_SUN)) {
           failureMessage = i18next.t("weather:harshSunStopAttackMessage");
         } else {
           failureMessage = i18next.t("weather:heavyRainStopAttackMessage");
@@ -625,7 +625,7 @@ export class MovePhase extends BattlePhase {
       if (failureMessage) {
         failedText = failureMessage;
       } else if (failedDueToTerrain) {
-        failedText = getTerrainBlockMessage(targets[0], globalScene.arena.getTerrainType());
+        failedText = getTerrainBlockMessage(targets[0], globalScene.arena.terrainType);
       }
 
       this.showFailedText(failedText);
