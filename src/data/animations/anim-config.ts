@@ -11,7 +11,7 @@ import { AnimFocus } from "#enums/anim-focus";
 import { AnimFrameTarget } from "#enums/anim-frame-target";
 import type { AnimTimedEventType } from "#enums/anim-timed-event-type";
 import type { MoveId } from "#enums/move-id";
-import { getFrameMs, isNil } from "#utils/common-utils";
+import { getFrameMs } from "#utils/common-utils";
 import type Phaser from "phaser";
 
 export interface AnimConfig {
@@ -608,7 +608,7 @@ export class AnimTimedAddBgEvent extends AnimTimedBgEvent {
     moveAnim.bgSprite.setAlpha(this.opacity / 255);
     globalScene.field.add(moveAnim.bgSprite);
     const fieldPokemon = globalScene.getEnemyPokemon(false) ?? globalScene.getPlayerPokemon(false);
-    if (!isNil(priority)) {
+    if (priority != null) {
       globalScene.field.moveTo(moveAnim.bgSprite as Phaser.GameObjects.GameObject, priority);
     } else if (fieldPokemon?.isOnField()) {
       globalScene.field.moveBelow(moveAnim.bgSprite as Phaser.GameObjects.GameObject, fieldPokemon);

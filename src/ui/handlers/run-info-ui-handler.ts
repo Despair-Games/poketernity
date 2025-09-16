@@ -31,7 +31,7 @@ import type { SessionSaveData } from "#types/session-data";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";
 import { addWindow } from "#ui/ui-theme";
-import { enumValueToKey, isNil } from "#utils/common-utils";
+import { enumValueToKey } from "#utils/common-utils";
 import { formatLargeNumberFixedDigits, formatMoney, getPlayTimeString, getPokemonLevelText } from "#utils/string-utils";
 import i18next from "i18next";
 import RoundRectangle from "phaser3-rex-plugins/plugins/roundrectangle";
@@ -303,7 +303,7 @@ export class RunInfoUiHandler extends UiHandler {
       } else if (this.runInfo.enemyParty.length === 2) {
         this.parseWildDoubleDefeat(enemyContainer);
       }
-    } else if (this.runInfo.battleType === BattleType.TRAINER && !isNil(this.runInfo.trainer)) {
+    } else if (this.runInfo.battleType === BattleType.TRAINER && this.runInfo.trainer != null) {
       this.showTrainerSprites(enemyContainer);
       const row_limit = 3;
       this.runInfo.enemyParty.forEach((p, i) => {
@@ -436,7 +436,7 @@ export class RunInfoUiHandler extends UiHandler {
    */
   private showTrainerSprites(enemyContainer: Phaser.GameObjects.Container) {
     const { trainer } = this.runInfo;
-    if (isNil(trainer)) {
+    if (trainer == null) {
       console.warn("Missing TrainerData in session data, cannot render trainer sprites");
       return;
     }

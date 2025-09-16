@@ -81,7 +81,7 @@ import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlock
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { applyChallenges } from "#utils/challenge-utils";
-import { enumValueToKey, executeIf, fixedNumber, isNil, NumberHolder } from "#utils/common-utils";
+import { enumValueToKey, executeIf, fixedNumber, NumberHolder } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randInt } from "#utils/random-utils";
 import { AES, enc } from "crypto-js";
@@ -652,7 +652,7 @@ export class GameData {
     if (lsItem) {
       try {
         const lsTutorials: Tutorial[] = JSON.parse(lsItem);
-        lsTutorials.forEach((lsTutorial) => (isNil(lsTutorial) ? null : tutorials.add(lsTutorial)));
+        lsTutorials.forEach((lsTutorial) => (lsTutorial == null ? null : tutorials.add(lsTutorial)));
       } catch (err) {
         console.warn("Failed to parse tutorial data from local storage", err);
       }
@@ -1524,7 +1524,7 @@ export class GameData {
        * and its pre evolution Species don't have the same possible genders (gendered VS genderless).
        * In this case it will default to using an already unlocked gender, or male if there is none.
        */
-      const genderlessSpecies = isNil(species.malePercent);
+      const genderlessSpecies = species.malePercent == null;
       const genderlessMon = currentGender === Gender.GENDERLESS;
       if (genderlessMon && !genderlessSpecies) {
         const isFemaleCaught = (caughtAttr & DexAttr.FEMALE) > 0;

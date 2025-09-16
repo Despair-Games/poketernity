@@ -4,7 +4,7 @@ import type { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
-import { coerceArray, isNil } from "#utils/common-utils";
+import { coerceArray } from "#utils/common-utils";
 import { getPokemonMoveName } from "#utils/pokemon-utils";
 
 /**
@@ -148,7 +148,7 @@ export class BattlerTag {
     }
 
     const pokemon = this.getSourcePokemon();
-    if (isNil(pokemon)) {
+    if (pokemon == null) {
       return allMoves.get(this.sourceMoveId).name;
     }
     return getPokemonMoveName(pokemon, this.sourceMoveId);
@@ -170,7 +170,7 @@ export class BattlerTag {
    * @returns The source {@linkcode Pokemon} or `undefined` if none is found
    */
   public getSourcePokemon(): Pokemon | undefined {
-    if (!isNil(this.sourceId)) {
+    if (this.sourceId != null) {
       return globalScene.getPokemonById(this.sourceId);
     }
   }

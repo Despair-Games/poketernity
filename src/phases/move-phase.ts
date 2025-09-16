@@ -38,7 +38,7 @@ import { getMoveTargets, SelfStatusMove } from "#moves/move";
 import { PreMoveMessageAttr } from "#moves/pre-move-message-attr";
 import { VariableMoveMessageAttr } from "#moves/variable-move-message-attr";
 import { BattlePhase } from "#phases/base/battle-phase";
-import { BooleanHolder, isNil, NumberHolder } from "#utils/common-utils";
+import { BooleanHolder, NumberHolder } from "#utils/common-utils";
 import { applyMoveAttrs, isFieldTargeted } from "#utils/move-utils";
 import { getStatusEffectActivationText, getStatusEffectHealText } from "#utils/status-effect-utils";
 import i18next from "i18next";
@@ -456,7 +456,7 @@ export class MovePhase extends BattlePhase {
           break;
         default: {
           const target = globalScene.getPokemonByBattlerIndex(t);
-          if (!isNil(target)) {
+          if (target != null) {
             targets.push(target);
           }
           break;

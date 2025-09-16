@@ -42,7 +42,7 @@ import { NoEffectAttr } from "#moves/no-effect-attr";
 import { OverrideMoveEffectAttr } from "#moves/override-move-effect-attr";
 import { HitCheckPhase } from "#phases/base/hit-check-phase";
 import type { AttackMoveResult, DamageResult, TurnMove } from "#types/move-types";
-import { BooleanHolder, isNil, NumberHolder } from "#utils/common-utils";
+import { BooleanHolder, NumberHolder } from "#utils/common-utils";
 import { applyFilteredMoveAttrs, applyMoveAttrs, isFieldTargeted } from "#utils/move-utils";
 import i18next from "i18next";
 
@@ -304,7 +304,7 @@ export class MoveEffectPhase extends HitCheckPhase {
   protected applyMoveEffects(target: Pokemon, effectiveness: TypeDamageMultiplier, isFirstTarget: boolean): void {
     const user = this.getUserPokemon();
     const move = this.move.getMove();
-    if (isNil(user)) {
+    if (user == null) {
       return;
     }
 
@@ -432,7 +432,7 @@ export class MoveEffectPhase extends HitCheckPhase {
       (attr: MoveAttr) =>
         attr instanceof MoveEffectAttr
         && attr.trigger === triggerType
-        && (isNil(selfTarget) || attr.selfTarget === selfTarget)
+        && (selfTarget == null || attr.selfTarget === selfTarget)
         && (!attr.firstHitOnly || this.firstHit)
         && (!attr.lastHitOnly || this.lastHit)
         && (!attr.firstTargetOnly || (firstTarget ?? true)),
@@ -691,7 +691,7 @@ export class MoveEffectPhase extends HitCheckPhase {
 
     return (
       this.move.getMove().moveTarget === MoveTarget.DRAGON_DARTS
-      && !isNil(targetAlly)
+      && targetAlly != null
       && targetAlly.isActive(true)
       && targetAlly !== this.getUserPokemon()
       && !target?.hasTag(BattlerTagType.CENTER_OF_ATTENTION)

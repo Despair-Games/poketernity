@@ -10,7 +10,6 @@ import type { BindingUiHandler } from "#ui/binding-ui-handler";
 import { SettingsUiHandler } from "#ui/settings-ui-handler";
 import { TextListContainer } from "#ui/text-list-container";
 import { addTextObject, getBBCodeFragment } from "#ui/text-utils";
-import { isNil } from "#utils/common-utils";
 import { getIconWithSettingName } from "#utils/inputs-utils";
 import { camelizeString } from "#utils/string-utils";
 import i18next from "i18next";
@@ -134,7 +133,7 @@ export abstract class ControlsSettingsUiHandler extends SettingsUiHandler {
       if (i + this.scrollCursor >= this.uiItems.length) {
         const settingKey = Object.keys(config.settings)[i + settingOffset] as InputSettings;
         const frame = getIconWithSettingName(config, settingKey);
-        if (!isNil(frame)) {
+        if (frame != null) {
           icon.setVisible(true);
           icon.setFrame(frame);
         }

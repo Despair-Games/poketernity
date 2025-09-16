@@ -4,7 +4,6 @@ import { UiTheme } from "#enums/ui-theme";
 import { version } from "#package.json";
 import { defaultSettings } from "#system/default-settings";
 import type { Settings, SettingsCategory, UserFacingSettings } from "#types/settings";
-import { isNil } from "#utils/common-utils";
 
 //#region Types
 
@@ -128,7 +127,7 @@ class SettingsManager {
       throw new Error(`Unknown category: ${category}`);
     }
 
-    if (isNil(this._settings[category][key])) {
+    if (this._settings[category][key] == null) {
       eventBus.emit("settings/update/failed", { category, key, value });
       throw new Error(`Unknown key: ${category}.${String(key)}`);
     }
