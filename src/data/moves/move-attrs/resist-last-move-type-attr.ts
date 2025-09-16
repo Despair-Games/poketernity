@@ -9,7 +9,7 @@ import { ChangeTypeAttr } from "#moves/change-type-attr";
 import type { Move } from "#moves/move";
 import type { MoveConditionFunc } from "#types/move-types";
 import { applyChallenges } from "#utils/challenge-utils";
-import { isNil, ValueHolder } from "#utils/common-utils";
+import { ValueHolder } from "#utils/common-utils";
 import { randSeedItem } from "#utils/random-utils";
 
 /**
@@ -65,7 +65,7 @@ export class ResistLastMoveTypeAttr extends ChangeTypeAttr {
       }
 
       const [{ type: moveType }] = target.getLastXMoves();
-      if (isNil(moveType) || moveType === ElementalType.STELLAR || moveType === ElementalType.UNKNOWN) {
+      if (moveType == null || moveType === ElementalType.STELLAR || moveType === ElementalType.UNKNOWN) {
         return false;
       }
 

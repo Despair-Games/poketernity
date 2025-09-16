@@ -88,11 +88,17 @@ export class AddTypeAttr extends MoveEffectAttr {
     );
 
     const modDamageMultiplier = Math.max(...[...oppMoveTypes].map((t) => getTypeDamageMultiplier(t, this.type)));
-    if (modDamageMultiplier >= 1) {
-      return modDamageMultiplier > 1 ? MINOR_EFFECT_SCORE_PENALTY : 0;
+    if (modDamageMultiplier > 1) {
+      return MINOR_EFFECT_SCORE_PENALTY;
+    }
+    if (modDamageMultiplier === 1) {
+      return 0;
+    }
+    if (!globalScene.currentBattle.double) {
+      return MINOR_EFFECT_SCORE_BONUS;
     }
 
     const userOutspeeds = user.getOpponents().every((opp) => user.outspeeds(opp, true));
-    return userOutspeeds || !globalScene.currentBattle.double ? MINOR_EFFECT_SCORE_BONUS : 0;
+    return userOutspeeds ? MINOR_EFFECT_SCORE_BONUS : 0;
   }
 }

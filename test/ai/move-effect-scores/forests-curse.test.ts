@@ -34,7 +34,7 @@ describe("AI (Move Effect Scores) - Forests Curse", () => {
       .enemyLevel(100);
   });
 
-  it("should be preferred when the user has a Fire-type move", async () => {
+  it("should be preferred when the user has a move that would gain type effectiveness", async () => {
     game.override.enemyMoveset([MoveId.EMBER, ...baseMoveset]);
 
     await game.classicMode.startBattle(SpeciesId.FEEBAS);
@@ -43,7 +43,7 @@ describe("AI (Move Effect Scores) - Forests Curse", () => {
     expect(enemy).toPreferSelectingMove(MoveId.FORESTS_CURSE);
   });
 
-  it("should not be preferred when the user does not have a Fire-type move", async () => {
+  it("should not be preferred when the user does not have a move that would gain type effectiveness", async () => {
     await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemy = game.field.getEnemyPokemon();
