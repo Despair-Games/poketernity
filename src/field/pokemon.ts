@@ -2494,6 +2494,18 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         return;
       }
     }
+
+    const currentWeatherType = globalScene.arena.weatherType;
+    const weatherScore = this.getWeatherBenefitScore(currentWeatherType);
+    const oppWeatherScore = opponent.getWeatherBenefitScore(currentWeatherType, true);
+    matchupScore.value += Math.sign(weatherScore - oppWeatherScore);
+
+    const currentTerrainType = globalScene.arena.terrainType;
+    const terrainScore = this.getTerrainBenefitScore(currentTerrainType);
+    const oppTerrainScore = opponent.getTerrainBenefitScore(currentTerrainType, true);
+    matchupScore.value += Math.sign(terrainScore - oppTerrainScore);
+
+    matchupScore.value = Math.max(matchupScore.value, 0);
   }
 
   /**
