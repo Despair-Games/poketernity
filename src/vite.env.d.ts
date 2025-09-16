@@ -27,8 +27,9 @@ interface ImportMetaEnv {
   readonly VITE_GIT_BRANCH?: string;
   /** Set to `"0"` to remove the branch-name element from the DOM. Set to `"1"` to show it. _Only available in `"development"` mode!_ */
   readonly VITE_SHOW_BRANCH_NAME?: string;
+  readonly NODE_ENV?: string;
 }
 
-interface ImportMeta {
+declare interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
