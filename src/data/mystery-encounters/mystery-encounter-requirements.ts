@@ -298,8 +298,12 @@ export class WeatherRequirement extends EncounterSceneRequirement {
   }
 
   override meetsRequirement(): boolean {
-    const currentWeather = globalScene.arena.weather?.weatherType;
-    if (!isNil(currentWeather) && this.requiredWeather?.length > 0 && !this.requiredWeather.includes(currentWeather!)) {
+    const currentWeather = globalScene.arena.weatherType;
+    if (
+      currentWeather !== WeatherType.NONE
+      && this.requiredWeather.length > 0
+      && !this.requiredWeather.includes(currentWeather)
+    ) {
       return false;
     }
 
@@ -307,9 +311,9 @@ export class WeatherRequirement extends EncounterSceneRequirement {
   }
 
   override getDialogueToken(_pokemon?: PlayerPokemon): [string, string] {
-    const currentWeather = globalScene.arena.weather?.weatherType;
+    const currentWeather = globalScene.arena.weatherType;
     let token = "";
-    if (!isNil(currentWeather)) {
+    if (currentWeather !== WeatherType.NONE) {
       token = WeatherType[currentWeather].replace("_", " ").toLocaleLowerCase();
     }
     return ["weather", token];

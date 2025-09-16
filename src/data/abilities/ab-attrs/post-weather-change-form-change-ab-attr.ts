@@ -31,7 +31,7 @@ export class PostWeatherChangeFormChangeAbAttr extends PostWeatherChangeAbAttr {
         return simulated;
       }
 
-      const weatherType = globalScene.arena.weather?.weatherType;
+      const weatherType = globalScene.arena.weatherType;
 
       if (!weatherType || this.formRevertingWeathers.includes(weatherType)) {
         globalScene.arena.triggerWeatherBasedFormChangesToNormal();

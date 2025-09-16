@@ -42,7 +42,7 @@ describe("Moves - Grassy Glide", () => {
     game.move.use(MoveId.GRASSY_GLIDE);
     await game.toEndOfTurn();
 
-    expect(game.scene.arena.getTerrainType()).toEqual(TerrainType.GRASSY);
+    expect(game.scene.arena.terrainType).toEqual(TerrainType.GRASSY);
     expect(game.field.getSpeedOrder()).toEqual([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     expect(game.field.getTurnOrder()).toEqual([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
   });
@@ -59,7 +59,7 @@ describe("Moves - Grassy Glide", () => {
     game.move.use(MoveId.GRASSY_GLIDE);
     await game.toEndOfTurn();
 
-    expect(game.scene.arena.getTerrainType()).toEqual(terrainType);
+    expect(game.scene.arena.terrainType).toEqual(terrainType);
     expect(game.field.getSpeedOrder()).toEqual([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     expect(game.field.getTurnOrder()).toEqual(game.field.getSpeedOrder());
   });
@@ -71,7 +71,7 @@ describe("Moves - Grassy Glide", () => {
     game.move.use(MoveId.GRASSY_GLIDE);
     await game.toEndOfTurn();
 
-    expect(game.scene.arena.getTerrainType()).toEqual(TerrainType.GRASSY);
+    expect(game.scene.arena.terrainType).toEqual(TerrainType.GRASSY);
     expect(game.field.getSpeedOrder()).toEqual([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     expect(game.field.getTurnOrder()).toEqual(game.field.getSpeedOrder());
   });
