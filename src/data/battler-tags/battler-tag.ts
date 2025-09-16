@@ -43,6 +43,15 @@ export class BattlerTag {
    * @defaultValue `false`
    */
   public isBatonPassable: boolean;
+  /**
+   * Used to determine the order in which tags apply their
+   * Matchup Score modifier (if they have one). The higher the priority,
+   * the earlier the tag will modify MUS in the overall order.
+   * @defaultValue `0`
+   * @see {@linkcode modifyMatchupScore}
+   * @see {@linkcode Pokemon.getMatchupScore}
+   */
+  public musPriority: number = 0;
 
   constructor(
     tagType: BattlerTagType,

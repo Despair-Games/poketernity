@@ -6,6 +6,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitResult } from "#enums/hit-result";
 import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
+import type { ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -15,6 +16,8 @@ import i18next from "i18next";
  * Custom implementation: Boss Pokemon are immune to this effect
  */
 export class PerishSongTag extends BattlerTag {
+  public override musPriority = 2;
+
   constructor(turnCount: number) {
     super(BattlerTagType.PERISH_SONG, BattlerTagLapseType.TURN_END, turnCount, MoveId.PERISH_SONG, undefined, true);
   }
@@ -35,7 +38,6 @@ export class PerishSongTag extends BattlerTag {
         }),
       );
     } else {
-      // The 2 here is just a number big enough to overcome the G-Max damage reduction
       pokemon.damageAndUpdate(pokemon.hp, {
         result: HitResult.ONE_HIT_KO,
         ignoreSegments: true,
@@ -44,5 +46,21 @@ export class PerishSongTag extends BattlerTag {
     }
 
     return ret;
+  }
+
+  /**
+   * Sets MUS to -Infinity on the last turn of this effect, effectively forcing the Pokemon to switch.
+   * This should precede and override all other MUS modifiers.
+   */
+  public override modifyMatchupScore(
+    _pokemon: Pokemon,
+    _opponent: Pokemon,
+    matchupScore: ValueHolder<number>,
+  ): boolean {
+    if (this.turnCount === 1) {
+      matchupScore.value = Number.NEGATIVE_INFINITY;
+      return true;
+    }
+    return false;
   }
 }

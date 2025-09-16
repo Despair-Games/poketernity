@@ -10,7 +10,7 @@ import { CommonAnim } from "#enums/common-anim";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
-import { BooleanHolder, toDmgValue } from "#utils/common-utils";
+import { BooleanHolder, toDmgValue, type ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -73,5 +73,12 @@ export class SaltCuredTag extends BattlerTag {
     }
 
     return ret;
+  }
+
+  public override modifyMatchupScore(pokemon: Pokemon, _opponent: Pokemon, matchupScore: ValueHolder<number>): boolean {
+    if (!pokemon.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)) {
+      matchupScore.value -= 1;
+    }
+    return false;
   }
 }

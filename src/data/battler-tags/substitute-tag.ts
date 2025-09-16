@@ -7,6 +7,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import type { Pokemon } from "#field/pokemon";
+import type { ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -15,6 +16,8 @@ import i18next from "i18next";
  * onto the tag. This tag also grants immunity to most Status moves and several move effects.
  */
 export class SubstituteTag extends BattlerTag {
+  public override musPriority = 1;
+
   /** The substitute's remaining HP. If HP is depleted, the Substitute fades. */
   public hp: number;
   /** A reference to the sprite representing the Substitute doll */
@@ -126,5 +129,20 @@ export class SubstituteTag extends BattlerTag {
   override loadTag(source: BattlerTag | any): void {
     super.loadTag(source);
     this.hp = source.hp;
+  }
+
+  /**
+   * Sets MUS to Infinity if the affected Pokemon can deal damage to the opponent. This effectively
+   * prevents the affected Pokemon from switching while it has a Substitute up and overrides the
+   * effects of most other MUS modifiers.
+   */
+  public override modifyMatchupScore(pokemon: Pokemon, opponent: Pokemon, matchupScore: ValueHolder<number>): boolean {
+    const attackMoves = pokemon.isPlayer() ? pokemon.estimateAttackMoves() : pokemon.getAttackMoves(true);
+
+    if (attackMoves.some((move) => pokemon.getExpectedAttackScore(opponent, move) > 0)) {
+      matchupScore.value = Number.POSITIVE_INFINITY;
+      return true;
+    }
+    return false;
   }
 }

@@ -2489,7 +2489,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       }
     }
 
-    for (const tag of this.summonData.tags) {
+    const battlerTags = this.summonData.tags.slice().sort((tagA, tagB) => tagB.musPriority - tagA.musPriority);
+    for (const tag of battlerTags) {
       if (tag.modifyMatchupScore(this, opponent, matchupScore)) {
         return;
       }
