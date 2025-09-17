@@ -135,14 +135,7 @@ import { addTextObject } from "#ui/text-utils";
 import { UI } from "#ui/ui";
 import { setDocumentUiTheme, updateWindowStyle } from "#ui/ui-theme";
 import { loadCommonAnimAssets } from "#utils/anim-utils";
-import {
-  BooleanHolder,
-  enumValueToKey,
-  fixedNumber,
-  isBetween,
-  NumberHolder,
-  ValueHolder,
-} from "#utils/common-utils";
+import { BooleanHolder, enumValueToKey, fixedNumber, isBetween, NumberHolder, ValueHolder } from "#utils/common-utils";
 import { getModifierType } from "#utils/modifier-type-utils";
 import { loadMoveAnimAssets } from "#utils/move-anim-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
