@@ -71,9 +71,9 @@ export async function loadEncounterAnimAssets(startLoad?: boolean): Promise<void
 }
 
 /**
- * If awaited, this delays execution for a set time using the given Scene's
- * internal timer.
- * @param time - The time (ms) to delay execution
+ * If awaited, this delays execution for a set time using the given Scene's internal timer.
+ * @param time - The time (ms) to delay execution. Use {@linkcode fixedNumber}
+ *   on the value to prevent the game speed from affecting the duration of the delay.
  * @param scene - The {@linkcode SceneBase} whose timer is used to delay execution
  * (default {@linkcode globalScene})
  */
