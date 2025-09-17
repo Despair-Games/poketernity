@@ -77,7 +77,7 @@
         "useConst": "error",
         "useImportType": "error",
         "noNonNullAssertion": "off", // TODO: fix all non-null assertions in non-test files and turn this on
-        "noParameterAssign": "info",
+        "noParameterAssign": "info", // TODO: refactor and make "error"
         "useExponentiationOperator": "off", // Too typo-prone and easy to mixup with standard multiplication (* vs **)
         "useDefaultParameterLast": "error",
         "useSingleVarDeclarator": "error",
@@ -136,13 +136,13 @@
         "noParameterProperties": "error", // a step toward enabling `erasableSyntaxOnly` in `tsconfig.json`
         "useAtIndex": "error",
         "useReadonlyClassProperties": "error",
-        "useExplicitLengthCheck": "info",
+        "useExplicitLengthCheck": "info", // TODO: refactor and make "error"
         "noNestedTernary": "error"
       },
       "suspicious": {
         "noDoubleEquals": "error",
         "noExplicitAny": "off", // TODO: Refactor and make this an error
-        "noAssignInExpressions": "warn",
+        "noAssignInExpressions": "warn", // TODO: refactor and make "error"
         "noPrototypeBuiltins": "error",
         "noFallthroughSwitchClause": "error", // Prevents accidental automatic fallthroughs in switch cases (use disable comment if needed)
         "noImplicitAnyLet": "error",
@@ -181,11 +181,11 @@
         "noUselessUndefined": "error",
         "noNonNullAssertedOptionalChain": "error",
         "useExplicitType": "off", // TODO: refactor and make "error"
-        "noFloatingPromises": "warn",
-        "noMisusedPromises": "warn",
+        "noFloatingPromises": "warn", // TODO: refactor and make "error"
+        "noMisusedPromises": "warn", // TODO: refactor and make "error"
         "useExhaustiveSwitchCases": "error",
         "noUnnecessaryConditions": "off", // TODO: enable when the false positives are fixed
-        "noImportCycles": "error"
+        "noImportCycles": "error" // overlaps with depcruiser but this will allow diagnostics to be shown in the IDE
       },
       "performance": {
         "noNamespaceImport": "error",
