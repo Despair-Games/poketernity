@@ -1,11 +1,11 @@
-import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
+import { CounterAttackCondition } from "#moves/counter-attack-condition";
 import { FixedDamageAttr } from "#moves/fixed-damage-attr";
 import type { Move } from "#moves/move";
-import type { AttackMoveResult, MoveConditionFunc } from "#types/move-types";
+import type { MoveCondition } from "#moves/move-condition";
+import type { MoveFilter } from "#types/move-filter";
+import type { AttackMoveResult } from "#types/move-types";
 import { type NumberHolder, toDmgValue } from "#utils/common-utils";
-
-type MoveFilter = (moveId: MoveId) => boolean;
 
 /**
  * Attribute to modify damage based on the damage received by the user from attacks
@@ -33,7 +33,7 @@ export class CounterDamageAttr extends FixedDamageAttr {
     return true;
   }
 
-  override getCondition(): MoveConditionFunc {
-    return (user, _target, _move) => user.turnData.attacksReceived.some((ar) => this.moveFilter(ar.moveId));
+  override getCondition(): MoveCondition {
+    return new CounterAttackCondition(this.moveFilter);
   }
 }

@@ -3,12 +3,13 @@ import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveTarget } from "#enums/move-target";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
-import { ChanceBasedMoveEffectAttr, type ChanceBasedMoveEffectAttrOptions } from "#moves/chance-based-move-effect-attr";
 import type { Move } from "#moves/move";
+import { MoveEffectAttr, type MoveEffectAttrOptions } from "#moves/move-effect-attr";
 import type { MoveConditionFunc } from "#types/move-types";
 
-interface AddArenaTagAttrOptions extends ChanceBasedMoveEffectAttrOptions {
+interface AddArenaTagAttrOptions extends MoveEffectAttrOptions {
   /** The number of turns the tag is in effect */
   turnCount?: number;
   /** Should the move fail if an arena tag of the same type is already on the field? */
@@ -18,7 +19,7 @@ interface AddArenaTagAttrOptions extends ChanceBasedMoveEffectAttrOptions {
 /**
  * Attribute to add an arena tag to the field of a given {@linkcode ArenaTagType | type}.
  */
-export class AddArenaTagAttr extends ChanceBasedMoveEffectAttr {
+export abstract class AddArenaTagAttr extends MoveEffectAttr {
   protected readonly tagType: ArenaTagType;
   protected readonly relativeSide: ArenaTagRelativeSide;
   protected override options?: AddArenaTagAttrOptions;
@@ -82,4 +83,6 @@ export class AddArenaTagAttr extends ChanceBasedMoveEffectAttr {
       ? (user, _target, move) => !globalScene.arena.hasTag(this.tagType, this.getTagSide(user, move))
       : null;
   }
+
+  abstract override getEffectScore(_user: EnemyPokemon, _target: Pokemon, _move: Move): number;
 }

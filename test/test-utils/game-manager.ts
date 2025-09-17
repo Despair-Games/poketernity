@@ -25,9 +25,9 @@ import { UiMode } from "#enums/ui-mode";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
-import { Trainer } from "#field/trainer";
 import { ModifierTypeOption } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
+import type { EnemyCommandPhase } from "#phases/enemy-command-phase";
 import { settings } from "#system/settings-manager";
 import { ErrorInterceptor } from "#test/test-utils/error-interceptor";
 import { generateStarter, waitUntil } from "#test/test-utils/game-manager-utils";
@@ -129,6 +129,14 @@ export class GameManager {
 
     // Disables timed events on all tests (can be overriden at test level)
     this.override.timedEvents([]);
+
+    /**
+     * Prevents Enemy Trainers from switching for all tests.
+     * This can be overridden at test level by
+     * - calling `game.override.disableEnemySwitching(false)` at the start of a test
+     * - using {@linkcode forceEnemyToSwitch} to force an individual enemy to switch
+     */
+    this.override.enemyDisableSwitching();
 
     global.fetch = vi.fn(MockFetch) as any;
   }
@@ -322,15 +330,22 @@ export class GameManager {
     );
   }
 
-  forceEnemyToSwitch() {
-    const originalMatchupScore = Trainer.prototype.getPartyMemberMatchupScores;
-    Trainer.prototype.getPartyMemberMatchupScores = () => {
-      Trainer.prototype.getPartyMemberMatchupScores = originalMatchupScore;
-      return [
-        [1, 100],
-        [1, 100],
-      ];
-    };
+  async forceEnemyToSwitch(partyMemberIndex: number = 1, baton: boolean = false) {
+    // Make sure the party member to switch in exists and is allowed in battle
+    expect(partyMemberIndex).toBeLessThan(this.scene.getEnemyParty().length);
+    expect(this.scene.getEnemyParty()[partyMemberIndex]?.isAllowedInBattle()).toBeTruthy();
+
+    // Wait for the next EnemyCommandPhase to start
+    await this.phaseInterceptor.to("EnemyCommandPhase", false);
+    const enemy =
+      this.scene.getEnemyField()[(this.scene.phaseManager.getCurrentPhase() as EnemyCommandPhase).fieldIndex];
+
+    vi.spyOn(enemy, "getNextCommand").mockReturnValueOnce({
+      pokemon: enemy,
+      command: BattleCommand.POKEMON,
+      cursor: partyMemberIndex,
+      args: [baton],
+    });
   }
 
   /** Transition to the first {@linkcode CommandPhase} of the next turn. */

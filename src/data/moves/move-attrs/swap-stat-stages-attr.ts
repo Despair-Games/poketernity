@@ -1,7 +1,9 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { BAD_MOVE_PENALTY, SOFT_EFFECT_SCORE_LIMIT } from "#constants/ai-constants";
 import type { BattleStat } from "#enums/stat";
 import { getStatKey } from "#enums/stat";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
@@ -22,7 +24,7 @@ export class SwapStatStagesAttr extends MoveEffectAttr {
     this.stats = stats;
   }
 
-  override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
+  public override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     for (const s of this.stats) {
       const temp = user.getStatStage(s);
       user.setStatStage(s, target.getStatStage(s));
@@ -48,5 +50,28 @@ export class SwapStatStagesAttr extends MoveEffectAttr {
       );
     }
     return true;
+  }
+
+  /**
+   * @returns (+0.5) per stat stage the user would gain from this effect, rounded down. The
+   * total bonus cannot exceed the {@linkcode SOFT_EFFECT_SCORE_LIMIT}. If the user would not gain stat stages
+   * from this effect, this grants a {@linkcode BAD_MOVE_PENALTY} instead.
+   */
+  public override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+    const uncappedScore = Math.floor(this.getProjectedStatGain(user, target) * 0.5);
+    if (uncappedScore <= 0) {
+      return BAD_MOVE_PENALTY;
+    }
+    return Math.min(uncappedScore, SOFT_EFFECT_SCORE_LIMIT);
+  }
+
+  /**
+   * @param user - The {@linkcode EnemyPokemon} evaluating this effect
+   * @param target - The {@linkcode Pokemon} this effect is evaluated against
+   * @returns The projected number of stat stages the user would gain from
+   * applying this attribute's effect on the target
+   */
+  private getProjectedStatGain(user: EnemyPokemon, target: Pokemon): number {
+    return this.stats.reduce((total, stat) => total + target.getStatStage(stat) - user.getStatStage(stat), 0);
   }
 }

@@ -1,5 +1,9 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { DETRIMENTAL_ABILITIES } from "#constants/ability-constants";
+import { MAJOR_EFFECT_SCORE_BONUS } from "#constants/ai-constants";
+import { AbilityId } from "#enums/ability-id";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
@@ -30,5 +34,27 @@ export class SwitchAbilitiesAttr extends MoveEffectAttr {
 
   override getCondition(): MoveConditionFunc {
     return (user, target, _move) => [user, target].every((pkmn) => pkmn.getAbility().isSwappable);
+  }
+
+  /**
+   * If the user has a {@link DETRIMENTAL_ABILITIES | detrimental ability}, or the target
+   * has one of Huge Power, Pure Power, or Contrary, grants a (+2) effect score bonus
+   */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+    /**
+     * Note: this only uses a subset of {@linkcode HIGH_VALUE_ABILITIES} since
+     * - Desolate Land and Primordial Sea are symmetrical effects
+     * - Wonder Guard cannot be swapped
+     */
+    const highValueSwappableAbilities = [AbilityId.HUGE_POWER, AbilityId.PURE_POWER, AbilityId.CONTRARY];
+
+    const targetHasHighValueAbility = target
+      .getAbilities({ revealedOnly: true })
+      .some((ab) => !ab.passive && highValueSwappableAbilities.includes(ab.ability.id));
+
+    if (DETRIMENTAL_ABILITIES.includes(user.getAbility().id) || targetHasHighValueAbility) {
+      return MAJOR_EFFECT_SCORE_BONUS;
+    }
+    return 0;
   }
 }

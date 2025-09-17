@@ -214,6 +214,12 @@ class DefaultOverrides {
    */
   readonly ENEMY_HEALTH_SEGMENTS_OVERRIDE: number = 0;
   /**
+   * Prevents enemy Trainers from switching their Pokemon.
+   * Setting this to `true` is highly recommended if you are overriding the
+   * enemy's moveset with only status moves.
+   */
+  readonly ENEMY_DISABLE_SWITCHING_OVERRIDE: boolean = false;
+  /**
    * If `true`, every enemy Pokemon Terastallizes on the first turn that it decides to use a move.
    * If `false`, this override is ignored.
    */

@@ -47,11 +47,11 @@ describe("Abilities - Stakeout", () => {
     enemy1.hp = enemy1.getMaxHp();
 
     game.move.select(MoveId.SPLASH);
-    game.forceEnemyToSwitch();
+    await game.forceEnemyToSwitch();
     await game.toNextTurn();
 
     game.move.select(MoveId.SURF);
-    game.forceEnemyToSwitch();
+    await game.forceEnemyToSwitch();
     await game.toNextTurn();
 
     expect(enemy1.isFainted()).toBe(false);

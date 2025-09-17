@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
-import { getTerrainColor } from "#data/terrain";
 import { getCurrentTime } from "#utils/common-utils";
+import { getTerrainColor } from "#utils/terrain-utils";
 
 const spriteFragShader = `
 #ifdef GL_FRAGMENT_PRECISION_HIGH

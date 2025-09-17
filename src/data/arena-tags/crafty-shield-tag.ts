@@ -14,7 +14,7 @@ import type { ProtectConditionFunc } from "#types/move-types";
  * @returns `true` if the incoming move is a Status move, is not a hazard, and does not target all
  * Pokemon or sides of the field.
  */
-const CraftyShieldConditionFunc: ProtectConditionFunc = (moveId) => {
+export const CraftyShieldConditionFunc: ProtectConditionFunc = (moveId: MoveId) => {
   const move = allMoves.get(moveId);
   return (
     move.category === MoveCategory.STATUS

@@ -61,6 +61,7 @@ import type { RestrictingBattlerTag } from "#battler-tags/restricting-battler-ta
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import type { TypeImmuneTag } from "#battler-tags/type-immune-tag";
 import type { UproarTag } from "#battler-tags/uproar-tag";
+import { ATTACK_SCORE_HP_THRESHOLD } from "#constants/ai-constants";
 import { WEAKEN_MOVE_SCREEN_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
 import {
   CRIT_BOOST_BATTLER_TAG_TYPES,
@@ -159,19 +160,24 @@ import { BypassBurnDamageReductionAttr } from "#moves/bypass-burn-damage-reducti
 import { CombinedPledgeStabBoostAttr } from "#moves/combined-pledge-stab-boost-attr";
 import { CritOnlyAttr } from "#moves/crit-only-attr";
 import { DoubleDamageToMaxAttr } from "#moves/double-damage-to-max-attr";
+import { DrowsyAttr } from "#moves/drowsy-attr";
 import { FixedDamageAttr } from "#moves/fixed-damage-attr";
 import { HighCritAttr } from "#moves/high-crit-attr";
 import { HitsTagAttr } from "#moves/hits-tag-attr";
 import { IgnoreOpponentStatStagesAttr } from "#moves/ignore-opponent-stat-stages-attr";
 import { IgnoreWeatherTypeDebuffAttr } from "#moves/ignore-weather-type-debuff-attr";
 import { ModifiedDamageAttr } from "#moves/modified-damage-attr";
-import { getMoveTargets, type Move } from "#moves/move";
+import { AttackMove, getMoveTargets, type Move } from "#moves/move";
+import type { MoveAttr } from "#moves/move-attr";
+import { MultiStatusEffectAttr } from "#moves/multi-status-effect-attr";
 import { OneHitKOAccuracyAttr } from "#moves/one-hit-ko-accuracy-attr";
 import { OneHitKOAttr } from "#moves/one-hit-ko-attr";
+import { PsychoShiftEffectAttr } from "#moves/psycho-shift-effect-attr";
 import { RechargeAttr } from "#moves/recharge-attr";
 import { RespectAttackTypeImmunityAttr } from "#moves/respect-attack-type-immunity-attr";
 import { SacrificialAttr } from "#moves/sacrificial-attr";
 import { StatStageChangeAttr } from "#moves/stat-stage-change-attr";
+import { StatusEffectAttr } from "#moves/status-effect-attr";
 import { TypelessAttr } from "#moves/typeless-attr";
 import { VariableAtkAttr } from "#moves/variable-atk-attr";
 import { VariableDefAttr } from "#moves/variable-def-attr";
@@ -183,6 +189,7 @@ import type { PokemonData } from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
 import type { AbilityFilterOptions } from "#types/ability-types";
 import type { DamageCalculationResult, DamageResult, TurnMove } from "#types/move-types";
+import type { PokemonScoreData } from "#types/pokemon-score-data";
 import type {
   CustomPokemonData,
   PokemonSummonData,
@@ -190,6 +197,7 @@ import type {
   PokemonWaveData,
   Status,
 } from "#types/pokemon-types";
+import type { Constructor } from "#types/utility-types";
 import type { BattleInfo } from "#ui/battle-info";
 import { playTween } from "#utils/anim-utils";
 import { applyChallenges } from "#utils/challenge-utils";
@@ -208,6 +216,8 @@ import { loadMoveAnimAssets } from "#utils/move-anim-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
 import { getPokemonSpecies, getPokemonSpeciesForm, summonDataToJSON } from "#utils/pokemon-utils";
 import { randSeedInt } from "#utils/random-utils";
+import { getTerrainSynergyAbilities, getTerrainSynergyMoves, getTerrainTypeSynergyScore } from "#utils/terrain-utils";
+import { getWeatherSynergyAbilities, getWeatherSynergyMoves, getWeatherTypeSynergyScore } from "#utils/weather-utils";
 import i18next from "i18next";
 
 interface AbilityData {
@@ -224,7 +234,7 @@ interface DamageFunctionOptions {
   source?: Pokemon;
 }
 
-interface EffectiveStatOptions {
+export interface EffectiveStatOptions {
   /** The opposing {@linkcode Pokemon}, usually involved in an incoming or outgoing attack */
   opponent?: Pokemon;
   /** The {@linkcode Move} being used */
@@ -483,6 +493,15 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    */
   public get toxicTurnCount(): number {
     return this.status?.toxicTurnCount ?? 0;
+  }
+
+  /**
+   * The number of turns this Pokemon has slept since afflicted with the
+   * {@linkcode StatusEffect.SLEEP | SLEEP} condition.
+   * @defaultValue 0
+   */
+  public get turnsAsleep(): number {
+    return this.status?.turnsAsleep ?? 0;
   }
 
   /**
@@ -768,7 +787,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   getFormKey(): string {
-    if (!this.species.forms.length || this.species.forms.length <= this.formIndex) {
+    if (this.species.forms.length === 0 || this.species.forms.length <= this.formIndex) {
       return "";
     }
     return this.species.forms[this.formIndex].formKey;
@@ -1117,7 +1136,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       critStage.value += critBoostStackableTag.stackCount;
     }
 
-    console.log(`crit stage: +${critStage.value}`);
     return critStage.value;
   }
 
@@ -1250,6 +1268,19 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     return Math.floor(ret);
+  }
+
+  /**
+   * @param target - The {@linkcode Pokemon} to compare Speed against
+   * @param estimate - If `true`, estimates the target's Speed, not accounting for unrevealed Abilities
+   * @returns `true` if this Pokemon has higher Speed than the given target Pokemon
+   */
+  public outspeeds(target: Pokemon, estimate: boolean = false): boolean {
+    const abilityApplyMode = estimate ? AbilityApplyMode.REVEALED : AbilityApplyMode.DEFAULT;
+    return (
+      this.getEffectiveStat(Stat.SPD, { opponent: target })
+      > target.getEffectiveStat(Stat.SPD, { opponent: this, abilityApplyMode })
+    );
   }
 
   calculateStats(): void {
@@ -1385,9 +1416,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   abstract getBossSegmentIndex(): number;
 
   /**
-   * @param bypassSummonData - (Default `true`) Whether to get the Pokemon's actual/unmodified moveset (`true`)
-   *   or the Pokemon's temporary/modified moveset (such as due to Transform) (`false`).
-   * @returns The Pokemon's active moveset
+   * Obtains this Pokemon's known moves.
+   * If {@linkcode Overrides.MOVESET_OVERRIDE} is non-empty and this is a {@linkcode PlayerPokemon},
+   * calling this function will reset the Pokemon's moveset to the moves given in the override
+   * (likewise for {@linkcode Overrides.ENEMY_MOVESET_OVERRIDE} and {@linkcode EnemyPokemon}).
+   * @param baseOnly - (Default `false`) If `true`, ignores temporary moveset changes in the Pokemon's
+   * {@linkcode summonData}
+   * @returns An array containing this Pokemon's known {@linkcode PokemonMove | PokemonMoves}
    */
   public getMoveset(bypassSummonData: boolean = false): readonly PokemonMove[] {
     const ret = !bypassSummonData && this.summonData.moveset.length > 0 ? this.summonData.moveset : this.moveset;
@@ -1464,6 +1499,127 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return this.getMoveset(bypassSummonData).find((mv) => mv.moveId === moveId);
   }
 
+  /** @returns this Pokemon's {@linkcode PokemonWaveData.revealedMoves | revealed moves} in array format */
+  public getRevealedMoves(): MoveId[] {
+    return [...this.waveData.revealedMoves];
+  }
+
+  /**
+   * Checks whether this Pokemon knows a specific move
+   * @param moveId - The {@linkcode MoveId} to check
+   * @param revealedOnly - (Default `false`) If `true`, limits the search to
+   * moves that the Pokemon has revealed in battle
+   * @returns `true` if the Pokemon knows the given move
+   */
+  public hasMove(moveId: MoveId, revealedOnly: boolean = false): boolean {
+    return revealedOnly
+      ? this.waveData.revealedMoves.has(moveId)
+      : this.getMoveset().some((mv) => mv.moveId === moveId);
+  }
+
+  /**
+   * Checks whether this Pokemon knows a move with a specific {@linkcode MoveAttr}
+   * @param attr - The type of {@linkcode MoveAttr} to check
+   * @param revealedOnly - (Default `false`) If `true`, limits the search to
+   * moves that the Pokemon has revealed in battle
+   * @returns `true` if the Pokemon knows a move with the given attribute
+   * @todo Use enum flags for move attributes instead to reduce risk of dependency violations
+   */
+  public hasMoveWithAttr(attr: Constructor<MoveAttr>, revealedOnly: boolean = false): boolean {
+    const revealedMoves = revealedOnly
+      ? [...this.waveData.revealedMoves].map((moveId) => allMoves.get(moveId))
+      : this.getMoveset().map((pkMove) => pkMove.getMove());
+
+    return revealedMoves.some((move) => move.hasAttr(attr));
+  }
+
+  /**
+   * Obtains the attacks in this Pokemon's moveset.
+   * @param usableOnly if `true`, filters out any moves that are unusable
+   * @param revealedOnly if `true`, filters out any moves that have not yet
+   * been revealed in the current battle
+   * @returns the [filtered] array of attack moves
+   */
+  public getAttackMoves(usableOnly: boolean = false, revealedOnly: boolean = false): Move[] {
+    return this.getMoveset()
+      .filter((pmv) => !usableOnly || pmv.isUsable(this))
+      .map((pmv) => pmv.getMove())
+      .filter((move) => move.category !== MoveCategory.STATUS)
+      .filter((move) => !revealedOnly || this.waveData.revealedMoves.has(move.id));
+  }
+
+  /**
+   * Generates an estimated set of attack moves for this Pokemon
+   * based on what of the Pokemon's actual moves have been revealed
+   * in the current battle. If 4 moves have not been revealed, this
+   * fills the remaining space with up to 2 "simulated moves."
+   * @returns The estimated array of moves.
+   * @see {@linkcode getSimulatedMoves}
+   */
+  public estimateAttackMoves(): Move[] {
+    const revealedMoves = this.getMoveset()
+      .map((pmv) => pmv.getMove())
+      .filter((mv) => this.waveData.revealedMoves.has(mv.id));
+    revealedMoves.push(...this.getSimulatedMoves());
+
+    return revealedMoves.slice(0, 4).filter((move) => !move.isStatusMove());
+  }
+
+  /**
+   * Generates placeholder attacks for this Pokemon with properties based
+   * on the Pokemon's type(s), attacking stats, and the current wave index.
+   * This generates up to 2 moves:
+   * - One move for each of the Pokemon's base type(s).
+   * - The category of each move (physical or special) matches the Pokemon's
+   * dominant attacking stat (or physical if the stats are tied).
+   * - The power of each move increases based on the current wave:
+   *   ```
+   *   +-------+-------+
+   *   | Wave  | Power |
+   *   +-------+-------+
+   *   | 1-20  |    40 |
+   *   | 21-40 |    60 |
+   *   | 41-60 |    80 |
+   *   | 61+   |    90 |
+   *   +-------+-------+
+   *   ```
+   * - Each move has 100 accuracy
+   * - Each move has 0 priority and no secondary effects.
+   * @returns
+   */
+  private getSimulatedMoves(): Move[] {
+    const types = this.getTypes(false, false, true);
+    const category = this.getStat(Stat.ATK) >= this.getStat(Stat.SPATK) ? MoveCategory.PHYSICAL : MoveCategory.SPECIAL;
+    const ret: Move[] = [];
+
+    for (let i = 0; i < Math.min(types.length, 4 - this.waveData.revealedMoves.size); i++) {
+      /**
+       * Each simulated move is assigned a unique ID so that its {@linkcode getExpectedAttackScore | EAS}
+       * can be properly cached. The simulated move of the Pokemon's primary type is
+       * assigned the ID {@linkcode MoveId.SIMULATED_MOVE_1}, and the simulated move
+       * of its secondary type is assigned {@linkcode MoveId.SIMULATED_MOVE_2}.
+       */
+      const moveId = i % 2 === 0 ? MoveId.SIMULATED_MOVE_1 : MoveId.SIMULATED_MOVE_2;
+      ret.push(new AttackMove(moveId, types[i], category, this.getSimulatedMovePower(), 100, 10, -1, 0, 0));
+    }
+
+    return ret;
+  }
+
+  private getSimulatedMovePower(): number {
+    const { waveIndex } = globalScene.currentBattle;
+    if (waveIndex <= 20) {
+      return 40;
+    }
+    if (waveIndex <= 40) {
+      return 60;
+    }
+    if (waveIndex <= 60) {
+      return 80;
+    }
+    return 90;
+  }
+
   /**
    * Checks which egg moves have been unlocked for the {@linkcode Pokemon} based
    * on the species it was met at or by the first {@linkcode Pokemon} in its evolution
@@ -1530,7 +1686,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       }
     }
 
-    if (!types.length || !includeTeraType) {
+    if (types.length === 0 || !includeTeraType) {
       if (!bypassSummonData && this.summonData.types.length > 0) {
         this.summonData.types.forEach((t) => types.push(t));
       } else if (this.customPokemonData.types.length > 0) {
@@ -1552,7 +1708,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     // become UNKNOWN if no types are present
-    if (!types.length) {
+    if (types.length === 0) {
       types.push(ElementalType.UNKNOWN);
     }
 
@@ -2138,44 +2294,363 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Computes the given Pokemon's matchup score against this Pokemon.
-   * In most cases, this score ranges from near-zero to 16, but the maximum possible matchup score is 64.
-   * @param opponent {@linkcode Pokemon} The Pokemon to compare this Pokemon against
-   * @returns A score value based on how favorable this Pokemon is when fighting the given Pokemon
+   * Obtains the estimated damage of a move against this Pokemon, accounting
+   * for revealed abilities and multi-hit modifiers (if applicable).
+   * @param source the {@linkcode Pokemon} using the move
+   * @param move the {@linkcode Move} being evaluated
+   * @returns the given move's estimated damage output.
    */
-  getMatchupScore(opponent: Pokemon): number {
-    const types = this.getTypes(true);
-    const enemyTypes = opponent.getTypes(true, true);
-    /** Is this Pokemon faster than the opponent? */
-    const outspeed =
-      (this.isActive(true) ? this.getEffectiveStat(Stat.SPD, { opponent }) : this.getStat(Stat.SPD, false))
-      >= opponent.getEffectiveStat(Stat.SPD, { opponent: this });
-    /**
-     * Based on how effective this Pokemon's types are offensively against the opponent's types.
-     * This score is increased by 25 percent if this Pokemon is faster than the opponent.
-     */
-    let atkScore = opponent.getAttackTypeEffectiveness(types[0], this) * (outspeed ? 1.25 : 1);
-    /**
-     * Based on how effectively this Pokemon defends against the opponent's types.
-     * This score cannot be higher than 4.
-     */
-    let defScore = 1 / Math.max(this.getAttackTypeEffectiveness(enemyTypes[0], opponent), 0.25);
-    if (types.length > 1) {
-      atkScore *= opponent.getAttackTypeEffectiveness(types[1], this);
+  protected getEstimatedAttackDamage(source: Pokemon, move: Move): number {
+    return (
+      this.getAttackDamage(source, move, AbilityApplyMode.REVEALED).damage
+      * move.getMultiHitAttackScoreMultiplier(source)
+    );
+  }
+
+  /**
+   * Obtains this Pokemon's Attack Score (AS) against the given opponent
+   * for the given move. This score ranges from (-1) to (+4) depending on the
+   * move's forecasted damage against the opponent:
+   * - If the move is forecasted to KO the opponent, AS = (+4)
+   *   - (+6) if the move has increased priority in the current game state
+   * - If the move deals at least 80% of the opponent's maximum HP but does not KO, AS = (+2)
+   * - If the move deals damage in the interval of (0, 80)% max HP, and does not KO, AS
+   * is determined randomly based on the damage forecasted:
+   *   - Let *d* = 40*x* + *y* where d is the damage dealt in terms of % max HP,
+   * 40*x* is the next highest multiple of 40 below *d*, and *y* < 40, then
+   *     - P(AS = x + 1) = y / 40
+   *     - P(AS = x) = 1 - (y / 40)
+   * - If the move is not forecasted to deal damage, AS = -1, denoting a move with no effect.
+   *
+   * Example: A pokemon is evaluating a move against an opponent at full HP and
+   * calculates that the move deals damage equal to 50% of the opponent's HP.
+   * The AS for that move against the opponent would be (+1) 75% of the time
+   * and (+2) 25% of the time.
+   * @param opponent The {@linkcode Pokemon} to forecast the move against
+   * @param move The {@linkcode Move} whose outcome is forecasted and scored
+   * @returns The calculated AS for the forecasted action
+   */
+  public getAttackScore(opponent: Pokemon, move: Move): number {
+    if (move.category === MoveCategory.STATUS) {
+      return 0;
     }
-    if (enemyTypes.length > 1) {
-      defScore *= 1 / Math.max(this.getAttackTypeEffectiveness(enemyTypes[1], opponent), 0.25);
+
+    const damage = opponent.getEstimatedAttackDamage(this, move);
+
+    if (damage >= opponent.hp) {
+      return this.getAttackScoreOnKnockOut(move);
     }
-    /**
-     * Based on this Pokemon's HP ratio compared to that of the opponent.
-     * This ratio is multiplied by 1.5 if this Pokemon outspeeds the opponent;
-     * however, the final ratio cannot be higher than 1.
-     */
-    let hpDiffRatio = this.getHpRatio() + (1 - opponent.getHpRatio());
-    if (outspeed) {
-      hpDiffRatio = Math.min(hpDiffRatio * 1.5, 1);
+    if (damage <= 0) {
+      return -1;
     }
-    return (atkScore + defScore) * hpDiffRatio;
+
+    const damagePct = Math.floor((damage / opponent.getMaxHp()) * 100);
+
+    if (damagePct >= 2 * ATTACK_SCORE_HP_THRESHOLD) {
+      return 2;
+    }
+    const minAttackScore = Math.floor(damagePct / ATTACK_SCORE_HP_THRESHOLD);
+    const tierUpChance = (damagePct % ATTACK_SCORE_HP_THRESHOLD) * (100 / ATTACK_SCORE_HP_THRESHOLD);
+
+    if (this.randSeedInt(100) < tierUpChance) {
+      return minAttackScore + 1;
+    }
+    return minAttackScore;
+  }
+
+  /**
+   * Obtains the expected value of this Pokemon's Attack Score (AS) against the
+   * given opponent when using the given move
+   *
+   * Example: A pokemon is evaluating a move against an opponent at full HP and
+   * calculates that the move deals damage equal to 50% of the opponent's HP. The
+   * expected value for Attack Score (EAS) for this action would be 1.25.
+   * @param opponent The {@linkcode Pokemon} to forecast the move against
+   * @param move The {@linkcode Move} being scored
+   * @returns The expected AS for the forecasted action
+   * @see {@linkcode getAttackScore}
+   */
+  public getExpectedAttackScore(opponent: Pokemon, move: Move): number {
+    const cachedScore = this.turnData.scoreData.get(opponent.id)?.expectedAttackScores.get(move.id);
+    if (cachedScore != null) {
+      return cachedScore;
+    }
+
+    const damage = opponent.getEstimatedAttackDamage(this, move);
+
+    let score: number = 0;
+    if (damage >= opponent.hp) {
+      score = this.getAttackScoreOnKnockOut(move);
+    } else {
+      const damagePct = Math.floor((damage / opponent.getMaxHp()) * 100);
+      score = damagePct / ATTACK_SCORE_HP_THRESHOLD;
+    }
+
+    this.cacheEas(opponent, move, score);
+    return score;
+  }
+
+  /**
+   * Caches a {@linkcode PokemonScoreData} entry in this Pokemon's
+   * {@linkcode turnData} with the given data.
+   * @param opponent - The {@linkcode Pokemon} that {@linkcode move} is evaluated against
+   * @param move - The {@linkcode Move} being evaluated
+   * @param score - The calculated score for the move action
+   * @see {@linkcode getExpectedAttackScore}
+   */
+  private cacheEas(opponent: Pokemon, move: Move, score: number): void {
+    const oppScoreData = this.turnData.scoreData.get(opponent.id);
+    if (oppScoreData == null) {
+      this.turnData.scoreData.set(opponent.id, {
+        expectedAttackScores: new Map<MoveId, number>([[move.id, score]]),
+      });
+    } else {
+      oppScoreData.expectedAttackScores.set(move.id, score);
+    }
+  }
+
+  /**
+   * Obtains the Attack Score of a move assuming the move can KO its opponent.
+   * @param move the {@linkcode Move} being evaluated
+   * @returns the move's calculated Attack Score
+   * @see {@linkcode getAttackScore}
+   */
+  protected getAttackScoreOnKnockOut(move: Move): number {
+    if (move.getPriority(this) > 0) {
+      return 6;
+    }
+    return 4;
+  }
+
+  /**
+   * Computes this Pokemon's matchup score (MUS) against the given opponent.
+   * This MUS is a reflection of
+   * 1. How effective this Pokemon's attacks are against the opponent, and
+   * 2. How many turns this Pokemon will have to act, assuming the opponent
+   * attacks with their perceived best attack every turn.
+   *
+   * If this Pokemon is on the field and can safely KO the opponent, its MUS
+   * against that opponent will be `Infinity`. Otherwise, MUS falls in the
+   * interval [0, 8]
+   * @param opponent The {@linkcode Pokemon} to score this Pokemon against
+   * @returns the calculated score for the matchup.
+   */
+  public getMatchupScore(opponent: Pokemon): number {
+    const cachedScore = this.turnData.scoreData.get(opponent.id)?.matchupScore;
+    if (cachedScore != null) {
+      return cachedScore;
+    }
+
+    const canOutspeed = this.outspeeds(opponent, true);
+
+    const attackMoves = this.getAttackMoves(true);
+    const oppAttackMoves = opponent.estimateAttackMoves();
+
+    const eas = Math.max(...attackMoves.map((mv) => this.getExpectedAttackScore(opponent, mv)));
+    const oppEas = Math.max(...oppAttackMoves.map((mv) => opponent.getExpectedAttackScore(this, mv)));
+
+    let score: number = 0;
+    if (this.isActive(true)) {
+      if (eas >= 4 && (canOutspeed || oppEas < eas)) {
+        score = Number.POSITIVE_INFINITY;
+      } else if (oppEas >= 4 && (!canOutspeed || eas < oppEas)) {
+        score = 0;
+      } else {
+        score = eas * (3 - oppEas + (canOutspeed ? 1 : 0));
+      }
+    } else {
+      score = Math.max(eas * (2 - oppEas + (canOutspeed ? 1 : 0)), 0);
+    }
+
+    this.cacheMatchupScore(opponent, score);
+    return score;
+  }
+
+  /**
+   * Caches a {@linkcode PokemonScoreData} entry in this Pokemon's
+   * {@linkcode turnData} with the given Matchup Score data.
+   * @param opponent - The opposing Pokemon that this Pokemon is evaluated against
+   * @param matchupScore - This Pokemon's Matchup Score against {@linkcode opponent}
+   * @see {@linkcode getMatchupScore}
+   */
+  private cacheMatchupScore(opponent: Pokemon, matchupScore: number) {
+    const oppScoreData = this.turnData.scoreData.get(opponent.id);
+    if (oppScoreData == null) {
+      this.turnData.scoreData.set(opponent.id, {
+        matchupScore,
+        expectedAttackScores: new Map<MoveId, number>(),
+      });
+    } else {
+      oppScoreData.matchupScore = matchupScore;
+    }
+  }
+
+  /**
+   * Obtains the average matchup score for this Pokemon between each of its
+   * active opponents.
+   * @see {@linkcode getMatchupScore}
+   */
+  public getAverageMatchupScore(): number {
+    const opponents = this.getOpponents();
+    return opponents.map((opp) => this.getMatchupScore(opp)).reduce((total, mus) => total + mus) / opponents.length;
+  }
+
+  /**
+   * Calculates a score to measure how much this Pokemon benefits from the
+   * given type of weather. The final score consists of three components:
+   * - An assigned score for the Pokemon's type(s) according to {@linkcode getWeatherTypeSynergyScore}.
+   * - (+1) for each Ability the Pokemon has (and can apply) that benefits from the weather.
+   * - (+0.5) for each Move the Pokemon knows that benefits from the weather.
+   * @param weatherType - The {@link WeatherType | type} of weather to evaluate this Pokemon against
+   * @param estimate - If `true`, limits checked abilities and moves to those revealed in battle
+   * @returns A decimal score approximating the Pokemon's potential synergy with the given weather
+   */
+  public getWeatherBenefitScore(weatherType: WeatherType, estimate: boolean = false): number {
+    const typeScore = this.getTypes(true, true).reduce(
+      (score, elemType) => score + getWeatherTypeSynergyScore(weatherType, elemType),
+      0,
+    );
+
+    // TODO: This ability check doesn't account for ability suppression
+    const abilities = this.getAbilities({ revealedOnly: estimate });
+    const synergyAbilities = getWeatherSynergyAbilities(weatherType);
+    const abilityScore = abilities.reduce(
+      (total, { ability }) => total + (synergyAbilities.has(ability.id) ? 1 : 0),
+      0,
+    );
+
+    const moveScore = getWeatherSynergyMoves(weatherType).reduce(
+      (score, moveId) => score + (this.hasMove(moveId, estimate) ? 0.5 : 0),
+      0,
+    );
+
+    return typeScore + abilityScore + moveScore;
+  }
+
+  /**
+   * Calculates a score to measure how much this Pokemon benefits from the
+   * given type of Terrain. The final score consists of three components:
+   * - An assigned score for the Pokemon's type(s) according to {@linkcode getTerrainTypeSynergyScore}.
+   * - (+1) for each Ability the Pokemon has (and can apply) that benefits from the terrain.
+   * - (+0.5) for each Move the Pokemon knows that benefits from the terrain.
+   * - An assigned score for the Terrain's "secondary effect" according to
+   * {@linkcode getTerrainSecondaryEffectScore}.
+   * @param weatherType - The {@link WeatherType | type} of weather to evaluate this Pokemon against
+   * @param estimate - If `true`, limits checked abilities and moves to those revealed in battle
+   * @returns A decimal score approximating the Pokemon's potential synergy with the given weather
+   */
+  public getTerrainBenefitScore(terrainType: TerrainType, estimate: boolean = false): number {
+    if (!this.isGrounded()) {
+      return 0;
+    }
+
+    const typeScore = this.getTypes(true, true).reduce(
+      (score, elemType) => score + getTerrainTypeSynergyScore(terrainType, elemType),
+      0,
+    );
+
+    // TODO: This ability check doesn't account for ability suppression
+    const abilities = this.getAbilities({ revealedOnly: estimate });
+    const synergyAbilities = getTerrainSynergyAbilities(terrainType);
+    const abilityScore = abilities.reduce(
+      (total, { ability }) => total + (synergyAbilities.has(ability.id) ? 1 : 0),
+      0,
+    );
+
+    const moveScore = getTerrainSynergyMoves(terrainType).reduce(
+      (score, moveId) => score + (this.hasMove(moveId, estimate) ? 0.5 : 0),
+      0,
+    );
+
+    const secondaryEffectScore = this.getTerrainSecondaryEffectScore(terrainType, estimate);
+
+    return typeScore + abilityScore + moveScore + secondaryEffectScore;
+  }
+
+  /**
+   * Calculates the benefit score component for the given terrain's "secondary" effect. For the purpose
+   * of this score, each Terrain's secondary effect is as follows:
+   * - {@link TerrainType.MISTY | Misty Terrain}: grants immunity to status conditions to all grounded Pokemon
+   * - {@link TerrainType.ELECTRIC | Electric Terrain}: grants immunity to Sleep to all grounded Pokemon
+   * - {@link TerrainType.GRASSY | Grassy Terrain}: halves the power of Earthquake, Bulldoze, and Magnitude
+   * - {@link TerrainType.PSYCHIC | Psychic Terrain}: grants immunity to opponents' high-priority moves
+   * to all grounded Pokemon
+   * @param terrainType - The {@linkcode TerrainType} to check
+   * @param estimate - If `true`, the data used for scoring (i.e. moves, abilities) is limited
+   * to what has been "revealed" to the Enemy AI in the current battle
+   * @returns The decimal secondary effect benefit score component for the given Terrain
+   * @see {@linkcode getTerrainBenefitScore}
+   */
+  private getTerrainSecondaryEffectScore(terrainType: TerrainType, estimate: boolean): number {
+    switch (terrainType) {
+      case TerrainType.MISTY:
+        return this.getMistyTerrainSecondaryEffectScore(estimate);
+      case TerrainType.ELECTRIC:
+        return this.getElectricTerrainSecondaryEffectScore(estimate);
+      case TerrainType.GRASSY:
+        return this.getGrassyTerrainSecondaryEffectScore(estimate);
+      case TerrainType.PSYCHIC:
+        return this.getPsychicTerrainSecondaryEffectScore(estimate);
+      default: {
+        terrainType satisfies TerrainType.NONE;
+        return 0;
+      }
+    }
+  }
+
+  /**
+   * Misty Terrain penalizes Pokemon if they have any status-effect-inflicting moves
+   * @see {@linkcode getTerrainSecondaryEffectScore}
+   */
+  private getMistyTerrainSecondaryEffectScore(estimate: boolean): number {
+    const badMoveAttrs: Constructor<MoveAttr>[] = [StatusEffectAttr, MultiStatusEffectAttr, PsychoShiftEffectAttr];
+
+    return badMoveAttrs.some((attr) => this.hasMoveWithAttr(attr, estimate)) ? -1 : 0;
+  }
+
+  /**
+   * Electric Terrain penalizes Pokemon if they have any Sleep-inducing moves
+   * @see {@linkcode getTerrainSecondaryEffectScore}
+   */
+  private getElectricTerrainSecondaryEffectScore(estimate: boolean): number {
+    const moveset = estimate
+      ? this.getRevealedMoves().map((moveId) => allMoves.get(moveId))
+      : this.getMoveset().map((pkMove) => pkMove.getMove());
+
+    const hasSleepMove = moveset.some(
+      (move) => move.hasAttr(DrowsyAttr) || move.getAttrs(StatusEffectAttr)[0]?.effect === StatusEffect.SLEEP,
+    );
+
+    return hasSleepMove ? -1 : 0;
+  }
+
+  /**
+   * Grassy Terrain penalizes Pokemon if they know Earthquake, Bulldoze, or Magnitude
+   * @see {@linkcode getTerrainSecondaryEffectScore}
+   */
+  private getGrassyTerrainSecondaryEffectScore(estimate: boolean): number {
+    const badMoves: MoveId[] = [MoveId.EARTHQUAKE, MoveId.BULLDOZE, MoveId.MAGNITUDE];
+
+    return badMoves.some((moveId) => this.hasMove(moveId, estimate)) ? -1 : 0;
+  }
+
+  /**
+   * Psychic Terrain penalizes Pokemon if they know a single-target, high-priority move.
+   * If not, it may reward Pokemon that are faster than any of their active opponents.
+   * @see {@linkcode getTerrainSecondaryEffectScore}
+   */
+  private getPsychicTerrainSecondaryEffectScore(estimate: boolean): number {
+    const moveset = estimate
+      ? this.getRevealedMoves().map((moveId) => allMoves.get(moveId))
+      : this.getMoveset().map((pkMove) => pkMove.getMove());
+
+    const hasPriorityMove = moveset.some((move) => move.getPriority(this) > 0 && move.isSingleEnemyTarget());
+
+    if (hasPriorityMove) {
+      return -1;
+    }
+
+    return this.getOpponents().every((opp) => this.outspeeds(opp, opp.isPlayer())) ? 0.5 : 0;
   }
 
   getEvolution(): SpeciesFormEvolution | null {
@@ -2460,7 +2935,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (this.hasTrainer()) {
       const tms = Object.keys(tmSpecies);
       for (const tm of tms) {
-        const moveId = Number.parseInt(tm) as MoveId;
+        const moveId = Number.parseInt(tm, 10) as MoveId;
         let compatible = false;
         for (const p of tmSpecies[tm]) {
           if (Array.isArray(p)) {
@@ -2573,7 +3048,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         (m) => allMoves.get(m[0]).category !== MoveCategory.STATUS && this.isOfType(allMoves.get(m[0]).type),
       );
 
-      if (stabMovePool.length) {
+      if (stabMovePool.length > 0) {
         const totalWeight = stabMovePool.reduce((v, m) => v + m[1], 0);
         let rand = randSeedInt(totalWeight);
         let index = 0;
@@ -2585,7 +3060,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     } else {
       // Normal wild pokemon just force a random damaging move
       const attackMovePool = baseWeights.filter((m) => allMoves.get(m[0]).category !== MoveCategory.STATUS);
-      if (attackMovePool.length) {
+      if (attackMovePool.length > 0) {
         const totalWeight = attackMovePool.reduce((v, m) => v + m[1], 0);
         let rand = randSeedInt(totalWeight);
         let index = 0;
@@ -2759,12 +3234,24 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Compares if `this` and {@linkcode target} are on the same team.
+   * Compares if `this` and {@linkcode target} are opponents to each other.
    * @param target the {@linkcode Pokemon} to compare against.
-   * @returns `true` if the two pokemon are allies, `false` otherwise
+   * @returns `true` if the two pokemon are opponents, `false` otherwise
    */
   public isOpponent(target: Pokemon): boolean {
     return this.isPlayer() !== target.isPlayer();
+  }
+
+  /**
+   * Checks if `this` and a given active {@linkcode target} are allies. This can
+   * also be used to assert if `this` is of the same class as the target.
+   * @param target - The active {@linkcode Pokemon} to check
+   * @returns `true` if the two pokemon are allies
+   */
+  public isAlly(target: PlayerPokemon): this is PlayerPokemon;
+  public isAlly(target: EnemyPokemon): this is EnemyPokemon;
+  public isAlly(target: PlayerPokemon | EnemyPokemon): this is typeof target {
+    return this === target.getAlly();
   }
 
   /**
@@ -3239,7 +3726,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     /** Doubles damage if this Pokemon's last move was Glaive Rush */
     const glaiveRushMultiplier = new NumberHolder(1);
-    if (this.hasTag(BattlerTagType.RECEIVE_DOUBLE_DAMAGE)) {
+    if (this.hasTag(BattlerTagType.GLAIVE_RUSH)) {
       glaiveRushMultiplier.value = 2;
     }
 
@@ -3412,7 +3899,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     applyMoveAttrs(CritOnlyAttr, source, this, move, isCritical);
     applyAbAttrs<ConditionalCritAbAttr>(AbAttrFlag.CONDITIONAL_CRIT, source, simulated, isCritical, this, move);
     if (!isCritical.value) {
-      const critChance = [24, 8, 2, 1][Math.max(0, Math.min(this.getCritStage(source, move, false), 3))];
+      const critChance = [24, 8, 2, 1][Math.max(0, Math.min(this.getCritStage(source, move, simulated), 3))];
       isCritical.value = critChance === 1 || !globalScene.randBattleSeedInt(critChance);
     }
 
@@ -3871,6 +4358,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
     turnMove.turn = globalScene.currentBattle?.turn;
     this.getMoveHistory().push(turnMove);
+    this.waveData.revealedMoves.add(turnMove.move.id);
   }
 
   /**
@@ -4056,7 +4544,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return false;
     }
 
-    if (sourcePokemon && sourcePokemon !== this && this.isSafeguarded(sourcePokemon)) {
+    if (sourcePokemon && sourcePokemon !== this && this.isSafeguarded(sourcePokemon, quiet)) {
       return false;
     }
 
@@ -4219,11 +4707,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   protected setStatus(
     effect: StatusEffect,
-    { toxicTurnCount = 0, sleepTurnsRemaining = 0 }: Partial<Omit<Status, "effect">>,
+    { toxicTurnCount = 0, turnsAsleep = 0, sleepTurnsRemaining = 0 }: Partial<Omit<Status, "effect">>,
   ): void {
     this.status = {
       effect,
       toxicTurnCount,
+      turnsAsleep,
       sleepTurnsRemaining,
     };
   }
@@ -4238,6 +4727,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         break;
       case StatusEffect.SLEEP:
         if (activeOverrides.STATUS_ACTIVATION_OVERRIDE === true) {
+          this.status.turnsAsleep++;
           this.status.sleepTurnsRemaining = Math.max(this.status.sleepTurnsRemaining, 1);
           break;
         }
@@ -4245,6 +4735,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           this.status.sleepTurnsRemaining = 0;
           break;
         }
+        this.status.turnsAsleep++;
         this.status.sleepTurnsRemaining--;
         break;
       default:
@@ -4283,15 +4774,16 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   /**
    * Checks if this Pokemon is protected by Safeguard
-   * @param attacker - The {@linkcode Pokemon} inflicting a status on this Pokemon
+   * @param attacker - The {@linkcode Pokemon} inflicting status on this Pokemon
+   * @param simulated - If `true`, suppresses messages and other changes to game state
    * @returns Whether this Pokemon is protected by Safeguard
    */
-  isSafeguarded(attacker: Pokemon): boolean {
+  isSafeguarded(attacker: Pokemon, simulated: boolean = true): boolean {
     const defendingSide = this.getArenaTagSide();
     if (globalScene.arena.hasTag(ArenaTagType.SAFEGUARD, defendingSide)) {
       const bypassed = new BooleanHolder(false);
       if (attacker) {
-        applyAbAttrs<InfiltratorAbAttr>(AbAttrFlag.INFILTRATOR, attacker, false, bypassed);
+        applyAbAttrs<InfiltratorAbAttr>(AbAttrFlag.INFILTRATOR, attacker, simulated, bypassed);
       }
       return !bypassed.value;
     }
@@ -4367,6 +4859,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       berriesEaten: [],
       abilitiesApplied: [],
       abilitiesRevealed: [],
+      revealedMoves: new Set(),
     };
   }
 
@@ -4387,6 +4880,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       switchedInThisTurn: false,
       failedRunAway: false,
       joinedRound: false,
+      scoreData: new Map<number, PokemonScoreData>(),
     };
   }
 
@@ -4588,4 +5082,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
     return false;
   }
+}
+
+/** @todo Move this interface to `enemy-pokemon.ts` or its own file */
+export interface TargetScoreData {
+  moveId: MoveId;
+  targets: BattlerIndex[];
+  score: number;
 }

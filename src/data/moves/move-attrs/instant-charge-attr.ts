@@ -10,7 +10,7 @@ import type { BooleanHolder } from "#utils/common-utils";
  */
 export class InstantChargeAttr extends MoveAttr {
   /** The condition in which the move with this attribute instantly charges */
-  protected readonly condition: UserMoveConditionFunc;
+  public readonly condition: UserMoveConditionFunc;
 
   constructor(condition: UserMoveConditionFunc) {
     super(true);

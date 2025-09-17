@@ -1,10 +1,22 @@
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
+import type { MultiStatusEffectAttr } from "#moves/multi-status-effect-attr";
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
+
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { ConfusionOnStatusEffectAbAttr } from "#abilities/confusion-on-status-effect-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import {
+  BURN_SYNERGY_ABILITIES,
+  POISON_SYNERGY_ABILITIES,
+  POISONING_SYNERGY_ABILITIES,
+} from "#constants/ability-constants";
+import { BAD_MOVE_PENALTY, MAJOR_EFFECT_SCORE_BONUS, OPP_EFFECTIVE_STAT_OPTIONS } from "#constants/ai-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { MoveCategory } from "#enums/move-category";
-import type { StatusEffect } from "#enums/status-effect";
+import { Stat } from "#enums/stat";
+import { StatusEffect } from "#enums/status-effect";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { ChanceBasedMoveEffectAttr } from "#moves/chance-based-move-effect-attr";
 import type { Move } from "#moves/move";
@@ -34,9 +46,9 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
     this.overrideStatus = overrideStatus;
   }
 
-  override canApply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (user !== target && target.isSafeguarded(user)) {
-      if (move.category === MoveCategory.STATUS) {
+  public override canApply(user: Pokemon, target: Pokemon, move: Move, simulated: boolean = false): boolean {
+    if (user !== target && target.isSafeguarded(user, simulated)) {
+      if (move.category === MoveCategory.STATUS && !simulated) {
         globalScene.phaseManager.createAndUnshiftPhase(
           "MessagePhase",
           i18next.t("moveTriggers:safeguard", { targetName: getPokemonNameWithAffix(target) }),
@@ -47,7 +59,7 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
     return super.canApply(user, target, move);
   }
 
-  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
+  public override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     const pokemon = this.selfTarget ? user : target;
     if (pokemon.hasNonVolatileStatusEffect()) {
       if (this.overrideStatus) {
@@ -72,11 +84,93 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
     return false;
   }
 
-  override getTargetBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {
-    const moveChance = this.getMoveChance(user, target, move, false);
-    const score = moveChance < 0 ? -10 : Math.floor(moveChance * -0.1);
-    const pokemon = this.selfTarget ? user : target;
+  /**
+   * @returns The output of {@linkcode getAllyTargetScore} when evaluating the move against the given user's
+   * ally, or the chance-adjusted {@linkcode getRawEffectScore | raw Effect Score} otherwise.
+   * This score is inverted for self-targeted effects (i.e. Rest).
+   */
+  public override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    return (this.selfTarget ? -1 : 1) * super.getEffectScore(user, target, move);
+  }
 
-    return !pokemon.hasNonVolatileStatusEffect() && pokemon.canSetStatus(this.effect, true, false, user) ? score : 0;
+  /**
+   * @returns An Effect Score bonus to incentivize afflicting allies with status effects under certain conditions.
+   * These bonuses only apply to {@linkcode StatusEffect.BURN | BURN}, {@linkcode StatusEffect.POISON | POISON}, and
+   * {@linkcode StatusEffect.TOXIC | TOXIC}, and only when the ally has an ability that synergizes with being afflicted
+   * by that effect.
+   * @see {@linkcode BURN_SYNERGY_ABILITIES}
+   * @see {@linkcode POISON_SYNERGY_ABILITIES}
+   */
+  public override getAllyTargetScore(user: EnemyPokemon, target: EnemyPokemon, _move: Move): number | null {
+    if (!target.canSetStatus(this.effect, true, this.overrideStatus, user)) {
+      return null;
+    }
+
+    if (this.effect === StatusEffect.BURN && BURN_SYNERGY_ABILITIES.some((abId) => target.hasAbility(abId))) {
+      return this.getRandomScore(user, 80, MAJOR_EFFECT_SCORE_BONUS);
+    }
+
+    if (
+      [StatusEffect.POISON, StatusEffect.TOXIC].includes(this.effect)
+      && POISON_SYNERGY_ABILITIES.some((abId) => target.hasAbility(abId))
+    ) {
+      /**
+       * The chance to grant a bonus for poisoning the user's ally (with a status move).
+       * {@link StatusEffect.TOXIC | Badly poisoning} an ally is less likely to grant a bonus
+       * than {@link StatusEffect.POISON | poisoning} an ally.
+       */
+      const bonusChance = this.effect === StatusEffect.POISON ? 70 : 60;
+      return this.getRandomScore(user, bonusChance, MAJOR_EFFECT_SCORE_BONUS);
+    }
+
+    return null;
+  }
+
+  /**
+   * @returns The base Effect Score corresponding to this attribute's {@linkcode effect}.
+   * @see {@linkcode getStatusEffectScore}
+   */
+  public override getRawEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    if (!target.canSetStatus(this.effect, true, this.overrideStatus, user)) {
+      return move.isStatusMove() ? BAD_MOVE_PENALTY : 0;
+    }
+    return this.getStatusEffectScore(user, target, this.effect);
+  }
+
+  /**
+   * @returns A base Effect Score depending on the given {@linkcode StatusEffect}:
+   * - Poison and Toxic Poison grant (+1)/(+1.5) respectively. If the user has Poison Puppeteer or
+   * Merciless, this bonus is increased to (+2)/(+2.5).
+   * - Paralysis grants (+1) if the user outspeeds the target, and (+2) otherwise.
+   * - Sleep and Freeze grant (+2.5) in all cases
+   * - Burn grants (+2) if the target has a physical affinity (ATK > SPATK), and (+1) otherwise.
+   *
+   * @privateRemarks
+   * This is organized here (and not in {@linkcode getRawEffectScore}) so that
+   * {@linkcode MultiStatusEffectAttr} can reuse this method in its scoring.
+   */
+  protected getStatusEffectScore(user: EnemyPokemon, target: Pokemon, effect: StatusEffect): number {
+    switch (effect) {
+      case StatusEffect.POISON:
+        return POISONING_SYNERGY_ABILITIES.some((abId) => user.hasAbility(abId)) ? 2 : 1;
+      case StatusEffect.TOXIC:
+        return POISONING_SYNERGY_ABILITIES.some((abId) => user.hasAbility(abId)) ? 2.5 : 1.5;
+      case StatusEffect.PARALYSIS:
+        return user.outspeeds(target, true) ? 1 : 2;
+      case StatusEffect.SLEEP:
+      case StatusEffect.FREEZE:
+        return 2.5;
+      case StatusEffect.BURN: {
+        return target.getEffectiveStat(Stat.ATK, OPP_EFFECTIVE_STAT_OPTIONS)
+          > target.getEffectiveStat(Stat.SPATK, OPP_EFFECTIVE_STAT_OPTIONS)
+          ? 2
+          : 1;
+      }
+      default:
+        // This will cause a type error if more status effects are added in the future,
+        // ensuring they are not forgotten to be accounted for.
+        effect satisfies StatusEffect.NONE;
+        return 0;
+    }
   }
 }

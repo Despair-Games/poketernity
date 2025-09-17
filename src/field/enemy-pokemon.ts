@@ -1,18 +1,28 @@
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
+import type { ALLY_TARGET_PENALTY } from "#constants/ai-constants";
+import type { MovePhase } from "#phases/move-phase";
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
+
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
+import type { ConditionalCritAbAttr } from "#abilities/conditional-crit-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { activeOverrides } from "#app/overrides";
-import type { EncoreTag } from "#battler-tags/encore-tag";
-import { MOVE_LOCK_TAG_TYPES } from "#constants/battler-tag-constants";
+import type { TurnCommand } from "#app/turn-command-manager";
+import { BAD_MOVE_PENALTY, KO_ATTACK_SCORE } from "#constants/ai-constants";
 import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#constants/game-constants";
 import { allMoves } from "#data/data-lists";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import type { PokemonSpecies } from "#data/pokemon-species";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
+import { AbilityId } from "#enums/ability-id";
 import { AiType } from "#enums/ai-type";
+import { ArenaTagType } from "#enums/arena-tag-type";
+import { BattleCommand } from "#enums/battle-command";
 import { BattlerIndex, type FieldBattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Challenges } from "#enums/challenges";
 import { ElementalType } from "#enums/elemental-type";
-import { MoveCategory } from "#enums/move-category";
 import { MoveId } from "#enums/move-id";
 import { MoveTarget } from "#enums/move-target";
 import type { PokeballType } from "#enums/pokeball-type";
@@ -20,17 +30,19 @@ import { SpeciesId } from "#enums/species-id";
 import { EFFECTIVE_STATS, type EffectiveStat } from "#enums/stat";
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { PlayerPokemon } from "#field/player-pokemon";
-import { Pokemon } from "#field/pokemon";
+import { Pokemon, type TargetScoreData } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
 import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
 import { CounterDamageAttr } from "#moves/counter-damage-attr";
 import { CritOnlyAttr } from "#moves/crit-only-attr";
-import { getMoveTargets } from "#moves/move";
+import { FixedDamageAttr } from "#moves/fixed-damage-attr";
+import { getMoveTargets, type Move } from "#moves/move";
 import type { PokemonData } from "#system/pokemon-data";
 import type { TurnMove } from "#types/move-types";
 import { EnemyBattleInfo } from "#ui/battle-info";
-import { isBetween, toDmgValue } from "#utils/common-utils";
-import { randSeedInt, randSeedItem } from "#utils/random-utils";
+import { BooleanHolder, isBetween, toDmgValue } from "#utils/common-utils";
+import { applyMoveAttrs } from "#utils/move-utils";
+import { randSeedInt, randSeedItem, randSeedShuffle } from "#utils/random-utils";
 
 export class EnemyPokemon extends Pokemon {
   public trainerSlot: TrainerSlot;
@@ -185,211 +197,416 @@ export class EnemyPokemon extends Pokemon {
   }
 
   /**
-   * Determines the move this Pokemon will use on the next turn, as well as
-   * the Pokemon the move will target.
-   * @returns this Pokemon's next move in the format {move, moveTargets}
+   * Obtains the total score for the given move when used by this Pokemon
+   * against the given target. A move's total score is based on three major components:
+   * 1. {@linkcode Move.getConditionScore | Condition Score (CS)}: to determine whether the
+   * move is likely to succeed or fail.
+   * 2. {@linkcode getAttackScore | Attack Score (AS)}: to evaluate attacks based
+   * on their projected damage output.
+   * 3. {@linkcode Move.getEffectScore | Effect Score (ES)}: to evaluate the non-damaging
+   * effects of moves.
+   * @param target the {@linkcode Pokemon} the move is evaluated against
+   * @param move the {@linkcode Move} being evaluated
+   * @returns the sum of this move's score components against the given target
    */
-  getNextMove(): TurnMove {
-    // If this Pokemon has a move already queued, return it.
-    const moveQueue = this.getMoveQueue();
-    if (moveQueue.length !== 0) {
-      const queuedMove = moveQueue[0];
-      if (queuedMove) {
-        const moveIndex = this.getMoveset().findIndex((m) => m?.moveId === queuedMove.move.id);
-        if (
-          (moveIndex > -1 && this.getMoveset()[moveIndex]!.isUsable(this, queuedMove.ignorePP))
-          || queuedMove.virtual
-        ) {
-          MOVE_LOCK_TAG_TYPES.forEach((tagType) => this.lapseTag(tagType));
-          return queuedMove;
-        }
-        this.getMoveQueue().shift();
-        return this.getNextMove();
+  public getMoveScore(target: Pokemon, move: Move): number {
+    // If the move is a Status move and is known to have no effect on the target,
+    // return a Bad Move Penalty.
+    if (move.isStatusMove() && target.getMoveEffectiveness(this, move, AbilityApplyMode.REVEALED) === 0) {
+      return BAD_MOVE_PENALTY;
+    }
+
+    const conditionScore = move.getConditionScore(this, target);
+    const attackScore = this.getAttackScore(target, move);
+
+    const isFail = conditionScore <= BAD_MOVE_PENALTY || attackScore === -1;
+    const isKnockOut = !isFail && attackScore >= KO_ATTACK_SCORE;
+
+    return (
+      (isFail ? BAD_MOVE_PENALTY : conditionScore + attackScore + this.getCriticalHitBonus(target, move, attackScore))
+      + move.getEffectScore(this, target, isKnockOut, isFail)
+      + move.getPostTargetEffectScore(this, isFail)
+    );
+  }
+
+  /**
+   * Obtains the total score for the given multi-target move across
+   * all given targets when used by this Pokemon. The components of this score
+   * are much like that of {@link getMoveScore | single-target move scoring},
+   * but there are a few key differences:
+   * - Attack Score (AS) is based on the combined individual AS of each target.
+   * targeted allies to the user have their AS inverted when added to the combined score.
+   * - The {@linkcode BAD_MOVE_PENALTY} applies if the move is expected to fail
+   * OR the move is expected to deal more damage to allies than opponents (approximated by AS).
+   * - The {@linkcode ALLY_TARGET_PENALTY} does not apply to Effect Score (ES) calculations.
+   * @param targets - An array of all {@linkcode Pokemon} targeted by the move
+   * @param move - The {@linkcode Move} to evaluate
+   * @returns The sum of this move's score components across all targets
+   */
+  private getMultiTargetMoveScore(targets: Pokemon[], move: Move): number {
+    /**
+     * CS is equal to the highest individual CS across all targets,
+     * i.e. if the move is expected to succeed against at least one Pokemon,
+     * the move won't be penalized.
+     */
+    const conditionScore = Math.max(...targets.map((target) => move.getConditionScore(this, target)));
+    /**
+     * AS for multi-targeted moves is accumulated from all active Pokemon
+     * targeted by the move. Allied targets' AS is inverted before it is
+     * added to the total AS. Since {@linkcode getAttackScore} codifies
+     * 0-damage attacks with an AS of (-1), targeted allies that are immune
+     * effectively grant a {@linkcode MINOR_EFFECT_SCORE_BONUS} to the move action.
+     *
+     * Assuming the attack doesn't have high priority, this score has a maximum
+     * value of (+9) (2 opponent KOs + 1 immune ally in a double battle). Status
+     * moves still receive an AS of (+0) in all cases.
+     */
+    const attackScores = targets.map(
+      (target) => (target.isOpponent(this) ? 1 : -1) * this.getAttackScore(target, move),
+    );
+
+    const isFail = conditionScore <= BAD_MOVE_PENALTY;
+    const isKnockOut = attackScores.map((score) => !isFail && score >= KO_ATTACK_SCORE);
+    const totalAttackScore = attackScores.reduce((total, score) => total + score);
+
+    /**
+     * A multi-target move action is considered "bad" if the move is expected
+     * to fail or deal more damage to allies than opponents.
+     */
+    const isBadMove = isFail || totalAttackScore < 0;
+
+    /**
+     * The critical hit bonus for this move action is the sum of
+     * single-target critical hit bonuses against all opponent targets.
+     */
+    const critBonus = targets.reduce((score, target, i) => {
+      if (!target.isOpponent(this)) {
+        return score;
+      }
+      return score + this.getCriticalHitBonus(target, move, attackScores[i]);
+    }, 0);
+
+    return (
+      (isBadMove ? BAD_MOVE_PENALTY : conditionScore + totalAttackScore + critBonus)
+      + targets.reduce((score, target, i) => score + move.getEffectScore(this, target, isKnockOut[i], isFail, true), 0)
+      + move.getPostTargetEffectScore(this, isFail)
+    );
+  }
+
+  /**
+   * Calculates the bonus granted to the given move based on its critical hit chance
+   * when used by this Pokemon against the given opponent.
+   * @param opponent the {@linkcode Pokemon} targeted by the move
+   * @param move the {@linkcode Move} being evaluated
+   * @param attackScore the previously calculated attack score (optional)
+   * @returns the score bonus from critical hit chance
+   */
+  protected getCriticalHitBonus(opponent: Pokemon, move: Move, attackScore?: number) {
+    if (move.isStatusMove()) {
+      return 0;
+    }
+
+    const { damage: critDamage } = opponent.getAttackDamage(this, move, AbilityApplyMode.REVEALED, true);
+    if ((attackScore == null || attackScore < 4) && critDamage >= opponent.hp) {
+      const critChance = this.getSimulatedCriticalHitChance(opponent, move);
+      /**
+       * Only grant a bonus if the calculated critical hit chance is over 10%
+       * (i.e. the user has 1 or more crit stages)
+       */
+      if (critChance > 10) {
+        return 1 + (this.randSeedInt(100) < critChance ? 1 : 0);
       }
     }
 
-    // Filter out any moves this Pokemon cannot use
-    let movePool = this.getMoveset().filter((m) => m.isUsable(this));
-    // If no moves are left, use Struggle. Otherwise, continue with move selection
-    if (movePool.length) {
-      // If there's only 1 move in the move pool, use it.
-      if (movePool.length === 1) {
-        const move = movePool[0].getMove();
-        return { move, targets: this.getNextTargets(move.id), type: this.getMoveType(move) };
-      }
-      // If a move is forced because of Encore, use it.
-      const encoreTag = this.getTag<EncoreTag>(BattlerTagType.ENCORE);
-      if (encoreTag) {
-        const encoreMove = movePool.find((m) => m.moveId === encoreTag.moveId);
-        if (encoreMove) {
-          const move = encoreMove.getMove();
-          return { move, targets: this.getNextTargets(move.id), type: this.getMoveType(move) };
-        }
-      }
-      switch (this.aiType) {
-        // No enemy should spawn with this AI type in-game
-        case AiType.RANDOM: {
-          const move = movePool[globalScene.randBattleSeedInt(movePool.length)].getMove();
-          return { move, targets: this.getNextTargets(move.id), type: this.getMoveType(move) };
-        }
-        case AiType.SMART_RANDOM:
-        case AiType.SMART: {
-          /**
-           * Search this Pokemon's move pool for moves that will KO an opposing target.
-           * If there are any moves that can KO an opponent (i.e. a player Pokemon),
-           * those moves are the only ones considered for selection on this turn.
-           */
-          const koMoves = movePool.filter((pkmnMove) => {
-            if (!pkmnMove) {
-              return false;
-            }
+    return 0;
+  }
 
-            const move = pkmnMove.getMove()!;
-            if (move.moveTarget === MoveTarget.ATTACKER) {
-              return false;
-            }
+  /**
+   * Calculates the chance (%, rounded down) of the given move critically hitting
+   * the given target when used by this Pokemon.
+   * @param target the {@linkcode Pokemon} targeted by the move
+   * @param move the {@linkcode Move} being evaluated
+   * @returns the chance of the move hitting
+   */
+  protected getSimulatedCriticalHitChance(target: Pokemon, move: Move): number {
+    const defendingSide = this.getArenaTagSide();
+    const noCritTag = globalScene.arena.hasTag(ArenaTagType.NO_CRIT, defendingSide);
 
-            const moveTargets = getMoveTargets(this, move.id)
-              .targets.map((ind) => globalScene.getPokemonByBattlerIndex(ind))
-              .filter((p) => p != null && this.isPlayer() !== p.isPlayer()) as Pokemon[];
-            // Only considers critical hits for crit-only moves or when this Pokemon is under the effect of Laser Focus
-            const isCritical = move.hasAttr(CritOnlyAttr) || this.hasTag(BattlerTagType.ALWAYS_CRIT);
+    if (noCritTag || move.hasAttr(FixedDamageAttr) || target.hasAbilityWithAttr(AbAttrFlag.BLOCK_CRIT)) {
+      return -1;
+    }
 
-            return (
-              move.category !== MoveCategory.STATUS
-              && moveTargets.some((p) => {
-                const doesNotFail =
-                  move.applyConditions(this, p, move)
-                  || [MoveId.SUCKER_PUNCH, MoveId.UPPER_HAND, MoveId.THUNDERCLAP].includes(move.id);
-                return (
-                  doesNotFail && p.getAttackDamage(this, move, AbilityApplyMode.REVEALED, isCritical).damage >= p.hp
-                );
-              })
-            );
-          }, this);
+    const isCritical = new BooleanHolder(!!this.getTag(BattlerTagType.ALWAYS_CRIT));
+    applyMoveAttrs(CritOnlyAttr, this, target, move, isCritical);
+    applyAbAttrs<ConditionalCritAbAttr>(AbAttrFlag.CONDITIONAL_CRIT, this, true, isCritical, target, move);
 
-          if (koMoves.length > 0) {
-            movePool = koMoves;
-          }
+    if (isCritical.value) {
+      return 100;
+    }
 
-          /**
-           * Move selection is based on the move's calculated "benefit score" against the
-           * best possible target(s) (as determined by {@linkcode getNextTargets}).
-           * For more information on how benefit scores are calculated, see `docs/enemy-ai.md`.
-           */
-          const moveScores: number[] = new Array(movePool.length).fill(0);
-          const moveTargets = Object.fromEntries(movePool.map((m) => [m.moveId, this.getNextTargets(m.moveId)]));
-          movePool.forEach((pokemonMove, moveIndex) => {
-            const move = pokemonMove.getMove();
+    const critChance = [24, 8, 2, 1][Phaser.Math.Clamp(target.getCritStage(this, move, true), 0, 3)];
+    return Math.floor(100 / critChance);
+  }
 
-            const targetScores: number[] = [];
+  /**
+   * Obtains this Pokemon's next action for the turn based on
+   * {@linkcode getMatchupScore | Matchup Score} and {@linkcode getMoveScore | Move Score}.
+   * @returns this Pokemon's {@linkcode TurnCommand} for next turn, or `undefined` if this
+   * Pokemon's turn is skipped.
+   */
+  public getNextCommand(): TurnCommand | undefined {
+    const battle = globalScene.currentBattle;
+    const trainer = battle.trainer;
 
-            for (const mt of moveTargets[move.id]) {
-              // Prevent a target score from being calculated when the target is whoever attacks the user
-              if (mt === BattlerIndex.ATTACKER) {
-                break;
-              }
+    // If the current Mystery Encounter is configured to disable enemy moves,
+    // skip this command fetch.
+    if (battle.mysteryEncounter?.skipEnemyBattleTurns) {
+      return;
+    }
 
-              const target = globalScene.getPokemonByBattlerIndex(mt)!;
-              /**
-               * The "target score" of a move is given by the move's user benefit score + the move's target benefit score.
-               * If the target is an ally, the target benefit score is multiplied by -1.
-               */
-              let targetScore =
-                move.getUserBenefitScore(this, target, move)
-                + move.getTargetBenefitScore(this, target, move)
-                  * (mt < BattlerIndex.ENEMY === this.isPlayer() ? 1 : -1);
-              if (Number.isNaN(targetScore)) {
-                console.error(`Move ${move.name} returned score of NaN`);
-                targetScore = 0;
-              }
-              // If this move is unimplemented, or the move is known to fail when used, set its target score to -20
-              if (
-                (move.name.endsWith(" (N)") || !move.applyConditions(this, target, move))
-                && ![MoveId.SUCKER_PUNCH, MoveId.UPPER_HAND, MoveId.THUNDERCLAP].includes(move.id)
-              ) {
-                targetScore = -20;
-              } else if (move.isAttackMove()) {
-                /**
-                 * Attack moves are given extra multipliers to their base benefit score based on
-                 * the move's type effectiveness against the target and whether the move is a STAB move.
-                 */
-                const effectiveness = target.getMoveEffectiveness(this, move, AbilityApplyMode.REVEALED);
-                if (target.isPlayer() !== this.isPlayer()) {
-                  targetScore *= effectiveness;
-                  if (this.isOfType(move.type)) {
-                    targetScore *= 1.5;
-                  }
-                } else if (effectiveness) {
-                  targetScore /= effectiveness;
-                  if (this.isOfType(move.type)) {
-                    targetScore /= 1.5;
-                  }
-                }
-                // If a move has a base benefit score of 0, its benefit score is assumed to be unimplemented at this point
-                if (!targetScore) {
-                  targetScore = -20;
-                }
-              }
-              targetScores.push(targetScore);
-            }
-            // When a move has multiple targets, its score is equal to the maximum target score across all targets
-            // (could make smarter by checking opponent def/spdef)
-            moveScores[moveIndex] = Math.max(...targetScores);
-          });
+    // If this Pokemon is hidden by its Commander ability, skip this command fetch.
+    if (
+      battle.double
+      && this.hasAbility(AbilityId.COMMANDER)
+      && this.getAlly()?.getTag(BattlerTagType.COMMANDED)?.sourceId === this.id
+    ) {
+      return;
+    }
 
-          // Sort the move pool in decreasing order of move score
-          const sortedMovePool = movePool.slice(0);
-          sortedMovePool.sort((a, b) => {
-            const scoreA = moveScores[movePool.indexOf(a)];
-            const scoreB = moveScores[movePool.indexOf(b)];
-            if (scoreA < scoreB) {
-              return 1;
-            }
-            if (scoreA > scoreB) {
-              return -1;
-            }
-            return 0;
-          });
-          let r = 0;
-          if (this.aiType === AiType.SMART_RANDOM) {
-            // Has a 5/8 chance to select the best move, and a 3/8 chance to advance to the next best move (and repeat this roll)
-            while (r < sortedMovePool.length - 1 && globalScene.randBattleSeedInt(8) >= 5) {
-              r++;
-            }
-          } else if (this.aiType === AiType.SMART) {
-            // The chance to advance to the next best move increases when the compared moves' scores are closer to each other.
-            while (
-              r < sortedMovePool.length - 1
-              && moveScores[movePool.indexOf(sortedMovePool[r + 1])] / moveScores[movePool.indexOf(sortedMovePool[r])]
-                >= 0
-              && globalScene.randBattleSeedInt(100)
-                < Math.round(
-                  (moveScores[movePool.indexOf(sortedMovePool[r + 1])]
-                    / moveScores[movePool.indexOf(sortedMovePool[r])])
-                    * 50,
-                )
-            ) {
-              r++;
-            }
-          }
-          // biome-ignore format: For some reason this gets broken into multiple lines
-          console.log("Move Pool:", movePool.map((m) => m.name));
-          console.log("Move Scores:", moveScores);
-          console.log("`r` value:", r);
-          // biome-ignore format: For some reason this gets broken into multiple lines
-          console.log("Sorted Move Pool:", sortedMovePool.map((m) => m.name));
-
-          const retMove = sortedMovePool[r].getMove();
-          return { move: retMove, targets: moveTargets[retMove.id], type: this.getMoveType(retMove) };
-        }
+    if (
+      trainer
+      && !this.isTrapped()
+      && this.getParty().some((p) => p.isActive() && !p.isOnField())
+      && this.getMoveQueue().length === 0
+    ) {
+      const switchCommand = this.getSwitchCommand();
+      if (switchCommand) {
+        return switchCommand;
       }
     }
+
+    const command = this.shouldTera() ? BattleCommand.TERA : BattleCommand.FIGHT;
+    const turnMove = this.getNextMove();
+    console.log(
+      `${BattlerIndex[this.getBattlerIndex()]}: selecting ${MoveId[turnMove.move.id]} against ${turnMove.targets.map((i) => BattlerIndex[i])}`,
+    );
+
     return {
-      move: allMoves.get(MoveId.STRUGGLE),
-      targets: this.getNextTargets(MoveId.STRUGGLE),
+      pokemon: this,
+      command,
+      turnMove,
+      targets: turnMove.targets,
+    };
+  }
+
+  /**
+   * Determines if this Pokemon should switch out with another Pokemon
+   * in its party and, if so, returns the command to do so
+   * @returns the {@linkcode TurnCommand} to switch, or `undefined` if
+   * this Pokemon should not switch out.
+   * @todo Finalize the MUS threshold for switching
+   */
+  public getSwitchCommand(): TurnCommand | undefined {
+    if (activeOverrides.ENEMY_DISABLE_SWITCHING_OVERRIDE) {
+      return;
+    }
+
+    const nonActiveParty = this.getParty().filter((p) => p.isActive() && !p.isOnField());
+    const matchupScore = this.getAverageMatchupScore();
+
+    // If this Pokemon can safely KO at least 1 opponent, it gains an average MUS
+    // of Infinity and should never switch out.
+    if (matchupScore === Number.POSITIVE_INFINITY) {
+      return;
+    }
+
+    // The switch candidate is the inactive Pokemon with the highest average MUS.
+    const [candIndex, candScore] = nonActiveParty
+      .map((p) => [this.getParty().indexOf(p), p.getAverageMatchupScore()])
+      .reduce((cand, entry) => (cand[1] < entry[1] ? entry : cand));
+
+    // To qualify for switching in, the candidate must have an MUS that exceeds
+    // whichever's higher between this Pokemon's MUS + 2 or twice this Pokemon's MUS.
+    if (candScore > Math.max(matchupScore + 2, matchupScore * 2)) {
+      return {
+        pokemon: this,
+        command: BattleCommand.POKEMON,
+        cursor: candIndex,
+        args: [false],
+      };
+    }
+    return;
+  }
+
+  /**
+   * Generates the move action to be performed by this Pokemon on the upcoming turn.
+   * In most cases, this is done by finding the best target for each usable move
+   * according to {@linkcode getMoveScore | Move Score}, then selecting the move
+   * action with the highest overall score. If there is a tie for the highest
+   * score, then the final move selection is random between the tied move actions.
+   * @returns The {@linkcode QueuedMove} representing the optimal move action.
+   */
+  public getNextMove(): TurnMove {
+    // If this Pokemon has already queued a move before this turn, it will try to use it.
+    const queuedMove = this.getMoveQueue()[0];
+    if (queuedMove) {
+      const queuedMovesetMove = this.getMoveset().find((m) => m.moveId === queuedMove.move.id);
+      if (queuedMovesetMove?.isUsable(this, queuedMove.ignorePP)) {
+        return {
+          move: queuedMovesetMove.getMove(),
+          targets: queuedMove.targets,
+          type: ElementalType.UNKNOWN,
+          ignorePP: queuedMove.ignorePP,
+        };
+      }
+      this.getMoveQueue().shift();
+      return this.getNextMove();
+    }
+
+    const movePool = this.getMoveset().filter((m) => m.isUsable(this));
+
+    // If this Pokemon has no usable moves, it will use Struggle.
+    if (movePool.length === 0) {
+      return {
+        move: allMoves.get(MoveId.STRUGGLE),
+        targets: getMoveTargets(this, MoveId.STRUGGLE).targets,
+        type: ElementalType.UNKNOWN,
+      };
+    }
+
+    /**
+     * Contains the "optimal" action for each move in this Pokemon's move pool.
+     * This accumulates scores and resolves move targeting based on those scores.
+     * @todo Resolve issues with {@linkcode BattlerIndex.ATTACKER} targeting
+     */
+    const moveActions = movePool.map((mv) => this.getOptimalMoveAction(mv.getMove()));
+
+    /**
+     * Shuffle and sort {@linkcode moveActions} to obtain the best overall
+     * move action among all entries in the move pool.
+     */
+    const optMoveAction = randSeedShuffle(moveActions).sort((actionA, actionB) => actionB.score - actionA.score)[0];
+
+    return {
+      move: allMoves.get(optMoveAction.moveId),
+      targets: optMoveAction.targets,
       type: ElementalType.UNKNOWN,
     };
+  }
+
+  /**
+   * Calculates the optimal use case for the given move among
+   * all valid targets on the current field.
+   * @param move the {@linkcode Move} being evaluated
+   * @returns A {@linkcode TargetScoreData} object with the following data:
+   * - `move`: The {@linkcode Moves | identifier} for the evaluated move
+   * - `targets`: The {@linkcode BattlerIndex} of the target(s) for which
+   * the evaluated move scores highest.
+   * - `score`: The {@linkcode getMoveScore | score} corresponding to the optimal target(s)
+   */
+  private getOptimalMoveAction(move: Move): TargetScoreData {
+    if (move.moveTarget === MoveTarget.ATTACKER) {
+      /**
+       * Counter-attack moves are scored based entirely on their
+       * Condition Score and Effect Score. Attack Score is not included.
+       */
+      const score = move.getConditionScore(this, this) + move.getEffectScore(this, this);
+
+      return {
+        moveId: move.id,
+        targets: [BattlerIndex.ATTACKER],
+        score,
+      };
+    }
+
+    if (move.isFieldTarget()) {
+      // Field-targeting effects are internally self-targeted during
+      // score evaluation.
+      const score = this.getMoveScore(this, move);
+
+      return {
+        moveId: move.id,
+        targets: getMoveTargets(this, move.id).targets,
+        score,
+      };
+    }
+
+    const { targets, multiple } = getMoveTargets(this, move.id);
+
+    /**
+     * The {@linkcode BattlerIndex | BattlerIndexes} of active Pokemon that
+     * can legally be targeted with this move.
+     */
+    const activeTargets = targets.filter((bi) => globalScene.getPokemonByBattlerIndex(bi) != null);
+    if (activeTargets.length === 0) {
+      // Moves with no valid targets are given a "fail penalty" of (-5).
+      return {
+        moveId: move.id,
+        targets: [],
+        score: BAD_MOVE_PENALTY,
+      };
+    }
+
+    if (multiple) {
+      // Multi-target moves are evaluated by their cumulative score across all valid targets
+      return {
+        moveId: move.id,
+        targets: activeTargets,
+        score: this.getMultiTargetMoveScore(
+          activeTargets.map((bi) => globalScene.getPokemonByBattlerIndex(bi)!),
+          move,
+        ),
+      };
+    }
+
+    /**
+     * A mapping between {@linkcode BattlerIndex} and the move score for this
+     * move against the Pokemon at that index.
+     */
+    const targetScores = activeTargets.map(
+      (bi) => [bi, this.getMoveScore(globalScene.getPokemonByBattlerIndex(bi)!, move)], // TODO: find a way to get rid of this bang
+    );
+
+    if (move.moveTarget === MoveTarget.RANDOM_NEAR_ENEMY) {
+      /**
+       * Moves with random targeting resolve their final target within {@linkcode getMoveTargets},
+       * but calculate score based on the average move score between all legal targets
+       */
+      const averageScore =
+        this.getOpponents()
+          .map((p) => this.getMoveScore(p, move))
+          .reduce((total, score) => total + score, 0) / this.getOpponents().length;
+
+      return {
+        moveId: move.id,
+        targets,
+        score: averageScore,
+      };
+    }
+
+    /**
+     * Single-target moves form an optimal move action with the highest-scoring
+     * {@linkcode BattlerIndex}. {@linkcode targetScores} is shuffled here so
+     * that a target is randomly selected from the highest-scoring indexes in
+     * the event of a tie.
+     */
+    const optTarget = randSeedShuffle(targetScores).sort((aScore, bScore) => bScore[1] - aScore[1])[0];
+
+    return {
+      moveId: move.id,
+      targets: [optTarget[0]],
+      score: optTarget[1],
+    };
+  }
+
+  /** @returns `true` if this Pokemon should Terastallize on its next action */
+  public shouldTera(): boolean {
+    if (this.isTerastallized) {
+      return false;
+    }
+
+    const { trainer } = globalScene.currentBattle;
+    return activeOverrides.FORCE_ENEMY_TERA_OVERRIDE || (trainer != null && trainer.shouldTera(this));
   }
 
   /**
@@ -436,7 +653,7 @@ export class EnemyPokemon extends Pokemon {
       return 0;
     });
 
-    if (!sortedBenefitScores.length) {
+    if (sortedBenefitScores.length === 0) {
       // Set target to BattlerIndex.ATTACKER when using a counter move
       // This is the same as when the player does so
       if (move.hasAttr(CounterDamageAttr)) {
@@ -497,6 +714,10 @@ export class EnemyPokemon extends Pokemon {
 
   override isEnemy(): this is EnemyPokemon {
     return true;
+  }
+
+  public override isAllowedInBattle(): boolean {
+    return !this.isFainted();
   }
 
   hasTrainer(): boolean {

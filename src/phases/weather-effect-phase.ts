@@ -6,7 +6,7 @@ import type { SuppressWeatherEffectAbAttr } from "#abilities/suppress-weather-ef
 import { CommonBattleAnim } from "#animations/common-battle-anim";
 import { globalScene } from "#app/global-scene";
 import { WEATHER_DAMAGE_RATIO } from "#constants/weather-constants";
-import { getWeatherDamageMessage, getWeatherLapseMessage, type Weather } from "#data/weather";
+import type { Weather } from "#data/weather";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
@@ -15,6 +15,7 @@ import { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
 import { FieldPhase } from "#phases/base/field-phase";
 import { BooleanHolder, toDmgValue } from "#utils/common-utils";
+import { getWeatherDamageMessage, getWeatherLapseMessage } from "#utils/weather-utils";
 
 /**
  * Applies the end-of-turn effects from active {@linkcode Weather}, including

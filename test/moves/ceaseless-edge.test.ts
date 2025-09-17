@@ -74,8 +74,8 @@ describe("Moves - Ceaseless Edge", () => {
     expect(tagAfter).toBeDefined();
     expect(tagAfter!.layers).toBe(2);
 
-    game.forceEnemyToSwitch();
     game.move.select(MoveId.SPLASH);
+    await game.forceEnemyToSwitch();
     await game.phaseInterceptor.to("TurnEndPhase", false);
 
     const switchedInPokemon = game.field.getEnemyPokemon();

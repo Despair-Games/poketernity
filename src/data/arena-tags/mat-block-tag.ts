@@ -15,7 +15,7 @@ import i18next from "i18next";
  * @param moveId {@linkcode MoveId} The move to check against this condition.
  * @returns `true` if the incoming move is not a Status move.
  */
-const MatBlockConditionFunc: ProtectConditionFunc = (moveId): boolean => {
+export const MatBlockConditionFunc: ProtectConditionFunc = (moveId: MoveId): boolean => {
   const move = allMoves.get(moveId);
   return move.category !== MoveCategory.STATUS;
 };

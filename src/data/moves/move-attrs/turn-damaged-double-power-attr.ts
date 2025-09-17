@@ -10,7 +10,7 @@ import type { NumberHolder } from "#utils/common-utils";
  */
 export class TurnDamagedDoublePowerAttr extends VariablePowerAttr {
   override apply(user: Pokemon, target: Pokemon, _move: Move, power: NumberHolder): boolean {
-    if (user.turnData.attacksReceived.find((r) => r.damage && r.sourceId === target.id)) {
+    if (user.turnData.attacksReceived.some((r) => r.damage && r.sourceId === target.id)) {
       power.value *= 2;
       return true;
     }

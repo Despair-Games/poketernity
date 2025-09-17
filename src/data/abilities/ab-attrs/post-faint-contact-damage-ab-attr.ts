@@ -31,9 +31,8 @@ export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
 
   public override apply(pokemon: Pokemon, simulated: boolean, attacker?: Pokemon, move?: Move): boolean {
     if (move && attacker && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)) {
-      //If the mon didn't die to indirect damage
+      // If the mon didn't die to indirect damage
       const cancelled = new BooleanHolder(false);
-      const moveName = pokemon.getPokemonMove(move.id)?.name ?? move.name;
       globalScene
         .getField(true)
         .map((p) =>
@@ -42,8 +41,7 @@ export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
             p,
             simulated,
             cancelled,
-            getPokemonNameWithAffix(attacker),
-            moveName,
+            attacker,
           ),
         );
 

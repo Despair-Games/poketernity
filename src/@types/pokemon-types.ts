@@ -16,6 +16,7 @@ import type { SpeciesId } from "#enums/species-id";
 import type { StatusEffect } from "#enums/status-effect";
 import type { PokemonMove } from "#field/pokemon-move";
 import type { AttackMoveResult, TurnMove } from "#types/move-types";
+import type { PokemonScoreData } from "#types/pokemon-score-data";
 
 /**
  * The type that {@linkcode PokemonSpeciesForm} is converted to when an object containing it serializes it.
@@ -113,6 +114,11 @@ export interface PokemonTurnData {
   switchedInThisTurn: boolean;
   failedRunAway: boolean;
   joinedRound: boolean;
+  /**
+   * Contains invariant scoring data for this Pokemon
+   * against all Pokemon on the field, mapped by their id.
+   */
+  scoreData: Map<number, PokemonScoreData>;
 }
 
 /** Container for Pokemon-specific data that resets at the end of each wave. */
@@ -130,6 +136,8 @@ export interface PokemonWaveData {
    * without applying them.
    */
   abilitiesRevealed: AbilityId[];
+  /** The moves revealed from this Pokemon */
+  revealedMoves: Set<MoveId>;
 }
 
 /**
@@ -160,6 +168,11 @@ export interface Status {
    * @defaultValue 0
    */
   toxicTurnCount: number;
+  /**
+   * The number of turns the affected Pokemon has been sleeping.
+   * @defaultValue 0
+   */
+  turnsAsleep: number;
   /**
    * The pokemon wakes up when this is `0` and the {@linkcode effect} is {@linkcode StatusEffect.SLEEP}.
    * Ignored if the effect is not sleep.

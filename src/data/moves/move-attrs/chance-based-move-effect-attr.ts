@@ -5,6 +5,7 @@ import { globalScene } from "#app/global-scene";
 import type { WaterFirePledgeTag } from "#arena-tags/water-fire-pledge-tag";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr, type MoveEffectAttrOptions } from "#moves/move-effect-attr";
@@ -73,5 +74,73 @@ export abstract class ChanceBasedMoveEffectAttr extends MoveEffectAttr {
       applyAbAttrs<IgnoreMoveEffectsAbAttr>(AbAttrFlag.IGNORE_MOVE_EFFECTS, target, false, user, move, moveChance);
     }
     return moveChance.value;
+  }
+
+  /**
+   * Calculates effect score, factoring in this attribute's {@linkcode getRawEffectScore | raw effect score}
+   * and {@linkcode getMoveChance | chance to apply}.
+   */
+  public override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    /** The attribute's effect score, assuming its effect always applies */
+    const rawScore = this.getRawEffectScore(user, target, move);
+
+    return this.getTieredScore(user, target, move, rawScore);
+  }
+
+  /**
+   * Translates the given "raw" decimal Effect Score into a final integer Effect Score, accounting for the
+   * effect's chance to apply. This is done by multiplying the raw score by the effect chance, then
+   * randomly "tiering" the product into either `floor(score)` or `floor(score) + 1`.
+   *
+   * **Example:**
+   *
+   * If an effect's raw score is `1.5`, and the chance to apply said effect is 50 percent, the resulting
+   * chance-adjusted score is `0.75`. In turn, the final score has a 25% chance of being (+0) and a 75%
+   * chance of being (+1)
+   * @param user - The {@linkcode EnemyPokemon} evaluating the move
+   * @param target - The {@linkcode Pokemon} the move is evaluated against
+   * @param move - The {@linkcode Move} being evaluated
+   * @param score - The previously calculated "raw" Effect Score for the move action
+   * @returns The final integer score after tiering
+   */
+  protected getTieredScore(user: EnemyPokemon, target: Pokemon, move: Move, score: number): number {
+    /**
+     * The attribute's chance to apply its effect
+     * @todo this chance calculation may prematurely reveal abilities
+     */
+    const chance = this.getMoveChance(user, target, move);
+
+    if (chance < 0) {
+      return score;
+    }
+
+    /**
+     * The attribute's effect score after factoring in effect chance.
+     * This may be a decimal number; the final output is either
+     * `floor(chanceWeightedScore)` or `floor(chanceWeightedScore) + 1`
+     */
+    const chanceWeightedScore = (chance * score) / 100;
+    /** The minimum integer score this function can return */
+    const minScore = Math.floor(chanceWeightedScore);
+    /**
+     * The chance to return `minScore + 1` instead of `minScore`.
+     * This is the decimal component of `chanceWeightedScore` scaled
+     * up to a percent value, then rounded down.
+     */
+    const tierUpChance = Math.floor((chanceWeightedScore % 1) * 100);
+
+    return minScore + this.getRandomScore(user, tierUpChance);
+  }
+
+  /**
+   * Calculates the move action's raw effect score (before effect chance is accounted for).
+   * Unlike other attributes' scores, this can be a decimal value.
+   * @param user the {@linkcode EnemyPokemon} evaluating the move
+   * @param target the {@linkcode Pokemon} the move is evaluated against
+   * @param move the {@linkcode Move} being evaluated
+   * @todo make this `abstract` once attribute scores are filled in
+   */
+  protected getRawEffectScore(_user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+    return 0;
   }
 }

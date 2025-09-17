@@ -52,7 +52,16 @@ export type DamageResult =
 // TODO: Can these be combined into one? Should all of the params be optional in PAC?
 export type PokemonAttackCondition = (user?: Pokemon, target?: Pokemon, move?: Move) => boolean;
 export type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => boolean;
-export type MoveConditionFunc = (user: Pokemon, target: Pokemon, move: Move) => boolean;
+
+/**
+ * A function representing a {@linkcode Move | Move's} condition.
+ * @param user - The {@linkcode Pokemon} using the move
+ * @param target - The {@linkcode Pokemon} targeted by the move
+ * @param move - The {@linkcode Move} being used
+ * @param simulated - (Optional) If `true`, suppresses changes to game state
+ * @returns `true` if the condition is satisfied in the given battle state
+ */
+export type MoveConditionFunc = (user: Pokemon, target: Pokemon, move: Move, simulated?: boolean) => boolean;
 
 /**
  * A function to check if a move with the given {@linkcode MoveId}

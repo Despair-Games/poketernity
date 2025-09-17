@@ -13,11 +13,13 @@ import type { WeakenMoveTypeTag } from "#arena-tags/weaken-move-type-tag";
 import { applyBattlerTags } from "#battler-tags/apply-battler-tags";
 import type { MeFirstPowerBoostTag } from "#battler-tags/me-first-power-boost-tag";
 import type { TypeBoostTag } from "#battler-tags/type-boost-tag";
+import { ALLY_TARGET_PENALTY, BAD_MOVE_PENALTY, COMMANDING_TARGET_PENALTY } from "#constants/ai-constants";
 import { WEAKEN_MOVE_TYPE_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
 import { TYPE_BOOST_TAG_TYPES } from "#constants/battler-tag-constants";
 import { FOG_ACCURACY_MULTIPLIER } from "#constants/game-constants";
 import { allMoves } from "#data/data-lists";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -25,12 +27,15 @@ import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";
+import { MoveEffectTrigger } from "#enums/move-effect-trigger";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
 import { MoveTarget } from "#enums/move-target";
+import { MultiHitType } from "#enums/multi-hit-type";
 import type { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { WeatherType } from "#enums/weather-type";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { AttackTypeBoosterModifier } from "#modifier/modifier";
 import type { ChargingAttackMove } from "#moves/charging-attack-move";
@@ -39,7 +44,9 @@ import { GMaxPowerAttr } from "#moves/gmax-power-attr";
 import { IncrementMovePriorityAttr } from "#moves/increment-move-priority-attr";
 import type { MoveAttr } from "#moves/move-attr";
 import { MoveCondition } from "#moves/move-condition";
+import { MoveEffectAttr } from "#moves/move-effect-attr";
 import { MultiHitAttr } from "#moves/multi-hit-attr";
+import { MultiHitPowerIncrementAttr } from "#moves/multi-hit-power-increment-attr";
 import { OneHitKOAccuracyAttr } from "#moves/one-hit-ko-accuracy-attr";
 import { SacrificialAttr } from "#moves/sacrificial-attr";
 import { StatStageChangeAttr } from "#moves/stat-stage-change-attr";
@@ -225,10 +232,7 @@ export abstract class Move {
     return (this.flags & flag) > 0;
   }
 
-  /**
-   * Getter function that returns if the move hits multiple targets
-   * @returns boolean
-   */
+  /** @returns `true` if this move can hit multiple targets in a single attack */
   isMultiTarget(): boolean {
     switch (this.moveTarget) {
       case MoveTarget.ALL_OTHERS:
@@ -245,10 +249,7 @@ export abstract class Move {
     return false;
   }
 
-  /**
-   * Getter function that returns if the move targets the user or its ally
-   * @returns boolean
-   */
+  /** @returns `true` if this move targets the user and/or its ally */
   isAllyTarget(): boolean {
     switch (this.moveTarget) {
       case MoveTarget.USER:
@@ -262,6 +263,19 @@ export abstract class Move {
     return false;
   }
 
+  /** @returns `true` if this move targets a single enemy */
+  isSingleEnemyTarget(): boolean {
+    switch (this.moveTarget) {
+      case MoveTarget.OTHER:
+      case MoveTarget.NEAR_OTHER:
+      case MoveTarget.NEAR_ENEMY:
+      case MoveTarget.RANDOM_NEAR_ENEMY:
+        return true;
+    }
+    return false;
+  }
+
+  /** @returns `true` if this move targets one or both sides of the field */
   isFieldTarget(): boolean {
     switch (this.moveTarget) {
       case MoveTarget.BOTH_SIDES:
@@ -353,7 +367,7 @@ export abstract class Move {
    */
   condition(condition: MoveCondition | MoveConditionFunc): this {
     if (typeof condition === "function") {
-      condition = new MoveCondition(condition as MoveConditionFunc);
+      condition = new MoveCondition(condition);
     }
     this.conditions.push(condition);
 
@@ -675,19 +689,13 @@ export abstract class Move {
 
   /**
    * Applies each {@linkcode MoveCondition} function of this move to the params, determines if the move can be used prior to calling each attribute's apply()
-   * @param user {@linkcode Pokemon} to apply conditions to
-   * @param target {@linkcode Pokemon} to apply conditions to
-   * @param move {@linkcode Move} to apply conditions to
+   * @param user - The {@linkcode Pokemon} using this move
+   * @param target - The {@linkcode Pokemon} targeted by this move
+   * @param simulated - (Default `false`) If `true`, suppresses changes to game state during the condition check
    * @returns boolean: false if any of the apply()'s return false, else true
    */
-  applyConditions(user: Pokemon, target: Pokemon, move: Move): boolean {
-    for (const condition of this.conditions) {
-      if (!condition.apply(user, target, move)) {
-        return false;
-      }
-    }
-
-    return true;
+  applyConditions(user: Pokemon, target: Pokemon, simulated: boolean = false): boolean {
+    return this.conditions.every(({ condition }) => condition(user, target, this, simulated));
   }
 
   /**
@@ -714,16 +722,13 @@ export abstract class Move {
    * @param target {@linkcode Pokemon} receiving the move
    * @param move {@linkcode Move} using the move
    * @returns integer representing the total benefitScore
+   * @deprecated
    */
   getUserBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {
     let score = 0;
 
     for (const attr of this.attrs) {
       score += attr.getUserBenefitScore(user, target, move);
-    }
-
-    for (const condition of this.conditions) {
-      score += condition.getUserBenefitScore(user, target, move);
     }
 
     return score;
@@ -735,6 +740,7 @@ export abstract class Move {
    * @param target {@linkcode Pokemon} receiving the move
    * @param move {@linkcode Move} using the move
    * @returns integer representing the total benefitScore
+   * @deprecated
    */
   getTargetBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {
     let score = 0;
@@ -751,6 +757,155 @@ export abstract class Move {
     }
 
     return score;
+  }
+
+  /**
+   * Calculates the move's combined Condition Score (CS) from all conditions.
+   * Generally, this should result in a {@linkcode BAD_MOVE_PENALTY | Bad Move Penalty}
+   * if this move is proven to fail against the given target. CS should virtually
+   * never be positive.
+   *
+   * **Note:** While this does check for move failure, move immunities are
+   * resolved during {@linkcode Pokemon.getAttackScore | Attack Score} evaluation.
+   * @param user - The {@linkcode EnemyPokemon} evaluating this move
+   * @param target - The {@linkcode Pokemon} against which the move is evaluated
+   * @returns the CS for the move action. The final score should be an integer
+   */
+  public getConditionScore(user: EnemyPokemon, target: Pokemon): number {
+    const uncappedCondScore = this.conditions
+      .map((moveCondition) => moveCondition.getConditionScore(user, target, this))
+      .reduce((total, score) => total + score, 0);
+
+    return Math.max(uncappedCondScore, BAD_MOVE_PENALTY);
+  }
+
+  /**
+   * Calculates the move's combined effect score (ES) from all attributes and
+   * other miscellaneous score modifiers. ES is used to evaluate secondary
+   * effects and does not factor in damage dealt, as that is accounted for by
+   * {@linkcode Pokemon.getAttackScore}.
+   *
+   * ES technically doesn't have a set range, but should be implemented such
+   * that the overall move score does not exceed (+4) if the move doesn't KO.
+   * This means that the ES for an attack should rarely exceed (+1) and almost
+   * never exceed (+2). Status moves may have a higher ES in comparison but
+   * should typically be limited to (+3) or lower.
+   * @param user - The {@linkcode Pokemon} using the move
+   * @param target - The {@linkcode Pokemon} targeted by the move
+   * @param isKnockOut - `true` if the move is already known to KO the target (default `false`)
+   * @param isFail - `true` if the move is already known to fail or have no effect (default `false`)
+   * @param isMultiTarget - `true` if the move is expected to apply to multiple Pokemon (default `false`)
+   * @returns a score value accumulated from effect score modifiers.
+   */
+  public getEffectScore(
+    user: EnemyPokemon,
+    target: Pokemon,
+    isKnockOut: boolean = false,
+    isFail: boolean = false,
+    isMultiTarget: boolean = false,
+  ): number {
+    // penalize targeting Pokemon that are hidden by Commander
+    if (target && !isMultiTarget && target.getAlly()?.getTag(BattlerTagType.COMMANDED)?.getSourcePokemon() === target) {
+      return COMMANDING_TARGET_PENALTY;
+    }
+
+    /** The combined score from all attributes of the move */
+    const attrScore = this.getCombinedAttributeScore(user, target, isKnockOut, isFail, isMultiTarget);
+
+    /** The penalty given if the move is inaccurate */
+    const accuracyPenalty = this.getBattleAccuracyPenalty(user, target);
+
+    return attrScore + accuracyPenalty;
+  }
+
+  /**
+   * Calculates the combined score from this move's attributes' effect scores.
+   * @param user - The {@linkcode Pokemon} evaluating this move
+   * @param target - The {@linkcode Pokemon} this move is evaluated against
+   * @param isKnockOut - `true` if this move would knock out the target (as determined by
+   * {@linkcode Pokemon.getAttackScore | Attack Score})
+   * @param isFail - `true` if this move would fail or have no effect against the target
+   * (as determined by {@linkcode getConditionScore | Condition Score})
+   * @param isMultiTarget - `true` if this move is expected to apply to multiple targets
+   * @returns the cumulative integer score from this move's attributes
+   * @see {@linkcode getEffectScore}
+   * @see {@linkcode MoveAttr.getEffectScore}
+   */
+  protected getCombinedAttributeScore(
+    user: EnemyPokemon,
+    target: Pokemon,
+    isKnockOut: boolean,
+    isFail: boolean,
+    isMultiTarget: boolean,
+  ): number {
+    let attrs = this.attrs.filter(
+      (attr) => !(attr instanceof MoveEffectAttr && attr.trigger === MoveEffectTrigger.POST_TARGET),
+    );
+
+    if (target.isAlly(user)) {
+      /*
+       * Single-target attacks (other than Pollen Puff) are always penalized against allies
+       * TODO: Use attribute flags instead of specific move IDs for more flexibility
+       */
+      if (!isMultiTarget && this.id !== MoveId.POLLEN_PUFF && !this.isStatusMove()) {
+        return ALLY_TARGET_PENALTY;
+      }
+
+      /**
+       * ALLY TARGET PENALTY:
+       *
+       * If the user is the target's ally, a {@link ALLY_TARGET_PENALTY | massive score penalty} is applied
+       * unless the move is multi-target or has at least one attribute that overrides the penalty.
+       * In that case, the total score is the sum of {@link MoveAttr.getAllyTargetScore | ally target scores} from those
+       * overriding attributes.
+       */
+      const allyTargetScores = this.attrs
+        .map((attr) => attr.getAllyTargetScore(user, target, this))
+        .filter((score) => score != null);
+
+      if (allyTargetScores.length === 0) {
+        return isMultiTarget ? 0 : ALLY_TARGET_PENALTY;
+      }
+
+      return allyTargetScores.reduce((total, score) => total + score, 0);
+    }
+
+    if (isKnockOut) {
+      /*
+       * If the move KOs the target, only the following attributes contribute to score:
+       * - Self-targeted attributes
+       * - Effects that apply to the target before the target is hit
+       */
+      attrs = attrs.filter(
+        (attr) => attr.selfTarget || (attr instanceof MoveEffectAttr && attr.trigger !== MoveEffectTrigger.POST_APPLY),
+      );
+    }
+
+    if (isFail) {
+      attrs = attrs.filter((attr) => attr.appliesScoreOnFail);
+    }
+
+    return attrs.reduce((score, attr) => score + attr.getEffectScore(user, target, this), 0);
+  }
+
+  /**
+   * Calculates the Effect Score gained (or lost) from all move effects
+   * with a {@linkcode MoveEffectTrigger.POST_TARGET | POST_TARGET} effect trigger.
+   * These effects trigger exactly once instead of once per target.
+   * @param user - The {@linkcode EnemyPokemon} evaluating this move
+   * @param isFail - `true` if the move is expected to fail.
+   * @returns - The integer "post-target" Effect Score component
+   */
+  public getPostTargetEffectScore(user: EnemyPokemon, isFail: boolean): number {
+    let attrs: MoveAttr[] = this.attrs.filter(
+      (attr) => attr instanceof MoveEffectAttr && attr.trigger === MoveEffectTrigger.POST_TARGET,
+    );
+
+    if (isFail) {
+      attrs = attrs.filter((attr) => attr.appliesScoreOnFail);
+    }
+
+    return attrs.reduce((score, attr) => score + attr.getEffectScore(user, user, this), 0);
   }
 
   /**
@@ -782,6 +937,61 @@ export abstract class Move {
     }
 
     return moveAccuracy.value;
+  }
+
+  /**
+   * Calculates the score penalty granted to this move based on its accuracy, according
+   * to the table below:
+   *   ```
+   *   +--------+-------+
+   *   | Acc    | Score |
+   *   +--------+-------+
+   *   | 80-100 |     0 |
+   *   | 70-79  |    -1 |
+   *   | 50-69  |    -2 |
+   *   | 0-49   |    -3 |
+   *   +--------+-------+
+   *   ```
+   * This penalty is negated if any ongoing effect would cause the move to bypass accuracy checks,
+   * and it becomes (-5) if the target is semi-invulnerable.
+   * @param user the {@linkcode EnemyPokemon} using this move
+   * @param target the {@linkcode Pokemon} targeted by this move
+   * @returns the score penalty from accuracy
+   * @see {@linkcode getEffectScore}
+   */
+  public getBattleAccuracyPenalty(user: EnemyPokemon, target: Pokemon): number {
+    // If any ongoing effect would cause the move to bypass accuracy checks, assign no penalty.
+    // TODO: the target's No Guard can be discovered prematurely here
+    if (
+      [user, target].some((p) => p.hasAbilityWithAttr(AbAttrFlag.ALWAYS_HIT))
+      || user.getTag(BattlerTagType.IGNORE_ACCURACY)
+      || target.getTag(BattlerTagType.GLAIVE_RUSH)
+      || target.getTag(BattlerTagType.TELEKINESIS)
+    ) {
+      return 0;
+    }
+
+    /**
+     * If the user is faster than the target, and the target is semi-invulnerable,
+     * assign a (-5) penalty.
+     */
+    const userSpd = user.getEffectiveStat(Stat.SPD);
+    const targetSpd = target.getEffectiveStat(Stat.SPD, { abilityApplyMode: AbilityApplyMode.REVEALED });
+    if (target.isSemiInvulnerable() && userSpd > targetSpd) {
+      return BAD_MOVE_PENALTY;
+    }
+
+    const accuracy = this.calculateBattleAccuracy(user, target, true);
+    if (accuracy < 0 || accuracy >= 80) {
+      return 0;
+    }
+    if (accuracy >= 70) {
+      return -1;
+    }
+    if (accuracy >= 50) {
+      return -2;
+    }
+    return -3;
   }
 
   /**
@@ -891,6 +1101,44 @@ export abstract class Move {
     return power.value;
   }
 
+  /**
+   * Obtains an approximate damage multiplier accounting for multi-hit
+   * move and ability modifiers relative to the move's first strike.
+   * @param user the {@linkcode Pokemon} using this move
+   * @returns a damage modifier to be used for move scoring
+   * @see {@linkcode Pokemon.getAttackScore}
+   */
+  public getMultiHitAttackScoreMultiplier(user: Pokemon): number {
+    const userHasSkillLink = user.hasAbilityWithAttr(AbAttrFlag.MAX_MULTI_HIT);
+    if (this.hasAttr(MultiHitPowerIncrementAttr)) {
+      /**
+       * Triple Axel / Triple Kick have a combined power of 6x the first strike,
+       * assuming all strikes hit (~72.9% at 90 accuracy). Accounting for accuracy,
+       * their average damage output is ~4.7x the first strike.
+       */
+      return 5;
+    }
+    if (this.hasAttr(MultiHitAttr)) {
+      const multiHitType = this.getAttrs(MultiHitAttr)[0].getMultiHitType();
+      switch (multiHitType) {
+        case MultiHitType._2:
+          return 2;
+        case MultiHitType._2_TO_5:
+          return userHasSkillLink ? 5 : 3; // Expected hit count is ~3.1
+        case MultiHitType._3:
+          return 3;
+        case MultiHitType._10:
+          return userHasSkillLink ? 10 : 6; // Population Bomb hits ~5.8 times on average
+        case MultiHitType.BEAT_UP:
+          return user.getParty().length;
+      }
+    }
+    if (this.canBeMultiStrikeEnhanced(user) && user.hasAbility(AbilityId.PARENTAL_BOND)) {
+      return 1.25;
+    }
+    return 1;
+  }
+
   getPriority(user: Pokemon, simulated: boolean = true) {
     const priority = new NumberHolder(this.priority);
 
@@ -966,6 +1214,7 @@ export class AttackMove extends Move {
      */
   }
 
+  /** @deprecated */
   override getTargetBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {
     let ret = super.getTargetBenefitScore(user, target, move);
 
@@ -1051,11 +1300,22 @@ export interface MoveTargetSet {
 }
 
 export function getMoveTargets(user: Pokemon, moveId: MoveId, replaceTarget?: MoveTarget): MoveTargetSet {
+  if ([MoveId.SIMULATED_MOVE_1, MoveId.SIMULATED_MOVE_2].includes(moveId)) {
+    return {
+      targets: globalScene
+        .getField(true)
+        .filter((p) => p !== user)
+        .map((p) => p.getBattlerIndex()),
+      multiple: false,
+    };
+  }
+
   const variableTarget = new ValueHolder<MoveTarget>(MoveTarget.USER);
-  user.getOpponents().forEach((p) => applyMoveAttrs(VariableTargetAttr, user, p, allMoves.get(moveId), variableTarget));
+  const move = allMoves.get(moveId);
+  user.getOpponents().forEach((p) => applyMoveAttrs(VariableTargetAttr, user, p, move, variableTarget));
 
   let moveTarget: MoveTarget | undefined;
-  if (allMoves.get(moveId).hasAttr(VariableTargetAttr)) {
+  if (move?.hasAttr(VariableTargetAttr)) {
     moveTarget = variableTarget.value;
   } else if (replaceTarget !== undefined) {
     moveTarget = replaceTarget;

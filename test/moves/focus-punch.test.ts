@@ -100,8 +100,8 @@ describe("Moves - Focus Punch", () => {
 
     await game.classicMode.startBattle(SpeciesId.CHARIZARD);
 
-    game.forceEnemyToSwitch();
     game.move.select(MoveId.FOCUS_PUNCH);
+    await game.forceEnemyToSwitch();
 
     await game.phaseInterceptor.to("TurnStartPhase");
 

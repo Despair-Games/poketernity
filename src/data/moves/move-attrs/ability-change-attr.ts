@@ -1,8 +1,11 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { HIGH_VALUE_ABILITIES } from "#constants/ability-constants";
+import { MAJOR_EFFECT_SCORE_BONUS } from "#constants/ai-constants";
 import { allAbilities } from "#data/data-lists";
 import { SpeciesFormChangeRevertWeatherFormTrigger } from "#data/pokemon-forms";
 import type { AbilityId } from "#enums/ability-id";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
@@ -44,5 +47,19 @@ export class AbilityChangeAttr extends MoveEffectAttr {
     return (user, target, _move) =>
       (this.selfTarget ? user : target).getAbility().isReplaceable
       && (this.selfTarget ? user : target).getAbility().id !== this.ability;
+  }
+
+  /**
+   * If the target is an opponent and is known to have a high-value ability,
+   * grants (+2) effect score.
+   * @see {@linkcode HIGH_VALUE_ABILITIES}
+   */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+    const hasHighValueAbility = target
+      .getAbilities({ canApplyOnly: true, revealedOnly: true })
+      .filter((ab) => !ab.passive) // Remove this if passives are made to be overwritten
+      .some((ab) => HIGH_VALUE_ABILITIES.includes(ab.ability.id));
+
+    return hasHighValueAbility && user.isOpponent(target) ? MAJOR_EFFECT_SCORE_BONUS : 0;
   }
 }

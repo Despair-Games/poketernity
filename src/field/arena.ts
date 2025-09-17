@@ -14,8 +14,8 @@ import { type BiomeTierTrainerPools, getBiomeBgm, IndoorBiomes, type PokemonPool
 import { allBiomes } from "#data/data-lists";
 import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrigger } from "#data/pokemon-forms";
 import type { PokemonSpecies } from "#data/pokemon-species";
-import { getTerrainClearMessage, getTerrainStartMessage, Terrain } from "#data/terrain";
-import { getWeatherClearMessage, getWeatherStartMessage, Weather } from "#data/weather";
+import { Terrain } from "#data/terrain";
+import { Weather } from "#data/weather";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
@@ -37,6 +37,8 @@ import type { Move } from "#moves/move";
 import { coerceArray, enumValueToKey, getTSEnumValues } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedInt, weightedPick } from "#utils/random-utils";
+import { getTerrainClearMessage, getTerrainStartMessage } from "#utils/terrain-utils";
+import { getWeatherClearMessage, getWeatherStartMessage } from "#utils/weather-utils";
 
 export class Arena {
   public biomeId: BiomeId;
@@ -179,7 +181,7 @@ export class Arena {
     console.log(enumValueToKey(BiomePoolTier, tier));
 
     // If the BiomePoolTier is empty, downgrade the rarity
-    while (!this.pokemonPool[tier].length) {
+    while (this.pokemonPool[tier].length === 0) {
       console.log(
         `Downgraded rarity tier from ${enumValueToKey(BiomePoolTier, tier)} to ${enumValueToKey(BiomePoolTier, (tier - 1) as BiomePoolTier)}`,
       );
@@ -307,14 +309,14 @@ export class Arena {
     const tierValue = randSeedInt(isTrainerBoss ? 64 : 512);
     let tier = isTrainerBoss ? this.generateBossBiomeTier(tierValue) : this.generateNonBossBiomeTier(tierValue);
 
-    while (tier > BiomePoolTier.COMMON && !this.trainerPool[tier].length) {
+    while (tier > BiomePoolTier.COMMON && this.trainerPool[tier].length === 0) {
       console.log(
         `Downgraded trainer rarity tier from ${enumValueToKey(BiomePoolTier, tier)} to ${enumValueToKey(BiomePoolTier, (tier - 1) as BiomePoolTier)}`,
       );
       tier--;
     }
     const tierPool = this.trainerPool[tier] || [];
-    return tierPool.length ? tierPool[randSeedInt(tierPool.length)] : TrainerType.BREEDER;
+    return tierPool.length > 0 ? tierPool[randSeedInt(tierPool.length)] : TrainerType.BREEDER;
   }
 
   /**
@@ -912,7 +914,7 @@ export class Arena {
   }
 
   removeAllTags(): void {
-    while (this.tags.length) {
+    while (this.tags.length > 0) {
       this.tags[0].onRemove();
       this.eventTarget.dispatchEvent(
         new TagRemovedEvent(this.tags[0].tagType, this.tags[0].side, this.tags[0].turnCount),

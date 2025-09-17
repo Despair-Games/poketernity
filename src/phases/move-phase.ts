@@ -13,7 +13,6 @@ import type { ImprisoningTag } from "#battler-tags/imprisoning-tag";
 import type { MagicCoatTag } from "#battler-tags/magic-coat-tag";
 import type { SnatchingTag } from "#battler-tags/snatch-tag";
 import { allMoves } from "#data/data-lists";
-import { getTerrainBlockMessage } from "#data/terrain";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
@@ -41,6 +40,7 @@ import { BattlePhase } from "#phases/base/battle-phase";
 import { BooleanHolder, NumberHolder } from "#utils/common-utils";
 import { applyMoveAttrs, isFieldTargeted } from "#utils/move-utils";
 import { getStatusEffectActivationText, getStatusEffectHealText } from "#utils/status-effect-utils";
+import { getTerrainBlockMessage } from "#utils/terrain-utils";
 import i18next from "i18next";
 
 interface MovePhaseOptions {
@@ -248,7 +248,7 @@ export class MovePhase extends BattlePhase {
 
     if (
       (targets.length === 0 && !isFieldTargeted(this.targets))
-      || (moveQueue.length && moveQueue[0].move.id === MoveId.NONE)
+      || (moveQueue.length > 0 && moveQueue[0].move.id === MoveId.NONE)
     ) {
       this.showFailedText();
       this.cancel();
@@ -381,7 +381,7 @@ export class MovePhase extends BattlePhase {
     // Rest and Swallow are only stolen if they would have an effect on the original user
     if (
       [MoveId.REST, MoveId.SWALLOW].includes(this.pokemonMove.moveId)
-      && !this.pokemonMove.getMove().applyConditions(this.pokemon, this.pokemon, this.pokemonMove.getMove())
+      && !this.pokemonMove.getMove().applyConditions(this.pokemon, this.pokemon)
     ) {
       return;
     }
@@ -563,7 +563,7 @@ export class MovePhase extends BattlePhase {
      * Move conditions assume the move has a single target
      * TODO: is this sustainable?
      */
-    const passesConditions = move.applyConditions(this.pokemon, targets[0] ?? null, move);
+    const passesConditions = move.applyConditions(this.pokemon, targets[0] ?? null);
     const failedDueToWeather: boolean = globalScene.arena.isMoveWeatherCancelled(this.pokemon, move);
     const failedDueToTerrain: boolean = globalScene.arena.isMoveTerrainCancelled(this.pokemon, this.targets, move);
 
@@ -655,7 +655,7 @@ export class MovePhase extends BattlePhase {
     const move = this.pokemonMove.getMove();
     const targets = this.getActiveTargetPokemon();
 
-    if (move.applyConditions(this.pokemon, targets[0], move)) {
+    if (move.applyConditions(this.pokemon, targets[0])) {
       this.updateLastMoveId(true);
 
       // Protean and Libero apply on the charging turn of charge moves
@@ -789,7 +789,7 @@ export class MovePhase extends BattlePhase {
    */
   protected resolveCounterAttackTarget(): void {
     if (this.targets.length === 1 && this.targets[0] === BattlerIndex.ATTACKER) {
-      if (this.pokemon.turnData.attacksReceived.length) {
+      if (this.pokemon.turnData.attacksReceived.length > 0) {
         this.targets[0] = this.pokemon.turnData.attacksReceived[0].sourceBattlerIndex;
         const [target] = this.targets;
         const targetPkm = globalScene.getPokemonByBattlerIndex(target);

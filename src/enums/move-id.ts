@@ -1,4 +1,23 @@
+/** biome-ignore-start lint/correctness/noUnusedImports: TSDoc imports */
+import type { Pokemon } from "#field/pokemon";
+/** biome-ignore-end lint/correctness/noUnusedImports: TSDoc imports */
+
 export enum MoveId {
+  /**
+   * The {@linkcode Pokemon.getSimulatedMoves | simulated move}
+   * of a Pokemon's primary type.
+   *
+   * @privateRemarks
+   * This and {@linkcode SIMULATED_MOVE_2} are negative values
+   * to maintain parity between the IDs of real moves
+   * and their IDs in the mainline games.
+   */
+  SIMULATED_MOVE_1 = -2,
+  /**
+   * The {@linkcode Pokemon.getSimulatedMoves | simulated move}
+   * of a Pokemon's secondary type.
+   */
+  SIMULATED_MOVE_2,
   /**{@link https://bulbapedia.bulbagarden.net/wiki/None_(move) | Source} */
   NONE,
   /**{@link https://bulbapedia.bulbagarden.net/wiki/Pound_(move) | Source} */

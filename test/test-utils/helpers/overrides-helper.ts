@@ -601,6 +601,20 @@ export class OverridesHelper extends GameManagerHelper {
   }
 
   /**
+   * Override enemy Trainers to never switch their Pokemon during battle.
+   * This override is set to `true` by default for all unit tests; if you need to
+   * allow (but not force) switching for your test(s), include this override and
+   * set `disable` to `false`.
+   * @param disable If `true`, prevents the enemy Trainer from switching.
+   * @returns `this`
+   */
+  public enemyDisableSwitching(disable: boolean = true): this {
+    vi.spyOn(activeOverrides, "ENEMY_DISABLE_SWITCHING_OVERRIDE", "get").mockReturnValue(disable);
+    this.log(`Enemy Trainer switching ${disable ? "disabled" : "enabled"}!`);
+    return this;
+  }
+
+  /**
    * Override the statuses Paralysis, Freeze, Sleep, Confusion, or Infatuation  to always or never activate
    * @param activate - `true` to force activation, `false` to force no activation, `null` to disable the override
    * @returns `this`

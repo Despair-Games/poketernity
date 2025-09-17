@@ -1,5 +1,6 @@
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { Pokemon } from "#field/pokemon";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import "vitest";
@@ -17,6 +18,7 @@ import type { ToHaveMoveResultMatcherOptions } from "#test/test-utils/matchers/t
 import type { ToHaveStatMatcherOptions } from "#test/test-utils/matchers/to-have-stat-matcher";
 import type { ToHaveStatusEffectMatcherOptions } from "#test/test-utils/matchers/to-have-status-effect-matcher";
 import type { ToHaveUsedMoveMatcherOptions } from "#test/test-utils/matchers/to-have-used-move-matcher";
+import type { MoveQualifier } from "#test/test-utils/matchers/to-never-select-move-matcher";
 import type { ToHaveTakenDamageMatcherOptions } from "#test/test-utils/matchers/to-have-taken-damage-matcher";
 
 declare module "vitest" {
@@ -130,5 +132,23 @@ declare module "vitest" {
      * _Includes a check for hp being `0`._
      */
     toHaveFainted(): void;
+
+    /**
+     * Matcher to check if an {@linkcode EnemyPokemon} selects a specific move
+     * in the current game state a majority of the time.
+     * @param expectedMoveId - The expected {@linkcode MoveId}
+     */
+    toPreferSelectingMove(expectedMoveId: MoveId): void;
+
+    /**
+     * Matcher to check if an {@linkcode EnemyPokemon} never selects
+     * a move or set of moves in the current game state.
+     * @param qualifier - Can be any of the following:
+     * - A {@linkcode MoveId} to expect a single move to never be used
+     * - A {@linkcode MoveId} array to expect all moves in the array to never be used
+     * - A condition function to expect all moves that meet the condition in
+     * the enemy's moveset to never be used
+     */
+    toNeverSelectMove(qualifier: MoveQualifier): void;
   }
 }

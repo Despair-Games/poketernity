@@ -88,7 +88,7 @@ export abstract class HitCheckPhase extends PokemonPhase {
       [user, target].some((p) => p.hasAbilityWithAttr(AbAttrFlag.ALWAYS_HIT))
       || (user.hasTag(BattlerTagType.IGNORE_ACCURACY)
         && (user.getLastXMoves()[0]?.targets ?? []).indexOf(target.getBattlerIndex()) !== -1)
-      || target.hasTag(BattlerTagType.ALWAYS_GET_HIT);
+      || target.hasTag(BattlerTagType.GLAIVE_RUSH);
 
     const semiInvulnerableTag =
       target.getTag(...SEMI_INVULNERABLE_BATTLER_TAG_TYPES) ?? target.getTag(BattlerTagType.SKY_DROP);
