@@ -234,6 +234,14 @@ export class EvolutionPhase extends FormChangeBasePhase {
     this.bgVideo.setVisible(false);
 
     await playTween({
+      targets: [this.overlay, this.pokemonNewFormTintSprite],
+      alpha: 0,
+      duration: 2000,
+      delay: 150,
+      ease: "Sine.easeIn",
+    });
+
+    await playTween({
       targets: this.bgOverlay,
       alpha: 0,
       duration: 250,
