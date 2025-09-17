@@ -140,7 +140,6 @@ import {
   enumValueToKey,
   fixedNumber,
   isBetween,
-  isNil,
   NumberHolder,
   ValueHolder,
 } from "#utils/common-utils";
@@ -965,10 +964,10 @@ export class BattleScene extends SceneBase {
       boss = this.getEncounterBossSegments(this.currentBattle.waveIndex, level, species) > 1;
 
       // Ensure the gender from the data source is valid for the overridden species
-      if (!isNil(dataSource?.gender)) {
-        if (dataSource.gender === Gender.GENDERLESS && !isNil(species.malePercent)) {
+      if (dataSource?.gender != null) {
+        if (dataSource.gender === Gender.GENDERLESS && species.malePercent != null) {
           dataSource.gender = species.malePercent > 0 ? Gender.MALE : Gender.FEMALE;
-        } else if (dataSource.gender !== Gender.GENDERLESS && isNil(species.malePercent)) {
+        } else if (dataSource.gender !== Gender.GENDERLESS && species.malePercent == null) {
           dataSource.gender = Gender.GENDERLESS;
         }
       }
@@ -1240,7 +1239,7 @@ export class BattleScene extends SceneBase {
 
     const playerField = this.getPlayerField();
 
-    if (this.gameMode.isFixedBattle(newWaveIndex) && isNil(trainerData)) {
+    if (this.gameMode.isFixedBattle(newWaveIndex) && trainerData == null) {
       battleConfig = this.gameMode.getFixedBattle(newWaveIndex);
       newDouble = battleConfig.double;
       newBattleType = battleConfig.battleType;
@@ -1281,7 +1280,7 @@ export class BattleScene extends SceneBase {
         } else if (randSeedInt(2)) {
           variant = TrainerVariant.FEMALE;
         }
-        newTrainer = isNil(trainerData) ? new Trainer(trainerType, variant) : trainerData.toTrainer();
+        newTrainer = trainerData == null ? new Trainer(trainerType, variant) : trainerData.toTrainer();
         this.field.add(newTrainer);
       }
 
@@ -1309,7 +1308,7 @@ export class BattleScene extends SceneBase {
       newDouble = false;
     }
 
-    if (!isNil(activeOverrides.BATTLE_TYPE_OVERRIDE)) {
+    if (activeOverrides.BATTLE_TYPE_OVERRIDE != null) {
       let doubleOverrideForWave: "single" | "double" | null = null;
 
       switch (activeOverrides.BATTLE_TYPE_OVERRIDE) {
@@ -2119,7 +2118,7 @@ export class BattleScene extends SceneBase {
               this.applyModifiers(HealingBoosterModifier, true, hpRestoreMultiplier);
               args.push(hpRestoreMultiplier.value);
             }
-          } else if (modifier instanceof RememberMoveModifier && !isNil(cost)) {
+          } else if (modifier instanceof RememberMoveModifier && cost != null) {
             args.push(cost);
           }
 
@@ -2914,7 +2913,7 @@ export class BattleScene extends SceneBase {
    */
   public tryForceSwitchPokemon(battlerIndex: FieldBattlerIndex, switchType: SwitchType = SwitchType.SWITCH): boolean {
     const pokemon = this.getPokemonByBattlerIndex(battlerIndex);
-    if (isNil(pokemon) || !this.canForceSwitchPokemon(pokemon, switchType)) {
+    if (pokemon == null || !this.canForceSwitchPokemon(pokemon, switchType)) {
       return false;
     }
 
@@ -2993,7 +2992,7 @@ export class BattleScene extends SceneBase {
   public tryForceFleePokemon(battlerIndex: FieldBattlerIndex, source: Pokemon): boolean {
     const pokemon = this.getPokemonByBattlerIndex(battlerIndex);
 
-    if (isNil(pokemon) || !this.canForceFleePokemon(pokemon, source)) {
+    if (pokemon == null || !this.canForceFleePokemon(pokemon, source)) {
       return false;
     }
 
@@ -3106,7 +3105,7 @@ export class BattleScene extends SceneBase {
       const canSpawn =
         encounteredEvents.length === 0
         || waveIndex - encounteredEvents.at(-1)!.waveIndex > 3
-        || !isNil(activeOverrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE);
+        || activeOverrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE != null;
 
       if (canSpawn) {
         let roll = ME_MAX_SPAWN_WEIGHT;
@@ -3134,7 +3133,7 @@ export class BattleScene extends SceneBase {
     // Loading override or session encounter
     let encounter: MysteryEncounter | null;
     if (
-      !isNil(activeOverrides.MYSTERY_ENCOUNTER_OVERRIDE)
+      activeOverrides.MYSTERY_ENCOUNTER_OVERRIDE != null
       && Object.hasOwn(allMysteryEncounters, activeOverrides.MYSTERY_ENCOUNTER_OVERRIDE)
     ) {
       encounter = allMysteryEncounters[activeOverrides.MYSTERY_ENCOUNTER_OVERRIDE];
@@ -3145,7 +3144,7 @@ export class BattleScene extends SceneBase {
       encounter = allMysteryEncounters[encounterType ?? -1];
       return encounter;
     } else {
-      encounter = isNil(encounterType) ? null : allMysteryEncounters[encounterType];
+      encounter = encounterType == null ? null : allMysteryEncounters[encounterType];
     }
 
     // Check for queued encounters first
@@ -3203,7 +3202,7 @@ export class BattleScene extends SceneBase {
       tier = MysteryEncounterTier.ULTRA;
     }
 
-    if (!isNil(activeOverrides.MYSTERY_ENCOUNTER_TIER_OVERRIDE)) {
+    if (activeOverrides.MYSTERY_ENCOUNTER_TIER_OVERRIDE != null) {
       tier = activeOverrides.MYSTERY_ENCOUNTER_TIER_OVERRIDE;
     }
 
@@ -3243,7 +3242,7 @@ export class BattleScene extends SceneBase {
           if (!encounterCandidate.meetsRequirements()) {
             return false;
           }
-          if (!isNil(previousEncounter) && encType === previousEncounter) {
+          if (previousEncounter != null && encType === previousEncounter) {
             return false;
           }
           if (

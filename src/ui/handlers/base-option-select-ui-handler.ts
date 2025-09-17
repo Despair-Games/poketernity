@@ -9,7 +9,7 @@ import type { UIOptionSelectItem } from "#ui/option-select-ui-item";
 import { ScrollBar } from "#ui/scroll-bar";
 import { addBBCodeTextObject, getBBCodeFragment } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
-import { fixedNumber, isNil } from "#utils/common-utils";
+import { fixedNumber } from "#utils/common-utils";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 
 const SCROLLBAR_PADDING = 5;
@@ -270,7 +270,7 @@ export abstract class BaseOptionSelectUiHandler<T extends OptionSelectItem> exte
         const neededSpaces = Math.ceil(maxIconWidth / singleSpaceWidth);
         label = label.padStart(label.length + neededSpaces);
         // Change the label color to fit the required text style
-        if (!isNil(option.color) && option.color !== DEFAULT_TEXT_STYLE) {
+        if (option.color != null && option.color !== DEFAULT_TEXT_STYLE) {
           label = getBBCodeFragment(label, option.color, true);
         }
       }
@@ -398,7 +398,7 @@ export abstract class BaseOptionSelectUiHandler<T extends OptionSelectItem> exte
       if (success) {
         // handle hover code if the option has a handler for it
         const newOption = this.getCurrentOption();
-        if (!isNil(newOption.onHover)) {
+        if (newOption.onHover != null) {
           newOption.onHover();
         }
       }

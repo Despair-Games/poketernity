@@ -3,7 +3,6 @@ import { Device } from "#enums/device";
 import { UiMode } from "#enums/ui-mode";
 import type { KeyboardKeys } from "#types/inputs-types";
 import { BindingUiHandler } from "#ui/binding-ui-handler";
-import { isNil } from "#utils/common-utils";
 import { getKeyWithKeycode } from "#utils/inputs-utils";
 import i18next from "i18next";
 
@@ -43,7 +42,7 @@ export class KeyboardBindingUiHandler extends BindingUiHandler {
     }
 
     const key = getKeyWithKeycode(activeConfig, keyCode);
-    if (isNil(key) || activeConfig.keysBlacklist?.includes(key as KeyboardKeys)) {
+    if (key == null || activeConfig.keysBlacklist?.includes(key as KeyboardKeys)) {
       return;
     }
 

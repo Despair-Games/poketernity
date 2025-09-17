@@ -3,7 +3,7 @@ import { allMoves } from "#data/data-lists";
 import type { MoveId } from "#enums/move-id";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import { EncounterPokemonRequirement } from "#mystery-encounters/mystery-encounter-requirements";
-import { coerceArray, isNil } from "#utils/common-utils";
+import { coerceArray } from "#utils/common-utils";
 
 /**
  * {@linkcode CanLearnMoveRequirement} options
@@ -44,7 +44,7 @@ export class CanLearnMoveRequirement extends EncounterPokemonRequirement {
       .getPlayerParty()
       .filter((pkm) => (this.includeFainted ? pkm.isAllowedInChallenge() : pkm.isAllowedInBattle()));
 
-    if (isNil(partyPokemon) || this.requiredMoves?.length < 0) {
+    if (partyPokemon == null || this.requiredMoves?.length < 0) {
       return false;
     }
 

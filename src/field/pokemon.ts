@@ -200,7 +200,6 @@ import {
   coerceArray,
   fixedNumber,
   getTSEnumValues,
-  isNil,
   NumberHolder,
   toDmgValue,
   ValueHolder,
@@ -278,7 +277,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public metBiome: BiomeId | -1;
   public metSpecies: SpeciesId;
   public metWave: number;
-  public luck: number;
   public pauseEvolutions: boolean;
   public pokerus: boolean;
   public switchOutStatus: boolean;
@@ -371,7 +369,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.status = dataSource["status"];
       this.friendship = dataSource.friendship ?? this.species.baseFriendship;
       this.metLevel = dataSource.metLevel || 5;
-      this.luck = dataSource.luck;
       this.metBiome = dataSource.metBiome;
       this.metSpecies =
         dataSource.metSpecies ?? (this.metBiome !== -1 ? this.species.speciesId : this.species.getRootSpeciesId(true));
@@ -419,7 +416,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.metSpecies = species.speciesId;
       this.metWave = globalScene.currentBattle ? globalScene.currentBattle.waveIndex : -1;
       this.pokerus = false;
-      this.luck = this.shiny ? this.variant + 1 : 0;
     }
 
     this.generateName();
@@ -1367,7 +1363,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   getGender(bypassSummonData: boolean = false): Gender {
-    if (!bypassSummonData && !isNil(this.summonData.gender)) {
+    if (!bypassSummonData && this.summonData.gender != null) {
       return this.summonData.gender;
     }
     return this.gender;
@@ -1380,10 +1376,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   getVariant(): Variant {
     return this.variant;
-  }
-
-  getLuck(): number {
-    return this.luck;
   }
 
   abstract isBoss(): boolean;
@@ -1573,7 +1565,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     // the type added to Pokemon from moves like Forest's Curse or Trick Or Treat
-    if (!bypassSummonData && !isNil(this.summonData.addedType) && !types.includes(this.summonData.addedType)) {
+    if (!bypassSummonData && this.summonData.addedType != null && !types.includes(this.summonData.addedType)) {
       types.push(this.summonData.addedType);
     }
 
@@ -1852,7 +1844,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public getWeight(): number {
     const autotomizedTag = this.getTag<AutotomizedTag>(BattlerTagType.AUTOTOMIZED);
     let weightRemoved = 0;
-    if (!isNil(autotomizedTag)) {
+    if (autotomizedTag != null) {
       weightRemoved = 100 * autotomizedTag.autotomizeCount;
     }
     const minWeight = 0.1;
@@ -1976,7 +1968,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     simulated: boolean = true,
     cancelled?: BooleanHolder,
   ): TypeDamageMultiplier {
-    if (!isNil(this.turnData.moveEffectiveness)) {
+    if (this.turnData.moveEffectiveness != null) {
       return this.turnData.moveEffectiveness;
     }
 
@@ -2132,8 +2124,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     // Handle strong winds lowering effectiveness of types super effective against pure flying
     if (
       !ignoreFieldConditions
-      && arena.weather?.weatherType === WeatherType.STRONG_WINDS
-      && !arena.weather.isEffectSuppressed()
+      && arena.weatherType === WeatherType.STRONG_WINDS
+      && !arena.weather?.isEffectSuppressed()
       && this.isOfType(ElementalType.FLYING)
       && typeMultiplierAgainstFlying.value === 2
     ) {
@@ -2193,7 +2185,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         if (
           !e.item
           && this.level >= e.level
-          && (isNil(e.preFormKey) || this.getFormKey() === e.preFormKey)
+          && (e.preFormKey == null || this.getFormKey() === e.preFormKey)
           && (e.conditions === null
             || (e.conditions as SpeciesEvolutionCondition[]).every((condition) => condition.predicate(this)))
         ) {
@@ -2391,7 +2383,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     if (this.shiny) {
       this.variant = this.generateShinyVariant();
-      this.luck = this.variant + 1;
       this.initShinySparkle();
     }
 
@@ -4127,9 +4118,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       case StatusEffect.FREEZE:
         if (
           this.isOfType(ElementalType.ICE)
-          || (!ignoreField
-            && globalScene?.arena?.weather?.weatherType
-            && [WeatherType.SUNNY, WeatherType.HARSH_SUN].includes(globalScene.arena.weather.weatherType))
+          || (!ignoreField && globalScene.arena.hasWeather([WeatherType.SUNNY, WeatherType.HARSH_SUN]))
         ) {
           return false;
         }

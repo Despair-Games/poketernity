@@ -6,7 +6,6 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import type { FieldBattlerIndex } from "#enums/battler-index";
 import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
-import { isNil } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -108,7 +107,7 @@ export class PendingHealTag extends ArenaTag {
       targetEffects.splice(targetEffects.indexOf(healEffect), 1);
     }
 
-    return !isNil(healEffect);
+    return healEffect != null;
   }
 
   /**

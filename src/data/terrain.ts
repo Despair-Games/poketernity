@@ -9,7 +9,7 @@ import i18next from "i18next";
 
 /** Class representing Terrain effects */
 export class Terrain {
-  public terrainType: TerrainType;
+  public readonly terrainType: TerrainType;
   public turnsLeft: number;
 
   /**

@@ -10,7 +10,7 @@ import { getPokeballAtlasKey } from "#data/pokeball";
 import { starterColors } from "#data/starter-colors";
 import { getCandyProgressRequirement, speciesStarterCosts } from "#data/starters";
 import { getTypeRgb } from "#data/type";
-import { getVariantTint, type Variant } from "#data/variant";
+import { getVariantTint } from "#data/variant";
 import { Button } from "#enums/button";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";
@@ -30,7 +30,7 @@ import type { PartyUiHandler } from "#ui/party-ui-handler";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";
 import { rgbHexToRgba } from "#utils/color-utils";
-import { enumValueToKey, fixedNumber, getTSEnumValues, isNil } from "#utils/common-utils";
+import { enumValueToKey, fixedNumber, getTSEnumValues } from "#utils/common-utils";
 import { getShinyDescriptor } from "#utils/pokemon-utils";
 import { formatStat, leftPad, toReadableString } from "#utils/string-utils";
 import { argbFromRgba } from "@material/material-color-utilities";
@@ -430,7 +430,7 @@ export class SummaryUiHandler extends UiHandler {
         break;
     }
 
-    const fromSummary = !isNil(pageOrMove);
+    const fromSummary = pageOrMove != null;
 
     let statusTextKey: string | undefined;
     if (this.pokemon.isFainted()) {
@@ -780,24 +780,8 @@ export class SummaryUiHandler extends UiHandler {
           profileContainer.add(getTypeIcon(1, types[1]));
         }
 
-        if (this.pokemon?.getLuck()) {
-          const luckLabelText = addTextObject(141, 28, i18next.t("common:luckIndicator"), TextStyle.SUMMARY_ALT);
-          luckLabelText.setOrigin(0, 0);
-          profileContainer.add(luckLabelText);
-
-          const luckText = addTextObject(
-            141 + luckLabelText.displayWidth + 2,
-            28,
-            this.pokemon.getLuck().toString(),
-            TextStyle.SUMMARY,
-          );
-          luckText.setOrigin(0, 0);
-          luckText.setTint(getVariantTint(Math.min(this.pokemon.getLuck() - 1, 2) as Variant));
-          profileContainer.add(luckText);
-        }
-
         if (
-          !isNil(this.pokemon) /*
+          this.pokemon != null /*
           && Object.hasOwn(globalScene.gameData.achvUnlocks, achvs.TERASTALLIZE.id) */
         ) {
           const teraIcon = globalScene.add.sprite(123, 26, "button_tera");

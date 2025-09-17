@@ -10,7 +10,6 @@ import type { StarterConfig } from "#types/starter-data";
 import type { SaveSlotSelectUiHandler } from "#ui/save-slot-select-ui-handler";
 import type { StarterSelectUiHandler } from "#ui/starter-select-ui-handler";
 import { applyChallenges } from "#utils/challenge-utils";
-import { isNil } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 
@@ -37,11 +36,11 @@ export class SelectStarterPhase extends Phase {
 
   /**
    * Initialize starters before starting the first battle
-   * @param starters {@linkcode Pokemon} with which to start the first battle
+   * @param starters - The {@linkcode Pokemon} to start the first battle with
    */
   public initBattle(starters: StarterConfig[]): void {
-    const { arena, gameMode, gameData, sound, time } = globalScene;
-    const { dexData, gameStats, starterData } = gameData;
+    const { arena, audioManager, gameMode, gameData, sound, time } = globalScene;
+    const { gameStats, starterData } = gameData;
     const { isClassic } = gameMode;
 
     const party = globalScene.getPlayerParty();
@@ -52,18 +51,19 @@ export class SelectStarterPhase extends Phase {
         starter.species = getPokemonSpecies(activeOverrides.STARTER_SPECIES_OVERRIDE);
       }
 
-      const { abilityIndex, dexAttr, moveset, nature, nickname, passive, pokerus, species } = starter;
+      const { abilityIndex, dexAttr, moveset, nature, nickname, passive, pokerus, species, teraType } = starter;
       const { speciesId } = species;
 
       const starterProps = gameData.getSpeciesDexAttrProps(species, dexAttr);
       let starterFormIndex = Math.min(starterProps.formIndex, Math.max(species.forms.length - 1, 0));
 
+      const { STARTER_FORM_OVERRIDES } = activeOverrides;
       if (
-        speciesId in activeOverrides.STARTER_FORM_OVERRIDES
-        && !isNil(activeOverrides.STARTER_FORM_OVERRIDES[speciesId])
-        && species.forms[activeOverrides.STARTER_FORM_OVERRIDES[speciesId]]
+        speciesId in STARTER_FORM_OVERRIDES
+        && STARTER_FORM_OVERRIDES[speciesId] != null
+        && species.forms[STARTER_FORM_OVERRIDES[speciesId]]
       ) {
-        starterFormIndex = activeOverrides.STARTER_FORM_OVERRIDES[speciesId];
+        starterFormIndex = STARTER_FORM_OVERRIDES[speciesId];
       }
 
       const starterGender = activeOverrides.GENDER_OVERRIDE ?? starterProps.gender;
@@ -90,8 +90,6 @@ export class SelectStarterPhase extends Phase {
         starterPokemon.passive = true;
       }
 
-      starterPokemon.luck = gameData.getDexAttrLuck(dexData[speciesId].caughtAttr);
-
       if (pokerus) {
         starterPokemon.pokerus = true;
       }
@@ -100,10 +98,10 @@ export class SelectStarterPhase extends Phase {
         starterPokemon.nickname = nickname;
       }
 
-      if (isNil(starter.teraType)) {
+      if (teraType == null) {
         starterPokemon.teraType = starterPokemon.species.type1;
       } else {
-        starterPokemon.teraType = starter.teraType;
+        starterPokemon.teraType = teraType;
       }
 
       starterPokemon.setVisible(false);
@@ -117,7 +115,7 @@ export class SelectStarterPhase extends Phase {
 
     Promise.all(loadPokemonAssets).then(() => {
       SoundFade.fadeOut(globalScene, sound.get("menu"), 500, true);
-      time.delayedCall(500, () => globalScene.audioManager.playBgm());
+      time.delayedCall(500, () => audioManager.playBgm());
 
       if (isClassic) {
         gameStats.classicSessionsPlayed++;

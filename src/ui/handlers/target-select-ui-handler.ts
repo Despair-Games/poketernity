@@ -8,7 +8,7 @@ import type { Pokemon } from "#field/pokemon";
 import type { ModifierBar } from "#modifier/modifier";
 import { getMoveTargets } from "#moves/move";
 import { UiHandler } from "#ui/ui-handler";
-import { fixedNumber, isNil } from "#utils/common-utils";
+import { fixedNumber } from "#utils/common-utils";
 import { isFieldTargeted } from "#utils/move-utils";
 
 type TargetSelectCallback = (targets: BattlerIndex[]) => void;
@@ -71,7 +71,7 @@ export class TargetSelectUiHandler extends UiHandler {
    */
   resetCursor(cursorN: number, user: Pokemon): void {
     if (
-      !isNil(cursorN)
+      cursorN != null
       && ([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2].includes(cursorN) || user.summonData.waveTurnCount === 1)
     ) {
       // Reset cursor on the first turn of a fight or if an ally was targeted last turn
@@ -90,10 +90,10 @@ export class TargetSelectUiHandler extends UiHandler {
       this.targetSelectCallback(button === Button.ACTION ? targetIndexes : []);
       success = true;
       if (this.fieldIndex === BattlerIndex.PLAYER) {
-        if (isNil(this.cursor0) || this.cursor0 !== this.cursor) {
+        if (this.cursor0 == null || this.cursor0 !== this.cursor) {
           this.cursor0 = this.cursor;
         }
-      } else if (this.fieldIndex === BattlerIndex.PLAYER_2 && (isNil(this.cursor1) || this.cursor1 !== this.cursor)) {
+      } else if (this.fieldIndex === BattlerIndex.PLAYER_2 && (this.cursor1 == null || this.cursor1 !== this.cursor)) {
         this.cursor1 = this.cursor;
       }
     } else if (this.isMultipleTargets || this.isFieldTarget) {
@@ -132,7 +132,7 @@ export class TargetSelectUiHandler extends UiHandler {
 
   /** @returns all valid target {@linkcode Pokemon} for the current target selection */
   protected getTargetsByIndex(): Pokemon[] {
-    return this.targets.map((index) => globalScene.getPokemonByBattlerIndex(index)).filter((p) => !isNil(p));
+    return this.targets.map((index) => globalScene.getPokemonByBattlerIndex(index)).filter((p) => p != null);
   }
 
   /** @returns the {@linkcode Pokemon} to highlight based on the move's targeting */

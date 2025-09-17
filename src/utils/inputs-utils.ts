@@ -1,7 +1,6 @@
 import type { Button } from "#enums/button";
 import { Device } from "#enums/device";
 import type { InputInterfaceConfig, InputKeys, InputSettings } from "#types/inputs-types";
-import { isNil } from "#utils/common-utils";
 
 // #region Helpers
 
@@ -78,7 +77,7 @@ export function getButtonWithKeycode(config: InputInterfaceConfig, keycode: numb
  */
 export function getKeyWithSettingName(config: InputInterfaceConfig, settingName: InputSettings): InputKeys | undefined {
   const { custom } = config;
-  if (isNil(custom)) {
+  if (custom == null) {
     return;
   }
   return Object.keys(custom).find((key) => custom[key] === settingName) as InputKeys;
@@ -158,7 +157,7 @@ export function assign(config: InputInterfaceConfig, settingNameTarget: InputSet
 
 export function swap(config: InputInterfaceConfig, settingNameTarget: InputSettings, keycode: number): boolean {
   // only for gamepad
-  if (config.padType === "keyboard" || isNil(config.custom)) {
+  if (config.padType === "keyboard" || config.custom == null) {
     return false;
   }
   const prev_key = getKeyWithSettingName(config, settingNameTarget);
@@ -185,7 +184,7 @@ export function swap(config: InputInterfaceConfig, settingNameTarget: InputSetti
  */
 export function deleteBind(config: InputInterfaceConfig, settingName: InputSettings): boolean {
   const key = getKeyWithSettingName(config, settingName);
-  if (isNil(config.custom) || isNil(key) || !canOverrideOrDeleteSetting(config, settingName)) {
+  if (config.custom == null || key == null || !canOverrideOrDeleteSetting(config, settingName)) {
     return false;
   }
   config.custom[key] = -1;
@@ -204,7 +203,7 @@ export function canOverrideOrDeleteSetting(config: InputInterfaceConfig, setting
   const { settingsBlacklist, keysBlacklist } = config;
   const key = getKeyWithSettingName(config, settingName);
   // If the setting is mapped to a protected key, we can't change it
-  if (settingsBlacklist?.includes(settingName) || (!isNil(key) && keysBlacklist?.includes(key))) {
+  if (settingsBlacklist?.includes(settingName) || (key != null && keysBlacklist?.includes(key))) {
     return false;
   }
   return true;

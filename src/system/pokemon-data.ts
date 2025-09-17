@@ -15,7 +15,7 @@ import { TrainerSlot } from "#enums/trainer-slot";
 import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
 import type { CustomPokemonData, PokemonSummonData, SerializedSpeciesForm, Status } from "#types/pokemon-types";
-import { clamp, isNil, isPokemon } from "#utils/common-utils";
+import { clamp, isPokemon } from "#utils/common-utils";
 import { getPokemonSpecies, getPokemonSpeciesForm, summonDataToJSON } from "#utils/pokemon-utils";
 
 /**
@@ -28,7 +28,7 @@ function deserializePokemonSpeciesForm(value: SerializedSpeciesForm | PokemonSpe
   const formIndex = value.formIndex ?? value["_formIndex"];
 
   // If for some reason either of these fields are `null`/`undefined`, we cannot reconstruct the species form
-  if (isNil(speciesId) || isNil(formIndex)) {
+  if (speciesId == null || formIndex == null) {
     console.warn(`Error when deserializing Pokemon Species Form\nSpecies ID: ${speciesId} | Form index: ${formIndex}`);
     return null;
   }
@@ -110,7 +110,6 @@ export class PokemonData {
     this.metBiome = source.metBiome ?? -1;
     this.metSpecies = source.metSpecies;
     this.metWave = source.metWave ?? (this.metBiome === -1 ? -1 : 0);
-    this.luck = source.luck ?? (source.shiny ? source.variant + 1 : 0);
     this.pauseEvolutions = source.pauseEvolutions;
     this.evoCounter = source.evoCounter ?? 0;
     this.pokerus = source.pokerus;
@@ -128,8 +127,7 @@ export class PokemonData {
     }
 
     if (isPokemon(source)) {
-      // @ts-expect-error - `Pokemon#moveset` is `protected`
-      this.moveset = source.moveset;
+      this.moveset = source["moveset"];
       this.summonData = source.summonData;
       return;
     }

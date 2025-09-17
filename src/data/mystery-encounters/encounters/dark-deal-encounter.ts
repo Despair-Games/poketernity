@@ -18,7 +18,6 @@ import {
 import { getRandomPlayerPokemon, getRandomSpeciesByStarterCost } from "#mystery-encounters/encounter-pokemon-utils";
 import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
-import { isNil } from "#utils/common-utils";
 import { getPokemonSpecies, getSpecialSpeciesList } from "#utils/pokemon-utils";
 import { randSeedInt } from "#utils/random-utils";
 
@@ -139,7 +138,7 @@ export const DarkDealEncounter: MysteryEncounter = MysteryEncounterBuilder.withE
             };
           }),
         };
-        if (!isNil(bossSpecies.forms) && bossSpecies.forms.length > 0) {
+        if (bossSpecies.forms != null && bossSpecies.forms.length > 0) {
           pokemonConfig.formIndex = 0;
         }
         const config: EnemyPartyConfig = {
