@@ -68,7 +68,6 @@ export interface TurnCommand {
 export class TurnCommandManager {
   /** The internal {@linkcode TurnCommand} queue. */
   private turnCommands: TurnCommand[] = [];
-  // biome-ignore lint/style/useReadonlyClassProperties: false positive
   private orderIndex: number = 0;
   private appliedMoveHeaders = false;
   /** Tracks how many pending turn commands are currently in the phase queue */
