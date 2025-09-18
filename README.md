@@ -38,29 +38,19 @@ Github Workflows are used on every PR to enforce the test suite being successful
 
 We are using [Vitest](https://vitest.dev/) as a testing framework for the game. Most PRs are expected to add tests for their new features or bug fixes to avoid future regression. A basic test file for a variety of cases can be created by running the `pnpm test:create` command.
 
-#### Code-Style
-
-We are using [Prettier](https://prettier.io/) to format our code. It will run automatically during the pre-commit hook so don't worry about having to format the code manually properly.
-
-#### Linting
-
-##### ESLint
-
-We are _still_ using [ESLint](https://eslint.org/docs/latest/rules/) plus the [ESLint Stylistic](https://eslint.style/rules) and [Typescript ESLint](https://typescript-eslint.io/rules/) plugins for linting. It will run automatically via the pre-commit hook, but if you would like to run it manually you can use the `pnpm eslint` script. To view the currently applied ESLint rules, check out the [eslint.config.js](./eslint.config.js) file.
+#### Code Style & Linting
 
 ##### Biome-Lint
 
-We started transitioning over to [Biome](https://biomejs.dev/) as it's significantly faster (~15x) than ESLint. 
-
-> [!NOTE]
-> _We still require ESLint as some rules aren't covered by Biome yet. The plan is to migrate fully to Biome in the long run._
+We use [Biome](https://biomejs.dev/) for linting and formatting as it's significantly faster than ESLint and Prettier.
+It runs automatically as a pre-commit hook via [Lefthook](https://github.com/evilmartians/lefthook) to format the code and fix many linting errors, though you are recommended to install the [extension](https://biomejs.dev/guides/editors/first-party-extensions/) that matches your IDE as well.
 
 ##### Dependency-Cruiser
 
-We use [dependency-cruiser](https://github.com/sverweij/dependency-cruiser) to check for runtime circular dependencies.
+We use [dependency-cruiser](https://github.com/sverweij/dependency-cruiser) to check for runtime circular dependencies and enforce some import/export rules (see the [config file](./dependency-cruiser.cjs) for documentation).
 
 > [!TIP]
-> Use `npm run depcruise` to check the codebase for any runtime circular dependency.
+> Use `pnpm depcruise` to check the codebase for any runtime circular dependency.
 
 #### 🌐 Localization
 
