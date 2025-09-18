@@ -11,8 +11,10 @@ import i18next from "i18next";
  * Reverses the Speed calculation for all Pokémon on the field as long as this arena tag is up.
  */
 export class TrickRoomTag extends ArenaRoomTag {
-  constructor(turnCount: number, sourceId: number) {
-    super(ArenaTagType.TRICK_ROOM, turnCount, MoveId.TRICK_ROOM, sourceId);
+  public override readonly tagType = ArenaTagType.TRICK_ROOM;
+
+  constructor(turnCount: number, sourceId?: number) {
+    super(turnCount, MoveId.TRICK_ROOM, sourceId);
   }
 
   /**
