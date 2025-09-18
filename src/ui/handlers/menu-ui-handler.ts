@@ -11,6 +11,7 @@ import { TextStyle } from "#enums/text-style";
 import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
 import type { ShowTextOptions } from "#types/ui-types";
+import type { ObjectValues } from "#types/utility-types";
 import type { AchievementsUiHandler } from "#ui/achievements-ui-handler";
 import type { AdminUiHandler } from "#ui/admin-ui-handler";
 import { getAdminModeName } from "#ui/admin-ui-handler";
@@ -29,21 +30,23 @@ import type { TestDialogueUiHandler } from "#ui/test-dialogue-ui-handler";
 import { addTextObject } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
 import { getCookie } from "#utils/app-utils";
-import { fixedNumber, getTSEnumKeys } from "#utils/common-utils";
+import { enumValueToKey, fixedNumber } from "#utils/common-utils";
 import i18next from "i18next";
 
-enum MenuOptions {
-  GAME_SETTINGS,
-  ACHIEVEMENTS,
-  STATS,
-  RUN_HISTORY,
-  EGG_LIST,
-  EGG_GACHA,
-  MANAGE_DATA,
-  COMMUNITY,
-  SAVE_AND_QUIT,
-  LOG_OUT,
-}
+const MenuOptions = {
+  GAME_SETTINGS: 1,
+  ACHIEVEMENTS: 2,
+  STATS: 3,
+  RUN_HISTORY: 4,
+  EGG_LIST: 5,
+  EGG_GACHA: 6,
+  MANAGE_DATA: 7,
+  COMMUNITY: 8,
+  SAVE_AND_QUIT: 9,
+  LOG_OUT: 10,
+} as const;
+
+type MenuOptions = ObjectValues<typeof MenuOptions>;
 
 const { VITE_WIKI_URL, VITE_DISCORD_URL, VITE_GITHUB_URL, VITE_REDDIT_URL, VITE_DONATE_URL } = import.meta.env;
 
@@ -143,15 +146,15 @@ export class MenuUiHandler extends OptionSelectUiHandler {
   }
 
   getMenuOptionsConfig(): OptionSelectModeConfig {
-    const validOptions = getTSEnumKeys(MenuOptions)
-      .map((m) => Number.parseInt(MenuOptions[m]) as MenuOptions)
+    const validOptions = Object.keys(MenuOptions)
+      .map((m) => Number.parseInt(MenuOptions[m], 10) as MenuOptions)
       .filter((m) => {
         return !this.excludedMenus().some((option) => option.excluded && option.options.includes(m));
       });
 
     const menuOptions: OptionSelectItem[] = validOptions.map((option: MenuOptions) => {
       return {
-        label: `${i18next.t(`menuUiHandler:${MenuOptions[option]}`)}`,
+        label: `${i18next.t(`menuUiHandler:${enumValueToKey(MenuOptions, option)}`)}`,
         handler: () => this.optionSelected(option),
         keepOpen: true,
       };
@@ -539,7 +542,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
         success = true;
         break;
       case MenuOptions.EGG_LIST:
-        if (globalScene.gameData.eggs.length) {
+        if (globalScene.gameData.eggs.length > 0) {
           ui.setOverlayMode<EggListUiHandler>(UiMode.EGG_LIST);
           success = true;
         } else {
