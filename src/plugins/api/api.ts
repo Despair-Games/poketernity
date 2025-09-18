@@ -21,7 +21,6 @@ class Api extends ApiBase {
   /** Wheter the hostname is 'localhost' or an IP address, and ensure a port is specified. */
   private readonly _isLocal: boolean;
   /** Whether the server/api is connected. By default we assume `true`. */
-  // biome-ignore lint/style/useReadonlyClassProperties: false positive
   private _isConnected: boolean;
 
   //#region Public

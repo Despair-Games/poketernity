@@ -34,7 +34,6 @@ export class BattleInfo extends Phaser.GameObjects.Container {
   private offset: boolean;
   private lastName: string | null;
   private lastTeraType: ElementalType;
-  // biome-ignore lint/style/useReadonlyClassProperties: false positive
   private lastStatus: StatusEffect;
   private lastHp: number;
   private lastMaxHp: number;
@@ -42,7 +41,6 @@ export class BattleInfo extends Phaser.GameObjects.Container {
   private lastExp: number;
   private lastLevelExp: number;
   private lastLevel: number;
-  // biome-ignore lint/style/useReadonlyClassProperties: false positive
   private lastLevelCapped: boolean;
   private lastStats: string;
 

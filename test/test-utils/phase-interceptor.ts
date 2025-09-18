@@ -169,7 +169,6 @@ export class PhaseInterceptor {
   private onHold: PhaseClass[];
   private readonly interval: NodeJS.Timeout;
   private promptInterval: NodeJS.Timeout;
-  // biome-ignore lint/style/useReadonlyClassProperties: false positive
   private intervalRun: NodeJS.Timeout;
   // biome-ignore lint/style/useReadonlyClassProperties: requires refactor
   private prompts: PromptHandler[];
