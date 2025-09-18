@@ -26,7 +26,6 @@ import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encou
 import { PokemonData } from "#system/pokemon-data";
 import type { HeldModifierConfig } from "#types/modifiers-types";
 import type { OptionSelectItem } from "#ui/option-select-config";
-import { getTSEnumValues } from "#utils/common-utils";
 import { randSeedShuffle } from "#utils/random-utils";
 import i18next from "i18next";
 
@@ -189,7 +188,7 @@ export const TrainingSessionEncounter: MysteryEncounter = MysteryEncounterBuilde
         const encounter = globalScene.currentBattle.mysteryEncounter!;
         const onPokemonSelected = (pokemon: PlayerPokemon) => {
           // Return the options for nature selection
-          return getTSEnumValues(Nature).map((nature: Nature) => {
+          return Object.values(Nature).map((nature: Nature) => {
             const option: OptionSelectItem = {
               label: getNatureName(nature, true, true, true),
               handler: () => {

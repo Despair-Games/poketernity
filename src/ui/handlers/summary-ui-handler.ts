@@ -868,7 +868,7 @@ export class SummaryUiHandler extends UiHandler {
         this.passiveContainer?.descriptionText?.setVisible(false);
 
         const closeFragment = getBBCodeFragment("", TextStyle.WINDOW_ALT);
-        const rawNature = toReadableString(Nature[this.pokemon!.getNature()]); // TODO: is this bang correct?
+        const rawNature = toReadableString(enumValueToKey(Nature, this.pokemon!.getNature())); // TODO: is this bang correct?
         const nature = `${getBBCodeFragment(toReadableString(getNatureName(this.pokemon!.getNature())), TextStyle.SUMMARY_RED)}${closeFragment}`; // TODO: is this bang correct?
 
         const memoString = i18next.t("pokemonSummary:memoString", {

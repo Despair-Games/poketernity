@@ -493,7 +493,7 @@ export class NatureRequirement extends EncounterPokemonRequirement {
 
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
     if (pokemon?.nature != null && this.requiredNature.includes(pokemon.nature)) {
-      return ["nature", Nature[pokemon.nature]];
+      return ["nature", enumValueToKey(Nature, pokemon.nature)];
     }
     return ["nature", ""];
   }

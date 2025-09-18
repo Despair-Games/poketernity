@@ -485,7 +485,7 @@ export class OverridesHelper extends GameManagerHelper {
     if (nature === null) {
       this.log("Player Nature override disabled!");
     } else {
-      this.log(`Player Nature set to ${Nature[nature]} (=${nature})!`);
+      this.log(`Player Nature set to ${enumValueToKey(Nature, nature)} (=${nature})!`);
     }
     return this;
   }
@@ -501,7 +501,7 @@ export class OverridesHelper extends GameManagerHelper {
     if (nature === null) {
       this.log("Enemy Nature override disabled!");
     } else {
-      this.log(`Enemy Nature set to ${Nature[nature]} (=${nature})!`);
+      this.log(`Enemy Nature set to ${enumValueToKey(Nature, nature)} (=${nature})!`);
     }
     return this;
   }

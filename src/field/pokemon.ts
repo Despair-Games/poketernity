@@ -204,7 +204,6 @@ import {
   clamp,
   coerceArray,
   fixedNumber,
-  getTSEnumValues,
   NumberHolder,
   toDmgValue,
   ValueHolder,
@@ -212,7 +211,7 @@ import {
 import { loadMoveAnimAssets } from "#utils/move-anim-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
 import { getPokemonSpecies, getPokemonSpeciesForm, summonDataToJSON } from "#utils/pokemon-utils";
-import { randSeedInt } from "#utils/random-utils";
+import { randSeedInt, randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
 interface AbilityData {
@@ -1331,11 +1330,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.calculateStats();
   }
 
-  protected generateNature(naturePool?: Nature[]): void {
-    if (naturePool === undefined) {
-      naturePool = getTSEnumValues(Nature);
-    }
-    const nature = naturePool[randSeedInt(naturePool.length)];
+  protected generateNature(naturePool: Nature[] = Object.values(Nature)): void {
+    const nature = randSeedItem(naturePool);
     this.setNature(nature);
   }
 
