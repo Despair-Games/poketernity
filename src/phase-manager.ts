@@ -638,6 +638,7 @@ export class PhaseManager {
       }
     };
 
+    // biome-ignore lint/nursery/useExhaustiveSwitchCases: false positive, biome doesn't recognize the default value of the param
     switch (when) {
       case "eager":
         this.unshiftPhase(...phases);

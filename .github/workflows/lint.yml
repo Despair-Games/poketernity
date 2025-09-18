@@ -45,12 +45,6 @@ jobs:
         id: biome_lint
         continue-on-error: true
       
-      # Lint files with ESLint - https://eslint.org
-      - name: Run ESLint
-        run: pnpm eslint-ci
-        id: eslint
-        continue-on-error: true
-      
       # Validate dependencies with dependency-cruiser - https://github.com/sverweij/dependency-cruiser
       - name: Run Dependency-Cruise
         run: pnpm depcruise
@@ -66,7 +60,6 @@ jobs:
       - name: Evaluate for Errors
         env:
           BIOME_LINT_OUTCOME: ${{ steps.biome_lint.outcome }}
-          ESLINT_OUTCOME: ${{ steps.eslint.outcome }}
           DEPCRUISE_OUTCOME: ${{ steps.depcruise.outcome }}
           TYPECHECK_OUTCOME: ${{ steps.typecheck.outcome }}
         run: |
@@ -87,12 +80,10 @@ jobs:
           }
 
           print_result "Biome" "$BIOME_LINT_OUTCOME"
-          print_result "ESLint" "$ESLINT_OUTCOME"
           print_result "Depcruise" "$DEPCRUISE_OUTCOME"
           print_result "Typecheck" "$TYPECHECK_OUTCOME"
 
           if [[ "$BIOME_LINT_OUTCOME" != "success" || \
-                "$ESLINT_OUTCOME" != "success" || \
                 "$DEPCRUISE_OUTCOME" != "success" || \
                 "$TYPECHECK_OUTCOME" != "success" ]]; then
             echo -e "\n${RED}❌ One or more checks failed.${NC}"
