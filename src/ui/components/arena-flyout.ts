@@ -295,7 +295,7 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
               (e) => tagAddedEvent.arenaTagType === e.tagType && arenaEffectType === e.effectType,
             )
           : -1;
-        let name: string = getFieldEffectText(ArenaTagType[tagAddedEvent.arenaTagType]);
+        let name: string = getFieldEffectText(enumValueToKey(ArenaTagType, tagAddedEvent.arenaTagType));
 
         if (isEntryHazardTag) {
           if (existingEntryHazardIndex !== -1) {

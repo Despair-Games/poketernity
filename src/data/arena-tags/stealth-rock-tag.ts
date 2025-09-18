@@ -11,9 +11,14 @@ import { MoveId } from "#enums/move-id";
  * against them.
  */
 export class StealthRockTag extends TypeHazardTag {
-  constructor(sourceId: number, side: ArenaTagSide) {
+  public override readonly tagType = ArenaTagType.STEALTH_ROCK;
+
+  public override get maxLayers(): 1 {
+    return 1;
+  }
+
+  constructor(sourceId: number | undefined, side: ArenaTagSide) {
     super(
-      ArenaTagType.STEALTH_ROCK,
       ElementalType.ROCK,
       sourceId,
       side,

@@ -10,8 +10,14 @@ import i18next from "i18next";
  * Weakens Fire type moves for a set amount of turns, usually 5.
  */
 export class WaterSportTag extends WeakenMoveTypeTag {
-  constructor(turnCount: number, sourceId: number) {
-    super(ArenaTagType.WATER_SPORT, turnCount, ElementalType.FIRE, MoveId.WATER_SPORT, sourceId);
+  public override readonly tagType = ArenaTagType.WATER_SPORT;
+
+  override get weakenedType(): typeof ElementalType.FIRE {
+    return ElementalType.FIRE;
+  }
+
+  constructor(turnCount: number, sourceId?: number) {
+    super(turnCount, MoveId.WATER_SPORT, sourceId);
   }
 
   override onAdd(): void {
