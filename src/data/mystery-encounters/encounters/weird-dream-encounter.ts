@@ -107,6 +107,8 @@ export const WeirdDreamEncounter: MysteryEncounter = MysteryEncounterBuilder.wit
     // Calculate all the newly transformed Pokemon and begin asset load
     const teamTransformations = getTeamTransformations();
     const loadAssets = teamTransformations.map((t) => (t.newPokemon as PlayerPokemon).loadAssets());
+    // TODO: we should store PokemonData in teamTransformations rather than plain Pokemon objects,
+    // especially since after the ME they are still kept in memory through globalScene.lastMysteryEncounter
     globalScene.currentBattle.mysteryEncounter!.misc = {
       teamTransformations,
       loadAssets,
@@ -264,6 +266,7 @@ export const WeirdDreamEncounter: MysteryEncounter = MysteryEncounterBuilder.wit
           enablePassiveMon.passive = true;
           enablePassiveMon.updateInfo(true);
         }
+        destroyTransformedPokemon();
       };
 
       setEncounterRewards(
@@ -307,6 +310,7 @@ export const WeirdDreamEncounter: MysteryEncounter = MysteryEncounterBuilder.wit
         await pokemon.updateInfo();
       }
 
+      destroyTransformedPokemon();
       leaveEncounterWithoutBattle(true);
       return true;
     },
@@ -318,6 +322,16 @@ interface PokemonTransformation {
   newSpecies: PokemonSpecies;
   newPokemon: PlayerPokemon;
   heldItems: PokemonHeldItemModifier[];
+}
+
+/**
+ * Destroy the transformed team of Pokemon. For cases where the player does not switch their team.
+ */
+function destroyTransformedPokemon(): void {
+  const transformations: PokemonTransformation[] = globalScene.currentBattle.mysteryEncounter!.misc.teamTransformations;
+  for (const transformation of transformations) {
+    transformation.newPokemon.destroy();
+  }
 }
 
 function getTeamTransformations(): PokemonTransformation[] {
