@@ -2979,7 +2979,7 @@ export class BattleScene extends SceneBase {
   /**
    * Forces the active enemy Pokemon at the given battler index to flee.
    * @param battlerIndex - The {@linkcode FieldBattlerIndex} of the enemy Pokemon to make flee
-   * @param pokemon - The {@linkcode Pokemon} that initiated this effect
+   * @param source - The {@linkcode Pokemon} that initiated this effect
    * @returns `true` if a Pokemon was successfully forced to flee
    */
   public tryForceFleePokemon(battlerIndex: FieldBattlerIndex, source: Pokemon): boolean {
