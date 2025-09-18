@@ -11,8 +11,14 @@ import i18next from "i18next";
  * Used by {@linkcode MoveId.REFLECT}
  */
 export class ReflectTag extends WeakenMoveScreenTag {
-  constructor(turnCount: number, sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.REFLECT, turnCount, MoveId.REFLECT, sourceId, side, [MoveCategory.PHYSICAL]);
+  public override readonly tagType = ArenaTagType.REFLECT;
+
+  protected override get weakenedCategories(): [typeof MoveCategory.PHYSICAL] {
+    return [MoveCategory.PHYSICAL];
+  }
+
+  constructor(turnCount: number, sourceId: number | undefined, side: ArenaTagSide) {
+    super(turnCount, MoveId.REFLECT, sourceId, side);
   }
 
   override onAdd(quiet: boolean = false): void {

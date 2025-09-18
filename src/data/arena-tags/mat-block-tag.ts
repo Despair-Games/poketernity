@@ -25,8 +25,10 @@ const MatBlockConditionFunc: ProtectConditionFunc = (moveId): boolean => {
  * Condition: The incoming move is a Physical or Special attack move.
  */
 export class MatBlockTag extends ConditionalProtectTag {
-  constructor(sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.MAT_BLOCK, MoveId.MAT_BLOCK, sourceId, side, MatBlockConditionFunc);
+  public override readonly tagType = ArenaTagType.MAT_BLOCK;
+
+  constructor(sourceId: number | undefined, side: ArenaTagSide) {
+    super(MoveId.MAT_BLOCK, sourceId, side, MatBlockConditionFunc);
   }
 
   override onAdd() {

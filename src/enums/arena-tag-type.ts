@@ -1,5 +1,17 @@
+/** biome-ignore-start lint/correctness/noUnusedImports: TSDoc imports */
+import type { ArenaTag } from "#arena-tags/arena-tag";
+import type { ArenaTagTypeMap, NonSerializableArenaTagType, SerializableArenaTagType } from "#types/arena-tag-types";
+/** biome-ignore-end lint/correctness/noUnusedImports: TSDoc imports */
+
 import type { EnumValues } from "#types/utility-types";
 
+/**
+ * Enum representing all different types of {@linkcode ArenaTag}s.
+ * @privateRemarks
+ * ⚠️ When modifying the fields in this enum, ensure that:
+ * - The entry is added to / removed from {@linkcode ArenaTagTypeMap}
+ * - The tag is added to / removed from {@linkcode NonSerializableArenaTagType} or {@linkcode SerializableArenaTagType}
+ */
 export const ArenaTagType = {
   MUD_SPORT: 1,
   WATER_SPORT: 2,

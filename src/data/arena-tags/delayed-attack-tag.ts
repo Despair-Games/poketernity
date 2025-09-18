@@ -1,34 +1,45 @@
 import { globalScene } from "#app/global-scene";
-import { ArenaTag } from "#arena-tags/arena-tag";
+import { SerializableArenaTag } from "#arena-tags/arena-tag";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import type { FieldBattlerIndex } from "#enums/battler-index";
 import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
+import type { BaseArenaTag } from "#types/arena-tag-types";
+import type { Mutable } from "#types/utility-types";
 
 /**
  * Interface representing a delayed attack command.
  * @see {@linkcode DelayedAttackTag}
  */
 interface DelayedAttack {
-  sourceId: number;
-  moveId: MoveId;
-  targetIndex: FieldBattlerIndex;
-  turnCount: number;
+  readonly sourceId: number;
+  readonly moveId: MoveId;
+  readonly targetIndex: FieldBattlerIndex;
+  readonly turnCount: number;
 }
 
 /**
  * Arena Tag class for delayed attacks from {@link https://bulbapedia.bulbagarden.net/wiki/Future_Sight_(move) Future Sight}
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Doom_Desire_(move) Doom Desire}.
+ *
  * Delays the attack's effect by 3 turns (including the turn the move is used),
  * and deals damage after the turn count is reached.
  */
-export class DelayedAttackTag extends ArenaTag {
-  /** Contains all queued delayed attacks on the field */
-  public delayedAttacks: DelayedAttack[];
+export class DelayedAttackTag extends SerializableArenaTag {
+  public override readonly tagType = ArenaTagType.DELAYED_ATTACK;
+
+  /**
+   * Contains all queued delayed attacks on the field
+   * @privateRemarks
+   * This is `public` due to needing to be serialized to save data,
+   * so `readonly` is used to emulate `private` visibility. \
+   * Otherwise, this would be `private` and have a `public` getter for use in `DelayedAttackAttr`.
+   */
+  public readonly delayedAttacks: readonly DelayedAttack[];
 
   constructor() {
-    super(ArenaTagType.DELAYED_ATTACK, 0);
+    super(0);
 
     this.delayedAttacks = [];
   }
@@ -40,12 +51,12 @@ export class DelayedAttackTag extends ArenaTag {
    * @param targetIndex - The {@linkcode FieldBattlerIndex} targeted by the attack
    */
   public addAttack(source: Pokemon, moveId: MoveId, targetIndex: FieldBattlerIndex): void {
-    this.delayedAttacks.push({ sourceId: source.id, moveId, targetIndex, turnCount: 3 });
+    (this.delayedAttacks as DelayedAttack[]).push({ sourceId: source.id, moveId, targetIndex, turnCount: 3 });
   }
 
   override lapse(): boolean {
-    this.delayedAttacks.forEach((attack) => {
-      attack.turnCount--;
+    for (const attack of this.delayedAttacks) {
+      (attack as Mutable<DelayedAttack>).turnCount--;
       const attacker = globalScene.getPokemonById(attack.sourceId);
 
       if (attacker != null && attack.turnCount <= 0) {
@@ -73,9 +84,9 @@ export class DelayedAttackTag extends ArenaTag {
           );
         }
       }
-    });
+    }
 
-    this.delayedAttacks = this.delayedAttacks.filter(
+    (this as Mutable<this>).delayedAttacks = this.delayedAttacks.filter(
       (attack) => globalScene.getPokemonById(attack.sourceId) != null && attack.turnCount > 0,
     );
     return this.delayedAttacks.length > 0;
@@ -83,8 +94,8 @@ export class DelayedAttackTag extends ArenaTag {
 
   override onRemove(): void {}
 
-  override loadTag(source: ArenaTag | any): void {
+  override loadTag(source: BaseArenaTag & Pick<DelayedAttackTag, "tagType" | "delayedAttacks">): void {
     super.loadTag(source);
-    this.delayedAttacks = source.delayedAttacks;
+    (this as Mutable<this>).delayedAttacks = source.delayedAttacks;
   }
 }

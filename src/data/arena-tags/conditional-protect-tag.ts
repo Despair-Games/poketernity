@@ -4,7 +4,6 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { ArenaTag } from "#arena-tags/arena-tag";
 import { allMoves } from "#data/data-lists";
 import { ArenaTagSide } from "#enums/arena-tag-side";
-import type { ArenaTagType } from "#enums/arena-tag-type";
 import { CommonAnim } from "#enums/common-anim";
 import { MoveFlags } from "#enums/move-flags";
 import type { MoveId } from "#enums/move-id";
@@ -20,18 +19,20 @@ import i18next from "i18next";
 export abstract class ConditionalProtectTag extends ArenaTag {
   /** The condition function to determine which moves are negated */
   protected protectConditionFunc: ProtectConditionFunc;
-  /** Does this apply to all moves, including those that ignore other forms of protection? */
+  /**
+   * Whether this protection effect should apply to _all_ moves, including ones that ignore other forms of protection.
+   * @defaultValue `false`
+   */
   protected ignoresBypass: boolean;
 
   constructor(
-    tagType: ArenaTagType,
     sourceMoveId: MoveId,
-    sourceId: number,
+    sourceId: number | undefined,
     side: ArenaTagSide,
     condition: ProtectConditionFunc,
     ignoresBypass: boolean = false,
   ) {
-    super(tagType, 1, sourceMoveId, sourceId, side);
+    super(1, sourceMoveId, sourceId, side);
 
     this.protectConditionFunc = condition;
     this.ignoresBypass = ignoresBypass;
