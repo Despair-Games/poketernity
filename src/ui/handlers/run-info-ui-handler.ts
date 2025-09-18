@@ -372,7 +372,7 @@ export class RunInfoUiHandler extends UiHandler {
     const currentBiomeText = addTextObject(
       windowCenterX,
       windowBottomY - 5,
-      `${getBiomeName(this.runInfo.arena.biome)}`,
+      `${getBiomeName(this.runInfo.arena.biomeId)}`,
       TextStyle.RUN_PREVIEW_STATUS,
     );
     currentBiomeText.setOrigin(0.5, 1);
