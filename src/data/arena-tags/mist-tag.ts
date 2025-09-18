@@ -2,7 +2,7 @@ import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { InfiltratorAbAttr } from "#abilities/infiltrator-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { ArenaTag } from "#arena-tags/arena-tag";
+import { SerializableArenaTag } from "#arena-tags/arena-tag";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -15,9 +15,11 @@ import i18next from "i18next";
  * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Mist_(move) Mist}.
  * Prevents Pokémon on the opposing side from lowering the stats of the Pokémon in the Mist.
  */
-export class MistTag extends ArenaTag {
-  constructor(turnCount: number, sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.MIST, turnCount, MoveId.MIST, sourceId, side);
+export class MistTag extends SerializableArenaTag {
+  public override readonly tagType = ArenaTagType.MIST;
+
+  constructor(turnCount: number, sourceId: number | undefined, side: ArenaTagSide) {
+    super(turnCount, MoveId.MIST, sourceId, side);
   }
 
   override onAdd(quiet: boolean = false): void {

@@ -64,15 +64,15 @@ export class TagAddedEvent extends ArenaEvent {
     arenaTagType: ArenaTagType,
     arenaTagSide: ArenaTagSide,
     duration: number,
-    arenaTagLayers?: number,
-    arenaTagMaxLayers?: number,
+    arenaTagLayers: number,
+    arenaTagMaxLayers: number,
   ) {
     super(ArenaEventType.TAG_ADDED, duration);
 
     this.arenaTagType = arenaTagType;
     this.arenaTagSide = arenaTagSide;
-    this.arenaTagLayers = arenaTagLayers!; // TODO: is this bang correct?
-    this.arenaTagMaxLayers = arenaTagMaxLayers!; // TODO: is this bang correct?
+    this.arenaTagLayers = arenaTagLayers;
+    this.arenaTagMaxLayers = arenaTagMaxLayers;
   }
 }
 /**

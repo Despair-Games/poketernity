@@ -1,33 +1,36 @@
-import { ArenaTag } from "#arena-tags/arena-tag";
+import { SerializableArenaTag } from "#arena-tags/arena-tag";
 import { ArenaTagSide } from "#enums/arena-tag-side";
-import type { ArenaTagType } from "#enums/arena-tag-type";
 import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
+import type { BaseArenaTag, EntryHazardTagType } from "#types/arena-tag-types";
+import type { Mutable } from "#types/utility-types";
 
 /**
  * Abstract class to implement arena entry hazards.
  */
-export abstract class EntryHazardTag extends ArenaTag {
-  public layers: number;
-  public maxLayers: number;
+export abstract class EntryHazardTag extends SerializableArenaTag {
+  public abstract override readonly tagType: EntryHazardTagType;
+  public readonly layers: number = 1;
 
   /**
-   * @param tagType - The type of the arena tag.
+   * The max layers the entry hazard can have.
+   * @privateRemarks
+   * This is a getter so that it will not be serialized to save data, since it's a static value.
+   */
+  public abstract get maxLayers(): number;
+
+  /**
    * @param sourceMoveId - The move that created the tag.
    * @param sourceId - The ID of the source of the tag.
    * @param side - The side (player or enemy) the tag affects.
-   * @param maxLayers - The maximum amount of layers this tag can have.
    */
-  constructor(tagType: ArenaTagType, sourceMoveId: MoveId, sourceId: number, side: ArenaTagSide, maxLayers: number) {
-    super(tagType, 0, sourceMoveId, sourceId, side);
-
-    this.layers = 1;
-    this.maxLayers = maxLayers;
+  constructor(sourceMoveId: MoveId, sourceId: number | undefined, side: ArenaTagSide) {
+    super(0, sourceMoveId, sourceId, side);
   }
 
   override onOverlap(): void {
     if (this.layers < this.maxLayers) {
-      this.layers++;
+      (this as Mutable<this>).layers++;
 
       this.onAdd();
     }
@@ -68,9 +71,8 @@ export abstract class EntryHazardTag extends ArenaTag {
       : Phaser.Math.Linear(0, 1 / Math.pow(2, this.layers), Math.min(pokemon.getHpRatio(), 0.5) * 2);
   }
 
-  override loadTag(source: any): void {
+  override loadTag<const T extends this>(source: BaseArenaTag & Pick<T, "tagType" | "layers">): void {
     super.loadTag(source);
-    this.layers = source.layers;
-    this.maxLayers = source.maxLayers;
+    (this as Mutable<this>).layers = source.layers;
   }
 }

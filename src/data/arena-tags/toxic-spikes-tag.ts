@@ -16,11 +16,17 @@ import i18next from "i18next";
  * Pokémon summoned into this trap remove it entirely.
  */
 export class ToxicSpikesTag extends EntryHazardTag {
-  private neutralized: boolean;
+  public override readonly tagType = ArenaTagType.TOXIC_SPIKES;
 
-  constructor(sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.TOXIC_SPIKES, MoveId.TOXIC_SPIKES, sourceId, side, 2);
-    this.neutralized = false;
+  #neutralized: boolean;
+
+  public override get maxLayers(): 2 {
+    return 2;
+  }
+
+  constructor(sourceId: number | undefined, side: ArenaTagSide) {
+    super(MoveId.TOXIC_SPIKES, sourceId, side);
+    this.#neutralized = false;
   }
 
   override onAdd(quiet: boolean = false): void {
@@ -39,7 +45,7 @@ export class ToxicSpikesTag extends EntryHazardTag {
   }
 
   override onRemove(): void {
-    if (!this.neutralized) {
+    if (!this.#neutralized) {
       super.onRemove();
     }
   }
@@ -50,7 +56,7 @@ export class ToxicSpikesTag extends EntryHazardTag {
         return true;
       }
       if (pokemon.isOfType(ElementalType.POISON)) {
-        this.neutralized = true;
+        this.#neutralized = true;
         if (globalScene.arena.removeTag(this.tagType)) {
           globalScene.phaseManager.createAndUnshiftPhase(
             "MessagePhase",

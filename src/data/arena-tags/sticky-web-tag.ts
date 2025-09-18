@@ -17,8 +17,14 @@ import i18next from "i18next";
  * to any Pokémon who is summoned into this trap.
  */
 export class StickyWebTag extends EntryHazardTag {
-  constructor(sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.STICKY_WEB, MoveId.STICKY_WEB, sourceId, side, 1);
+  public override readonly tagType = ArenaTagType.STICKY_WEB;
+
+  public override get maxLayers(): 1 {
+    return 1;
+  }
+
+  constructor(sourceId: number | undefined, side: ArenaTagSide) {
+    super(MoveId.STICKY_WEB, sourceId, side);
   }
 
   /** @todo Should `quiet` ever be `true`? */

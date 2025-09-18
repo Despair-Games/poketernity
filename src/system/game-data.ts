@@ -73,6 +73,7 @@ import { TrainerData } from "#system/trainer-data";
 import { applySessionVersionMigration, applySystemVersionMigration } from "#system/version-converter";
 import { vouchers } from "#system/voucher";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
+import type { SerializedArenaData } from "#types/arena-types";
 import type { DexData, DexEntry } from "#types/dex-data";
 import type { InputInterfaceConfig } from "#types/inputs-types";
 import type { SessionSaveData } from "#types/session-data";
@@ -830,7 +831,7 @@ export class GameData {
 
           globalScene.mysteryEncounterSaveData = new MysteryEncounterSaveData(sessionData.mysteryEncounterSaveData);
 
-          globalScene.newArena(sessionData.arena.biome);
+          globalScene.newArena(sessionData.arena.biomeId);
 
           const battleType = sessionData.battleType || 0;
           const trainerConfig = sessionData.trainer ? allTrainerConfigs[sessionData.trainer.trainerType] : null;
@@ -890,14 +891,11 @@ export class GameData {
           globalScene.arena.tags = sessionData.arena.tags;
           if (globalScene.arena.tags) {
             for (const tag of globalScene.arena.tags) {
-              if (tag instanceof EntryHazardTag) {
-                const { tagType, side, turnCount, layers, maxLayers } = tag as EntryHazardTag;
-                globalScene.arena.eventTarget.dispatchEvent(
-                  new TagAddedEvent(tagType, side, turnCount, layers, maxLayers),
-                );
-              } else {
-                globalScene.arena.eventTarget.dispatchEvent(new TagAddedEvent(tag.tagType, tag.side, tag.turnCount));
-              }
+              const { tagType, side, turnCount } = tag;
+              const { layers = 0, maxLayers = 0 } = tag instanceof EntryHazardTag ? tag : {};
+              globalScene.arena.eventTarget.dispatchEvent(
+                new TagAddedEvent(tagType, side, turnCount, layers, maxLayers),
+              );
             }
           }
 
@@ -1082,7 +1080,7 @@ export class GameData {
       }
 
       if (k === "arena") {
-        return new ArenaData(v);
+        return new ArenaData(v as SerializedArenaData);
       }
 
       if (k === "challenges") {

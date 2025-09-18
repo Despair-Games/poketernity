@@ -32,7 +32,9 @@ const WideGuardConditionFunc: ProtectConditionFunc = (moveId): boolean => {
  * The move's source can be an ally or enemy.
  */
 export class WideGuardTag extends ConditionalProtectTag {
-  constructor(sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.WIDE_GUARD, MoveId.WIDE_GUARD, sourceId, side, WideGuardConditionFunc);
+  public override readonly tagType = ArenaTagType.WIDE_GUARD;
+
+  constructor(sourceId: number | undefined, side: ArenaTagSide) {
+    super(MoveId.WIDE_GUARD, sourceId, side, WideGuardConditionFunc);
   }
 }

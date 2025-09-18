@@ -2,7 +2,7 @@ import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { ArenaTag } from "#arena-tags/arena-tag";
+import { SerializableArenaTag } from "#arena-tags/arena-tag";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -20,9 +20,11 @@ import i18next from "i18next";
  * Damages all non-Fire-type Pokemon on the given side of the field at the end
  * of each turn for 4 turns.
  */
-export class FireGrassPledgeTag extends ArenaTag {
-  constructor(sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.FIRE_GRASS_PLEDGE, 4, MoveId.FIRE_PLEDGE, sourceId, side);
+export class FireGrassPledgeTag extends SerializableArenaTag {
+  public override readonly tagType = ArenaTagType.FIRE_GRASS_PLEDGE;
+
+  constructor(sourceId: number | undefined, side: ArenaTagSide) {
+    super(4, MoveId.FIRE_PLEDGE, sourceId, side);
   }
 
   override onAdd(): void {
