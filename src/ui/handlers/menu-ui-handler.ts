@@ -59,7 +59,6 @@ export class MenuUiHandler extends OptionSelectUiHandler {
 
   private manageDataConfig: OptionSelectModeConfig;
   private communityConfig: OptionSelectModeConfig;
-  // biome-ignore lint/style/useReadonlyClassProperties: false positive
   private communityWindowWidth: number;
 
   constructor(mode: UiMode = UiMode.MENU) {
