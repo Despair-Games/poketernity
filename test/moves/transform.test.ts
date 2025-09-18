@@ -23,11 +23,14 @@ describe("Moves - Transform", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single").enemySpecies(SpeciesId.MAGIKARP).enemyLevel(200);
+    game.override //
+      .battleType("single")
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyLevel(200);
   });
 
   it("should copy species, ability, gender, all stats except HP, all stat stages, moveset, and types of target", async () => {
-    await game.classicMode.startBattle(SpeciesId.DITTO);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -68,7 +71,7 @@ describe("Moves - Transform", () => {
   });
 
   it("should copy in-battle overridden stats", async () => {
-    await game.classicMode.startBattle(SpeciesId.DITTO);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -90,7 +93,7 @@ describe("Moves - Transform", () => {
   });
 
   it("should set each move's pp to a maximum of 5", async () => {
-    await game.classicMode.startBattle(SpeciesId.DITTO);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
