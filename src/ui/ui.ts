@@ -172,7 +172,6 @@ export class UI extends Phaser.GameObjects.Container {
   private tooltipTitle: Phaser.GameObjects.Text;
   private tooltipContent: Phaser.GameObjects.Text;
 
-  // biome-ignore lint/style/useReadonlyClassProperties: false positive
   private overlayActive: boolean;
 
   /** Callback used to destroy no longer needed handlers on new encounters. */

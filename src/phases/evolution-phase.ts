@@ -32,7 +32,6 @@ export class EvolutionPhase extends FormChangeBasePhase {
 
   /** @todo why is this able to be `null`? */
   private readonly evolution: SpeciesFormEvolution | null;
-  // biome-ignore lint/style/useReadonlyClassProperties: false positive
   private evolutionBgm: AnySound;
 
   /**

@@ -95,7 +95,6 @@ export class Battle {
   /** If the current battle is a Mystery Encounter, this will always be defined */
   public mysteryEncounter?: MysteryEncounter;
 
-  // biome-ignore lint/style/useReadonlyClassProperties: false positive
   private rngCounter: number = 0;
 
   constructor(gameMode: GameMode, waveIndex: number, battleType: BattleType, trainer?: Trainer, double?: boolean) {

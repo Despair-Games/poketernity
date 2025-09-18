@@ -29,9 +29,7 @@ export class TitlePhase extends Phase {
 
   public gameMode: GameModes;
 
-  // biome-ignore lint/style/useReadonlyClassProperties: false positive
   private loaded: boolean = false;
-  // biome-ignore lint/style/useReadonlyClassProperties: false positive
   private lastSessionData: SessionSaveData;
 
   public override start(): void {
