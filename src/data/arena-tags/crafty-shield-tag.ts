@@ -31,7 +31,9 @@ const CraftyShieldConditionFunc: ProtectConditionFunc = (moveId) => {
  * and does not target all Pokemon or sides of the field.
  */
 export class CraftyShieldTag extends ConditionalProtectTag {
-  constructor(sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.CRAFTY_SHIELD, MoveId.CRAFTY_SHIELD, sourceId, side, CraftyShieldConditionFunc, true);
+  public override readonly tagType = ArenaTagType.CRAFTY_SHIELD;
+
+  constructor(sourceId: number | undefined, side: ArenaTagSide) {
+    super(MoveId.CRAFTY_SHIELD, sourceId, side, CraftyShieldConditionFunc, true);
   }
 }

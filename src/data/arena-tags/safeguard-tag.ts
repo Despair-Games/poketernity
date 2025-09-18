@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { ArenaTag } from "#arena-tags/arena-tag";
+import { SerializableArenaTag } from "#arena-tags/arena-tag";
 import type { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveId } from "#enums/move-id";
@@ -7,13 +7,14 @@ import i18next from "i18next";
 
 /**
  * Prevents Pokemon on the tag's {@linkcode ArenaTagSide | side}
- * from being afflicted with non-volatile status conditions
- * and Confusion.
+ * from being afflicted with non-volatile status conditions and confusion.
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Safeguard_(move) | Safeguard}
  */
-export class SafeguardTag extends ArenaTag {
-  constructor(turnCount: number, sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.SAFEGUARD, turnCount, MoveId.SAFEGUARD, sourceId, side);
+export class SafeguardTag extends SerializableArenaTag {
+  public override readonly tagType = ArenaTagType.SAFEGUARD;
+
+  constructor(turnCount: number, sourceId: number | undefined, side: ArenaTagSide) {
+    super(turnCount, MoveId.SAFEGUARD, sourceId, side);
   }
 
   override onAdd(): void {

@@ -38,6 +38,7 @@ import { coerceArray, enumValueToKey, getTSEnumValues } from "#utils/common-util
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedInt, weightedPick } from "#utils/random-utils";
 
+// TODO: remove `| null` from `weather` and `terrain`
 export class Arena {
   public biomeId: BiomeId;
   public weather: Weather | null;

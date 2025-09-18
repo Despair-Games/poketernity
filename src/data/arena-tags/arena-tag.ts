@@ -1,33 +1,87 @@
+/**
+ * ArenaTags are are meant for effects that are tied to the arena (as opposed to a specific pokemon).
+ * Examples include (but are not limited to)
+ * - Cross-turn effects that persist even if the user/target switches out, such as Happy Hour
+ * - Effects that are applied to a specific side of the field, such as Crafty Shield, Reflect, and Spikes
+ * - Field-Effects, like Gravity and Trick Room
+ *
+ * Any arena tag that persists across turns *must* extend from `SerializableArenaTag` in the class definition signature.
+ *
+ * Serializable ArenaTags have strict rules for their fields.
+ * These rules ensure that only the data necessary to reconstruct the tag is serialized, and that the
+ * session loader is able to deserialize saved tags correctly.
+ *
+ * If the data is static (i.e. it is always the same for all instances of the class, such as the
+ * type that is weakened by Mud Sport/Water Sport), then it must not be defined as a field, and must
+ * instead be defined as a getter.
+ * A static property is also acceptable, though static properties are less ergonomic with inheritance.
+ *
+ * If the data is mutable (i.e. it can change over the course of the tag's lifetime), then it *must*
+ * be defined as a field, and it must be set in the `loadTag` method.
+ * Such fields cannot be marked as `private`/`protected`; if they were, Typescript would omit them from
+ * types that are based off of the class, namely, `ArenaTagTypeData`. It is preferrable to trade the
+ * type-safety of private/protected fields for the type safety when deserializing arena tags from save data.
+ *
+ * For data that is mutable only within a turn (e.g. SuppressAbilitiesTag's beingRemoved field),
+ * where it does not make sense to be serialized, the field should use ES2020's
+ * [private field syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_elements#private_fields).
+ * If the field should be accessible outside of the class, then a public getter should be used.
+ *
+ *  If any new serializable fields *are* added, then the class *must* override the
+ * `loadTag` method to set the new fields. Its signature *must* match the example below,
+ * ```
+ * class ExampleTag extends SerializableArenaTag {
+ *   // Example, if we add 2 new fields that should be serialized:
+ *   public a: string;
+ *   public b: number;
+ *   // Then we must also define a loadTag method with one of the following signatures
+ *   public override loadTag(source: BaseArenaTag & Pick<ExampleTag, "tagType" | "a" | "b"): void;
+ *   public override loadTag<const T extends this>(source: BaseArenaTag & Pick<T, "tagType" | "a" | "b">): void;
+ * }
+ * ```
+ * Notes
+ * - If the class has any subclasses, then the second form of `loadTag` *must* be used.
+ *
+ * @module
+ */
+
 import { globalScene } from "#app/global-scene";
 import { allMoves } from "#data/data-lists";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
+import type { BaseArenaTag, SerializableArenaTagType } from "#types/arena-tag-types";
 import i18next from "i18next";
 
 /** Base class for any special effects that apply to the {@linkcode Arena | field} during battle. */
-export abstract class ArenaTag {
-  /** biome-ignore-start lint/style/noParameterProperties: Fixed in a different PR */
-  constructor(
-    /** An {@linkcode ArenaTagType | identifier} for the tag's effect. */
-    public tagType: ArenaTagType,
-    /**
-     * The number of turns the tag is active. If set to a number less than
-     * 1, the Arena Tag will last indefinitely (until its {@linkcode Arena} is reset).
-     */
-    public turnCount: number,
-    /** (Optional) The {@linkcode MoveId | move} that created this effect. */
-    public sourceMoveId?: MoveId,
-    /** (Optional) The ID number of the {@linkcode Pokemon} that created this effect. */
-    public sourceId?: number,
-    /**
-     * The {@linkcode ArenaTagSide} to which this effect applies. Tags can
-     * affect the player's and/or the enemy's side of the field.
-     */
-    public side: ArenaTagSide = ArenaTagSide.BOTH,
-  ) {}
-  /** biome-ignore-end lint/style/noParameterProperties: Fixed in a different PR */
+export abstract class ArenaTag implements BaseArenaTag {
+  /** An {@linkcode ArenaTagType | identifier} for the tag's effect. */
+  public abstract readonly tagType: ArenaTagType;
+  /**
+   * The number of turns the tag is active. If set to a number less than
+   * 1, the Arena Tag will last indefinitely (until its {@linkcode Arena} is reset).
+   */
+  public turnCount: number;
+  /** (Optional) The {@linkcode MoveId | move} that created this effect. */
+  public sourceMoveId?: MoveId;
+  /**
+   * (Optional) The ID number of the {@linkcode Pokemon} that created this effect,
+   * or `undefined` if not created by a Pokemon.
+   */
+  public sourceId: number | undefined;
+  /**
+   * The {@linkcode ArenaTagSide} to which this effect applies. Tags can
+   * affect the player's and/or the enemy's side of the field.
+   */
+  public side: ArenaTagSide;
+
+  constructor(turnCount: number, sourceMoveId?: MoveId, sourceId?: number, side: ArenaTagSide = ArenaTagSide.BOTH) {
+    this.turnCount = turnCount;
+    this.sourceMoveId = sourceMoveId;
+    this.sourceId = sourceId;
+    this.side = side;
+  }
 
   /**
    * Used to obtain localized keys for the tag's messages based on what
@@ -108,9 +162,9 @@ export abstract class ArenaTag {
   /**
    * When given a arena tag or json representing one, load the data for it.
    * This is meant to be inherited from by any arena tag with custom attributes
-   * @param source - The {@linkcode ArenaTag} source to load from
+   * @param source - The {@linkcode BaseArenaTag} being loaded
    */
-  public loadTag(source: ArenaTag | any): void {
+  public loadTag<const T extends this>(source: BaseArenaTag & Pick<T, "tagType">): void {
     this.turnCount = source.turnCount;
     this.sourceMoveId = source.sourceMoveId;
     this.sourceId = source.sourceId;
@@ -142,4 +196,11 @@ export abstract class ArenaTag {
         return globalScene.getField(true) ?? [];
     }
   }
+}
+
+/**
+ * Abstract class for arena tags that can persist across turns.
+ */
+export abstract class SerializableArenaTag extends ArenaTag {
+  abstract override readonly tagType: SerializableArenaTagType;
 }
