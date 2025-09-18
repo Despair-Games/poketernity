@@ -6,12 +6,14 @@
     "useIgnoreFile": true,
     "defaultBranch": "beta"
   },
+
   "formatter": {
     "enabled": true,
     "useEditorconfig": true,
     "indentStyle": "space",
     "lineWidth": 120
   },
+
   "files": {
     "ignoreUnknown": true,
     // Adding folders to the ignore list is GREAT for performance because it prevents biome from descending into them
@@ -47,6 +49,7 @@
       }
     }
   },
+
   "linter": {
     "enabled": true,
     "rules": {
@@ -64,6 +67,7 @@
         "noUnusedFunctionParameters": "error",
         "noUnusedLabels": "error",
         "noPrivateImports": "error",
+        "noUndeclaredDependencies": "error",
         "useJsonImportAttributes": "off", // "Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'. ts(2823)"
         "useSingleJsDocAsterisk": "error"
       },
@@ -73,7 +77,7 @@
         "useConst": "error",
         "useImportType": "error",
         "noNonNullAssertion": "off", // TODO: fix all non-null assertions in non-test files and turn this on
-        "noParameterAssign": "info",
+        "noParameterAssign": "info", // TODO: refactor and make "error"
         "useExponentiationOperator": "off", // Too typo-prone and easy to mixup with standard multiplication (* vs **)
         "useDefaultParameterLast": "error",
         "useSingleVarDeclarator": "error",
@@ -132,13 +136,13 @@
         "noParameterProperties": "error", // a step toward enabling `erasableSyntaxOnly` in `tsconfig.json`
         "useAtIndex": "error",
         "useReadonlyClassProperties": "error",
-        "useExplicitLengthCheck": "info",
+        "useExplicitLengthCheck": "info", // TODO: refactor and make "error"
         "noNestedTernary": "error"
       },
       "suspicious": {
         "noDoubleEquals": "error",
         "noExplicitAny": "off", // TODO: Refactor and make this an error
-        "noAssignInExpressions": "warn",
+        "noAssignInExpressions": "warn", // TODO: refactor and make "error"
         "noPrototypeBuiltins": "error",
         "noFallthroughSwitchClause": "error", // Prevents accidental automatic fallthroughs in switch cases (use disable comment if needed)
         "noImplicitAnyLet": "error",
@@ -176,7 +180,12 @@
         "noShadow": "warn", // TODO: refactor and make "error"
         "noUselessUndefined": "error",
         "noNonNullAssertedOptionalChain": "error",
-        "useExplicitType": "off" // TODO: refactor and make "error"
+        "useExplicitType": "off", // TODO: refactor and make "error"
+        "noFloatingPromises": "warn", // TODO: refactor and make "error"
+        "noMisusedPromises": "warn", // TODO: refactor and make "error"
+        "useExhaustiveSwitchCases": "error",
+        "noUnnecessaryConditions": "off", // TODO: enable when the false positives are fixed
+        "noImportCycles": "error" // overlaps with depcruiser but this will allow diagnostics to be shown in the IDE
       },
       "performance": {
         "noNamespaceImport": "error",
@@ -211,6 +220,9 @@
           },
           "style": {
             "noNonNullAssertion": "off" // tests are able to make assumptions about the game state that normally can't be made
+          },
+          "nursery": {
+            "noFloatingPromises": "error"
           }
         }
       }
@@ -230,13 +242,7 @@
       }
     },
     {
-      "includes": [
-        "**/src/overrides.ts",
-        "**/src/plugins/i18n.ts",
-        "**/eslint.config.js",
-        "**/vite.config.ts",
-        "**/vitest.config.ts"
-      ],
+      "includes": ["**/src/plugins/i18n.ts", "**/eslint.config.js", "**/vite.config.ts", "**/vitest.config.ts"],
       "linter": {
         "rules": {
           "style": {
@@ -250,7 +256,7 @@
       "linter": {
         "rules": {
           "complexity": {
-            "noUselessStringConcat": "off" // disabled for readability of this particular file
+            "noUselessStringConcat": "off" // disabled for readability of this particular file due to a bug
           }
         }
       }

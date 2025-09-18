@@ -235,11 +235,13 @@ export class GameManager {
    * @returns A promise that resolves when the EncounterPhase ends.
    * @todo Move to a `MysteryEncounter` helper class
    */
-  async runToMysteryEncounter(encounterType?: MysteryEncounterType, species?: SpeciesId[]) {
+  async runToMysteryEncounter(
+    encounterType?: MysteryEncounterType,
+    species: SpeciesId[] = [SpeciesId.FEEBAS, SpeciesId.MAGIKARP, SpeciesId.FEEBAS],
+  ) {
     if (encounterType != null) {
       this.override.trainerChance(0).mysteryEncounter(encounterType);
     }
-    species ??= [SpeciesId.FEEBAS, SpeciesId.MAGIKARP, SpeciesId.FEEBAS];
 
     await this.runToTitle();
 
@@ -391,7 +393,7 @@ export class GameManager {
    */
   exportSaveToTest(): Promise<string> {
     const saveKey = "x0i2O7WRiANTqPmZ";
-    return new Promise(async (resolve) => {
+    return new Promise((resolve) => {
       const sessionSaveData = this.scene.gameData.getSessionSaveData();
       const encryptedSaveData = AES.encrypt(JSON.stringify(sessionSaveData), saveKey).toString();
       resolve(encryptedSaveData);
