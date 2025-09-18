@@ -11,6 +11,7 @@ import { WindowVariant } from "#enums/window-variant";
 import type { ArenaEvent } from "#events/arena";
 import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#events/arena";
 import type { TurnEndEvent } from "#events/battle-scene";
+import type { ObjectValues } from "#types/utility-types";
 import { addTextObject } from "#ui/text-utils";
 import { TimeOfDayWidget } from "#ui/time-of-day-widget";
 import { addWindow } from "#ui/ui-theme";
@@ -20,13 +21,16 @@ import type { ParseKeys } from "i18next";
 import i18next from "i18next";
 
 /** Enum used to differentiate {@linkcode Arena} effects */
-enum ArenaEffectType {
-  PLAYER,
-  WEATHER,
-  TERRAIN,
-  FIELD,
-  ENEMY,
-}
+const ArenaEffectType = {
+  PLAYER: 1,
+  WEATHER: 2,
+  TERRAIN: 3,
+  FIELD: 4,
+  ENEMY: 5,
+} as const;
+
+type ArenaEffectType = ObjectValues<typeof ArenaEffectType>;
+
 /** Container for info about an {@linkcode Arena}'s effects */
 interface ArenaEffectInfo {
   /** The enum string representation of the effect */
