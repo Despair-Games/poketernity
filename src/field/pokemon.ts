@@ -1172,7 +1172,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     globalScene.applyModifiers(StatBoosterModifier, this.isPlayer(), this, stat, statValue);
 
-    const fieldApplied = new BooleanHolder(false);
+    const abilitiesApplied = new Set<AbilityId>();
     for (const pokemon of globalScene.getField(true)) {
       applyAbFunc<FieldMultiplyStatAbAttr>(
         AbAttrFlag.FIELD_MULTIPLY_STAT,
@@ -1181,11 +1181,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         stat,
         statValue,
         this,
-        fieldApplied,
+        abilitiesApplied,
       );
-      if (fieldApplied.value) {
-        break;
-      }
     }
 
     applyAbFunc<StatMultiplierAbAttr>(AbAttrFlag.STAT_MULTIPLIER, this, simulated, stat, statValue, move, opponent);
@@ -2916,7 +2913,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * | Gen V+           | 3/9 | 3/8 | 3/7 | 3/6 | 3/5 | 3/4 | 3/3 | 4/3 | 5/3 | 6/3 | 7/3 | 8/3 | 9/3 |
    * @see {@link https://bulbapedia.bulbagarden.net/wiki/Stat_modifier#Stage_multipliers Stage multipliers - Bulbapedia}
    */
-  getAccuracyMultiplier(target: Pokemon, sourceMove: Move): number {
+  getAccuracyMultiplier(target: Pokemon, sourceMove: Move, simulated: boolean = true): number {
     const isOhko = sourceMove.hasAttr(OneHitKOAccuracyAttr);
     if (isOhko) {
       return 1;
@@ -2931,14 +2928,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     applyAbAttrs<IgnoreOpponentStatStagesAbAttr>(
       AbAttrFlag.IGNORE_OPPONENT_STAT_STAGES,
       target,
-      false,
+      simulated,
       Stat.ACC,
       ignoreAccStatStage,
     );
     applyAbAttrs<IgnoreOpponentStatStagesAbAttr>(
       AbAttrFlag.IGNORE_OPPONENT_STAT_STAGES,
       this,
-      false,
+      simulated,
       Stat.EVA,
       ignoreEvaStatStage,
     );
@@ -2958,17 +2955,30 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     applyAbAttrs<StatMultiplierAbAttr>(
       AbAttrFlag.STAT_MULTIPLIER,
       this,
-      false,
+      simulated,
       Stat.ACC,
       accuracyMultiplier,
       sourceMove,
     );
+    globalScene
+      .getField(true)
+      .forEach((p) =>
+        applyAbAttrs<FieldMultiplyStatAbAttr>(
+          AbAttrFlag.FIELD_MULTIPLY_STAT,
+          p,
+          simulated,
+          Stat.ACC,
+          accuracyMultiplier,
+          this,
+          new Set(),
+        ),
+      );
 
     const evasionMultiplier = new NumberHolder(1);
     applyAbAttrs<StatMultiplierAbAttr>(
       AbAttrFlag.STAT_MULTIPLIER,
       target,
-      false,
+      simulated,
       Stat.EVA,
       evasionMultiplier,
       sourceMove,

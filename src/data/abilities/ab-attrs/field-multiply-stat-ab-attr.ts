@@ -1,8 +1,11 @@
 import { AbAttr } from "#abilities/ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { AbilityId } from "#enums/ability-id";
 import type { Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
-import type { BooleanHolder, NumberHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
+
+type TargetCondition = (params: { pokemon: Pokemon; target: Pokemon; abilitiesApplied: Set<AbilityId> }) => boolean;
 
 /**
  * Multiplies a Stat if the checked Pokemon lacks this ability.
@@ -12,15 +15,16 @@ import type { BooleanHolder, NumberHolder } from "#utils/common-utils";
 export class FieldMultiplyStatAbAttr extends AbAttr {
   private readonly stat: Stat;
   private readonly multiplier: number;
-  private readonly canStack: boolean;
+  /** A condition the target must satisfy to be affected by this attribute */
+  private readonly targetCondition: TargetCondition;
 
-  constructor(stat: Stat, multiplier: number, canStack: boolean = false) {
+  constructor(stat: Stat, multiplier: number, targetCondition: TargetCondition = () => true) {
     super(false);
     this._flags.add(AbAttrFlag.FIELD_MULTIPLY_STAT);
 
     this.stat = stat;
     this.multiplier = multiplier;
-    this.canStack = canStack;
+    this.targetCondition = targetCondition;
   }
 
   /**
@@ -29,30 +33,21 @@ export class FieldMultiplyStatAbAttr extends AbAttr {
    * @param simulated If `true`, suppresses changes to game state
    * @param stat The {@linkcode Stat} being checked
    * @param statValue {@linkcode NumberHolder} the value of the checked stat
-   * @param checkedPokemon The {@linkcode Pokemon} this ability is targeting
+   * @param target The {@linkcode Pokemon} to which the ability may apply
    * @param hasApplied {@linkcode BooleanHolder} whether or not another multiplier has been applied to this stat
    * @returns `true` if this changed the checked stat, `false` otherwise.
    */
   public override apply(
-    _pokemon: Pokemon,
+    pokemon: Pokemon,
     _simulated: boolean,
     stat: Stat,
-    statValue: NumberHolder,
-    checkedPokemon: Pokemon,
-    hasApplied: BooleanHolder,
+    statValue: ValueHolder<number>,
+    target: Pokemon,
+    abilitiesApplied: Set<AbilityId>,
   ): boolean {
-    if (!this.canStack && hasApplied.value) {
-      return false;
-    }
-
-    if (
-      this.stat === stat
-      && checkedPokemon
-        .getAbilityAttrs(AbAttrFlag.FIELD_MULTIPLY_STAT)
-        .every((attr) => (attr as FieldMultiplyStatAbAttr).stat !== stat)
-    ) {
+    if (stat === this.stat && this.targetCondition({ pokemon, target, abilitiesApplied })) {
       statValue.value *= this.multiplier;
-      hasApplied.value = true;
+      abilitiesApplied.add(this.source.id);
       return true;
     }
     return false;

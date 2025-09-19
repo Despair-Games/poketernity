@@ -162,6 +162,7 @@ import { SuppressWeatherEffectAbAttr } from "#abilities/suppress-weather-effect-
 import { SyncEncounterNatureAbAttr } from "#abilities/sync-encounter-nature-ab-attr";
 import { SynchronizeStatusAbAttr } from "#abilities/synchronize-status-ab-attr";
 import { TerrainEventTypeChangeAbAttr } from "#abilities/terrain-event-type-change-ab-attr";
+import { TreasureOfRuinAbAttr } from "#abilities/treasure-of-ruin-ab-attr";
 import { TypeImmunityAddBattlerTagAbAttr } from "#abilities/type-immunity-add-battler-tag-ab-attr";
 import { TypeImmunityHealAbAttr } from "#abilities/type-immunity-heal-ab-attr";
 import { TypeImmunityStatStageChangeAbAttr } from "#abilities/type-immunity-stat-stage-change-ab-attr";
@@ -842,9 +843,7 @@ export function initAbilities() {
       .unreplaceable()
       .bypassFaint(),
     new Ability(AbilityId.VICTORY_STAR, 5) //
-      .attr(StatMultiplierAbAttr, Stat.ACC, 1.1)
-      // Does not boost ally's accuracy
-      .partial(),
+      .attr(FieldMultiplyStatAbAttr, Stat.ACC, 1.1, ({ pokemon, target }) => !pokemon.isOpponent(target)),
     new Ability(AbilityId.TURBOBLAZE, 5) //
       .attr(PostSummonMessageAbAttr, (pokemon: Pokemon) =>
         i18next.t("abilityTriggers:postSummonTurboblaze", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
@@ -1546,7 +1545,7 @@ export function initAbilities() {
       )
       .ignorable(),
     new Ability(AbilityId.VESSEL_OF_RUIN, 9) //
-      .attr(FieldMultiplyStatAbAttr, Stat.SPATK, 0.75)
+      .attr(TreasureOfRuinAbAttr, Stat.SPATK)
       .attr(PostSummonMessageAbAttr, (user) =>
         i18next.t("abilityTriggers:postSummonVesselOfRuin", {
           pokemonNameWithAffix: getPokemonNameWithAffix(user),
@@ -1555,7 +1554,7 @@ export function initAbilities() {
       )
       .ignorable(),
     new Ability(AbilityId.SWORD_OF_RUIN, 9) //
-      .attr(FieldMultiplyStatAbAttr, Stat.DEF, 0.75)
+      .attr(TreasureOfRuinAbAttr, Stat.DEF)
       .attr(PostSummonMessageAbAttr, (user) =>
         i18next.t("abilityTriggers:postSummonSwordOfRuin", {
           pokemonNameWithAffix: getPokemonNameWithAffix(user),
@@ -1563,7 +1562,7 @@ export function initAbilities() {
         }),
       ),
     new Ability(AbilityId.TABLETS_OF_RUIN, 9) //
-      .attr(FieldMultiplyStatAbAttr, Stat.ATK, 0.75)
+      .attr(TreasureOfRuinAbAttr, Stat.ATK)
       .attr(PostSummonMessageAbAttr, (user) =>
         i18next.t("abilityTriggers:postSummonTabletsOfRuin", {
           pokemonNameWithAffix: getPokemonNameWithAffix(user),
@@ -1572,7 +1571,7 @@ export function initAbilities() {
       )
       .ignorable(),
     new Ability(AbilityId.BEADS_OF_RUIN, 9) //
-      .attr(FieldMultiplyStatAbAttr, Stat.SPDEF, 0.75)
+      .attr(TreasureOfRuinAbAttr, Stat.SPDEF)
       .attr(PostSummonMessageAbAttr, (user) =>
         i18next.t("abilityTriggers:postSummonBeadsOfRuin", {
           pokemonNameWithAffix: getPokemonNameWithAffix(user),
