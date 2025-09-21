@@ -1,4 +1,4 @@
-import type { StatMultiplierAbAttr } from "#abilities/stat-multiplier-ab-attr";
+import type { EffectiveStatMultiplier } from "#abilities/effective-stat-multiplier-ab-attr";
 import { allAbilities } from "#data/data-lists";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
@@ -42,8 +42,8 @@ describe("Abilities - Sand Veil", () => {
 
     game.field.mockAbility(leadPokemon[0], AbilityId.SAND_VEIL);
 
-    const sandVeilAttr = allAbilities[AbilityId.SAND_VEIL].getAttrs<StatMultiplierAbAttr>(
-      AbAttrFlag.STAT_MULTIPLIER,
+    const sandVeilAttr = allAbilities[AbilityId.SAND_VEIL].getAttrs<EffectiveStatMultiplier>(
+      AbAttrFlag.EFFECTIVE_STAT_MULTIPLIER,
     )[0];
     vi.spyOn(sandVeilAttr, "apply").mockImplementation((_pokemon, _simulated, stat, statValue) => {
       if (stat === Stat.EVA && game.scene.arena.hasWeather(WeatherType.SANDSTORM)) {

@@ -6,6 +6,7 @@ import type { FaintPhase } from "#phases/faint-phase";
 
 import type { AbAttr } from "#abilities/ab-attr";
 import type { Ability } from "#abilities/ability";
+import type { AccuracyMultiplierAbAttr } from "#abilities/accuracy-multiplier-ab-attr";
 import type { AddSecondStrikeAbAttr } from "#abilities/add-second-strike-ab-attr";
 import type { AlliedFieldDamageReductionAbAttr } from "#abilities/allied-field-damage-reduction-ab-attr";
 import { applyAbAttrs, getAbApplyFunc } from "#abilities/apply-ab-attrs";
@@ -17,8 +18,11 @@ import type { BypassBurnDamageReductionAbAttr } from "#abilities/bypass-burn-dam
 import type { BypassParaSpeedReductionAbAttr } from "#abilities/bypass-para-speed-reduction-ab-attr";
 import type { ConditionalCritAbAttr } from "#abilities/conditional-crit-ab-attr";
 import type { DamageBoostAbAttr } from "#abilities/damage-boost-ab-attr";
-import type { FieldMultiplyStatAbAttr } from "#abilities/field-multiply-stat-ab-attr";
+import type { EffectiveStatMultiplier } from "#abilities/effective-stat-multiplier-ab-attr";
+import type { EvasivenessMultiplierAbAttr } from "#abilities/evasiveness-multiplier-ab-attr";
+import type { FieldAccuracyMultiplierAbAttr } from "#abilities/field-accuracy-multiplier-ab-attr";
 import type { FieldPriorityMoveImmunityAbAttr } from "#abilities/field-priority-move-immunity-ab-attr";
+import type { FieldStatMultiplierAbAttr } from "#abilities/field-stat-multiplier-ab-attr";
 import type { FullHpResistTypeAbAttr } from "#abilities/full-hp-resist-type-ab-attr";
 import type { IgnoreOpponentStatStagesAbAttr } from "#abilities/ignore-opponent-stat-stages-ab-attr";
 import type { IgnoreTypeImmunityAbAttr } from "#abilities/ignore-type-immunity-ab-attr";
@@ -32,7 +36,6 @@ import type { PostDamageAbAttr } from "#abilities/post-damage-ab-attr";
 import type { PostItemLostAbAttr } from "#abilities/post-item-lost-ab-attr";
 import type { ReceivedMoveDamageMultiplierAbAttr } from "#abilities/received-move-damage-multiplier-ab-attr";
 import type { StabBoostAbAttr } from "#abilities/stab-boost-ab-attr";
-import type { StatMultiplierAbAttr } from "#abilities/stat-multiplier-ab-attr";
 import type { StatusEffectImmunityAbAttr } from "#abilities/status-effect-immunity-ab-attr";
 import type { SturdyAbAttr } from "#abilities/sturdy-ab-attr";
 import type { SynchronizeStatusAbAttr } from "#abilities/synchronize-status-ab-attr";
@@ -1174,8 +1177,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     const abilitiesApplied = new Set<AbilityId>();
     for (const pokemon of globalScene.getField(true)) {
-      applyAbFunc<FieldMultiplyStatAbAttr>(
-        AbAttrFlag.FIELD_MULTIPLY_STAT,
+      applyAbFunc<FieldStatMultiplierAbAttr>(
+        AbAttrFlag.FIELD_STAT_MULTIPLIER,
         pokemon,
         simulated,
         stat,
@@ -1185,7 +1188,15 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       );
     }
 
-    applyAbFunc<StatMultiplierAbAttr>(AbAttrFlag.STAT_MULTIPLIER, this, simulated, stat, statValue, move, opponent);
+    applyAbFunc<EffectiveStatMultiplier>(
+      AbAttrFlag.EFFECTIVE_STAT_MULTIPLIER,
+      this,
+      simulated,
+      stat,
+      statValue,
+      move,
+      opponent,
+    );
 
     let ret = statValue.value;
 
@@ -2952,37 +2963,28 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     const accuracyMultiplier = new NumberHolder(calcAccuracyMultiplier(userAccStage.value, targetEvaStage.value));
 
-    applyAbAttrs<StatMultiplierAbAttr>(
-      AbAttrFlag.STAT_MULTIPLIER,
+    applyAbAttrs<AccuracyMultiplierAbAttr>(
+      AbAttrFlag.ACCURACY_MULTIPLIER,
       this,
       simulated,
-      Stat.ACC,
-      accuracyMultiplier,
       sourceMove,
+      accuracyMultiplier,
     );
+
     globalScene
       .getField(true)
       .forEach((p) =>
-        applyAbAttrs<FieldMultiplyStatAbAttr>(
-          AbAttrFlag.FIELD_MULTIPLY_STAT,
+        applyAbAttrs<FieldAccuracyMultiplierAbAttr>(
+          AbAttrFlag.FIELD_ACCURACY_MULTIPLIER,
           p,
           simulated,
-          Stat.ACC,
-          accuracyMultiplier,
           this,
-          new Set(),
+          accuracyMultiplier,
         ),
       );
 
     const evasionMultiplier = new NumberHolder(1);
-    applyAbAttrs<StatMultiplierAbAttr>(
-      AbAttrFlag.STAT_MULTIPLIER,
-      target,
-      simulated,
-      Stat.EVA,
-      evasionMultiplier,
-      sourceMove,
-    );
+    applyAbAttrs<EvasivenessMultiplierAbAttr>(AbAttrFlag.EVASIVENESS_MULTIPLIER, target, simulated, evasionMultiplier);
 
     return accuracyMultiplier.value / evasionMultiplier.value;
   }
