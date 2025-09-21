@@ -103,13 +103,14 @@ describe("Abilities - Wimp Out", () => {
   it("should not force Boss Pokemon to flee", async () => {
     game.override //
       .enemyAbility(AbilityId.WIMP_OUT)
+      .enemyPassiveAbility(AbilityId.STURDY)
       .enemyLevel(1)
       .enemyHealthSegments(2);
 
     await game.classicMode.startBattle(SpeciesId.WIMPOD);
 
     const enemy = game.field.getEnemyPokemon();
-    game.move.use(MoveId.FALSE_SWIPE);
+    game.move.use(MoveId.QUICK_ATTACK);
     await game.toEndOfTurn();
 
     expect(enemy).not.toHaveFainted();
@@ -549,7 +550,7 @@ describe("Abilities - Wimp Out", () => {
     const enemy1 = game.scene.getEnemyField()[0];
 
     game.move.select(MoveId.SKY_DROP, 0, BattlerIndex.ENEMY);
-    game.move.select(MoveId.FALSE_SWIPE, 1, BattlerIndex.PLAYER);
+    game.move.select(MoveId.FALSE_SWIPE, 1, BattlerIndex.ENEMY);
 
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
@@ -558,9 +559,9 @@ describe("Abilities - Wimp Out", () => {
 
     await game.phaseInterceptor.to("PostActionPhase");
 
-    expect(player1.getHpRatio()).toBeLessThanOrEqual(0.5);
-    expect(player1).not.toHaveFainted();
-    expect(player1.isOnField()).toBeTruthy();
-    expect(player1.waveData.abilitiesApplied.includes(AbilityId.WIMP_OUT)).toBeFalsy();
+    expect(enemy1.getHpRatio()).toBeLessThanOrEqual(0.5);
+    expect(enemy1).not.toHaveFainted();
+    expect(enemy1.isOnField()).toBeTruthy();
+    expect(enemy1.waveData.abilitiesApplied.includes(AbilityId.WIMP_OUT)).toBeFalsy();
   });
 });
