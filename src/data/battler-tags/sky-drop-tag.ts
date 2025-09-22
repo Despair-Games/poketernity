@@ -41,7 +41,7 @@ export class SkyDropTag extends BattlerTag {
       if (pokemon?.getTag(BattlerTagType.SKY_DROP)?.sourceId === this.sourceId) {
         // Cancel the Sky Drop user's next use of Sky Drop
         if (this.sourceId === pokemon.id) {
-          globalScene.currentBattle.turnManager.tryRemoveCommand((tc) => tc.pokemon === pokemon);
+          globalScene.currentBattle.turnManager.remove((tc) => tc.pokemon === pokemon);
           pokemon.getMoveQueue().shift();
           pokemon.removeTag(BattlerTagType.CHARGING);
         }

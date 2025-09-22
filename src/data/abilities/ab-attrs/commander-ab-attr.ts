@@ -52,6 +52,6 @@ export class CommanderAbAttr extends AbAttr {
    */
   private cancelQueuedMove(pokemon: Pokemon): void {
     const { turnManager } = globalScene.currentBattle;
-    turnManager.tryRemoveCommand((tc) => tc.pokemon === pokemon);
+    turnManager.remove((tc) => tc.pokemon === pokemon);
   }
 }

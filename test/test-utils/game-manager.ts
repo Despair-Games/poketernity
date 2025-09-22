@@ -8,7 +8,6 @@ import { BattleScene } from "#app/battle-scene";
 import { getGameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
 import { activeOverrides } from "#app/overrides";
-import type { TurnCommand } from "#app/turn-command-manager";
 import type { AbilityId } from "#enums/ability-id";
 import { BattleCommand } from "#enums/battle-command";
 import type { FieldBattlerIndex } from "#enums/battler-index";
@@ -486,22 +485,20 @@ export class GameManager {
    * ```ts
    * game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
    * ```
+   *
+   * @remarks
+   * To ensure stability, be sure to respect command type priority when mocking turn order.
+   * Not doing so can yield turn sequences that are not reproducible in normal gameplay
+   * and potentially lead to unexpected behavior.
    */
   setTurnOrder(order: FieldBattlerIndex[]): void {
-    expect(order.length).toBe(this.scene.getField(true).length);
+    expect(order).toHaveLength(globalScene.getField(true).length);
+
     const { turnManager } = this.scene.currentBattle;
+    vi.spyOn(turnManager, "comparator").mockImplementation((commandA, commandB) => {
+      const [orderA, orderB] = [commandA, commandB].map(({ pokemon }) => order.indexOf(pokemon.getBattlerIndex()));
 
-    vi.spyOn(turnManager, "setTurnOrder").mockImplementation(() => {
-      const newTurnOrder: TurnCommand[] = [];
-      order.forEach((bi) => {
-        const turnCommand = turnManager.findCommand((tc) => tc.pokemon.getBattlerIndex() === bi);
-        if (turnCommand) {
-          newTurnOrder.push(turnCommand);
-        }
-      });
-
-      // @ts-expect-error - `turnCommands` is private
-      turnManager.turnCommands = newTurnOrder;
+      return orderA - orderB;
     });
   }
 
