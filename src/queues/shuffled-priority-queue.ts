@@ -88,9 +88,9 @@ export abstract class ShuffledPriorityQueue<T> {
   }
 
   /**
-   * Removes the first element matching the condition
-   * @param condition - An optional condition function (defaults to a function that always returns `true`)
-   * @returns Whether a removal occurred
+   * Removes the first element meeting the given condition
+   * @param condition - The condition an element must meet to be removed
+   * @returns The removed element, or `undefined` if no element was removed
    * @sealed
    */
   public remove(condition: (t: T) => boolean): T | undefined {
@@ -104,12 +104,18 @@ export abstract class ShuffledPriorityQueue<T> {
     return this.queue.splice(index, 1)[0];
   }
 
-  /** @returns The first element meeting the given condition */
+  /**
+   * @returns The first element meeting the given condition
+   * @sealed
+   */
   public find(condition: (t: T) => boolean): T | undefined {
     return this.queue.find(condition);
   }
 
-  /** @returns `true` if an element meeting the given condition exists */
+  /**
+   * @returns `true` if an element meeting the given condition exists
+   * @sealed
+   */
   public has(condition: (t: T) => boolean): boolean {
     return this.queue.some(condition);
   }
