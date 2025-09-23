@@ -4,13 +4,16 @@ import { PokemonPhasePriorityQueue } from "#app/queues/pokemon-phase-priority-qu
 import type { ShuffledPriorityQueue } from "#app/queues/shuffled-priority-queue";
 import type { PokemonPhase } from "#phases/base/pokemon-phase";
 
-export const dynamicPhaseKeys = [
+/**
+ * The {@linkcode PhaseKey | PhaseKeys} of Phases that are *always* scheduled
+ * dynamically
+ */
+export const dynamicPhaseKeys: PhaseKey[] = [
   "ObtainStatusEffectPhase",
   "PokemonTransformPhase",
   "PostSummonPhase",
   "StatStageChangePhase",
 ] as const;
-export type DynamicPhaseKey = (typeof dynamicPhaseKeys)[number];
 
 /**
  * The dynamic queue manager holds priority queues for phases which are queued as dynamic.
@@ -35,6 +38,10 @@ export class DynamicPhaseManager {
    * @returns `true` if the phase was added, or `false` if it is not dynamic
    */
   public add<T extends PokemonPhase>(phase: T): boolean {
+    if (!dynamicPhaseKeys.includes(phase.phaseName)) {
+      console.warn(`DynamicPhaseManager: ${phase.phaseName} is not dynamic!`);
+      return false;
+    }
     if (!this.dynamicPhaseMap.has(phase.phaseName)) {
       this.dynamicPhaseMap.set(phase.phaseName, new PokemonPhasePriorityQueue());
     }
@@ -47,7 +54,7 @@ export class DynamicPhaseManager {
    * @param type - The {@linkcode PhaseKey | type} to pop
    * @returns The popped {@linkcode Phase}, or `undefined` if none of the specified type exist
    */
-  public popNextPhase(type: DynamicPhaseKey): Phase | undefined {
+  public popNextPhase(type: PhaseKey): Phase | undefined {
     return this.dynamicPhaseMap.get(type)?.pop();
   }
 
@@ -57,7 +64,7 @@ export class DynamicPhaseManager {
    * @param condition - An optional {@linkcode PhaseConditionFunc} to add conditions to the search
    * @returns Whether a matching phase exists
    */
-  public has<T extends DynamicPhaseKey>(type: T, condition: PhaseConditionFunc<T>): boolean {
+  public has<T extends PhaseKey>(type: T, condition: PhaseConditionFunc<T>): boolean {
     return !!this.dynamicPhaseMap.get(type)?.has(condition);
   }
 
@@ -67,7 +74,7 @@ export class DynamicPhaseManager {
    * @param phaseFilter - A {@linkcode PhaseConditionFunc} to specify conditions for the phase
    * @returns Whether a removal occurred
    */
-  public remove<T extends DynamicPhaseKey>(type: T, condition: PhaseConditionFunc<T>): boolean {
+  public remove<T extends PhaseKey>(type: T, condition: PhaseConditionFunc<T>): boolean {
     return !!this.dynamicPhaseMap.get(type)?.remove(condition);
   }
 }

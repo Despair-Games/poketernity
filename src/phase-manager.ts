@@ -1,6 +1,6 @@
 import { DynamicPhaseManager, dynamicPhaseKeys } from "#app/dynamic-phase-manager";
 import type { Phase } from "#app/phase";
-import { type DynamicPhaseMarker, type PhaseEntryInput, PhaseTree } from "#app/phase-tree";
+import { type PhaseEntryInput, PhaseTree } from "#app/phase-tree";
 import type { DestinyBondTag } from "#battler-tags/destiny-bond-tag";
 import type { GrudgeTag } from "#battler-tags/grudge-tag";
 import type { FieldBattlerIndex } from "#enums/battler-index";
@@ -527,16 +527,16 @@ export class PhaseManager {
    * All Phases interpreted as dynamic are added to the {@linkcode dynamicPhaseManager} during parsing.
    * @param phases - The {@linkcode Phase | Phases} to parse
    * @returns The corresponding {@linkcode PhaseEntry | entries} to add to the Phase Tree.
-   * Dynamic Phases are added to the Tree as {@linkcode DynamicPhaseMarker | DynamicPhaseMarkers}
+   * Dynamic Phases are added to the Tree as {@linkcode DynamicPhaseMarker | DynamicPhaseMarkers}.
    */
   private parseDynamic(...phases: PhaseInput): PhaseEntryInput {
     return phases.map((phase) => {
-      if ((dynamicPhaseKeys as readonly PhaseKey[]).includes(phase.phaseName)) {
+      if (dynamicPhaseKeys.includes(phase.phaseName)) {
         this.dynamicPhaseManager.add(phase as PokemonPhase);
-        return { phaseType: phase.phaseName } as DynamicPhaseMarker;
+        return { phaseType: phase.phaseName };
       }
       return phase;
-    }) as PhaseEntryInput;
+    }) as PhaseEntryInput; // TS interprets this as `PhaseEntry[]` by default
   }
 
   // #region Phase-Specific Utils

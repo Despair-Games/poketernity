@@ -1,4 +1,3 @@
-import type { DynamicPhaseKey } from "#app/dynamic-phase-manager";
 import type { Phase } from "#app/phase";
 import type { PhaseConditionFunc, PhaseKey, PhaseMap } from "#types/phase-types";
 
@@ -8,7 +7,7 @@ import type { PhaseConditionFunc, PhaseKey, PhaseMap } from "#types/phase-types"
  * to schedule a dynamic Phase upon receiving this from its Tree.
  */
 export type DynamicPhaseMarker = {
-  phaseType: DynamicPhaseKey;
+  phaseType: PhaseKey;
 };
 
 /**
