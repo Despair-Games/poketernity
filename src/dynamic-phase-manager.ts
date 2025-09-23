@@ -17,17 +17,10 @@ export type DynamicPhaseKey = (typeof dynamicPhaseKeys)[number];
  *
  * Dynamic phases are generally those which hold a pokemon and are unshifted, not pushed. \
  * Queues work by sorting their entries in speed order (and possibly with more complex ordering) before each time a phase is popped.
- *
- * As the holder, this structure is also used to access and modify queued phases.
- * This is mostly used in redirection, cancellation, etc. of {@linkcode MovePhase}s.
  */
 export class DynamicPhaseManager {
   /** Maps phase types to their corresponding queues */
-  private readonly dynamicPhaseMap: Map<PhaseKey, ShuffledPriorityQueue<Phase>>;
-
-  constructor() {
-    this.dynamicPhaseMap = new Map();
-  }
+  private readonly dynamicPhaseMap: Map<PhaseKey, ShuffledPriorityQueue<Phase>> = new Map();
 
   /** Removes all phases from the manager */
   public clearQueues(): void {
@@ -41,7 +34,7 @@ export class DynamicPhaseManager {
    * @param phase - The {@linkcode Phase} to add
    * @returns `true` if the phase was added, or `false` if it is not dynamic
    */
-  public queueDynamicPhase<T extends PokemonPhase>(phase: T): boolean {
+  public add<T extends PokemonPhase>(phase: T): boolean {
     if (!this.dynamicPhaseMap.has(phase.phaseName)) {
       this.dynamicPhaseMap.set(phase.phaseName, new PokemonPhasePriorityQueue());
     }
@@ -74,7 +67,7 @@ export class DynamicPhaseManager {
    * @param phaseFilter - A {@linkcode PhaseConditionFunc} to specify conditions for the phase
    * @returns Whether a removal occurred
    */
-  public removePhase<T extends DynamicPhaseKey>(type: T, condition: PhaseConditionFunc<T>): boolean {
+  public remove<T extends DynamicPhaseKey>(type: T, condition: PhaseConditionFunc<T>): boolean {
     return !!this.dynamicPhaseMap.get(type)?.remove(condition);
   }
 }

@@ -7,7 +7,7 @@ import type { PhaseConditionFunc, PhaseKey, PhaseMap } from "#types/phase-types"
  * The {@linkcode PhaseManager} defers to its {@linkcode DynamicPhaseManager}
  * to schedule a dynamic Phase upon receiving this from its Tree.
  */
-type DynamicPhaseMarker = {
+export type DynamicPhaseMarker = {
   phaseType: DynamicPhaseKey;
 };
 
@@ -18,6 +18,7 @@ type DynamicPhaseMarker = {
  * {@linkcode DynamicPhaseManager} and runs that Phase.
  */
 type PhaseEntry = Phase | DynamicPhaseMarker;
+type PhaseEntryInput = [PhaseEntry, ...PhaseEntry[]];
 
 /**
  * The PhaseTree is the central storage location for {@linkcode Phase}s by the {@linkcode PhaseManager}.
@@ -30,10 +31,23 @@ export class PhaseTree {
   /** Storage for all levels in the tree. This is a simple 2-D array because only one Phase may have "children" at a time. */
   private levels: PhaseEntry[][] = [[]];
   /**
-   * True if a "deferred" level exists
-   * @see {@linkcode addPhase}
+   * True if an "unshifted" level exists for the current cycle.
+   * @see {@linkcode unshift}
+   *
+   * @remarks
+   * A "cycle" may be defined as the interval between {@linkcode getNextEntry} calls, which is
+   * roughly analogous to the runtime of a single Phase.
    */
-  private deferredActive = false;
+  private unshifted = false;
+  /**
+   * True if a "deferred" level exists for the current cycle.
+   * @see {@linkcode defer}
+   *
+   * @remarks
+   * A "cycle" may be defined as the interval between {@linkcode getNextEntry} calls, which is
+   * roughly analogous to the runtime of a single Phase.
+   */
+  private deferred = false;
 
   /**
    * @returns The last level in the tree. The {@linkcode PhaseManager}
@@ -48,30 +62,51 @@ export class PhaseTree {
     return this.levels.at(-1)!;
   }
 
-  private isPhase(entry: PhaseEntry): entry is Phase {
+  public isPhase(entry: PhaseEntry): entry is Phase {
     return typeof entry["start"] === "function";
   }
 
   /**
-   * Adds a {@linkcode PhaseEntry} to the specified level
-   * @param entry - The entry to add
-   * @param level - The numeric level to add the phase
+   * Adds one or more {@linkcode PhaseEntries} to the specified level
+   * @param level - The numeric level to add the given entries.
+   * @param entries - The {@linkcode PhaseEntry | PhaseEntries} to add
    * @throws Error if `level` is out of legal bounds
    */
-  private add(entry: PhaseEntry, level: number): void {
+  private addToLevel(level: number, ...entries: PhaseEntryInput): void {
     const addLevel = this.levels[level];
     if (addLevel == null) {
       throw new Error(
         "Attempted to add a phase or marker to a nonexistent level of the PhaseTree!\nLevel: " + level.toString(),
       );
     }
-    this.levels[level].push(entry);
+    this.levels[level].push(...entries);
+  }
+
+  /**
+   * Pushes a {@linkcode PhaseEntry} to the root level of the queue. It will run only after all previously queued phases have been executed.
+   * @param entry - The {@linkcode PhaseEntry} to be added
+   */
+  public push(...entries: PhaseEntryInput): void {
+    this.addToLevel(0, ...entries);
   }
 
   /**
    * Used by the {@linkcode PhaseManager} to add phases to the Tree
-   * @param entry - The {@linkcode PhaseEntry} to be added
    * @param defer - Whether to defer the execution of this phase by allowing subsequently-added phases to run before it
+   * @param entries - The {@linkcode PhaseEntry | PhaseEntries} to add
+   */
+  public unshift(...entries: PhaseEntryInput): void {
+    if (!this.unshifted) {
+      this.unshifted = true;
+      this.levels.push([]);
+    }
+    this.topLevel.push(...entries);
+  }
+
+  /**
+   * Adds one or more {@linkcode PhaseEntry | PhaseEntries} to the Tree,
+   * deferring them to execute only after unshifted Phases are exhausted.
+   * @param entries - The {@linkcode PhaseEntry | PhaseEntries} to add and defer
    *
    * @privateRemarks
    * Deferral is implemented by moving the queue at {@linkcode topLevel} up one level and inserting the new phase below it.
@@ -82,56 +117,57 @@ export class PhaseTree {
    *
    * @todo `setPhaseQueueSplice` had strange behavior. This is simpler, but there are probably some remnant edge cases with the current implementation
    */
-  public addEntry(entry: PhaseEntry, defer: boolean = false): void {
-    if (defer && !this.deferredActive) {
-      this.deferredActive = true;
+  public defer(...entries: PhaseEntryInput): void {
+    if (!this.unshifted) {
+      this.unshifted = true;
+      this.levels.push([]);
+    }
+    if (!this.deferred) {
+      this.deferred = true;
       this.levels.splice(-1, 0, []);
     }
-    this.add(entry, this.levels.length - 1 - +defer);
+    this.addToLevel(this.levels.length - 2, ...entries);
+  }
+
+  public addBefore(type: PhaseKey, ...entries: PhaseEntryInput): boolean {
+    for (let i = this.levels.length - 1; i >= 0; i--) {
+      const insertIdx = this.levels[i].findIndex((p) => this.isPhase(p) && p.is(type));
+      if (insertIdx !== -1) {
+        this.levels[i].splice(insertIdx, 0, ...entries);
+        return true;
+      }
+    }
+    this.unshift(...entries);
+    return false;
   }
 
   /**
-   * Adds a {@linkcode PhaseEntry} after the first occurence of the given type, or to the top of the Tree if no such phase exists
+   * Adds a {@linkcode PhaseEntry} after the first occurrence of the given type, or to the top of the Tree if no such phase exists
    * @param phase - The {@linkcode PhaseEntry} to be added
    * @param type - A {@linkcode PhaseKey} representing the type to search for
    * @todo Dynamic phase markers are not recognized as their internal phase type
    */
-  public addAfter(entry: PhaseEntry, type: PhaseKey): void {
+  public addAfter(type: PhaseKey, ...entries: PhaseEntryInput): boolean {
     for (let i = this.levels.length - 1; i >= 0; i--) {
       const insertIdx = this.levels[i].findIndex((p) => this.isPhase(p) && p.is(type)) + 1;
       if (insertIdx !== 0) {
-        this.levels[i].splice(insertIdx, 0, entry);
-        return;
+        this.levels[i].splice(insertIdx, 0, ...entries);
+        return true;
       }
     }
-
-    this.addEntry(entry);
-  }
-
-  /**
-   * Unshifts a {@linkcode PhaseEntry} to the current level.
-   * This is effectively the same as if the phase were added immediately after the currently-running phase, before it started.
-   * @param entry - The {@linkcode PhaseEntry} to be added
-   */
-  public unshiftToCurrent(entry: PhaseEntry): void {
-    this.topLevel.unshift(entry);
-  }
-
-  /**
-   * Pushes a {@linkcode PhaseEntry} to the root level of the queue. It will run only after all previously queued phases have been executed.
-   * @param entry - The {@linkcode PhaseEntry} to be added
-   */
-  public pushPhase(entry: PhaseEntry): void {
-    this.add(entry, 0);
+    this.unshift(...entries);
+    return false;
   }
 
   /**
    * Removes and returns the first {@linkcode PhaseEntry} from the topmost level of the tree
    * @returns - The next {@linkcode PhaseEntry}, or `undefined` if the Tree is empty
    */
-  public getNextPhase(): PhaseEntry | undefined {
+  public getNextEntry(): PhaseEntry | undefined {
+    this.unshifted = false;
+    this.deferred = false;
+
     while (this.levels.length > 1 && this.topLevel.length === 0) {
-      this.deferredActive = false;
       this.levels.pop();
     }
 

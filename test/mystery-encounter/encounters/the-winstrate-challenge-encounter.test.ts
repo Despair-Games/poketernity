@@ -347,7 +347,6 @@ describe("The Winstrate Challenge - Mystery Encounter", () => {
  */
 async function skipBattleToNextBattle(game: GameManager, isFinalBattle: boolean = false) {
   game.scene.phaseManager.clearPhaseQueue();
-  game.scene.phaseManager.clearPhaseQueueSplice();
   const commandUiHandler = game.scene.ui.getCurrentHandler<CommandUiHandler>();
   commandUiHandler.stop();
   game.scene.getEnemyParty().forEach((p) => {

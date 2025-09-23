@@ -92,7 +92,7 @@ export class RevivalBlessingPhase extends BattlePhase {
    * should be scheduled in {@linkcode TurnEndPhase} instead to make this method obsolete.
    */
   private clearFaintSwitchPhase(pokemon: Pokemon): void {
-    globalScene.phaseManager.tryRemovePhase((phase) => phase.is("SwitchPhase") && phase.getPokemon() === pokemon);
+    globalScene.phaseManager.removePhase("SwitchPhase", (phase) => phase.getPokemon() === pokemon);
   }
 
   /**

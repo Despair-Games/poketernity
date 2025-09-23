@@ -48,7 +48,6 @@ export class MysteryEncounterPhase extends Phase {
 
     // Clears out queued phases that are part of standard battle
     globalScene.phaseManager.clearPhaseQueue();
-    globalScene.phaseManager.clearPhaseQueueSplice();
 
     mysteryEncounter.updateSeedOffset();
 

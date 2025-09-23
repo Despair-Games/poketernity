@@ -139,7 +139,7 @@ describe("Double Battles", () => {
 
       expect(game.scene.currentBattle.waveIndex).toBe(13);
       expect(game.phaseInterceptor.log.filter((phase) => phase === "SelectModifierPhase").length).toBe(1);
-      expect(game.scene.phaseManager.hasPhase((phase) => phase.is("SelectModifierPhase"), true)).toBe(false);
+      expect(game.scene.phaseManager.hasPhaseOfType("SelectModifierPhase")).toBe(false);
     });
 
     it("should advance exactly one wave if the left opponent is defeated first", async () => {
@@ -152,7 +152,7 @@ describe("Double Battles", () => {
 
       expect(game.scene.currentBattle.waveIndex).toBe(13);
       expect(game.phaseInterceptor.log.filter((phase) => phase === "SelectModifierPhase").length).toBe(1);
-      expect(game.scene.phaseManager.hasPhase((phase) => phase.is("SelectModifierPhase"), true)).toBe(false);
+      expect(game.scene.phaseManager.hasPhaseOfType("SelectModifierPhase")).toBe(false);
     });
 
     it("should advance exactly one wave if the right opponent is defeated first", async () => {
@@ -165,7 +165,7 @@ describe("Double Battles", () => {
 
       expect(game.scene.currentBattle.waveIndex).toBe(13);
       expect(game.phaseInterceptor.log.filter((phase) => phase === "SelectModifierPhase").length).toBe(1);
-      expect(game.scene.phaseManager.hasPhase((phase) => phase.is("SelectModifierPhase"), true)).toBe(false);
+      expect(game.scene.phaseManager.hasPhaseOfType("SelectModifierPhase")).toBe(false);
     });
   });
 });

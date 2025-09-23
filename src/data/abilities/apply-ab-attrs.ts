@@ -94,7 +94,6 @@ function applyAbAttrsInternal<TAttr extends AbAttr = never>(
     });
 
     matchingAttrs.forEach((attr) => {
-      globalScene.phaseManager.setPhaseQueueSplice();
       let message: ApplyAbAttrResult<TAttr>["message"] = null;
       const applied = attr.apply(pokemon, simulated, ...args);
 
@@ -112,8 +111,8 @@ function applyAbAttrsInternal<TAttr extends AbAttr = never>(
           if (attr.showAbilityInstant) {
             globalScene.abilityBar.showAbility(pokemon, passive);
           } else {
+            // TODO: This is out of order with the ability's effects
             globalScene.phaseManager.createAndUnshiftPhase("ShowAbilityPhase", pokemon.id, passive);
-            globalScene.phaseManager.clearPhaseQueueSplice();
           }
         }
       }
@@ -126,7 +125,6 @@ function applyAbAttrsInternal<TAttr extends AbAttr = never>(
         }
       }
 
-      globalScene.phaseManager.clearPhaseQueueSplice();
       results.push({ attr, applied, message });
     });
   });

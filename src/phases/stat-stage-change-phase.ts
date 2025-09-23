@@ -215,9 +215,9 @@ export class StatStageChangePhase extends PokemonPhase {
       );
 
       // Look for any other stat change phases; if this is the last one, do White Herb check
-      const phaseExists = globalScene.phaseManager.hasPhase(
-        (p) => p instanceof StatStageChangePhase && p.battlerIndex === this.battlerIndex,
-        true,
+      const phaseExists = globalScene.phaseManager.hasPhaseOfType(
+        "StatStageChangePhase",
+        (p) => p.battlerIndex === this.battlerIndex,
       );
       if (!phaseExists) {
         // Apply White Herb if needed

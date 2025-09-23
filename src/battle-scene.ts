@@ -831,10 +831,10 @@ export class BattleScene extends SceneBase {
      */
     let targetingMovePhase: MovePhase | undefined;
     do {
-      targetingMovePhase = this.phaseManager.findPhase(
+      targetingMovePhase = this.phaseManager.findPhaseOfType(
+        "MovePhase",
         (mp) =>
-          mp.is("MovePhase")
-          && mp.targets.length === 1
+          mp.targets.length === 1
           && mp.targets[0] === removedPokemon.getBattlerIndex()
           && mp.pokemon.isPlayer() !== secondPokemon.isPlayer(),
       );
@@ -1340,7 +1340,7 @@ export class BattleScene extends SceneBase {
     }
 
     if (lastBattle?.double && !newDouble) {
-      this.phaseManager.tryRemovePhase((p) => p.is("SwitchPhase"));
+      this.phaseManager.removePhase("SwitchPhase");
       this.getPlayerField().forEach((p) => p.lapseTag(BattlerTagType.COMMANDED));
     }
 

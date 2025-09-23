@@ -9,7 +9,6 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { Pokemon } from "#field/pokemon";
 import { BattlePhase } from "#phases/base/battle-phase";
-import type { MovePhase } from "#phases/move-phase";
 
 export class QuietFormChangePhase extends BattlePhase {
   public override readonly phaseName = "QuietFormChangePhase";
@@ -168,9 +167,7 @@ export class QuietFormChangePhase extends BattlePhase {
       this.pokemon.initBattleInfo();
       this.pokemon.cry();
 
-      const movePhase = globalScene.phaseManager.findPhase<MovePhase>(
-        (p) => p.is("MovePhase") && p.pokemon === this.pokemon,
-      );
+      const movePhase = globalScene.phaseManager.findPhaseOfType("MovePhase", (p) => p.pokemon === this.pokemon);
       if (movePhase) {
         movePhase.cancel();
       }
