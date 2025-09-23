@@ -22,3 +22,6 @@ export type PhaseKey = keyof PhaseMap;
 export type PhaseParameterMap = {
   [P in PhaseKey]: ConstructorParameters<PhaseConstructorMap[P]>;
 };
+
+/** Type for predicate functions operating on a specific type of {@linkcode Phase} */
+export type PhaseConditionFunc<K extends PhaseKey> = (phase: PhaseMap[K]) => boolean;
