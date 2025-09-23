@@ -461,9 +461,10 @@ export class BattleInfo extends Phaser.GameObjects.Container {
   }
 
   getTextureName(): string {
+    const isBoss = !this.player && this.boss;
     const side = this.player ? "player" : "enemy";
-    const boss = !this.player && this.boss ? "_boss" : "";
-    const mini = this.mini ? "_mini" : "";
+    const boss = isBoss ? "_boss" : "";
+    const mini = !isBoss && this.mini ? "_mini" : "";
     return `pbinfo_${side}${boss}${mini}`;
   }
 
