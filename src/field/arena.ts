@@ -502,6 +502,7 @@ export class Arena {
    * Returns `0` if the {@linkcode Biome} does not support trainers; this disables random trainer spawns.
    *
    * Returns the value of {@linkcode activeOverrides.RANDOM_TRAINER_CHANCE_OVERRIDE} if it is set; this sets trainer spawn rates as above.
+   * @todo possibly change the way this works so it's more flexible than just `1/n`?
    */
   public getTrainerChance(): number {
     return activeOverrides.RANDOM_TRAINER_CHANCE_OVERRIDE ?? allBiomes.get(this.biomeId).trainerChance;
@@ -601,7 +602,8 @@ export class Arena {
    * - Most legendaries (including Regigigas but not Kyurem, Zacian and Zamazenta) cannot spawn below level 70
    * - All other sublegends cannot spawn below level 50
    * - The final base case only has Cosmoem/Cosmog
-   * @returns `true` if rerolling is required, `false` otherwise
+   * @returns Whether rerolling is required
+   * @todo Refactor so there is no rerolling required, instead modifying the pools directly
    */
   private determineRerollIfLegendLike(pokemonSpecies: PokemonSpecies, level: number): boolean {
     if (pokemonSpecies.isLegendLike()) {
