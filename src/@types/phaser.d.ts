@@ -1,3 +1,5 @@
+/** biome-ignore-all lint/style/noNamespace: necessary? */
+
 import "phaser";
 
 declare module "phaser" {
