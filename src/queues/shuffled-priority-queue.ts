@@ -11,9 +11,8 @@ type ComparatorFunc<T> = (a: T, b: T) => number;
  * is based on the provided {@linkcode comparator} function. All elements that have
  * the same priority (i.e. `comparator(A, B) === 0`) are ordered randomly
  * within the queue.
- * @abstract
  */
-export abstract class ShuffledPriorityQueue<T> {
+export class ShuffledPriorityQueue<T> {
   protected queue: T[] = [];
   public readonly comparator: ComparatorFunc<T>;
 
@@ -118,5 +117,15 @@ export abstract class ShuffledPriorityQueue<T> {
    */
   public has(condition: (t: T) => boolean): boolean {
     return this.queue.some(condition);
+  }
+
+  /** Executes the given callback function on each entry in the priority queue */
+  public forEach(callbackFn: (value: T, index: number) => void): void {
+    this.queue.forEach(callbackFn);
+  }
+
+  /** @returns `true` if all elements in the queue satisfy the given predicate */
+  public every(predicate: (value: T, index: number) => boolean): boolean {
+    return this.queue.every(predicate);
   }
 }

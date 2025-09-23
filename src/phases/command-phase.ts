@@ -290,7 +290,7 @@ export class CommandPhase extends FieldPhase {
                 targets,
               });
               if (this.fieldIndex) {
-                turnManager.remove((tc) => tc.pokemon === pokemon.getAlly());
+                turnManager.tryRemoveCommand((tc) => tc.pokemon === pokemon.getAlly());
               }
               success = true;
             }
@@ -335,7 +335,7 @@ export class CommandPhase extends FieldPhase {
           turnManager.addCommand(turnCommand);
           success = true;
           if (!isSwitch && this.fieldIndex) {
-            turnManager.remove((tc) => tc.pokemon === pokemon.getAlly());
+            turnManager.tryRemoveCommand((tc) => tc.pokemon === pokemon.getAlly());
           }
         } else if (trappedAbMessages.length > 0) {
           if (!isSwitch) {

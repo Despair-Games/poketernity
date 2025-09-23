@@ -495,7 +495,8 @@ export class GameManager {
     expect(order).toHaveLength(globalScene.getField(true).length);
 
     const { turnManager } = this.scene.currentBattle;
-    vi.spyOn(turnManager, "comparator").mockImplementation((commandA, commandB) => {
+    const turnCommandQueue = turnManager["queue"];
+    vi.spyOn(turnCommandQueue, "comparator").mockImplementation((commandA, commandB) => {
       const [orderA, orderB] = [commandA, commandB].map(({ pokemon }) => order.indexOf(pokemon.getBattlerIndex()));
 
       return orderA - orderB;

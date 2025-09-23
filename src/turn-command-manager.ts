@@ -71,14 +71,16 @@ export interface TurnCommand {
  * respective command type. Turn commands are dynamically ordered
  * as they are processed.
  */
-export class TurnCommandManager extends ShuffledPriorityQueue<TurnCommand> {
+export class TurnCommandManager {
+  private readonly queue: ShuffledPriorityQueue<TurnCommand>;
+
   private orderIndex: number = 0;
   private appliedMoveHeaders = false;
   /** Tracks how many pending turn commands are currently in the phase queue */
   public commandsInProgress: number = 0;
 
   constructor() {
-    super(TurnCommandManager.compare);
+    this.queue = new ShuffledPriorityQueue<TurnCommand>(TurnCommandManager.compare);
   }
 
   //#region Comparators
@@ -156,8 +158,19 @@ export class TurnCommandManager extends ShuffledPriorityQueue<TurnCommand> {
     const { pokemon } = turnCommand;
     pokemon.turnData.turnCommand = turnCommand;
     // Remove any existing commands by the Pokemon before adding
-    this.remove((tc) => tc.pokemon === pokemon);
-    this.push(turnCommand);
+    this.queue.remove((tc) => tc.pokemon === pokemon);
+    this.queue.push(turnCommand);
+  }
+
+  /**
+   * Obtains the first command in the turn command queue that
+   * meets the given condition
+   * @param commandFilter The condition to search the command queue by
+   * @returns The first {@linkcode TurnCommand} for which `commandFilter` returns
+   * `true`, or `undefined` if no such turn command exists.
+   */
+  public findCommand(commandFilter: TurnCommandFilter): TurnCommand | undefined {
+    return this.queue.find(commandFilter);
   }
 
   /**
@@ -167,7 +180,18 @@ export class TurnCommandManager extends ShuffledPriorityQueue<TurnCommand> {
    * if no such turn command exists.
    */
   public findCommandFromPokemon(pokemon: Pokemon): TurnCommand | undefined {
-    return this.find((tc) => tc.pokemon === pokemon);
+    return this.findCommand((tc) => tc.pokemon === pokemon);
+  }
+
+  /**
+   * Removes the first command in the turn command queue that
+   * meets the given condition.
+   * @param commandFilter Signifies the command should be removed from the queue
+   * if evaluated to be `true`.
+   * @returns the {@linkcode TurnCommand} that was removed, or `undefined` if no command is removed
+   */
+  public tryRemoveCommand(commandFilter: TurnCommandFilter): TurnCommand | undefined {
+    return this.queue.remove(commandFilter);
   }
 
   /**
@@ -214,7 +238,7 @@ export class TurnCommandManager extends ShuffledPriorityQueue<TurnCommand> {
    * If no valid command is found, this ends the current turn.
    */
   public scheduleNextValidCommand(): void {
-    while (!this.isEmpty()) {
+    while (!this.queue.isEmpty()) {
       if (!this.appliedMoveHeaders && this.queue.every((tc) => tc.command === BattleCommand.FIGHT)) {
         this.applyMoveHeaderAttrs();
       }
@@ -234,7 +258,7 @@ export class TurnCommandManager extends ShuffledPriorityQueue<TurnCommand> {
    * @returns `true` if a command is found and scheduled for execution
    */
   public preemptCommand(commandFilter: TurnCommandFilter): boolean {
-    const turnCommand = this.remove(commandFilter);
+    const turnCommand = this.queue.remove(commandFilter);
     if (turnCommand && this.handleCommand(turnCommand)) {
       turnCommand.pokemon.turnData.order = this.orderIndex++;
       this.commandsInProgress++;
@@ -304,6 +328,11 @@ export class TurnCommandManager extends ShuffledPriorityQueue<TurnCommand> {
     return true;
   }
 
+  /** @returns `true` if the turn command queue is empty */
+  public isEmpty(): boolean {
+    return this.queue.isEmpty();
+  }
+
   //#region Private Methods
 
   /**
@@ -312,7 +341,7 @@ export class TurnCommandManager extends ShuffledPriorityQueue<TurnCommand> {
    * @returns `true` if a phase was queued as a result of this call.
    */
   private shiftNextCommand(): boolean {
-    const nextCommand = this.pop();
+    const nextCommand = this.queue.pop();
     if (nextCommand && this.handleCommand(nextCommand)) {
       nextCommand.pokemon.turnData.order = this.orderIndex++;
       this.commandsInProgress++;
