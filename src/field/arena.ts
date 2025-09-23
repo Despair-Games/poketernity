@@ -15,7 +15,7 @@ import { allBiomes } from "#data/data-lists";
 import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrigger } from "#data/pokemon-forms";
 import type { PokemonSpecies } from "#data/pokemon-species";
 import { getTerrainClearMessage, getTerrainStartMessage, Terrain } from "#data/terrain";
-import { getWeatherClearMessage, getWeatherStartMessage, Weather } from "#data/weather";
+import { getWeatherAnim, getWeatherClearMessage, getWeatherStartMessage, Weather } from "#data/weather";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
@@ -68,10 +68,12 @@ export class Arena {
 
   // #region Getters
 
+  /** Getter for `this.terrain.terrainType` */
   public get terrainType(): TerrainType {
     return this.terrain?.terrainType ?? TerrainType.NONE;
   }
 
+  /** Getter for `this.weather.weatherType` */
   public get weatherType(): WeatherType {
     return this.weather?.weatherType ?? WeatherType.NONE;
   }
@@ -189,32 +191,30 @@ export class Arena {
     return coerceArray(weather).includes(this.weatherType);
   }
 
-  /**
-   * Sets weather to the override specified in overrides.ts
-   * @param weather new {@linkcode WeatherType} to set
-   * @returns true to force trySetWeather to return true
-   */
-  private tryOverrideWeather(weather: WeatherType): boolean {
-    this.weather = new Weather(weather, 0);
-    globalScene.phaseManager.createAndUnshiftPhase("CommonAnimPhase", (CommonAnim.SUNNY + (weather - 1)) as CommonAnim);
-    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", getWeatherStartMessage(weather) ?? "");
+  /** Sets weather to the override specified in `overrides.ts` */
+  private tryOverrideWeather(): boolean {
+    const weatherType = activeOverrides.WEATHER_OVERRIDE;
+    if (weatherType === WeatherType.NONE) {
+      return false;
+    }
+
+    this.weather = new Weather(weatherType, 0);
+    globalScene.phaseManager.createAndUnshiftPhase("CommonAnimPhase", getWeatherAnim(weatherType));
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", getWeatherStartMessage(weatherType));
+
     return true;
   }
 
   /**
    * Helper function that checks if it is possible to set a new weather given current weather conditions
    * @param newWeather - The weather that the game is attempting to set
-   * @returns `true` if the weather can be set given current conditions | `false` if not
+   * @returns Whether the weather can be set to the given value under current conditions
    */
   public canSetWeather(newWeather: WeatherType): boolean {
-    if (this.weather) {
-      if (newWeather === this.weather.weatherType) {
-        return false;
-      }
-      if (this.weather.isPrimal() && ![WeatherType.NONE, ...PRIMAL_WEATHER_TYPES].includes(newWeather)) {
-        return false;
-      }
-    } else if (newWeather === WeatherType.NONE) {
+    if (newWeather === this.weatherType) {
+      return false;
+    }
+    if (this.weather?.isPrimal() && ![WeatherType.NONE, ...PRIMAL_WEATHER_TYPES].includes(newWeather)) {
       return false;
     }
     return true;
@@ -222,16 +222,13 @@ export class Arena {
 
   /**
    * Attempts to set a new weather to the battle
-   * @param newWeatherType {@linkcode WeatherType} new {@linkcode WeatherType} to set
-   * @param hasPokemonSource boolean if the new weather is from a pokemon
-   * @returns true if new weather set, false if no weather provided or attempting to set the same weather as currently in use
+   * @param newWeatherType - The new {@linkcode WeatherType} to set
+   * @param hasPokemonSource - If the new weather is from a pokemon
+   * @returns `true` if new weather set, or `false` if no weather provided or attempting to set the same weather as currently in use
    */
   public trySetWeather(newWeatherType: WeatherType, hasPokemonSource: boolean): boolean {
-    /**
-     * TODO: Refactor into if(this.tryOverrideWeather()) { return true }
-     */
-    if (activeOverrides.WEATHER_OVERRIDE) {
-      return this.tryOverrideWeather(activeOverrides.WEATHER_OVERRIDE);
+    if (this.tryOverrideWeather()) {
+      return true;
     }
 
     if (!this.canSetWeather(newWeatherType)) {
@@ -249,14 +246,11 @@ export class Arena {
     }
 
     if (newWeatherType !== WeatherType.NONE) {
-      globalScene.phaseManager.createAndUnshiftPhase(
-        "CommonAnimPhase",
-        (CommonAnim.SUNNY + (newWeatherType - 1)) as CommonAnim,
-      );
-      globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", getWeatherStartMessage(newWeatherType) ?? "");
+      globalScene.phaseManager.createAndUnshiftPhase("CommonAnimPhase", getWeatherAnim(newWeatherType));
+      globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", getWeatherStartMessage(newWeatherType));
       this.weather = new Weather(newWeatherType, newWeatherDuration);
     } else {
-      globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", getWeatherClearMessage(oldWeatherType) ?? "");
+      globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", getWeatherClearMessage(oldWeatherType));
       this.weather = null;
     }
 
