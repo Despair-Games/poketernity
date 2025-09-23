@@ -141,7 +141,7 @@ import { formatMoney, shiftCharCodes } from "#utils/string-utils";
 import i18next from "i18next";
 import Phaser from "phaser";
 
-//#region Types
+// #region Types
 
 export interface PokeballCounts {
   [pb: string]: number;
@@ -152,14 +152,19 @@ export interface InfoToggle {
   isActive(): boolean;
 }
 
-//#endregion
-//#region Constants
+// #endregion
+// #region Constants
 
 const DEBUG_RNG = false;
 
-const startingWave = activeOverrides.STARTING_WAVE_OVERRIDE || 1;
+// #endregion
+// #region Functions
 
-//#endregion
+function getStartingWave(): number {
+  return activeOverrides.STARTING_WAVE_OVERRIDE || 1;
+}
+
+// #endregion
 
 export class BattleScene extends SceneBase {
   public inputController: InputsController;
@@ -523,7 +528,7 @@ export class BattleScene extends SceneBase {
     this.candyBar.setup();
     this.fieldUI.add(this.candyBar);
 
-    this.biomeWaveText = addTextObject(GAME_WIDTH - 2, 0, startingWave.toString(), TextStyle.BATTLE_INFO);
+    this.biomeWaveText = addTextObject(GAME_WIDTH - 2, 0, getStartingWave().toString(), TextStyle.BATTLE_INFO);
     this.biomeWaveText.setName("text-biome-wave");
     this.biomeWaveText.setOrigin(1, 0.5);
     this.fieldUI.add(this.biomeWaveText);
@@ -1138,7 +1143,7 @@ export class BattleScene extends SceneBase {
     console.log("Seed:", this.seed);
     this.resetSeed();
 
-    this.biomeWaveText.setText(startingWave.toString());
+    this.biomeWaveText.setText(getStartingWave().toString());
     this.biomeWaveText.setVisible(false);
 
     this.updateMoneyText();
@@ -1217,8 +1222,7 @@ export class BattleScene extends SceneBase {
     double?: boolean,
     mysteryEncounterType?: MysteryEncounterType,
   ): Battle {
-    const _startingWave = activeOverrides.STARTING_WAVE_OVERRIDE || startingWave;
-    const newWaveIndex = waveIndex || (this.currentBattle?.waveIndex || _startingWave - 1) + 1;
+    const newWaveIndex = waveIndex || (this.currentBattle?.waveIndex || getStartingWave() - 1) + 1;
     let newDouble: boolean | undefined;
     let newBattleType: BattleType;
     let newTrainer: Trainer | undefined;
@@ -1234,7 +1238,9 @@ export class BattleScene extends SceneBase {
       newDouble = battleConfig.double;
       newBattleType = battleConfig.battleType;
       this.executeWithSeedOffset(
-        () => (newTrainer = battleConfig?.getTrainer()),
+        () => {
+          newTrainer = battleConfig?.getTrainer();
+        },
         (battleConfig.seedOffsetWaveIndex || newWaveIndex) << 8,
       );
       if (newTrainer) {
@@ -1291,11 +1297,6 @@ export class BattleScene extends SceneBase {
       }
     } else if (!battleConfig) {
       newDouble = !!double;
-    }
-
-    // Disable double battles on Endless Wave 50x boss battles (Introduced 1.2.0)
-    if (this.gameMode.isEndlessBoss(newWaveIndex)) {
-      newDouble = false;
     }
 
     if (activeOverrides.BATTLE_TYPE_OVERRIDE != null) {
@@ -1359,12 +1360,8 @@ export class BattleScene extends SceneBase {
     }
 
     if (!waveIndex && lastBattle) {
-      const isWaveIndexMultipleOfTen = !(lastBattle.waveIndex % 10);
-      const isEndlessOrDaily = this.gameMode.hasShortBiomes || this.gameMode.isDaily;
-      const isEndlessFifthWave = this.gameMode.hasShortBiomes && lastBattle.waveIndex % 5 === 0;
-      const isWaveIndexMultipleOfFiftyMinusOne = lastBattle.waveIndex % 50 === 49;
-      const isNewBiome =
-        isWaveIndexMultipleOfTen || isEndlessFifthWave || (isEndlessOrDaily && isWaveIndexMultipleOfFiftyMinusOne);
+      const isDaily = this.gameMode.isDaily;
+      const isNewBiome = lastBattle.waveIndex % 10 === 0 || (isDaily && lastBattle.waveIndex === 49);
       const resetArenaState =
         isNewBiome
         || this.currentBattle.battleType === BattleType.TRAINER

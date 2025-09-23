@@ -144,7 +144,6 @@ const commonSplashMessages = [
   "betterNerfGreninja",
   "inCaseOfUpdateClearYourCache",
   "insertTextHere",
-  "endingEndlessNotFound",
   "iLikeMyEggsVouchered",
   "YOU",
   "noAddedSugar",

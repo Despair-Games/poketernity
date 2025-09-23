@@ -486,8 +486,7 @@ export function initModifierPools() {
     new WeightedModifierType(modifierTypes.HEALING_CHARM, 18),
     new WeightedModifierType(
       modifierTypes.VOUCHER_PREMIUM,
-      (_party: Pokemon[], rerollCount: number) =>
-        !globalScene.gameMode.isDaily && !globalScene.gameMode.isEndless ? Math.max(5 - rerollCount * 2, 0) : 0,
+      (_party: Pokemon[], rerollCount: number) => (globalScene.gameMode.isDaily ? 0 : Math.max(5 - rerollCount * 2, 0)),
       5,
     ),
     new WeightedModifierType(

@@ -188,7 +188,7 @@ export class GameData {
     this.gameStats = new GameStats();
     this.runHistory = {};
     this.unlocks = {
-      [Unlockables.ENDLESS_MODE]: false,
+      [Unlockables.CHALLENGE_MODE]: false,
       [Unlockables.MINI_BLACK_HOLE]: false,
       [Unlockables.EVIOLITE]: false,
     };

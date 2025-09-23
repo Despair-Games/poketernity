@@ -921,7 +921,7 @@ export function handleMysteryEncounterVictory(addHealPhase: boolean = false, doN
     if (encounter.encounterMode === MysteryEncounterMode.TRAINER_BATTLE) {
       globalScene.phaseManager.createAndPushPhase("TrainerVictoryPhase");
     }
-    if (globalScene.gameMode.isEndless || !globalScene.gameMode.isWaveFinal(globalScene.currentBattle.waveIndex)) {
+    if (!globalScene.gameMode.isWaveFinal(globalScene.currentBattle.waveIndex)) {
       globalScene.phaseManager.createAndPushPhase("MysteryEncounterRewardsPhase", addHealPhase);
       if (!encounter.doContinueEncounter) {
         // Only lapse eggs once for multi-battle encounters
@@ -1054,7 +1054,7 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
       // New biome
       if (i % 10 === 1) {
         if (Array.isArray(biomeLinks[currentBiome])) {
-          let biomeIds: BiomeId[];
+          let biomeIds!: BiomeId[];
           globalScene.executeWithSeedOffset(() => {
             biomeIds = (biomeLinks[currentBiome] as (BiomeId | [BiomeId, number])[])
               .filter((b) => {
@@ -1062,7 +1062,7 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
               })
               .map((b) => (Array.isArray(b) ? b[0] : b));
           }, i * 100);
-          if (biomeIds! && biomeIds.length > 0) {
+          if (biomeIds && biomeIds.length > 0) {
             const specialBiomes = biomeIds.filter((b) => alwaysPickTheseBiomes.includes(b));
             if (specialBiomes.length > 0) {
               currentBiome = specialBiomes[randSeedInt(specialBiomes.length)];
@@ -1072,11 +1072,8 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
           }
         } else if (Object.hasOwn(biomeLinks, currentBiome)) {
           currentBiome = biomeLinks[currentBiome] as BiomeId;
-        } else if (i % 50) {
-          currentBiome = globalScene.generateRandomBiome(i);
         } else {
-          // Special logic for endless mode
-          currentBiome = BiomeId.END;
+          currentBiome = globalScene.generateRandomBiome(i);
         }
 
         globalScene.newArena(currentBiome);

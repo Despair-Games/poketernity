@@ -119,8 +119,6 @@ export class SelectStarterPhase extends Phase {
 
       if (isClassic) {
         gameStats.classicSessionsPlayed++;
-      } else {
-        gameStats.endlessSessionsPlayed++;
       }
 
       globalScene.newBattle();
