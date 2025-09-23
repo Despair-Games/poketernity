@@ -14,7 +14,7 @@ import { type BiomeTierTrainerPools, getBiomeBgm, IndoorBiomes, type PokemonPool
 import { allBiomes } from "#data/data-lists";
 import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrigger } from "#data/pokemon-forms";
 import type { PokemonSpecies } from "#data/pokemon-species";
-import { getTerrainClearMessage, getTerrainStartMessage, Terrain } from "#data/terrain";
+import { getTerrainAnim, getTerrainClearMessage, getTerrainStartMessage, Terrain } from "#data/terrain";
 import { getWeatherAnim, getWeatherClearMessage, getWeatherStartMessage, Weather } from "#data/weather";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
@@ -23,7 +23,6 @@ import type { ArenaTagType } from "#enums/arena-tag-type";
 import type { BattlerIndex, FieldBattlerIndex } from "#enums/battler-index";
 import { BiomeId } from "#enums/biome-id";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
-import { CommonAnim } from "#enums/common-anim";
 import type { ElementalType } from "#enums/elemental-type";
 import type { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
@@ -355,18 +354,29 @@ export class Arena {
     return coerceArray(terrain).includes(this.terrainType);
   }
 
+  /** Sets terrain to the override specified in `overrides.ts` */
+  private tryOverrideTerrain(): boolean {
+    const newTerrain = activeOverrides.TERRAIN_OVERRIDE;
+    if (newTerrain === TerrainType.NONE) {
+      return false;
+    }
+
+    this.terrain = new Terrain(newTerrain, 0);
+    globalScene.phaseManager.createAndUnshiftPhase("CommonAnimPhase", getTerrainAnim(newTerrain));
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", getTerrainStartMessage(newTerrain));
+
+    return true;
+  }
+
   /**
-   * Sets terrain to the override specified in overrides.ts
-   * @param terrain new {@linkcode TerrainType} to set
-   * @returns true to force trySetTerrain to return true
+   * Check if it's possible to change the terrain
+   * @param terrain - The {@linkcode TerrainType} to set
+   * @returns Whether the terrain can be changed
    */
-  private tryOverrideTerrain(terrain: TerrainType): boolean {
-    this.terrain = new Terrain(terrain, 0);
-    globalScene.phaseManager.createAndUnshiftPhase(
-      "CommonAnimPhase",
-      (CommonAnim.MISTY_TERRAIN + (terrain - 1)) as CommonAnim,
-    );
-    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", getTerrainStartMessage(terrain) ?? "");
+  public canSetTerrain(terrain: TerrainType): boolean {
+    if (terrain === this.terrainType) {
+      return false;
+    }
     return true;
   }
 
@@ -378,13 +388,11 @@ export class Arena {
    * @returns whether or not the terrain was successfully set
    */
   public trySetTerrain(terrain: TerrainType, hasPokemonSource: boolean, ignoreAnim: boolean = false): boolean {
-    // TODO: Refactor into `if(this.tryOverrideTerrain()) { return true }`
-    if (activeOverrides.TERRAIN_OVERRIDE) {
-      return this.tryOverrideTerrain(activeOverrides.TERRAIN_OVERRIDE);
+    if (this.tryOverrideTerrain()) {
+      return true;
     }
 
-    // TODO: create `Arena#canSetTerrain` method
-    if (this.terrain?.terrainType === (terrain || undefined)) {
+    if (!this.canSetTerrain(terrain)) {
       return false;
     }
 
@@ -404,14 +412,11 @@ export class Arena {
         new TerrainChangedEvent(oldTerrainType, this.terrain.terrainType, this.terrain.turnsLeft),
       );
       if (!ignoreAnim) {
-        globalScene.phaseManager.createAndUnshiftPhase(
-          "CommonAnimPhase",
-          (CommonAnim.MISTY_TERRAIN + (terrain - 1)) as CommonAnim,
-        );
+        globalScene.phaseManager.createAndUnshiftPhase("CommonAnimPhase", getTerrainAnim(terrain));
       }
-      globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", getTerrainStartMessage(terrain) ?? "");
+      globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", getTerrainStartMessage(terrain));
     } else {
-      globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", getTerrainClearMessage(oldTerrainType) ?? "");
+      globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", getTerrainClearMessage(oldTerrainType));
     }
 
     globalScene
