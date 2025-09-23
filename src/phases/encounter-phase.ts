@@ -438,10 +438,10 @@ export class EncounterPhase extends BattlePhase {
         pbTrayEnemy.showPbTray(globalScene.getEnemyParty());
         const doTrainerSummon = (): void => {
           const availablePartyMembers = globalScene.getEnemyParty().filter((p) => !p.isFainted()).length;
-          phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.ENEMY, { deferPostSummon: true });
+          phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.ENEMY, { delayPostSummon: true });
           if (double && availablePartyMembers > 1) {
             phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.ENEMY_2, {
-              deferPostSummon: true,
+              delayPostSummon: true,
             });
           }
           this.end();
@@ -590,7 +590,7 @@ export class EncounterPhase extends BattlePhase {
 
     if (!availablePartyMembers[0].isOnField()) {
       phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.PLAYER, {
-        deferPostSummon: true,
+        delayPostSummon: true,
         loaded: this.loaded,
       });
     }
@@ -600,7 +600,7 @@ export class EncounterPhase extends BattlePhase {
         phaseManager.createAndUnshiftPhase("ToggleDoublePositionPhase", true);
         if (!availablePartyMembers[1].isOnField()) {
           phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.PLAYER_2, {
-            deferPostSummon: true,
+            delayPostSummon: true,
             loaded: this.loaded,
           });
         }
@@ -623,7 +623,7 @@ export class EncounterPhase extends BattlePhase {
     }
 
     if (battleType === BattleType.WILD) {
-      enemyField.forEach((p) => phaseManager.createAndDeferPhase("PostSummonPhase", p.getBattlerIndex()));
+      enemyField.forEach((p) => phaseManager.createAndPushPhase("PostSummonPhase", p.getBattlerIndex()));
     }
     handleTutorial(Tutorial.ACCESS_MENU).then(() => super.end());
   }
