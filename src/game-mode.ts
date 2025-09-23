@@ -22,11 +22,9 @@ import i18next from "i18next";
 
 interface GameModeConfig {
   isClassic?: boolean;
-  isEndless?: boolean;
   isDaily?: boolean;
   hasTrainers?: boolean;
   hasNoShop?: boolean;
-  hasShortBiomes?: boolean;
   hasRandomBiomes?: boolean;
   hasRandomBosses?: boolean;
   isChallenge?: boolean;
@@ -36,28 +34,25 @@ interface GameModeConfig {
 export class GameMode implements GameModeConfig {
   public modeId: GameModes;
   public isClassic: boolean;
-  public isEndless: boolean;
   public isDaily: boolean;
   public hasTrainers: boolean;
   public hasNoShop: boolean;
-  public hasShortBiomes: boolean;
   public hasRandomBiomes: boolean;
   public hasRandomBosses: boolean;
   public isChallenge: boolean;
-  public challenges: Challenge[];
+  public challenges: Challenge[] = [];
   public battleConfig: FixedBattleConfigs;
   public hasMysteryEncounters: boolean;
   public minMysteryEncounterWave: number;
   public maxMysteryEncounterWave: number;
 
-  constructor(modeId: GameModes, config: GameModeConfig, battleConfig?: FixedBattleConfigs) {
+  constructor(modeId: GameModes, config: GameModeConfig, battleConfig: FixedBattleConfigs = {}) {
     this.modeId = modeId;
-    this.challenges = [];
     Object.assign(this, config);
     if (this.isChallenge) {
       this.challenges = allChallenges.map((c) => copyChallenge(c));
     }
-    this.battleConfig = battleConfig || {};
+    this.battleConfig = battleConfig;
   }
 
   /**
@@ -203,8 +198,6 @@ export class GameMode implements GameModeConfig {
       case GameModes.CLASSIC:
       case GameModes.CHALLENGE:
         return this.isGymWave(waveIndex) && (biomeId !== BiomeId.END || this.isWaveFinal(waveIndex));
-      case GameModes.ENDLESS:
-        return false;
     }
   }
 
@@ -225,17 +218,15 @@ export class GameMode implements GameModeConfig {
 
   /**
    * Checks if wave provided is the final for current or specified game mode
-   * @param waveIndex
-   * @param modeId game mode
-   * @returns if the current wave is final for classic or daily OR a minor boss in endless
+   * @param waveIndex - The wave to check
+   * @param modeId - (Default `this.modeId`) The game mode to check
+   * @returns If the specified wave is the final wave of the specified game mode
    */
   isWaveFinal(waveIndex: number, modeId: GameModes = this.modeId): boolean {
     switch (modeId) {
       case GameModes.CLASSIC:
       case GameModes.CHALLENGE:
         return waveIndex === 200;
-      case GameModes.ENDLESS:
-        return !(waveIndex % 250);
       case GameModes.DAILY:
         return waveIndex === 50;
     }
@@ -254,33 +245,6 @@ export class GameMode implements GameModeConfig {
    */
   isBattleClassicFinalBoss(waveIndex: number): boolean {
     return (this.modeId === GameModes.CLASSIC || this.modeId === GameModes.CHALLENGE) && this.isWaveFinal(waveIndex);
-  }
-
-  /**
-   * Every 50 waves of an Endless mode is a boss
-   * At this time it is paradox pokemon
-   * @returns true if waveIndex is a multiple of 50 in Endless
-   */
-  isEndlessBoss(waveIndex: number): boolean {
-    return waveIndex % 50 === 0 && this.modeId === GameModes.ENDLESS;
-  }
-
-  /**
-   * Every 250 waves of an Endless mode is a minor boss
-   * At this time it is Eternatus
-   * @returns true if waveIndex is a multiple of 250 in Endless
-   */
-  isEndlessMinorBoss(waveIndex: number): boolean {
-    return waveIndex % 250 === 0 && this.modeId === GameModes.ENDLESS;
-  }
-
-  /**
-   * Every 1000 waves of an Endless mode is a major boss
-   * At this time it is Eternamax Eternatus
-   * @returns true if waveIndex is a multiple of 1000 in Endless
-   */
-  isEndlessMajorBoss(waveIndex: number): boolean {
-    return waveIndex % 1000 === 0 && this.modeId === GameModes.ENDLESS;
   }
 
   /**
@@ -327,22 +291,11 @@ export class GameMode implements GameModeConfig {
       case GameModes.CHALLENGE:
       case GameModes.DAILY:
         return isBoss ? 6 : 18;
-      case GameModes.ENDLESS:
-        return isBoss ? 4 : 12;
     }
   }
 
   getName(): string {
-    switch (this.modeId) {
-      case GameModes.CLASSIC:
-        return i18next.t("gameMode:classic");
-      case GameModes.ENDLESS:
-        return i18next.t("gameMode:endless");
-      case GameModes.DAILY:
-        return i18next.t("gameMode:dailyRun");
-      case GameModes.CHALLENGE:
-        return i18next.t("gameMode:challenge");
-    }
+    return getModeName(this.modeId);
   }
 
   /**
@@ -358,19 +311,6 @@ export class GameMode implements GameModeConfig {
         return [0, 0];
     }
   }
-
-  static getModeName(modeId: GameModes): string {
-    switch (modeId) {
-      case GameModes.CLASSIC:
-        return i18next.t("gameMode:classic");
-      case GameModes.ENDLESS:
-        return i18next.t("gameMode:endless");
-      case GameModes.DAILY:
-        return i18next.t("gameMode:dailyRun");
-      case GameModes.CHALLENGE:
-        return i18next.t("gameMode:challenge");
-    }
-  }
 }
 
 export function getGameMode(gameMode: GameModes): GameMode {
@@ -381,8 +321,6 @@ export function getGameMode(gameMode: GameModes): GameMode {
         { isClassic: true, hasTrainers: true, hasMysteryEncounters: true },
         classicFixedBattles,
       );
-    case GameModes.ENDLESS:
-      return new GameMode(GameModes.ENDLESS, { isEndless: true, hasShortBiomes: true, hasRandomBosses: true });
     case GameModes.DAILY:
       return new GameMode(GameModes.DAILY, { isDaily: true, hasTrainers: true, hasNoShop: true });
     case GameModes.CHALLENGE:
@@ -391,5 +329,16 @@ export function getGameMode(gameMode: GameModes): GameMode {
         { isClassic: true, hasTrainers: true, isChallenge: true, hasMysteryEncounters: true },
         classicFixedBattles,
       );
+  }
+}
+
+export function getModeName(modeId: GameModes): string {
+  switch (modeId) {
+    case GameModes.CLASSIC:
+      return i18next.t("gameMode:classic");
+    case GameModes.DAILY:
+      return i18next.t("gameMode:dailyRun");
+    case GameModes.CHALLENGE:
+      return i18next.t("gameMode:challenge");
   }
 }

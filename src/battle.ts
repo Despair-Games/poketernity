@@ -118,7 +118,7 @@ export class Battle {
    * - The `waveIndex` is adjusted by {@linkcode getWaveForDifficulty} for daily mode
    * - The base level uses {@linkcode getLevelForWaveFunc} (`1 + x/2 + x^2/625`)
    * - If the Pokemon is a boss, there is a `1.2` modifier
-   * - If the boss is the final boss of classic mode or an endless boss, this level is rounded up
+   * - If the boss is the final boss of classic mode, this level is rounded up
    * to the next multiple of 25
    * - If it's not the final wave then bosses can also have a +/- level fluctuation
    * of one tenth the adjusted waveIndex
@@ -132,7 +132,7 @@ export class Battle {
 
     if (this.gameMode.isBoss(this.waveIndex)) {
       const ret = Math.floor(baseLevel * bossMultiplier);
-      if (this.isClassicFinalBoss || !(this.waveIndex % 250)) {
+      if (this.isClassicFinalBoss) {
         return Math.ceil(ret / 25) * 25;
       }
       let levelOffset = 0;
@@ -147,6 +147,7 @@ export class Battle {
      * for the same number of waves
      *
      * Absolute value is not needed since the value is always >= 0
+     *
      * Deviation is a uniform deviation equal ranging from 0 to one tenth the levelWaveIndex
      */
     let levelOffset = 0;

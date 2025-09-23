@@ -86,16 +86,6 @@ const displayStats: DisplayStats = {
     label_key: "dailyRunWins",
     sourceFunc: (gameData) => gameData.gameStats.dailyRunSessionsWon.toString(),
   },
-  endlessSessionsPlayed: {
-    label_key: "endlessRuns",
-    sourceFunc: (gameData) => gameData.gameStats.endlessSessionsPlayed.toString(),
-    hidden: true,
-  },
-  highestEndlessWave: {
-    label_key: "highestWaveEndless",
-    sourceFunc: (gameData) => gameData.gameStats.highestEndlessWave.toString(),
-    hidden: true,
-  },
   highestMoney: {
     label_key: "highestMoney",
     sourceFunc: (gameData) => formatLargeNumberFixedDigits(gameData.gameStats.highestMoney),

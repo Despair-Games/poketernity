@@ -539,7 +539,7 @@ export class RunInfoUiHandler extends UiHandler {
    * @param windowX
    * @param windowY These two params are the coordinates of the window's bottom right corner. This is used to dynamically position Luck based on its length, creating a nice layout regardless of language / luck value.
    */
-  private async parseRunInfo(windowX: number, windowY: number) {
+  private async parseRunInfo(windowX: number, windowY: number): Promise<void> {
     // Parsing and displaying the mode.
     // In the future, parsing Challenges + Challenge Rules may have to be reworked as the game adds additional challenges and users can stack these challenges in various ways.
     const modeText = addBBCodeTextObject(7, 0, "", TextStyle.RUN_PREVIEW_DETAILS, { lineSpacing: 3 });
@@ -565,21 +565,12 @@ export class RunInfoUiHandler extends UiHandler {
         }
         break;
       }
-      case GameModes.ENDLESS:
-        modeText.appendText(`${i18next.t("gameMode:endless")}`, false);
-        break;
       case GameModes.CLASSIC:
         modeText.appendText(`${i18next.t("gameMode:classic")}`, false);
         break;
-    }
-
-    // If the player achieves a personal best in Endless, the mode text will be tinted similarly to SSS luck to celebrate their achievement.
-    if (
-      this.runInfo.gameMode === GameModes.ENDLESS
-      && this.runInfo.waveIndex === globalScene.gameData.gameStats.highestEndlessWave
-    ) {
-      modeText.appendText(` [${i18next.t("runHistory:personalBest")}]`);
-      modeText.setTint(0xffef5c, 0x47ff69, 0x6b6bff, 0xff6969);
+      default:
+        this.runInfo.gameMode satisfies never;
+        break;
     }
 
     // Duration + Money
@@ -822,8 +813,7 @@ export class RunInfoUiHandler extends UiHandler {
       }
 
       // Pokemon Held Items - not displayed by default
-      // Endless has a different scale because Pokemon tend to accumulate more items in these runs.
-      const heldItemsScale = this.runInfo.gameMode === GameModes.ENDLESS ? 0.25 : 0.5;
+      const heldItemsScale = 0.5;
       const heldItemsContainer = globalScene.add.container(-82, 2);
       const heldItemsList: Modifier.PokemonHeldItemModifier[] = [];
       if (this.runInfo.modifiers.length) {
