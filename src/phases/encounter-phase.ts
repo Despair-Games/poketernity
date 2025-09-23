@@ -438,10 +438,10 @@ export class EncounterPhase extends BattlePhase {
         pbTrayEnemy.showPbTray(globalScene.getEnemyParty());
         const doTrainerSummon = (): void => {
           const availablePartyMembers = globalScene.getEnemyParty().filter((p) => !p.isFainted()).length;
-          phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.ENEMY, { delayPostSummon: true });
+          phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.ENEMY, { deferPostSummon: true });
           if (double && availablePartyMembers > 1) {
             phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.ENEMY_2, {
-              delayPostSummon: true,
+              deferPostSummon: true,
             });
           }
           this.end();
@@ -577,7 +577,7 @@ export class EncounterPhase extends BattlePhase {
       const ivScannerModifier = globalScene.findModifier((m) => m instanceof IvScannerModifier);
       if (ivScannerModifier) {
         enemyField.forEach((p) =>
-          phaseManager.createAndPushPhase(
+          phaseManager.createAndUnshiftPhase(
             "ScanIvsPhase",
             p.getBattlerIndex(),
             Math.min(ivScannerModifier.getStackCount() * 2, 6),
@@ -586,42 +586,44 @@ export class EncounterPhase extends BattlePhase {
       }
     }
 
-    if (!this.loaded) {
-      const availablePartyMembers = globalScene.getPokemonAllowedInBattle();
+    const availablePartyMembers = globalScene.getPokemonAllowedInBattle();
 
-      if (!availablePartyMembers[0].isOnField()) {
-        phaseManager.createAndPushPhase("SummonPhase", BattlerIndex.PLAYER, { delayPostSummon: true });
-      }
+    if (!availablePartyMembers[0].isOnField()) {
+      phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.PLAYER, {
+        deferPostSummon: true,
+        loaded: this.loaded,
+      });
+    }
 
-      if (double) {
-        if (availablePartyMembers.length > 1) {
-          phaseManager.createAndPushPhase("ToggleDoublePositionPhase", true);
-          if (!availablePartyMembers[1].isOnField()) {
-            phaseManager.createAndPushPhase("SummonPhase", BattlerIndex.PLAYER_2, {
-              delayPostSummon: true,
-            });
-          }
+    if (double) {
+      if (availablePartyMembers.length > 1) {
+        phaseManager.createAndUnshiftPhase("ToggleDoublePositionPhase", true);
+        if (!availablePartyMembers[1].isOnField()) {
+          phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.PLAYER_2, {
+            deferPostSummon: true,
+            loaded: this.loaded,
+          });
         }
-      } else {
-        if (availablePartyMembers.length > 1 && availablePartyMembers[1].isOnField()) {
-          phaseManager.createAndPushPhase("RecallPhase", BattlerIndex.PLAYER_2);
-        }
-        phaseManager.createAndPushPhase("ToggleDoublePositionPhase", false);
       }
+    } else {
+      if (availablePartyMembers.length > 1 && availablePartyMembers[1].isOnField()) {
+        phaseManager.createAndUnshiftPhase("RecallPhase", BattlerIndex.PLAYER_2);
+      }
+      phaseManager.createAndUnshiftPhase("ToggleDoublePositionPhase", false);
+    }
 
-      if (battleType !== BattleType.TRAINER && (waveIndex > 1 || !gameMode.isDaily)) {
-        const minPartySize = double ? 2 : 1;
-        if (availablePartyMembers.length > minPartySize) {
-          phaseManager.createAndPushPhase("CheckSwitchPhase", 0, double);
-          if (double) {
-            phaseManager.createAndPushPhase("CheckSwitchPhase", 1, double);
-          }
+    if (battleType !== BattleType.TRAINER && (waveIndex > 1 || !gameMode.isDaily)) {
+      const minPartySize = double ? 2 : 1;
+      if (availablePartyMembers.length > minPartySize) {
+        phaseManager.createAndUnshiftPhase("CheckSwitchPhase", 0, double);
+        if (double) {
+          phaseManager.createAndUnshiftPhase("CheckSwitchPhase", 1, double);
         }
       }
     }
 
     if (battleType === BattleType.WILD) {
-      enemyField.forEach((p) => phaseManager.createAndPushPhase("PostSummonPhase", p.getBattlerIndex()));
+      enemyField.forEach((p) => phaseManager.createAndDeferPhase("PostSummonPhase", p.getBattlerIndex()));
     }
     handleTutorial(Tutorial.ACCESS_MENU).then(() => super.end());
   }

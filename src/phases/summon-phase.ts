@@ -40,7 +40,7 @@ interface SummonPhaseOptions {
    * This should be enabled whenever multiple Pokemon are summoned at the same
    * time outside of a turn in battle, e.g. at the start of a Trainer battle.
    */
-  delayPostSummon?: boolean;
+  deferPostSummon?: boolean;
 }
 
 /**
@@ -64,24 +64,24 @@ export class SummonPhase extends PokemonPhase {
    */
   private readonly playTrainerAnim: boolean;
   /**
-   * If `true`, this phase will push its corresponding {@linkcode PostSummonPhase}
+   * If `true`, this phase will defer its corresponding {@linkcode PostSummonPhase}
    * to the phase manager instead of unshifting it.
    * @defaultValue `false`
    * @privateRemarks
    * This should be enabled whenever multiple Pokemon are summoned at the same
    * time outside of a turn in battle, e.g. at the start of a Trainer battle.
    */
-  private readonly delayPostSummon: boolean;
+  private readonly deferPostSummon: boolean;
 
   constructor(
     battlerIndex: FieldBattlerIndex,
-    { loaded = false, playTrainerAnim = true, delayPostSummon = false }: SummonPhaseOptions = {},
+    { loaded = false, playTrainerAnim = true, deferPostSummon = false }: SummonPhaseOptions = {},
   ) {
     super(battlerIndex);
 
     this.loaded = loaded;
     this.playTrainerAnim = playTrainerAnim;
-    this.delayPostSummon = delayPostSummon;
+    this.deferPostSummon = deferPostSummon;
   }
 
   // #region Public Methods
@@ -427,8 +427,8 @@ export class SummonPhase extends PokemonPhase {
 
   private queuePostSummon(): void {
     const { phaseManager } = globalScene;
-    if (this.delayPostSummon) {
-      phaseManager.createAndPushPhase("PostSummonPhase", this.battlerIndex);
+    if (this.deferPostSummon) {
+      phaseManager.createAndDeferPhase("PostSummonPhase", this.battlerIndex);
     } else {
       phaseManager.createAndUnshiftPhase("PostSummonPhase", this.battlerIndex);
     }
