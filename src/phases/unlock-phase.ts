@@ -8,7 +8,7 @@ import i18next from "i18next";
 function getUnlockableName(unlockable: Unlockables) {
   switch (unlockable) {
     case Unlockables.CHALLENGE_MODE:
-      return `${getModeName(GameModes.CHALLENGE)} Mode`;
+      return `${getModeName(GameModes.CHALLENGE)} Mode`; // TODO: proper i18n
     case Unlockables.MINI_BLACK_HOLE:
       return i18next.t("modifierType:ModifierType.MINI_BLACK_HOLE.name");
     case Unlockables.EVIOLITE:
