@@ -1,6 +1,6 @@
 import { api } from "#api/api";
 import { loggedInUser } from "#app/account";
-import { GameMode, getGameMode } from "#app/game-mode";
+import { getGameMode, getModeName } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { fetchDailyRunSeed, getDailyRunStarters } from "#data/daily-run";
@@ -83,53 +83,46 @@ export class TitlePhase extends Phase {
             this.end();
           };
 
-          if (gameData.isUnlocked(Unlockables.ENDLESS_MODE)) {
-            const options: OptionSelectItem[] = [
-              {
-                label: GameMode.getModeName(GameModes.CLASSIC),
-                handler: () => {
-                  setModeAndEnd(GameModes.CLASSIC);
-                  return true;
-                },
-              },
-              {
-                label: GameMode.getModeName(GameModes.CHALLENGE),
-                handler: () => {
-                  setModeAndEnd(GameModes.CHALLENGE);
-                  return true;
-                },
-              },
-              {
-                label: GameMode.getModeName(GameModes.ENDLESS),
-                handler: () => {
-                  setModeAndEnd(GameModes.ENDLESS);
-                  return true;
-                },
-              },
-            ];
-
-            options.push({
-              label: i18next.t("menu:cancel"),
+          const opts: OptionSelectItem[] = [];
+          opts.push({
+            label: getModeName(GameModes.CLASSIC),
+            handler: () => {
+              setModeAndEnd(GameModes.CLASSIC);
+              return true;
+            },
+          });
+          if (gameData.isUnlocked(Unlockables.CHALLENGE_MODE)) {
+            opts.push({
+              label: getModeName(GameModes.CHALLENGE),
               handler: () => {
-                globalScene.phaseManager.toTitleScreen({ clearPhaseQueue: true });
-                super.end();
+                setModeAndEnd(GameModes.CHALLENGE);
                 return true;
               },
             });
-
-            ui.showText(i18next.t("menu:selectGameMode"), {
-              callback: () =>
-                ui.setOverlayMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, {
-                  options,
-                  yOffset: 48,
-                }),
-            });
-          } else {
-            this.gameMode = GameModes.CLASSIC;
-            ui.setMessageMode();
-            ui.clearText();
-            this.end();
           }
+          opts.push({
+            label: getModeName(GameModes.DAILY),
+            handler: () => {
+              this.initDailyRun();
+              return true;
+            },
+          });
+          opts.push({
+            label: i18next.t("menu:cancel"),
+            handler: () => {
+              globalScene.phaseManager.toTitleScreen({ clearPhaseQueue: true });
+              super.end();
+              return true;
+            },
+          });
+
+          ui.showText(i18next.t("menu:selectGameMode"), {
+            callback: () =>
+              ui.setOverlayMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, {
+                options: opts,
+                yOffset: 48,
+              }),
+          });
           return true;
         },
       },
@@ -144,14 +137,6 @@ export class TitlePhase extends Phase {
           });
           return true;
         },
-      },
-      {
-        label: i18next.t("menu:dailyRun"),
-        handler: () => {
-          this.initDailyRun();
-          return true;
-        },
-        keepOpen: true,
       },
       {
         label: i18next.t("menu:settings"),

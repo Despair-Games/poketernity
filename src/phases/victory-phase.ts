@@ -15,7 +15,7 @@ import { PokemonPhase } from "#phases/base/pokemon-phase";
  * - Clears "delayed attack" arena tags (Future Sight / Doom Desire)
  * - Pushes a {@linkcode BattleEndPhase}
  * - Pushes a {@linkcode TrainerVictoryPhase} if this was a trainer battle
- * - If this was the final wave in a non-Endless mode, pushes a {@linkcode GameOverPhase} and ends the current phase
+ * - If this was the final wave, pushes a {@linkcode GameOverPhase} and ends the current phase
  * - Pushes an {@linkcode EggLapsePhase}
  * - Gives item rewards based on wave and game mode
  * - Pushes a {@linkcode NewBattlePhase}
@@ -28,7 +28,7 @@ export class VictoryPhase extends PokemonPhase {
 
     const { currentBattle, gameMode, phaseManager } = globalScene;
     const { battleType, waveIndex } = currentBattle;
-    const { isClassic, isDaily, isEndless } = gameMode;
+    const { isClassic, isDaily } = gameMode;
 
     // clear all queued delayed attacks (e.g. from Future Sight)
     globalScene.arena.removeTag(ArenaTagType.DELAYED_ATTACK);
@@ -39,7 +39,7 @@ export class VictoryPhase extends PokemonPhase {
       phaseManager.createAndPushPhase("TrainerVictoryPhase");
     }
 
-    if (!isEndless && gameMode.isWaveFinal(waveIndex)) {
+    if (gameMode.isWaveFinal(waveIndex)) {
       currentBattle.battleType = BattleType.CLEAR;
       globalScene.score += gameMode.getClearScoreBonus();
       globalScene.updateScoreText();
@@ -73,28 +73,8 @@ export class VictoryPhase extends PokemonPhase {
       return;
     }
 
-    if (isEndless) {
-      if (waveIndex === 10) {
-        phaseManager.createAndPushPhase("ModifierRewardPhase", modifierTypes.EXP_SHARE);
-      }
-
-      if (waveIndex <= 750 && (waveIndex <= 500 || waveIndex % 30 === 10)) {
-        phaseManager.createAndPushPhase(
-          "ModifierRewardPhase",
-          !(waveIndex % 30 === 10) || waveIndex > 250 ? modifierTypes.EXP_CHARM : modifierTypes.SUPER_EXP_CHARM,
-        );
-      }
-
-      if (waveIndex % 50 === 0) {
-        phaseManager.createAndPushPhase(
-          "ModifierRewardPhase",
-          waveIndex % 250 ? modifierTypes.VOUCHER_PLUS : modifierTypes.VOUCHER_PREMIUM,
-        );
-      }
-    } else {
-      const modifierType = gameMode.isGymWave(waveIndex) ? modifierTypes.SUPER_EXP_CHARM : modifierTypes.EXP_CHARM;
-      phaseManager.createAndPushPhase("ModifierRewardPhase", modifierType);
-    }
+    const expCharmType = gameMode.isGymWave(waveIndex) ? modifierTypes.SUPER_EXP_CHARM : modifierTypes.EXP_CHARM;
+    phaseManager.createAndPushPhase("ModifierRewardPhase", expCharmType);
 
     if ([50, 100, 150].includes(waveIndex)) {
       phaseManager.createAndPushPhase("ModifierRewardPhase", modifierTypes.GOLDEN_POKEBALL);
