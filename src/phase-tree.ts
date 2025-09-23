@@ -17,8 +17,8 @@ export type DynamicPhaseMarker = {
  * When it receives a DynamicPhaseMarker, it retrieves a matching Phase from its
  * {@linkcode DynamicPhaseManager} and runs that Phase.
  */
-type PhaseEntry = Phase | DynamicPhaseMarker;
-type PhaseEntryInput = [PhaseEntry, ...PhaseEntry[]];
+export type PhaseEntry = Phase | DynamicPhaseMarker;
+export type PhaseEntryInput = [PhaseEntry, ...PhaseEntry[]];
 
 /**
  * The PhaseTree is the central storage location for {@linkcode Phase}s by the {@linkcode PhaseManager}.

@@ -4,7 +4,7 @@ import { PokemonPhasePriorityQueue } from "#app/queues/pokemon-phase-priority-qu
 import type { ShuffledPriorityQueue } from "#app/queues/shuffled-priority-queue";
 import type { PokemonPhase } from "#phases/base/pokemon-phase";
 
-const dynamicPhaseKeys = [
+export const dynamicPhaseKeys = [
   "ObtainStatusEffectPhase",
   "PokemonTransformPhase",
   "PostSummonPhase",

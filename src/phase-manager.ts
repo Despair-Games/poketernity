@@ -1,6 +1,6 @@
-import { DynamicPhaseManager } from "#app/dynamic-phase-manager";
+import { DynamicPhaseManager, dynamicPhaseKeys } from "#app/dynamic-phase-manager";
 import type { Phase } from "#app/phase";
-import { PhaseTree } from "#app/phase-tree";
+import { type DynamicPhaseMarker, type PhaseEntryInput, PhaseTree } from "#app/phase-tree";
 import type { DestinyBondTag } from "#battler-tags/destiny-bond-tag";
 import type { GrudgeTag } from "#battler-tags/grudge-tag";
 import type { FieldBattlerIndex } from "#enums/battler-index";
@@ -8,6 +8,7 @@ import { SwitchType } from "#enums/switch-type";
 import type { Pokemon } from "#field/pokemon";
 import { AttemptCapturePhase } from "#phases/attempt-capture-phase";
 import { AttemptRunPhase } from "#phases/attempt-run-phase";
+import type { PokemonPhase } from "#phases/base/pokemon-phase";
 import { BattleEndPhase } from "#phases/battle-end-phase";
 import { BerryPhase } from "#phases/berry-phase";
 import { CheckStatusEffectPhase } from "#phases/check-status-effect-phase";
@@ -270,7 +271,7 @@ export class PhaseManager {
    * @see {@linkcode PhaseTree.push}
    */
   public pushPhase(...phases: PhaseInput): void {
-    this.phaseQueue.push(...phases);
+    this.phaseQueue.push(...this.parseDynamic(...phases));
   }
 
   /**
@@ -301,7 +302,7 @@ export class PhaseManager {
    * @see {@linkcode PhaseTree.unshift}
    */
   public unshiftPhase(...phases: PhaseInput): void {
-    this.phaseQueue.unshift(...phases);
+    this.phaseQueue.unshift(...this.parseDynamic(...phases));
   }
 
   /**
@@ -334,7 +335,7 @@ export class PhaseManager {
    * @see {@linkcode PhaseTree.defer}
    */
   public deferPhase(...phases: PhaseInput): void {
-    this.phaseQueue.defer(...phases);
+    this.phaseQueue.defer(...this.parseDynamic(...phases));
   }
 
   /**
@@ -475,8 +476,8 @@ export class PhaseManager {
    * @returns `true` if the phase was successfully added to the queue before the target phase,
    *   `false` if the target phase wasn't found and {@linkcode unshiftPhase} was called instead
    */
-  public prependToPhase(targetPhaseKey: PhaseKey, ...phases: [Phase, ...Phase[]]): boolean {
-    return this.phaseQueue.addBefore(targetPhaseKey, ...phases);
+  public prependToPhase(targetPhaseKey: PhaseKey, ...phases: PhaseInput): boolean {
+    return this.phaseQueue.addBefore(targetPhaseKey, ...this.parseDynamic(...phases));
   }
 
   /**
@@ -503,7 +504,7 @@ export class PhaseManager {
    *   `false` if the target phase wasn't found and {@linkcode unshiftPhase} was called instead
    */
   public appendToPhase(targetPhaseKey: PhaseKey, ...phases: [Phase, ...Phase[]]): boolean {
-    return this.phaseQueue.addAfter(targetPhaseKey, ...phases);
+    return this.phaseQueue.addAfter(targetPhaseKey, ...this.parseDynamic(...phases));
   }
 
   /**
@@ -519,6 +520,23 @@ export class PhaseManager {
     ...params: PhaseParameterMap[P]
   ): boolean {
     return this.appendToPhase(targetPhaseKey, this.createPhase(phase, ...params));
+  }
+
+  /**
+   * Determines if any Phases in the given input should be scheduled dynamically.
+   * All Phases interpreted as dynamic are added to the {@linkcode dynamicPhaseManager} during parsing.
+   * @param phases - The {@linkcode Phase | Phases} to parse
+   * @returns The corresponding {@linkcode PhaseEntry | entries} to add to the Phase Tree.
+   * Dynamic Phases are added to the Tree as {@linkcode DynamicPhaseMarker | DynamicPhaseMarkers}
+   */
+  private parseDynamic(...phases: PhaseInput): PhaseEntryInput {
+    return phases.map((phase) => {
+      if ((dynamicPhaseKeys as readonly PhaseKey[]).includes(phase.phaseName)) {
+        this.dynamicPhaseManager.add(phase as PokemonPhase);
+        return { phaseType: phase.phaseName } as DynamicPhaseMarker;
+      }
+      return phase;
+    }) as PhaseEntryInput;
   }
 
   // #region Phase-Specific Utils
