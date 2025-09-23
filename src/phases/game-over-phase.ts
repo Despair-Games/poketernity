@@ -62,16 +62,7 @@ export class GameOverPhase extends BattlePhase {
       return;
     }
 
-    if (this.isVictory && gameMode.isEndless) {
-      const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
-      const genderStr = enumValueToKey(PlayerGender, genderIndex).toLowerCase();
-      ui.showDialogue(
-        i18next.t("miscDialogue:ending_endless", { context: genderStr }),
-        i18next.t("miscDialogue:ending_name"),
-        () => this.handleGameOver(),
-        0,
-      );
-    } else if (this.isVictory || !settings.general.enableRetries) {
+    if (this.isVictory || !settings.general.enableRetries) {
       this.handleGameOver();
     } else {
       const reloadGame = (): void => {
@@ -256,8 +247,8 @@ export class GameOverPhase extends BattlePhase {
     const { gameData, gameMode } = globalScene;
 
     if (this.isVictory && gameMode.isClassic) {
-      if (!gameData.unlocks[Unlockables.ENDLESS_MODE]) {
-        globalScene.phaseManager.createAndUnshiftPhase("UnlockPhase", Unlockables.ENDLESS_MODE);
+      if (!gameData.unlocks[Unlockables.CHALLENGE_MODE]) {
+        globalScene.phaseManager.createAndUnshiftPhase("UnlockPhase", Unlockables.CHALLENGE_MODE);
       }
 
       if (!gameData.unlocks[Unlockables.MINI_BLACK_HOLE]) {

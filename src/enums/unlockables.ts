@@ -1,5 +1,5 @@
 export enum Unlockables {
-  ENDLESS_MODE,
+  CHALLENGE_MODE,
   MINI_BLACK_HOLE,
   EVIOLITE,
 }

@@ -200,8 +200,6 @@ export class GameManager {
 
   /**
    * Helper function to run to the final boss encounter as it's a bit tricky due to extra dialogue
-   *
-   * Also handles Major/Minor bosses from endless modes
    */
   async runToFinalBossEncounter(species: SpeciesId[], mode: GameModes) {
     console.log("===to final boss encounter===");
