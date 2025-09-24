@@ -47,7 +47,7 @@ export class MysteryEncounterPhase extends Phase {
     const mysteryEncounter = currentBattle.mysteryEncounter!; // TODO: Resolve bang?
 
     // Clears out queued phases that are part of standard battle
-    globalScene.phaseManager.clearPhaseQueue();
+    globalScene.phaseManager.clear();
 
     mysteryEncounter.updateSeedOffset();
 

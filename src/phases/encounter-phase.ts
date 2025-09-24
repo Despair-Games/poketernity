@@ -498,7 +498,7 @@ export class EncounterPhase extends BattlePhase {
           ui.getMessageHandler()?.hideNameText();
 
           phaseManager.createAndUnshiftPhase("MysteryEncounterPhase");
-          this.end();
+          super.end();
         };
 
         if (showEncounterMessage) {

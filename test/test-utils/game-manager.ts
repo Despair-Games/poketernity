@@ -100,7 +100,7 @@ export class GameManager {
     if (!firstTimeScene) {
       this.scene.reset(false, true);
 
-      this.scene.phaseManager.clearAllPhases();
+      this.scene.phaseManager.clear();
       this.scene.ui.resetHandlers(); // reset ui state
 
       // This part, in particular, must not be run before the PhaseInterceptor has been initialized.

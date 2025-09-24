@@ -75,7 +75,7 @@ export class GameOverPhase extends BattlePhase {
       const reloadGame = (): void => {
         ui.fadeOut(1250).then(() => {
           globalScene.reset();
-          globalScene.phaseManager.clearPhaseQueue();
+          globalScene.phaseManager.clear();
           gameData.loadSession(globalScene.sessionSlotId).then(() => {
             globalScene.phaseManager.createAndPushPhase("EncounterPhase", true);
             ui.fadeIn(1250);
@@ -132,7 +132,7 @@ export class GameOverPhase extends BattlePhase {
         ui.fadeOut(fadeDuration).then(() => {
           activeBattlers.map((a) => a.setVisible(false));
           globalScene.setFieldScale(1, true);
-          globalScene.phaseManager.clearPhaseQueue();
+          globalScene.phaseManager.clear();
           ui.clearText();
 
           if (this.isVictory && gameMode.isChallenge) {

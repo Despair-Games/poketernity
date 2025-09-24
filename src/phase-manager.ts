@@ -360,19 +360,8 @@ export class PhaseManager {
     this.deferPhase(this.createPhase<P>(phase, ...params));
   }
 
-  /**
-   * Clears the {@linkcode phaseQueue}, but does not clear any other phase-related stuff.
-   *
-   * @todo Should this function be replaced by {@linkcode clearAllPhases}?
-   */
-  public clearPhaseQueue(): void {
-    this.phaseQueue.clear(true);
-  }
-
-  /**
-   * Clears all queued Phases, including the standby Phase.
-   */
-  public clearAllPhases(): void {
+  /** Clears all queued Phases, including the standby Phase. */
+  public clear(): void {
     this.phaseQueue.clear();
     this.dynamicPhaseManager.clearQueues();
     this.standbyPhase = null;
@@ -436,11 +425,11 @@ export class PhaseManager {
   }
 
   /**
-   * Find a specific {@linkcode Phase} in the phase queue.
+   * Finds a Phase matching the given type and condition (if defined).
    *
-   * @param phaseFilter - Filter function to find the wanted phase
-   * @param checkPrepend - If `true`, also searches through {@linkcode phaseQueuePrepend} (i.e., unshifted phases). Default `false`.
-   * @returns the found phase or `undefined` if none is found
+   * @param phaseType - The {@link PhaseKey | type} of Phase to search for
+   * @param phaseFilter - (Optional) A condition the query Phase must satisfy
+   * @returns the found {@linkcode Phase}, or `undefined` if none is found
    */
   public findPhaseOfType<P extends PhaseKey>(
     phaseType: P,
@@ -452,18 +441,29 @@ export class PhaseManager {
   /**
    * Checks if the phase queue contains a phase that matches the filter function
    *
-   * @param phaseFilter - Filter function to find the wanted phase
-   * @param checkPrepend - If `true`, also searches through {@linkcode phaseQueuePrepend} (i.e., unshifted phases). Default `false`.
+   * @param phaseType - The {@link PhaseKey | type} of Phase to search for
+   * @param phaseFilter - (Optional) A condition the query Phase must satisfy
    * @returns `true` if the phase exists, `false` otherwise
    */
   public hasPhaseOfType<P extends PhaseKey>(phaseType: P, phaseFilter: PhaseConditionFunc<P> = () => true): boolean {
-    return this.phaseQueue.has(phaseType, phaseFilter);
+    return this.phaseQueue.has(phaseType, phaseFilter) || this.dynamicPhaseManager.has(phaseType, phaseFilter);
   }
 
+  /**
+   * Removes the first Phase in the Phase Tree (in pop order) that is of the given
+   * type and meets the given condition.
+   * @param phaseType - The {@link PhaseKey | type} of Phase to remove
+   * @param phaseFilter - (Optional) A condition the Phase to remove must satisfy
+   * @returns `true` if a Phase was successfully removed
+   */
   public removePhase<P extends PhaseKey>(phaseType: P, phaseFilter: PhaseConditionFunc<P> = () => true): boolean {
     return this.phaseQueue.remove(phaseType, phaseFilter);
   }
 
+  /**
+   * Removes all Phases in the Phase Tree of the given type.
+   * @param phaseType - The {@link PhaseKey | type} of Phase to remove
+   */
   public removeAllPhasesOfType<P extends PhaseKey>(phaseType: P): void {
     this.phaseQueue.removeAll(phaseType);
   }
@@ -619,7 +619,7 @@ export class PhaseManager {
    */
   public queueGameOverPhase({ isVictory, clearPhaseQueue }: GameOverInit = {}): void {
     if (clearPhaseQueue) {
-      this.clearPhaseQueue();
+      this.clear();
     }
     this.createAndPushPhase("GameOverPhase", isVictory);
   }
@@ -630,7 +630,7 @@ export class PhaseManager {
    */
   public toTitleScreen({ eager, clearPhaseQueue }: ToTitleScreenInit = {}): void {
     if (clearPhaseQueue) {
-      this.clearPhaseQueue();
+      this.clear();
     }
 
     if (eager) {

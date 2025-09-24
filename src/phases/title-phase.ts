@@ -193,7 +193,7 @@ export class TitlePhase extends Phase {
     const { gameData, time, ui } = globalScene;
 
     ui.setMode<SaveSlotSelectUiHandler>(UiMode.SAVE_SLOT, SaveSlotUiMode.SAVE, (slotId: number) => {
-      globalScene.phaseManager.clearPhaseQueue();
+      globalScene.phaseManager.clear();
       if (slotId === -1) {
         globalScene.phaseManager.toTitleScreen();
         return super.end();

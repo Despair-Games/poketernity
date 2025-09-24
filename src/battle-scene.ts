@@ -1177,7 +1177,7 @@ export class BattleScene extends SceneBase {
         duration: 250,
         ease: "Sine.easeInOut",
         onComplete: () => {
-          this.phaseManager.clearPhaseQueue();
+          this.phaseManager.clear();
 
           // stop the tera sparkle handler
           this.spriteTeraSparkleHandler.destroy();

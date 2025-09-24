@@ -209,17 +209,9 @@ export class PhaseTree {
     return phases;
   }
 
-  /**
-   * Clears the Tree
-   * @param leaveFirstLevel - If `true`, leaves the top level of the tree intact
-   *
-   * @privateremarks
-   * The parameter on this method exists because {@linkcode PhaseManager.clearPhaseQueue} previously (probably by mistake) ignored `phaseQueuePrepend`.
-   *
-   * This is (probably by mistake) relied upon by certain ME functions.
-   */
-  public clear(leaveFirstLevel = false) {
-    this.levels = [leaveFirstLevel ? (this.levels.at(-1) ?? []) : []];
+  /** Clears the Tree of all Phases. */
+  public clear() {
+    this.levels = [[]];
   }
 
   /**
