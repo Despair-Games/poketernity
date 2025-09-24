@@ -10,7 +10,6 @@ import type { PokemonPhase } from "#phases/base/pokemon-phase";
  */
 export const dynamicPhaseKeys: PhaseKey[] = [
   "ObtainStatusEffectPhase",
-  "PokemonTransformPhase",
   "PostSummonPhase",
   "StatStageChangePhase",
 ] as const;

@@ -50,7 +50,7 @@ describe("Abilities - Intimidate", () => {
     expect(playerPokemon.species.speciesId).toBe(SpeciesId.POOCHYENA);
     expect(playerPokemon.getStatStage(Stat.ATK)).toBe(0);
     expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(-2);
-  }, 20000);
+  });
 
   it("should lower ATK stat stage by 1 for every enemy Pokemon in a double battle on entry", async () => {
     game.override.battleType("double").startingWave(3);
@@ -63,7 +63,7 @@ describe("Abilities - Intimidate", () => {
     expect(enemyField[1].getStatStage(Stat.ATK)).toBe(-2);
     expect(playerField[0].getStatStage(Stat.ATK)).toBe(-2);
     expect(playerField[1].getStatStage(Stat.ATK)).toBe(-2);
-  }, 20000);
+  });
 
   it("should not activate again if there is no switch or new entry", async () => {
     game.override.startingWave(2);
@@ -81,7 +81,7 @@ describe("Abilities - Intimidate", () => {
 
     expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(-1);
     expect(playerPokemon.getStatStage(Stat.ATK)).toBe(-1);
-  }, 20000);
+  });
 
   it("should lower ATK stat stage by 1 for every switch", async () => {
     game.override.moveset([MoveId.SPLASH]).enemyMoveset([MoveId.VOLT_SWITCH]).startingWave(5);
@@ -108,5 +108,37 @@ describe("Abilities - Intimidate", () => {
 
     expect(playerPokemon.getStatStage(Stat.ATK)).toBe(-3);
     expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(0);
-  }, 200000);
+  });
+
+  it("should activate in Speed order (Player is slower)", async () => {
+    await game.classicMode.runToSummon(SpeciesId.SHUCKLE);
+    await game.phaseInterceptor.to("StatStageChangePhase");
+
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
+
+    expect(player).toHaveStatStage(Stat.ATK, -1);
+    expect(enemy).toHaveStatStage(Stat.ATK, 0);
+
+    await game.phaseInterceptor.to("StatStageChangePhase");
+
+    expect(player).toHaveStatStage(Stat.ATK, -1);
+    expect(enemy).toHaveStatStage(Stat.ATK, -1);
+  });
+
+  it("should activate in Speed order (Player is faster)", async () => {
+    await game.classicMode.runToSummon(SpeciesId.REGIELEKI);
+    await game.phaseInterceptor.to("StatStageChangePhase");
+
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
+
+    expect(player).toHaveStatStage(Stat.ATK, 0);
+    expect(enemy).toHaveStatStage(Stat.ATK, -1);
+
+    await game.phaseInterceptor.to("StatStageChangePhase");
+
+    expect(player).toHaveStatStage(Stat.ATK, -1);
+    expect(enemy).toHaveStatStage(Stat.ATK, -1);
+  });
 });
