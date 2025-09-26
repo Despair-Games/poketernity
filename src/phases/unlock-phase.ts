@@ -1,8 +1,20 @@
+import { getModeName } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import type { Unlockables } from "#enums/unlockables";
-import { getUnlockableName } from "#system/unlockables";
+import { GameModes } from "#enums/game-modes";
+import { Unlockables } from "#enums/unlockables";
 import i18next from "i18next";
+
+function getUnlockableName(unlockable: Unlockables) {
+  switch (unlockable) {
+    case Unlockables.CHALLENGE_MODE:
+      return `${getModeName(GameModes.CHALLENGE)} Mode`; // TODO: proper i18n
+    case Unlockables.MINI_BLACK_HOLE:
+      return i18next.t("modifierType:ModifierType.MINI_BLACK_HOLE.name");
+    case Unlockables.EVIOLITE:
+      return i18next.t("modifierType:ModifierType.EVIOLITE.name");
+  }
+}
 
 export class UnlockPhase extends Phase {
   public override readonly phaseName = "UnlockPhase";
@@ -20,7 +32,6 @@ export class UnlockPhase extends Phase {
 
     time.delayedCall(2000, () => {
       gameData.unlocks[this.unlockable] = true;
-      // Sound loaded into game as is
       globalScene.audioManager.playSound("level_up_fanfare");
       ui.setMessageMode();
       ui.showText(i18next.t("battle:unlockedSomething", { unlockedThing: getUnlockableName(this.unlockable) }), {

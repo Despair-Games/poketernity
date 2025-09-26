@@ -14,7 +14,6 @@ export class CandyBar extends Phaser.GameObjects.Container {
   private countText: Phaser.GameObjects.Text;
   private readonly speciesId: SpeciesId;
 
-  // biome-ignore lint/style/useReadonlyClassProperties: false positive
   private tween: Phaser.Tweens.Tween | null;
   private autoHideTimer: NodeJS.Timeout | null;
 

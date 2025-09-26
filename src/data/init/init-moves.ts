@@ -1156,7 +1156,9 @@ export function initMoves() {
     new SelfStatusMove(MoveId.WISH, ElementalType.NORMAL, -1, 10, -1, 0, 3) //
       .triageMove()
       .snatchable()
-      .attr(AddArenaTagAttr, ArenaTagType.WISH, ArenaTagRelativeSide.USER, { turnCount: 2, failOnOverlap: true }),
+      .attr(AddArenaTagAttr, ArenaTagType.WISH, ArenaTagRelativeSide.USER, { turnCount: 2, failOnOverlap: true })
+      // can't be used on both slots on the same side of the field
+      .edgeCase(),
     new SelfStatusMove(MoveId.ASSIST, ElementalType.NORMAL, -1, 20, -1, 0, 3) //
       .attr(RandomMovesetMoveAttr, invalidAssistMoves, true),
     new SelfStatusMove(MoveId.INGRAIN, ElementalType.GRASS, -1, 20, -1, 0, 3) //

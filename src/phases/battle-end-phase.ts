@@ -23,17 +23,9 @@ export class BattleEndPhase extends BattlePhase {
   public override start(): void {
     super.start();
 
-    const { currentBattle, gameData, gameMode } = globalScene;
+    const { currentBattle, gameData } = globalScene;
 
     gameData.gameStats.battles++;
-    if (gameMode.isEndless && currentBattle.waveIndex + 1 > gameData.gameStats.highestEndlessWave) {
-      gameData.gameStats.highestEndlessWave = currentBattle.waveIndex + 1;
-    }
-
-    // Endless graceful end
-    if (gameMode.isEndless && currentBattle.waveIndex >= 5850) {
-      globalScene.phaseManager.queueGameOverPhase({ clearPhaseQueue: true, isVictory: true });
-    }
 
     for (const pokemon of globalScene.getPlayerField()) {
       if (pokemon) {

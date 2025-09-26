@@ -1,5 +1,6 @@
 import { activeOverrides } from "#app/overrides";
 import type { Challenge } from "#data/challenge";
+import { copyChallenge } from "#data/challenge";
 import { BattleStyle } from "#enums/battle-style";
 import type { Challenges } from "#enums/challenges";
 import type { SpeciesId } from "#enums/species-id";
@@ -7,7 +8,6 @@ import { UiMode } from "#enums/ui-mode";
 import { settings } from "#system/settings-manager";
 import { generateStarter } from "#test/test-utils/game-manager-utils";
 import { GameManagerHelper } from "#test/test-utils/helpers/game-manager-helper";
-import { copyChallenge } from "data/challenge";
 import { vi } from "vitest";
 
 /**

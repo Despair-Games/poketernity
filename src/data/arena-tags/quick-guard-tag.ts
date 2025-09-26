@@ -32,7 +32,9 @@ const QuickGuardConditionFunc: ProtectConditionFunc = (moveId) => {
  * **Condition:** The incoming move has increased priority.
  */
 export class QuickGuardTag extends ConditionalProtectTag {
-  constructor(sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.QUICK_GUARD, MoveId.QUICK_GUARD, sourceId, side, QuickGuardConditionFunc);
+  public override readonly tagType = ArenaTagType.QUICK_GUARD;
+
+  constructor(sourceId: number | undefined, side: ArenaTagSide) {
+    super(MoveId.QUICK_GUARD, sourceId, side, QuickGuardConditionFunc);
   }
 }

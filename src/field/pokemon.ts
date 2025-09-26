@@ -105,7 +105,7 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerIndex, type FieldBattlerIndex } from "#enums/battler-index";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { BiomeId } from "#enums/biome-id";
+import type { BiomeId } from "#enums/biome-id";
 import { ChallengeType } from "#enums/challenge-type";
 import { DexAttr } from "#enums/dex-attr";
 import { ElementalType } from "#enums/elemental-type";
@@ -1735,15 +1735,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return true;
     }
 
-    // Classic Final boss and Endless Minor/Major bosses do not have passive
-    const { currentBattle, gameMode } = globalScene;
-    const waveIndex = currentBattle?.waveIndex;
-    if (
-      this.isEnemy()
-      && (currentBattle?.isClassicFinalBoss
-        || gameMode.isEndlessMinorBoss(waveIndex)
-        || gameMode.isEndlessMajorBoss(waveIndex))
-    ) {
+    // Classic Final boss does not have passive
+    const { currentBattle } = globalScene;
+    if (this.isEnemy() && currentBattle?.isClassicFinalBoss) {
       return false;
     }
 
@@ -2307,8 +2301,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Function that tries to set a Pokemon shiny based on the trainer's trainer ID and secret ID. \
-   * Endless Pokemon in the end biome are unable to be set to shiny.
+   * Function that tries to set a Pokemon shiny based on the trainer's trainer ID and secret ID.
    *
    * The exact mechanic is that it calculates E as the XOR of the player's trainer ID and secret ID. \
    * F is calculated as the XOR of the first 16 bits of the Pokemon's {@linkcode personalityValue | Personality Value} with the last 16 bits. \
@@ -2319,12 +2312,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns Whether the Pokemon is shiny
    */
   trySetShiny(thresholdOverride?: number): boolean {
-    const { arena, gameData, gameMode } = globalScene;
-
-    // Shiny Pokemon should not spawn in the end biome in endless
-    if (gameMode.isEndless && arena.biomeId === BiomeId.END) {
-      return false;
-    }
+    const { gameData } = globalScene;
 
     const rand1 = (this.personalityValue & 0xffff0000) >>> 16;
     const rand2 = this.personalityValue & 0x0000ffff;

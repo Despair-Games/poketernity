@@ -10,8 +10,14 @@ import i18next from "i18next";
  * Weakens Electric type moves for a set amount of turns, usually 5.
  */
 export class MudSportTag extends WeakenMoveTypeTag {
-  constructor(turnCount: number, sourceId: number) {
-    super(ArenaTagType.MUD_SPORT, turnCount, ElementalType.ELECTRIC, MoveId.MUD_SPORT, sourceId);
+  public override readonly tagType = ArenaTagType.MUD_SPORT;
+
+  public override get weakenedType(): typeof ElementalType.ELECTRIC {
+    return ElementalType.ELECTRIC;
+  }
+
+  constructor(turnCount: number, sourceId?: number) {
+    super(turnCount, MoveId.MUD_SPORT, sourceId);
   }
 
   override onAdd(): void {

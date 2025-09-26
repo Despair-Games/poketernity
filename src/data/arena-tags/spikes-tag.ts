@@ -18,8 +18,14 @@ import i18next from "i18next";
  * in damage for 1, 2, or 3 layers of Spikes respectively if they are summoned into this trap.
  */
 export class SpikesTag extends EntryHazardTag {
-  constructor(sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.SPIKES, MoveId.SPIKES, sourceId, side, 3);
+  public override readonly tagType = ArenaTagType.SPIKES;
+
+  public override get maxLayers(): 3 {
+    return 3;
+  }
+
+  constructor(sourceId: number | undefined, side: ArenaTagSide) {
+    super(MoveId.SPIKES, sourceId, side);
   }
 
   override onAdd(quiet: boolean = false): void {

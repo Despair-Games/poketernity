@@ -11,8 +11,14 @@ import i18next from "i18next";
  * Used by {@linkcode MoveId.LIGHT_SCREEN}
  */
 export class LightScreenTag extends WeakenMoveScreenTag {
-  constructor(turnCount: number, sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.LIGHT_SCREEN, turnCount, MoveId.LIGHT_SCREEN, sourceId, side, [MoveCategory.SPECIAL]);
+  public override readonly tagType = ArenaTagType.LIGHT_SCREEN;
+
+  protected override get weakenedCategories(): [typeof MoveCategory.SPECIAL] {
+    return [MoveCategory.SPECIAL];
+  }
+
+  constructor(turnCount: number, sourceId: number | undefined, side: ArenaTagSide) {
+    super(turnCount, MoveId.LIGHT_SCREEN, sourceId, side);
   }
 
   override onAdd(quiet: boolean = false): void {
