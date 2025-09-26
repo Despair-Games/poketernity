@@ -7,6 +7,7 @@ import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/game-manager";
+import * as RandomUtils from "#utils/random-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -32,8 +33,8 @@ describe("Moves - Whirlwind", () => {
   it.each([
     { moveId: MoveId.FLY, name: "Fly" },
     { moveId: MoveId.BOUNCE, name: "Bounce" },
-  ])("should not hit a flying target: $name (=$move)", async ({ moveId }) => {
-    await game.classicMode.startBattle(SpeciesId.STARAPTOR);
+  ])("should not hit a flying target: $name", async ({ moveId }) => {
+    await game.classicMode.startBattle(SpeciesId.STARAPTOR, SpeciesId.SWELLOW);
 
     const staraptor = game.field.getPlayerPokemon();
 
@@ -71,8 +72,8 @@ describe("Moves - Whirlwind", () => {
     const [bulbasaur, charmander, squirtle] = game.scene.getPlayerParty();
 
     // Turn 1: Mock an RNG call that calls for switching to 1st backup Pokemon (Charmander)
-    vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
-      return min;
+    vi.spyOn(RandomUtils, "randSeedItem").mockImplementation((items) => {
+      return items.at(0);
     });
     game.move.use(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.WHIRLWIND);
@@ -83,8 +84,8 @@ describe("Moves - Whirlwind", () => {
     expect(squirtle.isOnField()).toBe(false);
 
     // Turn 2: Mock an RNG call that calls for switching to 2nd backup Pokemon (Squirtle)
-    vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
-      return min + 1;
+    vi.spyOn(RandomUtils, "randSeedItem").mockImplementation((items) => {
+      return items.at(-1);
     });
     game.move.use(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.WHIRLWIND);
@@ -100,26 +101,20 @@ describe("Moves - Whirlwind", () => {
     game.challengeMode.addChallenge(Challenges.SINGLE_TYPE, ElementalType.WATER, 0);
     await game.challengeMode.startBattle(SpeciesId.LAPRAS, SpeciesId.EEVEE, SpeciesId.TOXAPEX, SpeciesId.PRIMARINA);
 
-    const [lapras, eevee, toxapex, primarina] = game.scene.getPlayerParty();
-
-    // Turn 1: Mock an RNG call that would normally call for switching to Eevee, but it is ineligible
-    vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
-      return min;
-    });
     game.move.use(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.WHIRLWIND);
+    vi.spyOn(RandomUtils, "randSeedItem");
+
     await game.toNextTurn();
 
-    expect(lapras.isOnField()).toBe(false);
-    expect(eevee.isOnField()).toBe(false);
-    expect(toxapex.isOnField()).toBe(true);
-    expect(primarina.isOnField()).toBe(false);
+    // Eevee's index should not have been included in the switch-in pool
+    expect(RandomUtils.randSeedItem).not.toHaveBeenCalledWith(expect.arrayContaining([1]));
   });
 
   it("should not force a switch to a fainted Pokemon", async () => {
     await game.classicMode.startBattle(SpeciesId.LAPRAS, SpeciesId.EEVEE, SpeciesId.TOXAPEX, SpeciesId.PRIMARINA);
 
-    const [lapras, eevee, toxapex, primarina] = game.scene.getPlayerParty();
+    const eevee = game.scene.getPlayerParty()[1];
 
     // Turn 1: Eevee faints
     eevee.faint();
@@ -129,17 +124,14 @@ describe("Moves - Whirlwind", () => {
     await game.toNextTurn();
 
     // Turn 2: Mock an RNG call that would normally call for switching to Eevee, but it is fainted
-    vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
-      return min;
-    });
     game.move.use(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.WHIRLWIND);
+    vi.spyOn(RandomUtils, "randSeedItem");
+
     await game.toNextTurn();
 
-    expect(lapras.isOnField()).toBe(false);
-    expect(eevee.isOnField()).toBe(false);
-    expect(toxapex.isOnField()).toBe(true);
-    expect(primarina.isOnField()).toBe(false);
+    // Eevee's index should not have been included in the switch-in pool
+    expect(RandomUtils.randSeedItem).not.toHaveBeenCalledWith(expect.arrayContaining([1]));
   });
 
   it("should not force a switch if there are no available Pokemon to switch into", async () => {
