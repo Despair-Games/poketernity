@@ -12,8 +12,8 @@ import type { ValueHolder } from "#utils/common-utils";
 export class VariableMovePowerBoostAbAttr extends VariableMovePowerAbAttr {
   private readonly multFunc: (user: Pokemon, target: Pokemon, move: Move) => number;
 
-  constructor(multFunc: (user: Pokemon, target: Pokemon, move: Move) => number, showAbility: boolean = true) {
-    super(showAbility);
+  constructor(multFunc: (user: Pokemon, target: Pokemon, move: Move) => number) {
+    super();
     this.multFunc = multFunc;
   }
 

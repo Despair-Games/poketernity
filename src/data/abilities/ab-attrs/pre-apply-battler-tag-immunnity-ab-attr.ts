@@ -14,7 +14,7 @@ export class PreApplyBattlerTagImmunityAbAttr extends PreApplyBattlerTagAbAttr {
   private battlerTag: BattlerTag;
 
   constructor(...immuneTagTypes: BattlerTagType[]) {
-    super();
+    super(true);
 
     this.immuneTagTypes = immuneTagTypes;
   }

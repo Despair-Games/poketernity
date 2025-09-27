@@ -10,8 +10,8 @@ import type { ValueHolder } from "#utils/common-utils";
  * - Shell Armor (Identical to Battle Armor in functionality, just has a different name)
  */
 export class BlockCritAbAttr extends AbAttr {
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super();
     this._flags.add(AbAttrFlag.BLOCK_CRIT);
   }
 
@@ -19,8 +19,7 @@ export class BlockCritAbAttr extends AbAttr {
     isCritical.value = false;
   }
 
-  public override canApply(...params: Parameters<this["apply"]>): boolean {
-    const [, , isCritical] = params;
+  public override canApply(...[, , isCritical]: Parameters<this["apply"]>): boolean {
     return isCritical.value;
   }
 }

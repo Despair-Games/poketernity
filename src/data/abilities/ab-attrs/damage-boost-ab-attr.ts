@@ -20,7 +20,7 @@ export class DamageBoostAbAttr extends PreAttackAbAttr {
   private readonly condition: PokemonAttackCondition;
 
   constructor(damageMultiplier: number, condition: PokemonAttackCondition) {
-    super(true);
+    super();
     this._flags.add(AbAttrFlag.DAMAGE_BOOST);
     this.damageMultiplier = damageMultiplier;
     this.condition = condition;

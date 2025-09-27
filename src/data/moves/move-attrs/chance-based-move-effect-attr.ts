@@ -36,7 +36,7 @@ export abstract class ChanceBasedMoveEffectAttr extends MoveEffectAttr {
 
   public override canApply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (super.canApply(user, target, move)) {
-      const effectChance = this.getMoveChance(user, target, move, true);
+      const effectChance = this.getMoveChance(user, target, move);
       return effectChance < 0 || user.randSeedInt(100) < effectChance;
     }
     return false;
@@ -54,7 +54,7 @@ export abstract class ChanceBasedMoveEffectAttr extends MoveEffectAttr {
    * @returns The final percent chance of this attribute's effect applying. If negative, the
    * effect is guaranteed to apply.
    */
-  public getMoveChance(user: Pokemon, target: Pokemon, move: Move, showAbility: boolean = false): number {
+  public getMoveChance(user: Pokemon, target: Pokemon, move: Move): number {
     const moveChance = new NumberHolder(this.effectChanceOverride ?? move.chance);
 
     applyAbAttrs<MoveEffectChanceMultiplierAbAttr>(
@@ -63,7 +63,6 @@ export abstract class ChanceBasedMoveEffectAttr extends MoveEffectAttr {
       false,
       moveChance,
       move,
-      showAbility,
     );
 
     const userSide = user.getArenaTagSide();

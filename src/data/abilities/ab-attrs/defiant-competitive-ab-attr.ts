@@ -20,7 +20,7 @@ export class DefiantCompetitiveAbAttr extends PostStatStageChangeAbAttr {
   private readonly stages: number;
 
   constructor(statsToChange: BattleStat[], stages: number) {
-    super(true);
+    super();
 
     this.statsToChange = statsToChange;
     this.stages = stages;

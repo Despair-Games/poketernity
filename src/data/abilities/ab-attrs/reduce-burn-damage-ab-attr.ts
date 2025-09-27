@@ -11,7 +11,7 @@ export class ReduceBurnDamageAbAttr extends AbAttr {
   protected multiplier: number;
 
   constructor(multiplier: number) {
-    super(false);
+    super();
     this._flags.add(AbAttrFlag.REDUCE_BURN_DAMAGE);
 
     this.multiplier = multiplier;

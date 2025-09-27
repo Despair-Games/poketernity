@@ -4,8 +4,8 @@ import type { Pokemon } from "#field/pokemon";
 import { isBetween, type ValueHolder } from "#utils/common-utils";
 
 export class ReduceBerryUseThresholdAbAttr extends AbAttr {
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super();
     this._flags.add(AbAttrFlag.REDUCE_BERRY_USE_THRESHOLD);
   }
 

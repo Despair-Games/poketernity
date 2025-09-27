@@ -10,8 +10,8 @@ import type { ValueHolder } from "#utils/common-utils";
  * Used by Wonder Skin.
  */
 export class WonderSkinAbAttr extends PreDefendAbAttr {
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super();
     this._flags.add(AbAttrFlag.WONDER_SKIN);
   }
 

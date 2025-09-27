@@ -130,7 +130,7 @@ export class SecretPowerAttr extends ChanceBasedMoveEffectAttr {
   }
 
   /** Secret Power ignores the move chance bonus from the Water + Fire Pledge combo effect */
-  override getMoveChance(user: Pokemon, target: Pokemon, move: Move, showAbility: boolean = false): number {
+  override getMoveChance(user: Pokemon, target: Pokemon, move: Move): number {
     const moveChance = new NumberHolder(this.effectChanceOverride ?? move.chance);
 
     applyAbAttrs<MoveEffectChanceMultiplierAbAttr>(
@@ -139,7 +139,6 @@ export class SecretPowerAttr extends ChanceBasedMoveEffectAttr {
       false,
       moveChance,
       move,
-      showAbility,
     );
 
     applyAbAttrs<IgnoreMoveEffectsAbAttr>(AbAttrFlag.IGNORE_MOVE_EFFECTS, target, false, user, move, moveChance);

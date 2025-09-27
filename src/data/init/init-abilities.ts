@@ -480,14 +480,12 @@ export function initAbilities() {
         (user, target, _move) =>
           user?.gender !== Gender.GENDERLESS && target?.gender !== Gender.GENDERLESS && user?.gender === target?.gender,
         1.25,
-        true,
       )
       .attr(
         MovePowerBoostAbAttr,
         (user, target, _move) =>
           user?.gender !== Gender.GENDERLESS && target?.gender !== Gender.GENDERLESS && user?.gender !== target?.gender,
         0.75,
-        true,
       ),
     new Ability(AbilityId.STEADFAST, 4) //
       .attr(FlinchStatStageChangeAbAttr, [Stat.SPD], 1),
@@ -616,7 +614,7 @@ export function initAbilities() {
       )
       .ignorable(),
     new Ability(AbilityId.SLOW_START, 4) //
-      .attr(PostSummonAddBattlerTagAbAttr, BattlerTagType.SLOW_START, 5),
+      .attr(PostSummonAddBattlerTagAbAttr, BattlerTagType.SLOW_START, 5, false),
     new Ability(AbilityId.SCRAPPY, 4) //
       .attr(IgnoreTypeImmunityAbAttr, ElementalType.GHOST, [ElementalType.NORMAL, ElementalType.FIGHTING])
       .attr(IntimidateImmunityAbAttr),
@@ -1328,6 +1326,7 @@ export function initAbilities() {
         PostSummonAddBattlerTagAbAttr,
         BattlerTagType.ICE_FACE,
         0,
+        false,
       )
       // When weather changes to HAIL or SNOW while pokemon is fielded, add BattlerTagType.ICE_FACE
       .attr(PostWeatherChangeAddBattlerTagAbAttr, BattlerTagType.ICE_FACE, 0, WeatherType.HAIL, WeatherType.SNOW)
@@ -1518,7 +1517,6 @@ export function initAbilities() {
         PostSummonAddBattlerTagAbAttr,
         BattlerTagType.PROTOSYNTHESIS,
         0,
-        true,
       )
       .attr(
         PostWeatherChangeAddBattlerTagAbAttr,
@@ -1535,7 +1533,6 @@ export function initAbilities() {
         PostSummonAddBattlerTagAbAttr,
         BattlerTagType.QUARK_DRIVE,
         0,
-        true,
       )
       .attr(PostTerrainChangeAddBattlerTagAbAttr, BattlerTagType.QUARK_DRIVE, 0, TerrainType.ELECTRIC)
       .uncopiable()

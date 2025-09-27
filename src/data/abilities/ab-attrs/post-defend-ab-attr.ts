@@ -4,8 +4,8 @@ import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 
 export abstract class PostDefendAbAttr extends AbAttr {
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super(true);
     this._flags.add(AbAttrFlag.POST_DEFEND);
   }
 

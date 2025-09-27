@@ -5,7 +5,7 @@ import type { ValueHolder } from "#utils/common-utils";
 
 export class BypassBurnDamageReductionAbAttr extends AbAttr {
   constructor() {
-    super(false);
+    super();
     this._flags.add(AbAttrFlag.BYPASS_BURN_DAMAGE_REDUCTION);
   }
 

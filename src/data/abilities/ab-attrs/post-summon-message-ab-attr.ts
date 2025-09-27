@@ -6,7 +6,7 @@ export class PostSummonMessageAbAttr extends PostSummonAbAttr {
   private readonly messageFunc: (pokemon: Pokemon) => string;
 
   constructor(messageFunc: (pokemon: Pokemon) => string) {
-    super(true);
+    super();
 
     this.messageFunc = messageFunc;
   }

@@ -15,7 +15,7 @@ export class PreventBypassSpeedChanceAbAttr extends AbAttr {
   private readonly condition: (pokemon: Pokemon, move: Move) => boolean;
 
   constructor(condition: (pokemon: Pokemon, move: Move) => boolean) {
-    super(true);
+    super();
     this._flags.add(AbAttrFlag.PREVENT_BYPASS_SPEED_CHANCE);
     this.condition = condition;
   }

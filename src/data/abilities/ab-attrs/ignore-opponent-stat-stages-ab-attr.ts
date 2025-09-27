@@ -12,7 +12,7 @@ export class IgnoreOpponentStatStagesAbAttr extends AbAttr {
   private readonly stats: readonly BattleStat[];
 
   constructor(stats?: BattleStat[]) {
-    super(false);
+    super();
     this._flags.add(AbAttrFlag.IGNORE_OPPONENT_STAT_STAGES);
 
     this.stats = stats ?? BATTLE_STATS;

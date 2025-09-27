@@ -19,8 +19,8 @@ import type { ValueHolder } from "#utils/common-utils";
  * @see {@link https://github.com/Despair-Games/poketernity/blob/61cb4baeae5be3c65969f6a428b0fb0757414267/docs/stab.md | stab.md#stab-table}
  */
 export class StabBoostAbAttr extends AbAttr {
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super();
     this._flags.add(AbAttrFlag.STAB_BOOST);
   }
 

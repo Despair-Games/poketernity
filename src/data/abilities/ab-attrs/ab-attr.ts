@@ -18,21 +18,14 @@ export abstract class AbAttr {
    */
   public showAbility: boolean;
   /**
-   * If `true`, and {@linkcode showAbility} is also `true`, the Ability flyout
-   * will be shown immediately after the attribute applies instead of
-   * as a {@linkcode ShowAbilityPhase}
-   */
-  public showAbilityInstant: boolean;
-  /**
    * A condition for the attribute to apply.
    * Can be set by {@linkcode Ability.conditionalAttr}
    */
   private extraCondition: AbAttrCondition;
 
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
+  constructor(showAbility: boolean = false) {
     this._flags.add(AbAttrFlag.UNSPECIFIED);
     this.showAbility = showAbility;
-    this.showAbilityInstant = showAbilityInstant;
   }
 
   /**

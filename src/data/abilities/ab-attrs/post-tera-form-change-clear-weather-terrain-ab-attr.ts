@@ -11,7 +11,7 @@ import type { Pokemon } from "#field/pokemon";
  */
 export class PostTeraFormChangeClearWeatherTerrainAbAttr extends AbAttr {
   constructor() {
-    super(true, true);
+    super(true);
 
     this._flags.add(AbAttrFlag.POST_TERA_FORM_CHANGE_CLEAR_WEATHER_TERRAIN);
   }

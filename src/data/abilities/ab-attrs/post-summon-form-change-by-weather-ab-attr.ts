@@ -10,10 +10,6 @@ import type { Pokemon } from "#field/pokemon";
  * Used by Forecast and Flower Gift.
  */
 export class PostSummonFormChangeByWeatherAbAttr extends PostSummonAbAttr {
-  constructor() {
-    super(true, true);
-  }
-
   public override apply(pokemon: Pokemon, simulated: boolean): void {
     if (!simulated) {
       globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeWeatherTrigger);

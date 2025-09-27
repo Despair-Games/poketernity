@@ -33,7 +33,7 @@ export class PostDefendStatStageChangeAbAttr extends PostDefendAbAttr {
     selfTarget: boolean = true,
     allOthers: boolean = false,
   ) {
-    super(true);
+    super();
 
     this.condition = condition;
     this.stat = stat;

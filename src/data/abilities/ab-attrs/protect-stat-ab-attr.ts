@@ -14,7 +14,7 @@ export class ProtectStatAbAttr extends PreStatStageChangeAbAttr {
   private readonly protectedStat?: BattleStat;
 
   constructor(protectedStat?: BattleStat) {
-    super();
+    super(true);
     this._flags.add(AbAttrFlag.PROTECT_STAT);
 
     this.protectedStat = protectedStat;

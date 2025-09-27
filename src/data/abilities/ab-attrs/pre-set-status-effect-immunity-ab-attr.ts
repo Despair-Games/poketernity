@@ -14,7 +14,7 @@ export class PreSetStatusEffectImmunityAbAttr extends PreSetStatusAbAttr {
   private readonly immuneEffects: StatusEffect[];
 
   constructor(...immuneEffects: StatusEffect[]) {
-    super();
+    super(true);
 
     this.immuneEffects = immuneEffects;
   }

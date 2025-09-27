@@ -14,8 +14,8 @@ export class RecoveryBoostAbAttr extends AbAttr {
   private readonly condition: PokemonAttackCondition;
   private readonly recoveryMultiplier: number;
 
-  constructor(condition: PokemonAttackCondition, recoveryMultiplier: number, showAbility: boolean = true) {
-    super(showAbility);
+  constructor(condition: PokemonAttackCondition, recoveryMultiplier: number) {
+    super();
     this._flags.add(AbAttrFlag.RECOVERY_BOOST);
     this.condition = condition;
     this.recoveryMultiplier = recoveryMultiplier;

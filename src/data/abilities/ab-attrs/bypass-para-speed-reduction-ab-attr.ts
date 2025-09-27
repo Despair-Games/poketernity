@@ -9,7 +9,7 @@ import type { ValueHolder } from "#utils/common-utils";
  */
 export class BypassParaSpeedReductionAbAttr extends AbAttr {
   constructor() {
-    super(false);
+    super();
     this._flags.add(AbAttrFlag.BYPASS_PARA_SPEED_REDUCTION);
   }
 

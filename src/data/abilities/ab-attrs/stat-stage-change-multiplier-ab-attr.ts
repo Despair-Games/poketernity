@@ -7,7 +7,7 @@ export class StatStageChangeMultiplierAbAttr extends AbAttr {
   private readonly multiplier: number;
 
   constructor(multiplier: number) {
-    super(true);
+    super(false);
     this._flags.add(AbAttrFlag.STAT_STAGE_CHANGE_MULTIPLIER);
 
     this.multiplier = multiplier;

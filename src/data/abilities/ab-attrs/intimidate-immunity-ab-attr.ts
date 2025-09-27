@@ -9,7 +9,7 @@ export class IntimidateImmunityAbAttr extends AbAttr {
   protected readonly hasTriggerMessage: boolean;
 
   constructor(hasTriggerMessage: boolean = true) {
-    super(false);
+    super(hasTriggerMessage);
     this.hasTriggerMessage = hasTriggerMessage;
 
     this._flags.add(AbAttrFlag.INTIMIDATE_IMMUNITY);

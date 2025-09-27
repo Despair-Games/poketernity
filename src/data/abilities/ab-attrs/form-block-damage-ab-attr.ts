@@ -25,7 +25,7 @@ export class FormBlockDamageAbAttr extends ReceivedMoveDamageMultiplierAbAttr {
     triggerMessageFunc: (pokemon: Pokemon, abilityName: string) => string,
     recoilDamageFunc?: (pokemon: Pokemon) => number,
   ) {
-    super(condition, multiplier);
+    super(condition, multiplier, true);
 
     this.multiplier = multiplier;
     this.tagType = tagType;

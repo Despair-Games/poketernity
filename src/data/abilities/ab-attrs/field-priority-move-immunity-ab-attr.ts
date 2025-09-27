@@ -5,8 +5,8 @@ import type { Move } from "#moves/move";
 import type { ValueHolder } from "#utils/common-utils";
 
 export class FieldPriorityMoveImmunityAbAttr extends PreDefendAbAttr {
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super(true);
     this._flags.add(AbAttrFlag.FIELD_PRIORITY_MOVE_IMMUNITY);
   }
 

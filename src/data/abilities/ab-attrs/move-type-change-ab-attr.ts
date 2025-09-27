@@ -12,7 +12,7 @@ export class MoveTypeChangeAbAttr extends PreAttackAbAttr {
   private readonly condition: PokemonAttackCondition;
 
   constructor(newType: ElementalType, powerMultiplier: number, condition: PokemonAttackCondition = () => true) {
-    super(true);
+    super();
     this._flags.add(AbAttrFlag.MOVE_TYPE_CHANGE);
 
     this.newType = newType;

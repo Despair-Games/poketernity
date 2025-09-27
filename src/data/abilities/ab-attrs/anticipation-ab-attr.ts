@@ -22,8 +22,7 @@ export class AnticipationAbAttr extends PostSummonMessageAbAttr {
    * Effectiveness is determined based on the move's final type (*unless the move is Hidden Power*)
    * and does not account for field conditions such as Strong Winds and Gravity.
    */
-  public override canApply(...params: Parameters<this["apply"]>): boolean {
-    const [pokemon, simulated] = params;
+  public override canApply(...[pokemon, simulated]: Parameters<this["apply"]>): boolean {
     return this.getOpposingMoves(pokemon).some(([opp, move]) => {
       if (!move.isAttackMove()) {
         return false;

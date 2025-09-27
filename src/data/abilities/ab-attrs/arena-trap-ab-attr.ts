@@ -43,8 +43,7 @@ export class ArenaTrapAbAttr extends AbAttr {
   }
 
   /** @returns `true` if the target Pokemon can be trapped by this effect. */
-  public override canApply(...params: Parameters<this["apply"]>): boolean {
-    const [pokemon, , , trappedPokemon] = params;
+  public override canApply(...[pokemon, , , trappedPokemon]: Parameters<this["apply"]>): boolean {
     return (
       this.arenaTrapCondition(pokemon, trappedPokemon)
       && !trappedPokemon.isOfType(ElementalType.GHOST, true, true)

@@ -14,7 +14,7 @@ export class IgnoreTypeStatusEffectImmunityAbAttr extends AbAttr {
   private readonly defenderType: ElementalType[];
 
   constructor(statusEffect: StatusEffect[], defenderType: ElementalType[]) {
-    super(true);
+    super();
     this._flags.add(AbAttrFlag.IGNORE_TYPE_STATUS_EFFECT_IMMUNITY);
 
     this.statusEffect = statusEffect;

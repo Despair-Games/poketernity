@@ -13,8 +13,8 @@ import i18next from "i18next";
  * drain move. This is really jank and doesn't account for Heal Block, etc.
  */
 export class ReverseDrainAbAttr extends PostDefendAbAttr {
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super();
     this._flags.add(AbAttrFlag.REVERSE_DRAIN);
   }
 

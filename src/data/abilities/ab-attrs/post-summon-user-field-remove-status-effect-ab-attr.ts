@@ -11,11 +11,8 @@ import { getStatusEffectHealText } from "#utils/status-effect-utils";
 export class PostSummonUserFieldRemoveStatusEffectAbAttr extends PostSummonAbAttr {
   private readonly statusEffects: StatusEffect[];
 
-  /**
-   * @param statusEffect - The status effects to be removed from the user's field.
-   */
   constructor(...statusEffect: StatusEffect[]) {
-    super(false);
+    super();
 
     this.statusEffects = statusEffect;
   }

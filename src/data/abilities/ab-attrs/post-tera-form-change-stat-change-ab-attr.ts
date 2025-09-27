@@ -12,7 +12,7 @@ export class PostTeraFormChangeStatChangeAbAttr extends AbAttr {
   private readonly stages: number;
 
   constructor(stats: BattleStat[], stages: number) {
-    super(true, true);
+    super(true);
 
     this.stats = stats;
     this.stages = stages;

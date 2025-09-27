@@ -9,7 +9,7 @@ export abstract class PostWeatherLapseAbAttr extends AbAttr {
   protected readonly weatherTypes: WeatherType[];
 
   constructor(...weatherTypes: WeatherType[]) {
-    super();
+    super(true);
     this._flags.add(AbAttrFlag.POST_WEATHER_LAPSE);
 
     this.weatherTypes = weatherTypes;

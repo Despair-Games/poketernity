@@ -22,8 +22,7 @@ export class BlockStatusDamageAbAttr extends AbAttr {
     cancelled.value = true;
   }
 
-  public override canApply(...params: Parameters<this["apply"]>): boolean {
-    const [pokemon] = params;
+  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
     return pokemon.hasStatusEffect(this.statusEffects);
   }
 }

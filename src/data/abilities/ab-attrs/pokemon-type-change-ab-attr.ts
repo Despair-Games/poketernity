@@ -14,8 +14,8 @@ import i18next from "i18next";
 export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
   private moveType: ElementalType;
 
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super(true);
     this._flags.add(AbAttrFlag.POKEMON_TYPE_CHANGE);
   }
 

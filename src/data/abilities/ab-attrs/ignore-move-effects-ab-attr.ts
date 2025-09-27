@@ -9,14 +9,11 @@ import type { ValueHolder } from "#utils/common-utils";
  * @see {@linkcode applyPreDefend}
  */
 export class IgnoreMoveEffectsAbAttr extends PreDefendAbAttr {
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super();
     this._flags.add(AbAttrFlag.IGNORE_MOVE_EFFECTS);
   }
 
-  /**
-   * @param effectChance {@linkcode NumberHolder} Move additional effect chance.
-   */
   public override apply(
     _pokemon: Pokemon,
     _simulated: boolean,

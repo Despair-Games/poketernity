@@ -18,7 +18,7 @@ export class MoveEffectChanceMultiplierAbAttr extends AbAttr {
   private static exceptMoves = [MoveId.ORDER_UP, MoveId.ELECTRO_SHOT];
 
   constructor(chanceMultiplier: number) {
-    super(false);
+    super();
     this._flags.add(AbAttrFlag.MOVE_EFFECT_CHANCE_MULTIPLIER);
     this.chanceMultiplier = chanceMultiplier;
   }

@@ -7,7 +7,7 @@ export class PostSummonFormChangeAbAttr extends PostSummonAbAttr {
   private readonly formFunc: (p: Pokemon) => number;
 
   constructor(formFunc: (p: Pokemon) => number) {
-    super(true);
+    super();
 
     this.formFunc = formFunc;
   }

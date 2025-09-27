@@ -7,7 +7,7 @@ export class MultCritAbAttr extends AbAttr {
   public readonly multAmount: number;
 
   constructor(multAmount: number) {
-    super(true);
+    super();
     this._flags.add(AbAttrFlag.MULT_CRIT);
 
     this.multAmount = multAmount;

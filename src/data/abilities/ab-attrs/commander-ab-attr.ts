@@ -16,8 +16,8 @@ import type { Pokemon } from "#field/pokemon";
  * causing attacks that target the source to always miss.
  */
 export class CommanderAbAttr extends AbAttr {
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super(true);
     this._flags.add(AbAttrFlag.COMMANDER);
   }
 
@@ -25,7 +25,7 @@ export class CommanderAbAttr extends AbAttr {
     if (!simulated) {
       // Lapse the source's semi-invulnerable tags (to avoid visual inconsistencies)
       pokemon.lapseTags(BattlerTagLapseType.MOVE_EFFECT);
-      // Remove Sky Drop's effect from the source and whoever else is affected.
+      // Remove Sky Drop's effect from the source and whoever else is affected
       pokemon.getTag<SkyDropTag>(BattlerTagType.SKY_DROP)?.clearSkyDropEffects();
       // Play an animation of the source jumping into the ally Dondozo's mouth
       globalScene.triggerPokemonBattleAnim(pokemon, PokemonAnimType.COMMANDER_APPLY);

@@ -16,8 +16,8 @@ import i18next from "i18next";
  * @todo This should extend `PostTurnAbAttr` but currently does not as a workaround until proper ability timing is implemented.
  */
 export class BadDreamsAbAttr extends AbAttr {
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super(true);
     this._flags.add(AbAttrFlag.BAD_DREAMS);
   }
 
@@ -41,9 +41,7 @@ export class BadDreamsAbAttr extends AbAttr {
     }
   }
 
-  public override canApply(...params: Parameters<this["apply"]>): boolean {
-    const [pokemon, simulated] = params;
-
+  public override canApply(...[pokemon, simulated]: Parameters<this["apply"]>): boolean {
     return pokemon.getOpponents().some((opp) => {
       const isAsleep = opp.hasStatusEffect(StatusEffect.SLEEP);
       const willFallAsleep =

@@ -15,8 +15,8 @@ export class FieldPreventExplosionLikeAbAttr extends AbAttr {
   private moveUser: string;
   private moveName: string;
 
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super(true);
     this._flags.add(AbAttrFlag.FIELD_PREVENT_EXPLOSION_LIKE);
   }
 

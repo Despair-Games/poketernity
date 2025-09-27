@@ -11,8 +11,8 @@ export class BonusCritAbAttr extends AbAttr {
   /** Additional critical hit stages provided by the ability. */
   private readonly stages: number;
 
-  constructor(stages: number, showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor(stages: number) {
+    super();
     this._flags.add(AbAttrFlag.BONUS_CRIT);
     this.stages = stages;
   }

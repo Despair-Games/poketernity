@@ -10,7 +10,7 @@ import type { Pokemon } from "#field/pokemon";
 export class PostItemLostApplyBattlerTagAbAttr extends PostItemLostAbAttr {
   private readonly tagType: BattlerTagType;
   constructor(tagType: BattlerTagType) {
-    super(true);
+    super();
     this.tagType = tagType;
   }
 

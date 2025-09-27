@@ -12,7 +12,7 @@ export class PostTurnResetStatusAbAttr extends PostTurnAbAttr {
   private readonly allyTarget: boolean;
 
   constructor(allyTarget: boolean = false) {
-    super(true);
+    super();
     this.allyTarget = allyTarget;
   }
 

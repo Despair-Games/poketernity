@@ -9,7 +9,7 @@ import type { ValueHolder } from "#utils/common-utils";
  */
 export class DoubleBattleChanceAbAttr extends AbAttr {
   constructor() {
-    super(false);
+    super();
     this._flags.add(AbAttrFlag.DOUBLE_BATTLE_CHANCE);
   }
 

@@ -14,7 +14,7 @@ export class PostTurnStatusHealAbAttr extends PostTurnAbAttr {
   private readonly statusEffects: StatusEffect[];
 
   constructor(...effects: StatusEffect[]) {
-    super(false);
+    super();
 
     this.statusEffects = effects;
   }

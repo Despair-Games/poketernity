@@ -18,7 +18,7 @@ import i18next from "i18next";
  */
 export class ReflectMovesAbAttr extends PreDefendAbAttr {
   constructor() {
-    super();
+    super(true);
     this._flags.add(AbAttrFlag.REFLECT_MOVES);
   }
 

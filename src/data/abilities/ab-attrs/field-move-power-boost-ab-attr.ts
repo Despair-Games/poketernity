@@ -16,7 +16,7 @@ export abstract class FieldMovePowerBoostAbAttr extends PreAttackAbAttr {
    * @param powerMultiplier - The multiplier to apply to the move's power when the condition is met.
    */
   constructor(condition: PokemonAttackCondition, powerMultiplier: number) {
-    super(false);
+    super();
     this.condition = condition;
     this.powerMultiplier = powerMultiplier;
   }

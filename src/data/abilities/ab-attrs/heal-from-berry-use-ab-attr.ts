@@ -16,7 +16,7 @@ export class HealFromBerryUseAbAttr extends AbAttr {
   private readonly healRatio: number;
 
   constructor(healRatio: number) {
-    super();
+    super(true);
     this._flags.add(AbAttrFlag.HEAL_FROM_BERRY_USE);
 
     this.healRatio = clamp(healRatio, 0, 1);

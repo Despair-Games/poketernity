@@ -13,7 +13,7 @@ export class ReduceSleepDurationAbAttr extends AbAttr {
   private readonly statusEffect: StatusEffect = StatusEffect.SLEEP;
 
   constructor() {
-    super(false);
+    super();
     this._flags.add(AbAttrFlag.REDUCE_SLEEP_DURATION);
   }
 

@@ -6,8 +6,8 @@ import type { ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 export class BlockItemTheftAbAttr extends AbAttr {
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super(true);
     this._flags.add(AbAttrFlag.BLOCK_ITEM_THEFT);
   }
 

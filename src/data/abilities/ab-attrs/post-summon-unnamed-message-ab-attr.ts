@@ -10,7 +10,7 @@ export class PostSummonUnnamedMessageAbAttr extends PostSummonAbAttr {
   private readonly message: string;
 
   constructor(message: string) {
-    super(true);
+    super();
 
     this.message = message;
   }

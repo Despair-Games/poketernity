@@ -5,8 +5,8 @@ import type { Pokemon } from "#field/pokemon";
 import type { ValueHolder } from "#utils/common-utils";
 
 export abstract class PreWeatherDamageAbAttr extends PreWeatherEffectAbAttr {
-  constructor(showAbility: boolean = false) {
-    super(showAbility, true);
+  constructor() {
+    super();
     this._flags.add(AbAttrFlag.PRE_WEATHER_DAMAGE);
   }
 

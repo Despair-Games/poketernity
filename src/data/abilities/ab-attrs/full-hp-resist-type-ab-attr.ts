@@ -12,8 +12,8 @@ import i18next from "i18next";
  * When the source is at full HP, incoming attacks will have a maximum 0.5x type effectiveness multiplier.
  */
 export class FullHpResistTypeAbAttr extends PreDefendAbAttr {
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super(true);
     this._flags.add(AbAttrFlag.FULL_HP_RESIST_TYPE);
   }
 

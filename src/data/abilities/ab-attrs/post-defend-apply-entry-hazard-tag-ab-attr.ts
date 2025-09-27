@@ -11,7 +11,7 @@ export class PostDefendApplyEntryHazardTagAbAttr extends PostDefendAbAttr {
   private readonly tagType: ArenaTagType;
 
   constructor(condition: PokemonDefendCondition, tagType: ArenaTagType) {
-    super(true);
+    super();
 
     this.condition = condition;
     this.tagType = tagType;

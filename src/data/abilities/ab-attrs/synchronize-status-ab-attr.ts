@@ -18,8 +18,8 @@ export class SynchronizeStatusAbAttr extends AbAttr {
     StatusEffect.TOXIC,
   ]);
 
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super(true);
     this._flags.add(AbAttrFlag.SYNCHRONIZE_STATUS);
   }
 

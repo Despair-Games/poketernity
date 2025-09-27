@@ -4,8 +4,8 @@ import type { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
 
 export abstract class PostWeatherChangeAbAttr extends AbAttr {
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super(true);
     this._flags.add(AbAttrFlag.POST_WEATHER_CHANGE);
   }
 

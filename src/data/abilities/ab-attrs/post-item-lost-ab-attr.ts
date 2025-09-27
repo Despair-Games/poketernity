@@ -6,8 +6,8 @@ import type { Pokemon } from "#field/pokemon";
  * Triggers after the Pokemon loses or consumes an item
  */
 export abstract class PostItemLostAbAttr extends AbAttr {
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super();
     this._flags.add(AbAttrFlag.POST_ITEM_LOST);
   }
 

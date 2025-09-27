@@ -6,7 +6,7 @@ export class PostSummonAddBattlerTagAbAttr extends PostSummonAbAttr {
   private readonly tagType: BattlerTagType;
   private readonly turnCount: number;
 
-  constructor(tagType: BattlerTagType, turnCount: number, showAbility?: boolean) {
+  constructor(tagType: BattlerTagType, turnCount: number, showAbility: boolean = true) {
     super(showAbility);
 
     this.tagType = tagType;

@@ -14,8 +14,8 @@ export class ReceivedMoveDamageMultiplierAbAttr extends PreDefendAbAttr {
   protected readonly condition: PokemonDefendCondition;
   private readonly damageMultiplier: number;
 
-  constructor(condition: PokemonDefendCondition, damageMultiplier: number) {
-    super();
+  constructor(condition: PokemonDefendCondition, damageMultiplier: number, showAbility: boolean = false) {
+    super(showAbility);
     this._flags.add(AbAttrFlag.RECEIVED_MOVE_DAMAGE_MULTIPLIER);
 
     this.condition = condition;

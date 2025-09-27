@@ -13,7 +13,7 @@ export class AddSecondStrikeAbAttr extends PreAttackAbAttr {
   private readonly damageMultiplier: number;
 
   constructor(damageMultiplier: number) {
-    super(false);
+    super();
     this._flags.add(AbAttrFlag.ADD_SECOND_STRIKE);
 
     this.damageMultiplier = damageMultiplier;

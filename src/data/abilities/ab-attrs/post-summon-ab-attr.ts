@@ -7,8 +7,8 @@ import type { Pokemon } from "#field/pokemon";
  * @todo Most post-summon abilities should activate when the pokemon gains the ability (such as from Skill Swap)
  */
 export abstract class PostSummonAbAttr extends AbAttr {
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor(showAbility: boolean = true) {
+    super(showAbility);
     this._flags.add(AbAttrFlag.POST_SUMMON);
   }
 

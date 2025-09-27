@@ -16,8 +16,8 @@ import type { Move } from "#moves/move";
 export class EffectSporeAbAttr extends PostDefendAbAttr {
   public readonly chance = 30;
 
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super();
     this._flags.add(AbAttrFlag.EFFECT_SPORE);
   }
 

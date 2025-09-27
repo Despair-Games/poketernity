@@ -13,7 +13,7 @@ export class PostWeatherChangeFormChangeAbAttr extends PostWeatherChangeAbAttr {
   private readonly formRevertingWeathers: WeatherType[];
 
   constructor(formRevertingWeathers: WeatherType[]) {
-    super(false);
+    super();
 
     this.formRevertingWeathers = formRevertingWeathers;
   }

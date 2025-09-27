@@ -6,7 +6,7 @@ export class RedirectTypeMoveAbAttr extends RedirectMoveAbAttr {
   public readonly type: ElementalType;
 
   constructor(type: ElementalType) {
-    super(false);
+    super();
     this.type = type;
   }
 

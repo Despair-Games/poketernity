@@ -11,7 +11,7 @@ import type { ValueHolder } from "#utils/common-utils";
 export class MockStatusEffectAbAttr extends AbAttr {
   public mockedStatus: StatusEffect;
   constructor(mockedStatus: StatusEffect) {
-    super(false);
+    super();
 
     this._flags.add(AbAttrFlag.MOCK_STATUS_EFFECT);
     this.mockedStatus = mockedStatus;

@@ -11,11 +11,9 @@ import i18next from "i18next";
  * If the Ability activates, this is announced at the start of the turn (after move selection).
  */
 export class BypassSpeedChanceAbAttr extends AbAttr {
+  /** The percent chance for this effect to apply */
   public readonly chance: number;
 
-  /**
-   * @param chance probability of ability being active.
-   */
   constructor(chance: number) {
     super(true);
     this._flags.add(AbAttrFlag.BYPASS_SPEED_CHANCE);

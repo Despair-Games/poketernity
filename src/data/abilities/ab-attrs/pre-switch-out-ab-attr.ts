@@ -3,8 +3,8 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 
 export abstract class PreSwitchOutAbAttr extends AbAttr {
-  constructor(showAbility: boolean = true) {
-    super(showAbility, true);
+  constructor() {
+    super();
     this._flags.add(AbAttrFlag.PRE_SWITCH_OUT);
   }
 

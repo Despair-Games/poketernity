@@ -8,8 +8,8 @@ import type { PokemonMove } from "#field/pokemon-move";
  * Triggers just after a move is used either by the opponent or the player
  */
 export abstract class PostMoveUsedAbAttr extends AbAttr {
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super(true);
     this._flags.add(AbAttrFlag.POST_MOVE_USED);
   }
 

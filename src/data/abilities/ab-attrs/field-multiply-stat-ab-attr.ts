@@ -15,7 +15,7 @@ export class FieldMultiplyStatAbAttr extends AbAttr {
   private readonly canStack: boolean;
 
   constructor(stat: Stat, multiplier: number, canStack: boolean = false) {
-    super(false);
+    super();
     this._flags.add(AbAttrFlag.FIELD_MULTIPLY_STAT);
 
     this.stat = stat;

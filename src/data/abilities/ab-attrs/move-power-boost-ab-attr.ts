@@ -8,8 +8,8 @@ export class MovePowerBoostAbAttr extends VariableMovePowerAbAttr {
   private readonly condition: PokemonAttackCondition;
   private readonly powerMultiplier: number;
 
-  constructor(condition: PokemonAttackCondition, powerMultiplier: number, showAbility: boolean = true) {
-    super(showAbility);
+  constructor(condition: PokemonAttackCondition, powerMultiplier: number) {
+    super();
     this.condition = condition;
     this.powerMultiplier = powerMultiplier;
   }

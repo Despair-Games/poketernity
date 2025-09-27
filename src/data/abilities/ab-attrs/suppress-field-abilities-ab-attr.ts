@@ -6,7 +6,7 @@ import type { ValueHolder } from "#utils/common-utils";
 
 export class SuppressFieldAbilitiesAbAttr extends AbAttr {
   constructor() {
-    super(false);
+    super();
     this._flags.add(AbAttrFlag.SUPPRESS_FIELD_ABILITIES);
   }
 

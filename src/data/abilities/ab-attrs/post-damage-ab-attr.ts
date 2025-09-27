@@ -6,8 +6,8 @@ import type { Pokemon } from "#field/pokemon";
  * Triggers after the Pokemon takes any damage
  */
 export abstract class PostDamageAbAttr extends AbAttr {
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super(true);
     this._flags.add(AbAttrFlag.POST_DAMAGE);
   }
 

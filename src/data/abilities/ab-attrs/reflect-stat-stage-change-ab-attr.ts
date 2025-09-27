@@ -11,8 +11,8 @@ import type { ValueHolder } from "#utils/common-utils";
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Mirror_Armor_(Ability) | Mirror Armor}.
  */
 export class ReflectStatStageChangeAbAttr extends AbAttr {
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super(true);
     this._flags.add(AbAttrFlag.REFLECT_STAT_STAGE_CHANGE);
   }
 

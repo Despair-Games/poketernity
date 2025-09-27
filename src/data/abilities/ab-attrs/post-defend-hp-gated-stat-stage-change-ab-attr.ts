@@ -19,7 +19,7 @@ export class PostDefendHpGatedStatStageChangeAbAttr extends PostDefendAbAttr {
     stages: number,
     selfTarget: boolean = true,
   ) {
-    super(true);
+    super();
 
     this.condition = condition;
     this.hpGate = hpGate;

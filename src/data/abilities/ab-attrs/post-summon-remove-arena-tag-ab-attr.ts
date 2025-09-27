@@ -11,7 +11,7 @@ export class PostSummonRemoveArenaTagAbAttr extends PostSummonAbAttr {
   private readonly arenaTags: ArenaTagType[];
 
   constructor(arenaTags: ArenaTagType[]) {
-    super(true);
+    super();
 
     this.arenaTags = arenaTags;
   }

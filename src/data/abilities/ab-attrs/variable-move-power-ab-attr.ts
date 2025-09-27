@@ -5,8 +5,8 @@ import type { Move } from "#moves/move";
 import type { ValueHolder } from "#utils/common-utils";
 
 export abstract class VariableMovePowerAbAttr extends PreAttackAbAttr {
-  constructor(showAbility: boolean = true) {
-    super(showAbility);
+  constructor() {
+    super(false);
     this._flags.add(AbAttrFlag.VARIABLE_MOVE_POWER);
   }
 

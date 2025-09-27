@@ -9,7 +9,7 @@ export class IgnoreTypeImmunityAbAttr extends AbAttr {
   private readonly allowedMoveTypes: ElementalType[];
 
   constructor(defenderType: ElementalType, allowedMoveTypes: ElementalType[]) {
-    super(true);
+    super();
     this._flags.add(AbAttrFlag.IGNORE_TYPE_IMMUNITY);
     this.defenderType = defenderType;
     this.allowedMoveTypes = allowedMoveTypes;
