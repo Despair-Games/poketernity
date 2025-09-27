@@ -1,7 +1,7 @@
 import { AbAttr } from "#abilities/ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
-import type { BooleanHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 
 /**
  * Attribute implementing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Infiltrator_(Ability) | Infiltrator}.
@@ -13,15 +13,7 @@ export class InfiltratorAbAttr extends AbAttr {
     this._flags.add(AbAttrFlag.INFILTRATOR);
   }
 
-  /**
-   * Sets a flag to bypass screens, Substitute, Safeguard, and Mist
-   * @param pokemon n/a
-   * @param simulated n/a
-   * @param bypassed a {@linkcode BooleanHolder} containing the flag
-   * @returns `true` if the bypass flag was successfully set; `false` otherwise.
-   */
-  public override apply(_pokemon: Pokemon, _simulated: boolean, bypassed: BooleanHolder): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, bypassed: ValueHolder<boolean>): void {
     bypassed.value = true;
-    return true;
   }
 }

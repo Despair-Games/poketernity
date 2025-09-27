@@ -23,36 +23,17 @@ export abstract class PostAttackAbAttr extends AbAttr {
    * @param defender The {@linkcode Pokemon} attacked by the source
    * @param move The {@linkcode Move} being used
    * @param args Additional arguments for subclasses
-   * @returns `true` if effects from this ability can apply successfully.
    */
-  public override apply(
-    pokemon: Pokemon,
-    simulated: boolean,
-    defender: Pokemon,
-    move: Move,
-    ...args: unknown[]
-  ): boolean {
-    if (!this.attackMovesOnly || pokemon.getMoveCategory(defender, move) !== MoveCategory.STATUS) {
-      return this.applyPostAttack(pokemon, simulated, defender, move, ...args);
-    }
-    return false;
-  }
-
-  /**
-   * Called by {@linkcode apply} after a move category check satisfies
-   * the attribute's {@linkcode attackOnly} condition to apply effects.
-   * @param pokemon The {@linkcode Pokemon} with this ability
-   * @param simulated If `true`, suppresses changes to game state
-   * @param defender The {@linkcode Pokemon} attacked by the source
-   * @param move The {@linkcode Move} being used
-   * @param args Additional arguments for subclasses
-   * @returns `true` if effects apply successfully
-   */
-  protected abstract applyPostAttack(
+  public abstract override apply(
     _pokemon: Pokemon,
     _simulated: boolean,
     _defender: Pokemon,
     _move: Move,
     ..._args: unknown[]
-  ): boolean;
+  ): void;
+
+  public override canApply(...params: Parameters<this["apply"]>): boolean {
+    const [pokemon, , defender, move] = params;
+    return this.attackMovesOnly || pokemon.getMoveCategory(defender, move) !== MoveCategory.STATUS;
+  }
 }

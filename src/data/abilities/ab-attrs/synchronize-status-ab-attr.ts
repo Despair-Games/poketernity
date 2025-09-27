@@ -10,6 +10,14 @@ import type { Pokemon } from "#field/pokemon";
  * Used for {@linkcode https://bulbapedia.bulbagarden.net/wiki/Synchronize_(Ability) | Synchronize}.
  */
 export class SynchronizeStatusAbAttr extends AbAttr {
+  /** All status effects that can be transferred by Synchronize */
+  private static syncStatuses = new Set<StatusEffect>([
+    StatusEffect.BURN,
+    StatusEffect.PARALYSIS,
+    StatusEffect.POISON,
+    StatusEffect.TOXIC,
+  ]);
+
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
     super(showAbility, showAbilityInstant);
     this._flags.add(AbAttrFlag.SYNCHRONIZE_STATUS);
@@ -18,29 +26,22 @@ export class SynchronizeStatusAbAttr extends AbAttr {
   /**
    * When afflicted with burn, paralysis, or poison, copies the status
    * effect onto the source of the status condition
-   * @param pokemon The {@linkcode Pokemon} with this ability
-   * @param simulated If `true`, suppresses changes to game state
-   * @param sourcePokemon The {@linkcode Pokemon} applying the status effect
-   * @param effect The {@linkcode StatusEffect} being applied
-   * @returns `true` if this effect attempts to copy the status effect
-   * onto the source.
+   * @param pokemon - The {@linkcode Pokemon} with this ability
+   * @param simulated - If `true`, suppresses changes to game state
+   * @param sourcePokemon - The {@linkcode Pokemon} applying the status effect
+   * @param effect - The {@linkcode StatusEffect} being applied
    */
-  public override apply(pokemon: Pokemon, simulated: boolean, sourcePokemon: Pokemon, effect: StatusEffect): boolean {
-    /** Synchronizable statuses */
-    const syncStatuses = new Set<StatusEffect>([
-      StatusEffect.BURN,
-      StatusEffect.PARALYSIS,
-      StatusEffect.POISON,
-      StatusEffect.TOXIC,
-    ]);
-
-    if (sourcePokemon && syncStatuses.has(effect)) {
-      if (!simulated) {
-        sourcePokemon.trySetStatus(effect, true, pokemon);
-      }
-      return true;
+  public override apply(pokemon: Pokemon, simulated: boolean, sourcePokemon: Pokemon, effect: StatusEffect): void {
+    if (!simulated) {
+      sourcePokemon.trySetStatus(effect, true, pokemon);
     }
+  }
 
-    return false;
+  public override canApply(...[pokemon, simulated, sourcePokemon, effect]: Parameters<this["apply"]>): boolean {
+    return (
+      sourcePokemon != null
+      && SynchronizeStatusAbAttr.syncStatuses.has(effect)
+      && sourcePokemon.canSetStatus(effect, simulated, undefined, pokemon)
+    );
   }
 }

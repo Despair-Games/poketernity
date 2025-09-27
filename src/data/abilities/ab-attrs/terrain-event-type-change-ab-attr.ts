@@ -13,26 +13,21 @@ import i18next from "i18next";
  * Used by Mimicry.
  */
 export class TerrainEventTypeChangeAbAttr extends PostSummonAbAttr {
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super();
     this._flags.add(AbAttrFlag.TERRAIN_EVENT_TYPE_CHANGE);
   }
 
-  public override apply(pokemon: Pokemon, _simulated: boolean, onSummon: boolean = true): boolean {
-    if (pokemon.isTerastallized) {
-      return false;
+  public override apply(pokemon: Pokemon, simulated: boolean, _onSummon: boolean = true): void {
+    if (simulated) {
+      return;
     }
 
     const currentTerrain = globalScene.arena.terrainType;
-
-    // If there is no terrain, only apply ability if the terrain changed to become empty (i.e., `onSummon` is false)
-    if (onSummon && currentTerrain === TerrainType.NONE) {
-      return false;
-    }
     if (currentTerrain === TerrainType.NONE) {
       pokemon.summonData.types = [];
       pokemon.updateInfo();
-      return true;
+      return;
     }
 
     const typeChange = this.determineTypeChange(currentTerrain);
@@ -43,7 +38,10 @@ export class TerrainEventTypeChangeAbAttr extends PostSummonAbAttr {
       pokemon.setTemporaryTypes(typeChange);
       pokemon.updateInfo();
     }
-    return true;
+  }
+
+  public override canApply(...[pokemon, , onSummon]: Parameters<this["apply"]>): boolean {
+    return !pokemon.isTerastallized && (!onSummon || !globalScene.arena.hasTerrain(TerrainType.NONE));
   }
 
   /**

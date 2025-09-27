@@ -248,7 +248,7 @@ export class MovePhase extends BattlePhase {
 
     if (
       (targets.length === 0 && !isFieldTargeted(this.targets))
-      || (moveQueue.length && moveQueue[0].move.id === MoveId.NONE)
+      || (moveQueue.length > 0 && moveQueue[0].move.id === MoveId.NONE)
     ) {
       this.showFailedText();
       this.cancel();
@@ -789,7 +789,7 @@ export class MovePhase extends BattlePhase {
    */
   protected resolveCounterAttackTarget(): void {
     if (this.targets.length === 1 && this.targets[0] === BattlerIndex.ATTACKER) {
-      if (this.pokemon.turnData.attacksReceived.length) {
+      if (this.pokemon.turnData.attacksReceived.length > 0) {
         this.targets[0] = this.pokemon.turnData.attacksReceived[0].sourceBattlerIndex;
         const [target] = this.targets;
         const targetPkm = globalScene.getPokemonByBattlerIndex(target);

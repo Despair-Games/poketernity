@@ -411,14 +411,14 @@ export class PhaseManager {
       this.clearPhaseQueueSplice();
     }
 
-    while (this.phaseQueuePrepend.length) {
+    while (this.phaseQueuePrepend.length > 0) {
       const poppedPhase = this.phaseQueuePrepend.pop();
       if (poppedPhase) {
         this.phaseQueue.unshift(poppedPhase);
       }
     }
 
-    if (!this.phaseQueue.length) {
+    if (this.phaseQueue.length === 0) {
       this.createAndPushPhase("TurnInitPhase");
       // Clear the conditionalQueue if there are no phases left in the phaseQueue
       this.conditionalQueue = [];
@@ -427,7 +427,7 @@ export class PhaseManager {
     this.currentPhase = this.phaseQueue.shift() ?? null;
 
     // Check if there are any conditional phases queued
-    if (this.conditionalQueue?.length) {
+    if (this.conditionalQueue?.length > 0) {
       // Retrieve the first conditional phase from the queue
       const conditionalPhase = this.conditionalQueue.shift();
       // Evaluate the condition associated with the phase

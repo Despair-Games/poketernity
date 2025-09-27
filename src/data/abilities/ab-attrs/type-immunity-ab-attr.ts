@@ -1,11 +1,10 @@
 import { PreDefendAbAttr } from "#abilities/pre-defend-ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { ElementalType } from "#enums/elemental-type";
-import { MoveTarget } from "#enums/move-target";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { AbAttrCondition } from "#types/ability-types";
-import type { BooleanHolder, NumberHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 
 /**
  * Determines whether a Pokemon is immune to a move because of an ability.
@@ -14,14 +13,14 @@ import type { BooleanHolder, NumberHolder } from "#utils/common-utils";
  */
 export class TypeImmunityAbAttr extends PreDefendAbAttr {
   private readonly immuneType: ElementalType;
-  private readonly condition: AbAttrCondition | null;
+  private readonly condition: AbAttrCondition;
 
-  constructor(immuneType: ElementalType, condition?: AbAttrCondition) {
+  constructor(immuneType: ElementalType, condition: AbAttrCondition = () => true) {
     super();
     this._flags.add(AbAttrFlag.TYPE_IMMUNITY);
 
     this.immuneType = immuneType;
-    this.condition = condition ?? null;
+    this.condition = condition;
   }
 
   /**
@@ -34,30 +33,22 @@ export class TypeImmunityAbAttr extends PreDefendAbAttr {
    * @param typeMultiplier {@linkcode NumberHolder} gets set to `0` if the pokemon is immune
    */
   public override apply(
-    pokemon: Pokemon,
+    _pokemon: Pokemon,
     _simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    _cancelled: BooleanHolder,
-    typeMultiplier: NumberHolder,
-  ): boolean {
-    // Field moves should ignore immunity
-    const fieldTargets: MoveTarget[] = [MoveTarget.BOTH_SIDES, MoveTarget.ENEMY_SIDE, MoveTarget.USER_SIDE];
-    if (fieldTargets.includes(move.moveTarget)) {
-      return false;
-    }
-    if (attacker !== pokemon && attacker.getMoveType(move) === this.immuneType) {
-      typeMultiplier.value = 0;
-      return true;
-    }
-    return false;
+    _attacker: Pokemon,
+    _move: Move,
+    _cancelled: ValueHolder<boolean>,
+    typeMultiplier: ValueHolder<number>,
+  ): void {
+    typeMultiplier.value = 0;
   }
 
-  getImmuneType(): ElementalType | null {
-    return this.immuneType;
+  public override canApply(...params: Parameters<this["apply"]>): boolean {
+    const [pokemon, , attacker, move] = params;
+    return attacker !== pokemon && attacker.getMoveType(move) === this.immuneType;
   }
 
-  public override getCondition(): AbAttrCondition | null {
+  public override getCondition(): AbAttrCondition {
     return this.condition;
   }
 }

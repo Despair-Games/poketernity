@@ -14,6 +14,7 @@ import i18next from "i18next";
  * @param procChance - Chance to create an item
  */
 export class PostTurnLootAbAttr extends PostTurnAbAttr {
+  /** @todo The `HELD_BERRIES` option is unsupported and never used */
   private readonly itemType: "EATEN_BERRIES" | "HELD_BERRIES";
   private readonly procChance: (pokemon: Pokemon) => number;
 
@@ -25,15 +26,21 @@ export class PostTurnLootAbAttr extends PostTurnAbAttr {
   }
 
   public override apply(pokemon: Pokemon, simulated: boolean): boolean {
+    if (this.itemType === "EATEN_BERRIES") {
+      return this.createEatenBerry(pokemon, simulated);
+    }
+    return false;
+  }
+
+  /** @todo This can check item usage more thoroughly when modifier bullshit is sorted out */
+  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
     const pass = Phaser.Math.RND.realInRange(0, 1);
     if (clamp(this.procChance(pokemon), 0, 1) < pass) {
       return false;
     }
 
-    if (this.itemType === "EATEN_BERRIES") {
-      return this.createEatenBerry(pokemon, simulated);
-    }
-    return false;
+    const berriesEaten = pokemon.waveData.berriesEaten;
+    return berriesEaten.length > 0;
   }
 
   /**
@@ -45,7 +52,7 @@ export class PostTurnLootAbAttr extends PostTurnAbAttr {
   createEatenBerry(pokemon: Pokemon, simulated: boolean): boolean {
     const berriesEaten = pokemon.waveData.berriesEaten;
 
-    if (!berriesEaten.length) {
+    if (berriesEaten.length === 0) {
       return false;
     }
 

@@ -2,7 +2,7 @@ import { AbAttr } from "#abilities/ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#field/pokemon";
-import type { BooleanHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 
 export class IgnoreTypeImmunityAbAttr extends AbAttr {
   private readonly defenderType: ElementalType;
@@ -18,14 +18,14 @@ export class IgnoreTypeImmunityAbAttr extends AbAttr {
   public override apply(
     _pokemon: Pokemon,
     _simulated: boolean,
-    cancelled: BooleanHolder,
-    moveType: ElementalType,
-    defType: ElementalType,
-  ): boolean {
-    if (this.defenderType === defType && this.allowedMoveTypes.includes(moveType)) {
-      cancelled.value = true;
-      return true;
-    }
-    return false;
+    cancelled: ValueHolder<boolean>,
+    _moveType: ElementalType,
+    _defType: ElementalType,
+  ): void {
+    cancelled.value = true;
+  }
+
+  public override canApply(...[, , , moveType, defType]: Parameters<this["apply"]>): boolean {
+    return this.defenderType === defType && this.allowedMoveTypes.includes(moveType);
   }
 }

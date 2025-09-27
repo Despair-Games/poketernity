@@ -11,16 +11,15 @@ export class GorillaTacticsAbAttr extends PostAttackAbAttr {
     super(false, false);
   }
 
-  public override applyPostAttack(pokemon: Pokemon, simulated: boolean, _defender: Pokemon, _move: Move): boolean {
-    if (simulated) {
-      return simulated;
+  public override apply(pokemon: Pokemon, simulated: boolean, _defender: Pokemon, _move: Move): boolean {
+    if (!simulated) {
+      pokemon.addTag(BattlerTagType.GORILLA_TACTICS);
     }
-
-    if (pokemon.hasTag(BattlerTagType.GORILLA_TACTICS)) {
-      return false;
-    }
-
-    pokemon.addTag(BattlerTagType.GORILLA_TACTICS);
     return true;
+  }
+
+  public override canApply(...params: Parameters<this["apply"]>): boolean {
+    const [pokemon] = params;
+    return super.canApply(...params) && !pokemon.hasTag(BattlerTagType.GORILLA_TACTICS);
   }
 }

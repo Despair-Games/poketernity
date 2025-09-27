@@ -6,26 +6,25 @@ import type { Move } from "#moves/move";
 import i18next from "i18next";
 
 export class PostDefendAbilitySwapAbAttr extends PostDefendAbAttr {
-  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
-    if (
+  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, _move: Move): void {
+    if (!simulated) {
+      const sourceAbilityId = pokemon.getAbility().id;
+      const attackerAbilityId = attacker.getAbility().id;
+
+      attacker.summonData.ability = sourceAbilityId;
+      attacker.waveData.abilitiesRevealed.push(sourceAbilityId);
+
+      pokemon.summonData.ability = attackerAbilityId;
+      pokemon.waveData.abilitiesRevealed.push(attackerAbilityId);
+    }
+  }
+
+  public override canApply(...[pokemon, , attacker, move]: Parameters<this["apply"]>): boolean {
+    return (
       move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
       && attacker.getAbility().isSwappable
       && !attacker.isMax()
-    ) {
-      if (!simulated) {
-        const sourceAbilityId = pokemon.getAbility().id;
-        const attackerAbilityId = attacker.getAbility().id;
-
-        attacker.summonData.ability = sourceAbilityId;
-        attacker.waveData.abilitiesRevealed.push(sourceAbilityId);
-
-        pokemon.summonData.ability = attackerAbilityId;
-        pokemon.waveData.abilitiesRevealed.push(attackerAbilityId);
-      }
-      return true;
-    }
-
-    return false;
+    );
   }
 
   public override getTriggerMessage(pokemon: Pokemon, _abilityName: string): string {

@@ -25,23 +25,23 @@ export class EffectSporeAbAttr extends PostDefendAbAttr {
    * Identical code to {@linkcode PostDefendContactApplyStatusEffectAbAttr}'s `applyPostDefend()` but it contains two conditional checks.
    * Effect Spore cannot affect the attacker if the attacker is Grass-type or has the ability Overcoat
    */
-  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
-    if (attacker.hasAbility(AbilityId.OVERCOAT) || attacker.isOfType(ElementalType.GRASS)) {
-      return false;
-    }
+  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, _move: Move): void {
     const roll = pokemon.randSeedInt(100);
-    if (
-      move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
-      && !attacker.hasNonVolatileStatusEffect()
-      && roll < this.chance
-    ) {
+    if (roll < this.chance) {
       const statusEffect = this.getStatus(roll);
-      if (simulated) {
-        return attacker.canSetStatus(statusEffect, true, false, pokemon);
+      if (!simulated) {
+        attacker.trySetStatus(statusEffect, true, pokemon);
       }
-      return attacker.trySetStatus(statusEffect, true, pokemon);
     }
-    return false;
+  }
+
+  public override canApply(...[pokemon, , attacker, move]: Parameters<this["apply"]>): boolean {
+    return (
+      !attacker.isOfType(ElementalType.GRASS, true, true)
+      && !attacker.hasAbility(AbilityId.OVERCOAT)
+      && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
+      && !attacker.hasNonVolatileStatusEffect()
+    );
   }
 
   /**

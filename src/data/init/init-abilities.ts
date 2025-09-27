@@ -5,7 +5,6 @@ import { AllyMoveCategoryPowerBoostAbAttr } from "#abilities/ally-move-category-
 import { AlwaysHitAbAttr } from "#abilities/always-hit-ab-attr";
 import { AnticipationAbAttr } from "#abilities/anticipation-ab-attr";
 import { ArenaTrapAbAttr } from "#abilities/arena-trap-ab-attr";
-import { AttackTypeImmunityAbAttr } from "#abilities/attack-type-immunity-ab-attr";
 import { BadDreamsAbAttr } from "#abilities/bad-dreams-ab-attr";
 import { BattlerTagImmunityAbAttr } from "#abilities/battler-tag-immunity-ab-attr";
 import { BlockCritAbAttr } from "#abilities/block-crit-ab-attr";
@@ -53,6 +52,7 @@ import { IgnoreTypeStatusEffectImmunityAbAttr } from "#abilities/ignore-type-sta
 import { IncreasePpAbAttr } from "#abilities/increase-pp-ab-attr";
 import { InfiltratorAbAttr } from "#abilities/infiltrator-ab-attr";
 import { IntimidateImmunityAbAttr } from "#abilities/intimidate-immunity-ab-attr";
+import { LevitateImmunityAbAttr } from "#abilities/levitate-immunity-ab-attr";
 import { LowHpMoveTypeAttackMultiplierAbAttr } from "#abilities/low-hp-move-type-attack-multiplier-ab-attr";
 import { MaxMultiHitAbAttr } from "#abilities/max-multi-hit-ab-attr";
 import { MockStatusEffectAbAttr } from "#abilities/mock-status-effect-ab-attr";
@@ -87,7 +87,7 @@ import { PostDefendContactApplyStatusEffectAbAttr } from "#abilities/post-defend
 import { PostDefendContactApplyTagChanceAbAttr } from "#abilities/post-defend-contact-apply-tag-chance-ab-attr";
 import { PostDefendContactDamageAbAttr } from "#abilities/post-defend-contact-damage-ab-attr";
 import { PostDefendCritStatStageChangeAbAttr } from "#abilities/post-defend-crit-stat-stage-change-ab-attr";
-import { PostDefendHpGatedStatStageChangeAbAttr } from "#abilities/post-defend-hp-gated-stat-tage-change-ab-attr";
+import { PostDefendHpGatedStatStageChangeAbAttr } from "#abilities/post-defend-hp-gated-stat-stage-change-ab-attr";
 import { PostDefendMoveDisableAbAttr } from "#abilities/post-defend-move-disable-ab-attr";
 import { PostDefendPerishSongAbAttr } from "#abilities/post-defend-perish-song-ab-attr";
 import { PostDefendStatStageChangeAbAttr } from "#abilities/post-defend-stat-stage-change-ab-attr";
@@ -242,7 +242,7 @@ export function initAbilities() {
       .attr(TypeImmunityHealAbAttr, ElementalType.WATER)
       .ignorable(),
     new Ability(AbilityId.OBLIVIOUS, 3) //
-      .attr(BattlerTagImmunityAbAttr, [BattlerTagType.INFATUATED, BattlerTagType.TAUNT])
+      .attr(BattlerTagImmunityAbAttr, BattlerTagType.INFATUATED, BattlerTagType.TAUNT)
       .attr(IntimidateImmunityAbAttr)
       .ignorable(),
     new Ability(AbilityId.CLOUD_NINE, 3) //
@@ -294,7 +294,7 @@ export function initAbilities() {
       .ignorable(),
     new Ability(AbilityId.LEVITATE, 3) //
       .attr(
-        AttackTypeImmunityAbAttr,
+        LevitateImmunityAbAttr,
         ElementalType.GROUND,
         (pokemon: Pokemon) =>
           !pokemon.hasTag(BattlerTagType.IGNORE_FLYING) && !globalScene.arena.hasTag(ArenaTagType.GRAVITY),
@@ -317,9 +317,9 @@ export function initAbilities() {
     new Ability(AbilityId.SERENE_GRACE, 3) //
       .attr(MoveEffectChanceMultiplierAbAttr, 2),
     new Ability(AbilityId.SWIFT_SWIM, 3) //
-      .attr(WeatherBasedSpeedDoublerAbAttr, [WeatherType.RAIN, WeatherType.HEAVY_RAIN]),
+      .attr(WeatherBasedSpeedDoublerAbAttr, WeatherType.RAIN, WeatherType.HEAVY_RAIN),
     new Ability(AbilityId.CHLOROPHYLL, 3) //
-      .attr(WeatherBasedSpeedDoublerAbAttr, [WeatherType.SUNNY, WeatherType.HARSH_SUN]),
+      .attr(WeatherBasedSpeedDoublerAbAttr, WeatherType.SUNNY, WeatherType.HARSH_SUN),
     new Ability(AbilityId.ILLUMINATE, 3) //
       .attr(ProtectStatAbAttr, Stat.ACC)
       .attr(DoubleBattleChanceAbAttr)
@@ -413,8 +413,8 @@ export function initAbilities() {
     new Ability(AbilityId.FORECAST, 3) //
       .uncopiable()
       .unreplaceable()
-      .attr(PostSummonFormChangeByWeatherAbAttr, AbilityId.FORECAST)
-      .attr(PostWeatherChangeFormChangeAbAttr, AbilityId.FORECAST, [
+      .attr(PostSummonFormChangeByWeatherAbAttr)
+      .attr(PostWeatherChangeFormChangeAbAttr, [
         WeatherType.NONE,
         WeatherType.SANDSTORM,
         WeatherType.STRONG_WINDS,
@@ -662,8 +662,8 @@ export function initAbilities() {
       )
       .uncopiable()
       .unreplaceable()
-      .attr(PostSummonFormChangeByWeatherAbAttr, AbilityId.FLOWER_GIFT)
-      .attr(PostWeatherChangeFormChangeAbAttr, AbilityId.FLOWER_GIFT, [
+      .attr(PostSummonFormChangeByWeatherAbAttr)
+      .attr(PostWeatherChangeFormChangeAbAttr, [
         WeatherType.NONE,
         WeatherType.SANDSTORM,
         WeatherType.STRONG_WINDS,
@@ -776,7 +776,7 @@ export function initAbilities() {
       .attr(ProtectStatAbAttr, Stat.DEF)
       .ignorable(),
     new Ability(AbilityId.SAND_RUSH, 5) //
-      .attr(WeatherBasedSpeedDoublerAbAttr, [WeatherType.SANDSTORM])
+      .attr(WeatherBasedSpeedDoublerAbAttr, WeatherType.SANDSTORM)
       .attr(BlockWeatherDamageAbAttr, WeatherType.SANDSTORM),
     new Ability(AbilityId.WONDER_SKIN, 5) //
       .attr(WonderSkinAbAttr)
@@ -856,13 +856,14 @@ export function initAbilities() {
       )
       .attr(MoveAbilityBypassAbAttr),
     new Ability(AbilityId.AROMA_VEIL, 6) //
-      .attr(UserFieldBattlerTagImmunityAbAttr, [
+      .attr(
+        UserFieldBattlerTagImmunityAbAttr,
         BattlerTagType.INFATUATED,
         BattlerTagType.TAUNT,
         BattlerTagType.DISABLED,
         BattlerTagType.TORMENT,
         BattlerTagType.HEAL_BLOCK,
-      ])
+      )
       .ignorable(),
     new Ability(AbilityId.FLOWER_VEIL, 6) //
       .ignorable()
@@ -1034,7 +1035,7 @@ export function initAbilities() {
       )
       .condition(getSheerForceHitDisableAbCondition()),
     new Ability(AbilityId.SLUSH_RUSH, 7) //
-      .attr(WeatherBasedSpeedDoublerAbAttr, [WeatherType.HAIL, WeatherType.SNOW]),
+      .attr(WeatherBasedSpeedDoublerAbAttr, WeatherType.HAIL, WeatherType.SNOW),
     new Ability(AbilityId.LONG_REACH, 7) //
       .attr(IgnoreContactAbAttr),
     new Ability(AbilityId.LIQUID_VOICE, 7) //

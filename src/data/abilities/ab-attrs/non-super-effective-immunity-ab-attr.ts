@@ -3,7 +3,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { AbAttrCondition } from "#types/ability-types";
-import type { BooleanHolder, NumberHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -17,20 +17,19 @@ export class NonSuperEffectiveImmunityAbAttr extends TypeImmunityAbAttr {
   }
 
   public override apply(
-    _pokemon: Pokemon,
-    _simulated: boolean,
-    _attacker: Pokemon,
+    pokemon: Pokemon,
+    simulated: boolean,
+    attacker: Pokemon,
     move: Move,
-    cancelled: BooleanHolder,
-    typeMultiplier: NumberHolder,
-  ): boolean {
-    if (move.isAttackMove() && typeMultiplier.value < 2) {
-      cancelled.value = true; // Suppresses "No Effect" message
-      typeMultiplier.value = 0;
-      return true;
-    }
+    cancelled: ValueHolder<boolean>,
+    typeMultiplier: ValueHolder<number>,
+  ): void {
+    cancelled.value = true; // Suppresses "No Effect" message
+    super.apply(pokemon, simulated, attacker, move, cancelled, typeMultiplier);
+  }
 
-    return false;
+  public override canApply(...[, , , move, , typeMultiplier]: Parameters<this["apply"]>): boolean {
+    return move.isAttackMove() && typeMultiplier.value < 2;
   }
 
   public override getTriggerMessage(pokemon: Pokemon, abilityName: string): string {

@@ -21,9 +21,7 @@ export abstract class PostWeatherLapseAbAttr extends AbAttr {
    * @param simulated - If `true`, suppresses changes to game state
    * @returns `true` if effects successfully apply
    */
-  public override apply(_pokemon: Pokemon, _simulated: boolean): boolean {
-    return false;
-  }
+  public abstract override apply(_pokemon: Pokemon, _simulated: boolean): void;
 
   public override getCondition(): AbAttrCondition {
     return getWeatherCondition(...this.weatherTypes);

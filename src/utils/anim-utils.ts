@@ -17,7 +17,7 @@ export function loadAnimAssets(anims: LegacyAnimConfig[], startLoad?: boolean): 
     const backgrounds = new Set<string>();
     const sounds = new Set<string>();
     for (const a of anims) {
-      if (!a.frames?.length) {
+      if (a.frames?.length === 0) {
         continue;
       }
       const animSounds = a.getSoundResourceNames();
@@ -74,10 +74,7 @@ export async function loadEncounterAnimAssets(startLoad?: boolean): Promise<void
  * @param config - The config for a single Tween
  * @param scene - The {@linkcode SceneBase} on which the Tween plays (Default {@linkcode globalScene})
  */
-export async function playTween(
-  config: TweenBuilderConfig,
-  scene: Scene = globalScene,
-): Promise<void> {
+export async function playTween(config: TweenBuilderConfig, scene: Scene = globalScene): Promise<void> {
   await new Promise((resolve) =>
     scene.tweens.add({
       ...config,

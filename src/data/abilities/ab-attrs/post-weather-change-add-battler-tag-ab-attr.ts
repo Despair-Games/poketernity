@@ -16,14 +16,13 @@ export class PostWeatherChangeAddBattlerTagAbAttr extends PostWeatherChangeAbAtt
     this.weatherTypes = weatherTypes;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean, weather: WeatherType): boolean {
-    if (!this.weatherTypes.find((w) => weather === w)) {
-      return false;
+  public override apply(pokemon: Pokemon, simulated: boolean, _weather: WeatherType): void {
+    if (!simulated) {
+      pokemon.addTag(this.tagType, this.turnCount);
     }
+  }
 
-    if (simulated) {
-      return pokemon.canAddTag(this.tagType);
-    }
-    return pokemon.addTag(this.tagType, this.turnCount);
+  public override canApply(...[pokemon, , weather]: Parameters<this["apply"]>): boolean {
+    return this.weatherTypes.includes(weather) && pokemon.canAddTag(this.tagType);
   }
 }

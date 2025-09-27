@@ -12,9 +12,6 @@ export abstract class PreSwitchOutAbAttr extends AbAttr {
    * Applies an effect before the source switches out of the field
    * @param pokemon The {@linkcode Pokemon} with this ability
    * @param simulated If `true`, suppresses changes to game state
-   * @returns `true` if effects from this attribute apply successfully
    */
-  public override apply(_pokemon: Pokemon, _simulated: boolean): boolean {
-    return false;
-  }
+  public abstract override apply(pokemon: Pokemon, simulated: boolean): void;
 }

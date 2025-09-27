@@ -7,26 +7,22 @@ import type { PokemonDefendCondition } from "#types/move-types";
 
 export class PostDefendWeatherChangeAbAttr extends PostDefendAbAttr {
   private readonly weatherType: WeatherType;
-  protected readonly condition?: PokemonDefendCondition;
+  protected readonly condition: PokemonDefendCondition;
 
-  constructor(weatherType: WeatherType, condition?: PokemonDefendCondition) {
+  constructor(weatherType: WeatherType, condition: PokemonDefendCondition = () => true) {
     super();
 
     this.weatherType = weatherType;
     this.condition = condition;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
-    if (this.condition && !this.condition(pokemon, attacker, move)) {
-      return false;
+  public override apply(_pokemon: Pokemon, simulated: boolean, _attacker: Pokemon, _move: Move): void {
+    if (!simulated) {
+      globalScene.arena.trySetWeather(this.weatherType, true);
     }
-    if (globalScene.arena.canSetWeather(this.weatherType)) {
-      if (simulated) {
-        return !globalScene.arena.hasWeather(this.weatherType);
-      }
-      return globalScene.arena.trySetWeather(this.weatherType, true);
-    }
+  }
 
-    return false;
+  public override canApply(...[pokemon, , attacker, move]: Parameters<this["apply"]>): boolean {
+    return this.condition(pokemon, attacker, move) && globalScene.arena.canSetWeather(this.weatherType);
   }
 }

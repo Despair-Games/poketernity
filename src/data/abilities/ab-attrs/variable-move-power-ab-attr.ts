@@ -2,7 +2,7 @@ import { PreAttackAbAttr } from "#abilities/pre-attack-ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import type { NumberHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 
 export abstract class VariableMovePowerAbAttr extends PreAttackAbAttr {
   constructor(showAbility: boolean = true) {
@@ -18,15 +18,12 @@ export abstract class VariableMovePowerAbAttr extends PreAttackAbAttr {
    * @param defender The {@linkcode Pokemon} targeted by the move
    * @param power A {@linkcode NumberHolder} containing the move's
    * power for the current turn
-   * @returns `true` if this effect modified the move's power
    */
-  public override apply(
+  public abstract override apply(
     _pokemon: Pokemon,
     _simulated: boolean,
     _move: Move,
     _defender: Pokemon,
-    _power: NumberHolder,
-  ): boolean {
-    return false;
-  }
+    _power: ValueHolder<number>,
+  ): void;
 }

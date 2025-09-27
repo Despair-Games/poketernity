@@ -19,7 +19,7 @@ export class PostTeraFormChangeStatChangeAbAttr extends AbAttr {
     this._flags.add(AbAttrFlag.POST_TERA_FORM_CHANGE_STAT_CHANGE);
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): void {
     if (!simulated) {
       globalScene.phaseManager.createAndUnshiftPhase(
         "StatStageChangePhase",
@@ -29,7 +29,5 @@ export class PostTeraFormChangeStatChangeAbAttr extends AbAttr {
         this.stages,
       );
     }
-
-    return true;
   }
 }

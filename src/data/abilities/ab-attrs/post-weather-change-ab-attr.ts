@@ -14,9 +14,6 @@ export abstract class PostWeatherChangeAbAttr extends AbAttr {
    * @param pokemon The {@linkcode Pokemon} with this ability
    * @param simulated If `true`, suppresses changes to game state
    * @param weather The {@linkcode Weather} being set on the field
-   * @returns `true` if the ability's effect applies successfully
    */
-  public override apply(_pokemon: Pokemon, _simulated: boolean, _weather: WeatherType): boolean {
-    return false;
-  }
+  public abstract override apply(_pokemon: Pokemon, _simulated: boolean, _weather: WeatherType): void;
 }

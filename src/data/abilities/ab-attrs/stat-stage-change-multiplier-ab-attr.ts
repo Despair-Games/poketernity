@@ -1,7 +1,7 @@
 import { AbAttr } from "#abilities/ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
-import type { NumberHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 
 export class StatStageChangeMultiplierAbAttr extends AbAttr {
   private readonly multiplier: number;
@@ -13,9 +13,7 @@ export class StatStageChangeMultiplierAbAttr extends AbAttr {
     this.multiplier = multiplier;
   }
 
-  public override apply(_pokemon: Pokemon, _simulated: boolean, stages: NumberHolder): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, stages: ValueHolder<number>): void {
     stages.value *= this.multiplier;
-
-    return true;
   }
 }

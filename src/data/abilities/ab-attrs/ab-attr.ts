@@ -45,16 +45,21 @@ export abstract class AbAttr {
   }
 
   /**
-   * Applies the effects of this attribute
+   * Applies the effects of this attribute.
    * @param pokemon The {@linkcode Pokemon} with the ability
    * @param simulated `true` if attribute effects should be resolved without changing game state
    * @param args Any additional parameters or data to modify
-   * @returns `true` if this attribute applies successfully. If {@linkcode showAbility} is enabled,
-   * and this apply call is not simulated, returning `true` activates the ability's flyout
-   * and {@linkcode getTriggerMessage | trigger message} (if applicable)
    */
-  public apply(_pokemon: Pokemon, _simulated: boolean, ..._args: unknown[]): boolean {
-    return false;
+  public apply(_pokemon: Pokemon, _simulated: boolean, ..._args: unknown[]): void {}
+
+  /**
+   * Determines whether or not this attribute's effect can be applied in the current game state.
+   * This is meant to use the same parameters as {@linkcode apply}, and should always be run before
+   * `apply` is called.
+   * @returns `true` if this attribute's effect can be applied; `false` otherwise.
+   */
+  public canApply(..._params: Parameters<this["apply"]>) {
+    return true;
   }
 
   /**

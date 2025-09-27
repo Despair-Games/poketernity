@@ -2,7 +2,6 @@ import { AbAttr } from "#abilities/ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { MoveCategory } from "#enums/move-category";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import i18next from "i18next";
@@ -23,19 +22,15 @@ export class BypassSpeedChanceAbAttr extends AbAttr {
     this.chance = chance;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean, move: Move): boolean {
-    if (move.category === MoveCategory.STATUS) {
-      return false;
+  public override apply(pokemon: Pokemon, simulated: boolean, _move: Move): void {
+    if (!simulated && pokemon.randSeedInt(100) < this.chance) {
+      pokemon.addTag(BattlerTagType.BYPASS_SPEED);
     }
+  }
 
-    if (pokemon.randSeedInt(100) < this.chance) {
-      if (!simulated) {
-        return pokemon.addTag(BattlerTagType.BYPASS_SPEED);
-      }
-      return true;
-    }
-
-    return false;
+  public override canApply(...params: Parameters<this["apply"]>): boolean {
+    const [, , move] = params;
+    return move.isAttackMove();
   }
 
   public override getTriggerMessage(pokemon: Pokemon, _abilityName: string): string {

@@ -16,12 +16,11 @@ export class PostSummonRemoveArenaTagAbAttr extends PostSummonAbAttr {
     this.arenaTags = arenaTags;
   }
 
-  public override apply(_pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(_pokemon: Pokemon, simulated: boolean): void {
     if (!simulated) {
       for (const arenaTag of this.arenaTags) {
         globalScene.arena.removeTag(arenaTag);
       }
     }
-    return true;
   }
 }

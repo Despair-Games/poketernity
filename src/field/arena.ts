@@ -180,7 +180,7 @@ export class Arena {
     console.log(enumValueToKey(BiomePoolTier, tier));
 
     // If the BiomePoolTier is empty, downgrade the rarity
-    while (!this.pokemonPool[tier].length) {
+    while (this.pokemonPool[tier].length === 0) {
       console.log(
         `Downgraded rarity tier from ${enumValueToKey(BiomePoolTier, tier)} to ${enumValueToKey(BiomePoolTier, (tier - 1) as BiomePoolTier)}`,
       );
@@ -308,14 +308,14 @@ export class Arena {
     const tierValue = randSeedInt(isTrainerBoss ? 64 : 512);
     let tier = isTrainerBoss ? this.generateBossBiomeTier(tierValue) : this.generateNonBossBiomeTier(tierValue);
 
-    while (tier > BiomePoolTier.COMMON && !this.trainerPool[tier].length) {
+    while (tier > BiomePoolTier.COMMON && this.trainerPool[tier].length === 0) {
       console.log(
         `Downgraded trainer rarity tier from ${enumValueToKey(BiomePoolTier, tier)} to ${enumValueToKey(BiomePoolTier, (tier - 1) as BiomePoolTier)}`,
       );
       tier--;
     }
     const tierPool = this.trainerPool[tier] || [];
-    return tierPool.length ? tierPool[randSeedInt(tierPool.length)] : TrainerType.BREEDER;
+    return tierPool.length > 0 ? tierPool[randSeedInt(tierPool.length)] : TrainerType.BREEDER;
   }
 
   /**
@@ -518,6 +518,14 @@ export class Arena {
   }
 
   /**
+   * @param terrainType - The {@link TerrainType | type} of terrain to check
+   * @returns `true` if Terrain of the given type can be set on the field.
+   */
+  public canSetTerrain(terrain: TerrainType): boolean {
+    return this.terrain?.terrainType !== terrain;
+  }
+
+  /**
    * Attempts to set terrain
    * @param terrain - {@linkcode TerrainType | The type of terrain}
    * @param hasPokemonSource - Whether the terrain was generated from a Pokemon
@@ -530,8 +538,7 @@ export class Arena {
       return this.tryOverrideTerrain(activeOverrides.TERRAIN_OVERRIDE);
     }
 
-    // TODO: create `Arena#canSetTerrain` method
-    if (this.terrain?.terrainType === (terrain || undefined)) {
+    if (!this.canSetTerrain(terrain)) {
       return false;
     }
 
@@ -913,7 +920,7 @@ export class Arena {
   }
 
   removeAllTags(): void {
-    while (this.tags.length) {
+    while (this.tags.length > 0) {
       this.tags[0].onRemove();
       this.eventTarget.dispatchEvent(
         new TagRemovedEvent(this.tags[0].tagType, this.tags[0].side, this.tags[0].turnCount),

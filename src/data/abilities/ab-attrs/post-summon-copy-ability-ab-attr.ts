@@ -1,5 +1,4 @@
 import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
-import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { allAbilities } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
@@ -14,37 +13,24 @@ export class PostSummonCopyAbilityAbAttr extends PostSummonAbAttr {
   private target: Pokemon;
   private targetAbilityName: string;
 
-  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
-    const targets = pokemon.getOpponents();
-    if (!targets.length) {
-      return false;
-    }
-
-    let target: Pokemon;
-    if (targets.length > 1) {
-      globalScene.executeWithSeedOffset(() => (target = randSeedItem(targets)), globalScene.currentBattle.waveIndex);
-      target = target!;
-    } else {
-      target = targets[0];
-    }
-
-    // Wonder Guard is normally uncopiable so has the attribute, but Trace specifically can copy it
-    if (
-      !target.getAbility().isCopiable
-      && !(pokemon.hasAbility(AbilityId.TRACE) && target.getAbility().id === AbilityId.WONDER_GUARD)
-    ) {
-      return false;
-    }
-
+  public override apply(pokemon: Pokemon, simulated: boolean): void {
     if (!simulated) {
-      this.target = target;
-      this.targetAbilityName = allAbilities[target.getAbility().id].name;
-      pokemon.summonData.ability = target.getAbility().id;
-      target.waveData.abilitiesRevealed.push(target.getAbility().id);
+      this.targetAbilityName = allAbilities[this.target.getAbility().id].name;
+      pokemon.summonData.ability = this.target.getAbility().id;
+      this.target.waveData.abilitiesRevealed.push(this.target.getAbility().id);
       pokemon.updateInfo();
     }
+  }
 
-    return true;
+  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+    const targets = pokemon.getOpponents();
+    if (targets.length === 0) {
+      return false;
+    }
+
+    this.target = randSeedItem(targets);
+    // Wonder Guard is uncopiable by other effects, but Trace specifically can copy it
+    return this.target.getAbility().isCopiable || this.target.getAbility().id === AbilityId.WONDER_GUARD;
   }
 
   public override getTriggerMessage(pokemon: Pokemon, _abilityName: string): string {

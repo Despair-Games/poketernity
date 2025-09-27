@@ -4,7 +4,7 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import { FixedDamageAttr } from "#moves/fixed-damage-attr";
 import type { Move } from "#moves/move";
-import type { NumberHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -24,27 +24,22 @@ export class FullHpResistTypeAbAttr extends PreDefendAbAttr {
    * @param attacker n/a
    * @param move {@linkcode Move} the move being used on the source
    * @param typeMultiplier a container for the move's current type effectiveness multiplier
-   * @returns `true` if the move's effectiveness is reduced; `false` otherwise
    */
   public override apply(
     pokemon: Pokemon,
     simulated: boolean,
     _attacker: Pokemon,
-    move: Move,
-    typeMultiplier: NumberHolder,
-  ): boolean {
-    if (move?.hasAttr(FixedDamageAttr)) {
-      return false;
+    _move: Move,
+    typeMultiplier: ValueHolder<number>,
+  ): void {
+    typeMultiplier.value = 0.5;
+    if (!simulated) {
+      pokemon.turnData.moveEffectiveness = 0.5;
     }
+  }
 
-    if (pokemon.isFullHp() && typeMultiplier.value > 0.5) {
-      typeMultiplier.value = 0.5;
-      if (!simulated) {
-        pokemon.turnData.moveEffectiveness = 0.5;
-      }
-      return true;
-    }
-    return false;
+  public override canApply(...[pokemon, , , move, typeMultiplier]: Parameters<this["apply"]>): boolean {
+    return pokemon.isFullHp() && !move.hasAttr(FixedDamageAttr) && typeMultiplier.value > 0.5;
   }
 
   public override getTriggerMessage(pokemon: Pokemon, _abilityName: string): string {

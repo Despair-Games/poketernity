@@ -21,9 +21,7 @@ export class BadDreamsAbAttr extends AbAttr {
     this._flags.add(AbAttrFlag.BAD_DREAMS);
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
-    let isApplied = false;
-
+  public override apply(pokemon: Pokemon, simulated: boolean): void {
     for (const opp of pokemon.getOpponents()) {
       const isAsleep = opp.hasStatusEffect(StatusEffect.SLEEP);
       const blocksNonDirectDamage = opp.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE);
@@ -31,21 +29,31 @@ export class BadDreamsAbAttr extends AbAttr {
       const willFallAsleep =
         opp.getTag<DrowsyTag>(BattlerTagType.DROWSY)?.turnCount === 1 && opp.canSetStatus(StatusEffect.SLEEP, true);
 
-      if ((isAsleep || willFallAsleep) && !blocksNonDirectDamage && !opp.switchOutStatus) {
-        if (!simulated) {
-          opp.damageAndUpdate(toDmgValue(opp.getMaxHp() / 8), {
-            result: HitResult.OTHER,
-          });
-          globalScene.phaseManager.createAndUnshiftPhase(
-            "MessagePhase",
-            i18next.t("abilityTriggers:badDreams", { pokemonName: getPokemonNameWithAffix(opp) }),
-          );
-        }
-
-        isApplied = true;
+      if ((isAsleep || willFallAsleep) && !blocksNonDirectDamage && !opp.switchOutStatus && !simulated) {
+        opp.damageAndUpdate(toDmgValue(opp.getMaxHp() / 8), {
+          result: HitResult.OTHER,
+        });
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
+          i18next.t("abilityTriggers:badDreams", { pokemonName: getPokemonNameWithAffix(opp) }),
+        );
       }
     }
+  }
 
-    return isApplied;
+  public override canApply(...params: Parameters<this["apply"]>): boolean {
+    const [pokemon, simulated] = params;
+
+    return pokemon.getOpponents().some((opp) => {
+      const isAsleep = opp.hasStatusEffect(StatusEffect.SLEEP);
+      const willFallAsleep =
+        opp.getTag(BattlerTagType.DROWSY)?.turnCount === 1 && opp.canSetStatus(StatusEffect.SLEEP, simulated);
+
+      return (
+        (isAsleep || willFallAsleep)
+        && !opp.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)
+        && !opp.switchOutStatus
+      );
+    });
   }
 }

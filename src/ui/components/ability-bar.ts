@@ -19,11 +19,11 @@ export class AbilityBar extends Phaser.GameObjects.Container {
   private bg: Phaser.GameObjects.Image;
   private abilityBarText: Phaser.GameObjects.Text;
   /** The x-value of the flyout when displayed */
-  private shownX: number;
+  private readonly shownX: number;
   /** The x-value of the flyout when hidden */
-  private hiddenX: number;
+  private readonly hiddenX: number;
   /** The y-value of the flyout */
-  private baseY: number;
+  private readonly baseY: number;
 
   /** @todo Is the auto-hide functionality still needed? */
   private autoHideTimer: NodeJS.Timeout | null;
