@@ -1,6 +1,5 @@
 import type { AbAttr } from "#abilities/ab-attr";
 import { globalScene } from "#app/global-scene";
-import { getPokemonNameWithAffix } from "#app/messages";
 import type { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import type { AbilityFilterOptions } from "#types/ability-types";
@@ -97,37 +96,35 @@ function applyAbAttrsInternal<TAttr extends AbAttr = never>(
     matchingAttrs.forEach((attr) => {
       globalScene.phaseManager.setPhaseQueueSplice();
       let message: ApplyAbAttrResult<TAttr>["message"] = null;
-      const applied = attr.apply(pokemon, simulated, ...args);
-
-      if (applied && !simulated) {
-        if (!pokemon.summonData.abilitiesApplied.includes(ability.id)) {
-          pokemon.summonData.abilitiesApplied.push(ability.id);
-        }
-
-        if (!pokemon.waveData.abilitiesApplied.includes(ability.id)) {
-          pokemon.waveData.abilitiesApplied.push(ability.id);
-          pokemon.waveData.abilitiesRevealed.push(ability.id);
-        }
-
-        if (attr.showAbility) {
-          if (attr.showAbilityInstant) {
-            globalScene.abilityBar.show(getPokemonNameWithAffix(pokemon), ability.name, passive);
-          } else {
-            globalScene.phaseManager.createAndUnshiftPhase("ShowAbilityPhase", pokemon, passive);
-            globalScene.phaseManager.clearPhaseQueueSplice();
-          }
-        }
+      const applied = attr.canApply(...params);
+      if (!applied) {
+        return;
       }
 
-      if (applied) {
-        message = attr.getTriggerMessage(pokemon, ability.name, ...args);
-
-        if (message && !simulated) {
-          globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", message);
-        }
+      if (attr.showAbility && !simulated) {
+        globalScene.phaseManager.createAndUnshiftPhase("ShowAbilityPhase", pokemon, passive);
       }
 
-      globalScene.phaseManager.clearPhaseQueueSplice();
+      message = attr.getTriggerMessage(pokemon, ability.name, ...args);
+      if (message && !simulated) {
+        globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", message);
+      }
+
+      attr.apply(pokemon, simulated, ...args);
+
+      if (!pokemon.summonData.abilitiesApplied.includes(ability.id)) {
+        pokemon.summonData.abilitiesApplied.push(ability.id);
+      }
+
+      if (!pokemon.waveData.abilitiesApplied.includes(ability.id)) {
+        pokemon.waveData.abilitiesApplied.push(ability.id);
+        pokemon.waveData.abilitiesRevealed.push(ability.id);
+      }
+
+      if (attr.showAbility && !simulated) {
+        globalScene.phaseManager.createAndUnshiftPhase("HideAbilityPhase");
+      }
+
       results.push({ attr, applied, message });
     });
   });
