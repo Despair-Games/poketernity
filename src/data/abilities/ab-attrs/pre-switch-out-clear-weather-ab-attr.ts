@@ -14,6 +14,6 @@ export class PreSwitchOutClearWeatherAbAttr extends PreSwitchOutAbAttr {
   }
 
   public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
-    return globalScene.getField(true).some((p) => p !== pokemon && p.hasAbility(this.source.id));
+    return !globalScene.getField(true).some((p) => p !== pokemon && p.hasAbility(this.source.id));
   }
 }

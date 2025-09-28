@@ -32,8 +32,8 @@ export class AnticipationAbAttr extends PostSummonMessageAbAttr {
         return true;
       }
 
-      // All variable type moves (except Hidden Power) are interpreted as of their final type
-      const moveType = move.id === MoveId.HIDDEN_POWER ? move.type : opp.getMoveType(move, simulated);
+      // Variable-type moves (other than Hidden Power) are evaluated by their base type
+      const moveType = move.id === MoveId.HIDDEN_POWER ? opp.getMoveType(move, simulated) : move.type;
       // Effectiveness ignores modifiers from field effects (e.g. Strong Winds)
       return pokemon.getAttackTypeEffectiveness(moveType, undefined, true, simulated) >= 2;
     });

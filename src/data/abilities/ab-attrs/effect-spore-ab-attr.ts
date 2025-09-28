@@ -15,6 +15,7 @@ import type { Move } from "#moves/move";
  */
 export class EffectSporeAbAttr extends PostDefendAbAttr {
   public readonly chance = 30;
+  private roll: number = Number.POSITIVE_INFINITY;
 
   constructor() {
     super();
@@ -26,18 +27,17 @@ export class EffectSporeAbAttr extends PostDefendAbAttr {
    * Effect Spore cannot affect the attacker if the attacker is Grass-type or has the ability Overcoat
    */
   public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, _move: Move): void {
-    const roll = pokemon.randSeedInt(100);
-    if (roll < this.chance) {
-      const statusEffect = this.getStatus(roll);
-      if (!simulated) {
-        attacker.trySetStatus(statusEffect, true, pokemon);
-      }
+    const statusEffect = this.getStatus(this.roll);
+    if (!simulated) {
+      attacker.trySetStatus(statusEffect, true, pokemon);
     }
   }
 
   public override canApply(...[pokemon, , attacker, move]: Parameters<this["apply"]>): boolean {
+    this.roll = pokemon.randSeedInt(100);
     return (
-      !attacker.isOfType(ElementalType.GRASS, true, true)
+      this.roll < this.chance
+      && !attacker.isOfType(ElementalType.GRASS, true, true)
       && !attacker.hasAbility(AbilityId.OVERCOAT)
       && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
       && !attacker.hasNonVolatileStatusEffect()

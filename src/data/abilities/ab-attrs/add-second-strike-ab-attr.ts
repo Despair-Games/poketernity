@@ -38,7 +38,6 @@ export class AddSecondStrikeAbAttr extends PreAttackAbAttr {
     hitCount?: ValueHolder<number>,
     multiplier?: ValueHolder<number>,
   ): void {
-    this.showAbility = !!hitCount?.value;
     if (hitCount?.value) {
       hitCount.value += 1;
     }
@@ -52,8 +51,7 @@ export class AddSecondStrikeAbAttr extends PreAttackAbAttr {
    * @returns `true` if the move being used satisfies {@linkcode Move.canBeMultiStrikeEnhanced | conditions}
    * to be multi-strike-enhanced.
    */
-  public override canApply(...params: Parameters<this["apply"]>): boolean {
-    const [pokemon, , move] = params;
+  public override canApply(...[pokemon, , move]: Parameters<this["apply"]>): boolean {
     return move.canBeMultiStrikeEnhanced(pokemon);
   }
 }

@@ -12,8 +12,6 @@ import i18next from "i18next";
  * Ability attribute for changing a pokemon's type before using a move
  */
 export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
-  private moveType: ElementalType;
-
   constructor() {
     super(true);
     this._flags.add(AbAttrFlag.POKEMON_TYPE_CHANGE);
@@ -21,8 +19,7 @@ export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
 
   public override apply(pokemon: Pokemon, simulated: boolean, move: Move): void {
     if (!simulated) {
-      this.moveType = pokemon.getMoveType(move);
-      pokemon.setTemporaryTypes(this.moveType);
+      pokemon.setTemporaryTypes(pokemon.getMoveType(move));
       pokemon.updateInfo();
     }
   }
@@ -36,10 +33,10 @@ export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
     );
   }
 
-  public override getTriggerMessage(pokemon: Pokemon, _abilityName: string): string {
+  public override getTriggerMessage(pokemon: Pokemon, _abilityName: string, move: Move): string {
     return i18next.t("abilityTriggers:pokemonTypeChange", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-      moveType: i18next.t(`pokemonInfo:Type.${enumValueToKey(ElementalType, this.moveType)}`),
+      moveType: i18next.t(`pokemonInfo:Type.${enumValueToKey(ElementalType, pokemon.getMoveType(move))}`),
     });
   }
 }

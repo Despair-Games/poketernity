@@ -37,11 +37,9 @@ export class SynchronizeStatusAbAttr extends AbAttr {
     }
   }
 
-  public override canApply(...[pokemon, simulated, sourcePokemon, effect]: Parameters<this["apply"]>): boolean {
-    return (
-      sourcePokemon != null
-      && SynchronizeStatusAbAttr.syncStatuses.has(effect)
-      && sourcePokemon.canSetStatus(effect, simulated, undefined, pokemon)
-    );
+  public override canApply(...[, , sourcePokemon, effect]: Parameters<this["apply"]>): boolean {
+    // Synchronize is meant to activate even if the status effect cannot be applied to the source,
+    // hence `canSetStatus` not being checked here.
+    return sourcePokemon != null && SynchronizeStatusAbAttr.syncStatuses.has(effect);
   }
 }

@@ -94,7 +94,6 @@ function applyAbAttrsInternal<TAttr extends AbAttr = never>(
     });
 
     matchingAttrs.forEach((attr) => {
-      globalScene.phaseManager.setPhaseQueueSplice();
       let message: ApplyAbAttrResult<TAttr>["message"] = null;
       const applied = attr.canApply(...params);
       if (!applied) {

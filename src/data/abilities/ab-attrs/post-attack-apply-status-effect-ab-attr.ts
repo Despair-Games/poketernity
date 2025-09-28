@@ -43,6 +43,7 @@ export class PostAttackApplyStatusEffectAbAttr extends PostAttackAbAttr {
 
     /**
      * The status is only applied to the target if
+     * - The move is an Attack Move
      * - The target does not have a secondary ability that suppresses move effects
      * - The target is not the attacker
      * - If a contact move is required to activate the ability, the move should make contact
@@ -53,7 +54,8 @@ export class PostAttackApplyStatusEffectAbAttr extends PostAttackAbAttr {
      * Note: Status inflicted by abilities post attacking are also considered additional effects of moves.
      */
     return (
-      !target.hasAbilityWithAttr(AbAttrFlag.IGNORE_MOVE_EFFECTS)
+      move.isAttackMove()
+      && !target.hasAbilityWithAttr(AbAttrFlag.IGNORE_MOVE_EFFECTS)
       && target.id !== attacker.id
       && (!this.contactRequired || move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, target))
       && target.randSeedInt(100) < this.chance

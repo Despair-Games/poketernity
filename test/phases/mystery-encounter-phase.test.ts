@@ -88,7 +88,7 @@ describe("Mystery Encounter Phases", () => {
       await vi.waitFor(() => expect(game.isCurrentPhase("MysteryEncounterOptionSelectedPhase")).toBeTruthy());
       expect(ui.getMode()).toBe(UiMode.MESSAGE);
       expect(ui.showDialogue).toHaveBeenCalledTimes(1);
-      expect(ui.showText).toHaveBeenCalledTimes(2);
+      expect(ui.showText).toHaveBeenCalledTimes(3);
       expect(ui.showDialogue).toHaveBeenCalledWith(
         i18next.t("battle:mysteryEncounterAppeared"),
         "???",
