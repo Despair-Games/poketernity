@@ -18,8 +18,7 @@ export class EvasivenessMultiplierAbAttr extends AbAttr {
     this.multiplier = multiplier;
   }
 
-  public override apply(_pokemon: Pokemon, _simulated: boolean, evasivenessMultiplier: ValueHolder<number>): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, evasivenessMultiplier: ValueHolder<number>): void {
     evasivenessMultiplier.value *= this.multiplier;
-    return true;
   }
 }
