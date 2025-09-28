@@ -188,7 +188,8 @@ export class BattleScene extends SceneBase {
   public charSprite: CharSprite;
   public pbTray: PokeballTray;
   public pbTrayEnemy: PokeballTray;
-  public abilityBar: AbilityBar;
+  public playerAbilityBar: AbilityBar;
+  public enemyAbilityBar: AbilityBar;
   public partyExpBar: PartyExpBar;
   public candyBar: CandyBar;
   public arenaBg: Phaser.GameObjects.Sprite;
@@ -516,10 +517,15 @@ export class BattleScene extends SceneBase {
     this.fieldUI.add(this.pbTray);
     this.fieldUI.add(this.pbTrayEnemy);
 
-    this.abilityBar = new AbilityBar();
-    this.abilityBar.setName("ability-bar");
-    this.abilityBar.setup();
-    this.fieldUI.add(this.abilityBar);
+    this.playerAbilityBar = new AbilityBar();
+    this.playerAbilityBar.setName("ability-bar");
+    this.playerAbilityBar.setup();
+    this.fieldUI.add(this.playerAbilityBar);
+
+    this.enemyAbilityBar = new AbilityBar(false);
+    this.enemyAbilityBar.setName("enemy-ability-bar");
+    this.enemyAbilityBar.setup();
+    this.fieldUI.add(this.enemyAbilityBar);
 
     this.partyExpBar = new PartyExpBar();
     this.partyExpBar.setName("party-exp-bar");

@@ -9,6 +9,7 @@ export class ShowAbilityPhase extends Phase {
   private readonly pokemonName: string;
   private readonly abilityName: string;
   private readonly passive: boolean;
+  private readonly isPlayer: boolean;
 
   constructor(pokemon: Pokemon, passive: boolean = false) {
     super();
@@ -16,9 +17,11 @@ export class ShowAbilityPhase extends Phase {
     this.pokemonName = getPokemonNameWithAffix(pokemon);
     this.abilityName = passive ? pokemon.getAbility().name : pokemon.getPassiveAbility().name;
     this.passive = passive;
+    this.isPlayer = pokemon.isPlayer();
   }
 
   public override start(): void {
-    globalScene.abilityBar.show(this.pokemonName, this.abilityName, this.passive).then(this.end);
+    const abilityBar = this.isPlayer ? globalScene.playerAbilityBar : globalScene.enemyAbilityBar;
+    abilityBar.show(this.pokemonName, this.abilityName, this.passive).then(this.end);
   }
 }

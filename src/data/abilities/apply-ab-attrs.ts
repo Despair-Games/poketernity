@@ -121,7 +121,7 @@ function applyAbAttrsInternal<TAttr extends AbAttr = never>(
       }
 
       if (attr.showAbility && !simulated) {
-        globalScene.phaseManager.createAndUnshiftPhase("HideAbilityPhase");
+        globalScene.phaseManager.createAndUnshiftPhase("HideAbilityPhase", pokemon);
       }
 
       results.push({ attr, applied, message });

@@ -28,7 +28,7 @@ export class SturdyTag extends BattlerTag {
           "MessagePhase",
           i18next.t("battlerTags:sturdyLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
         ),
-        phaseManager.createPhase("HideAbilityPhase"),
+        phaseManager.createPhase("HideAbilityPhase", pokemon),
       );
       return false;
     }

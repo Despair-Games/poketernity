@@ -59,12 +59,4 @@ export class MessagePhase extends Phase {
       });
     }
   }
-
-  public override end(): void {
-    if (globalScene.abilityBar.shown) {
-      globalScene.abilityBar.hide();
-    }
-
-    super.end();
-  }
 }
