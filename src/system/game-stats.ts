@@ -6,8 +6,6 @@ export class GameStats {
   public ribbonsOwned: number;
   public dailyRunSessionsPlayed: number;
   public dailyRunSessionsWon: number;
-  public endlessSessionsPlayed: number;
-  public highestEndlessWave: number;
   public highestLevel: number;
   public highestMoney: number;
   public highestDamage: number;
@@ -35,6 +33,7 @@ export class GameStats {
   public legendaryEggsPulled: number;
   public manaphyEggsPulled: number;
 
+  // TODO: remove `: any`, possibly replace class with interface
   constructor(source?: any) {
     this.playTime = source?.playTime || 0;
     this.battles = source?.battles || 0;
@@ -43,8 +42,6 @@ export class GameStats {
     this.ribbonsOwned = source?.ribbonsOwned || 0;
     this.dailyRunSessionsPlayed = source?.dailyRunSessionsPlayed || 0;
     this.dailyRunSessionsWon = source?.dailyRunSessionsWon || 0;
-    this.endlessSessionsPlayed = source?.endlessSessionsPlayed || 0;
-    this.highestEndlessWave = source?.highestEndlessWave || 0;
     this.highestLevel = source?.highestLevel || 0;
     this.highestMoney = source?.highestMoney || 0;
     this.highestDamage = source?.highestDamage || 0;
