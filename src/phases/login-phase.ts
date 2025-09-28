@@ -26,8 +26,6 @@ export class LoginPhase extends Phase {
   }
 
   public override start(): void {
-    super.start();
-
     const { gameData, ui } = globalScene;
 
     const hasSession = !!getCookie(SESSION_ID_COOKIE);

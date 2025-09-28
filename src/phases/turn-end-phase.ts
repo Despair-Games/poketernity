@@ -15,8 +15,6 @@ export class TurnEndPhase extends FieldPhase {
   public override readonly phaseName = "TurnEndPhase";
 
   public override start(): void {
-    super.start();
-
     const { arena, currentBattle, eventTarget } = globalScene;
     const { terrain } = arena;
 

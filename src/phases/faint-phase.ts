@@ -85,8 +85,6 @@ export class FaintPhase extends PokemonPhase {
   }
 
   public override start(): void {
-    super.start();
-
     const faintPokemon = this.getPokemon();
 
     if (this.source != null) {

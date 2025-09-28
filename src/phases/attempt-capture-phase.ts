@@ -45,8 +45,6 @@ export class AttemptCapturePhase extends PokemonPhase {
   }
 
   public override start(): void {
-    super.start();
-
     const { field, time, tweens } = globalScene;
 
     const pokemon = this.getPokemon() as EnemyPokemon;

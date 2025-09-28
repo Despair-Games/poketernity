@@ -17,8 +17,6 @@ export class ModifierRewardPhase extends Phase {
   }
 
   public override start(): void {
-    super.start();
-
     this.doReward().then(() => this.end());
   }
 

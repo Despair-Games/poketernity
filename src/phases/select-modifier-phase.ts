@@ -74,8 +74,6 @@ export class SelectModifierPhase extends BattlePhase {
   }
 
   public override start(): void {
-    super.start();
-
     const { currentBattle, money, ui } = globalScene;
     const { waveIndex } = currentBattle;
 

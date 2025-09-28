@@ -18,8 +18,6 @@ export class MoveAnimPhase<Anim extends MoveAnim> extends Phase {
   }
 
   public override start(): void {
-    super.start();
-
     this.anim.play(this.onSubstitute, () => this.end());
   }
 }

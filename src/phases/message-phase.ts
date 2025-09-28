@@ -27,8 +27,6 @@ export class MessagePhase extends Phase {
   }
 
   public override start(): void {
-    super.start();
-
     if (this.text.indexOf("$") > -1) {
       const pageIndex = this.text.indexOf("$");
       globalScene.phaseManager.unshiftPhase(

@@ -25,9 +25,6 @@ export class AbilityBar extends Phaser.GameObjects.Container {
   /** The y-value of the flyout */
   private readonly baseY: number;
 
-  /** @todo Is the auto-hide functionality still needed? */
-  private autoHideTimer: NodeJS.Timeout | null;
-
   public shown: boolean;
 
   constructor(player: boolean = true) {
@@ -88,18 +85,12 @@ export class AbilityBar extends Phaser.GameObjects.Container {
       duration: 500,
       ease: "Sine.easeOut",
     });
-
-    this.resetAutoHideTimer();
   }
 
   /** Hides the Ability Bar flyout */
   public async hide(): Promise<void> {
     if (!this.shown) {
       return;
-    }
-
-    if (this.autoHideTimer) {
-      clearInterval(this.autoHideTimer);
     }
 
     await playTween({
@@ -111,16 +102,5 @@ export class AbilityBar extends Phaser.GameObjects.Container {
 
     this.setVisible(false);
     this.shown = false;
-  }
-
-  /** @todo If all ability flyout state changes become synchronous, this should be deprecated */
-  resetAutoHideTimer(): void {
-    if (this.autoHideTimer) {
-      clearInterval(this.autoHideTimer);
-    }
-    this.autoHideTimer = setTimeout(() => {
-      this.hide();
-      this.autoHideTimer = null;
-    }, 2500);
   }
 }

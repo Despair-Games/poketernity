@@ -21,8 +21,6 @@ export class TerastallizationPhase extends BattlePhase {
   }
 
   public override start(): void {
-    super.start();
-
     new CommonBattleAnim(CommonAnim.TERASTALLIZE, this.pokemon).play(false, () => {
       globalScene.phaseManager.createAndUnshiftPhase(
         "MessagePhase",

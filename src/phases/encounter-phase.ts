@@ -67,8 +67,6 @@ export class EncounterPhase extends BattlePhase {
   }
 
   public override start(): void {
-    super.start();
-
     const { arena, currentBattle, field, gameData, gameMode, load, ui } = globalScene;
     const { battleType, double, enemyLevels, isClassicFinalBoss, mysteryEncounterType, trainer, waveIndex } =
       currentBattle;

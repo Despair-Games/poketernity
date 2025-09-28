@@ -13,8 +13,6 @@ export class TurnInitPhase extends FieldPhase {
   public override readonly phaseName = "TurnInitPhase";
 
   public override start(): void {
-    super.start();
-
     const { currentBattle, phaseManager } = globalScene;
 
     globalScene.getPlayerField().forEach((p) => {

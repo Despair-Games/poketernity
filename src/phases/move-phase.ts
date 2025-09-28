@@ -168,8 +168,6 @@ export class MovePhase extends BattlePhase {
   }
 
   public override start(): void {
-    super.start();
-
     // If the user is affected by another Pokemon's Sky Drop, skip the user's turn
     const skyDropTag = this.pokemon.getTag(BattlerTagType.SKY_DROP);
     if (skyDropTag && skyDropTag.sourceId !== this.pokemon.id) {

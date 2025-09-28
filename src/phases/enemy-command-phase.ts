@@ -33,8 +33,6 @@ export class EnemyCommandPhase extends FieldPhase {
   }
 
   public override start(): void {
-    super.start();
-
     if (globalScene.currentBattle.mysteryEncounter?.skipEnemyBattleTurns) {
       this.end();
       return;

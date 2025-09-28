@@ -71,7 +71,6 @@ export class PokemonHealPhase extends CommonAnimPhase {
 
   public override start(): void {
     if (!this.skipAnim && (this.revive || this.getPokemon().hp) && !this.getPokemon().isFullHp()) {
-      super.start();
     } else {
       this.end();
     }

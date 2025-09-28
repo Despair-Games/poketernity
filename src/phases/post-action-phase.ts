@@ -30,8 +30,6 @@ export class PostActionPhase extends PokemonPhase {
   }
 
   public override start(): void {
-    super.start();
-
     const { arena, currentBattle } = globalScene;
     const { turnManager } = currentBattle;
     const pokemon = this.getPokemon();

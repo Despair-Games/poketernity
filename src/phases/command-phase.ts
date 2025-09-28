@@ -46,8 +46,6 @@ export class CommandPhase extends FieldPhase {
   }
 
   public override start(): void {
-    super.start();
-
     const { currentBattle, ui } = globalScene;
     const { turnManager } = globalScene.currentBattle;
 

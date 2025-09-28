@@ -16,8 +16,6 @@ export class BerryPhase extends FieldPhase {
   public override readonly phaseName = "BerryPhase";
 
   public override start(): void {
-    super.start();
-
     this.executeForAll((pokemon) => {
       const hasUsableBerry = !!globalScene.findModifier((m) => {
         return m.isBerryModifier() && m.shouldApply(pokemon);

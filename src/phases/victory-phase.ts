@@ -24,8 +24,6 @@ export class VictoryPhase extends PokemonPhase {
   public override readonly phaseName = "VictoryPhase";
 
   public override start(): void {
-    super.start();
-
     const { currentBattle, gameMode, phaseManager } = globalScene;
     const { battleType, waveIndex } = currentBattle;
     const { isClassic, isDaily } = gameMode;

@@ -20,8 +20,6 @@ export class ExpPhase extends PlayerPartyMemberPokemonPhase {
   }
 
   public override start(): void {
-    super.start();
-
     const pokemon = this.getPokemon();
     const exp = new NumberHolder(this.expValue);
     globalScene.applyModifiers(ExpBoosterModifier, true, exp);

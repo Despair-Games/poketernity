@@ -5,8 +5,6 @@ export class ShinySparklePhase extends PokemonPhase {
   public override readonly phaseName = "ShinySparklePhase";
 
   public override start(): void {
-    super.start();
-
     this.getPokemon().sparkle();
     globalScene.time.delayedCall(1000, () => this.end());
   }
