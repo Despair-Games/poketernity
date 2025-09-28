@@ -1,4 +1,4 @@
-import { StatMultiplierAbAttr } from "#abilities/stat-multiplier-ab-attr";
+import { EffectiveStatMultiplier } from "#abilities/effective-stat-multiplier-ab-attr";
 import { Stat } from "#enums/stat";
 import type { WeatherType } from "#enums/weather-type";
 import { getWeatherCondition } from "#utils/ability-utils";
@@ -17,7 +17,7 @@ import { getWeatherCondition } from "#utils/ability-utils";
 +-------------+------------------+
  * ```
  */
-export class WeatherBasedSpeedDoublerAbAttr extends StatMultiplierAbAttr {
+export class WeatherBasedSpeedDoublerAbAttr extends EffectiveStatMultiplier {
   private readonly weatherTypes: WeatherType[];
 
   constructor(...weatherTypes: WeatherType[]) {
