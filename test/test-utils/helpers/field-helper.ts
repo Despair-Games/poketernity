@@ -1,5 +1,6 @@
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { globalScene } from "#app/global-scene";
+import type { GameManager } from "#test/test-utils/game-manager";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import type { Ability } from "#abilities/ability";
@@ -12,6 +13,7 @@ import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { GameManagerHelper } from "#test/test-utils/helpers/game-manager-helper";
+import { coerceArray } from "#utils/common-utils";
 import { expect, type MockInstance, vi } from "vitest";
 
 /** Helper to manage pokemon */
@@ -63,6 +65,26 @@ export class FieldHelper extends GameManagerHelper {
       .getField(true)
       .sort((pA, pB) => pB.getEffectiveStat(Stat.SPD) - pA.getEffectiveStat(Stat.SPD))
       .map((p) => p.getBattlerIndex());
+  }
+
+  /**
+   * Sets the permanent Speed stat of active Pokemon to the given values.
+   * @param playerSpd - The `number` to set each Player Pokemon's Speed to, or a pair
+   * of numbers to individually set Player Pokemon speeds in a double battle
+   * @param enemySpd - The `number to set each Enemy Pokemon's Speed to, or a pair
+   * of numbers to individually set Enemy Pokemon speeds in a double battle
+   *
+   * @remarks
+   * This method is useful when testing mechanics that directly check or compare Speed between
+   * Pokemon. If you need to control turn order, it is safer to use {@linkcode GameManager.setTurnOrder} instead.
+   */
+  public setSpeed(playerSpd: number | [number, number], enemySpd: number | [number, number]): void {
+    const [playerSpdArr, enemySpdArr] = [playerSpd, enemySpd].map((spd) => coerceArray(spd));
+    const players = this.game.scene.getPlayerField();
+    const enemies = this.game.scene.getEnemyField();
+
+    players.forEach((p, i) => p.setStat(Stat.SPD, playerSpdArr[i] ?? playerSpdArr.at(-1)));
+    enemies.forEach((e, i) => e.setStat(Stat.SPD, enemySpdArr[i] ?? enemySpdArr.at(-1)));
   }
 
   /**
