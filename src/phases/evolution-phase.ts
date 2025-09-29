@@ -78,7 +78,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
     this.pokemon.cry();
 
     const evolvedPokemon = await this.pokemon.getPossibleEvolution(this.evolution);
-    [this.pokemonNewFormSprite, this.pokemonNewFormTintSprite].map((sprite) => {
+    [this.pokemonNewFormSprite, this.pokemonNewFormTintSprite].forEach((sprite) => {
       const spriteKey = evolvedPokemon.getSpriteKey(true);
       sprite.play(spriteKey);
 
