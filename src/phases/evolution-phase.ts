@@ -52,6 +52,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
   }
 
   public override start(): void {
+    super.start();
     this.preEvolvedPokemonName = getPokemonNameWithAffix(this.pokemon);
   }
 
