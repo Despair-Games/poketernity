@@ -3129,6 +3129,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     simulated: boolean = true,
     effectiveness?: TypeDamageMultiplier,
   ): DamageCalculationResult {
+    const { arena } = globalScene;
     const applyAbFunc = getAbApplyFunc(abilityApplyMode);
     const damage = new NumberHolder(0);
     const defendingSide = this.getArenaTagSide();
@@ -3153,13 +3154,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     const isPhysical = moveCategory === MoveCategory.PHYSICAL;
 
-    /** Combined damage multiplier from field effects such as weather, terrain, etc. */
-    const arenaAttackTypeMultiplier = new NumberHolder(
-      globalScene.arena.getAttackTypeMultiplier(moveType, source.isGrounded()),
-    );
-    applyMoveAttrs(IgnoreWeatherTypeDebuffAttr, source, this, move, arenaAttackTypeMultiplier);
+    const weatherDamageMultiplier = new ValueHolder(arena.getWeatherDamageMultiplier(moveType));
+    applyMoveAttrs(IgnoreWeatherTypeDebuffAttr, source, this, move, weatherDamageMultiplier);
 
-    const isTypeImmune = typeMultiplier * arenaAttackTypeMultiplier.value === 0;
+    const terrainDamageMultiplier = source.isGrounded() ? arena.getTerrainDamageMultiplier(moveType) : 1;
+
+    const isTypeImmune = typeMultiplier * weatherDamageMultiplier.value * terrainDamageMultiplier === 0;
 
     if (cancelled.value || isTypeImmune) {
       return {
@@ -3342,7 +3342,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       * targetMultiplier
       * gmaxBonusDamageMultiplier.value
       * multiStrikeEnhancementMultiplier.value
-      * arenaAttackTypeMultiplier.value
+      * weatherDamageMultiplier.value
+      * terrainDamageMultiplier
       * glaiveRushMultiplier.value
       * criticalMultiplier.value
       * randomMultiplier
