@@ -36,7 +36,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
   private evolutionBgm: AnySound;
 
   /**
-   * A {@linkcode BooleanHolder} whose value indicates whether or not the player has cancelled the evolution.
+   * A {@linkcode ValueHolder} whose value indicates whether or not the player has cancelled the evolution.
    */
   private readonly cancelled: ValueHolder<boolean> = new ValueHolder(false);
 
@@ -73,6 +73,10 @@ export class EvolutionPhase extends FormChangeBasePhase {
     });
   }
 
+  /**
+   * Plays an animation for the target Pokemon's evolution.
+   * @returns The target {@linkcode Pokemon} after attempting to evolve it
+   */
   private async playEvolutionAnim(): Promise<Pokemon> {
     const { animations, time, tweens } = globalScene;
     this.pokemon.cry();
@@ -145,7 +149,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
   }
 
   /**
-   * Handles a failed/stopped evolution
+   * Handles a failed or interrupted evolution attempt
    * @param evolvedPokemon - The evolved Pokemon
    */
   private handleFailedEvolution(evolvedPokemon: Pokemon): void {
@@ -199,7 +203,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
   }
 
   /**
-   * Handles a successful evolution
+   * Handles a successful evolution attempt
    * @param evolvedPokemon - The evolved Pokemon
    */
   private async handleSuccessEvolution(evolvedPokemon: Pokemon): Promise<void> {
