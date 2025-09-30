@@ -549,7 +549,7 @@ export function initMoves() {
     new AttackMove(MoveId.RAGE, ElementalType.NORMAL, MoveCategory.PHYSICAL, 20, 100, 20, -1, 0, 1) //
       .attr(RageAttr),
     new SelfStatusMove(MoveId.TELEPORT, ElementalType.PSYCHIC, -1, 20, -1, -6, 1) //
-      .attr(ForceSwitchOutAttr, true)
+      .attr(ForceSwitchOutAttr, true, SwitchType.TELEPORT)
       .hidesUser(),
     new AttackMove(MoveId.NIGHT_SHADE, ElementalType.GHOST, MoveCategory.SPECIAL, -1, 100, 15, -1, 0, 1) //
       .attr(LevelDamageAttr),

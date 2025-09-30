@@ -171,7 +171,7 @@ export abstract class HitCheckPhase extends PokemonPhase {
       return [HitCheckResult.HIT, effectiveness];
     }
 
-    const accuracyMultiplier = user.getAccuracyMultiplier(target, move);
+    const accuracyMultiplier = user.getAccuracyMultiplier(target, move, simulated);
     const rand = user.randSeedInt(100);
 
     if (rand < moveAccuracy * accuracyMultiplier) {

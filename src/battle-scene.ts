@@ -1,6 +1,7 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BlockItemTheftAbAttr } from "#abilities/block-item-theft-ab-attr";
 import type { DoubleBattleChanceAbAttr } from "#abilities/double-battle-chance-ab-attr";
+import type { ForceSwitchOutImmunityAbAttr } from "#abilities/force-switch-out-immunity-ab-attr";
 import type { PostBattleInitAbAttr } from "#abilities/post-battle-init-ab-attr";
 import type { PostItemLostAbAttr } from "#abilities/post-item-lost-ab-attr";
 import { Animation } from "#app/animations";
@@ -11,6 +12,7 @@ import { type GameMode, getGameMode } from "#app/game-mode";
 import { initGlobalScene } from "#app/global-scene";
 import { LoadingScene } from "#app/loading-scene";
 import { CallSourceLogger, logModifiers } from "#app/loggers";
+import { getPokemonNameWithAffix } from "#app/messages";
 import { activeOverrides } from "#app/overrides";
 import type { Phase } from "#app/phase";
 import { PhaseManager } from "#app/phase-manager";
@@ -37,7 +39,7 @@ import { type Variant, variantData } from "#data/variant";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { AchvCategory } from "#enums/achv-category";
 import { BattleType } from "#enums/battle-type";
-import { BattlerIndex } from "#enums/battler-index";
+import { BattlerIndex, type FieldBattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BiomeId } from "#enums/biome-id";
 import { CommonColor, ShadowColor } from "#enums/color";
@@ -56,6 +58,7 @@ import { PokeballType } from "#enums/pokeball-type";
 import type { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
+import { SwitchType } from "#enums/switch-type";
 import { TextStyle } from "#enums/text-style";
 import type { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerVariant } from "#enums/trainer-variant";
@@ -132,7 +135,7 @@ import { addTextObject } from "#ui/text-utils";
 import { UI } from "#ui/ui";
 import { setDocumentUiTheme, updateWindowStyle } from "#ui/ui-theme";
 import { loadCommonAnimAssets } from "#utils/anim-utils";
-import { BooleanHolder, enumValueToKey, fixedNumber, isBetween, NumberHolder } from "#utils/common-utils";
+import { BooleanHolder, enumValueToKey, fixedNumber, isBetween, NumberHolder, ValueHolder } from "#utils/common-utils";
 import { getModifierType } from "#utils/modifier-type-utils";
 import { loadMoveAnimAssets } from "#utils/move-anim-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
@@ -2837,6 +2840,170 @@ export class BattleScene extends SceneBase {
         }
       }
     }
+  }
+
+  /**
+   * Determines if the given Pokemon can be forced to switch out of the field.
+   * A Pokemon can generally be force-switched out as long as none of the following conditions are met:
+   * - The Pokemon is a Dondozo with an ally in its mouth via Commander
+   * - The Pokemon doesn't have an inactive party member that is allowed to take
+   * its place on the field
+   * - This effect is a {@link SwitchType.FORCE_SWITCH | forced random switch}, and
+   * the affected Pokemon either has an {@link ForceSwitchOutImmunityAbAttr | ability attribute}
+   * that nullifies the effect or is of a Max form.
+   * @param pokemon - The {@linkcode Pokemon} to switch out
+   * @param switchType - The {@link SwitchType | type} of switch to check
+   * (Default {@linkcode SwitchType.SWITCH})
+   * @returns `true` if the Pokemon can be force-switched out
+   */
+  public canForceSwitchPokemon(pokemon: Pokemon, switchType: SwitchType = SwitchType.SWITCH): boolean {
+    if (!pokemon.isActive(true)) {
+      return false;
+    }
+
+    // Dondozo with an active allied Tatsugiri in its mouth cannot
+    // force-switch out under any circumstance
+    const commandedTag = pokemon.getTag(BattlerTagType.COMMANDED);
+    if (commandedTag?.getSourcePokemon()?.isActive(true)) {
+      return false;
+    }
+
+    const party = pokemon.getParty();
+    if (!party.some((p) => p.isAllowedInBattle() && !p.isOnField())) {
+      return false;
+    }
+
+    if (switchType === SwitchType.FORCE_SWITCH) {
+      const blockedByAbility = new ValueHolder(false);
+      applyAbAttrs<ForceSwitchOutImmunityAbAttr>(
+        AbAttrFlag.FORCE_SWITCH_OUT_IMMUNITY,
+        pokemon,
+        false,
+        blockedByAbility,
+      );
+
+      if (blockedByAbility.value || pokemon.isMax()) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  /**
+   * Switches out the active Pokemon at the given battler index, provided that
+   * {@link canForceSwitchPokemon | conditions are met} to do so.
+   *
+   * Successful switches are scheduled as Phases, and will occur at the end of the
+   * ongoing turn action (or as the next Phase if no turn action is ongoing).
+   * @param battlerIndex - The {@linkcode FieldBattlerIndex} of the active Pokemon to switch
+   * @param switchType - The {@link SwitchType | type} of switch to carry out,
+   * assuming the switch is scheduled successfully (Default {@linkcode SwitchType.SWITCH})
+   * @returns `true` if a forced switch sequence is successfully scheduled
+   */
+  public tryForceSwitchPokemon(battlerIndex: FieldBattlerIndex, switchType: SwitchType = SwitchType.SWITCH): boolean {
+    const pokemon = this.getPokemonByBattlerIndex(battlerIndex);
+    if (pokemon == null || !this.canForceSwitchPokemon(pokemon, switchType)) {
+      return false;
+    }
+
+    if (switchType === SwitchType.FORCE_SWITCH) {
+      const eligibleSwitchIndices: number[] = [];
+      pokemon.getParty().forEach((p, i) => {
+        if (p.isAllowedInBattle() && !p.isOnField()) {
+          eligibleSwitchIndices.push(i);
+        }
+      });
+
+      const switchInIndex = randSeedItem(eligibleSwitchIndices);
+      this.phaseManager.queueBattlerSwitchOut(battlerIndex, {
+        switchType,
+        switchInIndex,
+        when: "before",
+        phaseKey: "PostActionPhase",
+      });
+      return true;
+    }
+
+    this.phaseManager.queueBattlerSwitchOut(battlerIndex, {
+      switchType,
+      when: "before",
+      phaseKey: "PostActionPhase",
+    });
+    return true;
+  }
+
+  /**
+   * Determines if the given Pokemon can be forced to flee from battle. Enemy Pokemon
+   * can be forced to flee as long as none of the following conditions are met:
+   * - The current battle is not a Wild battle
+   * - The Pokemon is a Boss Pokemon
+   * - The Pokemon is a higher level than the source of this effect
+   * - The current Mystery Encounter doesn't allow the Pokemon to flee
+   * - The Pokemon either has an {@link ForceSwitchOutImmunityAbAttr | ability attribute} that
+   * nullifies this effect or is of a Max form
+   * @param pokemon - The {@linkcode Pokemon} to check
+   * @param source - The {@linkcode Pokemon} that initiated this effect
+   * @returns `true` if the given Pokemon can be forced to flee
+   */
+  public canForceFleePokemon(pokemon: Pokemon, source: Pokemon): boolean {
+    if (
+      this.currentBattle.battleType !== BattleType.WILD
+      || !pokemon.isEnemy()
+      || pokemon.isBoss()
+      || pokemon.level > source.level
+    ) {
+      return false;
+    }
+
+    // Wild Dondozo with an active allied Tatsugiri in its mouth cannot
+    // flee under any circumstance
+    const commandedTag = pokemon.getTag(BattlerTagType.COMMANDED);
+    if (commandedTag?.getSourcePokemon()?.isActive(true)) {
+      return false;
+    }
+
+    if (this.currentBattle.isBattleMysteryEncounter() && !this.currentBattle.mysteryEncounter?.fleeAllowed) {
+      return false;
+    }
+
+    const blockedByAbility = new ValueHolder(false);
+    applyAbAttrs<ForceSwitchOutImmunityAbAttr>(AbAttrFlag.FORCE_SWITCH_OUT_IMMUNITY, pokemon, false, blockedByAbility);
+
+    return !(blockedByAbility.value || pokemon.isMax());
+  }
+
+  /**
+   * Forces the active enemy Pokemon at the given battler index to flee.
+   * @param battlerIndex - The {@linkcode FieldBattlerIndex} of the enemy Pokemon to make flee
+   * @param source - The {@linkcode Pokemon} that initiated this effect
+   * @returns `true` if a Pokemon was successfully forced to flee
+   */
+  public tryForceFleePokemon(battlerIndex: FieldBattlerIndex, source: Pokemon): boolean {
+    const pokemon = this.getPokemonByBattlerIndex(battlerIndex);
+
+    if (pokemon == null || !this.canForceFleePokemon(pokemon, source)) {
+      return false;
+    }
+
+    const ally = pokemon.getAlly();
+    pokemon.leaveField();
+    this.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
+      i18next.t("moveTriggers:fled", { pokemonName: getPokemonNameWithAffix(pokemon) }),
+      undefined,
+      true,
+      500,
+    );
+
+    if (ally?.isActive(true)) {
+      this.redirectPokemonMoves(pokemon, ally);
+    } else {
+      this.clearEnemyHeldItemModifiers();
+      this.phaseManager.queueNextBattle(false);
+    }
+
+    return true;
   }
 
   /**
