@@ -1,5 +1,6 @@
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { AbAttr } from "#abilities/ab-attr";
+import type { AccuracyMultiplierAbAttr } from "#abilities/accuracy-multiplier-ab-attr";
 import type { AddSecondStrikeAbAttr } from "#abilities/add-second-strike-ab-attr";
 import type { AlliedFieldDamageReductionAbAttr } from "#abilities/allied-field-damage-reduction-ab-attr";
 import type { AllyMoveCategoryPowerBoostAbAttr } from "#abilities/ally-move-category-power-boost-ab-attr";
@@ -23,10 +24,13 @@ import type { DamageBoostAbAttr } from "#abilities/damage-boost-ab-attr";
 import type { DoubleBattleChanceAbAttr } from "#abilities/double-battle-chance-ab-attr";
 import type { DoubleBerryEffectAbAttr } from "#abilities/double-berry-effect-ab-attr";
 import type { EffectSporeAbAttr } from "#abilities/effect-spore-ab-attr";
+import type { EffectiveStatMultiplier } from "#abilities/effective-stat-multiplier-ab-attr";
+import type { EvasivenessMultiplierAbAttr } from "#abilities/evasiveness-multiplier-ab-attr";
+import type { FieldAccuracyMultiplierAbAttr } from "#abilities/field-accuracy-multiplier-ab-attr";
 import type { FieldMoveTypePowerBoostAbAttr } from "#abilities/field-move-type-power-boost-ab-attr";
-import type { FieldMultiplyStatAbAttr } from "#abilities/field-multiply-stat-ab-attr";
 import type { FieldPreventExplosionLikeAbAttr } from "#abilities/field-prevent-explosion-like-ab-attr";
 import type { FieldPriorityMoveImmunityAbAttr } from "#abilities/field-priority-move-immunity-ab-attr";
+import type { FieldStatMultiplierAbAttr } from "#abilities/field-stat-multiplier-ab-attr";
 import type { FlinchEffectAbAttr } from "#abilities/flinch-effect-ab-attr";
 import type { ForceSwitchOutImmunityAbAttr } from "#abilities/force-switch-out-immunity-ab-attr";
 import type { FullHpResistTypeAbAttr } from "#abilities/full-hp-resist-type-ab-attr";
@@ -87,7 +91,6 @@ import type { ReflectStatStageChangeAbAttr } from "#abilities/reflect-stat-stage
 import type { ReverseDrainAbAttr } from "#abilities/reverse-drain-ab-attr";
 import type { RunSuccessAbAttr } from "#abilities/run-success-ab-attr";
 import type { StabBoostAbAttr } from "#abilities/stab-boost-ab-attr";
-import type { StatMultiplierAbAttr } from "#abilities/stat-multiplier-ab-attr";
 import type { StatStageChangeCopyAbAttr } from "#abilities/stat-stage-change-copy-ab-attr";
 import type { StatStageChangeMultiplierAbAttr } from "#abilities/stat-stage-change-multiplier-ab-attr";
 import type { StatusEffectImmunityAbAttr } from "#abilities/status-effect-immunity-ab-attr";
@@ -153,8 +156,8 @@ export const AbAttrFlag = {
   BYPASS_SPEED_CHANCE: 23,
   /** @see {@linkcode PreventBypassSpeedChanceAbAttr} */
   PREVENT_BYPASS_SPEED_CHANCE: 24,
-  /** @see {@linkcode StatMultiplierAbAttr} */
-  STAT_MULTIPLIER: 25,
+  /** @see {@linkcode EffectiveStatMultiplier} */
+  EFFECTIVE_STAT_MULTIPLIER: 25,
   /** @see {@linkcode PostAttackApplyBattlerTagAbAttr} */
   POST_ATTACK_APPLY_BATTLER_TAG: 26,
   /** @see {@linkcode MoveEffectChanceMultiplierAbAttr} */
@@ -217,8 +220,8 @@ export const AbAttrFlag = {
   TERRAIN_EVENT_TYPE_CHANGE: 55,
   /** @see {@linkcode BonusCritAbAttr} */
   BONUS_CRIT: 56,
-  /** @see {@linkcode FieldMultiplyStatAbAttr} */
-  FIELD_MULTIPLY_STAT: 57,
+  /** @see {@linkcode FieldStatMultiplierAbAttr} */
+  FIELD_STAT_MULTIPLIER: 57,
   /** @see {@linkcode RunSuccessAbAttr} */
   RUN_SUCCESS: 58,
   /** @see {@linkcode PostBattleAbAttr} */
@@ -329,6 +332,12 @@ export const AbAttrFlag = {
   POST_TERA_FORM_CHANGE_CLEAR_WEATHER_TERRAIN: 111,
   /** @see {@linkcode BadDreamsAbAttr} */
   BAD_DREAMS: 112,
+  /** @see {@linkcode AccuracyMultiplierAbAttr} */
+  ACCURACY_MULTIPLIER: 113,
+  /** @see {@linkcode FieldAccuracyMultiplierAbAttr} */
+  FIELD_ACCURACY_MULTIPLIER: 114,
+  /** @see {@linkcode EvasivenessMultiplierAbAttr} */
+  EVASIVENESS_MULTIPLIER: 115,
 } as const;
 
 export type AbAttrFlag = EnumValues<typeof AbAttrFlag>;
