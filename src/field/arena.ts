@@ -66,6 +66,8 @@ export class Arena {
     this.updatePoolsForTimeOfDay();
   }
 
+  // #region Getters
+
   public get terrainType(): TerrainType {
     return this.terrain?.terrainType ?? TerrainType.NONE;
   }
@@ -74,7 +76,10 @@ export class Arena {
     return this.weather?.weatherType ?? WeatherType.NONE;
   }
 
-  init() {
+  // #endregion
+  // #region Misc Public Methods
+
+  public init() {
     const biomeKey = getBiomeKey(this.biomeId);
 
     globalScene.arenaPlayer.setBiome(this.biomeId);
@@ -89,152 +94,30 @@ export class Arena {
     this.updatePoolsForTimeOfDay();
   }
 
-  /**
-   * Determines if the arena is in one the specified biomes.
-   * @param biomeId - {@linkcode BiomeId} or array of {@linkcode BiomeId} to check against
-   * @returns `true` if the arena is of the specified biome, `false` otherwise
-   */
-  public isInBiome(biomeId: BiomeId | BiomeId[]): boolean {
-    return coerceArray(biomeId).includes(this.biomeId);
+  public setIgnoreAbilities(ignoreAbilities: boolean, ignoringEffectSource?: FieldBattlerIndex): void {
+    this.ignoreAbilities = ignoreAbilities;
+    this.ignoringEffectSource = ignoreAbilities ? ignoringEffectSource : undefined;
   }
 
   /**
-   * Determines if one of the specified terrains is set in the arena.
-   * @param terrain - {@linkcode TerrainType} or array of {@linkcode TerrainType} to check against
-   * @returns `true` if the arena is of the specified terrain, `false` otherwise
+   * Clears weather, terrain and arena tags when entering new biome or trainer battle.
    */
-  public hasTerrain(terrain: TerrainType | TerrainType[]): boolean {
-    return coerceArray(terrain).includes(this.terrainType);
+  public resetArenaEffects(): void {
+    // Don't reset weather if a Biome's permanent weather is active
+    if (this.weather?.turnsLeft !== 0) {
+      this.trySetWeather(WeatherType.NONE, false);
+    }
+
+    // Don't reset terrain if a Biome's permanent terrain is active
+    if (this.terrain?.turnsLeft !== 0) {
+      this.trySetTerrain(TerrainType.NONE, false, true);
+    }
+
+    this.removeAllTags();
   }
 
-  /**
-   * Determines if one the specified weather effects is set in the arena.
-   * Does **not** take into account weather suppression effects.
-   * @see {@linkcode Weather.isEffectSuppressed} to check if the weather effect is suppressed.
-   * @param weather - {@linkcode WeatherType} or array of {@linkcode WeatherType} to check against
-   * @returns `true` if the arena is of the specified weather, `false` otherwise
-   */
-  public hasWeather(weather: WeatherType | WeatherType[]): boolean {
-    return coerceArray(weather).includes(this.weatherType);
-  }
-
-  /**
-   * Determines if the arena is of the specified time of day
-   * @param timeOfDay - {@linkcode TimeOfDay} or array of {@linkcode TimeOfDay} to check against
-   * @returns `true` if the arena is of the specified time of day, `false` otherwise
-   */
-  public isTimeOfDay(timeOfDay: TimeOfDay | TimeOfDay[]): boolean {
-    return coerceArray(timeOfDay).includes(this.getTimeOfDay());
-  }
-
-  /**
-   * Updates the `pokemonPool` if the time of day changes.
-   * The `pokemonPool` is a combination of a biome's `TimeOfDay.ALL` pool
-   * and the pool for the specific time of day
-   */
-  updatePoolsForTimeOfDay(): void {
-    const timeOfDay = this.getTimeOfDay();
-    if (timeOfDay !== this.lastTimeOfDay) {
-      this.pokemonPool = {};
-      for (const [tier, pool] of Object.entries(allBiomes.get(this.biomeId).pokemonPool)) {
-        this.pokemonPool[tier] = [...pool[TimeOfDay.ALL], ...pool[timeOfDay]];
-      }
-      this.lastTimeOfDay = timeOfDay;
-    }
-  }
-
-  /**
-   * Generates a random Pokemon species for the biome
-   * @param waveIndex - The current floor
-   * @param level - The level of the generated Pokemon
-   * @param attempt - The number of attempts this function has been called since it calls itself recursively
-   * - Is 0 if called from a ME
-   * - Is `undefined` if called from battle-scene
-   * @param luckValue - The player's luck value
-   * - If the spawned Pokemon is a boss then the RNG ceiling is decreased by half the luck value
-   * - If the spawned Pokemon is not a boss then the RNG ceiling is decreased by twice the luck value
-   * @returns a Pokemon species
-   */
-  randomSpecies(waveIndex: number, level: number, attempt?: number, luckValue?: number): PokemonSpecies {
-    const overrideSpecies = globalScene.gameMode.getOverrideSpecies(waveIndex);
-    if (overrideSpecies) {
-      return overrideSpecies;
-    }
-
-    // Boss pool is 0-63, non Boss pool is 0-512
-    const isBossSpecies =
-      globalScene.getEncounterBossSegments(waveIndex, level) > 0
-      && this.pokemonPool[BiomePoolTier.BOSS].length > 0
-      && (this.biomeId !== BiomeId.END
-        || globalScene.gameMode.isClassic
-        || globalScene.gameMode.isWaveFinal(waveIndex));
-    const randVal = isBossSpecies ? 64 : 512;
-
-    // Luck reduces the rng ceiling
-    let luckModifier = 0;
-    if (typeof luckValue !== "undefined") {
-      luckModifier = luckValue * (isBossSpecies ? 0.5 : 2);
-    }
-    const tierValue = randSeedInt(randVal - luckModifier);
-    let tier = isBossSpecies ? this.generateBossBiomeTier(tierValue) : this.generateNonBossBiomeTier(tierValue);
-    console.log(enumValueToKey(BiomePoolTier, tier));
-
-    // If the BiomePoolTier is empty, downgrade the rarity
-    while (!this.pokemonPool[tier].length) {
-      console.log(
-        `Downgraded rarity tier from ${enumValueToKey(BiomePoolTier, tier)} to ${enumValueToKey(BiomePoolTier, (tier - 1) as BiomePoolTier)}`,
-      );
-      tier--;
-    }
-    const tierPool = this.pokemonPool[tier];
-    let ret: PokemonSpecies;
-    let regen = false;
-    if (tierPool.length === 0) {
-      ret = globalScene.randomSpecies(waveIndex, level);
-    } else {
-      const entry = tierPool[randSeedInt(tierPool.length)];
-      ret = getPokemonSpecies(entry);
-      regen = this.determineRerollIfLegendLike(ret, level);
-    }
-
-    // Attempt to retry 10 times if generated a LegendLike with an incompatible level
-    if (regen && (attempt || 0) < 10) {
-      console.log("Incompatible level: regenerating...");
-      return this.randomSpecies(waveIndex, level, (attempt || 0) + 1);
-    }
-
-    const newSpeciesId = ret.getEnemySpeciesForLevel(level);
-    if (newSpeciesId !== ret.speciesId) {
-      console.log("Replaced", SpeciesId[ret.speciesId], "with", SpeciesId[newSpeciesId]);
-      ret = getPokemonSpecies(newSpeciesId);
-    }
-    return ret;
-  }
-
-  /**
-   * Determines whether or not to reroll for the given {@linkcode PokemonSpecies} and level
-   *
-   * Mega/Primal/Ultra legendaries and Arceus (720) cannot spawn below level 90
-   * Most legendaries (including Regigigas but not Kyurem, Zacian and Zamazenta) cannot spawn below level 70
-   * All other sublegends cannot spawn below level 50
-   * The final base case only has Cosmoem/Cosmog
-   * @returns `true` if rerolling is required, `false` otherwise
-   */
-  determineRerollIfLegendLike(pokemonSpecies: PokemonSpecies, level: number): boolean {
-    if (pokemonSpecies.isLegendLike()) {
-      if (pokemonSpecies.baseTotal >= 720) {
-        return level < 90;
-      }
-      if (pokemonSpecies.baseTotal >= 670) {
-        return level < 70;
-      }
-      if (pokemonSpecies.baseTotal >= 580) {
-        return level < 50;
-      }
-      return level < 30;
-    }
-    return false;
-  }
+  // #endregion
+  // #region Misc Private Methods
 
   /**
    * Generates a boss {@linkcode BiomePoolTier} for a given tier value.
@@ -249,7 +132,7 @@ export class Arena {
    * @param tierValue - Number from 0-63
    * @returns the generated BiomePoolTier
    */
-  generateBossBiomeTier(tierValue: number): BiomePoolTier {
+  private generateBossBiomeTier(tierValue: number): BiomePoolTier {
     if (tierValue >= 20) {
       return BiomePoolTier.BOSS;
     }
@@ -276,7 +159,7 @@ export class Arena {
    * @param tierValue - Number from 0-511
    * @returns the generated BiomePoolTier
    */
-  generateNonBossBiomeTier(tierValue: number): BiomePoolTier {
+  private generateNonBossBiomeTier(tierValue: number): BiomePoolTier {
     if (tierValue >= 156) {
       return BiomePoolTier.COMMON;
     }
@@ -292,94 +175,18 @@ export class Arena {
     return BiomePoolTier.ULTRA_RARE;
   }
 
-  /**
-   * Attempts to generate a trainer for a given wave.
-   * If no trainers can be found then a breeder will be returned instead.
-   * @param waveIndex - The wave index
-   * @param isBoss - Only true for the brutal mysterious challengers ME
-   * @returns a {@linkcode TrainerType | trainer}
-   */
-  randomTrainerType(waveIndex: number, isBoss: boolean = false): TrainerType {
-    const isTrainerBoss =
-      this.trainerPool[BiomePoolTier.BOSS].length > 0
-      && (globalScene.gameMode.isTrainerBoss(waveIndex, this.biomeId) || isBoss);
-
-    // @todo Right now there are no super/ultra or rare boss trainers
-    const tierValue = randSeedInt(isTrainerBoss ? 64 : 512);
-    let tier = isTrainerBoss ? this.generateBossBiomeTier(tierValue) : this.generateNonBossBiomeTier(tierValue);
-
-    while (tier > BiomePoolTier.COMMON && !this.trainerPool[tier].length) {
-      console.log(
-        `Downgraded trainer rarity tier from ${enumValueToKey(BiomePoolTier, tier)} to ${enumValueToKey(BiomePoolTier, (tier - 1) as BiomePoolTier)}`,
-      );
-      tier--;
-    }
-    const tierPool = this.trainerPool[tier] || [];
-    return tierPool.length ? tierPool[randSeedInt(tierPool.length)] : TrainerType.BREEDER;
-  }
+  // #endregion
+  // #region Weather
 
   /**
-   * Generates a `formIndex` for a given species based on the biome and time of day.
-   * Used for Burmy/Wormadam, Rotom, and Lycanroc
-   * @param species - The {@linkcode PokemonSpecies} being checked
-   * @returns the appropriate formIndex
+   * Determines if one the specified weather effects is set in the arena.
+   * Does **not** take into account weather suppression effects.
+   * @see {@linkcode Weather.isEffectSuppressed} to check if the weather effect is suppressed.
+   * @param weather - {@linkcode WeatherType} or array of {@linkcode WeatherType} to check against
+   * @returns `true` if the arena is of the specified weather, `false` otherwise
    */
-  getSpeciesFormIndex(species: PokemonSpecies): number {
-    switch (species.speciesId) {
-      case SpeciesId.BURMY:
-      case SpeciesId.WORMADAM:
-        switch (this.biomeId) {
-          case BiomeId.BEACH:
-            return 1;
-          case BiomeId.SLUM:
-            return 2;
-        }
-        break;
-      case SpeciesId.ROTOM:
-        switch (this.biomeId) {
-          case BiomeId.VOLCANO:
-            return 1;
-          case BiomeId.SEA:
-            return 2;
-          case BiomeId.ICE_CAVE:
-            return 3;
-          case BiomeId.MOUNTAIN:
-            return 4;
-          case BiomeId.TALL_GRASS:
-            return 5;
-        }
-        break;
-      case SpeciesId.LYCANROC: {
-        const timeOfDay = this.getTimeOfDay();
-        switch (timeOfDay) {
-          case TimeOfDay.DAY:
-          case TimeOfDay.DAWN:
-            return 0;
-          case TimeOfDay.DUSK:
-            return 2;
-          case TimeOfDay.NIGHT:
-            return 1;
-        }
-        break;
-      }
-    }
-
-    return 0;
-  }
-
-  /**
-   * Returns a background terrain color ratio for a given biome
-   * @returns 0, 131/180 or 1
-   */
-  getBgTerrainColorRatioForBiome(): number {
-    switch (this.biomeId) {
-      case BiomeId.SPACE:
-        return 1;
-      case BiomeId.END:
-        return 0;
-    }
-
-    return 131 / 180;
+  public hasWeather(weather: WeatherType | WeatherType[]): boolean {
+    return coerceArray(weather).includes(this.weatherType);
   }
 
   /**
@@ -387,25 +194,10 @@ export class Arena {
    * @param weather new {@linkcode WeatherType} to set
    * @returns true to force trySetWeather to return true
    */
-  tryOverrideWeather(weather: WeatherType): boolean {
+  private tryOverrideWeather(weather: WeatherType): boolean {
     this.weather = new Weather(weather, 0);
     globalScene.phaseManager.createAndUnshiftPhase("CommonAnimPhase", (CommonAnim.SUNNY + (weather - 1)) as CommonAnim);
     globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", getWeatherStartMessage(weather) ?? "");
-    return true;
-  }
-
-  /**
-   * Sets terrain to the override specified in overrides.ts
-   * @param terrain new {@linkcode TerrainType} to set
-   * @returns true to force trySetTerrain to return true
-   */
-  tryOverrideTerrain(terrain: TerrainType): boolean {
-    this.terrain = new Terrain(terrain, 0);
-    globalScene.phaseManager.createAndUnshiftPhase(
-      "CommonAnimPhase",
-      (CommonAnim.MISTY_TERRAIN + (terrain - 1)) as CommonAnim,
-    );
-    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", getTerrainStartMessage(terrain) ?? "");
     return true;
   }
 
@@ -434,7 +226,7 @@ export class Arena {
    * @param hasPokemonSource boolean if the new weather is from a pokemon
    * @returns true if new weather set, false if no weather provided or attempting to set the same weather as currently in use
    */
-  trySetWeather(newWeatherType: WeatherType, hasPokemonSource: boolean): boolean {
+  public trySetWeather(newWeatherType: WeatherType, hasPokemonSource: boolean): boolean {
     /**
      * TODO: Refactor into if(this.tryOverrideWeather()) { return true }
      */
@@ -484,9 +276,38 @@ export class Arena {
   }
 
   /**
+   * Checks to see if the current weather will cancel a move
+   * @param user - The Pokemon using the move
+   * @param move - The move being used
+   * @returns whether the move was cancelled by weather
+   */
+  public isMoveWeatherCancelled(user: Pokemon, move: Move): boolean {
+    return !!this.weather && !this.weather.isEffectSuppressed() && this.weather.isMoveWeatherCancelled(user, move);
+  }
+
+  /**
+   * Sets a random weather based on the time of day and the current biome
+   */
+  public setRandomWeather(): void {
+    const weatherPool = allBiomes.get(this.biomeId).weatherPool;
+    const weatherMap = new Map<WeatherType, number>();
+    for (const id of getTSEnumValues(WeatherType)) {
+      weatherMap.set(id, weatherPool[id] ?? 0);
+    }
+
+    // If the time is dusk or night, set the chance of sun to 0
+    if ([TimeOfDay.DUSK, TimeOfDay.NIGHT].includes(this.getTimeOfDay())) {
+      weatherMap.set(WeatherType.SUNNY, 0);
+    }
+
+    const randomWeather = weightedPick(weatherMap);
+    this.trySetWeather(randomWeather, false);
+  }
+
+  /**
    * Function to trigger all weather based form changes
    */
-  triggerWeatherBasedFormChanges(): void {
+  public triggerWeatherBasedFormChanges(): void {
     globalScene.getField(true).forEach((p) => {
       const isCastformWithForecast = p.hasAbility(AbilityId.FORECAST) && p.species.speciesId === SpeciesId.CASTFORM;
       const isCherrimWithFlowerGift = p.hasAbility(AbilityId.FLOWER_GIFT) && p.species.speciesId === SpeciesId.CHERRIM;
@@ -502,7 +323,7 @@ export class Arena {
   /**
    * Function to trigger all weather based form changes back into their normal forms
    */
-  triggerWeatherBasedFormChangesToNormal(): void {
+  public triggerWeatherBasedFormChangesToNormal(): void {
     globalScene.getField(true).forEach((p) => {
       const isCastformWithForecast =
         p.hasAbility(AbilityId.FORECAST, false, true) && p.species.speciesId === SpeciesId.CASTFORM;
@@ -518,13 +339,51 @@ export class Arena {
   }
 
   /**
+   * @param attackType - The {@linkcode ElementalType} of the attack
+   * @returns The weather damage multiplier
+   */
+  public getWeatherDamageMultiplier(attackType: ElementalType): number {
+    if (this.weather && !this.weather.isEffectSuppressed()) {
+      return this.weather.getAttackTypeMultiplier(attackType);
+    }
+    return 1;
+  }
+
+  // #endregion
+  // #region Terrain
+
+  /**
+   * Determines if one of the specified terrains is set in the arena.
+   * @param terrain - {@linkcode TerrainType} or array of {@linkcode TerrainType} to check against
+   * @returns `true` if the arena is of the specified terrain, `false` otherwise
+   */
+  public hasTerrain(terrain: TerrainType | TerrainType[]): boolean {
+    return coerceArray(terrain).includes(this.terrainType);
+  }
+
+  /**
+   * Sets terrain to the override specified in overrides.ts
+   * @param terrain new {@linkcode TerrainType} to set
+   * @returns true to force trySetTerrain to return true
+   */
+  private tryOverrideTerrain(terrain: TerrainType): boolean {
+    this.terrain = new Terrain(terrain, 0);
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "CommonAnimPhase",
+      (CommonAnim.MISTY_TERRAIN + (terrain - 1)) as CommonAnim,
+    );
+    globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", getTerrainStartMessage(terrain) ?? "");
+    return true;
+  }
+
+  /**
    * Attempts to set terrain
    * @param terrain - {@linkcode TerrainType | The type of terrain}
    * @param hasPokemonSource - Whether the terrain was generated from a Pokemon
    * @param ignoreAnim - Whether or not to ignore animations
    * @returns whether or not the terrain was successfully set
    */
-  trySetTerrain(terrain: TerrainType, hasPokemonSource: boolean, ignoreAnim: boolean = false): boolean {
+  public trySetTerrain(terrain: TerrainType, hasPokemonSource: boolean, ignoreAnim: boolean = false): boolean {
     // TODO: Refactor into `if(this.tryOverrideTerrain()) { return true }`
     if (activeOverrides.TERRAIN_OVERRIDE) {
       return this.tryOverrideTerrain(activeOverrides.TERRAIN_OVERRIDE);
@@ -576,16 +435,6 @@ export class Arena {
   }
 
   /**
-   * Checks to see if the current weather will cancel a move
-   * @param user - The Pokemon using the move
-   * @param move - The move being used
-   * @returns whether the move was cancelled by weather
-   */
-  public isMoveWeatherCancelled(user: Pokemon, move: Move): boolean {
-    return !!this.weather && !this.weather.isEffectSuppressed() && this.weather.isMoveWeatherCancelled(user, move);
-  }
-
-  /**
    * Checks to see if the current terrain will cancel a move
    * @param user - The Pokemon using the move
    * @param targets - The Pokemon being targetted
@@ -597,95 +446,9 @@ export class Arena {
   }
 
   /**
-   * Gets the attack type multiplier for weather and terrain
-   * @param attackType - The type of the attack being used
-   * @param grounded - Whether or not the user is grounded
-   * @returns the attack multiplier
-   */
-  getAttackTypeMultiplier(attackType: ElementalType, grounded: boolean): number {
-    let weatherMultiplier = 1;
-    if (this.weather && !this.weather.isEffectSuppressed()) {
-      weatherMultiplier = this.weather.getAttackTypeMultiplier(attackType);
-    }
-
-    let terrainMultiplier = 1;
-    if (this.terrain && grounded) {
-      terrainMultiplier = this.terrain.getAttackTypeMultiplier(attackType);
-    }
-
-    return weatherMultiplier * terrainMultiplier;
-  }
-
-  /**
-   * Gets the denominator for the chance for a trainer spawn
-   * @returns A number `n` such that the probability of a trainer battle is `1/n`.
-   * Returns `0` if the {@linkcode Biome} does not support trainers; this disables random trainer spawns.
-   *
-   * Returns the value of {@linkcode activeOverrides.RANDOM_TRAINER_CHANCE_OVERRIDE} if it is set; this sets trainer spawn rates as above.
-   */
-  getTrainerChance(): number {
-    return activeOverrides.RANDOM_TRAINER_CHANCE_OVERRIDE ?? allBiomes.get(this.biomeId).trainerChance;
-  }
-
-  /**
-   * Gets the time of day
-   * ```
-   * | time of day | waveCycle | waves |
-   * |-------------|-----------|-------|
-   * | day         | 0-14      | 15    |
-   * | dusk        | 15-19     | 5     |
-   * | night       | 20-34     | 15    |
-   * | dawn        | 35-39     | 5     |
-   * ```
-   * It is always night in the abyss
-   *
-   * @returns the TimeOfDay
-   */
-  getTimeOfDay(): TimeOfDay {
-    if (this.biomeId === BiomeId.ABYSS) {
-      return TimeOfDay.NIGHT;
-    }
-
-    const waveCycle = ((globalScene.currentBattle?.waveIndex || 0) + globalScene.waveCycleOffset) % 40;
-
-    if (waveCycle < 15) {
-      return TimeOfDay.DAY;
-    }
-
-    if (waveCycle < 20) {
-      return TimeOfDay.DUSK;
-    }
-
-    if (waveCycle < 35) {
-      return TimeOfDay.NIGHT;
-    }
-
-    return TimeOfDay.DAWN;
-  }
-
-  /**
-   * Sets a random weather based on the time of day and the current biome
-   */
-  setRandomWeather(): void {
-    const weatherPool = allBiomes.get(this.biomeId).weatherPool;
-    const weatherMap = new Map<WeatherType, number>();
-    for (const id of getTSEnumValues(WeatherType)) {
-      weatherMap.set(id, weatherPool[id] ?? 0);
-    }
-
-    // If the time is dusk or night, set the chance of sun to 0
-    if ([TimeOfDay.DUSK, TimeOfDay.NIGHT].includes(this.getTimeOfDay())) {
-      weatherMap.set(WeatherType.SUNNY, 0);
-    }
-
-    const randomWeather = weightedPick(weatherMap);
-    this.trySetWeather(randomWeather, false);
-  }
-
-  /**
    * Sets a random terrain based on the biome
    */
-  setRandomTerrain(): void {
+  public setRandomTerrain(): void {
     const terrainPool = allBiomes.get(this.biomeId).terrainPool;
     const terrainMap = new Map<TerrainType, number>();
     for (const id of getTSEnumValues(TerrainType)) {
@@ -696,75 +459,219 @@ export class Arena {
     this.trySetTerrain(randomTerrain, false);
   }
 
-  isOutside(): boolean {
-    return !IndoorBiomes.includes(this.biomeId);
+  /**
+   * @param attackType - The {@linkcode ElementalType} of the attack
+   * @returns The terrain damage multiplier
+   */
+  public getTerrainDamageMultiplier(attackType: ElementalType): number {
+    return this.terrain?.getAttackTypeMultiplier(attackType) ?? 1;
   }
 
-  // @todo these tints feel like they belong in their own class somewhere
-  overrideTint(): [number, number, number] {
-    switch (activeOverrides.ARENA_TINT_OVERRIDE) {
-      case TimeOfDay.DUSK:
-        return [98, 48, 73].map((c) => Math.round((c + 128) / 2)) as [number, number, number];
-      case TimeOfDay.NIGHT:
-        return [64, 64, 64];
-      case TimeOfDay.DAWN:
-      case TimeOfDay.DAY:
-      default:
-        return [128, 128, 128];
+  // #endregion
+  // #region Trainers
+
+  /**
+   * Attempts to generate a trainer for a given wave.
+   * If no trainers can be found then a breeder will be returned instead.
+   * @param waveIndex - The wave index
+   * @param isBoss - Only true for the brutal mysterious challengers ME
+   * @returns a {@linkcode TrainerType | trainer}
+   */
+  public randomTrainerType(waveIndex: number, isBoss: boolean = false): TrainerType {
+    const isTrainerBoss =
+      this.trainerPool[BiomePoolTier.BOSS].length > 0
+      && (globalScene.gameMode.isTrainerBoss(waveIndex, this.biomeId) || isBoss);
+
+    // TODO: Right now there are no super/ultra or rare boss trainers
+    const tierValue = randSeedInt(isTrainerBoss ? 64 : 512);
+    let tier = isTrainerBoss ? this.generateBossBiomeTier(tierValue) : this.generateNonBossBiomeTier(tierValue);
+
+    while (tier > BiomePoolTier.COMMON && this.trainerPool[tier].length === 0) {
+      console.log(
+        `Downgraded trainer rarity tier from ${enumValueToKey(BiomePoolTier, tier)} to ${enumValueToKey(BiomePoolTier, (tier - 1) as BiomePoolTier)}`,
+      );
+      tier--;
+    }
+    const tierPool = this.trainerPool[tier] || [];
+    return tierPool.length > 0 ? tierPool[randSeedInt(tierPool.length)] : TrainerType.BREEDER;
+  }
+
+  /**
+   * Gets the denominator for the chance for a trainer spawn
+   * @returns A number `n` such that the probability of a trainer battle is `1/n`.
+   * Returns `0` if the {@linkcode Biome} does not support trainers; this disables random trainer spawns.
+   *
+   * Returns the value of {@linkcode activeOverrides.RANDOM_TRAINER_CHANCE_OVERRIDE} if it is set; this sets trainer spawn rates as above.
+   * @todo possibly change the way this works so it's more flexible than just `1/n`?
+   */
+  public getTrainerChance(): number {
+    return activeOverrides.RANDOM_TRAINER_CHANCE_OVERRIDE ?? allBiomes.get(this.biomeId).trainerChance;
+  }
+
+  // #endregion
+  // #region Pokemon
+
+  /**
+   * Updates the `pokemonPool` if the time of day changes. \
+   * The `pokemonPool` is a combination of a biome's `TimeOfDay.ALL` pool
+   * and the pool for the specific time of day
+   */
+  public updatePoolsForTimeOfDay(): void {
+    const timeOfDay = this.getTimeOfDay();
+    if (timeOfDay !== this.lastTimeOfDay) {
+      this.pokemonPool = {};
+      for (const [tier, pool] of Object.entries(allBiomes.get(this.biomeId).pokemonPool)) {
+        this.pokemonPool[tier] = [...pool[TimeOfDay.ALL], ...pool[timeOfDay]];
+      }
+      this.lastTimeOfDay = timeOfDay;
     }
   }
 
-  getDayTint(): [number, number, number] {
-    if (activeOverrides.ARENA_TINT_OVERRIDE !== null) {
-      return this.overrideTint();
+  /**
+   * Generates a random Pokemon species for the biome
+   * @param waveIndex - The current floor
+   * @param level - The level of the generated Pokemon
+   * @param attempt - The number of attempts this function has been called since it calls itself recursively
+   * - Is 0 if called from a ME
+   * - Is `undefined` if called from battle-scene
+   * @param luckValue - The player's luck value
+   * - If the spawned Pokemon is a boss then the RNG ceiling is decreased by half the luck value
+   * - If the spawned Pokemon is not a boss then the RNG ceiling is decreased by twice the luck value
+   * @returns a Pokemon species
+   */
+  public randomSpecies(waveIndex: number, level: number, attempt?: number, luckValue?: number): PokemonSpecies {
+    const overrideSpecies = globalScene.gameMode.getOverrideSpecies(waveIndex);
+    if (overrideSpecies) {
+      return overrideSpecies;
     }
-    switch (this.biomeId) {
-      case BiomeId.ABYSS:
-        return [64, 64, 64];
-      default:
-        return [128, 128, 128];
+
+    // Boss pool is 0-63, non Boss pool is 0-512
+    const isBossSpecies =
+      globalScene.getEncounterBossSegments(waveIndex, level) > 0
+      && this.pokemonPool[BiomePoolTier.BOSS].length > 0
+      && (this.biomeId !== BiomeId.END
+        || globalScene.gameMode.isClassic
+        || globalScene.gameMode.isWaveFinal(waveIndex));
+    const randVal = isBossSpecies ? 64 : 512;
+
+    // Luck reduces the rng ceiling
+    let luckModifier = 0;
+    if (typeof luckValue !== "undefined") {
+      luckModifier = luckValue * (isBossSpecies ? 0.5 : 2);
     }
+    const tierValue = randSeedInt(randVal - luckModifier);
+    let tier = isBossSpecies ? this.generateBossBiomeTier(tierValue) : this.generateNonBossBiomeTier(tierValue);
+    console.log(enumValueToKey(BiomePoolTier, tier));
+
+    // If the BiomePoolTier is empty, downgrade the rarity
+    while (this.pokemonPool[tier].length === 0) {
+      console.log(
+        `Downgraded rarity tier from ${enumValueToKey(BiomePoolTier, tier)} to ${enumValueToKey(BiomePoolTier, (tier - 1) as BiomePoolTier)}`,
+      );
+      tier--;
+    }
+    const tierPool = this.pokemonPool[tier];
+    let ret: PokemonSpecies;
+    let regen = false;
+    if (tierPool.length === 0) {
+      ret = globalScene.randomSpecies(waveIndex, level);
+    } else {
+      const entry = tierPool[randSeedInt(tierPool.length)];
+      ret = getPokemonSpecies(entry);
+      regen = this.determineRerollIfLegendLike(ret, level);
+    }
+
+    // Attempt to retry 10 times if generated a LegendLike with an incompatible level
+    if (regen && (attempt || 0) < 10) {
+      console.log("Incompatible level: regenerating...");
+      return this.randomSpecies(waveIndex, level, (attempt || 0) + 1);
+    }
+
+    const newSpeciesId = ret.getEnemySpeciesForLevel(level);
+    if (newSpeciesId !== ret.speciesId) {
+      console.log("Replaced", SpeciesId[ret.speciesId], "with", SpeciesId[newSpeciesId]);
+      ret = getPokemonSpecies(newSpeciesId);
+    }
+    return ret;
   }
 
-  getDuskTint(): [number, number, number] {
-    if (activeOverrides.ARENA_TINT_OVERRIDE) {
-      return this.overrideTint();
+  /**
+   * Determines whether or not to reroll for the given {@linkcode PokemonSpecies} and level
+   *
+   * - Mega/Primal/Ultra legendaries and Arceus (720) cannot spawn below level 90
+   * - Most legendaries (including Regigigas but not Kyurem, Zacian and Zamazenta) cannot spawn below level 70
+   * - All other sublegends cannot spawn below level 50
+   * - The final base case only has Cosmoem/Cosmog
+   * @returns Whether rerolling is required
+   * @todo Refactor so there is no rerolling required, instead modifying the pools directly
+   */
+  private determineRerollIfLegendLike(pokemonSpecies: PokemonSpecies, level: number): boolean {
+    if (pokemonSpecies.isLegendLike()) {
+      if (pokemonSpecies.baseTotal >= 720) {
+        return level < 90;
+      }
+      if (pokemonSpecies.baseTotal >= 670) {
+        return level < 70;
+      }
+      if (pokemonSpecies.baseTotal >= 580) {
+        return level < 50;
+      }
+      return level < 30;
     }
-    if (!this.isOutside()) {
-      return [0, 0, 0];
-    }
-
-    switch (this.biomeId) {
-      default:
-        return [98, 48, 73].map((c) => Math.round((c + 128) / 2)) as [number, number, number];
-    }
+    return false;
   }
 
-  getNightTint(): [number, number, number] {
-    if (activeOverrides.ARENA_TINT_OVERRIDE) {
-      return this.overrideTint();
-    }
-    switch (this.biomeId) {
-      case BiomeId.ABYSS:
-      case BiomeId.SPACE:
-      case BiomeId.END:
-        return this.getDayTint();
+  /**
+   * Generates a `formIndex` for a given species based on the biome and time of day.
+   * Used for Burmy/Wormadam, Rotom, and Lycanroc
+   * @param species - The {@linkcode PokemonSpecies} being checked
+   * @returns the appropriate formIndex
+   */
+  public getSpeciesFormIndex(species: PokemonSpecies): number {
+    switch (species.speciesId) {
+      case SpeciesId.BURMY:
+      case SpeciesId.WORMADAM:
+        switch (this.biomeId) {
+          case BiomeId.BEACH:
+            return 1;
+          case BiomeId.SLUM:
+            return 2;
+        }
+        break;
+      case SpeciesId.ROTOM:
+        switch (this.biomeId) {
+          case BiomeId.VOLCANO:
+            return 1;
+          case BiomeId.SEA:
+            return 2;
+          case BiomeId.ICE_CAVE:
+            return 3;
+          case BiomeId.MOUNTAIN:
+            return 4;
+          case BiomeId.TALL_GRASS:
+            return 5;
+        }
+        break;
+      case SpeciesId.LYCANROC: {
+        const timeOfDay = this.getTimeOfDay();
+        switch (timeOfDay) {
+          case TimeOfDay.DAY:
+          case TimeOfDay.DAWN:
+            return 0;
+          case TimeOfDay.DUSK:
+            return 2;
+          case TimeOfDay.NIGHT:
+            return 1;
+        }
+        break;
+      }
     }
 
-    if (!this.isOutside()) {
-      return [64, 64, 64];
-    }
-
-    switch (this.biomeId) {
-      default:
-        return [48, 48, 98];
-    }
+    return 0;
   }
 
-  setIgnoreAbilities(ignoreAbilities: boolean, ignoringEffectSource?: FieldBattlerIndex): void {
-    this.ignoreAbilities = ignoreAbilities;
-    this.ignoringEffectSource = ignoreAbilities ? ignoringEffectSource : undefined;
-  }
+  // #endregion
+  // #region Arena Tags
 
   /**
    * Applies each `ArenaTag` in this Arena, based on which side (player, enemy, or both) is passed in as a parameter
@@ -773,7 +680,7 @@ export class Arena {
    * @param simulated if `true`, this applies arena tags without changing game state
    * @param args array of parameters that the called upon tags may need
    */
-  applyTags<T extends ArenaTag = never>(
+  public applyTags<T extends ArenaTag = never>(
     tagTypes: ArenaTagType | ArenaTagType[],
     side: ArenaTagSide,
     ...args: Parameters<T["apply"]>
@@ -799,7 +706,7 @@ export class Arena {
    * @returns `false` if there already exists a tag of this type in the Arena
    * @todo `sourceId` should be optional
    */
-  addTag(
+  public addTag(
     tagType: ArenaTagType,
     sourceId: number,
     turnCount: number = 0,
@@ -849,7 +756,7 @@ export class Arena {
    * @param side - (Default `ArenaTagSide.BOTH`) The {@linkcode ArenaTagSide} to look at
    * @returns Whether the `ArenaTag` exists
    */
-  hasTag(tagType: ArenaTagType, side: ArenaTagSide = ArenaTagSide.BOTH): boolean {
+  public hasTag(tagType: ArenaTagType, side: ArenaTagSide = ArenaTagSide.BOTH): boolean {
     const validSides = new Set<ArenaTagSide>([ArenaTagSide.BOTH, side]);
 
     return this.tags.some((t) => t.tagType === tagType && (side === ArenaTagSide.BOTH || validSides.has(t.side)));
@@ -863,7 +770,10 @@ export class Arena {
    * @param side - (Default `ArenaTagSide.BOTH`) The {@linkcode ArenaTagSide} to look at
    * @returns either the {@linkcode ArenaTag}, or `undefined` if it isn't there
    */
-  findTag<T extends ArenaTag = ArenaTag>(tagType: ArenaTagType, side: ArenaTagSide = ArenaTagSide.BOTH): T | undefined {
+  public findTag<T extends ArenaTag = ArenaTag>(
+    tagType: ArenaTagType,
+    side: ArenaTagSide = ArenaTagSide.BOTH,
+  ): T | undefined {
     const validSides = new Set<ArenaTagSide>([ArenaTagSide.BOTH, side]);
 
     return this.tags.find((t) => tagType === t.tagType && (side === ArenaTagSide.BOTH || validSides.has(t.side))) as T;
@@ -875,7 +785,7 @@ export class Arena {
    * @param side - (Default `ArenaTagSide.BOTH`) The {@linkcode ArenaTagSide} to look at
    * @returns array of {@linkcode ArenaTag}s from which the Arena's tags return `true` and apply to the given side
    */
-  getTags<T extends ArenaTag = ArenaTag>(
+  public getTags<T extends ArenaTag = ArenaTag>(
     tagPredicate: (t: ArenaTag) => boolean,
     side: ArenaTagSide = ArenaTagSide.BOTH,
   ): T[] | undefined {
@@ -884,7 +794,7 @@ export class Arena {
     return this.tags.filter((t) => tagPredicate(t) && (side === ArenaTagSide.BOTH || validSides.has(t.side))) as T[];
   }
 
-  lapseTags(): void {
+  public lapseTags(): void {
     this.tags
       .filter((t) => !t.lapse())
       .forEach((t) => {
@@ -895,7 +805,7 @@ export class Arena {
       });
   }
 
-  removeTag(tagType: ArenaTagType): boolean {
+  public removeTag(tagType: ArenaTagType): boolean {
     const tags = this.tags;
     const tag = tags.find((t) => t.tagType === tagType);
     if (tag) {
@@ -907,7 +817,7 @@ export class Arena {
     return !!tag;
   }
 
-  removeTagOnSide(tagType: ArenaTagType, side: ArenaTagSide, quiet: boolean = false): boolean {
+  public removeTagOnSide(tagType: ArenaTagType, side: ArenaTagSide, quiet: boolean = false): boolean {
     const tag = this.findTag(tagType, side);
     if (tag) {
       tag.onRemove(quiet);
@@ -918,8 +828,8 @@ export class Arena {
     return !!tag;
   }
 
-  removeAllTags(): void {
-    while (this.tags.length) {
+  public removeAllTags(): void {
+    while (this.tags.length > 0) {
       this.tags[0].onRemove();
       this.eventTarget.dispatchEvent(
         new TagRemovedEvent(this.tags[0].tagType, this.tags[0].side, this.tags[0].turnCount),
@@ -929,34 +839,124 @@ export class Arena {
     }
   }
 
-  /**
-   * Clears weather, terrain and arena tags when entering new biome or trainer battle.
-   */
-  resetArenaEffects(): void {
-    // Don't reset weather if a Biome's permanent weather is active
-    if (this.weather?.turnsLeft !== 0) {
-      this.trySetWeather(WeatherType.NONE, false);
-    }
-
-    // Don't reset terrain if a Biome's permanent terrain is active
-    if (this.terrain?.turnsLeft !== 0) {
-      this.trySetTerrain(TerrainType.NONE, false, true);
-    }
-
-    this.removeAllTags();
-  }
-
-  preloadBgm(): void {
-    globalScene.loadBgm(this.bgm);
-  }
+  // #endregion
+  // #region Time of Day
 
   /**
-   * @returns the {@linkcode Biome.bgmLoopPoint | loop point} of a biome's associated bgm in seconds
+   * Gets the time of day
+   * ```
+   * | time of day | waveCycle | waves |
+   * |-------------|-----------|-------|
+   * | day         | 0-14      | 15    |
+   * | dusk        | 15-19     | 5     |
+   * | night       | 20-34     | 15    |
+   * | dawn        | 35-39     | 5     |
+   * ```
+   * It is always night in the abyss
+   *
+   * @returns the TimeOfDay
    */
-  getBgmLoopPoint(): number {
-    return allBiomes.get(this.biomeId).bgmLoopPoint;
+  public getTimeOfDay(): TimeOfDay {
+    if (this.biomeId === BiomeId.ABYSS) {
+      return TimeOfDay.NIGHT;
+    }
+
+    const waveCycle = ((globalScene.currentBattle?.waveIndex || 0) + globalScene.waveCycleOffset) % 40;
+
+    if (waveCycle < 15) {
+      return TimeOfDay.DAY;
+    }
+
+    if (waveCycle < 20) {
+      return TimeOfDay.DUSK;
+    }
+
+    if (waveCycle < 35) {
+      return TimeOfDay.NIGHT;
+    }
+
+    return TimeOfDay.DAWN;
   }
+
+  /**
+   * Determines if the arena is of the specified time of day
+   * @param timeOfDay - {@linkcode TimeOfDay} or array of {@linkcode TimeOfDay} to check against
+   * @returns `true` if the arena is of the specified time of day, `false` otherwise
+   */
+  public isTimeOfDay(timeOfDay: TimeOfDay | TimeOfDay[]): boolean {
+    return coerceArray(timeOfDay).includes(this.getTimeOfDay());
+  }
+
+  public isOutside(): boolean {
+    return !IndoorBiomes.includes(this.biomeId);
+  }
+
+  // TODO: these tints feel like they belong in their own class somewhere
+  // TODO: replace arena tint override with time of day override
+  private overrideTint(): [number, number, number] {
+    switch (activeOverrides.ARENA_TINT_OVERRIDE) {
+      case TimeOfDay.DUSK:
+        return [98, 48, 73].map((c) => Math.round((c + 128) / 2)) as [number, number, number];
+      case TimeOfDay.NIGHT:
+        return [64, 64, 64];
+      case TimeOfDay.DAWN:
+      case TimeOfDay.DAY:
+      default:
+        return [128, 128, 128];
+    }
+  }
+
+  public getDayTint(): [number, number, number] {
+    if (activeOverrides.ARENA_TINT_OVERRIDE !== null) {
+      return this.overrideTint();
+    }
+    switch (this.biomeId) {
+      case BiomeId.ABYSS:
+        return [64, 64, 64];
+      default:
+        return [128, 128, 128];
+    }
+  }
+
+  public getDuskTint(): [number, number, number] {
+    if (activeOverrides.ARENA_TINT_OVERRIDE) {
+      return this.overrideTint();
+    }
+    if (!this.isOutside()) {
+      return [0, 0, 0];
+    }
+
+    switch (this.biomeId) {
+      default:
+        return [98, 48, 73].map((c) => Math.round((c + 128) / 2)) as [number, number, number];
+    }
+  }
+
+  public getNightTint(): [number, number, number] {
+    if (activeOverrides.ARENA_TINT_OVERRIDE) {
+      return this.overrideTint();
+    }
+    switch (this.biomeId) {
+      case BiomeId.ABYSS:
+      case BiomeId.SPACE:
+      case BiomeId.END:
+        return this.getDayTint();
+    }
+
+    if (!this.isOutside()) {
+      return [64, 64, 64];
+    }
+
+    switch (this.biomeId) {
+      default:
+        return [48, 48, 98];
+    }
+  }
+
+  // #endregion
 }
+
+// #region Helper Functions
 
 /**
  * @todo Make the key (`biomeId` in lower case) not what
@@ -1003,6 +1003,33 @@ export function getBiomeHasProps(biomeId: BiomeId): boolean {
   return biomeWithProps.includes(biomeId);
 }
 
+/**
+ * Returns a background terrain color ratio for a given biome
+ * @param biomeId - The biome to check
+ * @returns 0, 131/180 or 1
+ */
+export function getBgTerrainColorRatioForBiome(biomeId: BiomeId): number {
+  switch (biomeId) {
+    case BiomeId.SPACE:
+      return 1;
+    case BiomeId.END:
+      return 0;
+  }
+
+  return 131 / 180;
+}
+
+/**
+ * @param biomeId - The biome to check
+ * @returns the {@linkcode Biome.bgmLoopPoint | loop point} of a biome's associated bgm in seconds
+ */
+export function getArenaBgmLoopPoint(biomeId: BiomeId): number {
+  return allBiomes.get(biomeId).bgmLoopPoint;
+}
+
+// #endregion
+
+// TODO: document this (what exactly is this?)
 export class ArenaBase extends Phaser.GameObjects.Container {
   public player: boolean;
   public biomeId: BiomeId;

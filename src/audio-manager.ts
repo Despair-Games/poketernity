@@ -1,6 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { PRSFX_SOUND_ADJUSTMENT_RATIO } from "#constants/app-constants";
 import { bgmLoopPoint } from "#data/bgm-loop-point";
+import { getArenaBgmLoopPoint } from "#field/arena";
 import { settings } from "#system/settings-manager";
 import { fixedNumber } from "#utils/common-utils";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
@@ -169,8 +170,10 @@ export class AudioManager {
     }
     this.bgmCache.add(bgmName);
     globalScene.loadBgm(bgmName);
-    let loopPoint = 0;
-    loopPoint = bgmName === globalScene.arena.bgm ? globalScene.arena.getBgmLoopPoint() : this.getBgmLoopPoint(bgmName);
+    const loopPoint =
+      bgmName === globalScene.arena.bgm
+        ? getArenaBgmLoopPoint(globalScene.arena.biomeId)
+        : this.getBgmLoopPoint(bgmName);
     let loaded = false;
     const playNewBgm = () => {
       globalScene.ui.bgmBar.setBgmToBgmBar(bgmName);
