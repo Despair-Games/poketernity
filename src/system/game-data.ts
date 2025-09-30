@@ -91,15 +91,17 @@ import i18next from "i18next";
 const saveKey = "x0i2O7WRiANTqPmZ"; // Temporary; secure encryption is not yet necessary
 
 function encrypt(data: string, bypassLogin: boolean): string {
-  const localFunc = (d: string): string => btoa(encodeURIComponent(d));
-  const serverFunc = (d: string): string => AES.encrypt(d, saveKey) as unknown as string; // TODO: is this correct?
-  return (bypassLogin ? localFunc : serverFunc)(data);
+  if (bypassLogin) {
+    return btoa(encodeURIComponent(data));
+  }
+  return AES.encrypt(data, saveKey).toString();
 }
 
 function decrypt(data: string, bypassLogin: boolean): string {
-  const localFunc = (d: string): string => decodeURIComponent(atob(d));
-  const serverFunc = (d: string): string => AES.decrypt(d, saveKey).toString(enc.Utf8);
-  return (bypassLogin ? localFunc : serverFunc)(data);
+  if (bypassLogin) {
+    return decodeURIComponent(atob(data));
+  }
+  return AES.decrypt(data, saveKey).toString(enc.Utf8);
 }
 
 /**
@@ -117,7 +119,7 @@ type RunHistoryData = Record<number, RunEntry>;
 export interface RunEntry {
   entry: SessionSaveData;
   isVictory: boolean;
-  /*Automatically set to false at the moment - implementation TBD*/
+  /** Automatically set to false at the moment - implementation TBD */
   isFavorite: boolean;
 }
 
