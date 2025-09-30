@@ -1,7 +1,9 @@
 import { AbilityId } from "#enums/ability-id";
+import { BattlerIndex } from "#enums/battler-index";
+import { Challenges } from "#enums/challenges";
+import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
-import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -24,83 +26,116 @@ describe("Moves - U-turn", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("single")
-      .enemySpecies(SpeciesId.GENGAR)
-      .startingLevel(90)
-      .startingWave(97)
-      .moveset([MoveId.U_TURN])
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .ability(AbilityId.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
+      .startingLevel(100)
+      .enemyLevel(100)
       .enemyMoveset(MoveId.SPLASH)
       .disableCrits();
   });
 
-  it("triggers regenerator a single time when a regenerator user switches out with u-turn", async () => {
-    // arrange
-    const playerHp = 1;
+  it("should force the user to switch out", async () => {
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
+
+    const [magikarp, feebas] = game.scene.getPlayerParty();
+
+    game.move.use(MoveId.U_TURN);
+    game.selectPartyPokemon(1);
+    await game.toEndOfTurn();
+
+    // TODO: Should this use a new matcher instead?
+    expect(magikarp.isOnField()).toBeFalsy();
+    expect(feebas.isOnField()).toBeTruthy();
+  });
+
+  it("should force the user to switch out even when the target faints", async () => {
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
+
+    const [magikarp, feebas] = game.scene.getPlayerParty();
+    const enemy = game.field.getEnemyPokemon();
+    enemy.hp = 1;
+
+    game.move.use(MoveId.U_TURN);
+    game.selectPartyPokemon(1);
+    await game.toEndOfTurn();
+
+    expect(magikarp.isOnField()).toBeFalsy();
+    expect(feebas.isOnField()).toBeTruthy();
+  });
+
+  it("should not force a switch when party Pokemon are fainted", async () => {
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
+
+    const [magikarp, feebas] = game.scene.getPlayerParty();
+    feebas.hp = 0;
+
+    game.move.use(MoveId.U_TURN);
+    await game.toEndOfTurn();
+
+    expect(magikarp.isOnField()).toBeTruthy();
+    expect(feebas.isOnField()).toBeFalsy();
+  });
+
+  it("should not force a switch when party Pokemon are challenge-restricted", async () => {
+    game.challengeMode.addChallenge(Challenges.SINGLE_TYPE, ElementalType.WATER, 0);
+
+    await game.challengeMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.WHISMUR);
+
+    const [magikarp, whismur] = game.scene.getPlayerParty();
+
+    game.move.use(MoveId.U_TURN);
+    await game.toEndOfTurn();
+
+    expect(magikarp.isOnField()).toBeTruthy();
+    expect(whismur.isOnField()).toBeFalsy();
+  });
+
+  it("should trigger the user's Regenerator exactly once when the user is forced out", async () => {
     game.override.ability(AbilityId.REGENERATOR);
-    await game.classicMode.startBattle(SpeciesId.RAICHU, SpeciesId.SHUCKLE);
-    game.scene.getPlayerPokemon()!.hp = playerHp;
 
-    // act
-    game.move.select(MoveId.U_TURN);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
+
+    const [magikarp, feebas] = game.scene.getPlayerParty();
+    magikarp.hp = 1;
+
+    game.move.use(MoveId.U_TURN);
     game.selectPartyPokemon(1);
     await game.toEndOfTurn();
 
-    // assert
-    expect(game.scene.getPlayerParty()[1].hp).toEqual(
-      Math.floor(game.scene.getPlayerParty()[1].getMaxHp() * 0.33 + playerHp),
-    );
-    expect(game.phaseInterceptor.log).toContain("SwitchPhase");
-    expect(game.scene.getPlayerPokemon()!.species.speciesId).toBe(SpeciesId.SHUCKLE);
-  }, 20000);
+    expect(magikarp.isOnField()).toBeFalsy();
+    expect(magikarp).toHaveHp(Math.floor(magikarp.getMaxHp() * 0.33) + 1);
+    expect(feebas.isOnField()).toBeTruthy();
+  });
 
-  it("triggers rough skin on the u-turn user before a new pokemon is switched in", async () => {
-    // arrange
+  it("should apply the opponent's Rough Skin on the user before the user is forced out", async () => {
     game.override.enemyAbility(AbilityId.ROUGH_SKIN);
-    await game.classicMode.startBattle(SpeciesId.RAICHU, SpeciesId.SHUCKLE);
 
-    // act
-    game.move.select(MoveId.U_TURN);
-    game.selectPartyPokemon(1);
-    await game.phaseInterceptor.to("SwitchPhase", false);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
-    // assert
-    const playerPkm = game.scene.getPlayerPokemon()!;
-    expect(playerPkm.hp).not.toEqual(playerPkm.getMaxHp());
-    expect(game.scene.getEnemyPokemon()!.waveData.abilitiesApplied).toContain(AbilityId.ROUGH_SKIN); // proxy for asserting ability activated
-    expect(playerPkm.species.speciesId).toEqual(SpeciesId.RAICHU);
-    expect(game.phaseInterceptor.log).toContain("DamageAnimPhase");
-  }, 20000);
+    const [magikarp, feebas] = game.scene.getPlayerParty();
 
-  it("triggers contact abilities on the u-turn user (eg poison point) before a new pokemon is switched in", async () => {
-    // arrange
-    game.override.enemyAbility(AbilityId.POISON_POINT);
-    await game.classicMode.startBattle(SpeciesId.RAICHU, SpeciesId.SHUCKLE);
-    vi.spyOn(game.scene.getEnemyPokemon()!, "randSeedInt").mockReturnValue(0);
-
-    // act
-    game.move.select(MoveId.U_TURN);
-    await game.phaseInterceptor.to("SwitchPhase", false);
-
-    // assert
-    const playerPkm = game.scene.getPlayerPokemon()!;
-    expect(playerPkm.getStatusEffect(true)).toEqual(StatusEffect.POISON);
-    expect(playerPkm.species.speciesId).toEqual(SpeciesId.RAICHU);
-    expect(game.scene.getEnemyPokemon()!.waveData.abilitiesApplied).toContain(AbilityId.POISON_POINT); // proxy for asserting ability activated
-    expect(game.phaseInterceptor.log).toContain("ObtainStatusEffectPhase");
-  }, 20000);
-
-  it("still forces a switch if u-turn KO's the opponent", async () => {
-    game.override.startingLevel(1000); // Ensure that U-Turn KO's the opponent
-    await game.classicMode.startBattle(SpeciesId.RAICHU, SpeciesId.SHUCKLE);
-    const enemy = game.scene.getEnemyPokemon()!;
-
-    // KO the opponent with U-Turn
-    game.move.select(MoveId.U_TURN);
+    game.move.use(MoveId.U_TURN);
     game.selectPartyPokemon(1);
     await game.toEndOfTurn();
-    expect(enemy.isFainted()).toBe(true);
 
-    // Check that U-Turn forced a switch
-    expect(game.phaseInterceptor.log).toContain("SwitchPhase");
-    expect(game.scene.getPlayerPokemon()!.species.speciesId).toBe(SpeciesId.SHUCKLE);
+    expect(magikarp.isOnField()).toBeFalsy();
+    expect(magikarp).not.toHaveFullHp();
+    expect(feebas.isOnField()).toBeTruthy();
+    expect(feebas).toHaveFullHp();
+  });
+
+  it("should not force Wild Pokemon to flee", async () => {
+    game.override.enemyMoveset(MoveId.U_TURN);
+
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
+
+    vi.spyOn(game.scene, "tryForceFleePokemon");
+
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.move.use(MoveId.SPLASH);
+    await game.phaseInterceptor.to("MoveEffectPhase");
+
+    expect(game.scene.tryForceFleePokemon).not.toHaveBeenCalled();
   });
 });
