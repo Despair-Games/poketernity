@@ -16,4 +16,6 @@ export enum SwitchType {
   SHED_TAIL,
   /** Recalls a Pokemon and switches in a random party member */
   FORCE_SWITCH,
+  /** Switchout that allows Wild Pokemon to flee themselves from battle */
+  TELEPORT,
 }

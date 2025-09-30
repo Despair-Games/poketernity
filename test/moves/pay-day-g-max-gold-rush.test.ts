@@ -77,7 +77,7 @@ describe.each([
   });
 
   it("should NOT award money when forcing foe to flee", async () => {
-    game.override.enemyLevel(999).enemyAbility(AbilityId.STURDY).ability(AbilityId.RUN_AWAY);
+    game.override.enemyLevel(100).enemyAbility(AbilityId.STURDY).ability(AbilityId.RUN_AWAY);
     await game.classicMode.startBattle(SpeciesId.CHARMANDER);
 
     vi.spyOn(game.scene, "addMoney");

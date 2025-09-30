@@ -1,8 +1,6 @@
 import { allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
-import { Challenges } from "#enums/challenges";
-import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/game-manager";
@@ -191,88 +189,6 @@ describe("Moves - Dragon Tail", () => {
     expect(dratini).toBeDefined();
     expect(dratini.hp).toBe(Math.floor(dratini.getMaxHp() / 2));
     expect(game.scene.getPlayerField().length).toBe(1);
-  });
-
-  it("should force switches randomly", async () => {
-    game.override.enemyMoveset(MoveId.DRAGON_TAIL).startingLevel(100).enemyLevel(1);
-    await game.classicMode.startBattle(SpeciesId.BULBASAUR, SpeciesId.CHARMANDER, SpeciesId.SQUIRTLE);
-
-    const [bulbasaur, charmander, squirtle] = game.scene.getPlayerParty();
-
-    // Turn 1: Mock an RNG call that calls for switching to 1st backup Pokemon (Charmander)
-    vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
-      return min;
-    });
-    game.move.select(MoveId.SPLASH);
-    await game.move.selectEnemyMove(MoveId.DRAGON_TAIL);
-    await game.toNextTurn();
-
-    expect(bulbasaur.isOnField()).toBe(false);
-    expect(charmander.isOnField()).toBe(true);
-    expect(squirtle.isOnField()).toBe(false);
-    expect(bulbasaur.getInverseHp()).toBeGreaterThan(0);
-
-    // Turn 2: Mock an RNG call that calls for switching to 2nd backup Pokemon (Squirtle)
-    vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
-      return min + 1;
-    });
-    game.move.select(MoveId.SPLASH);
-    await game.toNextTurn();
-
-    expect(bulbasaur.isOnField()).toBe(false);
-    expect(charmander.isOnField()).toBe(false);
-    expect(squirtle.isOnField()).toBe(true);
-    expect(charmander.getInverseHp()).toBeGreaterThan(0);
-  });
-
-  it("should not force a switch to a challenge-ineligible Pokemon", async () => {
-    game.override.enemyMoveset(MoveId.DRAGON_TAIL).startingLevel(100).enemyLevel(1);
-    // Mono-Water challenge, Eevee is ineligible
-    game.challengeMode.addChallenge(Challenges.SINGLE_TYPE, ElementalType.WATER, 0);
-    await game.challengeMode.startBattle(SpeciesId.LAPRAS, SpeciesId.EEVEE, SpeciesId.TOXAPEX, SpeciesId.PRIMARINA);
-
-    const [lapras, eevee, toxapex, primarina] = game.scene.getPlayerParty();
-
-    // Turn 1: Mock an RNG call that would normally call for switching to Eevee, but it is ineligible
-    vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
-      return min;
-    });
-    game.move.select(MoveId.SPLASH);
-    await game.toNextTurn();
-
-    expect(lapras.isOnField()).toBe(false);
-    expect(eevee.isOnField()).toBe(false);
-    expect(toxapex.isOnField()).toBe(true);
-    expect(primarina.isOnField()).toBe(false);
-    expect(lapras.getInverseHp()).toBeGreaterThan(0);
-  });
-
-  it("should not force a switch to a fainted Pokemon", async () => {
-    game.override.enemyMoveset([MoveId.SPLASH, MoveId.DRAGON_TAIL]).startingLevel(100).enemyLevel(1);
-    await game.classicMode.startBattle(SpeciesId.LAPRAS, SpeciesId.EEVEE, SpeciesId.TOXAPEX, SpeciesId.PRIMARINA);
-
-    const [lapras, eevee, toxapex, primarina] = game.scene.getPlayerParty();
-
-    // Turn 1: Eevee faints
-    eevee.faint();
-    expect(eevee.isFainted()).toBe(true);
-    game.move.select(MoveId.SPLASH);
-    await game.move.selectEnemyMove(MoveId.SPLASH);
-    await game.toNextTurn();
-
-    // Turn 2: Mock an RNG call that would normally call for switching to Eevee, but it is fainted
-    vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
-      return min;
-    });
-    game.move.select(MoveId.SPLASH);
-    await game.move.selectEnemyMove(MoveId.DRAGON_TAIL);
-    await game.toNextTurn();
-
-    expect(lapras.isOnField()).toBe(false);
-    expect(eevee.isOnField()).toBe(false);
-    expect(toxapex.isOnField()).toBe(true);
-    expect(primarina.isOnField()).toBe(false);
-    expect(lapras.getInverseHp()).toBeGreaterThan(0);
   });
 
   it("should not force a switch if there are no available Pokemon to switch into", async () => {

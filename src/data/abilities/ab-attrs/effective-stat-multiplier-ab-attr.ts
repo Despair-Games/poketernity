@@ -1,20 +1,20 @@
 import { AbAttr } from "#abilities/ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import type { BattleStat } from "#enums/stat";
+import type { BattleStat, EffectiveStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { PokemonAttackCondition } from "#types/move-types";
 import type { NumberHolder } from "#utils/common-utils";
 
 /**
- * Ability attribute that multiplies a Pokemon's stat by a factor
+ * Ability attribute that multiplies one of the source Pokemon's
+ * {@linkcode EffectiveStat | EffectiveStats} by a factor.
+ * 
  * Abilities with this attribute:
  ```
 +-----------------------+-------+--------+----------------------------------+
 |        Ability        | Stat  | Factor |              Notes               |
 +-----------------------+-------+--------+----------------------------------+
-| Sand Veil             | EVA   |    1.3 | In sandstorm only                |
-| Compound Eyes         | ACC   |    1.3 |                                  |
 | Huge Power/Pure Power | ATK   |      2 |                                  |
 | Hustle                | ATK   |    1.5 |                                  |
 |                       | ACC   |    0.8 | Applies to Physical moves only   |
@@ -38,14 +38,14 @@ import type { NumberHolder } from "#utils/common-utils";
 +-----------------------+-------+--------+----------------------------------+
 ```
  */
-export class StatMultiplierAbAttr extends AbAttr {
-  protected stat: BattleStat;
+export class EffectiveStatMultiplier extends AbAttr {
+  protected stat: EffectiveStat;
   protected readonly multiplier: number;
   protected readonly condition?: PokemonAttackCondition;
 
-  constructor(stat: BattleStat, multiplier: number, condition?: PokemonAttackCondition) {
+  constructor(stat: EffectiveStat, multiplier: number, condition?: PokemonAttackCondition) {
     super();
-    this._flags.add(AbAttrFlag.STAT_MULTIPLIER);
+    this._flags.add(AbAttrFlag.EFFECTIVE_STAT_MULTIPLIER);
 
     this.stat = stat;
     this.multiplier = multiplier;

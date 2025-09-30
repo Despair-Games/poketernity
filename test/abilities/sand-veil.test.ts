@@ -1,10 +1,9 @@
-import type { StatMultiplierAbAttr } from "#abilities/stat-multiplier-ab-attr";
+import type { EvasivenessMultiplierAbAttr } from "#abilities/evasiveness-multiplier-ab-attr";
 import { allAbilities } from "#data/data-lists";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
-import { Stat } from "#enums/stat";
 import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
@@ -42,15 +41,12 @@ describe("Abilities - Sand Veil", () => {
 
     game.field.mockAbility(leadPokemon[0], AbilityId.SAND_VEIL);
 
-    const sandVeilAttr = allAbilities[AbilityId.SAND_VEIL].getAttrs<StatMultiplierAbAttr>(
-      AbAttrFlag.STAT_MULTIPLIER,
+    const sandVeilAttr = allAbilities[AbilityId.SAND_VEIL].getAttrs<EvasivenessMultiplierAbAttr>(
+      AbAttrFlag.EVASIVENESS_MULTIPLIER,
     )[0];
-    vi.spyOn(sandVeilAttr, "apply").mockImplementation((_pokemon, _simulated, stat, statValue) => {
-      if (stat === Stat.EVA && game.scene.arena.hasWeather(WeatherType.SANDSTORM)) {
-        statValue.value *= -1; // will make all attacks miss
-        return true;
-      }
-      return false;
+    vi.spyOn(sandVeilAttr, "apply").mockImplementation((_pokemon, _simulated, statValue) => {
+      statValue.value = -1;
+      return true;
     });
 
     expect(leadPokemon[0].hasAbility(AbilityId.SAND_VEIL)).toBe(true);
