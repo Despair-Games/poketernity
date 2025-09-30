@@ -456,7 +456,7 @@ function getPartyConfig(): EnemyPartyConfig {
     ],
   };
 
-  if (globalScene.arena.isInBiome(BiomeId.SPACE)) {
+  if (globalScene.arena.biomeId === BiomeId.SPACE) {
     // All 3 members always Cleffa line, but different configs
     baseConfig.pokemonConfigs!.push(
       {
