@@ -72,8 +72,9 @@ export class EggGachaUiHandler extends MessageUiHandler {
     this.eggGachaContainer.setVisible(false);
     ui.add(this.eggGachaContainer);
 
-    const background = globalScene.add.nineslice(0, 0, "default_bg", undefined, GAME_WIDTH, GAME_HEIGHT, 0, 0, 16, 0);
-    background.setOrigin(0, 0);
+    const background = globalScene.add
+      .nineslice(0, 0, "default_bg", undefined, GAME_WIDTH, GAME_HEIGHT, 0, 0, 16, 0)
+      .setOrigin(0, 0);
 
     this.eggGachaContainer.add(background);
 
