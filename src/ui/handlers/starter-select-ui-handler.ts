@@ -1361,12 +1361,12 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
     const ui = this.getUi();
 
-    let success = false;
+    let isSuccess = false;
     let error = false;
 
     if (button === Button.SUBMIT) {
       if (this.tryStart(true)) {
-        success = true;
+        isSuccess = true;
       } else {
         error = true;
       }
@@ -1379,22 +1379,22 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         if (numberOfStarters > 0) {
           this.setMode(StarterSelectMode.STARTER_GRID, 0, 0);
         }
-        success = true;
+        isSuccess = true;
       } else if (this.statsMode) {
         this.toggleStatsMode(false);
-        success = true;
+        isSuccess = true;
       } else if (this.starterSpecies.length) {
         this.popStarter(this.starterSpecies.length - 1);
-        success = true;
+        isSuccess = true;
         this.updateInstructions();
       } else {
         this.tryExit();
-        success = true;
+        isSuccess = true;
       }
     } else if (button === Button.STATS) {
       // if stats button is pressed, go to filter directly
       if (this.currentMode !== StarterSelectMode.FILTER) {
-        success = this.setMode(StarterSelectMode.FILTER, 0);
+        isSuccess = this.setMode(StarterSelectMode.FILTER, 0);
         this.filterBar.toggleDropDown(this.filterBarCursor);
       }
     } else if (this.currentMode === StarterSelectMode.START) {
@@ -1402,7 +1402,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       switch (button) {
         case Button.ACTION:
           if (this.tryStart(true)) {
-            success = true;
+            isSuccess = true;
           } else {
             error = true;
           }
@@ -1410,26 +1410,26 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         case Button.UP:
           // UP from start button: go to pokemon in team if any, otherwise to filters
           if (this.starterSpecies.length > 0) {
-            success = this.setMode(StarterSelectMode.PARTY, this.starterSpecies.length - 1);
+            isSuccess = this.setMode(StarterSelectMode.PARTY, this.starterSpecies.length - 1);
           } else {
-            success = this.setMode(StarterSelectMode.FILTER, Math.max(1, this.filterBar.numFilters - 1));
+            isSuccess = this.setMode(StarterSelectMode.FILTER, Math.max(1, this.filterBar.numFilters - 1));
           }
           break;
         case Button.DOWN:
           // DOWN from start button: Go to filters
-          success = this.setMode(StarterSelectMode.FILTER, Math.max(1, this.filterBar.numFilters - 1));
+          isSuccess = this.setMode(StarterSelectMode.FILTER, Math.max(1, this.filterBar.numFilters - 1));
           break;
         case Button.LEFT:
           // LEFT from start button: Go to starters grid
           if (numberOfStarters > 0) {
             const cursor = onScreenFirstIndex + (onScreenNumberOfRows - 1) * 9 + 8; // last column
-            success = this.setMode(StarterSelectMode.STARTER_GRID, cursor);
+            isSuccess = this.setMode(StarterSelectMode.STARTER_GRID, cursor);
           }
           break;
         case Button.RIGHT:
           if (numberOfStarters > 0) {
             const cursor = onScreenFirstIndex + (onScreenNumberOfRows - 1) * 9; // first column
-            success = this.setMode(StarterSelectMode.STARTER_GRID, cursor);
+            isSuccess = this.setMode(StarterSelectMode.STARTER_GRID, cursor);
           }
           break;
       }
@@ -1437,24 +1437,24 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       switch (button) {
         case Button.LEFT:
           if (this.filterBarCursor > 0) {
-            success = this.setCursor(this.filterBarCursor - 1);
+            isSuccess = this.setCursor(this.filterBarCursor - 1);
           } else {
-            success = this.setCursor(this.filterBar.numFilters - 1);
+            isSuccess = this.setCursor(this.filterBar.numFilters - 1);
           }
           break;
         case Button.RIGHT:
           if (this.filterBarCursor < this.filterBar.numFilters - 1) {
-            success = this.setCursor(this.filterBarCursor + 1);
+            isSuccess = this.setCursor(this.filterBarCursor + 1);
           } else {
-            success = this.setCursor(0);
+            isSuccess = this.setCursor(0);
           }
           break;
         case Button.UP:
           if (this.filterBar.openDropDown) {
-            success = this.filterBar.decDropDownCursor();
+            isSuccess = this.filterBar.decDropDownCursor();
           } else if (this.filterBarCursor === this.filterBar.numFilters - 1 && this.starterSpecies.length > 0) {
             // UP from the last filter with mons in the party, move to start button
-            success = this.setMode(StarterSelectMode.START);
+            isSuccess = this.setMode(StarterSelectMode.START);
           } else if (numberOfStarters > 0) {
             // UP from filter bar to bottom of Pokemon list
             let newCursor: number;
@@ -1465,21 +1465,21 @@ export class StarterSelectUiHandler extends MessageUiHandler {
             } else {
               newCursor = Math.max(numberOfStarters - (numberOfStarters % 9) + targetCol - 9, 0);
             }
-            success = this.setMode(StarterSelectMode.STARTER_GRID, newCursor, Math.max(0, numOfRows - 9));
+            isSuccess = this.setMode(StarterSelectMode.STARTER_GRID, newCursor, Math.max(0, numOfRows - 9));
           }
           break;
         case Button.DOWN:
           if (this.filterBar.openDropDown) {
-            success = this.filterBar.incDropDownCursor();
+            isSuccess = this.filterBar.incDropDownCursor();
           } else if (this.filterBarCursor === this.filterBar.numFilters - 1 && this.starterSpecies.length > 0) {
             // DOWN from the last filter with Pokemon in party => move to first Pokemon in party
-            success = this.setMode(StarterSelectMode.PARTY, 0);
+            isSuccess = this.setMode(StarterSelectMode.PARTY, 0);
           } else if (numberOfStarters > 0) {
             // DOWN from filter bar to the closest mon at the top of Starters list
             const proportion = this.filterBarCursor / Math.max(1, this.filterBar.numFilters - 1);
             const targetCol = Math.min(8, Math.floor(proportion * 11));
             const newCursor = Math.min(targetCol, numberOfStarters);
-            success = this.setMode(StarterSelectMode.STARTER_GRID, newCursor, 0);
+            isSuccess = this.setMode(StarterSelectMode.STARTER_GRID, newCursor, 0);
           }
           break;
         case Button.ACTION:
@@ -1488,7 +1488,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           } else {
             this.filterBar.toggleDropDown(this.filterBarCursor);
           }
-          success = true;
+          isSuccess = true;
           break;
       }
     } else {
@@ -1511,7 +1511,6 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         if (!this.speciesStarterDexEntry?.caughtAttr) {
           error = true;
         } else if (this.starterSpecies.length <= 6) {
-          const ui = this.getUi();
           let options: OptionSelectItem[] = [];
 
           const [isDupe, removeIndex]: [boolean, number] = this.isInParty(this.lastSpecies);
@@ -1603,12 +1602,12 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           if (this.speciesStarterMoves.length > 1) {
             const getMoveOptions = (
               moves: MoveId[],
-              selectHandler: (moveId: MoveId, index: number, currentMoveId?: MoveId, currentIndex?: number) => boolean,
+              selectHandler: (moveId: MoveId, index: number, curMoveId?: MoveId, curIndex?: number) => boolean,
               cancelHandler: () => boolean,
               currentMoveId?: MoveId,
               currentIndex?: number,
             ): OptionSelectModeConfig => {
-              const options: OptionSelectItem[] = moves.map((moveId: MoveId, index: number): OptionSelectItem => {
+              const opts: OptionSelectItem[] = moves.map((moveId: MoveId, index: number): OptionSelectItem => {
                 return {
                   label: allMoves.get(moveId).name,
                   handler: () => selectHandler(moveId, index, currentMoveId, currentIndex),
@@ -1617,7 +1616,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
                   },
                 };
               });
-              options.push({
+              opts.push({
                 label: i18next.t("menu:cancel"),
                 handler: cancelHandler,
                 onHover: () => {
@@ -1626,7 +1625,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
               });
 
               return {
-                options,
+                options: opts,
                 maxOptions: 8,
                 yOffset: 29,
               };
@@ -1843,7 +1842,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           // Purchases with Candy
           const candyCount = starterData.candyCount;
           const showUseCandies = () => {
-            const options: OptionSelectItem[] = [];
+            const opts: OptionSelectItem[] = [];
             const candyIconsConfig: OptionSelectIconConfig[] = [
               {
                 name: "items",
@@ -1865,7 +1864,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
               && !(starterData.abilityAttr & AbilityAttr.PASSIVE)
             ) {
               const passiveCost = getPassiveCandyCount(speciesStarterCosts[this.lastSpecies.speciesId]);
-              options.push({
+              opts.push({
                 label: `x${passiveCost} ${i18next.t("starterSelectUiHandler:unlockPassive")} (${
                   allAbilities[starterPassiveAbilities[this.lastSpecies.speciesId]].name
                 })`,
@@ -1906,7 +1905,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
               const reductionCost = getValueReductionCandyCounts(speciesStarterCosts[this.lastSpecies.speciesId])[
                 valueReduction
               ];
-              options.push({
+              opts.push({
                 label: `x${reductionCost} ${i18next.t("starterSelectUiHandler:reduceCost")}`,
                 handler: () => {
                   if (activeOverrides.FREE_CANDY_UPGRADE_OVERRIDE || candyCount >= reductionCost) {
@@ -1938,7 +1937,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
             // Same species egg menu option.
             const sameSpeciesEggCost = getSameSpeciesEggCandyCounts(speciesStarterCosts[this.lastSpecies.speciesId]);
-            options.push({
+            opts.push({
               label: `x${sameSpeciesEggCost} ${i18next.t("starterSelectUiHandler:sameSpeciesEgg")}`,
               handler: () => {
                 if (activeOverrides.FREE_CANDY_UPGRADE_OVERRIDE || candyCount >= sameSpeciesEggCost) {
@@ -1983,7 +1982,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
               },
               iconsConfig: candyIconsConfig,
             });
-            options.push({
+            opts.push({
               label: i18next.t("menu:cancel"),
               handler: () => {
                 ui.setMode<StarterSelectUiHandler>(UiMode.STARTER_SELECT);
@@ -1991,7 +1990,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
               },
             });
             ui.setModeWithoutClear<OptionSelectUiHandler>(UiMode.OPTION_SELECT, {
-              options,
+              options: opts,
             });
           };
           if (!Object.hasOwn(pokemonPreEvolutions, this.lastSpecies.speciesId)) {
@@ -2013,7 +2012,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           ui.setModeWithoutClear<OptionSelectUiHandler>(UiMode.OPTION_SELECT, {
             options,
           });
-          success = true;
+          isSuccess = true;
         }
       } else {
         const props = globalScene.gameData.getSpeciesDexAttrProps(
@@ -2023,7 +2022,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         switch (button) {
           case Button.CYCLE_SHINY:
             if (this.canCycleShiny) {
-              success = this.handleCycleShiny(starterAttributes, props);
+              isSuccess = this.handleCycleShiny(starterAttributes, props);
             }
             break;
           case Button.CYCLE_FORM:
@@ -2046,7 +2045,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
                 formIndex: newFormIndex,
                 teraType: starterAttributes.teraType,
               });
-              success = true;
+              isSuccess = true;
             }
             break;
           case Button.CYCLE_GENDER:
@@ -2054,7 +2053,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
               const female = props.gender !== Gender.FEMALE;
               starterAttributes.female = female;
               this.setSpeciesDetails(this.lastSpecies, { female });
-              success = true;
+              isSuccess = true;
             }
             break;
           case Button.CYCLE_ABILITY:
@@ -2089,7 +2088,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
               }
 
               this.setSpeciesDetails(this.lastSpecies, { abilityIndex: newAbilityIndex });
-              success = true;
+              isSuccess = true;
             }
             break;
           case Button.CYCLE_NATURE:
@@ -2100,7 +2099,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
               // store cycled nature as default
               starterAttributes.nature = newNature as unknown as number;
               this.setSpeciesDetails(this.lastSpecies, { natureIndex: newNature });
-              success = true;
+              isSuccess = true;
             }
             break;
           case Button.CYCLE_TERA:
@@ -2113,7 +2112,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
                 starterAttributes.teraType = speciesForm.type1;
                 this.setSpeciesDetails(this.lastSpecies, { teraType: speciesForm.type1 });
               }
-              success = true;
+              isSuccess = true;
             }
             break;
           case Button.UP:
@@ -2123,18 +2122,18 @@ export class StarterSelectUiHandler extends MessageUiHandler {
                   this.scrollCursor--;
                   this.updateScroll();
                 }
-                success = this.setCursor(this.cursor - 9);
+                isSuccess = this.setCursor(this.cursor - 9);
               } else {
                 const closestFilter = this.filterBar.getNearestFilter(this.filteredStarterContainers[this.cursor]);
-                success = this.setMode(StarterSelectMode.FILTER, closestFilter);
+                isSuccess = this.setMode(StarterSelectMode.FILTER, closestFilter);
               }
             } else if (this.starterIconsCursorIndex === 0) {
               // Up from first Pokemon in the team => go to filter
-              success = this.setMode(StarterSelectMode.FILTER, Math.max(1, this.filterBar.numFilters - 1));
+              isSuccess = this.setMode(StarterSelectMode.FILTER, Math.max(1, this.filterBar.numFilters - 1));
             } else {
               this.starterIconsCursorIndex--;
               this.moveStarterIconsCursor(this.starterIconsCursorIndex);
-              success = true;
+              isSuccess = true;
             }
             break;
           case Button.DOWN:
@@ -2145,71 +2144,71 @@ export class StarterSelectUiHandler extends MessageUiHandler {
                   // last row of visible starters
                   this.scrollCursor++;
                 }
-                success = this.setCursor(this.cursor + 9);
+                isSuccess = this.setCursor(this.cursor + 9);
                 this.updateScroll();
               } else if (numOfRows > 1) {
                 // DOWN from last row of Pokemon > Wrap around to first row
                 this.scrollCursor = 0;
                 this.updateScroll();
-                success = this.setCursor(this.cursor % 9);
+                isSuccess = this.setCursor(this.cursor % 9);
               } else {
                 // DOWN from single row of Pokemon > Go to filters
                 const closestFilter = this.filterBar.getNearestFilter(this.filteredStarterContainers[this.cursor]);
-                success = this.setMode(StarterSelectMode.FILTER, closestFilter);
+                isSuccess = this.setMode(StarterSelectMode.FILTER, closestFilter);
               }
             } else if (this.starterIconsCursorIndex <= this.starterSpecies.length - 2) {
               this.starterIconsCursorIndex++;
               this.moveStarterIconsCursor(this.starterIconsCursorIndex);
-              success = true;
+              isSuccess = true;
             } else {
               // DOWN from last Pokemon in party => Move to Start button
-              success = this.setMode(StarterSelectMode.START);
+              isSuccess = this.setMode(StarterSelectMode.START);
             }
             break;
           case Button.LEFT:
             if (this.currentMode !== StarterSelectMode.PARTY) {
               if (this.cursor % 9 !== 0) {
-                success = this.setCursor(this.cursor - 1);
+                isSuccess = this.setCursor(this.cursor - 1);
               } else if (this.starterSpecies.length === 0) {
                 // LEFT from filtered Pokemon, on the left edge
 
                 // no starter in team => wrap around to the last column
-                success = this.setCursor(this.cursor + Math.min(8, numberOfStarters - this.cursor));
+                isSuccess = this.setCursor(this.cursor + Math.min(8, numberOfStarters - this.cursor));
               } else if (onScreenCurrentRow < 7) {
                 // at least one pokemon in team => for the first 7 rows, go to closest mon in party
                 const closestStarter = findClosestStarterIndex(this.cursorObj.y - 1, this.starterSpecies.length);
-                success = this.setMode(StarterSelectMode.PARTY, closestStarter);
+                isSuccess = this.setMode(StarterSelectMode.PARTY, closestStarter);
               } else {
                 // at least one pokemon in team => from the bottom 2 rows, go to start run button
-                success = this.setMode(StarterSelectMode.START);
+                isSuccess = this.setMode(StarterSelectMode.START);
               }
             } else if (numberOfStarters > 0) {
               // LEFT from team => Go to closest filtered Pokemon
               const closestRowIndex = findClosestStarterRow(this.starterIconsCursorIndex, onScreenNumberOfRows);
               const cursor = Math.min(onScreenFirstIndex + closestRowIndex * 9 + 8, onScreenLastIndex);
-              success = this.setMode(StarterSelectMode.STARTER_GRID, cursor);
+              isSuccess = this.setMode(StarterSelectMode.STARTER_GRID, cursor);
             } else {
               // LEFT from team and no Pokemon in filter => do nothing
-              success = false;
+              isSuccess = false;
             }
             break;
           case Button.RIGHT:
             if (this.currentMode !== StarterSelectMode.PARTY) {
               // is not right edge
               if (this.cursor % 9 < (currentRow < numOfRows - 1 ? 8 : (numberOfStarters - 1) % 9)) {
-                success = this.setCursor(this.cursor + 1);
+                isSuccess = this.setCursor(this.cursor + 1);
               } else if (this.starterSpecies.length === 0) {
                 // RIGHT from filtered Pokemon, on the right edge
 
                 // no selected starter in team > wrap around to the first column
-                success = this.setCursor(this.cursor - Math.min(8, this.cursor % 9));
+                isSuccess = this.setCursor(this.cursor - Math.min(8, this.cursor % 9));
               } else if (onScreenCurrentRow < 7) {
                 // at least one pokemon in team > for the first 7 rows, go to closest mon in party
                 const closestStarter = findClosestStarterIndex(this.cursorObj.y - 1, this.starterSpecies.length);
-                success = this.setMode(StarterSelectMode.PARTY, closestStarter);
+                isSuccess = this.setMode(StarterSelectMode.PARTY, closestStarter);
               } else {
                 // at least one pokemon in team > from the bottom 2 rows, go to start run button
-                success = this.setMode(StarterSelectMode.START);
+                isSuccess = this.setMode(StarterSelectMode.START);
               }
             } else if (numberOfStarters > 0) {
               // RIGHT from team > Go to closest filtered Pokemon
@@ -2218,23 +2217,23 @@ export class StarterSelectUiHandler extends MessageUiHandler {
                 onScreenFirstIndex + closestRowIndex * 9,
                 onScreenLastIndex - (onScreenLastIndex % 9),
               );
-              success = this.setMode(StarterSelectMode.STARTER_GRID, closestMon);
+              isSuccess = this.setMode(StarterSelectMode.STARTER_GRID, closestMon);
             } else {
               // RIGHT from team and no Pokemon in filter > do nothing
-              success = false;
+              isSuccess = false;
             }
             break;
         }
       }
     }
 
-    if (success) {
+    if (isSuccess) {
       ui.playSelect();
     } else if (error) {
       ui.playError();
     }
 
-    return success || error;
+    return isSuccess || error;
   }
 
   /**
@@ -2835,28 +2834,27 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
     // sort
     const sort = this.filterBar.getVals(DropDownColumn.SORT)[0];
-    this.filteredStarterContainers.sort((a, b) => {
+    this.filteredStarterContainers.sort((contA, contB) => {
+      const { starterData } = globalScene.gameData;
+      const speciesIdA = contA.species.speciesId;
+      const speciesIdB = contB.species.speciesId;
       switch (sort.val) {
         case SortCriteria.NUMBER:
-          return (a.species.speciesId - b.species.speciesId) * -sort.dir;
+          return (speciesIdA - speciesIdB) * -sort.dir;
         case SortCriteria.COST:
-          return (a.cost - b.cost) * -sort.dir;
+          return (contA.cost - contB.cost) * -sort.dir;
         case SortCriteria.CANDY: {
-          const candyCountA = globalScene.gameData.starterData[a.species.speciesId].candyCount;
-          const candyCountB = globalScene.gameData.starterData[b.species.speciesId].candyCount;
+          const candyCountA = starterData[speciesIdA].candyCount;
+          const candyCountB = starterData[speciesIdB].candyCount;
           return (candyCountA - candyCountB) * -sort.dir;
         }
         case SortCriteria.IV: {
-          const avgIVsA =
-            globalScene.gameData.starterData[a.species.speciesId].ivs.reduce((a, b) => a + b, 0)
-            / globalScene.gameData.starterData[a.species.speciesId].ivs.length;
-          const avgIVsB =
-            globalScene.gameData.starterData[b.species.speciesId].ivs.reduce((a, b) => a + b, 0)
-            / globalScene.gameData.starterData[b.species.speciesId].ivs.length;
+          const avgIVsA = starterData[speciesIdA].ivs.reduce((a, b) => a + b, 0) / starterData[speciesIdA].ivs.length;
+          const avgIVsB = starterData[speciesIdB].ivs.reduce((a, b) => a + b, 0) / starterData[speciesIdB].ivs.length;
           return (avgIVsA - avgIVsB) * -sort.dir;
         }
         case SortCriteria.NAME:
-          return a.species.name.localeCompare(b.species.name) * -sort.dir;
+          return contA.species.name.localeCompare(contB.species.name) * -sort.dir;
       }
       return 0;
     });
@@ -3236,14 +3234,14 @@ export class StarterSelectUiHandler extends MessageUiHandler {
             teraType: this.starterTeras[starterIndex],
           });
         } else {
-          const defaultDexAttr = this.getCurrentDexProps(species.speciesId);
+          const defDexAttr = this.getCurrentDexProps(species.speciesId);
           const defaultAbilityIndex =
             starterAttributes?.ability ?? globalScene.gameData.getStarterSpeciesDefaultAbilityIndex(species);
           const passiveUnlocked = globalScene.gameData.isPassiveUnlocked(species.speciesId);
           const passiveEnabled = starterAttributes?.passive ?? passiveUnlocked;
           // load default nature from stater save data, if set
           const defaultNature = starterAttributes?.nature || globalScene.gameData.getSpeciesDefaultNature(species);
-          props = globalScene.gameData.getSpeciesDexAttrProps(species, defaultDexAttr);
+          props = globalScene.gameData.getSpeciesDexAttrProps(species, defDexAttr);
           if (starterAttributes?.variant && !Number.isNaN(starterAttributes.variant) && props.shiny) {
             props.variant = starterAttributes.variant as Variant;
           }

@@ -157,7 +157,7 @@ export abstract class PokemonSpeciesForm {
   }
 
   getRegion(): PokemonRegion {
-    return Math.floor(this.speciesId / 2000) as PokemonRegion;
+    return (Math.floor(this.speciesId / 2000) + 1) as PokemonRegion;
   }
 
   /**
@@ -509,7 +509,7 @@ export abstract class PokemonSpeciesForm {
       }
 
       for (let i = 0; i < pixelData.length; i += 4) {
-        const total = pixelData.slice(i, i + 3).reduce((total: number, value: number) => total + value, 0);
+        const total = pixelData.slice(i, i + 3).reduce((prev: number, value: number) => prev + value, 0);
         if (!total) {
           continue;
         }

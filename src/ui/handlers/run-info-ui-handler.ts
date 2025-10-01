@@ -682,11 +682,11 @@ export class RunInfoUiHandler extends UiHandler {
     const currentLanguage = i18next.resolvedLanguage ?? DEFAULT_LANGUAGE_KEY;
     const windowHeight = (GAME_HEIGHT - 23) / PLAYER_PARTY_MAX_SIZE;
 
-    party.forEach((p: PokemonData, i: number) => {
+    party.forEach((pokemonData: PokemonData, index: number) => {
       const pokemonInfoWindow = new RoundRectangle(globalScene, 0, 14, this.statsBgWidth * 2 + 10, windowHeight - 2, 3);
 
-      const pokemon = p.toPokemon();
-      const pokemonInfoContainer = globalScene.add.container(this.statsBgWidth + 5, (windowHeight - 0.5) * i);
+      const pokemon = pokemonData.toPokemon();
+      const pokemonInfoContainer = globalScene.add.container(this.statsBgWidth + 5, (windowHeight - 0.5) * index);
 
       const types = pokemon.getTypes();
       const type1 = getTypeRgb(types[0]);
@@ -827,8 +827,8 @@ export class RunInfoUiHandler extends UiHandler {
         if (heldItemsList.length > 0) {
           (heldItemsList as Modifier.PokemonHeldItemModifier[]).sort(Modifier.modifierSortFunc);
           let row = 0;
-          for (const [index, item] of heldItemsList.entries()) {
-            if (index > 36) {
+          for (const [idx, item] of heldItemsList.entries()) {
+            if (idx > 36) {
               const overflowIcon = addTextObject(182, 4, "+", TextStyle.WINDOW);
               heldItemsContainer.add(overflowIcon);
               break;
@@ -841,9 +841,9 @@ export class RunInfoUiHandler extends UiHandler {
               itemIcon.list[1].clearTint();
             }
             itemIcon.setScale(heldItemsScale);
-            itemIcon.setPosition((index % 19) * 10, row * 10);
+            itemIcon.setPosition((idx % 19) * 10, row * 10);
             heldItemsContainer.add(itemIcon);
-            if (index !== 0 && index % 18 === 0) {
+            if (idx !== 0 && idx % 18 === 0) {
               row++;
             }
           }

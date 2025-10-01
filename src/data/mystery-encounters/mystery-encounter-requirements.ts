@@ -285,7 +285,7 @@ export class TimeOfDayRequirement extends EncounterSceneRequirement {
   }
 
   override getDialogueToken(_pokemon?: PlayerPokemon): [string, string] {
-    return ["timeOfDay", TimeOfDay[globalScene.arena.getTimeOfDay()].toLocaleLowerCase()];
+    return ["timeOfDay", enumValueToKey(TimeOfDay, globalScene.arena.getTimeOfDay()).toLocaleLowerCase()];
   }
 }
 

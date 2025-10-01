@@ -12,6 +12,7 @@ export const defaultConfig: UserConfig = {
     minify: "esbuild",
     sourcemap: false,
     rollupOptions: {
+      // biome-ignore lint/nursery/noShadow: This matches Vite itself
       onwarn(warning: Rollup.RollupLog, defaultHandler: (warning: string | Rollup.RollupLog) => void) {
         // Suppress "Module level directives cause errors when bundled" warnings
         if (warning.code === "MODULE_LEVEL_DIRECTIVE") {

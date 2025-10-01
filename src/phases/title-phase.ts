@@ -59,10 +59,10 @@ export class TitlePhase extends Phase {
 
   protected showOptions(): void {
     const { gameData, ui } = globalScene;
-    const options: OptionSelectItem[] = [];
+    const titleOptions: OptionSelectItem[] = [];
 
     if (loggedInUser && loggedInUser.lastSessionSlot > -1) {
-      options.push({
+      titleOptions.push({
         label: i18next.t("continue", { ns: "menu" }),
         handler: () => {
           this.loadSaveSlot(this.lastSessionData || !loggedInUser ? -1 : loggedInUser.lastSessionSlot);
@@ -71,7 +71,7 @@ export class TitlePhase extends Phase {
       });
     }
 
-    options.push(
+    titleOptions.push(
       {
         label: i18next.t("menu:newGame"),
         handler: () => {
@@ -147,7 +147,7 @@ export class TitlePhase extends Phase {
       },
     );
     const config: OptionSelectModeConfig = {
-      options,
+      options: titleOptions,
       blockCancelButton: true,
     };
     globalScene.ui.setMode<TitleUiHandler>(UiMode.TITLE, config);
@@ -273,7 +273,7 @@ export class TitlePhase extends Phase {
     const { arena, currentBattle, gameData } = globalScene;
 
     if (!this.loaded && !globalScene.gameMode.isDaily) {
-      arena.preloadBgm();
+      globalScene.loadBgm(arena.bgm);
       globalScene.gameMode = getGameMode(this.gameMode);
       if (this.gameMode === GameModes.CHALLENGE) {
         globalScene.phaseManager.createAndPushPhase("SelectChallengePhase");

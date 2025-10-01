@@ -62,8 +62,9 @@ import { SwitchType } from "#enums/switch-type";
 import { TextStyle } from "#enums/text-style";
 import type { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerVariant } from "#enums/trainer-variant";
+import type { UiWindowStyle } from "#enums/ui-window-style";
 import { NewArenaEvent } from "#events/battle-scene";
-import { Arena, ArenaBase } from "#field/arena";
+import { Arena, ArenaBase, getBgTerrainColorRatioForBiome } from "#field/arena";
 import { DamageNumberHandler } from "#field/damage-number-handler";
 import { EnemyPokemon } from "#field/enemy-pokemon";
 import { PlayerPokemon } from "#field/player-pokemon";
@@ -303,7 +304,7 @@ export class BattleScene extends SceneBase {
 
       // If window type gets changed, update window colors
       if (key === "uiWindowStyle" && typeof value === "number") {
-        updateWindowStyle(value);
+        updateWindowStyle(value as UiWindowStyle);
       }
 
       // If gender gets changed, update trainer sprite
@@ -1437,7 +1438,7 @@ export class BattleScene extends SceneBase {
     this.arena = new Arena(biomeId);
     this.eventTarget.dispatchEvent(new NewArenaEvent());
 
-    this.arenaBg.pipelineData = { terrainColorRatio: this.arena.getBgTerrainColorRatioForBiome() };
+    this.arenaBg.pipelineData = { terrainColorRatio: getBgTerrainColorRatioForBiome(this.arena.biomeId) };
   }
 
   updateFieldScale(): Promise<void> {
@@ -1448,7 +1449,7 @@ export class BattleScene extends SceneBase {
             1
               / this.getField(true)
                 .map((p) => p.getSpriteScale())
-                .reduce((highestScale: number, scale: number) => (highestScale = Math.max(scale, highestScale)), 0),
+                .reduce((highestScale: number, scale: number) => Math.max(scale, highestScale), 0),
             0.7,
           ) * 40,
         ) / 40;

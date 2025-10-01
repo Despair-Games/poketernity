@@ -2091,10 +2091,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     let multiplier = types
       .map((defType) => {
-        const multiplier = new NumberHolder(getTypeDamageMultiplier(moveType, defType));
-        applyChallenges(globalScene.gameMode, ChallengeType.TYPE_EFFECTIVENESS, multiplier);
+        const mult = new NumberHolder(getTypeDamageMultiplier(moveType, defType));
+        applyChallenges(globalScene.gameMode, ChallengeType.TYPE_EFFECTIVENESS, mult);
         if (move) {
-          applyMoveAttrs(VariableMoveTypeChartAttr, null, this, move, multiplier, defType);
+          applyMoveAttrs(VariableMoveTypeChartAttr, null, this, move, mult, defType);
         }
         if (source) {
           const ignoreImmunity = new BooleanHolder(false);
@@ -2108,16 +2108,16 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
               defType,
             );
           }
-          if (ignoreImmunity.value && multiplier.value === 0) {
+          if (ignoreImmunity.value && mult.value === 0) {
             return 1;
           }
 
           const exposedTags = this.findTags<ExposedTag>((tag) => tag.isType<ExposedTag>(...EXPOSED_TAG_TYPES));
-          if (exposedTags.some((t) => t.ignoreImmunity(defType, moveType)) && multiplier.value === 0) {
+          if (exposedTags.some((t) => t.ignoreImmunity(defType, moveType)) && mult.value === 0) {
             return 1;
           }
         }
-        return multiplier.value;
+        return mult.value;
       })
       .reduce((acc, cur) => acc * cur, 1) as TypeDamageMultiplier;
 
@@ -3130,6 +3130,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     simulated: boolean = true,
     effectiveness?: TypeDamageMultiplier,
   ): DamageCalculationResult {
+    const { arena } = globalScene;
     const applyAbFunc = getAbApplyFunc(abilityApplyMode);
     const damage = new NumberHolder(0);
     const defendingSide = this.getArenaTagSide();
@@ -3154,13 +3155,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     const isPhysical = moveCategory === MoveCategory.PHYSICAL;
 
-    /** Combined damage multiplier from field effects such as weather, terrain, etc. */
-    const arenaAttackTypeMultiplier = new NumberHolder(
-      globalScene.arena.getAttackTypeMultiplier(moveType, source.isGrounded()),
-    );
-    applyMoveAttrs(IgnoreWeatherTypeDebuffAttr, source, this, move, arenaAttackTypeMultiplier);
+    const weatherDamageMultiplier = new ValueHolder(arena.getWeatherDamageMultiplier(moveType));
+    applyMoveAttrs(IgnoreWeatherTypeDebuffAttr, source, this, move, weatherDamageMultiplier);
 
-    const isTypeImmune = typeMultiplier * arenaAttackTypeMultiplier.value === 0;
+    const terrainDamageMultiplier = source.isGrounded() ? arena.getTerrainDamageMultiplier(moveType) : 1;
+
+    const isTypeImmune = typeMultiplier * weatherDamageMultiplier.value * terrainDamageMultiplier === 0;
 
     if (cancelled.value || isTypeImmune) {
       return {
@@ -3343,7 +3343,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       * targetMultiplier
       * gmaxBonusDamageMultiplier.value
       * multiStrikeEnhancementMultiplier.value
-      * arenaAttackTypeMultiplier.value
+      * weatherDamageMultiplier.value
+      * terrainDamageMultiplier
       * glaiveRushMultiplier.value
       * criticalMultiplier.value
       * randomMultiplier

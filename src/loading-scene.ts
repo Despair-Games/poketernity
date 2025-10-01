@@ -30,7 +30,7 @@ import { initAchievements } from "#system/achievements";
 import { initVouchers } from "#system/init-vouchers";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
 import { getWindowVariantSuffix } from "#ui/ui-theme";
-import { enumValueToKey, getTSEnumValues } from "#utils/common-utils";
+import { enumValueToKey } from "#utils/common-utils";
 import i18next from "i18next";
 
 export class LoadingScene extends SceneBase {
@@ -52,7 +52,7 @@ export class LoadingScene extends SceneBase {
     this.loadImage("logo");
 
     /** UI Elements that change based on the {@linkcode UiWindowStyle} */
-    for (const windowVariant of getTSEnumValues(WindowVariant)) {
+    for (const windowVariant of Object.values(WindowVariant)) {
       this.loadSpritesheet(`window${getWindowVariantSuffix(windowVariant)}`, ImagesFolder.UI_WINDOWS, 24, 24, {
         windowStyleDependant: true,
         uiThemeDependant: true,

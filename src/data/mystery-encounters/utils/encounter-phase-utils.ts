@@ -685,7 +685,7 @@ export function selectOptionThenPokemon(
   return new Promise<PokemonAndOptionSelected | null>((resolve) => {
     const modeToSetOnExit = globalScene.ui.getMode();
 
-    const displayOptions = (config: OptionSelectModeConfig) => {
+    const displayOptions = (cfg: OptionSelectModeConfig) => {
       globalScene.ui.setMessageMode().then(() => {
         if (optionSelectPromptKey) {
           showEncounterText(optionSelectPromptKey).then(() => {
@@ -693,14 +693,14 @@ export function selectOptionThenPokemon(
             if (fullOptions[0].onHover) {
               fullOptions[0].onHover();
             }
-            globalScene.ui.setMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, config);
+            globalScene.ui.setMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, cfg);
           });
         } else {
           // Do hover over the starting selection option
           if (fullOptions[0].onHover) {
             fullOptions[0].onHover();
           }
-          globalScene.ui.setMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, config);
+          globalScene.ui.setMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, cfg);
         }
       });
     };
@@ -1032,12 +1032,16 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
     BiomeId.WASTELAND,
   ];
 
-  const calculateNumEncounters = (): any[] => {
+  const calculateNumEncounters = (): [
+    numEncounters: number[],
+    encountersByBiome: Map<string, number>,
+    validMEFloorsByBiome: Map<string, number>,
+  ] => {
     let encounterRate = baseSpawnWeight; // BASE_MYSTERY_ENCOUNTER_SPAWN_WEIGHT
     const numEncounters = [0, 0, 0, 0];
     let mostRecentEncounterWave = 0;
     const encountersByBiome = new Map<string, number>(biomes.map((b) => [b, 0]));
-    const validMEfloorsByBiome = new Map<string, number>(biomes.map((b) => [b, 0]));
+    const validMEFloorsByBiome = new Map<string, number>(biomes.map((b) => [b, 0]));
     let currentBiome: BiomeId = BiomeId.TOWN;
     globalScene.setSeed(randomString(24));
     globalScene.resetSeed();
@@ -1089,7 +1093,7 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
 
       const roll = randSeedInt(256);
       const biomeKey = enumValueToKey(BiomeId, currentBiome);
-      validMEfloorsByBiome.set(biomeKey, (validMEfloorsByBiome.get(biomeKey) ?? 0) + 1);
+      validMEFloorsByBiome.set(biomeKey, (validMEFloorsByBiome.get(biomeKey) ?? 0) + 1);
 
       // If total number of encounters is lower than expected for the run, slightly favor a new encounter
       // Do the reverse as well
@@ -1134,7 +1138,7 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
       }
     }
 
-    return [numEncounters, encountersByBiome, validMEfloorsByBiome];
+    return [numEncounters, encountersByBiome, validMEFloorsByBiome];
   };
 
   const encounterRuns: number[][] = [];
@@ -1142,16 +1146,16 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
   const validFloorsByBiome: Map<string, number>[] = [];
   while (run < numRuns) {
     globalScene.executeWithSeedOffset(() => {
-      const [numEncounters, encountersByBiome, validMEfloorsByBiome] = calculateNumEncounters();
+      const [numEncounters, encountersByBiome, validMEFloorsByBiome] = calculateNumEncounters();
       encounterRuns.push(numEncounters);
       encountersByBiomeRuns.push(encountersByBiome);
-      validFloorsByBiome.push(validMEfloorsByBiome);
+      validFloorsByBiome.push(validMEFloorsByBiome);
     }, 1000 * run);
     run++;
   }
 
   const n = encounterRuns.length;
-  const totalEncountersInRun = encounterRuns.map((run) => run.reduce((a, b) => a + b));
+  const totalEncountersInRun = encounterRuns.map((encounterRun) => encounterRun.reduce((a, b) => a + b));
   const totalMean = totalEncountersInRun.reduce((a, b) => a + b) / n;
   const totalStd = Math.sqrt(totalEncountersInRun.map((x) => Math.pow(x - totalMean, 2)).reduce((a, b) => a + b) / n);
   const commonMean = encounterRuns.reduce((a, b) => a + b[0], 0) / n;

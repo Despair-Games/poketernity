@@ -164,55 +164,50 @@ export class Egg {
   ////
 
   constructor(eggOptions: EggOptions) {
-    const generateEggProperties = (eggOptions: EggOptions) => {
-      this._sourceType = eggOptions.sourceType;
-      // Ensure _sourceType is defined before invoking rollEggTier(), as it is referenced
-      this._tier = eggOptions.tier ?? Overrides.EGG_TIER_OVERRIDE ?? this.rollEggTier();
-      // If egg was pulled, check if egg pity needs to override the egg tier
-      if (eggOptions.pulled) {
-        // Needs this._tier and this._sourceType to work
-        this.checkForPityTierOverrides();
-      }
-
-      this._id = eggOptions.id ?? randInt(EGG_SEED, EGG_SEED * this._tier);
-
-      this._sourceType = eggOptions.sourceType;
-      this._hatchWaves = eggOptions.hatchWaves ?? this.getEggTierDefaultHatchWaves();
-      this._timestamp = eggOptions.timestamp ?? Date.now();
-
-      // First roll shiny and variant so we can filter if species with an variant exist
-      this._isShiny = eggOptions.isShiny ?? (Overrides.EGG_SHINY_OVERRIDE || this.rollShiny());
-      this._variantTier = eggOptions.variantTier ?? Overrides.EGG_VARIANT_OVERRIDE ?? this.rollVariant();
-      this._speciesId = eggOptions.speciesId ?? this.rollSpecies()!; // TODO: Is this bang correct?
-
-      this._overrideHiddenAbility = eggOptions.overrideHiddenAbility ?? false;
-
-      // Override egg tier and hatchwaves if species was given
-      if (eggOptions.speciesId) {
-        this._tier = this.getEggTier();
-        this._hatchWaves = eggOptions.hatchWaves ?? this.getEggTierDefaultHatchWaves();
-      }
-      // If species has no variant, set variantTier to common. This needs to
-      // be done because species with no variants get filtered at rollSpecies but if the
-      // species is set via options or the legendary gacha pokemon gets choosen the check never happens
-      if (this._speciesId && !getPokemonSpecies(this._speciesId).hasVariants()) {
-        this._variantTier = VariantTier.STANDARD;
-      }
-      // Needs this._tier so it needs to be generated afer the tier override if bought from same species
-      this._eggMoveIndex = eggOptions.eggMoveIndex ?? this.rollEggMoveIndex();
-      if (eggOptions.pulled) {
-        this.increasePullStatistic();
-        this.addEggToGameData();
-      }
-    };
-
-    const seedOverride = randomString(24);
     globalScene.executeWithSeedOffset(
       () => {
-        generateEggProperties(eggOptions);
+        this._sourceType = eggOptions.sourceType;
+        // Ensure _sourceType is defined before invoking rollEggTier(), as it is referenced
+        this._tier = eggOptions.tier ?? Overrides.EGG_TIER_OVERRIDE ?? this.rollEggTier();
+        // If egg was pulled, check if egg pity needs to override the egg tier
+        if (eggOptions.pulled) {
+          // Needs this._tier and this._sourceType to work
+          this.checkForPityTierOverrides();
+        }
+
+        this._id = eggOptions.id ?? randInt(EGG_SEED, EGG_SEED * this._tier);
+
+        this._sourceType = eggOptions.sourceType;
+        this._hatchWaves = eggOptions.hatchWaves ?? this.getEggTierDefaultHatchWaves();
+        this._timestamp = eggOptions.timestamp ?? Date.now();
+
+        // First roll shiny and variant so we can filter if species with an variant exist
+        this._isShiny = eggOptions.isShiny ?? (Overrides.EGG_SHINY_OVERRIDE || this.rollShiny());
+        this._variantTier = eggOptions.variantTier ?? Overrides.EGG_VARIANT_OVERRIDE ?? this.rollVariant();
+        this._speciesId = eggOptions.speciesId ?? this.rollSpecies()!; // TODO: Is this bang correct?
+
+        this._overrideHiddenAbility = eggOptions.overrideHiddenAbility ?? false;
+
+        // Override egg tier and hatchwaves if species was given
+        if (eggOptions.speciesId) {
+          this._tier = this.getEggTier();
+          this._hatchWaves = eggOptions.hatchWaves ?? this.getEggTierDefaultHatchWaves();
+        }
+        // If species has no variant, set variantTier to common. This needs to
+        // be done because species with no variants get filtered at rollSpecies but if the
+        // species is set via options or the legendary gacha pokemon gets choosen the check never happens
+        if (this._speciesId && !getPokemonSpecies(this._speciesId).hasVariants()) {
+          this._variantTier = VariantTier.STANDARD;
+        }
+        // Needs this._tier so it needs to be generated afer the tier override if bought from same species
+        this._eggMoveIndex = eggOptions.eggMoveIndex ?? this.rollEggMoveIndex();
+        if (eggOptions.pulled) {
+          this.increasePullStatistic();
+          this.addEggToGameData();
+        }
       },
       0,
-      seedOverride,
+      randomString(24),
     );
 
     this._eggDescriptor = eggOptions.eggDescriptor;
@@ -239,43 +234,38 @@ export class Egg {
 
   // Generates a PlayerPokemon from an egg
   public generatePlayerPokemon(): PlayerPokemon {
-    let ret: PlayerPokemon;
+    let ret!: PlayerPokemon;
 
-    const generatePlayerPokemonHelper = () => {
-      let pokemonSpecies = getPokemonSpecies(this._speciesId);
-      // Special condition to have Phione eggs also have a chance of generating Manaphy
-      if (this._speciesId === SpeciesId.PHIONE && this._sourceType === EggSourceType.SAME_SPECIES_EGG) {
-        pokemonSpecies = getPokemonSpecies(
-          randSeedInt(MANAPHY_EGG_MANAPHY_RATE) ? SpeciesId.PHIONE : SpeciesId.MANAPHY,
-        );
-      }
-
-      // Sets the hidden ability if a hidden ability exists and
-      // the override is set or the egg hits the chance
-      let abilityIndex: number | undefined;
-      const sameSpeciesEggHACheck =
-        this._sourceType === EggSourceType.SAME_SPECIES_EGG && !randSeedInt(SAME_SPECIES_EGG_HA_RATE);
-      const gachaEggHACheck = !(this._sourceType === EggSourceType.SAME_SPECIES_EGG) && !randSeedInt(GACHA_EGG_HA_RATE);
-      if (pokemonSpecies.abilityHidden && (this._overrideHiddenAbility || sameSpeciesEggHACheck || gachaEggHACheck)) {
-        abilityIndex = 2;
-      }
-
-      // This function has way to many optional parameters
-      ret = globalScene.addPlayerPokemon(pokemonSpecies, 1, abilityIndex, undefined, undefined, false);
-      ret.shiny = this._isShiny;
-      ret.variant = this._variantTier;
-
-      const secondaryIvs = ret.generateIvs();
-
-      for (let s = 0; s < ret.ivs.length; s++) {
-        ret.ivs[s] = Math.max(ret.ivs[s], secondaryIvs[s]);
-      }
-    };
-
-    ret = ret!; // Tell TS compiler it's defined now
     globalScene.executeWithSeedOffset(
       () => {
-        generatePlayerPokemonHelper();
+        let pokemonSpecies = getPokemonSpecies(this._speciesId);
+        // Special condition to have Phione eggs also have a chance of generating Manaphy
+        if (this._speciesId === SpeciesId.PHIONE && this._sourceType === EggSourceType.SAME_SPECIES_EGG) {
+          pokemonSpecies = getPokemonSpecies(
+            randSeedInt(MANAPHY_EGG_MANAPHY_RATE) ? SpeciesId.PHIONE : SpeciesId.MANAPHY,
+          );
+        }
+
+        // Sets the hidden ability if a hidden ability exists and
+        // the override is set or the egg hits the chance
+        let abilityIndex: number | undefined;
+        const sameSpeciesEggHACheck =
+          this._sourceType === EggSourceType.SAME_SPECIES_EGG && !randSeedInt(SAME_SPECIES_EGG_HA_RATE);
+        const gachaEggHACheck =
+          !(this._sourceType === EggSourceType.SAME_SPECIES_EGG) && !randSeedInt(GACHA_EGG_HA_RATE);
+        if (pokemonSpecies.abilityHidden && (this._overrideHiddenAbility || sameSpeciesEggHACheck || gachaEggHACheck)) {
+          abilityIndex = 2;
+        }
+
+        ret = globalScene.addPlayerPokemon(pokemonSpecies, 1, abilityIndex, undefined, undefined, false);
+        ret.shiny = this._isShiny;
+        ret.variant = this._variantTier;
+
+        const secondaryIvs = ret.generateIvs();
+
+        for (let s = 0; s < ret.ivs.length; s++) {
+          ret.ivs[s] = Math.max(ret.ivs[s], secondaryIvs[s]);
+        }
       },
       this._id,
       EGG_SEED.toString(),
