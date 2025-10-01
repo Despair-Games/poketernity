@@ -920,11 +920,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       new SpeciesFormChangeRevertWeatherFormTrigger(
         AbilityId.FLOWER_GIFT,
         WeatherType.NONE,
-        ...RAINY_WEATHER_TYPES,
-        ...SNOWY_WEATHER_TYPES,
-        WeatherType.SANDSTORM,
-        WeatherType.STRONG_WINDS,
-        WeatherType.FOG,
+        ...Object.values(WeatherType).filter((w) => w && !(SUNNY_WEATHER_TYPES as readonly WeatherType[]).includes(w)),
       ),
       true,
     ),
