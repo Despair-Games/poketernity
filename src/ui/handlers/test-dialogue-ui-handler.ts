@@ -15,25 +15,26 @@ export class TestDialogueUiHandler extends FormModalUiHandler {
   protected override setup() {
     super.setup();
 
-    const flattenKeys = (object?: any, topKey?: string, midleKey?: string[]): any[] => {
+    const flattenKeys = (object?: any, topKey?: string, middleKey?: string[]): any[] => {
       return Object.keys(object ?? {})
         .map((t, i) => {
           const value = Object.values(object)[i];
 
           if (typeof value === "object" && value != null) {
-            // we check for not null or undefined here because if the language json file has a null key, the typeof will still be an object, but that object will be null, causing issues
-            // If the value is an object, execute the same process
-            // si el valor es un objeto ejecuta el mismo proceso
+            // We check for not null or undefined here because if the language json file has a null key,
+            // the typeof will still be an object, but that object will be null, causing issues.
+            // If the value is an object, execute the same process.
 
-            return flattenKeys(value, topKey ?? t, topKey ? (midleKey ? [...midleKey, t] : [t]) : undefined).filter(
-              (t) => t.length > 0,
+            return flattenKeys(value, topKey ?? t, topKey ? (middleKey ? [...middleKey, t] : [t]) : undefined).filter(
+              (t2) => t2.length > 0,
             );
           }
           if (typeof value === "string" || value == null) {
-            // we check for null or undefined here as per above - the typeof is still an object but the value is null so we need to exit out of this and pass the null key
+            // We check for null or undefined here as per above - the typeof is still an object
+            // but the value is null so we need to exit out of this and pass the null key
 
             // Return in the format expected by i18next
-            return midleKey ? `${topKey}:${midleKey.map((m) => m).join(".")}.${t}` : `${topKey}:${t}`;
+            return middleKey ? `${topKey}:${middleKey.map((m) => m).join(".")}.${t}` : `${topKey}:${t}`;
           }
         })
         .filter((t) => t);

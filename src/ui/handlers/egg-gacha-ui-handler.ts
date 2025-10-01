@@ -72,10 +72,11 @@ export class EggGachaUiHandler extends MessageUiHandler {
     this.eggGachaContainer.setVisible(false);
     ui.add(this.eggGachaContainer);
 
-    const bg = globalScene.add.nineslice(0, 0, "default_bg", undefined, GAME_WIDTH, GAME_HEIGHT, 0, 0, 16, 0);
-    bg.setOrigin(0, 0);
+    const background = globalScene.add
+      .nineslice(0, 0, "default_bg", undefined, GAME_WIDTH, GAME_HEIGHT, 0, 0, 16, 0)
+      .setOrigin(0, 0);
 
-    this.eggGachaContainer.add(bg);
+    this.eggGachaContainer.add(background);
 
     const hatchFrameNames = globalScene.anims.generateFrameNames("gacha_hatch", { suffix: ".png", start: 1, end: 4 });
     if (!globalScene.anims.exists("open")) {
@@ -278,8 +279,8 @@ export class EggGachaUiHandler extends MessageUiHandler {
     Object.values(VoucherType).forEach((voucher, index) => {
       const container = globalScene.add.container(GAME_WIDTH - 56 * index, 0);
 
-      const background = addWindow(0, 0, 56, 22).setOrigin(1, 0);
-      container.add(background);
+      const voucherBg = addWindow(0, 0, 56, 22).setOrigin(1, 0);
+      container.add(voucherBg);
 
       const countLabel = addTextObject(-48, 3, "0", TextStyle.WINDOW).setOrigin(0);
       container.add(countLabel);
@@ -294,7 +295,7 @@ export class EggGachaUiHandler extends MessageUiHandler {
       this.eggGachaContainer.add(container);
     });
 
-    this.eggGachaOverlay = globalScene.add.rectangle(0, 0, bg.displayWidth, bg.displayHeight, 0x000000);
+    this.eggGachaOverlay = globalScene.add.rectangle(0, 0, background.displayWidth, background.displayHeight, 0x000000);
     this.eggGachaOverlay.setOrigin(0, 0);
     this.eggGachaOverlay.setAlpha(0);
 
@@ -474,8 +475,7 @@ export class EggGachaUiHandler extends MessageUiHandler {
           }
         }
 
-        const egg = new Egg(eggOptions);
-        eggs.push(egg);
+        eggs.push(new Egg(eggOptions));
       }
       // Shuffle the eggs in case the guaranteed one got added as last egg
       eggs = randSeedShuffle<Egg>(eggs);

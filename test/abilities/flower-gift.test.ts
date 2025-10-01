@@ -16,16 +16,16 @@ describe("Abilities - Flower Gift", () => {
 
   /**
    * Tests reverting to normal form when Cloud Nine/Air Lock is active on the field
-   * @param game The game manager instance
+   * @param gm The game manager instance
    * @param ability The ability that is active on the field
    */
-  const testRevertFormAgainstAbility = async (game: GameManager, ability: AbilityId) => {
-    game.override.starterForms({ [SpeciesId.CHERRIM]: SUNSHINE_FORM }).enemyAbility(ability);
-    await game.classicMode.startBattle(SpeciesId.CHERRIM);
+  const testRevertFormAgainstAbility = async (gm: GameManager, ability: AbilityId) => {
+    gm.override.starterForms({ [SpeciesId.CHERRIM]: SUNSHINE_FORM }).enemyAbility(ability);
+    await gm.classicMode.startBattle(SpeciesId.CHERRIM);
 
-    game.move.select(MoveId.SPLASH);
+    gm.move.select(MoveId.SPLASH);
 
-    expect(game.field.getPlayerPokemon().formIndex).toBe(OVERCAST_FORM);
+    expect(gm.field.getPlayerPokemon().formIndex).toBe(OVERCAST_FORM);
   };
 
   beforeAll(() => {

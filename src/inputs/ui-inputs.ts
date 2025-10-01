@@ -145,8 +145,8 @@ export class UiInputs {
       t.toggleInfo(pressed);
     }
     // handle normal pokemon battle ui
-    for (const p of globalScene.getField().filter((p) => p?.isActive(true))) {
-      p.toggleStats(pressed);
+    for (const pkmn of globalScene.getField().filter((p) => p?.isActive(true))) {
+      pkmn.toggleStats(pressed);
     }
   }
 
@@ -162,8 +162,8 @@ export class UiInputs {
 
   buttonInfo(pressed: boolean = true): void {
     if (settings.display.showMovesetFlyout) {
-      for (const p of globalScene.getField().filter((p) => p?.isActive(true))) {
-        p.toggleFlyout(pressed);
+      for (const pkmn of globalScene.getField().filter((p) => p?.isActive(true))) {
+        pkmn.toggleFlyout(pressed);
       }
     }
 

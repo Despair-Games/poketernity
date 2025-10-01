@@ -9,7 +9,7 @@ import type { Settings, SettingsCategory, UserFacingSettings } from "#types/sett
 
 interface SettingsManagerInit {
   localStorageKey: string;
-  settings: UserFacingSettings;
+  initSettings: UserFacingSettings;
 }
 
 //#endregion
@@ -25,14 +25,14 @@ class SettingsManager {
   private readonly _settings: Settings;
 
   constructor(init: SettingsManagerInit) {
-    const { localStorageKey, settings } = init;
+    const { localStorageKey, initSettings } = init;
 
     this.lsKey = localStorageKey;
     this._settings = {
       meta: {
         gameVersion: version,
       },
-      ...settings,
+      ...initSettings,
     };
 
     this.loadFromLocalStorage();
@@ -206,4 +206,4 @@ class SettingsManager {
 /**
  * Singleton instance of {@linkcode SettingsManager}
  */
-export const settings = new SettingsManager({ localStorageKey: SETTINGS_LS_KEY, settings: defaultSettings });
+export const settings = new SettingsManager({ localStorageKey: SETTINGS_LS_KEY, initSettings: defaultSettings });
