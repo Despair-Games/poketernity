@@ -279,8 +279,8 @@ export class EggGachaUiHandler extends MessageUiHandler {
     Object.values(VoucherType).forEach((voucher, index) => {
       const container = globalScene.add.container(GAME_WIDTH - 56 * index, 0);
 
-      const background = addWindow(0, 0, 56, 22).setOrigin(1, 0);
-      container.add(background);
+      const voucherBg = addWindow(0, 0, 56, 22).setOrigin(1, 0);
+      container.add(voucherBg);
 
       const countLabel = addTextObject(-48, 3, "0", TextStyle.WINDOW).setOrigin(0);
       container.add(countLabel);
