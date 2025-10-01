@@ -62,6 +62,7 @@ import { SwitchType } from "#enums/switch-type";
 import { TextStyle } from "#enums/text-style";
 import type { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerVariant } from "#enums/trainer-variant";
+import type { UiWindowStyle } from "#enums/ui-window-style";
 import { NewArenaEvent } from "#events/battle-scene";
 import { Arena, ArenaBase, getBgTerrainColorRatioForBiome } from "#field/arena";
 import { DamageNumberHandler } from "#field/damage-number-handler";
@@ -302,7 +303,7 @@ export class BattleScene extends SceneBase {
 
       // If window type gets changed, update window colors
       if (key === "uiWindowStyle" && typeof value === "number") {
-        updateWindowStyle(value);
+        updateWindowStyle(value as UiWindowStyle);
       }
 
       // If gender gets changed, update trainer sprite

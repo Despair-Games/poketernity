@@ -101,7 +101,7 @@ export function getTerrainName(terrainType: TerrainType): string {
     case TerrainType.PSYCHIC:
       return i18next.t("terrain:psychic");
     default:
-      terrainType satisfies TerrainType.NONE;
+      terrainType satisfies typeof TerrainType.NONE;
       break;
   }
 

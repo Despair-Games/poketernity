@@ -157,7 +157,7 @@ export abstract class PokemonSpeciesForm {
   }
 
   getRegion(): PokemonRegion {
-    return Math.floor(this.speciesId / 2000) as PokemonRegion;
+    return (Math.floor(this.speciesId / 2000) + 1) as PokemonRegion;
   }
 
   /**

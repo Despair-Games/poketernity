@@ -6,7 +6,7 @@ import { UiWindowStyle } from "#enums/ui-window-style";
 import { ImagesFolder } from "#enums/images-folder";
 import { settings } from "#system/settings-manager";
 import { windowStyleDependantAtlases } from "#ui/ui-theme";
-import { coerceArray } from "#utils/common-utils";
+import { coerceArray, enumValueToKey } from "#utils/common-utils";
 import { getLocalizedFilename } from "#utils/string-utils";
 
 /**
@@ -91,7 +91,7 @@ export class SceneBase extends Phaser.Scene {
   private getFilenameRoot(key: string, params: TextureLoadingOptions) {
     let filenameRoot = params.filenameRoot ?? key;
     if (params.uiThemeDependant) {
-      filenameRoot += "-" + UiTheme[settings.display.uiTheme].toLowerCase();
+      filenameRoot += "-" + enumValueToKey(UiTheme, settings.display.uiTheme).toLowerCase();
     }
     if (params.languageKey) {
       filenameRoot = getLocalizedFilename(filenameRoot, params.languageKey);
