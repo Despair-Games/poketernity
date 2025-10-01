@@ -13,14 +13,14 @@ import type { BooleanHolder } from "#utils/common-utils";
 +-----------+----------------------------------+
 | Sandstorm | Sand Veil, Sand Force, Sand Rush |
 | Hail      | Ice Body, Snow Cloak             |
-| All       | Overcoat                         |
+| Both      | Overcoat                         |
 +-----------+----------------------------------+
  * ```
  */
 export class BlockWeatherDamageAbAttr extends PreWeatherDamageAbAttr {
-  private readonly weatherTypes: readonly WeatherType[];
+  private readonly weatherTypes: readonly [WeatherType, ...WeatherType[]];
 
-  constructor(...weatherTypes: WeatherType[]) {
+  constructor(...weatherTypes: readonly [WeatherType, ...WeatherType[]]) {
     super();
 
     this.weatherTypes = weatherTypes;

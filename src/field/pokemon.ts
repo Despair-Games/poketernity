@@ -18,7 +18,7 @@ import type { BypassBurnDamageReductionAbAttr } from "#abilities/bypass-burn-dam
 import type { BypassParaSpeedReductionAbAttr } from "#abilities/bypass-para-speed-reduction-ab-attr";
 import type { ConditionalCritAbAttr } from "#abilities/conditional-crit-ab-attr";
 import type { DamageBoostAbAttr } from "#abilities/damage-boost-ab-attr";
-import type { EffectiveStatMultiplier } from "#abilities/effective-stat-multiplier-ab-attr";
+import type { EffectiveStatMultiplierAbAttr } from "#abilities/effective-stat-multiplier-ab-attr";
 import type { EvasivenessMultiplierAbAttr } from "#abilities/evasiveness-multiplier-ab-attr";
 import type { FieldAccuracyMultiplierAbAttr } from "#abilities/field-accuracy-multiplier-ab-attr";
 import type { FieldPriorityMoveImmunityAbAttr } from "#abilities/field-priority-move-immunity-ab-attr";
@@ -1189,7 +1189,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       );
     }
 
-    applyAbFunc<EffectiveStatMultiplier>(
+    applyAbFunc<EffectiveStatMultiplierAbAttr>(
       AbAttrFlag.EFFECTIVE_STAT_MULTIPLIER,
       this,
       simulated,

@@ -1287,14 +1287,11 @@ export function initMoves() {
           return 1;
         }
         const weatherTypes: readonly WeatherType[] = [
-          WeatherType.SUNNY,
-          WeatherType.RAIN,
+          ...SUNNY_WEATHER_TYPES,
+          ...RAINY_WEATHER_TYPES,
+          ...SNOWY_WEATHER_TYPES,
           WeatherType.SANDSTORM,
-          WeatherType.HAIL,
-          WeatherType.SNOW,
           WeatherType.FOG,
-          WeatherType.HEAVY_RAIN,
-          WeatherType.HARSH_SUN,
         ] as const;
         if (weatherTypes.includes(weather.weatherType) && !weather.isEffectSuppressed()) {
           return 2;

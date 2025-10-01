@@ -38,7 +38,7 @@ import type { NumberHolder } from "#utils/common-utils";
 +-----------------------+-------+--------+----------------------------------+
 ```
  */
-export class EffectiveStatMultiplier extends AbAttr {
+export class EffectiveStatMultiplierAbAttr extends AbAttr {
   protected stat: EffectiveStat;
   protected readonly multiplier: number;
   protected readonly condition?: PokemonAttackCondition;
