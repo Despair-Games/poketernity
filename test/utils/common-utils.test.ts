@@ -1,5 +1,5 @@
 import { arrayOfRange } from "#test/test-utils/test-utils";
-import { calcAccuracyMultiplier, clamp } from "#utils/common-utils";
+import { calcAccuracyMultiplier, clamp, wrap } from "#utils/common-utils";
 import { describe, expect, it } from "vitest";
 
 describe("Utils - Common Utils", () => {
@@ -102,6 +102,53 @@ describe("Utils - Common Utils", () => {
     it("should return 9/3 for a difference of +6", () => {
       const actual = calcAccuracyMultiplier(6, 0);
       expect(actual).toBe(9 / 3);
+    });
+  });
+
+  describe("wrap", () => {
+    const inputs: number[] = [
+      -20, -19, -18, -17, -16, -15, -14, -13, -12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7,
+      8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+    ];
+    // -10 to -5
+    const outputsA: number[] = [
+      -8, -7, -6, -5, -10, -9, -8, -7, -6, -5, -10, -9, -8, -7, -6, -5, -10, -9, -8, -7, -6, -5, -10, -9, -8, -7, -6,
+      -5, -10, -9, -8, -7, -6, -5, -10, -9, -8, -7, -6, -5, -10,
+    ];
+    // -5 to 0
+    const outputsB: number[] = [
+      -2, -1, 0, -5, -4, -3, -2, -1, 0, -5, -4, -3, -2, -1, 0, -5, -4, -3, -2, -1, 0, -5, -4, -3, -2, -1, 0, -5, -4, -3,
+      -2, -1, 0, -5, -4, -3, -2, -1, 0, -5, -4,
+    ];
+    // 0 to 5
+    const outputsC: number[] = [
+      4, 5, 0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5,
+      0, 1, 2,
+    ];
+    // 5 to 10
+    const outputsD: number[] = [
+      10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 5, 6, 7, 8, 9,
+      10, 5, 6, 7, 8,
+    ];
+    // -3 to 3
+    const outputsE: number[] = [
+      1, 2, 3, -3, -2, -1, 0, 1, 2, 3, -3, -2, -1, 0, 1, 2, 3, -3, -2, -1, 0, 1, 2, 3, -3, -2, -1, 0, 1, 2, 3, -3, -2,
+      -1, 0, 1, 2, 3, -3, -2, -1,
+    ];
+
+    it.each<{ input: number[]; output: number[]; min: number; max: number }>([
+      { input: inputs, output: outputsA, min: -10, max: -5 },
+      { input: inputs, output: outputsB, min: -5, max: 0 },
+      { input: inputs, output: outputsC, min: 0, max: 5 },
+      { input: inputs, output: outputsD, min: 5, max: 10 },
+      { input: inputs, output: outputsE, min: -3, max: 3 },
+    ])("should wrap the given value between $min and $max (inclusive)", ({ input, output, min, max }) => {
+      expect(input.length).toBe(output.length);
+      input.forEach((val, idx) => expect(wrap(val, min, max)).toBe(output[idx]));
+    });
+
+    it("should throw an error if min > max", () => {
+      expect(() => wrap(0, 5, 0)).toThrowError();
     });
   });
 });

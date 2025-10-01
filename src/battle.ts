@@ -46,7 +46,7 @@ import type { MysteryEncounter } from "#mystery-encounters/mystery-encounter";
 import { settings } from "#system/settings-manager";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import { isBetween, NumberHolder } from "#utils/common-utils";
-import { randInt, randomString, randSeedInt, randSeedItem } from "#utils/random-utils";
+import { randomString, randSeedInt, randSeedItem } from "#utils/random-utils";
 import { shiftCharCodes } from "#utils/string-utils";
 
 interface FaintLogEntry {
@@ -510,9 +510,9 @@ export class FixedBattleConfig {
 
 /**
  * Helper function to generate a random trainer for evil team trainers and the elite 4/champion
- * @param trainerPool The TrainerType or list of TrainerTypes that can possibly be generated
- * @param randomGender whether or not to randomly (50%) generate a female trainer (for use with evil team grunts)
- * @param seedOffset the seed offset to use for the random generation of the trainer
+ * @param trainerPool - The TrainerType or list of TrainerTypes that can possibly be generated
+ * @param randomGender - Whether or not to randomly (50%) generate a female trainer (for use with evil team grunts)
+ * @param seedOffset - The seed offset to use for the random generation of the trainer
  * @returns the generated trainer
  */
 function getRandomTrainerFunc(
@@ -531,13 +531,13 @@ function getRandomTrainerFunc(
       }
     }, seedOffset);
 
-    let trainerGender = TrainerVariant.DEFAULT;
+    let trainerGender: TrainerVariant = TrainerVariant.DEFAULT;
     if (randomGender) {
-      trainerGender = randInt(2) === 0 ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT;
+      trainerGender = randSeedInt(2) === 0 ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT;
     }
 
     /* 1/3 chance for evil team grunts to be double battles */
-    const evilTeamGrunts = [
+    const evilTeamGrunts: readonly TrainerType[] = [
       TrainerType.ROCKET_GRUNT,
       TrainerType.MAGMA_GRUNT,
       TrainerType.AQUA_GRUNT,
@@ -548,11 +548,11 @@ function getRandomTrainerFunc(
       TrainerType.SKULL_GRUNT,
       TrainerType.MACRO_GRUNT,
       TrainerType.STAR_GRUNT,
-    ];
+    ] as const;
     const isEvilTeamGrunt = evilTeamGrunts.includes(trainerTypes[rand]);
 
     if (allTrainerConfigs[trainerTypes[rand]].hasDouble && isEvilTeamGrunt) {
-      return new Trainer(trainerTypes[rand], randInt(3) === 0 ? TrainerVariant.DOUBLE : trainerGender);
+      return new Trainer(trainerTypes[rand], randSeedInt(3) === 0 ? TrainerVariant.DOUBLE : trainerGender);
     }
 
     return new Trainer(trainerTypes[rand], trainerGender);

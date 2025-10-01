@@ -21,6 +21,7 @@ import { TrainerVariant } from "#enums/trainer-variant";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PersistentModifier } from "#modifier/modifier";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
+import { enumValueToKey } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedInt, randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
@@ -465,10 +466,10 @@ export class Trainer extends Phaser.GameObjects.Container {
       } else if (tierValue >= 1) {
         tier = TrainerPoolTier.SUPER_RARE;
       }
-      console.log(TrainerPoolTier[tier]);
+      console.log("trainer pool tier:", enumValueToKey(TrainerPoolTier, tier));
       while (!Object.hasOwn(this.config.speciesPools, tier) || !this.config.speciesPools[tier].length) {
         console.log(
-          `Downgraded trainer Pokemon rarity tier from ${TrainerPoolTier[tier]} to ${TrainerPoolTier[tier - 1]}`,
+          `Downgraded trainer Pokemon rarity tier from ${enumValueToKey(TrainerPoolTier, tier)} to ${enumValueToKey(TrainerPoolTier, (tier - 1) as TrainerPoolTier)}`,
         );
         tier--;
       }

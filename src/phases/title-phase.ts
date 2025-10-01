@@ -274,7 +274,7 @@ export class TitlePhase extends Phase {
     const { arena, currentBattle, gameData } = globalScene;
 
     if (!this.loaded && !globalScene.gameMode.isDaily) {
-      arena.preloadBgm();
+      globalScene.loadBgm(arena.bgm);
       globalScene.gameMode = getGameMode(this.gameMode);
       if (this.gameMode === GameModes.CHALLENGE) {
         globalScene.phaseManager.createAndPushPhase("SelectChallengePhase");

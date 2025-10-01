@@ -9,7 +9,7 @@ import type { UIOptionSelectItem } from "#ui/option-select-ui-item";
 import { ScrollBar } from "#ui/scroll-bar";
 import { addBBCodeTextObject, getBBCodeFragment } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
-import { fixedNumber } from "#utils/common-utils";
+import { enumValueToKey, fixedNumber } from "#utils/common-utils";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 
 const SCROLLBAR_PADDING = 5;
@@ -65,7 +65,7 @@ export abstract class BaseOptionSelectUiHandler<T extends OptionSelectItem> exte
     const ui = this.getUi();
 
     this.optionSelectContainer = globalScene.add.container(GAME_WIDTH - 1, -1);
-    this.optionSelectContainer.setName(`option-select-${this.mode ? UiMode[this.mode] : "UNKNOWN"}`);
+    this.optionSelectContainer.setName(`option-select-${this.mode ? enumValueToKey(UiMode, this.mode) : "UNKNOWN"}`);
     this.optionSelectContainer.setVisible(false);
     ui.add(this.optionSelectContainer);
 
@@ -92,7 +92,7 @@ export abstract class BaseOptionSelectUiHandler<T extends OptionSelectItem> exte
    */
   public override show(...args: unknown[]): boolean {
     if (!Object.hasOwn(args[0] ?? {}, "options")) {
-      console.error("Missing `OptionSelectModeConfig` argument for Mode.OPTION_SELECT");
+      console.error("Missing `OptionSelectModeConfig` argument for `Mode.OPTION_SELECT`");
       return false;
     }
 

@@ -1,9 +1,13 @@
+import type { EnumValues } from "#types/utility-types";
+
 /** Determines whether an NPC trainer is allowed to Terastallize any of their pokemon */
-export enum TeraAIMode {
+export const TeraAIMode = {
   /** The trainer cannot use Terastallization */
-  NONE,
+  NONE: 1,
   /** The trainer will Tersastallize the configured pokemon on the first turn it's sent out */
-  INSTANT,
+  INSTANT: 2,
   /** (Currently unused) The trainer will choose when to Terastallize their pokemon based on the current battle state */
-  SMART,
-}
+  SMART: 3,
+} as const;
+
+export type TeraAIMode = EnumValues<typeof TeraAIMode>;
