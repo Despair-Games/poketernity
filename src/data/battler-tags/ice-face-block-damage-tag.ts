@@ -19,6 +19,6 @@ export class IceFaceBlockDamageTag extends FormBlockDamageTag {
    * @returns True if the tag can be added, false otherwise.
    */
   override canAdd(pokemon: Pokemon): boolean {
-    return super.canAdd(pokemon) || globalScene.arena.hasWeather(SNOWY_WEATHER_TYPES);
+    return super.canAdd(pokemon) || globalScene.arena.hasWeather(...SNOWY_WEATHER_TYPES);
   }
 }

@@ -23,7 +23,7 @@ import i18next from "i18next";
 export class PostWeatherLapseDamageAbAttr extends PostWeatherLapseAbAttr {
   private readonly damageFactor: number;
 
-  constructor(damageFactor: number, ...weatherTypes: WeatherType[]) {
+  constructor(damageFactor: number, ...weatherTypes: readonly [WeatherType, ...WeatherType[]]) {
     super(...weatherTypes);
 
     this.damageFactor = damageFactor;

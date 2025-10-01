@@ -11,13 +11,13 @@ export const PRIMAL_WEATHER_TYPES = Object.freeze<WeatherType[]>([
 ]);
 
 /** Weather types that are associated with the sunny weather. */
-export const SUNNY_WEATHER_TYPES = Object.freeze<WeatherType[]>([WeatherType.SUNNY, WeatherType.HARSH_SUN]);
+export const SUNNY_WEATHER_TYPES = Object.freeze([WeatherType.SUNNY, WeatherType.HARSH_SUN] as const);
 
 /** Weather types that are associated with rainy weather. */
-export const RAINY_WEATHER_TYPES = Object.freeze<WeatherType[]>([WeatherType.RAIN, WeatherType.HEAVY_RAIN]);
+export const RAINY_WEATHER_TYPES = Object.freeze([WeatherType.RAIN, WeatherType.HEAVY_RAIN] as const);
 
 /** Weather types that are associated with snowy weather. */
-export const SNOWY_WEATHER_TYPES = Object.freeze<WeatherType[]>([WeatherType.SNOW, WeatherType.HAIL]);
+export const SNOWY_WEATHER_TYPES = Object.freeze([WeatherType.SNOW, WeatherType.HAIL] as const);
 
 /** Weather types that cause damage to pokemon at end of turn. */
 export const DAMAGING_WEATHER_TYPES = Object.freeze<WeatherType[]>([WeatherType.HAIL, WeatherType.SANDSTORM]);

@@ -2598,7 +2598,7 @@ export function initMoves() {
     new StatusMove(MoveId.AURORA_VEIL, ElementalType.ICE, -1, 20, -1, 0, 7) //
       .condition(
         (_user, _target, _move) =>
-          globalScene.arena.hasWeather(SNOWY_WEATHER_TYPES) && !globalScene.arena.weather?.isEffectSuppressed(),
+          globalScene.arena.hasWeather(...SNOWY_WEATHER_TYPES) && !globalScene.arena.weather?.isEffectSuppressed(),
       )
       .attr(AddArenaTagAttr, ArenaTagType.AURORA_VEIL, ArenaTagRelativeSide.USER, { turnCount: 5, failOnOverlap: true })
       .target(MoveTarget.USER_SIDE)

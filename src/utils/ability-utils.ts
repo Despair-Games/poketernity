@@ -22,7 +22,7 @@ export function getPokemonWithWeatherBasedForms(): Pokemon[] {
     );
 }
 
-export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondition {
+export function getWeatherCondition(...weatherTypes: readonly [WeatherType, ...WeatherType[]]): AbAttrCondition {
   return () => {
     if (!globalScene?.arena) {
       return false;
@@ -30,7 +30,7 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
     if (globalScene.arena.weather?.isEffectSuppressed()) {
       return false;
     }
-    return globalScene.arena.hasWeather([...weatherTypes]);
+    return globalScene.arena.hasWeather(...weatherTypes);
   };
 }
 

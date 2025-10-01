@@ -186,8 +186,8 @@ export class Arena {
    * @param weather - {@linkcode WeatherType} or array of {@linkcode WeatherType} to check against
    * @returns `true` if the arena is of the specified weather, `false` otherwise
    */
-  public hasWeather(weather: WeatherType | readonly WeatherType[]): boolean {
-    return coerceArray(weather).includes(this.weatherType);
+  public hasWeather(...weather: readonly [WeatherType, ...WeatherType[]]): boolean {
+    return weather.includes(this.weatherType);
   }
 
   /** Sets weather to the override specified in `overrides.ts` */

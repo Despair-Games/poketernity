@@ -6,9 +6,9 @@ import type { AbAttrCondition } from "#types/ability-types";
 import { getWeatherCondition } from "#utils/ability-utils";
 
 export abstract class PostWeatherLapseAbAttr extends AbAttr {
-  protected readonly weatherTypes: WeatherType[];
+  protected readonly weatherTypes: readonly [WeatherType, ...WeatherType[]];
 
-  constructor(...weatherTypes: WeatherType[]) {
+  constructor(...weatherTypes: readonly [WeatherType, ...WeatherType[]]) {
     super();
     this._flags.add(AbAttrFlag.POST_WEATHER_LAPSE);
 

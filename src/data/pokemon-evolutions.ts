@@ -1,4 +1,5 @@
 import { globalScene } from "#app/global-scene";
+import { RAINY_WEATHER_TYPES } from "#constants/weather-constants";
 import type { BiomeId } from "#enums/biome-id";
 import { ElementalType } from "#enums/elemental-type";
 import { EvolutionItem } from "#enums/evolution-item";
@@ -342,7 +343,7 @@ export class PangoroEvoCondition extends SpeciesEvolutionCondition {
  */
 export class GoodraEvoCondition extends SpeciesEvolutionCondition {
   constructor() {
-    super(() => globalScene.arena.hasWeather([WeatherType.RAIN, WeatherType.FOG, WeatherType.HEAVY_RAIN]));
+    super(() => globalScene.arena.hasWeather(...RAINY_WEATHER_TYPES, WeatherType.FOG));
     this.description = "requires rain or fog";
   }
 }

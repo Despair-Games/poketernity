@@ -4118,7 +4118,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         break;
       }
       case StatusEffect.FREEZE:
-        if (this.isOfType(ElementalType.ICE) || (!ignoreField && globalScene.arena.hasWeather(SUNNY_WEATHER_TYPES))) {
+        if (
+          this.isOfType(ElementalType.ICE)
+          || (!ignoreField && globalScene.arena.hasWeather(...SUNNY_WEATHER_TYPES))
+        ) {
           return false;
         }
         break;
