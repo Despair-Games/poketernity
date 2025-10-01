@@ -350,8 +350,8 @@ export class Arena {
    * @param terrain - {@linkcode TerrainType} or array of {@linkcode TerrainType} to check against
    * @returns `true` if the arena is of the specified terrain, `false` otherwise
    */
-  public hasTerrain(terrain: TerrainType | TerrainType[]): boolean {
-    return coerceArray(terrain).includes(this.terrainType);
+  public hasTerrain(...terrain: readonly [TerrainType, ...TerrainType[]]): boolean {
+    return terrain.includes(this.terrainType);
   }
 
   /** Sets terrain to the override specified in `overrides.ts` */

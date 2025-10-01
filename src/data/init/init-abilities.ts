@@ -1671,9 +1671,9 @@ export function initAbilities() {
 
 // #region Helpers
 
-function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
+function getTerrainCondition(...terrainTypes: readonly [TerrainType, ...TerrainType[]]): AbAttrCondition {
   return (_pokemon: Pokemon) => {
-    return globalScene.arena.hasTerrain([...terrainTypes]);
+    return globalScene.arena.hasTerrain(...terrainTypes);
   };
 }
 
