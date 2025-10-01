@@ -34,9 +34,9 @@ export class LoginPhase extends Phase {
 
     ui.setMode<LoadingModalUiHandler>(UiMode.LOADING, { buttonActions: [] });
     executeIf(BYPASS_LOGIN || hasSession, updateUserInfo).then((response) => {
-      const success = response ? response[0] : false;
+      const isSuccess = response ? response[0] : false;
       const statusCode = response ? response[1] : null;
-      if (!success) {
+      if (!isSuccess) {
         if (!statusCode || statusCode === 400) {
           if (this.showText) {
             ui.showText(i18next.t("menu:logInOrCreateAccount"));

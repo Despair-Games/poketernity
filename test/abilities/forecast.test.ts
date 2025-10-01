@@ -17,32 +17,32 @@ describe("Abilities - Forecast", () => {
 
   /**
    * Tests form changes based on weather changes
-   * @param game The game manager instance
+   * @param gm The game manager instance
    * @param weather The active weather to set
    * @param form The expected form based on the active weather
    * @param initialForm The initial form pre form change
    */
-  const testWeatherFormChange = async (game: GameManager, weather: WeatherType, form: number, initialForm?: number) => {
-    game.override.weather(weather).starterForms({ [SpeciesId.CASTFORM]: initialForm });
-    await game.classicMode.startBattle(SpeciesId.CASTFORM);
+  const testWeatherFormChange = async (gm: GameManager, weather: WeatherType, form: number, initialForm?: number) => {
+    gm.override.weather(weather).starterForms({ [SpeciesId.CASTFORM]: initialForm });
+    await gm.classicMode.startBattle(SpeciesId.CASTFORM);
 
-    game.move.select(MoveId.SPLASH);
+    gm.move.select(MoveId.SPLASH);
 
-    expect(game.field.getPlayerPokemon().formIndex).toBe(form);
+    expect(gm.field.getPlayerPokemon().formIndex).toBe(form);
   };
 
   /**
    * Tests reverting to normal form when Cloud Nine/Air Lock is active on the field
-   * @param game The game manager instance
+   * @param gm The game manager instance
    * @param ability The ability that is active on the field
    */
-  const testRevertFormAgainstAbility = async (game: GameManager, ability: AbilityId) => {
-    game.override.starterForms({ [SpeciesId.CASTFORM]: SUNNY_FORM }).enemyAbility(ability);
-    await game.classicMode.startBattle(SpeciesId.CASTFORM);
+  const testRevertFormAgainstAbility = async (gm: GameManager, ability: AbilityId) => {
+    gm.override.starterForms({ [SpeciesId.CASTFORM]: SUNNY_FORM }).enemyAbility(ability);
+    await gm.classicMode.startBattle(SpeciesId.CASTFORM);
 
-    game.move.select(MoveId.SPLASH);
+    gm.move.select(MoveId.SPLASH);
 
-    expect(game.field.getPlayerPokemon().formIndex).toBe(NORMAL_FORM);
+    expect(gm.field.getPlayerPokemon().formIndex).toBe(NORMAL_FORM);
   };
 
   beforeAll(() => {

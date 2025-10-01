@@ -176,7 +176,7 @@
         "noUselessStringConcat": "error"
       },
       "nursery": {
-        "noShadow": "warn", // TODO: refactor and make "error"
+        "noShadow": "error",
         "noUselessUndefined": "error",
         "noNonNullAssertedOptionalChain": "error",
         "useExplicitType": "off", // TODO: refactor and make "error"

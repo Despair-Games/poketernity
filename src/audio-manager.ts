@@ -126,7 +126,7 @@ export class AudioManager {
     if (!this.bgm) {
       return false;
     }
-    const bgm = globalScene.sound.getAllPlaying().find((bgm) => bgm.key === this.bgm.key);
+    const bgm = globalScene.sound.getAllPlaying().find((activeBgm) => activeBgm.key === this.bgm.key);
     if (bgm) {
       SoundFade.fadeOut(globalScene, this.bgm, duration, destroy);
       return true;

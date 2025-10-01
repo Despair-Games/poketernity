@@ -571,9 +571,9 @@ export class EncounterPhase extends BattlePhase {
     });
 
     if (battleType !== BattleType.TRAINER && battleType !== BattleType.MYSTERY_ENCOUNTER) {
-      enemyField.map((p) =>
-        phaseManager.pushConditionalPhase(phaseManager.createPhase("PostSummonPhase", p.getBattlerIndex()), () => {
-          if (!globalScene.getPlayerParty().length) {
+      enemyField.map((pkmn) =>
+        phaseManager.pushConditionalPhase(phaseManager.createPhase("PostSummonPhase", pkmn.getBattlerIndex()), () => {
+          if (globalScene.getPlayerParty().length === 0) {
             return false;
           }
           const pokemonsOnFieldCount = globalScene.getPlayerParty().filter((p) => p.isOnField()).length;

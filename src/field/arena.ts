@@ -696,25 +696,24 @@ export class Arena {
 
   /**
    * Adds a new tag to the arena
-   * @param tagType {@linkcode ArenaTagType} the tag being added
-   * @param turnCount How many turns the tag lasts
-   * @param sourceMove {@linkcode MoveId} the move the tag came from, or `undefined` if not from a move
-   * @param sourceId The ID of the pokemon in play the tag came from (see {@linkcode BattleScene.getPokemonById})
-   * @param side {@linkcode ArenaTagSide} which side(s) the tag applies to
-   * @param quiet If a message should be queued on screen to announce the tag being added
-   * @param targetIndex The {@linkcode BattlerIndex} of the target pokemon
-   * @returns `false` if there already exists a tag of this type in the Arena
-   * @todo `sourceId` should be optional
+   * @param newTagType - The {@linkcode ArenaTagType | tag type} being added
+   * @param newTagSourceId - The ID of the pokemon in play the tag came from (see {@linkcode BattleScene.getPokemonById})
+   * @param newTagTurnCount - (Default `0`) How many turns the tag lasts
+   * @param newTagSourceMove - (Optional) The {@linkcode MoveId | move} the tag came from, if applicable
+   * @param newTagSide - (Default `ArenaTagSide.BOTH`) The {@linkcode ArenaTagSide | side} of the `Arena` the tag applies to
+   * @param quiet - (Default `false`) Whether a message should be queued on screen to announce the tag being added
+   * @returns `true` if a new tag was added, or `false` if there already exists a tag of this type in the `Arena`
    */
+  // TODO: `sourceId` should be optional
   public addTag(
-    tagType: ArenaTagType,
-    sourceId: number,
-    turnCount: number = 0,
-    sourceMove?: MoveId,
-    side: ArenaTagSide = ArenaTagSide.BOTH,
+    newTagType: ArenaTagType,
+    newTagSourceId: number,
+    newTagTurnCount: number = 0,
+    newTagSourceMove?: MoveId,
+    newTagSide: ArenaTagSide = ArenaTagSide.BOTH,
     quiet: boolean = false,
   ): boolean {
-    const existingTag = this.findTag(tagType, side);
+    const existingTag = this.findTag(newTagType, newTagSide);
     if (existingTag) {
       existingTag.onOverlap();
 
@@ -727,18 +726,13 @@ export class Arena {
     }
 
     // creates a new tag object
-    const newTag = getArenaTag(tagType, sourceId, turnCount, sourceMove, side);
+    const newTag = getArenaTag(newTagType, newTagSourceId, newTagTurnCount, newTagSourceMove, newTagSide);
     if (newTag) {
       this.tags.push(newTag);
       newTag.onAdd(quiet);
 
-      const { layers = 0, maxLayers = 0 } = ENTRY_HAZARD_ARENA_TAG_TYPES.includes(newTag.tagType)
-        ? (newTag as EntryHazardTag)
-        : {};
-
-      this.eventTarget.dispatchEvent(
-        new TagAddedEvent(newTag.tagType, newTag.side, newTag.turnCount, layers, maxLayers),
-      );
+      const { tagType, side, turnCount, layers = 0, maxLayers = 0 } = newTag as EntryHazardTag;
+      this.eventTarget.dispatchEvent(new TagAddedEvent(tagType, side, turnCount, layers, maxLayers));
     }
 
     return true;

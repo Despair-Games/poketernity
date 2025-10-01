@@ -2091,10 +2091,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     let multiplier = types
       .map((defType) => {
-        const multiplier = new NumberHolder(getTypeDamageMultiplier(moveType, defType));
-        applyChallenges(globalScene.gameMode, ChallengeType.TYPE_EFFECTIVENESS, multiplier);
+        const mult = new NumberHolder(getTypeDamageMultiplier(moveType, defType));
+        applyChallenges(globalScene.gameMode, ChallengeType.TYPE_EFFECTIVENESS, mult);
         if (move) {
-          applyMoveAttrs(VariableMoveTypeChartAttr, null, this, move, multiplier, defType);
+          applyMoveAttrs(VariableMoveTypeChartAttr, null, this, move, mult, defType);
         }
         if (source) {
           const ignoreImmunity = new BooleanHolder(false);
@@ -2108,16 +2108,16 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
               defType,
             );
           }
-          if (ignoreImmunity.value && multiplier.value === 0) {
+          if (ignoreImmunity.value && mult.value === 0) {
             return 1;
           }
 
           const exposedTags = this.findTags<ExposedTag>((tag) => tag.isType<ExposedTag>(...EXPOSED_TAG_TYPES));
-          if (exposedTags.some((t) => t.ignoreImmunity(defType, moveType)) && multiplier.value === 0) {
+          if (exposedTags.some((t) => t.ignoreImmunity(defType, moveType)) && mult.value === 0) {
             return 1;
           }
         }
-        return multiplier.value;
+        return mult.value;
       })
       .reduce((acc, cur) => acc * cur, 1) as TypeDamageMultiplier;
 
