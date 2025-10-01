@@ -189,9 +189,9 @@ export class PokemonSpecies extends PokemonSpeciesForm {
         if (
           e.speciesId === this.speciesId
           && (!this.forms.length || !e.evoFormKey || e.evoFormKey === this.forms[this.formIndex].formKey)
-          && preEvolutionLevels.every((pe) => pe[0] !== Number.parseInt(p))
+          && preEvolutionLevels.every((pe) => pe[0] !== Number.parseInt(p, 10))
         ) {
-          const speciesId = Number.parseInt(p) as SpeciesId;
+          const speciesId = Number.parseInt(p, 10) as SpeciesId;
           const level = e.enemyEvolveLevel;
           preEvolutionLevels.push([speciesId, level]);
           const subPreEvolutionLevels = getPokemonSpecies(speciesId).getPreEvolutionLevels();
@@ -276,7 +276,7 @@ export class PokemonSpecies extends PokemonSpeciesForm {
     };
   }
 
-  hasVariants() {
+  hasVariants(): boolean {
     let variantDataIndex: string | number = this.speciesId;
     if (this.forms.length > 0) {
       const formKey = this.forms[this.formIndex]?.formKey;
@@ -287,45 +287,44 @@ export class PokemonSpecies extends PokemonSpeciesForm {
     return Object.hasOwn(variantData, variantDataIndex) || Object.hasOwn(variantData, this.speciesId);
   }
 
-  getFormSpriteKey(formIndex?: number) {
-    if (this.forms.length && formIndex !== undefined && formIndex >= this.forms.length) {
+  getFormSpriteKey(formIndex: number = 0): string {
+    if (this.forms.length > 0 && formIndex >= this.forms.length) {
       console.warn(
-        `Attempted accessing form with index ${formIndex} of species ${this.getName()} with only ${this.forms.length || 0} forms`,
+        `Attempted accessing form with index ${formIndex} of species ${this.getName()} with only ${this.forms.length} forms`,
       );
       formIndex = Math.min(formIndex, this.forms.length - 1);
     }
-    return this.forms?.length ? this.forms[formIndex || 0].getFormSpriteKey() : "";
+    return this.forms[formIndex]?.getFormSpriteKey() ?? "";
   }
 
   /**
-   * Helper function that determines if the game would consider this Pokemon a sublegendary
-   * @returns true if the Pokemon is considered a sub-legendary by the game
+   * @returns Whether the Pokemon is "sub-legendary" (includes Ultra Beasts)
+   * @see {@link https://www.serebii.net/pokemon/legendary.shtml}
    */
-  isSubLegendary() {
-    return [SpeciesGroups.SUBLEGENDARY, SpeciesGroups.ULTRA_BEAST].includes(this.group);
+  isSubLegendary(): boolean {
+    return ([SpeciesGroups.SUBLEGENDARY, SpeciesGroups.ULTRA_BEAST] as SpeciesGroups[]).includes(this.group);
   }
 
   /**
-   * Helper function that determines if the game would consider this Pokemon a legendary
-   * @returns true if the Pokemon is considered a legendary by the game
+   * @returns Whether the Pokemon is legendary
+   * @see {@link https://bulbapedia.bulbagarden.net/wiki/Legendary_Pok%C3%A9mon}
    */
-  isLegendary() {
+  isLegendary(): boolean {
     return this.group === SpeciesGroups.LEGENDARY;
   }
 
   /**
-   * Helper function that determines if the Pokemon is a mythical
-   * @returns true if the Pokemon is a mythical
+   * @returns Whether the Pokemon is mythical
+   * @see {@link https://bulbapedia.bulbagarden.net/wiki/Mythical_Pok%C3%A9mon}
    */
-  isMythical() {
+  isMythical(): boolean {
     return this.group === SpeciesGroups.MYTHICAL;
   }
 
   /**
-   * Helper function that determines if the Pokemon is a sublegendary, legendary, or mythical
-   * @returns `true` if the Pokemon is a sublegendary, legendary, or mythical
+   * @returns Whether the Pokemon is sub-legendary / an Ultra Beast, legendary, or mythical
    */
-  isLegendLike() {
+  isLegendLike(): boolean {
     return this.isSubLegendary() || this.isLegendary() || this.isMythical();
   }
 }

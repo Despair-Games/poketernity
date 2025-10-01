@@ -62,7 +62,7 @@ import { enumValueToKey, executeIf } from "#utils/common-utils";
 import i18next from "i18next";
 
 /** All modes that are part of the settings UI. */
-export const settingsUiModes = [
+export const settingsUiModes: readonly UiMode[] = [
   UiMode.SETTINGS,
   UiMode.SETTINGS_AUDIO,
   UiMode.SETTINGS_DISPLAY,
@@ -70,10 +70,10 @@ export const settingsUiModes = [
   UiMode.KEYBOARD_BINDING,
   UiMode.SETTINGS_GAMEPAD,
   UiMode.GAMEPAD_BINDING,
-];
+] as const;
 
 /** Modes for which animations should play when changing to/from the mode. */
-const transitionModes = [
+const transitionModes: readonly UiMode[] = [
   UiMode.SAVE_SLOT,
   UiMode.PARTY,
   UiMode.SUMMARY,
@@ -84,17 +84,18 @@ const transitionModes = [
   UiMode.EGG_LIST,
   UiMode.EGG_GACHA,
   UiMode.RUN_HISTORY,
-];
+] as const;
 
 /**
  * Modes for which animations should **not** play when changing to/from the mode.
  *
  * Note: this list is not strictly the opposite of `transitionModes`,
- * as some UIs that are not in this list or transitionModes will still get animated
+ * as some UIs that are not in this list or transitionModes will still get animated.
+ *
  * TODO: Figure out whether that is intended. If not, only keep a single list of the two.
  * If yes, clarify the different between the two.
  */
-const noTransitionModes = [
+const noTransitionModes: readonly UiMode[] = [
   UiMode.TITLE,
   UiMode.CONFIRM,
   UiMode.OPTION_SELECT,
@@ -120,14 +121,22 @@ const noTransitionModes = [
   UiMode.ADMIN,
   UiMode.MYSTERY_ENCOUNTER,
   UiMode.RUN_INFO,
-];
+] as const;
 
 /** List of ui modes that can always be destroyed after use. */
-const alwaysDestroyModes = [UiMode.UNAVAILABLE, UiMode.SESSION_RELOAD];
+const alwaysDestroyModes: readonly UiMode[] = [UiMode.UNAVAILABLE, UiMode.SESSION_RELOAD] as const;
+
 /** List of ui modes used during run preparation that can be destroyed when in a run. */
-const runPrepModes = [UiMode.TITLE, UiMode.STARTER_SELECT, UiMode.CHALLENGE_SELECT, UiMode.SAVE_SLOT, UiMode.RUN_INFO];
+const runPrepModes: readonly UiMode[] = [
+  UiMode.TITLE,
+  UiMode.STARTER_SELECT,
+  UiMode.CHALLENGE_SELECT,
+  UiMode.SAVE_SLOT,
+  UiMode.RUN_INFO,
+] as const;
+
 /** List of ui battle modes that should always stay loaded when in a run. */
-const permanentBattleModes = [
+const permanentBattleModes: readonly UiMode[] = [
   UiMode.COMMAND,
   UiMode.BALL,
   UiMode.FIGHT,
@@ -135,16 +144,18 @@ const permanentBattleModes = [
   UiMode.PARTY,
   UiMode.SUMMARY,
   UiMode.MODIFIER_SELECT,
-];
+] as const;
+
 /** List of ui battle modes that can be destroyed after each wave. */
-const temporaryBattleModes = [
+const temporaryBattleModes: readonly UiMode[] = [
   UiMode.MYSTERY_ENCOUNTER,
   UiMode.FORM_CHANGE_SCENE,
   UiMode.EGG_HATCH_SCENE,
   UiMode.EGG_HATCH_SUMMARY,
-];
+] as const;
+
 /** List of ui modes accessed only from the main menu, that can be destroyed once the menu is closed. */
-const mainMenuAccessedModes = [
+const mainMenuAccessedModes: readonly UiMode[] = [
   UiMode.ACHIEVEMENTS,
   UiMode.GAME_STATS,
   UiMode.EGG_GACHA,
@@ -153,7 +164,7 @@ const mainMenuAccessedModes = [
   UiMode.RUN_INFO,
   UiMode.ADMIN,
   UiMode.TEST_DIALOGUE,
-];
+] as const;
 
 /** Mode that will be set by default when initializing the UI. */
 const DEFAULT_MODE = UiMode.MESSAGE;
@@ -194,7 +205,7 @@ export class UI extends Phaser.GameObjects.Container {
 
     logUiVerbose("Initializing UI and default handlers");
 
-    this.setName(`ui-${UiMode[this.mode]}`);
+    this.setName(`ui-${enumValueToKey(UiMode, this.mode)}`);
 
     // Initialize the default handler
     this.addUiHandler(this.mode);
@@ -362,7 +373,7 @@ export class UI extends Phaser.GameObjects.Container {
    */
   private addUiHandler(mode: UiMode): UiHandler {
     const handler = this.createUiHandler(mode);
-    logUiVerbose(`Initializing Handler for mode: ${UiMode[mode]} (${mode})`);
+    logUiVerbose(`Initializing Handler for mode: ${enumValueToKey(UiMode, mode)} (${mode})`);
     this.handlers.set(mode, handler);
     handler.initialize();
     return handler;
@@ -376,7 +387,7 @@ export class UI extends Phaser.GameObjects.Container {
     for (const mode of modes) {
       const handler = this.handlers.get(mode);
       if (handler && !handler.active) {
-        logUiVerbose(`Destroying Handler for mode: ${UiMode[mode]} (${mode})`);
+        logUiVerbose(`Destroying Handler for mode: ${enumValueToKey(UiMode, mode)} (${mode})`);
         this.handlers.delete(mode);
         if (handler.ready) {
           handler.destroy();
@@ -470,10 +481,12 @@ export class UI extends Phaser.GameObjects.Container {
       return false;
     }
 
-    if ([UiMode.CONFIRM, UiMode.COMMAND, UiMode.FIGHT, UiMode.MESSAGE].includes(this.mode)) {
+    const overlayModes: readonly UiMode[] = [UiMode.CONFIRM, UiMode.COMMAND, UiMode.FIGHT, UiMode.MESSAGE] as const;
+    if (overlayModes.includes(this.mode)) {
       globalScene?.processInfoButton(pressed);
       return true;
     }
+
     globalScene?.processInfoButton(false);
     return true;
   }
@@ -830,8 +843,8 @@ export class UI extends Phaser.GameObjects.Container {
     ...params: Parameters<THandler["show"]>
   ): Promise<void> {
     logUiDebug(
-      `Set ${UiMode[mode]} (${mode}) Mode${chainMode ? " as overlay" : ""}`,
-      `(${clear ? "" : "not "}clearing ${UiMode[this.mode]})`,
+      `Set ${enumValueToKey(UiMode, mode)} (${mode}) Mode${chainMode ? " as overlay" : ""}`,
+      `(${clear ? "" : "not "}clearing ${enumValueToKey(UiMode, this.mode)})`,
     );
     return new Promise((resolve) => {
       if (this.mode === mode && !forceTransition) {
@@ -850,7 +863,7 @@ export class UI extends Phaser.GameObjects.Container {
           this.mode = mode;
           const touchControls = document?.getElementById("touchControls");
           if (touchControls) {
-            touchControls.dataset.uiMode = UiMode[mode];
+            touchControls.dataset.uiMode = enumValueToKey(UiMode, mode);
           }
           this.getUiHandler(mode).start(...params);
           // Arriving on title screen, remove login handlers from memory
@@ -901,10 +914,12 @@ export class UI extends Phaser.GameObjects.Container {
         this.stopCurrentHandler(newMode);
         this.mode = newMode;
         globalScene.updateGameInfo();
-        logUiDebug(`Set ${UiMode[this.mode]} (${this.mode}) Mode (reverting from ${UiMode[lastMode]})`);
+        logUiDebug(
+          `Set ${enumValueToKey(UiMode, this.mode)} (${this.mode}) Mode (reverting from ${enumValueToKey(UiMode, lastMode)})`,
+        );
         const touchControls = document.getElementById("touchControls");
         if (touchControls) {
-          touchControls.dataset.uiMode = UiMode[this.mode];
+          touchControls.dataset.uiMode = enumValueToKey(UiMode, this.mode);
         }
         resolve(true);
       };

@@ -18,7 +18,7 @@ import type { ShowTextOptions } from "#types/ui-types";
 import { MessageUiHandler } from "#ui/message-ui-handler";
 import { addTextObject, getEggTierTextTint } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
-import { enumValueToKey, fixedNumber, getTSEnumValues } from "#utils/common-utils";
+import { enumValueToKey, fixedNumber } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedShuffle } from "#utils/random-utils";
 import i18next from "i18next";
@@ -275,24 +275,20 @@ export class EggGachaUiHandler extends MessageUiHandler {
 
     this.eggGachaContainer.add(this.eggGachaOptionsContainer);
 
-    getTSEnumValues(VoucherType).forEach((voucher, index) => {
+    Object.values(VoucherType).forEach((voucher, index) => {
       const container = globalScene.add.container(GAME_WIDTH - 56 * index, 0);
 
-      const bg = addWindow(0, 0, 56, 22);
-      bg.setOrigin(1, 0);
-      container.add(bg);
+      const background = addWindow(0, 0, 56, 22).setOrigin(1, 0);
+      container.add(background);
 
-      const countLabel = addTextObject(-48, 3, "0", TextStyle.WINDOW);
-      countLabel.setOrigin(0, 0);
+      const countLabel = addTextObject(-48, 3, "0", TextStyle.WINDOW).setOrigin(0);
       container.add(countLabel);
 
       this.voucherCountLabels.push(countLabel);
 
       const iconImage = getVoucherTypeIcon(voucher);
 
-      const icon = globalScene.add.sprite(-19, 2, "items", iconImage);
-      icon.setOrigin(0, 0);
-      icon.setScale(0.5);
+      const icon = globalScene.add.sprite(-19, 2, "items", iconImage).setOrigin(0).setScale(0.5);
       container.add(icon);
 
       this.eggGachaContainer.add(container);

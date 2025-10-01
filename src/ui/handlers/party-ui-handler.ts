@@ -44,7 +44,7 @@ import type { SummaryUiHandler } from "#ui/summary-ui-handler";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
 import { applyChallenges } from "#utils/challenge-utils";
-import { BooleanHolder } from "#utils/common-utils";
+import { BooleanHolder, enumValueToKey } from "#utils/common-utils";
 import { FilterAllMoves } from "#utils/move-utils";
 import { PartyFilterAll } from "#utils/party-ui-utils";
 import { toReadableString } from "#utils/string-utils";
@@ -74,7 +74,7 @@ export class PartyUiHandler extends MessageUiHandler {
   public optionsContainer: Phaser.GameObjects.Container;
   private optionsBg: Phaser.GameObjects.NineSlice;
   private optionsCursorObj: Phaser.GameObjects.Image | null;
-  private options: number[];
+  private options: (PartyOption | number)[];
 
   private transferMode: boolean;
   private transferOptionCursor: number;
@@ -268,7 +268,7 @@ export class PartyUiHandler extends MessageUiHandler {
     let success = false;
 
     if (this.optionsMode) {
-      const option = this.options[this.optionsCursor];
+      const option = this.options[this.optionsCursor] as PartyOption;
       if (button === Button.ACTION) {
         const pokemon = globalScene.getPlayerParty()[this.cursor];
         if (this.partyUiMode === PartyUiMode.MODIFIER_TRANSFER && !this.transferMode && option !== PartyOption.CANCEL) {
@@ -974,10 +974,10 @@ export class PartyUiHandler extends MessageUiHandler {
               optionName = `${modifier.active ? i18next.t("partyUiHandler:DEACTIVATE") : i18next.t("partyUiHandler:ACTIVATE")} ${modifier.type.name}`;
             } else if (option === PartyOption.UNPAUSE_EVOLUTION) {
               optionName = `${pokemon.pauseEvolutions ? i18next.t("partyUiHandler:UNPAUSE_EVOLUTION") : i18next.t("partyUiHandler:PAUSE_EVOLUTION")}`;
-            } else if (this.localizedOptions.includes(option)) {
-              optionName = i18next.t(`partyUiHandler:${PartyOption[option]}`);
+            } else if ((this.localizedOptions as number[]).includes(option)) {
+              optionName = i18next.t(`partyUiHandler:${enumValueToKey(PartyOption, option as PartyOption)}`);
             } else {
-              optionName = toReadableString(PartyOption[option]);
+              optionName = toReadableString(enumValueToKey(PartyOption, option as PartyOption));
             }
             break;
         }

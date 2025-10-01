@@ -296,7 +296,7 @@ export class Arena {
     }
 
     // If the time is dusk or night, set the chance of sun to 0
-    if ([TimeOfDay.DUSK, TimeOfDay.NIGHT].includes(this.getTimeOfDay())) {
+    if (([TimeOfDay.DUSK, TimeOfDay.NIGHT] as readonly TimeOfDay[]).includes(this.getTimeOfDay())) {
       weatherMap.set(WeatherType.SUNNY, 0);
     }
 
@@ -451,7 +451,7 @@ export class Arena {
   public setRandomTerrain(): void {
     const terrainPool = allBiomes.get(this.biomeId).terrainPool;
     const terrainMap = new Map<TerrainType, number>();
-    for (const id of getTSEnumValues(TerrainType)) {
+    for (const id of Object.values(TerrainType)) {
       terrainMap.set(id, terrainPool[id] ?? 0);
     }
 

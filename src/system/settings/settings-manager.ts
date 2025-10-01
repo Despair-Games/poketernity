@@ -1,5 +1,6 @@
 import { eventBus } from "#app/event-bus";
 import { GAME_SPEEDS, SETTINGS_LS_KEY } from "#constants/app-constants";
+import { UiTheme } from "#enums/ui-theme";
 import { version } from "#package.json";
 import { defaultSettings } from "#system/default-settings";
 import type { Settings, SettingsCategory, UserFacingSettings } from "#types/settings";
@@ -181,6 +182,10 @@ class SettingsManager {
         }
 
         if (display) {
+          // TODO: temporary "migration" for dev saves, remove later
+          if ((display.uiTheme as number) === 0) {
+            display.uiTheme = UiTheme.DARK;
+          }
           this._settings.display = { ...this._settings.display, ...display };
         }
 
