@@ -44,155 +44,155 @@ describe("Achievements", () => {
 });
 
 describe("Ribbon Achievements", () => {
-    let phaserGame: Phaser.Game;
-    let game: GameManager;
+  let phaserGame: Phaser.Game;
+  let game: GameManager;
 
-    beforeAll(() => {
-      phaserGame = new Phaser.Game({
-        type: Phaser.HEADLESS,
-      });
+  beforeAll(() => {
+    phaserGame = new Phaser.Game({
+      type: Phaser.HEADLESS,
     });
+  });
 
-    afterEach(() => {
-      game.phaseInterceptor.restoreOg();
-    });
+  afterEach(() => {
+    game.phaseInterceptor.restoreOg();
+  });
 
-    beforeEach(() => {
-      game = new GameManager(phaserGame);
-    });
+  beforeEach(() => {
+    game = new GameManager(phaserGame);
+  });
 
-    it("should create an instance of RibbonAchv", () => {
+  it("should create an instance of RibbonAchv", () => {
     const ribbonAchv = new RibbonAchievement("", "ribbon_icon", 10);
     expect(ribbonAchv).toBeInstanceOf(RibbonAchievement);
-      expect(ribbonAchv instanceof Achievement).toBe(true);
-    });
+    expect(ribbonAchv instanceof Achievement).toBe(true);
+  });
 
-    it("should validate the achievement based on the ribbon amount", () => {
+  it("should validate the achievement based on the ribbon amount", () => {
     const ribbonAchv = new RibbonAchievement("", "ribbon_icon", 10);
-      game.scene.gameData.gameStats.ribbonsOwned = 5;
+    game.scene.gameData.gameStats.ribbonsOwned = 5;
 
     expect(ribbonAchv.conditionFunc(game.scene.gameData.gameStats.ribbonsOwned)).toBe(false);
 
-      game.scene.gameData.gameStats.ribbonsOwned = 15;
+    game.scene.gameData.gameStats.ribbonsOwned = 15;
     expect(ribbonAchv.conditionFunc(game.scene.gameData.gameStats.ribbonsOwned)).toBe(true);
-    });
+  });
 });
 
 describe("MonoGen Challenge Achievement", () => {
-    let phaserGame: Phaser.Game;
-    let game: GameManager;
+  let phaserGame: Phaser.Game;
+  let game: GameManager;
 
-    beforeAll(() => {
-      phaserGame = new Phaser.Game({
-        type: Phaser.HEADLESS,
-      });
+  beforeAll(() => {
+    phaserGame = new Phaser.Game({
+      type: Phaser.HEADLESS,
     });
+  });
 
-    afterEach(() => {
-      game.phaseInterceptor.restoreOg();
-    });
+  afterEach(() => {
+    game.phaseInterceptor.restoreOg();
+  });
 
-    beforeEach(() => {
-      game = new GameManager(phaserGame);
-      game.scene.gameMode.challenges = [];
-    });
+  beforeEach(() => {
+    game = new GameManager(phaserGame);
+    game.scene.gameMode.challenges = [];
+  });
 
   it("should create an instance of MonoGenAchievement", () => {
     const monoGenAchievement = new MonoGenAchievement("sample", "sample", 3);
     expect(monoGenAchievement).toBeInstanceOf(MonoGenAchievement);
     expect(monoGenAchievement instanceof Achievement).toBe(true);
-    });
+  });
 
-    it("should validate the achievement based on the challenge value and type", () => {
+  it("should validate the achievement based on the challenge value and type", () => {
     const monoGenAchievement = new MonoGenAchievement("sample", "sample", 3);
-      const challenge = new SingleGenerationChallenge();
-      challenge.value = 1;
+    const challenge = new SingleGenerationChallenge();
+    challenge.value = 1;
     game.scene.gameMode.challenges.push(challenge);
     expect(monoGenAchievement.conditionFunc(game.scene.gameMode.challenges)).toBe(false);
-      challenge.value = 3;
+    challenge.value = 3;
     expect(monoGenAchievement.conditionFunc(game.scene.gameMode.challenges)).toBe(true);
 
     game.scene.gameMode.challenges = [];
-      const wrongChallenge = new SingleTypeChallenge();
-      wrongChallenge.value = 3;
+    const wrongChallenge = new SingleTypeChallenge();
+    wrongChallenge.value = 3;
     game.scene.gameMode.challenges.push(wrongChallenge);
     expect(monoGenAchievement.conditionFunc(game.scene.gameMode.challenges)).toBe(false);
-    });
+  });
 
-    it("should not validate the achievement if inverse challenge is active", () => {
+  it("should not validate the achievement if inverse challenge is active", () => {
     const monoGenAchievement = new MonoGenAchievement("", "", 3);
-      const challenge = new SingleGenerationChallenge();
-      challenge.value = 3;
+    const challenge = new SingleGenerationChallenge();
+    challenge.value = 3;
     game.scene.gameMode.challenges.push(challenge);
-      const inverseChallenge = new InverseBattleChallenge();
-      game.scene.gameMode.challenges.push(inverseChallenge);
+    const inverseChallenge = new InverseBattleChallenge();
+    game.scene.gameMode.challenges.push(inverseChallenge);
 
-      inverseChallenge.value = 0;
+    inverseChallenge.value = 0;
     expect(monoGenAchievement.conditionFunc(game.scene.gameMode.challenges)).toBe(true);
-      inverseChallenge.value = 1;
+    inverseChallenge.value = 1;
     expect(monoGenAchievement.conditionFunc(game.scene.gameMode.challenges)).toBe(false);
-    });
+  });
 });
 
 describe("MonoType Challenge Achievement", () => {
-    let phaserGame: Phaser.Game;
-    let game: GameManager;
+  let phaserGame: Phaser.Game;
+  let game: GameManager;
 
-    beforeAll(() => {
-      phaserGame = new Phaser.Game({
-        type: Phaser.HEADLESS,
-      });
+  beforeAll(() => {
+    phaserGame = new Phaser.Game({
+      type: Phaser.HEADLESS,
     });
+  });
 
-    afterEach(() => {
-      game.phaseInterceptor.restoreOg();
-    });
+  afterEach(() => {
+    game.phaseInterceptor.restoreOg();
+  });
 
-    beforeEach(() => {
-      game = new GameManager(phaserGame);
-      game.scene.gameMode.challenges = [];
-    });
+  beforeEach(() => {
+    game = new GameManager(phaserGame);
+    game.scene.gameMode.challenges = [];
+  });
 
   it("should create an instance of MonoTypeAchievement", () => {
     const monoTypeAchievement = new MonoTypeAchievement(ElementalType.STELLAR, "monotype_icon");
     expect(monoTypeAchievement).toBeInstanceOf(MonoTypeAchievement);
     expect(monoTypeAchievement instanceof Achievement).toBe(true);
-    });
+  });
 
-    it("should validate the achievement based on the challenge value and type", () => {
+  it("should validate the achievement based on the challenge value and type", () => {
     const monoTypeAchievement = new MonoTypeAchievement(ElementalType.ROCK, "monotype_icon");
-      const challenge = new SingleTypeChallenge();
-      challenge.value = 1;
+    const challenge = new SingleTypeChallenge();
+    challenge.value = 1;
     game.scene.gameMode.challenges.push(challenge);
     expect(monoTypeAchievement.conditionFunc(game.scene.gameMode.challenges)).toBe(false);
     challenge.value = ElementalType.ROCK;
     expect(monoTypeAchievement.conditionFunc(game.scene.gameMode.challenges)).toBe(true);
 
     game.scene.gameMode.challenges = [];
-      const wrongChallenge = new SingleGenerationChallenge();
-      wrongChallenge.value = 6;
+    const wrongChallenge = new SingleGenerationChallenge();
+    wrongChallenge.value = 6;
     game.scene.gameMode.challenges.push(wrongChallenge);
     expect(monoTypeAchievement.conditionFunc(game.scene.gameMode.challenges)).toBe(false);
-    });
+  });
 
-    it("should not validate the achievement if inverse challenge is active", () => {
+  it("should not validate the achievement if inverse challenge is active", () => {
     const monoTypeAchievement = new MonoTypeAchievement(ElementalType.ROCK, "monotype_icon");
-      const challenge = new SingleTypeChallenge();
+    const challenge = new SingleTypeChallenge();
     challenge.value = ElementalType.ROCK;
     game.scene.gameMode.challenges.push(challenge);
 
-      const inverseChallenge = new InverseBattleChallenge();
-      game.scene.gameMode.challenges.push(inverseChallenge);
+    const inverseChallenge = new InverseBattleChallenge();
+    game.scene.gameMode.challenges.push(inverseChallenge);
 
-      inverseChallenge.value = 0;
+    inverseChallenge.value = 0;
     expect(monoTypeAchievement.conditionFunc(game.scene.gameMode.challenges)).toBe(true);
-      inverseChallenge.value = 1;
+    inverseChallenge.value = 1;
     expect(monoTypeAchievement.conditionFunc(game.scene.gameMode.challenges)).toBe(false);
-    });
+  });
 });
 
 describe("Achievements", () => {
-    it("should contain the predefined achievements", () => {
+  it("should contain the predefined achievements", () => {
     expect(newAchvs._10_RIBBONS).toBeInstanceOf(RibbonAchievement);
     expect(newAchvs._25_RIBBONS).toBeInstanceOf(RibbonAchievement);
     expect(newAchvs._50_RIBBONS).toBeInstanceOf(RibbonAchievement);
@@ -241,5 +241,5 @@ describe("Achievements", () => {
     expect(newAchvs.MONO_DRAGON).toBeInstanceOf(MonoTypeAchievement);
     expect(newAchvs.MONO_DARK).toBeInstanceOf(MonoTypeAchievement);
     expect(newAchvs.MONO_FAIRY).toBeInstanceOf(MonoTypeAchievement);
-    });
+  });
 });

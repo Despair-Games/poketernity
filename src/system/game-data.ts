@@ -1702,10 +1702,10 @@ export class GameData {
 
   /**
    * Updates the player's data with newly unlocked achievements
-   * @param achvs the list of unlocked achievements
+   * @param achievements - The list of unlocked achievements
    */
-  addUnlockedAchievements(achvs: string[]): void {
-    achvs.forEach((aName) => {
+  addUnlockedAchievements(achievements: string[]): void {
+    achievements.forEach((aName) => {
       this.achvUnlocks[newAchvs[aName]] = Date.now();
     });
   }
