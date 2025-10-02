@@ -42,14 +42,14 @@ interface ArenaEffectInfo {
   tagType?: ArenaTagType;
 }
 
-function getFieldEffectText(arenaTagType: string): string {
-  if (!arenaTagType) {
+function getFieldEffectText(flyoutDisplayText: string): string {
+  if (!flyoutDisplayText || flyoutDisplayText.toLowerCase() === "none") {
     return "";
   }
-  const effectName = toCamelCaseString(arenaTagType);
+  const effectName = toCamelCaseString(flyoutDisplayText);
   const i18nKey = `arenaFlyout:${effectName}` as ParseKeys;
   const resultName = i18next.t(i18nKey);
-  return !resultName || resultName === i18nKey ? toTitleCase(arenaTagType) : resultName;
+  return !resultName || resultName === i18nKey ? toTitleCase(flyoutDisplayText) : resultName;
 }
 
 export class ArenaFlyout extends Phaser.GameObjects.Container {
