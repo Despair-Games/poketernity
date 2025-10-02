@@ -411,7 +411,14 @@ export class EnemyPokemon extends Pokemon {
       return;
     }
 
-    const nonActiveParty = this.getParty().filter((p) => p.isActive() && !p.isOnField());
+    /** All inactive enemy Pokemon that can switch into this Pokemon's place */
+    const nonActiveParty = this.getParty().filter(
+      (p: EnemyPokemon) => p.isActive() && !p.isOnField() && p.trainerSlot === this.trainerSlot,
+    );
+    if (nonActiveParty.length === 0) {
+      return;
+    }
+
     const matchupScore = this.getAverageMatchupScore();
 
     // If this Pokemon can safely KO at least 1 opponent, it gains an average MUS

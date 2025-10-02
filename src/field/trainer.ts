@@ -1,7 +1,5 @@
 import { globalScene } from "#app/global-scene";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
-import type { EntryHazardTag } from "#arena-tags/entry-hazard-tag";
-import { ENTRY_HAZARD_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
 import { LEVEL_CAP_SCALE_FACTOR } from "#constants/game-constants";
 import { getLevelForWaveFunc } from "#data/exp";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
@@ -10,7 +8,6 @@ import { signatureSpecies } from "#data/signature-species";
 import type { TrainerConfig, TrainerPartyTemplate } from "#data/trainer-config";
 import { TrainerPartyCompoundTemplate, trainerPartyTemplates } from "#data/trainer-config";
 import { trainerNamePools } from "#data/trainer-names";
-import { ArenaTagSide } from "#enums/arena-tag-side";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { SpeciesId } from "#enums/species-id";
 import { TeraAIMode } from "#enums/tera-ai-mode";
@@ -537,73 +534,25 @@ export class Trainer extends Phaser.GameObjects.Container {
     return currentPartySpecies.includes(species.speciesId) || staticPartyPokemon.includes(baseSpecies.speciesId);
   }
 
-  getPartyMemberMatchupScores(
-    trainerSlot: TrainerSlot = TrainerSlot.NONE,
-    forSwitch: boolean = false,
-  ): [number, number][] {
-    if (trainerSlot && !this.isDouble()) {
-      trainerSlot = TrainerSlot.NONE;
-    }
+  /**
+   * Determines the next Pokemon for the Trainer at the given trainer slot to summon
+   * when the Trainer's active Pokemon is forced off of the field, e.g. from fainting.
+   * @param trainerSlot - The {@linkcode TrainerSlot} of the Trainer summoning a Pokemon
+   * @returns The party index of the next {@linkcode Pokemon} to summon
+   */
+  public getNextSummonIndex(trainerSlot: TrainerSlot = TrainerSlot.NONE): number {
+    /**
+     * Trainer slots are only relevant for double battles. If an irrelevant trainer
+     * slot was passed during a single battle, use {@linkcode TrainerSlot.NONE} instead.
+     * @todo This is adapted from old code. There's probably a better way to manage
+     * trainer slots...
+     */
+    const adjTrainerSlot = this.isDouble() ? trainerSlot : TrainerSlot.NONE;
 
-    const party = globalScene.getEnemyParty();
-    const nonFaintedLegalPartyMembers = party
-      .slice(globalScene.currentBattle.getBattlerCount())
-      .filter((p) => p.isAllowedInBattle())
-      .filter((p) => !trainerSlot || p.trainerSlot === trainerSlot);
-    const partyMemberScores = nonFaintedLegalPartyMembers.map((p) => {
-      const playerField = globalScene.getPlayerField().filter((p) => p.isAllowedInBattle());
-      let score = 0;
+    const sortedValidPartyScores = this.getValidPartyMemberMatchupScores(adjTrainerSlot).sort((a, b) => b[1] - a[1]);
 
-      if (playerField.length > 0) {
-        for (const playerPokemon of playerField) {
-          score += p.getMatchupScore(playerPokemon);
-          if (playerPokemon.species.isLegendary()) {
-            score /= 2;
-          }
-        }
-        score /= playerField.length;
-        if (forSwitch && !p.isOnField()) {
-          globalScene.arena
-            .getTags<EntryHazardTag>((t) => ENTRY_HAZARD_ARENA_TAG_TYPES.includes(t.tagType), ArenaTagSide.ENEMY)
-            ?.map((t) => (score *= t.getMatchupScoreMultiplier(p)));
-        }
-      }
-
-      return [party.indexOf(p), score];
-    }) as [number, number][];
-
-    return partyMemberScores;
-  }
-
-  getSortedPartyMemberMatchupScores(partyMemberScores: [number, number][] = this.getPartyMemberMatchupScores()) {
-    const sortedPartyMemberScores = partyMemberScores.slice(0);
-    sortedPartyMemberScores.sort((a, b) => {
-      const scoreA = a[1];
-      const scoreB = b[1];
-      if (scoreA < scoreB) {
-        return 1;
-      }
-      if (scoreA > scoreB) {
-        return -1;
-      }
-      return 0;
-    });
-
-    return sortedPartyMemberScores;
-  }
-
-  getNextSummonIndex(
-    trainerSlot: TrainerSlot = TrainerSlot.NONE,
-    partyMemberScores: [number, number][] = this.getPartyMemberMatchupScores(trainerSlot),
-  ): number {
-    if (trainerSlot && !this.isDouble()) {
-      trainerSlot = TrainerSlot.NONE;
-    }
-
-    const sortedPartyMemberScores = this.getSortedPartyMemberMatchupScores(partyMemberScores);
-
-    const maxScorePartyMemberIndexes = partyMemberScores
-      .filter((pms) => pms[1] === sortedPartyMemberScores[0][1])
+    const maxScorePartyMemberIndexes = sortedValidPartyScores
+      .filter(([, score]) => score === sortedValidPartyScores[0][1])
       .map((pms) => pms[0]);
 
     if (maxScorePartyMemberIndexes.length > 1) {
@@ -615,6 +564,29 @@ export class Trainer extends Phaser.GameObjects.Container {
     }
 
     return maxScorePartyMemberIndexes[0];
+  }
+
+  /**
+   * Calculates {@link Pokemon.getAverageMatchupScore | Matchup Scores} for all Pokemon in the party of the
+   * Trainer at the given slot.
+   * @param trainerSlot - The {@linkcode TrainerSlot} of the Trainer whose Pokemon
+   * are evaluated
+   * @returns An array of number pairs, with one pair per eligible Pokemon.
+   * The first number in a pair is the Pokemon's current party index,
+   * while the second number is the Pokemon's average MUS against active opponents.
+   */
+  private getValidPartyMemberMatchupScores(trainerSlot: TrainerSlot = TrainerSlot.NONE): [number, number][] {
+    const party = globalScene.getEnemyParty();
+    const nonFaintedLegalPartyMembers = party
+      .slice(globalScene.currentBattle.getBattlerCount())
+      .filter((p) => p.isAllowedInBattle())
+      .filter((p) => !trainerSlot || p.trainerSlot === trainerSlot);
+    const partyMemberScores: [number, number][] = nonFaintedLegalPartyMembers.map((p) => [
+      party.indexOf(p),
+      p.getAverageMatchupScore(),
+    ]);
+
+    return partyMemberScores;
   }
 
   getPartyMemberModifierChanceMultiplier(index: number): number {

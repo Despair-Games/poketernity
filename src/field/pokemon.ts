@@ -2516,7 +2516,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param matchupScore - This Pokemon's Matchup Score against {@linkcode opponent}
    * @see {@linkcode getMatchupScore}
    */
-  private cacheMatchupScore(opponent: Pokemon, matchupScore: number) {
+  private cacheMatchupScore(opponent: Pokemon, matchupScore: number): void {
     const oppScoreData = this.turnData.scoreData.get(opponent.id);
     if (oppScoreData == null) {
       this.turnData.scoreData.set(opponent.id, {
