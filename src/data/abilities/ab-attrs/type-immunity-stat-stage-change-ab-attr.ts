@@ -27,7 +27,6 @@ export class TypeImmunityStatStageChangeAbAttr extends TypeImmunityAbAttr {
     typeMultiplier: ValueHolder<number>,
   ): void {
     super.apply(pokemon, simulated, attacker, move, cancelled, typeMultiplier);
-    cancelled.value = true; // Suppresses "No Effect" message
     if (!simulated) {
       globalScene.phaseManager.createAndUnshiftPhase(
         "StatStageChangePhase",
@@ -37,5 +36,10 @@ export class TypeImmunityStatStageChangeAbAttr extends TypeImmunityAbAttr {
         this.stages,
       );
     }
+  }
+
+  // The StatStageChangePhase from this effect takes the place of the default trigger message
+  public override getTriggerMessage(_pokemon: Pokemon, _abilityName: string): string | null {
+    return null;
   }
 }

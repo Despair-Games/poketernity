@@ -15,7 +15,7 @@ export class ShowAbilityPhase extends Phase {
     super();
     /** @todo Should this use `pokemon.name` instead? */
     this.pokemonName = getPokemonNameWithAffix(pokemon);
-    this.abilityName = passive ? pokemon.getAbility().name : pokemon.getPassiveAbility().name;
+    this.abilityName = passive ? pokemon.getPassiveAbility().name : pokemon.getAbility().name;
     this.passive = passive;
     this.isPlayer = pokemon.isPlayer();
   }

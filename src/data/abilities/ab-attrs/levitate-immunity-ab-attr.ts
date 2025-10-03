@@ -22,4 +22,6 @@ export class LevitateImmunityAbAttr extends TypeImmunityAbAttr {
       && super.canApply(...params)
     );
   }
+
+  // TODO: Add an override for Levitate's trigger message
 }

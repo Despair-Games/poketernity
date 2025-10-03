@@ -18,7 +18,6 @@ export class TypeImmunityHealAbAttr extends TypeImmunityAbAttr {
     super.apply(pokemon, simulated, attacker, move, cancelled, typeMultiplier);
 
     if (!pokemon.isFullHp() && !simulated) {
-      cancelled.value = true; // Suppresses "No Effect" message
       const abilityName = this.source.name;
       globalScene.phaseManager.createAndUnshiftPhase(
         "PokemonHealPhase",
@@ -32,5 +31,10 @@ export class TypeImmunityHealAbAttr extends TypeImmunityAbAttr {
         },
       );
     }
+  }
+
+  // The healing effect from this attribute takes the place of the trigger message if it can be applied
+  public override getTriggerMessage(pokemon: Pokemon, abilityName: string): string | null {
+    return pokemon.isFullHp() ? super.getTriggerMessage(pokemon, abilityName) : null;
   }
 }

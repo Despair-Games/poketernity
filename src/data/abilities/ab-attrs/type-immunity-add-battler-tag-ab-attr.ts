@@ -26,9 +26,13 @@ export class TypeImmunityAddBattlerTagAbAttr extends TypeImmunityAbAttr {
     typeMultiplier: ValueHolder<number>,
   ): void {
     super.apply(pokemon, simulated, attacker, move, cancelled, typeMultiplier);
-    cancelled.value = true; // Suppresses "No Effect" message
     if (!simulated) {
       pokemon.addTag(this.tagType, this.turnCount, undefined, pokemon.id);
     }
+  }
+
+  // The added battler tag supplies the trigger message instead
+  public override getTriggerMessage(_pokemon: Pokemon, _abilityName: string): string | null {
+    return null;
   }
 }

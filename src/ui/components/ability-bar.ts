@@ -11,9 +11,9 @@ const PLAYER_SHOWN_X = 0;
 const PLAYER_HIDDEN_X = PLAYER_SHOWN_X - ABILITY_BAR_WIDTH;
 const PLAYER_BASE_Y = -116;
 
-const ENEMY_SHOWN_X = GAME_WIDTH;
+const ENEMY_SHOWN_X = GAME_WIDTH - ABILITY_BAR_WIDTH;
 const ENEMY_HIDDEN_X = ENEMY_SHOWN_X + ABILITY_BAR_WIDTH;
-const ENEMY_BASE_Y = -102;
+const ENEMY_BASE_Y = -130;
 
 export class AbilityBar extends Phaser.GameObjects.Container {
   private bg: Phaser.GameObjects.Image;
