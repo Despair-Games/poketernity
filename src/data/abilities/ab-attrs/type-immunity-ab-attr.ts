@@ -12,8 +12,6 @@ import i18next from "i18next";
  * Determines whether a Pokemon is immune to a move because of an ability.
  * @see {@linkcode applyPreDefend}
  * @see {@linkcode getCondition}
- * @todo The Ability Flyout runs into timing issues when abilities with this effect
- * don't schedule Phases internally nor use a custom {@link getTriggerMessage | trigger message}
  */
 export class TypeImmunityAbAttr extends PreDefendAbAttr {
   private readonly immuneType: ElementalType;
