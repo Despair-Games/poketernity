@@ -17,7 +17,7 @@ export class ConfusionOnStatusEffectAbAttr extends PostAttackAbAttr {
 
   constructor(...effects: StatusEffect[]) {
     /** This effect does not require a damaging move */
-    super();
+    super(false);
     this._flags.add(AbAttrFlag.CONFUSION_ON_STATUS_EFFECT);
     this.effects = effects;
   }
