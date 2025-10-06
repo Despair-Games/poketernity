@@ -1,4 +1,4 @@
-import { GameMode } from "#app/game-mode";
+import { getModeName } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
 import { SAVE_SLOT_LIMIT } from "#constants/app-constants";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
@@ -114,12 +114,12 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
               break;
             case SaveSlotUiMode.SAVE: {
               const saveAndCallback = () => {
-                const originalCallback = this.saveSlotSelectCallback;
+                const originalCb = this.saveSlotSelectCallback;
                 this.saveSlotSelectCallback = null;
                 ui.revertMode();
                 ui.showText("", { delay: 0 });
                 ui.setMessageMode();
-                originalCallback?.(cursor);
+                originalCb?.(cursor);
               };
               if (this.sessionSlots[cursor].hasData) {
                 const overwriteDataOptions: ConfirmModeConfig = {
@@ -376,7 +376,7 @@ class SessionSlot extends Phaser.GameObjects.Container {
     const gameModeLabel = addTextObject(
       8,
       5,
-      `${GameMode.getModeName(data.gameMode) || i18next.t("gameMode:unkown")} - ${i18next.t("saveSlotSelectUiHandler:wave")} ${data.waveIndex}`,
+      `${getModeName(data.gameMode) || i18next.t("gameMode:unkown")} - ${i18next.t("saveSlotSelectUiHandler:wave")} ${data.waveIndex}`,
       TextStyle.WINDOW,
     );
     this.add(gameModeLabel);

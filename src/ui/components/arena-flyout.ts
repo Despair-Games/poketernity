@@ -14,7 +14,7 @@ import type { TurnEndEvent } from "#events/battle-scene";
 import { addTextObject } from "#ui/text-utils";
 import { TimeOfDayWidget } from "#ui/time-of-day-widget";
 import { addWindow } from "#ui/ui-theme";
-import { fixedNumber } from "#utils/common-utils";
+import { enumValueToKey, fixedNumber } from "#utils/common-utils";
 import { toCamelCaseString, toTitleCase } from "#utils/string-utils";
 import type { ParseKeys } from "i18next";
 import i18next from "i18next";
@@ -295,7 +295,7 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
               (e) => tagAddedEvent.arenaTagType === e.tagType && arenaEffectType === e.effectType,
             )
           : -1;
-        let name: string = getFieldEffectText(ArenaTagType[tagAddedEvent.arenaTagType]);
+        let name: string = getFieldEffectText(enumValueToKey(ArenaTagType, tagAddedEvent.arenaTagType));
 
         if (isEntryHazardTag) {
           if (existingEntryHazardIndex !== -1) {
@@ -343,8 +343,8 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
       }
       case TerrainChangedEvent: {
         const terrainEvent = arenaEffectChangedEvent as TerrainChangedEvent;
-        const oldTerrainName = getFieldEffectText(TerrainType[terrainEvent.oldTerrainType]);
-        const newTerrainName = getFieldEffectText(TerrainType[terrainEvent.newTerrainType]);
+        const oldTerrainName = getFieldEffectText(enumValueToKey(TerrainType, terrainEvent.oldTerrainType));
+        const newTerrainName = getFieldEffectText(enumValueToKey(TerrainType, terrainEvent.newTerrainType));
         // Stores the new Weather/Terrain info
         const newTerrainInfo = {
           name: newTerrainName,

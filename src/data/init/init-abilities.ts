@@ -1,4 +1,5 @@
 import { Ability } from "#abilities/ability";
+import { AccuracyMultiplierAbAttr } from "#abilities/accuracy-multiplier-ab-attr";
 import { AddSecondStrikeAbAttr } from "#abilities/add-second-strike-ab-attr";
 import { AlliedFieldDamageReductionAbAttr } from "#abilities/allied-field-damage-reduction-ab-attr";
 import { AllyMoveCategoryPowerBoostAbAttr } from "#abilities/ally-move-category-power-boost-ab-attr";
@@ -31,9 +32,11 @@ import { DoubleBattleChanceAbAttr } from "#abilities/double-battle-chance-ab-att
 import { DoubleBerryEffectAbAttr } from "#abilities/double-berry-effect-ab-attr";
 import { DownloadAbAttr } from "#abilities/download-ab-attr";
 import { EffectSporeAbAttr } from "#abilities/effect-spore-ab-attr";
+import { EffectiveStatMultiplier } from "#abilities/effective-stat-multiplier-ab-attr";
+import { EvasivenessMultiplierAbAttr } from "#abilities/evasiveness-multiplier-ab-attr";
 import { FetchBallAbAttr } from "#abilities/fetch-ball-ab-attr";
+import { FieldAccuracyMultiplierAbAttr } from "#abilities/field-accuracy-multiplier-ab-attr";
 import { FieldMoveTypePowerBoostAbAttr } from "#abilities/field-move-type-power-boost-ab-attr";
-import { FieldMultiplyStatAbAttr } from "#abilities/field-multiply-stat-ab-attr";
 import { FieldPreventExplosionLikeAbAttr } from "#abilities/field-prevent-explosion-like-ab-attr";
 import { FieldPriorityMoveImmunityAbAttr } from "#abilities/field-priority-move-immunity-ab-attr";
 import { FlinchStatStageChangeAbAttr } from "#abilities/flinch-stat-stage-change-ab-attr";
@@ -152,7 +155,6 @@ import { ReverseDrainAbAttr } from "#abilities/reverse-drain-ab-attr";
 import { RunSuccessAbAttr } from "#abilities/run-success-ab-attr";
 import { SpeedBoostAbAttr } from "#abilities/speed-boost-ab-attr";
 import { StabBoostAbAttr } from "#abilities/stab-boost-ab-attr";
-import { StatMultiplierAbAttr } from "#abilities/stat-multiplier-ab-attr";
 import { StatStageChangeCopyAbAttr } from "#abilities/stat-stage-change-copy-ab-attr";
 import { StatStageChangeMultiplierAbAttr } from "#abilities/stat-stage-change-multiplier-ab-attr";
 import { StatusEffectImmunityAbAttr } from "#abilities/status-effect-immunity-ab-attr";
@@ -162,6 +164,7 @@ import { SuppressWeatherEffectAbAttr } from "#abilities/suppress-weather-effect-
 import { SyncEncounterNatureAbAttr } from "#abilities/sync-encounter-nature-ab-attr";
 import { SynchronizeStatusAbAttr } from "#abilities/synchronize-status-ab-attr";
 import { TerrainEventTypeChangeAbAttr } from "#abilities/terrain-event-type-change-ab-attr";
+import { TreasureOfRuinAbAttr } from "#abilities/treasure-of-ruin-ab-attr";
 import { TypeImmunityAddBattlerTagAbAttr } from "#abilities/type-immunity-add-battler-tag-ab-attr";
 import { TypeImmunityHealAbAttr } from "#abilities/type-immunity-heal-ab-attr";
 import { TypeImmunityStatStageChangeAbAttr } from "#abilities/type-immunity-stat-stage-change-ab-attr";
@@ -228,7 +231,7 @@ export function initAbilities() {
       .attr(StatusEffectImmunityAbAttr, StatusEffect.PARALYSIS)
       .ignorable(),
     new Ability(AbilityId.SAND_VEIL, 3) //
-      .attr(StatMultiplierAbAttr, Stat.EVA, 1.2)
+      .attr(EvasivenessMultiplierAbAttr, 1.2)
       .attr(BlockWeatherDamageAbAttr, WeatherType.SANDSTORM)
       .condition(getWeatherCondition(WeatherType.SANDSTORM))
       .ignorable(),
@@ -252,7 +255,7 @@ export function initAbilities() {
       .attr(PostFaintUnsuppressedWeatherFormChangeAbAttr)
       .bypassFaint(),
     new Ability(AbilityId.COMPOUND_EYES, 3) //
-      .attr(StatMultiplierAbAttr, Stat.ACC, 1.3),
+      .attr(AccuracyMultiplierAbAttr, 1.3),
     new Ability(AbilityId.INSOMNIA, 3) //
       .attr(StatusEffectImmunityAbAttr, StatusEffect.SLEEP)
       .attr(BattlerTagImmunityAbAttr, BattlerTagType.DROWSY)
@@ -329,7 +332,7 @@ export function initAbilities() {
       .attr(PostSummonCopyAbilityAbAttr)
       .uncopiable(),
     new Ability(AbilityId.HUGE_POWER, 3) //
-      .attr(StatMultiplierAbAttr, Stat.ATK, 2),
+      .attr(EffectiveStatMultiplier, Stat.ATK, 2),
     new Ability(AbilityId.POISON_POINT, 3) //
       .attr(PostDefendContactApplyStatusEffectAbAttr, 30, StatusEffect.POISON)
       .bypassFaint(),
@@ -390,15 +393,15 @@ export function initAbilities() {
     new Ability(AbilityId.TRUANT, 3) //
       .attr(PostSummonAddBattlerTagAbAttr, BattlerTagType.TRUANT, 1, false),
     new Ability(AbilityId.HUSTLE, 3) //
-      .attr(StatMultiplierAbAttr, Stat.ATK, 1.5)
-      .attr(StatMultiplierAbAttr, Stat.ACC, 0.8, (_user, _target, move) => move?.category === MoveCategory.PHYSICAL),
+      .attr(EffectiveStatMultiplier, Stat.ATK, 1.5)
+      .attr(AccuracyMultiplierAbAttr, 0.8, (_user, move) => move?.category === MoveCategory.PHYSICAL),
     new Ability(AbilityId.CUTE_CHARM, 3) //
       .attr(PostDefendContactApplyTagChanceAbAttr, 30, BattlerTagType.INFATUATED),
     new Ability(AbilityId.PLUS, 3) //
       .conditionalAttr(
         (p) =>
           globalScene.currentBattle.double && [AbilityId.PLUS, AbilityId.MINUS].some((a) => p.getAlly()?.hasAbility(a)),
-        StatMultiplierAbAttr,
+        EffectiveStatMultiplier,
         Stat.SPATK,
         1.5,
       ),
@@ -406,7 +409,7 @@ export function initAbilities() {
       .conditionalAttr(
         (p) =>
           globalScene.currentBattle.double && [AbilityId.PLUS, AbilityId.MINUS].some((a) => p.getAlly()?.hasAbility(a)),
-        StatMultiplierAbAttr,
+        EffectiveStatMultiplier,
         Stat.SPATK,
         1.5,
       ),
@@ -428,9 +431,9 @@ export function initAbilities() {
       .conditionalAttr((pokemon) => !pokemon.randSeedInt(3), PostTurnResetStatusAbAttr),
     new Ability(AbilityId.GUTS, 3) //
       .attr(BypassBurnDamageReductionAbAttr)
-      .conditionalAttr((pokemon) => pokemon.hasNonVolatileStatusEffect(), StatMultiplierAbAttr, Stat.ATK, 1.5),
+      .conditionalAttr((pokemon) => pokemon.hasNonVolatileStatusEffect(), EffectiveStatMultiplier, Stat.ATK, 1.5),
     new Ability(AbilityId.MARVEL_SCALE, 3) //
-      .conditionalAttr((pokemon) => pokemon.hasNonVolatileStatusEffect(), StatMultiplierAbAttr, Stat.DEF, 1.5)
+      .conditionalAttr((pokemon) => pokemon.hasNonVolatileStatusEffect(), EffectiveStatMultiplier, Stat.DEF, 1.5)
       .ignorable(),
     new Ability(AbilityId.LIQUID_OOZE, 3) //
       .attr(ReverseDrainAbAttr),
@@ -458,7 +461,7 @@ export function initAbilities() {
       .attr(ProtectStatAbAttr)
       .ignorable(),
     new Ability(AbilityId.PURE_POWER, 3) //
-      .attr(StatMultiplierAbAttr, Stat.ATK, 2),
+      .attr(EffectiveStatMultiplier, Stat.ATK, 2),
     new Ability(AbilityId.SHELL_ARMOR, 3) //
       .attr(BlockCritAbAttr)
       .ignorable(),
@@ -469,7 +472,7 @@ export function initAbilities() {
       .attr(PostFaintUnsuppressedWeatherFormChangeAbAttr)
       .bypassFaint(),
     new Ability(AbilityId.TANGLED_FEET, 4) //
-      .conditionalAttr((pokemon) => pokemon.hasTag(BattlerTagType.CONFUSED), StatMultiplierAbAttr, Stat.EVA, 2)
+      .conditionalAttr((pokemon) => pokemon.hasTag(BattlerTagType.CONFUSED), EvasivenessMultiplierAbAttr, 2)
       .ignorable(),
     new Ability(AbilityId.MOTOR_DRIVE, 4) //
       .attr(TypeImmunityStatStageChangeAbAttr, ElementalType.ELECTRIC, Stat.SPD, 1)
@@ -492,7 +495,7 @@ export function initAbilities() {
     new Ability(AbilityId.STEADFAST, 4) //
       .attr(FlinchStatStageChangeAbAttr, [Stat.SPD], 1),
     new Ability(AbilityId.SNOW_CLOAK, 4) //
-      .attr(StatMultiplierAbAttr, Stat.EVA, 1.2)
+      .attr(EvasivenessMultiplierAbAttr, 1.2)
       .attr(BlockWeatherDamageAbAttr, WeatherType.HAIL)
       .condition(getWeatherCondition(WeatherType.HAIL, WeatherType.SNOW))
       .ignorable(),
@@ -535,10 +538,10 @@ export function initAbilities() {
       .condition(getWeatherCondition(WeatherType.RAIN, WeatherType.HEAVY_RAIN)),
     new Ability(AbilityId.SOLAR_POWER, 4) //
       .attr(PostWeatherLapseDamageAbAttr, 1 / 8, WeatherType.SUNNY, WeatherType.HARSH_SUN)
-      .attr(StatMultiplierAbAttr, Stat.SPATK, 1.5, getWeatherCondition(WeatherType.SUNNY, WeatherType.HARSH_SUN)),
+      .attr(EffectiveStatMultiplier, Stat.SPATK, 1.5, getWeatherCondition(WeatherType.SUNNY, WeatherType.HARSH_SUN)),
     new Ability(AbilityId.QUICK_FEET, 4) //
       .attr(BypassParaSpeedReductionAbAttr)
-      .conditionalAttr((pokemon) => pokemon.hasNonVolatileStatusEffect(), StatMultiplierAbAttr, Stat.SPD, 1.5),
+      .conditionalAttr((pokemon) => pokemon.hasNonVolatileStatusEffect(), EffectiveStatMultiplier, Stat.SPD, 1.5),
     new Ability(AbilityId.NORMALIZE, 4) //
       .attr(
         MoveTypeChangeAbAttr,
@@ -650,13 +653,13 @@ export function initAbilities() {
     new Ability(AbilityId.FLOWER_GIFT, 4) //
       .conditionalAttr(
         getWeatherCondition(WeatherType.SUNNY || WeatherType.HARSH_SUN),
-        StatMultiplierAbAttr,
+        EffectiveStatMultiplier,
         Stat.ATK,
         1.5,
       )
       .conditionalAttr(
         getWeatherCondition(WeatherType.SUNNY || WeatherType.HARSH_SUN),
-        StatMultiplierAbAttr,
+        EffectiveStatMultiplier,
         Stat.SPDEF,
         1.5,
       )
@@ -697,8 +700,8 @@ export function initAbilities() {
     new Ability(AbilityId.DEFIANT, 5) //
       .attr(DefiantCompetitiveAbAttr, [Stat.ATK], 2),
     new Ability(AbilityId.DEFEATIST, 5) //
-      .attr(StatMultiplierAbAttr, Stat.ATK, 0.5)
-      .attr(StatMultiplierAbAttr, Stat.SPATK, 0.5)
+      .attr(EffectiveStatMultiplier, Stat.ATK, 0.5)
+      .attr(EffectiveStatMultiplier, Stat.SPATK, 0.5)
       .condition((pokemon) => pokemon.getHpRatio() <= 0.5),
     new Ability(AbilityId.CURSED_BODY, 5) //
       .attr(PostDefendMoveDisableAbAttr, 30)
@@ -842,9 +845,7 @@ export function initAbilities() {
       .unreplaceable()
       .bypassFaint(),
     new Ability(AbilityId.VICTORY_STAR, 5) //
-      .attr(StatMultiplierAbAttr, Stat.ACC, 1.1)
-      // Does not boost ally's accuracy
-      .partial(),
+      .attr(FieldAccuracyMultiplierAbAttr, 1.1, (source, target) => !source.isOpponent(target)),
     new Ability(AbilityId.TURBOBLAZE, 5) //
       .attr(PostSummonMessageAbAttr, (pokemon: Pokemon) =>
         i18next.t("abilityTriggers:postSummonTurboblaze", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
@@ -873,7 +874,7 @@ export function initAbilities() {
       .attr(PokemonTypeChangeAbAttr),
     new Ability(AbilityId.FUR_COAT, 6) //
       // Doesn't boost defense on self inflicted confusion damage
-      .attr(StatMultiplierAbAttr, Stat.DEF, 2, (_user, target) => !!target)
+      .attr(EffectiveStatMultiplier, Stat.DEF, 2, (_user, target) => !!target)
       .ignorable(),
     new Ability(AbilityId.MAGICIAN, 6) //
       .attr(PostAttackStealHeldItemAbAttr),
@@ -906,7 +907,7 @@ export function initAbilities() {
         1.5,
       ),
     new Ability(AbilityId.GRASS_PELT, 6) //
-      .conditionalAttr(getTerrainCondition(TerrainType.GRASSY), StatMultiplierAbAttr, Stat.DEF, 1.5)
+      .conditionalAttr(getTerrainCondition(TerrainType.GRASSY), EffectiveStatMultiplier, Stat.DEF, 1.5)
       .ignorable(),
     new Ability(AbilityId.SYMBIOSIS, 6) //
       .unimplemented(),
@@ -1049,7 +1050,7 @@ export function initAbilities() {
     new Ability(AbilityId.GALVANIZE, 7) //
       .attr(MoveTypeChangeAbAttr, ElementalType.ELECTRIC, 1.2, normalTypeMoveConversionCondition),
     new Ability(AbilityId.SURGE_SURFER, 7) //
-      .conditionalAttr(getTerrainCondition(TerrainType.ELECTRIC), StatMultiplierAbAttr, Stat.SPD, 2),
+      .conditionalAttr(getTerrainCondition(TerrainType.ELECTRIC), EffectiveStatMultiplier, Stat.SPD, 2),
     new Ability(AbilityId.SCHOOLING, 7) //
       .attr(PostBattleInitFormChangeAbAttr, () => 0)
       .attr(PostSummonFormChangeAbAttr, (p) => (p.level < 20 || p.getHpRatio() <= 0.25 ? 0 : 1))
@@ -1546,7 +1547,7 @@ export function initAbilities() {
       )
       .ignorable(),
     new Ability(AbilityId.VESSEL_OF_RUIN, 9) //
-      .attr(FieldMultiplyStatAbAttr, Stat.SPATK, 0.75)
+      .attr(TreasureOfRuinAbAttr, Stat.SPATK)
       .attr(PostSummonMessageAbAttr, (user) =>
         i18next.t("abilityTriggers:postSummonVesselOfRuin", {
           pokemonNameWithAffix: getPokemonNameWithAffix(user),
@@ -1555,7 +1556,7 @@ export function initAbilities() {
       )
       .ignorable(),
     new Ability(AbilityId.SWORD_OF_RUIN, 9) //
-      .attr(FieldMultiplyStatAbAttr, Stat.DEF, 0.75)
+      .attr(TreasureOfRuinAbAttr, Stat.DEF)
       .attr(PostSummonMessageAbAttr, (user) =>
         i18next.t("abilityTriggers:postSummonSwordOfRuin", {
           pokemonNameWithAffix: getPokemonNameWithAffix(user),
@@ -1563,7 +1564,7 @@ export function initAbilities() {
         }),
       ),
     new Ability(AbilityId.TABLETS_OF_RUIN, 9) //
-      .attr(FieldMultiplyStatAbAttr, Stat.ATK, 0.75)
+      .attr(TreasureOfRuinAbAttr, Stat.ATK)
       .attr(PostSummonMessageAbAttr, (user) =>
         i18next.t("abilityTriggers:postSummonTabletsOfRuin", {
           pokemonNameWithAffix: getPokemonNameWithAffix(user),
@@ -1572,7 +1573,7 @@ export function initAbilities() {
       )
       .ignorable(),
     new Ability(AbilityId.BEADS_OF_RUIN, 9) //
-      .attr(FieldMultiplyStatAbAttr, Stat.SPDEF, 0.75)
+      .attr(TreasureOfRuinAbAttr, Stat.SPDEF)
       .attr(PostSummonMessageAbAttr, (user) =>
         i18next.t("abilityTriggers:postSummonBeadsOfRuin", {
           pokemonNameWithAffix: getPokemonNameWithAffix(user),
@@ -1584,14 +1585,14 @@ export function initAbilities() {
       .attr(PostBiomeChangeWeatherChangeAbAttr, WeatherType.SUNNY)
       .conditionalAttr(
         getWeatherCondition(WeatherType.SUNNY, WeatherType.HARSH_SUN),
-        StatMultiplierAbAttr,
+        EffectiveStatMultiplier,
         Stat.ATK,
         4 / 3,
       ),
     new Ability(AbilityId.HADRON_ENGINE, 9) //
       .attr(PostSummonTerrainChangeAbAttr, TerrainType.ELECTRIC)
       .attr(PostBiomeChangeTerrainChangeAbAttr, TerrainType.ELECTRIC)
-      .conditionalAttr(getTerrainCondition(TerrainType.ELECTRIC), StatMultiplierAbAttr, Stat.SPATK, 4 / 3),
+      .conditionalAttr(getTerrainCondition(TerrainType.ELECTRIC), EffectiveStatMultiplier, Stat.SPATK, 4 / 3),
     new Ability(AbilityId.OPPORTUNIST, 9) //
       .attr(StatStageChangeCopyAbAttr),
     new Ability(AbilityId.CUD_CHEW, 9) //

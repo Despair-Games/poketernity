@@ -99,8 +99,8 @@ export const DancingLessonsEncounter: MysteryEncounter = MysteryEncounterBuilder
     const oricorio = globalScene.addEnemyPokemon(species, level, TrainerSlot.NONE, false, false, oricorioData);
 
     // Adds a real Pokemon sprite to the field (required for the animation)
-    globalScene.getEnemyParty().forEach((enemyPokemon) => {
-      globalScene.field.remove(enemyPokemon, true);
+    globalScene.getEnemyParty().forEach((enemy) => {
+      globalScene.field.remove(enemy, true);
     });
     globalScene.currentBattle.enemyParty = [oricorio];
     globalScene.field.add(oricorio);

@@ -3,7 +3,6 @@ import { WeatherType } from "#enums/weather-type";
 /**
  * Weather types that are associated with the primal forms of the Generation III cover legendary
  * and cannot be overwritten by weaker weather types.
- * @todo - Move to `constants/weather.ts`
  */
 export const PRIMAL_WEATHER_TYPES = Object.freeze([
   WeatherType.HARSH_SUN,

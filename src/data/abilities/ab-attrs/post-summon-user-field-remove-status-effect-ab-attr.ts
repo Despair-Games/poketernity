@@ -28,14 +28,14 @@ export class PostSummonUserFieldRemoveStatusEffectAbAttr extends PostSummonAbAtt
     }
 
     if (!simulated) {
-      for (const pokemon of allowedPokemon) {
-        if (pokemon.hasStatusEffect(this.statusEffects, false, true)) {
+      for (const pkmn of allowedPokemon) {
+        if (pkmn.hasStatusEffect(this.statusEffects, false, true)) {
           globalScene.phaseManager.createAndUnshiftPhase(
             "MessagePhase",
-            getStatusEffectHealText(pokemon.getStatusEffect(true), getPokemonNameWithAffix(pokemon)),
+            getStatusEffectHealText(pkmn.getStatusEffect(true), getPokemonNameWithAffix(pkmn)),
           );
-          pokemon.resetStatus();
-          pokemon.updateInfo();
+          pkmn.resetStatus();
+          pkmn.updateInfo();
         }
       }
     }

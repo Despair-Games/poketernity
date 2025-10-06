@@ -1,3 +1,5 @@
+/** biome-ignore-all lint/nursery/noShadow: Changed in another PR */
+
 import { InverseBattleChallenge, SingleGenerationChallenge, SingleTypeChallenge } from "#data/challenge";
 import { ElementalType } from "#enums/elemental-type";
 import { Achievement, achvs, ChallengeAchv, MonoGenAchv, MonoTypeAchv, RibbonAchv } from "#system/achievements";

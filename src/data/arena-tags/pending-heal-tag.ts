@@ -1,11 +1,13 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { ArenaTag } from "#arena-tags/arena-tag";
+import { SerializableArenaTag } from "#arena-tags/arena-tag";
 import { allMoves } from "#data/data-lists";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import type { FieldBattlerIndex } from "#enums/battler-index";
 import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
+import type { BaseArenaTag } from "#types/arena-tag-types";
+import type { Mutable } from "#types/utility-types";
 import i18next from "i18next";
 
 /**
@@ -24,17 +26,26 @@ interface PendingHealEffect {
   readonly healMessageKey: string;
 }
 
+type PendingHealEffectRecord = Record<FieldBattlerIndex, readonly PendingHealEffect[]>;
+
 /**
  * Arena tag to contain stored healing effects, namely from
  * {@link https://bulbapedia.bulbagarden.net/wiki/Healing_Wish_(move) | Healing Wish}
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Lunar_Dance_(move) | Lunar Dance}.
- * When a damaged Pokemon first enters the effect's {@linkcode BattlerIndex | field position},
- * their HP is fully restored, and they are cured of any non-volatile status condition.
+ *
+ * When a damaged Pokemon first enters the effect's {@linkcode FieldBattlerIndex | field position},
+ * their HP is fully restored, and they are cured of any non-volatile status condition. \
  * If the effect is from Lunar Dance, their PP is also restored.
  */
-export class PendingHealTag extends ArenaTag {
-  /** All pending healing effects, organized by {@linkcode FieldBattlerIndex} */
-  private pendingHeals: Partial<Record<FieldBattlerIndex, PendingHealEffect[]>> = {};
+export class PendingHealTag extends SerializableArenaTag {
+  public override readonly tagType = ArenaTagType.PENDING_HEAL;
+
+  /**
+   * All pending healing effects, organized by {@linkcode FieldBattlerIndex}
+   * @privateRemarks
+   * All of the `readonly` is to emulate the field being `private` (it needs to be public to be serializable).
+   */
+  public readonly pendingHeals: Partial<Readonly<PendingHealEffectRecord>> = {};
 
   constructor() {
     super(ArenaTagType.PENDING_HEAL, 0);
@@ -50,10 +61,10 @@ export class PendingHealTag extends ArenaTag {
     const existingHealEffects = this.pendingHeals[targetIndex];
     if (existingHealEffects) {
       if (!existingHealEffects.some((he) => he.moveId === healEffect.moveId)) {
-        existingHealEffects.push(healEffect);
+        (existingHealEffects as PendingHealEffect[]).push(healEffect);
       }
     } else {
-      this.pendingHeals[targetIndex] = [healEffect];
+      (this.pendingHeals as PendingHealEffectRecord)[targetIndex] = [healEffect];
     }
   }
 
@@ -93,7 +104,7 @@ export class PendingHealTag extends ArenaTag {
       const sourcePokemon = globalScene.getPokemonById(sourceId);
       if (!sourcePokemon) {
         console.warn(`Source of pending ${allMoves.get(moveId).name} effect is undefined!`);
-        targetEffects.splice(targetEffects.indexOf(healEffect), 1);
+        (targetEffects as PendingHealEffect[]).splice(targetEffects.indexOf(healEffect), 1);
         // Re-evaluate after the invalid heal effect is removed
         return this.apply(simulated, pokemon);
       }
@@ -104,7 +115,7 @@ export class PendingHealTag extends ArenaTag {
         fullRestorePP: restorePP,
       });
 
-      targetEffects.splice(targetEffects.indexOf(healEffect), 1);
+      (targetEffects as PendingHealEffect[]).splice(targetEffects.indexOf(healEffect), 1);
     }
 
     return healEffect != null;
@@ -125,8 +136,8 @@ export class PendingHealTag extends ArenaTag {
     );
   }
 
-  override loadTag(source: ArenaTag | any): void {
+  override loadTag(source: BaseArenaTag & Pick<PendingHealTag, "tagType" | "pendingHeals">): void {
     super.loadTag(source);
-    this.pendingHeals = source.pendingHeals;
+    (this as Mutable<this>).pendingHeals = source.pendingHeals;
   }
 }

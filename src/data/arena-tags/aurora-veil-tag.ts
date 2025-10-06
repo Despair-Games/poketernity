@@ -11,11 +11,14 @@ import i18next from "i18next";
  * Used by {@linkcode MoveId.AURORA_VEIL}.
  */
 export class AuroraVeilTag extends WeakenMoveScreenTag {
-  constructor(turnCount: number, sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.AURORA_VEIL, turnCount, MoveId.AURORA_VEIL, sourceId, side, [
-      MoveCategory.SPECIAL,
-      MoveCategory.PHYSICAL,
-    ]);
+  public override readonly tagType = ArenaTagType.AURORA_VEIL;
+
+  protected get weakenedCategories(): [typeof MoveCategory.PHYSICAL, typeof MoveCategory.SPECIAL] {
+    return [MoveCategory.PHYSICAL, MoveCategory.SPECIAL];
+  }
+
+  constructor(turnCount: number, sourceId: number | undefined, side: ArenaTagSide) {
+    super(turnCount, MoveId.AURORA_VEIL, sourceId, side);
   }
 
   override onAdd(quiet: boolean = false): void {

@@ -1,13 +1,16 @@
-/**
- * Determines the row cursor target when entering the shop phase.
- */
-export enum ShopCursorTarget {
+import type { EnumValues } from "#types/utility-types";
+
+/** Determines the row cursor target when entering the shop phase. */
+// The enum values are used as cursor values and thus this cannot start at `1` currently.
+export const ShopCursorTarget = {
   /** Cursor points to Reroll row */
-  REROLL,
+  REROLL: 0,
   /** Cursor points to Rewards row */
-  REWARDS,
+  REWARDS: 1,
   /** Cursor points to Shop row */
-  SHOP,
+  SHOP: 2,
   /** Cursor points to Check Team row */
-  CHECK_TEAM,
-}
+  CHECK_TEAM: 3,
+} as const;
+
+export type ShopCursorTarget = EnumValues<typeof ShopCursorTarget>;

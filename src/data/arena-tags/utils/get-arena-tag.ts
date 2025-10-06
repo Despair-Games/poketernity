@@ -33,6 +33,7 @@ import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
+import { enumValueToKey } from "#utils/common-utils";
 
 /**
  * Generates an {@linkcode ArenaTag} of the given type.
@@ -46,7 +47,7 @@ import { MoveId } from "#enums/move-id";
  */
 export function getArenaTag(
   tagType: ArenaTagType,
-  sourceId: number,
+  sourceId: number | undefined,
   turnCount: number,
   sourceMoveId?: MoveId,
   side: ArenaTagSide = ArenaTagSide.BOTH,
@@ -87,7 +88,7 @@ export function getArenaTag(
     case ArenaTagType.TRICK_ROOM:
       return new TrickRoomTag(turnCount, sourceId);
     case ArenaTagType.GRAVITY:
-      return new GravityTag(turnCount);
+      return new GravityTag(turnCount, sourceId);
     case ArenaTagType.REFLECT:
       return new ReflectTag(turnCount, sourceId, side);
     case ArenaTagType.LIGHT_SCREEN:
@@ -95,7 +96,7 @@ export function getArenaTag(
     case ArenaTagType.AURORA_VEIL:
       return new AuroraVeilTag(turnCount, sourceId, side);
     case ArenaTagType.TAILWIND:
-      return new TailwindTag(turnCount, sourceId, side);
+      return new TailwindTag(turnCount, sourceId!, side);
     case ArenaTagType.HAPPY_HOUR:
       return new HappyHourTag(sourceId, side);
     case ArenaTagType.SAFEGUARD:
@@ -143,7 +144,7 @@ export function getArenaTag(
     case ArenaTagType.SHARP_STEEL:
       return new SharpSteelTag(sourceId, side);
     default:
-      console.warn(`getArenaTag: Failed to generate tag of type ${ArenaTagType[tagType]}`);
+      console.warn(`getArenaTag: Failed to generate tag of type ${enumValueToKey(ArenaTagType, tagType)}`);
       return;
   }
 }

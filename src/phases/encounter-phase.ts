@@ -557,10 +557,7 @@ export class EncounterPhase extends BattlePhase {
         phaseManager.createAndUnshiftPhase("ShinySparklePhase", BattlerIndex.ENEMY + e);
       }
       // This sets Eternatus' held item to be untransferrable, preventing it from being stolen
-      if (
-        enemyPokemon.species.speciesId === SpeciesId.ETERNATUS
-        && (gameMode.isBattleClassicFinalBoss(waveIndex) || gameMode.isEndlessMajorBoss(waveIndex))
-      ) {
+      if (enemyPokemon.species.speciesId === SpeciesId.ETERNATUS && gameMode.isBattleClassicFinalBoss(waveIndex)) {
         const enemyMBH = globalScene.findModifier(
           (m) => m instanceof TurnHeldItemTransferModifier,
           false,
@@ -574,9 +571,9 @@ export class EncounterPhase extends BattlePhase {
     });
 
     if (battleType !== BattleType.TRAINER && battleType !== BattleType.MYSTERY_ENCOUNTER) {
-      enemyField.map((p) =>
-        phaseManager.pushConditionalPhase(phaseManager.createPhase("PostSummonPhase", p.getBattlerIndex()), () => {
-          if (!globalScene.getPlayerParty().length) {
+      enemyField.map((pkmn) =>
+        phaseManager.pushConditionalPhase(phaseManager.createPhase("PostSummonPhase", pkmn.getBattlerIndex()), () => {
+          if (globalScene.getPlayerParty().length === 0) {
             return false;
           }
           const pokemonsOnFieldCount = globalScene.getPlayerParty().filter((p) => p.isOnField()).length;

@@ -44,7 +44,7 @@ import type { SummaryUiHandler } from "#ui/summary-ui-handler";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
 import { applyChallenges } from "#utils/challenge-utils";
-import { BooleanHolder } from "#utils/common-utils";
+import { BooleanHolder, enumValueToKey } from "#utils/common-utils";
 import { FilterAllMoves } from "#utils/move-utils";
 import { PartyFilterAll } from "#utils/party-ui-utils";
 import { toReadableString } from "#utils/string-utils";
@@ -74,7 +74,7 @@ export class PartyUiHandler extends MessageUiHandler {
   public optionsContainer: Phaser.GameObjects.Container;
   private optionsBg: Phaser.GameObjects.NineSlice;
   private optionsCursorObj: Phaser.GameObjects.Image | null;
-  private options: number[];
+  private options: (PartyOption | number)[];
 
   private transferMode: boolean;
   private transferOptionCursor: number;
@@ -268,7 +268,7 @@ export class PartyUiHandler extends MessageUiHandler {
     let success = false;
 
     if (this.optionsMode) {
-      const option = this.options[this.optionsCursor];
+      const option = this.options[this.optionsCursor] as PartyOption;
       if (button === Button.ACTION) {
         const pokemon = globalScene.getPlayerParty()[this.cursor];
         if (this.partyUiMode === PartyUiMode.MODIFIER_TRANSFER && !this.transferMode && option !== PartyOption.CANCEL) {
@@ -279,9 +279,9 @@ export class PartyUiHandler extends MessageUiHandler {
             // this for look goes through each of the party pokemon
             const newPokemon = globalScene.getPlayerParty()[p];
             // this next line gets all of the transferable items from pokemon [p]; it does this by getting all the held modifiers that are transferable and checking to see if they belong to pokemon [p]
-            const getTransferrableItemsFromPokemon = (newPokemon: PlayerPokemon) =>
+            const getTransferrableItemsFromPokemon = (pkmn: PlayerPokemon) =>
               globalScene.findModifiers(
-                (m) => m.isPokemonHeldItemModifier() && m.isTransferable && m.pokemonId === newPokemon.id,
+                (m) => m.isPokemonHeldItemModifier() && m.isTransferable && m.pokemonId === pkmn.id,
               );
             // this next bit checks to see if the the selected item from the original transfer pokemon exists on the new pokemon [p]; this returns undefined if the new pokemon doesn't have the item at all, otherwise it returns the pokemonHeldItemModifier for that item
             const matchingModifier = globalScene.findModifier(
@@ -344,9 +344,9 @@ export class PartyUiHandler extends MessageUiHandler {
           || (option === PartyOption.RELEASE && this.partyUiMode === PartyUiMode.RELEASE)
         ) {
           let filterResult: string | null;
-          const getTransferrableItemsFromPokemon = (pokemon: PlayerPokemon) =>
+          const getTransferrableItemsFromPokemon = (pkmn: PlayerPokemon) =>
             globalScene.findModifiers<PokemonHeldItemModifier>(
-              (m) => m.isPokemonHeldItemModifier() && m.isTransferable && m.pokemonId === pokemon.id,
+              (m) => m.isPokemonHeldItemModifier() && m.isTransferable && m.pokemonId === pkmn.id,
             );
           if (option !== PartyOption.TRANSFER) {
             filterResult = (this.selectFilter as PokemonSelectFilter)(pokemon);
@@ -559,9 +559,9 @@ export class PartyUiHandler extends MessageUiHandler {
 
         // show move description
         if (this.partyUiMode === PartyUiMode.REMEMBER_MOVE_MODIFIER) {
-          const option = this.options[this.optionsCursor];
+          const opt = this.options[this.optionsCursor];
           const pokemon = globalScene.getPlayerParty()[this.cursor];
-          const move = allMoves.get(pokemon.getLearnableLevelMoves()[option]);
+          const move = allMoves.get(pokemon.getLearnableLevelMoves()[opt]);
           if (move) {
             this.moveInfoOverlay.show(move);
           } else {
@@ -974,10 +974,10 @@ export class PartyUiHandler extends MessageUiHandler {
               optionName = `${modifier.active ? i18next.t("partyUiHandler:DEACTIVATE") : i18next.t("partyUiHandler:ACTIVATE")} ${modifier.type.name}`;
             } else if (option === PartyOption.UNPAUSE_EVOLUTION) {
               optionName = `${pokemon.pauseEvolutions ? i18next.t("partyUiHandler:UNPAUSE_EVOLUTION") : i18next.t("partyUiHandler:PAUSE_EVOLUTION")}`;
-            } else if (this.localizedOptions.includes(option)) {
-              optionName = i18next.t(`partyUiHandler:${PartyOption[option]}`);
+            } else if ((this.localizedOptions as number[]).includes(option)) {
+              optionName = i18next.t(`partyUiHandler:${enumValueToKey(PartyOption, option as PartyOption)}`);
             } else {
-              optionName = toReadableString(PartyOption[option]);
+              optionName = toReadableString(enumValueToKey(PartyOption, option as PartyOption));
             }
             break;
         }

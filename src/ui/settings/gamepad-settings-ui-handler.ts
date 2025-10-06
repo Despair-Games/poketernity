@@ -86,21 +86,21 @@ export class GamepadSettingsUiHandler extends ControlsSettingsUiHandler {
   protected override handleSaveSetting<V = any>(uiItem: SettingsUiItem, newValue: V): void {
     if (uiItem.key === SettingGamepad.Controller) {
       if (newValue) {
-        const gamepad = globalScene.inputController.getGamepadsName();
-        if (globalScene.ui && gamepad) {
-          const cancelHandler = () => {
+        const gamepads = globalScene.inputController.getGamepadsName();
+        if (globalScene.ui && gamepads) {
+          const cancelHandler = (): true => {
             globalScene.ui.revertMode();
             this.setOptionCursor(-1, 0);
             return true;
           };
-          const changeGamepadHandler = (gamepad: string, index: number) => {
+          const changeGamepadHandler = (gamepad: string, index: number): true => {
             globalScene.inputController.setChosenGamepad(gamepad);
             settings.update("gamepad", "activeIndex", index);
             return cancelHandler();
           };
           globalScene.ui.setOverlayMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, {
             options: [
-              ...gamepad.map((g: string, index) => ({
+              ...gamepads.map((g: string, index) => ({
                 label: truncateString(g, 40), // Truncate the gamepad name for display
                 handler: () => changeGamepadHandler(g, index),
               })),

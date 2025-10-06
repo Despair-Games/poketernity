@@ -1,7 +1,11 @@
-export enum SortCriteria {
-  NUMBER,
-  COST,
-  CANDY,
-  IV,
-  NAME,
-}
+import type { EnumValues } from "#types/utility-types";
+
+export const SortCriteria = {
+  NUMBER: 1,
+  COST: 2,
+  CANDY: 3,
+  IV: 4,
+  NAME: 5,
+} as const;
+
+export type SortCriteria = EnumValues<typeof SortCriteria>;

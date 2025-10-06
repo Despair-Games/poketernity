@@ -42,13 +42,6 @@ export function getTSEnumValues(enumType: any): number[] {
     .map((v) => Number.parseInt(v!.toString()));
 }
 
-/**
- * @returns length of the TypeScript enum
- */
-export function getTSEnumLength(input: any): number {
-  return getTSEnumKeys(input).length;
-}
-
 export function executeIf<T>(condition: boolean, promiseFunc: () => Promise<T>): Promise<T | null> {
   return condition ? promiseFunc() : new Promise<T | null>((resolve) => resolve(null));
 }
@@ -245,4 +238,35 @@ export function enumValueToKey<T extends Record<string, string | number>>(input:
     }
   }
   throw new Error(`Invalid value passed to \`enumValueToKey\`! Value: ${val}`);
+}
+
+/**
+ * Wraps a number between `min` and `max` (inclusive).
+ * @example
+ * wrap(0, 1, 5); // 5
+ * wrap(1, 1, 5); // 1
+ * wrap(3, 1, 5); // 3
+ * wrap(5, 1, 5); // 5
+ * wrap(6, 1, 5); // 1
+ * @param value - Input number
+ * @param min - Minimum allowed value
+ * @param max - Maximum allowed value
+ * @returns The wrapped number
+ */
+export function wrap(value: number, min: number, max: number): number {
+  if (min > max) {
+    throw new Error(`\`min\` (${min}) > \`max\` (${max}) in \`wrap()\` function!`);
+  }
+
+  if (min === max) {
+    return min;
+  }
+
+  if (isBetween(value, min, max)) {
+    return value;
+  }
+
+  const range = max - min + 1;
+
+  return min + ((((value - min) % range) + range) % range);
 }

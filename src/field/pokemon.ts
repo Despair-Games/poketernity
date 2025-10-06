@@ -6,6 +6,7 @@ import type { FaintPhase } from "#phases/faint-phase";
 
 import type { AbAttr } from "#abilities/ab-attr";
 import type { Ability } from "#abilities/ability";
+import type { AccuracyMultiplierAbAttr } from "#abilities/accuracy-multiplier-ab-attr";
 import type { AddSecondStrikeAbAttr } from "#abilities/add-second-strike-ab-attr";
 import type { AlliedFieldDamageReductionAbAttr } from "#abilities/allied-field-damage-reduction-ab-attr";
 import { applyAbAttrs, getAbApplyFunc } from "#abilities/apply-ab-attrs";
@@ -17,8 +18,11 @@ import type { BypassBurnDamageReductionAbAttr } from "#abilities/bypass-burn-dam
 import type { BypassParaSpeedReductionAbAttr } from "#abilities/bypass-para-speed-reduction-ab-attr";
 import type { ConditionalCritAbAttr } from "#abilities/conditional-crit-ab-attr";
 import type { DamageBoostAbAttr } from "#abilities/damage-boost-ab-attr";
-import type { FieldMultiplyStatAbAttr } from "#abilities/field-multiply-stat-ab-attr";
+import type { EffectiveStatMultiplier } from "#abilities/effective-stat-multiplier-ab-attr";
+import type { EvasivenessMultiplierAbAttr } from "#abilities/evasiveness-multiplier-ab-attr";
+import type { FieldAccuracyMultiplierAbAttr } from "#abilities/field-accuracy-multiplier-ab-attr";
 import type { FieldPriorityMoveImmunityAbAttr } from "#abilities/field-priority-move-immunity-ab-attr";
+import type { FieldStatMultiplierAbAttr } from "#abilities/field-stat-multiplier-ab-attr";
 import type { FullHpResistTypeAbAttr } from "#abilities/full-hp-resist-type-ab-attr";
 import type { IgnoreOpponentStatStagesAbAttr } from "#abilities/ignore-opponent-stat-stages-ab-attr";
 import type { IgnoreTypeImmunityAbAttr } from "#abilities/ignore-type-immunity-ab-attr";
@@ -32,7 +36,6 @@ import type { PostDamageAbAttr } from "#abilities/post-damage-ab-attr";
 import type { PostItemLostAbAttr } from "#abilities/post-item-lost-ab-attr";
 import type { ReceivedMoveDamageMultiplierAbAttr } from "#abilities/received-move-damage-multiplier-ab-attr";
 import type { StabBoostAbAttr } from "#abilities/stab-boost-ab-attr";
-import type { StatMultiplierAbAttr } from "#abilities/stat-multiplier-ab-attr";
 import type { StatusEffectImmunityAbAttr } from "#abilities/status-effect-immunity-ab-attr";
 import type { SturdyAbAttr } from "#abilities/sturdy-ab-attr";
 import type { SynchronizeStatusAbAttr } from "#abilities/synchronize-status-ab-attr";
@@ -105,7 +108,7 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerIndex, type FieldBattlerIndex } from "#enums/battler-index";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { BiomeId } from "#enums/biome-id";
+import type { BiomeId } from "#enums/biome-id";
 import { ChallengeType } from "#enums/challenge-type";
 import { DexAttr } from "#enums/dex-attr";
 import { ElementalType } from "#enums/elemental-type";
@@ -1172,23 +1175,28 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     globalScene.applyModifiers(StatBoosterModifier, this.isPlayer(), this, stat, statValue);
 
-    const fieldApplied = new BooleanHolder(false);
+    const abilitiesApplied = new Set<AbilityId>();
     for (const pokemon of globalScene.getField(true)) {
-      applyAbFunc<FieldMultiplyStatAbAttr>(
-        AbAttrFlag.FIELD_MULTIPLY_STAT,
+      applyAbFunc<FieldStatMultiplierAbAttr>(
+        AbAttrFlag.FIELD_STAT_MULTIPLIER,
         pokemon,
         simulated,
         stat,
         statValue,
         this,
-        fieldApplied,
+        abilitiesApplied,
       );
-      if (fieldApplied.value) {
-        break;
-      }
     }
 
-    applyAbFunc<StatMultiplierAbAttr>(AbAttrFlag.STAT_MULTIPLIER, this, simulated, stat, statValue, move, opponent);
+    applyAbFunc<EffectiveStatMultiplier>(
+      AbAttrFlag.EFFECTIVE_STAT_MULTIPLIER,
+      this,
+      simulated,
+      stat,
+      statValue,
+      move,
+      opponent,
+    );
 
     let ret = statValue.value;
 
@@ -1735,15 +1743,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return true;
     }
 
-    // Classic Final boss and Endless Minor/Major bosses do not have passive
-    const { currentBattle, gameMode } = globalScene;
-    const waveIndex = currentBattle?.waveIndex;
-    if (
-      this.isEnemy()
-      && (currentBattle?.isClassicFinalBoss
-        || gameMode.isEndlessMinorBoss(waveIndex)
-        || gameMode.isEndlessMajorBoss(waveIndex))
-    ) {
+    // Classic Final boss does not have passive
+    const { currentBattle } = globalScene;
+    if (this.isEnemy() && currentBattle?.isClassicFinalBoss) {
       return false;
     }
 
@@ -2089,10 +2091,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     let multiplier = types
       .map((defType) => {
-        const multiplier = new NumberHolder(getTypeDamageMultiplier(moveType, defType));
-        applyChallenges(globalScene.gameMode, ChallengeType.TYPE_EFFECTIVENESS, multiplier);
+        const mult = new NumberHolder(getTypeDamageMultiplier(moveType, defType));
+        applyChallenges(globalScene.gameMode, ChallengeType.TYPE_EFFECTIVENESS, mult);
         if (move) {
-          applyMoveAttrs(VariableMoveTypeChartAttr, null, this, move, multiplier, defType);
+          applyMoveAttrs(VariableMoveTypeChartAttr, null, this, move, mult, defType);
         }
         if (source) {
           const ignoreImmunity = new BooleanHolder(false);
@@ -2106,16 +2108,16 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
               defType,
             );
           }
-          if (ignoreImmunity.value && multiplier.value === 0) {
+          if (ignoreImmunity.value && mult.value === 0) {
             return 1;
           }
 
           const exposedTags = this.findTags<ExposedTag>((tag) => tag.isType<ExposedTag>(...EXPOSED_TAG_TYPES));
-          if (exposedTags.some((t) => t.ignoreImmunity(defType, moveType)) && multiplier.value === 0) {
+          if (exposedTags.some((t) => t.ignoreImmunity(defType, moveType)) && mult.value === 0) {
             return 1;
           }
         }
-        return multiplier.value;
+        return mult.value;
       })
       .reduce((acc, cur) => acc * cur, 1) as TypeDamageMultiplier;
 
@@ -2307,8 +2309,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Function that tries to set a Pokemon shiny based on the trainer's trainer ID and secret ID. \
-   * Endless Pokemon in the end biome are unable to be set to shiny.
+   * Function that tries to set a Pokemon shiny based on the trainer's trainer ID and secret ID.
    *
    * The exact mechanic is that it calculates E as the XOR of the player's trainer ID and secret ID. \
    * F is calculated as the XOR of the first 16 bits of the Pokemon's {@linkcode personalityValue | Personality Value} with the last 16 bits. \
@@ -2319,12 +2320,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns Whether the Pokemon is shiny
    */
   trySetShiny(thresholdOverride?: number): boolean {
-    const { arena, gameData, gameMode } = globalScene;
-
-    // Shiny Pokemon should not spawn in the end biome in endless
-    if (gameMode.isEndless && arena.biomeId === BiomeId.END) {
-      return false;
-    }
+    const { gameData } = globalScene;
 
     const rand1 = (this.personalityValue & 0xffff0000) >>> 16;
     const rand2 = this.personalityValue & 0x0000ffff;
@@ -2916,7 +2912,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * | Gen V+           | 3/9 | 3/8 | 3/7 | 3/6 | 3/5 | 3/4 | 3/3 | 4/3 | 5/3 | 6/3 | 7/3 | 8/3 | 9/3 |
    * @see {@link https://bulbapedia.bulbagarden.net/wiki/Stat_modifier#Stage_multipliers Stage multipliers - Bulbapedia}
    */
-  getAccuracyMultiplier(target: Pokemon, sourceMove: Move): number {
+  getAccuracyMultiplier(target: Pokemon, sourceMove: Move, simulated: boolean = true): number {
     const isOhko = sourceMove.hasAttr(OneHitKOAccuracyAttr);
     if (isOhko) {
       return 1;
@@ -2931,14 +2927,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     applyAbAttrs<IgnoreOpponentStatStagesAbAttr>(
       AbAttrFlag.IGNORE_OPPONENT_STAT_STAGES,
       target,
-      false,
+      simulated,
       Stat.ACC,
       ignoreAccStatStage,
     );
     applyAbAttrs<IgnoreOpponentStatStagesAbAttr>(
       AbAttrFlag.IGNORE_OPPONENT_STAT_STAGES,
       this,
-      false,
+      simulated,
       Stat.EVA,
       ignoreEvaStatStage,
     );
@@ -2955,24 +2951,28 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     const accuracyMultiplier = new NumberHolder(calcAccuracyMultiplier(userAccStage.value, targetEvaStage.value));
 
-    applyAbAttrs<StatMultiplierAbAttr>(
-      AbAttrFlag.STAT_MULTIPLIER,
+    applyAbAttrs<AccuracyMultiplierAbAttr>(
+      AbAttrFlag.ACCURACY_MULTIPLIER,
       this,
-      false,
-      Stat.ACC,
-      accuracyMultiplier,
+      simulated,
       sourceMove,
+      accuracyMultiplier,
     );
 
+    globalScene
+      .getField(true)
+      .forEach((p) =>
+        applyAbAttrs<FieldAccuracyMultiplierAbAttr>(
+          AbAttrFlag.FIELD_ACCURACY_MULTIPLIER,
+          p,
+          simulated,
+          this,
+          accuracyMultiplier,
+        ),
+      );
+
     const evasionMultiplier = new NumberHolder(1);
-    applyAbAttrs<StatMultiplierAbAttr>(
-      AbAttrFlag.STAT_MULTIPLIER,
-      target,
-      false,
-      Stat.EVA,
-      evasionMultiplier,
-      sourceMove,
-    );
+    applyAbAttrs<EvasivenessMultiplierAbAttr>(AbAttrFlag.EVASIVENESS_MULTIPLIER, target, simulated, evasionMultiplier);
 
     return accuracyMultiplier.value / evasionMultiplier.value;
   }
@@ -3130,6 +3130,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     simulated: boolean = true,
     effectiveness?: TypeDamageMultiplier,
   ): DamageCalculationResult {
+    const { arena } = globalScene;
     const applyAbFunc = getAbApplyFunc(abilityApplyMode);
     const damage = new NumberHolder(0);
     const defendingSide = this.getArenaTagSide();
@@ -3154,13 +3155,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     const isPhysical = moveCategory === MoveCategory.PHYSICAL;
 
-    /** Combined damage multiplier from field effects such as weather, terrain, etc. */
-    const arenaAttackTypeMultiplier = new NumberHolder(
-      globalScene.arena.getAttackTypeMultiplier(moveType, source.isGrounded()),
-    );
-    applyMoveAttrs(IgnoreWeatherTypeDebuffAttr, source, this, move, arenaAttackTypeMultiplier);
+    const weatherDamageMultiplier = new ValueHolder(arena.getWeatherDamageMultiplier(moveType));
+    applyMoveAttrs(IgnoreWeatherTypeDebuffAttr, source, this, move, weatherDamageMultiplier);
 
-    const isTypeImmune = typeMultiplier * arenaAttackTypeMultiplier.value === 0;
+    const terrainDamageMultiplier = source.isGrounded() ? arena.getTerrainDamageMultiplier(moveType) : 1;
+
+    const isTypeImmune = typeMultiplier * weatherDamageMultiplier.value * terrainDamageMultiplier === 0;
 
     if (cancelled.value || isTypeImmune) {
       return {
@@ -3343,7 +3343,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       * targetMultiplier
       * gmaxBonusDamageMultiplier.value
       * multiStrikeEnhancementMultiplier.value
-      * arenaAttackTypeMultiplier.value
+      * weatherDamageMultiplier.value
+      * terrainDamageMultiplier
       * glaiveRushMultiplier.value
       * criticalMultiplier.value
       * randomMultiplier

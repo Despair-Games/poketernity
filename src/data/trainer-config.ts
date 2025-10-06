@@ -1723,7 +1723,7 @@ export function getSpeciesFilterRandomPartyMemberFunc(
   originalSpeciesFilter: PokemonSpeciesFilter,
   trainerSlot: TrainerSlot = TrainerSlot.TRAINER,
   allowLegendaries?: boolean,
-  postProcess?: (EnemyPokemon: EnemyPokemon) => void,
+  postProcess?: (enemyPokemon: EnemyPokemon) => void,
 ): PartyMemberFunc {
   const speciesFilter = (species: PokemonSpecies): boolean => {
     const notLegendary = !species.isLegendLike();
