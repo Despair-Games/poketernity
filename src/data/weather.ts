@@ -1,3 +1,4 @@
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { SuppressWeatherEffectAbAttr } from "#abilities/suppress-weather-effect-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -7,6 +8,7 @@ import { ElementalType } from "#enums/elemental-type";
 import { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
+import { ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /** Class representing Weather effects */
@@ -132,22 +134,13 @@ export class Weather {
    */
   isEffectSuppressed(): boolean {
     const field = globalScene.getField(true);
+    const suppressed = new ValueHolder(false);
 
-    for (const pokemon of field) {
-      let suppressWeatherEffectAbAttr: SuppressWeatherEffectAbAttr | null = pokemon
-        .getAbility()
-        .getAttrs<SuppressWeatherEffectAbAttr>(AbAttrFlag.SUPPRESS_WEATHER_EFFECT)[0];
-      if (!suppressWeatherEffectAbAttr) {
-        suppressWeatherEffectAbAttr = pokemon.hasPassive()
-          ? pokemon.getPassiveAbility().getAttrs<SuppressWeatherEffectAbAttr>(AbAttrFlag.SUPPRESS_WEATHER_EFFECT)[0]
-          : null;
-      }
-      if (suppressWeatherEffectAbAttr && (!this.isPrimal() || suppressWeatherEffectAbAttr.affectsPrimal)) {
-        return true;
-      }
-    }
+    field.forEach((pokemon) =>
+      applyAbAttrs<SuppressWeatherEffectAbAttr>(AbAttrFlag.SUPPRESS_WEATHER_EFFECT, pokemon, true, this, suppressed),
+    );
 
-    return false;
+    return suppressed.value;
   }
 }
 
