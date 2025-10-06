@@ -33,7 +33,7 @@ export class PostBattleLootAbAttr extends PostBattleAbAttr {
   public override canApply(...[pokemon, simulated, isVictory]: Parameters<this["apply"]>): boolean {
     const { postBattleLoot } = globalScene.currentBattle;
 
-    if (postBattleLoot.length === 0 || isVictory) {
+    if (postBattleLoot.length === 0 || !isVictory) {
       return false;
     }
 

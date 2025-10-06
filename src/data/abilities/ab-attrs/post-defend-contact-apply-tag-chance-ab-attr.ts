@@ -18,7 +18,7 @@ export class PostDefendContactApplyTagChanceAbAttr extends PostDefendAbAttr {
   }
 
   public override apply(_pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): void {
-    if (simulated) {
+    if (!simulated) {
       attacker.addTag(this.tagType, this.turnCount, move.id, attacker.id);
     }
   }

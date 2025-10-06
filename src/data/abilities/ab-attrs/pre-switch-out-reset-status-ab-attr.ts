@@ -10,6 +10,6 @@ export class PreSwitchOutResetStatusAbAttr extends PreSwitchOutAbAttr {
   }
 
   public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
-    return pokemon.hasNonVolatileStatusEffect(true, true);
+    return pokemon.hasNonVolatileStatusEffect(false, true);
   }
 }
