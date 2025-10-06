@@ -10,9 +10,9 @@ export abstract class PostBattleAbAttr extends AbAttr {
 
   /**
    * Applies an effect at the end of a battle.
-   * @param pokemon The {@linkcode Pokemon} with this ability
-   * @param simulated If `true`, suppresses changes to game state
-   * @param isVictory `true` if the result of the battle was a victory for the player
+   * @param pokemon - The {@linkcode Pokemon} with this ability
+   * @param simulated - If `true`, suppresses changes to game state
+   * @param isVictory - `true` if the result of the battle was a victory for the player
    */
-  public abstract override apply(_pokemon: Pokemon, _simulated: boolean, _isVictory: boolean): void;
+  public abstract override apply(pokemon: Pokemon, simulated: boolean, isVictory: boolean): void;
 }

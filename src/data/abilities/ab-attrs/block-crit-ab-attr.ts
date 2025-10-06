@@ -4,7 +4,7 @@ import type { Pokemon } from "#field/pokemon";
 import type { ValueHolder } from "#utils/common-utils";
 
 /**
- * Provides immunity to critical hits
+ * Provides immunity to critical hits. \
  * These abilities use this attribute:
  * - Battle Armor
  * - Shell Armor (Identical to Battle Armor in functionality, just has a different name)

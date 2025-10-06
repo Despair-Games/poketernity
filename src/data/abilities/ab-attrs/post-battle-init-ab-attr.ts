@@ -10,8 +10,8 @@ export abstract class PostBattleInitAbAttr extends AbAttr {
 
   /**
    * Applies an effect at the start of battle
-   * @param pokemon The {@linkcode Pokemon} with this ability
-   * @param simulated If `true`, suppresses changes to game state
+   * @param pokemon - The {@linkcode Pokemon} with this ability
+   * @param simulated - If `true`, suppresses changes to game state
    */
-  public abstract override apply(_pokemon: Pokemon, _simulated: boolean): void;
+  public abstract override apply(pokemon: Pokemon, simulated: boolean): void;
 }

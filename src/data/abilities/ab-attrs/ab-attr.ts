@@ -1,7 +1,3 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { ShowAbilityPhase } from "#phases/show-ability-phase";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import type { Ability } from "#abilities/ability";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
@@ -47,9 +43,10 @@ export abstract class AbAttr {
 
   /**
    * Determines whether or not this attribute's effect can be applied in the current game state.
-   * This is meant to use the same parameters as {@linkcode apply}, and should always be run before
-   * `apply` is called.
-   * @returns `true` if this attribute's effect can be applied; `false` otherwise.
+   * @remarks
+   * This is meant to use the same parameters as {@linkcode apply},
+   * and should always be run before `apply` is called.
+   * @returns Whether this attribute's effect can be applied
    */
   public canApply(..._params: Parameters<this["apply"]>) {
     return true;

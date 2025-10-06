@@ -13,7 +13,7 @@ export class ShowAbilityPhase extends Phase {
 
   constructor(pokemon: Pokemon, passive: boolean = false) {
     super();
-    /** @todo Should this use `pokemon.name` instead? */
+    // TODO: Should this use `pokemon.name` instead?
     this.pokemonName = getPokemonNameWithAffix(pokemon);
     this.abilityName = passive ? pokemon.getPassiveAbility().name : pokemon.getAbility().name;
     this.passive = passive;

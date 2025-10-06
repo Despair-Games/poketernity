@@ -18,18 +18,18 @@ export abstract class PostAttackAbAttr extends AbAttr {
   /**
    * Applies an effect after attacking with the given move.
    * Subclasses should override {@linkcode applyPostAttack} instead of this function.
-   * @param pokemon The {@linkcode Pokemon} with this ability
-   * @param simulated If `true`, suppresses changes to game state
-   * @param defender The {@linkcode Pokemon} attacked by the source
-   * @param move The {@linkcode Move} being used
-   * @param args Additional arguments for subclasses
+   * @param pokemon - The {@linkcode Pokemon} with this ability
+   * @param simulated - If `true`, suppresses changes to game state
+   * @param defender - The {@linkcode Pokemon} attacked by the source
+   * @param move - The {@linkcode Move} being used
+   * @param args - Additional arguments for subclasses
    */
   public abstract override apply(
-    _pokemon: Pokemon,
-    _simulated: boolean,
-    _defender: Pokemon,
-    _move: Move,
-    ..._args: unknown[]
+    pokemon: Pokemon,
+    simulated: boolean,
+    defender: Pokemon,
+    move: Move,
+    ...args: unknown[]
   ): void;
 
   public override canApply(...params: Parameters<this["apply"]>): boolean {

@@ -16,7 +16,7 @@ import type { ValueHolder } from "#utils/common-utils";
  *
  * Used for the {@linkcode AbilityId.ADAPTABILITY | Adaptability} ability.
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Adaptability_(Ability) | Adaptability (Ability) - Bulbapedia}
- * @see {@link https://github.com/Despair-Games/poketernity/blob/61cb4baeae5be3c65969f6a428b0fb0757414267/docs/stab.md | stab.md#stab-table}
+ * @see {@link https://github.com/Despair-Games/poketernity/blob/beta/docs/stab.md}
  */
 export class StabBoostAbAttr extends AbAttr {
   constructor() {

@@ -8,8 +8,8 @@ import type { ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
- * Attribute implementing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Tera_Shell_(Ability) | Tera Shell}
- * When the source is at full HP, incoming attacks will have a maximum 0.5x type effectiveness multiplier.
+ * Attribute implementing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Tera_Shell_(Ability) | Tera Shell}. \
+ * When the source is at full HP, incoming attacks will have a maximum `0.5x` type effectiveness multiplier.
  */
 export class FullHpResistTypeAbAttr extends PreDefendAbAttr {
   constructor() {
