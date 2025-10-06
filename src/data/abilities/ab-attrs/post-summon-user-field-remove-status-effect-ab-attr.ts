@@ -36,7 +36,6 @@ export class PostSummonUserFieldRemoveStatusEffectAbAttr extends PostSummonAbAtt
   }
 
   public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
-    const affectedPokemon = pokemon.getField().filter((p) => p.isActive(true));
-    return affectedPokemon.some((p) => p.hasStatusEffect(this.statusEffects, false, true));
+    return pokemon.getField().some((p) => p.isActive(true) && p.hasStatusEffect(this.statusEffects, false, true));
   }
 }

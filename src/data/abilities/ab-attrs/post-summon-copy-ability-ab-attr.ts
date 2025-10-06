@@ -1,6 +1,5 @@
 import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { allAbilities } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import type { Pokemon } from "#field/pokemon";
 import { randSeedItem } from "#utils/random-utils";
@@ -14,12 +13,15 @@ export class PostSummonCopyAbilityAbAttr extends PostSummonAbAttr {
   private targetAbilityName: string;
 
   public override apply(pokemon: Pokemon, simulated: boolean): void {
-    if (!simulated) {
-      this.targetAbilityName = allAbilities[this.target.getAbility().id].name;
-      pokemon.summonData.ability = this.target.getAbility().id;
-      this.target.waveData.abilitiesRevealed.push(this.target.getAbility().id);
-      pokemon.updateInfo();
+    if (simulated) {
+      return;
     }
+
+    const targetAbility = this.target.getAbility();
+    this.targetAbilityName = targetAbility.name;
+    pokemon.summonData.ability = targetAbility.id;
+    this.target.waveData.abilitiesRevealed.push(targetAbility.id);
+    pokemon.updateInfo();
   }
 
   public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {

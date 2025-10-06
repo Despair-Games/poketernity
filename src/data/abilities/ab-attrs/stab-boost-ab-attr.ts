@@ -47,8 +47,7 @@ export class StabBoostAbAttr extends AbAttr {
   }
 
   public override canApply(...[pokemon, , move]: Parameters<this["apply"]>): boolean {
-    return (
-      pokemon.getMoveType(move) !== ElementalType.STELLAR && pokemon.getTypes(true).includes(pokemon.getMoveType(move))
-    );
+    const moveType = pokemon.getMoveType(move);
+    return moveType !== ElementalType.STELLAR && pokemon.getTypes(true).includes(moveType);
   }
 }

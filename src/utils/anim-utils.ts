@@ -77,7 +77,7 @@ export async function loadEncounterAnimAssets(startLoad?: boolean): Promise<void
  * @param scene - The {@linkcode SceneBase} whose timer is used to delay execution
  * (default {@linkcode globalScene})
  */
-export async function delay(time: number, scene: SceneBase = globalScene): Promise<void> {
+export async function delay(time: number, scene: Scene = globalScene): Promise<void> {
   await new Promise((resolve) => scene.time.delayedCall(time, resolve));
 }
 
@@ -85,6 +85,12 @@ export async function delay(time: number, scene: SceneBase = globalScene): Promi
  * Plays a Tween animation, resolving once the animation completes.
  * @param config - The config for a single Tween
  * @param scene - The {@linkcode SceneBase} on which the Tween plays (Default {@linkcode globalScene})
+ *
+ * @privateRemarks
+ * The `config` input should not include an `onComplete` field as that callback is
+ * used to resolve the Promise containing the Tween animation. However, `config`'s type
+ * cannot be changed to something like `Omit<TweenBuilderConfig, "onComplete">` due to
+ * how Phaser interprets `TweenBuilderConfig` inputs.
  */
 export async function playTween(config: TweenBuilderConfig, scene: Scene = globalScene): Promise<void> {
   await new Promise((resolve) =>
@@ -103,10 +109,10 @@ export async function playTween(config: TweenBuilderConfig, scene: Scene = globa
  * @privateRemarks
  * The `config` input should not include an `onComplete` field as that callback is
  * used to resolve the Promise containing the Tween animation. However, `config`'s type
- * cannot be changed to something like `Omit<TweenBuilderConfig, "onComplete">` due to
+ * cannot be changed to something like `Omit<NumberTweenBuilderConfig, "onComplete">` due to
  * how Phaser interprets `NumberTweenBuilderConfig` inputs.
  */
-export async function playNumberTween(config: NumberTweenBuilderConfig, scene: SceneBase = globalScene): Promise<void> {
+export async function playNumberTween(config: NumberTweenBuilderConfig, scene: Scene = globalScene): Promise<void> {
   await new Promise((resolve) =>
     scene.tweens.addCounter({
       ...config,

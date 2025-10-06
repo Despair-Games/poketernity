@@ -43,8 +43,7 @@ export class PostDefendStealHeldItemAbAttr extends PostDefendAbAttr {
       return false;
     }
 
-    const heldItems = this.getTargetHeldItems(attacker).filter((i) => i.isTransferable);
-    return heldItems.length > 0;
+    return this.getTargetHeldItems(attacker).some((i) => i.isTransferable);
   }
 
   private getTargetHeldItems(target: Pokemon): PokemonHeldItemModifier[] {

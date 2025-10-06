@@ -1,11 +1,9 @@
-import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { PostBiomeChangeAbAttr } from "#abilities/post-biome-change-ab-attr";
 import { globalScene } from "#app/global-scene";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { NextEncounterPhase } from "#phases/next-encounter-phase";
 
 /**
- * Triggers the first encounter of a new biome
+ * Triggers the first encounter of a new biome.
+ * @deprecated This is no longer used after Endless Mode's removal
  */
 export class NewBiomeEncounterPhase extends NextEncounterPhase {
   public override readonly phaseName = "NewBiomeEncounterPhase";
@@ -19,10 +17,6 @@ export class NewBiomeEncounterPhase extends NextEncounterPhase {
       if (pokemon) {
         pokemon.resetWaveData();
       }
-    }
-
-    for (const pokemon of globalScene.getPlayerParty().filter((p) => p.isOnField())) {
-      applyAbAttrs<PostBiomeChangeAbAttr>(AbAttrFlag.POST_BIOME_CHANGE, pokemon, false);
     }
 
     const enemyField = globalScene.getEnemyField();

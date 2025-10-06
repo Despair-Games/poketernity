@@ -10,11 +10,6 @@ import { OneHitKOAttr } from "#moves/one-hit-ko-attr";
  * Shuddering has no actual effect, except that the presence of the Ability message is meant to provide information about possible moves the opponent might have.
  */
 export class AnticipationAbAttr extends PostSummonMessageAbAttr {
-  /** This is just to remove the `args` parameter */
-  public override apply(pokemon: Pokemon, simulated: boolean): void {
-    super.apply(pokemon, simulated);
-  }
-
   /**
    * @returns `true` if a super-effective move is detected against the source Pokemon
    * from any of its opponents.
@@ -22,7 +17,7 @@ export class AnticipationAbAttr extends PostSummonMessageAbAttr {
    * Effectiveness is determined based on the move's final type (*unless the move is Hidden Power*)
    * and does not account for field conditions such as Strong Winds and Gravity.
    */
-  public override canApply(...[pokemon, simulated]: Parameters<this["apply"]>): boolean {
+  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
     return this.getOpposingMoves(pokemon).some(([opp, move]) => {
       if (!move.isAttackMove()) {
         return false;
@@ -33,9 +28,9 @@ export class AnticipationAbAttr extends PostSummonMessageAbAttr {
       }
 
       // Variable-type moves (other than Hidden Power) are evaluated by their base type
-      const moveType = move.id === MoveId.HIDDEN_POWER ? opp.getMoveType(move, simulated) : move.type;
+      const moveType = move.id === MoveId.HIDDEN_POWER ? opp.getMoveType(move) : move.type;
       // Effectiveness ignores modifiers from field effects (e.g. Strong Winds)
-      return pokemon.getAttackTypeEffectiveness(moveType, undefined, true, simulated) >= 2;
+      return pokemon.getAttackTypeEffectiveness(moveType, undefined, true, true) >= 2;
     });
   }
 

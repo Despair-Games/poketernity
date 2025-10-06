@@ -381,7 +381,7 @@ export class Arena {
    * @returns `true` if Terrain of the given type can be set on the field.
    */
   public canSetTerrain(terrain: TerrainType): boolean {
-    return this.terrain?.terrainType !== terrain;
+    return (this.terrain?.terrainType ?? TerrainType.NONE) !== terrain;
   }
 
   /**

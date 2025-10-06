@@ -39,7 +39,7 @@ export class FullHpResistTypeAbAttr extends PreDefendAbAttr {
   }
 
   public override canApply(...[pokemon, , , move, typeMultiplier]: Parameters<this["apply"]>): boolean {
-    return pokemon.isFullHp() && !move.hasAttr(FixedDamageAttr) && typeMultiplier.value > 0.5;
+    return pokemon.isFullHp() && typeMultiplier.value > 0.5 && !move.hasAttr(FixedDamageAttr);
   }
 
   public override getTriggerMessage(pokemon: Pokemon, _abilityName: string): string {

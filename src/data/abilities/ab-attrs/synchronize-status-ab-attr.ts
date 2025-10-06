@@ -3,6 +3,11 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#field/pokemon";
 
+/** All status effects that can be transferred by Synchronize */
+const syncStatuses = Object.freeze<ReadonlySet<StatusEffect>>(
+  new Set([StatusEffect.BURN, StatusEffect.PARALYSIS, StatusEffect.POISON, StatusEffect.TOXIC]),
+);
+
 /**
  * If another Pokemon burns, paralyzes, poisons, or badly poisons this Pokemon,
  * that Pokemon receives the same non-volatile status condition as part of this
@@ -10,14 +15,6 @@ import type { Pokemon } from "#field/pokemon";
  * Used for {@linkcode https://bulbapedia.bulbagarden.net/wiki/Synchronize_(Ability) | Synchronize}.
  */
 export class SynchronizeStatusAbAttr extends AbAttr {
-  /** All status effects that can be transferred by Synchronize */
-  private static syncStatuses = new Set<StatusEffect>([
-    StatusEffect.BURN,
-    StatusEffect.PARALYSIS,
-    StatusEffect.POISON,
-    StatusEffect.TOXIC,
-  ]);
-
   constructor() {
     super(true);
     this._flags.add(AbAttrFlag.SYNCHRONIZE_STATUS);
@@ -40,6 +37,6 @@ export class SynchronizeStatusAbAttr extends AbAttr {
   public override canApply(...[, , sourcePokemon, effect]: Parameters<this["apply"]>): boolean {
     // Synchronize is meant to activate even if the status effect cannot be applied to the source,
     // hence `canSetStatus` not being checked here.
-    return sourcePokemon != null && SynchronizeStatusAbAttr.syncStatuses.has(effect);
+    return sourcePokemon != null && syncStatuses.has(effect);
   }
 }

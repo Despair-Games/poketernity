@@ -10,15 +10,16 @@ export class PostBattleLootAbAttr extends PostBattleAbAttr {
   private randItem?: PokemonHeldItemModifier;
 
   public override apply(pokemon: Pokemon, simulated: boolean, _isVictory: boolean): void {
+    if (simulated) {
+      return;
+    }
+
     const postBattleLoot = globalScene.currentBattle.postBattleLoot;
     if (this.randItem == null) {
       this.randItem = randSeedItem(postBattleLoot);
     }
 
-    if (
-      !simulated
-      && globalScene.tryTransferHeldItemModifier(this.randItem, pokemon, true, 1, true, undefined, false)
-    ) {
+    if (globalScene.tryTransferHeldItemModifier(this.randItem, pokemon, true, 1, true, undefined, false)) {
       postBattleLoot.splice(postBattleLoot.indexOf(this.randItem), 1);
       globalScene.phaseManager.createAndUnshiftPhase(
         "MessagePhase",

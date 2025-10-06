@@ -2154,7 +2154,7 @@ export class BattleScene extends SceneBase {
 
   private hasModifier(modifier: PersistentModifier, enemy = false): boolean {
     const modifiers = enemy ? this.enemyModifiers : this.modifiers;
-    return modifiers.indexOf(modifier) > -1;
+    return modifiers.includes(modifier);
   }
 
   public canTransferHeldItemModifier(
@@ -2167,7 +2167,7 @@ export class BattleScene extends SceneBase {
     const source = mod.pokemonId ? mod.getPokemon() : null;
     const cancelled = new ValueHolder(false);
 
-    if (source && source.isPlayer() !== target.isPlayer()) {
+    if (source?.isOpponent(target)) {
       applyAbAttrs<BlockItemTheftAbAttr>(AbAttrFlag.BLOCK_ITEM_THEFT, source, simulated, cancelled);
     }
 

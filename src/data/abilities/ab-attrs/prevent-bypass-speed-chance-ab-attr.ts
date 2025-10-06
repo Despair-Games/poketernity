@@ -29,6 +29,6 @@ export class PreventBypassSpeedChanceAbAttr extends AbAttr {
     const isCommandFight = turnCommand?.command === BattleCommand.FIGHT;
     const move = turnCommand?.turnMove?.move;
 
-    return move != null && this.condition(pokemon, move) && isCommandFight;
+    return move != null && isCommandFight && this.condition(pokemon, move);
   }
 }

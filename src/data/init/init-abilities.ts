@@ -78,8 +78,6 @@ import { PostAttackApplyStatusEffectAbAttr } from "#abilities/post-attack-apply-
 import { PostAttackStealHeldItemAbAttr } from "#abilities/post-attack-steal-held-item-ab-attr";
 import { PostBattleInitFormChangeAbAttr } from "#abilities/post-battle-init-form-change-ab-attr";
 import { PostBattleLootAbAttr } from "#abilities/post-battle-loot-ab-attr";
-import { PostBiomeChangeTerrainChangeAbAttr } from "#abilities/post-biome-change-terrain-change-ab-attr";
-import { PostBiomeChangeWeatherChangeAbAttr } from "#abilities/post-biome-change-weather-change-ab-attr";
 import { PostDamageForceSwitchAbAttr } from "#abilities/post-damage-force-switch-ab-attr";
 import { PostDancingMoveAbAttr } from "#abilities/post-dancing-move-ab-attr";
 import { PostDefendAbilityGiveAbAttr } from "#abilities/post-defend-ability-give-ab-attr";
@@ -213,8 +211,7 @@ export function initAbilities() {
         BattlerTagType.FLINCHED,
       ),
     new Ability(AbilityId.DRIZZLE, 3) //
-      .attr(PostSummonWeatherChangeAbAttr, WeatherType.RAIN)
-      .attr(PostBiomeChangeWeatherChangeAbAttr, WeatherType.RAIN),
+      .attr(PostSummonWeatherChangeAbAttr, WeatherType.RAIN),
     new Ability(AbilityId.SPEED_BOOST, 3) //
       .attr(SpeedBoostAbAttr),
     new Ability(AbilityId.BATTLE_ARMOR, 3) //
@@ -249,7 +246,7 @@ export function initAbilities() {
       .attr(IntimidateImmunityAbAttr)
       .ignorable(),
     new Ability(AbilityId.CLOUD_NINE, 3) //
-      .attr(SuppressWeatherEffectAbAttr, true)
+      .attr(SuppressWeatherEffectAbAttr)
       .attr(PostSummonUnnamedMessageAbAttr, i18next.t("abilityTriggers:weatherEffectDisappeared"))
       .attr(PostSummonWeatherSuppressedFormChangeAbAttr)
       .attr(PostFaintUnsuppressedWeatherFormChangeAbAttr)
@@ -362,8 +359,7 @@ export function initAbilities() {
     new Ability(AbilityId.RAIN_DISH, 3) //
       .attr(PostWeatherLapseHealAbAttr, 1 / 16, WeatherType.RAIN, WeatherType.HEAVY_RAIN),
     new Ability(AbilityId.SAND_STREAM, 3) //
-      .attr(PostSummonWeatherChangeAbAttr, WeatherType.SANDSTORM)
-      .attr(PostBiomeChangeWeatherChangeAbAttr, WeatherType.SANDSTORM),
+      .attr(PostSummonWeatherChangeAbAttr, WeatherType.SANDSTORM),
     new Ability(AbilityId.PRESSURE, 3) //
       .attr(IncreasePpAbAttr)
       .attr(PostSummonMessageAbAttr, (pokemon: Pokemon) =>
@@ -448,8 +444,7 @@ export function initAbilities() {
     new Ability(AbilityId.ROCK_HEAD, 3) //
       .attr(BlockRecoilDamageAbAttr),
     new Ability(AbilityId.DROUGHT, 3) //
-      .attr(PostSummonWeatherChangeAbAttr, WeatherType.SUNNY)
-      .attr(PostBiomeChangeWeatherChangeAbAttr, WeatherType.SUNNY),
+      .attr(PostSummonWeatherChangeAbAttr, WeatherType.SUNNY),
     new Ability(AbilityId.ARENA_TRAP, 3) //
       .attr(ArenaTrapAbAttr, (_user, target) => target.isGrounded())
       .attr(DoubleBattleChanceAbAttr),
@@ -466,7 +461,7 @@ export function initAbilities() {
       .attr(BlockCritAbAttr)
       .ignorable(),
     new Ability(AbilityId.AIR_LOCK, 3) //
-      .attr(SuppressWeatherEffectAbAttr, true)
+      .attr(SuppressWeatherEffectAbAttr)
       .attr(PostSummonUnnamedMessageAbAttr, i18next.t("abilityTriggers:weatherEffectDisappeared"))
       .attr(PostSummonWeatherSuppressedFormChangeAbAttr)
       .attr(PostFaintUnsuppressedWeatherFormChangeAbAttr)
@@ -636,8 +631,7 @@ export function initAbilities() {
       )
       .ignorable(),
     new Ability(AbilityId.SNOW_WARNING, 4) //
-      .attr(PostSummonWeatherChangeAbAttr, WeatherType.SNOW)
-      .attr(PostBiomeChangeWeatherChangeAbAttr, WeatherType.SNOW),
+      .attr(PostSummonWeatherChangeAbAttr, WeatherType.SNOW),
     new Ability(AbilityId.HONEY_GATHER, 4) //
       .attr(MoneyAbAttr),
     new Ability(AbilityId.FRISK, 4) //
@@ -961,19 +955,16 @@ export function initAbilities() {
       ),
     new Ability(AbilityId.PRIMORDIAL_SEA, 6) //
       .attr(PostSummonWeatherChangeAbAttr, WeatherType.HEAVY_RAIN)
-      .attr(PostBiomeChangeWeatherChangeAbAttr, WeatherType.HEAVY_RAIN)
       .attr(PreSwitchOutClearWeatherAbAttr)
       .attr(PostFaintClearWeatherAbAttr)
       .bypassFaint(),
     new Ability(AbilityId.DESOLATE_LAND, 6) //
       .attr(PostSummonWeatherChangeAbAttr, WeatherType.HARSH_SUN)
-      .attr(PostBiomeChangeWeatherChangeAbAttr, WeatherType.HARSH_SUN)
       .attr(PreSwitchOutClearWeatherAbAttr)
       .attr(PostFaintClearWeatherAbAttr)
       .bypassFaint(),
     new Ability(AbilityId.DELTA_STREAM, 6) //
       .attr(PostSummonWeatherChangeAbAttr, WeatherType.STRONG_WINDS)
-      .attr(PostBiomeChangeWeatherChangeAbAttr, WeatherType.STRONG_WINDS)
       .attr(PreSwitchOutClearWeatherAbAttr)
       .attr(PostFaintClearWeatherAbAttr)
       .bypassFaint(),
@@ -1202,17 +1193,13 @@ export function initAbilities() {
       .unsuppressable()
       .unreplaceable(),
     new Ability(AbilityId.ELECTRIC_SURGE, 7) //
-      .attr(PostSummonTerrainChangeAbAttr, TerrainType.ELECTRIC)
-      .attr(PostBiomeChangeTerrainChangeAbAttr, TerrainType.ELECTRIC),
+      .attr(PostSummonTerrainChangeAbAttr, TerrainType.ELECTRIC),
     new Ability(AbilityId.PSYCHIC_SURGE, 7) //
-      .attr(PostSummonTerrainChangeAbAttr, TerrainType.PSYCHIC)
-      .attr(PostBiomeChangeTerrainChangeAbAttr, TerrainType.PSYCHIC),
+      .attr(PostSummonTerrainChangeAbAttr, TerrainType.PSYCHIC),
     new Ability(AbilityId.MISTY_SURGE, 7) //
-      .attr(PostSummonTerrainChangeAbAttr, TerrainType.MISTY)
-      .attr(PostBiomeChangeTerrainChangeAbAttr, TerrainType.MISTY),
+      .attr(PostSummonTerrainChangeAbAttr, TerrainType.MISTY),
     new Ability(AbilityId.GRASSY_SURGE, 7) //
-      .attr(PostSummonTerrainChangeAbAttr, TerrainType.GRASSY)
-      .attr(PostBiomeChangeTerrainChangeAbAttr, TerrainType.GRASSY),
+      .attr(PostSummonTerrainChangeAbAttr, TerrainType.GRASSY),
     new Ability(AbilityId.FULL_METAL_BODY, 7) //
       .attr(ProtectStatAbAttr),
     new Ability(AbilityId.SHADOW_SHIELD, 7) //
@@ -1580,7 +1567,6 @@ export function initAbilities() {
       ),
     new Ability(AbilityId.ORICHALCUM_PULSE, 9) //
       .attr(PostSummonWeatherChangeAbAttr, WeatherType.SUNNY)
-      .attr(PostBiomeChangeWeatherChangeAbAttr, WeatherType.SUNNY)
       .conditionalAttr(
         getWeatherCondition(WeatherType.SUNNY, WeatherType.HARSH_SUN),
         EffectiveStatMultiplier,
@@ -1589,7 +1575,6 @@ export function initAbilities() {
       ),
     new Ability(AbilityId.HADRON_ENGINE, 9) //
       .attr(PostSummonTerrainChangeAbAttr, TerrainType.ELECTRIC)
-      .attr(PostBiomeChangeTerrainChangeAbAttr, TerrainType.ELECTRIC)
       .conditionalAttr(getTerrainCondition(TerrainType.ELECTRIC), EffectiveStatMultiplier, Stat.SPATK, 4 / 3),
     new Ability(AbilityId.OPPORTUNIST, 9) //
       .attr(StatStageChangeCopyAbAttr),
