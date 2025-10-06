@@ -18,9 +18,9 @@ import { getWeatherCondition } from "#utils/ability-utils";
  * ```
  */
 export class WeatherBasedSpeedDoublerAbAttr extends EffectiveStatMultiplier {
-  private readonly weatherTypes: WeatherType[];
+  private readonly weatherTypes: readonly WeatherType[];
 
-  constructor(...weatherTypes: WeatherType[]) {
+  constructor(...weatherTypes: readonly WeatherType[]) {
     super(Stat.SPD, 2);
     this.weatherTypes = weatherTypes;
   }

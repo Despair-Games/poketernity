@@ -27,6 +27,6 @@ export class RedirectMoveAbAttr extends AbAttr {
 
   public override canApply(...[, , moveId]: Parameters<this["apply"]>): boolean {
     const move = allMoves.get(moveId);
-    return ([MoveTarget.NEAR_OTHER, MoveTarget.OTHER] as MoveTarget[]).includes(move.moveTarget);
+    return ([MoveTarget.NEAR_OTHER, MoveTarget.OTHER] as readonly MoveTarget[]).includes(move.moveTarget);
   }
 }

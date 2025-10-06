@@ -11,11 +11,11 @@ import type { ValueHolder } from "#utils/common-utils";
 export class IgnoreOpponentStatStagesAbAttr extends AbAttr {
   private readonly stats: readonly BattleStat[];
 
-  constructor(stats?: BattleStat[]) {
+  constructor(stats: readonly BattleStat[] = BATTLE_STATS) {
     super();
     this._flags.add(AbAttrFlag.IGNORE_OPPONENT_STAT_STAGES);
 
-    this.stats = stats ?? BATTLE_STATS;
+    this.stats = stats;
   }
 
   /**
