@@ -94,7 +94,6 @@ describe("Abilities - Effect Spore", () => {
 
     game.move.select(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.WATER_GUN);
-    await game.move.forceHit();
     await game.toEndOfTurn();
 
     expect(abilityAttr.apply).not.toHaveBeenCalled();

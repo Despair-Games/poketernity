@@ -25,7 +25,7 @@ export class BerryPhase extends FieldPhase {
         const cancelled = new ValueHolder(false);
         pokemon
           .getOpponents()
-          .map((opp) =>
+          .forEach((opp) =>
             applyAbAttrs<PreventBerryUseAbAttr>(AbAttrFlag.PREVENT_BERRY_USE, opp, false, pokemon, cancelled),
           );
 
