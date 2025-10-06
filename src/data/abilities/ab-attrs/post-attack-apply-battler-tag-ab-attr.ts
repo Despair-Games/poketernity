@@ -28,9 +28,13 @@ export class PostAttackApplyBattlerTagAbAttr extends PostAttackAbAttr {
     this.effects = effects;
   }
 
-  public override apply(attacker: Pokemon, simulated: boolean, target: Pokemon, _move: Move): boolean {
+  public override apply(attacker: Pokemon, simulated: boolean, target: Pokemon, _move: Move): void {
+    if (simulated) {
+      return;
+    }
+
     const effect = this.effects.length === 1 ? this.effects[0] : this.effects[target.randSeedInt(this.effects.length)];
-    return simulated || attacker.addTag(effect);
+    attacker.addTag(effect);
   }
 
   public override canApply(...params: Parameters<this["apply"]>): boolean {

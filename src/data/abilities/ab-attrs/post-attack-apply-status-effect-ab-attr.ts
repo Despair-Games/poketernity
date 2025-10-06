@@ -32,10 +32,14 @@ export class PostAttackApplyStatusEffectAbAttr extends PostAttackAbAttr {
     this.effects = effects;
   }
 
-  public override apply(attacker: Pokemon, simulated: boolean, target: Pokemon, _move: Move): boolean {
+  public override apply(attacker: Pokemon, simulated: boolean, target: Pokemon, _move: Move): void {
+    if (simulated) {
+      return;
+    }
+
     const effect =
       this.effects.length === 1 ? this.effects[0] : this.effects[attacker.randSeedInt(this.effects.length)];
-    return simulated || target.trySetStatus(effect, true, attacker);
+    target.trySetStatus(effect, true, attacker);
   }
 
   public override canApply(...params: Parameters<this["apply"]>): boolean {

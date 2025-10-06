@@ -7,11 +7,12 @@ import type { Move } from "#moves/move";
  * Ability attribute for Gorilla Tactics
  */
 export class GorillaTacticsAbAttr extends PostAttackAbAttr {
-  public override apply(pokemon: Pokemon, simulated: boolean, _defender: Pokemon, _move: Move): boolean {
-    if (!simulated) {
-      pokemon.addTag(BattlerTagType.GORILLA_TACTICS);
+  public override apply(pokemon: Pokemon, simulated: boolean, _defender: Pokemon, _move: Move): void {
+    if (simulated) {
+      return;
     }
-    return true;
+
+    pokemon.addTag(BattlerTagType.GORILLA_TACTICS);
   }
 
   public override canApply(...params: Parameters<this["apply"]>): boolean {
