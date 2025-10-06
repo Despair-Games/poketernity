@@ -68,3 +68,6 @@ export type NonFunctionPropertiesRecursive<Class> = {
 export type Mutable<T> = {
   -readonly [P in keyof T]: T[P];
 };
+
+/** Requires an array to contain at least one item. */
+export type AtLeastOneArray<T> = [T, ...T[]];
