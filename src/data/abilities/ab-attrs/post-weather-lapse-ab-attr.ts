@@ -3,12 +3,13 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
 import type { AbAttrCondition } from "#types/ability-types";
+import type { AtLeastOneArray } from "#types/utility-types";
 import { getWeatherCondition } from "#utils/ability-utils";
 
 export abstract class PostWeatherLapseAbAttr extends AbAttr {
-  protected readonly weatherTypes: readonly [WeatherType, ...WeatherType[]];
+  protected readonly weatherTypes: Readonly<AtLeastOneArray<WeatherType>>;
 
-  constructor(...weatherTypes: readonly [WeatherType, ...WeatherType[]]) {
+  constructor(...weatherTypes: Readonly<AtLeastOneArray<WeatherType>>) {
     super();
     this._flags.add(AbAttrFlag.POST_WEATHER_LAPSE);
 

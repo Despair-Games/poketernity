@@ -2,13 +2,14 @@ import { PostWeatherChangeAbAttr } from "#abilities/post-weather-change-ab-attr"
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
+import type { AtLeastOneArray } from "#types/utility-types";
 
 export class PostWeatherChangeAddBattlerTagAbAttr extends PostWeatherChangeAbAttr {
   private readonly tagType: BattlerTagType;
   private readonly turnCount: number;
-  private readonly weatherTypes: WeatherType[];
+  private readonly weatherTypes: Readonly<AtLeastOneArray<WeatherType>>;
 
-  constructor(tagType: BattlerTagType, turnCount: number, ...weatherTypes: WeatherType[]) {
+  constructor(tagType: BattlerTagType, turnCount: number, ...weatherTypes: Readonly<AtLeastOneArray<WeatherType>>) {
     super();
 
     this.tagType = tagType;

@@ -33,6 +33,7 @@ import { WeatherType } from "#enums/weather-type";
 import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#events/arena";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
+import type { AtLeastOneArray } from "#types/utility-types";
 import { coerceArray, enumValueToKey } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedInt, weightedPick } from "#utils/random-utils";
@@ -186,7 +187,7 @@ export class Arena {
    * @param weather - {@linkcode WeatherType} or array of {@linkcode WeatherType} to check against
    * @returns `true` if the arena is of the specified weather, `false` otherwise
    */
-  public hasWeather(...weather: readonly [WeatherType, ...WeatherType[]]): boolean {
+  public hasWeather(...weather: Readonly<AtLeastOneArray<WeatherType>>): boolean {
     return weather.includes(this.weatherType);
   }
 

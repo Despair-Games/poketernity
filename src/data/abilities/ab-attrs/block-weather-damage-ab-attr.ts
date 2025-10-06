@@ -2,6 +2,7 @@ import { PreWeatherDamageAbAttr } from "#abilities/pre-weather-damage-ab-attr";
 import type { Weather } from "#data/weather";
 import type { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
+import type { AtLeastOneArray } from "#types/utility-types";
 import type { BooleanHolder } from "#utils/common-utils";
 
 /**
@@ -18,9 +19,9 @@ import type { BooleanHolder } from "#utils/common-utils";
  * ```
  */
 export class BlockWeatherDamageAbAttr extends PreWeatherDamageAbAttr {
-  private readonly weatherTypes: readonly [WeatherType, ...WeatherType[]];
+  private readonly weatherTypes: Readonly<AtLeastOneArray<WeatherType>>;
 
-  constructor(...weatherTypes: readonly [WeatherType, ...WeatherType[]]) {
+  constructor(...weatherTypes: Readonly<AtLeastOneArray<WeatherType>>) {
     super();
 
     this.weatherTypes = weatherTypes;

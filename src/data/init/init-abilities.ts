@@ -418,12 +418,14 @@ export function initAbilities() {
       .uncopiable()
       .unreplaceable()
       .attr(PostSummonFormChangeByWeatherAbAttr, AbilityId.FORECAST)
-      .attr(PostWeatherChangeFormChangeAbAttr, AbilityId.FORECAST, [
+      .attr(
+        PostWeatherChangeFormChangeAbAttr,
+        AbilityId.FORECAST,
         WeatherType.NONE,
         WeatherType.SANDSTORM,
         WeatherType.STRONG_WINDS,
         WeatherType.FOG,
-      ]),
+      ),
     new Ability(AbilityId.STICKY_HOLD, 3) //
       .attr(BlockItemTheftAbAttr)
       .bypassFaint()
@@ -657,16 +659,16 @@ export function initAbilities() {
       .uncopiable()
       .unreplaceable()
       .attr(PostSummonFormChangeByWeatherAbAttr, AbilityId.FLOWER_GIFT)
-      .attr(PostWeatherChangeFormChangeAbAttr, AbilityId.FLOWER_GIFT, [
+      .attr(
+        PostWeatherChangeFormChangeAbAttr,
+        AbilityId.FLOWER_GIFT,
         WeatherType.NONE,
+        ...RAINY_WEATHER_TYPES,
+        ...SNOWY_WEATHER_TYPES,
         WeatherType.SANDSTORM,
         WeatherType.STRONG_WINDS,
         WeatherType.FOG,
-        WeatherType.HAIL,
-        WeatherType.HEAVY_RAIN,
-        WeatherType.SNOW,
-        WeatherType.RAIN,
-      ])
+      )
       // Should also boosts stats of ally
       .partial()
       .ignorable(),

@@ -4,6 +4,7 @@ import { Stat } from "#enums/stat";
 import type { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
+import type { AtLeastOneArray } from "#types/utility-types";
 import { getWeatherCondition } from "#utils/ability-utils";
 import type { NumberHolder } from "#utils/common-utils";
 
@@ -22,9 +23,9 @@ import type { NumberHolder } from "#utils/common-utils";
  * ```
  */
 export class WeatherBasedSpeedDoublerAbAttr extends EffectiveStatMultiplierAbAttr {
-  private readonly weatherTypes: readonly [WeatherType, ...WeatherType[]];
+  private readonly weatherTypes: Readonly<AtLeastOneArray<WeatherType>>;
 
-  constructor(...weatherTypes: readonly [WeatherType, ...WeatherType[]]) {
+  constructor(...weatherTypes: Readonly<AtLeastOneArray<WeatherType>>) {
     super(Stat.SPD, 2);
     this.weatherTypes = weatherTypes;
   }
