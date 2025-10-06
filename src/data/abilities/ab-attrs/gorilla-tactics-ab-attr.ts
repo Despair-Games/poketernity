@@ -7,6 +7,10 @@ import type { Move } from "#moves/move";
  * Ability attribute for Gorilla Tactics
  */
 export class GorillaTacticsAbAttr extends PostAttackAbAttr {
+  constructor() {
+    super(false);
+  }
+
   public override apply(pokemon: Pokemon, simulated: boolean, _defender: Pokemon, _move: Move): void {
     if (simulated) {
       return;
