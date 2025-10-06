@@ -22,18 +22,17 @@ export class CommanderAbAttr extends AbAttr {
   }
 
   public override apply(pokemon: Pokemon, simulated: boolean): void {
-    if (!simulated) {
-      // Lapse the source's semi-invulnerable tags (to avoid visual inconsistencies)
-      pokemon.lapseTags(BattlerTagLapseType.MOVE_EFFECT);
-      // Remove Sky Drop's effect from the source and whoever else is affected
-      pokemon.getTag<SkyDropTag>(BattlerTagType.SKY_DROP)?.clearSkyDropEffects();
-      // Play an animation of the source jumping into the ally Dondozo's mouth
-      globalScene.triggerPokemonBattleAnim(pokemon, PokemonAnimType.COMMANDER_APPLY);
-      // Apply boosts from this effect to the ally Dondozo
-      pokemon.getAlly()?.addTag(BattlerTagType.COMMANDED, 0, MoveId.NONE, pokemon.id);
-      // Cancel the source Pokemon's next move (if a move is queued)
-      this.cancelQueuedMove(pokemon);
+    if (simulated) {
+      return;
     }
+
+    // Lapse the source's semi-invulnerable tags (to avoid visual inconsistencies)
+    pokemon.lapseTags(BattlerTagLapseType.MOVE_EFFECT);
+
+    pokemon.getTag<SkyDropTag>(BattlerTagType.SKY_DROP)?.clearSkyDropEffects();
+    globalScene.triggerPokemonBattleAnim(pokemon, PokemonAnimType.COMMANDER_APPLY);
+    pokemon.getAlly()?.addTag(BattlerTagType.COMMANDED, 0, MoveId.NONE, pokemon.id);
+    this.cancelQueuedMove(pokemon);
   }
 
   public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {

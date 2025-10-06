@@ -17,20 +17,22 @@ export class TypeImmunityHealAbAttr extends TypeImmunityAbAttr {
   ): void {
     super.apply(pokemon, simulated, attacker, move, cancelled, typeMultiplier);
 
-    if (!pokemon.isFullHp() && !simulated) {
-      const abilityName = this.source.name;
-      globalScene.phaseManager.createAndUnshiftPhase(
-        "PokemonHealPhase",
-        pokemon.getBattlerIndex(),
-        toDmgValue(pokemon.getMaxHp() / 4),
-        {
-          message: i18next.t("abilityTriggers:typeImmunityHeal", {
-            pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-            abilityName,
-          }),
-        },
-      );
+    if (pokemon.isFullHp() || simulated) {
+      return;
     }
+
+    const abilityName = this.source.name;
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "PokemonHealPhase",
+      pokemon.getBattlerIndex(),
+      toDmgValue(pokemon.getMaxHp() / 4),
+      {
+        message: i18next.t("abilityTriggers:typeImmunityHeal", {
+          pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+          abilityName,
+        }),
+      },
+    );
   }
 
   // The healing effect from this attribute takes the place of the trigger message if it can be applied

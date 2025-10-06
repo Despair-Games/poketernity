@@ -14,12 +14,10 @@ export class PostSummonCopyAllyStatsAbAttr extends PostSummonAbAttr {
       return;
     }
 
-    if (!simulated) {
-      for (const s of BATTLE_STATS) {
-        pokemon.setStatStage(s, ally.getStatStage(s));
-      }
-      pokemon.updateInfo();
+    for (const s of BATTLE_STATS) {
+      pokemon.setStatStage(s, ally.getStatStage(s));
     }
+    pokemon.updateInfo();
   }
 
   public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {

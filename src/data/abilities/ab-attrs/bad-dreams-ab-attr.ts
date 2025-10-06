@@ -22,6 +22,10 @@ export class BadDreamsAbAttr extends AbAttr {
   }
 
   public override apply(pokemon: Pokemon, simulated: boolean): void {
+    if (simulated) {
+      return;
+    }
+
     for (const opp of pokemon.getOpponents()) {
       const isAsleep = opp.hasStatusEffect(StatusEffect.SLEEP);
       const blocksNonDirectDamage = opp.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE);
@@ -29,7 +33,7 @@ export class BadDreamsAbAttr extends AbAttr {
       const willFallAsleep =
         opp.getTag<DrowsyTag>(BattlerTagType.DROWSY)?.turnCount === 1 && opp.canSetStatus(StatusEffect.SLEEP, true);
 
-      if ((isAsleep || willFallAsleep) && !blocksNonDirectDamage && !opp.switchOutStatus && !simulated) {
+      if ((isAsleep || willFallAsleep) && !blocksNonDirectDamage && !opp.switchOutStatus) {
         opp.damageAndUpdate(toDmgValue(opp.getMaxHp() / 8), {
           result: HitResult.OTHER,
         });
