@@ -1,5 +1,3 @@
-import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { SuppressWeatherEffectAbAttr } from "#abilities/suppress-weather-effect-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { PRIMAL_WEATHER_TYPES } from "#constants/weather-constants";
@@ -8,7 +6,6 @@ import { ElementalType } from "#enums/elemental-type";
 import { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import { ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /** Class representing Weather effects */
@@ -131,16 +128,14 @@ export class Weather {
    * Checks if the weather would be suppressed by a Pokemon with an ability/passive
    * with SuppressWeatherEffectAbAttr (Air Lock or Cloud Nine)
    * @returns true if the weather is being suppressed, false otherwise
+   * @todo This doesn't apply `SuppressWeatherEffectAbAttr` directly to avoid an infinite loop
+   * ("call stack exceeded" error) from calling {@linkcode Pokemon.canApplyAbility}. Ability conditions are scuffed.
    */
   isEffectSuppressed(): boolean {
     const field = globalScene.getField(true);
-    const suppressed = new ValueHolder(false);
-
-    field.forEach((pokemon) =>
-      applyAbAttrs<SuppressWeatherEffectAbAttr>(AbAttrFlag.SUPPRESS_WEATHER_EFFECT, pokemon, true, this, suppressed),
+    return field.some(
+      (p) => p.hasAbilityWithAttr(AbAttrFlag.SUPPRESS_WEATHER_EFFECT, false) && !p.summonData.abilitySuppressed,
     );
-
-    return suppressed.value;
   }
 }
 
