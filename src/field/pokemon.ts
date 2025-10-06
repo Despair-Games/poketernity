@@ -84,6 +84,7 @@ import {
   MIN_STAT_STAGE,
   NON_VOLATILE_STATUS_EFFECTS,
 } from "#constants/game-constants";
+import { EVOLVE_MOVE, RELEARN_MOVE } from "#constants/move-constants";
 import { allAbilities, allMoves } from "#data/data-lists";
 import { speciesEggMoves } from "#data/egg-moves";
 import { getLevelTotalExp } from "#data/exp";
@@ -91,7 +92,6 @@ import { getNatureStatMultiplier } from "#data/nature";
 import { starterPassiveAbilities } from "#data/passives";
 import type { SpeciesEvolutionCondition, SpeciesFormEvolution } from "#data/pokemon-evolutions";
 import { type SpeciesFormChange, SpeciesFormChangeLapseTeraTrigger } from "#data/pokemon-forms";
-import { EVOLVE_MOVE, type LevelMoves, RELEARN_MOVE } from "#data/pokemon-level-moves";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import type { PokemonSpecies } from "#data/pokemon-species";
 import type { PokemonSpeciesForm } from "#data/pokemon-species-form";
@@ -186,7 +186,7 @@ import { VariableMoveTypeMultiplierAttr } from "#moves/variable-move-type-multip
 import type { PokemonData } from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
 import type { AbilityFilterOptions } from "#types/ability-types";
-import type { DamageCalculationResult, DamageResult, TurnMove } from "#types/move-types";
+import type { DamageCalculationResult, DamageResult, LevelMoves, TurnMove } from "#types/move-types";
 import type {
   CustomPokemonData,
   PokemonSummonData,

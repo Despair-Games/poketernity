@@ -2,10 +2,10 @@
 import type { SpeciesFormChange } from "#data/pokemon-forms";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
-import type { PokemonSpeciesFormLevelMoves } from "#data/pokemon-level-moves";
-import { EVOLVE_MOVE, FORM_CHANGE_MOVE } from "#data/pokemon-level-moves";
+import { EVOLVE_MOVE, FORM_CHANGE_MOVE } from "#constants/move-constants";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import type { PokemonSpeciesFormLevelMoves } from "#types/move-types";
 
 /**
  * Note: The logic that distinguishes regular level-up moves from moves that are learned

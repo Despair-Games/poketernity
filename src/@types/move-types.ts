@@ -64,3 +64,17 @@ export type ProtectConditionFunc = (moveId: MoveId) => boolean;
 export type UserMoveConditionFunc = (user: Pokemon, move: Move) => boolean;
 
 export type MoveMessageFunc = (user: Pokemon, target: Pokemon, move: Move) => string | undefined;
+
+export type LevelMoves = [number, MoveId][];
+
+export interface PokemonSpeciesLevelMoves {
+  [key: number]: LevelMoves;
+}
+
+interface PokemonFormLevelMoves {
+  [key: number]: LevelMoves;
+}
+
+export interface PokemonSpeciesFormLevelMoves {
+  [key: number]: PokemonFormLevelMoves;
+}
