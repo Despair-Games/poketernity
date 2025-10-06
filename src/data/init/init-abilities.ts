@@ -201,7 +201,7 @@ import { NumberHolder, toDmgValue } from "#utils/common-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
 import i18next from "i18next";
 
-export function initAbilities() {
+export function initAbilities(): void {
   allAbilities.push(
     new Ability(AbilityId.NONE, 3), //
     new Ability(AbilityId.STENCH, 3) //
