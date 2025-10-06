@@ -354,7 +354,7 @@ export class Arena {
     return terrain.includes(this.terrainType);
   }
 
-  /** Sets terrain to the override specified in `overrides.ts` */
+  /** Sets terrain to the override specified in {@linkcode activeOverrides} */
   private tryOverrideTerrain(): boolean {
     const newTerrain = activeOverrides.TERRAIN_OVERRIDE;
     if (newTerrain === TerrainType.NONE) {
@@ -370,14 +370,11 @@ export class Arena {
 
   /**
    * Check if it's possible to change the terrain
-   * @param terrain - The {@linkcode TerrainType} to set
+   * @param terrainType - The {@linkcode TerrainType} to set
    * @returns Whether the terrain can be changed
    */
-  public canSetTerrain(terrain: TerrainType): boolean {
-    if (terrain === this.terrainType) {
-      return false;
-    }
-    return true;
+  public canSetTerrain(terrainType: TerrainType): boolean {
+    return terrainType !== this.terrainType;
   }
 
   /**
