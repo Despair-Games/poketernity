@@ -32,22 +32,22 @@
     "update-locales:remote": "git submodule update --progress --init --recursive --force --remote"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.2.4",
+    "@biomejs/biome": "2.2.5",
     "@types/crypto-js": "^4.2.2",
-    "@types/jsdom": "^21.1.7",
-    "@types/node": "^22.17.0",
+    "@types/jsdom": "^27.0.0",
+    "@types/node": "^24.7.0",
     "@vitest/coverage-istanbul": "^3.2.4",
     "@vitest/expect": "^3.2.4",
-    "chalk": "^5.5.0",
-    "dependency-cruiser": "^17.0.1",
-    "inquirer": "^12.9.0",
-    "jsdom": "^26.1.0",
-    "lefthook": "^1.12.2",
-    "msw": "^2.10.4",
+    "chalk": "^5.6.2",
+    "dependency-cruiser": "^17.0.2",
+    "inquirer": "^12.9.6",
+    "jsdom": "^27.0.0",
+    "lefthook": "^1.13.6",
+    "msw": "^2.11.3",
     "phaser3spectorjs": "^0.0.8",
-    "typedoc": "^0.28.9",
-    "typescript": "^5.9.2",
-    "vite": "^7.0.6",
+    "typedoc": "^0.28.13",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.9",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.2.4",
     "vitest-canvas-mock": "^0.3.3"
@@ -57,7 +57,7 @@
     "ajv": "^8.17.1",
     "compare-versions": "^6.1.1",
     "crypto-js": "^4.2.0",
-    "i18next": "^25.3.2",
+    "i18next": "^25.5.3",
     "i18next-browser-languagedetector": "^8.2.0",
     "i18next-http-backend": "^3.0.2",
     "i18next-korean-postposition-processor": "^1.0.0",
@@ -66,7 +66,7 @@
     "phaser3-rex-plugins": "^1.80.16"
   },
   "engines": {
-    "node": ">=22.0.0"
+    "node": ">=24.9.0"
   },
   "optionalDependencies": {
     "@actions/core": "^1.11.1",
