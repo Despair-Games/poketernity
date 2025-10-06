@@ -197,6 +197,7 @@ import { FlinchAttr } from "#moves/flinch-attr";
 import type { Move } from "#moves/move";
 import { VariablePowerAttr } from "#moves/variable-power-attr";
 import type { AbAttrCondition } from "#types/ability-types";
+import type { AtLeastOneArray } from "#types/utility-types";
 import { getWeatherCondition, normalTypeMoveConversionCondition } from "#utils/ability-utils";
 import { NumberHolder, toDmgValue } from "#utils/common-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
@@ -1673,7 +1674,7 @@ export function initAbilities() {
 
 // #region Helpers
 
-function getTerrainCondition(...terrainTypes: readonly [TerrainType, ...TerrainType[]]): AbAttrCondition {
+function getTerrainCondition(...terrainTypes: Readonly<AtLeastOneArray<TerrainType>>): AbAttrCondition {
   return () => globalScene.arena.hasTerrain(...terrainTypes);
 }
 

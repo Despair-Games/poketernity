@@ -351,7 +351,7 @@ export class Arena {
    * @param terrain - {@linkcode TerrainType} or array of {@linkcode TerrainType} to check against
    * @returns `true` if the arena is of the specified terrain, `false` otherwise
    */
-  public hasTerrain(...terrain: readonly [TerrainType, ...TerrainType[]]): boolean {
+  public hasTerrain(...terrain: Readonly<AtLeastOneArray<TerrainType>>): boolean {
     return terrain.includes(this.terrainType);
   }
 
