@@ -36,8 +36,7 @@ export class CommanderAbAttr extends AbAttr {
     }
   }
 
-  public override canApply(...params: Parameters<this["apply"]>): boolean {
-    const [pokemon] = params;
+  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
     const ally = pokemon.getAlly();
 
     return (

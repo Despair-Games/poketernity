@@ -26,8 +26,7 @@ export class BypassSpeedChanceAbAttr extends AbAttr {
     }
   }
 
-  public override canApply(...params: Parameters<this["apply"]>): boolean {
-    const [, , move] = params;
+  public override canApply(...[, , move]: Parameters<this["apply"]>): boolean {
     return move.isAttackMove();
   }
 

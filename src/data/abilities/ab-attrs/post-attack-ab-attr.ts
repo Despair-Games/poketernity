@@ -32,8 +32,7 @@ export abstract class PostAttackAbAttr extends AbAttr {
     ...args: unknown[]
   ): void;
 
-  public override canApply(...params: Parameters<this["apply"]>): boolean {
-    const [pokemon, , defender, move] = params;
-    return this.attackMovesOnly || pokemon.getMoveCategory(defender, move) !== MoveCategory.STATUS;
+  public override canApply(...[pokemon, , defender, move]: Parameters<this["apply"]>): boolean {
+    return !this.attackMovesOnly || pokemon.getMoveCategory(defender, move) !== MoveCategory.STATUS;
   }
 }

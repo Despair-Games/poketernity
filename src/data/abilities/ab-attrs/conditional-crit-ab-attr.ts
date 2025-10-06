@@ -35,8 +35,7 @@ export class ConditionalCritAbAttr extends AbAttr {
     isCritical.value = true;
   }
 
-  public override canApply(...params: Parameters<this["apply"]>): boolean {
-    const [pokemon, , , target, move] = params;
+  public override canApply(...[pokemon, , , target, move]: Parameters<this["apply"]>): boolean {
     return this.condition(pokemon, target, move);
   }
 }

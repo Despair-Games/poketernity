@@ -36,8 +36,7 @@ export class ChangeMovePriorityAbAttr extends AbAttr {
     priority.value += this.changeAmount;
   }
 
-  public override canApply(...params: Parameters<this["apply"]>): boolean {
-    const [pokemon, , move] = params;
+  public override canApply(...[pokemon, , move]: Parameters<this["apply"]>): boolean {
     return this.condition(pokemon, move);
   }
 }

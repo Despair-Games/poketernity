@@ -47,8 +47,7 @@ export class DamageBoostAbAttr extends PreAttackAbAttr {
     multiplier.value *= this.damageMultiplier;
   }
 
-  public override canApply(...params: Parameters<this["apply"]>): boolean {
-    const [pokemon, , move, defender] = params;
+  public override canApply(...[pokemon, , move, defender]: Parameters<this["apply"]>): boolean {
     return this.condition(pokemon, defender, move);
   }
 }
