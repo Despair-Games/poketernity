@@ -172,6 +172,7 @@ import { PreMoveMessageAttr } from "#moves/pre-move-message-attr";
 import { PresentPowerAttr } from "#moves/present-power-attr";
 import { ProtectAttr } from "#moves/protect-attr";
 import { PsychoShiftEffectAttr } from "#moves/psycho-shift-effect-attr";
+import { PursuitAttr } from "#moves/pursuit-attr";
 import { QuashAttr } from "#moves/quash-attr";
 import { RageAttr } from "#moves/rage-attr";
 import { RagingBullTypeAttr } from "#moves/raging-bull-type-attr";
@@ -992,7 +993,8 @@ export function initMoves() {
       .bounceable()
       .edgeCase(), // wrongly interacts with moves reflected by Magic Coat/Bounce
     new AttackMove(MoveId.PURSUIT, ElementalType.DARK, MoveCategory.PHYSICAL, 40, 100, 20, -1, 0, 2) //
-      .partial(), // No effect implemented
+      .attr(PursuitAttr)
+      .edgeCase(), // Terastallization can disrupt the order in which multiple Pursuits apply
     new AttackMove(MoveId.RAPID_SPIN, ElementalType.NORMAL, MoveCategory.PHYSICAL, 50, 100, 40, 100, 0, 2) //
       .attr(StatStageChangeAttr, [Stat.SPD], 1, true)
       .attr(RemoveBattlerTagAttr, rapidSpinRemoveTags, true)
