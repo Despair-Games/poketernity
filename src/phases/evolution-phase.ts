@@ -14,7 +14,8 @@ import type { Pokemon } from "#field/pokemon";
 import { FormChangeBasePhase } from "#phases/base/form-change-base-phase";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
-import { BooleanHolder, fixedNumber } from "#utils/common-utils";
+import { delay, playNumberTween, playTween } from "#utils/anim-utils";
+import { fixedNumber, ValueHolder } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import i18next from "i18next";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
@@ -35,9 +36,9 @@ export class EvolutionPhase extends FormChangeBasePhase {
   private evolutionBgm: AnySound;
 
   /**
-   * A {@linkcode BooleanHolder} whose value indicates whether or not the player has cancelled the evolution.
+   * A {@linkcode ValueHolder} whose value indicates whether or not the player has cancelled the evolution.
    */
-  private readonly cancelled: BooleanHolder = new BooleanHolder(false);
+  private readonly cancelled: ValueHolder<boolean> = new ValueHolder(false);
 
   constructor(pokemon: PlayerPokemon, evolution: SpeciesFormEvolution | null, lastLevel: number) {
     super(pokemon);
@@ -57,82 +58,87 @@ export class EvolutionPhase extends FormChangeBasePhase {
   }
 
   public override doFormChange(): void {
-    const { time, tweens, ui, animations } = globalScene;
+    const { ui } = globalScene;
 
     ui.showText(i18next.t("menu:evolving", { pokemonName: this.preEvolvedPokemonName }), {
       callback: () => {
-        this.pokemon.cry();
-
-        this.pokemon.getPossibleEvolution(this.evolution).then((evolvedPokemon) => {
-          [this.pokemonNewFormSprite, this.pokemonNewFormTintSprite].map((sprite) => {
-            const spriteKey = evolvedPokemon.getSpriteKey(true);
-            sprite.play(spriteKey);
-
-            sprite.setPipelineData("ignoreTimeTint", true);
-            sprite.setPipelineData("spriteKey", evolvedPokemon.getSpriteKey());
-            let key = "spriteColors";
-            if (evolvedPokemon.summonData.speciesForm) {
-              key += "Base";
-            }
-            sprite.pipelineData[key] = evolvedPokemon.getSprite().pipelineData[key];
-          });
-
-          time.delayedCall(1000, () => {
-            this.evolutionBgm = globalScene.audioManager.playSoundWithoutBgm("evolution");
-            tweens.add({
-              targets: this.bgOverlay,
-              alpha: 1,
-              delay: 500,
-              duration: 1500,
-              ease: "Sine.easeOut",
-              onComplete: () => {
-                time.delayedCall(1000, () => {
-                  tweens.add({
-                    targets: this.bgOverlay,
-                    alpha: 0,
-                    duration: 250,
-                  });
-                  this.bgVideo.setVisible(true);
-                  this.bgVideo.play();
-                });
-                globalScene.audioManager.playSound("se/charge");
-                animations.doSpiralUpward(this.baseBgImg, this.container);
-                tweens.addCounter({
-                  from: 0,
-                  to: 1,
-                  duration: 2000,
-                  onUpdate: (t) => {
-                    this.pokemonTintSprite.setAlpha(t.getValue() ?? 1);
-                  },
-                  onComplete: () => {
-                    this.pokemonSprite.setVisible(false);
-                    time.delayedCall(1100, () => {
-                      globalScene.audioManager.playSound("se/beam");
-                      animations.doArcDownward(this.baseBgImg, this.container);
-                      time.delayedCall(1500, () => {
-                        this.pokemonNewFormTintSprite.setScale(0.25);
-                        this.pokemonNewFormTintSprite.setVisible(true);
-                        this.handler.canCancel = true;
-                        animations
-                          .doCycle(1, 15, this.pokemonTintSprite, this.pokemonNewFormTintSprite, this.cancelled)
-                          .then(() => {
-                            if (this.cancelled.value) {
-                              this.handleFailedEvolution(evolvedPokemon);
-                            } else {
-                              this.handleSuccessEvolution(evolvedPokemon);
-                            }
-                          });
-                      });
-                    });
-                  },
-                });
-              },
-            });
-          });
+        this.playEvolutionAnim().then((evolvedPokemon) => {
+          if (this.cancelled.value) {
+            this.handleFailedEvolution(evolvedPokemon);
+          } else {
+            this.handleSuccessEvolution(evolvedPokemon);
+          }
         });
       },
-      callbackDelay: 1000,
     });
+  }
+
+  /**
+   * Plays an animation for the target Pokemon's evolution.
+   * @returns The target {@linkcode Pokemon} after attempting to evolve it
+   */
+  private async playEvolutionAnim(): Promise<Pokemon> {
+    const { animations, time, tweens } = globalScene;
+    this.pokemon.cry();
+
+    const evolvedPokemon = await this.pokemon.getPossibleEvolution(this.evolution);
+    [this.pokemonNewFormSprite, this.pokemonNewFormTintSprite].forEach((sprite) => {
+      const spriteKey = evolvedPokemon.getSpriteKey(true);
+      sprite.play(spriteKey);
+
+      sprite.setPipelineData("ignoreTimeTint", true);
+      sprite.setPipelineData("spriteKey", evolvedPokemon.getSpriteKey());
+      let key = "spriteColors";
+      if (evolvedPokemon.summonData.speciesForm) {
+        key += "Base";
+      }
+      sprite.pipelineData[key] = evolvedPokemon.getSprite().pipelineData[key];
+    });
+
+    await delay(1000);
+    this.evolutionBgm = globalScene.audioManager.playSoundWithoutBgm("evolution");
+    await playTween({
+      targets: this.bgOverlay,
+      alpha: 1,
+      delay: 500,
+      duration: 1500,
+      ease: "Sine.easeOut",
+    });
+
+    time.delayedCall(1000, () => {
+      tweens.add({
+        targets: this.bgOverlay,
+        alpha: 0,
+        duration: 250,
+      });
+      this.bgVideo.setVisible(true);
+      this.bgVideo.play();
+    });
+
+    globalScene.audioManager.playSound("se/charge");
+    animations.doSpiralUpward(this.baseBgImg, this.container);
+    await playNumberTween({
+      from: 0,
+      to: 1,
+      duration: 2000,
+      onUpdate: (t) => {
+        this.pokemonTintSprite.setAlpha(t.getValue() ?? 1);
+      },
+    });
+
+    this.pokemonSprite.setVisible(false);
+
+    await delay(1100);
+    globalScene.audioManager.playSound("se/beam");
+    animations.doArcDownward(this.baseBgImg, this.container);
+
+    await delay(1500);
+    this.pokemonNewFormTintSprite.setScale(0.25);
+    this.pokemonNewFormTintSprite.setVisible(true);
+    this.handler.canCancel = true;
+    await animations.doCycle(1, 15, this.pokemonTintSprite, this.pokemonNewFormTintSprite, this.cancelled);
+
+    return evolvedPokemon;
   }
 
   /**
@@ -143,7 +149,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
   }
 
   /**
-   * Handles a failed/stopped evolution
+   * Handles a failed or interrupted evolution attempt
    * @param evolvedPokemon - The evolved Pokemon
    */
   private handleFailedEvolution(evolvedPokemon: Pokemon): void {
@@ -197,98 +203,95 @@ export class EvolutionPhase extends FormChangeBasePhase {
   }
 
   /**
-   * Handles a successful evolution
+   * Handles a successful evolution attempt
    * @param evolvedPokemon - The evolved Pokemon
    */
-  private handleSuccessEvolution(evolvedPokemon: Pokemon): void {
-    const { time, tweens, ui, animations } = globalScene;
+  private async handleSuccessEvolution(evolvedPokemon: Pokemon): Promise<void> {
+    const { animations, audioManager, ui, phaseManager } = globalScene;
 
     globalScene.audioManager.playSound("se/sparkle");
     this.pokemonNewFormSprite.setVisible(true);
     animations.doCircleInward(this.baseBgImg, this.container);
 
-    async function showStarterUnlockText(unlockedStarters: SpeciesId[]): Promise<void> {
-      for (const speciesId of unlockedStarters) {
-        globalScene.audioManager.playSound("level_up_fanfare");
-        await new Promise<void>((resolve) => {
-          ui.showText(i18next.t("battle:addedAsAStarter", { pokemonName: getPokemonSpecies(speciesId).getName() }), {
+    await delay(900);
+    this.handler.canCancel = false;
+    const unlockedStarters = await this.pokemon.evolve(this.evolution);
+
+    const levelMoves = this.pokemon
+      .getLevelMoves(this.lastLevel + 1, true, false, false)
+      .filter(([level]) => level === EVOLVE_MOVE);
+    for (const [, moveId] of levelMoves) {
+      phaseManager.createAndUnshiftPhase("LearnMovePhase", globalScene.getPlayerParty().indexOf(this.pokemon), moveId);
+    }
+    phaseManager.createAndUnshiftPhase("EndEvolutionPhase");
+
+    audioManager.playSound("se/shine");
+    animations.doSpray(this.baseBgImg, this.container);
+    await playTween({
+      targets: this.overlay,
+      alpha: 1,
+      duration: 250,
+      ease: "Sine.easeIn",
+    });
+
+    this.bgOverlay.setAlpha(1);
+    this.bgVideo.setVisible(false);
+
+    await playTween({
+      targets: [this.overlay, this.pokemonNewFormTintSprite],
+      alpha: 0,
+      duration: 2000,
+      delay: 150,
+      ease: "Sine.easeIn",
+    });
+
+    await playTween({
+      targets: this.bgOverlay,
+      alpha: 0,
+      duration: 250,
+    });
+
+    SoundFade.fadeOut(globalScene, this.evolutionBgm, 100);
+    await delay(250);
+
+    this.pokemon.cry();
+    await delay(1250);
+    audioManager.playSoundWithoutBgm("evolution_fanfare");
+    evolvedPokemon.destroy();
+
+    ui.showText(
+      i18next.t("menu:evolutionDone", {
+        pokemonName: this.preEvolvedPokemonName,
+        evolvedPokemonName: this.pokemon.name,
+      }),
+      {
+        callback: () => {
+          this.showStarterUnlockText(unlockedStarters).then(() => this.end());
+        },
+        prompt: true,
+        promptDelay: fixedNumber(4000),
+      },
+    );
+    await delay(fixedNumber(4250));
+    audioManager.playBgm();
+  }
+
+  /**
+   * Shows a message for each Starter Pokemon the Player unlocked via this evolution.
+   * @param unlockedStarters - A list of {@linkcode SpeciesId} unlocked via this evolution
+   */
+  private async showStarterUnlockText(unlockedStarters: SpeciesId[]): Promise<void> {
+    for (const speciesId of unlockedStarters) {
+      globalScene.audioManager.playSound("level_up_fanfare");
+      await new Promise<void>((resolve) => {
+        globalScene.ui.showText(
+          i18next.t("battle:addedAsAStarter", { pokemonName: getPokemonSpecies(speciesId).getName() }),
+          {
             callback: () => resolve(),
             prompt: true,
-          });
-        });
-      }
-    }
-
-    const onEvolutionComplete = (unlockedStarters: SpeciesId[]): void => {
-      SoundFade.fadeOut(globalScene, this.evolutionBgm, 100);
-      time.delayedCall(250, () => {
-        this.pokemon.cry();
-        time.delayedCall(1250, () => {
-          globalScene.audioManager.playSoundWithoutBgm("evolution_fanfare");
-
-          evolvedPokemon.destroy();
-          ui.showText(
-            i18next.t("menu:evolutionDone", {
-              pokemonName: this.preEvolvedPokemonName,
-              evolvedPokemonName: this.pokemon.name,
-            }),
-            {
-              callback: () => {
-                showStarterUnlockText(unlockedStarters).then(() => this.end());
-              },
-              prompt: true,
-              promptDelay: fixedNumber(4000),
-            },
-          );
-          time.delayedCall(fixedNumber(4250), () => globalScene.audioManager.playBgm());
-        });
-      });
-    };
-
-    time.delayedCall(900, () => {
-      this.handler.canCancel = false;
-
-      this.pokemon.evolve(this.evolution).then((unlockedStarters: SpeciesId[]) => {
-        const levelMoves = this.pokemon
-          .getLevelMoves(this.lastLevel + 1, true, false, false)
-          .filter((lm) => lm[0] === EVOLVE_MOVE);
-        for (const lm of levelMoves) {
-          globalScene.phaseManager.createAndUnshiftPhase(
-            "LearnMovePhase",
-            globalScene.getPlayerParty().indexOf(this.pokemon),
-            lm[1],
-          );
-        }
-        globalScene.phaseManager.createAndUnshiftPhase("EndEvolutionPhase");
-
-        globalScene.audioManager.playSound("se/shine");
-        animations.doSpray(this.baseBgImg, this.container);
-        tweens.add({
-          targets: this.overlay,
-          alpha: 1,
-          duration: 250,
-          easing: "Sine.easeIn",
-          onComplete: () => {
-            this.bgOverlay.setAlpha(1);
-            this.bgVideo.setVisible(false);
-            tweens.add({
-              targets: [this.overlay, this.pokemonNewFormTintSprite],
-              alpha: 0,
-              duration: 2000,
-              delay: 150,
-              easing: "Sine.easeIn",
-              onComplete: () => {
-                tweens.add({
-                  targets: this.bgOverlay,
-                  alpha: 0,
-                  duration: 250,
-                  onComplete: () => onEvolutionComplete(unlockedStarters),
-                });
-              },
-            });
           },
-        });
+        );
       });
-    });
+    }
   }
 }
