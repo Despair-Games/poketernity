@@ -1,5 +1,6 @@
 import { eventBus } from "#app/event-bus";
 import { GAME_SPEEDS, SETTINGS_LS_KEY } from "#constants/app-constants";
+import { UiTheme } from "#enums/ui-theme";
 import { version } from "#package.json";
 import { defaultSettings } from "#system/default-settings";
 import type { Settings, SettingsCategory, UserFacingSettings } from "#types/settings";
@@ -8,7 +9,7 @@ import type { Settings, SettingsCategory, UserFacingSettings } from "#types/sett
 
 interface SettingsManagerInit {
   localStorageKey: string;
-  settings: UserFacingSettings;
+  initSettings: UserFacingSettings;
 }
 
 //#endregion
@@ -24,14 +25,14 @@ class SettingsManager {
   private readonly _settings: Settings;
 
   constructor(init: SettingsManagerInit) {
-    const { localStorageKey, settings } = init;
+    const { localStorageKey, initSettings } = init;
 
     this.lsKey = localStorageKey;
     this._settings = {
       meta: {
         gameVersion: version,
       },
-      ...settings,
+      ...initSettings,
     };
 
     this.loadFromLocalStorage();
@@ -181,6 +182,10 @@ class SettingsManager {
         }
 
         if (display) {
+          // TODO: temporary "migration" for dev saves, remove later
+          if ((display.uiTheme as number) === 0) {
+            display.uiTheme = UiTheme.DARK;
+          }
           this._settings.display = { ...this._settings.display, ...display };
         }
 
@@ -201,4 +206,4 @@ class SettingsManager {
 /**
  * Singleton instance of {@linkcode SettingsManager}
  */
-export const settings = new SettingsManager({ localStorageKey: SETTINGS_LS_KEY, settings: defaultSettings });
+export const settings = new SettingsManager({ localStorageKey: SETTINGS_LS_KEY, initSettings: defaultSettings });

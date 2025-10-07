@@ -8,6 +8,7 @@ import type { SupportedLanguageKey } from "#types/language";
 import { allTextFormats } from "#ui/font-style";
 import { allTextColors } from "#ui/text-color";
 import type { TextStyleOptions } from "#ui/text-style-options";
+import { enumValueToKey } from "#utils/common-utils";
 import i18next from "i18next";
 
 interface ModularTextStyleOptions {
@@ -513,7 +514,7 @@ export function getTextStyle(style: TextStyle): TextStyleOptions {
       fontStyleId = fontStyle[DEFAULT_LANGUAGE_KEY];
     } else {
       console.warn(
-        `TextStyleId "${TextStyle[style]}" missing format for default langauge key "${DEFAULT_LANGUAGE_KEY}"`,
+        `TextStyleId "${enumValueToKey(TextStyle, style)}" missing format for default langauge key "${DEFAULT_LANGUAGE_KEY}"`,
       );
       fontStyleId = Object.values(fontStyle)[0]; // default to the first defined format
     }

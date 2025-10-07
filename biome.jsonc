@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.2.4/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.2.5/schema.json",
   "vcs": {
     "enabled": false,
     "clientKind": "git",
@@ -20,7 +20,6 @@
     // and having to verify whether each individual file is ignored
     "includes": [
       "**",
-      "!**/*.d.ts",
       "!**/.github/**/*",
       "**/.github/**/*.ts",
       "!**/.vscode/**/*",
@@ -177,7 +176,7 @@
         "noUselessStringConcat": "error"
       },
       "nursery": {
-        "noShadow": "warn", // TODO: refactor and make "error"
+        "noShadow": "error",
         "noUselessUndefined": "error",
         "noNonNullAssertedOptionalChain": "error",
         "useExplicitType": "off", // TODO: refactor and make "error"

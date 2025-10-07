@@ -19,8 +19,8 @@ export class PostGameOverPhase extends Phase {
     const { gameData, sessionSlotId, ui } = globalScene;
 
     const saveAndReset = (): void => {
-      gameData.saveAll(true, true, true).then((success) => {
-        if (!success) {
+      gameData.saveAll(true, true, true).then((isSuccess) => {
+        if (!isSuccess) {
           return globalScene.reset(true);
         }
         gameData.tryClearSession(sessionSlotId).then((success: boolean | [boolean, boolean]) => {

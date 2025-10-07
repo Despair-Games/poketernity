@@ -41,42 +41,39 @@ export function initMoveAnim(move: MoveId): Promise<void> {
         defaultMoveAnim = MoveId.FOCUS_ENERGY;
       }
 
-      const fetchAnimAndResolve = (move: MoveId) => {
-        globalScene
-          .cachedFetch(`./battle-anims/${animationFileName(move)}.json`)
-          .then((response) => {
-            const contentType = response.headers.get("content-type");
-            if (!response.ok || contentType?.indexOf("application/json") === -1) {
-              useDefaultAnim(move, defaultMoveAnim);
-              logMissingMoveAnim(move, response.status, response.statusText);
-              return resolve();
-            }
-            return response.json();
-          })
-          .then((ba) => {
-            if (Array.isArray(ba)) {
-              populateMoveAnim(move, ba[0]);
-              populateMoveAnim(move, ba[1]);
-            } else {
-              populateMoveAnim(move, ba);
-            }
-            const chargeAnimSource = allMoves.get(move).isChargingMove()
-              ? (allMoves.get(move) as ChargingMove)
-              : (allMoves.get(move).getAttrs(DelayedAttackAttr)[0]
-                ?? allMoves.get(move).getAttrs(BeakBlastHeaderAttr)[0]);
-            if (chargeAnimSource) {
-              initMoveChargeAnim(chargeAnimSource.chargeAnim).then(() => resolve());
-            } else {
-              resolve();
-            }
-          })
-          .catch((error) => {
+      globalScene
+        .cachedFetch(`./battle-anims/${animationFileName(move)}.json`)
+        .then((response) => {
+          const contentType = response.headers.get("content-type");
+          if (!response.ok || contentType?.indexOf("application/json") === -1) {
             useDefaultAnim(move, defaultMoveAnim);
-            logMissingMoveAnim(move, error);
+            logMissingMoveAnim(move, response.status, response.statusText);
             return resolve();
-          });
-      };
-      fetchAnimAndResolve(move);
+          }
+          return response.json();
+        })
+        .then((ba) => {
+          if (Array.isArray(ba)) {
+            populateMoveAnim(move, ba[0]);
+            populateMoveAnim(move, ba[1]);
+          } else {
+            populateMoveAnim(move, ba);
+          }
+          const chargeAnimSource = allMoves.get(move).isChargingMove()
+            ? (allMoves.get(move) as ChargingMove)
+            : (allMoves.get(move).getAttrs(DelayedAttackAttr)[0]
+              ?? allMoves.get(move).getAttrs(BeakBlastHeaderAttr)[0]);
+          if (chargeAnimSource) {
+            initMoveChargeAnim(chargeAnimSource.chargeAnim).then(() => resolve());
+          } else {
+            resolve();
+          }
+        })
+        .catch((error) => {
+          useDefaultAnim(move, defaultMoveAnim);
+          logMissingMoveAnim(move, error);
+          return resolve();
+        });
     }
   });
 }

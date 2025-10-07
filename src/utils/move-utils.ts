@@ -12,7 +12,7 @@ import type { Move, MoveAttrFilter } from "#moves/move";
 import type { MoveAttr } from "#moves/move-attr";
 import type { AbstractConstructor } from "#types/utility-types";
 import { BooleanHolder, getTSEnumKeys, toDmgValue } from "#utils/common-utils";
-import { t } from "i18next";
+import i18next from "i18next";
 
 //#region Exports
 
@@ -31,7 +31,7 @@ export const crashDamageFunc = (user: Pokemon, _move: Move): boolean => {
   });
   globalScene.phaseManager.createAndUnshiftPhase(
     "MessagePhase",
-    t("moveTriggers:keptGoingAndCrashed", { pokemonName: getPokemonNameWithAffix(user) }),
+    i18next.t("moveTriggers:keptGoingAndCrashed", { pokemonName: getPokemonNameWithAffix(user) }),
   );
 
   return true;

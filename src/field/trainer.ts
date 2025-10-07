@@ -21,6 +21,7 @@ import { TrainerVariant } from "#enums/trainer-variant";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PersistentModifier } from "#modifier/modifier";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
+import { enumValueToKey } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedInt, randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
@@ -380,23 +381,23 @@ export class Trainer extends Phaser.GameObjects.Container {
 
         // Filter out the species that are already in the enemy party from the main trainer species pool
         const speciesPoolFiltered = speciesPool
-          .filter((species) => {
+          .filter((pool) => {
             // Since some species pools have arrays in them (use either of those species), we need to check if one of the species is already in the party and filter the whole array if it is
-            if (Array.isArray(species)) {
-              return !species.some((s) => AlreadyUsedSpecies.includes(s));
+            if (Array.isArray(pool)) {
+              return !pool.some((s) => AlreadyUsedSpecies.includes(s));
             }
-            return !AlreadyUsedSpecies.includes(species);
+            return !AlreadyUsedSpecies.includes(pool);
           })
           .flat();
 
         // Filter out the species that are already in the enemy party from the partner trainer species pool
         const speciesPoolPartnerFiltered = speciesPoolPartner
-          .filter((species) => {
+          .filter((speciesId) => {
             // Since some species pools have arrays in them (use either of those species), we need to check if one of the species is already in the party and filter the whole array if it is
-            if (Array.isArray(species)) {
-              return !species.some((s) => AlreadyUsedSpecies.includes(s));
+            if (Array.isArray(speciesId)) {
+              return !speciesId.some((s) => AlreadyUsedSpecies.includes(s));
             }
-            return !AlreadyUsedSpecies.includes(species);
+            return !AlreadyUsedSpecies.includes(speciesId);
           })
           .flat();
 
@@ -465,10 +466,10 @@ export class Trainer extends Phaser.GameObjects.Container {
       } else if (tierValue >= 1) {
         tier = TrainerPoolTier.SUPER_RARE;
       }
-      console.log(TrainerPoolTier[tier]);
+      console.log("trainer pool tier:", enumValueToKey(TrainerPoolTier, tier));
       while (!Object.hasOwn(this.config.speciesPools, tier) || !this.config.speciesPools[tier].length) {
         console.log(
-          `Downgraded trainer Pokemon rarity tier from ${TrainerPoolTier[tier]} to ${TrainerPoolTier[tier - 1]}`,
+          `Downgraded trainer Pokemon rarity tier from ${enumValueToKey(TrainerPoolTier, tier)} to ${enumValueToKey(TrainerPoolTier, (tier - 1) as TrainerPoolTier)}`,
         );
         tier--;
       }
@@ -541,35 +542,35 @@ export class Trainer extends Phaser.GameObjects.Container {
     trainerSlot: TrainerSlot = TrainerSlot.NONE,
     forSwitch: boolean = false,
   ): [number, number][] {
-    if (trainerSlot && !this.isDouble()) {
-      trainerSlot = TrainerSlot.NONE;
-    }
+    const slot = trainerSlot && !this.isDouble() ? TrainerSlot.NONE : trainerSlot;
 
     const party = globalScene.getEnemyParty();
     const nonFaintedLegalPartyMembers = party
       .slice(globalScene.currentBattle.getBattlerCount())
       .filter((p) => p.isAllowedInBattle())
-      .filter((p) => !trainerSlot || p.trainerSlot === trainerSlot);
-    const partyMemberScores = nonFaintedLegalPartyMembers.map((p) => {
+      .filter((p) => !slot || p.trainerSlot === slot);
+    const partyMemberScores = nonFaintedLegalPartyMembers.map((pkmn) => {
       const playerField = globalScene.getPlayerField().filter((p) => p.isAllowedInBattle());
       let score = 0;
 
       if (playerField.length > 0) {
         for (const playerPokemon of playerField) {
-          score += p.getMatchupScore(playerPokemon);
+          score += pkmn.getMatchupScore(playerPokemon);
           if (playerPokemon.species.isLegendary()) {
             score /= 2;
           }
         }
         score /= playerField.length;
-        if (forSwitch && !p.isOnField()) {
+        if (forSwitch && !pkmn.isOnField()) {
           globalScene.arena
             .getTags<EntryHazardTag>((t) => ENTRY_HAZARD_ARENA_TAG_TYPES.includes(t.tagType), ArenaTagSide.ENEMY)
-            ?.map((t) => (score *= t.getMatchupScoreMultiplier(p)));
+            ?.map((t) => {
+              score *= t.getMatchupScoreMultiplier(pkmn);
+            });
         }
       }
 
-      return [party.indexOf(p), score];
+      return [party.indexOf(pkmn), score];
     }) as [number, number][];
 
     return partyMemberScores;

@@ -1,3 +1,5 @@
+/** biome-ignore-all lint/nursery/noShadow: changed in another PR */
+
 import { globalScene } from "#app/global-scene";
 import type { Challenge } from "#data/challenge";
 import { AchvCategory } from "#enums/achv-category";

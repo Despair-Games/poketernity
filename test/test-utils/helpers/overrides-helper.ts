@@ -310,7 +310,7 @@ export class OverridesHelper extends GameManagerHelper {
    */
   public terrain(type: TerrainType): this {
     vi.spyOn(activeOverrides, "TERRAIN_OVERRIDE", "get").mockReturnValue(type);
-    this.log(`Terrain set to ${TerrainType[type]} (=${type})!`);
+    this.log(`Terrain set to ${enumValueToKey(TerrainType, type)} (=${type})!`);
     return this;
   }
 

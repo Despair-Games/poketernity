@@ -54,7 +54,7 @@ describe("Game Over Phase", () => {
     expect(game.phaseInterceptor.log.includes("GameOverPhase")).toBe(true);
     expect(game.phaseInterceptor.log.includes("UnlockPhase")).toBe(true);
     expect(game.phaseInterceptor.log.includes("RibbonModifierRewardPhase")).toBe(true);
-    expect(game.scene.gameData.unlocks[Unlockables.ENDLESS_MODE]).toBe(true);
+    expect(game.scene.gameData.unlocks[Unlockables.CHALLENGE_MODE]).toBe(true);
     expect(game.scene.validateAchv).toHaveBeenCalledWith(achvs.CLASSIC_VICTORY);
     expect(game.scene.gameData.achvUnlocks[achvs.CLASSIC_VICTORY.id]).toBeTruthy();
   });
@@ -70,7 +70,7 @@ describe("Game Over Phase", () => {
     expect(game.phaseInterceptor.log.includes("UnlockPhase")).toBe(false);
     expect(game.phaseInterceptor.log.includes("RibbonModifierRewardPhase")).toBe(false);
     expect(game.phaseInterceptor.log.includes("GameOverModifierRewardPhase")).toBe(false);
-    expect(game.scene.gameData.unlocks[Unlockables.ENDLESS_MODE]).toBe(false);
+    expect(game.scene.gameData.unlocks[Unlockables.CHALLENGE_MODE]).toBe(false);
     expect(game.scene.validateAchv).not.toHaveBeenCalledWith(achvs.CLASSIC_VICTORY);
     expect(game.scene.gameData.achvUnlocks[achvs.CLASSIC_VICTORY.id]).toBeFalsy();
   });

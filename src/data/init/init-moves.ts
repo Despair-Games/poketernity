@@ -549,7 +549,7 @@ export function initMoves() {
     new AttackMove(MoveId.RAGE, ElementalType.NORMAL, MoveCategory.PHYSICAL, 20, 100, 20, -1, 0, 1) //
       .attr(RageAttr),
     new SelfStatusMove(MoveId.TELEPORT, ElementalType.PSYCHIC, -1, 20, -1, -6, 1) //
-      .attr(ForceSwitchOutAttr, true)
+      .attr(ForceSwitchOutAttr, true, SwitchType.TELEPORT)
       .hidesUser(),
     new AttackMove(MoveId.NIGHT_SHADE, ElementalType.GHOST, MoveCategory.SPECIAL, -1, 100, 15, -1, 0, 1) //
       .attr(LevelDamageAttr),
@@ -3324,16 +3324,7 @@ export function initMoves() {
       )
       .slicingMove(),
     new AttackMove(MoveId.HYDRO_STEAM, ElementalType.WATER, MoveCategory.SPECIAL, 80, 100, 15, -1, 0, 9) //
-      .attr(IgnoreWeatherTypeDebuffAttr, WeatherType.SUNNY)
-      .attr(MovePowerMultiplierAttr, (_user, _target, _move) => {
-        const weather = globalScene.arena.weather;
-        if (!weather) {
-          return 1;
-        }
-        return [WeatherType.SUNNY, WeatherType.HARSH_SUN].includes(weather.weatherType) && !weather.isEffectSuppressed()
-          ? 1.5
-          : 1;
-      }),
+      .attr(IgnoreWeatherTypeDebuffAttr, WeatherType.SUNNY),
     new AttackMove(MoveId.RUINATION, ElementalType.DARK, MoveCategory.SPECIAL, -1, 90, 10, -1, 0, 9) //
       .attr(TargetHalfHpDamageAttr),
     new AttackMove(MoveId.COLLISION_COURSE, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 100, 100, 5, -1, 0, 9) //
