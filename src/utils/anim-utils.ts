@@ -11,6 +11,7 @@ import type { SceneBase } from "#app/scene-base";
 import { ImagesFolder } from "#enums/images-folder";
 
 type TweenBuilderConfig = Phaser.Types.Tweens.TweenBuilderConfig;
+type NumberTweenBuilderConfig = Phaser.Types.Tweens.NumberTweenBuilderConfig;
 
 export function loadAnimAssets(anims: LegacyAnimConfig[], startLoad?: boolean): Promise<void> {
   return new Promise((resolve) => {
@@ -70,6 +71,17 @@ export async function loadEncounterAnimAssets(startLoad?: boolean): Promise<void
 }
 
 /**
+ * If awaited, this delays execution for a set time using the given Scene's internal timer.
+ * @param time - The time (ms) to delay execution. Use {@linkcode fixedNumber}
+ *   on the value to prevent the game speed from affecting the duration of the delay.
+ * @param scene - The {@linkcode SceneBase} whose timer is used to delay execution
+ * (default {@linkcode globalScene})
+ */
+export async function delay(time: number, scene: SceneBase = globalScene): Promise<void> {
+  await new Promise((resolve) => scene.time.delayedCall(time, resolve));
+}
+
+/**
  * Plays a Tween animation, resolving once the animation completes.
  * @param config - The config for a single Tween
  * @param scene - The {@linkcode SceneBase} on which the Tween plays (Default {@linkcode globalScene})
@@ -83,6 +95,26 @@ export async function loadEncounterAnimAssets(startLoad?: boolean): Promise<void
 export async function playTween(config: TweenBuilderConfig, scene: SceneBase = globalScene): Promise<void> {
   await new Promise((resolve) =>
     scene.tweens.add({
+      ...config,
+      onComplete: resolve,
+    }),
+  );
+}
+
+/**
+ * Runs a NumberTween and resolves once the animation completes.
+ * @param config - The config for a single NumberTween
+ * @param scene - The {@linkcode SceneBase} on which the NumberTween plays (Default {@linkcode globalScene})
+ *
+ * @privateRemarks
+ * The `config` input should not include an `onComplete` field as that callback is
+ * used to resolve the Promise containing the Tween animation. However, `config`'s type
+ * cannot be changed to something like `Omit<TweenBuilderConfig, "onComplete">` due to
+ * how Phaser interprets `NumberTweenBuilderConfig` inputs.
+ */
+export async function playNumberTween(config: NumberTweenBuilderConfig, scene: SceneBase = globalScene): Promise<void> {
+  await new Promise((resolve) =>
+    scene.tweens.addCounter({
       ...config,
       onComplete: resolve,
     }),
