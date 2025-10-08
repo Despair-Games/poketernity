@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const Button = {
   UP: 1,
@@ -20,4 +20,4 @@ export const Button = {
   SLOW_DOWN: 17,
 } as const;
 
-export type Button = EnumValues<typeof Button>;
+export type Button = ObjectValues<typeof Button>;

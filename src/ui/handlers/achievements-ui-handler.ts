@@ -9,7 +9,7 @@ import { achvs } from "#system/achievements";
 import { settings } from "#system/settings-manager";
 import type { Voucher } from "#system/voucher";
 import { getVoucherTypeIcon, getVoucherTypeName, vouchers } from "#system/voucher";
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 import { MessageUiHandler } from "#ui/message-ui-handler";
 import { ScrollBar } from "#ui/scroll-bar";
 import { ScrollableGridController } from "#ui/scrollable-grid-controller";
@@ -23,7 +23,7 @@ const Page = {
   VOUCHERS: 2,
 } as const;
 
-type Page = EnumValues<typeof Page>;
+type Page = ObjectValues<typeof Page>;
 
 export class AchievementsUiHandler extends MessageUiHandler {
   private readonly ROWS = 4;

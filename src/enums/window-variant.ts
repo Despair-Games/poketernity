@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const WindowVariant = {
   NORMAL: 1,
@@ -6,4 +6,4 @@ export const WindowVariant = {
   XTHIN: 3,
 } as const;
 
-export type WindowVariant = EnumValues<typeof WindowVariant>;
+export type WindowVariant = ObjectValues<typeof WindowVariant>;

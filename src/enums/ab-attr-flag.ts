@@ -109,7 +109,7 @@ import type { WeightMultiplierAbAttr } from "#abilities/weight-multiplier-ab-att
 import type { WonderSkinAbAttr } from "#abilities/wonder-skin-ab-attr";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const AbAttrFlag = {
   /** @see {@linkcode AbAttr} */
@@ -340,4 +340,4 @@ export const AbAttrFlag = {
   EVASIVENESS_MULTIPLIER: 115,
 } as const;
 
-export type AbAttrFlag = EnumValues<typeof AbAttrFlag>;
+export type AbAttrFlag = ObjectValues<typeof AbAttrFlag>;

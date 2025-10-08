@@ -1,4 +1,4 @@
-/** biome-ignore-all lint/nursery/noShadow: Changed in another PR */
+/* biome-ignore-all lint/nursery/noShadow: Changed in another PR */
 
 import { InverseBattleChallenge, SingleGenerationChallenge, SingleTypeChallenge } from "#data/challenge";
 import { ElementalType } from "#enums/elemental-type";

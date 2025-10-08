@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const MoveEffectTrigger = {
   PRE_APPLY: 1,
@@ -7,4 +7,4 @@ export const MoveEffectTrigger = {
   POST_TARGET: 3,
 } as const;
 
-export type MoveEffectTrigger = EnumValues<typeof MoveEffectTrigger>;
+export type MoveEffectTrigger = ObjectValues<typeof MoveEffectTrigger>;

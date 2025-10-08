@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const TrainerPoolTier = {
   COMMON: 1,
@@ -8,4 +8,4 @@ export const TrainerPoolTier = {
   ULTRA_RARE: 5,
 } as const;
 
-export type TrainerPoolTier = EnumValues<typeof TrainerPoolTier>;
+export type TrainerPoolTier = ObjectValues<typeof TrainerPoolTier>;

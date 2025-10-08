@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const TrainerSlot = {
   NONE: 0,
@@ -6,4 +6,4 @@ export const TrainerSlot = {
   TRAINER_PARTNER: 2,
 } as const;
 
-export type TrainerSlot = EnumValues<typeof TrainerSlot>;
+export type TrainerSlot = ObjectValues<typeof TrainerSlot>;

@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const MysteryEncounterOptionMode = {
   /** Default style */
@@ -11,4 +11,4 @@ export const MysteryEncounterOptionMode = {
   DISABLED_OR_SPECIAL: 4,
 } as const;
 
-export type MysteryEncounterOptionMode = EnumValues<typeof MysteryEncounterOptionMode>;
+export type MysteryEncounterOptionMode = ObjectValues<typeof MysteryEncounterOptionMode>;

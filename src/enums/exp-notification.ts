@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 /** Determines exp notification style */
 export const ExpNotification = {
@@ -10,4 +10,4 @@ export const ExpNotification = {
   SKIP: 3,
 } as const;
 
-export type ExpNotification = EnumValues<typeof ExpNotification>;
+export type ExpNotification = ObjectValues<typeof ExpNotification>;

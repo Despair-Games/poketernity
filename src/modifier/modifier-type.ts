@@ -1,5 +1,5 @@
-/** biome-ignore-all lint/style/noNestedTernary: all of this is going to be deleted soon anyway */
-/** biome-ignore-all lint/nursery/noShadow: see above */
+/* biome-ignore-all lint/style/noNestedTernary: all of this is going to be deleted soon anyway */
+/* biome-ignore-all lint/nursery/noShadow: see above */
 
 import { globalScene } from "#app/global-scene";
 import { logModifiers } from "#app/loggers";
@@ -71,7 +71,7 @@ import { modifierTypes } from "#modifier/modifier-types";
 import { settings } from "#system/settings-manager";
 import { getVoucherTypeIcon, getVoucherTypeName } from "#system/voucher";
 import type { PokemonMoveSelectFilter, PokemonSelectFilter } from "#types/ui-types";
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 import { getModifierTierTextTint } from "#ui/text-utils";
 import { getBerryEffectDescription, getBerryName } from "#utils/berry-utils";
 import { enumValueToKey, getTSEnumKeys, getTSEnumValues, NumberHolder } from "#utils/common-utils";
@@ -745,7 +745,7 @@ const AttackTypeBoosterItem = {
   FAIRY_FEATHER: ElementalType.FAIRY,
 } as const;
 
-type AttackTypeBoosterItem = EnumValues<typeof AttackTypeBoosterItem>;
+type AttackTypeBoosterItem = ObjectValues<typeof AttackTypeBoosterItem>;
 
 export class AttackTypeBoosterModifierType
   extends PokemonHeldItemModifierType

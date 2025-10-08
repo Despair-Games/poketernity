@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const EaseType = {
   NONE: 0,
@@ -16,4 +16,4 @@ export const EaseType = {
   STEPPED: "Stepped",
 } as const;
 
-export type EaseType = EnumValues<typeof EaseType>;
+export type EaseType = ObjectValues<typeof EaseType>;

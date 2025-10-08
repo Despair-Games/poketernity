@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const MoveCategory = {
   STATUS: 1,
@@ -6,4 +6,4 @@ export const MoveCategory = {
   SPECIAL: 3,
 } as const;
 
-export type MoveCategory = EnumValues<typeof MoveCategory>;
+export type MoveCategory = ObjectValues<typeof MoveCategory>;

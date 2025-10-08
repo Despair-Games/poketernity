@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 /** Alias for all {@linkcode ArenaEvent} type strings */
 export const ArenaEventType = {
@@ -13,4 +13,4 @@ export const ArenaEventType = {
   TAG_REMOVED: "onTagRemoved",
 } as const;
 
-export type ArenaEventType = EnumValues<typeof ArenaEventType>;
+export type ArenaEventType = ObjectValues<typeof ArenaEventType>;

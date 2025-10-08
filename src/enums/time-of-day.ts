@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const TimeOfDay = {
   ALL: -1,
@@ -8,4 +8,4 @@ export const TimeOfDay = {
   NIGHT: 4,
 } as const;
 
-export type TimeOfDay = EnumValues<typeof TimeOfDay>;
+export type TimeOfDay = ObjectValues<typeof TimeOfDay>;

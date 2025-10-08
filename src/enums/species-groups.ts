@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const SpeciesGroups = {
   COMMON: 1,
@@ -9,4 +9,4 @@ export const SpeciesGroups = {
   MYTHICAL: 6,
 } as const;
 
-export type SpeciesGroups = EnumValues<typeof SpeciesGroups>;
+export type SpeciesGroups = ObjectValues<typeof SpeciesGroups>;

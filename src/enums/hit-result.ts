@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const HitResult = {
   EFFECTIVE: 1,
@@ -15,4 +15,4 @@ export const HitResult = {
   SELF_KO: 12,
 } as const;
 
-export type HitResult = EnumValues<typeof HitResult>;
+export type HitResult = ObjectValues<typeof HitResult>;
