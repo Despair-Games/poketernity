@@ -1876,12 +1876,10 @@ export class BattleScene extends SceneBase {
       enemy.getSpeciesForm().getBaseExp()
       * (enemy.level / this.getMaxExpLevel())
       * ((enemy.ivs.reduce((iv: number, total: number) => total + iv, 0) / 93) * 0.2 + 0.8);
-    this.findModifiers((m) => m.isPokemonHeldItemModifier() && m.pokemonId === enemy.id, false).map(
-      (m: PokemonHeldItemModifier) => {
+    this.findModifiers<PokemonHeldItemModifier>((m) => m.isPokemonHeldItemModifier() && m.pokemonId === enemy.id, false) //
+      .forEach((m) => {
         scoreIncrease *= m.getScoreMultiplier();
-        return scoreIncrease;
-      },
-    );
+      });
     if (enemy.boss) {
       scoreIncrease *= Math.sqrt(enemy.bossSegments);
     }

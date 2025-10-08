@@ -2045,9 +2045,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         }
         return mult.value;
       })
-      .reduce((acc, cur) => acc * cur, 1) as TypeDamageMultiplier;
+      .reduce((acc, cur) => (acc * cur) as TypeDamageMultiplier, 1);
 
-    const typeMultiplierAgainstFlying = new NumberHolder(getTypeDamageMultiplier(moveType, ElementalType.FLYING));
+    const typeMultiplierAgainstFlying = new ValueHolder(getTypeDamageMultiplier(moveType, ElementalType.FLYING));
     applyChallenges(globalScene.gameMode, ChallengeType.TYPE_EFFECTIVENESS, typeMultiplierAgainstFlying);
     // Handle strong winds lowering effectiveness of types super effective against pure flying
     if (
@@ -3537,7 +3537,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns The first {@linkcode BattlerTag} found, or `undefined` if none is found
    */
   public findTag<T extends BattlerTag = BattlerTag>(tagFilter: (tag: T) => boolean): T | undefined {
-    return this.summonData.tags.find(tagFilter) as T | undefined;
+    return this.summonData.tags.find(tagFilter as (tag: BattlerTag) => boolean) as T | undefined;
   }
 
   /**
@@ -3546,7 +3546,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns An array of {@linkcode BattlerTag}s matching the input filter
    */
   public findTags<T extends BattlerTag = BattlerTag>(tagFilter: (tag: T) => boolean): T[] {
-    return this.summonData.tags.filter(tagFilter) as T[];
+    return this.summonData.tags.filter(tagFilter as (tag: BattlerTag) => boolean) as T[];
   }
 
   /**

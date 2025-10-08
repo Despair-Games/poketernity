@@ -71,12 +71,12 @@ describe("Moves - Spectral Thief", () => {
     await game.phaseInterceptor.to("PostActionPhase");
     await game.phaseInterceptor.to("MoveEffectPhase");
 
-    [Stat.ATK, Stat.SPATK, Stat.SPD].forEach((stat: BattleStat) => {
+    ([Stat.ATK, Stat.SPATK, Stat.SPD] as readonly BattleStat[]).forEach((stat: BattleStat) => {
       expect(player.getStatStage(stat)).toBe(2);
       expect(enemy.getStatStage(stat)).toBe(0);
     });
 
-    [Stat.DEF, Stat.SPDEF].forEach((stat: BattleStat) => {
+    ([Stat.DEF, Stat.SPDEF] as readonly BattleStat[]).forEach((stat: BattleStat) => {
       expect(player.getStatStage(stat)).toBe(0);
       expect(enemy.getStatStage(stat)).toBe(-1);
     });

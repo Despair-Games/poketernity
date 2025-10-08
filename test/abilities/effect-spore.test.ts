@@ -34,7 +34,7 @@ describe("Abilities - Effect Spore", () => {
       .enemyAbility(AbilityId.BALL_FETCH);
 
     // Force minimum RNG roll so that Effect Spore's RNG roll succeeds
-    vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: 0) => min);
+    vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min) => min ?? 0);
   });
 
   it("should have a chance of inflicting a status effect if user is hit with a contact move", async () => {

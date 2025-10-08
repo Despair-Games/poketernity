@@ -192,7 +192,7 @@ describe("The Pokemon Salesman - Mystery Encounter", () => {
     it("should not offer any Paradox Pokemon", async () => {
       const NUM_ROLLS = 2000; // As long as this is greater than total number of species, this should cover all possible RNG rolls
 
-      vi.spyOn(Phaser.Math.RND, "shuffle").mockImplementation((arr: any[]) => arr);
+      vi.spyOn(Phaser.Math.RND, "shuffle").mockImplementation(<T>(arr: T[] | undefined): T[] => arr!);
 
       await game.rng.equalSample(NUM_ROLLS, () => {
         const simSpecies = getSalesmanSpeciesOffer().speciesId;

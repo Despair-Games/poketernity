@@ -359,6 +359,7 @@ export class PhaseInterceptor {
   setMode(mode: UiMode, ...args: unknown[]): Promise<void> {
     const currentPhase = this.scene.phaseManager.getCurrentPhase();
     const instance = this.scene.ui;
+    // @ts-expect-error: TypeScript doesn't like the `= never` from `UI#setMode`
     const ret = this.originalSetMode.apply(instance, [mode, ...args]);
     if (currentPhase && !this.phases[currentPhase.constructor.name]) {
       throw new Error(

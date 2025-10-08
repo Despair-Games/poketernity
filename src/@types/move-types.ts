@@ -47,8 +47,8 @@ export type DamageResult =
   | typeof HitResult.OTHER
   | typeof HitResult.SELF_KO;
 
-// TODO: Can these be combined into one? Should all of the params be optional in PAC?
-export type PokemonAttackCondition = (user?: Pokemon, target?: Pokemon, move?: Move) => boolean;
+// TODO: Can any of these be combined? Should any of the params in PAC be optional?
+export type PokemonAttackCondition = (user: Pokemon, target?: Pokemon, move?: Move) => boolean;
 export type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => boolean;
 export type MoveConditionFunc = (user: Pokemon, target: Pokemon, move: Move) => boolean;
 

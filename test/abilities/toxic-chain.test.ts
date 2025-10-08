@@ -35,7 +35,7 @@ describe("Abilities - Toxic Chain", () => {
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .enemyLevel(100);
-    vi.spyOn(globalScene, "randBattleSeedInt").mockImplementation((_range, min: 0) => min); // Force Toxic RNG rolls to succeed
+    vi.spyOn(globalScene, "randBattleSeedInt").mockImplementation((_range, min) => min ?? 0); // Force Toxic RNG rolls to succeed
   });
 
   /**

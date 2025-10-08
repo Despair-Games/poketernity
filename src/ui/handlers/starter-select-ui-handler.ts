@@ -1663,10 +1663,10 @@ export class StarterSelectUiHandler extends MessageUiHandler {
             const onSelectedMoveToSwapTo = (
               moveId: MoveId,
               _i: number,
-              baseMoveId: MoveId,
-              baseMoveIndex: number,
+              baseMoveId?: MoveId, // TODO: should this be optional?
+              baseMoveIndex?: number, // TODO: should this be optional?
             ): boolean => {
-              this.switchMoveHandler(baseMoveIndex, moveId, baseMoveId);
+              this.switchMoveHandler(baseMoveIndex!, moveId, baseMoveId!); // TODO: are these bangs correct?
               showSwapOptions(this.starterMoveset!); // TODO: is this bang correct?
               return true;
             };

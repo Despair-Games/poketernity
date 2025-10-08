@@ -100,7 +100,7 @@ describe("Abilities - Mirror Armor", () => {
     game.move.use(MoveId.OCTOLOCK);
 
     await game.toNextTurn();
-    [Stat.DEF, Stat.SPDEF].forEach((stat: BattleStat) => {
+    ([Stat.DEF, Stat.SPDEF] as readonly BattleStat[]).forEach((stat: BattleStat) => {
       expect(player.getStatStage(stat)).toBe(0);
       expect(enemy.getStatStage(stat)).toBe(-1);
     });

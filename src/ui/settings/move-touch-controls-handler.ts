@@ -45,8 +45,6 @@ export class MoveTouchControlsHandler {
 
   private readonly touchControls: TouchControl;
 
-  // private readonly currentOrientation: Phaser.Scale.Orientation = globalScene.scale.orientation;
-
   constructor(touchControls: TouchControl) {
     this.touchControls = touchControls;
     this.inConfigurationMode = false;
@@ -347,7 +345,7 @@ export class MoveTouchControlsHandler {
    * Does not save the changes.
    */
   private resetPositions() {
-    this.controlGroupEls.forEach((controlGroup: HTMLDivElement) => {
+    this.controlGroupEls.forEach((controlGroup) => {
       controlGroup.style.removeProperty("left");
       controlGroup.style.removeProperty("right");
       controlGroup.style.removeProperty("bottom");
@@ -367,7 +365,7 @@ export class MoveTouchControlsHandler {
         return startDrag;
       }),
       touchmove: controlGroups.map(() => {
-        const drag = (event: TouchEvent) => this.drag(event.touches[0]);
+        const drag = (event: Event) => this.drag((event as TouchEvent).touches[0]);
         window.addEventListener("touchmove", drag, { passive: true });
         return drag;
       }),

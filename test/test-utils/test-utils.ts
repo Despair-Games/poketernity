@@ -38,7 +38,12 @@ export const EVERYTHING_SAVE_FILE_PATH = `${RESOURCES_FOLDER_PATH}/saves/everyth
  * @returns A spy/mock of i18next
  */
 export function mockI18next() {
-  return vi.spyOn(i18next, "t").mockImplementation((key: ParseKeys) => key);
+  return (
+    vi
+      .spyOn(i18next, "t")
+      // @ts-expect-error: mocking the type
+      .mockImplementation((key: ParseKeys) => key)
+  );
 }
 
 /**

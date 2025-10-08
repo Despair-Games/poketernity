@@ -39,7 +39,10 @@ export class DynamicPhaseManager {
       return false;
     }
     if (!this.dynamicPhaseMap.has(phase.phaseName)) {
-      this.dynamicPhaseMap.set(phase.phaseName, new PokemonPhasePriorityQueue());
+      this.dynamicPhaseMap.set(
+        phase.phaseName,
+        new PokemonPhasePriorityQueue() as unknown as ShuffledPriorityQueue<Phase>,
+      );
     }
     this.dynamicPhaseMap.get(phase.phaseName)?.push(phase);
     return true;
@@ -61,7 +64,7 @@ export class DynamicPhaseManager {
    * @returns Whether a matching phase exists
    */
   public has<T extends PhaseKey>(phaseType: T, condition: PhaseConditionFunc<T>): boolean {
-    return !!this.dynamicPhaseMap.get(phaseType)?.has(condition);
+    return !!this.dynamicPhaseMap.get(phaseType)?.has(condition as (t: Phase) => boolean);
   }
 
   /**
@@ -71,6 +74,6 @@ export class DynamicPhaseManager {
    * @returns Whether a removal occurred
    */
   public remove<T extends PhaseKey>(phaseType: T, condition: PhaseConditionFunc<T>): boolean {
-    return !!this.dynamicPhaseMap.get(phaseType)?.remove(condition);
+    return !!this.dynamicPhaseMap.get(phaseType)?.remove(condition as (t: Phase) => boolean);
   }
 }
