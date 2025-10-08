@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const WeatherType = {
   NONE: 0,
@@ -28,4 +28,4 @@ export const WeatherType = {
   STRONG_WINDS: 9,
 } as const;
 
-export type WeatherType = EnumValues<typeof WeatherType>;
+export type WeatherType = ObjectValues<typeof WeatherType>;
