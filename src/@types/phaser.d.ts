@@ -1,4 +1,4 @@
-/** biome-ignore-all lint/style/noNamespace: necessary? */
+/* biome-ignore-all lint/style/noNamespace: necessary? */
 
 import "phaser";
 

@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const ChargeAnim = {
   FLY_CHARGING: 1000,
@@ -24,4 +24,4 @@ export const ChargeAnim = {
   ELECTRO_SHOT_CHARGING: 1020,
 } as const;
 
-export type ChargeAnim = EnumValues<typeof ChargeAnim>;
+export type ChargeAnim = ObjectValues<typeof ChargeAnim>;

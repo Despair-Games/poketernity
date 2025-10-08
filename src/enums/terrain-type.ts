@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const TerrainType = {
   NONE: 0,
@@ -8,4 +8,4 @@ export const TerrainType = {
   PSYCHIC: 4,
 } as const;
 
-export type TerrainType = EnumValues<typeof TerrainType>;
+export type TerrainType = ObjectValues<typeof TerrainType>;

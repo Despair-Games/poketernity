@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const GrowthRate = {
   ERRATIC: 1,
@@ -9,4 +9,4 @@ export const GrowthRate = {
   FLUCTUATING: 6,
 } as const;
 
-export type GrowthRate = EnumValues<typeof GrowthRate>;
+export type GrowthRate = ObjectValues<typeof GrowthRate>;

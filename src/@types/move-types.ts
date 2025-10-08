@@ -1,6 +1,6 @@
-/** biome-ignore-start lint/correctness/noUnusedImports: TSDoc imports */
+/* biome-ignore-start lint/correctness/noUnusedImports: TSDoc imports */
 import type { ConditionalProtectTag } from "#arena-tags/conditional-protect-tag";
-/** biome-ignore-end lint/correctness/noUnusedImports: TSDoc imports */
+/* biome-ignore-end lint/correctness/noUnusedImports: TSDoc imports */
 
 import type { BattlerIndex, FieldBattlerIndex } from "#enums/battler-index";
 import type { ElementalType } from "#enums/elemental-type";

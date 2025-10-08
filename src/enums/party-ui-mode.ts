@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 /**
  * Indicates the reason why the party UI is being opened.
@@ -66,4 +66,4 @@ export const PartyUiMode = {
   SELECT: 12,
 } as const;
 
-export type PartyUiMode = EnumValues<typeof PartyUiMode>;
+export type PartyUiMode = ObjectValues<typeof PartyUiMode>;

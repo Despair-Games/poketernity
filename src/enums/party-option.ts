@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const PartyOption = {
   CANCEL: -1,
@@ -23,4 +23,4 @@ export const PartyOption = {
   ALL: 4000,
 } as const;
 
-export type PartyOption = EnumValues<typeof PartyOption>;
+export type PartyOption = ObjectValues<typeof PartyOption>;

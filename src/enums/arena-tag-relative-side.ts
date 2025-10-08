@@ -2,7 +2,7 @@
 import type { Pokemon } from "#field/pokemon";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 /**
  * Denotes which side of the field an effect applies,
@@ -14,4 +14,4 @@ export const ArenaTagRelativeSide = {
   ALL: 3,
 } as const;
 
-export type ArenaTagRelativeSide = EnumValues<typeof ArenaTagRelativeSide>;
+export type ArenaTagRelativeSide = ObjectValues<typeof ArenaTagRelativeSide>;

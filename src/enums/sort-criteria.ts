@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const SortCriteria = {
   NUMBER: 1,
@@ -8,4 +8,4 @@ export const SortCriteria = {
   NAME: 5,
 } as const;
 
-export type SortCriteria = EnumValues<typeof SortCriteria>;
+export type SortCriteria = ObjectValues<typeof SortCriteria>;

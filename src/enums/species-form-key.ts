@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const SpeciesFormKey = {
   MEGA: "mega",
@@ -14,4 +14,4 @@ export const SpeciesFormKey = {
   ETERNAMAX: "eternamax",
 } as const;
 
-export type SpeciesFormKey = EnumValues<typeof SpeciesFormKey>;
+export type SpeciesFormKey = ObjectValues<typeof SpeciesFormKey>;

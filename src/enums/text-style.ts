@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const TextStyle = {
   MESSAGE: 1,
@@ -93,4 +93,4 @@ export const TextStyle = {
   GENDER_FEMALE: 83,
 } as const;
 
-export type TextStyle = EnumValues<typeof TextStyle>;
+export type TextStyle = ObjectValues<typeof TextStyle>;

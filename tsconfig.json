@@ -28,7 +28,7 @@
     "strictPropertyInitialization": false, // TODO: refactor so this can be true
     "noImplicitAny": false, // TODO: refactor so this can be true
     "noImplicitThis": true,
-    "useUnknownInCatchVariables": false, // TODO: refactor so this can be true
+    "useUnknownInCatchVariables": false, // not relevant to our codebase, makes things more cumbersome
     // #endregion
     "rootDir": ".",
     "baseUrl": "./src",

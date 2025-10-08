@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 /** Modifies the speed of the experience gain animations. */
 export const ExpGainSpeed = {
@@ -12,7 +12,7 @@ export const ExpGainSpeed = {
   SKIP: 4,
 } as const;
 
-export type ExpGainSpeed = EnumValues<typeof ExpGainSpeed>;
+export type ExpGainSpeed = ObjectValues<typeof ExpGainSpeed>;
 
 export const EXP_GAIN_SPEED_MAP = {
   [ExpGainSpeed.DEFAULT]: 1,

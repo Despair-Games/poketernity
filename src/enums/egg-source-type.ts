@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 // TODO: decouple enum value from cursor position
 export const EggSourceType = {
@@ -9,4 +9,4 @@ export const EggSourceType = {
   EVENT: 4,
 } as const;
 
-export type EggSourceType = EnumValues<typeof EggSourceType>;
+export type EggSourceType = ObjectValues<typeof EggSourceType>;

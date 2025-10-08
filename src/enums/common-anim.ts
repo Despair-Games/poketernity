@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const CommonAnim = {
   USE_ITEM: 2000,
@@ -53,4 +53,4 @@ export const CommonAnim = {
   TERASTALLIZE: 2121,
 } as const;
 
-export type CommonAnim = EnumValues<typeof CommonAnim>;
+export type CommonAnim = ObjectValues<typeof CommonAnim>;

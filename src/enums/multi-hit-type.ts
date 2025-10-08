@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const MultiHitType = {
   _2: 1,
@@ -8,4 +8,4 @@ export const MultiHitType = {
   BEAT_UP: 5,
 } as const;
 
-export type MultiHitType = EnumValues<typeof MultiHitType>;
+export type MultiHitType = ObjectValues<typeof MultiHitType>;

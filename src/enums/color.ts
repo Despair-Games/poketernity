@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const CommonColor = {
   /** #ffffff */
@@ -67,7 +67,7 @@ export const CommonColor = {
   LUXURY: "#e64a18",
 } as const;
 
-export type CommonColor = EnumValues<typeof CommonColor>;
+export type CommonColor = ObjectValues<typeof CommonColor>;
 
 /** Colors used for the shadow of text elements. */
 export const ShadowColor = {
@@ -135,7 +135,7 @@ export const ShadowColor = {
   PEACH_SAND: "#f7b18b",
 } as const;
 
-export type ShadowColor = EnumValues<typeof ShadowColor>;
+export type ShadowColor = ObjectValues<typeof ShadowColor>;
 
 /** Combination of a {@linkcode CommonColor} and {@linkcode ShadowColor} used for text display. */
 export const TextColor = {
@@ -184,7 +184,7 @@ export const TextColor = {
   BLUE_DARK_SHADOW: 19,
 } as const;
 
-export type TextColor = EnumValues<typeof TextColor>;
+export type TextColor = ObjectValues<typeof TextColor>;
 
 export const TypeColor = {
   /** #ada594 */
@@ -225,7 +225,7 @@ export const TypeColor = {
   FAIRY: "#ef70ef",
 } as const;
 
-export type TypeColor = EnumValues<typeof TypeColor>;
+export type TypeColor = ObjectValues<typeof TypeColor>;
 
 export const TypeShadowColor = {
   /** #574f4a */
@@ -266,7 +266,7 @@ export const TypeShadowColor = {
   FAIRY: "#663878",
 } as const;
 
-export type TypeShadowColor = EnumValues<typeof TypeShadowColor>;
+export type TypeShadowColor = ObjectValues<typeof TypeShadowColor>;
 
 export const TypeEffectivenessColor = {
   /** #929292 */
@@ -291,4 +291,4 @@ export const TypeEffectivenessColor = {
   MAX_SUPER_EFFECTIVE: "#61e000", // Vibrant Green (16x)
 } as const;
 
-export type TypeEffectivenessColor = EnumValues<typeof TypeEffectivenessColor>;
+export type TypeEffectivenessColor = ObjectValues<typeof TypeEffectivenessColor>;

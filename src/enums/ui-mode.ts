@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const UiMode = {
   MESSAGE: 1,
@@ -45,4 +45,4 @@ export const UiMode = {
   MYSTERY_ENCOUNTER: 42,
 } as const;
 
-export type UiMode = EnumValues<typeof UiMode>;
+export type UiMode = ObjectValues<typeof UiMode>;

@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const GachaType = {
   MOVE: 1,
@@ -6,4 +6,4 @@ export const GachaType = {
   SHINY: 3,
 } as const;
 
-export type GachaType = EnumValues<typeof GachaType>;
+export type GachaType = ObjectValues<typeof GachaType>;
