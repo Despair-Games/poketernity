@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 /** @todo make this start at 1 */
 export const AnimBlendType = {
@@ -7,4 +7,4 @@ export const AnimBlendType = {
   SUBTRACT: 2,
 } as const;
 
-export type AnimBlendType = EnumValues<typeof AnimBlendType>;
+export type AnimBlendType = ObjectValues<typeof AnimBlendType>;

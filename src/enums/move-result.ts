@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const MoveResult = {
   PENDING: 1,
@@ -8,4 +8,4 @@ export const MoveResult = {
   OTHER: 5,
 } as const;
 
-export type MoveResult = EnumValues<typeof MoveResult>;
+export type MoveResult = ObjectValues<typeof MoveResult>;

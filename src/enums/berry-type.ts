@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const BerryType = {
   SITRUS: 1,
@@ -14,4 +14,4 @@ export const BerryType = {
   LEPPA: 11,
 } as const;
 
-export type BerryType = EnumValues<typeof BerryType>;
+export type BerryType = ObjectValues<typeof BerryType>;

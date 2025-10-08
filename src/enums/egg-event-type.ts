@@ -2,7 +2,7 @@
 import type { MoveUsedEvent } from "#events/battle-scene";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const EggEventType = {
   /**
@@ -12,4 +12,4 @@ export const EggEventType = {
   EGG_COUNT_CHANGED: "onEggCountChanged",
 } as const;
 
-export type EggEventType = EnumValues<typeof EggEventType>;
+export type EggEventType = ObjectValues<typeof EggEventType>;

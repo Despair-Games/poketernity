@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 // Note: some code expects this to start at `0`
 export const VoucherType = {
@@ -8,4 +8,4 @@ export const VoucherType = {
   GOLDEN: 3,
 } as const;
 
-export type VoucherType = EnumValues<typeof VoucherType>;
+export type VoucherType = ObjectValues<typeof VoucherType>;

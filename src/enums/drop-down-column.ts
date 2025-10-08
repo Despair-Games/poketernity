@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const DropDownColumn = {
   GEN: 1,
@@ -9,4 +9,4 @@ export const DropDownColumn = {
   SORT: 6,
 } as const;
 
-export type DropDownColumn = EnumValues<typeof DropDownColumn>;
+export type DropDownColumn = ObjectValues<typeof DropDownColumn>;

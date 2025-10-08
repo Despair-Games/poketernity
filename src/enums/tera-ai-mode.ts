@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 /** Determines whether an NPC trainer is allowed to Terastallize any of their pokemon */
 export const TeraAIMode = {
@@ -10,4 +10,4 @@ export const TeraAIMode = {
   SMART: 3,
 } as const;
 
-export type TeraAIMode = EnumValues<typeof TeraAIMode>;
+export type TeraAIMode = ObjectValues<typeof TeraAIMode>;

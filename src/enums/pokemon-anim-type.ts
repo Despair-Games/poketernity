@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const PokemonAnimType = {
   /**
@@ -24,4 +24,4 @@ export const PokemonAnimType = {
   COMMANDER_REMOVE: 6,
 } as const;
 
-export type PokemonAnimType = EnumValues<typeof PokemonAnimType>;
+export type PokemonAnimType = ObjectValues<typeof PokemonAnimType>;

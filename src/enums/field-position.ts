@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const FieldPosition = {
   CENTER: 1,
@@ -6,4 +6,4 @@ export const FieldPosition = {
   RIGHT: 3,
 } as const;
 
-export type FieldPosition = EnumValues<typeof FieldPosition>;
+export type FieldPosition = ObjectValues<typeof FieldPosition>;

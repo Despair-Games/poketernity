@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const GameModes = {
   CLASSIC: 1,
@@ -6,4 +6,4 @@ export const GameModes = {
   CHALLENGE: 4,
 } as const;
 
-export type GameModes = EnumValues<typeof GameModes>;
+export type GameModes = ObjectValues<typeof GameModes>;

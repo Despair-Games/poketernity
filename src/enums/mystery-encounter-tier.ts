@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 /**
  * Enum values are base spawn weights of each tier.
@@ -14,4 +14,4 @@ export const MysteryEncounterTier = {
   MASTER: 0, // Not currently used
 } as const;
 
-export type MysteryEncounterTier = EnumValues<typeof MysteryEncounterTier>;
+export type MysteryEncounterTier = ObjectValues<typeof MysteryEncounterTier>;

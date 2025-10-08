@@ -1,6 +1,6 @@
-/** biome-ignore-start lint/correctness/noUnusedImports: TSDoc imports */
+/* biome-ignore-start lint/correctness/noUnusedImports: TSDoc imports */
 import type { MoveId } from "#enums/move-id";
-/** biome-ignore-end lint/correctness/noUnusedImports: TSDoc imports */
+/* biome-ignore-end lint/correctness/noUnusedImports: TSDoc imports */
 
 import type { AbAttr } from "#abilities/ab-attr";
 import type { AbAttrFlag } from "#enums/ab-attr-flag";

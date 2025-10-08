@@ -2,7 +2,7 @@
 import type { TimedEvent } from "#types/timed-event";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 /**
  * The various type of modifications that {@linkcode TimedEvent}s can activate.
@@ -13,4 +13,4 @@ export const EventModifierType = {
   EXTRA_TRAINER_REWARDS: 3,
 } as const;
 
-export type EventModifierType = EnumValues<typeof EventModifierType>;
+export type EventModifierType = ObjectValues<typeof EventModifierType>;

@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const EggTier = {
   COMMON: 0,
@@ -7,4 +7,4 @@ export const EggTier = {
   LEGENDARY: 3,
 } as const;
 
-export type EggTier = EnumValues<typeof EggTier>;
+export type EggTier = ObjectValues<typeof EggTier>;

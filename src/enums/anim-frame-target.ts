@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 /**
  * Specifies the type of sprite affected by an animation
@@ -21,4 +21,4 @@ export const AnimFrameTarget = {
 } as const;
 
 /** The sprite types affected by an animation */
-export type AnimFrameTarget = EnumValues<typeof AnimFrameTarget>;
+export type AnimFrameTarget = ObjectValues<typeof AnimFrameTarget>;

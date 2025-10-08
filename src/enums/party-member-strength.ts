@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 /**
  * An enum describing what level a Pokemon should be.
@@ -14,4 +14,4 @@ export const PartyMemberStrength = {
   STRONGER: 6,
 } as const;
 
-export type PartyMemberStrength = EnumValues<typeof PartyMemberStrength>;
+export type PartyMemberStrength = ObjectValues<typeof PartyMemberStrength>;

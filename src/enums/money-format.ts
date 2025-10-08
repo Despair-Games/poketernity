@@ -1,8 +1,8 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const MoneyFormat = {
   NORMAL: 1,
   ABBREVIATED: 2,
 } as const;
 
-export type MoneyFormat = EnumValues<typeof MoneyFormat>;
+export type MoneyFormat = ObjectValues<typeof MoneyFormat>;
