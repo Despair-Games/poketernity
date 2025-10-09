@@ -10,7 +10,7 @@ import type { nil } from "#types/utility-types";
  */
 export abstract class PokemonPhase extends FieldPhase {
   /** FieldBattlerIndex of the target Pokemon, or its ID */
-  protected readonly battlerIndex: FieldBattlerIndex | number;
+  public readonly battlerIndex: FieldBattlerIndex | number;
   public readonly isPlayer: boolean;
   public readonly fieldIndex: number;
 

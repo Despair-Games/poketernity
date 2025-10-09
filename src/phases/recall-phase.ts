@@ -39,7 +39,7 @@ export class RecallPhase extends PokemonPhase {
 
     const { currentBattle, phaseManager } = globalScene;
     const { turnManager } = currentBattle;
-    if (turnManager.tryPursueTarget(pokemon)) {
+    if (this.switchType === SwitchType.SWITCH && turnManager.tryPursueTarget(pokemon)) {
       // Reschedule this phase for after the scheduled Pursuit is fully resolved
       // TODO: this might cause issues if Pursuit KOs the target
       phaseManager.unshiftPhase(this);
