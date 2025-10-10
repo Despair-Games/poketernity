@@ -37,7 +37,7 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
 /**
  * @returns `true` if the move isn't a variable-type move. Tera-based variable-type moves may
  * still have their type changed by abilities with this condition if the user is not Terastallized.
- *
+ * @remarks
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Normalize_(Ability) | Normalize} and as
  * part of the conditions for {@link https://bulbapedia.bulbagarden.net/wiki/Pixilate_(Ability) | Pixilate} et al.
  */
@@ -50,4 +50,4 @@ export const anyTypeMoveConversionCondition: PokemonAttackCondition = (user, _ta
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Pixilate_(Ability) | Pixilate} et al.
  */
 export const normalTypeMoveConversionCondition: PokemonAttackCondition = (user, target, move) =>
-  anyTypeMoveConversionCondition(user, target, move) && move?.type === ElementalType.NORMAL;
+  move?.type === ElementalType.NORMAL && anyTypeMoveConversionCondition(user, target, move);
