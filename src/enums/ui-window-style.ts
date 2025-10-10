@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 // Starting the values at `1` breaks things
 export const UiWindowStyle = {
@@ -17,4 +17,4 @@ export const UiWindowStyle = {
   MEDIUM_GRAY: 4,
 } as const;
 
-export type UiWindowStyle = EnumValues<typeof UiWindowStyle>;
+export type UiWindowStyle = ObjectValues<typeof UiWindowStyle>;

@@ -184,7 +184,6 @@ import { ElementalType } from "#enums/elemental-type";
 import { Gender } from "#enums/gender";
 import { MoveCategory } from "#enums/move-category";
 import { MoveFlags } from "#enums/move-flags";
-import { MoveId } from "#enums/move-id";
 import { EFFECTIVE_STATS, type EffectiveStat, getStatKey, Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
@@ -194,7 +193,11 @@ import { FlinchAttr } from "#moves/flinch-attr";
 import type { Move } from "#moves/move";
 import { VariablePowerAttr } from "#moves/variable-power-attr";
 import type { AbAttrCondition } from "#types/ability-types";
-import { getWeatherCondition, normalTypeMoveConversionCondition } from "#utils/ability-utils";
+import {
+  anyTypeMoveConversionCondition,
+  getWeatherCondition,
+  normalTypeMoveConversionCondition,
+} from "#utils/ability-utils";
 import { NumberHolder, toDmgValue } from "#utils/common-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
 import i18next from "i18next";
@@ -536,20 +539,7 @@ export function initAbilities() {
       .attr(BypassParaSpeedReductionAbAttr)
       .conditionalAttr((pokemon) => pokemon.hasNonVolatileStatusEffect(), EffectiveStatMultiplier, Stat.SPD, 1.5),
     new Ability(AbilityId.NORMALIZE, 4) //
-      .attr(
-        MoveTypeChangeAbAttr,
-        ElementalType.NORMAL,
-        1.2,
-        (_user, _target, move) =>
-          !!move
-          && ![
-            MoveId.HIDDEN_POWER,
-            MoveId.WEATHER_BALL,
-            MoveId.NATURAL_GIFT,
-            MoveId.JUDGMENT,
-            MoveId.TECHNO_BLAST,
-          ].includes(move.id),
-      ),
+      .attr(MoveTypeChangeAbAttr, ElementalType.NORMAL, 1.2, anyTypeMoveConversionCondition),
     new Ability(AbilityId.SNIPER, 4) //
       .attr(MultCritAbAttr, 1.5),
     new Ability(AbilityId.MAGIC_GUARD, 4) //

@@ -12,7 +12,7 @@ import type {
 import type { Arena } from "#field/arena";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 /** Alias for all {@linkcode BattleScene} events */
 export const BattleSceneEventType = {
@@ -56,4 +56,4 @@ export const BattleSceneEventType = {
   NEW_ARENA: "onNewArena",
 } as const;
 
-export type BattleSceneEventType = EnumValues<typeof BattleSceneEventType>;
+export type BattleSceneEventType = ObjectValues<typeof BattleSceneEventType>;

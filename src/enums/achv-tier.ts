@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const AchvTier = {
   COMMON: 1,
@@ -8,4 +8,4 @@ export const AchvTier = {
   MASTER: 5,
 } as const;
 
-export type AchvTier = EnumValues<typeof AchvTier>;
+export type AchvTier = ObjectValues<typeof AchvTier>;

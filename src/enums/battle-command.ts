@@ -2,7 +2,7 @@
 import type { CommandPhase } from "#phases/command-phase";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 /**
  * Commands that can be executed from a {@linkcode CommandPhase}.
@@ -19,4 +19,4 @@ export const BattleCommand = {
   TERA: 4,
 } as const;
 
-export type BattleCommand = EnumValues<typeof BattleCommand>;
+export type BattleCommand = ObjectValues<typeof BattleCommand>;

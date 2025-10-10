@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 /** Descriptor for the outcome of a move being used against a target */
 export const HitCheckResult = {
@@ -18,4 +18,4 @@ export const HitCheckResult = {
   ERROR: 7,
 } as const;
 
-export type HitCheckResult = EnumValues<typeof HitCheckResult>;
+export type HitCheckResult = ObjectValues<typeof HitCheckResult>;

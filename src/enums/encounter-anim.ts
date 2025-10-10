@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 /**
  * Animations used for Mystery Encounters.
@@ -12,4 +12,4 @@ export const EncounterAnim = {
   DANCE: 4,
 } as const;
 
-export type EncounterAnim = EnumValues<typeof EncounterAnim>;
+export type EncounterAnim = ObjectValues<typeof EncounterAnim>;

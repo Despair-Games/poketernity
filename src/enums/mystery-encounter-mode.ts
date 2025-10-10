@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const MysteryEncounterMode = {
   /** {@linkcode MysteryEncounter} will always begin in this mode, but will always swap modes when an option is selected */
@@ -13,4 +13,4 @@ export const MysteryEncounterMode = {
   NO_BATTLE: 5,
 } as const;
 
-export type MysteryEncounterMode = EnumValues<typeof MysteryEncounterMode>;
+export type MysteryEncounterMode = ObjectValues<typeof MysteryEncounterMode>;

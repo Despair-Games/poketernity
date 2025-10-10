@@ -3,7 +3,7 @@ import type { ModifierTier } from "#enums/modifier-tier";
 import type { Item } from "#types/item";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 /**
  * Defines the rarity of an {@linkcode Item}
@@ -19,4 +19,4 @@ export const ItemRarity = {
   LUXURY: 6,
 } as const;
 
-export type ItemRarity = EnumValues<typeof ItemRarity>;
+export type ItemRarity = ObjectValues<typeof ItemRarity>;

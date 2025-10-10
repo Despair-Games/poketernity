@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const TransformationScreenPosition = {
   CENTER: 1,
@@ -6,4 +6,4 @@ export const TransformationScreenPosition = {
   RIGHT: 3,
 } as const;
 
-export type TransformationScreenPosition = EnumValues<typeof TransformationScreenPosition>;
+export type TransformationScreenPosition = ObjectValues<typeof TransformationScreenPosition>;

@@ -1,8 +1,8 @@
-/** biome-ignore-start lint/correctness/noUnusedImports: TSDoc imports */
+/* biome-ignore-start lint/correctness/noUnusedImports: TSDoc imports */
 import type { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#field/pokemon";
 import type { SessionSaveData } from "#types/session-data";
-/** biome-ignore-end lint/correctness/noUnusedImports: TSDoc imports */
+/* biome-ignore-end lint/correctness/noUnusedImports: TSDoc imports */
 
 import type { AuroraVeilTag } from "#arena-tags/aurora-veil-tag";
 import type { CraftyShieldTag } from "#arena-tags/crafty-shield-tag";
@@ -37,6 +37,7 @@ import type { WishTag } from "#arena-tags/wish-tag";
 import type { ArenaTagSide } from "#enums/arena-tag-side";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import type { MoveId } from "#enums/move-id";
+import type { ObjectValues } from "#types/utility-types";
 
 /** Subset of {@linkcode ArenaTagType}s that deal type-based damage to pokemon that switch in. */
 export type TypeHazardTagType = typeof ArenaTagType.STEALTH_ROCK | typeof ArenaTagType.SHARP_STEEL;
@@ -77,14 +78,19 @@ export type NonSerializableArenaTagType = TurnProtectArenaTagType | typeof Arena
 /** Subset of {@linkcode ArenaTagType}s that may persist across turns, and thus must be serialized in {@linkcode SessionSaveData}. */
 export type SerializableArenaTagType = Exclude<ArenaTagType, NonSerializableArenaTagType>;
 
+/** Utility type containing all entries of {@linkcode ArenaTagTypeMap} corresponding to serializable tags. */
+type SerializableArenaTagTypeMap = Pick<ArenaTagTypeMap, SerializableArenaTagType>;
+
 /**
- * Type-safe representation of an arbitrary, serialized Arena Tag
+ * Type mapping all `ArenaTag`s to type-safe representations of their serialized forms.
+ * @interface
  */
-export type ArenaTagTypeData = Parameters<
-  ArenaTagTypeMap[keyof {
-    [K in keyof ArenaTagTypeMap as K extends SerializableArenaTagType ? K : never]: ArenaTagTypeMap[K];
-  }]["loadTag"]
->[0];
+export type ArenaTagDataMap = {
+  [k in keyof SerializableArenaTagTypeMap]: Parameters<SerializableArenaTagTypeMap[k]["loadTag"]>[0];
+};
+
+/** Type-safe representation of an arbitrary, serialized `ArenaTag`. */
+export type ArenaTagData = ObjectValues<ArenaTagDataMap>;
 
 /**
  * Dummy, typescript-only declaration to ensure that
@@ -98,18 +104,12 @@ declare const EnsureAllArenaTagTypesAreMapped: ArenaTagTypeMap[ArenaTagType] & n
 
 /** Interface containing the serializable fields of ArenaTagData. */
 export interface BaseArenaTag {
-  /**
-   * The tag's remaining duration. Setting to any number `<=0` will make the tag's duration effectively infinite.
-   */
+  /** The tag's remaining duration. Setting to any number `<= 0` will make the tag's duration effectively infinite. */
   turnCount: number;
-  /**
-   * The {@linkcode MoveId} that created this tag, or `undefined` if not set by a move.
-   */
+  /** The {@linkcode MoveId} that created this tag, or `undefined` if not set by a move. */
   sourceMoveId?: MoveId;
-  /**
-   * The {@linkcode Pokemon.id | PID} of the {@linkcode Pokemon} having created the tag, or `undefined` if not set by a Pokemon.
-   * @todo Implement handling for `ArenaTag`s created by non-pokemon sources (most tags will throw errors without a source)
-   */
+  /** The {@linkcode Pokemon.id | PID} of the {@linkcode Pokemon} having created the tag, or `undefined` if not set by a Pokemon. */
+  // TODO: Implement handling for `ArenaTag`s created by non-pokemon sources (most tags will throw errors without a source)
   // Note: Intentionally not using `?`, as the property should always exist, but just be undefined if not present.
   sourceId: number | undefined;
   /**

@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const Unlockables = {
   CHALLENGE_MODE: 1,
@@ -6,4 +6,4 @@ export const Unlockables = {
   EVIOLITE: 3,
 } as const;
 
-export type Unlockables = EnumValues<typeof Unlockables>;
+export type Unlockables = ObjectValues<typeof Unlockables>;

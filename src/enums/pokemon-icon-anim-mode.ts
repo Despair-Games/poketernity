@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const PokemonIconAnimMode = {
   NONE: 0,
@@ -6,4 +6,4 @@ export const PokemonIconAnimMode = {
   ACTIVE: 2,
 } as const;
 
-export type PokemonIconAnimMode = EnumValues<typeof PokemonIconAnimMode>;
+export type PokemonIconAnimMode = ObjectValues<typeof PokemonIconAnimMode>;

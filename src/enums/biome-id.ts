@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 // TODO: start this at 1
 export const BiomeId = {
@@ -41,4 +41,4 @@ export const BiomeId = {
   END: 50,
 } as const;
 
-export type BiomeId = EnumValues<typeof BiomeId>;
+export type BiomeId = ObjectValues<typeof BiomeId>;

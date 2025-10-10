@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 /** Defines the speed of hp-bar animations */
 export const HpBarSpeed = {
@@ -12,4 +12,4 @@ export const HpBarSpeed = {
   SKIP: 4,
 } as const;
 
-export type HpBarSpeed = EnumValues<typeof HpBarSpeed>;
+export type HpBarSpeed = ObjectValues<typeof HpBarSpeed>;

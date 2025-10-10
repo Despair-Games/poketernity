@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 /**
  * Paths of the various subfolders found in public/images.
@@ -42,4 +42,4 @@ export const ImagesFolder = {
   UI_WINDOWS: "ui/windows",
 } as const;
 
-export type ImagesFolder = EnumValues<typeof ImagesFolder>;
+export type ImagesFolder = ObjectValues<typeof ImagesFolder>;

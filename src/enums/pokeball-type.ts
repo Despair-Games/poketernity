@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 // TODO: start at 1
 export const PokeballType = {
@@ -13,4 +13,4 @@ export const PokeballType = {
   LUXURY_BALL: 4,
 } as const;
 
-export type PokeballType = EnumValues<typeof PokeballType>;
+export type PokeballType = ObjectValues<typeof PokeballType>;

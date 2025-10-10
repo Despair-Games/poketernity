@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const MoveTarget = {
   /** {@link https://bulbapedia.bulbagarden.net/wiki/Category:Moves_that_target_the_user Moves that target the User} */
@@ -31,4 +31,4 @@ export const MoveTarget = {
   DRAGON_DARTS: 21,
 } as const;
 
-export type MoveTarget = EnumValues<typeof MoveTarget>;
+export type MoveTarget = ObjectValues<typeof MoveTarget>;

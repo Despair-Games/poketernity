@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const PokemonRegion = {
   NORMAL: 1,
@@ -8,4 +8,4 @@ export const PokemonRegion = {
   PALDEA: 5,
 } as const;
 
-export type PokemonRegion = EnumValues<typeof PokemonRegion>;
+export type PokemonRegion = ObjectValues<typeof PokemonRegion>;

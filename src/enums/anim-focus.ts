@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 /**
  * Specifies the reference point (origin)
@@ -22,4 +22,4 @@ export const AnimFocus = {
   SCREEN: 4,
 } as const;
 
-export type AnimFocus = EnumValues<typeof AnimFocus>;
+export type AnimFocus = ObjectValues<typeof AnimFocus>;
