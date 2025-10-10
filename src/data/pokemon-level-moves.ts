@@ -6,7 +6,9 @@ import { SpeciesId } from "#enums/species-id";
 import type { PokemonSpeciesLevelMoves } from "#types/move-types";
 import { deepFreeze } from "#utils/common-utils";
 
-export const pokemonSpeciesLevelMoves = deepFreeze({
+// Note: Using `deepFreeze<PokemonSpeciesLevelMoves>` causes a large performance penalty when typechecking
+// due to the size of the object, so `: Readonly<PokemonSpeciesLevelMoves>` is used instead.
+export const pokemonSpeciesLevelMoves: Readonly<PokemonSpeciesLevelMoves> = deepFreeze({
   [SpeciesId.BULBASAUR]: [
     [1, MoveId.TACKLE],
     [1, MoveId.GROWL],
@@ -18911,4 +18913,4 @@ export const pokemonSpeciesLevelMoves = deepFreeze({
     [64, MoveId.HAMMER_ARM],
     [70, MoveId.BLOOD_MOON],
   ],
-}) as Readonly<PokemonSpeciesLevelMoves>;
+});

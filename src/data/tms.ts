@@ -5,7 +5,7 @@ import { SpeciesId } from "#enums/species-id";
 import { deepFreeze } from "#utils/common-utils";
 
 interface TmSpecies {
-  [key: number]: Array<SpeciesId | Array<SpeciesId | string>>;
+  readonly [key: number]: readonly (SpeciesId | readonly (string | SpeciesId)[])[];
 }
 
 export const reverseCompatibleTms: MoveId[] = []; /*[
@@ -33,7 +33,9 @@ export const reverseCompatibleTms: MoveId[] = []; /*[
     MoveId.ROUND
 ];*/
 
-export const tmSpecies = deepFreeze({
+// Note: Using `deepFreeze<TmSpecies>` causes a large performance penalty when typechecking
+// due to the size of the object, so `: TmSpecies` is used instead.
+export const tmSpecies: TmSpecies = deepFreeze({
   [MoveId.MEGA_PUNCH]: [
     SpeciesId.CHARMANDER,
     SpeciesId.CHARMELEON,
@@ -67956,4 +67958,4 @@ export const tmSpecies = deepFreeze({
     SpeciesId.HISUI_LILLIGANT,
     SpeciesId.HISUI_DECIDUEYE,
   ],
-}) as Readonly<TmSpecies>;
+});
