@@ -43,7 +43,8 @@ interface ArenaEffectInfo {
 }
 
 function getFieldEffectText(flyoutDisplayText: string): string {
-  if (!flyoutDisplayText || flyoutDisplayText.toLowerCase() === "none") {
+  // "NONE" is the name of the key in the `WeatherType` and `TerrainType` enums to indicate no active weather/terrain
+  if (!flyoutDisplayText || flyoutDisplayText === "NONE") {
     return "";
   }
   const effectName = toCamelCaseString(flyoutDisplayText);
