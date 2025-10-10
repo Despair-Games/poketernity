@@ -185,6 +185,11 @@ export function getTerrainBlockMessage(pokemon: Pokemon, terrainType: TerrainTyp
   });
 }
 
+/**
+ * Gets the animation associated with the given terrain type
+ * @param terrainType - The {@linkcode TerrainType} to get the animiation for
+ * @returns The {@linkcode CommonAnim} for the given terrain
+ */
 export function getTerrainAnim(terrainType: TerrainType): CommonAnim {
   return (CommonAnim.MISTY_TERRAIN + (terrainType - 1)) as CommonAnim;
 }
