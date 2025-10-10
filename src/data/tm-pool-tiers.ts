@@ -6,6 +6,7 @@ interface TmPoolTiers {
   [key: number]: ModifierTier;
 }
 
+/** A map of {@linkcode MoveId | TMs} to their {@linkcode ModifierTier | modifier tier} */
 export const tmPoolTiers = deepFreeze<TmPoolTiers>({
   [MoveId.MEGA_PUNCH]: ModifierTier.GREAT,
   [MoveId.PAY_DAY]: ModifierTier.ULTRA,
