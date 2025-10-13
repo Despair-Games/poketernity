@@ -29,7 +29,7 @@ export class RecallPhase extends PokemonPhase {
 
   // #region Public methods
 
-  public override start(): void {
+  public override async start(): Promise<void> {
     const pokemon = this.getPokemonAtFieldIndex();
     if (!pokemon?.isActive(true) || !pokemon.isOnField()) {
       super.end();
@@ -41,17 +41,13 @@ export class RecallPhase extends PokemonPhase {
     const { turnManager } = currentBattle;
     if (this.switchType === SwitchType.SWITCH && turnManager.tryPursueTarget(pokemon)) {
       // Reschedule this phase for after the scheduled Pursuit is fully resolved
-      // TODO: this might cause issues if Pursuit KOs the target
       phaseManager.unshiftPhase(this);
       super.end();
       return;
     }
 
-    this.recall()
-      .then(() => this.end())
-      .catch(() => {
-        throw new Error("RecallPhase: Recall process failed unexpectedly");
-      });
+    await this.recall();
+    this.end();
   }
 
   // #endregion

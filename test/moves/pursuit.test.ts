@@ -199,7 +199,12 @@ describe("Move - Pursuit", () => {
        * interrupted by opponents' uses of Pursuit. Since turn order reflects when commands are scheduled, the
        * `PLAYER` Pokemon is expected to act first.
        */
-      // expect(game.field.getTurnOrder()).toEqual([BattlerIndex.PLAYER, BattlerIndex.ENEMY_2, BattlerIndex.ENEMY, BattlerIndex.PLAYER_2]);
+      expect(game.field.getTurnOrder()).toEqual([
+        BattlerIndex.PLAYER,
+        BattlerIndex.ENEMY_2,
+        BattlerIndex.ENEMY,
+        BattlerIndex.PLAYER_2,
+      ]);
       expect(magikarp.turnData.attacksReceived).toHaveLength(2);
 
       const pursuitPower = pursuitSpy.mock.results.map((result) => result.value);
@@ -243,6 +248,38 @@ describe("Move - Pursuit", () => {
       expect(magikarp).toHaveFullHp();
       expect(feebas).not.toHaveFullHp();
       expect(luvdisc).toHaveFullHp();
+    });
+
+    it("should bypass redirection when attacking a retreating opponent", async () => {
+      await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS, SpeciesId.LUVDISC);
+
+      const [magikarp, feebas, luvdisc] = game.scene.getPlayerParty();
+
+      game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+      game.move.use(MoveId.FOLLOW_ME, 0);
+      game.move.use(MoveId.U_TURN, 1, BattlerIndex.ENEMY);
+      await game.move.forceEnemyMove(MoveId.PURSUIT, BattlerIndex.PLAYER_2);
+      game.selectPartyPokemon(2);
+      await game.toEndOfTurn();
+
+      expect(magikarp).toHaveFullHp();
+      expect(feebas).not.toHaveFullHp();
+      expect(luvdisc).toHaveFullHp();
+    });
+
+    it("should not bypass redirection when not attacking a retreating opponent", async () => {
+      await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
+
+      const [magikarp, feebas] = game.scene.getPlayerField();
+
+      game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+      game.move.use(MoveId.FOLLOW_ME, 0);
+      game.move.use(MoveId.SPLASH, 1);
+      await game.move.forceEnemyMove(MoveId.PURSUIT, BattlerIndex.PLAYER_2);
+      await game.toEndOfTurn();
+
+      expect(magikarp).not.toHaveFullHp();
+      expect(feebas).toHaveFullHp();
     });
   });
 });
