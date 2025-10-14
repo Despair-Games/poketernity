@@ -12,6 +12,7 @@ import { globalScene } from "#app/global-scene";
 import type { WeakenMoveTypeTag } from "#arena-tags/weaken-move-type-tag";
 import { applyBattlerTags } from "#battler-tags/apply-battler-tags";
 import type { MeFirstPowerBoostTag } from "#battler-tags/me-first-power-boost-tag";
+import type { PursuingTag } from "#battler-tags/pursuing-battler-tag";
 import type { TypeBoostTag } from "#battler-tags/type-boost-tag";
 import { WEAKEN_MOVE_TYPE_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
 import { TYPE_BOOST_TAG_TYPES } from "#constants/battler-tag-constants";
@@ -887,6 +888,7 @@ export abstract class Move {
     }
 
     applyBattlerTags<MeFirstPowerBoostTag>(BattlerTagType.ME_FIRST_POWER_BOOST, source, simulated, power);
+    applyBattlerTags<PursuingTag>(BattlerTagType.PURSUING, source, simulated, power);
 
     return power.value;
   }
