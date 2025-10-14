@@ -15,14 +15,13 @@ import type { UserInfo } from "#types/api-types";
 import { randomString } from "#utils/random-utils";
 
 export let loggedInUser: UserInfo | null = null;
-// This is a random string that is used to identify the client session - unique per session (tab or window) so that the game will only save on the one that the server is expecting
+/**
+ * This is a random string that is used to identify the client session - unique per session (tab or window)
+ * so that the game will only save on the one that the server is expecting
+ */
 export const clientSessionId = randomString(32);
 
 const OFFLINE_USERNAME = "Guest";
-
-export function initLoggedInUser(): void {
-  loggedInUser = { username: OFFLINE_USERNAME, lastSessionSlot: -1, discordId: "", googleId: "", hasAdminRole: false };
-}
 
 export function updateUserInfo(): Promise<[boolean, number]> {
   return new Promise<[boolean, number]>((resolve) => {
@@ -60,9 +59,10 @@ export function updateUserInfo(): Promise<[boolean, number]> {
 
 /**
  * Retrieve the local storage key used to store the given data type.
+ * @remarks
  * For System data, Session data, Run history and starter preferences the key depends on the username.
- *
- * Note: needs to be in this file to prevent circular dependencies due to `updateUserInfo` calling it.
+ * @privateRemarks
+ * Needs to be in the same file as {@linkcode updateUserInfo} to prevent circular dependencies due to `updateUserInfo` calling it.
  *
  * @param dataType - The {@linkcode GameDataType} we want to store / retrieve from storage.
  * @param slotId - The save slot index, from 0 to 4 - only used for session data. Default: `0`.
@@ -71,7 +71,7 @@ export function updateUserInfo(): Promise<[boolean, number]> {
 export function getLocalStorageKey(dataType: GameDataType, slotId: number = 0): string {
   let prefix = "";
   switch (dataType) {
-    // Those data types have a static storage key
+    // These data types have a static storage key
     case GameDataType.SETTINGS:
       return SETTINGS_LS_KEY;
     case GameDataType.TUTORIALS:
@@ -90,6 +90,9 @@ export function getLocalStorageKey(dataType: GameDataType, slotId: number = 0): 
       break;
     case GameDataType.STARTER_PREFS:
       prefix = STARTER_PREF_LS_KEY_PREFIX;
+      break;
+    default:
+      dataType satisfies never;
       break;
   }
   return `${prefix}_${loggedInUser?.username}`;
