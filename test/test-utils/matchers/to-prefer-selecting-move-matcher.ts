@@ -1,3 +1,7 @@
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
+
 import { getPokemonNameWithAffix } from "#app/messages";
 import { MoveId } from "#enums/move-id";
 import { getEnemyMoveChoices } from "#test/test-utils/enemy-command-utils";
@@ -6,7 +10,7 @@ import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
 /**
  * Matcher to check if an {@linkcode EnemyPokemon} prefers selecting a specific
- * move in the current game state
+ * move in the current game state.
  * @param received - The object to check. Should be an {@linkcode EnemyPokemon}.
  * @param expectedMoveId - The {@linkcode MoveId} to check for.
  * @returns Whether the matcher passed, and the message to display in case of failure

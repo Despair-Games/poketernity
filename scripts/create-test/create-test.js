@@ -27,6 +27,7 @@ const choices = [
   { label: "UI", dir: "ui" },
   { label: "AI (Move Effect Scores)", dir: "ai/move-effect-scores" },
   { label: "AI (Move Condition Scores)", dir: "ai/move-condition-scores" },
+  { label: "AI (Matchup Scores)", dir: "ai/matchup-scores" },
 ];
 
 //#endregion
