@@ -765,11 +765,6 @@ export class MovePhase extends BattlePhase {
 
         if (this.pokemon.hasAbilityWithAttr(AbAttrFlag.BLOCK_REDIRECT)) {
           redirectTarget.value = currentTarget;
-          globalScene.phaseManager.createAndUnshiftPhase(
-            "ShowAbilityPhase",
-            this.pokemon,
-            this.pokemon.getPassiveAbility().hasAttrFlag(AbAttrFlag.BLOCK_REDIRECT),
-          );
         }
 
         this.targets[0] = redirectTarget.value;
