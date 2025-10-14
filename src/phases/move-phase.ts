@@ -757,19 +757,13 @@ export class MovePhase extends BattlePhase {
 
       if (currentTarget !== redirectTarget.value) {
         const bypassRedirectAttrs = this.pokemonMove.getMove().getAttrs(BypassRedirectAttr);
-        bypassRedirectAttrs.forEach((attr) => {
-          if (!attr.abilitiesOnly || redirectedByAbility) {
-            redirectTarget.value = currentTarget;
-          }
-        });
-
         if (
-          this.pokemon.hasTag(BattlerTagType.PURSUING)
+          bypassRedirectAttrs.some((attr) => !attr.abilitiesOnly || redirectedByAbility)
           || this.pokemon.hasAbilityWithAttr(AbAttrFlag.BLOCK_REDIRECT)
+          || this.pokemon.hasTag(BattlerTagType.PURSUING)
         ) {
           redirectTarget.value = currentTarget;
         }
-
         this.targets[0] = redirectTarget.value;
       }
     }
