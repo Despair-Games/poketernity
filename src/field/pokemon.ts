@@ -1329,7 +1329,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.calculateStats();
   }
 
-  generateNature(naturePool?: Nature[]): void {
+  protected generateNature(naturePool?: Nature[]): void {
     if (naturePool === undefined) {
       naturePool = getTSEnumValues(Nature);
     }
@@ -1337,15 +1337,16 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.setNature(nature);
   }
 
-  isFullHp(): boolean {
+  public isFullHp(): boolean {
     return this.hp >= this.getMaxHp();
   }
 
-  getMaxHp(): number {
+  public getMaxHp(): number {
     return this.getStat(Stat.HP);
   }
 
-  getInverseHp(): number {
+  /** @returns The Pokemon's max HP minus it's current HP */
+  public getInverseHp(): number {
     return this.getMaxHp() - this.hp;
   }
 
@@ -1353,24 +1354,22 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * Helper function that returns a Pokemon's unrounded HP ratio
    * @returns the Pokemon's current HP divided by its max HP
    */
-  getHpRatio(): number {
+  public getHpRatio(): number {
     return this.hp / this.getMaxHp();
   }
 
-  generateGender(): void {
+  /** Sets the pokemon's gender based on its species gender ratios */
+  protected generateGender(): void {
     if (this.species.malePercent === null) {
       this.gender = Gender.GENDERLESS;
+    } else if (Phaser.Math.RND.frac() * 100 < this.species.malePercent) {
+      this.gender = Gender.MALE;
     } else {
-      const genderChance = (this.id % 256) * 0.390625;
-      if (genderChance < this.species.malePercent) {
-        this.gender = Gender.MALE;
-      } else {
-        this.gender = Gender.FEMALE;
-      }
+      this.gender = Gender.FEMALE;
     }
   }
 
-  getGender(bypassSummonData: boolean = false): Gender {
+  public getGender(bypassSummonData: boolean = false): Gender {
     if (!bypassSummonData && this.summonData.gender != null) {
       return this.summonData.gender;
     }
