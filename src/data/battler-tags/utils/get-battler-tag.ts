@@ -56,6 +56,7 @@ import { PowderTag } from "#battler-tags/powder-tag";
 import { PowerTrickTag } from "#battler-tags/power-trick-tag";
 import { ProtectedTag } from "#battler-tags/protected-tag";
 import { PsychoShiftTag } from "#battler-tags/psycho-shift-tag";
+import { PursuingTag } from "#battler-tags/pursuing-battler-tag";
 import { QuashedTag } from "#battler-tags/quashed-tag";
 import { RageTag } from "#battler-tags/rage-tag";
 import { RechargingTag } from "#battler-tags/recharging-tag";
@@ -320,6 +321,8 @@ export function getBattlerTag(
       return new SnatchingTag();
     case BattlerTagType.ME_FIRST_POWER_BOOST:
       return new MeFirstPowerBoostTag();
+    case BattlerTagType.PURSUING:
+      return new PursuingTag();
     case BattlerTagType.BIDE:
       return new BideTag();
     case BattlerTagType.NONE:
