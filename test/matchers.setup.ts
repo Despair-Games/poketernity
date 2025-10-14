@@ -14,6 +14,7 @@ import { toHaveUsedMoveMatcher } from "#test/test-utils/matchers/to-have-used-mo
 import { toHaveWeatherMatcher } from "#test/test-utils/matchers/to-have-weather-matcher";
 import { toNeverSelectMoveMatcher } from "#test/test-utils/matchers/to-never-select-move-matcher";
 import { toPreferSelectingMoveMatcher } from "#test/test-utils/matchers/to-prefer-selecting-move-matcher";
+import { toPreferSwitchingMatcher } from "#test/test-utils/matchers/to-prefer-switching-matcher";
 import { expect } from "vitest";
 
 /*
@@ -38,4 +39,5 @@ expect.extend({
   toHaveFainted: toHaveFaintedMatcher,
   toPreferSelectingMove: toPreferSelectingMoveMatcher,
   toNeverSelectMove: toNeverSelectMoveMatcher,
+  toPreferSwitching: toPreferSwitchingMatcher,
 });

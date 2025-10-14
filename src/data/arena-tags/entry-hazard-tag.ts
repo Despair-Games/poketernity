@@ -3,6 +3,7 @@ import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
+import type { ValueHolder } from "#utils/common-utils";
 
 /**
  * Abstract class to implement arena entry hazards.
@@ -55,18 +56,7 @@ export abstract class EntryHazardTag extends ArenaTag {
    */
   protected abstract activateTrap(_pokemon: Pokemon, _simulated: boolean): boolean;
 
-  /**
-   * Calculates the tag's effect on a Pokemon's matchup score (for enemy switching)
-   * @param pokemon - The {@linkcode Pokemon} to evaluate
-   * @returns the multiplier to the given Pokemon's matchup score
-   * @deprecated To be replaced in the AI Rework
-   * ({@link https://github.com/Despair-Games/poketernity/issues/945 | #945})
-   */
-  public getMatchupScoreMultiplier(pokemon: Pokemon): number {
-    return pokemon.isGrounded()
-      ? 1
-      : Phaser.Math.Linear(0, 1 / Math.pow(2, this.layers), Math.min(pokemon.getHpRatio(), 0.5) * 2);
-  }
+  public abstract override modifyMatchupScore(_pokemon: Pokemon, _matchupScore: ValueHolder<number>): boolean;
 
   override loadTag(source: any): void {
     super.loadTag(source);

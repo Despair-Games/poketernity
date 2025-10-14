@@ -7,6 +7,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
 import type { Pokemon } from "#field/pokemon";
 import type { MovePhase } from "#phases/move-phase";
+import type { ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -99,5 +100,14 @@ export class InfatuatedTag extends BattlerTag {
 
   override getDescriptor(): string {
     return i18next.t("battlerTags:infatuatedDesc");
+  }
+
+  public override modifyMatchupScore(
+    _pokemon: Pokemon,
+    _opponent: Pokemon,
+    matchupScore: ValueHolder<number>,
+  ): boolean {
+    matchupScore.value -= 1;
+    return false;
   }
 }

@@ -4,7 +4,7 @@ import type { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
-import { coerceArray } from "#utils/common-utils";
+import { coerceArray, type ValueHolder } from "#utils/common-utils";
 import { getPokemonMoveName } from "#utils/pokemon-utils";
 
 /**
@@ -43,6 +43,15 @@ export class BattlerTag {
    * @defaultValue `false`
    */
   public isBatonPassable: boolean;
+  /**
+   * Used to determine the order in which tags apply their
+   * Matchup Score modifier (if they have one). The higher the priority,
+   * the earlier the tag will modify MUS in the overall order.
+   * @defaultValue `0`
+   * @see {@linkcode modifyMatchupScore}
+   * @see {@linkcode Pokemon.getMatchupScore}
+   */
+  public musPriority: number = 0;
 
   constructor(
     tagType: BattlerTagType,
@@ -182,5 +191,17 @@ export class BattlerTag {
    */
   public isType<T extends BattlerTag>(...types: BattlerTagType[]): this is T {
     return types.includes(this.tagType);
+  }
+
+  /**
+   * Modifies the afflicted Pokemon's {@link Pokemon.getMatchupScore | Matchup Score}
+   * against a given opponent.
+   * @param pokemon - The {@linkcode Pokemon} under this tag's effect
+   * @param opponent - The opposing {@linkcode Pokemon} for which MUS is evaluated
+   * @param matchupScore - The running MUS for the evaluation
+   * @returns `true` if this tag's modification is meant to override modifications from other tags (Default `false`).
+   */
+  public modifyMatchupScore(_pokemon: Pokemon, _opponent: Pokemon, _matchupScore: ValueHolder<number>): boolean {
+    return false;
   }
 }

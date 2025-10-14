@@ -150,5 +150,13 @@ declare module "vitest" {
      * the enemy's moveset to never be used
      */
     toNeverSelectMove(qualifier: MoveQualifier): void;
+
+    /**
+     * Matcher to check if an {@linkcode EnemyPokemon} prefers switching to
+     * another Pokemon in the current game state.
+     * @param switchInIndex - (Optional) The party slot of the {@linkcode EnemyPokemon}
+     * expected to take the received enemy's place on the field
+     */
+    toPreferSwitching(switchInIndex?: number): void;
   }
 }

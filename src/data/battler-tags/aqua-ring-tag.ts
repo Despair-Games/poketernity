@@ -5,7 +5,7 @@ import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
-import { toDmgValue } from "#utils/common-utils";
+import { toDmgValue, type ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -44,5 +44,14 @@ export class AquaRingTag extends BattlerTag {
     }
 
     return ret;
+  }
+
+  public override modifyMatchupScore(
+    _pokemon: Pokemon,
+    _opponent: Pokemon,
+    matchupScore: ValueHolder<number>,
+  ): boolean {
+    matchupScore.value += 0.5;
+    return false;
   }
 }

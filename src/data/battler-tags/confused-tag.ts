@@ -15,7 +15,7 @@ import { Stat } from "#enums/stat";
 import { TerrainType } from "#enums/terrain-type";
 import type { Pokemon } from "#field/pokemon";
 import type { MovePhase } from "#phases/move-phase";
-import { NumberHolder, toDmgValue } from "#utils/common-utils";
+import { NumberHolder, toDmgValue, type ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -137,5 +137,14 @@ export class ConfusedTag extends BattlerTag {
 
   override getDescriptor(): string {
     return i18next.t("battlerTags:confusedDesc");
+  }
+
+  public override modifyMatchupScore(
+    _pokemon: Pokemon,
+    _opponent: Pokemon,
+    matchupScore: ValueHolder<number>,
+  ): boolean {
+    matchupScore.value -= 1;
+    return false;
   }
 }
