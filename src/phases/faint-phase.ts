@@ -134,7 +134,7 @@ export class FaintPhase extends PokemonPhase {
   }
 
   protected doFaint(): void {
-    const { currentBattle, field, tweens } = globalScene;
+    const { currentBattle, field, phaseManager, tweens } = globalScene;
     const { battleType, double, enemyFaintsHistory, playerFaintsHistory, turn } = currentBattle;
     const pokemon = this.getPokemon();
 
@@ -147,7 +147,7 @@ export class FaintPhase extends PokemonPhase {
       enemyFaintsHistory.push({ pokemon, turn });
     }
 
-    globalScene.phaseManager.createAndUnshiftPhase(
+    phaseManager.createAndUnshiftPhase(
       "MessagePhase",
       i18next.t("battle:fainted", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       undefined,
@@ -186,25 +186,33 @@ export class FaintPhase extends PokemonPhase {
       }
     }
 
+    /*
+     * Remove any scheduled Phases to recall and/or switch out the fainted Pokemon.
+     * These Phases may have been scheduled e.g. if the Pokemon fainted from an opponent's Pursuit.
+     * TODO: Refactor this; Switch phase scheduling around faints is messy.
+     */
+    phaseManager.tryRemovePhase((phase) => phase.is("RecallPhase") && phase.battlerIndex === this.battlerIndex);
+    phaseManager.tryRemovePhase((phase) => phase.is("SwitchPhase") && phase.battlerIndex === this.battlerIndex);
+
     if (this.isPlayer) {
       /** The total number of Pokemon in the player's party that can legally fight */
       const legalPlayerPokemon = globalScene.getPokemonAllowedInBattle();
       /** The total number of legal player Pokemon that aren't currently on the field */
       const legalPlayerPartyPokemon = legalPlayerPokemon.filter((p) => !p.isActive(true));
       if (!legalPlayerPokemon.length) {
-        globalScene.phaseManager.queueGameOverPhase({ clearPhaseQueue: false });
+        phaseManager.queueGameOverPhase({ clearPhaseQueue: false });
       } else if (double && legalPlayerPokemon.length === 1 && legalPlayerPartyPokemon.length === 0) {
         /**
          * If the player has exactly one Pokemon in total at this point in a double battle, and that Pokemon
          * is already on the field, push a phase that moves that Pokemon to center position.
          */
-        globalScene.phaseManager.createAndPushPhase("ToggleDoublePositionPhase", true);
+        phaseManager.createAndPushPhase("ToggleDoublePositionPhase", true);
       } else if (legalPlayerPartyPokemon.length > 0) {
         /**
          * If previous conditions weren't met, and the player has at least 1 legal Pokemon off the field,
          * push a phase that prompts the player to summon a Pokemon from their party.
          */
-        globalScene.phaseManager.createAndPushPhase("SwitchPhase", this.fieldIndex, SwitchType.FAINT_SWITCH);
+        phaseManager.createAndPushPhase("SwitchPhase", this.fieldIndex, SwitchType.FAINT_SWITCH);
       }
     } else {
       globalScene.phaseManager.createAndUnshiftPhase("PostKnockoutPhase", this.battlerIndex);
