@@ -21,6 +21,7 @@ import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
 import { BypassSpeedChanceModifier } from "#modifier/modifier";
 import { MoveHeaderAttr } from "#moves/move-header-attr";
+import { PursuitAttr } from "#moves/pursuit-attr";
 import type { TurnMove } from "#types/move-types";
 import { BooleanHolder } from "#utils/common-utils";
 import { randSeedShuffle } from "#utils/random-utils";
@@ -271,6 +272,50 @@ export class TurnCommandManager {
     turnCommand.turnMove = newMove;
     turnCommand.targets = targets;
 
+    return true;
+  }
+
+  /**
+   * Forces the first opposing Pokemon in turn order that is intending to use the move Pursuit
+   * to immediately Terastallize (if applicable), then attack the target.
+   * @param target - The {@linkcode Pokemon} attempting to switch out or retreat
+   * @returns `true` if a turn command was scheduled by this call
+   */
+  public tryPursueTarget(target: Pokemon): boolean {
+    const pursuitCommand = this.tryRemoveCommand(
+      (tc) => tc.pokemon.isOpponent(target) && !!tc.turnMove?.move.hasAttr(PursuitAttr),
+    );
+    if (pursuitCommand == null) {
+      return false;
+    }
+
+    const { command, pokemon, cursor } = pursuitCommand;
+    // we know this is defined from the filter above, but TS doesn't
+    const turnMove = pursuitCommand.turnMove!;
+    const { phaseManager } = globalScene;
+
+    // Pursuing Pokemon that intend to Terastallize do so immediately before attacking.
+    // TODO: Terastallizing pursuing Pokemon will always act before non-Tera pursuing
+    // Pokemon, regardless of their Speed order.
+    if (command === BattleCommand.TERA) {
+      phaseManager.createAndUnshiftPhase("TerastallizationPhase", pokemon);
+    }
+
+    pokemon.addTag(BattlerTagType.PURSUING);
+
+    const move =
+      pokemon.getMoveset().find((m) => m.moveId === turnMove.move.id && m.ppUsed < m.getMovePp())
+      ?? new PokemonMove(turnMove.move.id, { pokemonId: pokemon.id });
+
+    phaseManager.unshiftPhase(
+      phaseManager.createPhase("MovePhase", pokemon, [target.getBattlerIndex()], move, {
+        ignorePp: cursor !== -1 && turnMove.ignorePP,
+      }),
+      phaseManager.createPhase("PostActionPhase", pokemon.getBattlerIndex(), true),
+    );
+
+    pokemon.turnData.order = this.orderIndex++;
+    this.commandsInProgress++;
     return true;
   }
 

@@ -160,7 +160,11 @@ export abstract class HitCheckPhase extends PokemonPhase {
       return [HitCheckResult.HIT, effectiveness];
     }
 
-    if (alwaysHit || (target.hasTag(BattlerTagType.TELEKINESIS) && !move.hasAttr(OneHitKOAttr))) {
+    if (
+      alwaysHit
+      || user.hasTag(BattlerTagType.PURSUING)
+      || (target.hasTag(BattlerTagType.TELEKINESIS) && !move.hasAttr(OneHitKOAttr))
+    ) {
       return [HitCheckResult.HIT, effectiveness];
     }
 

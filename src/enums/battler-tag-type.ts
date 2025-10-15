@@ -118,6 +118,7 @@ export const BattlerTagType = {
   SNATCHING: 104,
   ME_FIRST_POWER_BOOST: 105,
   BIDE: 106,
+  PURSUING: 107,
 } as const;
 
 export type BattlerTagType = ObjectValues<typeof BattlerTagType>;
