@@ -1,31 +1,14 @@
+// @ts-nocheck: disabled to improve typecheck performance
+
+import { EVOLVE_MOVE, RELEARN_MOVE } from "#constants/move-constants";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import type { PokemonSpeciesLevelMoves } from "#types/move-types";
+import { deepFreeze } from "#utils/common-utils";
 
-export type LevelMoves = [number, MoveId][];
-
-interface PokemonSpeciesLevelMoves {
-  [key: number]: LevelMoves;
-}
-
-interface PokemonFormLevelMoves {
-  [key: number]: LevelMoves;
-}
-
-export interface PokemonSpeciesFormLevelMoves {
-  [key: number]: PokemonFormLevelMoves;
-}
-
-/** Moves that can only be learned with a memory-mushroom */
-export const RELEARN_MOVE = -1;
-/**
- * Moves that are learned by applying a specific form change without requiring a high enough level.
- * This has the same value as {@linkcode EVOLVE_MOVE}, but is provided for better clarity.
- */
-export const FORM_CHANGE_MOVE = 0;
-/** Moves that are learned by evolving into the indicated species */
-export const EVOLVE_MOVE = 0;
-
-export const pokemonSpeciesLevelMoves: PokemonSpeciesLevelMoves = {
+// Note: Using `deepFreeze<PokemonSpeciesLevelMoves>` causes a large performance penalty when typechecking
+// due to the size of the object, so `: Readonly<PokemonSpeciesLevelMoves>` is used instead.
+export const pokemonSpeciesLevelMoves: Readonly<PokemonSpeciesLevelMoves> = deepFreeze({
   [SpeciesId.BULBASAUR]: [
     [1, MoveId.TACKLE],
     [1, MoveId.GROWL],
@@ -18930,4 +18913,4 @@ export const pokemonSpeciesLevelMoves: PokemonSpeciesLevelMoves = {
     [64, MoveId.HAMMER_ARM],
     [70, MoveId.BLOOD_MOON],
   ],
-};
+});

@@ -87,7 +87,7 @@ export function initMoveAnim(move: MoveId): Promise<void> {
  * @param move the move to populate an animation for
  * @param defaultMoveAnim the move to use as the default animation
  */
-function useDefaultAnim(move: MoveId, defaultMoveAnim: MoveId) {
+function useDefaultAnim(move: MoveId, defaultMoveAnim: MoveId): void {
   populateMoveAnim(move, moveAnims.get(defaultMoveAnim));
 }
 
@@ -99,7 +99,7 @@ function useDefaultAnim(move: MoveId, defaultMoveAnim: MoveId) {
  *
  * @remarks use {@linkcode useDefaultAnim} to use a default animation
  */
-function logMissingMoveAnim(move: MoveId, ...optionalParams: any[]) {
+function logMissingMoveAnim(move: MoveId, ...optionalParams: any[]): void {
   const moveName = animationFileName(move);
   console.warn(`Could not load animation file for move '${moveName}'`, ...optionalParams);
 }

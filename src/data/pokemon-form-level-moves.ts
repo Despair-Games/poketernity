@@ -2,17 +2,28 @@
 import type { SpeciesFormChange } from "#data/pokemon-forms";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
-import type { PokemonSpeciesFormLevelMoves } from "#data/pokemon-level-moves";
-import { EVOLVE_MOVE, FORM_CHANGE_MOVE } from "#data/pokemon-level-moves";
+import { EVOLVE_MOVE, FORM_CHANGE_MOVE } from "#constants/move-constants";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import type { LevelMoves } from "#types/move-types";
+import { deepFreeze } from "#utils/common-utils";
+
+/** A list mapping pokemon species forms to their {@linkcode LevelMoves | level up & form change moves} */
+interface PokemonFormLevelMoves {
+  readonly [key: number]: LevelMoves;
+}
+
+/** A list mapping pokemon species and their forms to their {@linkcode PokemonFormLevelMoves | level up & form change moves} */
+interface PokemonSpeciesFormLevelMoves {
+  readonly [key: number]: PokemonFormLevelMoves;
+}
 
 /**
  * Note: The logic that distinguishes regular level-up moves from moves that are learned
  * upon form change (e.g., G-max moves) is handled by
  * {@link SpeciesFormChange.movesToLearn | data stored in `pokemon-forms.ts`}.
  */
-export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
+export const pokemonFormLevelMoves: Readonly<PokemonSpeciesFormLevelMoves> = deepFreeze({
   [SpeciesId.VENUSAUR]: {
     2: [
       // G-Max
@@ -1751,4 +1762,4 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [60, MoveId.CLOSE_COMBAT],
     ],
   },
-};
+});

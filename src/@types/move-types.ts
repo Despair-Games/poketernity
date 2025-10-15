@@ -1,5 +1,6 @@
 /* biome-ignore-start lint/correctness/noUnusedImports: TSDoc imports */
 import type { ConditionalProtectTag } from "#arena-tags/conditional-protect-tag";
+import type { SpeciesId } from "#enums/species-id";
 /* biome-ignore-end lint/correctness/noUnusedImports: TSDoc imports */
 
 import type { BattlerIndex, FieldBattlerIndex } from "#enums/battler-index";
@@ -64,3 +65,11 @@ export type ProtectConditionFunc = (moveId: MoveId) => boolean;
 export type UserMoveConditionFunc = (user: Pokemon, move: Move) => boolean;
 
 export type MoveMessageFunc = (user: Pokemon, target: Pokemon, move: Move) => string | undefined;
+
+/** A list of {@linkcode MoveId | moves} learned by level up, in the form of `[PokemonLevel, MoveId][]` */
+export type LevelMoves = [number, MoveId][];
+
+/** A list mapping pokemon {@linkcode SpeciesId | species} to their {@linkcode LevelMoves | level up moves} */
+export interface PokemonSpeciesLevelMoves {
+  readonly [key: number]: LevelMoves;
+}

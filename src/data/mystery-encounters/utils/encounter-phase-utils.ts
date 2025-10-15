@@ -65,7 +65,7 @@ import i18next from "i18next";
 /**
  * Animates exclamation sprite over trainer's head at start of encounter
  */
-export function doTrainerExclamation() {
+export function doTrainerExclamation(): void {
   const exclamationSprite = globalScene.add.sprite(0, 0, "encounter_exclaim");
   exclamationSprite.setName("exclamation");
   globalScene.field.add(exclamationSprite);
@@ -465,15 +465,15 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
 }
 
 /**
- * Load special move animations/sfx for hard-coded encounter-specific moves that a pokemon uses at the start of an encounter
- * See: {@linkcode IMysteryEncounter.startOfBattleEffects} for more details
+ * Load special move animations/sfx for hard-coded encounter-specific moves that a pokemon uses at the start of an encounter \
+ * See: {@linkcode IMysteryEncounter | IMysteryEncounter.startOfBattleEffects} for more details
  *
  * This promise does not need to be awaited on if called in an encounter onInit (will just load lazily)
- * @param moveIds The move or moves the Pokemon uses at the start of the encounter
+ * @param moveIds - The move or moves the Pokemon uses at the start of the encounter
  */
-export function loadCustomMovesForEncounter(moveIds: MoveId | MoveId[]) {
-  moveIds = coerceArray(moveIds);
-  return Promise.all(moveIds.map((moveId) => initMoveAnim(moveId))).then(() => loadMoveAnimAssets(moveIds));
+export async function loadCustomMovesForEncounter(moveIds: MoveId | MoveId[]): Promise<void> {
+  const movesArray: MoveId[] = coerceArray(moveIds);
+  return Promise.all(movesArray.map((move: MoveId) => initMoveAnim(move))).then(() => loadMoveAnimAssets(movesArray));
 }
 
 /**
@@ -482,7 +482,7 @@ export function loadCustomMovesForEncounter(moveIds: MoveId | MoveId[]) {
  * @param playSound whether or not to play the buying sound effect
  * @param showMessage whether or not to display a message about paying or receiving money
  */
-export function updatePlayerMoney(changeValue: number, playSound: boolean = true, showMessage: boolean = true) {
+export function updatePlayerMoney(changeValue: number, playSound: boolean = true, showMessage: boolean = true): void {
   globalScene.money = Math.min(Math.max(globalScene.money + changeValue, 0), Number.MAX_SAFE_INTEGER);
   globalScene.updateMoneyText();
   globalScene.animateMoneyChanged(false);
@@ -787,7 +787,7 @@ export function setEncounterRewards(
   customShopRewards?: CustomModifierSettings,
   eggRewards?: EggOptions[],
   preRewardsCallback?: VoidFunction,
-) {
+): void {
   globalScene.currentBattle.mysteryEncounter!.doEncounterRewards = () => {
     if (preRewardsCallback) {
       preRewardsCallback();
@@ -862,7 +862,7 @@ export class OptionSelectSettings {
  * MUST be used only in onOptionPhase, will not work in onPreOptionPhase or onPostOptionPhase
  * @param optionSelectSettings - The initial OptionSelectSettings being passed to the new ME
  */
-export function initSubsequentOptionSelect(optionSelectSettings: OptionSelectSettings) {
+export function initSubsequentOptionSelect(optionSelectSettings: OptionSelectSettings): void {
   globalScene.phaseManager.createAndPushPhase("MysteryEncounterPhase", optionSelectSettings);
 }
 
@@ -875,7 +875,7 @@ export function initSubsequentOptionSelect(optionSelectSettings: OptionSelectSet
 export function leaveEncounterWithoutBattle(
   addHealPhase: boolean = false,
   encounterMode: MysteryEncounterMode = MysteryEncounterMode.NO_BATTLE,
-) {
+): void {
   globalScene.currentBattle.mysteryEncounter!.encounterMode = encounterMode;
   globalScene.phaseManager.clearPhaseQueue();
   globalScene.phaseManager.clearPhaseQueueSplice();
@@ -887,7 +887,7 @@ export function leaveEncounterWithoutBattle(
  * @param addHealPhase - Adds an empty shop phase to allow player to purchase healing items
  * @param doNotContinue - default `false`. If set to true, will not end the battle and continue to next wave
  */
-export function handleMysteryEncounterVictory(addHealPhase: boolean = false, doNotContinue: boolean = false) {
+export function handleMysteryEncounterVictory(addHealPhase: boolean = false, doNotContinue: boolean = false): void {
   const allowedPkm = globalScene.getPlayerParty().filter((pkm) => pkm.isAllowedInBattle());
   const { phaseManager } = globalScene;
 
@@ -936,7 +936,10 @@ export function handleMysteryEncounterVictory(addHealPhase: boolean = false, doN
  * @param addHealPhase - Adds an empty shop phase to allow player to purchase healing items
  * @param doNotContinue - default `false`. If set to true, will not end the battle and continue to next wave
  */
-export function handleMysteryEncounterBattleFailed(addHealPhase: boolean = false, doNotContinue: boolean = false) {
+export function handleMysteryEncounterBattleFailed(
+  addHealPhase: boolean = false,
+  doNotContinue: boolean = false,
+): void {
   const allowedPkm = globalScene.getPlayerParty().filter((pkm) => pkm.isAllowedInBattle());
 
   if (allowedPkm.length === 0) {
@@ -966,7 +969,7 @@ export function handleMysteryEncounterBattleFailed(addHealPhase: boolean = false
  * Will queue moves for any pokemon to use before the first CommandPhase of a battle
  * Mostly useful for allowing {@linkcode MysteryEncounter} enemies to "cheat" and use moves before the first turn
  */
-export function handleMysteryEncounterBattleStartEffects() {
+export function handleMysteryEncounterBattleStartEffects(): void {
   const encounter = globalScene.currentBattle.mysteryEncounter;
   if (
     globalScene.currentBattle.isBattleMysteryEncounter()
@@ -1013,11 +1016,11 @@ export function handleMysteryEncounterTurnStartEffects(): boolean {
 }
 
 /**
- * Debug function used to calculate ME statistics in a Classic run.
+ * Debug function used to calculate ME statistics in a Classic run. \
  * UNUSED IN THE GAME. PURELY FOR DEBUGGING.
  * @param baseSpawnWeight - The chance of spawning a ME in %
  */
-export function calculateMEAggregateStats(baseSpawnWeight: number) {
+export function calculateMEAggregateStats(baseSpawnWeight: number): void {
   const numRuns = 1000;
   let run = 0;
   const biomes = Object.keys(BiomeId).filter((key) => Number.isNaN(Number(key)));
@@ -1199,11 +1202,11 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
 }
 
 /**
- * TODO: remove once encounter spawn rate is finalized
+ * TODO: remove once encounter spawn rate is finalized \
  * Just a helper function to calculate aggregate stats for MEs in a Classic run
  * @param luckValue - 0 to 14
  */
-export function calculateRareSpawnAggregateStats(luckValue: number) {
+export function calculateRareSpawnAggregateStats(luckValue: number): void {
   const numRuns = 1000;
   let run = 0;
 

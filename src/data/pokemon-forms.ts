@@ -1,5 +1,5 @@
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { FORM_CHANGE_MOVE } from "#data/pokemon-level-moves";
+import type { FORM_CHANGE_MOVE } from "#constants/move-constants";
 import type { FormChangePhase } from "#phases/form-change-phase";
 import type { QuietFormChangePhase } from "#phases/quiet-form-change-phase";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
