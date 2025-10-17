@@ -1,18 +1,9 @@
 import { api } from "#api/api";
-import { initLoggedInUser, loggedInUser, updateUserInfo } from "#app/account";
+import { loggedInUser, updateUserInfo } from "#app/account";
 import * as appConstants from "#constants/app-constants";
 import { describe, expect, it, vi } from "vitest";
 
 describe("account", () => {
-  describe("initLoggedInUser", () => {
-    it("should set loggedInUser to Guest and lastSessionSlot to -1", () => {
-      initLoggedInUser();
-
-      expect(loggedInUser!.username).toBe("Guest");
-      expect(loggedInUser!.lastSessionSlot).toBe(-1);
-    });
-  });
-
   describe("updateUserInfo", () => {
     it("should set loggedInUser! to Guest if bypassLogin is true", async () => {
       vi.spyOn(appConstants, "BYPASS_LOGIN", "get").mockReturnValue(true);

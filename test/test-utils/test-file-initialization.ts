@@ -1,6 +1,5 @@
 import "#app/phaser-extensions";
 
-import { initLoggedInUser } from "#app/account";
 import { SESSION_ID_COOKIE } from "#constants/app-constants";
 import { allMoves } from "#data/data-lists";
 import { initEggMoves } from "#data/egg-moves";
@@ -41,7 +40,6 @@ export function initDataForTests() {
     initPokemonForms();
     initSpecies();
     initAbilities();
-    initLoggedInUser();
     initMysteryEncounters();
   }
 }

@@ -84,6 +84,7 @@ import {
   MIN_STAT_STAGE,
   NON_VOLATILE_STATUS_EFFECTS,
 } from "#constants/game-constants";
+import { EVOLVE_MOVE, RELEARN_MOVE } from "#constants/move-constants";
 import { allAbilities, allMoves } from "#data/data-lists";
 import { speciesEggMoves } from "#data/egg-moves";
 import { getLevelTotalExp } from "#data/exp";
@@ -91,12 +92,12 @@ import { getNatureStatMultiplier } from "#data/nature";
 import { starterPassiveAbilities } from "#data/passives";
 import type { SpeciesEvolutionCondition, SpeciesFormEvolution } from "#data/pokemon-evolutions";
 import { type SpeciesFormChange, SpeciesFormChangeLapseTeraTrigger } from "#data/pokemon-forms";
-import { EVOLVE_MOVE, type LevelMoves, RELEARN_MOVE } from "#data/pokemon-level-moves";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import type { PokemonSpecies } from "#data/pokemon-species";
 import type { PokemonSpeciesForm } from "#data/pokemon-species-form";
 import { BASE_HIDDEN_ABILITY_CHANCE, BASE_SHINY_CHANCE, SHINY_EPIC_CHANCE, SHINY_VARIANT_CHANCE } from "#data/rates";
-import { tmPoolTiers, tmSpecies } from "#data/tms";
+import { tmPoolTiers } from "#data/tm-pool-tiers";
+import { tmSpecies } from "#data/tms";
 import { getTypeDamageMultiplier, getTypeRgb, type TypeDamageMultiplier } from "#data/type";
 import { type Variant, variantData } from "#data/variant";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -185,7 +186,7 @@ import { VariableMoveTypeMultiplierAttr } from "#moves/variable-move-type-multip
 import type { PokemonData } from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
 import type { AbilityFilterOptions } from "#types/ability-types";
-import type { DamageCalculationResult, DamageResult, TurnMove } from "#types/move-types";
+import type { DamageCalculationResult, DamageResult, LevelMoves, TurnMove } from "#types/move-types";
 import type {
   CustomPokemonData,
   PokemonSummonData,

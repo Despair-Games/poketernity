@@ -18,6 +18,7 @@
     "esModuleInterop": true,
     "noImplicitOverride": true,
     "sourceMap": false,
+    "skipLibCheck": true,
     // #region `strict` options
     "strict": false,
     "alwaysStrict": true,

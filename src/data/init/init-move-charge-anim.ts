@@ -40,7 +40,7 @@ export function initMoveChargeAnim(chargeAnim: ChargeAnim): Promise<void> {
 //#endregion
 //#region Helpers
 
-function populateMoveChargeAnim(chargeAnim: ChargeAnim, animSource: any) {
+function populateMoveChargeAnim(chargeAnim: ChargeAnim, animSource: any): void {
   const moveChargeAnim = new LegacyAnimConfig(animSource);
   if (chargeAnims.get(chargeAnim) === null) {
     chargeAnims.set(chargeAnim, moveChargeAnim);

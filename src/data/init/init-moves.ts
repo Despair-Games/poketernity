@@ -253,7 +253,7 @@ import { WeightPowerAttr } from "#moves/weight-power-attr";
 import { crashDamageFunc } from "#utils/move-utils";
 import i18next from "i18next";
 
-export function initMoves() {
+export function initMoves(): void {
   const rawAllMoves = [
     SelfStatusMove.none(),
     new AttackMove(MoveId.POUND, ElementalType.NORMAL, MoveCategory.PHYSICAL, 40, 100, 35, -1, 0, 1),
@@ -3519,7 +3519,7 @@ export function initMoves() {
  * All damaging (aka {@linkcode AttackMove}) Fire-type moves can now thaw a frozen target, regardless of whether or not they have a chance to burn.
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Freeze_(status_condition) | Bulbapedia - Freeze (Status Condition)}
  */
-function addFireMovesThawFrozenTargetAttribute(move: Move) {
+function addFireMovesThawFrozenTargetAttribute(move: Move): void {
   if (move.type === ElementalType.FIRE && move.isAttackMove()) {
     move.addAttr(new HealStatusEffectAttr(false, StatusEffect.FREEZE));
   }
