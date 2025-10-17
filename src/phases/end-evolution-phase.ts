@@ -9,9 +9,10 @@ import type { MessageUiHandler } from "#ui/message-ui-handler";
 export class EndEvolutionPhase extends Phase {
   public override readonly phaseName = "EndEvolutionPhase";
 
-  public override start(): void {
+  public override async start(): Promise<void> {
     super.start();
 
-    globalScene.ui.setModeForceTransition<MessageUiHandler>(UiMode.MESSAGE).then(() => this.end());
+    await globalScene.ui.setModeForceTransition<MessageUiHandler>(UiMode.MESSAGE);
+    this.end();
   }
 }
