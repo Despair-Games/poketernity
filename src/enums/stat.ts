@@ -1,5 +1,4 @@
 import type { ObjectValues } from "#types/utility-types";
-import { enumValueToKey } from "#utils/common-utils";
 
 /** Enum that comprises all possible stat-related attributes, in-battle and permanent, of a Pokemon. */
 export const Stat = {
@@ -73,22 +72,4 @@ export function getStatStageChangeDescriptionKey(stages: number, isIncrease: boo
     default:
       return "battle:statSeverelyFell";
   }
-}
-
-/**
- * Provides the translation key corresponding to a given stat which can be translated into its full name.
- * @param stat - The {@linkcode Stat} to be translated
- * @returns The translation key corresponding to the given {@linkcode Stat}
- */
-export function getStatKey(stat: Stat) {
-  return `pokemonInfo:Stat.${enumValueToKey(Stat, stat)}`;
-}
-
-/**
- * Provides the translation key corresponding to a given stat which can be translated into its shortened name.
- * @param stat - The {@linkcode Stat} to be translated
- * @returns The translation key corresponding to the given {@linkcode Stat}
- */
-export function getShortenedStatKey(stat: PermanentStat) {
-  return `pokemonInfo:Stat.${enumValueToKey(Stat, stat)}shortened`;
 }

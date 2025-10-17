@@ -8,7 +8,7 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Nature } from "#enums/nature";
-import { getStatKey, type PermanentStat } from "#enums/stat";
+import type { PermanentStat } from "#enums/stat";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { PokemonHeldItemModifier } from "#modifier/modifier";
@@ -26,6 +26,7 @@ import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encou
 import { PokemonData } from "#system/pokemon-data";
 import type { HeldModifierConfig } from "#types/modifiers-types";
 import type { OptionSelectItem } from "#ui/option-select-config";
+import { getStatKey } from "#utils/i18n-utils";
 import { randSeedShuffle } from "#utils/random-utils";
 import i18next from "i18next";
 

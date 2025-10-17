@@ -1,8 +1,9 @@
 import { Nature } from "#enums/nature";
-import { EFFECTIVE_STATS, type EffectiveStat, getShortenedStatKey, Stat } from "#enums/stat";
+import { EFFECTIVE_STATS, type EffectiveStat, Stat } from "#enums/stat";
 import { TextStyle } from "#enums/text-style";
 import { getBBCodeFragment } from "#ui/text-utils";
 import { enumValueToKey } from "#utils/common-utils";
+import { getShortenedStatKey } from "#utils/i18n-utils";
 import { toReadableString } from "#utils/string-utils";
 import i18next from "i18next";
 

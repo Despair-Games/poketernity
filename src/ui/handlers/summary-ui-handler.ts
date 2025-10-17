@@ -16,7 +16,7 @@ import { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";
 import { Nature } from "#enums/nature";
 import { PlayerGender } from "#enums/player-gender";
-import { type EffectiveStat, getStatKey, PERMANENT_STATS, Stat } from "#enums/stat";
+import { type EffectiveStat, PERMANENT_STATS, Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { SummaryUiPage } from "#enums/summary-ui-page";
@@ -31,6 +31,7 @@ import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } f
 import { UiHandler } from "#ui/ui-handler";
 import { rgbHexToRgba } from "#utils/color-utils";
 import { enumValueToKey, fixedNumber } from "#utils/common-utils";
+import { getStatKey } from "#utils/i18n-utils";
 import { getShinyDescriptor } from "#utils/pokemon-utils";
 import { formatStat, leftPad, toReadableString } from "#utils/string-utils";
 import { argbFromRgba } from "@material/material-color-utilities";
