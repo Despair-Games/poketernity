@@ -1166,7 +1166,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
      * e.g. items and abilities, apply based on the original stat.
      * See https://bulbapedia.bulbagarden.net/wiki/Body_Press_(move)#Effect for more info
      */
-    if (move && opponent && [Stat.ATK, Stat.SPATK].includes(stat)) {
+    if (move && opponent && ([Stat.ATK, Stat.SPATK] as readonly EffectiveStat[]).includes(stat)) {
       applyMoveAttrs(VariableAtkAttr, this, opponent, move, statValue, isCritical);
     }
 
@@ -3017,7 +3017,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
      * The {@linkcode EffectiveStat} used to defend against the given move.
      * Can be altered by move attributes, e.g. from Psyshock.
      */
-    const defendingStat = new NumberHolder(isPhysical ? Stat.DEF : Stat.SPDEF);
+    const defendingStat = new ValueHolder(isPhysical ? Stat.DEF : Stat.SPDEF);
     applyMoveAttrs(VariableDefAttr, source, this, move, defendingStat);
 
     /**

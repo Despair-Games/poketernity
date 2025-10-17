@@ -18,6 +18,7 @@ import { PlayerGender } from "#enums/player-gender";
 import { RunDisplayMode } from "#enums/run-display-mode";
 import { SettingKeyboard } from "#enums/setting-keyboard";
 import type { SpeciesId } from "#enums/species-id";
+import type { EffectiveStat } from "#enums/stat";
 import { TextStyle } from "#enums/text-style";
 import { TrainerVariant } from "#enums/trainer-variant";
 import { UiMode } from "#enums/ui-mode";
@@ -745,7 +746,7 @@ export class RunInfoUiHandler extends UiHandler {
       const pStats: string[] = [];
       pokemon.stats.forEach((element) => pStats.push(formatLargeNumberFixedDigits(element, 1)));
       for (let i = 0; i < pStats.length; i++) {
-        const isMult = getNatureStatMultiplier(pNature, i);
+        const isMult = getNatureStatMultiplier(pNature, i as EffectiveStat);
         pStats[i] = isMult < 1 ? pStats[i] + `[color=${CommonColor.LIGHT_BLUE}]↓[/color]` : pStats[i];
         pStats[i] = isMult > 1 ? pStats[i] + `[color=${CommonColor.SOFT_PINK}]↑[/color]` : pStats[i];
       }

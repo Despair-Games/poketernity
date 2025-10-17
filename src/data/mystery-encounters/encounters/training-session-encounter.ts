@@ -8,7 +8,7 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Nature } from "#enums/nature";
-import { getStatKey } from "#enums/stat";
+import { getStatKey, type PermanentStat } from "#enums/stat";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { PokemonHeldItemModifier } from "#modifier/modifier";
@@ -126,9 +126,9 @@ export const TrainingSessionEncounter: MysteryEncounter = MysteryEncounterBuilde
             const ivToChange = ivIndexes.pop()!;
             let newVal = ivToChange.iv;
             if (improvedCount === 0) {
-              encounter.setDialogueToken("stat1", i18next.t(getStatKey(ivToChange.index)) ?? "");
+              encounter.setDialogueToken("stat1", i18next.t(getStatKey(ivToChange.index as PermanentStat)) ?? "");
             } else {
-              encounter.setDialogueToken("stat2", i18next.t(getStatKey(ivToChange.index)) ?? "");
+              encounter.setDialogueToken("stat2", i18next.t(getStatKey(ivToChange.index as PermanentStat)) ?? "");
             }
 
             // Corrects required encounter breakpoints to be continuous for all IV values

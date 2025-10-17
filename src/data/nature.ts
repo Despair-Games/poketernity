@@ -1,5 +1,5 @@
 import { Nature } from "#enums/nature";
-import { EFFECTIVE_STATS, getShortenedStatKey, Stat } from "#enums/stat";
+import { EFFECTIVE_STATS, type EffectiveStat, getShortenedStatKey, Stat } from "#enums/stat";
 import { TextStyle } from "#enums/text-style";
 import { getBBCodeFragment } from "#ui/text-utils";
 import { enumValueToKey } from "#utils/common-utils";
@@ -44,7 +44,7 @@ export function getNatureName(
   return ret;
 }
 
-export function getNatureStatMultiplier(nature: Nature, stat: Stat): number {
+export function getNatureStatMultiplier(nature: Nature, stat: EffectiveStat): number {
   switch (stat) {
     case Stat.ATK:
       switch (nature) {

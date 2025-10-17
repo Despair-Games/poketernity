@@ -1124,7 +1124,7 @@ export class PokemonBaseStatFlatModifier extends PokemonHeldItemModifier {
   override apply(_pokemon: Pokemon, baseStats: number[]): boolean {
     // Modifies the passed in baseStats[] array by a flat value, only if the stat is specified in this.stats
     baseStats.forEach((v, i) => {
-      if (this.stats.includes(i)) {
+      if (this.stats.includes(i as PermanentStat)) {
         const newVal = Math.floor(v + this.statModifier);
         baseStats[i] = Math.min(Math.max(newVal, 1), 999999);
       }

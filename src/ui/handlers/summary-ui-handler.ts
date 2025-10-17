@@ -16,7 +16,7 @@ import { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";
 import { Nature } from "#enums/nature";
 import { PlayerGender } from "#enums/player-gender";
-import { getStatKey, PERMANENT_STATS, Stat } from "#enums/stat";
+import { type EffectiveStat, getStatKey, PERMANENT_STATS, Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { SummaryUiPage } from "#enums/summary-ui-page";
@@ -897,7 +897,7 @@ export class SummaryUiHandler extends UiHandler {
           const rowIndex = s % 3;
           const colIndex = Math.floor(s / 3);
 
-          const natureStatMultiplier = getNatureStatMultiplier(this.pokemon!.getNature(), s); // TODO: is this bang correct?
+          const natureStatMultiplier = getNatureStatMultiplier(this.pokemon!.getNature(), s as EffectiveStat); // TODO: is this bang correct?
 
           let textStyle: TextStyle = TextStyle.SUMMARY_BLUE;
           if (natureStatMultiplier === 1) {
