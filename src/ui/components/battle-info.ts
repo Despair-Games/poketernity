@@ -627,7 +627,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
       if (this.lastStatus !== pokemon.getStatusEffect(true)) {
         this.lastStatus = pokemon.getStatusEffect(true);
         if (this.lastStatus !== StatusEffect.NONE) {
-          this.statusIndicator.setFrame(StatusEffect[this.lastStatus].toLowerCase());
+          this.statusIndicator.setFrame(enumValueToKey(StatusEffect, this.lastStatus).toLowerCase());
         }
 
         const offsetX = this.player ? 0 : (this.ownedIcon.visible ? 8 : 0) + (this.championRibbon.visible ? 8 : 0);

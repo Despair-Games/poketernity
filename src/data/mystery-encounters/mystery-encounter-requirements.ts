@@ -746,7 +746,7 @@ export class StatusEffectRequirement extends EncounterPokemonRequirement {
       return pokemon?.hasStatusEffect(a);
     });
     if (reqStatus.length > 0) {
-      return ["status", StatusEffect[reqStatus[0]]];
+      return ["status", enumValueToKey(StatusEffect, reqStatus[0])];
     }
     return ["status", ""];
   }

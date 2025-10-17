@@ -434,7 +434,7 @@ export class SummaryUiHandler extends UiHandler {
     if (this.pokemon.isFainted()) {
       statusTextKey = "faint";
     } else if (this.pokemon.hasNonVolatileStatusEffect(false, true)) {
-      statusTextKey = StatusEffect[this.pokemon.getStatusEffect(true)].toLowerCase();
+      statusTextKey = enumValueToKey(StatusEffect, this.pokemon.getStatusEffect(true)).toLowerCase();
     } else if (this.pokemon.pokerus) {
       statusTextKey = "pokerus";
     }

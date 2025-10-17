@@ -2717,7 +2717,7 @@ export class BattleScene extends SceneBase {
               level: p.level,
               currentHP: p.hp,
               maxHP: p.getMaxHp(),
-              status: StatusEffect[p.getStatusEffect()],
+              status: enumValueToKey(StatusEffect, p.getStatusEffect()),
             };
           })
         : [],

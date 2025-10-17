@@ -5,6 +5,7 @@ import type { Pokemon } from "#field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { StatusEffect } from "#enums/status-effect";
 import { isPokemonInstance, receivedStr } from "#test/test-utils/test-utils";
+import { enumValueToKey } from "#utils/common-utils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
 //#region Types
@@ -43,8 +44,8 @@ export function toHaveStatusEffectMatcher(
   const pass = actualStatusEffect === expectedStatusEffect;
 
   const pkmName = getPokemonNameWithAffix(received);
-  const expectedStatusEffectStr = `${StatusEffect[expectedStatusEffect]} (=${expectedStatusEffect})`;
-  const actualStatusEffectStr = `${StatusEffect[actualStatusEffect]} (=${actualStatusEffect})`;
+  const expectedStatusEffectStr = `${enumValueToKey(StatusEffect, expectedStatusEffect)} (=${expectedStatusEffect})`;
+  const actualStatusEffectStr = `${enumValueToKey(StatusEffect, actualStatusEffect)} (=${actualStatusEffect})`;
 
   return {
     pass,

@@ -229,7 +229,7 @@ export class OverridesHelper extends GameManagerHelper {
    */
   public statusEffect(statusEffect: StatusEffect): this {
     vi.spyOn(activeOverrides, "STATUS_OVERRIDE", "get").mockReturnValue(statusEffect);
-    this.log(`Player Pokemon status-effect set to ${StatusEffect[statusEffect]} (=${statusEffect})!`);
+    this.log(`Player Pokemon status-effect set to ${enumValueToKey(StatusEffect, statusEffect)} (=${statusEffect})!`);
     return this;
   }
 
@@ -428,7 +428,7 @@ export class OverridesHelper extends GameManagerHelper {
    */
   public enemyStatusEffect(statusEffect: StatusEffect): this {
     vi.spyOn(activeOverrides, "ENEMY_STATUS_OVERRIDE", "get").mockReturnValue(statusEffect);
-    this.log(`Enemy Pokemon status-effect set to ${StatusEffect[statusEffect]} (=${statusEffect})!`);
+    this.log(`Enemy Pokemon status-effect set to ${enumValueToKey(StatusEffect, statusEffect)} (=${statusEffect})!`);
     return this;
   }
 
