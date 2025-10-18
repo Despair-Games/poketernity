@@ -75,7 +75,7 @@ export abstract class FormChangeBasePhase extends Phase {
   /**
    * Applies all logical and visual effects of the form change, including
    * animations and changes to game data.
-   * @abstract
+   * @virtual
    * @async
    */
   public abstract applyFormChange(): Promise<void>;
