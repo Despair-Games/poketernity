@@ -32,23 +32,30 @@ export class FormChangePhase extends FormChangeBasePhase {
   private readonly formChange: SpeciesFormChange;
 
   /**
-   * If `true`, this indicates that the form change was triggered via the "Check Team" UI.
+   * If `true`, this indicates that the form change was triggered by a toggle
+   * via the "Check Team" UI (e.g. disabling or re-enabling a Mega Evolution).
    * In particular, this disables learning new moves linked to the form change.
    */
-  private readonly modal: boolean;
+  private readonly isFromToggle: boolean;
 
   constructor(pokemon: PlayerPokemon, formChange: SpeciesFormChange, modal: boolean) {
     super(pokemon);
 
     this.formChange = formChange;
-    this.modal = modal;
+    this.isFromToggle = modal;
   }
 
-  public override setMode(): Promise<void> {
-    if (!this.modal) {
+  protected override async setMode(): Promise<void> {
+    if (!this.isFromToggle) {
       return super.setMode();
     }
-    return globalScene.ui.setOverlayMode<FormChangeSceneUiHandler>(UiMode.FORM_CHANGE_SCENE);
+
+    const { ui } = globalScene;
+
+    await ui.setOverlayMode<FormChangeSceneUiHandler>(UiMode.FORM_CHANGE_SCENE);
+
+    this.handler = ui.getCurrentHandler<FormChangeSceneUiHandler>();
+    this.container = this.handler.container;
   }
 
   public override async applyFormChange(): Promise<void> {
@@ -56,7 +63,7 @@ export class FormChangePhase extends FormChangeBasePhase {
 
     const formChangedPokemon = await this.pokemon.getPossibleForm(this.formChange);
 
-    [this.pokemonNewFormSprite, this.pokemonNewFormTintSprite].map((sprite) => {
+    [this.pokemonNewFormSprite, this.pokemonNewFormTintSprite].forEach((sprite) => {
       const spriteKey = formChangedPokemon.getSpriteKey(true);
       sprite.play(spriteKey);
 
@@ -99,7 +106,7 @@ export class FormChangePhase extends FormChangeBasePhase {
       },
     });
 
-    this.pokemon.setVisible(false);
+    this.pokemonSprite.setVisible(false);
     await delay(1100);
 
     this.pokemonNewFormTintSprite.setScale(0.25);
@@ -111,6 +118,7 @@ export class FormChangePhase extends FormChangeBasePhase {
   /**
    * Handles the completion of the form change
    * @param formChangedPokemon - The {@linkcode Pokemon} that has changed form
+   * @async
    */
   private async handleFormChangeComplete(formChangedPokemon: Pokemon): Promise<void> {
     const { animations, audioManager, ui } = globalScene;
@@ -181,7 +189,7 @@ export class FormChangePhase extends FormChangeBasePhase {
     const { ui } = globalScene;
 
     this.pokemon.findAndRemoveTags((t) => t.tagType === BattlerTagType.AUTOTOMIZED);
-    if (this.modal) {
+    if (this.isFromToggle) {
       // If the form change was triggered via the "Check Team" UI, go back to the "Check Team" UI without learning new moves.
       await ui.revertMode();
       if (ui.getMode() === UiMode.PARTY) {

@@ -1,3 +1,7 @@
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
+import type { BattleScene } from "#app/battle-scene";
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
+
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
@@ -33,10 +37,6 @@ export abstract class FormChangeBasePhase extends Phase {
     this.pokemon = pokemon;
   }
 
-  public setMode(): Promise<void> {
-    return globalScene.ui.setModeForceTransition<FormChangeSceneUiHandler>(UiMode.FORM_CHANGE_SCENE);
-  }
-
   public override async start(): Promise<void> {
     super.start();
 
@@ -47,10 +47,10 @@ export abstract class FormChangeBasePhase extends Phase {
 
     this.initAssets();
 
-    // TODO: Should this be included within `applyFormChange` instead?
     [this.pokemonSprite, this.pokemonTintSprite, this.pokemonNewFormSprite, this.pokemonNewFormTintSprite].forEach(
       (sprite) => {
         const spriteKey = this.pokemon.getSpriteKey(true);
+        // TODO: this animation may be better placed in `applyFormChange`
         sprite.play(spriteKey);
 
         sprite.setPipeline(spritePipeline, {
@@ -73,6 +73,20 @@ export abstract class FormChangeBasePhase extends Phase {
   }
 
   /**
+   * Switches the running UI handler to the form change "scene", then initializes
+   * the phase's {@linkcode handler} and {@linkcode container} references based on
+   * the new handler.
+   * @async
+   */
+  protected async setMode(): Promise<void> {
+    const { ui } = globalScene;
+    await ui.setModeForceTransition<FormChangeSceneUiHandler>(UiMode.FORM_CHANGE_SCENE);
+
+    this.handler = ui.getCurrentHandler<FormChangeSceneUiHandler>();
+    this.container = this.handler.container;
+  }
+
+  /**
    * Applies all logical and visual effects of the form change, including
    * animations and changes to game data.
    * @virtual
@@ -80,12 +94,13 @@ export abstract class FormChangeBasePhase extends Phase {
    */
   public abstract applyFormChange(): Promise<void>;
 
+  /**
+   * Creates all assets for the form change sequence and injects them into
+   * the running UI handler.
+   * @todo Visual assets should be stored in a separate Scene.
+   */
   private initAssets(): void {
     const { add, ui } = globalScene;
-
-    this.handler = ui.getCurrentHandler<FormChangeSceneUiHandler>();
-
-    this.container = this.handler.container;
 
     this.baseBgImg = add.image(0, 0, "default_bg");
     this.baseBgImg.setOrigin(0, 0);
@@ -123,6 +138,11 @@ export abstract class FormChangeBasePhase extends Phase {
     ui.add(this.overlay);
   }
 
+  /**
+   * {@link BattleScene.addPokemonSprite | Creates a Pokemon sprite}, then applies `globalScene`'s
+   * pipeline onto the created sprite.
+   * @returns The created {@linkcode Phaser.GameObjects.Sprite | Sprite}
+   */
   private createPokemonSprite(): Phaser.GameObjects.Sprite {
     const ret = globalScene.addPokemonSprite(
       this.pokemon,
