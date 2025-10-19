@@ -1,7 +1,3 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { BattleScene } from "#app/battle-scene";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
@@ -139,7 +135,7 @@ export abstract class FormChangeBasePhase extends Phase {
   }
 
   /**
-   * {@link BattleScene.addPokemonSprite | Creates a Pokemon sprite}, then applies `globalScene`'s
+   * {@link globalScene.addPokemonSprite | Creates a Pokemon sprite}, then applies `globalScene`'s
    * pipeline onto the created sprite.
    * @returns The created {@linkcode Phaser.GameObjects.Sprite | Sprite}
    */
