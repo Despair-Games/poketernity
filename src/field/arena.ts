@@ -191,7 +191,7 @@ export class Arena {
     return weather.includes(this.weatherType);
   }
 
-  /** Sets weather to the override specified in `overrides.ts` */
+  /** Sets weather to the override specified in {@linkcode activeOverrides} */
   private tryOverrideWeather(): boolean {
     const weatherType = activeOverrides.WEATHER_OVERRIDE;
     if (weatherType === WeatherType.NONE) {
