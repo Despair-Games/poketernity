@@ -23,15 +23,15 @@ export class AccuracyMultiplierAbAttr extends AbAttr {
   }
 
   public override apply(
-    pokemon: Pokemon,
+    _pokemon: Pokemon,
     _simulated: boolean,
-    move: Move,
+    _move: Move,
     accuracyMultiplier: ValueHolder<number>,
-  ): boolean {
-    if (this.condition(pokemon, move)) {
-      accuracyMultiplier.value *= this.multiplier;
-      return true;
-    }
-    return false;
+  ): void {
+    accuracyMultiplier.value *= this.multiplier;
+  }
+
+  public override canApply(...[pokemon, , move]: Parameters<this["apply"]>): boolean {
+    return this.condition(pokemon, move);
   }
 }

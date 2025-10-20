@@ -22,7 +22,7 @@ export class FlinchStatStageChangeAbAttr extends FlinchEffectAbAttr {
     this.stages = stages;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): void {
     if (!simulated) {
       globalScene.phaseManager.createAndUnshiftPhase(
         "StatStageChangePhase",
@@ -32,7 +32,5 @@ export class FlinchStatStageChangeAbAttr extends FlinchEffectAbAttr {
         this.stages,
       );
     }
-
-    return true;
   }
 }

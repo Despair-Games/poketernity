@@ -1,5 +1,4 @@
 import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
-import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BATTLE_STATS } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
@@ -9,24 +8,21 @@ import i18next from "i18next";
  * Attempt to copy the stat changes on an ally pokemon. Used by Costar.
  */
 export class PostSummonCopyAllyStatsAbAttr extends PostSummonAbAttr {
-  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
-    if (!globalScene.currentBattle.double) {
-      return false;
-    }
-
+  public override apply(pokemon: Pokemon, simulated: boolean): void {
     const ally = pokemon.getAlly();
-    if (!ally || ally.getStatStages().every((s) => s === 0)) {
-      return false;
+    if (simulated || !ally?.isActive(true)) {
+      return;
     }
 
-    if (!simulated) {
-      for (const s of BATTLE_STATS) {
-        pokemon.setStatStage(s, ally.getStatStage(s));
-      }
-      pokemon.updateInfo();
+    for (const s of BATTLE_STATS) {
+      pokemon.setStatStage(s, ally.getStatStage(s));
     }
+    pokemon.updateInfo();
+  }
 
-    return true;
+  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+    const ally = pokemon.getAlly();
+    return !!ally?.isActive(true) && ally.getStatStages().some((s) => s !== 0);
   }
 
   public override getTriggerMessage(pokemon: Pokemon, _abilityName: string): string {

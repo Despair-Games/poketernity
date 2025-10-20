@@ -26,6 +26,7 @@ import { FaintPhase } from "#phases/faint-phase";
 import { FormChangePhase } from "#phases/form-change-phase";
 import { GameOverModifierRewardPhase } from "#phases/game-over-modifier-reward-phase";
 import { GameOverPhase } from "#phases/game-over-phase";
+import { HideAbilityPhase } from "#phases/hide-ability-phase";
 import { LearnMovePhase } from "#phases/learn-move-phase";
 import { LevelCapPhase } from "#phases/level-cap-phase";
 import { LevelUpPhase } from "#phases/level-up-phase";
@@ -123,6 +124,7 @@ const PHASES = {
   FormChangePhase,
   GameOverModifierRewardPhase,
   GameOverPhase,
+  HideAbilityPhase,
   LearnMovePhase,
   LevelCapPhase,
   LevelUpPhase,
@@ -409,14 +411,14 @@ export class PhaseManager {
       this.clearPhaseQueueSplice();
     }
 
-    while (this.phaseQueuePrepend.length) {
+    while (this.phaseQueuePrepend.length > 0) {
       const poppedPhase = this.phaseQueuePrepend.pop();
       if (poppedPhase) {
         this.phaseQueue.unshift(poppedPhase);
       }
     }
 
-    if (!this.phaseQueue.length) {
+    if (this.phaseQueue.length === 0) {
       this.createAndPushPhase("TurnInitPhase");
       // Clear the conditionalQueue if there are no phases left in the phaseQueue
       this.conditionalQueue = [];
@@ -425,7 +427,7 @@ export class PhaseManager {
     this.currentPhase = this.phaseQueue.shift() ?? null;
 
     // Check if there are any conditional phases queued
-    if (this.conditionalQueue?.length) {
+    if (this.conditionalQueue?.length > 0) {
       // Retrieve the first conditional phase from the queue
       const conditionalPhase = this.conditionalQueue.shift();
       // Evaluate the condition associated with the phase

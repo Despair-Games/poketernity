@@ -18,8 +18,6 @@ export class MoveChargePhase extends HitCheckPhase {
   public override readonly phaseName = "MoveChargePhase";
 
   public override start() {
-    super.start();
-
     const user = this.getUserPokemon();
     const target = this.getFirstTarget();
     const move = this.move.getMove();

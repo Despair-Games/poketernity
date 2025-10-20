@@ -7,31 +7,26 @@ import type { Pokemon } from "#field/pokemon";
 import type { NumberHolder } from "#utils/common-utils";
 
 export class RedirectMoveAbAttr extends AbAttr {
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super();
     this._flags.add(AbAttrFlag.REDIRECT_MOVE);
   }
 
   public override apply(
     pokemon: Pokemon,
     _simulated: boolean,
-    moveId: MoveId,
-    user: Pokemon,
+    _moveId: MoveId,
+    _user: Pokemon,
     target: NumberHolder,
-  ): boolean {
-    if (this.canRedirect(moveId, user)) {
-      const newTarget = pokemon.getBattlerIndex();
-      if (target.value !== newTarget) {
-        target.value = newTarget;
-        return true;
-      }
+  ): void {
+    const newTarget = pokemon.getBattlerIndex();
+    if (target.value !== newTarget) {
+      target.value = newTarget;
     }
-
-    return false;
   }
 
-  canRedirect(moveId: MoveId, _user: Pokemon): boolean {
+  public override canApply(...[, , moveId]: Parameters<this["apply"]>): boolean {
     const move = allMoves.get(moveId);
-    return ([MoveTarget.NEAR_OTHER, MoveTarget.OTHER] as MoveTarget[]).includes(move.moveTarget);
+    return ([MoveTarget.NEAR_OTHER, MoveTarget.OTHER] as readonly MoveTarget[]).includes(move.moveTarget);
   }
 }

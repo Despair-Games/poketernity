@@ -14,7 +14,7 @@ export class PostKnockOutStatStageChangeAbAttr extends PostKnockOutAbAttr {
     this.stages = stages;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean, _knockedOutPokemon: Pokemon): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean, _knockedOutPokemon: Pokemon): void {
     const stat = typeof this.stat === "function" ? this.stat(pokemon) : this.stat;
     if (!simulated) {
       globalScene.phaseManager.createAndUnshiftPhase(
@@ -25,6 +25,5 @@ export class PostKnockOutStatStageChangeAbAttr extends PostKnockOutAbAttr {
         this.stages,
       );
     }
-    return true;
   }
 }

@@ -55,7 +55,6 @@ import type { PostAttackApplyBattlerTagAbAttr } from "#abilities/post-attack-app
 import type { PostAttackApplyStatusEffectAbAttr } from "#abilities/post-attack-apply-status-effect-ab-attr";
 import type { PostBattleAbAttr } from "#abilities/post-battle-ab-attr";
 import type { PostBattleInitAbAttr } from "#abilities/post-battle-init-ab-attr";
-import type { PostBiomeChangeAbAttr } from "#abilities/post-biome-change-ab-attr";
 import type { PostDamageAbAttr } from "#abilities/post-damage-ab-attr";
 import type { PostDamageForceSwitchAbAttr } from "#abilities/post-damage-force-switch-ab-attr";
 import type { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
@@ -294,50 +293,48 @@ export const AbAttrFlag = {
   POST_MOVE_USED: 92,
   /** @see {@linkcode RedirectMoveAbAttr} */
   REDIRECT_MOVE: 93,
-  /** @see {@linkcode PostBiomeChangeAbAttr} */
-  POST_BIOME_CHANGE: 94,
   /** @see {@linkcode PostSummonAbAttr} */
-  POST_SUMMON: 95,
+  POST_SUMMON: 94,
   /** @see {@linkcode BlockStatusDamageAbAttr} */
-  BLOCK_STATUS_DAMAGE: 96,
+  BLOCK_STATUS_DAMAGE: 95,
   /** @see {@linkcode ReduceBurnDamageAbAttr} */
-  REDUCE_BURN_DAMAGE: 97,
+  REDUCE_BURN_DAMAGE: 96,
   /** @see {@linkcode StatStageChangeCopyAbAttr} */
-  STAT_STAGE_CHANGE_COPY: 98,
+  STAT_STAGE_CHANGE_COPY: 97,
   /** @see {@linkcode PostStatStageChangeAbAttr} */
-  POST_STAT_STAGE_CHANGE: 99,
+  POST_STAT_STAGE_CHANGE: 98,
   /** @see {@linkcode PreSwitchOutAbAttr} */
-  PRE_SWITCH_OUT: 100,
+  PRE_SWITCH_OUT: 99,
   /** @see {@linkcode PostTurnAbAttr} */
-  POST_TURN: 101,
+  POST_TURN: 100,
   /** @see {@linkcode PreWeatherDamageAbAttr} */
-  PRE_WEATHER_DAMAGE: 102,
+  PRE_WEATHER_DAMAGE: 101,
   /** @see {@linkcode PostWeatherLapseAbAttr} */
-  POST_WEATHER_LAPSE: 103,
+  POST_WEATHER_LAPSE: 102,
   /** @see {@linkcode FieldMoveTypePowerBoostAbAttr} */
-  FIELD_MOVE_TYPE_POWER_BOOST: 104,
+  FIELD_MOVE_TYPE_POWER_BOOST: 103,
   /** @see {@linkcode EffectSporeAbAttr} */
-  EFFECT_SPORE: 105,
+  EFFECT_SPORE: 104,
   /** @see {@linkcode ReflectStatStageChangeAbAttr} */
-  REFLECT_STAT_STAGE_CHANGE: 106,
+  REFLECT_STAT_STAGE_CHANGE: 105,
   /** @see {@linkcode BypassParaSpeedReductionAbAttr} */
-  BYPASS_PARA_SPEED_REDUCTION: 107,
+  BYPASS_PARA_SPEED_REDUCTION: 106,
   /** @see {@linkcode MockStatusEffectAbAttr} */
-  MOCK_STATUS_EFFECT: 108,
+  MOCK_STATUS_EFFECT: 107,
   /** @see {@linkcode ReflectMovesAbAttr} */
-  REFLECT_MOVES: 109,
+  REFLECT_MOVES: 108,
   /** @see {@linkcode PostTeraFormChangeStatChangeAbAttr} */
-  POST_TERA_FORM_CHANGE_STAT_CHANGE: 110,
+  POST_TERA_FORM_CHANGE_STAT_CHANGE: 109,
   /** @see {@linkcode PostTeraFormChangeClearWeatherTerrainAbAttr} */
-  POST_TERA_FORM_CHANGE_CLEAR_WEATHER_TERRAIN: 111,
+  POST_TERA_FORM_CHANGE_CLEAR_WEATHER_TERRAIN: 110,
   /** @see {@linkcode BadDreamsAbAttr} */
-  BAD_DREAMS: 112,
+  BAD_DREAMS: 111,
   /** @see {@linkcode AccuracyMultiplierAbAttr} */
-  ACCURACY_MULTIPLIER: 113,
+  ACCURACY_MULTIPLIER: 112,
   /** @see {@linkcode FieldAccuracyMultiplierAbAttr} */
-  FIELD_ACCURACY_MULTIPLIER: 114,
+  FIELD_ACCURACY_MULTIPLIER: 113,
   /** @see {@linkcode EvasivenessMultiplierAbAttr} */
-  EVASIVENESS_MULTIPLIER: 115,
+  EVASIVENESS_MULTIPLIER: 114,
 } as const;
 
 export type AbAttrFlag = ObjectValues<typeof AbAttrFlag>;

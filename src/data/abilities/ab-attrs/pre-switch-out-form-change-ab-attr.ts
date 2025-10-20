@@ -16,15 +16,14 @@ export class PreSwitchOutFormChangeAbAttr extends PreSwitchOutAbAttr {
     this.formFunc = formFunc;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
-    const formIndex = this.formFunc(pokemon);
-    if (formIndex !== pokemon.formIndex) {
-      if (!simulated) {
-        globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
-      }
-      return true;
+  public override apply(pokemon: Pokemon, simulated: boolean): void {
+    if (!simulated) {
+      globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger, false);
     }
+  }
 
-    return false;
+  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+    const formIndex = this.formFunc(pokemon);
+    return formIndex !== pokemon.formIndex;
   }
 }

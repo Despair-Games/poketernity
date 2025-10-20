@@ -11,8 +11,6 @@ export class SelectGenderPhase extends Phase {
   public override readonly phaseName = "SelectGenderPhase";
 
   public override start(): void {
-    super.start();
-
     const { gameData, ui } = globalScene;
 
     const menuOptionsConfig: OptionSelectModeConfig = {

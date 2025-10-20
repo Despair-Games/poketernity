@@ -39,7 +39,6 @@ export abstract class FormChangeBasePhase extends Phase {
   }
 
   public override start(): void {
-    super.start();
     const { add, spritePipeline, ui } = globalScene;
 
     this.setMode().then(() => {

@@ -22,7 +22,6 @@ export class MysteryEncounterOptionSelectedPhase extends Phase {
     globalScene.currentBattle.mysteryEncounter!.selectedOption!.onOptionPhase;
 
   public override start(): void {
-    super.start();
     const { mysteryEncounter } = globalScene.currentBattle;
     if (mysteryEncounter?.autoHideIntroVisuals) {
       transitionMysteryEncounterIntroVisuals().then(() => {

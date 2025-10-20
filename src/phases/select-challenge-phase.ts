@@ -7,8 +7,6 @@ export class SelectChallengePhase extends Phase {
   public override readonly phaseName = "SelectChallengePhase";
 
   public override start(): void {
-    super.start();
-
     globalScene.audioManager.playBgm("menu");
 
     globalScene.ui.setMode<ChallengeSelectUiHandler>(UiMode.CHALLENGE_SELECT);

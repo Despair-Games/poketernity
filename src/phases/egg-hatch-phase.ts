@@ -80,8 +80,6 @@ export class EggHatchPhase extends Phase {
   }
 
   public override start(): void {
-    super.start();
-
     globalScene.ui.setModeForceTransition<EggHatchSceneUiHandler>(UiMode.EGG_HATCH_SCENE).then(() => {
       if (!this.egg) {
         return this.end();

@@ -13,25 +13,25 @@ import i18next from "i18next";
  * @param pokemon The {@link Pokemon} with this {@link AbAttr}
  */
 export class PostSummonClearAllyStatStagesAbAttr extends PostSummonAbAttr {
-  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): void {
     const target = pokemon.getAlly();
-    if (target?.isActive(true)) {
-      if (!simulated) {
-        for (const s of BATTLE_STATS) {
-          target.setStatStage(s, 0);
-        }
-
-        globalScene.phaseManager.createAndUnshiftPhase(
-          "MessagePhase",
-          i18next.t("abilityTriggers:postSummonClearAllyStats", {
-            pokemonNameWithAffix: getPokemonNameWithAffix(target),
-          }),
-        );
-      }
-
-      return true;
+    if (simulated || target == null) {
+      return;
     }
 
-    return false;
+    for (const s of BATTLE_STATS) {
+      target.setStatStage(s, 0);
+    }
+
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
+      i18next.t("abilityTriggers:postSummonClearAllyStats", {
+        pokemonNameWithAffix: getPokemonNameWithAffix(target),
+      }),
+    );
+  }
+
+  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+    return !!pokemon.getAlly()?.isActive(true);
   }
 }

@@ -27,8 +27,6 @@ export class MessagePhase extends Phase {
   }
 
   public override start(): void {
-    super.start();
-
     if (this.text.indexOf("$") > -1) {
       const pageIndex = this.text.indexOf("$");
       globalScene.phaseManager.unshiftPhase(
@@ -60,13 +58,5 @@ export class MessagePhase extends Phase {
         promptDelay: this.promptDelay,
       });
     }
-  }
-
-  public override end(): void {
-    if (globalScene.abilityBar.shown) {
-      globalScene.abilityBar.hide();
-    }
-
-    super.end();
   }
 }

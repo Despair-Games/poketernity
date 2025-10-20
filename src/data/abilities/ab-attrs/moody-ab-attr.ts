@@ -10,34 +10,34 @@ import type { Pokemon } from "#field/pokemon";
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Moody_(Ability) | Moody}.
  */
 export class MoodyAbAttr extends PostTurnAbAttr {
-  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): void {
+    if (simulated) {
+      return;
+    }
+
     const canRaise = EFFECTIVE_STATS.filter((s) => pokemon.getStatStage(s) < 6);
     let canLower = EFFECTIVE_STATS.filter((s) => pokemon.getStatStage(s) > -6);
 
-    if (!simulated) {
-      if (canRaise.length > 0) {
-        const raisedStat = canRaise[pokemon.randSeedInt(canRaise.length)];
-        canLower = canLower.filter((s) => s !== raisedStat);
-        globalScene.phaseManager.createAndUnshiftPhase(
-          "StatStageChangePhase",
-          pokemon.getBattlerIndex(),
-          pokemon,
-          [raisedStat],
-          2,
-        );
-      }
-      if (canLower.length > 0) {
-        const loweredStat = canLower[pokemon.randSeedInt(canLower.length)];
-        globalScene.phaseManager.createAndUnshiftPhase(
-          "StatStageChangePhase",
-          pokemon.getBattlerIndex(),
-          pokemon,
-          [loweredStat],
-          -1,
-        );
-      }
+    if (canRaise.length > 0) {
+      const raisedStat = canRaise[pokemon.randSeedInt(canRaise.length)];
+      canLower = canLower.filter((s) => s !== raisedStat);
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "StatStageChangePhase",
+        pokemon.getBattlerIndex(),
+        pokemon,
+        [raisedStat],
+        2,
+      );
     }
-
-    return true;
+    if (canLower.length > 0) {
+      const loweredStat = canLower[pokemon.randSeedInt(canLower.length)];
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "StatStageChangePhase",
+        pokemon.getBattlerIndex(),
+        pokemon,
+        [loweredStat],
+        -1,
+      );
+    }
   }
 }

@@ -33,7 +33,6 @@ export class TitlePhase extends Phase {
   private lastSessionData: SessionSaveData;
 
   public override start(): void {
-    super.start();
     const { arenaBg, gameData, ui } = globalScene;
 
     ui.clearText();

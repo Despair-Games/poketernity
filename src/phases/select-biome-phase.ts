@@ -13,8 +13,6 @@ export class SelectBiomePhase extends BattlePhase {
   public override readonly phaseName = "SelectBiomePhase";
 
   public override start(): void {
-    super.start();
-
     const { arena, currentBattle, gameMode, ui } = globalScene;
     const { isClassic, isDaily, hasRandomBiomes } = gameMode;
     const { waveIndex } = currentBattle;

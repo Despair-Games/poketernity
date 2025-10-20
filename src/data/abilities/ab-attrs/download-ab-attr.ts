@@ -1,7 +1,7 @@
 import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
-import { type BattleStat, Stat } from "#enums/stat";
+import { Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 
 /**
@@ -10,43 +10,43 @@ import type { Pokemon } from "#field/pokemon";
  * otherwise, it will raise Special Attack.
  */
 export class DownloadAbAttr extends PostSummonAbAttr {
-  private enemyDef: number;
-  private enemySpDef: number;
-  private stats: BattleStat[];
-
   /**
    * @param pokemon The {@linkcode Pokemon} with this ability
    * @returns Returns `true` if ability is used successful, `false` if not.
    */
-  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
-    this.enemyDef = 0;
-    this.enemySpDef = 0;
-
-    for (const opponent of pokemon.getOpponents()) {
-      this.enemyDef += opponent.getEffectiveStat(Stat.DEF, { abilityApplyMode: AbilityApplyMode.IGNORE });
-      this.enemySpDef += opponent.getEffectiveStat(Stat.SPDEF, { abilityApplyMode: AbilityApplyMode.IGNORE });
+  public override apply(pokemon: Pokemon, simulated: boolean): void {
+    if (simulated) {
+      return;
     }
 
-    if (this.enemyDef < this.enemySpDef) {
-      this.stats = [Stat.ATK];
-    } else {
-      this.stats = [Stat.SPATK];
-    }
+    const oppDef = this.getTotalOpposingDefensiveStat(pokemon, Stat.DEF);
+    const oppSpDef = this.getTotalOpposingDefensiveStat(pokemon, Stat.SPDEF);
+    const statToBoost = oppDef < oppSpDef ? Stat.ATK : Stat.SPATK;
 
-    // only activate if there's actually an enemy to download from
-    if (this.enemyDef > 0 && this.enemySpDef > 0) {
-      if (!simulated) {
-        globalScene.phaseManager.createAndUnshiftPhase(
-          "StatStageChangePhase",
-          pokemon.getBattlerIndex(),
-          pokemon,
-          this.stats,
-          1,
-        );
-      }
-      return true;
-    }
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "StatStageChangePhase",
+      pokemon.getBattlerIndex(),
+      pokemon,
+      [statToBoost],
+      1,
+    );
+  }
 
-    return false;
+  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+    return pokemon.getOpponents().length > 0;
+  }
+
+  /**
+   * @param pokemon - The {@linkcode Pokemon} applying this attribute's effect
+   * @param stat - The {@linkcode Stat} to evaluate
+   * @returns The combined effective stat of the given Pokemon's opponents for the given stat.
+   */
+  private getTotalOpposingDefensiveStat(pokemon: Pokemon, stat: Stat.DEF | Stat.SPDEF): number {
+    return pokemon
+      .getOpponents()
+      .reduce(
+        (totalStat, opp) => totalStat + opp.getEffectiveStat(stat, { abilityApplyMode: AbilityApplyMode.IGNORE }),
+        0,
+      );
   }
 }

@@ -23,8 +23,6 @@ export class EggLapsePhase extends Phase {
   private readonly minEggsToSkip: number = 2;
 
   public override start(): void {
-    super.start();
-
     const eggsToHatch: Egg[] = globalScene.gameData.eggs.filter((egg: Egg) => {
       return activeOverrides.EGG_IMMEDIATE_HATCH_OVERRIDE ? true : --egg.hatchWaves < 1;
     });

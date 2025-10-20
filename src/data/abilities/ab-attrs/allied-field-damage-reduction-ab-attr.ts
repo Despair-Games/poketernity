@@ -22,8 +22,7 @@ export class AlliedFieldDamageReductionAbAttr extends PreDefendAbAttr {
     _attacker: Pokemon,
     _move: Move,
     multiplier: NumberHolder,
-  ): boolean {
+  ): void {
     multiplier.value *= this.damageMultiplier;
-    return true;
   }
 }

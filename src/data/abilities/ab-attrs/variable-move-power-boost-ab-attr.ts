@@ -1,7 +1,7 @@
 import { VariableMovePowerAbAttr } from "#abilities/variable-move-power-ab-attr";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import type { NumberHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 
 /**
  * Abilities which cause a variable amount of power increase.
@@ -12,27 +12,22 @@ import type { NumberHolder } from "#utils/common-utils";
 export class VariableMovePowerBoostAbAttr extends VariableMovePowerAbAttr {
   private readonly multFunc: (user: Pokemon, target: Pokemon, move: Move) => number;
 
-  constructor(multFunc: (user: Pokemon, target: Pokemon, move: Move) => number, showAbility: boolean = true) {
-    super(showAbility);
+  constructor(multFunc: (user: Pokemon, target: Pokemon, move: Move) => number) {
+    super();
     this.multFunc = multFunc;
   }
 
-  /**
-   * @override
-   */
   public override apply(
     pokemon: Pokemon,
     _simulated: boolean,
     move: Move,
     defender: Pokemon,
-    power: NumberHolder,
-  ): boolean {
-    const multiplier = this.multFunc(pokemon, defender, move);
-    if (multiplier !== 1) {
-      power.value *= multiplier;
-      return true;
-    }
+    power: ValueHolder<number>,
+  ): void {
+    power.value *= this.multFunc(pokemon, defender, move);
+  }
 
-    return false;
+  public override canApply(...[pokemon, , move, defender]: Parameters<this["apply"]>): boolean {
+    return this.multFunc(pokemon, defender, move) !== 1;
   }
 }

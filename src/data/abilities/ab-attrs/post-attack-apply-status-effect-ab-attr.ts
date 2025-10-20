@@ -32,9 +32,22 @@ export class PostAttackApplyStatusEffectAbAttr extends PostAttackAbAttr {
     this.effects = effects;
   }
 
-  public override applyPostAttack(attacker: Pokemon, simulated: boolean, target: Pokemon, move: Move): boolean {
+  public override apply(attacker: Pokemon, simulated: boolean, target: Pokemon, _move: Move): void {
+    if (simulated) {
+      return;
+    }
+
+    const effect =
+      this.effects.length === 1 ? this.effects[0] : this.effects[attacker.randSeedInt(this.effects.length)];
+    target.trySetStatus(effect, true, attacker);
+  }
+
+  public override canApply(...params: Parameters<this["apply"]>): boolean {
+    const [attacker, , target, move] = params;
+
     /**
      * The status is only applied to the target if
+     * - The move is an Attack Move
      * - The target does not have a secondary ability that suppresses move effects
      * - The target is not the attacker
      * - If a contact move is required to activate the ability, the move should make contact
@@ -44,18 +57,13 @@ export class PostAttackApplyStatusEffectAbAttr extends PostAttackAbAttr {
      *
      * Note: Status inflicted by abilities post attacking are also considered additional effects of moves.
      */
-    if (
-      !target.hasAbilityWithAttr(AbAttrFlag.IGNORE_MOVE_EFFECTS)
+    return (
+      move.isAttackMove()
+      && !target.hasAbilityWithAttr(AbAttrFlag.IGNORE_MOVE_EFFECTS)
       && target.id !== attacker.id
       && (!this.contactRequired || move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, target))
       && target.randSeedInt(100) < this.chance
       && !target.hasNonVolatileStatusEffect()
-    ) {
-      const effect =
-        this.effects.length === 1 ? this.effects[0] : this.effects[attacker.randSeedInt(this.effects.length)];
-      return simulated || target.trySetStatus(effect, true, attacker);
-    }
-
-    return false;
+    );
   }
 }

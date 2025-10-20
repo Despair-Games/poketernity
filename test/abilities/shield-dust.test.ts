@@ -60,8 +60,8 @@ describe("Abilities - Shield Dust", () => {
       false,
       chance,
       move,
-      false,
     );
+
     applyAbAttrs<IgnoreMoveEffectsAbAttr>(
       AbAttrFlag.IGNORE_MOVE_EFFECTS,
       phase.getFirstTarget()!,

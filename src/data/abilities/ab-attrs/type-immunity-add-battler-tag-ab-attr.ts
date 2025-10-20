@@ -4,7 +4,7 @@ import type { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { AbAttrCondition } from "#types/ability-types";
-import type { BooleanHolder, NumberHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 
 export class TypeImmunityAddBattlerTagAbAttr extends TypeImmunityAbAttr {
   private readonly tagType: BattlerTagType;
@@ -22,18 +22,17 @@ export class TypeImmunityAddBattlerTagAbAttr extends TypeImmunityAbAttr {
     simulated: boolean,
     attacker: Pokemon,
     move: Move,
-    cancelled: BooleanHolder,
-    typeMultiplier: NumberHolder,
-  ): boolean {
-    const ret = super.apply(pokemon, simulated, attacker, move, cancelled, typeMultiplier);
-
-    if (ret) {
-      cancelled.value = true; // Suppresses "No Effect" message
-      if (!simulated) {
-        pokemon.addTag(this.tagType, this.turnCount, undefined, pokemon.id);
-      }
+    cancelled: ValueHolder<boolean>,
+    typeMultiplier: ValueHolder<number>,
+  ): void {
+    super.apply(pokemon, simulated, attacker, move, cancelled, typeMultiplier);
+    if (!simulated) {
+      pokemon.addTag(this.tagType, this.turnCount, undefined, pokemon.id);
     }
+  }
 
-    return ret;
+  // The added battler tag supplies the trigger message instead
+  public override getTriggerMessage(_pokemon: Pokemon, _abilityName: string): string | null {
+    return null;
   }
 }

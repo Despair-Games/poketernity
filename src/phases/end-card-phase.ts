@@ -17,8 +17,6 @@ export class EndCardPhase extends Phase {
   public text: Phaser.GameObjects.Text;
 
   public override start(): void {
-    super.start();
-
     const { field, ui } = globalScene;
     const messageHandler = ui.getMessageHandler();
 

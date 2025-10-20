@@ -15,9 +15,10 @@ import type { Move } from "#moves/move";
  */
 export class EffectSporeAbAttr extends PostDefendAbAttr {
   public readonly chance = 30;
+  private roll: number = Number.POSITIVE_INFINITY;
 
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super();
     this._flags.add(AbAttrFlag.EFFECT_SPORE);
   }
 
@@ -25,23 +26,22 @@ export class EffectSporeAbAttr extends PostDefendAbAttr {
    * Identical code to {@linkcode PostDefendContactApplyStatusEffectAbAttr}'s `applyPostDefend()` but it contains two conditional checks.
    * Effect Spore cannot affect the attacker if the attacker is Grass-type or has the ability Overcoat
    */
-  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
-    if (attacker.hasAbility(AbilityId.OVERCOAT) || attacker.isOfType(ElementalType.GRASS)) {
-      return false;
+  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, _move: Move): void {
+    const statusEffect = this.getStatus(this.roll);
+    if (!simulated) {
+      attacker.trySetStatus(statusEffect, true, pokemon);
     }
-    const roll = pokemon.randSeedInt(100);
-    if (
-      move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
+  }
+
+  public override canApply(...[pokemon, , attacker, move]: Parameters<this["apply"]>): boolean {
+    this.roll = pokemon.randSeedInt(100);
+    return (
+      this.roll < this.chance
+      && !attacker.isOfType(ElementalType.GRASS, true, true)
+      && !attacker.hasAbility(AbilityId.OVERCOAT)
+      && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
       && !attacker.hasNonVolatileStatusEffect()
-      && roll < this.chance
-    ) {
-      const statusEffect = this.getStatus(roll);
-      if (simulated) {
-        return attacker.canSetStatus(statusEffect, true, false, pokemon);
-      }
-      return attacker.trySetStatus(statusEffect, true, pokemon);
-    }
-    return false;
+    );
   }
 
   /**

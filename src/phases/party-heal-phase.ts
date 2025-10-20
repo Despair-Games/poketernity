@@ -17,7 +17,6 @@ export class PartyHealPhase extends BattlePhase {
   }
 
   public override start(): void {
-    super.start();
     const { time, ui } = globalScene;
 
     const bgmPlaying = globalScene.audioManager.isBgmPlaying();

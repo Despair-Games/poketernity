@@ -284,7 +284,7 @@ describe("Abilities - Sturdy", () => {
     expect(enemy).toHaveHp(1); // and has 1 hp left!
   });
 
-  it("should not proc when 'Wonder Guard' ability is present too", async () => {
+  it("should not proc when the source also has Wonder Guard", async () => {
     const { override, classicMode, field, move } = game;
     override.enemySpecies(SpeciesId.SHEDINJA).enemyPassiveAbility(AbilityId.WONDER_GUARD);
     vi.spyOn(SturdyAbAttr.prototype, "apply");
@@ -298,7 +298,7 @@ describe("Abilities - Sturdy", () => {
     move.use(MoveId.AERIAL_ACE);
     await game.toEndOfTurn();
 
-    expect(SturdyAbAttr.prototype.apply).toHaveReturnedWith(false);
+    expect(SturdyAbAttr.prototype.apply).not.toHaveBeenCalled();
     expect(enemy).toHaveFainted();
   });
 });

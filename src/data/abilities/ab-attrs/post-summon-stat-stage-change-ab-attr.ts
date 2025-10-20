@@ -7,7 +7,7 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { BattleStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
-import { BooleanHolder } from "#utils/common-utils";
+import { ValueHolder } from "#utils/common-utils";
 
 export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
   private readonly stats: BattleStat[];
@@ -16,7 +16,7 @@ export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
   private readonly intimidate: boolean;
 
   constructor(stats: BattleStat[], stages: number, selfTarget: boolean = false, intimidate: boolean = false) {
-    super(true, true);
+    super();
 
     this.stats = stats;
     this.stages = stages;
@@ -24,9 +24,9 @@ export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
     this.intimidate = intimidate;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): void {
     if (simulated) {
-      return true;
+      return;
     }
 
     const { phaseManager } = globalScene;
@@ -39,11 +39,11 @@ export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
         this.stats,
         this.stages,
       );
-      return true;
+      return;
     }
 
     for (const opponent of pokemon.getOpponents()) {
-      const cancelled = new BooleanHolder(false);
+      const cancelled = new ValueHolder(false);
       if (this.intimidate) {
         if (opponent.hasTag(BattlerTagType.SUBSTITUTE)) {
           continue;
@@ -70,6 +70,25 @@ export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
         );
       }
     }
-    return true;
+  }
+
+  public override canApply(...[pokemon, simulated]: Parameters<this["apply"]>): boolean {
+    if (this.selfTarget) {
+      return true;
+    }
+
+    const opponents = pokemon.getOpponents();
+    return opponents.some((opp) => {
+      if (opp.hasTag(BattlerTagType.SUBSTITUTE)) {
+        return false;
+      }
+
+      if (this.intimidate) {
+        const cancelled = new ValueHolder(false);
+        applyAbAttrs<IntimidateImmunityAbAttr>(AbAttrFlag.INTIMIDATE_IMMUNITY, opp, simulated, cancelled);
+        return !cancelled.value;
+      }
+      return true;
+    });
   }
 }

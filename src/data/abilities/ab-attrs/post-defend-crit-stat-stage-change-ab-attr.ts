@@ -21,25 +21,25 @@ export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {
     this.stages = stages;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, _move: Move): boolean {
-    const attacksReceivedEntry = pokemon.turnData.attacksReceived[0];
-    if (
-      pokemon.turnData.attacksReceived.length !== 0
-      && attacksReceivedEntry.isCritical
+  public override apply(pokemon: Pokemon, simulated: boolean, _attacker: Pokemon, _move: Move): void {
+    if (!simulated) {
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "StatStageChangePhase",
+        pokemon.getBattlerIndex(),
+        pokemon,
+        [this.stat],
+        this.stages,
+      );
+    }
+  }
+
+  public override canApply(...[pokemon, , attacker]: Parameters<this["apply"]>): boolean {
+    const attacksReceivedEntry = pokemon.turnData.attacksReceived.at(-1);
+
+    return (
+      !!attacksReceivedEntry?.isCritical
       && attacksReceivedEntry.sourceId === attacker.id
       && pokemon.getStatStage(Stat.ATK) < 6
-    ) {
-      if (!simulated) {
-        globalScene.phaseManager.createAndUnshiftPhase(
-          "StatStageChangePhase",
-          pokemon.getBattlerIndex(),
-          pokemon,
-          [this.stat],
-          this.stages,
-        );
-      }
-      return true;
-    }
-    return false;
+    );
   }
 }

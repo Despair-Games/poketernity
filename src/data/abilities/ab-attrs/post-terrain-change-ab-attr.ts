@@ -4,8 +4,8 @@ import type { TerrainType } from "#enums/terrain-type";
 import type { Pokemon } from "#field/pokemon";
 
 export abstract class PostTerrainChangeAbAttr extends AbAttr {
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super(true);
     this._flags.add(AbAttrFlag.POST_TERRAIN_CHANGE);
   }
 
@@ -14,9 +14,6 @@ export abstract class PostTerrainChangeAbAttr extends AbAttr {
    * @param pokemon The {@linkcode Pokemon} with this ability
    * @param simulated If `true`, suppresses changes to game state
    * @param terrain The {@linkcode TerrainType | terrain} being set
-   * @returns `true` if effects successfully applied
    */
-  public override apply(_pokemon: Pokemon, _simulated: boolean, _terrain: TerrainType): boolean {
-    return false;
-  }
+  public abstract override apply(_pokemon: Pokemon, _simulated: boolean, _terrain: TerrainType): void;
 }

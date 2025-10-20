@@ -3,7 +3,7 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import type { NumberHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 
 /**
  * If the pokemon with this `AbAttr` is full HP and is hit with a move that would 1-hit faint it,
@@ -12,8 +12,8 @@ import type { NumberHolder } from "#utils/common-utils";
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Sturdy_(Ability) | Sturdy Ability - Bulbapedia}
  */
 export class SturdyAbAttr extends PreDefendAbAttr {
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super();
     this._flags.add(AbAttrFlag.STURDY);
   }
 
@@ -22,16 +22,14 @@ export class SturdyAbAttr extends PreDefendAbAttr {
     simulated: boolean,
     _attacker: Pokemon,
     _move: Move,
-    damage: NumberHolder,
-  ): boolean {
-    if (
-      pokemon.isFullHp()
-      && pokemon.getMaxHp() > 1 // Checks if pokemon has Wonder Guard (which forces 1hp)
-      && damage.value >= pokemon.hp
-    ) {
-      return simulated || pokemon.addTag(BattlerTagType.STURDY, 1);
+    _damage: ValueHolder<number>,
+  ): void {
+    if (!simulated) {
+      pokemon.addTag(BattlerTagType.STURDY, 1);
     }
+  }
 
-    return false;
+  public override canApply(...[pokemon, , , , damage]: Parameters<this["apply"]>): boolean {
+    return pokemon.isFullHp() && pokemon.getMaxHp() > 1 && damage.value >= pokemon.hp;
   }
 }

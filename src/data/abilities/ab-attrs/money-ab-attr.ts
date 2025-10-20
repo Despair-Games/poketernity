@@ -4,14 +4,15 @@ import type { Pokemon } from "#field/pokemon";
 
 /**
  * Gives money to the user after the battle.
- *
  */
 export class MoneyAbAttr extends PostBattleAbAttr {
-  public override apply(_pokemon: Pokemon, simulated: boolean, isVictory: boolean): boolean {
-    if (!simulated && isVictory) {
+  public override apply(_pokemon: Pokemon, simulated: boolean, _isVictory: boolean): void {
+    if (!simulated) {
       globalScene.currentBattle.moneyScattered += globalScene.getWaveMoneyAmount(0.2);
-      return true;
     }
-    return false;
+  }
+
+  public override canApply(...[, , isVictory]: Parameters<this["apply"]>): boolean {
+    return isVictory;
   }
 }

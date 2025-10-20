@@ -90,7 +90,6 @@ describe("Abilities - Dry Skin", () => {
     // Allow for ±1 tolerance
     expect(fireDamageTakenWithDrySkin).toBeGreaterThanOrEqual(expectedDamage - 1);
     expect(fireDamageTakenWithDrySkin).toBeLessThanOrEqual(expectedDamage + 1);
-    expect(ReceivedTypeDamageMultiplierAbAttr.prototype.apply).toHaveLastReturnedWith(true);
   });
 
   it("should heal 1/4 of max HP instead of receiving damage if hit by a Water-type move", async () => {

@@ -6,16 +6,14 @@ export class PostSummonMessageAbAttr extends PostSummonAbAttr {
   private readonly messageFunc: (pokemon: Pokemon) => string;
 
   constructor(messageFunc: (pokemon: Pokemon) => string) {
-    super(true);
+    super();
 
     this.messageFunc = messageFunc;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): void {
     if (!simulated) {
       globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", this.messageFunc(pokemon));
     }
-
-    return true;
   }
 }

@@ -9,37 +9,28 @@ import i18next from "i18next";
  * Used by Imposter
  */
 export class PostSummonTransformAbAttr extends PostSummonAbAttr {
-  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): void {
     const targets = pokemon.getOpponents();
-    if (simulated || !targets.length) {
-      return simulated;
+    if (simulated || targets.length === 0) {
+      return;
     }
 
-    let target: Pokemon;
-    if (targets.length > 1) {
-      globalScene.executeWithSeedOffset(() => {
-        target = randSeedItem(targets);
-      }, globalScene.currentBattle.waveIndex);
-    } else {
-      target = targets[0];
-    }
-    target = target!;
+    const target = randSeedItem(targets);
+    const { phaseManager } = globalScene;
 
-    globalScene.phaseManager.createAndUnshiftPhase(
-      "PokemonTransformPhase",
-      pokemon.getBattlerIndex(),
-      target.getBattlerIndex(),
-      true,
+    phaseManager.unshiftPhase(
+      phaseManager.createPhase("PokemonTransformPhase", pokemon.getBattlerIndex(), target.getBattlerIndex(), true),
+      phaseManager.createPhase(
+        "MessagePhase",
+        i18next.t("abilityTriggers:postSummonTransform", {
+          pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+          targetName: target.name,
+        }),
+      ),
     );
+  }
 
-    globalScene.phaseManager.createAndUnshiftPhase(
-      "MessagePhase",
-      i18next.t("abilityTriggers:postSummonTransform", {
-        pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-        targetName: target.name,
-      }),
-    );
-
-    return true;
+  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+    return pokemon.getOpponents().length > 0;
   }
 }

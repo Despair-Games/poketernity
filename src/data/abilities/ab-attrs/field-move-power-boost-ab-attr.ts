@@ -16,24 +16,22 @@ export abstract class FieldMovePowerBoostAbAttr extends PreAttackAbAttr {
    * @param powerMultiplier - The multiplier to apply to the move's power when the condition is met.
    */
   constructor(condition: PokemonAttackCondition, powerMultiplier: number) {
-    super(false);
+    super();
     this.condition = condition;
     this.powerMultiplier = powerMultiplier;
   }
 
   public override apply(
-    pokemon: Pokemon,
+    _pokemon: Pokemon,
     _simulated: boolean,
-    move: Move,
-    defender: Pokemon,
+    _move: Move,
+    _defender: Pokemon,
     movePower: NumberHolder,
-  ): boolean {
-    if (this.condition(pokemon, defender, move)) {
-      movePower.value *= this.powerMultiplier;
+  ): void {
+    movePower.value *= this.powerMultiplier;
+  }
 
-      return true;
-    }
-
-    return false;
+  public override canApply(...[pokemon, , move, defender]: Parameters<this["apply"]>): boolean {
+    return this.condition(pokemon, defender, move);
   }
 }

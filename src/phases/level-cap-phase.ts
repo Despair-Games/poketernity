@@ -9,8 +9,6 @@ export class LevelCapPhase extends FieldPhase {
   public override readonly phaseName = "LevelCapPhase";
 
   public override start(): void {
-    super.start();
-
     globalScene.ui.setMessageMode().then(() => {
       // Sound loaded into game as is
       globalScene.audioManager.playSound("level_up_fanfare");

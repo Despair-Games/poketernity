@@ -11,36 +11,34 @@ import type { AtLeastOneArray } from "#types/utility-types";
  * Used by Forecast and Flower Gift.
  */
 export class PostWeatherChangeFormChangeAbAttr extends PostWeatherChangeAbAttr {
-  private readonly ability: AbilityId;
   private readonly formRevertingWeathers: Readonly<AtLeastOneArray<WeatherType>>;
 
-  constructor(ability: AbilityId, ...formRevertingWeathers: Readonly<AtLeastOneArray<WeatherType>>) {
-    super(false);
+  constructor(...formRevertingWeathers: Readonly<AtLeastOneArray<WeatherType>>) {
+    super();
 
-    this.ability = ability;
     this.formRevertingWeathers = formRevertingWeathers;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean, _weather: WeatherType): boolean {
-    const isCastformWithForecast =
-      pokemon.species.speciesId === SpeciesId.CASTFORM && this.ability === AbilityId.FORECAST;
-    const isCherrimWithFlowerGift =
-      pokemon.species.speciesId === SpeciesId.CHERRIM && this.ability === AbilityId.FLOWER_GIFT;
-
-    if (isCastformWithForecast || isCherrimWithFlowerGift) {
+  public override apply(_pokemon: Pokemon, simulated: boolean, _weather: WeatherType): void {
       if (simulated) {
-        return simulated;
+      return;
       }
 
-      const weatherType = globalScene.arena.weatherType;
+    const { weatherType } = globalScene.arena;
 
       if (!weatherType || this.formRevertingWeathers.includes(weatherType)) {
         globalScene.arena.triggerWeatherBasedFormChangesToNormal();
       } else {
         globalScene.arena.triggerWeatherBasedFormChanges();
       }
-      return true;
     }
-    return false;
+
+  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+    const isCastformWithForecast =
+      pokemon.species.speciesId === SpeciesId.CASTFORM && this.source.id === AbilityId.FORECAST;
+    const isCherrimWithFlowerGift =
+      pokemon.species.speciesId === SpeciesId.CHERRIM && this.source.id === AbilityId.FLOWER_GIFT;
+
+    return isCastformWithForecast || isCherrimWithFlowerGift;
   }
 }

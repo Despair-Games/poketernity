@@ -5,7 +5,7 @@ import type { Pokemon } from "#field/pokemon";
 import i18next from "i18next";
 
 export class FriskAbAttr extends PostSummonAbAttr {
-  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): void {
     if (!simulated) {
       for (const opponent of pokemon.getOpponents()) {
         globalScene.phaseManager.createAndUnshiftPhase(
@@ -19,6 +19,5 @@ export class FriskAbAttr extends PostSummonAbAttr {
         opponent.waveData.abilitiesRevealed.push(opponent.getAbility().id);
       }
     }
-    return true;
   }
 }

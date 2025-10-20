@@ -12,8 +12,6 @@ export class SelectTargetPhase extends PokemonPhase {
   public override readonly phaseName = "SelectTargetPhase";
 
   public override start(): void {
-    super.start();
-
     const { currentBattle, ui } = globalScene;
     const { turnManager } = currentBattle;
     const pokemon = this.getPokemon();

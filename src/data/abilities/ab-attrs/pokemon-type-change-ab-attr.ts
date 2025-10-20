@@ -12,37 +12,31 @@ import i18next from "i18next";
  * Ability attribute for changing a pokemon's type before using a move
  */
 export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
-  private moveType: ElementalType;
-
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super(true);
     this._flags.add(AbAttrFlag.POKEMON_TYPE_CHANGE);
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean, move: Move): boolean {
-    // Skip moves that call other moves because these moves generate a following move that will trigger this ability attribute
-    // See: https://bulbapedia.bulbagarden.net/wiki/Category:Moves_that_call_other_moves
-    if (!pokemon.isTerastallized && move.id !== MoveId.STRUGGLE && !move.findAttr((attr) => attr.callsOtherMoves)) {
-      const moveType = pokemon.getMoveType(move);
-
-      if (pokemon.getTypes().some((t) => t !== moveType)) {
-        if (!simulated) {
-          this.moveType = moveType;
-          pokemon.setTemporaryTypes(moveType);
-          pokemon.updateInfo();
-        }
-
-        return true;
-      }
+  public override apply(pokemon: Pokemon, simulated: boolean, move: Move): void {
+    if (!simulated) {
+      pokemon.setTemporaryTypes(pokemon.getMoveType(move));
+      pokemon.updateInfo();
     }
-
-    return false;
   }
 
-  public override getTriggerMessage(pokemon: Pokemon, _abilityName: string): string {
+  public override canApply(...[pokemon, , move]: Parameters<this["apply"]>): boolean {
+    return (
+      !pokemon.isTerastallized
+      && move.id !== MoveId.STRUGGLE
+      && !move.attrs.some((attr) => attr.callsOtherMoves)
+      && pokemon.getTypes().some((t) => t !== pokemon.getMoveType(move))
+    );
+  }
+
+  public override getTriggerMessage(pokemon: Pokemon, _abilityName: string, move: Move): string {
     return i18next.t("abilityTriggers:pokemonTypeChange", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-      moveType: i18next.t(`pokemonInfo:Type.${enumValueToKey(ElementalType, this.moveType)}`),
+      moveType: i18next.t(`pokemonInfo:Type.${enumValueToKey(ElementalType, pokemon.getMoveType(move))}`),
     });
   }
 }

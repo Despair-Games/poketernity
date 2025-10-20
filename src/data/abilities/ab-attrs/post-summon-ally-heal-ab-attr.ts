@@ -16,27 +16,27 @@ export class PostSummonAllyHealAbAttr extends PostSummonAbAttr {
     this.showAnim = showAnim;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): void {
     const target = pokemon.getAlly();
-    if (target?.isActive(true)) {
-      if (!simulated) {
-        globalScene.phaseManager.createAndUnshiftPhase(
-          "PokemonHealPhase",
-          target.getBattlerIndex(),
-          toDmgValue(pokemon.getMaxHp() / this.healRatio),
-          {
-            message: i18next.t("abilityTriggers:postSummonAllyHeal", {
-              pokemonNameWithAffix: getPokemonNameWithAffix(target),
-              pokemonName: pokemon.name,
-            }),
-            skipAnim: !this.showAnim,
-          },
-        );
-      }
-
-      return true;
+    if (simulated || target == null) {
+      return;
     }
 
-    return false;
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "PokemonHealPhase",
+      target.getBattlerIndex(),
+      toDmgValue(pokemon.getMaxHp() / this.healRatio),
+      {
+        message: i18next.t("abilityTriggers:postSummonAllyHeal", {
+          pokemonNameWithAffix: getPokemonNameWithAffix(target),
+          pokemonName: pokemon.name,
+        }),
+        skipAnim: !this.showAnim,
+      },
+    );
+  }
+
+  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+    return !!pokemon.getAlly()?.isActive(true);
   }
 }

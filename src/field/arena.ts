@@ -308,7 +308,7 @@ export class Arena {
 
       if (isCastformWithForecast || isCherrimWithFlowerGift) {
         // TODO: This doesn't seem to account for which ability is triggered (main vs. passive)
-        globalScene.phaseManager.createAndUnshiftPhase("ShowAbilityPhase", p.getBattlerIndex());
+        globalScene.phaseManager.createAndUnshiftPhase("ShowAbilityPhase", p);
         globalScene.triggerPokemonFormChange(p, SpeciesFormChangeWeatherTrigger);
       }
     });
@@ -326,7 +326,7 @@ export class Arena {
 
       if (isCastformWithForecast || isCherrimWithFlowerGift) {
         // TODO: This doesn't seem to account for which ability is triggered (main vs. passive)
-        globalScene.phaseManager.createAndUnshiftPhase("ShowAbilityPhase", p.getBattlerIndex());
+        globalScene.phaseManager.createAndUnshiftPhase("ShowAbilityPhase", p);
         return globalScene.triggerPokemonFormChange(p, SpeciesFormChangeRevertWeatherFormTrigger);
       }
     });
@@ -376,6 +376,14 @@ export class Arena {
    */
   public canSetTerrain(terrainType: TerrainType): boolean {
     return terrainType !== this.terrainType;
+  }
+
+  /**
+   * @param terrainType - The {@link TerrainType | type} of terrain to check
+   * @returns `true` if Terrain of the given type can be set on the field.
+   */
+  public canSetTerrain(terrain: TerrainType): boolean {
+    return (this.terrain?.terrainType ?? TerrainType.NONE) !== terrain;
   }
 
   /**

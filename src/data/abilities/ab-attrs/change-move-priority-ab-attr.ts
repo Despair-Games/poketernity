@@ -2,7 +2,7 @@ import { AbAttr } from "#abilities/ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import type { NumberHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 
 type AbAttrMoveCondition = (pokemon: Pokemon, move: Move) => boolean;
 
@@ -20,24 +20,23 @@ type AbAttrMoveCondition = (pokemon: Pokemon, move: Move) => boolean;
  */
 export class ChangeMovePriorityAbAttr extends AbAttr {
   /** The condition moves must follow for the priority change to apply */
-  private readonly moveFunc: AbAttrMoveCondition;
+  private readonly condition: AbAttrMoveCondition;
   /** The amount of priority added or subtracted */
   private readonly changeAmount: number;
 
-  constructor(moveFunc: AbAttrMoveCondition, changeAmount: number) {
+  constructor(condition: AbAttrMoveCondition, changeAmount: number) {
     super(true);
     this._flags.add(AbAttrFlag.CHANGE_MOVE_PRIORITY);
 
-    this.moveFunc = moveFunc;
+    this.condition = condition;
     this.changeAmount = changeAmount;
   }
 
-  public override apply(pokemon: Pokemon, _simulated: boolean, move: Move, priority: NumberHolder): boolean {
-    if (!this.moveFunc(pokemon, move)) {
-      return false;
-    }
-
+  public override apply(_pokemon: Pokemon, _simulated: boolean, _move: Move, priority: ValueHolder<number>): void {
     priority.value += this.changeAmount;
-    return true;
+  }
+
+  public override canApply(...[pokemon, , move]: Parameters<this["apply"]>): boolean {
+    return this.condition(pokemon, move);
   }
 }
