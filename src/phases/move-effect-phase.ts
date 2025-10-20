@@ -61,8 +61,6 @@ export class MoveEffectPhase extends HitCheckPhase {
   private lastHit: boolean;
 
   public override start(): void {
-    super.start();
-
     /** The Pokemon using this phase's invoked move */
     const user = this.getUserPokemon();
 

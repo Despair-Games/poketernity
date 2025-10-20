@@ -3,7 +3,7 @@ import type { AbilityId } from "#enums/ability-id";
 import type { MoveId } from "#enums/move-id";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const MoveFlags = {
   NONE: 0,
@@ -59,4 +59,4 @@ export const MoveFlags = {
   SNATCHABLE: 1 << 21,
 } as const;
 
-export type MoveFlags = EnumValues<typeof MoveFlags>;
+export type MoveFlags = ObjectValues<typeof MoveFlags>;

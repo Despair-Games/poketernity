@@ -4,40 +4,40 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { Pokemon } from "#field/pokemon";
 import type { PokemonHeldItemModifier } from "#modifier/modifier";
 import type { Move } from "#moves/move";
-import type { PokemonAttackCondition } from "#types/move-types";
 import i18next from "i18next";
 
 export class PostAttackStealHeldItemAbAttr extends PostAttackAbAttr {
-  private readonly stealCondition?: PokemonAttackCondition;
-
-  constructor(stealCondition?: PokemonAttackCondition) {
-    super();
-
-    this.stealCondition = stealCondition;
-  }
-
-  public override applyPostAttack(pokemon: Pokemon, simulated: boolean, defender: Pokemon, move: Move): boolean {
-    if (!simulated && (!this.stealCondition || this.stealCondition(pokemon, defender, move))) {
-      const heldItems = this.getTargetHeldItems(defender).filter((i) => i.isTransferable);
-      if (heldItems.length) {
-        const stolenItem = heldItems[pokemon.randSeedInt(heldItems.length)];
-        if (globalScene.tryTransferHeldItemModifier(stolenItem, pokemon, false)) {
-          globalScene.phaseManager.createAndUnshiftPhase(
-            "MessagePhase",
-            i18next.t("abilityTriggers:postAttackStealHeldItem", {
-              pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-              defenderName: defender.name,
-              stolenItemType: stolenItem.type.name,
-            }),
-          );
-          return true;
-        }
-      }
+  public override apply(pokemon: Pokemon, simulated: boolean, defender: Pokemon, _move: Move): void {
+    if (simulated) {
+      return;
     }
-    return false;
+
+    const heldItems = this.getTargetHeldItems(defender).filter((i) => i.isTransferable);
+    if (heldItems.length === 0) {
+      return;
+    }
+
+    const stolenItem = heldItems[pokemon.randSeedInt(heldItems.length)];
+    if (!globalScene.tryTransferHeldItemModifier(stolenItem, pokemon, false)) {
+      return;
+    }
+
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
+      i18next.t("abilityTriggers:postAttackStealHeldItem", {
+        pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+        defenderName: defender.name,
+        stolenItemType: stolenItem.type.name,
+      }),
+    );
   }
 
-  getTargetHeldItems(target: Pokemon): PokemonHeldItemModifier[] {
+  public override canApply(...params: Parameters<this["apply"]>): boolean {
+    const [, , defender] = params;
+    return this.getTargetHeldItems(defender).some((i) => i.isTransferable);
+  }
+
+  private getTargetHeldItems(target: Pokemon): PokemonHeldItemModifier[] {
     return globalScene.findModifiers(
       (m) => m.isPokemonHeldItemModifier() && m.pokemonId === target.id,
       target.isPlayer(),

@@ -5,7 +5,7 @@ import type { BattleStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { AbAttrCondition } from "#types/ability-types";
-import type { BooleanHolder, NumberHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 
 export class TypeImmunityStatStageChangeAbAttr extends TypeImmunityAbAttr {
   private readonly stat: BattleStat;
@@ -23,24 +23,23 @@ export class TypeImmunityStatStageChangeAbAttr extends TypeImmunityAbAttr {
     simulated: boolean,
     attacker: Pokemon,
     move: Move,
-    cancelled: BooleanHolder,
-    typeMultiplier: NumberHolder,
-  ): boolean {
-    const ret = super.apply(pokemon, simulated, attacker, move, cancelled, typeMultiplier);
-
-    if (ret) {
-      cancelled.value = true; // Suppresses "No Effect" message
-      if (!simulated) {
-        globalScene.phaseManager.createAndUnshiftPhase(
-          "StatStageChangePhase",
-          pokemon.getBattlerIndex(),
-          pokemon,
-          [this.stat],
-          this.stages,
-        );
-      }
+    cancelled: ValueHolder<boolean>,
+    typeMultiplier: ValueHolder<number>,
+  ): void {
+    super.apply(pokemon, simulated, attacker, move, cancelled, typeMultiplier);
+    if (!simulated) {
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "StatStageChangePhase",
+        pokemon.getBattlerIndex(),
+        pokemon,
+        [this.stat],
+        this.stages,
+      );
     }
+  }
 
-    return ret;
+  // The StatStageChangePhase from this effect takes the place of the default trigger message
+  public override getTriggerMessage(_pokemon: Pokemon, _abilityName: string): string | null {
+    return null;
   }
 }

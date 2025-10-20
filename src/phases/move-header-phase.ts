@@ -25,8 +25,6 @@ export class MoveHeaderPhase extends BattlePhase {
   }
 
   public override start(): void {
-    super.start();
-
     if (this.canMove()) {
       applyMoveAttrs(MoveHeaderAttr, this.pokemon, null, this.move.getMove());
     }

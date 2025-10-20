@@ -1,7 +1,7 @@
 import { AbAttr } from "#abilities/ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
-import type { NumberHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 
 /**
  * Ability attribute used for abilites that change the ability owner's weight
@@ -17,9 +17,7 @@ export class WeightMultiplierAbAttr extends AbAttr {
     this.multiplier = multiplier;
   }
 
-  public override apply(_pokemon: Pokemon, _simulated: boolean, weight: NumberHolder): boolean {
+  public override apply(_pokemon: Pokemon, _simulated: boolean, weight: ValueHolder<number>): void {
     weight.value *= this.multiplier;
-
-    return true;
   }
 }

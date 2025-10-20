@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 /**
  * Remember to add the appropriate score to
@@ -118,6 +118,7 @@ export const BattlerTagType = {
   SNATCHING: 104,
   ME_FIRST_POWER_BOOST: 105,
   BIDE: 106,
+  PURSUING: 107,
 } as const;
 
-export type BattlerTagType = EnumValues<typeof BattlerTagType>;
+export type BattlerTagType = ObjectValues<typeof BattlerTagType>;

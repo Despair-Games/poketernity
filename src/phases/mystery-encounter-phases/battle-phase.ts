@@ -35,8 +35,6 @@ export class MysteryEncounterBattlePhase extends Phase {
    * Sets up a ME battle
    */
   public override start(): void {
-    super.start();
-
     this.doMysteryEncounterBattle();
   }
 

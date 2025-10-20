@@ -11,23 +11,29 @@ import i18next from "i18next";
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Ball_Fetch_(Ability) | Ball Fetch}.
  */
 export class FetchBallAbAttr extends PostTurnAbAttr {
-  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): void {
     if (simulated) {
-      return false;
+      return;
     }
-    const lastUsed = globalScene.currentBattle.lastUsedPokeball;
-    if (lastUsed !== null && pokemon.isPlayer()) {
-      globalScene.pokeballCounts[lastUsed]++;
-      globalScene.currentBattle.lastUsedPokeball = null;
-      globalScene.phaseManager.createAndUnshiftPhase(
-        "MessagePhase",
-        i18next.t("abilityTriggers:fetchBall", {
-          pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-          pokeballName: getPokeballName(lastUsed),
-        }),
-      );
-      return true;
+
+    const { lastUsedPokeball } = globalScene.currentBattle;
+    if (lastUsedPokeball == null) {
+      return;
     }
-    return false;
+
+    globalScene.pokeballCounts[lastUsedPokeball]++;
+    globalScene.currentBattle.lastUsedPokeball = null;
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
+      i18next.t("abilityTriggers:fetchBall", {
+        pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+        pokeballName: getPokeballName(lastUsedPokeball),
+      }),
+    );
+  }
+
+  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+    const { lastUsedPokeball } = globalScene.currentBattle;
+    return lastUsedPokeball != null && pokemon.isPlayer();
   }
 }

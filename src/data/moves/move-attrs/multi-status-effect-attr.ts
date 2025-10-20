@@ -24,7 +24,7 @@ export class MultiStatusEffectAttr extends StatusEffectAttr {
   }
 
   override getTargetBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {
-    const moveChance = this.getMoveChance(user, target, move, false);
+    const moveChance = this.getMoveChance(user, target, move);
     const score = moveChance < 0 ? -10 : Math.floor(moveChance * -0.1);
     const pokemon = this.selfTarget ? user : target;
 

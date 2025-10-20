@@ -4,15 +4,15 @@ import type { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { PokemonAttackCondition } from "#types/move-types";
-import type { NumberHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 
 export class MoveTypeChangeAbAttr extends PreAttackAbAttr {
   private readonly newType: ElementalType;
   private readonly powerMultiplier: number;
-  private readonly condition?: PokemonAttackCondition;
+  private readonly condition: PokemonAttackCondition;
 
-  constructor(newType: ElementalType, powerMultiplier: number, condition?: PokemonAttackCondition) {
-    super(true);
+  constructor(newType: ElementalType, powerMultiplier: number, condition: PokemonAttackCondition) {
+    super();
     this._flags.add(AbAttrFlag.MOVE_TYPE_CHANGE);
 
     this.newType = newType;
@@ -22,23 +22,22 @@ export class MoveTypeChangeAbAttr extends PreAttackAbAttr {
 
   // TODO: Decouple this into two attributes (type change / power boost)
   public override apply(
-    pokemon: Pokemon,
+    _pokemon: Pokemon,
     _simulated: boolean,
-    move: Move,
-    defender?: Pokemon,
-    moveType?: NumberHolder,
-    power?: NumberHolder,
-  ): boolean {
-    if (this.condition?.(pokemon, defender, move)) {
-      if (moveType) {
-        moveType.value = this.newType;
-      }
-      if (power) {
-        power.value *= this.powerMultiplier;
-      }
-      return true;
+    _move: Move,
+    _defender?: Pokemon,
+    moveType?: ValueHolder<number>,
+    power?: ValueHolder<number>,
+  ): void {
+    if (moveType != null) {
+      moveType.value = this.newType;
     }
+    if (power != null) {
+      power.value *= this.powerMultiplier;
+    }
+  }
 
-    return false;
+  public override canApply(...[pokemon, , move, defender]: Parameters<this["apply"]>): boolean {
+    return this.condition(pokemon, defender, move);
   }
 }

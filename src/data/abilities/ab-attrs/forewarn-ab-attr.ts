@@ -9,7 +9,7 @@ import { OneHitKOAttr } from "#moves/one-hit-ko-attr";
 import i18next from "i18next";
 
 export class ForewarnAbAttr extends PostSummonAbAttr {
-  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): void {
     let maxPowerSeen = 0;
     let moveName = "";
     let movePower = 0;
@@ -50,7 +50,5 @@ export class ForewarnAbAttr extends PostSummonAbAttr {
         }),
       );
     }
-
-    return true;
   }
 }

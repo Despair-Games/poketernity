@@ -3,7 +3,7 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { PokemonAttackCondition } from "#types/move-types";
-import type { BooleanHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 
 /**
  * Guarantees a critical hit according to the given condition, except if target prevents critical hits. ie. Merciless
@@ -26,17 +26,16 @@ export class ConditionalCritAbAttr extends AbAttr {
    * @param move {@linkcode Move} used by ability user.
    */
   public override apply(
-    pokemon: Pokemon,
+    _pokemon: Pokemon,
     _simulated: boolean,
-    isCritical: BooleanHolder,
-    target: Pokemon,
-    move: Move,
-  ): boolean {
-    if (!this.condition(pokemon, target, move)) {
-      return false;
-    }
-
+    isCritical: ValueHolder<boolean>,
+    _target: Pokemon,
+    _move: Move,
+  ): void {
     isCritical.value = true;
-    return true;
+  }
+
+  public override canApply(...[pokemon, , , target, move]: Parameters<this["apply"]>): boolean {
+    return this.condition(pokemon, target, move);
   }
 }

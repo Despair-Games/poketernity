@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const BattlerTagLapseType = {
   FAINT: 1,
@@ -12,4 +12,4 @@ export const BattlerTagLapseType = {
   CUSTOM: 9,
 } as const;
 
-export type BattlerTagLapseType = EnumValues<typeof BattlerTagLapseType>;
+export type BattlerTagLapseType = ObjectValues<typeof BattlerTagLapseType>;

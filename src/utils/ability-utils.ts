@@ -34,7 +34,20 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
   };
 }
 
-/** Used for Aerialate, Refrigerate, Pixilate, Galvanize */
-export const normalTypeMoveConversionCondition: PokemonAttackCondition = (user, _target, move) =>
-  move?.type === ElementalType.NORMAL
-  && (!move.hasAttr(VariableMoveTypeAttr) || (TERA_MOVES.includes(move.id) && !user?.isTerastallized));
+/**
+ * @returns `true` if the move isn't a variable-type move. Tera-based variable-type moves may
+ * still have their type changed by abilities with this condition if the user is not Terastallized.
+ * @remarks
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Normalize_(Ability) | Normalize} and as
+ * part of the conditions for {@link https://bulbapedia.bulbagarden.net/wiki/Pixilate_(Ability) | Pixilate} et al.
+ */
+export const anyTypeMoveConversionCondition: PokemonAttackCondition = (user, _target, move) =>
+  !move?.hasAttr(VariableMoveTypeAttr) || (TERA_MOVES.includes(move.id) && !user?.isTerastallized);
+
+/**
+ * Similar to {@linkcode anyTypeMoveConversionCondition}, except that the given move must also be Normal-type.
+ *
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Pixilate_(Ability) | Pixilate} et al.
+ */
+export const normalTypeMoveConversionCondition: PokemonAttackCondition = (user, target, move) =>
+  move?.type === ElementalType.NORMAL && anyTypeMoveConversionCondition(user, target, move);

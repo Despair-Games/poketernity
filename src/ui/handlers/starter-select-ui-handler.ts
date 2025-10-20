@@ -13,7 +13,6 @@ import { getNatureName } from "#data/nature";
 import { starterPassiveAbilities } from "#data/passives";
 import { pokemonFormLevelMoves } from "#data/pokemon-form-level-moves";
 import { pokemonFormChanges } from "#data/pokemon-forms";
-import type { LevelMoves } from "#data/pokemon-level-moves";
 import { pokemonSpeciesLevelMoves } from "#data/pokemon-level-moves";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import type { PokemonSpecies } from "#data/pokemon-species";
@@ -56,9 +55,10 @@ import type { DexAttrProps, StarterAttributes, StarterPreferences } from "#syste
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
 import type { DexEntry } from "#types/dex-data";
 import type { InputSettings } from "#types/inputs-types";
+import type { LevelMoves } from "#types/move-types";
 import type { StarterConfig, StarterDataEntry, StarterMoveset } from "#types/starter-data";
 import type { ShowTextOptions } from "#types/ui-types";
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { DropDown, DropDownLabel, DropDownOption } from "#ui/drop-down";
@@ -109,7 +109,7 @@ const StarterSelectMode = {
   START: 4,
 } as const;
 
-type StarterSelectMode = EnumValues<typeof StarterSelectMode>;
+type StarterSelectMode = ObjectValues<typeof StarterSelectMode>;
 
 const languageSettings: { [key: string]: LanguageSetting } = {
   pt_BR: {

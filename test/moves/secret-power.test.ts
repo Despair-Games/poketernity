@@ -86,8 +86,6 @@ describe("Moves - Secret Power", () => {
     await game.toEndOfTurn();
 
     expect(sereneGraceAttr.apply).toHaveBeenCalledOnce();
-    expect(sereneGraceAttr.apply).toHaveLastReturnedWith(true);
-
     expect(rainbowEffect.apply).toHaveBeenCalledTimes(0);
   });
 });

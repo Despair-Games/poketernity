@@ -10,15 +10,12 @@ export abstract class PreAttackAbAttr extends AbAttr {
    * @param move The {@linkcode Move} being used
    * @param defender The {@linkcode Pokemon} targeted by the move
    * @param args Any additional parameters for this effect
-   * @returns `true` if effects from this attribute apply successfully
    */
-  public override apply(
+  public abstract override apply(
     _pokemon: Pokemon,
     _simulated: boolean,
     _move: Move,
     _defender?: Pokemon,
     ..._args: unknown[]
-  ): boolean {
-    return false;
-  }
+  ): void;
 }

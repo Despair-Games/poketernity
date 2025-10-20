@@ -1,4 +1,4 @@
-/** biome-ignore-all lint/style/noNestedTernary: modifiers are being deleted soon anyway */
+/* biome-ignore-all lint/style/noNestedTernary: modifiers are being deleted soon anyway */
 
 import { globalScene } from "#app/global-scene";
 import { activeOverrides } from "#app/overrides";
@@ -74,8 +74,6 @@ export class SelectModifierPhase extends BattlePhase {
   }
 
   public override start(): void {
-    super.start();
-
     const { currentBattle, money, ui } = globalScene;
     const { waveIndex } = currentBattle;
 

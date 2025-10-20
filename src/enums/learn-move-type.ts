@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const LearnMoveType = {
   /** For learning a move via level-up, evolution, or other non-item-based event */
@@ -9,4 +9,4 @@ export const LearnMoveType = {
   TM: 3,
 } as const;
 
-export type LearnMoveType = EnumValues<typeof LearnMoveType>;
+export type LearnMoveType = ObjectValues<typeof LearnMoveType>;

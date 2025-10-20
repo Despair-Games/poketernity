@@ -1,6 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTag } from "#battler-tags/battler-tag";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { MoveId } from "#enums/move-id";
@@ -19,9 +20,15 @@ export class SturdyTag extends BattlerTag {
 
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     if (lapseType === BattlerTagLapseType.CUSTOM) {
-      globalScene.phaseManager.createAndUnshiftPhase(
-        "MessagePhase",
-        i18next.t("battlerTags:sturdyLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+      const { phaseManager } = globalScene;
+      // Sturdy requires custom timing to show/hide its ability bar
+      phaseManager.unshiftPhase(
+        phaseManager.createPhase("ShowAbilityPhase", pokemon, pokemon.getPassiveAbility().id === AbilityId.STURDY),
+        phaseManager.createPhase(
+          "MessagePhase",
+          i18next.t("battlerTags:sturdyLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+        ),
+        phaseManager.createPhase("HideAbilityPhase", pokemon),
       );
       return false;
     }

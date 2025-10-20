@@ -95,34 +95,33 @@ function applyAbAttrsInternal<TAttr extends AbAttr = never>(
 
     matchingAttrs.forEach((attr) => {
       let message: ApplyAbAttrResult<TAttr>["message"] = null;
-      const applied = attr.apply(pokemon, simulated, ...args);
-
-      if (applied && !simulated) {
-        if (!pokemon.summonData.abilitiesApplied.includes(ability.id)) {
-          pokemon.summonData.abilitiesApplied.push(ability.id);
-        }
-
-        if (!pokemon.waveData.abilitiesApplied.includes(ability.id)) {
-          pokemon.waveData.abilitiesApplied.push(ability.id);
-          pokemon.waveData.abilitiesRevealed.push(ability.id);
-        }
-
-        if (attr.showAbility) {
-          if (attr.showAbilityInstant) {
-            globalScene.abilityBar.showAbility(pokemon, passive);
-          } else {
-            // TODO: This is out of order with the ability's effects
-            globalScene.phaseManager.createAndUnshiftPhase("ShowAbilityPhase", pokemon.id, passive);
-          }
-        }
+      const applied = attr.canApply(...params);
+      if (!applied) {
+        return;
       }
 
-      if (applied) {
-        message = attr.getTriggerMessage(pokemon, ability.name, ...args);
+      if (attr.showAbility && !simulated) {
+        globalScene.phaseManager.createAndUnshiftPhase("ShowAbilityPhase", pokemon, passive);
+      }
 
-        if (message && !simulated) {
-          globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", message);
-        }
+      message = attr.getTriggerMessage(pokemon, ability.name, ...args);
+      if (message && !simulated) {
+        globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", message);
+      }
+
+      attr.apply(pokemon, simulated, ...args);
+
+      if (!pokemon.summonData.abilitiesApplied.includes(ability.id)) {
+        pokemon.summonData.abilitiesApplied.push(ability.id);
+      }
+
+      if (!pokemon.waveData.abilitiesApplied.includes(ability.id)) {
+        pokemon.waveData.abilitiesApplied.push(ability.id);
+        pokemon.waveData.abilitiesRevealed.push(ability.id);
+      }
+
+      if (attr.showAbility && !simulated) {
+        globalScene.phaseManager.createAndUnshiftPhase("HideAbilityPhase", pokemon);
       }
 
       results.push({ attr, applied, message });

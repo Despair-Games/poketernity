@@ -87,8 +87,6 @@ export class SummonPhase extends PokemonPhase {
   // #region Public Methods
 
   public override start(): void {
-    super.start();
-
     // If the Pokemon about to be summoned is fainted or illegal under active challenges,
     // try to reorganize the Pokemon's party such that a legal inactive Pokemon is summoned instead.
     if (!this.getPokemon().isAllowedInBattle() && !this.handleIllegalSummon()) {

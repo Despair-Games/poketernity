@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const AiType = {
   RANDOM: 1,
@@ -6,4 +6,4 @@ export const AiType = {
   SMART: 3,
 } as const;
 
-export type AiType = EnumValues<typeof AiType>;
+export type AiType = ObjectValues<typeof AiType>;

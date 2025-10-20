@@ -30,8 +30,6 @@ export class DamageAnimPhase extends PokemonPhase {
   }
 
   public override start(): void {
-    super.start();
-
     if (this.damageResult === HitResult.ONE_HIT_KO) {
       if (settings.display.enableMoveAnimations) {
         globalScene.toggleInvert(true);

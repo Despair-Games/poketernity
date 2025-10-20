@@ -14,29 +14,29 @@ export class PostTurnStatusHealAbAttr extends PostTurnAbAttr {
   private readonly statusEffects: StatusEffect[];
 
   constructor(...effects: StatusEffect[]) {
-    super(false);
+    super();
 
     this.statusEffects = effects;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
-    if (pokemon.hasStatusEffect(this.statusEffects) && !pokemon.isFullHp()) {
-      if (!simulated) {
-        const abilityName = this.source.name;
-        globalScene.phaseManager.createAndUnshiftPhase(
-          "PokemonHealPhase",
-          pokemon.getBattlerIndex(),
-          toDmgValue(pokemon.getMaxHp() / 8),
-          {
-            message: i18next.t("abilityTriggers:poisonHeal", {
-              pokemonName: getPokemonNameWithAffix(pokemon),
-              abilityName,
-            }),
-          },
-        );
-      }
-      return true;
+  public override apply(pokemon: Pokemon, simulated: boolean): void {
+    if (!simulated) {
+      const abilityName = this.source.name;
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "PokemonHealPhase",
+        pokemon.getBattlerIndex(),
+        toDmgValue(pokemon.getMaxHp() / 8),
+        {
+          message: i18next.t("abilityTriggers:poisonHeal", {
+            pokemonName: getPokemonNameWithAffix(pokemon),
+            abilityName,
+          }),
+        },
+      );
     }
-    return false;
+  }
+
+  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+    return pokemon.hasStatusEffect(this.statusEffects) && !pokemon.isFullHp();
   }
 }

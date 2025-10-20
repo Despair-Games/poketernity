@@ -9,7 +9,7 @@ import { HitResult } from "#enums/hit-result";
 import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import { BooleanHolder, toDmgValue } from "#utils/common-utils";
+import { toDmgValue, ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -29,39 +29,40 @@ export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
     this.damageRatio = damageRatio;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean, attacker?: Pokemon, move?: Move): boolean {
-    if (move && attacker && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)) {
-      //If the mon didn't die to indirect damage
-      const cancelled = new BooleanHolder(false);
-      const moveName = pokemon.getPokemonMove(move.id)?.name ?? move.name;
-      globalScene
-        .getField(true)
-        .map((p) =>
-          applyAbAttrs<FieldPreventExplosionLikeAbAttr>(
-            AbAttrFlag.FIELD_PREVENT_EXPLOSION_LIKE,
-            p,
-            simulated,
-            cancelled,
-            getPokemonNameWithAffix(attacker),
-            moveName,
-          ),
-        );
-
-      applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, attacker, simulated, cancelled);
-      if (cancelled.value) {
-        return false;
-      }
-      if (!simulated) {
-        const abilityDamage = toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio));
-        attacker.damageAndUpdate(abilityDamage, {
-          result: HitResult.OTHER,
-          preventEndure: true,
-        });
-      }
-      return true;
+  public override apply(_pokemon: Pokemon, simulated: boolean, attacker?: Pokemon, move?: Move): void {
+    if (simulated || attacker == null || move == null) {
+      return;
     }
 
-    return false;
+    const abilityDamage = toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio));
+    attacker.damageAndUpdate(abilityDamage, {
+      result: HitResult.OTHER,
+      preventEndure: true,
+    });
+  }
+
+  public override canApply(...[pokemon, simulated, attacker, move]: Parameters<this["apply"]>): boolean {
+    if (move == null || attacker == null || !move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)) {
+      return false;
+    }
+
+    const cancelled = new ValueHolder(false);
+    const moveName = pokemon.getPokemonMove(move.id)?.name ?? move.name;
+    globalScene
+      .getField(true)
+      .map((p) =>
+        applyAbAttrs<FieldPreventExplosionLikeAbAttr>(
+          AbAttrFlag.FIELD_PREVENT_EXPLOSION_LIKE,
+          p,
+          simulated,
+          cancelled,
+          getPokemonNameWithAffix(attacker),
+          moveName,
+        ),
+      );
+
+    applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, attacker, simulated, cancelled);
+    return !cancelled.value;
   }
 
   public override getTriggerMessage(pokemon: Pokemon, abilityName: string): string {

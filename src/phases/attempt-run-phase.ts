@@ -22,8 +22,6 @@ export class AttemptRunPhase extends PokemonPhase {
   public forceFailEscape = false; // TODO: replace with a new override
 
   public override start(): void {
-    super.start();
-
     const playerField = globalScene.getPlayerField();
     const enemyField = globalScene.getEnemyField();
 

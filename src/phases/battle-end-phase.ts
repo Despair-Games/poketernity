@@ -21,8 +21,6 @@ export class BattleEndPhase extends BattlePhase {
   }
 
   public override start(): void {
-    super.start();
-
     const { currentBattle, gameData } = globalScene;
 
     gameData.gameStats.battles++;

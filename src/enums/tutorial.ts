@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const Tutorial = {
   INTRO: 1,
@@ -11,4 +11,4 @@ export const Tutorial = {
   EGG_GACHA: 8,
 } as const;
 
-export type Tutorial = EnumValues<typeof Tutorial>;
+export type Tutorial = ObjectValues<typeof Tutorial>;

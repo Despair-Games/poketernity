@@ -1,6 +1,5 @@
 import { PostMoveUsedAbAttr } from "#abilities/post-move-used-ab-attr";
 import { globalScene } from "#app/global-scene";
-import { SEMI_INVULNERABLE_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
 import type { BattlerIndex } from "#enums/battler-index";
 import type { Pokemon } from "#field/pokemon";
 import type { PokemonMove } from "#field/pokemon-move";
@@ -15,31 +14,29 @@ export class PostDancingMoveAbAttr extends PostMoveUsedAbAttr {
     move: PokemonMove,
     source: Pokemon,
     targets: BattlerIndex[],
-  ): boolean {
-    // The move to replicate cannot come from the Dancer
-    if (
-      source.getBattlerIndex() !== pokemon.getBattlerIndex()
-      && !pokemon.summonData.tags.some((tag) => SEMI_INVULNERABLE_BATTLER_TAG_TYPES.includes(tag.tagType))
-    ) {
-      if (!simulated) {
-        if (move.getMove().isSelfStatusMove()) {
-          // If the move is a SelfStatusMove (ie. Swords Dance), the Dancer should replicate it on itself
-          globalScene.phaseManager.createAndUnshiftPhase("MovePhase", pokemon, [pokemon.getBattlerIndex()], move, {
-            followUp: true,
-            ignorePp: true,
-          });
-        } else {
-          // Otherwise, the Dancer must replicate the move on the source of the Dance
-          const target = this.getTarget(pokemon, source, targets);
-          globalScene.phaseManager.createAndUnshiftPhase("MovePhase", pokemon, target, move, {
-            followUp: true,
-            ignorePp: true,
-          });
-        }
-      }
-      return true;
+  ): void {
+    if (simulated) {
+      return;
     }
-    return false;
+
+    if (move.getMove().isSelfStatusMove()) {
+      // If the move is a SelfStatusMove (ie. Swords Dance), the Dancer should replicate it on itself
+      globalScene.phaseManager.createAndUnshiftPhase("MovePhase", pokemon, [pokemon.getBattlerIndex()], move, {
+        followUp: true,
+        ignorePp: true,
+      });
+    } else {
+      // Otherwise, the Dancer must replicate the move on the source of the Dance
+      const target = this.getTarget(pokemon, source, targets);
+      globalScene.phaseManager.createAndUnshiftPhase("MovePhase", pokemon, target, move, {
+        followUp: true,
+        ignorePp: true,
+      });
+    }
+  }
+
+  public override canApply(...[pokemon, , , source]: Parameters<this["apply"]>): boolean {
+    return source.id !== pokemon.id && !pokemon.isSemiInvulnerable();
   }
 
   /**

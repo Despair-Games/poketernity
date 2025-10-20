@@ -119,9 +119,6 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
       case BattlerTagType.QUASHED:
         return -1;
       case BattlerTagType.NONE:
-      /**
-       * @todo: Burned Up and Double Shocked terastallization considerations
-       */
       case BattlerTagType.BURNED_UP:
       case BattlerTagType.DOUBLE_SHOCKED:
       case BattlerTagType.MINIMIZED:
@@ -144,6 +141,7 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
       case BattlerTagType.SKY_DROP:
       case BattlerTagType.MAGIC_COAT:
       case BattlerTagType.ME_FIRST_POWER_BOOST:
+      case BattlerTagType.PURSUING:
       case BattlerTagType.BIDE:
         return 0;
       case BattlerTagType.INGRAIN:
@@ -190,7 +188,7 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
   }
 
   override getTargetBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {
-    let moveChance = this.getMoveChance(user, target, move, false);
+    let moveChance = this.getMoveChance(user, target, move);
     if (moveChance < 0) {
       moveChance = 100;
     }

@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const Challenges = {
   SINGLE_GENERATION: 1,
@@ -9,4 +9,4 @@ export const Challenges = {
   INVERSE_BATTLE: 6,
 } as const;
 
-export type Challenges = EnumValues<typeof Challenges>;
+export type Challenges = ObjectValues<typeof Challenges>;

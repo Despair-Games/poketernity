@@ -10,8 +10,6 @@ export class CheckStatusEffectPhase extends Phase {
   public override readonly phaseName = "CheckStatusEffectPhase";
 
   public override start(): void {
-    super.start();
-
     /** @todo Shuffle this before sorting to resolve speed ties */
     const pokemon = globalScene
       .getField(true)

@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const DropDownState = {
   ON: 1,
@@ -8,4 +8,4 @@ export const DropDownState = {
   PARTIAL: 5,
 } as const;
 
-export type DropDownState = EnumValues<typeof DropDownState>;
+export type DropDownState = ObjectValues<typeof DropDownState>;

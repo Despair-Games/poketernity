@@ -1,11 +1,12 @@
 import { PreDefendAbAttr } from "#abilities/pre-defend-ab-attr";
+import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { ElementalType } from "#enums/elemental-type";
-import { MoveTarget } from "#enums/move-target";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { AbAttrCondition } from "#types/ability-types";
-import type { BooleanHolder, NumberHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
+import i18next from "i18next";
 
 /**
  * Determines whether a Pokemon is immune to a move because of an ability.
@@ -14,14 +15,14 @@ import type { BooleanHolder, NumberHolder } from "#utils/common-utils";
  */
 export class TypeImmunityAbAttr extends PreDefendAbAttr {
   private readonly immuneType: ElementalType;
-  private readonly condition: AbAttrCondition | null;
+  private readonly condition: AbAttrCondition;
 
-  constructor(immuneType: ElementalType, condition?: AbAttrCondition) {
-    super();
+  constructor(immuneType: ElementalType, condition: AbAttrCondition = () => true) {
+    super(true);
     this._flags.add(AbAttrFlag.TYPE_IMMUNITY);
 
     this.immuneType = immuneType;
-    this.condition = condition ?? null;
+    this.condition = condition;
   }
 
   /**
@@ -29,35 +30,39 @@ export class TypeImmunityAbAttr extends PreDefendAbAttr {
    * @param pokemon - The defending {@linkcode Pokemon}
    * @param simulated - N/A
    * @param attacker - The attacking {@linkcode Pokemon}
-   * @param move The used {@linkcode Move}
-   * @param cancelled N/A
-   * @param typeMultiplier {@linkcode NumberHolder} gets set to `0` if the pokemon is immune
+   * @param move - The used {@linkcode Move}
+   * @param cancelled - A {@linkcode ValueHolder} which, if set to `true`, suppresses
+   * the default "It doesn't affect {Pokemon}" message after the hit check
+   * @param typeMultiplier - A {@linkcode ValueHolder} containing the move's running effectiveness
+   * multiplier
    */
   public override apply(
-    pokemon: Pokemon,
+    _pokemon: Pokemon,
     _simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    _cancelled: BooleanHolder,
-    typeMultiplier: NumberHolder,
-  ): boolean {
-    // Field moves should ignore immunity
-    const fieldTargets: MoveTarget[] = [MoveTarget.BOTH_SIDES, MoveTarget.ENEMY_SIDE, MoveTarget.USER_SIDE];
-    if (fieldTargets.includes(move.moveTarget)) {
-      return false;
-    }
-    if (attacker !== pokemon && attacker.getMoveType(move) === this.immuneType) {
-      typeMultiplier.value = 0;
-      return true;
-    }
-    return false;
+    _attacker: Pokemon,
+    _move: Move,
+    cancelled: ValueHolder<boolean>,
+    typeMultiplier: ValueHolder<number>,
+  ): void {
+    cancelled.value = true;
+    typeMultiplier.value = 0;
   }
 
-  getImmuneType(): ElementalType | null {
-    return this.immuneType;
+  public override canApply(...params: Parameters<this["apply"]>): boolean {
+    const [pokemon, , attacker, move] = params;
+    return attacker !== pokemon && attacker.getMoveType(move) === this.immuneType;
   }
 
-  public override getCondition(): AbAttrCondition | null {
+  /**
+   * Type immunity abilities require a trigger message override in order for the ability
+   * flyout to display correctly. By default, this is set to the baseline no-effect message
+   * ("It doesn't affect {Pokemon}!").
+   */
+  public override getTriggerMessage(pokemon: Pokemon, _abilityName: string): string | null {
+    return i18next.t("battle:hitResultNoEffect", { pokemonName: getPokemonNameWithAffix(pokemon) });
+  }
+
+  public override getCondition(): AbAttrCondition {
     return this.condition;
   }
 }

@@ -8,8 +8,8 @@ import type { PokemonMove } from "#field/pokemon-move";
  * Triggers just after a move is used either by the opponent or the player
  */
 export abstract class PostMoveUsedAbAttr extends AbAttr {
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super(true);
     this._flags.add(AbAttrFlag.POST_MOVE_USED);
   }
 
@@ -20,15 +20,12 @@ export abstract class PostMoveUsedAbAttr extends AbAttr {
    * @param move The {@linkcode Move} being used
    * @param source The {@linkcode Pokemon} using the move
    * @param targets The targets of the move (by {@linkcode BattlerIndex})
-   * @returns `true` if effects successfully apply
    */
-  public override apply(
+  public abstract override apply(
     _pokemon: Pokemon,
     _simulated: boolean,
     _move: PokemonMove,
     _source: Pokemon,
     _targets: BattlerIndex[],
-  ): boolean {
-    return false;
-  }
+  ): void;
 }

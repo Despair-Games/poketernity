@@ -7,7 +7,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import type { BooleanHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -18,7 +18,7 @@ import i18next from "i18next";
  */
 export class ReflectMovesAbAttr extends PreDefendAbAttr {
   constructor() {
-    super();
+    super(true);
     this._flags.add(AbAttrFlag.REFLECT_MOVES);
   }
 
@@ -27,13 +27,13 @@ export class ReflectMovesAbAttr extends PreDefendAbAttr {
     _simulated: boolean,
     _attacker: Pokemon,
     _move: Move,
-    reflected: BooleanHolder,
-  ): boolean {
-    if (!reflected.value) {
-      reflected.value = true;
-      return true;
-    }
-    return false;
+    reflected: ValueHolder<boolean>,
+  ): void {
+    reflected.value = true;
+  }
+
+  public override canApply(...[, , , , reflected]: Parameters<this["apply"]>): boolean {
+    return !reflected.value;
   }
 
   public override getTriggerMessage(pokemon: Pokemon, _abilityName: string, _attacker: Pokemon, move: Move): string {

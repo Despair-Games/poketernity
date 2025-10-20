@@ -44,8 +44,6 @@ export class GameOverPhase extends BattlePhase {
   }
 
   public override start(): void {
-    super.start();
-
     const { currentBattle, gameData, gameMode, ui } = globalScene;
 
     // Failsafe if players somehow skip floor 200 in classic mode

@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const MysteryEncounterType = {
   MYSTERIOUS_CHALLENGERS: 1,
@@ -34,4 +34,4 @@ export const MysteryEncounterType = {
   THE_EXPERT_POKEMON_BREEDER: 31,
 } as const;
 
-export type MysteryEncounterType = EnumValues<typeof MysteryEncounterType>;
+export type MysteryEncounterType = ObjectValues<typeof MysteryEncounterType>;

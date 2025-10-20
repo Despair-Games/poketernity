@@ -27,28 +27,27 @@ export class FieldStatMultiplierAbAttr extends AbAttr {
   }
 
   /**
-   * Tries to multiply a Pokemon's Stat
+   * Multiplies the given stat value by this attribute's multiplier
    * @param pokemon The {@linkcode Pokemon} with this ability
    * @param simulated If `true`, suppresses changes to game state
-   * @param stat The {@linkcode Stat} being checked
+   * @param stat The {@linkcode EffectiveStat} being checked
    * @param statValue {@linkcode NumberHolder} the value of the checked stat
    * @param target The {@linkcode Pokemon} to which the ability may apply
    * @param hasApplied {@linkcode BooleanHolder} whether or not another multiplier has been applied to this stat
-   * @returns `true` if this changed the checked stat, `false` otherwise.
    */
   public override apply(
-    pokemon: Pokemon,
+    _pokemon: Pokemon,
     _simulated: boolean,
-    stat: EffectiveStat,
+    _stat: EffectiveStat,
     statValue: ValueHolder<number>,
-    target: Pokemon,
+    _target: Pokemon,
     abilitiesApplied: Set<AbilityId>,
-  ): boolean {
-    if (stat === this.stat && this.targetCondition({ pokemon, target, abilitiesApplied })) {
-      statValue.value *= this.multiplier;
-      abilitiesApplied.add(this.source.id);
-      return true;
-    }
-    return false;
+  ): void {
+    statValue.value *= this.multiplier;
+    abilitiesApplied.add(this.source.id);
+  }
+
+  public override canApply(...[pokemon, , stat, , target, abilitiesApplied]: Parameters<this["apply"]>): boolean {
+    return stat === this.stat && this.targetCondition({ pokemon, target, abilitiesApplied });
   }
 }

@@ -4,7 +4,7 @@ import type { BattleStat, EffectiveStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { PokemonAttackCondition } from "#types/move-types";
-import type { NumberHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 
 /**
  * Ability attribute that multiplies one of the source Pokemon's
@@ -41,9 +41,9 @@ import type { NumberHolder } from "#utils/common-utils";
 export class EffectiveStatMultiplier extends AbAttr {
   protected stat: EffectiveStat;
   protected readonly multiplier: number;
-  protected readonly condition?: PokemonAttackCondition;
+  protected readonly condition: PokemonAttackCondition;
 
-  constructor(stat: EffectiveStat, multiplier: number, condition?: PokemonAttackCondition) {
+  constructor(stat: EffectiveStat, multiplier: number, condition: PokemonAttackCondition = () => true) {
     super();
     this._flags.add(AbAttrFlag.EFFECTIVE_STAT_MULTIPLIER);
 
@@ -60,21 +60,19 @@ export class EffectiveStatMultiplier extends AbAttr {
    * @param statValue A {@linkcode NumberHolder} containing the value of the evaluated stat
    * @param move The {@linkcode Move} being used at the time of evaluation
    * @param target The {@linkcode Pokemon} targeted by the move
-   * @returns `true` if this attribute's multiplier applies to the evaluated stat
    */
   public override apply(
-    pokemon: Pokemon,
+    _pokemon: Pokemon,
     _simulated: boolean,
-    stat: BattleStat,
-    statValue: NumberHolder,
-    move?: Move,
-    target?: Pokemon,
-  ): boolean {
-    if (stat === this.stat && (!this.condition || this.condition(pokemon, target, move))) {
-      statValue.value *= this.multiplier;
-      return true;
-    }
+    _stat: BattleStat,
+    statValue: ValueHolder<number>,
+    _move?: Move,
+    _target?: Pokemon,
+  ): void {
+    statValue.value *= this.multiplier;
+  }
 
-    return false;
+  public override canApply(...[pokemon, , stat, , move, target]: Parameters<this["apply"]>): boolean {
+    return stat === this.stat && this.condition(pokemon, target, move);
   }
 }

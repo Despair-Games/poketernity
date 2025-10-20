@@ -4,7 +4,7 @@ import { Terrain } from "#data/terrain";
 import { Weather } from "#data/weather";
 import type { BiomeId } from "#enums/biome-id";
 import { Arena } from "#field/arena";
-import type { ArenaTagTypeData } from "#types/arena-tag-types";
+import type { ArenaTagData } from "#types/arena-tag-types";
 import type { SerializedArenaData } from "#types/arena-types";
 
 export class ArenaData {
@@ -19,7 +19,7 @@ export class ArenaData {
     // is not yet an instance of `ArenaTag`
     this.tags =
       source.tags
-        ?.map((t: ArenaTag | ArenaTagTypeData) => loadArenaTag(t))
+        ?.map((t: ArenaTag | ArenaTagData) => loadArenaTag(t))
         ?.filter((tag): tag is SerializableArenaTag => tag instanceof SerializableArenaTag) ?? [];
 
     if (source instanceof Arena) {

@@ -41,8 +41,6 @@ export class MysteryEncounterPhase extends Phase {
    * Updates seed offset, sets seen encounter session data, sets UI mode
    */
   public override start(): void {
-    super.start();
-
     const { currentBattle, mysteryEncounterSaveData, ui } = globalScene;
     const mysteryEncounter = currentBattle.mysteryEncounter!; // TODO: Resolve bang?
 

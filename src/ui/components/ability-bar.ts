@@ -1,26 +1,42 @@
 import { globalScene } from "#app/global-scene";
-import { getPokemonNameWithAffix } from "#app/messages";
-import { TEXT_SCALE } from "#constants/ui-constants";
+import { GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
 import { TextStyle } from "#enums/text-style";
-import type { Pokemon } from "#field/pokemon";
 import { addTextObject } from "#ui/text-utils";
+import { playTween } from "#utils/anim-utils";
 import i18next from "i18next";
 
-const hiddenX = -118;
-const shownX = 0;
-const baseY = -116;
+const ABILITY_BAR_WIDTH = 118;
+
+const PLAYER_SHOWN_X = 0;
+const PLAYER_HIDDEN_X = PLAYER_SHOWN_X - ABILITY_BAR_WIDTH;
+const PLAYER_BASE_Y = -116;
+
+const ENEMY_SHOWN_X = GAME_WIDTH - ABILITY_BAR_WIDTH;
+const ENEMY_HIDDEN_X = ENEMY_SHOWN_X + ABILITY_BAR_WIDTH;
+const ENEMY_BASE_Y = -130;
 
 export class AbilityBar extends Phaser.GameObjects.Container {
   private bg: Phaser.GameObjects.Image;
   private abilityBarText: Phaser.GameObjects.Text;
-
-  private tween: Phaser.Tweens.Tween | null;
-  private autoHideTimer: NodeJS.Timeout | null;
+  /** The x-value of the flyout when displayed */
+  private readonly shownX: number;
+  /** The x-value of the flyout when hidden */
+  private readonly hiddenX: number;
+  /** The y-value of the flyout */
+  private readonly baseY: number;
 
   public shown: boolean;
 
-  constructor() {
+  constructor(player: boolean = true) {
+    const shownX = player ? PLAYER_SHOWN_X : ENEMY_SHOWN_X;
+    const hiddenX = player ? PLAYER_HIDDEN_X : ENEMY_HIDDEN_X;
+    const baseY = player ? PLAYER_BASE_Y : ENEMY_BASE_Y;
+
     super(globalScene, hiddenX, baseY);
+
+    this.shownX = shownX;
+    this.hiddenX = hiddenX;
+    this.baseY = baseY;
   }
 
   setup(): void {
@@ -38,9 +54,19 @@ export class AbilityBar extends Phaser.GameObjects.Container {
     this.shown = false;
   }
 
-  showAbility(pokemon: Pokemon, passive: boolean = false): void {
+  /**
+   * Displays the Ability Bar flyout with the given text.
+   * @param pokemonName - The name of the {@linkcode Pokemon} whose ability activated the flyout
+   * @param abilityName - The name of the {@linkcode Ability} that activated the flyout
+   * @param passive - (Default `false`) `true` if the Ability that activated is the source Pokemon's Passive
+   */
+  public async show(pokemonName: string, abilityName: string, passive: boolean = false): Promise<void> {
     this.abilityBarText.setText(
-      `${i18next.t("fightUiHandler:abilityFlyInText", { pokemonName: getPokemonNameWithAffix(pokemon), passive: passive ? i18next.t("fightUiHandler:passive") : "", abilityName: passive ? pokemon.getPassiveAbility().name : pokemon.getAbility().name })}`,
+      i18next.t("fightUiHandler:abilityFlyInText", {
+        pokemonName,
+        passive: passive ? i18next.t("fightUiHandler:passive") : "",
+        abilityName,
+      }),
     );
 
     if (this.shown) {
@@ -49,56 +75,32 @@ export class AbilityBar extends Phaser.GameObjects.Container {
 
     globalScene.fieldUI.bringToTop(this);
 
-    this.y = baseY + (globalScene.currentBattle.double ? 14 : 0);
-    this.tween = globalScene.tweens.add({
-      targets: this,
-      x: shownX,
-      duration: 500,
-      ease: "Sine.easeOut",
-      onComplete: () => {
-        this.tween = null;
-        this.resetAutoHideTimer();
-      },
-    });
-
+    this.y = this.baseY + (globalScene.currentBattle.double ? 14 : 0);
     this.setVisible(true);
     this.shown = true;
+
+    await playTween({
+      targets: this,
+      x: this.shownX,
+      duration: 500,
+      ease: "Sine.easeOut",
+    });
   }
 
-  hide(): void {
+  /** Hides the Ability Bar flyout */
+  public async hide(): Promise<void> {
     if (!this.shown) {
       return;
     }
 
-    if (this.autoHideTimer) {
-      clearInterval(this.autoHideTimer);
-    }
-
-    if (this.tween) {
-      this.tween.stop();
-    }
-
-    this.tween = globalScene.tweens.add({
+    await playTween({
       targets: this,
-      x: -91,
+      x: this.hiddenX,
       duration: 500,
       ease: "Sine.easeIn",
-      onComplete: () => {
-        this.tween = null;
-        this.setVisible(false);
-      },
     });
 
+    this.setVisible(false);
     this.shown = false;
-  }
-
-  resetAutoHideTimer(): void {
-    if (this.autoHideTimer) {
-      clearInterval(this.autoHideTimer);
-    }
-    this.autoHideTimer = setTimeout(() => {
-      this.hide();
-      this.autoHideTimer = null;
-    }, 2500);
   }
 }

@@ -10,32 +10,28 @@ import { getStatusEffectHealText } from "#utils/status-effect-utils";
  */
 export class PostTurnResetStatusAbAttr extends PostTurnAbAttr {
   private readonly allyTarget: boolean;
-  private target?: Pokemon;
 
   constructor(allyTarget: boolean = false) {
-    super(true);
+    super();
     this.allyTarget = allyTarget;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
-    if (this.allyTarget) {
-      this.target = pokemon.getAlly();
-    } else {
-      this.target = pokemon;
-    }
-    if (this.target?.hasNonVolatileStatusEffect(false, true)) {
-      if (!simulated) {
-        globalScene.phaseManager.createAndUnshiftPhase(
-          "MessagePhase",
-          getStatusEffectHealText(this.target.getStatusEffect(true), getPokemonNameWithAffix(this.target)),
-        );
-        this.target.resetStatus();
-        this.target.updateInfo();
-      }
-
-      return true;
+  public override apply(pokemon: Pokemon, simulated: boolean): void {
+    const target = this.allyTarget ? pokemon.getAlly() : pokemon;
+    if (simulated || target == null) {
+      return;
     }
 
-    return false;
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
+      getStatusEffectHealText(target.getStatusEffect(true), getPokemonNameWithAffix(target)),
+    );
+    target.resetStatus();
+    target.updateInfo();
+  }
+
+  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+    const target = this.allyTarget ? pokemon.getAlly() : pokemon;
+    return !!target?.isActive(true) && target.hasNonVolatileStatusEffect(false, true);
   }
 }

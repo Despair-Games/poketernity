@@ -29,7 +29,24 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
     this.hpRatio = hpRatio;
   }
 
-  public override apply(pokemon: Pokemon, _simulated: boolean, damage: number, source?: Pokemon): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean, _damage: number, _source?: Pokemon): void {
+    if (simulated) {
+      return;
+    }
+
+    const pokemonIndex = pokemon.getBattlerIndex();
+    if (pokemon.isEnemy() && globalScene.currentBattle.battleType === BattleType.WILD) {
+      globalScene.tryForceFleePokemon(pokemonIndex, pokemon);
+    }
+    globalScene.tryForceSwitchPokemon(pokemonIndex);
+  }
+
+  public override canApply(...[pokemon, , damage, source]: Parameters<this["apply"]>): boolean {
+    // TODO: should other forms of semi-invulnerability cancel this effect?
+    if (pokemon.hasTag(BattlerTagType.SKY_DROP)) {
+      return false;
+    }
+
     const moveHistory = pokemon.getMoveHistory();
     // Will not activate when the Pokémon's HP is lowered by cutting its own HP
     const forbiddenAttackingAttrs = [AddSubstituteAttr, CurseAttr, CutHpStatStageBoostAttr, HpSplitAttr];
@@ -42,39 +59,32 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
 
     // Dragon Tail and Circle Throw switch out Pokémon before the Ability activates.
     const forbiddenDefendingMoves = [MoveId.DRAGON_TAIL, MoveId.CIRCLE_THROW];
+
     if (source) {
       const enemyMoveHistory = source.getMoveHistory();
       if (enemyMoveHistory.length > 0) {
         const enemyLastMoveUsed = enemyMoveHistory.at(-1)!;
-        // Will not activate if the Pokémon's HP falls below half while it is in the air during Sky Drop.
-        if (forbiddenDefendingMoves.includes(enemyLastMoveUsed.move.id) || pokemon.hasTag(BattlerTagType.SKY_DROP)) {
+        if (
+          source.turnData.hitsLeft > 1
+          || forbiddenDefendingMoves.includes(enemyLastMoveUsed.move.id)
+          || (allMoves.get(enemyLastMoveUsed.move.id).chance >= 0 && source.hasAbility(AbilityId.SHEER_FORCE))
+        ) {
           return false;
-        }
-        // Will not activate if the Pokémon's HP falls below half by a move affected by Sheer Force.
-        if (allMoves.get(enemyLastMoveUsed.move.id).chance >= 0 && source.hasAbility(AbilityId.SHEER_FORCE)) {
-          return false;
-        }
-        // Activate only after the last hit of multistrike moves
-        if (source.turnData.hitsLeft > 1) {
-          return false;
-        }
-        if (source.turnData.hitCount > 1) {
-          damage = pokemon.turnData.damageTaken;
         }
       }
     }
 
-    if (pokemon.hp + damage >= pokemon.getMaxHp() * this.hpRatio) {
+    const totalDamage = source == null || source.turnData.hitCount <= 1 ? damage : pokemon.turnData.damageTaken;
+
+    if (pokemon.hp + totalDamage >= pokemon.getMaxHp() * this.hpRatio) {
       // Activates if it falls below half and recovers back above half from a Shell Bell
       // TODO: This is a bandaid fix for on-hit effects being applied in the wrong order
       const shellBellHeal = calculateShellBellRecovery(pokemon);
       if (pokemon.hp - shellBellHeal < pokemon.getMaxHp() * this.hpRatio) {
-        const pokemonIndex = pokemon.getBattlerIndex();
-
         if (pokemon.isEnemy() && globalScene.currentBattle.battleType === BattleType.WILD) {
-          return globalScene.tryForceFleePokemon(pokemonIndex, pokemon);
+          return globalScene.canForceFleePokemon(pokemon, pokemon);
         }
-        return globalScene.tryForceSwitchPokemon(pokemonIndex);
+        return globalScene.canForceSwitchPokemon(pokemon);
       }
     }
     return false;

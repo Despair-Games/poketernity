@@ -17,8 +17,6 @@ export class SelectStarterPhase extends Phase {
   public override readonly phaseName = "SelectStarterPhase";
 
   public override start(): void {
-    super.start();
-
     globalScene.audioManager.playBgm("menu");
 
     globalScene.ui.setMode<StarterSelectUiHandler>(UiMode.STARTER_SELECT, (starters: StarterConfig[]) => {

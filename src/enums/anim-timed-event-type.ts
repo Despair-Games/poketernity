@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const AnimTimedEventType = {
   /** Plays a sound effect */
@@ -9,4 +9,4 @@ export const AnimTimedEventType = {
   UPDATE_BG: "AnimTimedUpdateBgEvent",
 } as const;
 
-export type AnimTimedEventType = EnumValues<typeof AnimTimedEventType>;
+export type AnimTimedEventType = ObjectValues<typeof AnimTimedEventType>;

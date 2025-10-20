@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const DropDownType = {
   SINGLE: 1,
@@ -7,4 +7,4 @@ export const DropDownType = {
   RADIAL: 4,
 } as const;
 
-export type DropDownType = EnumValues<typeof DropDownType>;
+export type DropDownType = ObjectValues<typeof DropDownType>;

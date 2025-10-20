@@ -11,25 +11,23 @@ export class PostDefendApplyEntryHazardTagAbAttr extends PostDefendAbAttr {
   private readonly tagType: ArenaTagType;
 
   constructor(condition: PokemonDefendCondition, tagType: ArenaTagType) {
-    super(true);
+    super();
 
     this.condition = condition;
     this.tagType = tagType;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean, _attacker: Pokemon, _move: Move): void {
+    if (!simulated) {
+      globalScene.arena.addTag(this.tagType, pokemon.id, undefined, undefined, pokemon.getOpposingArenaTagSide());
+    }
+  }
+
+  public override canApply(...[pokemon, , attacker, move]: Parameters<this["apply"]>): boolean {
     if (!this.condition(pokemon, attacker, move)) {
       return false;
     }
-
-    const tag = globalScene.arena.findTag<EntryHazardTag>(this.tagType);
-    if (!tag || tag.layers < tag.maxLayers) {
-      if (!simulated) {
-        globalScene.arena.addTag(this.tagType, pokemon.id, undefined, undefined, pokemon.getOpposingArenaTagSide());
-      }
-      return true;
-    }
-
-    return false;
+    const existingTag = globalScene.arena.findTag<EntryHazardTag>(this.tagType);
+    return existingTag == null || existingTag.layers < existingTag.maxLayers;
   }
 }

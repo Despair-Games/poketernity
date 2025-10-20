@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 // Things break if this doesn't start at `0`
 export const SummaryUiPage = {
@@ -7,4 +7,4 @@ export const SummaryUiPage = {
   MOVES: 2,
 } as const;
 
-export type SummaryUiPage = EnumValues<typeof SummaryUiPage>;
+export type SummaryUiPage = ObjectValues<typeof SummaryUiPage>;

@@ -29,25 +29,25 @@ export class PostWeatherLapseDamageAbAttr extends PostWeatherLapseAbAttr {
     this.damageFactor = damageFactor;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
-    if (pokemon.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)) {
-      return false;
+  public override apply(pokemon: Pokemon, simulated: boolean): void {
+    if (simulated) {
+      return;
     }
 
-    if (!simulated) {
-      const abilityName = this.source.name;
-      globalScene.phaseManager.createAndUnshiftPhase(
-        "MessagePhase",
-        i18next.t("abilityTriggers:postWeatherLapseDamage", {
-          pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-          abilityName,
-        }),
-      );
-      pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() * this.damageFactor), {
-        result: HitResult.OTHER,
-      });
-    }
+    const abilityName = this.source.name;
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
+      i18next.t("abilityTriggers:postWeatherLapseDamage", {
+        pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+        abilityName,
+      }),
+    );
+    pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() * this.damageFactor), {
+      result: HitResult.OTHER,
+    });
+  }
 
-    return true;
+  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+    return !pokemon.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE);
   }
 }

@@ -16,13 +16,15 @@ import i18next from "i18next";
  * @todo This should extend `PostTurnAbAttr` but currently does not as a workaround until proper ability timing is implemented.
  */
 export class BadDreamsAbAttr extends AbAttr {
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super(true);
     this._flags.add(AbAttrFlag.BAD_DREAMS);
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
-    let isApplied = false;
+  public override apply(pokemon: Pokemon, simulated: boolean): void {
+    if (simulated) {
+      return;
+    }
 
     for (const opp of pokemon.getOpponents()) {
       const isAsleep = opp.hasStatusEffect(StatusEffect.SLEEP);
@@ -32,20 +34,28 @@ export class BadDreamsAbAttr extends AbAttr {
         opp.getTag<DrowsyTag>(BattlerTagType.DROWSY)?.turnCount === 1 && opp.canSetStatus(StatusEffect.SLEEP, true);
 
       if ((isAsleep || willFallAsleep) && !blocksNonDirectDamage && !opp.switchOutStatus) {
-        if (!simulated) {
-          opp.damageAndUpdate(toDmgValue(opp.getMaxHp() / 8), {
-            result: HitResult.OTHER,
-          });
-          globalScene.phaseManager.createAndUnshiftPhase(
-            "MessagePhase",
-            i18next.t("abilityTriggers:badDreams", { pokemonName: getPokemonNameWithAffix(opp) }),
-          );
-        }
-
-        isApplied = true;
+        opp.damageAndUpdate(toDmgValue(opp.getMaxHp() / 8), {
+          result: HitResult.OTHER,
+        });
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
+          i18next.t("abilityTriggers:badDreams", { pokemonName: getPokemonNameWithAffix(opp) }),
+        );
       }
     }
+  }
 
-    return isApplied;
+  public override canApply(...[pokemon, simulated]: Parameters<this["apply"]>): boolean {
+    return pokemon.getOpponents().some((opp) => {
+      const isAsleep = opp.hasStatusEffect(StatusEffect.SLEEP);
+      const willFallAsleep =
+        opp.getTag(BattlerTagType.DROWSY)?.turnCount === 1 && opp.canSetStatus(StatusEffect.SLEEP, simulated);
+
+      return (
+        (isAsleep || willFallAsleep)
+        && !opp.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)
+        && !opp.switchOutStatus
+      );
+    });
   }
 }

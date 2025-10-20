@@ -3,7 +3,7 @@ import { globalScene } from "#app/global-scene";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { BattleStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
-import type { BooleanHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 
 /**
  * Attribute to reflect stat-lowering effects from moves and abilities
@@ -11,8 +11,8 @@ import type { BooleanHolder } from "#utils/common-utils";
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Mirror_Armor_(Ability) | Mirror Armor}.
  */
 export class ReflectStatStageChangeAbAttr extends AbAttr {
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super(true);
     this._flags.add(AbAttrFlag.REFLECT_STAT_STAGE_CHANGE);
   }
 
@@ -27,7 +27,6 @@ export class ReflectStatStageChangeAbAttr extends AbAttr {
    * @param stages the stages by which {@linkcode stats} will change
    * @param reflected a {@linkcode BooleanHolder} which, if set to `true`, cancels the current
    * stat stage change phase
-   * @returns `true` if a stat stage change is successfully reflected
    */
   public override apply(
     pokemon: Pokemon,
@@ -35,18 +34,10 @@ export class ReflectStatStageChangeAbAttr extends AbAttr {
     source: Pokemon | undefined,
     stats: BattleStat[],
     stages: number,
-    reflected: BooleanHolder,
-  ): boolean {
-    if (pokemon === source || stages >= 0) {
-      return false;
-    }
-
-    const reflectedStats = stats.filter((stat) => pokemon.getStatStage(stat) > -6);
-    if (reflectedStats.length === 0) {
-      return false;
-    }
-
+    reflected: ValueHolder<boolean>,
+  ): void {
     if (!simulated && source) {
+      const reflectedStats = stats.filter((stat) => pokemon.getStatStage(stat) > -6);
       globalScene.phaseManager.createAndUnshiftPhase(
         "StatStageChangePhase",
         source.id,
@@ -57,6 +48,11 @@ export class ReflectStatStageChangeAbAttr extends AbAttr {
       );
     }
     reflected.value = true;
-    return true;
+  }
+
+  public override canApply(...[pokemon, , source, stats, stages, reflected]: Parameters<this["apply"]>): boolean {
+    return (
+      pokemon !== source && stages < 0 && stats.some((stat) => pokemon.getStatStage(stat) > -6) && !reflected.value
+    );
   }
 }

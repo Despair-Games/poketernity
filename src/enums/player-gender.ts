@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const PlayerGender = {
   UNSET: 0,
@@ -6,4 +6,4 @@ export const PlayerGender = {
   FEMALE: 2,
 } as const;
 
-export type PlayerGender = EnumValues<typeof PlayerGender>;
+export type PlayerGender = ObjectValues<typeof PlayerGender>;

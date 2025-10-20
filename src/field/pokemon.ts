@@ -84,6 +84,7 @@ import {
   MIN_STAT_STAGE,
   NON_VOLATILE_STATUS_EFFECTS,
 } from "#constants/game-constants";
+import { EVOLVE_MOVE, RELEARN_MOVE } from "#constants/move-constants";
 import { allAbilities, allMoves } from "#data/data-lists";
 import { speciesEggMoves } from "#data/egg-moves";
 import { getLevelTotalExp } from "#data/exp";
@@ -91,12 +92,12 @@ import { getNatureStatMultiplier } from "#data/nature";
 import { starterPassiveAbilities } from "#data/passives";
 import type { SpeciesEvolutionCondition, SpeciesFormEvolution } from "#data/pokemon-evolutions";
 import { type SpeciesFormChange, SpeciesFormChangeLapseTeraTrigger } from "#data/pokemon-forms";
-import { EVOLVE_MOVE, type LevelMoves, RELEARN_MOVE } from "#data/pokemon-level-moves";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import type { PokemonSpecies } from "#data/pokemon-species";
 import type { PokemonSpeciesForm } from "#data/pokemon-species-form";
 import { BASE_HIDDEN_ABILITY_CHANCE, BASE_SHINY_CHANCE, SHINY_EPIC_CHANCE, SHINY_VARIANT_CHANCE } from "#data/rates";
-import { tmPoolTiers, tmSpecies } from "#data/tms";
+import { tmPoolTiers } from "#data/tm-pool-tiers";
+import { tmSpecies } from "#data/tms";
 import { getTypeDamageMultiplier, getTypeRgb, type TypeDamageMultiplier } from "#data/type";
 import { type Variant, variantData } from "#data/variant";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -185,7 +186,7 @@ import { VariableMoveTypeMultiplierAttr } from "#moves/variable-move-type-multip
 import type { PokemonData } from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
 import type { AbilityFilterOptions } from "#types/ability-types";
-import type { DamageCalculationResult, DamageResult, TurnMove } from "#types/move-types";
+import type { DamageCalculationResult, DamageResult, LevelMoves, TurnMove } from "#types/move-types";
 import type {
   CustomPokemonData,
   PokemonSummonData,
@@ -1329,7 +1330,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.calculateStats();
   }
 
-  generateNature(naturePool?: Nature[]): void {
+  protected generateNature(naturePool?: Nature[]): void {
     if (naturePool === undefined) {
       naturePool = getTSEnumValues(Nature);
     }
@@ -1337,15 +1338,16 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.setNature(nature);
   }
 
-  isFullHp(): boolean {
+  public isFullHp(): boolean {
     return this.hp >= this.getMaxHp();
   }
 
-  getMaxHp(): number {
+  public getMaxHp(): number {
     return this.getStat(Stat.HP);
   }
 
-  getInverseHp(): number {
+  /** @returns The Pokemon's max HP minus it's current HP */
+  public getInverseHp(): number {
     return this.getMaxHp() - this.hp;
   }
 
@@ -1353,24 +1355,22 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * Helper function that returns a Pokemon's unrounded HP ratio
    * @returns the Pokemon's current HP divided by its max HP
    */
-  getHpRatio(): number {
+  public getHpRatio(): number {
     return this.hp / this.getMaxHp();
   }
 
-  generateGender(): void {
+  /** Sets the pokemon's gender based on its species gender ratios */
+  protected generateGender(): void {
     if (this.species.malePercent === null) {
       this.gender = Gender.GENDERLESS;
+    } else if (Phaser.Math.RND.frac() * 100 < this.species.malePercent) {
+      this.gender = Gender.MALE;
     } else {
-      const genderChance = (this.id % 256) * 0.390625;
-      if (genderChance < this.species.malePercent) {
-        this.gender = Gender.MALE;
-      } else {
-        this.gender = Gender.FEMALE;
-      }
+      this.gender = Gender.FEMALE;
     }
   }
 
-  getGender(bypassSummonData: boolean = false): Gender {
+  public getGender(bypassSummonData: boolean = false): Gender {
     if (!bypassSummonData && this.summonData.gender != null) {
       return this.summonData.gender;
     }

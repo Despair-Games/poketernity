@@ -1,7 +1,7 @@
 import { AbAttr } from "#abilities/ab-attr";
 import type { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#field/pokemon";
-import type { BooleanHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 
 export abstract class PreSetStatusAbAttr extends AbAttr {
   /**
@@ -11,14 +11,11 @@ export abstract class PreSetStatusAbAttr extends AbAttr {
    * @param effect The {@linkcode StatusEffect} being set
    * @param cancelled A {@linkcode BooleanHolder} which, if true, cancels
    * the effect being set
-   * @returns `true` if the ability applies successfully
    */
-  public override apply(
+  public abstract override apply(
     _pokemon: Pokemon,
     _simulated: boolean,
     _effect: StatusEffect | undefined,
-    _cancelled: BooleanHolder,
-  ): boolean {
-    return false;
-  }
+    _cancelled: ValueHolder<boolean>,
+  ): void;
 }

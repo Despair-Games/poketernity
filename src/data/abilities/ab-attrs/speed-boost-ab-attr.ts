@@ -4,20 +4,20 @@ import { Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 
 export class SpeedBoostAbAttr extends PostTurnAbAttr {
-  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): void {
     if (!simulated) {
-      if (!pokemon.turnData.switchedInThisTurn && !pokemon.turnData.failedRunAway) {
-        globalScene.phaseManager.createAndUnshiftPhase(
-          "StatStageChangePhase",
-          pokemon.getBattlerIndex(),
-          pokemon,
-          [Stat.SPD],
-          1,
-        );
-      } else {
-        return false;
-      }
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "StatStageChangePhase",
+        pokemon.getBattlerIndex(),
+        pokemon,
+        [Stat.SPD],
+        1,
+      );
     }
-    return true;
+  }
+
+  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+    const { switchedInThisTurn, failedRunAway } = pokemon.turnData;
+    return !switchedInThisTurn && !failedRunAway;
   }
 }

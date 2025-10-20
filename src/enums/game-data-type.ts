@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 /**
  * enum for the game data types
@@ -13,4 +13,4 @@ export const GameDataType = {
   STARTER_PREFS: 7,
 } as const;
 
-export type GameDataType = EnumValues<typeof GameDataType>;
+export type GameDataType = ObjectValues<typeof GameDataType>;

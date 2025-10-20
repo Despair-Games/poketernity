@@ -23,11 +23,6 @@ export class PostDefendContactApplyStatusEffectAbAttr extends PostDefendAbAttr {
   public readonly chance: number;
   private readonly statusEffects: StatusEffect[] = [];
 
-  /**
-   * PostDefendContactApplyStatusEffectAbAttr takes an activation chance and a status effect/list of status effects that should be applied following a passing roll.
-   * @param chance a percentage chance of the ability attribute's activation
-   * @param effects the status effect(s) to be applied to the attacker
-   */
   constructor(chance: number, effects: StatusEffect | StatusEffect[]) {
     super();
     this._flags.add(AbAttrFlag.POST_DEFEND_CONTACT_APPLY_STATUS_EFFECT);
@@ -36,22 +31,24 @@ export class PostDefendContactApplyStatusEffectAbAttr extends PostDefendAbAttr {
     this.statusEffects = this.statusEffects.concat(effects);
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
-    if (
+  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, _move: Move): void {
+    if (simulated) {
+      return;
+    }
+
+    const status =
+      this.statusEffects.length === 1
+        ? this.statusEffects[0]
+        : this.statusEffects[pokemon.randSeedInt(this.statusEffects.length)];
+
+    attacker.trySetStatus(status, true, pokemon);
+  }
+
+  public override canApply(...[pokemon, , attacker, move]: Parameters<this["apply"]>): boolean {
+    return (
       move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
       && !attacker.hasNonVolatileStatusEffect()
       && (this.chance === -1 || pokemon.randSeedInt(100) < this.chance)
-    ) {
-      const status =
-        this.statusEffects.length === 1
-          ? this.statusEffects[0]
-          : this.statusEffects[pokemon.randSeedInt(this.statusEffects.length)];
-      if (simulated) {
-        return attacker.canSetStatus(status, true, false, pokemon);
-      }
-      return attacker.trySetStatus(status, true, pokemon);
-    }
-
-    return false;
+    );
   }
 }

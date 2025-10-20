@@ -16,34 +16,34 @@ import type { Pokemon } from "#field/pokemon";
  * causing attacks that target the source to always miss.
  */
 export class CommanderAbAttr extends AbAttr {
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super(true);
     this._flags.add(AbAttrFlag.COMMANDER);
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
-    if (globalScene.currentBattle?.double && pokemon.getAlly()?.species.speciesId === SpeciesId.DONDOZO) {
-      // If the ally Dondozo is fainted or was previously "commanded" by
-      // another Pokemon, this effect cannot apply.
-      if (pokemon.getAlly()?.isFainted() || pokemon.getAlly()?.hasTag(BattlerTagType.COMMANDED)) {
-        return false;
-      }
-
-      if (!simulated) {
-        // Lapse the source's semi-invulnerable tags (to avoid visual inconsistencies)
-        pokemon.lapseTags(BattlerTagLapseType.MOVE_EFFECT);
-        // Remove Sky Drop's effect from the source and whoever else is affected.
-        pokemon.getTag<SkyDropTag>(BattlerTagType.SKY_DROP)?.clearSkyDropEffects();
-        // Play an animation of the source jumping into the ally Dondozo's mouth
-        globalScene.triggerPokemonBattleAnim(pokemon, PokemonAnimType.COMMANDER_APPLY);
-        // Apply boosts from this effect to the ally Dondozo
-        pokemon.getAlly()?.addTag(BattlerTagType.COMMANDED, 0, MoveId.NONE, pokemon.id);
-        // Cancel the source Pokemon's next move (if a move is queued)
-        this.cancelQueuedMove(pokemon);
-      }
-      return true;
+  public override apply(pokemon: Pokemon, simulated: boolean): void {
+    if (simulated) {
+      return;
     }
-    return false;
+
+    // Lapse the source's semi-invulnerable tags (to avoid visual inconsistencies)
+    pokemon.lapseTags(BattlerTagLapseType.MOVE_EFFECT);
+
+    pokemon.getTag<SkyDropTag>(BattlerTagType.SKY_DROP)?.clearSkyDropEffects();
+    globalScene.triggerPokemonBattleAnim(pokemon, PokemonAnimType.COMMANDER_APPLY);
+    pokemon.getAlly()?.addTag(BattlerTagType.COMMANDED, 0, MoveId.NONE, pokemon.id);
+    this.cancelQueuedMove(pokemon);
+  }
+
+  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+    const ally = pokemon.getAlly();
+
+    return (
+      globalScene.currentBattle.double
+      && !!ally?.isActive(true)
+      && ally.species.speciesId === SpeciesId.DONDOZO
+      && !ally.hasTag(BattlerTagType.COMMANDED)
+    );
   }
 
   /**

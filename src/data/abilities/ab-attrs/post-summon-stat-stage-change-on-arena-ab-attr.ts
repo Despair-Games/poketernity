@@ -2,7 +2,6 @@ import { PostSummonStatStageChangeAbAttr } from "#abilities/post-summon-stat-sta
 import { globalScene } from "#app/global-scene";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import { type BattleStat, Stat } from "#enums/stat";
-import type { Pokemon } from "#field/pokemon";
 
 /**
  * Applies a stat change after a Pokémon is summoned,
@@ -23,10 +22,8 @@ export class PostSummonStatStageChangeOnArenaAbAttr extends PostSummonStatStageC
     this.tagType = tagType;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
-    if (globalScene.arena.hasTag(this.tagType, pokemon.getArenaTagSide())) {
-      return super.apply(pokemon, simulated);
-    }
-    return false;
+  public override canApply(...params: Parameters<this["apply"]>): boolean {
+    const [pokemon] = params;
+    return globalScene.arena.hasTag(this.tagType, pokemon.getArenaTagSide()) && super.canApply(...params);
   }
 }

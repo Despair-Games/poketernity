@@ -33,7 +33,7 @@ export class PostDefendStatStageChangeAbAttr extends PostDefendAbAttr {
     selfTarget: boolean = true,
     allOthers: boolean = false,
   ) {
-    super(true);
+    super();
 
     this.condition = condition;
     this.stat = stat;
@@ -42,39 +42,39 @@ export class PostDefendStatStageChangeAbAttr extends PostDefendAbAttr {
     this.allOthers = allOthers;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
-    if (this.condition(pokemon, attacker, move)) {
-      if (simulated) {
-        return true;
-      }
-
-      if (this.allOthers) {
-        const otherPokemon = pokemon.getOpponents();
-        const allyPokemon = pokemon.getAlly();
-        if (allyPokemon) {
-          otherPokemon.push(allyPokemon);
-        }
-        for (const other of otherPokemon) {
-          globalScene.phaseManager.createAndUnshiftPhase(
-            "StatStageChangePhase",
-            other.getBattlerIndex(),
-            pokemon,
-            [this.stat],
-            this.stages,
-          );
-        }
-        return true;
-      }
-      globalScene.phaseManager.createAndUnshiftPhase(
-        "StatStageChangePhase",
-        (this.selfTarget ? pokemon : attacker).getBattlerIndex(),
-        pokemon,
-        [this.stat],
-        this.stages,
-      );
-      return true;
+  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, _move: Move): void {
+    if (simulated) {
+      return;
     }
 
-    return false;
+    if (this.allOthers) {
+      const otherPokemon = pokemon.getOpponents();
+      const allyPokemon = pokemon.getAlly();
+      if (allyPokemon) {
+        otherPokemon.push(allyPokemon);
+      }
+      for (const other of otherPokemon) {
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "StatStageChangePhase",
+          other.getBattlerIndex(),
+          pokemon,
+          [this.stat],
+          this.stages,
+        );
+      }
+      return;
+    }
+
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "StatStageChangePhase",
+      (this.selfTarget ? pokemon : attacker).getBattlerIndex(),
+      pokemon,
+      [this.stat],
+      this.stages,
+    );
+  }
+
+  public override canApply(...[pokemon, , attacker, move]: Parameters<this["apply"]>): boolean {
+    return this.condition(pokemon, attacker, move);
   }
 }

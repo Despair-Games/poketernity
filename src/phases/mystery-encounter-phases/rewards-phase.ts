@@ -30,8 +30,6 @@ export class MysteryEncounterRewardsPhase extends Phase {
    * Runs {@linkcode MysteryEncounter.doContinueEncounter} and ends phase, OR {@linkcode MysteryEncounter.onRewards} then continues encounter
    */
   public override start(): void {
-    super.start();
-
     const encounter = globalScene.currentBattle.mysteryEncounter!; // TODO: Resolve bang?
 
     if (encounter.doContinueEncounter) {

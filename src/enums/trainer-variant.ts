@@ -1,4 +1,4 @@
-import type { EnumValues } from "#types/utility-types";
+import type { ObjectValues } from "#types/utility-types";
 
 export const TrainerVariant = {
   DEFAULT: 1,
@@ -6,4 +6,4 @@ export const TrainerVariant = {
   DOUBLE: 3,
 } as const;
 
-export type TrainerVariant = EnumValues<typeof TrainerVariant>;
+export type TrainerVariant = ObjectValues<typeof TrainerVariant>;

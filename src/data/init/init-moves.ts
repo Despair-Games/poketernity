@@ -172,6 +172,7 @@ import { PreMoveMessageAttr } from "#moves/pre-move-message-attr";
 import { PresentPowerAttr } from "#moves/present-power-attr";
 import { ProtectAttr } from "#moves/protect-attr";
 import { PsychoShiftEffectAttr } from "#moves/psycho-shift-effect-attr";
+import { PursuitAttr } from "#moves/pursuit-attr";
 import { QuashAttr } from "#moves/quash-attr";
 import { RageAttr } from "#moves/rage-attr";
 import { RagingBullTypeAttr } from "#moves/raging-bull-type-attr";
@@ -252,7 +253,7 @@ import { WeightPowerAttr } from "#moves/weight-power-attr";
 import { crashDamageFunc } from "#utils/move-utils";
 import i18next from "i18next";
 
-export function initMoves() {
+export function initMoves(): void {
   const rawAllMoves = [
     SelfStatusMove.none(),
     new AttackMove(MoveId.POUND, ElementalType.NORMAL, MoveCategory.PHYSICAL, 40, 100, 35, -1, 0, 1),
@@ -992,7 +993,8 @@ export function initMoves() {
       .bounceable()
       .edgeCase(), // wrongly interacts with moves reflected by Magic Coat/Bounce
     new AttackMove(MoveId.PURSUIT, ElementalType.DARK, MoveCategory.PHYSICAL, 40, 100, 20, -1, 0, 2) //
-      .partial(), // No effect implemented
+      .attr(PursuitAttr)
+      .edgeCase(), // Terastallization can disrupt the order in which multiple Pursuits apply
     new AttackMove(MoveId.RAPID_SPIN, ElementalType.NORMAL, MoveCategory.PHYSICAL, 50, 100, 40, 100, 0, 2) //
       .attr(StatStageChangeAttr, [Stat.SPD], 1, true)
       .attr(RemoveBattlerTagAttr, rapidSpinRemoveTags, true)
@@ -3517,7 +3519,7 @@ export function initMoves() {
  * All damaging (aka {@linkcode AttackMove}) Fire-type moves can now thaw a frozen target, regardless of whether or not they have a chance to burn.
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Freeze_(status_condition) | Bulbapedia - Freeze (Status Condition)}
  */
-function addFireMovesThawFrozenTargetAttribute(move: Move) {
+function addFireMovesThawFrozenTargetAttribute(move: Move): void {
   if (move.type === ElementalType.FIRE && move.isAttackMove()) {
     move.addAttr(new HealStatusEffectAttr(false, StatusEffect.FREEZE));
   }

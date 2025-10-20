@@ -3,7 +3,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import { type BooleanHolder, type NumberHolder, toDmgValue } from "#utils/common-utils";
+import { toDmgValue, type ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 export class TypeImmunityHealAbAttr extends TypeImmunityAbAttr {
@@ -12,30 +12,31 @@ export class TypeImmunityHealAbAttr extends TypeImmunityAbAttr {
     simulated: boolean,
     attacker: Pokemon,
     move: Move,
-    cancelled: BooleanHolder,
-    typeMultiplier: NumberHolder,
-  ): boolean {
-    const ret = super.apply(pokemon, simulated, attacker, move, cancelled, typeMultiplier);
+    cancelled: ValueHolder<boolean>,
+    typeMultiplier: ValueHolder<number>,
+  ): void {
+    super.apply(pokemon, simulated, attacker, move, cancelled, typeMultiplier);
 
-    if (ret) {
-      if (!pokemon.isFullHp() && !simulated) {
-        const abilityName = this.source.name;
-        globalScene.phaseManager.createAndUnshiftPhase(
-          "PokemonHealPhase",
-          pokemon.getBattlerIndex(),
-          toDmgValue(pokemon.getMaxHp() / 4),
-          {
-            message: i18next.t("abilityTriggers:typeImmunityHeal", {
-              pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-              abilityName,
-            }),
-          },
-        );
-        cancelled.value = true; // Suppresses "No Effect" message
-      }
-      return true;
+    if (pokemon.isFullHp() || simulated) {
+      return;
     }
 
-    return false;
+    const abilityName = this.source.name;
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "PokemonHealPhase",
+      pokemon.getBattlerIndex(),
+      toDmgValue(pokemon.getMaxHp() / 4),
+      {
+        message: i18next.t("abilityTriggers:typeImmunityHeal", {
+          pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+          abilityName,
+        }),
+      },
+    );
+  }
+
+  // The healing effect from this attribute takes the place of the trigger message if it can be applied
+  public override getTriggerMessage(pokemon: Pokemon, abilityName: string): string | null {
+    return pokemon.isFullHp() ? super.getTriggerMessage(pokemon, abilityName) : null;
   }
 }

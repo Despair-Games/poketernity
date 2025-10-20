@@ -26,8 +26,6 @@ export class MysteryEncounterBattleStartCleanupPhase extends Phase {
    * Cleans up `TURN_END` tags, any {@linkcode PostTurnStatusEffectPhase}s, checks for Pokemon switches, then continues
    */
   public override start(): void {
-    super.start();
-
     // Lapse any residual flinches/endures but ignore all other turn-end battle tags
     const includedLapseTags: readonly BattlerTagType[] = [BattlerTagType.FLINCHED, BattlerTagType.ENDURING];
     const field = globalScene.getField(true);

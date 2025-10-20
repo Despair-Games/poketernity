@@ -3,31 +3,38 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { BattlerTag } from "#battler-tags/battler-tag";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { Pokemon } from "#field/pokemon";
-import { type BooleanHolder, coerceArray } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
  * Provides immunity to BattlerTags {@linkcode BattlerTag} to specified targets.
  */
 export class PreApplyBattlerTagImmunityAbAttr extends PreApplyBattlerTagAbAttr {
-  private readonly immuneTagTypes: BattlerTagType[];
+  private readonly immuneTagTypes: readonly BattlerTagType[];
   private battlerTag: BattlerTag;
 
-  constructor(immuneTagTypes: BattlerTagType | BattlerTagType[]) {
-    super();
+  constructor(...immuneTagTypes: readonly BattlerTagType[]) {
+    super(true);
 
-    this.immuneTagTypes = coerceArray(immuneTagTypes);
+    this.immuneTagTypes = immuneTagTypes;
   }
 
-  public override apply(_pokemon: Pokemon, simulated: boolean, tag: BattlerTag, cancelled: BooleanHolder): boolean {
+  public override apply(
+    _pokemon: Pokemon,
+    _simulated: boolean,
+    _tag: BattlerTag,
+    cancelled: ValueHolder<boolean>,
+  ): void {
+    cancelled.value = true;
+  }
+
+  public override canApply(...[, simulated, tag]: Parameters<this["apply"]>): boolean {
     if (this.immuneTagTypes.includes(tag.tagType)) {
-      cancelled.value = true;
       if (!simulated) {
         this.battlerTag = tag;
       }
       return true;
     }
-
     return false;
   }
 

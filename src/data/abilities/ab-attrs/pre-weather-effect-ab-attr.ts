@@ -1,7 +1,7 @@
 import { AbAttr } from "#abilities/ab-attr";
 import type { Weather } from "#data/weather";
 import type { Pokemon } from "#field/pokemon";
-import type { BooleanHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 
 export abstract class PreWeatherEffectAbAttr extends AbAttr {
   /**
@@ -13,12 +13,10 @@ export abstract class PreWeatherEffectAbAttr extends AbAttr {
    * cancel's the current weather's effects.
    * @returns `true` if effects from this attribute apply successfully
    */
-  public override apply(
-    _pokemon: Pokemon,
-    _simulated: boolean,
-    _weather: Weather | null,
-    _cancelled: BooleanHolder,
-  ): boolean {
-    return false;
-  }
+  public abstract override apply(
+    pokemon: Pokemon,
+    simulated: boolean,
+    weather: Weather | null,
+    cancelled: ValueHolder<boolean>,
+  ): void;
 }

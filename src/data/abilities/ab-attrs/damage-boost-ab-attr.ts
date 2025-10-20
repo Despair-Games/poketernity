@@ -7,7 +7,7 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { PokemonAttackCondition } from "#types/move-types";
-import type { NumberHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 
 /**
  * Class for abilities that boost the damage of moves
@@ -20,7 +20,7 @@ export class DamageBoostAbAttr extends PreAttackAbAttr {
   private readonly condition: PokemonAttackCondition;
 
   constructor(damageMultiplier: number, condition: PokemonAttackCondition) {
-    super(true);
+    super();
     this._flags.add(AbAttrFlag.DAMAGE_BOOST);
     this.damageMultiplier = damageMultiplier;
     this.condition = condition;
@@ -33,22 +33,21 @@ export class DamageBoostAbAttr extends PreAttackAbAttr {
    * @param simulated If `true`, suppresses changes to game state
    * @param move The {@linkcode Move} being used
    * @param defender The {@linkcode Pokemon} targeted by the move
-   * @param multiplier A {@linkcode NumberHolder} containing a damage
+   * @param multiplier A {@linkcode ValueHolder} containing a damage
    * multiplier for the current attack.
    * @returns `true` if this effect modified the given move's damage
    */
   public override apply(
-    pokemon: Pokemon,
+    _pokemon: Pokemon,
     _simulated: boolean,
-    move: Move,
-    defender: Pokemon,
-    multiplier: NumberHolder,
-  ): boolean {
-    if (this.condition(pokemon, defender, move)) {
-      multiplier.value *= this.damageMultiplier;
-      return true;
-    }
+    _move: Move,
+    _defender: Pokemon,
+    multiplier: ValueHolder<number>,
+  ): void {
+    multiplier.value *= this.damageMultiplier;
+  }
 
-    return false;
+  public override canApply(...[pokemon, , move, defender]: Parameters<this["apply"]>): boolean {
+    return this.condition(pokemon, defender, move);
   }
 }

@@ -189,7 +189,8 @@ export class BattleScene extends SceneBase {
   public charSprite: CharSprite;
   public pbTray: PokeballTray;
   public pbTrayEnemy: PokeballTray;
-  public abilityBar: AbilityBar;
+  public playerAbilityBar: AbilityBar;
+  public enemyAbilityBar: AbilityBar;
   public partyExpBar: PartyExpBar;
   public candyBar: CandyBar;
   public arenaBg: Phaser.GameObjects.Sprite;
@@ -517,10 +518,15 @@ export class BattleScene extends SceneBase {
     this.fieldUI.add(this.pbTray);
     this.fieldUI.add(this.pbTrayEnemy);
 
-    this.abilityBar = new AbilityBar();
-    this.abilityBar.setName("ability-bar");
-    this.abilityBar.setup();
-    this.fieldUI.add(this.abilityBar);
+    this.playerAbilityBar = new AbilityBar();
+    this.playerAbilityBar.setName("ability-bar");
+    this.playerAbilityBar.setup();
+    this.fieldUI.add(this.playerAbilityBar);
+
+    this.enemyAbilityBar = new AbilityBar(false);
+    this.enemyAbilityBar.setName("enemy-ability-bar");
+    this.enemyAbilityBar.setup();
+    this.fieldUI.add(this.enemyAbilityBar);
 
     this.partyExpBar = new PartyExpBar();
     this.partyExpBar.setName("party-exp-bar");
@@ -2144,6 +2150,51 @@ export class BattleScene extends SceneBase {
     if (!ignoreUpdate) {
       this.updateModifiers(false, instant);
     }
+  }
+
+  private hasModifier(modifier: PersistentModifier, enemy = false): boolean {
+    const modifiers = enemy ? this.enemyModifiers : this.modifiers;
+    return modifiers.includes(modifier);
+  }
+
+  public canTransferHeldItemModifier(
+    itemModifier: PokemonHeldItemModifier,
+    target: Pokemon,
+    simulated: boolean = true,
+    transferQuantity: number = 1,
+  ): boolean {
+    const mod = itemModifier.clone() as PokemonHeldItemModifier;
+    const source = mod.pokemonId ? mod.getPokemon() : null;
+    const cancelled = new ValueHolder(false);
+
+    if (source?.isOpponent(target)) {
+      applyAbAttrs<BlockItemTheftAbAttr>(AbAttrFlag.BLOCK_ITEM_THEFT, source, simulated, cancelled);
+    }
+
+    if (cancelled.value) {
+      return false;
+    }
+
+    const matchingModifier = this.findModifier(
+      (m) => m.isPokemonHeldItemModifier() && m.matchType(mod) && m.pokemonId === target.id,
+      target.isPlayer(),
+    ) as PokemonHeldItemModifier;
+
+    if (matchingModifier) {
+      const maxStackCount = matchingModifier.getMaxStackCount();
+      if (matchingModifier.stackCount >= maxStackCount) {
+        return false;
+      }
+      const countTaken = Math.min(transferQuantity, mod.stackCount, maxStackCount - matchingModifier.stackCount);
+      mod.stackCount -= countTaken;
+    } else {
+      const countTaken = Math.min(transferQuantity, mod.stackCount);
+      mod.stackCount -= countTaken;
+    }
+
+    const removeOld = mod.stackCount === 0;
+
+    return !removeOld || !source || this.hasModifier(itemModifier, !source.isPlayer());
   }
 
   /**

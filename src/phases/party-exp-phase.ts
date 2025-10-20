@@ -22,8 +22,6 @@ export class PartyExpPhase extends Phase {
   }
 
   public override start(): void {
-    super.start();
-
     globalScene.applyPartyExp(this.expValue, false, this.useWaveIndexMultiplier, this.pokemonParticipantIds);
 
     this.end();

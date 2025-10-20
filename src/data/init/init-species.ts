@@ -8,7 +8,7 @@ import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesGroups } from "#enums/species-groups";
 import { SpeciesId } from "#enums/species-id";
 
-export function initSpecies() {
+export function initSpecies(): void {
   allSpecies.push(
     new PokemonSpecies(
       SpeciesId.BULBASAUR,

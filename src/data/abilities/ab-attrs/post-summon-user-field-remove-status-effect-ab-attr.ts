@@ -11,34 +11,31 @@ import { getStatusEffectHealText } from "#utils/status-effect-utils";
 export class PostSummonUserFieldRemoveStatusEffectAbAttr extends PostSummonAbAttr {
   private readonly statusEffects: StatusEffect[];
 
-  /**
-   * @param statusEffect - The status effects to be removed from the user's field.
-   */
   constructor(...statusEffect: StatusEffect[]) {
-    super(false);
+    super();
 
     this.statusEffects = statusEffect;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
-    const allowedPokemon = pokemon.getField().filter((p) => p.isAllowedInBattle());
-
-    if (allowedPokemon.length < 1) {
-      return false;
+  public override apply(pokemon: Pokemon, simulated: boolean): void {
+    if (simulated) {
+      return;
     }
 
-    if (!simulated) {
-      for (const pkmn of allowedPokemon) {
-        if (pkmn.hasStatusEffect(this.statusEffects, false, true)) {
-          globalScene.phaseManager.createAndUnshiftPhase(
-            "MessagePhase",
-            getStatusEffectHealText(pkmn.getStatusEffect(true), getPokemonNameWithAffix(pkmn)),
-          );
-          pkmn.resetStatus();
-          pkmn.updateInfo();
-        }
+    const affectedPokemon = pokemon.getField().filter((p) => p.isActive(true));
+    affectedPokemon.forEach((p) => {
+      if (p.hasStatusEffect(this.statusEffects, false, true)) {
+        globalScene.phaseManager.createAndUnshiftPhase(
+          "MessagePhase",
+          getStatusEffectHealText(p.getStatusEffect(true), getPokemonNameWithAffix(p)),
+        );
+        p.resetStatus();
+        p.updateInfo();
       }
-    }
-    return true;
+    });
+  }
+
+  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+    return pokemon.getField().some((p) => p.isActive(true) && p.hasStatusEffect(this.statusEffects, false, true));
   }
 }
