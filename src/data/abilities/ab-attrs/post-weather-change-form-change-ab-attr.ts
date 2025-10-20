@@ -20,18 +20,18 @@ export class PostWeatherChangeFormChangeAbAttr extends PostWeatherChangeAbAttr {
   }
 
   public override apply(_pokemon: Pokemon, simulated: boolean, _weather: WeatherType): void {
-      if (simulated) {
+    if (simulated) {
       return;
-      }
+    }
 
     const { weatherType } = globalScene.arena;
 
-      if (!weatherType || this.formRevertingWeathers.includes(weatherType)) {
-        globalScene.arena.triggerWeatherBasedFormChangesToNormal();
-      } else {
-        globalScene.arena.triggerWeatherBasedFormChanges();
-      }
+    if (!weatherType || this.formRevertingWeathers.includes(weatherType)) {
+      globalScene.arena.triggerWeatherBasedFormChangesToNormal();
+    } else {
+      globalScene.arena.triggerWeatherBasedFormChanges();
     }
+  }
 
   public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
     const isCastformWithForecast =

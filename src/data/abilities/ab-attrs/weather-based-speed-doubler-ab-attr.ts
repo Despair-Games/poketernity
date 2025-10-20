@@ -29,5 +29,5 @@ export class WeatherBasedSpeedDoublerAbAttr extends EffectiveStatMultiplierAbAtt
   public override canApply(...params: Parameters<this["apply"]>): boolean {
     const [pokemon] = params;
     return super.canApply(...params) && getWeatherCondition(...this.weatherTypes)(pokemon);
-    }
+  }
 }

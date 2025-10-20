@@ -379,14 +379,6 @@ export class Arena {
   }
 
   /**
-   * @param terrainType - The {@link TerrainType | type} of terrain to check
-   * @returns `true` if Terrain of the given type can be set on the field.
-   */
-  public canSetTerrain(terrain: TerrainType): boolean {
-    return (this.terrain?.terrainType ?? TerrainType.NONE) !== terrain;
-  }
-
-  /**
    * Attempts to set terrain
    * @param terrain - {@linkcode TerrainType | The type of terrain}
    * @param hasPokemonSource - Whether the terrain was generated from a Pokemon

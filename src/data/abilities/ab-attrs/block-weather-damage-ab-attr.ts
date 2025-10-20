@@ -33,8 +33,8 @@ export class BlockWeatherDamageAbAttr extends PreWeatherDamageAbAttr {
     _weather: Weather,
     cancelled: ValueHolder<boolean>,
   ): void {
-      cancelled.value = true;
-    }
+    cancelled.value = true;
+  }
 
   public override canApply(...[, , weather]: Parameters<this["apply"]>): boolean {
     return this.weatherTypes.includes(weather.weatherType);
