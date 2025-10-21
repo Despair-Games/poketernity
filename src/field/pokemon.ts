@@ -212,6 +212,7 @@ import { loadMoveAnimAssets } from "#utils/move-anim-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
 import { getPokemonSpecies, getPokemonSpeciesForm, summonDataToJSON } from "#utils/pokemon-utils";
 import { randSeedInt } from "#utils/random-utils";
+import { inSpeedOrder } from "#utils/speed-order-generator";
 import i18next from "i18next";
 
 interface AbilityData {
@@ -2012,17 +2013,18 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       applyAbFunc<MoveImmunityAbAttr>(AbAttrFlag.MOVE_IMMUNITY, this, simulated, source, move, cancelledHolder);
     }
 
-    if (!cancelledHolder.value) {
-      const defendingSidePlayField = this.getField();
-      defendingSidePlayField.forEach((p) =>
-        applyAbFunc<FieldPriorityMoveImmunityAbAttr>(
-          AbAttrFlag.FIELD_PRIORITY_MOVE_IMMUNITY,
-          p,
-          simulated,
-          source,
-          move,
-          cancelledHolder,
-        ),
+    for (const p of inSpeedOrder(this.getArenaTagSide())) {
+      if (cancelledHolder.value) {
+        break;
+      }
+
+      applyAbFunc<FieldPriorityMoveImmunityAbAttr>(
+        AbAttrFlag.FIELD_PRIORITY_MOVE_IMMUNITY,
+        p,
+        simulated,
+        source,
+        move,
+        cancelledHolder,
       );
     }
 
@@ -3841,7 +3843,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns the first {@linkcode RestrictingBattlerTag | tag} on this Pokemon that restricts the move, or `null` if the move is not restricted.
    */
   getRestrictingTag(moveId: MoveId, user?: Pokemon, target?: Pokemon): RestrictingBattlerTag | null {
-    for (const opponent of this.getOpponents()) {
+    for (const opponent of inSpeedOrder(this.getOpposingArenaTagSide())) {
       const imprisoningTag = opponent.getTag<ImprisoningTag>(BattlerTagType.IMPRISONING);
       if (imprisoningTag?.apply(opponent, true, this, moveId)) {
         return imprisoningTag;

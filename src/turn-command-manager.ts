@@ -7,11 +7,8 @@ import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BypassSpeedChanceAbAttr } from "#abilities/bypass-speed-chance-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { ShuffledPriorityQueue } from "#app/queues/shuffled-priority-queue";
-import type { TrickRoomTag } from "#arena-tags/trick-room-tag";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
-import { ArenaTagSide } from "#enums/arena-tag-side";
-import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleCommand } from "#enums/battle-command";
 import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -24,7 +21,7 @@ import { BypassSpeedChanceModifier } from "#modifier/modifier";
 import { MoveHeaderAttr } from "#moves/move-header-attr";
 import { PursuitAttr } from "#moves/pursuit-attr";
 import type { TurnMove } from "#types/move-types";
-import { ValueHolder } from "#utils/common-utils";
+import { speedOrderComparator } from "#utils/speed-order-utils";
 
 /** Lower number = lower priority */
 const COMMAND_PRIORITY_MAP = {
@@ -140,11 +137,8 @@ export class TurnCommandManager {
 
   /** Prioritizes commands based on their source Pokemon's Speed. */
   private static compareSpeed(commandA: TurnCommand, commandB: TurnCommand): number {
-    const speedReversed = new ValueHolder(false);
-    globalScene.arena.applyTags<TrickRoomTag>(ArenaTagType.TRICK_ROOM, ArenaTagSide.BOTH, false, speedReversed);
-
-    const [aSpeed, bSpeed] = [commandA, commandB].map(({ pokemon }) => pokemon.getEffectiveStat(Stat.SPD));
-    return (bSpeed - aSpeed) * (speedReversed.value ? -1 : 1);
+    const [{ pokemon: pokemonA }, { pokemon: pokemonB }] = [commandA, commandB];
+    return speedOrderComparator<Pokemon>(pokemonA, pokemonB);
   }
 
   //#region Public Methods

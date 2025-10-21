@@ -1,9 +1,9 @@
 import { globalScene } from "#app/global-scene";
 import type { Pokemon } from "#field/pokemon";
-import { FieldPhase } from "#phases/base/field-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
 
 // TODO: Delete this class and replace its uses with `PokemonPhase`
-export abstract class PartyMemberPokemonPhase extends FieldPhase {
+export abstract class PartyMemberPokemonPhase extends BattlePhase {
   protected partyMemberIndex: number;
   public fieldIndex: number;
   public isPlayer: boolean;

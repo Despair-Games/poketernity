@@ -8,6 +8,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import type { BattleStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import { ValueHolder } from "#utils/common-utils";
+import { inSpeedOrder } from "#utils/speed-order-generator";
 
 export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
   private readonly stats: BattleStat[];
@@ -42,7 +43,7 @@ export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
       return;
     }
 
-    for (const opponent of pokemon.getOpponents()) {
+    for (const opponent of inSpeedOrder(pokemon.getOpposingArenaTagSide())) {
       const cancelled = new ValueHolder(false);
       if (this.intimidate) {
         if (opponent.hasTag(BattlerTagType.SUBSTITUTE)) {

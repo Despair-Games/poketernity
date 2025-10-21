@@ -18,6 +18,7 @@ import type { Pokemon } from "#field/pokemon";
 import type { SwitchEffectTransferModifier } from "#modifier/modifier";
 import { PokemonPhase } from "#phases/base/pokemon-phase";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
+import { inSpeedOrder } from "#utils/speed-order-generator";
 
 /**
  * Phase to handle all logical elements of switching a Pokemon.
@@ -135,7 +136,9 @@ export class SwitchPhase extends PokemonPhase {
 
     // Remove all tags applied to the active Pokemon's opponents by the active Pokemon
     // (e.g. the "binding" effect from Bind, Fire Spin, etc.)
-    activePokemon.getOpponents().forEach((opp) => opp.removeTagsBySourceId(activePokemon.id));
+    for (const opp of inSpeedOrder(activePokemon.getOpposingArenaTagSide())) {
+      opp.removeTagsBySourceId(activePokemon.id);
+    }
 
     // If this switch is the result of Baton, Baton Pass, or Shed Tail, transfer all
     // relevant effects from the active Pokemon to the switched in Pokemon

@@ -774,11 +774,15 @@ export class BattleScene extends SceneBase {
   /**
    * Returns an array of PlayerPokemon of length 1 or 2 depending on if in a double battle or not.
    * Does not actually check if the pokemon are on the field or not.
+   * @param activeOnly - (Default `false`) If `true`, the returned array will only contain Pokemon that
+   * are active and on the field
    * @returns array of {@linkcode PlayerPokemon}
    */
-  public getPlayerField(): PlayerPokemon[] {
+  public getPlayerField(activeOnly: boolean = false): PlayerPokemon[] {
     const party = this.getPlayerParty();
-    return party.slice(0, Math.min(party.length, this.currentBattle?.double ? 2 : 1));
+    return party
+      .slice(0, Math.min(party.length, this.currentBattle?.double ? 2 : 1))
+      .filter((p) => !activeOnly || p.isActive(true));
   }
 
   public getEnemyParty(): EnemyPokemon[] {
@@ -799,11 +803,15 @@ export class BattleScene extends SceneBase {
   /**
    * Returns an array of EnemyPokemon of length 1 or 2 depending on if in a double battle or not.
    * Does not actually check if the pokemon are on the field or not.
+   * @param activeOnly - (Default `false`) If `true`, the returned array will only contain Pokemon that
+   * are active and on the field
    * @returns array of {@linkcode EnemyPokemon}
    */
-  public getEnemyField(): EnemyPokemon[] {
+  public getEnemyField(activeOnly: boolean = false): EnemyPokemon[] {
     const party = this.getEnemyParty();
-    return party.slice(0, Math.min(party.length, this.currentBattle?.double ? 2 : 1));
+    return party
+      .slice(0, Math.min(party.length, this.currentBattle?.double ? 2 : 1))
+      .filter((p) => !activeOnly || p.isActive(true));
   }
 
   /**

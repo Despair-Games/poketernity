@@ -13,8 +13,9 @@ import { CommonAnim } from "#enums/common-anim";
 import { HitResult } from "#enums/hit-result";
 import { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
-import { FieldPhase } from "#phases/base/field-phase";
-import { BooleanHolder, toDmgValue } from "#utils/common-utils";
+import { BattlePhase } from "#phases/base/battle-phase";
+import { toDmgValue, ValueHolder } from "#utils/common-utils";
+import { inSpeedOrder } from "#utils/speed-order-generator";
 
 /**
  * Applies the end-of-turn effects from active {@linkcode Weather}, including
@@ -23,7 +24,7 @@ import { BooleanHolder, toDmgValue } from "#utils/common-utils";
  * - all post-turn ability triggers dependent on the current weather
  * (e.g. Rain Dish, Dry Skin)
  */
-export class WeatherEffectPhase extends FieldPhase {
+export class WeatherEffectPhase extends BattlePhase {
   public override readonly phaseName = "WeatherEffectPhase";
 
   public override start(): void {
@@ -69,13 +70,10 @@ export class WeatherEffectPhase extends FieldPhase {
       return;
     }
 
-    this.executeForAll((pokemon: Pokemon) => this.tryInflictWeatherDamage(weather, pokemon));
-
-    this.executeForAll((pokemon: Pokemon) => {
-      if (!pokemon.switchOutStatus) {
-        applyAbAttrs<PostWeatherLapseAbAttr>(AbAttrFlag.POST_WEATHER_LAPSE, pokemon, false);
-      }
-    });
+    for (const pokemon of inSpeedOrder()) {
+      this.tryInflictWeatherDamage(weather, pokemon);
+      applyAbAttrs<PostWeatherLapseAbAttr>(AbAttrFlag.POST_WEATHER_LAPSE, pokemon, false);
+    }
   }
 
   /**
@@ -88,11 +86,14 @@ export class WeatherEffectPhase extends FieldPhase {
    * be combined by rewriting `isEffectSuppressed` to support simulated application.
    */
   private tryCancelWeatherEffects(weather: Weather): boolean {
-    const cancelled = new BooleanHolder(false);
+    const cancelled = new ValueHolder(false);
 
-    this.executeForAll((pokemon: Pokemon) =>
-      applyAbAttrs<SuppressWeatherEffectAbAttr>(AbAttrFlag.SUPPRESS_WEATHER_EFFECT, pokemon, false, weather, cancelled),
-    );
+    for (const pokemon of inSpeedOrder()) {
+      applyAbAttrs<SuppressWeatherEffectAbAttr>(AbAttrFlag.SUPPRESS_WEATHER_EFFECT, pokemon, false, weather, cancelled);
+      if (cancelled.value) {
+        break;
+      }
+    }
 
     return cancelled.value;
   }
@@ -110,7 +111,7 @@ export class WeatherEffectPhase extends FieldPhase {
       return;
     }
 
-    const cancelled = new BooleanHolder(false);
+    const cancelled = new ValueHolder(false);
 
     applyAbAttrs<PreWeatherDamageAbAttr>(AbAttrFlag.PRE_WEATHER_DAMAGE, pokemon, false, weather, cancelled);
     applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);

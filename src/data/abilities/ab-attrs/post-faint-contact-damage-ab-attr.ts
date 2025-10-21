@@ -2,7 +2,6 @@ import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
 import type { FieldPreventExplosionLikeAbAttr } from "#abilities/field-prevent-explosion-like-ab-attr";
 import { PostFaintAbAttr } from "#abilities/post-faint-ab-attr";
-import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { HitResult } from "#enums/hit-result";
@@ -10,6 +9,7 @@ import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { toDmgValue, ValueHolder } from "#utils/common-utils";
+import { inSpeedOrder } from "#utils/speed-order-generator";
 import i18next from "i18next";
 
 /**
@@ -48,18 +48,20 @@ export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
 
     const cancelled = new ValueHolder(false);
     const moveName = pokemon.getPokemonMove(move.id)?.name ?? move.name;
-    globalScene
-      .getField(true)
-      .map((p) =>
-        applyAbAttrs<FieldPreventExplosionLikeAbAttr>(
-          AbAttrFlag.FIELD_PREVENT_EXPLOSION_LIKE,
-          p,
-          simulated,
-          cancelled,
-          getPokemonNameWithAffix(attacker),
-          moveName,
-        ),
+    for (const p of inSpeedOrder()) {
+      applyAbAttrs<FieldPreventExplosionLikeAbAttr>(
+        AbAttrFlag.FIELD_PREVENT_EXPLOSION_LIKE,
+        p,
+        simulated,
+        cancelled,
+        getPokemonNameWithAffix(attacker),
+        moveName,
       );
+
+      if (cancelled.value) {
+        break;
+      }
+    }
 
     applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, attacker, simulated, cancelled);
     return !cancelled.value;

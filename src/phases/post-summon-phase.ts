@@ -12,6 +12,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { StatusEffect } from "#enums/status-effect";
 import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
 import { PokemonPhase } from "#phases/base/pokemon-phase";
+import { inSpeedOrder } from "#utils/speed-order-generator";
 
 export class PostSummonPhase extends PokemonPhase {
   public override readonly phaseName = "PostSummonPhase";
@@ -34,8 +35,9 @@ export class PostSummonPhase extends PokemonPhase {
     }
 
     applyAbAttrs<PostSummonAbAttr>(AbAttrFlag.POST_SUMMON, pokemon, false);
-    const field = pokemon.getField();
-    field.forEach((p) => applyAbAttrs<CommanderAbAttr>(AbAttrFlag.COMMANDER, p, false));
+    for (const p of inSpeedOrder()) {
+      applyAbAttrs<CommanderAbAttr>(AbAttrFlag.COMMANDER, p, false);
+    }
 
     // If the Pokemon takes a different form when active, change its form
     globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeActiveTrigger, true);

@@ -8,10 +8,11 @@ import { TerrainType } from "#enums/terrain-type";
 import { TurnEndEvent } from "#events/battle-scene";
 import type { Pokemon } from "#field/pokemon";
 import { TurnHealModifier, TurnHeldItemTransferModifier, TurnStatusEffectModifier } from "#modifier/modifier";
-import { FieldPhase } from "#phases/base/field-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
+import { inSpeedOrder } from "#utils/speed-order-generator";
 import i18next from "i18next";
 
-export class TurnEndPhase extends FieldPhase {
+export class TurnEndPhase extends BattlePhase {
   public override readonly phaseName = "TurnEndPhase";
 
   public override start(): void {
@@ -47,7 +48,9 @@ export class TurnEndPhase extends FieldPhase {
       globalScene.applyModifiers(TurnHeldItemTransferModifier, pokemon.isPlayer(), pokemon);
     };
 
-    this.executeForAll(handlePokemon);
+    for (const pokemon of inSpeedOrder()) {
+      handlePokemon(pokemon);
+    }
 
     arena.lapseTags();
 

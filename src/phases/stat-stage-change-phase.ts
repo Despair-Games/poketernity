@@ -19,6 +19,7 @@ import { ResetNegativeStatStageModifier } from "#modifier/modifier";
 import { PokemonPhase } from "#phases/base/pokemon-phase";
 import { settings } from "#system/settings-manager";
 import { BooleanHolder, NumberHolder } from "#utils/common-utils";
+import { inSpeedOrder } from "#utils/speed-order-generator";
 import i18next from "i18next";
 
 //#region Types
@@ -193,7 +194,7 @@ export class StatStageChangePhase extends PokemonPhase {
       }
 
       if (stages.value > 0 && this.canBeCopied) {
-        for (const opponent of pokemon.getOpponents()) {
+        for (const opponent of inSpeedOrder(pokemon.getOpposingArenaTagSide())) {
           applyAbAttrs<StatStageChangeCopyAbAttr>(
             AbAttrFlag.STAT_STAGE_CHANGE_COPY,
             opponent,

@@ -7,12 +7,9 @@ import type { PokemonPhase } from "#phases/base/pokemon-phase";
 /**
  * The {@linkcode PhaseKey | PhaseKeys} of Phases that are *always* scheduled
  * dynamically
+ * @todo Add dynamic scheduling support for `StatStageChangePhase`
  */
-export const dynamicPhaseKeys: PhaseKey[] = [
-  "ObtainStatusEffectPhase",
-  "PostSummonPhase",
-  "StatStageChangePhase",
-] as const;
+export const dynamicPhaseKeys: PhaseKey[] = ["ObtainStatusEffectPhase", "PostSummonPhase"] as const;
 
 /**
  * The dynamic queue manager holds priority queues for phases which are queued as dynamic.

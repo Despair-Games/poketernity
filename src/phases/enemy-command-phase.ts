@@ -8,7 +8,7 @@ import { activeOverrides } from "#app/overrides";
 import { AbilityId } from "#enums/ability-id";
 import { BattleCommand } from "#enums/battle-command";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { FieldPhase } from "#phases/base/field-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
 
 /**
  * Phase for determining an enemy AI's action for the next turn.
@@ -21,7 +21,7 @@ import { FieldPhase } from "#phases/base/field-phase";
  * @see {@linkcode Pokemon.getMatchupScore}
  * @see {@linkcode EnemyPokemon.getNextMove}
  */
-export class EnemyCommandPhase extends FieldPhase {
+export class EnemyCommandPhase extends BattlePhase {
   public override readonly phaseName = "EnemyCommandPhase";
 
   public readonly fieldIndex: number;

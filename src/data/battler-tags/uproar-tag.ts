@@ -6,6 +6,7 @@ import { MoveId } from "#enums/move-id";
 import { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#field/pokemon";
 import type { BooleanHolder } from "#utils/common-utils";
+import { inSpeedOrder } from "#utils/speed-order-generator";
 import i18next from "i18next";
 
 /**
@@ -32,7 +33,7 @@ export class UproarTag extends MoveLockTag {
     );
 
     // Wake up all sleeping Pokemon on the field
-    globalScene.getField(true).forEach((p) => {
+    for (const p of inSpeedOrder()) {
       if (p.hasStatusEffect(StatusEffect.SLEEP, false, true)) {
         p.resetStatus();
         // "The uproar woke {pokemonNameWithAffix}!"
@@ -41,7 +42,7 @@ export class UproarTag extends MoveLockTag {
           i18next.t("battlerTags:uproarOnCureSleep", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
         );
       }
-    });
+    }
   }
 
   override onRemove(pokemon: Pokemon): void {

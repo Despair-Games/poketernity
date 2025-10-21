@@ -3,6 +3,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#field/pokemon";
+import { inSpeedOrder } from "#utils/speed-order-generator";
 import { getStatusEffectHealText } from "#utils/status-effect-utils";
 
 /**
@@ -22,8 +23,7 @@ export class PostSummonUserFieldRemoveStatusEffectAbAttr extends PostSummonAbAtt
       return;
     }
 
-    const affectedPokemon = pokemon.getField().filter((p) => p.isActive(true));
-    affectedPokemon.forEach((p) => {
+    for (const p of inSpeedOrder(pokemon.getArenaTagSide())) {
       if (p.hasStatusEffect(this.statusEffects, false, true)) {
         globalScene.phaseManager.createAndUnshiftPhase(
           "MessagePhase",
@@ -32,7 +32,7 @@ export class PostSummonUserFieldRemoveStatusEffectAbAttr extends PostSummonAbAtt
         p.resetStatus();
         p.updateInfo();
       }
-    });
+    }
   }
 
   public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {

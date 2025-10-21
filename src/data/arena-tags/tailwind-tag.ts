@@ -7,6 +7,7 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { Stat } from "#enums/stat";
+import { inSpeedOrder } from "#utils/speed-order-generator";
 import i18next from "i18next";
 
 /**
@@ -35,10 +36,9 @@ export class TailwindTag extends SerializableArenaTag {
     if (source == null) {
       return;
     }
-    const party = source.getField();
     const { phaseManager } = globalScene;
 
-    for (const pokemon of party) {
+    for (const pokemon of inSpeedOrder(this.side)) {
       // Apply the CHARGED tag to party members with the WIND_POWER ability
       if (pokemon.hasAbility(AbilityId.WIND_POWER) && !pokemon.hasTag(BattlerTagType.CHARGED)) {
         pokemon.addTag(BattlerTagType.CHARGED);

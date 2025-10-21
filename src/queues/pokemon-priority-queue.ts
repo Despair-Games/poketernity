@@ -1,14 +1,18 @@
-import { ShuffledPriorityQueue } from "#app/queues/shuffled-priority-queue";
-import { Stat } from "#enums/stat";
-import type { Pokemon } from "#field/pokemon";
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
+import type { Stat } from "#enums/stat";
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
+import { ShuffledPriorityQueue } from "#app/queues/shuffled-priority-queue";
+import type { Pokemon } from "#field/pokemon";
+import { speedOrderComparator } from "#utils/speed-order-utils";
+
+/**
+ * Stores a list of Pokemon ordered by {@link Stat.SPD | Speed}.
+ * Use {@linkcode pop} to obtain the first Pokemon in Speed order.
+ * Speed ties are resolved randomly.
+ */
 export class PokemonPriorityQueue extends ShuffledPriorityQueue<Pokemon> {
   constructor() {
-    super(PokemonPriorityQueue.compare);
-  }
-
-  private static compare(pokemonA: Pokemon, pokemonB: Pokemon) {
-    const [aSpeed, bSpeed] = [pokemonA, pokemonB].map((p) => p.getEffectiveStat(Stat.SPD));
-    return bSpeed - aSpeed;
+    super(speedOrderComparator<Pokemon>);
   }
 }

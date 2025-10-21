@@ -21,7 +21,7 @@ import { PokeballType } from "#enums/pokeball-type";
 import { UiMode } from "#enums/ui-mode";
 import type { Pokemon } from "#field/pokemon";
 import { getMoveTargets, type MoveTargetSet } from "#moves/move";
-import { FieldPhase } from "#phases/base/field-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
 import type { TurnMove } from "#types/move-types";
 import type { FightCommand } from "#types/ui-types";
 import type { CommandUiHandler } from "#ui/command-ui-handler";
@@ -33,7 +33,7 @@ import i18next from "i18next";
  * Handles the player's start-of-turn actions (`Fight/Ball/Pokemon/Run`) during a battle
  * @see {@linkcode handleCommand}
  */
-export class CommandPhase extends FieldPhase {
+export class CommandPhase extends BattlePhase {
   public override readonly phaseName = "CommandPhase";
 
   /** TODO: Is this supposed to be a {@linkcode FieldPosition} or a {@linkcode BattlerIndex}? */
