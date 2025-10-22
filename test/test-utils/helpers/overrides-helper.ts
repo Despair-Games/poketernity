@@ -258,7 +258,7 @@ export class OverridesHelper extends GameManagerHelper {
    */
   public trainerType(trainerType: TrainerType): this {
     vi.spyOn(activeOverrides, "TRAINER_TYPE_OVERRIDE", "get").mockReturnValue(trainerType);
-    this.log(`Trainer type set to ${TrainerType[trainerType]} (=${trainerType})!`);
+    this.log(`Trainer type set to ${enumValueToKey(TrainerType, trainerType)} (=${trainerType})!`);
     return this;
   }
 

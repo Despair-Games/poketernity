@@ -14,9 +14,8 @@ import { TrainerType } from "#enums/trainer-type";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import { modifierTypes } from "#modifier/modifier-types";
 
-let t = TrainerType.RIVAL;
 export const rivalTrainerConfigs: TrainerConfigs = {
-  [TrainerType.RIVAL]: new TrainerConfig(t)
+  [TrainerType.RIVAL]: new TrainerConfig(TrainerType.RIVAL)
     .setName("Finn")
     .setHasGenders("Ivy")
     .setHasCharSprite()
@@ -88,7 +87,7 @@ export const rivalTrainerConfigs: TrainerConfigs = {
         true,
       ),
     ),
-  [TrainerType.RIVAL_2]: new TrainerConfig(++t)
+  [TrainerType.RIVAL_2]: new TrainerConfig(TrainerType.RIVAL_2)
     .setName("Finn")
     .setHasGenders("Ivy")
     .setHasCharSprite()
@@ -164,7 +163,7 @@ export const rivalTrainerConfigs: TrainerConfigs = {
           && species.baseTotal >= 450,
       ),
     ),
-  [TrainerType.RIVAL_3]: new TrainerConfig(++t)
+  [TrainerType.RIVAL_3]: new TrainerConfig(TrainerType.RIVAL_3)
     .setName("Finn")
     .setHasGenders("Ivy")
     .setHasCharSprite()
@@ -239,7 +238,7 @@ export const rivalTrainerConfigs: TrainerConfigs = {
       ),
     )
     .setSpeciesFilter((species) => species.baseTotal >= 540),
-  [TrainerType.RIVAL_4]: new TrainerConfig(++t)
+  [TrainerType.RIVAL_4]: new TrainerConfig(TrainerType.RIVAL_4)
     .setName("Finn")
     .setHasGenders("Ivy")
     .setHasCharSprite()
@@ -326,7 +325,7 @@ export const rivalTrainerConfigs: TrainerConfigs = {
   //       .newModifier(starter) as PersistentModifier,
   //   ]; // TODO: is the bang correct?
   // }),
-  [TrainerType.RIVAL_5]: new TrainerConfig(++t)
+  [TrainerType.RIVAL_5]: new TrainerConfig(TrainerType.RIVAL_5)
     .setName("Finn")
     .setHasGenders("Ivy")
     .setHasCharSprite()
@@ -425,7 +424,7 @@ export const rivalTrainerConfigs: TrainerConfigs = {
   //       .newModifier(starter) as PersistentModifier,
   //   ]; //TODO: is the bang correct?
   // }),
-  [TrainerType.RIVAL_6]: new TrainerConfig(++t)
+  [TrainerType.RIVAL_6]: new TrainerConfig(TrainerType.RIVAL_6)
     .setName("Finn")
     .setHasGenders("Ivy")
     .setHasCharSprite()
