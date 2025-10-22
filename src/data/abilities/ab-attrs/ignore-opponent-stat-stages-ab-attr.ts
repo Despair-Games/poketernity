@@ -2,7 +2,7 @@ import { AbAttr } from "#abilities/ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BATTLE_STATS, type BattleStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
-import type { BooleanHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 
 /**
  * Ability attribute for ignoring the opponent's stat changes
@@ -11,26 +11,29 @@ import type { BooleanHolder } from "#utils/common-utils";
 export class IgnoreOpponentStatStagesAbAttr extends AbAttr {
   private readonly stats: readonly BattleStat[];
 
-  constructor(stats?: BattleStat[]) {
-    super(false);
+  constructor(stats: readonly BattleStat[] = BATTLE_STATS) {
+    super();
     this._flags.add(AbAttrFlag.IGNORE_OPPONENT_STAT_STAGES);
 
-    this.stats = stats ?? BATTLE_STATS;
+    this.stats = stats;
   }
 
   /**
-   * Modifies a BooleanHolder and returns the result to see if a stat is ignored or not
-   * @param pokemon n/a
-   * @param simulated n/a
-   * @param stat The {@linkcode BattleStat} to be ignored by this ability
-   * @param ignoreStatStage A {@linkcode BooleanHolder} that represents whether or not to ignore a stat's stat changes
-   * @returns true if the stat is ignored, false otherwise
+   * @param pokemon - The {@linkcode Pokemon} with this attribute
+   * @param simulated - If `true`, suppresses changes to game state
+   * @param stat - The {@linkcode BattleStat} whose stages may be ignored
+   * @param ignoreStatStage - If set to `true`, stat stages for the given stat are ignored
    */
-  public override apply(_pokemon: Pokemon, _simulated: boolean, stat: BattleStat, ignoreStatStage: BooleanHolder) {
-    if (this.stats.includes(stat)) {
-      ignoreStatStage.value = true;
-      return true;
-    }
-    return false;
+  public override apply(
+    _pokemon: Pokemon,
+    _simulated: boolean,
+    _stat: BattleStat,
+    ignoreStatStage: ValueHolder<boolean>,
+  ): void {
+    ignoreStatStage.value = true;
+  }
+
+  public override canApply(...[, , stat]: Parameters<this["apply"]>): boolean {
+    return this.stats.includes(stat);
   }
 }

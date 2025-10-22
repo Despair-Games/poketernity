@@ -6,17 +6,20 @@ export class PostSummonAddBattlerTagAbAttr extends PostSummonAbAttr {
   private readonly tagType: BattlerTagType;
   private readonly turnCount: number;
 
-  constructor(tagType: BattlerTagType, turnCount: number, showAbility?: boolean) {
+  constructor(tagType: BattlerTagType, turnCount: number, showAbility: boolean = true) {
     super(showAbility);
 
     this.tagType = tagType;
     this.turnCount = turnCount;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
-    if (simulated) {
-      return pokemon.canAddTag(this.tagType);
+  public override apply(pokemon: Pokemon, simulated: boolean): void {
+    if (!simulated) {
+      pokemon.addTag(this.tagType, this.turnCount);
     }
-    return pokemon.addTag(this.tagType, this.turnCount);
+  }
+
+  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+    return pokemon.canAddTag(this.tagType);
   }
 }

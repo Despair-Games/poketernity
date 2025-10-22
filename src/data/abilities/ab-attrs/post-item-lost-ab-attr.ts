@@ -6,8 +6,8 @@ import type { Pokemon } from "#field/pokemon";
  * Triggers after the Pokemon loses or consumes an item
  */
 export abstract class PostItemLostAbAttr extends AbAttr {
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super();
     this._flags.add(AbAttrFlag.POST_ITEM_LOST);
   }
 
@@ -17,7 +17,5 @@ export abstract class PostItemLostAbAttr extends AbAttr {
    * @param simulated If `true`, suppresses changes to game state
    * @returns `true` if effects from this ability applied successfully.
    */
-  public override apply(_pokemon: Pokemon, _simulated: boolean): boolean {
-    return false;
-  }
+  public abstract override apply(pokemon: Pokemon, simulated: boolean): void;
 }

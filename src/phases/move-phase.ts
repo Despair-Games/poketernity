@@ -168,8 +168,6 @@ export class MovePhase extends BattlePhase {
   }
 
   public override start(): void {
-    super.start();
-
     // If the user is affected by another Pokemon's Sky Drop, skip the user's turn
     const skyDropTag = this.pokemon.getTag(BattlerTagType.SKY_DROP);
     if (skyDropTag && skyDropTag.sourceId !== this.pokemon.id) {
@@ -248,7 +246,7 @@ export class MovePhase extends BattlePhase {
 
     if (
       (targets.length === 0 && !isFieldTargeted(this.targets))
-      || (moveQueue.length && moveQueue[0].move.id === MoveId.NONE)
+      || (moveQueue.length > 0 && moveQueue[0].move.id === MoveId.NONE)
     ) {
       this.showFailedText();
       this.cancel();
@@ -759,24 +757,13 @@ export class MovePhase extends BattlePhase {
 
       if (currentTarget !== redirectTarget.value) {
         const bypassRedirectAttrs = this.pokemonMove.getMove().getAttrs(BypassRedirectAttr);
-        bypassRedirectAttrs.forEach((attr) => {
-          if (!attr.abilitiesOnly || redirectedByAbility) {
-            redirectTarget.value = currentTarget;
-          }
-        });
-
         if (
-          this.pokemon.hasTag(BattlerTagType.PURSUING)
+          bypassRedirectAttrs.some((attr) => !attr.abilitiesOnly || redirectedByAbility)
           || this.pokemon.hasAbilityWithAttr(AbAttrFlag.BLOCK_REDIRECT)
+          || this.pokemon.hasTag(BattlerTagType.PURSUING)
         ) {
           redirectTarget.value = currentTarget;
-          globalScene.phaseManager.createAndUnshiftPhase(
-            "ShowAbilityPhase",
-            this.pokemon.getBattlerIndex(),
-            this.pokemon.getPassiveAbility().hasAttrFlag(AbAttrFlag.BLOCK_REDIRECT),
-          );
         }
-
         this.targets[0] = redirectTarget.value;
       }
     }
@@ -792,7 +779,7 @@ export class MovePhase extends BattlePhase {
    */
   protected resolveCounterAttackTarget(): void {
     if (this.targets.length === 1 && this.targets[0] === BattlerIndex.ATTACKER) {
-      if (this.pokemon.turnData.attacksReceived.length) {
+      if (this.pokemon.turnData.attacksReceived.length > 0) {
         this.targets[0] = this.pokemon.turnData.attacksReceived[0].sourceBattlerIndex;
         const [target] = this.targets;
         const targetPkm = globalScene.getPokemonByBattlerIndex(target);

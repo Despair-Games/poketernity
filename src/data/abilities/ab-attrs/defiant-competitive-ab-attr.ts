@@ -20,7 +20,7 @@ export class DefiantCompetitiveAbAttr extends PostStatStageChangeAbAttr {
   private readonly stages: number;
 
   constructor(statsToChange: BattleStat[], stages: number) {
-    super(true);
+    super();
 
     this.statsToChange = statsToChange;
     this.stages = stages;
@@ -30,26 +30,25 @@ export class DefiantCompetitiveAbAttr extends PostStatStageChangeAbAttr {
     pokemon: Pokemon,
     simulated: boolean,
     _statStagesChanged: BattleStat[],
-    stagesChanged: number,
-    source: Pokemon | undefined,
-    isStickyWeb: boolean,
-  ): boolean {
+    _stagesChanged: number,
+    _source: Pokemon | undefined,
+    _isStickyWeb: boolean,
+  ): void {
+    if (!simulated) {
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "StatStageChangePhase",
+        pokemon.getBattlerIndex(),
+        pokemon,
+        this.statsToChange,
+        this.stages,
+      );
+    }
+  }
+
+  public override canApply(...[pokemon, , , stagesChanged, source, isStickyWeb]: Parameters<this["apply"]>): boolean {
     // Ability does not activate if the stat change was caused by the ability holder or its ally.
     // The only known exception to this rule is Sticky Web.
-    const isSourceAllied = !!source && [pokemon, pokemon.getAlly()].includes(source);
-    if (stagesChanged < 0 && (!isSourceAllied || isStickyWeb)) {
-      if (!simulated) {
-        globalScene.phaseManager.createAndUnshiftPhase(
-          "StatStageChangePhase",
-          pokemon.getBattlerIndex(),
-          pokemon,
-          this.statsToChange,
-          this.stages,
-        );
-      }
-      return true;
-    }
-
-    return false;
+    const isSourceAllied = source != null && [pokemon, pokemon.getAlly()].includes(source);
+    return stagesChanged < 0 && (isStickyWeb || !isSourceAllied);
   }
 }

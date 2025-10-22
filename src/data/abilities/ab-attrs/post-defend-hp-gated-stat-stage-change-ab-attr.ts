@@ -19,7 +19,7 @@ export class PostDefendHpGatedStatStageChangeAbAttr extends PostDefendAbAttr {
     stages: number,
     selfTarget: boolean = true,
   ) {
-    super(true);
+    super();
 
     this.condition = condition;
     this.hpGate = hpGate;
@@ -28,29 +28,26 @@ export class PostDefendHpGatedStatStageChangeAbAttr extends PostDefendAbAttr {
     this.selfTarget = selfTarget;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
-    const hpGateFlat: number = Math.ceil(pokemon.getMaxHp() * this.hpGate);
+  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, _move: Move): void {
+    if (!simulated) {
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "StatStageChangePhase",
+        (this.selfTarget ? pokemon : attacker).getBattlerIndex(),
+        pokemon,
+        this.stats,
+        this.stages,
+      );
+    }
+  }
+
+  public override canApply(...[pokemon, , attacker, move]: Parameters<this["apply"]>): boolean {
+    const hpGateFlat = Math.ceil(pokemon.getMaxHp() * this.hpGate);
     // TODO: Normalize `attacksReceived[]` checks
     const lastAttackReceived = pokemon.turnData.attacksReceived.at(-1);
     const damageReceived = lastAttackReceived?.damage ?? 0;
 
-    if (
-      this.condition(pokemon, attacker, move)
-      && pokemon.hp <= hpGateFlat
-      && pokemon.hp + damageReceived > hpGateFlat
-    ) {
-      if (!simulated) {
-        globalScene.phaseManager.createAndUnshiftPhase(
-          "StatStageChangePhase",
-          (this.selfTarget ? pokemon : attacker).getBattlerIndex(),
-          pokemon,
-          this.stats,
-          this.stages,
-        );
-      }
-      return true;
-    }
-
-    return false;
+    return (
+      this.condition(pokemon, attacker, move) && pokemon.hp <= hpGateFlat && pokemon.hp + damageReceived > hpGateFlat
+    );
   }
 }

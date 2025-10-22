@@ -15,20 +15,19 @@ export class PostDefendMoveDisableAbAttr extends PostDefendAbAttr {
     this.chance = chance;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
-    if (
+  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, _move: Move): void {
+    if (!simulated) {
+      attacker.addTag(BattlerTagType.DISABLED, 4, 0, pokemon.id);
+    }
+  }
+
+  public override canApply(...[pokemon, , attacker, move]: Parameters<this["apply"]>): boolean {
+    return (
       !attacker.hasTag(BattlerTagType.DISABLED)
       && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
       && (this.chance === -1 || pokemon.randSeedInt(100) < this.chance)
       && !attacker.isMax()
-    ) {
-      if (simulated) {
-        return true;
-      }
-
-      attacker.addTag(BattlerTagType.DISABLED, 4, 0, pokemon.id);
-      return true;
-    }
-    return false;
+      && attacker.canAddTag(BattlerTagType.DISABLED)
+    );
   }
 }

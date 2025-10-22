@@ -34,29 +34,21 @@ export class ArenaTrapAbAttr extends AbAttr {
    * @returns `true` if enemy Pokemon is trapped
    */
   public override apply(
-    pokemon: Pokemon,
+    _pokemon: Pokemon,
     _simulated: boolean,
     trapped: BooleanHolder,
-    trappedPokemon: Pokemon,
-  ): boolean {
-    if (this.arenaTrapCondition(pokemon, trappedPokemon)) {
-      if (
-        trappedPokemon.getTypes(true).includes(ElementalType.GHOST)
-        || (trappedPokemon.getTypes(true).includes(ElementalType.STELLAR)
-          && trappedPokemon.getTypes().includes(ElementalType.GHOST))
-      ) {
-        trapped.value = false;
-        return false;
-      }
-      if (trappedPokemon.hasAbility(AbilityId.RUN_AWAY)) {
-        trapped.value = false;
-        return false;
-      }
-      trapped.value = true;
-      return true;
-    }
-    trapped.value = false;
-    return false;
+    _trappedPokemon: Pokemon,
+  ): void {
+    trapped.value = true;
+  }
+
+  /** @returns `true` if the target Pokemon can be trapped by this effect. */
+  public override canApply(...[pokemon, , , trappedPokemon]: Parameters<this["apply"]>): boolean {
+    return (
+      this.arenaTrapCondition(pokemon, trappedPokemon)
+      && !trappedPokemon.isOfType(ElementalType.GHOST, true, true)
+      && !trappedPokemon.hasAbility(AbilityId.RUN_AWAY)
+    );
   }
 
   public override getTriggerMessage(pokemon: Pokemon, abilityName: string): string {

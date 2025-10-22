@@ -3,7 +3,7 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { PokemonAttackCondition } from "#types/move-types";
-import type { NumberHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 
 /**
  * Ability attribute that boosts a move's recovery by a certain factor if it meets specific conditions
@@ -14,24 +14,24 @@ export class RecoveryBoostAbAttr extends AbAttr {
   private readonly condition: PokemonAttackCondition;
   private readonly recoveryMultiplier: number;
 
-  constructor(condition: PokemonAttackCondition, recoveryMultiplier: number, showAbility: boolean = true) {
-    super(showAbility);
+  constructor(condition: PokemonAttackCondition, recoveryMultiplier: number) {
+    super();
     this._flags.add(AbAttrFlag.RECOVERY_BOOST);
     this.condition = condition;
     this.recoveryMultiplier = recoveryMultiplier;
   }
 
   public override apply(
-    pokemon: Pokemon,
+    _pokemon: Pokemon,
     _simulated: boolean,
-    move: Move,
-    defender: Pokemon,
-    healRatio: NumberHolder,
-  ): boolean {
-    if (this.condition(pokemon, defender, move)) {
-      healRatio.value *= this.recoveryMultiplier;
-      return true;
-    }
-    return false;
+    _move: Move,
+    _defender: Pokemon,
+    healRatio: ValueHolder<number>,
+  ): void {
+    healRatio.value *= this.recoveryMultiplier;
+  }
+
+  public override canApply(...[pokemon, , move, defender]: Parameters<this["apply"]>): boolean {
+    return this.condition(pokemon, defender, move);
   }
 }

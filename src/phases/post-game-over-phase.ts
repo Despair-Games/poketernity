@@ -15,7 +15,6 @@ export class PostGameOverPhase extends Phase {
   }
 
   public override start(): void {
-    super.start();
     const { gameData, sessionSlotId, ui } = globalScene;
 
     const saveAndReset = (): void => {

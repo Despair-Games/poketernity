@@ -11,17 +11,15 @@ import type { Pokemon } from "#field/pokemon";
  */
 export class PostTeraFormChangeClearWeatherTerrainAbAttr extends AbAttr {
   constructor() {
-    super(true, true);
+    super(true);
 
     this._flags.add(AbAttrFlag.POST_TERA_FORM_CHANGE_CLEAR_WEATHER_TERRAIN);
   }
 
-  public override apply(_pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(_pokemon: Pokemon, simulated: boolean): void {
     if (!simulated) {
       globalScene.arena.trySetWeather(WeatherType.NONE, true);
       globalScene.arena.trySetTerrain(TerrainType.NONE, true);
     }
-
-    return true;
   }
 }

@@ -154,10 +154,6 @@ describe("Abilities - Steadfast", () => {
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     move.use(MoveId.SPLASH);
     await move.selectEnemyMove(MoveId.FAKE_OUT);
-    await phaseInterceptor.to("MessagePhase", false);
-
-    expect(playerPkm).not.toHaveBattlerTag(BattlerTagType.FLINCHED);
-
     await phaseInterceptor.to("PostActionPhase", true);
 
     expect(playerPkm).toHaveBattlerTag(BattlerTagType.FLINCHED);

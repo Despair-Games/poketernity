@@ -31,19 +31,25 @@ export class ConfusionOnStatusEffectAbAttr extends PostAttackAbAttr {
    * @param effect {@linkcode StatusEffect} applied by move
    * @returns true if defender is confused
    */
-  public override applyPostAttack(
+  public override apply(
     pokemon: Pokemon,
     simulated: boolean,
     defender: Pokemon,
     move: Move,
-    effect: StatusEffect,
-  ): boolean {
-    if (this.effects.includes(effect) && !defender.isFainted()) {
-      if (simulated) {
-        return defender.canAddTag(BattlerTagType.CONFUSED);
-      }
-      return defender.addTag(BattlerTagType.CONFUSED, pokemon.randSeedIntRange(2, 5), move.id, defender.id);
+    _effect: StatusEffect,
+  ): void {
+    if (!simulated) {
+      defender.addTag(BattlerTagType.CONFUSED, pokemon.randSeedIntRange(2, 5), move.id, defender.id);
     }
-    return false;
+  }
+
+  public override canApply(...params: Parameters<this["apply"]>): boolean {
+    const [, , defender, , effect] = params;
+    return (
+      super.canApply(...params)
+      && this.effects.includes(effect)
+      && !defender.isFainted()
+      && defender.canAddTag(BattlerTagType.CONFUSED)
+    );
   }
 }

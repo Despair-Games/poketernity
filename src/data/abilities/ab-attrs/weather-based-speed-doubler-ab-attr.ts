@@ -1,11 +1,7 @@
 import { EffectiveStatMultiplier } from "#abilities/effective-stat-multiplier-ab-attr";
-import type { BattleStat } from "#enums/stat";
 import { Stat } from "#enums/stat";
 import type { WeatherType } from "#enums/weather-type";
-import type { Pokemon } from "#field/pokemon";
-import type { Move } from "#moves/move";
 import { getWeatherCondition } from "#utils/ability-utils";
-import type { NumberHolder } from "#utils/common-utils";
 
 /**
  * Ability attribute that doubles speed if specific weather(s) are active
@@ -22,23 +18,15 @@ import type { NumberHolder } from "#utils/common-utils";
  * ```
  */
 export class WeatherBasedSpeedDoublerAbAttr extends EffectiveStatMultiplier {
-  private readonly weather: WeatherType[] = [];
+  private readonly weatherTypes: readonly WeatherType[];
 
-  constructor(weather: WeatherType | WeatherType[]) {
+  constructor(...weatherTypes: readonly WeatherType[]) {
     super(Stat.SPD, 2);
-    this.weather = this.weather.concat(weather);
+    this.weatherTypes = weatherTypes;
   }
 
-  public override apply(
-    pokemon: Pokemon,
-    simulated: boolean,
-    stat: BattleStat,
-    statValue: NumberHolder,
-    move: Move,
-  ): boolean {
-    if (getWeatherCondition(...this.weather)(pokemon)) {
-      return super.apply(pokemon, simulated, stat, statValue, move);
-    }
-    return false;
+  public override canApply(...params: Parameters<this["apply"]>): boolean {
+    const [pokemon] = params;
+    return super.canApply(...params) && getWeatherCondition(...this.weatherTypes)(pokemon);
   }
 }

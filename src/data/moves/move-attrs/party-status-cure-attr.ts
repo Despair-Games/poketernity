@@ -41,13 +41,7 @@ export class PartyStatusCureAttr extends MoveEffectAttr {
       // user always cures its own status, regardless of ability
       pokemon.resetStatus();
       pokemon.updateInfo();
-    } else if (pokemon.hasAbility(this.abilityCondition)) {
-      globalScene.phaseManager.createAndUnshiftPhase(
-        "ShowAbilityPhase",
-        pokemon.id,
-        pokemon.getPassiveAbility()?.id === this.abilityCondition,
-      );
-    } else {
+    } else if (!pokemon.hasAbility(this.abilityCondition)) {
       pokemon.resetStatus();
       pokemon.updateInfo();
     }

@@ -8,17 +8,14 @@ import { getPokemonWithWeatherBasedForms } from "#utils/ability-utils";
  * Used by Cloud Nine and Air Lock.
  */
 export class PostSummonWeatherSuppressedFormChangeAbAttr extends PostSummonAbAttr {
-  public override apply(_pokemon: Pokemon, simulated: boolean) {
-    const pokemonToTransform = getPokemonWithWeatherBasedForms();
-
-    if (pokemonToTransform.length < 1) {
-      return false;
-    }
-
+  public override apply(_pokemon: Pokemon, simulated: boolean): void {
     if (!simulated) {
       globalScene.arena.triggerWeatherBasedFormChangesToNormal();
     }
+  }
 
-    return true;
+  public override canApply(..._params: Parameters<this["apply"]>): boolean {
+    const pokemonToTransform = getPokemonWithWeatherBasedForms();
+    return pokemonToTransform.length > 0;
   }
 }

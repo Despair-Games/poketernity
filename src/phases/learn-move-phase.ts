@@ -41,8 +41,6 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
   }
 
   public override start(): void {
-    super.start();
-
     const { ui } = globalScene;
     const pokemon = this.getPokemon();
 

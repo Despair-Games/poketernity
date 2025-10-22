@@ -3,18 +3,15 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 
 export abstract class PostBattleInitAbAttr extends AbAttr {
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super(true);
     this._flags.add(AbAttrFlag.POST_BATTLE_INIT);
   }
 
   /**
    * Applies an effect at the start of battle
-   * @param pokemon The {@linkcode Pokemon} with this ability
-   * @param simulated If `true`, suppresses changes to game state
-   * @returns `true` if the effect applies successfully
+   * @param pokemon - The {@linkcode Pokemon} with this ability
+   * @param simulated - If `true`, suppresses changes to game state
    */
-  public override apply(_pokemon: Pokemon, _simulated: boolean): boolean {
-    return false;
-  }
+  public abstract override apply(pokemon: Pokemon, simulated: boolean): void;
 }

@@ -12,9 +12,13 @@ export class PostSummonTerrainChangeAbAttr extends PostSummonAbAttr {
     this.terrainType = terrainType;
   }
 
-  public override apply(_pokemon: Pokemon, simulated: boolean): boolean {
-    return simulated
-      ? !globalScene.arena.hasTerrain(this.terrainType)
-      : globalScene.arena.trySetTerrain(this.terrainType, true);
+  public override apply(_pokemon: Pokemon, simulated: boolean): void {
+    if (!simulated) {
+      globalScene.arena.trySetTerrain(this.terrainType, true);
+    }
+  }
+
+  public override canApply(..._params: Parameters<this["apply"]>): boolean {
+    return globalScene.arena.canSetTerrain(this.terrainType);
   }
 }

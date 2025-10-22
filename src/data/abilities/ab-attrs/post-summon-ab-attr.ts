@@ -3,13 +3,12 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 
 /**
- * Base class for defining all {@linkcode Ability} Attributes post summon
- * @see {@linkcode applyPostSummon()}
+ * Base class for effects that activate when the source Pokemon enters the field.
  * @todo Most post-summon abilities should activate when the pokemon gains the ability (such as from Skill Swap)
  */
 export abstract class PostSummonAbAttr extends AbAttr {
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor(showAbility: boolean = true) {
+    super(showAbility);
     this._flags.add(AbAttrFlag.POST_SUMMON);
   }
 
@@ -18,9 +17,6 @@ export abstract class PostSummonAbAttr extends AbAttr {
    * @param pokemon {@linkcode Pokemon} with this ability
    * @param simulated If `true`, suppresses changes to game state
    * @param args Set of unique arguments needed by this attribute
-   * @returns true if application of the ability succeeds
    */
-  public override apply(_pokemon: Pokemon, _simulated: boolean, ..._args: unknown[]): boolean {
-    return false;
-  }
+  public abstract override apply(_pokemon: Pokemon, _simulated: boolean, ..._args: unknown[]): void;
 }

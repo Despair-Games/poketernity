@@ -20,7 +20,7 @@ export class FlinchAttr extends AddBattlerTagAttr {
   }
 
   /** Serene Grace and the Water + Fire Pledge combo effect do not stack for flinching */
-  override getMoveChance(user: Pokemon, target: Pokemon, move: Move, showAbility: boolean = false): number {
+  override getMoveChance(user: Pokemon, target: Pokemon, move: Move): number {
     const moveChance = new NumberHolder(this.effectChanceOverride ?? move.chance);
 
     applyAbAttrs<MoveEffectChanceMultiplierAbAttr>(
@@ -29,7 +29,6 @@ export class FlinchAttr extends AddBattlerTagAttr {
       false,
       moveChance,
       move,
-      showAbility,
     );
 
     if (moveChance.value <= move.chance) {

@@ -16,14 +16,13 @@ export class PostTerrainChangeAddBattlerTagAbAttr extends PostTerrainChangeAbAtt
     this.terrainTypes = terrainTypes;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean, terrain: TerrainType): boolean {
-    if (!this.terrainTypes.find((t) => t === terrain)) {
-      return false;
+  public override apply(pokemon: Pokemon, simulated: boolean, _terrain: TerrainType): void {
+    if (!simulated) {
+      pokemon.addTag(this.tagType, this.turnCount);
     }
+  }
 
-    if (simulated) {
-      return pokemon.canAddTag(this.tagType);
-    }
-    return pokemon.addTag(this.tagType, this.turnCount);
+  public override canApply(...[pokemon, , terrain]: Parameters<this["apply"]>): boolean {
+    return this.terrainTypes.includes(terrain) && pokemon.canAddTag(this.tagType);
   }
 }

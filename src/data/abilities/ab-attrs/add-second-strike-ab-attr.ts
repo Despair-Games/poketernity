@@ -2,7 +2,7 @@ import { PreAttackAbAttr } from "#abilities/pre-attack-ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import type { NumberHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 
 /**
  * Attribute to convert single-strike moves to two-strike moves.
@@ -13,7 +13,7 @@ export class AddSecondStrikeAbAttr extends PreAttackAbAttr {
   private readonly damageMultiplier: number;
 
   constructor(damageMultiplier: number) {
-    super(false);
+    super();
     this._flags.add(AbAttrFlag.ADD_SECOND_STRIKE);
 
     this.damageMultiplier = damageMultiplier;
@@ -33,22 +33,25 @@ export class AddSecondStrikeAbAttr extends PreAttackAbAttr {
   public override apply(
     pokemon: Pokemon,
     _simulated: boolean,
-    move: Move,
+    _move: Move,
     _defender: Pokemon,
-    hitCount?: NumberHolder,
-    multiplier?: NumberHolder,
-  ): boolean {
-    if (move.canBeMultiStrikeEnhanced(pokemon)) {
-      this.showAbility = !!hitCount?.value;
-      if (hitCount?.value) {
-        hitCount.value += 1;
-      }
-
-      if (multiplier?.value && pokemon.turnData.hitsLeft === 1) {
-        multiplier.value = this.damageMultiplier;
-      }
-      return true;
+    hitCount?: ValueHolder<number>,
+    multiplier?: ValueHolder<number>,
+  ): void {
+    if (hitCount?.value) {
+      hitCount.value += 1;
     }
-    return false;
+
+    if (multiplier?.value && pokemon.turnData.hitsLeft === 1) {
+      multiplier.value = this.damageMultiplier;
+    }
+  }
+
+  /**
+   * @returns `true` if the move being used satisfies {@linkcode Move.canBeMultiStrikeEnhanced | conditions}
+   * to be multi-strike-enhanced.
+   */
+  public override canApply(...[pokemon, , move]: Parameters<this["apply"]>): boolean {
+    return move.canBeMultiStrikeEnhanced(pokemon);
   }
 }

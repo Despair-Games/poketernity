@@ -24,8 +24,6 @@ export class ScanIvsPhase extends PokemonPhase {
   }
 
   public override start(): void {
-    super.start();
-
     const { gameData, ui } = globalScene;
 
     if (!this.shownIvs) {

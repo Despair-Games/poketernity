@@ -4,13 +4,11 @@ import type { Pokemon } from "#field/pokemon";
 
 export class SyncEncounterNatureAbAttr extends AbAttr {
   constructor() {
-    super(false);
+    super();
     this._flags.add(AbAttrFlag.SYNC_ENCOUNTER_NATURE);
   }
 
-  public override apply(pokemon: Pokemon, _simulated: boolean, opponent: Pokemon): boolean {
+  public override apply(pokemon: Pokemon, _simulated: boolean, opponent: Pokemon): void {
     opponent.setNature(pokemon.getNature());
-
-    return true;
   }
 }

@@ -17,19 +17,19 @@ export class PostDefendContactDamageAbAttr extends PostDefendAbAttr {
     this.damageRatio = damageRatio;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
-    if (
-      !simulated
-      && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
-      && !attacker.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)
-    ) {
+  public override apply(_pokemon: Pokemon, simulated: boolean, attacker: Pokemon, _move: Move): void {
+    if (!simulated) {
       attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio)), {
         result: HitResult.OTHER,
       });
-      return true;
     }
+  }
 
-    return false;
+  public override canApply(...[pokemon, , attacker, move]: Parameters<this["apply"]>): boolean {
+    return (
+      move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
+      && !attacker.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)
+    );
   }
 
   public override getTriggerMessage(pokemon: Pokemon, abilityName: string): string {

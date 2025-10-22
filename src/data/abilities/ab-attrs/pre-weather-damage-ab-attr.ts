@@ -2,11 +2,11 @@ import { PreWeatherEffectAbAttr } from "#abilities/pre-weather-effect-ab-attr";
 import type { Weather } from "#data/weather";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
-import type { BooleanHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 
 export abstract class PreWeatherDamageAbAttr extends PreWeatherEffectAbAttr {
-  constructor(showAbility: boolean = false) {
-    super(showAbility, true);
+  constructor() {
+    super();
     this._flags.add(AbAttrFlag.PRE_WEATHER_DAMAGE);
   }
 
@@ -18,9 +18,11 @@ export abstract class PreWeatherDamageAbAttr extends PreWeatherEffectAbAttr {
    * @param weather The {@linkcode Weather} applying damage
    * @param cancelled A {@linkcode BooleanHolder} which, if `true`,
    * cancels the damage taken from weather.
-   * @returns `true` if this ability's effects successfully apply.
    */
-  public override apply(_pokemon: Pokemon, _simulated: boolean, _weather: Weather, _cancelled: BooleanHolder): boolean {
-    return false;
-  }
+  public abstract override apply(
+    pokemon: Pokemon,
+    simulated: boolean,
+    weather: Weather,
+    cancelled: ValueHolder<boolean>,
+  ): void;
 }

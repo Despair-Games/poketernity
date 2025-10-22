@@ -7,8 +7,6 @@ export class ShowTrainerPhase extends BattlePhase {
   public override readonly phaseName = "ShowTrainerPhase";
 
   public override start(): void {
-    super.start();
-
     globalScene.trainer.setVisible(true);
 
     globalScene.trainer.setTexture(`trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back`);

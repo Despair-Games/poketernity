@@ -24,8 +24,6 @@ export class PostMysteryEncounterPhase extends Phase {
    * Runs {@linkcode MysteryEncounterOption.onPostOptionPhase} then continues encounter
    */
   public override start(): void {
-    super.start();
-
     const { mysteryEncounter } = globalScene.currentBattle;
 
     if (this.onPostOptionSelect) {

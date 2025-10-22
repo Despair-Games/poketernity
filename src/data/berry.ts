@@ -11,7 +11,7 @@ import { HitResult } from "#enums/hit-result";
 import { type BattleStat, Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import { getBerryName } from "#utils/berry-utils";
-import { NumberHolder, toDmgValue } from "#utils/common-utils";
+import { NumberHolder, toDmgValue, ValueHolder } from "#utils/common-utils";
 import { randSeedInt } from "#utils/random-utils";
 import { getStatusEffectHealText } from "#utils/status-effect-utils";
 import i18next from "i18next";
@@ -32,28 +32,26 @@ export function getBerryPredicate(berryType: BerryType): BerryPredicate {
     case BerryType.APICOT:
     case BerryType.SALAC:
       return (pokemon: Pokemon) => {
-        const threshold = new NumberHolder(0.25);
+        const threshold = new ValueHolder(0.25);
         // Offset BerryType such that LIECHI -> Stat.ATK = 1, GANLON -> Stat.DEF = 2, so on and so forth
         const stat: BattleStat = berryType - BerryType.ENIGMA;
         applyAbAttrs<ReduceBerryUseThresholdAbAttr>(AbAttrFlag.REDUCE_BERRY_USE_THRESHOLD, pokemon, false, threshold);
-        return pokemon.getHpRatio() < threshold.value && pokemon.getStatStage(stat) < 6;
+        return pokemon.getHpRatio() <= threshold.value && pokemon.getStatStage(stat) < 6;
       };
     case BerryType.LANSAT:
       return (pokemon: Pokemon) => {
-        const threshold = new NumberHolder(0.25);
+        const threshold = new ValueHolder(0.25);
         applyAbAttrs<ReduceBerryUseThresholdAbAttr>(AbAttrFlag.REDUCE_BERRY_USE_THRESHOLD, pokemon, false, threshold);
-        return pokemon.getHpRatio() < 0.25 && !pokemon.hasTag(BattlerTagType.CRIT_BOOST);
+        return pokemon.getHpRatio() <= threshold.value && !pokemon.hasTag(BattlerTagType.CRIT_BOOST);
       };
     case BerryType.STARF:
       return (pokemon: Pokemon) => {
-        const threshold = new NumberHolder(0.25);
+        const threshold = new ValueHolder(0.25);
         applyAbAttrs<ReduceBerryUseThresholdAbAttr>(AbAttrFlag.REDUCE_BERRY_USE_THRESHOLD, pokemon, false, threshold);
-        return pokemon.getHpRatio() < 0.25;
+        return pokemon.getHpRatio() <= threshold.value;
       };
     case BerryType.LEPPA:
       return (pokemon: Pokemon) => {
-        const threshold = new NumberHolder(0.25);
-        applyAbAttrs<ReduceBerryUseThresholdAbAttr>(AbAttrFlag.REDUCE_BERRY_USE_THRESHOLD, pokemon, false, threshold);
         return pokemon.getMoveset().some((m) => !m.getPpRatio());
       };
   }

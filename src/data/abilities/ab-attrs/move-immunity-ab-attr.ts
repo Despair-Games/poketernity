@@ -4,7 +4,7 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { PreDefendAbAttrCondition } from "#types/ability-types";
-import type { BooleanHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 export class MoveImmunityAbAttr extends PreDefendAbAttr {
@@ -18,18 +18,17 @@ export class MoveImmunityAbAttr extends PreDefendAbAttr {
   }
 
   public override apply(
-    pokemon: Pokemon,
+    _pokemon: Pokemon,
     _simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    cancelled: BooleanHolder,
-  ): boolean {
-    if (this.immuneCondition(pokemon, attacker, move)) {
-      cancelled.value = true;
-      return true;
-    }
+    _attacker: Pokemon,
+    _move: Move,
+    cancelled: ValueHolder<boolean>,
+  ): void {
+    cancelled.value = true;
+  }
 
-    return false;
+  public override canApply(...[pokemon, , attacker, move]: Parameters<this["apply"]>): boolean {
+    return this.immuneCondition(pokemon, attacker, move);
   }
 
   public override getTriggerMessage(pokemon: Pokemon, _abilityName: string): string {

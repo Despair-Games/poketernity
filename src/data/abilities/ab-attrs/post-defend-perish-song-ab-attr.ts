@@ -12,19 +12,15 @@ import i18next from "i18next";
  * the attacker doesn't already have the Perish Song tag.
  */
 export class PostDefendPerishSongAbAttr extends PostDefendAbAttr {
-  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
-    if (move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)) {
-      if (attacker.hasTag(BattlerTagType.PERISH_SONG)) {
-        return false;
-      }
-
-      if (!simulated) {
-        attacker.addTag(BattlerTagType.PERISH_SONG, 4);
-        pokemon.addTag(BattlerTagType.PERISH_SONG, 4);
-      }
-      return true;
+  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, _move: Move): void {
+    if (!simulated) {
+      attacker.addTag(BattlerTagType.PERISH_SONG, 4);
+      pokemon.addTag(BattlerTagType.PERISH_SONG, 4);
     }
-    return false;
+  }
+
+  public override canApply(...[pokemon, , attacker, move]: Parameters<this["apply"]>): boolean {
+    return move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon) && attacker.canAddTag(BattlerTagType.PERISH_SONG);
   }
 
   public override getTriggerMessage(pokemon: Pokemon, abilityName: string): string {

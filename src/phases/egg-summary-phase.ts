@@ -21,8 +21,6 @@ export class EggSummaryPhase extends Phase {
   }
 
   public override start(): void {
-    super.start();
-
     // updates next pokemon once the current update has been completed
     const updateNextPokemon = (i: number): void => {
       if (i >= this.eggHatchData.length) {

@@ -34,8 +34,6 @@ export abstract class FormChangeBasePhase extends Phase {
   }
 
   public override async start(): Promise<void> {
-    super.start();
-
     await this.setMode();
     const { audioManager, spritePipeline } = globalScene;
 

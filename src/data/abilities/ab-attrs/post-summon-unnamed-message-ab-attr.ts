@@ -10,16 +10,14 @@ export class PostSummonUnnamedMessageAbAttr extends PostSummonAbAttr {
   private readonly message: string;
 
   constructor(message: string) {
-    super(true);
+    super();
 
     this.message = message;
   }
 
-  public override apply(_pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(_pokemon: Pokemon, simulated: boolean): void {
     if (!simulated) {
       globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", this.message);
     }
-
-    return true;
   }
 }

@@ -10,8 +10,6 @@ export class EndEvolutionPhase extends Phase {
   public override readonly phaseName = "EndEvolutionPhase";
 
   public override async start(): Promise<void> {
-    super.start();
-
     await globalScene.ui.setModeForceTransition<MessageUiHandler>(UiMode.MESSAGE);
     this.end();
   }

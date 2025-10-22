@@ -11,29 +11,30 @@ export class PostDefendApplyBattlerTagAbAttr extends PostDefendAbAttr {
   private readonly condition: PokemonDefendCondition;
   private readonly tagType: BattlerTagType;
   constructor(condition: PokemonDefendCondition, tagType: BattlerTagType) {
-    super(true);
+    super();
 
     this.condition = condition;
     this.tagType = tagType;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
-    if (this.condition(pokemon, attacker, move)) {
-      if (!pokemon.hasTag(this.tagType) && !simulated) {
-        pokemon.addTag(this.tagType, undefined, undefined, pokemon.id);
-
-        const pokemonName = getPokemonNameWithAffix(pokemon);
-        const moveName = pokemon.getPokemonMove(move.id)?.name ?? move.name;
-        globalScene.phaseManager.createAndUnshiftPhase(
-          "MessagePhase",
-          i18next.t("abilityTriggers:windPowerCharged", {
-            pokemonName,
-            moveName,
-          }),
-        );
-      }
-      return true;
+  public override apply(pokemon: Pokemon, simulated: boolean, _attacker: Pokemon, move: Move): void {
+    if (simulated) {
+      return;
     }
-    return false;
+    pokemon.addTag(this.tagType, undefined, undefined, pokemon.id);
+
+    const pokemonName = getPokemonNameWithAffix(pokemon);
+    const moveName = pokemon.getPokemonMove(move.id)?.name ?? move.name;
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
+      i18next.t("abilityTriggers:windPowerCharged", {
+        pokemonName,
+        moveName,
+      }),
+    );
+  }
+
+  public override canApply(...[pokemon, , attacker, move]: Parameters<this["apply"]>): boolean {
+    return this.condition(pokemon, attacker, move) && !pokemon.hasTag(this.tagType);
   }
 }

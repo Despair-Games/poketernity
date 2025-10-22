@@ -27,11 +27,15 @@ export class TruantTag extends AbilityBattlerTag {
     const lastMove = pokemon.getLastXMoves().find(() => true);
 
     if (lastMove && lastMove.move.id !== MoveId.NONE) {
-      globalScene.phaseManager.getCurrentPhase<MovePhase>()?.cancel();
-      globalScene.phaseManager.createAndUnshiftPhase("ShowAbilityPhase", pokemon.id, passive);
-      globalScene.phaseManager.createAndUnshiftPhase(
-        "MessagePhase",
-        i18next.t("battlerTags:truantLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+      const { phaseManager } = globalScene;
+      phaseManager.getCurrentPhase<MovePhase>()?.cancel();
+      phaseManager.unshiftPhase(
+        phaseManager.createPhase("ShowAbilityPhase", pokemon, passive),
+        phaseManager.createPhase(
+          "MessagePhase",
+          i18next.t("battlerTags:truantLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+        ),
+        phaseManager.createPhase("HideAbilityPhase", pokemon),
       );
     }
 

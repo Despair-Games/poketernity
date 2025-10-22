@@ -25,7 +25,6 @@ export class QuietFormChangePhase extends BattlePhase {
   }
 
   public override async start(): Promise<void> {
-    super.start();
     const { ui } = globalScene;
 
     if (this.pokemon.formIndex === this.pokemon.species.forms.findIndex((f) => f.formKey === this.formChange.formKey)) {

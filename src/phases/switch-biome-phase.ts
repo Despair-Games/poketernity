@@ -15,8 +15,6 @@ export class SwitchBiomePhase extends BattlePhase {
   }
 
   public override start(): void {
-    super.start();
-
     const {
       arenaBg,
       arenaBgTransition,

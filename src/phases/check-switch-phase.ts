@@ -32,8 +32,6 @@ export class CheckSwitchPhase extends BattlePhase {
   }
 
   public override start(): void {
-    super.start();
-
     const pokemon = globalScene.getPlayerField()[this.fieldIndex];
     const { field, phaseManager, ui } = globalScene;
 

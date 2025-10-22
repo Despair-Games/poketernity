@@ -13,23 +13,22 @@ import i18next from "i18next";
  */
 export class HealFromBerryUseAbAttr extends AbAttr {
   /** Percent of Max HP to heal */
-  private readonly healPercent: number;
+  private readonly healRatio: number;
 
-  constructor(healPercent: number) {
-    super();
+  constructor(healRatio: number) {
+    super(true);
     this._flags.add(AbAttrFlag.HEAL_FROM_BERRY_USE);
 
-    // Clamp healPercent so its between [0,1].
-    this.healPercent = clamp(healPercent, 0, 1);
+    this.healRatio = clamp(healRatio, 0, 1);
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean): void {
     const abilityName = this.source.name;
     if (!simulated) {
       globalScene.phaseManager.createAndUnshiftPhase(
         "PokemonHealPhase",
         pokemon.getBattlerIndex(),
-        toDmgValue(pokemon.getMaxHp() * this.healPercent),
+        toDmgValue(pokemon.getMaxHp() * this.healRatio),
         {
           message: i18next.t("abilityTriggers:healFromBerryUse", {
             pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
@@ -38,6 +37,5 @@ export class HealFromBerryUseAbAttr extends AbAttr {
         },
       );
     }
-    return true;
   }
 }

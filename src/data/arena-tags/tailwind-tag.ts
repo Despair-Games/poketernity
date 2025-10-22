@@ -36,12 +36,13 @@ export class TailwindTag extends SerializableArenaTag {
       return;
     }
     const party = source.getField();
+    const { phaseManager } = globalScene;
 
     for (const pokemon of party) {
       // Apply the CHARGED tag to party members with the WIND_POWER ability
       if (pokemon.hasAbility(AbilityId.WIND_POWER) && !pokemon.hasTag(BattlerTagType.CHARGED)) {
         pokemon.addTag(BattlerTagType.CHARGED);
-        globalScene.phaseManager.createAndUnshiftPhase(
+        phaseManager.createAndUnshiftPhase(
           "MessagePhase",
           i18next.t("abilityTriggers:windPowerCharged", {
             pokemonName: getPokemonNameWithAffix(pokemon),
@@ -50,14 +51,12 @@ export class TailwindTag extends SerializableArenaTag {
         );
       }
       // Raise attack by one stage if party member has WIND_RIDER ability
+      // TODO: This should apply an attribute instead
       if (pokemon.hasAbility(AbilityId.WIND_RIDER)) {
-        globalScene.phaseManager.createAndUnshiftPhase("ShowAbilityPhase", pokemon.getBattlerIndex());
-        globalScene.phaseManager.createAndUnshiftPhase(
-          "StatStageChangePhase",
-          pokemon.getBattlerIndex(),
-          pokemon,
-          [Stat.ATK],
-          1,
+        phaseManager.unshiftPhase(
+          phaseManager.createPhase("ShowAbilityPhase", pokemon),
+          phaseManager.createPhase("StatStageChangePhase", pokemon.getBattlerIndex(), pokemon, [Stat.ATK], 1),
+          phaseManager.createPhase("HideAbilityPhase", pokemon),
         );
       }
     }

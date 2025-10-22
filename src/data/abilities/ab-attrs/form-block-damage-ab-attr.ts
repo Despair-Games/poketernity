@@ -4,7 +4,7 @@ import { HitResult } from "#enums/hit-result";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { PokemonDefendCondition } from "#types/move-types";
-import type { NumberHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 
 /**
  * Negates the damage from the first hit of a damaging move,
@@ -25,7 +25,7 @@ export class FormBlockDamageAbAttr extends ReceivedMoveDamageMultiplierAbAttr {
     triggerMessageFunc: (pokemon: Pokemon, abilityName: string) => string,
     recoilDamageFunc?: (pokemon: Pokemon) => number,
   ) {
-    super(condition, multiplier);
+    super(condition, multiplier, true);
 
     this.multiplier = multiplier;
     this.tagType = tagType;
@@ -36,26 +36,26 @@ export class FormBlockDamageAbAttr extends ReceivedMoveDamageMultiplierAbAttr {
   public override apply(
     pokemon: Pokemon,
     simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    multiplier: NumberHolder,
-  ): boolean {
-    if (this.condition(pokemon, attacker, move) && !move.hitsSubstitute(attacker, pokemon)) {
-      if (!simulated) {
-        multiplier.value *= this.multiplier;
-        pokemon.removeTag(this.tagType);
-        if (this.recoilDamageFunc) {
-          pokemon.damageAndUpdate(this.recoilDamageFunc(pokemon), {
-            result: HitResult.OTHER,
-            preventEndure: true,
-            ignoreFaintPhase: true,
-          });
-        }
-      }
-      return true;
+    _attacker: Pokemon,
+    _move: Move,
+    multiplier: ValueHolder<number>,
+  ): void {
+    if (simulated) {
+      return;
     }
+    multiplier.value *= this.multiplier;
+    pokemon.removeTag(this.tagType);
+    if (this.recoilDamageFunc) {
+      pokemon.damageAndUpdate(this.recoilDamageFunc(pokemon), {
+        result: HitResult.OTHER,
+        preventEndure: true,
+        ignoreFaintPhase: true,
+      });
+    }
+  }
 
-    return false;
+  public override canApply(...[pokemon, , attacker, move]: Parameters<this["apply"]>): boolean {
+    return this.condition(pokemon, attacker, move) && !move.hitsSubstitute(attacker, pokemon);
   }
 
   /**

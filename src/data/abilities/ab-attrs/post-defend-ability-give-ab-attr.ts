@@ -16,22 +16,20 @@ export class PostDefendAbilityGiveAbAttr extends PostDefendAbAttr {
     this.ability = ability;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
-    if (
+  public override apply(_pokemon: Pokemon, simulated: boolean, attacker: Pokemon, _move: Move): void {
+    if (!simulated) {
+      attacker.summonData.ability = this.ability;
+      attacker.waveData.abilitiesRevealed.push(this.ability);
+    }
+  }
+
+  public override canApply(...[pokemon, , attacker, move]: Parameters<this["apply"]>): boolean {
+    return (
       move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
       && attacker.getAbility().isSuppressable
       && !attacker.getAbility().hasAttrFlag(AbAttrFlag.POST_DEFEND_ABILITY_GIVE)
       && !attacker.isMax()
-    ) {
-      if (!simulated) {
-        attacker.summonData.ability = this.ability;
-        attacker.waveData.abilitiesRevealed.push(this.ability);
-      }
-
-      return true;
-    }
-
-    return false;
+    );
   }
 
   public override getTriggerMessage(pokemon: Pokemon, abilityName: string): string {

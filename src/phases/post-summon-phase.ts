@@ -17,8 +17,6 @@ export class PostSummonPhase extends PokemonPhase {
   public override readonly phaseName = "PostSummonPhase";
 
   public override start(): void {
-    super.start();
-
     const pokemon = this.getPokemon();
 
     if (pokemon.hasStatusEffect(StatusEffect.TOXIC)) {

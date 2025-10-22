@@ -18,8 +18,6 @@ export class ShowPartyExpBarPhase extends PlayerPartyMemberPokemonPhase {
   }
 
   public override start(): void {
-    super.start();
-
     const pokemon = this.getPokemon();
     const exp = new NumberHolder(this.expValue);
 

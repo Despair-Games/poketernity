@@ -2,7 +2,7 @@ import { AbAttr } from "#abilities/ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#field/pokemon";
-import type { BooleanHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 
 /**
  * This attribute will block any status damage that you put in the parameter.
@@ -18,18 +18,11 @@ export class BlockStatusDamageAbAttr extends AbAttr {
     this.statusEffects = effects;
   }
 
-  /**
-   * @param pokemon The {@linkcode Pokemon} with the ability
-   * @param passive N/A
-   * @param cancelled {@linkcode BooleanHolder} whether to cancel the status damage
-   * @param N/A
-   * @returns Returns `true` if status damage is blocked
-   */
-  public override apply(pokemon: Pokemon, _simulated: boolean, cancelled: BooleanHolder): boolean {
-    if (pokemon.hasStatusEffect(this.statusEffects)) {
-      cancelled.value = true;
-      return true;
-    }
-    return false;
+  public override apply(_pokemon: Pokemon, _simulated: boolean, cancelled: ValueHolder<boolean>): void {
+    cancelled.value = true;
+  }
+
+  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+    return pokemon.hasStatusEffect(this.statusEffects);
   }
 }

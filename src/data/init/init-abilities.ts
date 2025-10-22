@@ -6,7 +6,6 @@ import { AllyMoveCategoryPowerBoostAbAttr } from "#abilities/ally-move-category-
 import { AlwaysHitAbAttr } from "#abilities/always-hit-ab-attr";
 import { AnticipationAbAttr } from "#abilities/anticipation-ab-attr";
 import { ArenaTrapAbAttr } from "#abilities/arena-trap-ab-attr";
-import { AttackTypeImmunityAbAttr } from "#abilities/attack-type-immunity-ab-attr";
 import { BadDreamsAbAttr } from "#abilities/bad-dreams-ab-attr";
 import { BattlerTagImmunityAbAttr } from "#abilities/battler-tag-immunity-ab-attr";
 import { BlockCritAbAttr } from "#abilities/block-crit-ab-attr";
@@ -56,6 +55,7 @@ import { IgnoreTypeStatusEffectImmunityAbAttr } from "#abilities/ignore-type-sta
 import { IncreasePpAbAttr } from "#abilities/increase-pp-ab-attr";
 import { InfiltratorAbAttr } from "#abilities/infiltrator-ab-attr";
 import { IntimidateImmunityAbAttr } from "#abilities/intimidate-immunity-ab-attr";
+import { LevitateImmunityAbAttr } from "#abilities/levitate-immunity-ab-attr";
 import { LowHpMoveTypeAttackMultiplierAbAttr } from "#abilities/low-hp-move-type-attack-multiplier-ab-attr";
 import { MaxMultiHitAbAttr } from "#abilities/max-multi-hit-ab-attr";
 import { MockStatusEffectAbAttr } from "#abilities/mock-status-effect-ab-attr";
@@ -78,8 +78,6 @@ import { PostAttackApplyStatusEffectAbAttr } from "#abilities/post-attack-apply-
 import { PostAttackStealHeldItemAbAttr } from "#abilities/post-attack-steal-held-item-ab-attr";
 import { PostBattleInitFormChangeAbAttr } from "#abilities/post-battle-init-form-change-ab-attr";
 import { PostBattleLootAbAttr } from "#abilities/post-battle-loot-ab-attr";
-import { PostBiomeChangeTerrainChangeAbAttr } from "#abilities/post-biome-change-terrain-change-ab-attr";
-import { PostBiomeChangeWeatherChangeAbAttr } from "#abilities/post-biome-change-weather-change-ab-attr";
 import { PostDamageForceSwitchAbAttr } from "#abilities/post-damage-force-switch-ab-attr";
 import { PostDancingMoveAbAttr } from "#abilities/post-dancing-move-ab-attr";
 import { PostDefendAbilityGiveAbAttr } from "#abilities/post-defend-ability-give-ab-attr";
@@ -90,7 +88,7 @@ import { PostDefendContactApplyStatusEffectAbAttr } from "#abilities/post-defend
 import { PostDefendContactApplyTagChanceAbAttr } from "#abilities/post-defend-contact-apply-tag-chance-ab-attr";
 import { PostDefendContactDamageAbAttr } from "#abilities/post-defend-contact-damage-ab-attr";
 import { PostDefendCritStatStageChangeAbAttr } from "#abilities/post-defend-crit-stat-stage-change-ab-attr";
-import { PostDefendHpGatedStatStageChangeAbAttr } from "#abilities/post-defend-hp-gated-stat-tage-change-ab-attr";
+import { PostDefendHpGatedStatStageChangeAbAttr } from "#abilities/post-defend-hp-gated-stat-stage-change-ab-attr";
 import { PostDefendMoveDisableAbAttr } from "#abilities/post-defend-move-disable-ab-attr";
 import { PostDefendPerishSongAbAttr } from "#abilities/post-defend-perish-song-ab-attr";
 import { PostDefendStatStageChangeAbAttr } from "#abilities/post-defend-stat-stage-change-ab-attr";
@@ -186,7 +184,6 @@ import { ElementalType } from "#enums/elemental-type";
 import { Gender } from "#enums/gender";
 import { MoveCategory } from "#enums/move-category";
 import { MoveFlags } from "#enums/move-flags";
-import { MoveId } from "#enums/move-id";
 import { EFFECTIVE_STATS, type EffectiveStat, getStatKey, Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
@@ -196,7 +193,11 @@ import { FlinchAttr } from "#moves/flinch-attr";
 import type { Move } from "#moves/move";
 import { VariablePowerAttr } from "#moves/variable-power-attr";
 import type { AbAttrCondition } from "#types/ability-types";
-import { getWeatherCondition, normalTypeMoveConversionCondition } from "#utils/ability-utils";
+import {
+  anyTypeMoveConversionCondition,
+  getWeatherCondition,
+  normalTypeMoveConversionCondition,
+} from "#utils/ability-utils";
 import { NumberHolder, toDmgValue } from "#utils/common-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
 import i18next from "i18next";
@@ -213,8 +214,7 @@ export function initAbilities(): void {
         BattlerTagType.FLINCHED,
       ),
     new Ability(AbilityId.DRIZZLE, 3) //
-      .attr(PostSummonWeatherChangeAbAttr, WeatherType.RAIN)
-      .attr(PostBiomeChangeWeatherChangeAbAttr, WeatherType.RAIN),
+      .attr(PostSummonWeatherChangeAbAttr, WeatherType.RAIN),
     new Ability(AbilityId.SPEED_BOOST, 3) //
       .attr(SpeedBoostAbAttr),
     new Ability(AbilityId.BATTLE_ARMOR, 3) //
@@ -245,11 +245,11 @@ export function initAbilities(): void {
       .attr(TypeImmunityHealAbAttr, ElementalType.WATER)
       .ignorable(),
     new Ability(AbilityId.OBLIVIOUS, 3) //
-      .attr(BattlerTagImmunityAbAttr, [BattlerTagType.INFATUATED, BattlerTagType.TAUNT])
+      .attr(BattlerTagImmunityAbAttr, BattlerTagType.INFATUATED, BattlerTagType.TAUNT)
       .attr(IntimidateImmunityAbAttr)
       .ignorable(),
     new Ability(AbilityId.CLOUD_NINE, 3) //
-      .attr(SuppressWeatherEffectAbAttr, true)
+      .attr(SuppressWeatherEffectAbAttr)
       .attr(PostSummonUnnamedMessageAbAttr, i18next.t("abilityTriggers:weatherEffectDisappeared"))
       .attr(PostSummonWeatherSuppressedFormChangeAbAttr)
       .attr(PostFaintUnsuppressedWeatherFormChangeAbAttr)
@@ -297,7 +297,7 @@ export function initAbilities(): void {
       .ignorable(),
     new Ability(AbilityId.LEVITATE, 3) //
       .attr(
-        AttackTypeImmunityAbAttr,
+        LevitateImmunityAbAttr,
         ElementalType.GROUND,
         (pokemon: Pokemon) =>
           !pokemon.hasTag(BattlerTagType.IGNORE_FLYING) && !globalScene.arena.hasTag(ArenaTagType.GRAVITY),
@@ -320,9 +320,9 @@ export function initAbilities(): void {
     new Ability(AbilityId.SERENE_GRACE, 3) //
       .attr(MoveEffectChanceMultiplierAbAttr, 2),
     new Ability(AbilityId.SWIFT_SWIM, 3) //
-      .attr(WeatherBasedSpeedDoublerAbAttr, [WeatherType.RAIN, WeatherType.HEAVY_RAIN]),
+      .attr(WeatherBasedSpeedDoublerAbAttr, WeatherType.RAIN, WeatherType.HEAVY_RAIN),
     new Ability(AbilityId.CHLOROPHYLL, 3) //
-      .attr(WeatherBasedSpeedDoublerAbAttr, [WeatherType.SUNNY, WeatherType.HARSH_SUN]),
+      .attr(WeatherBasedSpeedDoublerAbAttr, WeatherType.SUNNY, WeatherType.HARSH_SUN),
     new Ability(AbilityId.ILLUMINATE, 3) //
       .attr(ProtectStatAbAttr, Stat.ACC)
       .attr(DoubleBattleChanceAbAttr)
@@ -362,8 +362,7 @@ export function initAbilities(): void {
     new Ability(AbilityId.RAIN_DISH, 3) //
       .attr(PostWeatherLapseHealAbAttr, 1 / 16, WeatherType.RAIN, WeatherType.HEAVY_RAIN),
     new Ability(AbilityId.SAND_STREAM, 3) //
-      .attr(PostSummonWeatherChangeAbAttr, WeatherType.SANDSTORM)
-      .attr(PostBiomeChangeWeatherChangeAbAttr, WeatherType.SANDSTORM),
+      .attr(PostSummonWeatherChangeAbAttr, WeatherType.SANDSTORM),
     new Ability(AbilityId.PRESSURE, 3) //
       .attr(IncreasePpAbAttr)
       .attr(PostSummonMessageAbAttr, (pokemon: Pokemon) =>
@@ -416,8 +415,8 @@ export function initAbilities(): void {
     new Ability(AbilityId.FORECAST, 3) //
       .uncopiable()
       .unreplaceable()
-      .attr(PostSummonFormChangeByWeatherAbAttr, AbilityId.FORECAST)
-      .attr(PostWeatherChangeFormChangeAbAttr, AbilityId.FORECAST, [
+      .attr(PostSummonFormChangeByWeatherAbAttr)
+      .attr(PostWeatherChangeFormChangeAbAttr, [
         WeatherType.NONE,
         WeatherType.SANDSTORM,
         WeatherType.STRONG_WINDS,
@@ -448,8 +447,7 @@ export function initAbilities(): void {
     new Ability(AbilityId.ROCK_HEAD, 3) //
       .attr(BlockRecoilDamageAbAttr),
     new Ability(AbilityId.DROUGHT, 3) //
-      .attr(PostSummonWeatherChangeAbAttr, WeatherType.SUNNY)
-      .attr(PostBiomeChangeWeatherChangeAbAttr, WeatherType.SUNNY),
+      .attr(PostSummonWeatherChangeAbAttr, WeatherType.SUNNY),
     new Ability(AbilityId.ARENA_TRAP, 3) //
       .attr(ArenaTrapAbAttr, (_user, target) => target.isGrounded())
       .attr(DoubleBattleChanceAbAttr),
@@ -466,7 +464,7 @@ export function initAbilities(): void {
       .attr(BlockCritAbAttr)
       .ignorable(),
     new Ability(AbilityId.AIR_LOCK, 3) //
-      .attr(SuppressWeatherEffectAbAttr, true)
+      .attr(SuppressWeatherEffectAbAttr)
       .attr(PostSummonUnnamedMessageAbAttr, i18next.t("abilityTriggers:weatherEffectDisappeared"))
       .attr(PostSummonWeatherSuppressedFormChangeAbAttr)
       .attr(PostFaintUnsuppressedWeatherFormChangeAbAttr)
@@ -483,14 +481,12 @@ export function initAbilities(): void {
         (user, target, _move) =>
           user?.gender !== Gender.GENDERLESS && target?.gender !== Gender.GENDERLESS && user?.gender === target?.gender,
         1.25,
-        true,
       )
       .attr(
         MovePowerBoostAbAttr,
         (user, target, _move) =>
           user?.gender !== Gender.GENDERLESS && target?.gender !== Gender.GENDERLESS && user?.gender !== target?.gender,
         0.75,
-        true,
       ),
     new Ability(AbilityId.STEADFAST, 4) //
       .attr(FlinchStatStageChangeAbAttr, [Stat.SPD], 1),
@@ -543,20 +539,7 @@ export function initAbilities(): void {
       .attr(BypassParaSpeedReductionAbAttr)
       .conditionalAttr((pokemon) => pokemon.hasNonVolatileStatusEffect(), EffectiveStatMultiplier, Stat.SPD, 1.5),
     new Ability(AbilityId.NORMALIZE, 4) //
-      .attr(
-        MoveTypeChangeAbAttr,
-        ElementalType.NORMAL,
-        1.2,
-        (_user, _target, move) =>
-          !!move
-          && ![
-            MoveId.HIDDEN_POWER,
-            MoveId.WEATHER_BALL,
-            MoveId.NATURAL_GIFT,
-            MoveId.JUDGMENT,
-            MoveId.TECHNO_BLAST,
-          ].includes(move.id),
-      ),
+      .attr(MoveTypeChangeAbAttr, ElementalType.NORMAL, 1.2, anyTypeMoveConversionCondition),
     new Ability(AbilityId.SNIPER, 4) //
       .attr(MultCritAbAttr, 1.5),
     new Ability(AbilityId.MAGIC_GUARD, 4) //
@@ -619,7 +602,7 @@ export function initAbilities(): void {
       )
       .ignorable(),
     new Ability(AbilityId.SLOW_START, 4) //
-      .attr(PostSummonAddBattlerTagAbAttr, BattlerTagType.SLOW_START, 5),
+      .attr(PostSummonAddBattlerTagAbAttr, BattlerTagType.SLOW_START, 5, false),
     new Ability(AbilityId.SCRAPPY, 4) //
       .attr(IgnoreTypeImmunityAbAttr, ElementalType.GHOST, [ElementalType.NORMAL, ElementalType.FIGHTING])
       .attr(IntimidateImmunityAbAttr),
@@ -638,8 +621,7 @@ export function initAbilities(): void {
       )
       .ignorable(),
     new Ability(AbilityId.SNOW_WARNING, 4) //
-      .attr(PostSummonWeatherChangeAbAttr, WeatherType.SNOW)
-      .attr(PostBiomeChangeWeatherChangeAbAttr, WeatherType.SNOW),
+      .attr(PostSummonWeatherChangeAbAttr, WeatherType.SNOW),
     new Ability(AbilityId.HONEY_GATHER, 4) //
       .attr(MoneyAbAttr),
     new Ability(AbilityId.FRISK, 4) //
@@ -665,8 +647,8 @@ export function initAbilities(): void {
       )
       .uncopiable()
       .unreplaceable()
-      .attr(PostSummonFormChangeByWeatherAbAttr, AbilityId.FLOWER_GIFT)
-      .attr(PostWeatherChangeFormChangeAbAttr, AbilityId.FLOWER_GIFT, [
+      .attr(PostSummonFormChangeByWeatherAbAttr)
+      .attr(PostWeatherChangeFormChangeAbAttr, [
         WeatherType.NONE,
         WeatherType.SANDSTORM,
         WeatherType.STRONG_WINDS,
@@ -779,7 +761,7 @@ export function initAbilities(): void {
       .attr(ProtectStatAbAttr, Stat.DEF)
       .ignorable(),
     new Ability(AbilityId.SAND_RUSH, 5) //
-      .attr(WeatherBasedSpeedDoublerAbAttr, [WeatherType.SANDSTORM])
+      .attr(WeatherBasedSpeedDoublerAbAttr, WeatherType.SANDSTORM)
       .attr(BlockWeatherDamageAbAttr, WeatherType.SANDSTORM),
     new Ability(AbilityId.WONDER_SKIN, 5) //
       .attr(WonderSkinAbAttr)
@@ -857,13 +839,14 @@ export function initAbilities(): void {
       )
       .attr(MoveAbilityBypassAbAttr),
     new Ability(AbilityId.AROMA_VEIL, 6) //
-      .attr(UserFieldBattlerTagImmunityAbAttr, [
+      .attr(
+        UserFieldBattlerTagImmunityAbAttr,
         BattlerTagType.INFATUATED,
         BattlerTagType.TAUNT,
         BattlerTagType.DISABLED,
         BattlerTagType.TORMENT,
         BattlerTagType.HEAL_BLOCK,
-      ])
+      )
       .ignorable(),
     new Ability(AbilityId.FLOWER_VEIL, 6) //
       .ignorable()
@@ -962,19 +945,16 @@ export function initAbilities(): void {
       ),
     new Ability(AbilityId.PRIMORDIAL_SEA, 6) //
       .attr(PostSummonWeatherChangeAbAttr, WeatherType.HEAVY_RAIN)
-      .attr(PostBiomeChangeWeatherChangeAbAttr, WeatherType.HEAVY_RAIN)
       .attr(PreSwitchOutClearWeatherAbAttr)
       .attr(PostFaintClearWeatherAbAttr)
       .bypassFaint(),
     new Ability(AbilityId.DESOLATE_LAND, 6) //
       .attr(PostSummonWeatherChangeAbAttr, WeatherType.HARSH_SUN)
-      .attr(PostBiomeChangeWeatherChangeAbAttr, WeatherType.HARSH_SUN)
       .attr(PreSwitchOutClearWeatherAbAttr)
       .attr(PostFaintClearWeatherAbAttr)
       .bypassFaint(),
     new Ability(AbilityId.DELTA_STREAM, 6) //
       .attr(PostSummonWeatherChangeAbAttr, WeatherType.STRONG_WINDS)
-      .attr(PostBiomeChangeWeatherChangeAbAttr, WeatherType.STRONG_WINDS)
       .attr(PreSwitchOutClearWeatherAbAttr)
       .attr(PostFaintClearWeatherAbAttr)
       .bypassFaint(),
@@ -1035,7 +1015,7 @@ export function initAbilities(): void {
       )
       .condition(getSheerForceHitDisableAbCondition()),
     new Ability(AbilityId.SLUSH_RUSH, 7) //
-      .attr(WeatherBasedSpeedDoublerAbAttr, [WeatherType.HAIL, WeatherType.SNOW]),
+      .attr(WeatherBasedSpeedDoublerAbAttr, WeatherType.HAIL, WeatherType.SNOW),
     new Ability(AbilityId.LONG_REACH, 7) //
       .attr(IgnoreContactAbAttr),
     new Ability(AbilityId.LIQUID_VOICE, 7) //
@@ -1203,17 +1183,13 @@ export function initAbilities(): void {
       .unsuppressable()
       .unreplaceable(),
     new Ability(AbilityId.ELECTRIC_SURGE, 7) //
-      .attr(PostSummonTerrainChangeAbAttr, TerrainType.ELECTRIC)
-      .attr(PostBiomeChangeTerrainChangeAbAttr, TerrainType.ELECTRIC),
+      .attr(PostSummonTerrainChangeAbAttr, TerrainType.ELECTRIC),
     new Ability(AbilityId.PSYCHIC_SURGE, 7) //
-      .attr(PostSummonTerrainChangeAbAttr, TerrainType.PSYCHIC)
-      .attr(PostBiomeChangeTerrainChangeAbAttr, TerrainType.PSYCHIC),
+      .attr(PostSummonTerrainChangeAbAttr, TerrainType.PSYCHIC),
     new Ability(AbilityId.MISTY_SURGE, 7) //
-      .attr(PostSummonTerrainChangeAbAttr, TerrainType.MISTY)
-      .attr(PostBiomeChangeTerrainChangeAbAttr, TerrainType.MISTY),
+      .attr(PostSummonTerrainChangeAbAttr, TerrainType.MISTY),
     new Ability(AbilityId.GRASSY_SURGE, 7) //
-      .attr(PostSummonTerrainChangeAbAttr, TerrainType.GRASSY)
-      .attr(PostBiomeChangeTerrainChangeAbAttr, TerrainType.GRASSY),
+      .attr(PostSummonTerrainChangeAbAttr, TerrainType.GRASSY),
     new Ability(AbilityId.FULL_METAL_BODY, 7) //
       .attr(ProtectStatAbAttr),
     new Ability(AbilityId.SHADOW_SHIELD, 7) //
@@ -1328,6 +1304,7 @@ export function initAbilities(): void {
         PostSummonAddBattlerTagAbAttr,
         BattlerTagType.ICE_FACE,
         0,
+        false,
       )
       // When weather changes to HAIL or SNOW while pokemon is fielded, add BattlerTagType.ICE_FACE
       .attr(PostWeatherChangeAddBattlerTagAbAttr, BattlerTagType.ICE_FACE, 0, WeatherType.HAIL, WeatherType.SNOW)
@@ -1518,7 +1495,6 @@ export function initAbilities(): void {
         PostSummonAddBattlerTagAbAttr,
         BattlerTagType.PROTOSYNTHESIS,
         0,
-        true,
       )
       .attr(
         PostWeatherChangeAddBattlerTagAbAttr,
@@ -1535,7 +1511,6 @@ export function initAbilities(): void {
         PostSummonAddBattlerTagAbAttr,
         BattlerTagType.QUARK_DRIVE,
         0,
-        true,
       )
       .attr(PostTerrainChangeAddBattlerTagAbAttr, BattlerTagType.QUARK_DRIVE, 0, TerrainType.ELECTRIC)
       .uncopiable()
@@ -1582,7 +1557,6 @@ export function initAbilities(): void {
       ),
     new Ability(AbilityId.ORICHALCUM_PULSE, 9) //
       .attr(PostSummonWeatherChangeAbAttr, WeatherType.SUNNY)
-      .attr(PostBiomeChangeWeatherChangeAbAttr, WeatherType.SUNNY)
       .conditionalAttr(
         getWeatherCondition(WeatherType.SUNNY, WeatherType.HARSH_SUN),
         EffectiveStatMultiplier,
@@ -1591,7 +1565,6 @@ export function initAbilities(): void {
       ),
     new Ability(AbilityId.HADRON_ENGINE, 9) //
       .attr(PostSummonTerrainChangeAbAttr, TerrainType.ELECTRIC)
-      .attr(PostBiomeChangeTerrainChangeAbAttr, TerrainType.ELECTRIC)
       .conditionalAttr(getTerrainCondition(TerrainType.ELECTRIC), EffectiveStatMultiplier, Stat.SPATK, 4 / 3),
     new Ability(AbilityId.OPPORTUNIST, 9) //
       .attr(StatStageChangeCopyAbAttr),

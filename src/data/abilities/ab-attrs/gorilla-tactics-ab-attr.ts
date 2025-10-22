@@ -8,19 +8,19 @@ import type { Move } from "#moves/move";
  */
 export class GorillaTacticsAbAttr extends PostAttackAbAttr {
   constructor() {
-    super(false, false);
+    super(false);
   }
 
-  public override applyPostAttack(pokemon: Pokemon, simulated: boolean, _defender: Pokemon, _move: Move): boolean {
+  public override apply(pokemon: Pokemon, simulated: boolean, _defender: Pokemon, _move: Move): void {
     if (simulated) {
-      return simulated;
-    }
-
-    if (pokemon.hasTag(BattlerTagType.GORILLA_TACTICS)) {
-      return false;
+      return;
     }
 
     pokemon.addTag(BattlerTagType.GORILLA_TACTICS);
-    return true;
+  }
+
+  public override canApply(...params: Parameters<this["apply"]>): boolean {
+    const [pokemon] = params;
+    return super.canApply(...params) && !pokemon.hasTag(BattlerTagType.GORILLA_TACTICS);
   }
 }

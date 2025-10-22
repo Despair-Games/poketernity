@@ -1,7 +1,7 @@
 import { AbAttr } from "#abilities/ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
-import type { BooleanHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -15,8 +15,8 @@ export class FieldPreventExplosionLikeAbAttr extends AbAttr {
   private moveUser: string;
   private moveName: string;
 
-  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
-    super(showAbility, showAbilityInstant);
+  constructor() {
+    super(true);
     this._flags.add(AbAttrFlag.FIELD_PREVENT_EXPLOSION_LIKE);
   }
 
@@ -29,14 +29,13 @@ export class FieldPreventExplosionLikeAbAttr extends AbAttr {
   public override apply(
     _pokemon: Pokemon,
     _simulated: boolean,
-    cancelled: BooleanHolder,
+    cancelled: ValueHolder<boolean>,
     moveUser: string,
     moveName: string,
-  ): boolean {
+  ): void {
     this.moveUser = moveUser;
     this.moveName = moveName;
     cancelled.value = true;
-    return true;
   }
 
   /**

@@ -26,8 +26,6 @@ export class PokemonAnimPhase extends BattlePhase {
   }
 
   public override start(): void {
-    super.start();
-
     switch (this.key) {
       case PokemonAnimType.SUBSTITUTE_ADD:
         this.doSubstituteAddAnim();

@@ -1,6 +1,7 @@
 import { PostSummonMessageAbAttr } from "#abilities/post-summon-message-ab-attr";
 import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
+import type { Move } from "#moves/move";
 import { OneHitKOAttr } from "#moves/one-hit-ko-attr";
 
 /**
@@ -9,23 +10,33 @@ import { OneHitKOAttr } from "#moves/one-hit-ko-attr";
  * Shuddering has no actual effect, except that the presence of the Ability message is meant to provide information about possible moves the opponent might have.
  */
 export class AnticipationAbAttr extends PostSummonMessageAbAttr {
-  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
-    for (const opponent of pokemon.getOpponents()) {
-      for (const pkmMove of opponent.getMoveset()) {
-        const move = pkmMove.getMove();
-        if (move.isAttackMove()) {
-          // Hidden Power is the only exception to Anticipation's interactions with variable type moves. Anticipation considers the type of most other variable-type moves to be their default type.
-          const moveType = move.id !== MoveId.HIDDEN_POWER ? move.type : opponent.getMoveType(move, simulated);
-          // Anticipation does not consider the effects of Strong Winds and Gravity on moves or opponent move type-changing abilities
-          if (pokemon.getAttackTypeEffectiveness(moveType, undefined, true, simulated) >= 2) {
-            return super.apply(pokemon, simulated);
-          }
-          if (move.hasAttr(OneHitKOAttr)) {
-            return super.apply(pokemon, simulated);
-          }
-        }
+  /**
+   * @returns `true` if a super-effective move is detected against the source Pokemon
+   * from any of its opponents.
+   *
+   * Effectiveness is determined based on the move's final type (*unless the move is Hidden Power*)
+   * and does not account for field conditions such as Strong Winds and Gravity.
+   */
+  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+    return this.getOpposingMoves(pokemon).some(([opp, move]) => {
+      if (!move.isAttackMove()) {
+        return false;
       }
-    }
-    return false;
+
+      if (move.hasAttr(OneHitKOAttr)) {
+        return true;
+      }
+
+      // Variable-type moves (other than Hidden Power) are evaluated by their base type
+      const moveType = move.id === MoveId.HIDDEN_POWER ? opp.getMoveType(move) : move.type;
+      // Effectiveness ignores modifiers from field effects (e.g. Strong Winds)
+      return pokemon.getAttackTypeEffectiveness(moveType, undefined, true, true) >= 2;
+    });
+  }
+
+  private getOpposingMoves(pokemon: Pokemon): [Pokemon, Move][] {
+    return pokemon
+      .getOpponents()
+      .flatMap((opp) => opp.getMoveset().map((pkmMove) => [opp, pkmMove.getMove()] as [Pokemon, Move]));
   }
 }
