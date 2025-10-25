@@ -48,15 +48,15 @@ export class QuietFormChangePhase extends BattlePhase {
     }
 
     /** A white tint fill of the pre-form-change Pokemon sprite */
-    const pokemonTintSprite = this.createPokemonSprite();
-    pokemonTintSprite.setAlpha(0);
-    pokemonTintSprite.setTintFill(0xffffff);
+    const pokemonTintSprite = this.createPokemonSprite() //
+      .setAlpha(0)
+      .setTintFill(0xffffff);
 
     /** A white tint fill of the post-form-change Pokemon sprite */
-    const pokemonFormTintSprite = this.createPokemonSprite();
-    pokemonFormTintSprite.setVisible(false);
-    pokemonFormTintSprite.setTintFill(0xffffff);
-    pokemonFormTintSprite.setScale(0.01);
+    const pokemonFormTintSprite = this.createPokemonSprite() //
+      .setVisible(false)
+      .setTintFill(0xffffff)
+      .setScale(0.01);
 
     // Sync tint sprites' animations with the original Pokemon's animation
     this.pokemon.getSprite().on("animationupdate", (_anim, frame) => {
@@ -83,8 +83,10 @@ export class QuietFormChangePhase extends BattlePhase {
 
     const spriteKey = this.pokemon.getBattleSpriteKey();
     // TODO: does `.play(...).stop()` actually do anything?
-    pokemonFormTintSprite.play(spriteKey).stop();
-    pokemonFormTintSprite.setVisible(true);
+    pokemonFormTintSprite //
+      .play(spriteKey)
+      .stop()
+      .setVisible(true);
 
     await Promise.allSettled([
       // Shrinks the original form tint sprite
