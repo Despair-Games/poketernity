@@ -278,7 +278,7 @@ export class OverridesHelper extends GameManagerHelper {
    */
   public weather(type: WeatherType): this {
     vi.spyOn(activeOverrides, "WEATHER_OVERRIDE", "get").mockReturnValue(type);
-    this.log(`Weather set to ${WeatherType[type]} (=${type})!`);
+    this.log(`Weather set to ${enumValueToKey(WeatherType, type)} (=${type})!`);
     return this;
   }
 

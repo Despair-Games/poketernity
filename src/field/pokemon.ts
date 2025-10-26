@@ -48,6 +48,7 @@ import {
   NON_VOLATILE_STATUS_EFFECTS,
 } from "#constants/game-constants";
 import { EVOLVE_MOVE, RELEARN_MOVE } from "#constants/move-constants";
+import { SUNNY_WEATHER_TYPES } from "#constants/weather-constants";
 import { allAbilities, allMoves } from "#data/data-lists";
 import { speciesEggMoves } from "#data/egg-moves";
 import { getLevelTotalExp } from "#data/exp";
@@ -3958,7 +3959,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       case StatusEffect.FREEZE:
         if (
           this.isOfType(ElementalType.ICE)
-          || (!ignoreField && globalScene.arena.hasWeather([WeatherType.SUNNY, WeatherType.HARSH_SUN]))
+          || (!ignoreField && globalScene.arena.hasWeather(...SUNNY_WEATHER_TYPES))
         ) {
           return false;
         }

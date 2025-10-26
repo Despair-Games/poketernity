@@ -1,6 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { PRIMAL_WEATHER_TYPES } from "#constants/weather-constants";
+import { DAMAGING_WEATHER_TYPES, PRIMAL_WEATHER_TYPES } from "#constants/weather-constants";
+import { CommonAnim } from "#enums/common-anim";
 import { ElementalType } from "#enums/elemental-type";
 import { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
@@ -49,7 +50,7 @@ export class Weather {
    * @returns true for sandstorm or hail, false otherwise
    */
   isDamaging(): boolean {
-    return [WeatherType.SANDSTORM, WeatherType.HAIL].includes(this.weatherType);
+    return DAMAGING_WEATHER_TYPES.includes(this.weatherType);
   }
 
   /**
@@ -138,14 +139,14 @@ export class Weather {
   }
 }
 
-// TODO: Should localization return null or "" as a default? Inconsistencies in the codebase
+// #region Message functions
 
 /**
  * Function to get the starting message for weather
  * @param weatherType - the {@linkcode WeatherType} starting
  * @returns the associated string
  */
-export function getWeatherStartMessage(weatherType: WeatherType): string | null {
+export function getWeatherStartMessage(weatherType: WeatherType): string {
   switch (weatherType) {
     case WeatherType.SUNNY:
       return i18next.t("weather:sunnyStartMessage");
@@ -165,9 +166,9 @@ export function getWeatherStartMessage(weatherType: WeatherType): string | null 
       return i18next.t("weather:harshSunStartMessage");
     case WeatherType.STRONG_WINDS:
       return i18next.t("weather:strongWindsStartMessage");
+    case WeatherType.NONE:
+      return "";
   }
-
-  return null;
 }
 
 /**
@@ -206,7 +207,7 @@ export function getWeatherLapseMessage(weatherType: WeatherType): string {
  * @param pokemon - The {@linkcode Pokemon} being damaged
  * @returns the corresponding string
  */
-export function getWeatherDamageMessage(weatherType: WeatherType, pokemon: Pokemon): string | null {
+export function getWeatherDamageMessage(weatherType: WeatherType, pokemon: Pokemon): string {
   switch (weatherType) {
     case WeatherType.SANDSTORM:
       return i18next.t("weather:sandstormDamageMessage", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) });
@@ -214,7 +215,7 @@ export function getWeatherDamageMessage(weatherType: WeatherType, pokemon: Pokem
       return i18next.t("weather:hailDamageMessage", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) });
   }
 
-  return null;
+  return "";
 }
 
 /**
@@ -222,7 +223,7 @@ export function getWeatherDamageMessage(weatherType: WeatherType, pokemon: Pokem
  * @param weatherType - the {@linkcode WeatherType} ending
  * @returns the associated string
  */
-export function getWeatherClearMessage(weatherType: WeatherType): string | null {
+export function getWeatherClearMessage(weatherType: WeatherType): string {
   switch (weatherType) {
     case WeatherType.SUNNY:
       return i18next.t("weather:sunnyClearMessage");
@@ -242,7 +243,21 @@ export function getWeatherClearMessage(weatherType: WeatherType): string | null 
       return i18next.t("weather:harshSunClearMessage");
     case WeatherType.STRONG_WINDS:
       return i18next.t("weather:strongWindsClearMessage");
+    case WeatherType.NONE:
+      return "";
   }
-
-  return null;
 }
+
+// #endregion
+// #region Helper functions
+
+/**
+ * Gets the animation associated with the given weather type
+ * @param weatherType - The {@linkcode WeatherType} to get the animiation for
+ * @returns The {@linkcode CommonAnim} for the given weather
+ */
+export function getWeatherAnim(weatherType: WeatherType): CommonAnim {
+  return (CommonAnim.SUNNY + (weatherType - 1)) as CommonAnim;
+}
+
+// #endregion

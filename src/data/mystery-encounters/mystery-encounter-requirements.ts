@@ -314,7 +314,8 @@ export class WeatherRequirement extends EncounterSceneRequirement {
     const currentWeather = globalScene.arena.weatherType;
     let token = "";
     if (currentWeather !== WeatherType.NONE) {
-      token = WeatherType[currentWeather].replace("_", " ").toLocaleLowerCase();
+      // TODO: don't reinvent the wheel
+      token = enumValueToKey(WeatherType, currentWeather).replace("_", " ").toLocaleLowerCase();
     }
     return ["weather", token];
   }

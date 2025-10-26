@@ -1,9 +1,9 @@
 import { globalScene } from "#app/global-scene";
-import { WeatherType } from "#enums/weather-type";
+import { RAINY_WEATHER_TYPES } from "#constants/weather-constants";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { VariableAccuracyAttr } from "#moves/variable-accuracy-attr";
-import type { NumberHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 
 /**
  * Attribute used for Bleakwind Storm, Wildbolt Storm, and Sandsear Storm
@@ -12,11 +12,8 @@ import type { NumberHolder } from "#utils/common-utils";
  * Springtide Storm does NOT have this property
  */
 export class StormAccuracyAttr extends VariableAccuracyAttr {
-  override apply(_user: Pokemon, _target: Pokemon, _move: Move, accuracy: NumberHolder): boolean {
-    if (
-      !globalScene.arena.weather?.isEffectSuppressed()
-      && globalScene.arena.hasWeather([WeatherType.RAIN, WeatherType.HEAVY_RAIN])
-    ) {
+  override apply(_user: Pokemon, _target: Pokemon, _move: Move, accuracy: ValueHolder<number>): boolean {
+    if (!globalScene.arena.weather?.isEffectSuppressed() && globalScene.arena.hasWeather(...RAINY_WEATHER_TYPES)) {
       accuracy.value = -1;
       return true;
     }

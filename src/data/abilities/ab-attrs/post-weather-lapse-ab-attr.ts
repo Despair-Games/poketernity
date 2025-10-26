@@ -2,13 +2,14 @@ import { AbAttr } from "#abilities/ab-attr";
 import type { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
 import type { AbAttrCondition } from "#types/ability-types";
+import type { NonEmptyArray } from "#types/utility-types";
 import { getWeatherCondition } from "#utils/ability-utils";
 
 export abstract class PostWeatherLapseAbAttr extends AbAttr {
   protected override readonly abAttrKey = "PostWeatherLapseAbAttr";
-  protected readonly weatherTypes: WeatherType[];
+  protected readonly weatherTypes: Readonly<NonEmptyArray<WeatherType>>;
 
-  constructor(...weatherTypes: WeatherType[]) {
+  constructor(...weatherTypes: Readonly<NonEmptyArray<WeatherType>>) {
     super(true);
 
     this.weatherTypes = weatherTypes;

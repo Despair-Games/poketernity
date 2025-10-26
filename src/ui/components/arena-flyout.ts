@@ -42,14 +42,15 @@ interface ArenaEffectInfo {
   tagType?: ArenaTagType;
 }
 
-function getFieldEffectText(arenaTagType: string): string {
-  if (!arenaTagType) {
+function getFieldEffectText(flyoutDisplayText: string): string {
+  // "NONE" is the name of the key in the `WeatherType` and `TerrainType` enums to indicate no active weather/terrain
+  if (!flyoutDisplayText || flyoutDisplayText === "NONE") {
     return "";
   }
-  const effectName = toCamelCaseString(arenaTagType);
+  const effectName = toCamelCaseString(flyoutDisplayText);
   const i18nKey = `arenaFlyout:${effectName}` as ParseKeys;
   const resultName = i18next.t(i18nKey);
-  return !resultName || resultName === i18nKey ? toTitleCase(arenaTagType) : resultName;
+  return !resultName || resultName === i18nKey ? toTitleCase(flyoutDisplayText) : resultName;
 }
 
 export class ArenaFlyout extends Phaser.GameObjects.Container {
@@ -330,8 +331,8 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
 
       case WeatherChangedEvent: {
         const weatherEvent = arenaEffectChangedEvent as WeatherChangedEvent;
-        const oldWeatherName = getFieldEffectText(WeatherType[weatherEvent.oldWeatherType]);
-        const newWeatherName = getFieldEffectText(WeatherType[weatherEvent.newWeatherType]);
+        const oldWeatherName = getFieldEffectText(enumValueToKey(WeatherType, weatherEvent.oldWeatherType));
+        const newWeatherName = getFieldEffectText(enumValueToKey(WeatherType, weatherEvent.newWeatherType));
         const newWeatherInfo = {
           name: newWeatherName,
           effectType: ArenaEffectType.WEATHER,

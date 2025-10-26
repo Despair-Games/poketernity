@@ -4,6 +4,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { HitResult } from "#enums/hit-result";
 import type { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
+import type { NonEmptyArray } from "#types/utility-types";
 import { toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
@@ -22,7 +23,7 @@ import i18next from "i18next";
 export class PostWeatherLapseDamageAbAttr extends PostWeatherLapseAbAttr {
   private readonly damageFactor: number;
 
-  constructor(damageFactor: number, ...weatherTypes: WeatherType[]) {
+  constructor(damageFactor: number, ...weatherTypes: Readonly<NonEmptyArray<WeatherType>>) {
     super(...weatherTypes);
 
     this.damageFactor = damageFactor;

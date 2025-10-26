@@ -1,8 +1,8 @@
 import { globalScene } from "#app/global-scene";
 import { FormBlockDamageTag } from "#battler-tags/form-block-damage-tag";
+import { SNOWY_WEATHER_TYPES } from "#constants/weather-constants";
 import { AbilityId } from "#enums/ability-id";
 import type { BattlerTagType } from "#enums/battler-tag-type";
-import { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
 
 /**
@@ -19,6 +19,6 @@ export class IceFaceBlockDamageTag extends FormBlockDamageTag {
    * @returns True if the tag can be added, false otherwise.
    */
   override canAdd(pokemon: Pokemon): boolean {
-    return super.canAdd(pokemon) || globalScene.arena.hasWeather([WeatherType.HAIL, WeatherType.SNOW]);
+    return super.canAdd(pokemon) || globalScene.arena.hasWeather(...SNOWY_WEATHER_TYPES);
   }
 }
