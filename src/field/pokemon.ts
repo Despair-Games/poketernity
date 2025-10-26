@@ -1720,9 +1720,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         .forEach((p) => {
           // Applying this attribute normally (i.e. with a `canApply` check)
           // causes an infinite loop.
-          const suppressingAttr = p.getAbilityAttrs("SuppressFieldAbilitiesAbAttr", false)?.[0];
-          if (suppressingAttr?.canApply(p, true, suppressed, ability)) {
-            suppressingAttr.apply(p, true, suppressed, ability);
+          const suppressingAbility = p
+            .getAbilities()
+            .find(({ ability: ab }) => ab.hasAttrOfKey("SuppressFieldAbilitiesAbAttr"));
+          if (suppressingAbility != null && p.canApplyAbility(suppressingAbility.passive)) {
+            suppressingAbility.ability.getAttrs("SuppressFieldAbilitiesAbAttr")[0]?.apply(p, true, suppressed, ability);
           }
         });
       if (suppressed.value) {
