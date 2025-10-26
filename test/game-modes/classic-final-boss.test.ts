@@ -1,4 +1,5 @@
 import { AbilityId } from "#enums/ability-id";
+import { BattlerIndex } from "#enums/battler-index";
 import { BiomeId } from "#enums/biome-id";
 import { GameModes } from "#enums/game-modes";
 import { MoveId } from "#enums/move-id";
@@ -112,7 +113,9 @@ describe("Classic Final Boss", () => {
     expect(eternatus.bossSegments).toBe(4);
     expect(eternatus.bossSegmentIndex).toBe(3);
 
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     game.move.select(MoveId.WILL_O_WISP);
+    await game.move.forceHit();
     await game.toNextTurn();
     expect(eternatus.getStatusEffect(true)).toBe(StatusEffect.BURN);
 
