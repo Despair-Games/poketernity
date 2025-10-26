@@ -8,7 +8,7 @@ import type { Pokemon } from "#field/pokemon";
 import { VariableMoveTypeAttr } from "#moves/variable-move-type-attr";
 import type { AbAttrCondition } from "#types/ability-types";
 import type { PokemonAttackCondition } from "#types/move-types";
-import type { AtLeastOneArray } from "#types/utility-types";
+import type { NonEmptyArray } from "#types/utility-types";
 
 /**
  * @returns An array of Pokemon with weather-based forms
@@ -23,7 +23,7 @@ export function getPokemonWithWeatherBasedForms(): Pokemon[] {
     );
 }
 
-export function getWeatherCondition(...weatherTypes: Readonly<AtLeastOneArray<WeatherType>>): AbAttrCondition {
+export function getWeatherCondition(...weatherTypes: Readonly<NonEmptyArray<WeatherType>>): AbAttrCondition {
   return () => {
     if (!globalScene?.arena) {
       return false;

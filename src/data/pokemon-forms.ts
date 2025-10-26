@@ -24,7 +24,7 @@ import { SpeciesFormChangeManualTrigger } from "#form-change-triggers/species-fo
 import { SpeciesFormChangeMoveLearnedTrigger } from "#form-change-triggers/species-form-change-move-learned-trigger";
 import { SpeciesFormChangePreMoveTrigger } from "#form-change-triggers/species-form-change-pre-move-trigger";
 import { SpeciesFormChangeTrigger } from "#form-change-triggers/species-form-change-trigger";
-import type { AbstractConstructor, AtLeastOneArray, nil } from "#types/utility-types";
+import type { AbstractConstructor, NonEmptyArray, nil } from "#types/utility-types";
 import i18next from "i18next";
 
 type SpeciesFormChangeConditionPredicate = (p: Pokemon) => boolean;
@@ -206,9 +206,9 @@ export class SpeciesFormChangeWeatherTrigger extends SpeciesFormChangeTrigger {
   /** The ability that  triggers the form change */
   public ability: AbilityId;
   /** The list of weathers that trigger the form change */
-  public readonly weathers: Readonly<AtLeastOneArray<WeatherType>>;
+  public readonly weathers: Readonly<NonEmptyArray<WeatherType>>;
 
-  constructor(ability: AbilityId, ...weathers: Readonly<AtLeastOneArray<WeatherType>>) {
+  constructor(ability: AbilityId, ...weathers: Readonly<NonEmptyArray<WeatherType>>) {
     super();
     this.ability = ability;
     this.weathers = weathers;
@@ -242,9 +242,9 @@ export class SpeciesFormChangeRevertWeatherFormTrigger extends SpeciesFormChange
   /** The ability that triggers the form change*/
   public ability: AbilityId;
   /** The list of weathers that will also trigger a form change to original form */
-  public readonly weathers: Readonly<AtLeastOneArray<WeatherType>>;
+  public readonly weathers: Readonly<NonEmptyArray<WeatherType>>;
 
-  constructor(ability: AbilityId, ...weathers: Readonly<AtLeastOneArray<WeatherType>>) {
+  constructor(ability: AbilityId, ...weathers: Readonly<NonEmptyArray<WeatherType>>) {
     super();
     this.ability = ability;
     this.weathers = weathers;

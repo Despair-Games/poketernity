@@ -2,14 +2,14 @@ import { PostTerrainChangeAbAttr } from "#abilities/post-terrain-change-ab-attr"
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { TerrainType } from "#enums/terrain-type";
 import type { Pokemon } from "#field/pokemon";
-import type { AtLeastOneArray } from "#types/utility-types";
+import type { NonEmptyArray } from "#types/utility-types";
 
 export class PostTerrainChangeAddBattlerTagAbAttr extends PostTerrainChangeAbAttr {
   private readonly tagType: BattlerTagType;
   private readonly turnCount: number;
-  private readonly terrainTypes: Readonly<AtLeastOneArray<TerrainType>>;
+  private readonly terrainTypes: Readonly<NonEmptyArray<TerrainType>>;
 
-  constructor(tagType: BattlerTagType, turnCount: number, ...terrainTypes: Readonly<AtLeastOneArray<TerrainType>>) {
+  constructor(tagType: BattlerTagType, turnCount: number, ...terrainTypes: Readonly<NonEmptyArray<TerrainType>>) {
     super();
 
     this.tagType = tagType;

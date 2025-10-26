@@ -4,7 +4,7 @@ import type { WeatherBattlerTag } from "#battler-tags/weather-battler-tag";
 import type { AbilityId } from "#enums/ability-id";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { WeatherType } from "#enums/weather-type";
-import type { AtLeastOneArray, Mutable } from "#types/utility-types";
+import type { Mutable, NonEmptyArray } from "#types/utility-types";
 
 /**
  * Tag representing the stat boost from an ability
@@ -12,9 +12,9 @@ import type { AtLeastOneArray, Mutable } from "#types/utility-types";
  * while a given {@linkcode WeatherType | weather} is active.
  */
 export class WeatherHighestStatBoostTag extends HighestStatBoostTag implements WeatherBattlerTag {
-  public readonly weatherTypes: Readonly<AtLeastOneArray<WeatherType>>;
+  public readonly weatherTypes: Readonly<NonEmptyArray<WeatherType>>;
 
-  constructor(tagType: BattlerTagType, ability: AbilityId, ...weatherTypes: Readonly<AtLeastOneArray<WeatherType>>) {
+  constructor(tagType: BattlerTagType, ability: AbilityId, ...weatherTypes: Readonly<NonEmptyArray<WeatherType>>) {
     super(tagType, ability);
     this.weatherTypes = weatherTypes;
   }

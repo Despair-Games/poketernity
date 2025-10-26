@@ -4,16 +4,16 @@ import { AbilityId } from "#enums/ability-id";
 import { SpeciesId } from "#enums/species-id";
 import type { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
-import type { AtLeastOneArray } from "#types/utility-types";
+import type { NonEmptyArray } from "#types/utility-types";
 
 /**
  * Triggers weather-based form change when weather changes.
  * Used by Forecast and Flower Gift.
  */
 export class PostWeatherChangeFormChangeAbAttr extends PostWeatherChangeAbAttr {
-  private readonly formRevertingWeathers: Readonly<AtLeastOneArray<WeatherType>>;
+  private readonly formRevertingWeathers: Readonly<NonEmptyArray<WeatherType>>;
 
-  constructor(...formRevertingWeathers: Readonly<AtLeastOneArray<WeatherType>>) {
+  constructor(...formRevertingWeathers: Readonly<NonEmptyArray<WeatherType>>) {
     super();
 
     this.formRevertingWeathers = formRevertingWeathers;

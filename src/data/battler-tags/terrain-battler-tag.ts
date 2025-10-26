@@ -1,6 +1,6 @@
 import type { TerrainType } from "#enums/terrain-type";
-import type { AtLeastOneArray } from "#types/utility-types";
+import type { NonEmptyArray } from "#types/utility-types";
 
 export interface TerrainBattlerTag {
-  terrainTypes: Readonly<AtLeastOneArray<TerrainType>>;
+  terrainTypes: Readonly<NonEmptyArray<TerrainType>>;
 }

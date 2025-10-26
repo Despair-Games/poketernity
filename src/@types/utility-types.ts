@@ -68,7 +68,7 @@ export type Mutable<T> = {
 };
 
 /** Requires an array to contain at least one item. */
-export type AtLeastOneArray<T> = [T, ...T[]];
+export type NonEmptyArray<T> = [T, ...T[]];
 
 /**
  * Type helper to obtain the keys associated with a given value inside an object. \
