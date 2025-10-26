@@ -1,6 +1,5 @@
 import { AbAttr } from "#abilities/ab-attr";
 import { globalScene } from "#app/global-scene";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { BattleStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { ValueHolder } from "#utils/common-utils";
@@ -11,9 +10,10 @@ import type { ValueHolder } from "#utils/common-utils";
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Mirror_Armor_(Ability) | Mirror Armor}.
  */
 export class ReflectStatStageChangeAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "ReflectStatStageChangeAbAttr";
+
   constructor() {
     super(true);
-    this._flags.add(AbAttrFlag.REFLECT_STAT_STAGE_CHANGE);
   }
 
   /**

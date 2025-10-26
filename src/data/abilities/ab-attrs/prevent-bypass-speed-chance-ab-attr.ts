@@ -1,6 +1,5 @@
 import { AbAttr } from "#abilities/ab-attr";
 import { globalScene } from "#app/global-scene";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattleCommand } from "#enums/battle-command";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
@@ -12,11 +11,11 @@ import type { ValueHolder } from "#utils/common-utils";
  * @param condition checks if a move meets certain conditions
  */
 export class PreventBypassSpeedChanceAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "PreventBypassSpeedChanceAbAttr";
   private readonly condition: (pokemon: Pokemon, move: Move) => boolean;
 
   constructor(condition: (pokemon: Pokemon, move: Move) => boolean) {
     super();
-    this._flags.add(AbAttrFlag.PREVENT_BYPASS_SPEED_CHANCE);
     this.condition = condition;
   }
 

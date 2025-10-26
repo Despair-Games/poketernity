@@ -1,12 +1,12 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
 
 export abstract class PostWeatherChangeAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "PostWeatherChangeAbAttr";
+
   constructor() {
     super(true);
-    this._flags.add(AbAttrFlag.POST_WEATHER_CHANGE);
   }
 
   /**

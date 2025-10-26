@@ -1,6 +1,5 @@
 import type { PostAttackApplyStatusEffectAbAttr } from "#abilities/post-attack-apply-status-effect-ab-attr";
 import { globalScene } from "#app/global-scene";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
@@ -64,9 +63,7 @@ describe("Abilities - Toxic Chain", () => {
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
-    const abilityAttr = playerPokemon
-      .getAbility()
-      .getAttrs<PostAttackApplyStatusEffectAbAttr>(AbAttrFlag.POST_ATTACK_APPLY_STATUS_EFFECT)[0];
+    const abilityAttr = playerPokemon.getAbility().getAttrs("PostAttackAbAttr")[0] as PostAttackApplyStatusEffectAbAttr;
 
     await checkSucceedPoison(MoveId.WATER_GUN, enemyPokemon);
     expect(abilityAttr.chance).toBe(30);

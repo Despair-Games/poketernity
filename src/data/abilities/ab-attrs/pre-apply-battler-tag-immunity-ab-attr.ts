@@ -9,7 +9,7 @@ import i18next from "i18next";
 /**
  * Provides immunity to BattlerTags {@linkcode BattlerTag} to specified targets.
  */
-export class PreApplyBattlerTagImmunityAbAttr extends PreApplyBattlerTagAbAttr {
+export abstract class PreApplyBattlerTagImmunityAbAttr extends PreApplyBattlerTagAbAttr {
   private readonly immuneTagTypes: readonly BattlerTagType[];
   private battlerTag: BattlerTag;
 

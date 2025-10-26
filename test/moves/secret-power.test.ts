@@ -1,5 +1,4 @@
 import { allAbilities, allMoves } from "#data/data-lists";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -72,7 +71,7 @@ describe("Moves - Secret Power", () => {
 
     await game.toEndOfTurn();
 
-    const sereneGraceAttr = allAbilities[AbilityId.SERENE_GRACE].getAttrs(AbAttrFlag.MOVE_EFFECT_CHANCE_MULTIPLIER)[0];
+    const sereneGraceAttr = allAbilities[AbilityId.SERENE_GRACE].getAttrs("MoveEffectChanceMultiplierAbAttr")[0];
     vi.spyOn(sereneGraceAttr, "apply");
 
     const rainbowEffect = game.scene.arena.findTag(ArenaTagType.WATER_FIRE_PLEDGE, ArenaTagSide.PLAYER)!;

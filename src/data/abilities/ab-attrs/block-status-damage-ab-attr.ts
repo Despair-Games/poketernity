@@ -1,5 +1,4 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#field/pokemon";
 import type { ValueHolder } from "#utils/common-utils";
@@ -9,11 +8,11 @@ import type { ValueHolder } from "#utils/common-utils";
  * @param effects - The {@linkcode StatusEffect | status effect(s)} that will be blocked from damaging the ability pokemon
  */
 export class BlockStatusDamageAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "BlockStatusDamageAbAttr";
   private readonly statusEffects: StatusEffect[];
 
   constructor(...effects: StatusEffect[]) {
     super(false);
-    this._flags.add(AbAttrFlag.BLOCK_STATUS_DAMAGE);
 
     this.statusEffects = effects;
   }

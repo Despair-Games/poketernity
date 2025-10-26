@@ -1,16 +1,14 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTag } from "#battler-tags/battler-tag";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
-import { BooleanHolder, toDmgValue } from "#utils/common-utils";
+import { toDmgValue, ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -54,8 +52,8 @@ export class SeededTag extends BattlerTag {
     if (ret) {
       const source = pokemon.getOpponents().find((o) => o.getBattlerIndex() === this.sourceIndex);
       if (source) {
-        const cancelled = new BooleanHolder(false);
-        applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
+        const cancelled = new ValueHolder(false);
+        applyAbAttrs("BlockNonDirectDamageAbAttr", pokemon, false, cancelled);
 
         if (!cancelled.value) {
           globalScene.phaseManager.createAndUnshiftPhase(
@@ -66,14 +64,15 @@ export class SeededTag extends BattlerTag {
           );
 
           const damage = pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8));
-          const reverseDrain = pokemon.hasAbilityWithAttr(AbAttrFlag.REVERSE_DRAIN, false);
+          const reverseDrain = new ValueHolder(false);
+          applyAbAttrs("ReverseDrainAbAttr", pokemon, false, source, reverseDrain);
 
           globalScene.phaseManager.createAndUnshiftPhase(
             "PokemonHealPhase",
             source.getBattlerIndex(),
-            reverseDrain ? damage * -1 : damage,
+            reverseDrain.value ? damage * -1 : damage,
             {
-              message: reverseDrain
+              message: reverseDrain.value
                 ? i18next.t("battlerTags:seededLapseShed", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) })
                 : i18next.t("battlerTags:seededLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
               showFullHpMessage: false,

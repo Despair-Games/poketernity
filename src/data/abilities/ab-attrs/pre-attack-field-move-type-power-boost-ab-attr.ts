@@ -6,7 +6,7 @@ import type { ElementalType } from "#enums/elemental-type";
  * @param boostedType - The type of move that will receive the power boost.
  * @param powerMultiplier - The multiplier to apply to the move's power, defaults to 1.5 if not provided.
  */
-export class PreAttackFieldMoveTypePowerBoostAbAttr extends FieldMovePowerBoostAbAttr {
+export abstract class PreAttackFieldMoveTypePowerBoostAbAttr extends FieldMovePowerBoostAbAttr {
   constructor(boostedType: ElementalType, powerMultiplier: number = 1.5) {
     super((pokemon, _defender, move) => !!move && pokemon?.getMoveType(move) === boostedType, powerMultiplier);
   }

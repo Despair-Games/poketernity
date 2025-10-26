@@ -1,8 +1,6 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { PostBattleInitAbAttr } from "#abilities/post-battle-init-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
@@ -210,7 +208,7 @@ function endTrainerBattleAndShowDialogue(): Promise<void> {
         }
 
         pokemon.resetWaveData();
-        applyAbAttrs<PostBattleInitAbAttr>(AbAttrFlag.POST_BATTLE_INIT, pokemon, false);
+        applyAbAttrs("PostBattleInitAbAttr", pokemon, false);
       }
 
       globalScene.phaseManager.createAndUnshiftPhase("ShowTrainerPhase");

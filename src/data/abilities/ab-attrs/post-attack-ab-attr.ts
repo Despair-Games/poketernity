@@ -1,16 +1,15 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { MoveCategory } from "#enums/move-category";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 
 export abstract class PostAttackAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "PostAttackAbAttr";
   /** Whether it only applies to attack moves. */
   private readonly attackMovesOnly: boolean;
 
   constructor(attackMovesOnly: boolean = true, showAbility: boolean = true) {
     super(showAbility);
-    this._flags.add(AbAttrFlag.POST_ATTACK);
 
     this.attackMovesOnly = attackMovesOnly;
   }

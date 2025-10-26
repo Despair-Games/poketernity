@@ -1,6 +1,5 @@
 import { PreAttackAbAttr } from "#abilities/pre-attack-ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
@@ -12,9 +11,10 @@ import i18next from "i18next";
  * Ability attribute for changing a pokemon's type before using a move
  */
 export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
+  protected override readonly abAttrKey = "PokemonTypeChangeAbAttr";
+
   constructor() {
     super(true);
-    this._flags.add(AbAttrFlag.POKEMON_TYPE_CHANGE);
   }
 
   public override apply(pokemon: Pokemon, simulated: boolean, move: Move): void {

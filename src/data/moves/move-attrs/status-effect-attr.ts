@@ -1,8 +1,5 @@
-import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { ConfusionOnStatusEffectAbAttr } from "#abilities/confusion-on-status-effect-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { MoveCategory } from "#enums/move-category";
 import type { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#field/pokemon";
@@ -47,7 +44,7 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
     return super.canApply(user, target, move);
   }
 
-  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
+  override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     const pokemon = this.selfTarget ? user : target;
     if (pokemon.hasNonVolatileStatusEffect()) {
       if (this.overrideStatus) {
@@ -57,19 +54,7 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
       }
     }
 
-    if (pokemon.trySetStatus(this.effect, true, user, this.turnsRemaining)) {
-      applyAbAttrs<ConfusionOnStatusEffectAbAttr>(
-        AbAttrFlag.CONFUSION_ON_STATUS_EFFECT,
-        user,
-        false,
-        target,
-        move,
-        this.effect,
-      );
-      return true;
-    }
-
-    return false;
+    return pokemon.trySetStatus(this.effect, true, user, this.turnsRemaining);
   }
 
   override getTargetBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {

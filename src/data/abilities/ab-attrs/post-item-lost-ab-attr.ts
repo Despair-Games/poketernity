@@ -1,15 +1,11 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 
 /**
  * Triggers after the Pokemon loses or consumes an item
  */
 export abstract class PostItemLostAbAttr extends AbAttr {
-  constructor() {
-    super();
-    this._flags.add(AbAttrFlag.POST_ITEM_LOST);
-  }
+  protected override readonly abAttrKey = "PostItemLostAbAttr";
 
   /**
    * Applies an effect when the source Pokemon loses or consumes an item

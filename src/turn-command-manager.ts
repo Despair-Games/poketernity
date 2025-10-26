@@ -1,13 +1,12 @@
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
+import type { BypassSpeedChanceAbAttr } from "#abilities/bypass-speed-chance-ab-attr";
 import type { Phase } from "#app/phase";
 import type { MovePhase } from "#phases/move-phase";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { BypassSpeedChanceAbAttr } from "#abilities/bypass-speed-chance-ab-attr";
 import { globalScene } from "#app/global-scene";
 import type { TrickRoomTag } from "#arena-tags/trick-room-tag";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -584,7 +583,7 @@ export class TurnCommandManager {
         return;
       }
 
-      applyAbAttrs<BypassSpeedChanceAbAttr>(AbAttrFlag.BYPASS_SPEED_CHANCE, pokemon, false, turnMove.move);
+      applyAbAttrs("BypassSpeedChanceAbAttr", pokemon, false, turnMove.move);
       globalScene.applyModifiers(BypassSpeedChanceModifier, pokemon.isPlayer(), pokemon);
     });
   }

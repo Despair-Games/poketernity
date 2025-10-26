@@ -1,9 +1,7 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { FlinchEffectAbAttr } from "#abilities/flinch-effect-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTag } from "#battler-tags/battler-tag";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { MoveId } from "#enums/move-id";
@@ -41,7 +39,7 @@ export class FlinchedTag extends BattlerTag {
         i18next.t("battlerTags:flinchedLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
 
-      applyAbAttrs<FlinchEffectAbAttr>(AbAttrFlag.FLINCH_EFFECT, pokemon, false);
+      applyAbAttrs("FlinchEffectAbAttr", pokemon, false);
 
       return true;
     }

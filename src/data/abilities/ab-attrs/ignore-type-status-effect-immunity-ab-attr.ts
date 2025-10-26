@@ -1,5 +1,4 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { ElementalType } from "#enums/elemental-type";
 import type { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#field/pokemon";
@@ -10,12 +9,12 @@ import type { ValueHolder } from "#utils/common-utils";
  * Used by Corrosion
  */
 export class IgnoreTypeStatusEffectImmunityAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "IgnoreTypeStatusEffectImmunityAbAttr";
   private readonly statusEffect: StatusEffect[];
   private readonly defenderType: ElementalType[];
 
   constructor(statusEffect: StatusEffect[], defenderType: ElementalType[]) {
     super();
-    this._flags.add(AbAttrFlag.IGNORE_TYPE_STATUS_EFFECT_IMMUNITY);
 
     this.statusEffect = statusEffect;
     this.defenderType = defenderType;

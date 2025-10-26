@@ -1,6 +1,5 @@
 import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { AbilityId } from "#enums/ability-id";
 import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#field/pokemon";
@@ -12,7 +11,6 @@ export class PostDefendAbilityGiveAbAttr extends PostDefendAbAttr {
 
   constructor(ability: AbilityId) {
     super();
-    this._flags.add(AbAttrFlag.POST_DEFEND_ABILITY_GIVE);
     this.ability = ability;
   }
 
@@ -24,10 +22,11 @@ export class PostDefendAbilityGiveAbAttr extends PostDefendAbAttr {
   }
 
   public override canApply(...[pokemon, , attacker, move]: Parameters<this["apply"]>): boolean {
+    // TODO: This allows Mummy to affect Lingering Aroma (and vice versa)
     return (
       move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
       && attacker.getAbility().isSuppressable
-      && !attacker.getAbility().hasAttrFlag(AbAttrFlag.POST_DEFEND_ABILITY_GIVE)
+      && attacker.getAbility() !== pokemon.getAbility()
       && !attacker.isMax()
     );
   }

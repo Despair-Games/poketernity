@@ -1,10 +1,7 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
-import type { FieldPreventExplosionLikeAbAttr } from "#abilities/field-prevent-explosion-like-ab-attr";
 import { PostFaintAbAttr } from "#abilities/post-faint-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { HitResult } from "#enums/hit-result";
 import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#field/pokemon";
@@ -51,8 +48,8 @@ export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
     globalScene
       .getField(true)
       .map((p) =>
-        applyAbAttrs<FieldPreventExplosionLikeAbAttr>(
-          AbAttrFlag.FIELD_PREVENT_EXPLOSION_LIKE,
+        applyAbAttrs(
+          "FieldPreventExplosionLikeAbAttr",
           p,
           simulated,
           cancelled,
@@ -61,7 +58,7 @@ export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
         ),
       );
 
-    applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, attacker, simulated, cancelled);
+    applyAbAttrs("BlockNonDirectDamageAbAttr", attacker, simulated, cancelled);
     return !cancelled.value;
   }
 

@@ -1,6 +1,5 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { MoveId } from "#enums/move-id";
 import type { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#field/pokemon";
@@ -29,7 +28,7 @@ export class HealStatusEffectAttr extends MoveEffectAttr {
     // Special edge case for shield dust blocking Sparkling Aria curing burn
     const moveTargets = getMoveTargets(user, move.id);
     if (
-      target.hasAbilityWithAttr(AbAttrFlag.IGNORE_MOVE_EFFECTS)
+      target.hasAbilityWithAttr("IgnoreMoveEffectsAbAttr")
       && move.id === MoveId.SPARKLING_ARIA
       && moveTargets.targets.length === 1
     ) {

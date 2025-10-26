@@ -1,6 +1,4 @@
-import type { BypassSpeedChanceAbAttr } from "#abilities/bypass-speed-chance-ab-attr";
 import { allAbilities } from "#data/data-lists";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
@@ -34,7 +32,7 @@ describe("Abilities - Quick Draw", () => {
       .enemyLevel(100);
 
     vi.spyOn(
-      allAbilities[AbilityId.QUICK_DRAW].getAttrs<BypassSpeedChanceAbAttr>(AbAttrFlag.BYPASS_SPEED_CHANCE)[0],
+      allAbilities[AbilityId.QUICK_DRAW].getAttrs("BypassSpeedChanceAbAttr")[0],
       "chance",
       "get",
     ).mockReturnValue(100);

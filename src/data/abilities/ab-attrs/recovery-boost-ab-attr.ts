@@ -1,5 +1,4 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { PokemonAttackCondition } from "#types/move-types";
@@ -11,12 +10,12 @@ import type { ValueHolder } from "#utils/common-utils";
  * - Mega Launcher (Recovery move must have a PULSE_MOVE flag)
  */
 export class RecoveryBoostAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "RecoveryBoostAbAttr";
   private readonly condition: PokemonAttackCondition;
   private readonly recoveryMultiplier: number;
 
   constructor(condition: PokemonAttackCondition, recoveryMultiplier: number) {
     super();
-    this._flags.add(AbAttrFlag.RECOVERY_BOOST);
     this.condition = condition;
     this.recoveryMultiplier = recoveryMultiplier;
   }

@@ -1,5 +1,4 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { ValueHolder } from "#utils/common-utils";
 
@@ -8,12 +7,12 @@ import type { ValueHolder } from "#utils/common-utils";
  * It is used by the ability Super Luck, which provides a one stage boost to critical hit rate.
  */
 export class BonusCritAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "BonusCritAbAttr";
   /** Additional critical hit stages provided by the ability. */
   private readonly stages: number;
 
   constructor(stages: number) {
     super();
-    this._flags.add(AbAttrFlag.BONUS_CRIT);
     this.stages = stages;
   }
 

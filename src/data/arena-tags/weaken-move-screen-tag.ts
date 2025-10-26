@@ -1,9 +1,7 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { InfiltratorAbAttr } from "#abilities/infiltrator-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { SerializableArenaTag } from "#arena-tags/arena-tag";
 import { SCREEN_DOUBLES_DMG_FACTOR, SCREEN_SINGLES_DMG_FACTOR } from "#constants/game-constants";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { MoveCategory } from "#enums/move-category";
 import type { Pokemon } from "#field/pokemon";
 import type { ArenaScreenTagType } from "#types/arena-tag-types";
@@ -35,7 +33,7 @@ export abstract class WeakenMoveScreenTag extends SerializableArenaTag {
   ): boolean {
     if (this.weakenedCategories.includes(moveCategory)) {
       const bypassed = new BooleanHolder(false);
-      applyAbAttrs<InfiltratorAbAttr>(AbAttrFlag.INFILTRATOR, attacker, simulated, bypassed);
+      applyAbAttrs("InfiltratorAbAttr", attacker, simulated, bypassed);
       if (bypassed.value) {
         return false;
       }

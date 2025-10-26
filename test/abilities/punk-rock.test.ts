@@ -1,4 +1,3 @@
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
@@ -37,7 +36,7 @@ describe("Abilities - Punk Rock", () => {
     await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemy = game.scene.getEnemyPokemon()!;
-    const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(AbAttrFlag.RECEIVED_MOVE_DAMAGE_MULTIPLIER)[0], "apply");
+    const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs("ReceivedMoveDamageMultiplierAbAttr")[0], "apply");
 
     game.move.select(MoveId.UPROAR);
     await game.toEndOfTurn();

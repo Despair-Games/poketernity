@@ -1,11 +1,13 @@
 import type { Ability } from "#abilities/ability";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
-import type { AbAttrCondition } from "#types/ability-types";
+import type { AbAttrCondition, AbAttrKey, AbAttrMap } from "#types/ability-types";
 
 export abstract class AbAttr {
-  /** A set of flags for this attribute. Cascaded top to bottom. */
-  protected _flags: Set<AbAttrFlag> = new Set();
+  /**
+   * A `string` identifier for this attribute's type. When attributes
+   * are {@link apply | applied}, they are looked up using this key.
+   */
+  protected abstract readonly abAttrKey: AbAttrKey;
   /** The {@linkcode Ability} to which this attribute belongs */
   public source: Ability;
   /**
@@ -20,17 +22,11 @@ export abstract class AbAttr {
   private extraCondition: AbAttrCondition;
 
   constructor(showAbility: boolean = false) {
-    this._flags.add(AbAttrFlag.UNSPECIFIED);
     this.showAbility = showAbility;
   }
 
-  /**
-   * Checks if this attribute has the provided {@linkcode AbAttrFlag}.
-   * @param flag The {@linkcode AbAttrFlag} to check
-   * @returns true if the attribute has the flag
-   */
-  public hasFlag(flag: AbAttrFlag) {
-    return this._flags.has(flag);
+  public is<K extends AbAttrKey>(abAttrKey: K): this is AbAttrMap[K] {
+    return this.abAttrKey === abAttrKey;
   }
 
   /**

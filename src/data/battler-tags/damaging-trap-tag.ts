@@ -3,13 +3,11 @@ import type { DAMAGING_TRAPPED_BATTLER_TAG_TYPES } from "#constants/battler-tag-
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { BattlerTag } from "#battler-tags/battler-tag";
 import { TrappedTag } from "#battler-tags/trapped-tag";
 import { TRAPPED_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { CommonAnim } from "#enums/common-anim";
@@ -66,7 +64,7 @@ export abstract class DamagingTrapTag extends TrappedTag {
       globalScene.phaseManager.createAndUnshiftPhase("CommonAnimPhase", this.commonAnim, pokemon.getBattlerIndex());
 
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
+      applyAbAttrs("BlockNonDirectDamageAbAttr", pokemon, false, cancelled);
 
       if (!cancelled.value) {
         pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8));

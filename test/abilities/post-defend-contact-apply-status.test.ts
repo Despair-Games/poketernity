@@ -1,5 +1,4 @@
 import type { PostDefendContactApplyStatusEffectAbAttr } from "#abilities/post-defend-contact-apply-status-effect-ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
@@ -42,9 +41,7 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
     await game.classicMode.startBattle(SpeciesId.FEEBAS);
     const pokemon = game.scene.getPlayerPokemon();
     vi.spyOn(
-      pokemon!
-        .getAbility()
-        .getAttrs<PostDefendContactApplyStatusEffectAbAttr>(AbAttrFlag.POST_DEFEND_CONTACT_APPLY_STATUS_EFFECT)[0],
+      pokemon!.getAbility().getAttrs("PostDefendAbAttr")[0] as PostDefendContactApplyStatusEffectAbAttr,
       "chance",
       "get",
     ).mockReturnValue(100);
@@ -66,9 +63,7 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
     await game.classicMode.startBattle(SpeciesId.FEEBAS);
     const pokemon = game.scene.getPlayerPokemon();
     vi.spyOn(
-      pokemon!
-        .getAbility()
-        .getAttrs<PostDefendContactApplyStatusEffectAbAttr>(AbAttrFlag.POST_DEFEND_CONTACT_APPLY_STATUS_EFFECT)[0],
+      pokemon!.getAbility().getAttrs("PostDefendAbAttr")[0] as PostDefendContactApplyStatusEffectAbAttr,
       "chance",
       "get",
     ).mockReturnValue(100);
@@ -86,9 +81,7 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
     await game.classicMode.startBattle(SpeciesId.FEEBAS);
     const pokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(
-      pokemon!
-        .getAbility()
-        .getAttrs<PostDefendContactApplyStatusEffectAbAttr>(AbAttrFlag.POST_DEFEND_CONTACT_APPLY_STATUS_EFFECT)[0],
+      pokemon!.getAbility().getAttrs("PostDefendAbAttr")[0] as PostDefendContactApplyStatusEffectAbAttr,
       "chance",
       "get",
     ).mockReturnValue(100);

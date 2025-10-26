@@ -2,8 +2,20 @@
 import type { PokemonWaveData } from "#types/pokemon-types";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
+import type { AbAttrConstructorMap } from "#abilities/ability";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
+
+/** Union type of all referable ability attribute class names as strings */
+export type AbAttrKey = keyof AbAttrConstructorMap;
+
+export type AbAttrMap = {
+  [K in keyof AbAttrConstructorMap]: InstanceType<AbAttrConstructorMap[K]>;
+};
+
+export type AbAttrParamMap = {
+  [K in keyof AbAttrMap]: Parameters<AbAttrMap[K]["apply"]>;
+};
 
 export type AbAttrCondition = (pokemon: Pokemon) => boolean;
 export type PreDefendAbAttrCondition = (pokemon: Pokemon, attacker: Pokemon, move: Move) => boolean;

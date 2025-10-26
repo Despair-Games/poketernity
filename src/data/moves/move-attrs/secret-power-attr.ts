@@ -1,8 +1,5 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { IgnoreMoveEffectsAbAttr } from "#abilities/ignore-move-effects-ab-attr";
-import type { MoveEffectChanceMultiplierAbAttr } from "#abilities/move-effect-chance-multiplier-ab-attr";
 import { globalScene } from "#app/global-scene";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BiomeId } from "#enums/biome-id";
 import { Stat } from "#enums/stat";
@@ -14,7 +11,7 @@ import { ChanceBasedMoveEffectAttr } from "#moves/chance-based-move-effect-attr"
 import type { Move } from "#moves/move";
 import { StatStageChangeAttr } from "#moves/stat-stage-change-attr";
 import { StatusEffectAttr } from "#moves/status-effect-attr";
-import { NumberHolder } from "#utils/common-utils";
+import { ValueHolder } from "#utils/common-utils";
 
 /**
  * Attribute used to determine the Biome/Terrain-based secondary
@@ -131,17 +128,11 @@ export class SecretPowerAttr extends ChanceBasedMoveEffectAttr {
 
   /** Secret Power ignores the move chance bonus from the Water + Fire Pledge combo effect */
   override getMoveChance(user: Pokemon, target: Pokemon, move: Move): number {
-    const moveChance = new NumberHolder(this.effectChanceOverride ?? move.chance);
+    const moveChance = new ValueHolder(this.effectChanceOverride ?? move.chance);
 
-    applyAbAttrs<MoveEffectChanceMultiplierAbAttr>(
-      AbAttrFlag.MOVE_EFFECT_CHANCE_MULTIPLIER,
-      user,
-      false,
-      moveChance,
-      move,
-    );
+    applyAbAttrs("MoveEffectChanceMultiplierAbAttr", user, false, moveChance, move);
 
-    applyAbAttrs<IgnoreMoveEffectsAbAttr>(AbAttrFlag.IGNORE_MOVE_EFFECTS, target, false, user, move, moveChance);
+    applyAbAttrs("IgnoreMoveEffectsAbAttr", target, false, user, move, moveChance);
 
     return moveChance.value;
   }

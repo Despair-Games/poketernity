@@ -3,7 +3,6 @@ import type { VariableMovePowerAbAttr } from "#abilities/variable-move-power-ab-
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { PreAttackAbAttr } from "#abilities/pre-attack-ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { PokemonAttackCondition } from "#types/move-types";
@@ -16,12 +15,12 @@ import type { ValueHolder } from "#utils/common-utils";
  * @param condition the condition for this ability to be applied
  */
 export class DamageBoostAbAttr extends PreAttackAbAttr {
+  protected override readonly abAttrKey = "DamageBoostAbAttr";
   private readonly damageMultiplier: number;
   private readonly condition: PokemonAttackCondition;
 
   constructor(damageMultiplier: number, condition: PokemonAttackCondition) {
     super();
-    this._flags.add(AbAttrFlag.DAMAGE_BOOST);
     this.damageMultiplier = damageMultiplier;
     this.condition = condition;
   }

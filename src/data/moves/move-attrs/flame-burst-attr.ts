@@ -1,6 +1,4 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { HitResult } from "#enums/hit-result";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
@@ -26,7 +24,7 @@ export class FlameBurstAttr extends MoveEffectAttr {
     const cancelled = new BooleanHolder(false);
 
     if (targetAlly) {
-      applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, targetAlly, false, cancelled);
+      applyAbAttrs("BlockNonDirectDamageAbAttr", targetAlly, false, cancelled);
     }
 
     if (cancelled.value || !targetAlly || targetAlly.switchOutStatus) {

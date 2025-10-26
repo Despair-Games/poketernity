@@ -1,8 +1,6 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { HitResult } from "#enums/hit-result";
 import { MoveEffectTrigger } from "#enums/move-effect-trigger";
 import type { Pokemon } from "#field/pokemon";
@@ -24,7 +22,7 @@ export class HalfMaxHpRecoilAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
     const cancelled = new BooleanHolder(false);
     // Check to see if the Pokemon has an ability that blocks non-direct damage
-    applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, user, false, cancelled);
+    applyAbAttrs("BlockNonDirectDamageAbAttr", user, false, cancelled);
     if (!cancelled.value) {
       user.damageAndUpdate(toDmgValue(user.getMaxHp() / 2), {
         result: HitResult.OTHER,

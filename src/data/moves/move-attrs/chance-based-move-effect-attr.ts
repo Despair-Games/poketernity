@@ -1,9 +1,6 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { IgnoreMoveEffectsAbAttr } from "#abilities/ignore-move-effects-ab-attr";
-import type { MoveEffectChanceMultiplierAbAttr } from "#abilities/move-effect-chance-multiplier-ab-attr";
 import { globalScene } from "#app/global-scene";
 import type { WaterFirePledgeTag } from "#arena-tags/water-fire-pledge-tag";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
@@ -57,19 +54,13 @@ export abstract class ChanceBasedMoveEffectAttr extends MoveEffectAttr {
   public getMoveChance(user: Pokemon, target: Pokemon, move: Move): number {
     const moveChance = new NumberHolder(this.effectChanceOverride ?? move.chance);
 
-    applyAbAttrs<MoveEffectChanceMultiplierAbAttr>(
-      AbAttrFlag.MOVE_EFFECT_CHANCE_MULTIPLIER,
-      user,
-      false,
-      moveChance,
-      move,
-    );
+    applyAbAttrs("MoveEffectChanceMultiplierAbAttr", user, false, moveChance, move);
 
     const userSide = user.getArenaTagSide();
     globalScene.arena.applyTags<WaterFirePledgeTag>(ArenaTagType.WATER_FIRE_PLEDGE, userSide, false, moveChance);
 
     if (!this.selfTarget) {
-      applyAbAttrs<IgnoreMoveEffectsAbAttr>(AbAttrFlag.IGNORE_MOVE_EFFECTS, target, false, user, move, moveChance);
+      applyAbAttrs("IgnoreMoveEffectsAbAttr", target, false, user, move, moveChance);
     }
     return moveChance.value;
   }

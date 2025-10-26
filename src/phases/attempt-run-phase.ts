@@ -1,7 +1,5 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { RunSuccessAbAttr } from "#abilities/run-success-ab-attr";
 import { globalScene } from "#app/global-scene";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { Stat } from "#enums/stat";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
@@ -31,7 +29,7 @@ export class AttemptRunPhase extends PokemonPhase {
 
     this.attemptRunAway(playerField, enemyField, escapeChance);
 
-    applyAbAttrs<RunSuccessAbAttr>(AbAttrFlag.RUN_SUCCESS, playerPokemon, false, escapeChance);
+    applyAbAttrs("RunSuccessAbAttr", playerPokemon, false, escapeChance);
 
     if (playerPokemon.randSeedInt(100) < escapeChance.value && !this.forceFailEscape) {
       globalScene.audioManager.playSound("se/flee");

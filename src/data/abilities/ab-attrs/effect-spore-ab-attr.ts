@@ -1,5 +1,4 @@
 import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveFlags } from "#enums/move-flags";
@@ -17,15 +16,6 @@ export class EffectSporeAbAttr extends PostDefendAbAttr {
   public readonly chance = 30;
   private roll: number = Number.POSITIVE_INFINITY;
 
-  constructor() {
-    super();
-    this._flags.add(AbAttrFlag.EFFECT_SPORE);
-  }
-
-  /**
-   * Identical code to {@linkcode PostDefendContactApplyStatusEffectAbAttr}'s `applyPostDefend()` but it contains two conditional checks.
-   * Effect Spore cannot affect the attacker if the attacker is Grass-type or has the ability Overcoat
-   */
   public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, _move: Move): void {
     const statusEffect = this.getStatus(this.roll);
     if (!simulated) {

@@ -1,9 +1,7 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { SerializableArenaTag } from "#arena-tags/arena-tag";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { CommonAnim } from "#enums/common-anim";
 import { ElementalType } from "#enums/elemental-type";
@@ -72,7 +70,7 @@ export class TypeImmuneDamageOverTimeTag extends SerializableArenaTag {
       .filter((pokemon) => pokemon.isActive(true) && !pokemon.isOfType(this.#immuneType) && !pokemon.switchOutStatus)
       .forEach((pokemon) => {
         const cancelled = new BooleanHolder(false);
-        applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
+        applyAbAttrs("BlockNonDirectDamageAbAttr", pokemon, false, cancelled);
         if (cancelled.value) {
           return;
         }

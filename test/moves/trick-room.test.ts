@@ -1,6 +1,4 @@
-import type { BypassSpeedChanceAbAttr } from "#abilities/bypass-speed-chance-ab-attr";
 import { allAbilities } from "#data/data-lists";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerIndex } from "#enums/battler-index";
@@ -91,9 +89,7 @@ describe("Moves - Trick Room", () => {
   it("should not reverse effects which cause Pokemon to move first/last within a priority bracket", async () => {
     game.override.ability(AbilityId.QUICK_DRAW);
 
-    const quickDrawAbAttr = allAbilities[AbilityId.QUICK_DRAW].getAttrs<BypassSpeedChanceAbAttr>(
-      AbAttrFlag.BYPASS_SPEED_CHANCE,
-    )[0];
+    const quickDrawAbAttr = allAbilities[AbilityId.QUICK_DRAW].getAttrs("BypassSpeedChanceAbAttr")[0];
     vi.spyOn(quickDrawAbAttr, "chance", "get").mockReturnValue(100);
 
     await game.classicMode.startBattle(SpeciesId.REGIELEKI);

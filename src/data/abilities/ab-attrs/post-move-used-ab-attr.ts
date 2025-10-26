@@ -1,5 +1,4 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { BattlerIndex } from "#enums/battler-index";
 import type { Pokemon } from "#field/pokemon";
 import type { PokemonMove } from "#field/pokemon-move";
@@ -8,9 +7,10 @@ import type { PokemonMove } from "#field/pokemon-move";
  * Triggers just after a move is used either by the opponent or the player
  */
 export abstract class PostMoveUsedAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "PostMoveUsedAbAttr";
+
   constructor() {
     super(true);
-    this._flags.add(AbAttrFlag.POST_MOVE_USED);
   }
 
   /**

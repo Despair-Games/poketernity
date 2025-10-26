@@ -1,13 +1,8 @@
 import { PreApplyBattlerTagImmunityAbAttr } from "#abilities/pre-apply-battler-tag-immunity-ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
-import type { BattlerTagType } from "#enums/battler-tag-type";
 
 /**
  * Provides immunity to BattlerTags {@linkcode BattlerTag} to the user's field.
  */
 export class UserFieldBattlerTagImmunityAbAttr extends PreApplyBattlerTagImmunityAbAttr {
-  constructor(...immuneTagTypes: readonly BattlerTagType[]) {
-    super(...immuneTagTypes);
-    this._flags.add(AbAttrFlag.USER_FIELD_BATTLER_TAG_IMMUNITY);
-  }
+  protected override readonly abAttrKey = "UserFieldBattlerTagImmunityAbAttr";
 }

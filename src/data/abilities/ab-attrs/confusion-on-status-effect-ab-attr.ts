@@ -1,5 +1,4 @@
-import { PostAttackAbAttr } from "#abilities/post-attack-ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { AbAttr } from "#abilities/ab-attr";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#field/pokemon";
@@ -11,14 +10,14 @@ import type { Move } from "#moves/move";
  * Called in {@linkcode StatusEffectAttr}.
  * @see {@linkcode applyPostAttack}
  */
-export class ConfusionOnStatusEffectAbAttr extends PostAttackAbAttr {
+export class ConfusionOnStatusEffectAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "ConfusionOnStatusEffectAbAttr";
   /** List of effects to apply confusion after */
   private readonly effects: StatusEffect[];
 
   constructor(...effects: StatusEffect[]) {
     /** This effect does not require a damaging move */
     super(false);
-    this._flags.add(AbAttrFlag.CONFUSION_ON_STATUS_EFFECT);
     this.effects = effects;
   }
 
@@ -31,20 +30,14 @@ export class ConfusionOnStatusEffectAbAttr extends PostAttackAbAttr {
    * @param effect {@linkcode StatusEffect} applied by move
    * @returns true if defender is confused
    */
-  public override apply(
-    pokemon: Pokemon,
-    simulated: boolean,
-    defender: Pokemon,
-    move: Move,
-    _effect: StatusEffect,
-  ): void {
+  public override apply(pokemon: Pokemon, simulated: boolean, defender: Pokemon, _effect: StatusEffect): void {
     if (!simulated) {
-      defender.addTag(BattlerTagType.CONFUSED, pokemon.randSeedIntRange(2, 5), move.id, defender.id);
+      defender.addTag(BattlerTagType.CONFUSED, pokemon.randSeedIntRange(2, 5), undefined, defender.id);
     }
   }
 
   public override canApply(...params: Parameters<this["apply"]>): boolean {
-    const [, , defender, , effect] = params;
+    const [, , defender, effect] = params;
     return (
       super.canApply(...params)
       && this.effects.includes(effect)

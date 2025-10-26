@@ -1,5 +1,4 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import { toDmgValue, type ValueHolder } from "#utils/common-utils";
 
@@ -8,11 +7,11 @@ import { toDmgValue, type ValueHolder } from "#utils/common-utils";
  * @param multiplier Multiplied with the damage taken
  */
 export class ReduceBurnDamageAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "ReduceBurnDamageAbAttr";
   protected multiplier: number;
 
   constructor(multiplier: number) {
     super();
-    this._flags.add(AbAttrFlag.REDUCE_BURN_DAMAGE);
 
     this.multiplier = multiplier;
   }

@@ -31,13 +31,15 @@ import { DoubleBattleChanceAbAttr } from "#abilities/double-battle-chance-ab-att
 import { DoubleBerryEffectAbAttr } from "#abilities/double-berry-effect-ab-attr";
 import { DownloadAbAttr } from "#abilities/download-ab-attr";
 import { EffectSporeAbAttr } from "#abilities/effect-spore-ab-attr";
-import { EffectiveStatMultiplier } from "#abilities/effective-stat-multiplier-ab-attr";
+import { EffectiveStatMultiplierAbAttr } from "#abilities/effective-stat-multiplier-ab-attr";
 import { EvasivenessMultiplierAbAttr } from "#abilities/evasiveness-multiplier-ab-attr";
 import { FetchBallAbAttr } from "#abilities/fetch-ball-ab-attr";
 import { FieldAccuracyMultiplierAbAttr } from "#abilities/field-accuracy-multiplier-ab-attr";
 import { FieldMoveTypePowerBoostAbAttr } from "#abilities/field-move-type-power-boost-ab-attr";
 import { FieldPreventExplosionLikeAbAttr } from "#abilities/field-prevent-explosion-like-ab-attr";
 import { FieldPriorityMoveImmunityAbAttr } from "#abilities/field-priority-move-immunity-ab-attr";
+import { FieldStatMultiplierAbAttr } from "#abilities/field-stat-multiplier-ab-attr";
+import { FlinchEffectAbAttr } from "#abilities/flinch-effect-ab-attr";
 import { FlinchStatStageChangeAbAttr } from "#abilities/flinch-stat-stage-change-ab-attr";
 import { ForceSwitchOutImmunityAbAttr } from "#abilities/force-switch-out-immunity-ab-attr";
 import { ForewarnAbAttr } from "#abilities/forewarn-ab-attr";
@@ -73,13 +75,18 @@ import { MoveTypePowerBoostAbAttr } from "#abilities/move-type-power-boost-ab-at
 import { MultCritAbAttr } from "#abilities/mult-crit-ab-attr";
 import { NonSuperEffectiveImmunityAbAttr } from "#abilities/non-super-effective-immunity-ab-attr";
 import { PokemonTypeChangeAbAttr } from "#abilities/pokemon-type-change-ab-attr";
+import { PostAttackAbAttr } from "#abilities/post-attack-ab-attr";
 import { PostAttackApplyBattlerTagAbAttr } from "#abilities/post-attack-apply-battler-tag-ab-attr";
 import { PostAttackApplyStatusEffectAbAttr } from "#abilities/post-attack-apply-status-effect-ab-attr";
 import { PostAttackStealHeldItemAbAttr } from "#abilities/post-attack-steal-held-item-ab-attr";
+import { PostBattleAbAttr } from "#abilities/post-battle-ab-attr";
+import { PostBattleInitAbAttr } from "#abilities/post-battle-init-ab-attr";
 import { PostBattleInitFormChangeAbAttr } from "#abilities/post-battle-init-form-change-ab-attr";
 import { PostBattleLootAbAttr } from "#abilities/post-battle-loot-ab-attr";
+import { PostDamageAbAttr } from "#abilities/post-damage-ab-attr";
 import { PostDamageForceSwitchAbAttr } from "#abilities/post-damage-force-switch-ab-attr";
 import { PostDancingMoveAbAttr } from "#abilities/post-dancing-move-ab-attr";
+import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
 import { PostDefendAbilityGiveAbAttr } from "#abilities/post-defend-ability-give-ab-attr";
 import { PostDefendAbilitySwapAbAttr } from "#abilities/post-defend-ability-swap-ab-attr";
 import { PostDefendApplyBattlerTagAbAttr } from "#abilities/post-defend-apply-battler-tag-ab-attr";
@@ -96,13 +103,19 @@ import { PostDefendStealHeldItemAbAttr } from "#abilities/post-defend-steal-held
 import { PostDefendTerrainChangeAbAttr } from "#abilities/post-defend-terrain-change-ab-attr";
 import { PostDefendTypeChangeAbAttr } from "#abilities/post-defend-type-change-ab-attr";
 import { PostDefendWeatherChangeAbAttr } from "#abilities/post-defend-weather-change-ab-attr";
+import { PostFaintAbAttr } from "#abilities/post-faint-ab-attr";
 import { PostFaintClearWeatherAbAttr } from "#abilities/post-faint-clear-weather-ab-attr";
 import { PostFaintContactDamageAbAttr } from "#abilities/post-faint-contact-damage-ab-attr";
 import { PostFaintHPDamageAbAttr } from "#abilities/post-faint-hp-damage-ab-attr";
 import { PostFaintUnsuppressedWeatherFormChangeAbAttr } from "#abilities/post-faint-unsuppressed-weather-form-change-ab-attr";
 import { PostIntimidateStatStageChangeAbAttr } from "#abilities/post-intimidate-stat-stage-change-ab-attr";
+import { PostItemLostAbAttr } from "#abilities/post-item-lost-ab-attr";
 import { PostItemLostApplyBattlerTagAbAttr } from "#abilities/post-item-lost-apply-battler-tag-ab-attr";
+import { PostKnockOutAbAttr } from "#abilities/post-knock-out-ab-attr";
 import { PostKnockOutStatStageChangeAbAttr } from "#abilities/post-knock-out-stat-stage-change-ab-attr";
+import { PostMoveUsedAbAttr } from "#abilities/post-move-used-ab-attr";
+import { PostStatStageChangeAbAttr } from "#abilities/post-stat-stage-change-ab-attr";
+import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import { PostSummonAddBattlerTagAbAttr } from "#abilities/post-summon-add-battler-tag-ab-attr";
 import { PostSummonAllyHealAbAttr } from "#abilities/post-summon-ally-heal-ab-attr";
 import { PostSummonClearAllyStatStagesAbAttr } from "#abilities/post-summon-clear-ally-stat-stages-ab-attr";
@@ -122,27 +135,35 @@ import { PostSummonWeatherChangeAbAttr } from "#abilities/post-summon-weather-ch
 import { PostSummonWeatherSuppressedFormChangeAbAttr } from "#abilities/post-summon-weather-suppressed-form-change-ab-attr";
 import { PostTeraFormChangeClearWeatherTerrainAbAttr } from "#abilities/post-tera-form-change-clear-weather-terrain-ab-attr";
 import { PostTeraFormChangeStatChangeAbAttr } from "#abilities/post-tera-form-change-stat-change-ab-attr";
+import { PostTerrainChangeAbAttr } from "#abilities/post-terrain-change-ab-attr";
 import { PostTerrainChangeAddBattlerTagAbAttr } from "#abilities/post-terrain-change-add-battler-tag-ab-attr";
+import { PostTurnAbAttr } from "#abilities/post-turn-ab-attr";
 import { PostTurnFormChangeAbAttr } from "#abilities/post-turn-form-change-ab-attr";
 import { PostTurnLootAbAttr } from "#abilities/post-turn-loot-ab-attr";
 import { PostTurnResetStatusAbAttr } from "#abilities/post-turn-reset-status-ab-attr";
 import { PostTurnStatusHealAbAttr } from "#abilities/post-turn-status-heal-ab-attr";
+import { PostVictoryAbAttr } from "#abilities/post-victory-ab-attr";
 import { PostVictoryFormChangeAbAttr } from "#abilities/post-victory-form-change-ab-attr";
 import { PostVictoryStatStageChangeAbAttr } from "#abilities/post-victory-stat-stage-change-ab-attr";
+import { PostWeatherChangeAbAttr } from "#abilities/post-weather-change-ab-attr";
 import { PostWeatherChangeAddBattlerTagAbAttr } from "#abilities/post-weather-change-add-battler-tag-ab-attr";
 import { PostWeatherChangeFormChangeAbAttr } from "#abilities/post-weather-change-form-change-ab-attr";
+import { PostWeatherLapseAbAttr } from "#abilities/post-weather-lapse-ab-attr";
 import { PostWeatherLapseDamageAbAttr } from "#abilities/post-weather-lapse-damage-ab-attr";
 import { PostWeatherLapseHealAbAttr } from "#abilities/post-weather-lapse-heal-ab-attr";
+import { PreSwitchOutAbAttr } from "#abilities/pre-switch-out-ab-attr";
 import { PreSwitchOutClearWeatherAbAttr } from "#abilities/pre-switch-out-clear-weather-ab-attr";
 import { PreSwitchOutFormChangeAbAttr } from "#abilities/pre-switch-out-form-change-ab-attr";
 import { PreSwitchOutHealAbAttr } from "#abilities/pre-switch-out-heal-ab-attr";
 import { PreSwitchOutResetStatusAbAttr } from "#abilities/pre-switch-out-reset-status-ab-attr";
+import { PreWeatherDamageAbAttr } from "#abilities/pre-weather-damage-ab-attr";
 import { PreventBerryUseAbAttr } from "#abilities/prevent-berry-use-ab-attr";
 import { PreventBypassSpeedChanceAbAttr } from "#abilities/prevent-bypass-speed-chance-ab-attr";
 import { ProtectStatAbAttr } from "#abilities/protect-stat-ab-attr";
 import { ReceivedMoveDamageMultiplierAbAttr } from "#abilities/received-move-damage-multiplier-ab-attr";
 import { ReceivedTypeDamageMultiplierAbAttr } from "#abilities/received-type-damage-multiplier-ab-attr";
 import { RecoveryBoostAbAttr } from "#abilities/recovery-boost-ab-attr";
+import { RedirectMoveAbAttr } from "#abilities/redirect-move-ab-attr";
 import { RedirectTypeMoveAbAttr } from "#abilities/redirect-type-move-ab-attr";
 import { ReduceBerryUseThresholdAbAttr } from "#abilities/reduce-berry-use-threshold-ab-attr";
 import { ReduceBurnDamageAbAttr } from "#abilities/reduce-burn-damage-ab-attr";
@@ -163,12 +184,14 @@ import { SyncEncounterNatureAbAttr } from "#abilities/sync-encounter-nature-ab-a
 import { SynchronizeStatusAbAttr } from "#abilities/synchronize-status-ab-attr";
 import { TerrainEventTypeChangeAbAttr } from "#abilities/terrain-event-type-change-ab-attr";
 import { TreasureOfRuinAbAttr } from "#abilities/treasure-of-ruin-ab-attr";
+import { TypeImmunityAbAttr } from "#abilities/type-immunity-ab-attr";
 import { TypeImmunityAddBattlerTagAbAttr } from "#abilities/type-immunity-add-battler-tag-ab-attr";
 import { TypeImmunityHealAbAttr } from "#abilities/type-immunity-heal-ab-attr";
 import { TypeImmunityStatStageChangeAbAttr } from "#abilities/type-immunity-stat-stage-change-ab-attr";
 import { UserFieldBattlerTagImmunityAbAttr } from "#abilities/user-field-battler-tag-immunity-ab-attr";
 import { UserFieldMoveTypePowerBoostAbAttr } from "#abilities/user-field-move-type-power-boost-ab-attr";
 import { UserFieldStatusEffectImmunityAbAttr } from "#abilities/user-field-status-effect-immunity-ab-attr";
+import { VariableMovePowerAbAttr } from "#abilities/variable-move-power-ab-attr";
 import { VariableMovePowerBoostAbAttr } from "#abilities/variable-move-power-boost-ab-attr";
 import { WeatherBasedSpeedDoublerAbAttr } from "#abilities/weather-based-speed-doubler-ab-attr";
 import { WeightMultiplierAbAttr } from "#abilities/weight-multiplier-ab-attr";
@@ -201,6 +224,121 @@ import {
 import { NumberHolder, toDmgValue } from "#utils/common-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
 import i18next from "i18next";
+
+const AbilityAttrs = {
+  PostDefendAbilityGiveAbAttr,
+  PostDamageForceSwitchAbAttr,
+  SuppressFieldAbilitiesAbAttr,
+  BlockRedirectAbAttr,
+  IgnoreMoveEffectsAbAttr,
+  IgnoreTypeImmunityAbAttr,
+  CommanderAbAttr,
+  BlockNonDirectDamageAbAttr,
+  ReverseDrainAbAttr,
+  IgnoreContactAbAttr,
+  MoveAbilityBypassAbAttr,
+  IgnoreProtectOnContactAbAttr,
+  IncreasePpAbAttr,
+  AlwaysHitAbAttr,
+  MaxMultiHitAbAttr,
+  SuppressWeatherEffectAbAttr,
+  ReceivedMoveDamageMultiplierAbAttr,
+  PostAttackApplyStatusEffectAbAttr,
+  PostDefendContactApplyStatusEffectAbAttr,
+  BypassSpeedChanceAbAttr,
+  PreventBypassSpeedChanceAbAttr,
+  EffectiveStatMultiplierAbAttr,
+  PostAttackApplyBattlerTagAbAttr,
+  MoveEffectChanceMultiplierAbAttr,
+  DoubleBattleChanceAbAttr,
+  PostBattleInitAbAttr,
+  PostItemLostAbAttr,
+  BlockItemTheftAbAttr,
+  ForceSwitchOutImmunityAbAttr,
+  FieldPreventExplosionLikeAbAttr,
+  IntimidateImmunityAbAttr,
+  PostIntimidateStatStageChangeAbAttr,
+  InfiltratorAbAttr,
+  ProtectStatAbAttr,
+  FlinchEffectAbAttr,
+  ReduceBerryUseThresholdAbAttr,
+  DoubleBerryEffectAbAttr,
+  HealFromBerryUseAbAttr,
+  RecoveryBoostAbAttr,
+  BlockOneHitKOAbAttr,
+  BlockRecoilDamageAbAttr,
+  ConfusionOnStatusEffectAbAttr,
+  StatStageChangeMultiplierAbAttr,
+  WonderSkinAbAttr,
+  MoveTypeChangeAbAttr,
+  VariableMovePowerAbAttr,
+  AllyMoveCategoryPowerBoostAbAttr,
+  UserFieldMoveTypePowerBoostAbAttr,
+  ChangeMovePriorityAbAttr,
+  PostWeatherChangeAbAttr,
+  PostTerrainChangeAbAttr,
+  TerrainEventTypeChangeAbAttr,
+  BonusCritAbAttr,
+  FieldStatMultiplierAbAttr,
+  RunSuccessAbAttr,
+  PostBattleAbAttr,
+  PreventBerryUseAbAttr,
+  SyncEncounterNatureAbAttr,
+  PostFaintAbAttr,
+  PostKnockOutAbAttr,
+  PostVictoryAbAttr,
+  AddSecondStrikeAbAttr,
+  PostDamageAbAttr,
+  PostAttackAbAttr,
+  PostDefendAbAttr,
+  WeightMultiplierAbAttr,
+  ArenaTrapAbAttr,
+  TypeImmunityAbAttr,
+  MoveImmunityAbAttr,
+  FieldPriorityMoveImmunityAbAttr,
+  FullHpResistTypeAbAttr,
+  IgnoreOpponentStatStagesAbAttr,
+  MultCritAbAttr,
+  StabBoostAbAttr,
+  BypassBurnDamageReductionAbAttr,
+  DamageBoostAbAttr,
+  AlliedFieldDamageReductionAbAttr,
+  SturdyAbAttr,
+  ConditionalCritAbAttr,
+  BlockCritAbAttr,
+  BattlerTagImmunityAbAttr,
+  UserFieldBattlerTagImmunityAbAttr,
+  IgnoreTypeStatusEffectImmunityAbAttr,
+  StatusEffectImmunityAbAttr,
+  UserFieldStatusEffectImmunityAbAttr,
+  SynchronizeStatusAbAttr,
+  ReduceSleepDurationAbAttr,
+  PokemonTypeChangeAbAttr,
+  PostMoveUsedAbAttr,
+  RedirectMoveAbAttr,
+  PostSummonAbAttr,
+  BlockStatusDamageAbAttr,
+  ReduceBurnDamageAbAttr,
+  StatStageChangeCopyAbAttr,
+  PostStatStageChangeAbAttr,
+  PreSwitchOutAbAttr,
+  PostTurnAbAttr,
+  PreWeatherDamageAbAttr,
+  PostWeatherLapseAbAttr,
+  FieldMoveTypePowerBoostAbAttr,
+  EffectSporeAbAttr,
+  ReflectStatStageChangeAbAttr,
+  BypassParaSpeedReductionAbAttr,
+  MockStatusEffectAbAttr,
+  ReflectMovesAbAttr,
+  PostTeraFormChangeStatChangeAbAttr,
+  PostTeraFormChangeClearWeatherTerrainAbAttr,
+  BadDreamsAbAttr,
+  AccuracyMultiplierAbAttr,
+  FieldAccuracyMultiplierAbAttr,
+  EvasivenessMultiplierAbAttr,
+};
+export type AbAttrConstructorMap = typeof AbilityAttrs;
 
 export function initAbilities(): void {
   allAbilities.push(
@@ -332,7 +470,7 @@ export function initAbilities(): void {
       .attr(PostSummonCopyAbilityAbAttr)
       .uncopiable(),
     new Ability(AbilityId.HUGE_POWER, 3) //
-      .attr(EffectiveStatMultiplier, Stat.ATK, 2),
+      .attr(EffectiveStatMultiplierAbAttr, Stat.ATK, 2),
     new Ability(AbilityId.POISON_POINT, 3) //
       .attr(PostDefendContactApplyStatusEffectAbAttr, 30, StatusEffect.POISON)
       .bypassFaint(),
@@ -392,7 +530,7 @@ export function initAbilities(): void {
     new Ability(AbilityId.TRUANT, 3) //
       .attr(PostSummonAddBattlerTagAbAttr, BattlerTagType.TRUANT, 1, false),
     new Ability(AbilityId.HUSTLE, 3) //
-      .attr(EffectiveStatMultiplier, Stat.ATK, 1.5)
+      .attr(EffectiveStatMultiplierAbAttr, Stat.ATK, 1.5)
       .attr(AccuracyMultiplierAbAttr, 0.8, (_user, move) => move?.category === MoveCategory.PHYSICAL),
     new Ability(AbilityId.CUTE_CHARM, 3) //
       .attr(PostDefendContactApplyTagChanceAbAttr, 30, BattlerTagType.INFATUATED),
@@ -400,7 +538,7 @@ export function initAbilities(): void {
       .conditionalAttr(
         (p) =>
           globalScene.currentBattle.double && [AbilityId.PLUS, AbilityId.MINUS].some((a) => p.getAlly()?.hasAbility(a)),
-        EffectiveStatMultiplier,
+        EffectiveStatMultiplierAbAttr,
         Stat.SPATK,
         1.5,
       ),
@@ -408,7 +546,7 @@ export function initAbilities(): void {
       .conditionalAttr(
         (p) =>
           globalScene.currentBattle.double && [AbilityId.PLUS, AbilityId.MINUS].some((a) => p.getAlly()?.hasAbility(a)),
-        EffectiveStatMultiplier,
+        EffectiveStatMultiplierAbAttr,
         Stat.SPATK,
         1.5,
       ),
@@ -430,9 +568,9 @@ export function initAbilities(): void {
       .conditionalAttr((pokemon) => !pokemon.randSeedInt(3), PostTurnResetStatusAbAttr),
     new Ability(AbilityId.GUTS, 3) //
       .attr(BypassBurnDamageReductionAbAttr)
-      .conditionalAttr((pokemon) => pokemon.hasNonVolatileStatusEffect(), EffectiveStatMultiplier, Stat.ATK, 1.5),
+      .conditionalAttr((pokemon) => pokemon.hasNonVolatileStatusEffect(), EffectiveStatMultiplierAbAttr, Stat.ATK, 1.5),
     new Ability(AbilityId.MARVEL_SCALE, 3) //
-      .conditionalAttr((pokemon) => pokemon.hasNonVolatileStatusEffect(), EffectiveStatMultiplier, Stat.DEF, 1.5)
+      .conditionalAttr((pokemon) => pokemon.hasNonVolatileStatusEffect(), EffectiveStatMultiplierAbAttr, Stat.DEF, 1.5)
       .ignorable(),
     new Ability(AbilityId.LIQUID_OOZE, 3) //
       .attr(ReverseDrainAbAttr),
@@ -459,7 +597,7 @@ export function initAbilities(): void {
       .attr(ProtectStatAbAttr)
       .ignorable(),
     new Ability(AbilityId.PURE_POWER, 3) //
-      .attr(EffectiveStatMultiplier, Stat.ATK, 2),
+      .attr(EffectiveStatMultiplierAbAttr, Stat.ATK, 2),
     new Ability(AbilityId.SHELL_ARMOR, 3) //
       .attr(BlockCritAbAttr)
       .ignorable(),
@@ -534,10 +672,15 @@ export function initAbilities(): void {
       .condition(getWeatherCondition(WeatherType.RAIN, WeatherType.HEAVY_RAIN)),
     new Ability(AbilityId.SOLAR_POWER, 4) //
       .attr(PostWeatherLapseDamageAbAttr, 1 / 8, WeatherType.SUNNY, WeatherType.HARSH_SUN)
-      .attr(EffectiveStatMultiplier, Stat.SPATK, 1.5, getWeatherCondition(WeatherType.SUNNY, WeatherType.HARSH_SUN)),
+      .attr(
+        EffectiveStatMultiplierAbAttr,
+        Stat.SPATK,
+        1.5,
+        getWeatherCondition(WeatherType.SUNNY, WeatherType.HARSH_SUN),
+      ),
     new Ability(AbilityId.QUICK_FEET, 4) //
       .attr(BypassParaSpeedReductionAbAttr)
-      .conditionalAttr((pokemon) => pokemon.hasNonVolatileStatusEffect(), EffectiveStatMultiplier, Stat.SPD, 1.5),
+      .conditionalAttr((pokemon) => pokemon.hasNonVolatileStatusEffect(), EffectiveStatMultiplierAbAttr, Stat.SPD, 1.5),
     new Ability(AbilityId.NORMALIZE, 4) //
       .attr(MoveTypeChangeAbAttr, ElementalType.NORMAL, 1.2, anyTypeMoveConversionCondition),
     new Ability(AbilityId.SNIPER, 4) //
@@ -635,13 +778,13 @@ export function initAbilities(): void {
     new Ability(AbilityId.FLOWER_GIFT, 4) //
       .conditionalAttr(
         getWeatherCondition(WeatherType.SUNNY || WeatherType.HARSH_SUN),
-        EffectiveStatMultiplier,
+        EffectiveStatMultiplierAbAttr,
         Stat.ATK,
         1.5,
       )
       .conditionalAttr(
         getWeatherCondition(WeatherType.SUNNY || WeatherType.HARSH_SUN),
-        EffectiveStatMultiplier,
+        EffectiveStatMultiplierAbAttr,
         Stat.SPDEF,
         1.5,
       )
@@ -682,8 +825,8 @@ export function initAbilities(): void {
     new Ability(AbilityId.DEFIANT, 5) //
       .attr(DefiantCompetitiveAbAttr, [Stat.ATK], 2),
     new Ability(AbilityId.DEFEATIST, 5) //
-      .attr(EffectiveStatMultiplier, Stat.ATK, 0.5)
-      .attr(EffectiveStatMultiplier, Stat.SPATK, 0.5)
+      .attr(EffectiveStatMultiplierAbAttr, Stat.ATK, 0.5)
+      .attr(EffectiveStatMultiplierAbAttr, Stat.SPATK, 0.5)
       .condition((pokemon) => pokemon.getHpRatio() <= 0.5),
     new Ability(AbilityId.CURSED_BODY, 5) //
       .attr(PostDefendMoveDisableAbAttr, 30)
@@ -857,7 +1000,7 @@ export function initAbilities(): void {
       .attr(PokemonTypeChangeAbAttr),
     new Ability(AbilityId.FUR_COAT, 6) //
       // Doesn't boost defense on self inflicted confusion damage
-      .attr(EffectiveStatMultiplier, Stat.DEF, 2, (_user, target) => !!target)
+      .attr(EffectiveStatMultiplierAbAttr, Stat.DEF, 2, (_user, target) => !!target)
       .ignorable(),
     new Ability(AbilityId.MAGICIAN, 6) //
       .attr(PostAttackStealHeldItemAbAttr),
@@ -890,7 +1033,7 @@ export function initAbilities(): void {
         1.5,
       ),
     new Ability(AbilityId.GRASS_PELT, 6) //
-      .conditionalAttr(getTerrainCondition(TerrainType.GRASSY), EffectiveStatMultiplier, Stat.DEF, 1.5)
+      .conditionalAttr(getTerrainCondition(TerrainType.GRASSY), EffectiveStatMultiplierAbAttr, Stat.DEF, 1.5)
       .ignorable(),
     new Ability(AbilityId.SYMBIOSIS, 6) //
       .unimplemented(),
@@ -1030,7 +1173,7 @@ export function initAbilities(): void {
     new Ability(AbilityId.GALVANIZE, 7) //
       .attr(MoveTypeChangeAbAttr, ElementalType.ELECTRIC, 1.2, normalTypeMoveConversionCondition),
     new Ability(AbilityId.SURGE_SURFER, 7) //
-      .conditionalAttr(getTerrainCondition(TerrainType.ELECTRIC), EffectiveStatMultiplier, Stat.SPD, 2),
+      .conditionalAttr(getTerrainCondition(TerrainType.ELECTRIC), EffectiveStatMultiplierAbAttr, Stat.SPD, 2),
     new Ability(AbilityId.SCHOOLING, 7) //
       .attr(PostBattleInitFormChangeAbAttr, () => 0)
       .attr(PostSummonFormChangeAbAttr, (p) => (p.level < 20 || p.getHpRatio() <= 0.25 ? 0 : 1))
@@ -1559,13 +1702,13 @@ export function initAbilities(): void {
       .attr(PostSummonWeatherChangeAbAttr, WeatherType.SUNNY)
       .conditionalAttr(
         getWeatherCondition(WeatherType.SUNNY, WeatherType.HARSH_SUN),
-        EffectiveStatMultiplier,
+        EffectiveStatMultiplierAbAttr,
         Stat.ATK,
         4 / 3,
       ),
     new Ability(AbilityId.HADRON_ENGINE, 9) //
       .attr(PostSummonTerrainChangeAbAttr, TerrainType.ELECTRIC)
-      .conditionalAttr(getTerrainCondition(TerrainType.ELECTRIC), EffectiveStatMultiplier, Stat.SPATK, 4 / 3),
+      .conditionalAttr(getTerrainCondition(TerrainType.ELECTRIC), EffectiveStatMultiplierAbAttr, Stat.SPATK, 4 / 3),
     new Ability(AbilityId.OPPORTUNIST, 9) //
       .attr(StatStageChangeCopyAbAttr),
     new Ability(AbilityId.CUD_CHEW, 9) //

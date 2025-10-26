@@ -1,6 +1,5 @@
 import { AbAttr } from "#abilities/ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#field/pokemon";
@@ -14,11 +13,11 @@ type ArenaTrapCondition = (user: Pokemon, target: Pokemon) => boolean;
  * because of a trapping ability or move.
  */
 export class ArenaTrapAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "ArenaTrapAbAttr";
   protected readonly arenaTrapCondition: ArenaTrapCondition;
 
   constructor(condition: ArenaTrapCondition) {
     super(false);
-    this._flags.add(AbAttrFlag.ARENA_TRAP);
     this.arenaTrapCondition = condition;
   }
   /**

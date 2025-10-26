@@ -1,13 +1,4 @@
-import type { AllyMoveCategoryPowerBoostAbAttr } from "#abilities/ally-move-category-power-boost-ab-attr";
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { ChangeMovePriorityAbAttr } from "#abilities/change-move-priority-ab-attr";
-import type { FieldMoveTypePowerBoostAbAttr } from "#abilities/field-move-type-power-boost-ab-attr";
-import type { InfiltratorAbAttr } from "#abilities/infiltrator-ab-attr";
-import type { MoveAbilityBypassAbAttr } from "#abilities/move-ability-bypass-ab-attr";
-import type { MoveTypeChangeAbAttr } from "#abilities/move-type-change-ab-attr";
-import type { UserFieldMoveTypePowerBoostAbAttr } from "#abilities/user-field-move-type-power-boost-ab-attr";
-import type { VariableMovePowerAbAttr } from "#abilities/variable-move-power-ab-attr";
-import type { WonderSkinAbAttr } from "#abilities/wonder-skin-ab-attr";
 import { globalScene } from "#app/global-scene";
 import type { WeakenMoveTypeTag } from "#arena-tags/weaken-move-type-tag";
 import { applyBattlerTags } from "#battler-tags/apply-battler-tags";
@@ -18,7 +9,6 @@ import { WEAKEN_MOVE_TYPE_ARENA_TAG_TYPES } from "#constants/arena-tag-constants
 import { TYPE_BOOST_TAG_TYPES } from "#constants/battler-tag-constants";
 import { FOG_ACCURACY_MULTIPLIER } from "#constants/game-constants";
 import { allMoves } from "#data/data-lists";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -342,7 +332,7 @@ export abstract class Move {
 
     const bypassed = new BooleanHolder(false);
     // TODO: Allow this to be simulated
-    applyAbAttrs<InfiltratorAbAttr>(AbAttrFlag.INFILTRATOR, user, false, bypassed);
+    applyAbAttrs("InfiltratorAbAttr", user, false, bypassed);
 
     return !bypassed.value && !this.hasFlag(MoveFlags.SOUND_MOVE) && !this.hasFlag(MoveFlags.IGNORE_SUBSTITUTE);
   }
@@ -642,30 +632,21 @@ export abstract class Move {
     // special cases below, eg: if the move flag is MAKES_CONTACT, and the user pokemon has an ability that ignores contact (like "Long Reach"), then overrides and move does not make contact
     switch (flag) {
       case MoveFlags.MAKES_CONTACT:
-        if (user.hasAbilityWithAttr(AbAttrFlag.IGNORE_CONTACT) || this.hitsSubstitute(user, target)) {
+        if (user.hasAbilityWithAttr("IgnoreContactAbAttr") || this.hitsSubstitute(user, target)) {
           return false;
         }
         break;
       case MoveFlags.IGNORE_ABILITIES:
-        if (user.hasAbilityWithAttr(AbAttrFlag.MOVE_ABILITY_BYPASS)) {
-          const abilityEffectsIgnored = new BooleanHolder(false);
-          applyAbAttrs<MoveAbilityBypassAbAttr>(
-            AbAttrFlag.MOVE_ABILITY_BYPASS,
-            user,
-            false,
-            abilityEffectsIgnored,
-            this,
-          );
+        if (user.hasAbilityWithAttr("MoveAbilityBypassAbAttr")) {
+          const abilityEffectsIgnored = new ValueHolder(false);
+          applyAbAttrs("MoveAbilityBypassAbAttr", user, false, abilityEffectsIgnored, this);
           if (abilityEffectsIgnored.value) {
             return true;
           }
         }
         break;
       case MoveFlags.IGNORE_PROTECT:
-        if (
-          user.hasAbilityWithAttr(AbAttrFlag.IGNORE_PROTECT_ON_CONTACT)
-          && this.checkFlag(MoveFlags.MAKES_CONTACT, user)
-        ) {
+        if (user.hasAbilityWithAttr("IgnoreProtectOnContactAbAttr") && this.checkFlag(MoveFlags.MAKES_CONTACT, user)) {
           return true;
         }
         break;
@@ -765,7 +746,7 @@ export abstract class Move {
     const moveAccuracy = new NumberHolder(this.accuracy);
 
     applyMoveAttrs(VariableAccuracyAttr, user, target, this, moveAccuracy);
-    applyAbAttrs<WonderSkinAbAttr>(AbAttrFlag.WONDER_SKIN, target, simulated, user, this, moveAccuracy);
+    applyAbAttrs("WonderSkinAbAttr", target, simulated, user, this, moveAccuracy);
 
     if (moveAccuracy.value === -1) {
       return moveAccuracy.value;
@@ -800,19 +781,11 @@ export abstract class Move {
     const power = new NumberHolder(this.power);
     const typeChangeMovePowerMultiplier = new NumberHolder(1);
 
-    applyAbAttrs<MoveTypeChangeAbAttr>(
-      AbAttrFlag.MOVE_TYPE_CHANGE,
-      source,
-      true,
-      this,
-      target,
-      undefined,
-      typeChangeMovePowerMultiplier,
-    );
+    applyAbAttrs("MoveTypeChangeAbAttr", source, true, this, target, undefined, typeChangeMovePowerMultiplier);
 
     applyMoveAttrs(VariablePowerAttr, source, target, this, power);
 
-    applyAbAttrs<VariableMovePowerAbAttr>(AbAttrFlag.VARIABLE_MOVE_POWER, source, simulated, this, target, power);
+    applyAbAttrs("VariableMovePowerAbAttr", source, simulated, this, target, power);
 
     const sourceTeraType = source.teraType;
     if (
@@ -828,23 +801,15 @@ export abstract class Move {
 
     const allyPokemon = source.getAlly();
     if (allyPokemon) {
-      applyAbAttrs<AllyMoveCategoryPowerBoostAbAttr>(
-        AbAttrFlag.ALLY_MOVE_CATEGORY_POWER_BOOST,
-        allyPokemon,
-        simulated,
-        this,
-        target,
-        power,
-      );
+      applyAbAttrs("AllyMoveCategoryPowerBoostAbAttr", allyPokemon, simulated, this, target, power);
     }
 
     const fieldAuras = new Set(
-      globalScene.getField(true).flatMap(
-        (p) =>
-          p.getAbilityAttrs<FieldMoveTypePowerBoostAbAttr>(AbAttrFlag.FIELD_MOVE_TYPE_POWER_BOOST).filter((attr) => {
-            const condition = attr.getCondition();
-            return !condition || condition(p);
-          }) as FieldMoveTypePowerBoostAbAttr[],
+      globalScene.getField(true).flatMap((p) =>
+        p.getAbilityAttrs("FieldMoveTypePowerBoostAbAttr").filter((attr) => {
+          const condition = attr.getCondition();
+          return !condition || condition(p);
+        }),
       ),
     );
     for (const aura of fieldAuras) {
@@ -852,16 +817,7 @@ export abstract class Move {
     }
 
     const alliedField: Pokemon[] = source.getField();
-    alliedField.forEach((p) =>
-      applyAbAttrs<UserFieldMoveTypePowerBoostAbAttr>(
-        AbAttrFlag.USER_FIELD_MOVE_TYPE_POWER_BOOST,
-        p,
-        simulated,
-        this,
-        target,
-        power,
-      ),
-    );
+    alliedField.forEach((p) => applyAbAttrs("UserFieldMoveTypePowerBoostAbAttr", p, simulated, this, target, power));
 
     power.value *= typeChangeMovePowerMultiplier.value;
 
@@ -897,7 +853,7 @@ export abstract class Move {
     const priority = new NumberHolder(this.priority);
 
     applyMoveAttrs(IncrementMovePriorityAttr, user, null, this, priority);
-    applyAbAttrs<ChangeMovePriorityAbAttr>(AbAttrFlag.CHANGE_MOVE_PRIORITY, user, simulated, this, priority);
+    applyAbAttrs("ChangeMovePriorityAbAttr", user, simulated, this, priority);
 
     return priority.value;
   }

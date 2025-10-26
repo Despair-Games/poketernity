@@ -1,14 +1,10 @@
 import { PreWeatherEffectAbAttr } from "#abilities/pre-weather-effect-ab-attr";
 import type { Weather } from "#data/weather";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { ValueHolder } from "#utils/common-utils";
 
 export abstract class PreWeatherDamageAbAttr extends PreWeatherEffectAbAttr {
-  constructor() {
-    super();
-    this._flags.add(AbAttrFlag.PRE_WEATHER_DAMAGE);
-  }
+  protected override readonly abAttrKey = "PreWeatherDamageAbAttr";
 
   /**
    * Applies an effect before the source would take damage from weather

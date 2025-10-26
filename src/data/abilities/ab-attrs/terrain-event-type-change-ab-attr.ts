@@ -1,10 +1,10 @@
 import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ElementalType } from "#enums/elemental-type";
 import { TerrainType } from "#enums/terrain-type";
 import type { Pokemon } from "#field/pokemon";
+import type { AbAttrKey, AbAttrMap } from "#types/ability-types";
 import { enumValueToKey } from "#utils/common-utils";
 import i18next from "i18next";
 
@@ -13,9 +13,15 @@ import i18next from "i18next";
  * Used by Mimicry.
  */
 export class TerrainEventTypeChangeAbAttr extends PostSummonAbAttr {
-  constructor() {
-    super();
-    this._flags.add(AbAttrFlag.TERRAIN_EVENT_TYPE_CHANGE);
+  protected override readonly abAttrKey = "TerrainEventTypeChangeAbAttr";
+
+  /**
+   * @todo This is a temporary workaround for this attribute being recycled
+   * as a post-summon effect. This attribute's behavior should probably be split
+   * into two attributes.
+   */
+  public override is<K extends AbAttrKey>(abAttrKey: K): this is AbAttrMap[K] {
+    return super.is(abAttrKey) || abAttrKey === "PostSummonAbAttr";
   }
 
   public override apply(pokemon: Pokemon, simulated: boolean, _onSummon: boolean = true): void {

@@ -1,5 +1,4 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
@@ -16,11 +15,11 @@ const exceptMoves = Object.freeze<MoveId[]>([MoveId.ORDER_UP, MoveId.ELECTRO_SHO
  * @see {@linkcode apply}
  */
 export class MoveEffectChanceMultiplierAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "MoveEffectChanceMultiplierAbAttr";
   private readonly chanceMultiplier: number;
 
   constructor(chanceMultiplier: number) {
     super();
-    this._flags.add(AbAttrFlag.MOVE_EFFECT_CHANCE_MULTIPLIER);
     this.chanceMultiplier = chanceMultiplier;
   }
 

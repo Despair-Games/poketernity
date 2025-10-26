@@ -1,13 +1,13 @@
 import { PreDefendAbAttr } from "#abilities/pre-defend-ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { ValueHolder } from "#utils/common-utils";
 
 export class FieldPriorityMoveImmunityAbAttr extends PreDefendAbAttr {
+  protected override readonly abAttrKey = "FieldPriorityMoveImmunityAbAttr";
+
   constructor() {
     super(true);
-    this._flags.add(AbAttrFlag.FIELD_PRIORITY_MOVE_IMMUNITY);
   }
 
   public override apply(

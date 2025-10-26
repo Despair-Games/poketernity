@@ -1,5 +1,4 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { ValueHolder } from "#utils/common-utils";
 
@@ -9,11 +8,11 @@ import type { ValueHolder } from "#utils/common-utils";
  * e.g. for {@link https://bulbapedia.bulbagarden.net/wiki/Sand_Veil_(Ability) | Sand Veil}
  */
 export class EvasivenessMultiplierAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "EvasivenessMultiplierAbAttr";
   protected readonly multiplier: number;
 
   constructor(multiplier: number) {
     super();
-    this._flags.add(AbAttrFlag.EVASIVENESS_MULTIPLIER);
 
     this.multiplier = multiplier;
   }
