@@ -673,9 +673,7 @@ export async function catchPokemon(
         resolve();
       };
       const removePokemon = () => {
-        if (pokemon) {
-          globalScene.field.remove(pokemon, true);
-        }
+        pokemon?.leaveField(true, true, true);
       };
       const addToParty = (slotIndex?: number) => {
         const newPokemon = pokemon.addToParty(pokeballType, slotIndex);
@@ -825,8 +823,7 @@ export async function doPokemonFlee(pokemon: EnemyPokemon): Promise<void> {
       ease: "Sine.easeIn",
       scale: pokemon.getSpriteScale(),
       onComplete: () => {
-        pokemon.setVisible(false);
-        globalScene.field.remove(pokemon, true);
+        pokemon.leaveField(true, true, true);
         showEncounterText(i18next.t("battle:pokemonFled", { pokemonName: pokemon.getNameToRender() }), {
           callbackDelay: 600,
           prompt: false,
@@ -854,8 +851,7 @@ export function doPlayerFlee(pokemon: EnemyPokemon): Promise<void> {
       ease: "Sine.easeIn",
       scale: pokemon.getSpriteScale(),
       onComplete: () => {
-        pokemon.setVisible(false);
-        globalScene.field.remove(pokemon, true);
+        pokemon.leaveField(true, true, true);
         showEncounterText(i18next.t("battle:playerFled", { pokemonName: pokemon.getNameToRender() }), {
           callbackDelay: 600,
           prompt: false,
