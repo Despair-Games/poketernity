@@ -1,9 +1,10 @@
 import { AbAttr } from "#abilities/ab-attr";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
+import type { AbAttrKey } from "#types/ability-types";
 
 export abstract class PostDefendAbAttr extends AbAttr {
-  protected override readonly abAttrKey = "PostDefendAbAttr";
+  protected override readonly abAttrKey: AbAttrKey = "PostDefendAbAttr";
 
   constructor() {
     super(true);

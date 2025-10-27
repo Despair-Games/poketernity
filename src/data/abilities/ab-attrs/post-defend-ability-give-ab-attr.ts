@@ -4,14 +4,20 @@ import type { AbilityId } from "#enums/ability-id";
 import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
+import type { AbAttrKey, AbAttrMap } from "#types/ability-types";
 import i18next from "i18next";
 
 export class PostDefendAbilityGiveAbAttr extends PostDefendAbAttr {
+  protected override readonly abAttrKey = "PostDefendAbilityGiveAbAttr";
   private readonly ability: AbilityId;
 
   constructor(ability: AbilityId) {
     super();
     this.ability = ability;
+  }
+
+  public override is<K extends AbAttrKey>(abAttrKey: K): this is AbAttrMap[K] {
+    return abAttrKey === this.abAttrKey || abAttrKey === "PostDefendAbAttr";
   }
 
   public override apply(_pokemon: Pokemon, simulated: boolean, attacker: Pokemon, _move: Move): void {
@@ -22,11 +28,11 @@ export class PostDefendAbilityGiveAbAttr extends PostDefendAbAttr {
   }
 
   public override canApply(...[pokemon, , attacker, move]: Parameters<this["apply"]>): boolean {
-    // TODO: This allows Mummy to affect Lingering Aroma (and vice versa)
+    const ability = attacker.getAbility();
     return (
       move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
-      && attacker.getAbility().isSuppressable
-      && attacker.getAbility() !== pokemon.getAbility()
+      && ability.isSuppressable
+      && ability.hasAttrOfKey("PostDefendAbilityGiveAbAttr")
       && !attacker.isMax()
     );
   }

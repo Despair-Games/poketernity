@@ -229,7 +229,6 @@ import i18next from "i18next";
 
 const AbilityAttrs = {
   PostDefendAbilityGiveAbAttr,
-  PostDamageForceSwitchAbAttr,
   SuppressFieldAbilitiesAbAttr,
   BlockRedirectAbAttr,
   IgnoreMoveEffectsAbAttr,
@@ -245,12 +244,9 @@ const AbilityAttrs = {
   MaxMultiHitAbAttr,
   SuppressWeatherEffectAbAttr,
   ReceivedMoveDamageMultiplierAbAttr,
-  PostAttackApplyStatusEffectAbAttr,
-  PostDefendContactApplyStatusEffectAbAttr,
   BypassSpeedChanceAbAttr,
   PreventBypassSpeedChanceAbAttr,
   EffectiveStatMultiplierAbAttr,
-  PostAttackApplyBattlerTagAbAttr,
   MoveEffectChanceMultiplierAbAttr,
   DoubleBattleChanceAbAttr,
   PostBattleInitAbAttr,
@@ -328,7 +324,6 @@ const AbilityAttrs = {
   PreWeatherDamageAbAttr,
   PostWeatherLapseAbAttr,
   FieldMoveTypePowerBoostAbAttr,
-  EffectSporeAbAttr,
   ReflectStatStageChangeAbAttr,
   BypassParaSpeedReductionAbAttr,
   MockStatusEffectAbAttr,
