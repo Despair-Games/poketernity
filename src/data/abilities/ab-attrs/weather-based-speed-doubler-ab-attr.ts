@@ -1,6 +1,7 @@
-import { EffectiveStatMultiplier } from "#abilities/effective-stat-multiplier-ab-attr";
+import { EffectiveStatMultiplierAbAttr } from "#abilities/effective-stat-multiplier-ab-attr";
 import { Stat } from "#enums/stat";
 import type { WeatherType } from "#enums/weather-type";
+import type { NonEmptyArray } from "#types/utility-types";
 import { getWeatherCondition } from "#utils/ability-utils";
 
 /**
@@ -17,10 +18,10 @@ import { getWeatherCondition } from "#utils/ability-utils";
 +-------------+------------------+
  * ```
  */
-export class WeatherBasedSpeedDoublerAbAttr extends EffectiveStatMultiplier {
-  private readonly weatherTypes: readonly WeatherType[];
+export class WeatherBasedSpeedDoublerAbAttr extends EffectiveStatMultiplierAbAttr {
+  private readonly weatherTypes: Readonly<NonEmptyArray<WeatherType>>;
 
-  constructor(...weatherTypes: readonly WeatherType[]) {
+  constructor(...weatherTypes: Readonly<NonEmptyArray<WeatherType>>) {
     super(Stat.SPD, 2);
     this.weatherTypes = weatherTypes;
   }

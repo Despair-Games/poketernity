@@ -31,7 +31,7 @@ import { DoubleBattleChanceAbAttr } from "#abilities/double-battle-chance-ab-att
 import { DoubleBerryEffectAbAttr } from "#abilities/double-berry-effect-ab-attr";
 import { DownloadAbAttr } from "#abilities/download-ab-attr";
 import { EffectSporeAbAttr } from "#abilities/effect-spore-ab-attr";
-import { EffectiveStatMultiplier } from "#abilities/effective-stat-multiplier-ab-attr";
+import { EffectiveStatMultiplierAbAttr } from "#abilities/effective-stat-multiplier-ab-attr";
 import { EvasivenessMultiplierAbAttr } from "#abilities/evasiveness-multiplier-ab-attr";
 import { FetchBallAbAttr } from "#abilities/fetch-ball-ab-attr";
 import { FieldAccuracyMultiplierAbAttr } from "#abilities/field-accuracy-multiplier-ab-attr";
@@ -176,6 +176,7 @@ import { WonderSkinAbAttr } from "#abilities/wonder-skin-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { NON_VOLATILE_STATUS_EFFECTS } from "#constants/game-constants";
+import { RAINY_WEATHER_TYPES, SNOWY_WEATHER_TYPES, SUNNY_WEATHER_TYPES } from "#constants/weather-constants";
 import { allAbilities, allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -193,6 +194,7 @@ import { FlinchAttr } from "#moves/flinch-attr";
 import type { Move } from "#moves/move";
 import { VariablePowerAttr } from "#moves/variable-power-attr";
 import type { AbAttrCondition } from "#types/ability-types";
+import type { NonEmptyArray } from "#types/utility-types";
 import {
   anyTypeMoveConversionCondition,
   getWeatherCondition,
@@ -320,9 +322,9 @@ export function initAbilities(): void {
     new Ability(AbilityId.SERENE_GRACE, 3) //
       .attr(MoveEffectChanceMultiplierAbAttr, 2),
     new Ability(AbilityId.SWIFT_SWIM, 3) //
-      .attr(WeatherBasedSpeedDoublerAbAttr, WeatherType.RAIN, WeatherType.HEAVY_RAIN),
+      .attr(WeatherBasedSpeedDoublerAbAttr, ...RAINY_WEATHER_TYPES),
     new Ability(AbilityId.CHLOROPHYLL, 3) //
-      .attr(WeatherBasedSpeedDoublerAbAttr, WeatherType.SUNNY, WeatherType.HARSH_SUN),
+      .attr(WeatherBasedSpeedDoublerAbAttr, ...SUNNY_WEATHER_TYPES),
     new Ability(AbilityId.ILLUMINATE, 3) //
       .attr(ProtectStatAbAttr, Stat.ACC)
       .attr(DoubleBattleChanceAbAttr)
@@ -332,7 +334,7 @@ export function initAbilities(): void {
       .attr(PostSummonCopyAbilityAbAttr)
       .uncopiable(),
     new Ability(AbilityId.HUGE_POWER, 3) //
-      .attr(EffectiveStatMultiplier, Stat.ATK, 2),
+      .attr(EffectiveStatMultiplierAbAttr, Stat.ATK, 2),
     new Ability(AbilityId.POISON_POINT, 3) //
       .attr(PostDefendContactApplyStatusEffectAbAttr, 30, StatusEffect.POISON)
       .bypassFaint(),
@@ -360,7 +362,7 @@ export function initAbilities(): void {
       .attr(MoveFlagImmunityAbAttr, MoveFlags.SOUND_MOVE)
       .ignorable(),
     new Ability(AbilityId.RAIN_DISH, 3) //
-      .attr(PostWeatherLapseHealAbAttr, 1 / 16, WeatherType.RAIN, WeatherType.HEAVY_RAIN),
+      .attr(PostWeatherLapseHealAbAttr, 1 / 16, ...RAINY_WEATHER_TYPES),
     new Ability(AbilityId.SAND_STREAM, 3) //
       .attr(PostSummonWeatherChangeAbAttr, WeatherType.SANDSTORM),
     new Ability(AbilityId.PRESSURE, 3) //
@@ -392,7 +394,7 @@ export function initAbilities(): void {
     new Ability(AbilityId.TRUANT, 3) //
       .attr(PostSummonAddBattlerTagAbAttr, BattlerTagType.TRUANT, 1, false),
     new Ability(AbilityId.HUSTLE, 3) //
-      .attr(EffectiveStatMultiplier, Stat.ATK, 1.5)
+      .attr(EffectiveStatMultiplierAbAttr, Stat.ATK, 1.5)
       .attr(AccuracyMultiplierAbAttr, 0.8, (_user, move) => move?.category === MoveCategory.PHYSICAL),
     new Ability(AbilityId.CUTE_CHARM, 3) //
       .attr(PostDefendContactApplyTagChanceAbAttr, 30, BattlerTagType.INFATUATED),
@@ -400,7 +402,7 @@ export function initAbilities(): void {
       .conditionalAttr(
         (p) =>
           globalScene.currentBattle.double && [AbilityId.PLUS, AbilityId.MINUS].some((a) => p.getAlly()?.hasAbility(a)),
-        EffectiveStatMultiplier,
+        EffectiveStatMultiplierAbAttr,
         Stat.SPATK,
         1.5,
       ),
@@ -408,7 +410,7 @@ export function initAbilities(): void {
       .conditionalAttr(
         (p) =>
           globalScene.currentBattle.double && [AbilityId.PLUS, AbilityId.MINUS].some((a) => p.getAlly()?.hasAbility(a)),
-        EffectiveStatMultiplier,
+        EffectiveStatMultiplierAbAttr,
         Stat.SPATK,
         1.5,
       ),
@@ -416,12 +418,13 @@ export function initAbilities(): void {
       .uncopiable()
       .unreplaceable()
       .attr(PostSummonFormChangeByWeatherAbAttr)
-      .attr(PostWeatherChangeFormChangeAbAttr, [
+      .attr(
+        PostWeatherChangeFormChangeAbAttr,
         WeatherType.NONE,
         WeatherType.SANDSTORM,
         WeatherType.STRONG_WINDS,
         WeatherType.FOG,
-      ]),
+      ),
     new Ability(AbilityId.STICKY_HOLD, 3) //
       .attr(BlockItemTheftAbAttr)
       .bypassFaint()
@@ -430,9 +433,9 @@ export function initAbilities(): void {
       .conditionalAttr((pokemon) => !pokemon.randSeedInt(3), PostTurnResetStatusAbAttr),
     new Ability(AbilityId.GUTS, 3) //
       .attr(BypassBurnDamageReductionAbAttr)
-      .conditionalAttr((pokemon) => pokemon.hasNonVolatileStatusEffect(), EffectiveStatMultiplier, Stat.ATK, 1.5),
+      .conditionalAttr((pokemon) => pokemon.hasNonVolatileStatusEffect(), EffectiveStatMultiplierAbAttr, Stat.ATK, 1.5),
     new Ability(AbilityId.MARVEL_SCALE, 3) //
-      .conditionalAttr((pokemon) => pokemon.hasNonVolatileStatusEffect(), EffectiveStatMultiplier, Stat.DEF, 1.5)
+      .conditionalAttr((pokemon) => pokemon.hasNonVolatileStatusEffect(), EffectiveStatMultiplierAbAttr, Stat.DEF, 1.5)
       .ignorable(),
     new Ability(AbilityId.LIQUID_OOZE, 3) //
       .attr(ReverseDrainAbAttr),
@@ -459,7 +462,7 @@ export function initAbilities(): void {
       .attr(ProtectStatAbAttr)
       .ignorable(),
     new Ability(AbilityId.PURE_POWER, 3) //
-      .attr(EffectiveStatMultiplier, Stat.ATK, 2),
+      .attr(EffectiveStatMultiplierAbAttr, Stat.ATK, 2),
     new Ability(AbilityId.SHELL_ARMOR, 3) //
       .attr(BlockCritAbAttr)
       .ignorable(),
@@ -493,7 +496,7 @@ export function initAbilities(): void {
     new Ability(AbilityId.SNOW_CLOAK, 4) //
       .attr(EvasivenessMultiplierAbAttr, 1.2)
       .attr(BlockWeatherDamageAbAttr, WeatherType.HAIL)
-      .condition(getWeatherCondition(WeatherType.HAIL, WeatherType.SNOW))
+      .condition(getWeatherCondition(...SNOWY_WEATHER_TYPES))
       .ignorable(),
     new Ability(AbilityId.GLUTTONY, 4) //
       .attr(ReduceBerryUseThresholdAbAttr),
@@ -513,8 +516,8 @@ export function initAbilities(): void {
       .attr(StatStageChangeMultiplierAbAttr, 2)
       .ignorable(),
     new Ability(AbilityId.DRY_SKIN, 4) //
-      .attr(PostWeatherLapseDamageAbAttr, 1 / 8, WeatherType.SUNNY, WeatherType.HARSH_SUN)
-      .attr(PostWeatherLapseHealAbAttr, 1 / 8, WeatherType.RAIN, WeatherType.HEAVY_RAIN)
+      .attr(PostWeatherLapseDamageAbAttr, 1 / 8, ...SUNNY_WEATHER_TYPES)
+      .attr(PostWeatherLapseHealAbAttr, 1 / 8, ...RAINY_WEATHER_TYPES)
       .attr(ReceivedTypeDamageMultiplierAbAttr, ElementalType.FIRE, 1.25)
       .attr(TypeImmunityHealAbAttr, ElementalType.WATER)
       .ignorable(),
@@ -531,13 +534,13 @@ export function initAbilities(): void {
       .attr(MaxMultiHitAbAttr),
     new Ability(AbilityId.HYDRATION, 4) //
       .attr(PostTurnResetStatusAbAttr)
-      .condition(getWeatherCondition(WeatherType.RAIN, WeatherType.HEAVY_RAIN)),
+      .condition(getWeatherCondition(...RAINY_WEATHER_TYPES)),
     new Ability(AbilityId.SOLAR_POWER, 4) //
-      .attr(PostWeatherLapseDamageAbAttr, 1 / 8, WeatherType.SUNNY, WeatherType.HARSH_SUN)
-      .attr(EffectiveStatMultiplier, Stat.SPATK, 1.5, getWeatherCondition(WeatherType.SUNNY, WeatherType.HARSH_SUN)),
+      .attr(PostWeatherLapseDamageAbAttr, 1 / 8, ...SUNNY_WEATHER_TYPES)
+      .attr(EffectiveStatMultiplierAbAttr, Stat.SPATK, 1.5, getWeatherCondition(...SUNNY_WEATHER_TYPES)),
     new Ability(AbilityId.QUICK_FEET, 4) //
       .attr(BypassParaSpeedReductionAbAttr)
-      .conditionalAttr((pokemon) => pokemon.hasNonVolatileStatusEffect(), EffectiveStatMultiplier, Stat.SPD, 1.5),
+      .conditionalAttr((pokemon) => pokemon.hasNonVolatileStatusEffect(), EffectiveStatMultiplierAbAttr, Stat.SPD, 1.5),
     new Ability(AbilityId.NORMALIZE, 4) //
       .attr(MoveTypeChangeAbAttr, ElementalType.NORMAL, 1.2, anyTypeMoveConversionCondition),
     new Ability(AbilityId.SNIPER, 4) //
@@ -564,7 +567,7 @@ export function initAbilities(): void {
       ),
     new Ability(AbilityId.LEAF_GUARD, 4) //
       .attr(StatusEffectImmunityAbAttr)
-      .condition(getWeatherCondition(WeatherType.SUNNY, WeatherType.HARSH_SUN))
+      .condition(getWeatherCondition(...SUNNY_WEATHER_TYPES))
       .ignorable(),
     new Ability(AbilityId.KLUTZ, 4) //
       .unimplemented(),
@@ -612,7 +615,7 @@ export function initAbilities(): void {
       .ignorable(),
     new Ability(AbilityId.ICE_BODY, 4) //
       .attr(BlockWeatherDamageAbAttr, WeatherType.HAIL)
-      .attr(PostWeatherLapseHealAbAttr, 1 / 16, WeatherType.HAIL, WeatherType.SNOW),
+      .attr(PostWeatherLapseHealAbAttr, 1 / 16, ...SNOWY_WEATHER_TYPES),
     new Ability(AbilityId.SOLID_ROCK, 4) //
       .attr(
         ReceivedMoveDamageMultiplierAbAttr,
@@ -633,31 +636,20 @@ export function initAbilities(): void {
       .unsuppressable()
       .unreplaceable(),
     new Ability(AbilityId.FLOWER_GIFT, 4) //
-      .conditionalAttr(
-        getWeatherCondition(WeatherType.SUNNY || WeatherType.HARSH_SUN),
-        EffectiveStatMultiplier,
-        Stat.ATK,
-        1.5,
-      )
-      .conditionalAttr(
-        getWeatherCondition(WeatherType.SUNNY || WeatherType.HARSH_SUN),
-        EffectiveStatMultiplier,
-        Stat.SPDEF,
-        1.5,
-      )
+      .conditionalAttr(getWeatherCondition(...SUNNY_WEATHER_TYPES), EffectiveStatMultiplierAbAttr, Stat.ATK, 1.5)
+      .conditionalAttr(getWeatherCondition(...SUNNY_WEATHER_TYPES), EffectiveStatMultiplierAbAttr, Stat.SPDEF, 1.5)
       .uncopiable()
       .unreplaceable()
       .attr(PostSummonFormChangeByWeatherAbAttr)
-      .attr(PostWeatherChangeFormChangeAbAttr, [
+      .attr(
+        PostWeatherChangeFormChangeAbAttr,
         WeatherType.NONE,
+        ...RAINY_WEATHER_TYPES,
+        ...SNOWY_WEATHER_TYPES,
         WeatherType.SANDSTORM,
         WeatherType.STRONG_WINDS,
         WeatherType.FOG,
-        WeatherType.HAIL,
-        WeatherType.HEAVY_RAIN,
-        WeatherType.SNOW,
-        WeatherType.RAIN,
-      ])
+      )
       // Should also boosts stats of ally
       .partial()
       .ignorable(),
@@ -682,8 +674,8 @@ export function initAbilities(): void {
     new Ability(AbilityId.DEFIANT, 5) //
       .attr(DefiantCompetitiveAbAttr, [Stat.ATK], 2),
     new Ability(AbilityId.DEFEATIST, 5) //
-      .attr(EffectiveStatMultiplier, Stat.ATK, 0.5)
-      .attr(EffectiveStatMultiplier, Stat.SPATK, 0.5)
+      .attr(EffectiveStatMultiplierAbAttr, Stat.ATK, 0.5)
+      .attr(EffectiveStatMultiplierAbAttr, Stat.SPATK, 0.5)
       .condition((pokemon) => pokemon.getHpRatio() <= 0.5),
     new Ability(AbilityId.CURSED_BODY, 5) //
       .attr(PostDefendMoveDisableAbAttr, 30)
@@ -738,7 +730,7 @@ export function initAbilities(): void {
         PostTurnLootAbAttr,
         "EATEN_BERRIES",
         // Rate is doubled when under sun, see https://dex.pokemonshowdown.com/abilities/harvest
-        (pokemon) => (getWeatherCondition(WeatherType.SUNNY, WeatherType.HARSH_SUN)(pokemon) ? 1 : 0.5),
+        (pokemon) => (getWeatherCondition(...SUNNY_WEATHER_TYPES)(pokemon) ? 1 : 0.5),
       )
       // Cannot recover berries used up by fling or natural gift (unimplemented)
       .edgeCase(),
@@ -857,7 +849,7 @@ export function initAbilities(): void {
       .attr(PokemonTypeChangeAbAttr),
     new Ability(AbilityId.FUR_COAT, 6) //
       // Doesn't boost defense on self inflicted confusion damage
-      .attr(EffectiveStatMultiplier, Stat.DEF, 2, (_user, target) => !!target)
+      .attr(EffectiveStatMultiplierAbAttr, Stat.DEF, 2, (_user, target) => !!target)
       .ignorable(),
     new Ability(AbilityId.MAGICIAN, 6) //
       .attr(PostAttackStealHeldItemAbAttr),
@@ -890,7 +882,7 @@ export function initAbilities(): void {
         1.5,
       ),
     new Ability(AbilityId.GRASS_PELT, 6) //
-      .conditionalAttr(getTerrainCondition(TerrainType.GRASSY), EffectiveStatMultiplier, Stat.DEF, 1.5)
+      .conditionalAttr(getTerrainCondition(TerrainType.GRASSY), EffectiveStatMultiplierAbAttr, Stat.DEF, 1.5)
       .ignorable(),
     new Ability(AbilityId.SYMBIOSIS, 6) //
       .unimplemented(),
@@ -1015,7 +1007,7 @@ export function initAbilities(): void {
       )
       .condition(getSheerForceHitDisableAbCondition()),
     new Ability(AbilityId.SLUSH_RUSH, 7) //
-      .attr(WeatherBasedSpeedDoublerAbAttr, WeatherType.HAIL, WeatherType.SNOW),
+      .attr(WeatherBasedSpeedDoublerAbAttr, ...SNOWY_WEATHER_TYPES),
     new Ability(AbilityId.LONG_REACH, 7) //
       .attr(IgnoreContactAbAttr),
     new Ability(AbilityId.LIQUID_VOICE, 7) //
@@ -1030,7 +1022,7 @@ export function initAbilities(): void {
     new Ability(AbilityId.GALVANIZE, 7) //
       .attr(MoveTypeChangeAbAttr, ElementalType.ELECTRIC, 1.2, normalTypeMoveConversionCondition),
     new Ability(AbilityId.SURGE_SURFER, 7) //
-      .conditionalAttr(getTerrainCondition(TerrainType.ELECTRIC), EffectiveStatMultiplier, Stat.SPD, 2),
+      .conditionalAttr(getTerrainCondition(TerrainType.ELECTRIC), EffectiveStatMultiplierAbAttr, Stat.SPD, 2),
     new Ability(AbilityId.SCHOOLING, 7) //
       .attr(PostBattleInitFormChangeAbAttr, () => 0)
       .attr(PostSummonFormChangeAbAttr, (p) => (p.level < 20 || p.getHpRatio() <= 0.25 ? 0 : 1))
@@ -1300,14 +1292,14 @@ export function initAbilities(): void {
       )
       // When summoned with active HAIL or SNOW, add BattlerTagType.ICE_FACE
       .conditionalAttr(
-        getWeatherCondition(WeatherType.HAIL, WeatherType.SNOW),
+        getWeatherCondition(...SNOWY_WEATHER_TYPES),
         PostSummonAddBattlerTagAbAttr,
         BattlerTagType.ICE_FACE,
         0,
         false,
       )
       // When weather changes to HAIL or SNOW while pokemon is fielded, add BattlerTagType.ICE_FACE
-      .attr(PostWeatherChangeAddBattlerTagAbAttr, BattlerTagType.ICE_FACE, 0, WeatherType.HAIL, WeatherType.SNOW)
+      .attr(PostWeatherChangeAddBattlerTagAbAttr, BattlerTagType.ICE_FACE, 0, ...SNOWY_WEATHER_TYPES)
       .attr(
         FormBlockDamageAbAttr,
         (target, _user, move) => move.category === MoveCategory.PHYSICAL && target.hasTag(BattlerTagType.ICE_FACE),
@@ -1491,18 +1483,12 @@ export function initAbilities(): void {
       ),
     new Ability(AbilityId.PROTOSYNTHESIS, 9) //
       .conditionalAttr(
-        getWeatherCondition(WeatherType.SUNNY, WeatherType.HARSH_SUN),
+        getWeatherCondition(...SUNNY_WEATHER_TYPES),
         PostSummonAddBattlerTagAbAttr,
         BattlerTagType.PROTOSYNTHESIS,
         0,
       )
-      .attr(
-        PostWeatherChangeAddBattlerTagAbAttr,
-        BattlerTagType.PROTOSYNTHESIS,
-        0,
-        WeatherType.SUNNY,
-        WeatherType.HARSH_SUN,
-      )
+      .attr(PostWeatherChangeAddBattlerTagAbAttr, BattlerTagType.PROTOSYNTHESIS, 0, ...SUNNY_WEATHER_TYPES)
       .uncopiable()
       .noTransform(),
     new Ability(AbilityId.QUARK_DRIVE, 9) //
@@ -1557,15 +1543,10 @@ export function initAbilities(): void {
       ),
     new Ability(AbilityId.ORICHALCUM_PULSE, 9) //
       .attr(PostSummonWeatherChangeAbAttr, WeatherType.SUNNY)
-      .conditionalAttr(
-        getWeatherCondition(WeatherType.SUNNY, WeatherType.HARSH_SUN),
-        EffectiveStatMultiplier,
-        Stat.ATK,
-        4 / 3,
-      ),
+      .conditionalAttr(getWeatherCondition(...SUNNY_WEATHER_TYPES), EffectiveStatMultiplierAbAttr, Stat.ATK, 4 / 3),
     new Ability(AbilityId.HADRON_ENGINE, 9) //
       .attr(PostSummonTerrainChangeAbAttr, TerrainType.ELECTRIC)
-      .conditionalAttr(getTerrainCondition(TerrainType.ELECTRIC), EffectiveStatMultiplier, Stat.SPATK, 4 / 3),
+      .conditionalAttr(getTerrainCondition(TerrainType.ELECTRIC), EffectiveStatMultiplierAbAttr, Stat.SPATK, 4 / 3),
     new Ability(AbilityId.OPPORTUNIST, 9) //
       .attr(StatStageChangeCopyAbAttr),
     new Ability(AbilityId.CUD_CHEW, 9) //
@@ -1664,10 +1645,8 @@ export function initAbilities(): void {
 
 // #region Helpers
 
-function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
-  return (_pokemon: Pokemon) => {
-    return globalScene.arena.hasTerrain([...terrainTypes]);
-  };
+function getTerrainCondition(...terrainTypes: Readonly<NonEmptyArray<TerrainType>>): AbAttrCondition {
+  return () => globalScene.arena.hasTerrain(...terrainTypes);
 }
 
 /**

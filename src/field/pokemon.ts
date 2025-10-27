@@ -18,7 +18,7 @@ import type { BypassBurnDamageReductionAbAttr } from "#abilities/bypass-burn-dam
 import type { BypassParaSpeedReductionAbAttr } from "#abilities/bypass-para-speed-reduction-ab-attr";
 import type { ConditionalCritAbAttr } from "#abilities/conditional-crit-ab-attr";
 import type { DamageBoostAbAttr } from "#abilities/damage-boost-ab-attr";
-import type { EffectiveStatMultiplier } from "#abilities/effective-stat-multiplier-ab-attr";
+import type { EffectiveStatMultiplierAbAttr } from "#abilities/effective-stat-multiplier-ab-attr";
 import type { EvasivenessMultiplierAbAttr } from "#abilities/evasiveness-multiplier-ab-attr";
 import type { FieldAccuracyMultiplierAbAttr } from "#abilities/field-accuracy-multiplier-ab-attr";
 import type { FieldPriorityMoveImmunityAbAttr } from "#abilities/field-priority-move-immunity-ab-attr";
@@ -85,6 +85,7 @@ import {
   NON_VOLATILE_STATUS_EFFECTS,
 } from "#constants/game-constants";
 import { EVOLVE_MOVE, RELEARN_MOVE } from "#constants/move-constants";
+import { SUNNY_WEATHER_TYPES } from "#constants/weather-constants";
 import { allAbilities, allMoves } from "#data/data-lists";
 import { speciesEggMoves } from "#data/egg-moves";
 import { getLevelTotalExp } from "#data/exp";
@@ -1189,7 +1190,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       );
     }
 
-    applyAbFunc<EffectiveStatMultiplier>(
+    applyAbFunc<EffectiveStatMultiplierAbAttr>(
       AbAttrFlag.EFFECTIVE_STAT_MULTIPLIER,
       this,
       simulated,
@@ -4119,7 +4120,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       case StatusEffect.FREEZE:
         if (
           this.isOfType(ElementalType.ICE)
-          || (!ignoreField && globalScene.arena.hasWeather([WeatherType.SUNNY, WeatherType.HARSH_SUN]))
+          || (!ignoreField && globalScene.arena.hasWeather(...SUNNY_WEATHER_TYPES))
         ) {
           return false;
         }

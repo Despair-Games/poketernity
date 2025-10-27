@@ -24,7 +24,7 @@ import type { DamageBoostAbAttr } from "#abilities/damage-boost-ab-attr";
 import type { DoubleBattleChanceAbAttr } from "#abilities/double-battle-chance-ab-attr";
 import type { DoubleBerryEffectAbAttr } from "#abilities/double-berry-effect-ab-attr";
 import type { EffectSporeAbAttr } from "#abilities/effect-spore-ab-attr";
-import type { EffectiveStatMultiplier } from "#abilities/effective-stat-multiplier-ab-attr";
+import type { EffectiveStatMultiplierAbAttr } from "#abilities/effective-stat-multiplier-ab-attr";
 import type { EvasivenessMultiplierAbAttr } from "#abilities/evasiveness-multiplier-ab-attr";
 import type { FieldAccuracyMultiplierAbAttr } from "#abilities/field-accuracy-multiplier-ab-attr";
 import type { FieldMoveTypePowerBoostAbAttr } from "#abilities/field-move-type-power-boost-ab-attr";
@@ -155,7 +155,7 @@ export const AbAttrFlag = {
   BYPASS_SPEED_CHANCE: 23,
   /** @see {@linkcode PreventBypassSpeedChanceAbAttr} */
   PREVENT_BYPASS_SPEED_CHANCE: 24,
-  /** @see {@linkcode EffectiveStatMultiplier} */
+  /** @see {@linkcode EffectiveStatMultiplierAbAttr} */
   EFFECTIVE_STAT_MULTIPLIER: 25,
   /** @see {@linkcode PostAttackApplyBattlerTagAbAttr} */
   POST_ATTACK_APPLY_BATTLER_TAG: 26,

@@ -8,6 +8,7 @@ import type { Pokemon } from "#field/pokemon";
 import { VariableMoveTypeAttr } from "#moves/variable-move-type-attr";
 import type { AbAttrCondition } from "#types/ability-types";
 import type { PokemonAttackCondition } from "#types/move-types";
+import type { NonEmptyArray } from "#types/utility-types";
 
 /**
  * @returns An array of Pokemon with weather-based forms
@@ -22,7 +23,7 @@ export function getPokemonWithWeatherBasedForms(): Pokemon[] {
     );
 }
 
-export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondition {
+export function getWeatherCondition(...weatherTypes: Readonly<NonEmptyArray<WeatherType>>): AbAttrCondition {
   return () => {
     if (!globalScene?.arena) {
       return false;
@@ -30,7 +31,7 @@ export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondi
     if (globalScene.arena.weather?.isEffectSuppressed()) {
       return false;
     }
-    return globalScene.arena.hasWeather([...weatherTypes]);
+    return globalScene.arena.hasWeather(...weatherTypes);
   };
 }
 

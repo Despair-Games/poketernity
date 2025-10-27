@@ -67,6 +67,9 @@ export type Mutable<T> = {
   -readonly [P in keyof T]: T[P];
 };
 
+/** Requires an array to contain at least one item. */
+export type NonEmptyArray<T> = [T, ...T[]];
+
 /**
  * Type helper to obtain the keys associated with a given value inside an object. \
  * Acts similar to {@linkcode Pick}, except checking the object's values instead of its keys.
