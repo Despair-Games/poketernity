@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
+import { SUNNY_WEATHER_TYPES } from "#constants/weather-constants";
 import { Stat } from "#enums/stat";
-import { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
 import { StatStageChangeAttr } from "#moves/stat-stage-change-attr";
 
@@ -15,10 +15,7 @@ export class GrowthStatStageChangeAttr extends StatStageChangeAttr {
   }
 
   override getLevels(_user: Pokemon): number {
-    if (
-      !globalScene.arena.weather?.isEffectSuppressed()
-      && globalScene.arena.hasWeather([WeatherType.SUNNY, WeatherType.HARSH_SUN])
-    ) {
+    if (!globalScene.arena.weather?.isEffectSuppressed() && globalScene.arena.hasWeather(...SUNNY_WEATHER_TYPES)) {
       return this.stages + 1;
     }
     return this.stages;

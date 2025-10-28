@@ -5,6 +5,7 @@ import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/test-utils/game-manager";
+import { enumValueToKey } from "#utils/common-utils";
 import { capitalizeString } from "#utils/string-utils";
 import { t } from "i18next";
 import Phaser from "phaser";
@@ -13,7 +14,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 //#region Test Constants
 
 const primalWeather = PRIMAL_WEATHER_TYPES.map<[string, WeatherType]>((weatherType) => [
-  capitalizeString(WeatherType[weatherType], "_", false, true) ?? "",
+  capitalizeString(enumValueToKey(WeatherType, weatherType), "_", false, true) ?? "",
   weatherType,
 ]);
 
@@ -24,7 +25,7 @@ const replaceableWeather = [
   WeatherType.SNOW,
   WeatherType.FOG,
 ].map<[string, WeatherType]>((weatherType) => [
-  capitalizeString(WeatherType[weatherType], "_", false, true) ?? "",
+  capitalizeString(enumValueToKey(WeatherType, weatherType), "_", false, true) ?? "",
   weatherType,
 ]);
 

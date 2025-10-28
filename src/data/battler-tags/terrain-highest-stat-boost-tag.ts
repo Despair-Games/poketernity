@@ -4,6 +4,7 @@ import type { TerrainBattlerTag } from "#battler-tags/terrain-battler-tag";
 import type { AbilityId } from "#enums/ability-id";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { TerrainType } from "#enums/terrain-type";
+import type { Mutable, NonEmptyArray } from "#types/utility-types";
 
 /**
  * Tag representing the stat boost from an ability
@@ -11,9 +12,9 @@ import type { TerrainType } from "#enums/terrain-type";
  * while a given {@linkcode TerrainType | terrain} is active.
  */
 export class TerrainHighestStatBoostTag extends HighestStatBoostTag implements TerrainBattlerTag {
-  public terrainTypes: TerrainType[];
+  public readonly terrainTypes: Readonly<NonEmptyArray<TerrainType>>;
 
-  constructor(tagType: BattlerTagType, ability: AbilityId, ...terrainTypes: TerrainType[]) {
+  constructor(tagType: BattlerTagType, ability: AbilityId, ...terrainTypes: Readonly<NonEmptyArray<TerrainType>>) {
     super(tagType, ability);
     this.terrainTypes = terrainTypes;
   }
@@ -24,6 +25,6 @@ export class TerrainHighestStatBoostTag extends HighestStatBoostTag implements T
    */
   override loadTag(source: BattlerTag | any): void {
     super.loadTag(source);
-    this.terrainTypes = source.terrainTypes.map((w) => w as TerrainType);
+    (this as Mutable<this>).terrainTypes = source.terrainTypes.map((w) => w as TerrainType);
   }
 }

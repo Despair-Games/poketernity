@@ -1,5 +1,6 @@
 import { WeatherType } from "#enums/weather-type";
 import { isGameManagerInstance, receivedStr } from "#test/test-utils/test-utils";
+import { enumValueToKey } from "#utils/common-utils";
 import { capitalizeString } from "#utils/string-utils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
@@ -50,7 +51,7 @@ export function toHaveWeatherMatcher(
  * @returns A human readable string
  */
 function toWeatherStr(weatherType: WeatherType) {
-  return capitalizeString(WeatherType[weatherType], "_", false, true);
+  return capitalizeString(enumValueToKey(WeatherType, weatherType), "_", false, true);
 }
 
 //#endregion

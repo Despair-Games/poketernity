@@ -1,4 +1,4 @@
-import { EffectiveStatMultiplier } from "#abilities/effective-stat-multiplier-ab-attr";
+import { EffectiveStatMultiplierAbAttr } from "#abilities/effective-stat-multiplier-ab-attr";
 import type { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";
 import { Stat } from "#enums/stat";
@@ -19,7 +19,7 @@ import type { Move } from "#moves/move";
 +--------------+-------+
  * ```
  */
-export class LowHpMoveTypeAttackMultiplierAbAttr extends EffectiveStatMultiplier {
+export class LowHpMoveTypeAttackMultiplierAbAttr extends EffectiveStatMultiplierAbAttr {
   /**
    * The constructor defaults to Stat.ATK since at the moment of the attribute's construction, the game does not know what move will be used.
    */

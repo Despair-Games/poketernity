@@ -91,6 +91,7 @@ import { UproarTag } from "#battler-tags/uproar-tag";
 import { WeatherHighestStatBoostTag } from "#battler-tags/weather-highest-stat-boost-tag";
 import { WhirlpoolTag } from "#battler-tags/whirlpool-tag";
 import { WrapTag } from "#battler-tags/wrap-tag";
+import { SUNNY_WEATHER_TYPES } from "#constants/weather-constants";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -98,7 +99,6 @@ import { ElementalType } from "#enums/elemental-type";
 import type { MoveId } from "#enums/move-id";
 import { Stat } from "#enums/stat";
 import { TerrainType } from "#enums/terrain-type";
-import { WeatherType } from "#enums/weather-type";
 
 /**
  * Retrieves a {@linkcode BattlerTag} based on the provided tag type, turn count, source move, and source ID.
@@ -207,12 +207,7 @@ export function getBattlerTag(
     case BattlerTagType.SLOW_START:
       return new SlowStartTag();
     case BattlerTagType.PROTOSYNTHESIS:
-      return new WeatherHighestStatBoostTag(
-        tagType,
-        AbilityId.PROTOSYNTHESIS,
-        WeatherType.SUNNY,
-        WeatherType.HARSH_SUN,
-      );
+      return new WeatherHighestStatBoostTag(tagType, AbilityId.PROTOSYNTHESIS, ...SUNNY_WEATHER_TYPES);
     case BattlerTagType.QUARK_DRIVE:
       return new TerrainHighestStatBoostTag(tagType, AbilityId.QUARK_DRIVE, TerrainType.ELECTRIC);
     case BattlerTagType.MID_AIR:

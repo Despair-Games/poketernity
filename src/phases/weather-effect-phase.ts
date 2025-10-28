@@ -129,7 +129,7 @@ export class WeatherEffectPhase extends BattlePhase {
 
     globalScene.phaseManager.createAndUnshiftPhase(
       "MessagePhase",
-      getWeatherDamageMessage(weather.weatherType, pokemon) ?? "",
+      getWeatherDamageMessage(weather.weatherType, pokemon),
     );
     pokemon.damageAndUpdate(damage, { result: HitResult.EFFECTIVE, preventEndure: true });
   }
