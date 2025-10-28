@@ -127,7 +127,8 @@ export class AttemptRunPhase extends PokemonPhase {
     await Promise.allSettled(enemyField.map((p) => p.hideInfo()));
     enemyField.forEach((p) => p.destroy());
 
-    globalScene.phaseManager.queueNextBattle(false);
+    phaseManager.clearAllPhases();
+    phaseManager.queueNextBattle(false);
   }
 
   /** Applies all data and visual feedback for the Player failing to flee from battle. */
