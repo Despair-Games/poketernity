@@ -90,6 +90,7 @@ export class GameWrapper {
   setScene(scene: BattleScene) {
     this.scene = scene;
     this.injectMandatory();
+    // biome-ignore lint/nursery/noFloatingPromises: TODO: fix this
     this.scene.preload?.();
     this.scene.create();
   }

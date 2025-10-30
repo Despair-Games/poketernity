@@ -75,6 +75,7 @@ export class MoveHelper extends GameManagerHelper {
     const movePosition = getMovePosition(this.game.scene, pkmIndex, moveId);
 
     this.game.onNextPrompt("CommandPhase", UiMode.COMMAND, () => {
+      // biome-ignore lint/nursery/noFloatingPromises: TODO: fix this
       this.game.scene.ui.setMode<FightUiHandler>(
         UiMode.FIGHT,
         (this.game.scene.phaseManager.getCurrentPhase() as CommandPhase).getFieldIndex(),
