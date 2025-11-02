@@ -118,7 +118,6 @@ export class FormChangePhase extends FormChangeBasePhase {
   /**
    * Handles the completion of the form change
    * @param formChangedPokemon - The {@linkcode Pokemon} that has changed form
-   * @async
    */
   private async handleFormChangeComplete(formChangedPokemon: Pokemon): Promise<void> {
     const { animations, audioManager, ui } = globalScene;

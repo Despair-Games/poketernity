@@ -47,7 +47,7 @@ It runs automatically as a pre-commit hook via [Lefthook](https://github.com/evi
 
 ##### Dependency-Cruiser
 
-We use [dependency-cruiser](https://github.com/sverweij/dependency-cruiser) to check for runtime circular dependencies and enforce some import/export rules (see the [config file](./dependency-cruiser.cjs) for documentation).
+We use [dependency-cruiser](https://github.com/sverweij/dependency-cruiser) to check for runtime circular dependencies and enforce some import/export rules (see the [config file](./.dependency-cruiser.cjs) for documentation).
 
 > [!TIP]
 > Use `pnpm depcruise` to check the codebase for any runtime circular dependency.

@@ -1,0 +1,45 @@
+name: "Typecheck (tsgo)"
+
+on:
+  push:
+    branches:
+      - main
+      - beta
+  pull_request:
+    branches:
+      - main
+      - beta
+  merge_group:
+    types: [checks_requested]
+
+jobs:
+  # Validate types with tsgo - https://github.com/microsoft/typescript-go
+  tsgo-typecheck:
+    name: 
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+        with:
+          submodules: "recursive"
+      
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "pnpm"
+
+      - name: Install Node modules
+        run: pnpm i
+
+      - name: Install tsgo
+        run: pnpm add @typescript/native-preview
+
+      - name: Run Typecheck
+        run: pnpm exec tsgo --noEmit
