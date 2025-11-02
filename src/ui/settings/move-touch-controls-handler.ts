@@ -45,7 +45,7 @@ export class MoveTouchControlsHandler {
 
   private readonly touchControls: TouchControl;
 
-  private readonly currentOrientation: Phaser.Scale.Orientation = globalScene.scale.orientation;
+  // private readonly currentOrientation: Phaser.Scale.Orientation = globalScene.scale.orientation;
 
   constructor(touchControls: TouchControl) {
     this.touchControls = touchControls;

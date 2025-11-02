@@ -15,16 +15,12 @@ export class MenuManip {
   private readonly config;
   private settingName;
   private keycode;
-  private readonly icon;
   private iconDisplayed;
-  private readonly specialCaseIcon;
 
   constructor(config) {
     this.config = config;
     this.settingName = null;
-    this.icon = null;
     this.iconDisplayed = null;
-    this.specialCaseIcon = null;
   }
 
   convertNameToButtonString(input) {
