@@ -20,19 +20,19 @@
     // and having to verify whether each individual file is ignored
     "includes": [
       "**",
-      "!**/.github/**/*",
-      "**/.github/**/*.ts",
-      "!**/.vscode/**/*",
-      "!**/build/**/*",
-      "!**/coverage/**/*",
-      "!**/dist/**/*",
-      "!**/docs/**/*",
-      "!**/node_modules/**/*",
-      "!**/public/**/*",
-      "!**/typedoc/**/*",
-      "!**/pnpm-lock.yml",
+      "!.github",
+      ".github/**/*.ts",
+      "!!.vscode",
+      "!!build",
+      "!!coverage",
+      "!!dist",
+      "!!docs",
+      "!public",
+      "public/service-worker.js",
+      "!!typedoc",
+      "!pnpm-lock.yml",
       // this file is too big
-      "!**/src/data/tms.ts"
+      "!src/data/tms.ts"
     ]
   },
 
