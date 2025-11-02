@@ -122,6 +122,7 @@ Terminology: fix(move): Future Sight no longer crashes
     }
 
     // Check if title has an allowed scope
+    // biome-ignore lint/style/useExplicitLengthCheck: doubles as a nullish check for `scope`
     if (scope?.length && !PREFIX_SCOPE_MAP[prefix].includes(scope)) {
       core.setFailed(`Pull Request title "${title}" has an invalid prefix (${prefix}) + scope (${scope}) combination!`);
       return;
@@ -131,4 +132,5 @@ Terminology: fix(move): Future Sight no longer crashes
   }
 }
 
+// biome-ignore lint/nursery/noFloatingPromises: not relevant
 run();
