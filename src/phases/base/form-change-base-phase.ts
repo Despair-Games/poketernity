@@ -70,7 +70,6 @@ export abstract class FormChangeBasePhase extends Phase {
    * Switches the running UI handler to the form change "scene", then initializes
    * the phase's {@linkcode handler} and {@linkcode container} references based on
    * the new handler.
-   * @async
    */
   protected async setMode(): Promise<void> {
     const { ui } = globalScene;
