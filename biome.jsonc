@@ -249,16 +249,6 @@
           }
         }
       }
-    },
-    {
-      "includes": [".dependency-cruiser.cjs"],
-      "linter": {
-        "rules": {
-          "complexity": {
-            "noUselessStringConcat": "off" // disabled for readability of this particular file due to a bug
-          }
-        }
-      }
     }
   ]
 }
