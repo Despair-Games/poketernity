@@ -195,7 +195,11 @@ export class PokemonAnimPhase extends BattlePhase {
     );
 
     const subScale = this.pokemon.getSpriteScale() * (this.pokemon.isPlayer() ? 0.5 : 1);
-    subTintSprite.setOrigin(0.5, 1).setAlpha(0).setTintFill(0xffffff).setScale(subScale);
+    subTintSprite //
+      .setOrigin(0.5, 1)
+      .setAlpha(0)
+      .setTintFill(0xffffff)
+      .setScale(subScale);
     globalScene.field.add(subTintSprite);
 
     await playTween({
