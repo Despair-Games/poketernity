@@ -5,7 +5,7 @@ import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { SpeciesId } from "#enums/species-id";
 import type { Pokemon } from "#field/pokemon";
 import { BattlePhase } from "#phases/base/battle-phase";
-import { playTween } from "#utils/anim-utils";
+import { playNumberTween, playTween } from "#utils/anim-utils";
 
 // TODO: This should probably be made into an abstract base class
 export class PokemonAnimPhase extends BattlePhase {
@@ -83,7 +83,7 @@ export class PokemonAnimPhase extends BattlePhase {
       field.bringToTop(this.pokemon);
     }
 
-    globalScene.audioManager.playSound("PRSFX- Transform");
+    globalScene.audioManager.playSound("battle_anims/PRSFX- Transform.wav");
 
     const offset = this.pokemon.getSubstituteOffset();
 
@@ -210,7 +210,14 @@ export class PokemonAnimPhase extends BattlePhase {
     });
 
     subSprite.destroy();
-    await this.flashSubstituteTint(subTintSprite);
+    // TODO: this doesn't cause the tint sprite to flash for some reason
+    await playNumberTween({
+      delay: 200,
+      duration: 100,
+      repeat: 7,
+      onStart: () => globalScene.audioManager.playSound("battle_anims/PRSFX- Substitute2.wav"),
+      onLoop: () => subTintSprite.setVisible(!subTintSprite.visible),
+    });
 
     const offset = this.pokemon.getSubstituteOffset();
     await Promise.allSettled([
@@ -222,8 +229,8 @@ export class PokemonAnimPhase extends BattlePhase {
       }),
       playTween({
         targets: this.pokemon,
-        x: `+=${offset[0]}`,
-        y: `+=${offset[1]}`,
+        x: `-=${offset[0]}`,
+        y: `-=${offset[1]}`,
         alpha: 1,
         ease: "Sine.easeInOut",
         delay: 250,
@@ -232,23 +239,6 @@ export class PokemonAnimPhase extends BattlePhase {
     ]);
 
     subTintSprite.destroy();
-  }
-
-  private async flashSubstituteTint(target: Phaser.GameObjects.Sprite): Promise<void> {
-    await new Promise<void>((resolve) => {
-      const flashTimer = globalScene.time.addEvent({
-        delay: 100,
-        repeat: 7,
-        startAt: 200,
-        callback: () => {
-          const { repeatCount } = flashTimer;
-          target.setVisible(repeatCount % 2 === 0);
-          if (repeatCount === 0) {
-            resolve();
-          }
-        },
-      });
-    });
   }
 
   private async doCommanderApplyAnim(): Promise<void> {

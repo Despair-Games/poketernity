@@ -236,7 +236,7 @@ export abstract class BattleAnim {
       userSprite.setAlpha(1);
       userSprite.pipelineData["tone"] = [0.0, 0.0, 0.0, 0.0];
       userSprite.setAngle(0);
-      if (targetSubstitute) {
+      if (targetSubstitute != null) {
         targetSprite.setPosition(
           target.x - target.getSubstituteOffset()[0],
           target.y - target.getSubstituteOffset()[1],
