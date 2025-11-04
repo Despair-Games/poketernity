@@ -162,8 +162,8 @@ export class PokemonAnimPhase extends BattlePhase {
     await Promise.allSettled([
       playTween({
         targets: this.pokemon,
-        x: `+=${offset[0]}`,
-        y: `+=${offset[1]}`,
+        x: subSprite.x + offset[0],
+        y: subSprite.y + offset[1],
         alpha: 0.5,
         ease: "Sine.easeInOut",
         duration: 500,
