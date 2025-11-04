@@ -3,7 +3,6 @@ import { BattleCommand } from "#enums/battle-command";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
-import type { AttemptRunPhase } from "#phases/attempt-run-phase";
 import type { CommandPhase } from "#phases/command-phase";
 import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
@@ -96,12 +95,12 @@ describe("Abilities - Speed Boost", () => {
   });
 
   it("should not trigger if pokemon fails to escape", async () => {
+    game.override.forceRunResult(false);
+
     await game.classicMode.startBattle(SpeciesId.SHUCKLE);
 
     const commandPhase = game.scene.phaseManager.getCurrentPhase() as CommandPhase;
     commandPhase.handleCommand(BattleCommand.RUN, 0);
-    const runPhase = game.scene.phaseManager.getCurrentPhase() as AttemptRunPhase;
-    runPhase.forceFailEscape = true;
     await game.phaseInterceptor.to("AttemptRunPhase");
     await game.toNextTurn();
 

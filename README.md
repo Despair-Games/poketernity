@@ -14,7 +14,7 @@ If you have the motivation and experience with Typescript/Javascript (or are wil
 
 #### Prerequisites
 
-- node: 22.14.0 - [manage with pnpm](https://pnpm.io/cli/env) | [manage with fnm](https://github.com/Schniz/fnm) | [manage with nvm](https://github.com/nvm-sh/nvm)
+- node: 24.9.0 - [manage with pnpm](https://pnpm.io/cli/env) | [manage with fnm](https://github.com/Schniz/fnm) | [manage with nvm](https://github.com/nvm-sh/nvm)
 - pnpm: 10.x - [how to install](https://pnpm.io/installation) (not recommended to install via `npm` on Windows native) | [alternate method - volta.sh](https://volta.sh/)
 - git: [how to install](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) (needed to retrieve the translations)
 
@@ -47,7 +47,7 @@ It runs automatically as a pre-commit hook via [Lefthook](https://github.com/evi
 
 ##### Dependency-Cruiser
 
-We use [dependency-cruiser](https://github.com/sverweij/dependency-cruiser) to check for runtime circular dependencies and enforce some import/export rules (see the [config file](./dependency-cruiser.cjs) for documentation).
+We use [dependency-cruiser](https://github.com/sverweij/dependency-cruiser) to check for runtime circular dependencies and enforce some import/export rules (see the [config file](./.dependency-cruiser.cjs) for documentation).
 
 > [!TIP]
 > Use `pnpm depcruise` to check the codebase for any runtime circular dependency.

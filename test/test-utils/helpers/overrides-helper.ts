@@ -1,6 +1,7 @@
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { NewArenaEvent } from "#events/battle-scene";
 import type { Arena } from "#field/arena";
+import type { AttemptRunPhase } from "#phases/attempt-run-phase";
 import type { GameManager } from "#test/test-utils/game-manager";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
@@ -649,6 +650,25 @@ export class OverridesHelper extends GameManagerHelper {
       this.log("Disabled override for enemy Tera type!");
     } else {
       this.log(`Enemy Tera type set to ${enumValueToKey(ElementalType, type)} (=${type})!`);
+    }
+    return this;
+  }
+
+  /**
+   * Override the result of the Player's attempts to flee from battle.
+   * @param result - The desired outcome for Run attempts:
+   * - If `true`, Run attempts will always succeed.
+   * - If `false`, Run attempts will always fail.
+   * - If `null`, the override is disabled, and Run attempts will use the default algorithm.
+   * @returns `this`
+   * @see {@linkcode AttemptRunPhase}
+   */
+  public forceRunResult(result: boolean | null): this {
+    vi.spyOn(activeOverrides, "RUN_RESULT_OVERRIDE", "get").mockReturnValue(result);
+    if (result === null) {
+      this.log("Disabled override for player Run result!");
+    } else {
+      this.log(`Result for run attempts set to ${result}`);
     }
     return this;
   }

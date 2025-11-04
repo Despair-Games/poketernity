@@ -48,27 +48,27 @@ export class EvolutionPhase extends FormChangeBasePhase {
     this.lastLevel = lastLevel;
   }
 
-  public override validate(): boolean {
-    return !!this.evolution;
-  }
+  public override async start(): Promise<void> {
+    if (this.evolution == null) {
+      super.end();
+      return;
+    }
 
-  public override start(): void {
-    super.start();
     this.preEvolvedPokemonName = getPokemonNameWithAffix(this.pokemon);
+    await super.start();
   }
 
-  public override doFormChange(): void {
+  public override async applyFormChange(): Promise<void> {
     const { ui } = globalScene;
 
     ui.showText(i18next.t("menu:evolving", { pokemonName: this.preEvolvedPokemonName }), {
-      callback: () => {
-        this.playEvolutionAnim().then((evolvedPokemon) => {
-          if (this.cancelled.value) {
-            this.handleFailedEvolution(evolvedPokemon);
-          } else {
-            this.handleSuccessEvolution(evolvedPokemon);
-          }
-        });
+      callback: async () => {
+        const evolvedPokemon = await this.playEvolutionAnim();
+        if (this.cancelled.value) {
+          this.handleFailedEvolution(evolvedPokemon);
+        } else {
+          await this.handleSuccessEvolution(evolvedPokemon);
+        }
       },
     });
   }
@@ -265,8 +265,9 @@ export class EvolutionPhase extends FormChangeBasePhase {
         evolvedPokemonName: this.pokemon.name,
       }),
       {
-        callback: () => {
-          this.showStarterUnlockText(unlockedStarters).then(() => this.end());
+        callback: async () => {
+          await this.showStarterUnlockText(unlockedStarters);
+          this.end();
         },
         prompt: true,
         promptDelay: fixedNumber(4000),
