@@ -19,8 +19,6 @@ export class AdminUiHandler extends FormModalUiHandler {
   private config: ModalConfig;
 
   private readonly buttonGap = 10;
-  // http response from the server when a username isn't found in the server
-  private readonly httpUserNotFoundErrorCode: number = 404;
   private readonly ERR_REQUIRED_FIELD = (field: string) => {
     if (field === "username") {
       return `${toTitleCase(field)} is required`;
@@ -314,7 +312,7 @@ export class AdminUiHandler extends FormModalUiHandler {
     try {
       const [adminInfo, errorType] = await api.admin.searchAccount({ username: adminSearchResult.username });
       if (errorType || !adminInfo) {
-        // error - if adminInfo.status === this.httpUserNotFoundErrorCode that means the username can't be found in the db
+        // error - if adminInfo.status === 404 that means the username can't be found in the db
         return { adminSearchResult, error: true, errorType };
       }
       // success
@@ -366,7 +364,7 @@ export class AdminUiHandler extends FormModalUiHandler {
       }
 
       if (errorType) {
-        // error - if response.status === this.httpUserNotFoundErrorCode that means the username can't be found in the db
+        // error - if response.status === 404 that means the username can't be found in the db
         return { adminSearchResult, error: true, errorType };
       }
       // success!

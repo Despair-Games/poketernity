@@ -59,10 +59,13 @@ export class UnavailableModalUiHandler extends ModalUiHandler {
     this.modalContainer.add(label);
   }
 
-  tryReconnect(): void {
+  public tryReconnect(): void {
     updateUserInfo().then((response) => {
       if (response[0] || [200, 400].includes(response[1])) {
-        this.reconnectTimer = null;
+        if (this.reconnectTimer) {
+          clearTimeout(this.reconnectTimer);
+          this.reconnectTimer = null;
+        }
         this.reconnectDuration = this.minTime;
         globalScene.audioManager.playSound("se/pb_bounce_1");
         this.reconnectCallback();
