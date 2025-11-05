@@ -20,13 +20,12 @@ import { enumValueToKey, fixedNumber } from "#utils/common-utils";
 import { getPokemonLevelText } from "#utils/string-utils";
 import i18next from "i18next";
 
-type RunSelectCallback = (cursor: number) => void;
-
 /**
- * RunHistoryUiHandler handles the UI of the Run History Menu
- * Run History itself is broken into an array of RunEntryContainer objects that can show the user basic details about their run and allow them to access more details about their run through cursor action.
- * It navigates similarly to the UI of the save slot select menu.
- * The only valid input buttons are Button.ACTION and Button.CANCEL.
+ * `RunHistoryUiHandler` handles the UI of the Run History Menu \
+ * Run History itself is broken into an array of `RunEntryContainer` objects that can show the user
+ * basic details about their run and allow them to access more details about their run through cursor action. \
+ * It navigates similarly to the UI of the save slot select menu. \
+ * The only valid input buttons are `Button.ACTION` and `Button.CANCEL`.
  */
 export class RunHistoryUiHandler extends MessageUiHandler {
   private readonly maxRows = 3;
@@ -34,8 +33,6 @@ export class RunHistoryUiHandler extends MessageUiHandler {
   private runSelectContainer: Phaser.GameObjects.Container;
   private runsContainer: Phaser.GameObjects.Container;
   private runs: RunEntryContainer[];
-
-  private runSelectCallback: RunSelectCallback | null;
 
   private scrollCursor: number = 0;
 
@@ -123,7 +120,6 @@ export class RunHistoryUiHandler extends MessageUiHandler {
     if (button === Button.ACTION) {
       success = handleAction();
     } else if (button === Button.CANCEL) {
-      this.runSelectCallback = null;
       success = true;
       ui.revertMode();
     } else if (this.runs.length > 0) {
@@ -236,7 +232,6 @@ export class RunHistoryUiHandler extends MessageUiHandler {
     this.runSelectContainer.setVisible(false);
     this.setScrollCursor(0);
     this.clearCursor();
-    this.runSelectCallback = null;
     this.clearRuns();
   }
 
@@ -253,19 +248,18 @@ export class RunHistoryUiHandler extends MessageUiHandler {
   }
 }
 
-/**
- * RunEntryContainer : stores/displays an individual run
- * slotId: necessary for positioning
- * entryData: the data of an individual run
- */
+/** Stores/displays an individual run */
 class RunEntryContainer extends Phaser.GameObjects.Container {
-  private readonly slotId: number;
+  /** The data of an individual run */
   public entryData: RunEntry;
 
+  /**
+   * @param entryData - The data of an individual run
+   * @param slotId - Used for positioning
+   */
   constructor(entryData: RunEntry, slotId: number) {
     super(globalScene, 0, slotId * 56);
 
-    this.slotId = slotId;
     this.entryData = entryData;
 
     this.setup(this.entryData);
