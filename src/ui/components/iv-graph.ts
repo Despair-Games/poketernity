@@ -1,7 +1,8 @@
 import { globalScene } from "#app/global-scene";
-import { getStatKey, PERMANENT_STATS } from "#enums/stat";
+import { PERMANENT_STATS } from "#enums/stat";
 import { TextStyle } from "#enums/text-style";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#ui/text-utils";
+import { getStatKey } from "#utils/i18n-utils";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 

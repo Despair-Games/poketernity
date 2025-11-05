@@ -1554,7 +1554,7 @@ export class BattleScene extends SceneBase {
       case SpeciesId.OINKOLOGNE:
         return gender === Gender.FEMALE ? 1 : 0;
       case SpeciesId.TOXTRICITY: {
-        const lowkeyNatures = [
+        const lowkeyNatures: readonly Nature[] = [
           Nature.LONELY,
           Nature.BOLD,
           Nature.RELAXED,
@@ -1567,8 +1567,8 @@ export class BattleScene extends SceneBase {
           Nature.CALM,
           Nature.GENTLE,
           Nature.CAREFUL,
-        ];
-        if (nature !== undefined && lowkeyNatures.indexOf(nature) > -1) {
+        ] as const;
+        if (nature !== undefined && lowkeyNatures.includes(nature)) {
           return 1;
         }
         return 0;
@@ -2717,7 +2717,7 @@ export class BattleScene extends SceneBase {
               level: p.level,
               currentHP: p.hp,
               maxHP: p.getMaxHp(),
-              status: StatusEffect[p.getStatusEffect()],
+              status: enumValueToKey(StatusEffect, p.getStatusEffect()),
             };
           })
         : [],

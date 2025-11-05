@@ -53,8 +53,9 @@ export class ScanIvsPhase extends PokemonPhase {
       statsContainerLabels = statsContainer.filter((m) => m.name.includes("icon_stat_label"));
 
       for (const label of statsContainerLabels) {
-        const ivStat = Stat[label.frame.name];
-        if (enemyIvs[ivStat] > currentIvs[ivStat] && ivsToShow.indexOf(Number(ivStat)) >= 0) {
+        const ivStat: Stat = Stat[label.frame.name];
+        // TODO: is the `Number(ivStat)` necessary?
+        if (enemyIvs[ivStat] > currentIvs[ivStat] && ivsToShow.includes(Number(ivStat) as Stat)) {
           const hexColour = enemyIvs[ivStat] === 31 ? CommonColor.SOFT_ORANGE : CommonColor.LIGHT_GREEN;
           const hexTextColour = Phaser.Display.Color.HexStringToColor(hexColour).color;
           label.setTint(hexTextColour);

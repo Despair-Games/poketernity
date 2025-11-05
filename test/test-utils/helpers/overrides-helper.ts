@@ -244,7 +244,7 @@ export class OverridesHelper extends GameManagerHelper {
    */
   public statusEffect(statusEffect: StatusEffect): this {
     vi.spyOn(activeOverrides, "STATUS_OVERRIDE", "get").mockReturnValue(statusEffect);
-    this.log(`Player Pokemon status-effect set to ${StatusEffect[statusEffect]} (=${statusEffect})!`);
+    this.log(`Player Pokemon status-effect set to ${enumValueToKey(StatusEffect, statusEffect)} (=${statusEffect})!`);
     return this;
   }
 
@@ -273,7 +273,7 @@ export class OverridesHelper extends GameManagerHelper {
    */
   public trainerType(trainerType: TrainerType): this {
     vi.spyOn(activeOverrides, "TRAINER_TYPE_OVERRIDE", "get").mockReturnValue(trainerType);
-    this.log(`Trainer type set to ${TrainerType[trainerType]} (=${trainerType})!`);
+    this.log(`Trainer type set to ${enumValueToKey(TrainerType, trainerType)} (=${trainerType})!`);
     return this;
   }
 
@@ -458,7 +458,7 @@ export class OverridesHelper extends GameManagerHelper {
    */
   public enemyStatusEffect(statusEffect: StatusEffect): this {
     vi.spyOn(activeOverrides, "ENEMY_STATUS_OVERRIDE", "get").mockReturnValue(statusEffect);
-    this.log(`Enemy Pokemon status-effect set to ${StatusEffect[statusEffect]} (=${statusEffect})!`);
+    this.log(`Enemy Pokemon status-effect set to ${enumValueToKey(StatusEffect, statusEffect)} (=${statusEffect})!`);
     return this;
   }
 
@@ -515,7 +515,7 @@ export class OverridesHelper extends GameManagerHelper {
     if (nature === null) {
       this.log("Player Nature override disabled!");
     } else {
-      this.log(`Player Nature set to ${Nature[nature]} (=${nature})!`);
+      this.log(`Player Nature set to ${enumValueToKey(Nature, nature)} (=${nature})!`);
     }
     return this;
   }
@@ -531,7 +531,7 @@ export class OverridesHelper extends GameManagerHelper {
     if (nature === null) {
       this.log("Enemy Nature override disabled!");
     } else {
-      this.log(`Enemy Nature set to ${Nature[nature]} (=${nature})!`);
+      this.log(`Enemy Nature set to ${enumValueToKey(Nature, nature)} (=${nature})!`);
     }
     return this;
   }

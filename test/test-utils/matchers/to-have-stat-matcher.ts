@@ -2,6 +2,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { type PermanentStat, Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import { isPokemonInstance, receivedStr } from "#test/test-utils/test-utils";
+import { enumValueToKey } from "#utils/common-utils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
 export interface ToHaveStatMatcherOptions {
@@ -39,7 +40,7 @@ export function toHaveStatMatcher(
   const pass = actualValue === expectedValue;
 
   const pkmName = getPokemonNameWithAffix(pokemon);
-  const statName = Stat[stat];
+  const statName = enumValueToKey(Stat, stat);
 
   return {
     pass,

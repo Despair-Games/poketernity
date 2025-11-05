@@ -373,8 +373,8 @@ export class Trainer extends Phaser.GameObjects.Container {
       // If we are in a double battle of named trainers, we need to use alternate species pools (generate half the party from each trainer)
       if (this.config.trainerTypeDouble && this.isDouble() && !this.config.doubleOnly) {
         // Get the species pool for the partner trainer and the current trainer
-        const speciesPoolPartner = signatureSpecies[TrainerType[this.config.trainerTypeDouble]];
-        const speciesPool = signatureSpecies[TrainerType[this.config.trainerType]];
+        const speciesPoolPartner = signatureSpecies[enumValueToKey(TrainerType, this.config.trainerTypeDouble)];
+        const speciesPool = signatureSpecies[enumValueToKey(TrainerType, this.config.trainerType)];
 
         // Get the species that are already in the enemy party so we dont generate the same species twice
         const AlreadyUsedSpecies = battle.enemyParty.map((p) => p.species.speciesId);
@@ -401,29 +401,32 @@ export class Trainer extends Phaser.GameObjects.Container {
           })
           .flat();
 
-        // biome-ignore-start lint/style/useCollapsedElseIf: TODO: surely this can be done better?
+        // TODO: this is... messy
+        const tateKey = enumValueToKey(TrainerType, TrainerType.TATE);
+        const lizaKey = enumValueToKey(TrainerType, TrainerType.LIZA);
         // If the index is even, use the species pool for the main trainer (that way he only uses his own pokemon in battle)
         if (index % 2) {
           // If the index is odd, use the species pool for the partner trainer (that way he only uses his own pokemon in battle)
           // Since the only currently allowed double battle with named trainers is Tate & Liza, we need to make sure that Solrock is the first pokemon in the party for Tate and Lunatone for Liza
-          if (index === 1 && TrainerType[this.config.trainerTypeDouble] === TrainerType[TrainerType.TATE]) {
+          const trainerTypeDoubleKey = enumValueToKey(TrainerType, this.config.trainerTypeDouble);
+          if (index === 1 && trainerTypeDoubleKey === tateKey) {
             newSpeciesPool = [SpeciesId.SOLROCK];
-          } else if (index === 1 && TrainerType[this.config.trainerTypeDouble] === TrainerType[TrainerType.LIZA]) {
+          } else if (index === 1 && trainerTypeDoubleKey === lizaKey) {
             newSpeciesPool = [SpeciesId.LUNATONE];
           } else {
             newSpeciesPool = speciesPoolPartnerFiltered;
           }
         } else {
           // Since the only currently allowed double battle with named trainers is Tate & Liza, we need to make sure that Solrock is the first pokemon in the party for Tate and Lunatone for Liza
-          if (index === 0 && TrainerType[this.config.trainerType] === TrainerType[TrainerType.TATE]) {
+          const trainerTypeKey = enumValueToKey(TrainerType, this.config.trainerType);
+          if (index === 0 && trainerTypeKey === tateKey) {
             newSpeciesPool = [SpeciesId.SOLROCK];
-          } else if (index === 0 && TrainerType[this.config.trainerType] === TrainerType[TrainerType.LIZA]) {
+          } else if (index === 0 && trainerTypeKey === lizaKey) {
             newSpeciesPool = [SpeciesId.LUNATONE];
           } else {
             newSpeciesPool = speciesPoolFiltered;
           }
         }
-        // biome-ignore-end lint/style/useCollapsedElseIf: range comment used because biome gets confused by `if`/`else` chains
       }
 
       let species: PokemonSpecies;
@@ -530,7 +533,7 @@ export class Trainer extends Phaser.GameObjects.Container {
    * @returns `true` if the species is already present in the party
    */
   checkDuplicateSpecies(species: PokemonSpecies, baseSpecies: PokemonSpecies): boolean {
-    const staticPartyPokemon = (signatureSpecies[TrainerType[this.config.trainerType]] ?? []).flat(1);
+    const staticPartyPokemon = (signatureSpecies[enumValueToKey(TrainerType, this.config.trainerType)] ?? []).flat(1);
 
     const currentPartySpecies = globalScene.getEnemyParty().map((p) => {
       return p.species.speciesId;

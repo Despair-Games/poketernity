@@ -8,7 +8,7 @@ import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { PERMANENT_STATS, Stat } from "#enums/stat";
+import { type BattleStat, PERMANENT_STATS, Stat } from "#enums/stat";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PlayerPokemon } from "#field/player-pokemon";
@@ -221,15 +221,7 @@ export const BerriesAboundEncounter: MysteryEncounter = MysteryEncounterBuilder.
           };
 
           // Defense/Spd buffs below wave 50, +1 to all stats otherwise
-          const statChangesForBattle: (
-            | Stat.ATK
-            | Stat.DEF
-            | Stat.SPATK
-            | Stat.SPDEF
-            | Stat.SPD
-            | Stat.ACC
-            | Stat.EVA
-          )[] =
+          const statChangesForBattle: BattleStat[] =
             globalScene.currentBattle.waveIndex < 50
               ? [Stat.DEF, Stat.SPDEF, Stat.SPD]
               : [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD];

@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import { GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
 import { Button } from "#enums/button";
 import type { Stat } from "#enums/stat";
-import { getStatKey, PERMANENT_STATS } from "#enums/stat";
+import { PERMANENT_STATS } from "#enums/stat";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { settings } from "#system/settings-manager";
@@ -10,6 +10,7 @@ import type { ShowTextOptions } from "#types/ui-types";
 import { MessageUiHandler } from "#ui/message-ui-handler";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
+import { getStatKey } from "#utils/i18n-utils";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 

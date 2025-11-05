@@ -184,7 +184,7 @@ import { ElementalType } from "#enums/elemental-type";
 import { Gender } from "#enums/gender";
 import { MoveCategory } from "#enums/move-category";
 import { MoveFlags } from "#enums/move-flags";
-import { EFFECTIVE_STATS, type EffectiveStat, getStatKey, Stat } from "#enums/stat";
+import { EFFECTIVE_STATS, type EffectiveStat, Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
@@ -200,6 +200,7 @@ import {
   normalTypeMoveConversionCondition,
 } from "#utils/ability-utils";
 import { NumberHolder, toDmgValue } from "#utils/common-utils";
+import { getStatKey } from "#utils/i18n-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
 import i18next from "i18next";
 

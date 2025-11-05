@@ -4,7 +4,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
-import { EFFECTIVE_STATS, Stat } from "#enums/stat";
+import { EFFECTIVE_STATS, type EffectiveStat, Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/game-manager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -65,9 +65,9 @@ describe("Abilities - Unaware", () => {
     const enemyPokemon = game.field.getEnemyPokemon();
     for (const stat of EFFECTIVE_STATS) {
       let expectedStat = playerPokemon.getStat(stat);
-      if ([Stat.ATK, Stat.SPATK, Stat.SPD].includes(stat)) {
+      if (([Stat.ATK, Stat.SPATK, Stat.SPD] as readonly EffectiveStat[]).includes(stat)) {
         expectedStat *= 2;
-      } else if ([Stat.DEF, Stat.SPDEF].includes(stat)) {
+      } else if (([Stat.DEF, Stat.SPDEF] as readonly EffectiveStat[]).includes(stat)) {
         expectedStat = Math.floor(expectedStat * (2 / 3));
       }
 

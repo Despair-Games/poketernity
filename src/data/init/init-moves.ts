@@ -21,7 +21,7 @@ import { MoveResult } from "#enums/move-result";
 import { MoveTarget } from "#enums/move-target";
 import { MultiHitType } from "#enums/multi-hit-type";
 import { SpeciesId } from "#enums/species-id";
-import { BATTLE_STATS, getStatKey, Stat } from "#enums/stat";
+import { BATTLE_STATS, Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { SwitchType } from "#enums/switch-type";
 import { TerrainType } from "#enums/terrain-type";
@@ -251,6 +251,7 @@ import { WeatherBallTypeAttr } from "#moves/weather-ball-type-attr";
 import { WeatherChangeAttr } from "#moves/weather-change-attr";
 import { WeatherInstantChargeAttr } from "#moves/weather-instant-charge-attr";
 import { WeightPowerAttr } from "#moves/weight-power-attr";
+import { getStatKey } from "#utils/i18n-utils";
 import { crashDamageFunc } from "#utils/move-utils";
 import i18next from "i18next";
 

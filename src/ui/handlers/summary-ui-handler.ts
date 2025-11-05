@@ -16,7 +16,7 @@ import { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";
 import { Nature } from "#enums/nature";
 import { PlayerGender } from "#enums/player-gender";
-import { getStatKey, PERMANENT_STATS, Stat } from "#enums/stat";
+import { type EffectiveStat, PERMANENT_STATS, Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { SummaryUiPage } from "#enums/summary-ui-page";
@@ -31,6 +31,7 @@ import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } f
 import { UiHandler } from "#ui/ui-handler";
 import { rgbHexToRgba } from "#utils/color-utils";
 import { enumValueToKey, fixedNumber } from "#utils/common-utils";
+import { getStatKey } from "#utils/i18n-utils";
 import { getShinyDescriptor } from "#utils/pokemon-utils";
 import { formatStat, leftPad, toReadableString } from "#utils/string-utils";
 import { argbFromRgba } from "@material/material-color-utilities";
@@ -434,7 +435,7 @@ export class SummaryUiHandler extends UiHandler {
     if (this.pokemon.isFainted()) {
       statusTextKey = "faint";
     } else if (this.pokemon.hasNonVolatileStatusEffect(false, true)) {
-      statusTextKey = StatusEffect[this.pokemon.getStatusEffect(true)].toLowerCase();
+      statusTextKey = enumValueToKey(StatusEffect, this.pokemon.getStatusEffect(true)).toLowerCase();
     } else if (this.pokemon.pokerus) {
       statusTextKey = "pokerus";
     }
@@ -868,7 +869,7 @@ export class SummaryUiHandler extends UiHandler {
         this.passiveContainer?.descriptionText?.setVisible(false);
 
         const closeFragment = getBBCodeFragment("", TextStyle.WINDOW_ALT);
-        const rawNature = toReadableString(Nature[this.pokemon!.getNature()]); // TODO: is this bang correct?
+        const rawNature = toReadableString(enumValueToKey(Nature, this.pokemon!.getNature())); // TODO: is this bang correct?
         const nature = `${getBBCodeFragment(toReadableString(getNatureName(this.pokemon!.getNature())), TextStyle.SUMMARY_RED)}${closeFragment}`; // TODO: is this bang correct?
 
         const memoString = i18next.t("pokemonSummary:memoString", {
@@ -897,7 +898,7 @@ export class SummaryUiHandler extends UiHandler {
           const rowIndex = s % 3;
           const colIndex = Math.floor(s / 3);
 
-          const natureStatMultiplier = getNatureStatMultiplier(this.pokemon!.getNature(), s); // TODO: is this bang correct?
+          const natureStatMultiplier = getNatureStatMultiplier(this.pokemon!.getNature(), s as EffectiveStat); // TODO: is this bang correct?
 
           let textStyle: TextStyle = TextStyle.SUMMARY_BLUE;
           if (natureStatMultiplier === 1) {

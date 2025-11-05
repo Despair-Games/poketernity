@@ -8,7 +8,7 @@ import { ElementalType } from "#enums/elemental-type";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { Stat } from "#enums/stat";
+import { type BattleStat, Stat } from "#enums/stat";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { getBiomeKey } from "#field/arena";
 import { EnemyPokemon } from "#field/enemy-pokemon";
@@ -198,7 +198,7 @@ async function doBiomeTransitionDialogueAndBattleInit() {
   encounter.setDialogueToken("enemyPokemon", getPokemonNameWithAffix(bossPokemon));
 
   // Defense/Spd buffs below wave 50, +1 to all stats otherwise
-  const statChangesForBattle: (Stat.ATK | Stat.DEF | Stat.SPATK | Stat.SPDEF | Stat.SPD | Stat.ACC | Stat.EVA)[] =
+  const statChangesForBattle: BattleStat[] =
     globalScene.currentBattle.waveIndex < 50
       ? [Stat.DEF, Stat.SPDEF, Stat.SPD]
       : [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD];
