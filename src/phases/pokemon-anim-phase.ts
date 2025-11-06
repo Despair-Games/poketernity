@@ -256,25 +256,21 @@ export class PokemonAnimPhase extends BattlePhase {
     const tatsugiriX = this.pokemon.x + this.pokemon.getSprite().x;
     const tatsugiriY = this.pokemon.y + this.pokemon.getSprite().y;
 
-    const getSourceSprite = (): Phaser.GameObjects.Sprite => {
-      const sprite = globalScene.addPokemonSprite(
-        this.pokemon,
-        tatsugiriX,
-        tatsugiriY,
-        this.pokemon.getSprite().texture,
-        this.pokemon.getSprite()!.frame.name,
-        true,
-      );
-      sprite.pipelineData["spriteColors"] = this.pokemon.getSprite().pipelineData["spriteColors"];
-      sprite.setPipelineData("spriteKey", this.pokemon.getBattleSpriteKey());
-      sprite.setPipelineData("ignoreFieldPos", true);
-      sprite.setOrigin(0.5, 1);
-      this.pokemon.getSprite().on("animationupdate", (_anim, frame) => sprite.setFrame(frame.textureFrame));
-      field.add(sprite);
-      return sprite;
-    };
-
-    const sourceSprite = getSourceSprite();
+    const sourceSprite = globalScene.addPokemonSprite(
+      this.pokemon,
+      tatsugiriX,
+      tatsugiriY,
+      this.pokemon.getSprite().texture,
+      this.pokemon.getSprite()!.frame.name,
+      true,
+    );
+    sourceSprite.pipelineData["spriteColors"] = this.pokemon.getSprite().pipelineData["spriteColors"];
+    sourceSprite
+      .setPipelineData("spriteKey", this.pokemon.getBattleSpriteKey())
+      .setPipelineData("ignoreFieldPos", true)
+      .setOrigin(0.5, 1);
+    this.pokemon.getSprite().on("animationupdate", (_anim, frame) => sourceSprite.setFrame(frame.textureFrame));
+    field.add(sourceSprite);
 
     this.pokemon.setVisible(false);
 
