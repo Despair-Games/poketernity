@@ -12,13 +12,14 @@ import { CANVAS_SCALE } from "#constants/ui-constants";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import type { FieldBattlerIndex } from "#enums/battler-index";
-import { type BattleStat, getStatKey, getStatStageChangeDescriptionKey, Stat } from "#enums/stat";
+import { type BattleStat, getStatStageChangeDescriptionKey, Stat } from "#enums/stat";
 import { Tutorial } from "#enums/tutorial";
 import type { Pokemon } from "#field/pokemon";
 import { ResetNegativeStatStageModifier } from "#modifier/modifier";
 import { PokemonPhase } from "#phases/base/pokemon-phase";
 import { settings } from "#system/settings-manager";
-import { BooleanHolder, NumberHolder } from "#utils/common-utils";
+import { BooleanHolder, enumValueToKey, NumberHolder } from "#utils/common-utils";
+import { getStatKey } from "#utils/i18n-utils";
 import i18next from "i18next";
 
 //#region Types
@@ -250,7 +251,7 @@ export class StatStageChangePhase extends PokemonPhase {
 
       // On increase, show the red sprite located at ATK
       // On decrease, show the blue sprite located at SPD
-      const spriteColor = stages.value >= 1 ? Stat[Stat.ATK].toLowerCase() : Stat[Stat.SPD].toLowerCase();
+      const spriteColor = enumValueToKey(Stat, stages.value >= 1 ? Stat.ATK : Stat.SPD).toLowerCase();
       const statSprite = add.tileSprite(tileX, tileY, tileWidth, tileHeight, "battle_stats", spriteColor);
       statSprite.setPipeline(fieldSpritePipeline);
       statSprite.setAlpha(0);

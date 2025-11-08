@@ -1,6 +1,7 @@
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { NewArenaEvent } from "#events/battle-scene";
 import type { Arena } from "#field/arena";
+import type { AttemptRunPhase } from "#phases/attempt-run-phase";
 import type { GameManager } from "#test/test-utils/game-manager";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
@@ -228,7 +229,7 @@ export class OverridesHelper extends GameManagerHelper {
    */
   public statusEffect(statusEffect: StatusEffect): this {
     vi.spyOn(activeOverrides, "STATUS_OVERRIDE", "get").mockReturnValue(statusEffect);
-    this.log(`Player Pokemon status-effect set to ${StatusEffect[statusEffect]} (=${statusEffect})!`);
+    this.log(`Player Pokemon status-effect set to ${enumValueToKey(StatusEffect, statusEffect)} (=${statusEffect})!`);
     return this;
   }
 
@@ -257,7 +258,7 @@ export class OverridesHelper extends GameManagerHelper {
    */
   public trainerType(trainerType: TrainerType): this {
     vi.spyOn(activeOverrides, "TRAINER_TYPE_OVERRIDE", "get").mockReturnValue(trainerType);
-    this.log(`Trainer type set to ${TrainerType[trainerType]} (=${trainerType})!`);
+    this.log(`Trainer type set to ${enumValueToKey(TrainerType, trainerType)} (=${trainerType})!`);
     return this;
   }
 
@@ -427,7 +428,7 @@ export class OverridesHelper extends GameManagerHelper {
    */
   public enemyStatusEffect(statusEffect: StatusEffect): this {
     vi.spyOn(activeOverrides, "ENEMY_STATUS_OVERRIDE", "get").mockReturnValue(statusEffect);
-    this.log(`Enemy Pokemon status-effect set to ${StatusEffect[statusEffect]} (=${statusEffect})!`);
+    this.log(`Enemy Pokemon status-effect set to ${enumValueToKey(StatusEffect, statusEffect)} (=${statusEffect})!`);
     return this;
   }
 
@@ -484,7 +485,7 @@ export class OverridesHelper extends GameManagerHelper {
     if (nature === null) {
       this.log("Player Nature override disabled!");
     } else {
-      this.log(`Player Nature set to ${Nature[nature]} (=${nature})!`);
+      this.log(`Player Nature set to ${enumValueToKey(Nature, nature)} (=${nature})!`);
     }
     return this;
   }
@@ -500,7 +501,7 @@ export class OverridesHelper extends GameManagerHelper {
     if (nature === null) {
       this.log("Enemy Nature override disabled!");
     } else {
-      this.log(`Enemy Nature set to ${Nature[nature]} (=${nature})!`);
+      this.log(`Enemy Nature set to ${enumValueToKey(Nature, nature)} (=${nature})!`);
     }
     return this;
   }
@@ -649,6 +650,25 @@ export class OverridesHelper extends GameManagerHelper {
       this.log("Disabled override for enemy Tera type!");
     } else {
       this.log(`Enemy Tera type set to ${enumValueToKey(ElementalType, type)} (=${type})!`);
+    }
+    return this;
+  }
+
+  /**
+   * Override the result of the Player's attempts to flee from battle.
+   * @param result - The desired outcome for Run attempts:
+   * - If `true`, Run attempts will always succeed.
+   * - If `false`, Run attempts will always fail.
+   * - If `null`, the override is disabled, and Run attempts will use the default algorithm.
+   * @returns `this`
+   * @see {@linkcode AttemptRunPhase}
+   */
+  public forceRunResult(result: boolean | null): this {
+    vi.spyOn(activeOverrides, "RUN_RESULT_OVERRIDE", "get").mockReturnValue(result);
+    if (result === null) {
+      this.log("Disabled override for player Run result!");
+    } else {
+      this.log(`Result for run attempts set to ${result}`);
     }
     return this;
   }

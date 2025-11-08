@@ -277,8 +277,8 @@ export class ShedinjaEvoCondition extends SpeciesEvolutionCondition {
  */
 export class AmpedToxtricityEvoCondition extends SpeciesEvolutionCondition {
   constructor() {
-    super(
-      (p) =>
+    super((p) =>
+      (
         [
           Nature.HARDY,
           Nature.BRAVE,
@@ -293,7 +293,8 @@ export class AmpedToxtricityEvoCondition extends SpeciesEvolutionCondition {
           Nature.RASH,
           Nature.SASSY,
           Nature.QUIRKY,
-        ].indexOf(p.getNature()) > -1,
+        ] as readonly Nature[]
+      ).includes(p.getNature()),
     );
     this.description =
       "Nature is Hardy, Brave, Adamant, Naughty, Docile, Impish, Lax, Hasty, Jolly, Naive, Rash, Sassy, or Quirky.";
@@ -306,8 +307,8 @@ export class AmpedToxtricityEvoCondition extends SpeciesEvolutionCondition {
  */
 export class LowKeyToxtricityEvoCondition extends SpeciesEvolutionCondition {
   constructor() {
-    super(
-      (p) =>
+    super((p) =>
+      (
         [
           Nature.LONELY,
           Nature.BOLD,
@@ -321,7 +322,8 @@ export class LowKeyToxtricityEvoCondition extends SpeciesEvolutionCondition {
           Nature.CALM,
           Nature.GENTLE,
           Nature.CAREFUL,
-        ].indexOf(p.getNature()) > -1,
+        ] as readonly Nature[]
+      ).includes(p.getNature()),
     );
     this.description =
       "Nature is Lonely, Bold, Relaxed, Timid, Serious, Modest, Mild, Quiet, Bashful, Calm, Gentle, or Careful.";

@@ -52,8 +52,4 @@ export class ModifierHelper extends GameManagerHelper {
     itemPoolChecks.clear();
     return this;
   }
-
-  private log(...params: any[]) {
-    console.log("Modifiers:", ...params);
-  }
 }

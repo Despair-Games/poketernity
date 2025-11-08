@@ -204,7 +204,6 @@ import {
   clamp,
   coerceArray,
   fixedNumber,
-  getTSEnumValues,
   NumberHolder,
   toDmgValue,
   ValueHolder,
@@ -212,7 +211,7 @@ import {
 import { loadMoveAnimAssets } from "#utils/move-anim-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
 import { getPokemonSpecies, getPokemonSpeciesForm, summonDataToJSON } from "#utils/pokemon-utils";
-import { randSeedInt } from "#utils/random-utils";
+import { randSeedInt, randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
 interface AbilityData {
@@ -1167,7 +1166,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
      * e.g. items and abilities, apply based on the original stat.
      * See https://bulbapedia.bulbagarden.net/wiki/Body_Press_(move)#Effect for more info
      */
-    if (move && opponent && [Stat.ATK, Stat.SPATK].includes(stat)) {
+    if (move && opponent && ([Stat.ATK, Stat.SPATK] as readonly EffectiveStat[]).includes(stat)) {
       applyMoveAttrs(VariableAtkAttr, this, opponent, move, statValue, isCritical);
     }
 
@@ -1331,11 +1330,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.calculateStats();
   }
 
-  protected generateNature(naturePool?: Nature[]): void {
-    if (naturePool === undefined) {
-      naturePool = getTSEnumValues(Nature);
-    }
-    const nature = naturePool[randSeedInt(naturePool.length)];
+  protected generateNature(naturePool: Nature[] = Object.values(Nature)): void {
+    const nature = randSeedItem(naturePool);
     this.setNature(nature);
   }
 
@@ -3021,7 +3017,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
      * The {@linkcode EffectiveStat} used to defend against the given move.
      * Can be altered by move attributes, e.g. from Psyshock.
      */
-    const defendingStat = new NumberHolder(isPhysical ? Stat.DEF : Stat.SPDEF);
+    const defendingStat = new ValueHolder(isPhysical ? Stat.DEF : Stat.SPDEF);
     applyMoveAttrs(VariableDefAttr, source, this, move, defendingStat);
 
     /**

@@ -1278,7 +1278,7 @@ class PartySlot extends Phaser.GameObjects.Container {
     if (this.pokemon.hasNonVolatileStatusEffect(false, true) || this.pokemon.isFainted()) {
       const effectIconKey = this.pokemon.isFainted()
         ? "faint"
-        : StatusEffect[this.pokemon.getStatusEffect(true)].toLowerCase();
+        : enumValueToKey(StatusEffect, this.pokemon.getStatusEffect(true)).toLowerCase();
       const statusIndicator = globalScene.add.sprite(0, 0, "status_icons");
       statusIndicator.setFrame(effectIconKey);
       statusIndicator.setOrigin(0, 0);

@@ -10,6 +10,8 @@ import { PokemonPhase } from "#phases/base/pokemon-phase";
 import { playTween } from "#utils/anim-utils";
 import i18next from "i18next";
 
+const batonSwitchTypes: readonly SwitchType[] = [SwitchType.BATON_PASS, SwitchType.SHED_TAIL] as const;
+
 /**
  * - Handles all VFX and SFX related to recalling a {@linkcode Pokemon} for player Pokemon at all times,
  * and for enemy Pokemon in trainer battles.
@@ -61,7 +63,7 @@ export class RecallPhase extends PokemonPhase {
   private async recall(): Promise<void> {
     await this.playRecallMessage();
     await this.playRecallAnimation();
-    this.pokemon.leaveField(![SwitchType.BATON_PASS, SwitchType.SHED_TAIL].includes(this.switchType), false);
+    this.pokemon.leaveField(!batonSwitchTypes.includes(this.switchType), false);
   }
 
   /** Plays a message before this phase's target {@linkcode Pokemon} is recalled */
@@ -91,7 +93,7 @@ export class RecallPhase extends PokemonPhase {
     promises.push(this.pokemon.hideInfo());
     this.pokemon.tint(getPokeballTintColor(this.pokemon.pokeball), 1, 250, "Sine.easeIn");
 
-    if (![SwitchType.BATON_PASS, SwitchType.SHED_TAIL].includes(this.switchType)) {
+    if (!batonSwitchTypes.includes(this.switchType)) {
       promises.push(this.removeSubstitute());
     }
 
