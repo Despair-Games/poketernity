@@ -455,9 +455,17 @@ export class BattleScene extends SceneBase {
       true,
     );
 
-    // @ts-expect-error - the defined types in the package are incomplete (TODO: fix this?)
+    // TODO: fix the typing in a `.d.ts` file so the `ts-ignore` is no longer necessary
+    /* biome-ignore lint/suspicious/noTsIgnore: ts-ignore is necessary because `tsc` and `tsgo` require the directive to be on different lines,
+     *   meaning `@ts-expect-error` is guaranteed to emit a diagnostic on one of the lines depending on which one is used
+     */
+    // @ts-ignore
     transition.transit({
       mode: "blinds",
+      /* biome-ignore lint/suspicious/noTsIgnore: ts-ignore is necessary because `tsc` and `tsgo` require the directive to be on different lines,
+       *   meaning `@ts-expect-error` is guaranteed to emit a diagnostic on one of the lines depending on which one is used
+       */
+      // @ts-ignore
       ease: "Cubic.easeInOut",
       duration: 1250,
     });
@@ -1554,7 +1562,7 @@ export class BattleScene extends SceneBase {
       case SpeciesId.OINKOLOGNE:
         return gender === Gender.FEMALE ? 1 : 0;
       case SpeciesId.TOXTRICITY: {
-        const lowkeyNatures = [
+        const lowkeyNatures: readonly Nature[] = [
           Nature.LONELY,
           Nature.BOLD,
           Nature.RELAXED,
@@ -1567,8 +1575,8 @@ export class BattleScene extends SceneBase {
           Nature.CALM,
           Nature.GENTLE,
           Nature.CAREFUL,
-        ];
-        if (nature !== undefined && lowkeyNatures.indexOf(nature) > -1) {
+        ] as const;
+        if (nature !== undefined && lowkeyNatures.includes(nature)) {
           return 1;
         }
         return 0;
@@ -2717,7 +2725,7 @@ export class BattleScene extends SceneBase {
               level: p.level,
               currentHP: p.hp,
               maxHP: p.getMaxHp(),
-              status: StatusEffect[p.getStatusEffect()],
+              status: enumValueToKey(StatusEffect, p.getStatusEffect()),
             };
           })
         : [],

@@ -11,14 +11,14 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/game-manager";
-import { BooleanHolder } from "#utils/common-utils";
+import { BooleanHolder, enumValueToKey } from "#utils/common-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 //#region Test Constants
 
 const nonVolatileStatusEffects = NON_VOLATILE_STATUS_EFFECTS.map<[string, StatusEffect]>((statusEffect) => [
-  capitalizeString(StatusEffect[statusEffect], "_", false, true) ?? "",
+  capitalizeString(enumValueToKey(StatusEffect, statusEffect), "_", false, true) ?? "",
   statusEffect,
 ]);
 

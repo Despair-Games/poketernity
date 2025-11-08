@@ -1056,7 +1056,8 @@ export function getMoveTargets(user: Pokemon, moveId: MoveId, replaceTarget?: Mo
   const variableTarget = new ValueHolder<MoveTarget>(MoveTarget.USER);
   user.getOpponents().forEach((p) => applyMoveAttrs(VariableTargetAttr, user, p, allMoves.get(moveId), variableTarget));
 
-  let moveTarget: MoveTarget | undefined;
+  // TODO: take a look at this
+  let moveTarget!: MoveTarget;
   if (allMoves.get(moveId).hasAttr(VariableTargetAttr)) {
     moveTarget = variableTarget.value;
   } else if (replaceTarget !== undefined) {

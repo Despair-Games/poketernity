@@ -137,6 +137,7 @@ export class GameManager {
    * @param mode - The mode to set.
    */
   setMode(mode: UiMode) {
+    // biome-ignore lint/nursery/noFloatingPromises: TODO: fix this
     this.scene.ui?.setMode<UiHandler>(mode);
   }
 

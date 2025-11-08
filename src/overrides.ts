@@ -131,7 +131,8 @@ class DefaultOverrides {
   readonly BYPASS_TUTORIAL_SKIP_OVERRIDE: boolean = false;
   /** Set to `true` to be able to re-earn already unlocked achievements */
   readonly ACHIEVEMENTS_REUNLOCK_OVERRIDE: boolean = false;
-  /** Forces the activation/non-activation of various statuses
+  /**
+   * Forces the activation/non-activation of various statuses
    * - Paralysis: set to `true` to always activate, `false` to do the opposite
    * - Sleep: set to `true` to force the Pokemon to stay asleep, `false` to immediately wake up
    * - Freeze: set to `true` to keep the Pokemon frozen, `false` to defrost
@@ -139,6 +140,8 @@ class DefaultOverrides {
    * - Infatuated: set to `true` to force its activation, set to `false` to do the opposite
    */
   readonly STATUS_ACTIVATION_OVERRIDE: boolean | null = null;
+  /** Forces the Player's attempts to run from battle to succeed (`true`) or fail (`false`) */
+  readonly RUN_RESULT_OVERRIDE: boolean | null = null;
 
   // ----------------
   // PLAYER OVERRIDES

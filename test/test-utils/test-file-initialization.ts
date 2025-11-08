@@ -66,6 +66,7 @@ export function initTestFile() {
 
   Phaser.GameObjects.Image = MockImage as any;
   window.URL.createObjectURL = (blob: Blob) => {
+    // biome-ignore lint/nursery/noFloatingPromises: TODO: fix this
     blobToString(blob).then((data: string) => {
       localStorage.setItem("toExport", data);
     });

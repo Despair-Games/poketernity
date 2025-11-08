@@ -16,7 +16,7 @@ import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PersistentModifier } from "#modifier/modifier";
 import type { ModifierTypeFunc } from "#modifier/modifier-type";
 import type { PokemonSpeciesFilter } from "#types/ui-types";
-import { clamp, coerceArray } from "#utils/common-utils";
+import { clamp, coerceArray, enumValueToKey } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randItem, randSeedItem } from "#utils/random-utils";
 import { toReadableString } from "#utils/string-utils";
@@ -354,7 +354,7 @@ export class TrainerConfig {
 
   constructor(trainerType: TrainerType, allowLegendaries?: boolean) {
     this.trainerType = trainerType;
-    this.name = toReadableString(TrainerType[this.getDerivedType()]);
+    this.name = toReadableString(enumValueToKey(TrainerType, this.getDerivedType()));
     this.battleBgm = "battle_trainer";
     this.victoryBgm = "victory_trainer";
     this.partyTemplates = [trainerPartyTemplates.TWO_AVG];
@@ -362,7 +362,7 @@ export class TrainerConfig {
   }
 
   getKey(): string {
-    return TrainerType[this.getDerivedType()].toString().toLowerCase();
+    return enumValueToKey(TrainerType, this.getDerivedType()).toLowerCase();
   }
 
   getSpriteKey(female: boolean = false, isDouble: boolean = false): string {
@@ -373,7 +373,7 @@ export class TrainerConfig {
     // If a special double trainer class was set, set it as the sprite key
     if (this.trainerTypeDouble && female && isDouble) {
       // Get the derived type for the double trainer since the sprite key is based on the derived type
-      ret = TrainerType[this.getDerivedType(this.trainerTypeDouble)].toString().toLowerCase();
+      ret = enumValueToKey(TrainerType, this.getDerivedType(this.trainerTypeDouble)).toLowerCase();
     }
     if (!female && this.spriteNameLeft) {
       return this.spriteNameLeft;
@@ -430,72 +430,54 @@ export class TrainerConfig {
   }
 
   /**
-   * Returns the derived trainer type for a given trainer type.
-   * @param trainerTypeToDeriveFrom - The trainer type to derive from. (If null, the this.trainerType property will be used.)
+   * Gets the "base" trainer type for a given input if applicable
+   * (e.g. if the input is `TrainerType.RIVAL_3` then the output is `TrainerType.RIVAL`).
+   * @param trainerType - (Default `this.trainerType) The trainer type to derive from.
    * @returns - The derived trainer type.
    */
-  getDerivedType(trainerTypeToDeriveFrom: TrainerType | null = null): TrainerType {
-    let trainerType = trainerTypeToDeriveFrom ? trainerTypeToDeriveFrom : this.trainerType;
+  getDerivedType(trainerType: TrainerType = this.trainerType): TrainerType {
     switch (trainerType) {
       case TrainerType.RIVAL_2:
       case TrainerType.RIVAL_3:
       case TrainerType.RIVAL_4:
       case TrainerType.RIVAL_5:
       case TrainerType.RIVAL_6:
-        trainerType = TrainerType.RIVAL;
-        break;
+        return TrainerType.RIVAL;
       case TrainerType.LANCE_CHAMPION:
-        trainerType = TrainerType.LANCE;
-        break;
+        return TrainerType.LANCE;
       case TrainerType.LARRY_ELITE:
-        trainerType = TrainerType.LARRY;
-        break;
+        return TrainerType.LARRY;
       case TrainerType.ROCKET_BOSS_GIOVANNI_1:
       case TrainerType.ROCKET_BOSS_GIOVANNI_2:
-        trainerType = TrainerType.GIOVANNI;
-        break;
+        return TrainerType.GIOVANNI;
       case TrainerType.MAXIE_2:
-        trainerType = TrainerType.MAXIE;
-        break;
+        return TrainerType.MAXIE;
       case TrainerType.ARCHIE_2:
-        trainerType = TrainerType.ARCHIE;
-        break;
+        return TrainerType.ARCHIE;
       case TrainerType.CYRUS_2:
-        trainerType = TrainerType.CYRUS;
-        break;
+        return TrainerType.CYRUS;
       case TrainerType.GHETSIS_2:
-        trainerType = TrainerType.GHETSIS;
-        break;
+        return TrainerType.GHETSIS;
       case TrainerType.LYSANDRE_2:
-        trainerType = TrainerType.LYSANDRE;
-        break;
+        return TrainerType.LYSANDRE;
       case TrainerType.LUSAMINE_2:
-        trainerType = TrainerType.LUSAMINE;
-        break;
+        return TrainerType.LUSAMINE;
       case TrainerType.GUZMA_2:
-        trainerType = TrainerType.GUZMA;
-        break;
+        return TrainerType.GUZMA;
       case TrainerType.ROSE_2:
-        trainerType = TrainerType.ROSE;
-        break;
+        return TrainerType.ROSE;
       case TrainerType.PENNY_2:
-        trainerType = TrainerType.PENNY;
-        break;
+        return TrainerType.PENNY;
       case TrainerType.MARNIE_ELITE:
-        trainerType = TrainerType.MARNIE;
-        break;
+        return TrainerType.MARNIE;
       case TrainerType.NESSA_ELITE:
-        trainerType = TrainerType.NESSA;
-        break;
+        return TrainerType.NESSA;
       case TrainerType.BEA_ELITE:
-        trainerType = TrainerType.BEA;
-        break;
+        return TrainerType.BEA;
       case TrainerType.ALLISTER_ELITE:
-        trainerType = TrainerType.ALLISTER;
-        break;
+        return TrainerType.ALLISTER;
       case TrainerType.RAIHAN_ELITE:
-        trainerType = TrainerType.RAIHAN;
-        break;
+        return TrainerType.RAIHAN;
     }
 
     return trainerType;
@@ -531,7 +513,7 @@ export class TrainerConfig {
       // Otherwise, assign the provided string as the BGM.
       this.femaleEncounterBgm =
         typeof femaleEncounterBgm === "number"
-          ? TrainerType[femaleEncounterBgm].toString().replace(/_/g, " ").toLowerCase()
+          ? enumValueToKey(TrainerType, femaleEncounterBgm).replace(/_/g, " ").toLowerCase()
           : femaleEncounterBgm;
     }
 
@@ -551,7 +533,7 @@ export class TrainerConfig {
     if (doubleEncounterBgm) {
       this.doubleEncounterBgm =
         typeof doubleEncounterBgm === "number"
-          ? TrainerType[doubleEncounterBgm].toString().replace(/_/g, " ").toLowerCase()
+          ? enumValueToKey(TrainerType, doubleEncounterBgm).replace(/_/g, " ").toLowerCase()
           : doubleEncounterBgm;
     }
     return this;
@@ -645,7 +627,7 @@ export class TrainerConfig {
 
   setEncounterBgm(encounterBgm: TrainerType | string): TrainerConfig {
     this.encounterBgm =
-      typeof encounterBgm === "number" ? TrainerType[encounterBgm].toString().toLowerCase() : encounterBgm;
+      typeof encounterBgm === "number" ? enumValueToKey(TrainerType, encounterBgm).toLowerCase() : encounterBgm;
     return this;
   }
 

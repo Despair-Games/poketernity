@@ -1,9 +1,10 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { type EffectiveStat, getStatKey } from "#enums/stat";
+import type { EffectiveStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
+import { getStatKey } from "#utils/i18n-utils";
 import i18next from "i18next";
 
 /**

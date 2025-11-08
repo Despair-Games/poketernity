@@ -24,7 +24,7 @@ import type { PokeballType } from "#enums/pokeball-type";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesId } from "#enums/species-id";
 import type { PermanentStat, TempBattleStat } from "#enums/stat";
-import { getStatKey, Stat, TEMP_BATTLE_STATS } from "#enums/stat";
+import { Stat, TEMP_BATTLE_STATS } from "#enums/stat";
 import type { VoucherType } from "#enums/voucher-type";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PlayerPokemon } from "#field/player-pokemon";
@@ -75,7 +75,8 @@ import type { PokemonMoveSelectFilter, PokemonSelectFilter } from "#types/ui-typ
 import type { ObjectValues } from "#types/utility-types";
 import { getModifierTierTextTint } from "#ui/text-utils";
 import { getBerryEffectDescription, getBerryName } from "#utils/berry-utils";
-import { enumValueToKey, getTSEnumKeys, getTSEnumValues, NumberHolder } from "#utils/common-utils";
+import { enumValueToKey, getTSEnumValues, NumberHolder } from "#utils/common-utils";
+import { getStatKey } from "#utils/i18n-utils";
 import { getModifierPoolForType } from "#utils/modifier-pool-utils";
 import { getModifierType } from "#utils/modifier-type-utils";
 import { randSeedInt } from "#utils/random-utils";
@@ -605,9 +606,9 @@ export class PokemonNatureChangeModifierType extends PokemonModifierType {
     super(
       "",
       `mint_${
-        getTSEnumKeys(Stat)
+        Object.keys(Stat)
           .find((s) => getNatureStatMultiplier(nature, Stat[s]) > 1)
-          ?.toLowerCase() || "neutral"
+          ?.toLowerCase() ?? "neutral"
       }`,
       (_type, args) => new PokemonNatureChangeModifier(this, (args[0] as PlayerPokemon).id, this.nature),
       (pokemon: PlayerPokemon) => {
@@ -1250,7 +1251,7 @@ export class BaseStatBoosterModifierTypeGenerator extends ModifierTypeGenerator 
       if (pregenArgs) {
         return new BaseStatBoosterModifierType(pregenArgs[0]);
       }
-      const randStat: PermanentStat = randSeedInt(Stat.SPD + 1);
+      const randStat = randSeedInt(Stat.SPD + 1) as PermanentStat;
       return new BaseStatBoosterModifierType(randStat);
     });
   }
@@ -1271,7 +1272,7 @@ export class TempStatStageBoosterModifierTypeGenerator extends ModifierTypeGener
       if (pregenArgs && pregenArgs.length === 1 && TEMP_BATTLE_STATS.includes(pregenArgs[0])) {
         return new TempStatStageBoosterModifierType(pregenArgs[0]);
       }
-      const randStat: TempBattleStat = randSeedInt(Stat.ACC, Stat.ATK);
+      const randStat = randSeedInt(Stat.ACC, Stat.ATK) as TempBattleStat;
       return new TempStatStageBoosterModifierType(randStat);
     });
   }

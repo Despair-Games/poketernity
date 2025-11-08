@@ -20,9 +20,8 @@ import { TrainerType } from "#enums/trainer-type";
 import { TrainerVariant } from "#enums/trainer-variant";
 import { randInt } from "#utils/random-utils";
 
-let t = TrainerType.BLUE_RED;
 export const championDoubleTrainerConfigs: TrainerConfigs = {
-  [TrainerType.BLUE_RED]: new TrainerConfig(t)
+  [TrainerType.BLUE_RED]: new TrainerConfig(TrainerType.BLUE_RED)
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([SpeciesId.UMBREON], TrainerSlot.TRAINER))
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([SpeciesId.ESPEON], TrainerSlot.TRAINER_PARTNER))
     .setPartyMemberFunc(
@@ -74,7 +73,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setHasDouble("blue_red_double")
     .setTitle("old_rivals")
     .initForChampion(TrainerVariant.DOUBLE, [KANTO_CHAMPION_THEME, JOHTO_CHAMPION_THEME]),
-  [TrainerType.LANCE_CLAIR]: new TrainerConfig(++t)
+  [TrainerType.LANCE_CLAIR]: new TrainerConfig(TrainerType.LANCE_CLAIR)
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([SpeciesId.DRAGONITE], TrainerSlot.TRAINER)) // (They both use Dragonite - even if their only ever mainline battle together is in the Johto games. So i like the idea of them fighting together with Dragonite)
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([SpeciesId.DRAGONITE], TrainerSlot.TRAINER_PARTNER))
     .setPartyMemberFunc(
@@ -115,7 +114,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setHasDouble("lance_clair_double")
     .setTitle("dragon_tamers")
     .initForChampion(TrainerVariant.DOUBLE, [JOHTO_CHAMPION_THEME]),
-  [TrainerType.STEVEN_WALLACE]: new TrainerConfig(++t)
+  [TrainerType.STEVEN_WALLACE]: new TrainerConfig(TrainerType.STEVEN_WALLACE)
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([SpeciesId.SKARMORY], TrainerSlot.TRAINER))
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([SpeciesId.WHISCASH], TrainerSlot.TRAINER_PARTNER))
     .setPartyMemberFunc(
@@ -155,7 +154,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setHasDouble("steven_wallace_double")
     .setTitle("hoenn_champions")
     .initForChampion(TrainerVariant.DOUBLE, [HOENN5_CHAMPION_THEME, HOENN6_CHAMPION_THEME]),
-  [TrainerType.CYNTHIA_DIANTHA]: new TrainerConfig(++t)
+  [TrainerType.CYNTHIA_DIANTHA]: new TrainerConfig(TrainerType.CYNTHIA_DIANTHA)
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([SpeciesId.TOGEKISS], TrainerSlot.TRAINER))
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([SpeciesId.GOODRA], TrainerSlot.TRAINER_PARTNER))
     .setPartyMemberFunc(
@@ -197,7 +196,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setHasDouble("cynthia_diantha_double")
     .setTitle("champion_friends")
     .initForChampion(TrainerVariant.DOUBLE, [SINNOH_CHAMPION_THEME, KALOS_CHAMPION_THEME]),
-  [TrainerType.IRIS_ALDER]: new TrainerConfig(++t)
+  [TrainerType.IRIS_ALDER]: new TrainerConfig(TrainerType.IRIS_ALDER)
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([SpeciesId.HAXORUS], TrainerSlot.TRAINER))
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([SpeciesId.VOLCARONA], TrainerSlot.TRAINER_PARTNER))
     .setPartyMemberFunc(
@@ -237,7 +236,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setHasDouble("iris_alder_double")
     .setTitle("unovas_best")
     .initForChampion(TrainerVariant.DOUBLE, [DEFAULT_CHAMPION_THEME, IRIS_CHAMPION_THEME]),
-  [TrainerType.HAU_KUKUI]: new TrainerConfig(++t)
+  [TrainerType.HAU_KUKUI]: new TrainerConfig(TrainerType.HAU_KUKUI)
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([SpeciesId.ALOLA_RAICHU], TrainerSlot.TRAINER)) // Signature
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([SpeciesId.LYCANROC], TrainerSlot.TRAINER_PARTNER)) // Signature
     .setPartyMemberFunc(
@@ -287,7 +286,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setHasDouble("hau_kukui_double")
     .setTitle("masters_of_alola")
     .initForChampion(TrainerVariant.DOUBLE, [ALOLA_CHAMPION_THEME]),
-  [TrainerType.LEON_HOP]: new TrainerConfig(++t)
+  [TrainerType.LEON_HOP]: new TrainerConfig(TrainerType.LEON_HOP)
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([SpeciesId.DRAGAPULT], TrainerSlot.TRAINER))
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([SpeciesId.DUBWOOL], TrainerSlot.TRAINER_PARTNER))
     .setPartyMemberFunc(
@@ -335,7 +334,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setHasDouble("leon_hop_double")
     .setTitle("galar_stars")
     .initForChampion(TrainerVariant.DOUBLE, [GALAR_CHAMPION_THEME]),
-  [TrainerType.GEETA_NEMONA]: new TrainerConfig(++t)
+  [TrainerType.GEETA_NEMONA]: new TrainerConfig(TrainerType.GEETA_NEMONA)
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([SpeciesId.GLIMMORA], TrainerSlot.TRAINER))
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([SpeciesId.PAWMOT], TrainerSlot.TRAINER_PARTNER))
     .setPartyMemberFunc(
@@ -379,7 +378,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setHasDouble("geeta_nemona_double")
     .setTitle("top_champs")
     .initForChampion(TrainerVariant.DOUBLE, [GEETA_CHAMPION_THEME, NEMONA_CHAMPION_THEME]),
-  [TrainerType.KIERAN_CARMINE]: new TrainerConfig(++t)
+  [TrainerType.KIERAN_CARMINE]: new TrainerConfig(TrainerType.KIERAN_CARMINE)
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([SpeciesId.POLIWRATH, SpeciesId.POLITOED], TrainerSlot.TRAINER))
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([SpeciesId.SINISTCHA], TrainerSlot.TRAINER_PARTNER))
     .setPartyMemberFunc(

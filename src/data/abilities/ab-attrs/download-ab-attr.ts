@@ -41,7 +41,7 @@ export class DownloadAbAttr extends PostSummonAbAttr {
    * @param stat - The {@linkcode Stat} to evaluate
    * @returns The combined effective stat of the given Pokemon's opponents for the given stat.
    */
-  private getTotalOpposingDefensiveStat(pokemon: Pokemon, stat: Stat.DEF | Stat.SPDEF): number {
+  private getTotalOpposingDefensiveStat(pokemon: Pokemon, stat: typeof Stat.DEF | typeof Stat.SPDEF): number {
     return pokemon
       .getOpponents()
       .reduce(

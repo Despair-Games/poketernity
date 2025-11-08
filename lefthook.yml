@@ -18,3 +18,10 @@ post-merge:
   commands:
     update-submodules:
       run: git submodule update --init --recursive
+    update-packages:
+      run: pnpm i --ignore-scripts
+
+post-checkout:
+  commands:
+    update-packages:
+      run: pnpm i --ignore-scripts

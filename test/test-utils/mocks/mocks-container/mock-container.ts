@@ -4,14 +4,13 @@ import type { MockTextureManager } from "#test/test-utils/mocks/mock-texture-man
 export class MockContainer implements MockGameObject {
   protected x: number;
   protected y: number;
-  protected scene;
+  protected scene: Phaser.Scene;
   protected width: number;
   protected height: number;
   protected visible: boolean;
-  private alpha: number;
-  private readonly style;
-  public frame;
-  protected textureManager;
+  public alpha: number;
+  public frame: object;
+  protected textureManager: MockTextureManager;
   public list: MockGameObject[] = [];
   public name: string;
   public active = true;

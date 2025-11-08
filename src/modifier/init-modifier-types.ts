@@ -80,7 +80,6 @@ import {
   TurnHeldItemTransferModifierType,
 } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
-import { getTSEnumValues } from "#utils/common-utils";
 import { randSeedInt, randSeedItem } from "#utils/random-utils";
 import { t } from "i18next";
 
@@ -206,7 +205,7 @@ export function initModifierTypes() {
       if (pregenArgs && pregenArgs.length === 1 && pregenArgs[0] in Nature) {
         return new PokemonNatureChangeModifierType(pregenArgs[0] as Nature);
       }
-      return new PokemonNatureChangeModifierType(randSeedInt(getTSEnumValues(Nature).length) as Nature);
+      return new PokemonNatureChangeModifierType(randSeedItem(Object.values(Nature)));
     });
 
   modifierTypes.BERRY = () =>

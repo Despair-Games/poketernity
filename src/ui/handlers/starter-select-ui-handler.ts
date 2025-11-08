@@ -2094,7 +2094,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           case Button.CYCLE_NATURE:
             if (this.canCycleNature) {
               const natures = globalScene.gameData.getNaturesForAttr(starterData.natureAttr);
-              const natureIndex = natures.indexOf(this.natureCursor);
+              const natureIndex = natures.indexOf(this.natureCursor as Nature);
               const newNature = natures[natureIndex < natures.length - 1 ? natureIndex + 1 : 0];
               // store cycled nature as default
               starterAttributes.nature = newNature as unknown as number;
@@ -3472,7 +3472,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
           this.starterAttr[starterIndex] = this.dexAttrCursor;
           this.starterAbilityIndexes[starterIndex] = this.abilityCursor;
           this.starterPassives[starterIndex] = this.passiveEnabled;
-          this.starterNatures[starterIndex] = this.natureCursor;
+          this.starterNatures[starterIndex] = this.natureCursor as Nature;
           this.starterTeras[starterIndex] = this.teraCursor;
         }
 

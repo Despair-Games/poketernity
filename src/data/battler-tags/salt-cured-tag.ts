@@ -20,19 +20,8 @@ import i18next from "i18next";
  * 1/4 if the owner is Water- or Steel-type.
  */
 export class SaltCuredTag extends BattlerTag {
-  private sourceIndex: number;
-
   constructor(sourceId: number) {
     super(BattlerTagType.SALT_CURED, BattlerTagLapseType.TURN_END, 1, MoveId.SALT_CURE, sourceId);
-  }
-
-  /**
-   * When given a battler tag or json representing one, load the data for it.
-   * @param source A battler tag
-   */
-  override loadTag(source: BattlerTag | any): void {
-    super.loadTag(source);
-    this.sourceIndex = source.sourceIndex;
   }
 
   override onAdd(pokemon: Pokemon): void {
@@ -42,7 +31,6 @@ export class SaltCuredTag extends BattlerTag {
       "MessagePhase",
       i18next.t("battlerTags:saltCuredOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
-    this.sourceIndex = globalScene.getPokemonById(this.sourceId!)!.getBattlerIndex(); // TODO: are those bangs correct?
   }
 
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {

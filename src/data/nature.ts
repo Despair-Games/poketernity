@@ -1,7 +1,9 @@
 import { Nature } from "#enums/nature";
-import { EFFECTIVE_STATS, getShortenedStatKey, Stat } from "#enums/stat";
+import { EFFECTIVE_STATS, type EffectiveStat, Stat } from "#enums/stat";
 import { TextStyle } from "#enums/text-style";
 import { getBBCodeFragment } from "#ui/text-utils";
+import { enumValueToKey } from "#utils/common-utils";
+import { getShortenedStatKey } from "#utils/i18n-utils";
 import { toReadableString } from "#utils/string-utils";
 import i18next from "i18next";
 
@@ -12,11 +14,7 @@ export function getNatureName(
   ignoreBBCode: boolean = false,
   baseTextStyle: TextStyle = TextStyle.WINDOW,
 ): string {
-  let ret = toReadableString(Nature[nature]);
-  //Translating nature
-  if (i18next.exists("nature:" + ret)) {
-    ret = i18next.t(("nature:" + ret) as any);
-  }
+  let ret: string = i18next.t("nature:" + toReadableString(enumValueToKey(Nature, nature)));
   if (includeStatEffects) {
     let increasedStat: Stat | null = null;
     let decreasedStat: Stat | null = null;
@@ -33,7 +31,7 @@ export function getNatureName(
       ? (text: string, _style: TextStyle) => text
       : (text: string, style: TextStyle) => getBBCodeFragment(text, style, true);
 
-    if (increasedStat && decreasedStat) {
+    if (increasedStat != null && decreasedStat != null) {
       ret =
         // biome-ignore lint/complexity/noUselessStringConcat: intentional for improved readability
         `${ret}${singleLine ? " " : "\n"}`
@@ -47,7 +45,7 @@ export function getNatureName(
   return ret;
 }
 
-export function getNatureStatMultiplier(nature: Nature, stat: Stat): number {
+export function getNatureStatMultiplier(nature: Nature, stat: EffectiveStat): number {
   switch (stat) {
     case Stat.ATK:
       switch (nature) {

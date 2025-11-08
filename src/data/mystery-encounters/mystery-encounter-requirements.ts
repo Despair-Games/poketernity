@@ -493,7 +493,7 @@ export class NatureRequirement extends EncounterPokemonRequirement {
 
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
     if (pokemon?.nature != null && this.requiredNature.includes(pokemon.nature)) {
-      return ["nature", Nature[pokemon.nature]];
+      return ["nature", enumValueToKey(Nature, pokemon.nature)];
     }
     return ["nature", ""];
   }
@@ -746,7 +746,7 @@ export class StatusEffectRequirement extends EncounterPokemonRequirement {
       return pokemon?.hasStatusEffect(a);
     });
     if (reqStatus.length > 0) {
-      return ["status", StatusEffect[reqStatus[0]]];
+      return ["status", enumValueToKey(StatusEffect, reqStatus[0])];
     }
     return ["status", ""];
   }

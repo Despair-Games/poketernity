@@ -5,11 +5,11 @@ import type { ShowTextOptions } from "#types/ui-types";
 import { UI } from "#ui/ui";
 
 export class MockText implements MockGameObject {
-  private readonly phaserText;
+  public readonly phaserText;
   private wordWrapWidth;
   private splitRegExp;
   private readonly scene;
-  private readonly textureManager: MockTextureManager;
+  public readonly textureManager: MockTextureManager;
   public list: MockGameObject[] = [];
   public style;
   public text = "";

@@ -7,6 +7,7 @@ import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
 import { GameManager } from "#test/test-utils/game-manager";
+import { enumValueToKey } from "#utils/common-utils";
 import { capitalizeString } from "#utils/string-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -14,7 +15,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 //#region Test Constants
 
 const nonVolatileStatusEffects = NON_VOLATILE_STATUS_EFFECTS.map((statusEffectId) => ({
-  statusEffectName: capitalizeString(StatusEffect[statusEffectId], "_", false, true),
+  statusEffectName: capitalizeString(enumValueToKey(StatusEffect, statusEffectId), "_", false, true),
   statusEffectId,
 }));
 

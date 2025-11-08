@@ -250,7 +250,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
         statY = baseY + (!!(i % 2) === this.player ? 10 : 0);
       }
 
-      const statLabel = globalScene.add.sprite(statX, statY, "pbinfo_stat", Stat[s]);
+      const statLabel = globalScene.add.sprite(statX, statY, "pbinfo_stat", enumValueToKey(Stat, s));
       statLabel.setName("icon_stat_label_" + i.toString());
       statLabel.setOrigin(0, 0);
       statLabels.push(statLabel);
@@ -627,7 +627,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
       if (this.lastStatus !== pokemon.getStatusEffect(true)) {
         this.lastStatus = pokemon.getStatusEffect(true);
         if (this.lastStatus !== StatusEffect.NONE) {
-          this.statusIndicator.setFrame(StatusEffect[this.lastStatus].toLowerCase());
+          this.statusIndicator.setFrame(enumValueToKey(StatusEffect, this.lastStatus).toLowerCase());
         }
 
         const offsetX = this.player ? 0 : (this.ownedIcon.visible ? 8 : 0) + (this.championRibbon.visible ? 8 : 0);

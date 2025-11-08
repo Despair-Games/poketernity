@@ -91,7 +91,7 @@ export class PokemonHealPhase extends CommonAnimPhase {
     const canRestorePP = this.fullRestorePP && pokemon.getMoveset().some((mv) => mv.ppUsed > 0);
     const healOrDamage = !pokemon.isFullHp() || this.hpHealed < 0 || canRestorePP;
     const healBlock = pokemon.getTag<HealBlockTag>(BattlerTagType.HEAL_BLOCK);
-    let lastStatusEffect = StatusEffect.NONE;
+    let lastStatusEffect: StatusEffect = StatusEffect.NONE;
 
     if (healBlock && this.hpHealed > 0) {
       globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", healBlock.onActivation(pokemon));
