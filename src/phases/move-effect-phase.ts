@@ -715,7 +715,8 @@ export class MoveEffectPhase extends HitCheckPhase {
   public override getTargets(): Pokemon[] {
     const targets = this.adjustedTargets ?? this.targets;
     const activeOnly = !this.move.getMove().isFieldTarget();
-    return globalScene.getField(activeOnly)
+    return globalScene
+      .getField(activeOnly)
       .filter((p) => targets.includes(p.getBattlerIndex()))
       .sort(speedOrderComparator);
   }
