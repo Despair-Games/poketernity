@@ -108,7 +108,7 @@ export class AttemptRunPhase extends PokemonPhase {
     await Promise.allSettled(enemyField.map((p) => p.hideInfo()));
     enemyField.forEach((p) => p.destroy());
 
-    phaseManager.clearAllPhases();
+    phaseManager.clear();
     phaseManager.queueNextBattle(false);
   }
 
