@@ -1,8 +1,9 @@
 import { PreStatStageChangeAbAttr } from "#abilities/pre-stat-stage-change-ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { type BattleStat, getStatKey } from "#enums/stat";
+import type { BattleStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { ValueHolder } from "#utils/common-utils";
+import { getStatKey } from "#utils/i18n-utils";
 import i18next from "i18next";
 
 /**

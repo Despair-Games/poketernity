@@ -12,9 +12,8 @@ import { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
 
-let t = TrainerType.BUCK;
 export const meTrainerConfigs: TrainerConfigs = {
-  [TrainerType.BUCK]: new TrainerConfig(t)
+  [TrainerType.BUCK]: new TrainerConfig(TrainerType.BUCK)
     .setName("Buck")
     .initForStatTrainer([], true)
     .setPartyMemberFunc(
@@ -63,7 +62,7 @@ export const meTrainerConfigs: TrainerConfigs = {
         p.pokeball = PokeballType.MASTER_BALL;
       }),
     ),
-  [TrainerType.CHERYL]: new TrainerConfig(++t)
+  [TrainerType.CHERYL]: new TrainerConfig(TrainerType.CHERYL)
     .setName("Cheryl")
     .initForStatTrainer([], false)
     .setPartyMemberFunc(
@@ -105,7 +104,7 @@ export const meTrainerConfigs: TrainerConfigs = {
         p.pokeball = PokeballType.MASTER_BALL;
       }),
     ),
-  [TrainerType.MARLEY]: new TrainerConfig(++t)
+  [TrainerType.MARLEY]: new TrainerConfig(TrainerType.MARLEY)
     .setName("Marley")
     .initForStatTrainer([], false)
     .setPartyMemberFunc(
@@ -143,7 +142,7 @@ export const meTrainerConfigs: TrainerConfigs = {
         p.pokeball = PokeballType.MASTER_BALL;
       }),
     ),
-  [TrainerType.MIRA]: new TrainerConfig(++t)
+  [TrainerType.MIRA]: new TrainerConfig(TrainerType.MIRA)
     .setName("Mira")
     .initForStatTrainer([], false)
     .setPartyMemberFunc(
@@ -176,7 +175,7 @@ export const meTrainerConfigs: TrainerConfigs = {
         p.pokeball = PokeballType.MASTER_BALL;
       }),
     ),
-  [TrainerType.RILEY]: new TrainerConfig(++t)
+  [TrainerType.RILEY]: new TrainerConfig(TrainerType.RILEY)
     .setName("Riley")
     .initForStatTrainer([], true)
     .setPartyMemberFunc(
@@ -213,27 +212,27 @@ export const meTrainerConfigs: TrainerConfigs = {
         p.pokeball = PokeballType.MASTER_BALL;
       }),
     ),
-  [TrainerType.VICTOR]: new TrainerConfig(++t)
+  [TrainerType.VICTOR]: new TrainerConfig(TrainerType.VICTOR)
     .setTitle("The Winstrates")
     .setLocalizedName("Victor")
     .setMoneyMultiplier(1) // The Winstrate trainers have total money multiplier of 6
     .setPartyTemplates(trainerPartyTemplates.ONE_AVG_ONE_STRONG),
-  [TrainerType.VICTORIA]: new TrainerConfig(++t)
+  [TrainerType.VICTORIA]: new TrainerConfig(TrainerType.VICTORIA)
     .setTitle("The Winstrates")
     .setLocalizedName("Victoria")
     .setMoneyMultiplier(1)
     .setPartyTemplates(trainerPartyTemplates.ONE_AVG_ONE_STRONG),
-  [TrainerType.VIVI]: new TrainerConfig(++t)
+  [TrainerType.VIVI]: new TrainerConfig(TrainerType.VIVI)
     .setTitle("The Winstrates")
     .setLocalizedName("Vivi")
     .setMoneyMultiplier(1)
     .setPartyTemplates(trainerPartyTemplates.TWO_AVG_ONE_STRONG),
-  [TrainerType.VICKY]: new TrainerConfig(++t)
+  [TrainerType.VICKY]: new TrainerConfig(TrainerType.VICKY)
     .setTitle("The Winstrates")
     .setLocalizedName("Vicky")
     .setMoneyMultiplier(1)
     .setPartyTemplates(trainerPartyTemplates.ONE_AVG),
-  [TrainerType.VITO]: new TrainerConfig(++t)
+  [TrainerType.VITO]: new TrainerConfig(TrainerType.VITO)
     .setTitle("The Winstrates")
     .setLocalizedName("Vito")
     .setMoneyMultiplier(2)
@@ -243,23 +242,23 @@ export const meTrainerConfigs: TrainerConfigs = {
         new TrainerPartyTemplate(2, PartyMemberStrength.STRONG),
       ),
     ),
-  [TrainerType.BUG_TYPE_SUPERFAN]: new TrainerConfig(++t)
+  [TrainerType.BUG_TYPE_SUPERFAN]: new TrainerConfig(TrainerType.BUG_TYPE_SUPERFAN)
     .setMoneyMultiplier(2.25)
     .setEncounterBgm(TrainerType.ACE_TRAINER)
     .setPartyTemplates(new TrainerPartyTemplate(2, PartyMemberStrength.AVERAGE)),
-  [TrainerType.EXPERT_POKEMON_BREEDER]: new TrainerConfig(++t)
+  [TrainerType.EXPERT_POKEMON_BREEDER]: new TrainerConfig(TrainerType.EXPERT_POKEMON_BREEDER)
     .setMoneyMultiplier(3)
     .setEncounterBgm(TrainerType.ACE_TRAINER)
     .setLocalizedName("Expert Pokemon Breeder")
     .setPartyTemplates(new TrainerPartyTemplate(3, PartyMemberStrength.AVERAGE)),
-  [TrainerType.FUTURE_SELF_M]: new TrainerConfig(++t)
+  [TrainerType.FUTURE_SELF_M]: new TrainerConfig(TrainerType.FUTURE_SELF_M)
     .setMoneyMultiplier(0)
     .setEncounterBgm("mystery_encounter_weird_dream")
     .setBattleBgm("mystery_encounter_weird_dream")
     .setVictoryBgm("mystery_encounter_weird_dream")
     .setLocalizedName("Future Self M")
     .setPartyTemplates(new TrainerPartyTemplate(6, PartyMemberStrength.STRONG)),
-  [TrainerType.FUTURE_SELF_F]: new TrainerConfig(++t)
+  [TrainerType.FUTURE_SELF_F]: new TrainerConfig(TrainerType.FUTURE_SELF_F)
     .setMoneyMultiplier(0)
     .setEncounterBgm("mystery_encounter_weird_dream")
     .setBattleBgm("mystery_encounter_weird_dream")

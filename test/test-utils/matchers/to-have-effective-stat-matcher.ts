@@ -3,6 +3,7 @@ import { type EffectiveStat, Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { isPokemonInstance, receivedStr } from "#test/test-utils/test-utils";
+import { enumValueToKey } from "#utils/common-utils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
 export interface ToHaveEffectiveStatMatcherOptions {
@@ -53,7 +54,7 @@ export function toHaveEffectiveStatMatcher(
   const pass = actualValue === expectedValue;
 
   const pkmName = getPokemonNameWithAffix(received);
-  const statName = Stat[stat];
+  const statName = enumValueToKey(Stat, stat);
 
   return {
     pass,

@@ -2005,7 +2005,7 @@ export class GameData {
     const ret: Nature[] = [];
     for (let n = 0; n < 25; n++) {
       if (natureAttr & (1 << n)) {
-        ret.push(n);
+        ret.push(n as Nature);
       }
     }
     return ret;

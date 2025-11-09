@@ -47,7 +47,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
     if (
       switchOutTarget.isEnemy()
       && globalScene.currentBattle.battleType === BattleType.WILD
-      && [SwitchType.FORCE_SWITCH, SwitchType.TELEPORT].includes(this.switchType)
+      && ([SwitchType.FORCE_SWITCH, SwitchType.TELEPORT] as readonly SwitchType[]).includes(this.switchType)
     ) {
       return globalScene.tryForceFleePokemon(switchOutIndex, user);
     }
@@ -69,7 +69,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
       if (
         switchOutTarget.isEnemy()
         && globalScene.currentBattle.battleType === BattleType.WILD
-        && [SwitchType.FORCE_SWITCH, SwitchType.TELEPORT].includes(this.switchType)
+        && ([SwitchType.FORCE_SWITCH, SwitchType.TELEPORT] as readonly SwitchType[]).includes(this.switchType)
       ) {
         return globalScene.canForceFleePokemon(switchOutTarget, user);
       }

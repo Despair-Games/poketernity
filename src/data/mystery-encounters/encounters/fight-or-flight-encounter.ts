@@ -6,6 +6,7 @@ import { ModifierTier } from "#enums/modifier-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import type { BattleStat } from "#enums/stat";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
@@ -86,7 +87,7 @@ export const FightOrFlightEncounter: MysteryEncounter = MysteryEncounterBuilder.
               "StatStageChangePhase",
               pokemon.getBattlerIndex(),
               pokemon,
-              [randSeedInt(4, 1)],
+              [randSeedInt(4, 1) as BattleStat],
               2,
             );
           },

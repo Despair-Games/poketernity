@@ -18,6 +18,7 @@ import { PlayerGender } from "#enums/player-gender";
 import { RunDisplayMode } from "#enums/run-display-mode";
 import { SettingKeyboard } from "#enums/setting-keyboard";
 import type { SpeciesId } from "#enums/species-id";
+import type { EffectiveStat } from "#enums/stat";
 import { TextStyle } from "#enums/text-style";
 import { TrainerVariant } from "#enums/trainer-variant";
 import { UiMode } from "#enums/ui-mode";
@@ -28,6 +29,7 @@ import type { PokemonData } from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
 import { DEFAULT_LANGUAGE_KEY } from "#system/supported-languages";
 import type { SessionSaveData } from "#types/session-data";
+import type { ObjectValues } from "#types/utility-types";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#ui/text-utils";
 import { UiHandler } from "#ui/ui-handler";
 import { addWindow } from "#ui/ui-theme";
@@ -41,11 +43,13 @@ import RoundRectangle from "phaser3-rex-plugins/plugins/roundrectangle";
  * MAIN <-- default overlay that can return back to RunHistoryUiHandler + should eventually have its own enum once more pages are added to RunInfoUiHandler
  * HALL_OF_FAME, ENDING_ART, etc. <-- overlays that should return back to MAIN
  */
-enum RunInfoUiMode {
-  MAIN,
-  HALL_OF_FAME,
-  ENDING_ART,
-}
+const RunInfoUiMode = {
+  MAIN: 1,
+  HALL_OF_FAME: 2,
+  ENDING_ART: 3,
+} as const;
+
+type RunInfoUiMode = ObjectValues<typeof RunInfoUiMode>;
 
 /**
  * Some variables are protected because this UI class will most likely be extended in the future to display more information.
@@ -164,7 +168,7 @@ export class RunInfoUiHandler extends UiHandler {
     const headerBg = addWindow(0, 0, GAME_WIDTH - 2, 24);
     headerBg.setOrigin(0, 0);
     this.runContainer.add(headerBg);
-    if (this.runInfo.modifiers.length !== 0) {
+    if (this.runInfo.modifiers.length > 0) {
       const headerBgCoords = headerBg.getRightCenter();
       const actionButtonContainer = globalScene.add.container(headerBgCoords.x, headerBgCoords.y);
       const viewItemsLabel = addTextObject(-7, 0, i18next.t("runHistory:viewHeldItems"), TextStyle.TOOLTIP_CONTENT);
@@ -199,11 +203,12 @@ export class RunInfoUiHandler extends UiHandler {
   /**
    * Shows the run's end result
    *
-   * Victory : The run will display options to allow the player to view the Hall of Fame + Ending Art
-   * Defeat : The run will show the opposing Pokemon (+ Trainer) that the trainer was defeated by.
-   * Defeat can call either parseWildSingleDefeat(), parseWildDoubleDefeat(), or parseTrainerDefeat()
+   * - Victory: The run will display options to allow the player to view the Hall of Fame + Ending Art
+   * - Defeat: The run will show the opposing Pokemon (+ Trainer) that the trainer was defeated by.
    *
+   * Defeat can call either {@linkcode parseWildSingleDefeat}, {@linkcode parseWildDoubleDefeat}, or {@linkcode parseTrainerDefeat}
    */
+  // TODO: why is this async?
   private async parseRunResult() {
     const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
     const genderStr = enumValueToKey(PlayerGender, genderIndex).toLowerCase();
@@ -534,11 +539,14 @@ export class RunInfoUiHandler extends UiHandler {
   }
 
   /**
-   * Shows information about the run like the run's mode, duration, luck, money, and player held items
+   * Shows information about the run like the run's mode, duration, luck, money, and player held items. \
    * The values for luck and money are from the end of the run, not the player's luck at the start of the run.
-   * @param windowX
-   * @param windowY These two params are the coordinates of the window's bottom right corner. This is used to dynamically position Luck based on its length, creating a nice layout regardless of language / luck value.
+   * @param windowX - X coordinate for the window's bottom right corner.
+   * @param windowY - Y coordinate for the window's bottom right corner.
+   * @privateRemarks
+   * The two coordinates are used to dynamically position Luck based on its length, creating a nice layout regardless of language / luck value.
    */
+  // TODO: why is this async?
   private async parseRunInfo(windowX: number, windowY: number): Promise<void> {
     // Parsing and displaying the mode.
     // In the future, parsing Challenges + Challenge Rules may have to be reworked as the game adds additional challenges and users can stack these challenges in various ways.
@@ -599,7 +607,7 @@ export class RunInfoUiHandler extends UiHandler {
 
     // Player Held Items
     // A max of 20 items can be displayed. A + sign will be added if the run's held items pushes past this maximum to show the user that there are more.
-    if (this.runInfo.modifiers.length) {
+    if (this.runInfo.modifiers.length > 0) {
       let visibleModifierIndex = 0;
 
       const modifierIconsContainer = globalScene.add.container(
@@ -738,7 +746,7 @@ export class RunInfoUiHandler extends UiHandler {
       const pStats: string[] = [];
       pokemon.stats.forEach((element) => pStats.push(formatLargeNumberFixedDigits(element, 1)));
       for (let i = 0; i < pStats.length; i++) {
-        const isMult = getNatureStatMultiplier(pNature, i);
+        const isMult = getNatureStatMultiplier(pNature, i as EffectiveStat);
         pStats[i] = isMult < 1 ? pStats[i] + `[color=${CommonColor.LIGHT_BLUE}]↓[/color]` : pStats[i];
         pStats[i] = isMult > 1 ? pStats[i] + `[color=${CommonColor.SOFT_PINK}]↑[/color]` : pStats[i];
       }
@@ -816,7 +824,7 @@ export class RunInfoUiHandler extends UiHandler {
       const heldItemsScale = 0.5;
       const heldItemsContainer = globalScene.add.container(-82, 2);
       const heldItemsList: Modifier.PokemonHeldItemModifier[] = [];
-      if (this.runInfo.modifiers.length) {
+      if (this.runInfo.modifiers.length > 0) {
         for (const m of this.runInfo.modifiers) {
           const modifier = m.toModifier(this.modifiersModule[m.className]);
           if (modifier instanceof Modifier.PokemonHeldItemModifier && modifier.pokemonId === pokemon.id) {
@@ -1038,7 +1046,7 @@ export class RunInfoUiHandler extends UiHandler {
         }
         break;
       case Button.CYCLE_ABILITY:
-        if (this.runInfo.modifiers.length !== 0 && this.pageMode === RunInfoUiMode.MAIN) {
+        if (this.runInfo.modifiers.length > 0 && this.pageMode === RunInfoUiMode.MAIN) {
           if (this.partyVisibility) {
             this.showParty(false);
           } else {

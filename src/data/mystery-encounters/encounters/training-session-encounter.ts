@@ -8,7 +8,7 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Nature } from "#enums/nature";
-import { getStatKey } from "#enums/stat";
+import type { PermanentStat } from "#enums/stat";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { PokemonHeldItemModifier } from "#modifier/modifier";
@@ -26,7 +26,7 @@ import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encou
 import { PokemonData } from "#system/pokemon-data";
 import type { HeldModifierConfig } from "#types/modifiers-types";
 import type { OptionSelectItem } from "#ui/option-select-config";
-import { getTSEnumValues } from "#utils/common-utils";
+import { getStatKey } from "#utils/i18n-utils";
 import { randSeedShuffle } from "#utils/random-utils";
 import i18next from "i18next";
 
@@ -127,9 +127,9 @@ export const TrainingSessionEncounter: MysteryEncounter = MysteryEncounterBuilde
             const ivToChange = ivIndexes.pop()!;
             let newVal = ivToChange.iv;
             if (improvedCount === 0) {
-              encounter.setDialogueToken("stat1", i18next.t(getStatKey(ivToChange.index)) ?? "");
+              encounter.setDialogueToken("stat1", i18next.t(getStatKey(ivToChange.index as PermanentStat)) ?? "");
             } else {
-              encounter.setDialogueToken("stat2", i18next.t(getStatKey(ivToChange.index)) ?? "");
+              encounter.setDialogueToken("stat2", i18next.t(getStatKey(ivToChange.index as PermanentStat)) ?? "");
             }
 
             // Corrects required encounter breakpoints to be continuous for all IV values
@@ -189,7 +189,7 @@ export const TrainingSessionEncounter: MysteryEncounter = MysteryEncounterBuilde
         const encounter = globalScene.currentBattle.mysteryEncounter!;
         const onPokemonSelected = (pokemon: PlayerPokemon) => {
           // Return the options for nature selection
-          return getTSEnumValues(Nature).map((nature: Nature) => {
+          return Object.values(Nature).map((nature: Nature) => {
             const option: OptionSelectItem = {
               label: getNatureName(nature, true, true, true),
               handler: () => {

@@ -38,9 +38,9 @@ describe("Abilities - Defeatist", () => {
   ])("should halve the user's $statName if the user's HP is at or below 50%", async ({ stat }) => {
     await game.classicMode.startBattle(SpeciesId.FEEBAS);
     const playerPokemon = game.field.getPlayerPokemon();
-    const expectedStat = Math.floor(playerPokemon.getStat(stat as number) / 2);
+    const expectedStat = Math.floor(playerPokemon.getStat(stat) / 2);
     playerPokemon.hp = 1;
-    const defeatistStat = playerPokemon.getEffectiveStat(stat as number);
+    const defeatistStat = playerPokemon.getEffectiveStat(stat);
 
     expect(playerPokemon.getHpRatio()).toBeLessThanOrEqual(0.5);
     expect(defeatistStat).toBe(expectedStat);
@@ -52,8 +52,8 @@ describe("Abilities - Defeatist", () => {
   ])("should have no effect on $statName if the user's HP is above 50%", async ({ stat }) => {
     await game.classicMode.startBattle(SpeciesId.FEEBAS);
     const playerPokemon = game.field.getPlayerPokemon();
-    const expectedStat = playerPokemon.getStat(stat as number);
-    const defeatistStat = playerPokemon.getEffectiveStat(stat as number);
+    const expectedStat = playerPokemon.getStat(stat);
+    const defeatistStat = playerPokemon.getEffectiveStat(stat);
 
     expect(playerPokemon.getHpRatio()).toBeGreaterThan(0.5);
     expect(defeatistStat).toBe(expectedStat);

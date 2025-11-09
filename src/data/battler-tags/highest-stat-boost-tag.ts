@@ -11,8 +11,9 @@ import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import type { AbilityId } from "#enums/ability-id";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";
-import { EFFECTIVE_STATS, type EffectiveStat, getStatKey, Stat } from "#enums/stat";
+import { EFFECTIVE_STATS, type EffectiveStat, Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
+import { getStatKey } from "#utils/i18n-utils";
 import i18next from "i18next";
 
 /**

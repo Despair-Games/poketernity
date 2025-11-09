@@ -4,7 +4,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
 import { HitResult } from "#enums/hit-result";
-import { type BattleStat, Stat } from "#enums/stat";
+import { type EffectiveStat, Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import { getBerryName } from "#utils/berry-utils";
 import { NumberHolder, toDmgValue, ValueHolder } from "#utils/common-utils";
@@ -30,7 +30,7 @@ export function getBerryPredicate(berryType: BerryType): BerryPredicate {
       return (pokemon: Pokemon) => {
         const threshold = new ValueHolder(0.25);
         // Offset BerryType such that LIECHI -> Stat.ATK = 1, GANLON -> Stat.DEF = 2, so on and so forth
-        const stat: BattleStat = berryType - BerryType.ENIGMA;
+        const stat = (berryType - BerryType.ENIGMA) as EffectiveStat;
         applyAbAttrs("ReduceBerryUseThresholdAbAttr", pokemon, false, threshold);
         return pokemon.getHpRatio() <= threshold.value && pokemon.getStatStage(stat) < 6;
       };
@@ -93,7 +93,7 @@ export function getBerryEffectFunc(berryType: BerryType): BerryEffectFunc {
       return (pokemon: Pokemon, berryOwner?: Pokemon) => {
         pokemon.waveData.berriesEaten.push(berryType);
         // Offset BerryType such that LIECHI -> Stat.ATK = 1, GANLON -> Stat.DEF = 2, so on and so forth
-        const stat: BattleStat = berryType - BerryType.ENIGMA;
+        const stat = (berryType - BerryType.ENIGMA) as EffectiveStat;
         const statStages = new NumberHolder(1);
         applyAbAttrs("DoubleBerryEffectAbAttr", pokemon, false, statStages);
         globalScene.phaseManager.createAndUnshiftPhase(
@@ -114,7 +114,7 @@ export function getBerryEffectFunc(berryType: BerryType): BerryEffectFunc {
     case BerryType.STARF:
       return (pokemon: Pokemon, berryOwner?: Pokemon) => {
         pokemon.waveData.berriesEaten.push(berryType);
-        const randStat = randSeedInt(Stat.SPD, Stat.ATK);
+        const randStat = randSeedInt(Stat.SPD, Stat.ATK) as EffectiveStat;
         const stages = new NumberHolder(2);
         applyAbAttrs("DoubleBerryEffectAbAttr", pokemon, false, stages);
         globalScene.phaseManager.createAndUnshiftPhase(
