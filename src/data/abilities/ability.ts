@@ -82,6 +82,7 @@ import { PostTurnAbAttr } from "#abilities/post-turn-ab-attr";
 import { PostVictoryAbAttr } from "#abilities/post-victory-ab-attr";
 import { PostWeatherChangeAbAttr } from "#abilities/post-weather-change-ab-attr";
 import { PostWeatherLapseAbAttr } from "#abilities/post-weather-lapse-ab-attr";
+import { PreLeaveFieldAbAttr } from "#abilities/pre-leave-field-ab-attrs";
 import { PreSwitchOutAbAttr } from "#abilities/pre-switch-out-ab-attr";
 import { PreWeatherDamageAbAttr } from "#abilities/pre-weather-damage-ab-attr";
 import { PreventBerryUseAbAttr } from "#abilities/prevent-berry-use-ab-attr";
@@ -383,6 +384,7 @@ const AbilityAttrs = {
   PostVictoryAbAttr,
   PostWeatherChangeAbAttr,
   PostWeatherLapseAbAttr,
+  PreLeaveFieldAbAttr,
   PreSwitchOutAbAttr,
   PreWeatherDamageAbAttr,
   PreventBerryUseAbAttr,

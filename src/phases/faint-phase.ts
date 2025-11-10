@@ -131,7 +131,7 @@ export class FaintPhase extends PokemonPhase {
   }
 
   protected doFaint(): void {
-    const { currentBattle, field, phaseManager, tweens } = globalScene;
+    const { currentBattle, phaseManager, tweens } = globalScene;
     const { battleType, double, enemyFaintsHistory, playerFaintsHistory, turn } = currentBattle;
     const pokemon = this.getPokemon();
 
@@ -169,7 +169,7 @@ export class FaintPhase extends PokemonPhase {
         // TODO: Refactor Fell Stinger
         const pvmove = allMoves.get(pokemon.turnData.attacksReceived[0].moveId);
         const pvattrs = pvmove.getAttrs(PostVictoryStatStageChangeAttr);
-        if (pvattrs.length) {
+        if (pvattrs.length > 0) {
           for (const pvattr of pvattrs) {
             pvattr.applyPostVictory(defeatSource, defeatSource, pvmove);
           }
@@ -190,7 +190,7 @@ export class FaintPhase extends PokemonPhase {
       const legalPlayerPokemon = globalScene.getPokemonAllowedInBattle();
       /** The total number of legal player Pokemon that aren't currently on the field */
       const legalPlayerPartyPokemon = legalPlayerPokemon.filter((p) => !p.isActive(true));
-      if (!legalPlayerPokemon.length) {
+      if (legalPlayerPokemon.length === 0) {
         phaseManager.queueGameOverPhase({ clearPhaseQueue: false });
       } else if (double && legalPlayerPokemon.length === 1 && legalPlayerPartyPokemon.length === 0) {
         /**
@@ -235,13 +235,7 @@ export class FaintPhase extends PokemonPhase {
         y: pokemon.y + 150,
         ease: "Sine.easeIn",
         onComplete: () => {
-          pokemon.resetSprite();
           pokemon.lapseTags(BattlerTagLapseType.FAINT);
-          globalScene
-            .getField(true)
-            .filter((p) => p !== pokemon)
-            .forEach((p) => p.removeTagsBySourceId(pokemon.id));
-
           pokemon.y -= 150;
           pokemon.faint();
           if (pokemon.isPlayer()) {
@@ -250,7 +244,7 @@ export class FaintPhase extends PokemonPhase {
             globalScene.addFaintedEnemyScore(pokemon as EnemyPokemon);
             currentBattle.addPostBattleLoot(pokemon as EnemyPokemon);
           }
-          field.remove(pokemon);
+          pokemon.leaveField(true);
           this.end();
         },
       });
