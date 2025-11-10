@@ -164,7 +164,20 @@ class DefaultOverrides {
   /** Will override the species of your pokemon when starting a new run */
   readonly STARTER_SPECIES_OVERRIDE: SpeciesId | 0 = 0;
   readonly ABILITY_OVERRIDE: AbilityId = AbilityId.NONE;
+  /**
+   * If set to a value other than {@linkcode AbilityId.NONE}, will forcibly enable passive abilities
+   * for all player pokemon and set them to the override's value.
+   */
   readonly PASSIVE_ABILITY_OVERRIDE: AbilityId = AbilityId.NONE;
+  /**
+   * - If `true`, forces all player pokemon to have their passive abilities enabled.
+   * - If `false`, forces all player pokemon to have their passive abilities disabled.
+   * - If `null`, the override does nothing.
+   *
+   * @remarks
+   * If set to `false`, the value of {@linkcode PASSIVE_ABILITY_OVERRIDE} will be ignored.
+   */
+  readonly HAS_PASSIVE_ABILITY_OVERRIDE: boolean | null = null;
   readonly STATUS_OVERRIDE: StatusEffect = StatusEffect.NONE;
   readonly GENDER_OVERRIDE: Gender | null = null;
   readonly MOVESET_OVERRIDE: MoveId | MoveId[] = [];
@@ -192,7 +205,20 @@ class DefaultOverrides {
   readonly ENEMY_SPECIES_OVERRIDE: SpeciesId | number = 0;
   readonly ENEMY_LEVEL_OVERRIDE: number = 0;
   readonly ENEMY_ABILITY_OVERRIDE: AbilityId = AbilityId.NONE;
+  /**
+   * If set to a value other than {@linkcode AbilityId.NONE}, will forcibly enable passive abilities
+   * for all enemy pokemon and set them to the override's value.
+   */
   readonly ENEMY_PASSIVE_ABILITY_OVERRIDE: AbilityId = AbilityId.NONE;
+  /**
+   * - If `true`, forces all enemy pokemon to have their passive abilities enabled.
+   * - If `false`, forces all enemy pokemon to have their passive abilities disabled.
+   * - If `null`, the override does nothing.
+   *
+   * @remarks
+   * If set to `false`, the value of {@linkcode ENEMY_PASSIVE_ABILITY_OVERRIDE} will be ignored.
+   */
+  readonly ENEMY_HAS_PASSIVE_ABILITY_OVERRIDE: boolean | null = null;
   readonly ENEMY_STATUS_OVERRIDE: StatusEffect = StatusEffect.NONE;
   readonly ENEMY_GENDER_OVERRIDE: Gender | null = null;
   readonly ENEMY_MOVESET_OVERRIDE: MoveId | MoveId[] = [];

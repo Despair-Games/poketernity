@@ -96,7 +96,6 @@ import { PostDefendStealHeldItemAbAttr } from "#abilities/post-defend-steal-held
 import { PostDefendTerrainChangeAbAttr } from "#abilities/post-defend-terrain-change-ab-attr";
 import { PostDefendTypeChangeAbAttr } from "#abilities/post-defend-type-change-ab-attr";
 import { PostDefendWeatherChangeAbAttr } from "#abilities/post-defend-weather-change-ab-attr";
-import { PostFaintClearWeatherAbAttr } from "#abilities/post-faint-clear-weather-ab-attr";
 import { PostFaintContactDamageAbAttr } from "#abilities/post-faint-contact-damage-ab-attr";
 import { PostFaintHPDamageAbAttr } from "#abilities/post-faint-hp-damage-ab-attr";
 import { PostFaintUnsuppressedWeatherFormChangeAbAttr } from "#abilities/post-faint-unsuppressed-weather-form-change-ab-attr";
@@ -133,7 +132,7 @@ import { PostWeatherChangeAddBattlerTagAbAttr } from "#abilities/post-weather-ch
 import { PostWeatherChangeFormChangeAbAttr } from "#abilities/post-weather-change-form-change-ab-attr";
 import { PostWeatherLapseDamageAbAttr } from "#abilities/post-weather-lapse-damage-ab-attr";
 import { PostWeatherLapseHealAbAttr } from "#abilities/post-weather-lapse-heal-ab-attr";
-import { PreSwitchOutClearWeatherAbAttr } from "#abilities/pre-switch-out-clear-weather-ab-attr";
+import { PreLeaveFieldClearWeatherAbAttr } from "#abilities/pre-leave-field-ab-attrs";
 import { PreSwitchOutFormChangeAbAttr } from "#abilities/pre-switch-out-form-change-ab-attr";
 import { PreSwitchOutHealAbAttr } from "#abilities/pre-switch-out-heal-ab-attr";
 import { PreSwitchOutResetStatusAbAttr } from "#abilities/pre-switch-out-reset-status-ab-attr";
@@ -938,18 +937,15 @@ export function initAbilities(): void {
       ),
     new Ability(AbilityId.PRIMORDIAL_SEA, 6) //
       .attr(PostSummonWeatherChangeAbAttr, WeatherType.HEAVY_RAIN)
-      .attr(PreSwitchOutClearWeatherAbAttr)
-      .attr(PostFaintClearWeatherAbAttr)
+      .attr(PreLeaveFieldClearWeatherAbAttr)
       .bypassFaint(),
     new Ability(AbilityId.DESOLATE_LAND, 6) //
       .attr(PostSummonWeatherChangeAbAttr, WeatherType.HARSH_SUN)
-      .attr(PreSwitchOutClearWeatherAbAttr)
-      .attr(PostFaintClearWeatherAbAttr)
+      .attr(PreLeaveFieldClearWeatherAbAttr)
       .bypassFaint(),
     new Ability(AbilityId.DELTA_STREAM, 6) //
       .attr(PostSummonWeatherChangeAbAttr, WeatherType.STRONG_WINDS)
-      .attr(PreSwitchOutClearWeatherAbAttr)
-      .attr(PostFaintClearWeatherAbAttr)
+      .attr(PreLeaveFieldClearWeatherAbAttr)
       .bypassFaint(),
     new Ability(AbilityId.STAMINA, 7) //
       .attr(

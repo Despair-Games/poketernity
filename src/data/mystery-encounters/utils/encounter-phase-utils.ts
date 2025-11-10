@@ -197,9 +197,9 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
     battle.enemyLevels = new Array(numEnemies).fill(null).map(() => globalScene.currentBattle.getLevelForWave());
   }
 
-  globalScene.getEnemyParty().forEach((enemyPokemon) => {
-    globalScene.field.remove(enemyPokemon, true);
-  });
+  for (const enemyPokemon of globalScene.getEnemyParty()) {
+    enemyPokemon.leaveField(false, true, true);
+  }
   battle.enemyParty = [];
   battle.double = doubleBattle;
 

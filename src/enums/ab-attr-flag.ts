@@ -74,6 +74,7 @@ import type { PostTurnAbAttr } from "#abilities/post-turn-ab-attr";
 import type { PostVictoryAbAttr } from "#abilities/post-victory-ab-attr";
 import type { PostWeatherChangeAbAttr } from "#abilities/post-weather-change-ab-attr";
 import type { PostWeatherLapseAbAttr } from "#abilities/post-weather-lapse-ab-attr";
+import type { PreLeaveFieldAbAttr } from "#abilities/pre-leave-field-ab-attrs";
 import type { PreSwitchOutAbAttr } from "#abilities/pre-switch-out-ab-attr";
 import type { PreWeatherDamageAbAttr } from "#abilities/pre-weather-damage-ab-attr";
 import type { PreventBerryUseAbAttr } from "#abilities/prevent-berry-use-ab-attr";
@@ -335,6 +336,8 @@ export const AbAttrFlag = {
   FIELD_ACCURACY_MULTIPLIER: 113,
   /** @see {@linkcode EvasivenessMultiplierAbAttr} */
   EVASIVENESS_MULTIPLIER: 114,
+  /** @see {@linkcode PreLeaveFieldAbAttr} */
+  PRE_LEAVE_FIELD: 115,
 } as const;
 
 export type AbAttrFlag = ObjectValues<typeof AbAttrFlag>;

@@ -56,7 +56,7 @@ describe.each([
     game.move.select(moveId);
     await game.move.forceHit();
     await game.toNextTurn();
-    await game.throwPokeball(PokeballType.MASTER_BALL);
+    game.throwPokeball(PokeballType.MASTER_BALL);
     await game.phaseInterceptor.to("SelectModifierPhase", false);
 
     expect(game.scene.money).toBeGreaterThan(0);
@@ -69,7 +69,7 @@ describe.each([
     game.move.select(moveId);
     await game.move.forceHit();
     await game.toNextTurn();
-    await game.tryToRunAway();
+    game.tryToRunAway();
     await game.toNextTurn();
 
     expect(game.scene.money).toBe(0);

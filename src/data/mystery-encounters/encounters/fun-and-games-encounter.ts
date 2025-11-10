@@ -238,10 +238,7 @@ function handleLoseMinigame() {
     if (!wobbuffet || wobbuffet.isFainted()) {
       // Player loses
       // End the battle
-      if (wobbuffet) {
-        wobbuffet.hideInfo();
-        globalScene.field.remove(wobbuffet);
-      }
+      wobbuffet?.leaveField(true, true, true);
       transitionMysteryEncounterIntroVisuals(true, true);
       globalScene.currentBattle.enemyParty = [];
       globalScene.currentBattle.mysteryEncounter!.doContinueEncounter = undefined;
@@ -290,8 +287,7 @@ function handleNextTurn() {
     }
 
     // End the battle
-    wobbuffet.hideInfo();
-    globalScene.field.remove(wobbuffet);
+    wobbuffet.leaveField(true, true, true);
     globalScene.currentBattle.enemyParty = [];
     globalScene.currentBattle.mysteryEncounter!.doContinueEncounter = undefined;
     leaveEncounterWithoutBattle(isHealPhase);

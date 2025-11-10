@@ -210,6 +210,21 @@ export class OverridesHelper extends GameManagerHelper {
   }
 
   /**
+   * Overrides whether the player pokemon have their passives enabled or disabled.
+   * @param hasPassiveAbility - `true` to force passives to be enabled, `false` to force passives to be disabled, `null` to disable the override
+   * @returns `this`
+   */
+  public hasPassiveAbility(hasPassiveAbility: boolean | null): this {
+    vi.spyOn(activeOverrides, "HAS_PASSIVE_ABILITY_OVERRIDE", "get").mockReturnValue(hasPassiveAbility);
+    if (hasPassiveAbility === null) {
+      this.log("Player Pokemon PASSIVE ability no longer force enabled or disabled!");
+    } else {
+      this.log(`Player Pokemon PASSIVE ability is force ${hasPassiveAbility ? "enabled" : "disabled"}!`);
+    }
+    return this;
+  }
+
+  /**
    * Override the player (pokemon) {@linkcode MoveId | moves}set
    * @param moveset the {@linkcode MoveId | moves}set to set
    * @returns `this`
@@ -394,6 +409,21 @@ export class OverridesHelper extends GameManagerHelper {
   public enemyPassiveAbility(passiveAbility: AbilityId): this {
     vi.spyOn(activeOverrides, "ENEMY_PASSIVE_ABILITY_OVERRIDE", "get").mockReturnValue(passiveAbility);
     this.log(`Enemy Pokemon PASSIVE ability set to ${AbilityId[passiveAbility]} (=${passiveAbility})!`);
+    return this;
+  }
+
+  /**
+   * Overrides whether the enemy pokemon have their passives enabled or disabled.
+   * @param hasPassiveAbility - `true` to force passives to be enabled, `false` to force passives to be disabled, `null` to disable the override
+   * @returns `this`
+   */
+  public enemyHasPassiveAbility(hasPassiveAbility: boolean | null): this {
+    vi.spyOn(activeOverrides, "ENEMY_HAS_PASSIVE_ABILITY_OVERRIDE", "get").mockReturnValue(hasPassiveAbility);
+    if (hasPassiveAbility === null) {
+      this.log("Enemy Pokemon PASSIVE ability no longer force enabled or disabled!");
+    } else {
+      this.log(`Enemy Pokemon PASSIVE ability is force ${hasPassiveAbility ? "enabled" : "disabled"}!`);
+    }
     return this;
   }
 
