@@ -4,6 +4,7 @@ import type { SpeciesId } from "#enums/species-id";
 import { TrainerGender } from "#enums/trainer-gender";
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { TrainerType } from "#enums/trainer-type";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { PokemonSpeciesFilter } from "#types/ui-types";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
@@ -13,10 +14,10 @@ import { randSeedItem } from "#utils/random-utils";
  * A record of generator functions mapped by {@linkcode TrainerGender}. When generating
  * a Trainer, the Trainer's name, title, sprite key, and other properties are determined
  * from the generator function under the desired {@linkcode TrainerGender}.
- * Generators defined under {@linkcode TrainerGender.ALL} are considered the default
+ * Generators defined under {@linkcode TrainerGender.DEFAULT} are considered the default
  * when a generator for the desired gender is undefined.
  */
-type GenderMappedGenerator<T = string> = Partial<Record<TrainerGender, () => T>>;
+type TrainerAssetGenerator<T = string> = Partial<Record<TrainerGender, () => T>>;
 /** A function to generate a {@linkcode Pokemon} of a desired level */
 type PartyPokemonGenerator = (level: number) => Pokemon;
 
@@ -33,25 +34,25 @@ export interface NewTrainerConfig {
    * This should contain one generator for each supported {@linkcode TrainerGender}.
    * The return value of each generator should be a localizable i18n key.
    */
-  name: GenderMappedGenerator;
+  name: TrainerAssetGenerator;
   /**
    * A set of generators for the Trainer's title.
    * This should contain one generator for each supported {@linkcode TrainerGender}.
    * The return value of each generator should be a localizable i18n key.
    */
-  title: GenderMappedGenerator;
+  title: TrainerAssetGenerator;
   /**
    * A set of generators for the Trainer's sprite key.
    * This should contain one generator for each supported {@linkcode TrainerGender}.
    */
-  spriteKey: GenderMappedGenerator;
+  spriteKey: TrainerAssetGenerator;
   /**
    * A set of generators for the Trainer's "close-up" sprite key, which may
    * be shown during the Trainer's dialogue.
    * This should either be empty (for no dialogue sprite) or contain one
    * generator for each supported {@linkcode TrainerGender}.
    */
-  dialogueSpriteKey: GenderMappedGenerator;
+  dialogueSpriteKey: TrainerAssetGenerator;
   /**
    * If `true`, the Trainer is considered a "boss". Boss Trainers have
    * modified AI command selection logic and may grant extra item rewards when
@@ -85,6 +86,52 @@ export interface NewTrainerConfig {
    * @see {@linkcode MoneyRewardPhase}
    */
   moneyMultiplier: () => number;
+}
+
+/** A cache of {@linkcode NewTrainerConfig}s organized by {@linkcode TrainerType} */
+export type TrainerConfigMap = Partial<Record<TrainerType, NewTrainerConfig>>;
+
+/**
+ * A cache of {@linkcode NewTrainerConfig}s organized by {@linkcode TrainerSlot}.
+ * All slots except for {@linkcode TrainerSlot.NONE} must have a mapped config.
+ */
+type ConfigSlotMap = Record<Exclude<TrainerSlot, typeof TrainerSlot.NONE>, NewTrainerConfig>;
+
+/**
+ * Container for multiple {@linkcode NewTrainerConfig}s to be used in a singular battle.
+ * This includes getters to resolve conflicting data/generators between the
+ * included configs.
+ */
+export class CompoundTrainerConfig {
+  public readonly configs: ConfigSlotMap;
+  public readonly combinedTitle: string;
+
+  constructor(configs: ConfigSlotMap, combinedTitle: string) {
+    this.configs = configs;
+    this.combinedTitle = combinedTitle;
+  }
+
+  public get isBoss(): boolean {
+    const configValues = Object.values(this.configs).map((cfg) => cfg.isBoss);
+    return configValues.includes(true);
+  }
+
+  public get battleBgm(): () => string {
+    return this.configs[TrainerSlot.TRAINER].battleBgm;
+  }
+
+  public get encounterBgm(): () => string {
+    return this.configs[TrainerSlot.TRAINER].encounterBgm;
+  }
+
+  public get victoryBgm(): () => string {
+    return this.configs[TrainerSlot.TRAINER].victoryBgm;
+  }
+
+  // TODO: Should this use the maximum money multiplier or some other formula?
+  public get moneyMultiplier(): () => number {
+    return () => Math.max(...Object.values(this.configs).map((cfg) => cfg.moneyMultiplier()));
+  }
 }
 
 /**
@@ -122,7 +169,7 @@ export class TrainerConfigBuilder {
    *
    * @privateRemarks
    * `config` is supplied instead of using `this.config` directly so that
-   * the type guard may be applied.
+   * the type guard may apply.
    */
   private validate(config: Partial<NewTrainerConfig>): config is NewTrainerConfig {
     if (config.trainerType == null) {
@@ -139,13 +186,13 @@ export class TrainerConfigBuilder {
 
     const requiredGenderMappedGeneratorKeys = ["name", "title", "spriteKey"] as const;
     for (const gender of this.possibleGenders) {
-      if (gender === TrainerGender.ALL) {
+      if (gender === TrainerGender.DEFAULT) {
         continue;
       }
 
       for (const k of requiredGenderMappedGeneratorKeys) {
         // We know `config[k]` is defined based on default values
-        if (config[k]![gender] == null && config[k]![TrainerGender.ALL] == null) {
+        if (config[k]![gender] == null && config[k]![TrainerGender.DEFAULT] == null) {
           console.error(`${k} does not have a matching generator for supported gender ${gender}!`);
           return false;
         }
@@ -156,7 +203,7 @@ export class TrainerConfigBuilder {
       if (
         Object.keys(dialogueSpriteKey).length > 0
         && dialogueSpriteKey[gender] == null
-        && dialogueSpriteKey[TrainerGender.ALL] == null
+        && dialogueSpriteKey[TrainerGender.DEFAULT] == null
       ) {
         console.error(`dialogueSpriteKey has a defined generator, but not for supported gender ${gender}!`);
         return false;
@@ -195,7 +242,7 @@ export class TrainerConfigBuilder {
    * @param gender - The {@linkcode TrainerGender} under which the name is assigned
    * @returns `this`
    */
-  public withFixedName(name: string, gender: TrainerGender = TrainerGender.ALL): this {
+  public withFixedName(name: string, gender: TrainerGender = TrainerGender.DEFAULT): this {
     this.possibleGenders.add(gender);
     this.config.name![gender] = () => name;
     return this;
@@ -208,7 +255,7 @@ export class TrainerConfigBuilder {
    * @param gender - The {@linkcode TrainerGender} under which the name is assigned
    * @returns `this`
    */
-  public withNameFromPool(names: string[], gender: TrainerGender = TrainerGender.ALL): this {
+  public withNameFromPool(names: string[], gender: TrainerGender = TrainerGender.DEFAULT): this {
     this.possibleGenders.add(gender);
     this.config.name![gender] = () => randSeedItem(names);
     return this;
@@ -220,7 +267,7 @@ export class TrainerConfigBuilder {
    * @param gender - The {@linkcode TrainerGender} under which the title is assigned
    * @returns `this`
    */
-  public withTitle(title: string, gender: TrainerGender = TrainerGender.ALL): this {
+  public withTitle(title: string, gender: TrainerGender = TrainerGender.DEFAULT): this {
     this.possibleGenders.add(gender);
     this.config.title![gender] = () => title;
     return this;
@@ -232,7 +279,7 @@ export class TrainerConfigBuilder {
    * @param gender - The {@linkcode TrainerGender} under which the sprite key is assigned
    * @returns `this`
    */
-  public withSpriteKey(spriteKey: string, gender: TrainerGender = TrainerGender.ALL): this {
+  public withSpriteKey(spriteKey: string, gender: TrainerGender = TrainerGender.DEFAULT): this {
     this.possibleGenders.add(gender);
     this.config.spriteKey![gender] = () => spriteKey;
     return this;
@@ -245,7 +292,7 @@ export class TrainerConfigBuilder {
    * @param gender - The {@linkcode TrainerGender} under which the sprite key is assigned
    * @returns `this`
    */
-  public withDialogueSpriteKey(spriteKey: string, gender: TrainerGender = TrainerGender.ALL): this {
+  public withDialogueSpriteKey(spriteKey: string, gender: TrainerGender = TrainerGender.DEFAULT): this {
     this.possibleGenders.add(gender);
     this.config.dialogueSpriteKey![gender] = () => spriteKey;
     return this;
@@ -296,7 +343,7 @@ export class TrainerConfigBuilder {
     species: SpeciesId,
     trainerSlot: TrainerSlot = TrainerSlot.TRAINER,
     ignoreEvolution: boolean = false,
-    postProcess?: (pokemon: Pokemon) => void,
+    postProcess?: (pokemon: EnemyPokemon) => void,
   ): this {
     return this.withPokemonFromPool([species], trainerSlot, ignoreEvolution, postProcess);
   }
@@ -314,13 +361,13 @@ export class TrainerConfigBuilder {
    * @todo Remove or refactor {@linkcode TrainerSlot} so that the extra param isn't needed
    */
   public withPokemonFromPool(
-    speciesPool: SpeciesId[],
+    speciesPool: readonly SpeciesId[],
     trainerSlot: TrainerSlot = TrainerSlot.TRAINER,
     ignoreEvolution: boolean = false,
-    postProcess?: (pokemon: Pokemon) => void,
+    postProcess?: (pokemon: EnemyPokemon) => void,
   ): this {
     this.config.partyGenerators!.push((level: number) => {
-      let species = randSeedItem(speciesPool);
+      let species = randSeedItem([...speciesPool]);
       if (!ignoreEvolution) {
         species = getPokemonSpecies(species).getEnemySpeciesForLevel(level, true);
       }
@@ -347,7 +394,7 @@ export class TrainerConfigBuilder {
     filter: PokemonSpeciesFilter,
     trainerSlot: TrainerSlot = TrainerSlot.TRAINER,
     allowLegendaries: boolean = false,
-    postProcess?: (pokemon: Pokemon) => void,
+    postProcess?: (pokemon: EnemyPokemon) => void,
   ): this {
     const speciesFilter = (species: PokemonSpecies): boolean => {
       return (allowLegendaries || !species.isLegendLike()) && !species.isTrainerForbidden() && filter(species);
@@ -363,5 +410,28 @@ export class TrainerConfigBuilder {
     });
 
     return this;
+  }
+
+  /**
+   * Sets a fixed multiplier for the money reward for defeating the Trainer.
+   * @param multiplier - The multiplier to set
+   * @returns `this`
+   */
+  public withMoneyMultiplier(multiplier: number): this {
+    this.config.moneyMultiplier = () => multiplier;
+    return this;
+  }
+
+  /**
+   * Sets the config to use the Rival character's assets
+   * (i.e. name, title, sprite keys, and bgm).
+   * @returns `this`
+   */
+  public withRivalAssets(): this {
+    return this.withFixedName("finn", TrainerGender.MALE)
+      .withFixedName("ivy", TrainerGender.FEMALE)
+      .withTitle("rival")
+      .withEncounterBgm("rival")
+      .withBattleBgm("battle_rival");
   }
 }

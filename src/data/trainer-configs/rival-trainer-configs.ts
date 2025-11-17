@@ -1,3 +1,5 @@
+import { RIVAL_SLOT_0_POKEMON, RIVAL_SLOT_1_POKEMON } from "#constants/trainer-constants";
+import { TrainerConfigBuilder, type TrainerConfigMap } from "#data/new-trainer-config";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import type { PokemonSpecies } from "#data/pokemon-species";
 import {
@@ -520,15 +522,86 @@ export const rivalTrainerConfigs: TrainerConfigs = {
         p.generateName();
       }),
     ),
-  // TODO: remove this when trainer teras are reworked
-  // .setGenModifiersFunc((party) => {
-  //   const starter = party[0];
-  //   return [
-  //     modifierTypes
-  //       .TERA_SHARD()
-  //       .generateType([], [starter.species.type1])!
-  //       .withIdFromFunc(modifierTypes.TERA_SHARD)
-  //       .newModifier(starter) as PersistentModifier,
-  //   ]; // TODO: is the bang correct?
-  // }),
+};
+
+export const newRivalTrainerConfigs: TrainerConfigMap = {
+  [TrainerType.RIVAL]: new TrainerConfigBuilder()
+    .withRivalAssets()
+    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON)
+    .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
+    .build(),
+  [TrainerType.RIVAL_2]: new TrainerConfigBuilder()
+    .withRivalAssets()
+    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON)
+    .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
+    .withPokemonFromFilter(
+      (species: PokemonSpecies) =>
+        !Object.hasOwn(pokemonEvolutions, species.speciesId)
+        && !Object.hasOwn(pokemonPreEvolutions, species.speciesId)
+        && species.baseTotal >= 450,
+    )
+    .build(),
+  [TrainerType.RIVAL_3]: new TrainerConfigBuilder()
+    .withRivalAssets()
+    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON)
+    .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
+    .withPokemonFromFilter(
+      (species) =>
+        !Object.hasOwn(pokemonEvolutions, species.speciesId)
+        && !Object.hasOwn(pokemonPreEvolutions, species.speciesId)
+        && species.baseTotal >= 450,
+    )
+    .withPokemonFromFilter((species) => species.baseTotal >= 540)
+    .build(),
+  [TrainerType.RIVAL_4]: new TrainerConfigBuilder()
+    .withRivalAssets()
+    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON)
+    .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
+    .withPokemonFromFilter(
+      (species) =>
+        !Object.hasOwn(pokemonEvolutions, species.speciesId)
+        && !Object.hasOwn(pokemonPreEvolutions, species.speciesId)
+        && species.baseTotal >= 450,
+    )
+    .withPokemonFromFilter((species) => species.baseTotal >= 540)
+    .build(),
+  [TrainerType.RIVAL_5]: new TrainerConfigBuilder()
+    .withRivalAssets()
+    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON)
+    .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
+    .withPokemonFromFilter(
+      (species) =>
+        !Object.hasOwn(pokemonEvolutions, species.speciesId)
+        && !Object.hasOwn(pokemonPreEvolutions, species.speciesId)
+        && species.baseTotal >= 450,
+    )
+    .withPokemonFromFilter((species) => species.baseTotal >= 540)
+    .withPokemon(SpeciesId.RAYQUAZA, TrainerSlot.TRAINER, true, (p) => {
+      p.setBoss();
+      p.pokeball = PokeballType.MASTER_BALL;
+      p.shiny = true;
+      p.variant = 1;
+    })
+    .build(),
+  [TrainerType.RIVAL_6]: new TrainerConfigBuilder()
+    .withRivalAssets()
+    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON)
+    .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
+    .withPokemonFromFilter(
+      (species) =>
+        !Object.hasOwn(pokemonEvolutions, species.speciesId)
+        && !Object.hasOwn(pokemonPreEvolutions, species.speciesId)
+        && species.baseTotal >= 450,
+    )
+    .withPokemonFromFilter((species) => species.baseTotal >= 540)
+    .withPokemon(SpeciesId.RAYQUAZA, TrainerSlot.TRAINER, true, (p) => {
+      p.setBoss();
+      p.generateAndPopulateMoveset();
+      p.pokeball = PokeballType.MASTER_BALL;
+      p.shiny = true;
+      p.variant = 1;
+      p.formIndex = 1; // Mega Rayquaza
+      p.generateName();
+    })
+    .build(),
 };
