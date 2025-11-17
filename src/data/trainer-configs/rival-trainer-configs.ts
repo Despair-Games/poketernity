@@ -1,5 +1,5 @@
 import { RIVAL_SLOT_0_POKEMON, RIVAL_SLOT_1_POKEMON } from "#constants/trainer-constants";
-import { TrainerConfigBuilder, type TrainerConfigMap } from "#data/new-trainer-config";
+import type { TrainerConfigMap } from "#data/new-trainer-config";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import type { PokemonSpecies } from "#data/pokemon-species";
 import {
@@ -9,6 +9,7 @@ import {
   type TrainerConfigs,
   trainerPartyTemplates,
 } from "#data/trainer-config";
+import { TrainerConfigBuilder } from "#data/trainer-config-builder";
 import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
@@ -527,12 +528,16 @@ export const rivalTrainerConfigs: TrainerConfigs = {
 export const newRivalTrainerConfigs: TrainerConfigMap = {
   [TrainerType.RIVAL]: new TrainerConfigBuilder()
     .withRivalAssets()
-    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON)
+    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, false, (p) => {
+      p.abilityIndex = 0;
+    })
     .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
     .build(),
   [TrainerType.RIVAL_2]: new TrainerConfigBuilder()
     .withRivalAssets()
-    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON)
+    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, false, (p) => {
+      p.abilityIndex = 0;
+    })
     .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
     .withPokemonFromFilter(
       (species: PokemonSpecies) =>
@@ -543,7 +548,9 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
     .build(),
   [TrainerType.RIVAL_3]: new TrainerConfigBuilder()
     .withRivalAssets()
-    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON)
+    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, false, (p) => {
+      p.abilityIndex = 0;
+    })
     .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
     .withPokemonFromFilter(
       (species) =>
@@ -555,7 +562,9 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
     .build(),
   [TrainerType.RIVAL_4]: new TrainerConfigBuilder()
     .withRivalAssets()
-    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON)
+    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, false, (p) => {
+      p.abilityIndex = 0;
+    })
     .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
     .withPokemonFromFilter(
       (species) =>
@@ -567,7 +576,10 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
     .build(),
   [TrainerType.RIVAL_5]: new TrainerConfigBuilder()
     .withRivalAssets()
-    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON)
+    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, false, (p) => {
+      p.abilityIndex = 0;
+      p.setBoss(true, 2);
+    })
     .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
     .withPokemonFromFilter(
       (species) =>
@@ -576,8 +588,8 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
         && species.baseTotal >= 450,
     )
     .withPokemonFromFilter((species) => species.baseTotal >= 540)
-    .withPokemon(SpeciesId.RAYQUAZA, TrainerSlot.TRAINER, true, (p) => {
-      p.setBoss();
+    .withPokemon(SpeciesId.RAYQUAZA, true, (p) => {
+      p.setBoss(true, 3);
       p.pokeball = PokeballType.MASTER_BALL;
       p.shiny = true;
       p.variant = 1;
@@ -585,8 +597,15 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
     .build(),
   [TrainerType.RIVAL_6]: new TrainerConfigBuilder()
     .withRivalAssets()
-    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON)
-    .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
+    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, false, (p) => {
+      p.abilityIndex = 0;
+      p.setBoss(true, 3);
+      p.generateAndPopulateMoveset();
+    })
+    .withPokemonFromPool(RIVAL_SLOT_1_POKEMON, false, (p) => {
+      p.setBoss(true, 2);
+      p.generateAndPopulateMoveset();
+    })
     .withPokemonFromFilter(
       (species) =>
         !Object.hasOwn(pokemonEvolutions, species.speciesId)
@@ -594,7 +613,7 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
         && species.baseTotal >= 450,
     )
     .withPokemonFromFilter((species) => species.baseTotal >= 540)
-    .withPokemon(SpeciesId.RAYQUAZA, TrainerSlot.TRAINER, true, (p) => {
+    .withPokemon(SpeciesId.RAYQUAZA, true, (p) => {
       p.setBoss();
       p.generateAndPopulateMoveset();
       p.pokeball = PokeballType.MASTER_BALL;
