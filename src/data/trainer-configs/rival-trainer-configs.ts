@@ -528,99 +528,94 @@ export const rivalTrainerConfigs: TrainerConfigs = {
 export const newRivalTrainerConfigs: TrainerConfigMap = {
   [TrainerType.RIVAL]: new TrainerConfigBuilder()
     .withRivalAssets()
-    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, false, (p) => {
-      p.abilityIndex = 0;
+    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
+      postProcess: (p) => {
+        p.abilityIndex = 0;
+      },
     })
     .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
     .build(),
   [TrainerType.RIVAL_2]: new TrainerConfigBuilder()
     .withRivalAssets()
-    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, false, (p) => {
-      p.abilityIndex = 0;
+    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
+      postProcess: (p) => {
+        p.abilityIndex = 0;
+      },
     })
     .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
-    .withPokemonFromFilter(
-      (species: PokemonSpecies) =>
-        !Object.hasOwn(pokemonEvolutions, species.speciesId)
-        && !Object.hasOwn(pokemonPreEvolutions, species.speciesId)
-        && species.baseTotal >= 450,
-    )
+    .withPokemonFromFilter((species: PokemonSpecies) => species.isSingleStage() && species.baseTotal >= 450)
     .build(),
   [TrainerType.RIVAL_3]: new TrainerConfigBuilder()
     .withRivalAssets()
-    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, false, (p) => {
-      p.abilityIndex = 0;
+    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
+      postProcess: (p) => {
+        p.abilityIndex = 0;
+      },
     })
     .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
-    .withPokemonFromFilter(
-      (species) =>
-        !Object.hasOwn(pokemonEvolutions, species.speciesId)
-        && !Object.hasOwn(pokemonPreEvolutions, species.speciesId)
-        && species.baseTotal >= 450,
-    )
+    .withPokemonFromFilter((species) => species.isSingleStage() && species.baseTotal >= 450)
     .withPokemonFromFilter((species) => species.baseTotal >= 540)
     .build(),
   [TrainerType.RIVAL_4]: new TrainerConfigBuilder()
     .withRivalAssets()
-    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, false, (p) => {
-      p.abilityIndex = 0;
+    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
+      postProcess: (p) => {
+        p.abilityIndex = 0;
+      },
     })
     .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
-    .withPokemonFromFilter(
-      (species) =>
-        !Object.hasOwn(pokemonEvolutions, species.speciesId)
-        && !Object.hasOwn(pokemonPreEvolutions, species.speciesId)
-        && species.baseTotal >= 450,
-    )
+    .withPokemonFromFilter((species) => species.isSingleStage() && species.baseTotal >= 450)
     .withPokemonFromFilter((species) => species.baseTotal >= 540)
     .build(),
   [TrainerType.RIVAL_5]: new TrainerConfigBuilder()
     .withRivalAssets()
-    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, false, (p) => {
-      p.abilityIndex = 0;
-      p.setBoss(true, 2);
+    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
+      postProcess: (p) => {
+        p.abilityIndex = 0;
+        p.setBoss(true, 2);
+      },
     })
     .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
-    .withPokemonFromFilter(
-      (species) =>
-        !Object.hasOwn(pokemonEvolutions, species.speciesId)
-        && !Object.hasOwn(pokemonPreEvolutions, species.speciesId)
-        && species.baseTotal >= 450,
-    )
+    .withPokemonFromFilter((species) => species.isSingleStage() && species.baseTotal >= 450)
     .withPokemonFromFilter((species) => species.baseTotal >= 540)
-    .withPokemon(SpeciesId.RAYQUAZA, true, (p) => {
-      p.setBoss(true, 3);
-      p.pokeball = PokeballType.MASTER_BALL;
-      p.shiny = true;
-      p.variant = 1;
+    .withPokemon(SpeciesId.RAYQUAZA, {
+      ignoreEvolution: true,
+      postProcess: (p) => {
+        p.setBoss(true, 3);
+        p.pokeball = PokeballType.MASTER_BALL;
+        p.shiny = true;
+        p.variant = 1;
+      },
     })
     .build(),
   [TrainerType.RIVAL_6]: new TrainerConfigBuilder()
     .withRivalAssets()
-    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, false, (p) => {
-      p.abilityIndex = 0;
-      p.setBoss(true, 3);
-      p.generateAndPopulateMoveset();
+    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
+      postProcess: (p) => {
+        p.abilityIndex = 0;
+        p.setBoss(true, 3);
+        p.generateAndPopulateMoveset();
+      },
     })
-    .withPokemonFromPool(RIVAL_SLOT_1_POKEMON, false, (p) => {
-      p.setBoss(true, 2);
-      p.generateAndPopulateMoveset();
+    .withPokemonFromPool(RIVAL_SLOT_1_POKEMON, {
+      postProcess: (p) => {
+        p.setBoss(true, 2);
+        p.generateAndPopulateMoveset();
+      },
     })
-    .withPokemonFromFilter(
-      (species) =>
-        !Object.hasOwn(pokemonEvolutions, species.speciesId)
-        && !Object.hasOwn(pokemonPreEvolutions, species.speciesId)
-        && species.baseTotal >= 450,
-    )
+    .withPokemonFromFilter((species) => species.isSingleStage() && species.baseTotal >= 450)
     .withPokemonFromFilter((species) => species.baseTotal >= 540)
-    .withPokemon(SpeciesId.RAYQUAZA, true, (p) => {
-      p.setBoss();
-      p.generateAndPopulateMoveset();
-      p.pokeball = PokeballType.MASTER_BALL;
-      p.shiny = true;
-      p.variant = 1;
-      p.formIndex = 1; // Mega Rayquaza
-      p.generateName();
+    .withPokemon(SpeciesId.RAYQUAZA, {
+      ignoreEvolution: true,
+      postProcess: (p) => {
+        p.setBoss();
+        p.generateAndPopulateMoveset();
+        p.pokeball = PokeballType.MASTER_BALL;
+        p.shiny = true;
+        p.variant = 1;
+        p.formIndex = 1; // Mega Rayquaza
+        p.generateName();
+      },
     })
     .build(),
 };

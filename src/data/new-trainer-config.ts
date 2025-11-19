@@ -1,7 +1,17 @@
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
+import type { PokemonSpecies } from "#data/pokemon-species";
+import type { PokemonSpeciesForm } from "#data/pokemon-species-form";
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
+
+import type { PartyMemberStrength } from "#enums/party-member-strength";
+import type { SpeciesId } from "#enums/species-id";
 import type { TrainerGender } from "#enums/trainer-gender";
+import type { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { TrainerType } from "#enums/trainer-type";
-import type { Pokemon } from "#field/pokemon";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { PokemonSpeciesFilter } from "#types/ui-types";
+import type { NonEmptyArray } from "#types/utility-types";
 
 /**
  * A record of generator functions mapped by {@linkcode TrainerGender}. When generating
@@ -11,9 +21,8 @@ import type { Pokemon } from "#field/pokemon";
  * when a generator for the desired gender is undefined.
  */
 type TrainerAssetGenerator<T = string> = Partial<Record<TrainerGender, () => T>>;
-/** A function to generate a {@linkcode Pokemon} of a desired level */
-type PartyPokemonGenerator = (level: number, trainerSlot: TrainerSlot) => Pokemon;
 
+// #region TrainerConfig
 /**
  * Interface for the specification of a generated Trainer. Most properties
  * in this object are "generators" -- functions that return the desired data.
@@ -69,10 +78,10 @@ export interface NewTrainerConfig {
    */
   victoryBgm: () => string;
   /**
-   * An array of generators for the Trainer's party Pokemon. When generated, the Pokemon
+   * An array of configs for the Trainer's party Pokemon. When generated, the Pokemon
    * are added to {@linkcode globalScene} as enemies.
    */
-  partyGenerators: PartyPokemonGenerator[];
+  partyConfigs: PartyPokemonConfig[];
   /**
    * A generator to determine the amount of money granted to the Player after defeating the Trainer
    * (relative to the base money amount)
@@ -80,6 +89,8 @@ export interface NewTrainerConfig {
    */
   moneyMultiplier: () => number;
 }
+
+// #endregion
 
 /** A cache of {@linkcode NewTrainerConfig}s organized by {@linkcode TrainerType} */
 export type TrainerConfigMap = Partial<Record<TrainerType, NewTrainerConfig>>;
@@ -90,6 +101,7 @@ export type TrainerConfigMap = Partial<Record<TrainerType, NewTrainerConfig>>;
  */
 type ConfigSlotMap = Record<Exclude<TrainerSlot, typeof TrainerSlot.NONE>, NewTrainerConfig>;
 
+// #region CompoundTrainerConfig
 /**
  * Container for multiple {@linkcode NewTrainerConfig}s to be used in a singular battle.
  * This includes getters to resolve conflicting data/generators between the
@@ -126,3 +138,72 @@ export class CompoundTrainerConfig {
     return () => Math.max(...Object.values(this.configs).map((cfg) => cfg.moneyMultiplier()));
   }
 }
+
+// #region PartyPokemonConfig
+
+export type TieredSpeciesPool = Partial<Record<TrainerPoolTier, SpeciesId[]>>;
+/**
+ * Interface for the specification of one or more Pokemon within a Trainer's party
+ */
+export interface PartyPokemonConfig {
+  /**
+   * A tiered pool of {@link SpeciesId | species} from which the Pokemon is generated.
+   * The lower a species' tier, the more likely it will be selected for generation.
+   *
+   * If this and {@linkcode speciesPool} are both defined in a config, this pool takes priority
+   */
+  tieredSpeciesPool?: TieredSpeciesPool;
+  /**
+   * An untiered pool of {@link SpeciesId | species} from which the Pokemon is generated.
+   * Each species in this pool has an equal chance of being selected for generation.
+   */
+  speciesPool?: NonEmptyArray<SpeciesId>;
+  /**
+   * A condition function to filter certain {@link SpeciesId | species} of Pokemon
+   * from being generated. If defined, a species must meet the condition to
+   * be selected for generation.
+   *
+   * If {@linkcode tieredSpeciesPool} or {@linkcode speciesPool} are also defined,
+   * this filter is applied onto the given pool. Otherwise, this filter is
+   * applied to all Pokemon that {@link PokemonSpeciesForm.canSpawnAsRandomSpecies | can spawn randomly}.
+   */
+  speciesFilter?: PokemonSpeciesFilter;
+  /**
+   * If `false`, restricts Pokemon of species that have already been
+   * generated in the Trainer's party (if possible)
+   */
+  allowDuplicates: boolean;
+  /**
+   * If `false`, restricts {@link PokemonSpecies.isLegendLike | legend-like}
+   * Pokemon from being generated.
+   */
+  allowLegendaries: boolean;
+  /**
+   * The {@link PartyMemberStrength | strength} of the generated Pokemon.
+   * Used to determine the Pokemon's level for the current wave.
+   */
+  strength: PartyMemberStrength;
+  /** The number of Pokemon to generate from this config */
+  count: number;
+  /**
+   * If `false`, the generated Pokemon's species may be adjusted to a stage
+   * in its evolution line that is appropriate for its level. If `true`, this
+   * adjustment step is skipped.
+   */
+  ignoreEvolution: boolean;
+  /**
+   * (Optional) A callback function to change the properties of the generated
+   * Pokemon after it is constructed.
+   * @remarks
+   * For the time being, this is the only way to set a generated Pokemon's
+   * properties. This function should not make any changes to game state other
+   * than to the generated Pokemon.
+   */
+  postProcess?: (pokemon: EnemyPokemon) => void;
+}
+
+export type SpeciesPoolConfigOptions = Partial<Omit<PartyPokemonConfig, "tieredSpeciesPool" | "speciesPool">>;
+export type SpeciesConfigOptions = Partial<
+  Omit<SpeciesPoolConfigOptions, "speciesFilter" | "allowDuplicates" | "allowLegendaries">
+>;
+export type SpeciesFilterConfigOptions = Partial<Omit<SpeciesPoolConfigOptions, "speciesFilter">>;

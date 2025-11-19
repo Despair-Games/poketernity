@@ -1,13 +1,21 @@
 import { globalScene } from "#app/global-scene";
-import type { NewTrainerConfig } from "#data/new-trainer-config";
-import type { PokemonSpecies } from "#data/pokemon-species";
+import type {
+  NewTrainerConfig,
+  PartyPokemonConfig,
+  SpeciesConfigOptions,
+  SpeciesFilterConfigOptions,
+  SpeciesPoolConfigOptions,
+  TieredSpeciesPool,
+} from "#data/new-trainer-config";
+import { PartyMemberStrength } from "#enums/party-member-strength";
 import type { SpeciesId } from "#enums/species-id";
 import { TrainerGender } from "#enums/trainer-gender";
 import type { TrainerType } from "#enums/trainer-type";
-import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PokemonSpeciesFilter } from "#types/ui-types";
-import { getPokemonSpecies } from "#utils/pokemon-utils";
+import type { NonEmptyArray } from "#types/utility-types";
 import { randSeedItem } from "#utils/random-utils";
+
+// #region TrainerConfigBuilder
 
 /**
  * Builder class for constructing a {@linkcode NewTrainerConfig} for Trainer generation.
@@ -24,7 +32,7 @@ export class TrainerConfigBuilder {
     spriteKey: {},
     dialogueSpriteKey: {},
     isBoss: false,
-    partyGenerators: [],
+    partyConfigs: [],
     moneyMultiplier: () => 1,
   };
 
@@ -85,7 +93,7 @@ export class TrainerConfigBuilder {
       }
     }
 
-    if (config.partyGenerators!.length === 0) {
+    if (config.partyConfigs!.length === 0) {
       console.error("partyGenerators is empty!");
       return false;
     }
@@ -203,6 +211,56 @@ export class TrainerConfigBuilder {
     return this;
   }
 
+  public withPokemonFromConfig({
+    tieredSpeciesPool,
+    speciesPool,
+    speciesFilter,
+    allowDuplicates = false,
+    allowLegendaries = false,
+    strength = PartyMemberStrength.AVERAGE,
+    count = 1,
+    ignoreEvolution = false,
+    postProcess,
+  }: PartyPokemonConfig): this {
+    this.config.partyConfigs!.push({
+      tieredSpeciesPool,
+      speciesPool,
+      speciesFilter,
+      allowDuplicates,
+      allowLegendaries,
+      strength,
+      count,
+      ignoreEvolution,
+      postProcess,
+    });
+
+    return this;
+  }
+
+  public withPokemonFromTieredPool(
+    speciesPool: TieredSpeciesPool,
+    {
+      speciesFilter,
+      allowDuplicates = false,
+      allowLegendaries = false,
+      strength = PartyMemberStrength.AVERAGE,
+      count = 1,
+      ignoreEvolution = false,
+      postProcess,
+    }: SpeciesPoolConfigOptions,
+  ): this {
+    return this.withPokemonFromConfig({
+      tieredSpeciesPool: speciesPool,
+      speciesFilter,
+      allowDuplicates,
+      allowLegendaries,
+      strength,
+      count,
+      ignoreEvolution,
+      postProcess,
+    });
+  }
+
   /**
    * Appends a Pokemon of a set species to the Trainer's party.
    * @param species - The {@linkcode SpeciesId} of the added Pokemon
@@ -215,17 +273,20 @@ export class TrainerConfigBuilder {
    */
   public withPokemon(
     species: SpeciesId,
-    ignoreEvolution: boolean = false,
-    postProcess?: (pokemon: EnemyPokemon) => void,
+    {
+      strength = PartyMemberStrength.AVERAGE,
+      count = 1,
+      ignoreEvolution = false,
+      postProcess,
+    }: SpeciesConfigOptions = {},
   ): this {
-    return this.withPokemonFromPool([species], ignoreEvolution, postProcess);
+    return this.withPokemonFromPool([species], { strength, count, ignoreEvolution, postProcess });
   }
 
   /**
    * Appends a Pokemon from a pool of species to the Trainer's party.
    * @param speciesPool - The set of {@linkcode SpeciesId} from which the Pokemon is generated.
    * When generated, the Pokemon will be of a random species from this pool
-   * @param trainerSlot - (Default `TRAINER`) The {@linkcode TrainerSlot} to which the Pokemon belongs
    * @param ignoreEvolution - (Default `false`) If `true`, the generated Pokemon's final species will be identical to
    * `species` regardless of the Pokemon's level. Otherwise, the Pokemon's final species is set to
    * a stage in its evolution line that is appropriate for its level.
@@ -233,28 +294,27 @@ export class TrainerConfigBuilder {
    * to the Pokemon after it has been generated.
    */
   public withPokemonFromPool(
-    speciesPool: readonly SpeciesId[],
-    ignoreEvolution: boolean = false,
-    postProcess?: (pokemon: EnemyPokemon) => void,
+    speciesPool: Readonly<NonEmptyArray<SpeciesId>>,
+    {
+      speciesFilter,
+      allowDuplicates = false,
+      allowLegendaries = false,
+      strength = PartyMemberStrength.AVERAGE,
+      count = 1,
+      ignoreEvolution = false,
+      postProcess,
+    }: SpeciesPoolConfigOptions = {},
   ): this {
-    this.config.partyGenerators!.push((level, trainerSlot) => {
-      let species = randSeedItem([...speciesPool]);
-      if (!ignoreEvolution) {
-        species = getPokemonSpecies(species).getEnemySpeciesForLevel(level, true);
-      }
-
-      return globalScene.addEnemyPokemon(
-        getPokemonSpecies(species),
-        level,
-        trainerSlot,
-        undefined,
-        false,
-        undefined,
-        postProcess,
-      );
+    return this.withPokemonFromConfig({
+      speciesPool: [...speciesPool],
+      speciesFilter,
+      allowDuplicates,
+      allowLegendaries,
+      strength,
+      count,
+      ignoreEvolution,
+      postProcess,
     });
-
-    return this;
   }
 
   /**
@@ -263,23 +323,22 @@ export class TrainerConfigBuilder {
    */
   public withPokemonFromFilter(
     filter: PokemonSpeciesFilter,
-    allowLegendaries: boolean = false,
-    postProcess?: (pokemon: EnemyPokemon) => void,
+    {
+      allowDuplicates = false,
+      allowLegendaries = false,
+      strength = PartyMemberStrength.AVERAGE,
+      count = 1,
+      ignoreEvolution = false,
+    }: SpeciesFilterConfigOptions = {},
   ): this {
-    const speciesFilter = (species: PokemonSpecies): boolean => {
-      return (allowLegendaries || !species.isLegendLike()) && !species.isTrainerForbidden() && filter(species);
-    };
-
-    this.config.partyGenerators!.push((level, trainerSlot) => {
-      const waveIndex = globalScene.currentBattle.waveIndex;
-      const species = getPokemonSpecies(
-        globalScene.randomSpecies(waveIndex, level, false, speciesFilter).getEnemySpeciesForLevel(level, true),
-      );
-
-      return globalScene.addEnemyPokemon(species, level, trainerSlot, undefined, false, undefined, postProcess);
+    return this.withPokemonFromConfig({
+      speciesFilter: filter,
+      allowDuplicates,
+      allowLegendaries,
+      strength,
+      count,
+      ignoreEvolution,
     });
-
-    return this;
   }
 
   /**

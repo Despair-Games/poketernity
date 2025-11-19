@@ -327,4 +327,12 @@ export class PokemonSpecies extends PokemonSpeciesForm {
   isLegendLike(): boolean {
     return this.isSubLegendary() || this.isLegendary() || this.isMythical();
   }
+
+  /**
+   * @returns Whether the Pokemon is single-stage (i.e. it doesn't
+   * have an evolution or pre-evolution).
+   */
+  isSingleStage(): boolean {
+    return !Object.hasOwn(pokemonEvolutions, this.speciesId) && !Object.hasOwn(pokemonPreEvolutions, this.speciesId);
+  }
 }
