@@ -13,6 +13,7 @@ import { TrainerGender } from "#enums/trainer-gender";
 import type { TrainerType } from "#enums/trainer-type";
 import type { PokemonSpeciesFilter } from "#types/ui-types";
 import type { NonEmptyArray } from "#types/utility-types";
+import { isBetween } from "#utils/common-utils";
 import { randSeedItem } from "#utils/random-utils";
 
 // #region TrainerConfigBuilder
@@ -93,8 +94,9 @@ export class TrainerConfigBuilder {
       }
     }
 
-    if (config.partyConfigs!.length === 0) {
-      console.error("partyGenerators is empty!");
+    const pokemonCount = config.partyConfigs!.reduce((total, { count }) => total + count, 0);
+    if (!isBetween(pokemonCount, 1, 6)) {
+      console.error(`Invalid Pokemon count from config(s): ${pokemonCount}`);
       return false;
     }
 
