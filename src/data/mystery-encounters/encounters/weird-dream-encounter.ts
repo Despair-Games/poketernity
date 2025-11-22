@@ -377,12 +377,11 @@ function getTeamTransformations(): PokemonTransformation[] {
   }
 
   for (const transformation of pokemonTransformations) {
-    const newAbilityIndex = randSeedInt(transformation.newSpecies.getAbilityCount());
+    const abilityIndex = randSeedInt(transformation.newSpecies.getAbilityCount());
     transformation.newPokemon = globalScene.addPlayerPokemon(
       transformation.newSpecies,
       transformation.previousPokemon.level,
-      newAbilityIndex,
-      undefined,
+      { abilityIndex },
     );
   }
 

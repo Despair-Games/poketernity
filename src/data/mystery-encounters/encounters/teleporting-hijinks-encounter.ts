@@ -9,7 +9,6 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { type BattleStat, Stat } from "#enums/stat";
-import { TrainerSlot } from "#enums/trainer-slot";
 import { getBiomeKey } from "#field/arena";
 import { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
@@ -151,7 +150,7 @@ export const TeleportingHijinksEncounter: MysteryEncounter = MysteryEncounterBui
         0,
         getPartyLuckValue(globalScene.getPlayerParty()),
       );
-      const bossPokemon = new EnemyPokemon(bossSpecies, level, TrainerSlot.NONE, true);
+      const bossPokemon = new EnemyPokemon(bossSpecies, level, { boss: true });
       encounter.setDialogueToken("enemyPokemon", getPokemonNameWithAffix(bossPokemon));
       const config: EnemyPartyConfig = {
         pokemonConfigs: [
@@ -194,7 +193,7 @@ async function doBiomeTransitionDialogueAndBattleInit() {
     0,
     getPartyLuckValue(globalScene.getPlayerParty()),
   );
-  const bossPokemon = new EnemyPokemon(bossSpecies, level, TrainerSlot.NONE, true);
+  const bossPokemon = new EnemyPokemon(bossSpecies, level, { boss: true });
   encounter.setDialogueToken("enemyPokemon", getPokemonNameWithAffix(bossPokemon));
 
   // Defense/Spd buffs below wave 50, +1 to all stats otherwise

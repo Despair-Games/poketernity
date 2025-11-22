@@ -4,7 +4,6 @@ import { AbilityId } from "#enums/ability-id";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
-import { TrainerSlot } from "#enums/trainer-slot";
 import { GameManager } from "#test/test-utils/game-manager";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import Phaser from "phaser";
@@ -23,7 +22,7 @@ function testMoveEffectiveness(
   game.override.enemyAbility(targetAbility);
 
   const user = game.scene.addPlayerPokemon(getPokemonSpecies(SpeciesId.SNORLAX), 5);
-  const target = game.scene.addEnemyPokemon(getPokemonSpecies(targetSpecies), 5, TrainerSlot.NONE);
+  const target = game.scene.addEnemyPokemon(getPokemonSpecies(targetSpecies), 5);
 
   if (teraType !== undefined) {
     game.field.forceTera(target, teraType);

@@ -53,7 +53,8 @@ export class SelectStarterPhase extends Phase {
       const { speciesId } = species;
 
       const starterProps = gameData.getSpeciesDexAttrProps(species, dexAttr);
-      let starterFormIndex = Math.min(starterProps.formIndex, Math.max(species.forms.length - 1, 0));
+      const { shiny, variant } = starterProps;
+      let formIndex = Math.min(starterProps.formIndex, Math.max(species.forms.length - 1, 0));
 
       const { STARTER_FORM_OVERRIDES } = activeOverrides;
       if (
@@ -61,26 +62,24 @@ export class SelectStarterPhase extends Phase {
         && STARTER_FORM_OVERRIDES[speciesId] != null
         && species.forms[STARTER_FORM_OVERRIDES[speciesId]]
       ) {
-        starterFormIndex = STARTER_FORM_OVERRIDES[speciesId];
+        formIndex = STARTER_FORM_OVERRIDES[speciesId];
       }
 
-      const starterGender = activeOverrides.GENDER_OVERRIDE ?? starterProps.gender;
+      const gender = activeOverrides.GENDER_OVERRIDE ?? starterProps.gender;
 
       // Get ivs from the root species in case of an override to a non starter species
       const starterSpeciesId = species.getRootSpeciesId(true);
-      const starterIvs = starterData[starterSpeciesId].ivs.slice(0);
+      const ivs = starterData[starterSpeciesId].ivs.slice(0);
 
-      const starterPokemon = globalScene.addPlayerPokemon(
-        species,
-        gameMode.getStartingLevel(),
+      const starterPokemon = globalScene.addPlayerPokemon(species, gameMode.getStartingLevel(), {
         abilityIndex,
-        starterFormIndex,
-        starterGender,
-        starterProps.shiny,
-        starterProps.variant,
-        starterIvs,
+        formIndex,
+        gender,
+        shiny,
+        variant,
+        ivs,
         nature,
-      );
+      });
 
       moveset && starterPokemon.tryPopulateMoveset(moveset);
 

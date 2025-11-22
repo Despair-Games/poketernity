@@ -10,7 +10,6 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PlayerGender } from "#enums/player-gender";
 import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesGroups } from "#enums/species-groups";
-import { TrainerSlot } from "#enums/trainer-slot";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import { HiddenAbilityRateBoosterModifier, IvScannerModifier } from "#modifier/modifier";
 import { getEncounterText, showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
@@ -284,7 +283,7 @@ async function summonSafariPokemon() {
     () => {
       const level = globalScene.currentBattle.getLevelForWave();
       enemySpecies = getPokemonSpecies(getSafariSpeciesSpawn().getEnemySpeciesForLevel(level));
-      pokemon = globalScene.addEnemyPokemon(enemySpecies, level, TrainerSlot.NONE, false);
+      pokemon = globalScene.addEnemyPokemon(enemySpecies, level);
 
       // Roll shiny twice
       if (!pokemon.shiny) {

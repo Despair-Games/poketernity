@@ -257,7 +257,10 @@ export class Egg {
           abilityIndex = 2;
         }
 
-        ret = globalScene.addPlayerPokemon(pokemonSpecies, 1, abilityIndex, undefined, undefined, false);
+        ret = globalScene.addPlayerPokemon(pokemonSpecies, 1, {
+          abilityIndex,
+          shiny: false,
+        });
         ret.shiny = this._isShiny;
         ret.variant = this._variantTier;
 

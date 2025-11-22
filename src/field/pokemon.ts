@@ -177,6 +177,17 @@ import { randSeedInt, randSeedItem } from "#utils/random-utils";
 import { inSpeedOrder } from "#utils/speed-order-generator";
 import i18next from "i18next";
 
+export interface PokemonOptions {
+  abilityIndex?: number;
+  formIndex?: number;
+  gender?: Gender;
+  shiny?: boolean;
+  variant?: Variant;
+  ivs?: number[];
+  nature?: Nature;
+  dataSource?: Pokemon | PokemonData;
+}
+
 interface AbilityData {
   ability: Ability;
   passive: boolean;
@@ -279,14 +290,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     y: number,
     species: PokemonSpecies,
     level: number,
-    abilityIndex?: number,
-    formIndex?: number,
-    gender?: Gender,
-    shiny?: boolean,
-    variant?: Variant,
-    ivs?: number[],
-    nature?: Nature,
-    dataSource?: Pokemon | PokemonData,
+    { abilityIndex, formIndex, gender, shiny, variant, ivs, nature, dataSource }: PokemonOptions = {},
   ) {
     super(globalScene, x, y);
     this.type = "Pokemon";
@@ -298,23 +302,21 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.level = level;
     this.switchOutStatus = false;
 
-    // Determine the ability index
-    if (abilityIndex !== undefined) {
-      this.abilityIndex = abilityIndex; // Use the provided ability index if it is defined
+    if (abilityIndex != null) {
+      this.abilityIndex = abilityIndex;
     } else {
-      // If abilityIndex is not provided, determine it based on species and hidden ability
       this.generateRandomAbility();
     }
-    if (formIndex !== undefined) {
+    if (formIndex != null) {
       this.formIndex = formIndex;
     }
-    if (gender !== undefined) {
+    if (gender != null) {
       this.gender = gender;
     }
-    if (shiny !== undefined) {
+    if (shiny != null) {
       this.shiny = shiny;
     }
-    if (variant !== undefined) {
+    if (variant != null) {
       this.variant = variant;
     }
     this.exp = dataSource?.exp || getLevelTotalExp(this.level, species.growthRate);
@@ -371,7 +373,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
       this.resetCustomPokemonData();
 
-      if (nature !== undefined) {
+      if (nature != null) {
         this.setNature(nature);
       } else {
         this.generateNature();

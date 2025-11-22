@@ -18,7 +18,6 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import type { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
-import { TrainerSlot } from "#enums/trainer-slot";
 import { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
@@ -218,7 +217,7 @@ export const GlobalTradeSystemEncounter: MysteryEncounter = MysteryEncounterBuil
         const onPokemonSelected = (pokemon: PlayerPokemon) => {
           // Randomly generate a Wonder Trade pokemon
           const randomTradeOption = generateTradeOption(globalScene.getPlayerParty().map((p) => p.species));
-          const tradePokemon = new EnemyPokemon(randomTradeOption, pokemon.level, TrainerSlot.NONE, false);
+          const tradePokemon = new EnemyPokemon(randomTradeOption, pokemon.level);
           // Extra shiny roll at 1/128 odds (boosted by events and charms)
           if (!tradePokemon.shiny) {
             const shinyThreshold = new NumberHolder(WONDER_TRADE_SHINY_CHANCE);
@@ -396,7 +395,7 @@ function getPokemonTradeOptions(): Map<number, EnemyPokemon[]> {
       const generation = pokemon.species.generation;
       const tradeOptions: EnemyPokemon[] = LEGENDARY_TRADE_POOLS[generation].map((s) => {
         const pokemonSpecies = getPokemonSpecies(s);
-        return new EnemyPokemon(pokemonSpecies, 5, TrainerSlot.NONE, false);
+        return new EnemyPokemon(pokemonSpecies, 5);
       });
       tradeOptionsMap.set(pokemon.id, tradeOptions);
     } else {
@@ -413,7 +412,7 @@ function getPokemonTradeOptions(): Map<number, EnemyPokemon[]> {
       tradeOptionsMap.set(
         pokemon.id,
         tradeOptions.map((s) => {
-          return new EnemyPokemon(s, pokemon.level, TrainerSlot.NONE, false);
+          return new EnemyPokemon(s, pokemon.level);
         }),
       );
     }
@@ -480,18 +479,9 @@ async function doTradeOptionPhaseCallback(): Promise<void> {
   // Pokeball to Ultra ball, randomly
   receivedPokemonData.pokeball = randInt(3) as PokeballType;
   const dataSource = new PokemonData(receivedPokemonData);
-  const newPlayerPokemon = globalScene.addPlayerPokemon(
-    receivedPokemonData.species,
-    receivedPokemonData.level,
-    dataSource.abilityIndex,
-    dataSource.formIndex,
-    dataSource.gender,
-    dataSource.shiny,
-    dataSource.variant,
-    dataSource.ivs,
-    dataSource.nature,
+  const newPlayerPokemon = globalScene.addPlayerPokemon(receivedPokemonData.species, receivedPokemonData.level, {
     dataSource,
-  );
+  });
   globalScene.getPlayerParty().push(newPlayerPokemon);
   await newPlayerPokemon.loadAssets();
 

@@ -85,9 +85,16 @@ export const ThePokemonSalesmanEncounter: MysteryEncounter = MysteryEncounterBui
     ) {
       // If no HA mon found or you roll 1%, give shiny Magikarp with random variant
       species = getPokemonSpecies(SpeciesId.MAGIKARP);
-      pokemon = new PlayerPokemon(species, 5, 2, species.formIndex, undefined, true);
+      pokemon = new PlayerPokemon(species, 5, {
+        abilityIndex: 2,
+        formIndex: species.formIndex,
+        shiny: true,
+      });
     } else {
-      pokemon = new PlayerPokemon(species, 5, 2, species.formIndex);
+      pokemon = new PlayerPokemon(species, 5, {
+        abilityIndex: 2,
+        formIndex: species.formIndex,
+      });
     }
     pokemon.generateAndPopulateMoveset();
 

@@ -161,23 +161,11 @@ export class PokemonData {
     const species = getPokemonSpecies(this.speciesId);
     let ret: Pokemon;
     if (this.player) {
-      ret = globalScene.addPlayerPokemon(
-        species,
-        this.level,
-        this.abilityIndex,
-        this.formIndex,
-        this.gender,
-        this.shiny,
-        this.variant,
-        this.ivs,
-        this.nature,
-        this,
-        (playerPokemon) => {
-          if (this.nickname) {
-            playerPokemon.nickname = this.nickname;
-          }
-        },
-      );
+      ret = globalScene.addPlayerPokemon(species, this.level, { dataSource: this }, (playerPokemon) => {
+        if (this.nickname) {
+          playerPokemon.nickname = this.nickname;
+        }
+      });
     } else {
       let trainerSlot: TrainerSlot = TrainerSlot.NONE;
       if (battleType === BattleType.TRAINER) {
@@ -187,7 +175,11 @@ export class PokemonData {
           trainerSlot = TrainerSlot.TRAINER_PARTNER;
         }
       }
-      ret = globalScene.addEnemyPokemon(species, this.level, trainerSlot, this.boss, false, this);
+      ret = globalScene.addEnemyPokemon(species, this.level, {
+        trainerSlot,
+        boss: this.boss,
+        dataSource: this,
+      });
     }
     ret.primeSummonData(this.summonData);
     return ret;

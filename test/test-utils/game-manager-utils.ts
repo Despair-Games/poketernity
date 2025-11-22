@@ -39,19 +39,18 @@ export function generateStarter(scene: BattleScene, species: SpeciesId[]): Start
     species.splice(6);
   }
   for (const starter of starters) {
+    const { abilityIndex, nature } = starter;
     const starterProps = scene.gameData.getSpeciesDexAttrProps(starter.species, starter.dexAttr);
-    const starterFormIndex = Math.min(starterProps.formIndex, Math.max(starter.species.forms.length - 1, 0));
-    const starterPokemon = scene.addPlayerPokemon(
-      starter.species,
-      startingLevel,
-      starter.abilityIndex,
-      starterFormIndex,
-      starterProps.gender,
-      starterProps.shiny,
-      starterProps.variant,
-      undefined,
-      starter.nature,
-    );
+    const formIndex = Math.min(starterProps.formIndex, Math.max(starter.species.forms.length - 1, 0));
+    const { gender, shiny, variant } = starterProps;
+    const starterPokemon = scene.addPlayerPokemon(starter.species, startingLevel, {
+      abilityIndex,
+      formIndex,
+      gender,
+      shiny,
+      variant,
+      nature,
+    });
     const moveset: MoveId[] = [];
     for (const move of starterPokemon.getMoveset(true)) {
       moveset.push(move.getMove().id);
@@ -68,7 +67,7 @@ function getTestRunStarters(species: SpeciesId[]): StarterConfig[] {
   for (const specie of species) {
     const starterSpeciesForm = getPokemonSpeciesForm(specie, 0);
     const starterSpecies = getPokemonSpecies(starterSpeciesForm.speciesId);
-    const pokemon = new PlayerPokemon(starterSpecies, startingLevel, undefined, 0);
+    const pokemon = new PlayerPokemon(starterSpecies, startingLevel, { formIndex: 0 });
     const starter: StarterConfig = {
       species: starterSpecies,
       dexAttr: pokemon.getDexAttr(),
@@ -108,22 +107,21 @@ export function getMovePosition(scene: BattleScene, pokemonIndex: 0 | 1, moveId:
 export function initSceneWithoutEncounterPhase(scene: BattleScene, species: SpeciesId[]): void {
   const starters = generateStarter(scene, species);
   starters.forEach((starter) => {
+    const { abilityIndex, nature } = starter;
     const starterProps = scene.gameData.getSpeciesDexAttrProps(starter.species, starter.dexAttr);
-    const starterFormIndex = Math.min(starterProps.formIndex, Math.max(starter.species.forms.length - 1, 0));
-    const starterGender = Gender.MALE;
+    const formIndex = Math.min(starterProps.formIndex, Math.max(starter.species.forms.length - 1, 0));
+    const { shiny, variant } = starterProps;
     const starterSpeciesId = starter.species.getRootSpeciesId(true);
-    const starterIvs = scene.gameData.starterData[starterSpeciesId].ivs.slice(0);
-    const starterPokemon = scene.addPlayerPokemon(
-      starter.species,
-      scene.gameMode.getStartingLevel(),
-      starter.abilityIndex,
-      starterFormIndex,
-      starterGender,
-      starterProps.shiny,
-      starterProps.variant,
-      starterIvs,
-      starter.nature,
-    );
+    const ivs = scene.gameData.starterData[starterSpeciesId].ivs.slice(0);
+    const starterPokemon = scene.addPlayerPokemon(starter.species, scene.gameMode.getStartingLevel(), {
+      abilityIndex,
+      formIndex,
+      gender: Gender.MALE,
+      shiny,
+      variant,
+      ivs,
+      nature,
+    });
     starter.moveset && starterPokemon.tryPopulateMoveset(starter.moveset);
     scene.getPlayerParty().push(starterPokemon);
   });

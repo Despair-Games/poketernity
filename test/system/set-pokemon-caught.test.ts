@@ -50,7 +50,15 @@ describe("Dex Data - Set Pokemon caught", () => {
     expect(gameData.getUnlockedVariantsAttr(dexData.caughtAttr)).toHaveLength(0);
 
     // bulbasaur
-    const newCatch = new PlayerPokemon(species, 5, 1, 0, Gender.MALE, false, 0, [], Nature.MODEST);
+    const newCatch = new PlayerPokemon(species, 5, {
+      abilityIndex: 1,
+      formIndex: 0,
+      gender: Gender.MALE,
+      shiny: false,
+      variant: 0,
+      ivs: [],
+      nature: Nature.MODEST,
+    });
     const newStarters = await gameData.setPokemonCaught(newCatch, true, false, false);
 
     expect(newStarters).toHaveLength(0);
@@ -85,7 +93,15 @@ describe("Dex Data - Set Pokemon caught", () => {
     expect(gameData.getUnlockedVariantsAttr(dexData.caughtAttr)).toHaveLength(0);
 
     // Shiny tier 3 bulbasaur
-    const newCatch = new PlayerPokemon(species, 5, 1, 0, Gender.MALE, true, 2, [], Nature.MODEST);
+    const newCatch = new PlayerPokemon(species, 5, {
+      abilityIndex: 1,
+      formIndex: 0,
+      gender: Gender.MALE,
+      shiny: true,
+      variant: 2,
+      ivs: [],
+      nature: Nature.MODEST,
+    });
     const newStarters = await gameData.setPokemonCaught(newCatch, false, false, false);
     expect(newStarters).toHaveLength(0);
 
@@ -120,7 +136,15 @@ describe("Dex Data - Set Pokemon caught", () => {
     expect(gameData.getNaturesForAttr(starterData.natureAttr)).toHaveLength(0);
 
     // Shiny tier 3 mewtwo
-    const newCatch = new PlayerPokemon(species, 5, 1, 0, Gender.GENDERLESS, true, 2, [], Nature.MODEST);
+    const newCatch = new PlayerPokemon(species, 5, {
+      abilityIndex: 1,
+      formIndex: 0,
+      gender: Gender.GENDERLESS,
+      shiny: true,
+      variant: 2,
+      ivs: [],
+      nature: Nature.MODEST,
+    });
     const newStarters = await gameData.setPokemonCaught(newCatch, false, false, false);
     expect(newStarters).toHaveLength(0);
 
@@ -162,7 +186,15 @@ describe("Dex Data - Set Pokemon caught", () => {
 
     // Catch shiny tier 2 a Venusaur
     const species = getPokemonSpecies(SpeciesId.VENUSAUR);
-    const newCatch = new PlayerPokemon(species, 5, 2, 0, Gender.FEMALE, true, 1, [], Nature.ADAMANT);
+    const newCatch = new PlayerPokemon(species, 5, {
+      abilityIndex: 2,
+      formIndex: 0,
+      gender: Gender.FEMALE,
+      shiny: true,
+      variant: 1,
+      ivs: [],
+      nature: Nature.ADAMANT,
+    });
     const newStarters = await gameData.setPokemonCaught(newCatch, true, false, false);
     expect(newStarters).toHaveLength(0);
 
@@ -213,13 +245,26 @@ describe("Dex Data - Set Pokemon caught", () => {
 
     // Catch a donphan, should unlock phanpy as a starter
     let species = getPokemonSpecies(SpeciesId.DONPHAN);
-    let newCatch = new PlayerPokemon(species, 5, 2, 0, Gender.FEMALE, false, 0, [], Nature.MILD);
+    let newCatch = new PlayerPokemon(species, 5, {
+      abilityIndex: 2,
+      formIndex: 0,
+      gender: Gender.FEMALE,
+      shiny: false,
+      nature: Nature.MILD,
+    });
     let newStarters = await gameData.setPokemonCaught(newCatch, true, false, false);
     expect(newStarters).toStrictEqual([SpeciesId.PHANPY]);
 
     // Hatch a shiny Phanpy
     species = getPokemonSpecies(SpeciesId.PHANPY);
-    newCatch = new PlayerPokemon(species, 5, 0, 0, Gender.MALE, true, 0, [], Nature.QUIET);
+    newCatch = new PlayerPokemon(species, 5, {
+      abilityIndex: 0,
+      formIndex: 0,
+      gender: Gender.MALE,
+      shiny: true,
+      variant: 0,
+      nature: Nature.QUIET,
+    });
     newStarters = await gameData.setPokemonCaught(newCatch, true, true, false);
     expect(newStarters).toHaveLength(0);
 
@@ -268,7 +313,10 @@ describe("Dex Data - Set Pokemon caught", () => {
     expect(shedinjaDexData.caughtAttr).toBeFalsy();
 
     // Catch a (genderless) Shedinja
-    const shedinjaCatch = new PlayerPokemon(species, 5, 0, 0, Gender.GENDERLESS, false, 0, [], Nature.MILD);
+    const shedinjaCatch = new PlayerPokemon(species, 5, {
+      shiny: false,
+      nature: Nature.MILD,
+    });
     const newStarters = await gameData.setPokemonCaught(shedinjaCatch, true, false, false);
     expect(newStarters).toStrictEqual([SpeciesId.NINCADA]);
 
@@ -298,7 +346,12 @@ describe("Dex Data - Set Pokemon caught", () => {
     expect(shedinjaDexData.caughtAttr).toBeFalsy();
 
     // Catch a female Nincada
-    const ninjaskCatch = new PlayerPokemon(nincadaSpecies, 5, 0, 0, Gender.FEMALE, false, 0, [], Nature.MILD);
+    const ninjaskCatch = new PlayerPokemon(nincadaSpecies, 5, {
+      abilityIndex: 0,
+      gender: Gender.FEMALE,
+      shiny: false,
+      nature: Nature.MILD,
+    });
     let newStarters = await gameData.setPokemonCaught(ninjaskCatch, true, false, false);
     expect(newStarters).toStrictEqual([SpeciesId.NINCADA]);
 
@@ -308,7 +361,10 @@ describe("Dex Data - Set Pokemon caught", () => {
     expect(shedinjaDexData.caughtAttr).toBeFalsy();
 
     // Catch a (genderless) Shedinja
-    const shedinjaCatch = new PlayerPokemon(shedinjaSpecies, 5, 0, 0, Gender.GENDERLESS, false, 0, [], Nature.MILD);
+    const shedinjaCatch = new PlayerPokemon(shedinjaSpecies, 5, {
+      shiny: false,
+      nature: Nature.MILD,
+    });
     newStarters = await gameData.setPokemonCaught(shedinjaCatch, true, false, false);
     expect(newStarters).toHaveLength(0);
 
@@ -332,7 +388,13 @@ describe("Dex Data - Set Pokemon caught", () => {
     const pikachuDexData = gameData.dexData[SpeciesId.PIKACHU];
 
     // Catch cosplay pikachu > no equivalent form in pichu > unlock default form
-    const newCatch = new PlayerPokemon(species, 5, 0, 2, Gender.FEMALE, false, 0, [], Nature.MILD);
+    const newCatch = new PlayerPokemon(species, 5, {
+      abilityIndex: 0,
+      formIndex: 2,
+      gender: Gender.FEMALE,
+      shiny: false,
+      nature: Nature.MILD,
+    });
     const newStarters = await gameData.setPokemonCaught(newCatch, true, false, false);
     expect(newStarters).toStrictEqual([SpeciesId.PIKACHU, SpeciesId.PICHU]);
 
@@ -351,7 +413,13 @@ describe("Dex Data - Set Pokemon caught", () => {
     const pikachuDexData = gameData.dexData[SpeciesId.PIKACHU];
 
     // Catch partner Pikachu
-    let newCatch = new PlayerPokemon(species, 5, 0, 1, Gender.FEMALE, false, 0, [], Nature.MILD);
+    let newCatch = new PlayerPokemon(species, 5, {
+      abilityIndex: 0,
+      formIndex: 1,
+      gender: Gender.FEMALE,
+      shiny: false,
+      nature: Nature.MILD,
+    });
     let newStarters = await gameData.setPokemonCaught(newCatch, true, false, false);
     expect(newStarters).toStrictEqual([SpeciesId.PIKACHU, SpeciesId.PICHU]);
 
@@ -360,7 +428,13 @@ describe("Dex Data - Set Pokemon caught", () => {
     expect(pichuDexData.caughtAttr & gameData.getFormAttr(1)).toBeTruthy(); // spiky eared pichu
 
     // Catch cosplay pikachu > no equivalent form in pichu > already has a form unlocked > no other form unlock
-    newCatch = new PlayerPokemon(species, 5, 0, 5, Gender.FEMALE, false, 0, [], Nature.MILD);
+    newCatch = new PlayerPokemon(species, 5, {
+      abilityIndex: 0,
+      formIndex: 5,
+      gender: Gender.FEMALE,
+      shiny: false,
+      nature: Nature.MILD,
+    });
     newStarters = await gameData.setPokemonCaught(newCatch, true, false, false);
     expect(newStarters).toHaveLength(0);
 
@@ -381,7 +455,13 @@ describe("Dex Data - Set Pokemon caught", () => {
     expect(dexData.caughtAttr).toBeFalsy();
 
     // Catch GMax eevee
-    const newCatch = new PlayerPokemon(species, 5, 0, 2, Gender.FEMALE, false, 0, [], Nature.MILD);
+    const newCatch = new PlayerPokemon(species, 5, {
+      abilityIndex: 0,
+      formIndex: 2,
+      gender: Gender.FEMALE,
+      shiny: false,
+      nature: Nature.MILD,
+    });
     const newStarters = await gameData.setPokemonCaught(newCatch, true, false, false);
 
     expect(newStarters).toStrictEqual([SpeciesId.EEVEE]);
@@ -405,7 +485,13 @@ describe("Dex Data - Set Pokemon caught", () => {
     expect(basculinDexData.caughtAttr).toBeFalsy();
     expect(basculegionDexData.caughtAttr).toBeFalsy();
 
-    const newCatch = new PlayerPokemon(species, 5, 0, formIndex, gender, false, 0, [], Nature.MILD);
+    const newCatch = new PlayerPokemon(species, 5, {
+      abilityIndex: 0,
+      formIndex,
+      gender,
+      shiny: false,
+      nature: Nature.MILD,
+    });
     const newStarters = await gameData.setPokemonCaught(newCatch, true, false, false);
 
     expect(newStarters).toStrictEqual([SpeciesId.BASCULIN]);
@@ -432,7 +518,13 @@ describe("Dex Data - Set Pokemon caught", () => {
     expect(frogadierDexData.caughtAttr).toBeFalsy();
 
     // Catch Ash form Greninja
-    const newCatch = new PlayerPokemon(species, 5, 0, 2, Gender.FEMALE, false, 0, [], Nature.MILD);
+    const newCatch = new PlayerPokemon(species, 5, {
+      abilityIndex: 0,
+      formIndex: 2,
+      gender: Gender.FEMALE,
+      shiny: false,
+      nature: Nature.MILD,
+    });
     const newStarters = await gameData.setPokemonCaught(newCatch, true, false, false);
 
     expect(newStarters).toHaveLength(0);
@@ -459,7 +551,13 @@ describe("Dex Data - Set Pokemon caught", () => {
     expect(lycanrocDexData.caughtAttr).toBeFalsy();
 
     // Catch Dusk form Lycanroc
-    const newCatch = new PlayerPokemon(species, 5, 0, 1, Gender.FEMALE, false, 0, [], Nature.MILD);
+    const newCatch = new PlayerPokemon(species, 5, {
+      abilityIndex: 0,
+      formIndex: 1,
+      gender: Gender.FEMALE,
+      shiny: false,
+      nature: Nature.MILD,
+    });
     const newStarters = await gameData.setPokemonCaught(newCatch, true, false, false);
 
     expect(species.forms[newCatch.formIndex].formName).toBe("Dusk Form");
@@ -500,7 +598,13 @@ describe("Dex Data - Set Pokemon caught", () => {
       expect(species.forms[unlockedFormIndex].formName).toBe(unlockedFormName);
       expect(species.forms[unlockedFormIndex].isStarterSelectable).toBeTruthy();
 
-      const newCatch = new PlayerPokemon(species, 5, 0, caughtFormIndex, Gender.GENDERLESS, false, 0, [], Nature.MILD);
+      const newCatch = new PlayerPokemon(species, 5, {
+        abilityIndex: 0,
+        formIndex: caughtFormIndex,
+        gender: Gender.GENDERLESS,
+        shiny: false,
+        nature: Nature.MILD,
+      });
       const newStarters = await gameData.setPokemonCaught(newCatch, true, false, false);
 
       expect(newStarters).toStrictEqual([SpeciesId.ZYGARDE]);

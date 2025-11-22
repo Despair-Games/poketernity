@@ -1689,15 +1689,7 @@ export function getRandomPartyMemberFunc(
     if (!ignoreEvolution) {
       species = getPokemonSpecies(species).getEnemySpeciesForLevel(level, true);
     }
-    return globalScene.addEnemyPokemon(
-      getPokemonSpecies(species),
-      level,
-      trainerSlot,
-      undefined,
-      false,
-      undefined,
-      postProcess,
-    );
+    return globalScene.addEnemyPokemon(getPokemonSpecies(species), level, { trainerSlot }, postProcess);
   };
 }
 
@@ -1718,6 +1710,6 @@ export function getSpeciesFilterRandomPartyMemberFunc(
       globalScene.randomSpecies(waveIndex, level, false, speciesFilter).getEnemySpeciesForLevel(level, true),
     );
 
-    return globalScene.addEnemyPokemon(species, level, trainerSlot, undefined, false, undefined, postProcess);
+    return globalScene.addEnemyPokemon(species, level, { trainerSlot }, postProcess);
   };
 }

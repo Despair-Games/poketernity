@@ -8,20 +8,17 @@ import type { SpeciesFormChange } from "#data/pokemon-forms";
 import type { PokemonSpecies } from "#data/pokemon-species";
 import { CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER, getCandyProgressRequirement, speciesStarterCosts } from "#data/starters";
 import { reverseCompatibleTms, tmSpecies } from "#data/tms";
-import type { Variant } from "#data/variant";
 import { AbilityId } from "#enums/ability-id";
 import type { FieldBattlerIndex } from "#enums/battler-index";
 import { EventModifierType } from "#enums/event-modifier-type";
 import { Gender } from "#enums/gender";
 import type { MoveId } from "#enums/move-id";
-import type { Nature } from "#enums/nature";
 import { SpeciesId } from "#enums/species-id";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
-import { Pokemon } from "#field/pokemon";
+import { Pokemon, type PokemonOptions } from "#field/pokemon";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import { EvoTrackerModifier, PokemonFriendshipBoosterModifier, type PokemonHeldItemModifier } from "#modifier/modifier";
 import { achvs } from "#system/achievements";
-import type { PokemonData } from "#system/pokemon-data";
 import type { StarterMoveset } from "#types/starter-data";
 import { PlayerBattleInfo } from "#ui/battle-info";
 import { NumberHolder } from "#utils/common-utils";
@@ -33,16 +30,9 @@ export class PlayerPokemon extends Pokemon {
   constructor(
     species: PokemonSpecies,
     level: number,
-    abilityIndex?: number,
-    formIndex?: number,
-    gender?: Gender,
-    shiny?: boolean,
-    variant?: Variant,
-    ivs?: number[],
-    nature?: Nature,
-    dataSource?: Pokemon | PokemonData,
+    { abilityIndex, formIndex, gender, shiny, variant, ivs, nature, dataSource }: PokemonOptions = {},
   ) {
-    super(106, 148, species, level, abilityIndex, formIndex, gender, shiny, variant, ivs, nature, dataSource);
+    super(106, 148, species, level, { abilityIndex, formIndex, gender, shiny, variant, ivs, nature, dataSource });
 
     if (activeOverrides.STATUS_OVERRIDE) {
       this.setStatus(activeOverrides.STATUS_OVERRIDE, { sleepTurnsRemaining: 4 });
@@ -220,33 +210,25 @@ export class PlayerPokemon extends Pokemon {
     }
   }
 
-  getPossibleEvolution(evolution: SpeciesFormEvolution | null): Promise<Pokemon> {
+  public async getPossibleEvolution(evolution: SpeciesFormEvolution | null): Promise<Pokemon> {
     if (!evolution) {
-      return new Promise((resolve) => resolve(this));
+      return this;
     }
-    return new Promise((resolve) => {
-      const evolutionSpecies = getPokemonSpecies(evolution.speciesId);
-      const formIndex =
-        evolution.evoFormKey !== null
-          ? Math.max(
-              evolutionSpecies.forms.findIndex((f) => f.formKey === evolution.evoFormKey),
-              0,
-            )
-          : this.formIndex;
-      const ret = globalScene.addPlayerPokemon(
-        evolutionSpecies,
-        this.level,
-        this.abilityIndex,
-        formIndex,
-        this.gender,
-        this.shiny,
-        this.variant,
-        this.ivs,
-        this.nature,
-        this,
-      );
-      ret.loadAssets().then(() => resolve(ret));
+
+    const evolutionSpecies = getPokemonSpecies(evolution.speciesId);
+    const formIndex =
+      evolution.evoFormKey !== null
+        ? Math.max(
+            evolutionSpecies.forms.findIndex((f) => f.formKey === evolution.evoFormKey),
+            0,
+          )
+        : this.formIndex;
+    const ret = globalScene.addPlayerPokemon(evolutionSpecies, this.level, {
+      formIndex,
+      dataSource: this,
     });
+    await ret.loadAssets();
+    return ret;
   }
 
   /**
@@ -312,22 +294,20 @@ export class PlayerPokemon extends Pokemon {
   }
 
   private handleShedinjaEvolution(evolution: SpeciesFormEvolution) {
+    const { abilityIndex, formIndex, shiny, variant, ivs, nature } = this;
     const { speciesId } = this.species;
     if (speciesId === SpeciesId.NINCADA && evolution.speciesId === SpeciesId.NINJASK) {
       const newEvolution = pokemonEvolutions[speciesId][1];
 
       if (newEvolution.conditions?.every((condition) => condition.predicate(this))) {
-        const newPokemon = globalScene.addPlayerPokemon(
-          this.species,
-          this.level,
-          this.abilityIndex,
-          this.formIndex,
-          undefined,
-          this.shiny,
-          this.variant,
-          this.ivs,
-          this.nature,
-        );
+        const newPokemon = globalScene.addPlayerPokemon(this.species, this.level, {
+          abilityIndex,
+          formIndex,
+          shiny,
+          variant,
+          ivs,
+          nature,
+        });
         newPokemon.passive = this.passive;
         this.copyMoveset(newPokemon);
         newPokemon.gender = Gender.GENDERLESS;
@@ -353,26 +333,23 @@ export class PlayerPokemon extends Pokemon {
     }
   }
 
-  getPossibleForm(formChange: SpeciesFormChange): Promise<Pokemon> {
-    return new Promise((resolve) => {
-      const formIndex = Math.max(
-        this.species.forms.findIndex((f) => f.formKey === formChange.formKey),
-        0,
-      );
-      const ret = globalScene.addPlayerPokemon(
-        this.species,
-        this.level,
-        this.abilityIndex,
-        formIndex,
-        this.gender,
-        this.shiny,
-        this.variant,
-        this.ivs,
-        this.nature,
-        this,
-      );
-      ret.loadAssets().then(() => resolve(ret));
+  public async getPossibleForm(formChange: SpeciesFormChange): Promise<Pokemon> {
+    const { abilityIndex, gender, shiny, variant, ivs, nature } = this;
+    const formIndex = Math.max(
+      this.species.forms.findIndex((f) => f.formKey === formChange.formKey),
+      0,
+    );
+    const ret = globalScene.addPlayerPokemon(this.species, this.level, {
+      abilityIndex,
+      formIndex,
+      gender,
+      shiny,
+      variant,
+      ivs,
+      nature,
     });
+    await ret.loadAssets();
+    return ret;
   }
 
   override changeForm(formChange: SpeciesFormChange): Promise<void> {

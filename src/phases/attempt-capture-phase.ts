@@ -292,18 +292,9 @@ export class AttemptCapturePhase extends PokemonPhase {
                 {
                   label: i18next.t("partyUiHandler:SUMMARY"),
                   handler: () => {
-                    const newPokemon = globalScene.addPlayerPokemon(
-                      pokemon.species,
-                      pokemon.level,
-                      pokemon.abilityIndex,
-                      pokemon.formIndex,
-                      pokemon.gender,
-                      pokemon.shiny,
-                      pokemon.variant,
-                      pokemon.ivs,
-                      pokemon.nature,
-                      pokemon,
-                    );
+                    const newPokemon = globalScene.addPlayerPokemon(pokemon.species, pokemon.level, {
+                      dataSource: pokemon,
+                    });
                     ui.setMode<SummaryUiHandler>(
                       UiMode.SUMMARY,
                       newPokemon,

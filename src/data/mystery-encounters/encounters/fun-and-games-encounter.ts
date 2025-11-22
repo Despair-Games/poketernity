@@ -9,7 +9,6 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Nature } from "#enums/nature";
 import { PlayerGender } from "#enums/player-gender";
 import { SpeciesId } from "#enums/species-id";
-import { TrainerSlot } from "#enums/trainer-slot";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
@@ -205,13 +204,7 @@ async function summonPlayerPokemon() {
     // Also loads Wobbuffet data (cannot be shiny)
     const enemySpecies = getPokemonSpecies(SpeciesId.WOBBUFFET);
     globalScene.currentBattle.enemyParty = [];
-    const wobbuffet = globalScene.addEnemyPokemon(
-      enemySpecies,
-      encounter.misc.playerPokemon.level,
-      TrainerSlot.NONE,
-      false,
-      true,
-    );
+    const wobbuffet = globalScene.addEnemyPokemon(enemySpecies, encounter.misc.playerPokemon.level, { shiny: false });
     wobbuffet.ivs = [0, 0, 0, 0, 0, 0];
     wobbuffet.setNature(Nature.MILD);
     wobbuffet.setAlpha(0);

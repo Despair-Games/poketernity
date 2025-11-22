@@ -63,18 +63,7 @@ function getDailyRunStarter(starterSpeciesForm: PokemonSpeciesForm, startingLeve
       ? (starterSpeciesForm as PokemonSpecies)
       : getPokemonSpecies(starterSpeciesForm.speciesId);
   const formIndex = starterSpeciesForm.type === "PokemonSpecies" ? undefined : starterSpeciesForm.formIndex;
-  const pokemon = new PlayerPokemon(
-    starterSpecies,
-    startingLevel,
-    undefined,
-    formIndex,
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-  );
+  const pokemon = new PlayerPokemon(starterSpecies, startingLevel, { formIndex });
   const starter: StarterConfig = {
     species: starterSpecies,
     dexAttr: pokemon.getDexAttr(),

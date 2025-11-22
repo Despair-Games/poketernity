@@ -200,18 +200,17 @@ export class TitlePhase extends Phase {
 
         for (const starter of starters) {
           const starterProps = gameData.getSpeciesDexAttrProps(starter.species, starter.dexAttr);
-          const starterFormIndex = Math.min(starterProps.formIndex, Math.max(starter.species.forms.length - 1, 0));
-          const starterPokemon = globalScene.addPlayerPokemon(
-            starter.species,
-            startingLevel,
-            starter.abilityIndex,
-            starterFormIndex,
-            starterProps.gender,
-            starterProps.shiny,
-            starterProps.variant,
-            undefined,
-            starter.nature,
-          );
+          const { abilityIndex, nature } = starter;
+          const { gender, shiny, variant } = starterProps;
+          const formIndex = Math.min(starterProps.formIndex, Math.max(starter.species.forms.length - 1, 0));
+          const starterPokemon = globalScene.addPlayerPokemon(starter.species, startingLevel, {
+            abilityIndex,
+            formIndex,
+            gender,
+            shiny,
+            variant,
+            nature,
+          });
           starterPokemon.setVisible(false);
           party.push(starterPokemon);
           loadPokemonAssets.push(starterPokemon.loadAssets());

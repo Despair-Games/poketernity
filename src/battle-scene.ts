@@ -31,7 +31,7 @@ import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import type { PokemonSpecies } from "#data/pokemon-species";
 import { resetStarterColors, starterColors } from "#data/starter-colors";
 import { getTypeRgb } from "#data/type";
-import { type Variant, variantData } from "#data/variant";
+import { variantData } from "#data/variant";
 import type { AchvCategory } from "#enums/achv-category";
 import { BattleType } from "#enums/battle-type";
 import { BattlerIndex, type FieldBattlerIndex } from "#enums/battler-index";
@@ -55,15 +55,15 @@ import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import { SwitchType } from "#enums/switch-type";
 import { TextStyle } from "#enums/text-style";
-import type { TrainerSlot } from "#enums/trainer-slot";
+import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerVariant } from "#enums/trainer-variant";
 import type { UiWindowStyle } from "#enums/ui-window-style";
 import { NewArenaEvent } from "#events/battle-scene";
 import { Arena, ArenaBase, getBgTerrainColorRatioForBiome } from "#field/arena";
 import { DamageNumberHandler } from "#field/damage-number-handler";
-import { EnemyPokemon } from "#field/enemy-pokemon";
+import { EnemyPokemon, type EnemyPokemonOptions } from "#field/enemy-pokemon";
 import { PlayerPokemon } from "#field/player-pokemon";
-import type { Pokemon } from "#field/pokemon";
+import type { Pokemon, PokemonOptions } from "#field/pokemon";
 import { PokemonSpriteTeraSparkleHandler } from "#field/pokemon-sprite-tera-sparkle-handler";
 import { Trainer } from "#field/trainer";
 import { SpeciesFormChangeManualTrigger } from "#form-change-triggers/species-form-change-manual-trigger";
@@ -111,7 +111,6 @@ import { SpritePipeline } from "#pipelines/sprite";
 import { type Achievement, achvs } from "#system/achievements";
 import { GameData } from "#system/game-data";
 import { initGameSpeed } from "#system/game-speed";
-import type { PokemonData } from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
 import type { TrainerData } from "#system/trainer-data";
 import { type Voucher, vouchers } from "#system/voucher";
@@ -907,22 +906,13 @@ export class BattleScene extends SceneBase {
     return findInParty(this.getPlayerParty()) || findInParty(this.getEnemyParty());
   }
 
-  addPlayerPokemon(
+  public addPlayerPokemon(
     species: PokemonSpecies,
     level: number,
-    abilityIndex?: number,
-    formIndex?: number,
-    gender?: Gender,
-    shiny?: boolean,
-    variant?: Variant,
-    ivs?: number[],
-    nature?: Nature,
-    dataSource?: Pokemon | PokemonData,
+    { abilityIndex, formIndex, gender, shiny, variant, ivs, nature, dataSource }: PokemonOptions = {},
     postProcess?: (playerPokemon: PlayerPokemon) => void,
   ): PlayerPokemon {
-    const pokemon = new PlayerPokemon(
-      species,
-      level,
+    const pokemon = new PlayerPokemon(species, level, {
       abilityIndex,
       formIndex,
       gender,
@@ -931,7 +921,7 @@ export class BattleScene extends SceneBase {
       ivs,
       nature,
       dataSource,
-    );
+    });
     if (postProcess) {
       postProcess(pokemon);
     }
@@ -964,10 +954,18 @@ export class BattleScene extends SceneBase {
   addEnemyPokemon(
     species: PokemonSpecies,
     level: number,
-    trainerSlot: TrainerSlot,
-    boss: boolean = false,
-    shinyLock: boolean = false,
-    dataSource?: PokemonData,
+    {
+      abilityIndex,
+      formIndex,
+      gender,
+      shiny,
+      variant,
+      ivs,
+      nature,
+      trainerSlot = TrainerSlot.NONE,
+      boss = false,
+      dataSource,
+    }: EnemyPokemonOptions = {},
     postProcess?: (enemyPokemon: EnemyPokemon) => void,
   ): EnemyPokemon {
     if (activeOverrides.ENEMY_LEVEL_OVERRIDE > 0) {
@@ -989,7 +987,18 @@ export class BattleScene extends SceneBase {
       }
     }
 
-    const pokemon = new EnemyPokemon(species, level, trainerSlot, boss, shinyLock, dataSource);
+    const pokemon = new EnemyPokemon(species, level, {
+      abilityIndex,
+      formIndex,
+      gender,
+      shiny,
+      variant,
+      ivs,
+      nature,
+      trainerSlot,
+      boss,
+      dataSource,
+    });
 
     if (boss && !dataSource) {
       const secondaryIvs = pokemon.generateIvs();

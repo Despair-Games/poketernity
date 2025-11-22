@@ -20,7 +20,7 @@ import { SpeciesId } from "#enums/species-id";
 import { EFFECTIVE_STATS, type EffectiveStat } from "#enums/stat";
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { PlayerPokemon } from "#field/player-pokemon";
-import { Pokemon } from "#field/pokemon";
+import { Pokemon, type PokemonOptions } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
 import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
 import { CounterDamageAttr } from "#moves/counter-damage-attr";
@@ -31,6 +31,12 @@ import type { TurnMove } from "#types/move-types";
 import { EnemyBattleInfo } from "#ui/battle-info";
 import { isBetween, toDmgValue } from "#utils/common-utils";
 import { randSeedInt, randSeedItem } from "#utils/random-utils";
+
+export interface EnemyPokemonOptions extends PokemonOptions {
+  trainerSlot?: TrainerSlot;
+  boss?: boolean;
+  dataSource?: PokemonData;
+}
 
 export class EnemyPokemon extends Pokemon {
   public trainerSlot: TrainerSlot;
@@ -46,25 +52,29 @@ export class EnemyPokemon extends Pokemon {
   constructor(
     species: PokemonSpecies,
     level: number,
-    trainerSlot: TrainerSlot,
-    boss: boolean,
-    shinyLock: boolean = false,
-    dataSource?: PokemonData,
-  ) {
-    super(
-      236,
-      84,
-      species,
-      level,
-      dataSource?.abilityIndex,
-      dataSource?.formIndex,
-      dataSource?.gender,
-      !shinyLock && dataSource ? dataSource.shiny : false,
-      !shinyLock && dataSource ? dataSource.variant : undefined,
-      undefined,
-      dataSource ? dataSource.nature : undefined,
+    {
+      abilityIndex,
+      formIndex,
+      gender,
+      shiny,
+      variant,
+      ivs,
+      nature,
+      trainerSlot = TrainerSlot.NONE,
+      boss = false,
       dataSource,
-    );
+    }: EnemyPokemonOptions = {},
+  ) {
+    super(236, 84, species, level, {
+      abilityIndex,
+      formIndex,
+      gender,
+      shiny,
+      variant,
+      ivs,
+      nature,
+      dataSource,
+    });
 
     this.trainerSlot = trainerSlot;
     this.initialTeamIndex = globalScene.currentBattle?.enemyParty.length ?? 0;
@@ -95,7 +105,7 @@ export class EnemyPokemon extends Pokemon {
     if (!dataSource) {
       this.generateAndPopulateMoveset();
 
-      if (shinyLock || activeOverrides.ENEMY_SHINY_OVERRIDE === false) {
+      if (shiny === false || activeOverrides.ENEMY_SHINY_OVERRIDE === false) {
         this.shiny = false;
       } else {
         this.trySetShiny();
@@ -689,18 +699,7 @@ export class EnemyPokemon extends Pokemon {
       this.metBiome = globalScene.arena.biomeId;
       this.metWave = globalScene.currentBattle.waveIndex;
       this.metSpecies = this.species.speciesId;
-      const newPokemon = globalScene.addPlayerPokemon(
-        this.species,
-        this.level,
-        this.abilityIndex,
-        this.formIndex,
-        this.gender,
-        this.shiny,
-        this.variant,
-        this.ivs,
-        this.nature,
-        this,
-      );
+      const newPokemon = globalScene.addPlayerPokemon(this.species, this.level, { dataSource: this });
 
       if (isBetween(slotIndex, 0, PLAYER_PARTY_MAX_SIZE - 1)) {
         party.splice(slotIndex, 0, newPokemon);

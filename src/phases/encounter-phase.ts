@@ -135,12 +135,8 @@ export class EncounterPhase extends BattlePhase {
           ) {
             enemySpecies = getGoldenBugNetSpecies(level);
           }
-          currentBattle.enemyParty[e] = globalScene.addEnemyPokemon(
-            enemySpecies,
-            level,
-            TrainerSlot.NONE,
-            globalScene.getEncounterBossSegments(waveIndex, level, enemySpecies) > 0,
-          );
+          const boss = globalScene.getEncounterBossSegments(waveIndex, level, enemySpecies) > 0;
+          currentBattle.enemyParty[e] = globalScene.addEnemyPokemon(enemySpecies, level, { boss });
           if (isClassicFinalBoss) {
             currentBattle.enemyParty[e].ivs = new Array(6).fill(31);
           }

@@ -12,7 +12,6 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
-import { TrainerSlot } from "#enums/trainer-slot";
 import { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
@@ -82,7 +81,7 @@ export const DancingLessonsEncounter: MysteryEncounter = MysteryEncounterBuilder
 
     const species = getPokemonSpecies(SpeciesId.ORICORIO);
     const level = getEncounterPokemonLevelForWave(STANDARD_ENCOUNTER_BOOSTED_LEVEL_MODIFIER);
-    const enemyPokemon = new EnemyPokemon(species, level, TrainerSlot.NONE, false);
+    const enemyPokemon = new EnemyPokemon(species, level);
     const moveset = enemyPokemon.getMoveset(true);
     if (!moveset.some((m) => m && m.getMove().id === MoveId.REVELATION_DANCE)) {
       if (moveset.length < 4) {
@@ -96,7 +95,7 @@ export const DancingLessonsEncounter: MysteryEncounter = MysteryEncounterBuilder
     enemyPokemon.formIndex = getOricorioFormIndexForBiome(globalScene.arena.biomeId);
 
     const oricorioData = new PokemonData(enemyPokemon);
-    const oricorio = globalScene.addEnemyPokemon(species, level, TrainerSlot.NONE, false, false, oricorioData);
+    const oricorio = globalScene.addEnemyPokemon(species, level, { dataSource: oricorioData });
 
     // Adds a real Pokemon sprite to the field (required for the animation)
     globalScene.getEnemyParty().forEach((enemy) => {

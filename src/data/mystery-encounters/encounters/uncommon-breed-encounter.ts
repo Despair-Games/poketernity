@@ -8,7 +8,6 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PokeballType } from "#enums/pokeball-type";
 import { type BattleStat, Stat } from "#enums/stat";
-import { TrainerSlot } from "#enums/trainer-slot";
 import { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
@@ -67,7 +66,7 @@ export const UncommonBreedEncounter: MysteryEncounter = MysteryEncounterBuilder.
       0,
       getPartyLuckValue(globalScene.getPlayerParty()),
     );
-    const pokemon = new EnemyPokemon(species, level, TrainerSlot.NONE, true);
+    const pokemon = new EnemyPokemon(species, level, { boss: true });
 
     // Pokemon will always have one of its egg moves in its moveset
     const eggMoves = pokemon.getEggMoves();
