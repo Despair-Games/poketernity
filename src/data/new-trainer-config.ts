@@ -9,7 +9,7 @@ import type { TrainerGender } from "#enums/trainer-gender";
 import type { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { TrainerType } from "#enums/trainer-type";
-import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { EnemyPokemon, EnemyPokemonOptions } from "#field/enemy-pokemon";
 import type { PokemonSpeciesFilter } from "#types/ui-types";
 import type { NonEmptyArray } from "#types/utility-types";
 
@@ -81,7 +81,7 @@ export interface NewTrainerConfig {
    * An array of configs for the Trainer's party Pokemon. When generated, the Pokemon
    * are added to {@linkcode globalScene} as enemies.
    */
-  partyConfigs: PartyPokemonConfig[];
+  partyConfigs: TrainerPartyPokemonConfig[];
   /**
    * A generator to determine the amount of money granted to the Player after defeating the Trainer
    * (relative to the base money amount)
@@ -141,11 +141,25 @@ export class CompoundTrainerConfig {
 
 // #region PartyPokemonConfig
 
+/**
+ * A list of Pokemon {@link SpeciesId | species} mapped by {@linkcode TrainerPoolTier}.
+ * Not all tiers need to be included in the pool.
+ * @example
+ * ```
+ * const validPool: TieredSpeciesPool = {
+ *   [TrainerPoolTier.COMMON]: [SpeciesId.MAGIKARP, SpeciesId.FEEBAS],
+ *   [TrainerPoolTier.UNCOMMON]: [SpeciesId.MUDKIP],
+ *   // ...
+ * };
+ * ```
+ */
 export type TieredSpeciesPool = Partial<Record<TrainerPoolTier, SpeciesId[]>>;
+type ConfigurableEnemyPokemonOptions = Omit<EnemyPokemonOptions, "trainerSlot" | "dataSource">;
+
 /**
  * Interface for the specification of one or more Pokemon within a Trainer's party
  */
-export interface PartyPokemonConfig {
+export interface TrainerPartyPokemonConfig extends ConfigurableEnemyPokemonOptions {
   /**
    * A tiered pool of {@link SpeciesId | species} from which the Pokemon is generated.
    * The lower a species' tier, the more likely it will be selected for generation.
@@ -202,7 +216,7 @@ export interface PartyPokemonConfig {
   postProcess?: (pokemon: EnemyPokemon) => void;
 }
 
-export type SpeciesPoolConfigOptions = Partial<Omit<PartyPokemonConfig, "tieredSpeciesPool" | "speciesPool">>;
+export type SpeciesPoolConfigOptions = Partial<Omit<TrainerPartyPokemonConfig, "tieredSpeciesPool" | "speciesPool">>;
 export type SpeciesConfigOptions = Partial<
   Omit<SpeciesPoolConfigOptions, "speciesFilter" | "allowDuplicates" | "allowLegendaries">
 >;

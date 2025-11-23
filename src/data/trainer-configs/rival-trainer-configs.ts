@@ -529,18 +529,14 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
   [TrainerType.RIVAL]: new TrainerConfigBuilder()
     .withRivalAssets()
     .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
-      postProcess: (p) => {
-        p.abilityIndex = 0;
-      },
+      abilityIndex: 0,
     })
     .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
     .build(),
   [TrainerType.RIVAL_2]: new TrainerConfigBuilder()
     .withRivalAssets()
     .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
-      postProcess: (p) => {
-        p.abilityIndex = 0;
-      },
+      abilityIndex: 0,
     })
     .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
     .withPokemonFromFilter((species: PokemonSpecies) => species.isSingleStage() && species.baseTotal >= 450)
@@ -548,9 +544,7 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
   [TrainerType.RIVAL_3]: new TrainerConfigBuilder()
     .withRivalAssets()
     .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
-      postProcess: (p) => {
-        p.abilityIndex = 0;
-      },
+      abilityIndex: 0,
     })
     .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
     .withPokemonFromFilter((species) => species.isSingleStage() && species.baseTotal >= 450)
@@ -559,9 +553,7 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
   [TrainerType.RIVAL_4]: new TrainerConfigBuilder()
     .withRivalAssets()
     .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
-      postProcess: (p) => {
-        p.abilityIndex = 0;
-      },
+      abilityIndex: 0,
     })
     .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
     .withPokemonFromFilter((species) => species.isSingleStage() && species.baseTotal >= 450)
@@ -570,8 +562,9 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
   [TrainerType.RIVAL_5]: new TrainerConfigBuilder()
     .withRivalAssets()
     .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
+      abilityIndex: 0,
       postProcess: (p) => {
-        p.abilityIndex = 0;
+        // TODO: Should boss segments be added to `EnemyPokemonOptions`?
         p.setBoss(true, 2);
       },
     })
@@ -580,20 +573,21 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
     .withPokemonFromFilter((species) => species.baseTotal >= 540)
     .withPokemon(SpeciesId.RAYQUAZA, {
       ignoreEvolution: true,
+      shiny: true,
+      variant: 1,
       postProcess: (p) => {
         p.setBoss(true, 3);
         p.pokeball = PokeballType.MASTER_BALL;
-        p.shiny = true;
-        p.variant = 1;
       },
     })
     .build(),
   [TrainerType.RIVAL_6]: new TrainerConfigBuilder()
     .withRivalAssets()
     .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
+      abilityIndex: 0,
       postProcess: (p) => {
-        p.abilityIndex = 0;
         p.setBoss(true, 3);
+        // TODO: Is this necessary?
         p.generateAndPopulateMoveset();
       },
     })
@@ -607,13 +601,13 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
     .withPokemonFromFilter((species) => species.baseTotal >= 540)
     .withPokemon(SpeciesId.RAYQUAZA, {
       ignoreEvolution: true,
+      formIndex: 1, // Mega Rayquaza
+      shiny: true,
+      variant: 1,
+      boss: true,
       postProcess: (p) => {
-        p.setBoss();
         p.generateAndPopulateMoveset();
         p.pokeball = PokeballType.MASTER_BALL;
-        p.shiny = true;
-        p.variant = 1;
-        p.formIndex = 1; // Mega Rayquaza
         p.generateName();
       },
     })

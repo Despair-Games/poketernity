@@ -1,11 +1,11 @@
 import { globalScene } from "#app/global-scene";
 import type {
   NewTrainerConfig,
-  PartyPokemonConfig,
   SpeciesConfigOptions,
   SpeciesFilterConfigOptions,
   SpeciesPoolConfigOptions,
   TieredSpeciesPool,
+  TrainerPartyPokemonConfig,
 } from "#data/new-trainer-config";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import type { SpeciesId } from "#enums/species-id";
@@ -222,8 +222,16 @@ export class TrainerConfigBuilder {
     strength = PartyMemberStrength.AVERAGE,
     count = 1,
     ignoreEvolution = false,
+    abilityIndex,
+    formIndex,
+    gender,
+    shiny,
+    variant,
+    ivs,
+    nature,
+    boss,
     postProcess,
-  }: PartyPokemonConfig): this {
+  }: TrainerPartyPokemonConfig): this {
     this.config.partyConfigs!.push({
       tieredSpeciesPool,
       speciesPool,
@@ -233,6 +241,14 @@ export class TrainerConfigBuilder {
       strength,
       count,
       ignoreEvolution,
+      abilityIndex,
+      formIndex,
+      gender,
+      shiny,
+      variant,
+      ivs,
+      nature,
+      boss,
       postProcess,
     });
 
@@ -248,6 +264,14 @@ export class TrainerConfigBuilder {
       strength = PartyMemberStrength.AVERAGE,
       count = 1,
       ignoreEvolution = false,
+      abilityIndex,
+      formIndex,
+      gender,
+      shiny,
+      variant,
+      ivs,
+      nature,
+      boss,
       postProcess,
     }: SpeciesPoolConfigOptions,
   ): this {
@@ -259,6 +283,14 @@ export class TrainerConfigBuilder {
       strength,
       count,
       ignoreEvolution,
+      abilityIndex,
+      formIndex,
+      gender,
+      shiny,
+      variant,
+      ivs,
+      nature,
+      boss,
       postProcess,
     });
   }
@@ -279,10 +311,31 @@ export class TrainerConfigBuilder {
       strength = PartyMemberStrength.AVERAGE,
       count = 1,
       ignoreEvolution = false,
+      abilityIndex,
+      formIndex,
+      gender,
+      shiny,
+      variant,
+      ivs,
+      nature,
+      boss,
       postProcess,
     }: SpeciesConfigOptions = {},
   ): this {
-    return this.withPokemonFromPool([species], { strength, count, ignoreEvolution, postProcess });
+    return this.withPokemonFromPool([species], {
+      strength,
+      count,
+      ignoreEvolution,
+      abilityIndex,
+      formIndex,
+      gender,
+      shiny,
+      variant,
+      ivs,
+      nature,
+      boss,
+      postProcess,
+    });
   }
 
   /**
@@ -304,6 +357,14 @@ export class TrainerConfigBuilder {
       strength = PartyMemberStrength.AVERAGE,
       count = 1,
       ignoreEvolution = false,
+      abilityIndex,
+      formIndex,
+      gender,
+      shiny,
+      variant,
+      ivs,
+      nature,
+      boss,
       postProcess,
     }: SpeciesPoolConfigOptions = {},
   ): this {
@@ -315,6 +376,14 @@ export class TrainerConfigBuilder {
       strength,
       count,
       ignoreEvolution,
+      abilityIndex,
+      formIndex,
+      gender,
+      shiny,
+      variant,
+      ivs,
+      nature,
+      boss,
       postProcess,
     });
   }
@@ -331,6 +400,15 @@ export class TrainerConfigBuilder {
       strength = PartyMemberStrength.AVERAGE,
       count = 1,
       ignoreEvolution = false,
+      abilityIndex,
+      formIndex,
+      gender,
+      shiny,
+      variant,
+      ivs,
+      nature,
+      boss,
+      postProcess,
     }: SpeciesFilterConfigOptions = {},
   ): this {
     return this.withPokemonFromConfig({
@@ -340,6 +418,15 @@ export class TrainerConfigBuilder {
       strength,
       count,
       ignoreEvolution,
+      abilityIndex,
+      formIndex,
+      gender,
+      shiny,
+      variant,
+      ivs,
+      nature,
+      boss,
+      postProcess,
     });
   }
 
