@@ -563,10 +563,8 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
     .withRivalAssets()
     .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
       abilityIndex: 0,
-      postProcess: (p) => {
-        // TODO: Should boss segments be added to `EnemyPokemonOptions`?
-        p.setBoss(true, 2);
-      },
+      boss: true,
+      bossSegments: 2,
     })
     .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
     .withPokemonFromFilter((species) => species.isSingleStage() && species.baseTotal >= 450)
@@ -575,8 +573,9 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
       ignoreEvolution: true,
       shiny: true,
       variant: 1,
+      boss: true,
+      bossSegments: 3,
       postProcess: (p) => {
-        p.setBoss(true, 3);
         p.pokeball = PokeballType.MASTER_BALL;
       },
     })
@@ -585,17 +584,12 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
     .withRivalAssets()
     .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
       abilityIndex: 0,
-      postProcess: (p) => {
-        p.setBoss(true, 3);
-        // TODO: Is this necessary?
-        p.generateAndPopulateMoveset();
-      },
+      boss: true,
+      bossSegments: 3,
     })
     .withPokemonFromPool(RIVAL_SLOT_1_POKEMON, {
-      postProcess: (p) => {
-        p.setBoss(true, 2);
-        p.generateAndPopulateMoveset();
-      },
+      boss: true,
+      bossSegments: 2,
     })
     .withPokemonFromFilter((species) => species.isSingleStage() && species.baseTotal >= 450)
     .withPokemonFromFilter((species) => species.baseTotal >= 540)
@@ -606,9 +600,7 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
       variant: 1,
       boss: true,
       postProcess: (p) => {
-        p.generateAndPopulateMoveset();
         p.pokeball = PokeballType.MASTER_BALL;
-        p.generateName();
       },
     })
     .build(),

@@ -103,7 +103,7 @@ export class TrainerConfigBuilder {
     return true;
   }
 
-  /** Constructs a {@linkcode NewTrainerConfig} from the builder's properties and returns it */
+  /** Validates and returns the builder's internal {@linkcode NewTrainerConfig} */
   public build(): NewTrainerConfig {
     if (!this.validate(this.config)) {
       throw new Error(`Required fields missing in generated config: ${this.config}`);
@@ -230,6 +230,7 @@ export class TrainerConfigBuilder {
     ivs,
     nature,
     boss,
+    bossSegments,
     postProcess,
   }: TrainerPartyPokemonConfig): this {
     this.config.partyConfigs!.push({
@@ -249,6 +250,7 @@ export class TrainerConfigBuilder {
       ivs,
       nature,
       boss,
+      bossSegments,
       postProcess,
     });
 
@@ -272,6 +274,7 @@ export class TrainerConfigBuilder {
       ivs,
       nature,
       boss,
+      bossSegments,
       postProcess,
     }: SpeciesPoolConfigOptions,
   ): this {
@@ -291,6 +294,7 @@ export class TrainerConfigBuilder {
       ivs,
       nature,
       boss,
+      bossSegments,
       postProcess,
     });
   }
@@ -319,6 +323,7 @@ export class TrainerConfigBuilder {
       ivs,
       nature,
       boss,
+      bossSegments,
       postProcess,
     }: SpeciesConfigOptions = {},
   ): this {
@@ -334,6 +339,7 @@ export class TrainerConfigBuilder {
       ivs,
       nature,
       boss,
+      bossSegments,
       postProcess,
     });
   }
@@ -365,6 +371,7 @@ export class TrainerConfigBuilder {
       ivs,
       nature,
       boss,
+      bossSegments,
       postProcess,
     }: SpeciesPoolConfigOptions = {},
   ): this {
@@ -384,6 +391,7 @@ export class TrainerConfigBuilder {
       ivs,
       nature,
       boss,
+      bossSegments,
       postProcess,
     });
   }
@@ -408,6 +416,7 @@ export class TrainerConfigBuilder {
       ivs,
       nature,
       boss,
+      bossSegments,
       postProcess,
     }: SpeciesFilterConfigOptions = {},
   ): this {
@@ -426,6 +435,7 @@ export class TrainerConfigBuilder {
       ivs,
       nature,
       boss,
+      bossSegments,
       postProcess,
     });
   }
