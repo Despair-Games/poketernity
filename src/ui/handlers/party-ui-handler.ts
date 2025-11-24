@@ -290,7 +290,7 @@ export class PartyUiHandler extends MessageUiHandler {
                 && m.pokemonId === newPokemon.id
                 && m.matchType(getTransferrableItemsFromPokemon(pokemon)[this.transferOptionCursor]),
             );
-            const partySlot = this.partySlots.filter((m) => m.getPokemon() === newPokemon)[0]; // this gets pokemon [p] for us
+            const partySlot = this.partySlots.find((m) => m.getPokemon() === newPokemon); // this gets pokemon [p] for us
             if (p !== this.transferCursor) {
               // this skips adding the able/not able labels on the pokemon doing the transfer
               if (matchingModifier) {
@@ -310,11 +310,11 @@ export class PartyUiHandler extends MessageUiHandler {
               // this else relates to the transfer pokemon. We set the text to be blank so there's no "Able"/"Not able" text
               ableToTransfer = "";
             }
-            partySlot.slotHpBar.setVisible(false);
-            partySlot.slotHpOverlay.setVisible(false);
-            partySlot.slotHpText.setVisible(false);
-            partySlot.slotDescriptionLabel.setText(ableToTransfer);
-            partySlot.slotDescriptionLabel.setVisible(true);
+            partySlot?.slotHpBar.setVisible(false);
+            partySlot?.slotHpOverlay.setVisible(false);
+            partySlot?.slotHpText.setVisible(false);
+            partySlot?.slotDescriptionLabel.setText(ableToTransfer);
+            partySlot?.slotDescriptionLabel.setVisible(true);
           }
 
           this.clearOptions();
@@ -616,12 +616,22 @@ export class PartyUiHandler extends MessageUiHandler {
       const battlerCount = globalScene.currentBattle.getBattlerCount();
 
       switch (button) {
-        case Button.UP:
-          success = this.setCursor(this.cursor ? (this.cursor < 6 ? this.cursor - 1 : slotCount - 1) : 6);
+        case Button.UP: {
+          let cursorVal = 6;
+          if (this.cursor) {
+            cursorVal = this.cursor < 6 ? this.cursor - 1 : slotCount - 1;
+          }
+          success = this.setCursor(cursorVal);
           break;
-        case Button.DOWN:
-          success = this.setCursor(this.cursor < 6 ? (this.cursor < slotCount - 1 ? this.cursor + 1 : 6) : 0);
+        }
+        case Button.DOWN: {
+          let cursorVal = 0;
+          if (this.cursor < 6) {
+            cursorVal = this.cursor < slotCount - 1 ? this.cursor + 1 : 6;
+          }
+          success = this.setCursor(cursorVal);
           break;
+        }
         case Button.LEFT:
           if (this.cursor >= battlerCount && this.cursor <= 6) {
             success = this.setCursor(0);
