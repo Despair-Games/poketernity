@@ -10,6 +10,7 @@ import {
   trainerPartyTemplates,
 } from "#data/trainer-config";
 import { TrainerConfigBuilder } from "#data/trainer-config-builder";
+import { PartyMemberStrength } from "#enums/party-member-strength";
 import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
@@ -530,34 +531,45 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
     .withRivalAssets()
     .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
       abilityIndex: 0,
+      strength: PartyMemberStrength.WEAKEST,
     })
-    .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
+    .withPokemonFromPool(RIVAL_SLOT_1_POKEMON, { strength: PartyMemberStrength.WEAKEST })
     .build(),
   [TrainerType.RIVAL_2]: new TrainerConfigBuilder()
     .withRivalAssets()
     .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
       abilityIndex: 0,
+      strength: PartyMemberStrength.STRONG,
     })
     .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
-    .withPokemonFromFilter((species: PokemonSpecies) => species.isSingleStage() && species.baseTotal >= 450)
+    .withPokemonFromFilter((species: PokemonSpecies) => species.isSingleStage() && species.baseTotal >= 450, {
+      strength: PartyMemberStrength.WEAK,
+    })
     .build(),
   [TrainerType.RIVAL_3]: new TrainerConfigBuilder()
     .withRivalAssets()
     .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
       abilityIndex: 0,
+      strength: PartyMemberStrength.STRONG,
     })
     .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
     .withPokemonFromFilter((species) => species.isSingleStage() && species.baseTotal >= 450)
-    .withPokemonFromFilter((species) => species.baseTotal >= 540)
+    .withPokemonFromFilter((species) => species.baseTotal >= 540, {
+      strength: [PartyMemberStrength.AVERAGE, PartyMemberStrength.WEAK],
+    })
     .build(),
   [TrainerType.RIVAL_4]: new TrainerConfigBuilder()
     .withRivalAssets()
     .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
       abilityIndex: 0,
+      strength: PartyMemberStrength.STRONG,
     })
     .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
     .withPokemonFromFilter((species) => species.isSingleStage() && species.baseTotal >= 450)
-    .withPokemonFromFilter((species) => species.baseTotal >= 540)
+    .withPokemonFromFilter((species) => species.baseTotal >= 540, {
+      count: 2,
+      strength: PartyMemberStrength.WEAK,
+    })
     .build(),
   [TrainerType.RIVAL_5]: new TrainerConfigBuilder()
     .withRivalAssets()
@@ -565,16 +577,18 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
       abilityIndex: 0,
       boss: true,
       bossSegments: 2,
+      strength: PartyMemberStrength.STRONG,
     })
     .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
     .withPokemonFromFilter((species) => species.isSingleStage() && species.baseTotal >= 450)
-    .withPokemonFromFilter((species) => species.baseTotal >= 540)
+    .withPokemonFromFilter((species) => species.baseTotal >= 540, { count: 2 })
     .withPokemon(SpeciesId.RAYQUAZA, {
       ignoreEvolution: true,
       shiny: true,
       variant: 1,
       boss: true,
       bossSegments: 3,
+      strength: PartyMemberStrength.STRONG,
       postProcess: (p) => {
         p.pokeball = PokeballType.MASTER_BALL;
       },
@@ -586,19 +600,21 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
       abilityIndex: 0,
       boss: true,
       bossSegments: 3,
+      strength: PartyMemberStrength.STRONG,
     })
     .withPokemonFromPool(RIVAL_SLOT_1_POKEMON, {
       boss: true,
       bossSegments: 2,
     })
     .withPokemonFromFilter((species) => species.isSingleStage() && species.baseTotal >= 450)
-    .withPokemonFromFilter((species) => species.baseTotal >= 540)
+    .withPokemonFromFilter((species) => species.baseTotal >= 540, { count: 2 })
     .withPokemon(SpeciesId.RAYQUAZA, {
       ignoreEvolution: true,
       formIndex: 1, // Mega Rayquaza
       shiny: true,
       variant: 1,
       boss: true,
+      strength: PartyMemberStrength.STRONGER,
       postProcess: (p) => {
         p.pokeball = PokeballType.MASTER_BALL;
       },

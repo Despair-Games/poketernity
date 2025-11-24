@@ -213,6 +213,11 @@ export class TrainerConfigBuilder {
     return this;
   }
 
+  /**
+   * Appends a Pokemon according to the properties of the given
+   * {@linkcode TrainerPartyPokemonConfig} to the Trainer's party.
+   * @returns `this`
+   */
   public withPokemonFromConfig({
     tieredSpeciesPool,
     speciesPool,
@@ -257,12 +262,16 @@ export class TrainerConfigBuilder {
     return this;
   }
 
+  /**
+   * Appends a Pokemon from a {@linkcode TieredSpeciesPool} to the Trainer's party.
+   * @returns `this`
+   * @todo Add odds for each tier to this doc
+   */
   public withPokemonFromTieredPool(
     speciesPool: TieredSpeciesPool,
     {
       speciesFilter,
       allowDuplicates = false,
-      allowLegendaries = false,
       strength = PartyMemberStrength.AVERAGE,
       count = 1,
       ignoreEvolution = false,
@@ -282,7 +291,7 @@ export class TrainerConfigBuilder {
       tieredSpeciesPool: speciesPool,
       speciesFilter,
       allowDuplicates,
-      allowLegendaries,
+      allowLegendaries: true,
       strength,
       count,
       ignoreEvolution,
@@ -301,13 +310,7 @@ export class TrainerConfigBuilder {
 
   /**
    * Appends a Pokemon of a set species to the Trainer's party.
-   * @param species - The {@linkcode SpeciesId} of the added Pokemon
-   * @param trainerSlot - (Default `TRAINER`) The {@linkcode TrainerSlot} to which the Pokemon belongs
-   * @param ignoreEvolution - (Default `false`) If `true`, the generated Pokemon's final species will be identical to
-   * `species` regardless of the Pokemon's level. Otherwise, the Pokemon's final species is set to
-   * a stage in its evolution line that is appropriate for its level.
-   * @param postProcess - (Optional) A callback that may be used to apply custom characteristics
-   * to the Pokemon after it has been generated.
+   * @returns `this`
    */
   public withPokemon(
     species: SpeciesId,
@@ -359,7 +362,6 @@ export class TrainerConfigBuilder {
     {
       speciesFilter,
       allowDuplicates = false,
-      allowLegendaries = false,
       strength = PartyMemberStrength.AVERAGE,
       count = 1,
       ignoreEvolution = false,
@@ -379,7 +381,7 @@ export class TrainerConfigBuilder {
       speciesPool: [...speciesPool],
       speciesFilter,
       allowDuplicates,
-      allowLegendaries,
+      allowLegendaries: true,
       strength,
       count,
       ignoreEvolution,

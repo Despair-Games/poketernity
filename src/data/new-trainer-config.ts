@@ -195,8 +195,9 @@ export interface TrainerPartyPokemonConfig extends ConfigurableEnemyPokemonOptio
   /**
    * The {@link PartyMemberStrength | strength} of the generated Pokemon.
    * Used to determine the Pokemon's level for the current wave.
+   * If set to an array, its length should be the same as {@linkcode count}
    */
-  strength: PartyMemberStrength;
+  strength: PartyMemberStrength | PartyMemberStrength[];
   /** The number of Pokemon to generate from this config */
   count: number;
   /**
@@ -216,8 +217,10 @@ export interface TrainerPartyPokemonConfig extends ConfigurableEnemyPokemonOptio
   postProcess?: (pokemon: EnemyPokemon) => void;
 }
 
-export type SpeciesPoolConfigOptions = Partial<Omit<TrainerPartyPokemonConfig, "tieredSpeciesPool" | "speciesPool">>;
-export type SpeciesConfigOptions = Partial<
-  Omit<SpeciesPoolConfigOptions, "speciesFilter" | "allowDuplicates" | "allowLegendaries">
+export type SpeciesPoolConfigOptions = Partial<
+  Omit<TrainerPartyPokemonConfig, "tieredSpeciesPool" | "speciesPool" | "allowLegendaries">
 >;
-export type SpeciesFilterConfigOptions = Partial<Omit<SpeciesPoolConfigOptions, "speciesFilter">>;
+export type SpeciesConfigOptions = Partial<Omit<SpeciesPoolConfigOptions, "speciesFilter" | "allowDuplicates">>;
+export type SpeciesFilterConfigOptions = Partial<
+  Omit<TrainerPartyPokemonConfig, "tieredSpeciesPool" | "speciesPool" | "speciesFilter">
+>;
