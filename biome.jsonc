@@ -188,7 +188,8 @@
         "noImportCycles": "error", // overlaps with depcruiser but this will allow diagnostics to be shown in the IDE
         "useArraySortCompare": "error",
         "useFind": "error",
-        "noParametersOnlyUsedInRecursion": "error"
+        "noParametersOnlyUsedInRecursion": "error",
+        "useSpread": "error"
       },
       "performance": {
         "noNamespaceImport": "error",

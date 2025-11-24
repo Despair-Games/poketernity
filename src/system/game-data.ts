@@ -470,8 +470,9 @@ export class GameData {
     let timestamps = Object.keys(runHistoryData).map(Number);
 
     // Arbitrary limit of 25 entries per user --> Can increase or decrease
+    // TODO: Would something like `timestamps.sort(...).splice(RUN_HISTORY_LIMIT)` be better?
     while (timestamps.length >= RUN_HISTORY_LIMIT) {
-      const oldestTimestamp = Math.min.apply(Math, timestamps).toString();
+      const oldestTimestamp = Math.min(...timestamps).toString();
       delete runHistoryData[oldestTimestamp];
       timestamps = Object.keys(runHistoryData).map(Number);
     }
