@@ -439,7 +439,7 @@ export class Trainer extends Phaser.GameObjects.Container {
         species = battle.enemyParty[offset].species;
       } else {
         // If none of the above applies, pick a random species from the trainer's regular pool.
-        species = this.genNewPartyMemberSpecies(level, strength);
+        species = this.genNewPartyMemberSpecies(level);
       }
 
       const trainerSlot = !this.isDouble() || !(index % 2) ? TrainerSlot.TRAINER : TrainerSlot.TRAINER_PARTNER;
@@ -450,7 +450,7 @@ export class Trainer extends Phaser.GameObjects.Container {
     return ret;
   }
 
-  genNewPartyMemberSpecies(level: number, strength: PartyMemberStrength, attempt?: number): PokemonSpecies {
+  private genNewPartyMemberSpecies(level: number, attempt: number = 0): PokemonSpecies {
     const battle = globalScene.currentBattle;
     const template = this.getPartyTemplate();
 
@@ -468,7 +468,7 @@ export class Trainer extends Phaser.GameObjects.Container {
         tier = TrainerPoolTier.SUPER_RARE;
       }
       console.log("trainer pool tier:", enumValueToKey(TrainerPoolTier, tier));
-      while (!Object.hasOwn(this.config.speciesPools, tier) || !this.config.speciesPools[tier].length) {
+      while (!Object.hasOwn(this.config.speciesPools, tier) || this.config.speciesPools[tier].length === 0) {
         console.log(
           `Downgraded trainer Pokemon rarity tier from ${enumValueToKey(TrainerPoolTier, tier)} to ${enumValueToKey(TrainerPoolTier, (tier - 1) as TrainerPoolTier)}`,
         );
@@ -497,7 +497,7 @@ export class Trainer extends Phaser.GameObjects.Container {
       }
     }
 
-    if (!retry && this.config.specialtyTypes.length && !this.config.specialtyTypes.find((t) => ret.isOfType(t))) {
+    if (!retry && this.config.specialtyTypes.length > 0 && !this.config.specialtyTypes.find((t) => ret.isOfType(t))) {
       retry = true;
       console.log("Attempting reroll of species evolution to fit specialty type...");
       let evoAttempt = 0;
@@ -516,9 +516,9 @@ export class Trainer extends Phaser.GameObjects.Container {
       retry = true;
     }
 
-    if (retry && (attempt ?? 0) < 10) {
+    if (retry && attempt < 10) {
       console.log("Rerolling party member...");
-      ret = this.genNewPartyMemberSpecies(level, strength, (attempt ?? 0) + 1);
+      ret = this.genNewPartyMemberSpecies(level, attempt + 1);
     }
 
     return ret;

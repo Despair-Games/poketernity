@@ -186,7 +186,8 @@
         "noUnnecessaryConditions": "off", // TODO: enable when the false positives are fixed
         "noImportCycles": "error", // overlaps with depcruiser but this will allow diagnostics to be shown in the IDE
         "useArraySortCompare": "error",
-        "useFind": "error"
+        "useFind": "error",
+        "noParametersOnlyUsedInRecursion": "error"
       },
       "performance": {
         "noNamespaceImport": "error",
