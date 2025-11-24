@@ -1,7 +1,14 @@
 import { globalScene } from "#app/global-scene";
 import { LEVEL_CAP_SCALE_FACTOR } from "#constants/game-constants";
 import { getLevelForWaveFunc } from "#data/exp";
+import type { TrainerPartyPokemonConfig } from "#data/new-trainer-config";
 import { PartyMemberStrength } from "#enums/party-member-strength";
+import { SpeciesId } from "#enums/species-id";
+
+export function getPartyPokemonSpecies(_config: TrainerPartyPokemonConfig): SpeciesId {
+  // TODO: Fill this in
+  return SpeciesId.MAGIKARP;
+}
 
 /**
  * @param strength - The {@linkcode PartyMemberStrength} of a generated Pokemon

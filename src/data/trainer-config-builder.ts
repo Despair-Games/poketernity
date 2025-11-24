@@ -70,13 +70,9 @@ export class TrainerConfigBuilder {
 
     const requiredGenderMappedGeneratorKeys = ["name", "title", "spriteKey"] as const;
     for (const gender of this.possibleGenders) {
-      if (gender === TrainerGender.DEFAULT) {
-        continue;
-      }
-
       for (const k of requiredGenderMappedGeneratorKeys) {
         // We know `config[k]` is defined based on default values
-        if (config[k]![gender] == null && config[k]![TrainerGender.DEFAULT] == null) {
+        if (config[k]![gender] == null) {
           console.error(`${k} does not have a matching generator for supported gender ${gender}!`);
           return false;
         }
@@ -84,11 +80,7 @@ export class TrainerConfigBuilder {
 
       // This should be defined based on default values
       const dialogueSpriteKey = config.dialogueSpriteKey!;
-      if (
-        Object.keys(dialogueSpriteKey).length > 0
-        && dialogueSpriteKey[gender] == null
-        && dialogueSpriteKey[TrainerGender.DEFAULT] == null
-      ) {
+      if (Object.keys(dialogueSpriteKey).length > 0 && dialogueSpriteKey[gender] == null) {
         console.error(`dialogueSpriteKey has a defined generator, but not for supported gender ${gender}!`);
         return false;
       }
@@ -127,7 +119,7 @@ export class TrainerConfigBuilder {
    * @param gender - The {@linkcode TrainerGender} under which the name is assigned
    * @returns `this`
    */
-  public withFixedName(name: string, gender: TrainerGender = TrainerGender.DEFAULT): this {
+  public withFixedName(name: string, gender: TrainerGender = TrainerGender.MALE): this {
     this.possibleGenders.add(gender);
     this.config.name![gender] = () => name;
     return this;
@@ -140,7 +132,7 @@ export class TrainerConfigBuilder {
    * @param gender - The {@linkcode TrainerGender} under which the name is assigned
    * @returns `this`
    */
-  public withNameFromPool(names: string[], gender: TrainerGender = TrainerGender.DEFAULT): this {
+  public withNameFromPool(names: string[], gender: TrainerGender = TrainerGender.MALE): this {
     this.possibleGenders.add(gender);
     this.config.name![gender] = () => randSeedItem(names);
     return this;
@@ -152,7 +144,7 @@ export class TrainerConfigBuilder {
    * @param gender - The {@linkcode TrainerGender} under which the title is assigned
    * @returns `this`
    */
-  public withTitle(title: string, gender: TrainerGender = TrainerGender.DEFAULT): this {
+  public withTitle(title: string, gender: TrainerGender = TrainerGender.MALE): this {
     this.possibleGenders.add(gender);
     this.config.title![gender] = () => title;
     return this;
@@ -164,7 +156,7 @@ export class TrainerConfigBuilder {
    * @param gender - The {@linkcode TrainerGender} under which the sprite key is assigned
    * @returns `this`
    */
-  public withSpriteKey(spriteKey: string, gender: TrainerGender = TrainerGender.DEFAULT): this {
+  public withSpriteKey(spriteKey: string, gender: TrainerGender = TrainerGender.MALE): this {
     this.possibleGenders.add(gender);
     this.config.spriteKey![gender] = () => spriteKey;
     return this;
@@ -177,7 +169,7 @@ export class TrainerConfigBuilder {
    * @param gender - The {@linkcode TrainerGender} under which the sprite key is assigned
    * @returns `this`
    */
-  public withDialogueSpriteKey(spriteKey: string, gender: TrainerGender = TrainerGender.DEFAULT): this {
+  public withDialogueSpriteKey(spriteKey: string, gender: TrainerGender = TrainerGender.MALE): this {
     this.possibleGenders.add(gender);
     this.config.dialogueSpriteKey![gender] = () => spriteKey;
     return this;
