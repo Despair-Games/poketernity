@@ -13,13 +13,14 @@ import { MockText } from "#test/test-utils/mocks/mocks-container/mock-text";
 import { MockTexture } from "#test/test-utils/mocks/mocks-container/mock-texture";
 
 /**
- * Stub class for Phaser.Textures.TextureManager
+ * Stub class for {@linkcode Phaser.Textures.TextureManager}
  */
 export class MockTextureManager {
   private readonly textures: Map<string, any>;
+  // biome-ignore lint/correctness/noUnusedPrivateClassMembers: TODO: is this needed?
   private readonly scene: BattleScene;
-  public add;
-  public displayList;
+  public add; // Phaser.GameObjects.GameObjectFactory
+  public displayList: Phaser.GameObjects.DisplayList;
   public list: MockGameObject[] = [];
 
   constructor(scene: BattleScene) {
@@ -44,7 +45,7 @@ export class MockTextureManager {
     };
   }
 
-  container(x, y) {
+  container(x: number, y: number) {
     const container = new MockContainer(this, x, y);
     this.list.push(container);
     return container;
@@ -68,7 +69,7 @@ export class MockTextureManager {
    * Returns a mock texture
    * @param key
    */
-  get(key) {
+  get(key: string) {
     return new MockTexture(this, key, null);
   }
 
