@@ -184,7 +184,8 @@
         "noMisusedPromises": "warn", // TODO: refactor and make "error"
         "useExhaustiveSwitchCases": "error",
         "noUnnecessaryConditions": "off", // TODO: enable when the false positives are fixed
-        "noImportCycles": "error" // overlaps with depcruiser but this will allow diagnostics to be shown in the IDE
+        "noImportCycles": "error", // overlaps with depcruiser but this will allow diagnostics to be shown in the IDE
+        "useArraySortCompare": "error"
       },
       "performance": {
         "noNamespaceImport": "error",
