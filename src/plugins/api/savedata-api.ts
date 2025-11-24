@@ -28,9 +28,12 @@ export class SavedataApi extends ApiBase {
    */
   public async updateAll(bodyData: UpdateAllSavedataRequest) {
     try {
-      const rawBodyData = JSON.stringify(bodyData, (_k: any, v: any) =>
-        typeof v === "bigint" ? (v <= MAX_INT_ATTR_VALUE ? Number(v) : v.toString()) : v,
-      );
+      const rawBodyData = JSON.stringify(bodyData, (_k: any, v: any) => {
+        if (typeof v === "bigint") {
+          return v <= MAX_INT_ATTR_VALUE ? Number(v) : v.toString();
+        }
+        return v;
+      });
       const response = await this.doPost("/savedata/updateall", rawBodyData);
       return await response.text();
     } catch (err) {

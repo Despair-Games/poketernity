@@ -15,19 +15,21 @@ export class TestDialogueUiHandler extends FormModalUiHandler {
   protected override setup() {
     super.setup();
 
-    const flattenKeys = (object?: any, topKey?: string, middleKey?: string[]): any[] => {
-      return Object.keys(object ?? {})
+    const flattenKeys = (i18nObject: object = {}, topKey?: string, middleKey?: string[]): any[] => {
+      return Object.keys(i18nObject)
         .map((t, i) => {
-          const value = Object.values(object)[i];
+          const value = Object.values(i18nObject)[i];
 
           if (typeof value === "object" && value != null) {
             // We check for not null or undefined here because if the language json file has a null key,
             // the typeof will still be an object, but that object will be null, causing issues.
             // If the value is an object, execute the same process.
 
-            return flattenKeys(value, topKey ?? t, topKey ? (middleKey ? [...middleKey, t] : [t]) : undefined).filter(
-              (t2) => t2.length > 0,
-            );
+            let midKey: string[] | undefined;
+            if (topKey) {
+              midKey = middleKey ? [...middleKey, t] : [t];
+            }
+            return flattenKeys(value, topKey ?? t, midKey).filter((t2) => t2.length > 0);
           }
           if (typeof value === "string" || value == null) {
             // We check for null or undefined here as per above - the typeof is still an object

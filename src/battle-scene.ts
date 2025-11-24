@@ -1846,9 +1846,11 @@ export class BattleScene extends SceneBase {
   updateUIPositions(): void {
     const enemyModifierCount = this.enemyModifiers.filter((m) => m.isIconVisible()).length;
     const biomeWaveTextHeight = this.biomeWaveText.getBottomLeft().y - this.biomeWaveText.getTopLeft().y;
-    this.biomeWaveText.setY(
-      -GAME_HEIGHT + (enemyModifierCount ? (enemyModifierCount <= 12 ? 15 : 24) : 0) + biomeWaveTextHeight / 2,
-    );
+    let biomeWaveTextYModifier = 0;
+    if (enemyModifierCount) {
+      biomeWaveTextYModifier = enemyModifierCount <= 12 ? 15 : 24;
+    }
+    this.biomeWaveText.setY(-GAME_HEIGHT + biomeWaveTextYModifier + biomeWaveTextHeight / 2);
     this.moneyText.setY(this.biomeWaveText.y + 10);
     this.scoreText.setY(this.moneyText.y + 10);
     [this.luckLabelText, this.luckText].map((l) =>
@@ -1873,9 +1875,12 @@ export class BattleScene extends SceneBase {
     let scoreIncrease =
       enemy.getSpeciesForm().getBaseExp()
       * (enemy.level / this.getMaxExpLevel())
-      * ((enemy.ivs.reduce((iv: number, total: number) => (total += iv), 0) / 93) * 0.2 + 0.8);
+      * ((enemy.ivs.reduce((iv: number, total: number) => total + iv, 0) / 93) * 0.2 + 0.8);
     this.findModifiers((m) => m.isPokemonHeldItemModifier() && m.pokemonId === enemy.id, false).map(
-      (m) => (scoreIncrease *= (m as PokemonHeldItemModifier).getScoreMultiplier()),
+      (m: PokemonHeldItemModifier) => {
+        scoreIncrease *= m.getScoreMultiplier();
+        return scoreIncrease;
+      },
     );
     if (enemy.boss) {
       scoreIncrease *= Math.sqrt(enemy.bossSegments);
