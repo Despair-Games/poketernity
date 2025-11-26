@@ -79,9 +79,8 @@ describe("Ability - Guts", () => {
     expect(player).toHaveBattlerTag(BattlerTagType.CONFUSED);
   });
 
-  it.each(
-    nonVolatileStatusEffects,
-  )("should apply a 1.5x attack boost with '%s' status effect", async (_name, statusEffect) => {
+  it.each(nonVolatileStatusEffects)(//
+  "should apply a 1.5x attack boost with '%s' status effect", async (_name, statusEffect) => {
     const { override, classicMode, field, move } = game;
     override.statusEffect(statusEffect);
 

@@ -77,9 +77,8 @@ describe("Ability - Marvel Scale", () => {
     expect(player).toHaveEffectiveStat(Stat.DEF, playerDef);
   });
 
-  it.each(nonVolatileStatusEffects)("should apply a 1.5x defense boost with $statusEffectName status effect", async ({
-    statusEffectId,
-  }) => {
+  it.each(nonVolatileStatusEffects)(//
+  "should apply a 1.5x defense boost with $statusEffectName status effect", async ({ statusEffectId }) => {
     const { override, classicMode, field } = game;
     override.statusEffect(statusEffectId);
 
