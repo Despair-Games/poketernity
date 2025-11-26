@@ -101,29 +101,30 @@ describe("Moves - Spectral Thief", () => {
     expect(enemy.waveData.abilitiesApplied.includes(AbilityId.CLEAR_BODY)).toBeFalsy();
   });
 
+  // biome-ignore format: prefer pre-2.3.6 formatting
   it.each([
     { abilityName: "Simple", abilityId: AbilityId.SIMPLE, multiplier: 2 },
     { abilityName: "Contrary", abilityId: AbilityId.CONTRARY, multiplier: -1 },
-  ])("$abilityName should multiply the stolen stat stages from this effect by $multiplier", async ({
-    abilityId,
-    multiplier,
-  }) => {
-    game.override.ability(abilityId);
+  ])(
+    "$abilityName should multiply the stolen stat stages from this effect by $multiplier",
+    async ({ abilityId, multiplier }) => {
+      game.override.ability(abilityId);
 
-    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
+      await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
-    const player = game.scene.getPlayerPokemon()!;
-    const enemy = game.scene.getEnemyPokemon()!;
+      const player = game.scene.getPlayerPokemon()!;
+      const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(MoveId.SPECTRAL_THIEF);
-    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+      game.move.select(MoveId.SPECTRAL_THIEF);
+      game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
-    await game.phaseInterceptor.to("PostActionPhase");
-    await game.phaseInterceptor.to("MoveEffectPhase");
+      await game.phaseInterceptor.to("PostActionPhase");
+      await game.phaseInterceptor.to("MoveEffectPhase");
 
-    expect(player.getStatStage(Stat.DEF)).toBe(2 * multiplier);
-    expect(enemy.getStatStage(Stat.DEF)).toBe(0);
-  });
+      expect(player.getStatStage(Stat.DEF)).toBe(2 * multiplier);
+      expect(enemy.getStatStage(Stat.DEF)).toBe(0);
+    },
+  );
 
   it("should not activate Defiant when stealing stat stages", async () => {
     game.override.enemyAbility(AbilityId.DEFIANT);

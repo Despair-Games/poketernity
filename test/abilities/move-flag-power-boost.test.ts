@@ -32,6 +32,7 @@ describe("Abilities - Move Flag Power Boost Ability Attr", () => {
   });
 
   // Note: All affected moves have been verified to have the flag required by all_moves
+  // biome-ignore format: prefer pre-2.3.6 formatting
   it.each([
     {
       ability: AbilityId.MEGA_LAUNCHER,
@@ -82,24 +83,21 @@ describe("Abilities - Move Flag Power Boost Ability Attr", () => {
       moveFlag: MoveFlags.SLICING_MOVE,
       factor: 1.5,
     },
-  ])("$abilityName should boost the damage of specific moves by a factor of $factor", async ({
-    ability,
-    moveId: move,
-    moveFlag,
-    factor,
-  }) => {
-    game.override.moveset(move).ability(ability);
-    await game.classicMode.startBattle(SpeciesId.FEEBAS);
-    const playerPokemon = game.field.getPlayerPokemon();
-    const moveUsed = allMoves.get(move);
-    vi.spyOn(moveUsed, "calculateBattlePower");
+  ])(
+    "$abilityName should boost the damage of specific moves by a factor of $factor",
+    async ({ ability, moveId: move, moveFlag, factor }) => {
+      game.override.moveset(move).ability(ability);
+      await game.classicMode.startBattle(SpeciesId.FEEBAS);
+      const playerPokemon = game.field.getPlayerPokemon();
+      const moveUsed = allMoves.get(move);
+      vi.spyOn(moveUsed, "calculateBattlePower");
 
-    game.move.select(move);
-    await game.move.forceHit();
-    await game.toEndOfTurn();
-    // @ts-expect-error - `hasFlag()` is private but we want to validate the flag is set
-    expect(moveUsed.hasFlag(moveFlag)).toBe(true);
-    expect(moveUsed.checkFlag(moveFlag, playerPokemon)).toBe(true);
-    expect(moveUsed.calculateBattlePower).toHaveLastReturnedWith(moveUsed.power * factor);
-  });
+      game.move.select(move);
+      await game.move.forceHit();
+      await game.toEndOfTurn();
+      expect(moveUsed["hasFlag"](moveFlag)).toBe(true);
+      expect(moveUsed.checkFlag(moveFlag, playerPokemon)).toBe(true);
+      expect(moveUsed.calculateBattlePower).toHaveLastReturnedWith(moveUsed.power * factor);
+    },
+  );
 });

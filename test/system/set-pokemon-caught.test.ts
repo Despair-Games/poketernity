@@ -572,6 +572,7 @@ describe("Dex Data - Set Pokemon caught", () => {
     expect(lycanrocDexData.caughtAttr & gameData.getFormAttr(2)).toBeFalsy(); // midnight
   });
 
+  // biome-ignore format: prefer pre-2.3.6 formatting
   it.each([
     {
       caughtFormIndex: 4,
@@ -585,12 +586,9 @@ describe("Dex Data - Set Pokemon caught", () => {
       unlockedFormIndex: 3,
       unlockedFormName: "10% Forme Power Construct",
     },
-  ])("should unlock $unlockedFormName when catching $caughtFormName Zygarde", async ({
-    caughtFormIndex,
-    caughtFormName,
-    unlockedFormIndex,
-    unlockedFormName,
-  }) => {
+  ])(
+    "should unlock $unlockedFormName when catching $caughtFormName Zygarde",
+    async ({ caughtFormIndex, caughtFormName, unlockedFormIndex, unlockedFormName }) => {
       await game.scene.initStarterColors();
       const species = getPokemonSpecies(SpeciesId.ZYGARDE);
       const zygardeDexData = gameData.dexData[species.speciesId];
@@ -615,5 +613,6 @@ describe("Dex Data - Set Pokemon caught", () => {
 
       expect(zygardeDexData.caughtAttr & gameData.getFormAttr(unlockedFormIndex)).toBeTruthy();
       expect(zygardeDexData.caughtAttr & gameData.getFormAttr(caughtFormIndex)).toBeFalsy();
-  });
+    },
+  );
 });
