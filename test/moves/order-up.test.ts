@@ -44,31 +44,31 @@ describe("Moves - Order Up", () => {
     { formIndex: 0, formName: "Curly", stat: Stat.ATK, statName: "Attack" },
     { formIndex: 1, formName: "Droopy", stat: Stat.DEF, statName: "Defense" },
     { formIndex: 2, formName: "Stretchy", stat: Stat.SPD, statName: "Speed" },
-  ])(
-    "should raise the user's $statName when the user is commanded by a $formName Tatsugiri",
-    async ({ formIndex, stat }) => {
-      game.override.starterForms({ [SpeciesId.TATSUGIRI]: formIndex });
+  ])("should raise the user's $statName when the user is commanded by a $formName Tatsugiri", async ({
+    formIndex,
+    stat,
+  }) => {
+    game.override.starterForms({ [SpeciesId.TATSUGIRI]: formIndex });
 
-      await game.classicMode.startBattle(SpeciesId.TATSUGIRI, SpeciesId.DONDOZO);
+    await game.classicMode.startBattle(SpeciesId.TATSUGIRI, SpeciesId.DONDOZO);
 
-      const [tatsugiri, dondozo] = game.scene.getPlayerField();
+    const [tatsugiri, dondozo] = game.scene.getPlayerField();
 
-      expect(game.scene.triggerPokemonBattleAnim).toHaveBeenLastCalledWith(tatsugiri, PokemonAnimType.COMMANDER_APPLY);
-      expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeDefined();
+    expect(game.scene.triggerPokemonBattleAnim).toHaveBeenLastCalledWith(tatsugiri, PokemonAnimType.COMMANDER_APPLY);
+    expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeDefined();
 
-      game.move.select(MoveId.ORDER_UP, 1, BattlerIndex.ENEMY);
+    game.move.select(MoveId.ORDER_UP, 1, BattlerIndex.ENEMY);
 
-      await game.phaseInterceptor.to("TurnStartPhase", false);
+    await game.phaseInterceptor.to("TurnStartPhase", false);
 
-      const { turnManager } = game.scene.currentBattle;
-      expect(turnManager.findCommandFromPokemon(tatsugiri)).toBeUndefined();
+    const { turnManager } = game.scene.currentBattle;
+    expect(turnManager.findCommandFromPokemon(tatsugiri)).toBeUndefined();
 
-      await game.toEndOfTurn();
+    await game.toEndOfTurn();
 
-      const affectedStats: EffectiveStat[] = [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD];
-      affectedStats.forEach((st) => expect(dondozo.getStatStage(st)).toBe(st === stat ? 3 : 2));
-    },
-  );
+    const affectedStats: EffectiveStat[] = [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD];
+    affectedStats.forEach((st) => expect(dondozo.getStatStage(st)).toBe(st === stat ? 3 : 2));
+  });
 
   it("should be boosted by Sheer Force while still applying a stat boost", async () => {
     game.override.passiveAbility(AbilityId.SHEER_FORCE).starterForms({ [SpeciesId.TATSUGIRI]: 0 });

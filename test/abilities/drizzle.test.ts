@@ -120,6 +120,5 @@ describe("Ability - Drizzle", () => {
       }
 
       expect(game).not.toHaveWeather(WeatherType.RAIN);
-    },
-  );
+  });
 });

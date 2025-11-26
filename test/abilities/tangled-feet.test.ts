@@ -138,30 +138,31 @@ describe("Ability - Tangled Feet", () => {
         weatherType: WeatherType.HAIL,
         passiveAbilityMultiplier: 1.2,
       },
-    ])(
-      "should stack with $passiveAbilityName Ability",
-      async ({ passiveAbilityId, weatherType, passiveAbilityMultiplier }) => {
-        const { override, classicMode, move, field } = game;
-        override.passiveAbility(passiveAbilityId).weather(weatherType);
-        await classicMode.startBattle(SpeciesId.FEEBAS);
-        const playerPkm = field.getPlayerPokemon();
-        const enemyPkm = field.getEnemyPokemon();
-        vi.spyOn(enemyPkm, "getAccuracyMultiplier");
+    ])("should stack with $passiveAbilityName Ability", async ({
+      passiveAbilityId,
+      weatherType,
+      passiveAbilityMultiplier,
+    }) => {
+      const { override, classicMode, move, field } = game;
+      override.passiveAbility(passiveAbilityId).weather(weatherType);
+      await classicMode.startBattle(SpeciesId.FEEBAS);
+      const playerPkm = field.getPlayerPokemon();
+      const enemyPkm = field.getEnemyPokemon();
+      vi.spyOn(enemyPkm, "getAccuracyMultiplier");
 
-        game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-        move.use(MoveId.SPLASH);
-        await move.selectEnemyMove(MoveId.CONFUSE_RAY);
-        await move.forceHit();
-        await game.toEndOfTurn();
-        move.use(MoveId.SPLASH);
-        await move.selectEnemyMove(MoveId.TACKLE);
-        await game.toEndOfTurn();
+      game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+      move.use(MoveId.SPLASH);
+      await move.selectEnemyMove(MoveId.CONFUSE_RAY);
+      await move.forceHit();
+      await game.toEndOfTurn();
+      move.use(MoveId.SPLASH);
+      await move.selectEnemyMove(MoveId.TACKLE);
+      await game.toEndOfTurn();
 
-        expect(playerPkm).toHaveBattlerTag(BattlerTagType.CONFUSED);
-        expect(enemyPkm.getAccuracyMultiplier).toHaveLastReturnedWith(
-          1 / passiveAbilityMultiplier / tangledFeetMultiplier,
-        );
-      },
-    );
+      expect(playerPkm).toHaveBattlerTag(BattlerTagType.CONFUSED);
+      expect(enemyPkm.getAccuracyMultiplier).toHaveLastReturnedWith(
+        1 / passiveAbilityMultiplier / tangledFeetMultiplier,
+      );
+    });
   });
 });

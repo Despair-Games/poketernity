@@ -97,26 +97,26 @@ describe("Moves - Conversion 2", () => {
       abilityName: "Refrigerate",
       resistingTypes: [ElementalType.STEEL, ElementalType.FIRE, ElementalType.ICE],
     },
-  ])(
-    "should change the user's type to resist $moveType if the target's last move was affected by $abilityName",
-    async ({ ability, resistingTypes }) => {
-      game.override.enemyAbility(ability);
+  ])("should change the user's type to resist $moveType if the target's last move was affected by $abilityName", async ({
+    ability,
+    resistingTypes,
+  }) => {
+    game.override.enemyAbility(ability);
 
-      await game.classicMode.startBattle(SpeciesId.FEEBAS);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
-      const player = game.field.getPlayerPokemon();
+    const player = game.field.getPlayerPokemon();
 
-      game.move.use(MoveId.CONVERSION_2);
-      await game.move.forceEnemyMove(MoveId.TACKLE);
-      game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.move.use(MoveId.CONVERSION_2);
+    await game.move.forceEnemyMove(MoveId.TACKLE);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
-      await game.toEndOfTurn();
+    await game.toEndOfTurn();
 
-      const playerTypes = player.getTypes();
-      expect(playerTypes).toHaveLength(1);
-      expect(playerTypes[0]).toBeOneOf(resistingTypes);
-    },
-  );
+    const playerTypes = player.getTypes();
+    expect(playerTypes).toHaveLength(1);
+    expect(playerTypes[0]).toBeOneOf(resistingTypes);
+  });
 
   it("should change the user's type according to the target move's changed type, if applicable", async () => {
     await game.classicMode.startBattle(SpeciesId.FEEBAS);

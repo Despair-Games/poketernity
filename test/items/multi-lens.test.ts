@@ -38,26 +38,26 @@ describe.todo("Items - Multi Lens", () => {
   it.each([
     { stackCount: 1, firstHitDamage: 0.75 },
     { stackCount: 2, firstHitDamage: 0.5 },
-  ])(
-    "$stackCount count: should deal {$firstHitDamage}x damage on the first hit, then hit $stackCount times for 0.25x",
-    async ({ stackCount, firstHitDamage }) => {
-      await game.classicMode.startBattle(SpeciesId.MAGIKARP);
+  ])("$stackCount count: should deal {$firstHitDamage}x damage on the first hit, then hit $stackCount times for 0.25x", async ({
+    stackCount,
+    firstHitDamage,
+  }) => {
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
-      const enemyPokemon = game.scene.getEnemyPokemon()!;
-      const spy = vi.spyOn(enemyPokemon, "getAttackDamage");
-      vi.spyOn(enemyPokemon, "getBaseDamage").mockReturnValue(100);
+    const enemyPokemon = game.scene.getEnemyPokemon()!;
+    const spy = vi.spyOn(enemyPokemon, "getAttackDamage");
+    vi.spyOn(enemyPokemon, "getBaseDamage").mockReturnValue(100);
 
-      game.move.select(MoveId.TACKLE);
-      game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.move.select(MoveId.TACKLE);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
-      await game.phaseInterceptor.to("PostActionPhase");
-      const damageResults = spy.mock.results.map((result) => result.value?.damage);
+    await game.phaseInterceptor.to("PostActionPhase");
+    const damageResults = spy.mock.results.map((result) => result.value?.damage);
 
-      expect(damageResults).toHaveLength(1 + stackCount);
-      expect(damageResults[0]).toBe(firstHitDamage * 100);
-      damageResults.slice(1).forEach((dmg) => expect(dmg).toBe(25));
-    },
-  );
+    expect(damageResults).toHaveLength(1 + stackCount);
+    expect(damageResults[0]).toBe(firstHitDamage * 100);
+    damageResults.slice(1).forEach((dmg) => expect(dmg).toBe(25));
+  });
 
   it("should stack additively with Parental Bond", async () => {
     game.override.ability(AbilityId.PARENTAL_BOND);

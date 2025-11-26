@@ -39,19 +39,20 @@ describe.todo("UI - Battle Info", () => {
       .enemySpecies(SpeciesId.CATERPIE);
   });
 
-  it.each([ExpGainSpeed.FAST, ExpGainSpeed.FASTER, ExpGainSpeed.SKIP])(
-    "should increase exp gains animation by 2^%i",
-    async (expGainSpeed) => {
-      game.settings.expGainSpeed(expGainSpeed);
-      vi.spyOn(Math, "pow");
+  it.each([
+    ExpGainSpeed.FAST,
+    ExpGainSpeed.FASTER,
+    ExpGainSpeed.SKIP,
+  ])("should increase exp gains animation by 2^%i", async (expGainSpeed) => {
+    game.settings.expGainSpeed(expGainSpeed);
+    vi.spyOn(Math, "pow");
 
-      await game.classicMode.startBattle(SpeciesId.CHARIZARD);
+    await game.classicMode.startBattle(SpeciesId.CHARIZARD);
 
-      game.move.select(MoveId.SPLASH);
-      await game.faintOpponents();
-      await game.phaseInterceptor.to("ExpPhase", true);
+    game.move.select(MoveId.SPLASH);
+    await game.faintOpponents();
+    await game.phaseInterceptor.to("ExpPhase", true);
 
-      expect(Math.pow).not.toHaveBeenCalledWith(2, expGainSpeed);
-    },
-  );
+    expect(Math.pow).not.toHaveBeenCalledWith(2, expGainSpeed);
+  });
 });

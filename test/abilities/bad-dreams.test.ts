@@ -111,28 +111,25 @@ describe("Ability - Bad Dreams", () => {
     ["Hydration", AbilityId.HYDRATION, WeatherType.RAIN],
     ["Shed Skin", AbilityId.SHED_SKIN, WeatherType.NONE],
     ["Healer", AbilityId.HEALER, WeatherType.NONE],
-  ])(
-    "should not damage if enemy is woken up by '%s' ability in the same turn",
-    async (_abilityName, abilityId, weatherType) => {
-      const { override, classicMode, field, move } = game;
-      override.weather(weatherType).battleType("double").enemyAbility(abilityId);
+  ])("should not damage if enemy is woken up by '%s' ability in the same turn", async (_abilityName, abilityId, weatherType) => {
+    const { override, classicMode, field, move } = game;
+    override.weather(weatherType).battleType("double").enemyAbility(abilityId);
 
-      await classicMode.runToSummon(SpeciesId.DARKRAI);
-      for (const enemyPkm of game.scene.getEnemyParty()) {
-        vi.spyOn(enemyPkm, "randSeedInt").mockReturnValueOnce(0); // Make sure that Shed Skin/Healer always triggers.
-      }
-      const enemy = field.getEnemyPokemon();
-      enemy.trySetStatus(StatusEffect.SLEEP);
+    await classicMode.runToSummon(SpeciesId.DARKRAI);
+    for (const enemyPkm of game.scene.getEnemyParty()) {
+      vi.spyOn(enemyPkm, "randSeedInt").mockReturnValueOnce(0); // Make sure that Shed Skin/Healer always triggers.
+    }
+    const enemy = field.getEnemyPokemon();
+    enemy.trySetStatus(StatusEffect.SLEEP);
 
-      expect(enemy).toHaveStatusEffect(StatusEffect.SLEEP);
+    expect(enemy).toHaveStatusEffect(StatusEffect.SLEEP);
 
-      move.use(MoveId.SPLASH);
-      await game.toEndOfTurn();
+    move.use(MoveId.SPLASH);
+    await game.toEndOfTurn();
 
-      expect(enemy).not.toHaveStatusEffect(StatusEffect.SLEEP);
-      expect(enemy).toHaveFullHp();
-    },
-  );
+    expect(enemy).not.toHaveStatusEffect(StatusEffect.SLEEP);
+    expect(enemy).toHaveFullHp();
+  });
 
   it("should damage if enemy is not woken up by 'Hydration' ability due to rain ending in the same turn", async () => {
     const { override, classicMode, field, move } = game;
@@ -155,26 +152,23 @@ describe("Ability - Bad Dreams", () => {
   it.each([
     ["Shed Skin", AbilityId.SHED_SKIN, WeatherType.NONE],
     ["Healer", AbilityId.HEALER, WeatherType.NONE],
-  ])(
-    "should damage if enemy is not woken up by '%s' ability in the same turn",
-    async (_abilityName, abilityId, weatherType) => {
-      const { override, classicMode, field, move } = game;
-      override.weather(weatherType).battleType("double").enemyAbility(abilityId);
+  ])("should damage if enemy is not woken up by '%s' ability in the same turn", async (_abilityName, abilityId, weatherType) => {
+    const { override, classicMode, field, move } = game;
+    override.weather(weatherType).battleType("double").enemyAbility(abilityId);
 
-      await classicMode.runToSummon(SpeciesId.DARKRAI);
-      for (const pokemon of game.scene.getEnemyParty()) {
-        vi.spyOn(pokemon, "randSeedInt").mockReturnValueOnce(3); // Make sure that Shed Skin/Healer never triggers.
-      }
-      const enemy = field.getEnemyPokemon();
-      enemy.trySetStatus(StatusEffect.SLEEP, false, null, Number.MAX_SAFE_INTEGER);
+    await classicMode.runToSummon(SpeciesId.DARKRAI);
+    for (const pokemon of game.scene.getEnemyParty()) {
+      vi.spyOn(pokemon, "randSeedInt").mockReturnValueOnce(3); // Make sure that Shed Skin/Healer never triggers.
+    }
+    const enemy = field.getEnemyPokemon();
+    enemy.trySetStatus(StatusEffect.SLEEP, false, null, Number.MAX_SAFE_INTEGER);
 
-      expect(enemy).toHaveStatusEffect(StatusEffect.SLEEP);
+    expect(enemy).toHaveStatusEffect(StatusEffect.SLEEP);
 
-      move.use(MoveId.SPLASH);
-      await game.toEndOfTurn();
+    move.use(MoveId.SPLASH);
+    await game.toEndOfTurn();
 
-      expect(enemy).toHaveStatusEffect(StatusEffect.SLEEP);
-      expect(enemy).toHaveTakenDamage(enemy.getMaxHp() / 8);
-    },
-  );
+    expect(enemy).toHaveStatusEffect(StatusEffect.SLEEP);
+    expect(enemy).toHaveTakenDamage(enemy.getMaxHp() / 8);
+  });
 });

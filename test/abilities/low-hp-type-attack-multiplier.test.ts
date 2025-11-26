@@ -37,69 +37,69 @@ describe("Abilities - Overgrow/Blaze/Torrent/Swarm", () => {
     { abilityName: "Blaze", ability: AbilityId.BLAZE, moveId: MoveId.FIRE_FANG },
     { abilityName: "Torrent", ability: AbilityId.TORRENT, moveId: MoveId.AQUA_JET },
     { abilityName: "Swarm", ability: AbilityId.SWARM, moveId: MoveId.BUG_BITE },
-  ])(
-    "$abilityName should multiply the user's attack stat by 1.5 if it uses a physical move of the relevant type at low HP",
-    async ({ ability, moveId }) => {
-      game.override.ability(ability).moveset(moveId);
-      await game.classicMode.startBattle(SpeciesId.MAGIKARP);
-      const playerPokemon = game.scene.getPlayerPokemon()!;
-      playerPokemon.hp = playerPokemon.getMaxHp() * 0.33 - 1;
-      vi.spyOn(playerPokemon, "getEffectiveStat");
+  ])("$abilityName should multiply the user's attack stat by 1.5 if it uses a physical move of the relevant type at low HP", async ({
+    ability,
+    moveId,
+  }) => {
+    game.override.ability(ability).moveset(moveId);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
+    const playerPokemon = game.scene.getPlayerPokemon()!;
+    playerPokemon.hp = playerPokemon.getMaxHp() * 0.33 - 1;
+    vi.spyOn(playerPokemon, "getEffectiveStat");
 
-      game.move.select(moveId);
-      await game.move.forceHit();
-      await game.phaseInterceptor.to("PostActionPhase", false);
+    game.move.select(moveId);
+    await game.move.forceHit();
+    await game.phaseInterceptor.to("PostActionPhase", false);
 
-      expect(playerPokemon.getEffectiveStat).toHaveLastReturnedWith(Math.floor(playerPokemon.stats[Stat.ATK] * 1.5));
-    },
-  );
-
-  it.each([
-    { abilityName: "Overgrow", ability: AbilityId.OVERGROW, moveId: MoveId.ABSORB },
-    { abilityName: "Blaze", ability: AbilityId.BLAZE, moveId: MoveId.EMBER },
-    { abilityName: "Torrent", ability: AbilityId.TORRENT, moveId: MoveId.WATER_GUN },
-    { abilityName: "Swarm", ability: AbilityId.SWARM, moveId: MoveId.INFESTATION },
-  ])(
-    "$abilityName should multiply the user's sp. attack stat by 1.5 if it uses a special move of the relevant type at low HP",
-    async ({ ability, moveId }) => {
-      game.override.ability(ability).moveset(moveId);
-      await game.classicMode.startBattle(SpeciesId.MAGIKARP);
-      const playerPokemon = game.scene.getPlayerPokemon()!;
-      playerPokemon.hp = playerPokemon.getMaxHp() * 0.33 - 1;
-      vi.spyOn(playerPokemon, "getEffectiveStat");
-
-      game.move.select(moveId);
-      await game.move.forceHit();
-      await game.phaseInterceptor.to("PostActionPhase", false);
-
-      expect(playerPokemon.getEffectiveStat).toHaveLastReturnedWith(Math.floor(playerPokemon.stats[Stat.SPATK] * 1.5));
-    },
-  );
+    expect(playerPokemon.getEffectiveStat).toHaveLastReturnedWith(Math.floor(playerPokemon.stats[Stat.ATK] * 1.5));
+  });
 
   it.each([
     { abilityName: "Overgrow", ability: AbilityId.OVERGROW, moveId: MoveId.ABSORB },
     { abilityName: "Blaze", ability: AbilityId.BLAZE, moveId: MoveId.EMBER },
     { abilityName: "Torrent", ability: AbilityId.TORRENT, moveId: MoveId.WATER_GUN },
     { abilityName: "Swarm", ability: AbilityId.SWARM, moveId: MoveId.INFESTATION },
-  ])(
-    "$abilityName should not take effect if the ability-holder is above the HP threshold",
-    async ({ ability, moveId }) => {
-      game.override.ability(ability).moveset(moveId);
-      await game.classicMode.startBattle(SpeciesId.MAGIKARP);
-      const playerPokemon = game.scene.getPlayerPokemon()!;
-      vi.spyOn(playerPokemon, "getEffectiveStat");
+  ])("$abilityName should multiply the user's sp. attack stat by 1.5 if it uses a special move of the relevant type at low HP", async ({
+    ability,
+    moveId,
+  }) => {
+    game.override.ability(ability).moveset(moveId);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
+    const playerPokemon = game.scene.getPlayerPokemon()!;
+    playerPokemon.hp = playerPokemon.getMaxHp() * 0.33 - 1;
+    vi.spyOn(playerPokemon, "getEffectiveStat");
 
-      game.move.select(moveId);
-      await game.move.forceHit();
-      await game.phaseInterceptor.to("PostActionPhase", false);
+    game.move.select(moveId);
+    await game.move.forceHit();
+    await game.phaseInterceptor.to("PostActionPhase", false);
 
-      const statUsed =
-        playerPokemon.getMoveCategory(game.scene.getEnemyPokemon()!, allMoves.get(moveId)) === MoveCategory.PHYSICAL
-          ? Stat.ATK
-          : Stat.SPATK;
-      expect(playerPokemon.getEffectiveStat).toHaveLastReturnedWith(Math.floor(playerPokemon.stats[statUsed]));
-    },
-  );
+    expect(playerPokemon.getEffectiveStat).toHaveLastReturnedWith(Math.floor(playerPokemon.stats[Stat.SPATK] * 1.5));
+  });
+
+  it.each([
+    { abilityName: "Overgrow", ability: AbilityId.OVERGROW, moveId: MoveId.ABSORB },
+    { abilityName: "Blaze", ability: AbilityId.BLAZE, moveId: MoveId.EMBER },
+    { abilityName: "Torrent", ability: AbilityId.TORRENT, moveId: MoveId.WATER_GUN },
+    { abilityName: "Swarm", ability: AbilityId.SWARM, moveId: MoveId.INFESTATION },
+  ])("$abilityName should not take effect if the ability-holder is above the HP threshold", async ({
+    ability,
+    moveId,
+  }) => {
+    game.override.ability(ability).moveset(moveId);
+    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
+    const playerPokemon = game.scene.getPlayerPokemon()!;
+    vi.spyOn(playerPokemon, "getEffectiveStat");
+
+    game.move.select(moveId);
+    await game.move.forceHit();
+    await game.phaseInterceptor.to("PostActionPhase", false);
+
+    const statUsed =
+      playerPokemon.getMoveCategory(game.scene.getEnemyPokemon()!, allMoves.get(moveId)) === MoveCategory.PHYSICAL
+        ? Stat.ATK
+        : Stat.SPATK;
+    expect(playerPokemon.getEffectiveStat).toHaveLastReturnedWith(Math.floor(playerPokemon.stats[statUsed]));
+  });
 
   it.each([
     { abilityName: "Overgrow", ability: AbilityId.OVERGROW },

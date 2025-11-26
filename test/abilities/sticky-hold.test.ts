@@ -55,18 +55,17 @@ describe("Abilities - Sticky Hold", () => {
   // TODO: Enable this test, and add it to the above test block, once Corrosive Gas is implemented
   it.todo("should prevent the user from losing a held item when hit by the move 'CORROSIVE_GAS'", () => {});
 
-  it.each([AbilityId.MAGICIAN, AbilityId.PICKPOCKET].map((ability) => ({ ability, name: AbilityId[ability] })))(
-    "should prevent the user's held item from being stolen by the ability $name",
-    async ({ ability }) => {
-      game.override.ability(ability);
-      await game.classicMode.startBattle(SpeciesId.FEEBAS);
+  it.each(
+    [AbilityId.MAGICIAN, AbilityId.PICKPOCKET].map((ability) => ({ ability, name: AbilityId[ability] })),
+  )("should prevent the user's held item from being stolen by the ability $name", async ({ ability }) => {
+    game.override.ability(ability);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
-      game.move.use(MoveId.FALSE_SWIPE);
-      await game.move.forceEnemyMove(MoveId.FALSE_SWIPE);
-      await game.toNextTurn();
+    game.move.use(MoveId.FALSE_SWIPE);
+    await game.move.forceEnemyMove(MoveId.FALSE_SWIPE);
+    await game.toNextTurn();
 
-      const enemyPokemon = game.field.getEnemyPokemon();
-      expect(enemyPokemon.getHeldItems().length).toBe(1);
-    },
-  );
+    const enemyPokemon = game.field.getEnemyPokemon();
+    expect(enemyPokemon.getHeldItems().length).toBe(1);
+  });
 });
