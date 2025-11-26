@@ -59,8 +59,8 @@ describe("Moves - Parting Shot", () => {
     expect(game.scene.getPlayerField()[0].species.speciesId).toBe(SpeciesId.MURKROW);
   });
 
-  it.todo(// TODO: fix this bug to pass the test!
-  "Parting shot should fail if target is -6/-6 de-buffed", async () => {
+  // TODO: fix this bug to pass the test!
+  it.todo("Parting shot should fail if target is -6/-6 de-buffed", async () => {
     game.override.moveset([MoveId.PARTING_SHOT, MoveId.MEMENTO, MoveId.SPLASH]);
     await game.classicMode.startBattle(
       SpeciesId.MEOWTH,
@@ -105,8 +105,8 @@ describe("Moves - Parting Shot", () => {
     expect(game.scene.getPlayerField()[0].species.speciesId).toBe(SpeciesId.MURKROW);
   });
 
-  it.todo(// TODO: fix this bug to pass the test!
-  "Parting shot shouldn't allow switch out when mist is active", async () => {
+  // TODO: fix this bug to pass the test!
+  it.todo("Parting shot shouldn't allow switch out when mist is active", async () => {
     game.override.enemySpecies(SpeciesId.ALTARIA).enemyAbility(AbilityId.NONE).enemyMoveset([MoveId.MIST]);
     await game.classicMode.startBattle(SpeciesId.SNORLAX, SpeciesId.MEOWTH);
 
@@ -121,8 +121,8 @@ describe("Moves - Parting Shot", () => {
     expect(game.scene.getPlayerField()[0].species.speciesId).toBe(SpeciesId.MURKROW);
   });
 
-  it.todo(// TODO: fix this bug to pass the test!
-  "Parting shot shouldn't allow switch out against clear body ability", async () => {
+  // TODO: fix this bug to pass the test!
+  it.todo("Parting shot shouldn't allow switch out against clear body ability", async () => {
     game.override.enemySpecies(SpeciesId.TENTACOOL).enemyAbility(AbilityId.CLEAR_BODY);
     await game.classicMode.startBattle(SpeciesId.SNORLAX, SpeciesId.MEOWTH);
 
@@ -137,8 +137,8 @@ describe("Moves - Parting Shot", () => {
     expect(game.scene.getPlayerField()[0].species.speciesId).toBe(SpeciesId.MURKROW);
   });
 
-  it.todo(// TODO: fix this bug to pass the test!
-  "Parting shot should de-buff and not fail if no party available to switch - party size 1", async () => {
+  // TODO: fix this bug to pass the test!
+  it.todo("Parting shot should de-buff and not fail if no party available to switch - party size 1", async () => {
     await game.classicMode.startBattle(SpeciesId.MURKROW);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -152,8 +152,8 @@ describe("Moves - Parting Shot", () => {
     expect(game.scene.getPlayerField()[0].species.speciesId).toBe(SpeciesId.MURKROW);
   });
 
-  it.todo(// TODO: fix this bug to pass the test!
-  "Parting shot regularly not fail if no party available to switch - party fainted", async () => {
+  // TODO: fix this bug to pass the test!
+  it.todo("Parting shot regularly not fail if no party available to switch - party fainted", async () => {
     await game.classicMode.startBattle(SpeciesId.MURKROW, SpeciesId.MEOWTH);
     game.move.select(MoveId.SPLASH);
 
