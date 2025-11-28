@@ -1,7 +1,5 @@
-// biome-ignore lint/correctness/noUnusedImports: suppression needed until Biome 2.3.8 update PR is merged
 import type { DynamicPhaseManager } from "#app/dynamic-phase-manager";
 import type { Phase } from "#app/phase";
-// biome-ignore lint/correctness/noUnusedImports: suppression needed until Biome 2.3.8 update PR is merged
 import type { PhaseConditionFunc, PhaseKey, PhaseManager, PhaseMap } from "#types/phase-types";
 import type { NonEmptyArray } from "#types/utility-types";
 

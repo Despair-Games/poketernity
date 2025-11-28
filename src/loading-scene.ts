@@ -1,7 +1,3 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { UiWindowStyle } from "#enums/ui-window-style";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import { api } from "#api/api";
 import { CacheBustedLoaderPlugin } from "#app/plugins/cache-busted-loader-plugin";
 import { SceneBase } from "#app/scene-base";
@@ -51,7 +47,7 @@ export class LoadingScene extends SceneBase {
     this.loadImage("loading_bg", ImagesFolder.ARENAS);
     this.loadImage("logo");
 
-    /** UI Elements that change based on the {@linkcode UiWindowStyle} */
+    // UI Elements that change based on the UI Window Style
     for (const windowVariant of Object.values(WindowVariant)) {
       this.loadSpritesheet(`window${getWindowVariantSuffix(windowVariant)}`, ImagesFolder.UI_WINDOWS, 24, 24, {
         windowStyleDependant: true,

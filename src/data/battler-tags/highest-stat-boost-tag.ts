@@ -1,11 +1,8 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { HIGHEST_STAT_BOOST_TAG_TYPES } from "#constants/battler-tag-constants";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbilityBattlerTag } from "#battler-tags/ability-battler-tag";
 import type { BattlerTag } from "#battler-tags/battler-tag";
+import type { HIGHEST_STAT_BOOST_TAG_TYPES } from "#constants/battler-tag-constants";
 import { allAbilities } from "#data/data-lists";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import type { AbilityId } from "#enums/ability-id";

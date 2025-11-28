@@ -1,6 +1,4 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { LoadingScene } from "#app/loading-scene";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 export type SupportedLanguageKey = "en" | "es-ES" | "it" | "fr" | "de" | "pt-BR" | "zh-CN" | "zh-TW" | "ko" | "ja";
 

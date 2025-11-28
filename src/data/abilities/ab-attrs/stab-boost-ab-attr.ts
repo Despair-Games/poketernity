@@ -1,8 +1,5 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { AbilityId } from "#enums/ability-id";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import { AbAttr } from "#abilities/ab-attr";
+import type { AbilityId } from "#enums/ability-id";
 import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";

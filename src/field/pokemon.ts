@@ -1,12 +1,8 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { Battle } from "#app/battle";
-import type { BattleScene } from "#app/battle-scene";
-import type { FaintPhase } from "#phases/faint-phase";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import type { Ability } from "#abilities/ability";
 import { applyAbAttrs, getAbApplyFunc } from "#abilities/apply-ab-attrs";
 import type { AnySound } from "#app/audio-manager";
+import type { Battle } from "#app/battle";
+import type { BattleScene } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import { activeOverrides } from "#app/overrides";
 import { timedEventManager } from "#app/timed-event-manager";
@@ -146,6 +142,7 @@ import { VariableMoveCategoryAttr } from "#moves/variable-move-category-attr";
 import { VariableMoveTypeAttr } from "#moves/variable-move-type-attr";
 import { VariableMoveTypeChartAttr } from "#moves/variable-move-type-chart-attr";
 import { VariableMoveTypeMultiplierAttr } from "#moves/variable-move-type-multiplier-attr";
+import type { FaintPhase } from "#phases/faint-phase";
 import { settings } from "#system/settings-manager";
 import type { AbAttrKey, AbAttrMap, AbilityFilterOptions } from "#types/ability-types";
 import type { DamageCalculationResult, DamageResult, LevelMoves, TurnMove } from "#types/move-types";

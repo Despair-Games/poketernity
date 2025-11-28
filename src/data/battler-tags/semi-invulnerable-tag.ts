@@ -1,9 +1,6 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { SEMI_INVULNERABLE_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import { globalScene } from "#app/global-scene";
 import { BattlerTag } from "#battler-tags/battler-tag";
+import type { SEMI_INVULNERABLE_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { MoveId } from "#enums/move-id";

@@ -1,8 +1,5 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { ModifierTier } from "#enums/modifier-tier";
 import type { Item } from "#types/item";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import type { ObjectValues } from "#types/utility-types";
 
 /**

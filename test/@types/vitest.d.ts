@@ -1,7 +1,3 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { Pokemon } from "#field/pokemon";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import "vitest";
 
 import type { AbilityId } from "#enums/ability-id";
@@ -12,12 +8,13 @@ import type { EffectiveStat, PermanentStat, Stat } from "#enums/stat";
 import type { StatusEffect } from "#enums/status-effect";
 import type { TerrainType } from "#enums/terrain-type";
 import type { WeatherType } from "#enums/weather-type";
+import type { Pokemon } from "#field/pokemon";
 import type { ToHaveEffectiveStatMatcherOptions } from "#test/test-utils/matchers/to-have-effective-stat-matcher";
 import type { ToHaveMoveResultMatcherOptions } from "#test/test-utils/matchers/to-have-move-result-matcher";
 import type { ToHaveStatMatcherOptions } from "#test/test-utils/matchers/to-have-stat-matcher";
 import type { ToHaveStatusEffectMatcherOptions } from "#test/test-utils/matchers/to-have-status-effect-matcher";
-import type { ToHaveUsedMoveMatcherOptions } from "#test/test-utils/matchers/to-have-used-move-matcher";
 import type { ToHaveTakenDamageMatcherOptions } from "#test/test-utils/matchers/to-have-taken-damage-matcher";
+import type { ToHaveUsedMoveMatcherOptions } from "#test/test-utils/matchers/to-have-used-move-matcher";
 
 declare module "vitest" {
   interface Assertion {

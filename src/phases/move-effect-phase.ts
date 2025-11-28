@@ -1,8 +1,3 @@
-// biome-ignore-start lint/correctness/noUnusedImports: TSDoc imports
-import type { allMoves } from "#data/data-lists";
-import type { Move } from "#moves/move";
-// biome-ignore-end lint/correctness/noUnusedImports: TSDoc imports
-
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import { MoveAnim } from "#animations/move-anim";
 import { globalScene } from "#app/global-scene";
@@ -11,6 +6,7 @@ import type { BideTag } from "#battler-tags/bide-tag";
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import type { TypeBoostTag } from "#battler-tags/type-boost-tag";
 import { TYPE_BOOST_TAG_TYPES } from "#constants/battler-tag-constants";
+import type { allMoves } from "#data/data-lists";
 import type { TypeDamageMultiplier } from "#data/type";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { BattlerIndex, type FieldBattlerIndex } from "#enums/battler-index";
@@ -35,6 +31,7 @@ import {
 import { DelayedAttackAttr } from "#moves/delayed-attack-attr";
 import { FlinchAttr } from "#moves/flinch-attr";
 import { MissEffectAttr } from "#moves/miss-effect-attr";
+import type { Move } from "#moves/move";
 import type { MoveAttr } from "#moves/move-attr";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
 import { MultiHitAttr } from "#moves/multi-hit-attr";

@@ -1,13 +1,10 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { CRIT_BOOST_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
-import type { ElementalType } from "#enums/elemental-type";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTag } from "#battler-tags/battler-tag";
+import type { CRIT_BOOST_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";
+import type { ElementalType } from "#enums/elemental-type";
 import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
 import i18next from "i18next";

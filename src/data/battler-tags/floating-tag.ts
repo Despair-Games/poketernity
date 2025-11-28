@@ -1,10 +1,7 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { TYPE_IMMUNE_TAG_TYPES } from "#constants/battler-tag-constants";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { TypeImmuneTag } from "#battler-tags/type-immune-tag";
+import type { TYPE_IMMUNE_TAG_TYPES } from "#constants/battler-tag-constants";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";

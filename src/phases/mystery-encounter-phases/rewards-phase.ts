@@ -1,9 +1,6 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { MysteryEncounter } from "#mystery-encounters/mystery-encounter";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
+import type { MysteryEncounter } from "#mystery-encounters/mystery-encounter";
 
 /**
  * Will handle (in order):

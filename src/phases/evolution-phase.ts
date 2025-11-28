@@ -1,7 +1,3 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { FormChangePhase } from "#phases/form-change-phase";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import type { AnySound } from "#app/audio-manager";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -12,6 +8,7 @@ import { UiMode } from "#enums/ui-mode";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { FormChangeBasePhase } from "#phases/base/form-change-base-phase";
+import type { FormChangePhase } from "#phases/form-change-phase";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { delay, playNumberTween, playTween } from "#utils/anim-utils";

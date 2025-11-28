@@ -1,11 +1,6 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { FORM_CHANGE_MOVE } from "#constants/move-constants";
-import type { FormChangePhase } from "#phases/form-change-phase";
-import type { QuietFormChangePhase } from "#phases/quiet-form-change-phase";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import type { FORM_CHANGE_MOVE } from "#constants/move-constants";
 import { RAINY_WEATHER_TYPES, SNOWY_WEATHER_TYPES, SUNNY_WEATHER_TYPES } from "#constants/weather-constants";
 import { allMoves } from "#data/data-lists";
 import { AbilityId } from "#enums/ability-id";
@@ -24,6 +19,8 @@ import { SpeciesFormChangeManualTrigger } from "#form-change-triggers/species-fo
 import { SpeciesFormChangeMoveLearnedTrigger } from "#form-change-triggers/species-form-change-move-learned-trigger";
 import { SpeciesFormChangePreMoveTrigger } from "#form-change-triggers/species-form-change-pre-move-trigger";
 import { SpeciesFormChangeTrigger } from "#form-change-triggers/species-form-change-trigger";
+import type { FormChangePhase } from "#phases/form-change-phase";
+import type { QuietFormChangePhase } from "#phases/quiet-form-change-phase";
 import type { AbstractConstructor, NonEmptyArray, nil } from "#types/utility-types";
 import i18next from "i18next";
 

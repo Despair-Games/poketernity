@@ -1,7 +1,4 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { SwitchPhase } from "#phases/switch-phase";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import type { ObjectValues } from "#types/utility-types";
 
 /** Indicates the type of switch functionality that a {@linkcode SwitchPhase} will carry out. */

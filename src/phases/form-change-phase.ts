@@ -1,7 +1,3 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { EvolutionPhase } from "#phases/evolution-phase";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { SpeciesFormChange } from "#data/pokemon-forms";
@@ -12,6 +8,7 @@ import { UiMode } from "#enums/ui-mode";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { FormChangeBasePhase } from "#phases/base/form-change-base-phase";
+import type { EvolutionPhase } from "#phases/evolution-phase";
 import { achvs } from "#system/achievements";
 import type { FormChangeSceneUiHandler } from "#ui/form-change-scene-ui-handler";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
