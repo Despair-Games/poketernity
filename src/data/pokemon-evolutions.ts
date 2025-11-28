@@ -25,9 +25,12 @@ type EvolutionConditionPredicate = (p: Pokemon) => boolean;
 export interface PokemonEvolutions {
   [key: string]: SpeciesFormEvolution[];
 }
-export interface PokemonPreEvolutions {
-  [key: string]: SpeciesId;
-}
+
+/**
+ * Record for mapping a {@link SpeciesId | species} to the species of its
+ * pre-evolution (if it has one)
+ */
+export type PokemonPreEvolutions = Partial<Record<SpeciesId, SpeciesId>>;
 
 export class SpeciesFormEvolution {
   public speciesId: SpeciesId;

@@ -26,7 +26,6 @@ export class TrainerData {
 
   constructor(trainerSlot: NonNullTrainerSlot, config: NewTrainerConfig) {
     this.trainerSlot = trainerSlot;
-
     this.gender = this.getGender(config);
     this.name = config.name[this.gender]!();
     this.title = config.title[this.gender]!();
@@ -40,6 +39,15 @@ export class TrainerData {
     this.moneyMultiplier = config.moneyMultiplier();
   }
 
+  /**
+   * Resolves the Trainer's gender which determines the pools from which the
+   * Trainer's name, title, and sprite keys are extracted. The Trainer's gender
+   * is determined randomly, and the chance of resolving to a specific gender is
+   * proportional to the number of entries in the given config's name pool for
+   * that gender, compared to other genders.
+   * @param config - The {@linkcode NewTrainerConfig} used to generate the Trainer.
+   * @returns The Trainer's {@linkcode TrainerGender}.
+   */
   private getGender(config: NewTrainerConfig): TrainerGender {
     const supportedGenders = Object.keys(config.name).map((k) => Number(k) as TrainerGender);
 
@@ -54,13 +62,23 @@ export class TrainerData {
     return supportedGenders[0];
   }
 
+  /**
+   * Generates the Trainer's party of {@linkcode EnemyPokemon} from the given config
+   * and adds them to {@linkcode globalScene}.
+   * @param config - The {@linkcode NewTrainerConfig} used to generate the Trainer.
+   * This method only uses this config's {@linkcode partyConfigs} property.
+   * @returns An array of {@linkcode EnemyPokemon} representing the Trainer's
+   * party in slot order.
+   * @see {@linkcode getPartyPokemonLevel}
+   * @see {@linkcode getPartyPokemonSpecies}
+   */
   private getParty({ partyConfigs }: NewTrainerConfig): EnemyPokemon[] {
     const party: EnemyPokemon[] = [];
     for (const config of partyConfigs) {
       const strength = coerceArray(config.strength);
       for (let i = 0; i < config.count; i++) {
-        const species = getPokemonSpecies(getPartyPokemonSpecies(config));
-        const level = getPartyPokemonLevel(strength[i], globalScene.currentBattle.waveIndex);
+        const level = getPartyPokemonLevel(strength[i] ?? strength.at(-1), globalScene.currentBattle.waveIndex);
+        const species = getPokemonSpecies(getPartyPokemonSpecies(level, party, config));
         party.push(globalScene.addEnemyPokemon(species, level, config, config.postProcess));
       }
     }
