@@ -27,7 +27,6 @@ import { allBiomes, allSpecies } from "#data/data-lists";
 import { classicFinalBossDialogue } from "#data/dialogue";
 import { getLevelForWaveFunc } from "#data/exp";
 import { pokemonFormChanges, type SpeciesFormChange } from "#data/pokemon-forms";
-import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import type { PokemonSpecies } from "#data/pokemon-species";
 import { resetStarterColors, starterColors } from "#data/starter-colors";
 import { getTypeRgb } from "#data/type";
@@ -1926,9 +1925,7 @@ export class BattleScene extends SceneBase {
               .filter(speciesFilter)
               .map((s) => {
                 if (!filterAllEvolutions) {
-                  while (Object.hasOwn(pokemonPreEvolutions, s.speciesId)) {
-                    s = getPokemonSpecies(pokemonPreEvolutions[s.speciesId]);
-                  }
+                  return getPokemonSpecies(s.getFirstStageSpecies());
                 }
                 return s;
               }),

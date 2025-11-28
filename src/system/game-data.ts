@@ -1544,7 +1544,7 @@ export class GameData {
         starterData.natureAttr |= 1 << pokemon.nature;
       }
 
-      const hasPreEvolution = Object.hasOwn(pokemonPreEvolutions, species.speciesId);
+      const preEvolution = pokemonPreEvolutions[species.speciesId];
       const newCatch = !caughtAttr;
       const hasNewAttr = (caughtAttr & dexAttr) !== dexAttr;
 
@@ -1559,7 +1559,7 @@ export class GameData {
       }
 
       // Once at the root species, give starter candy
-      if (giveCandy && !hasPreEvolution && (!globalScene.gameMode.isDaily || hasNewAttr || fromEgg)) {
+      if (giveCandy && preEvolution == null && (!globalScene.gameMode.isDaily || hasNewAttr || fromEgg)) {
         let candyMultiplier = 1;
         if (pokemon.isShiny()) {
           candyMultiplier *= getCandyGainMultiplierForShinies(pokemon.variant);
@@ -1573,11 +1573,10 @@ export class GameData {
       }
 
       const checkPreEvolution = (starters: SpeciesId[]): void => {
-        if (hasPreEvolution) {
-          const preEvolutionSpecies = pokemonPreEvolutions[species.speciesId];
+        if (preEvolution != null) {
           this.setPokemonSpeciesCaught(
             pokemon,
-            getPokemonSpecies(preEvolutionSpecies),
+            getPokemonSpecies(preEvolution),
             false, // pre-evolutions don't update game stats
             giveCandy,
             fromEgg,
@@ -1799,8 +1798,9 @@ export class GameData {
       }
 
       // If it has a pre-evolution, recursively unlock the nature for it
-      if (Object.hasOwn(pokemonPreEvolutions, speciesId)) {
-        _unlockSpeciesNature(pokemonPreEvolutions[speciesId]);
+      const preEvolution = pokemonPreEvolutions[speciesId];
+      if (preEvolution != null) {
+        _unlockSpeciesNature(preEvolution);
       }
     };
 
@@ -1827,8 +1827,9 @@ export class GameData {
       }
 
       // If it has a pre-evolution, recursively update its IVs
-      if (Object.hasOwn(pokemonPreEvolutions, sId)) {
-        doUpdateIvs(pokemonPreEvolutions[sId]);
+      const preEvolution = pokemonPreEvolutions[sId];
+      if (preEvolution != null) {
+        doUpdateIvs(preEvolution);
       }
     };
 

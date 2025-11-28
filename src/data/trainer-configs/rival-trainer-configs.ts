@@ -163,7 +163,7 @@ export const rivalTrainerConfigs: TrainerConfigs = {
       getSpeciesFilterRandomPartyMemberFunc(
         (species: PokemonSpecies) =>
           !Object.hasOwn(pokemonEvolutions, species.speciesId)
-          && !Object.hasOwn(pokemonPreEvolutions, species.speciesId)
+          && pokemonPreEvolutions[species.speciesId] == null
           && species.baseTotal >= 450,
       ),
     ),
@@ -237,7 +237,7 @@ export const rivalTrainerConfigs: TrainerConfigs = {
       getSpeciesFilterRandomPartyMemberFunc(
         (species: PokemonSpecies) =>
           !Object.hasOwn(pokemonEvolutions, species.speciesId)
-          && !Object.hasOwn(pokemonPreEvolutions, species.speciesId)
+          && pokemonPreEvolutions[species.speciesId] == null
           && species.baseTotal >= 450,
       ),
     )
@@ -313,7 +313,7 @@ export const rivalTrainerConfigs: TrainerConfigs = {
       getSpeciesFilterRandomPartyMemberFunc(
         (species: PokemonSpecies) =>
           !Object.hasOwn(pokemonEvolutions, species.speciesId)
-          && !Object.hasOwn(pokemonPreEvolutions, species.speciesId)
+          && pokemonPreEvolutions[species.speciesId] == null
           && species.baseTotal >= 450,
       ),
     )
@@ -403,7 +403,7 @@ export const rivalTrainerConfigs: TrainerConfigs = {
       getSpeciesFilterRandomPartyMemberFunc(
         (species: PokemonSpecies) =>
           !Object.hasOwn(pokemonEvolutions, species.speciesId)
-          && !Object.hasOwn(pokemonPreEvolutions, species.speciesId)
+          && pokemonPreEvolutions[species.speciesId] == null
           && species.baseTotal >= 450,
       ),
     )
@@ -507,7 +507,7 @@ export const rivalTrainerConfigs: TrainerConfigs = {
       getSpeciesFilterRandomPartyMemberFunc(
         (species: PokemonSpecies) =>
           !Object.hasOwn(pokemonEvolutions, species.speciesId)
-          && !Object.hasOwn(pokemonPreEvolutions, species.speciesId)
+          && pokemonPreEvolutions[species.speciesId] == null
           && species.baseTotal >= 450,
       ),
     )

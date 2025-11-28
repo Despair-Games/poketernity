@@ -367,6 +367,6 @@ export class PokemonSpecies extends PokemonSpeciesForm {
    * have an evolution or pre-evolution).
    */
   isSingleStage(): boolean {
-    return !Object.hasOwn(pokemonEvolutions, this.speciesId) && !Object.hasOwn(pokemonPreEvolutions, this.speciesId);
+    return pokemonEvolutions[this.speciesId] == null && pokemonPreEvolutions[this.speciesId] == null;
   }
 }

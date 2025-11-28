@@ -1993,7 +1993,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
               options: opts,
             });
           };
-          if (!Object.hasOwn(pokemonPreEvolutions, this.lastSpecies.speciesId)) {
+          if (pokemonPreEvolutions[this.lastSpecies.speciesId] == null) {
             options.push({
               label: i18next.t("starterSelectUiHandler:useCandies"),
               handler: () => {
@@ -3177,7 +3177,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         this.pokemonCaughtHatchedContainer.setVisible(true);
         this.pokemonFormText.setVisible(true);
 
-        if (Object.hasOwn(pokemonPreEvolutions, species.speciesId)) {
+        if (pokemonPreEvolutions[species.speciesId] != null) {
           this.pokemonCaughtHatchedContainer.setY(16);
           this.pokemonShinyIcon.setY(135);
           this.pokemonShinyIcon.setFrame(getVariantTierForVariant(variant));
