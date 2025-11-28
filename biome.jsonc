@@ -189,7 +189,9 @@
         "useArraySortCompare": "error",
         "useFind": "error",
         "noParametersOnlyUsedInRecursion": "error",
-        "useSpread": "error"
+        "useSpread": "error",
+        "noProto": "error",
+        "noMultiStr": "error"
       },
       "performance": {
         "noNamespaceImport": "error",
