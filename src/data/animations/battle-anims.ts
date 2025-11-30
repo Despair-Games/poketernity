@@ -212,7 +212,7 @@ export abstract class BattleAnim {
     }
 
     const targetSubstitute =
-      onSubstitute && user !== target ? target?.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE) : null;
+      onSubstitute && user !== target ? target?.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE) : undefined;
 
     const userSprite = user.getSprite();
     const targetSprite = targetSubstitute?.sprite ?? target.getSprite();
@@ -231,25 +231,26 @@ export abstract class BattleAnim {
      * cleaned, this calls the given {@linkcode callback} with no arguments.
      */
     const cleanUpAndComplete = (): void => {
-      userSprite.setPosition(0, 0);
-      userSprite.setScale(1);
-      userSprite.setAlpha(1);
+      userSprite //
+        .setPosition(0, 0)
+        .setScale(1)
+        .setAlpha(1)
+        .setAngle(0);
       userSprite.pipelineData["tone"] = [0.0, 0.0, 0.0, 0.0];
-      userSprite.setAngle(0);
-      if (targetSubstitute) {
-        targetSprite.setPosition(
-          target.x - target.getSubstituteOffset()[0],
-          target.y - target.getSubstituteOffset()[1],
-        );
-        targetSprite.setScale(target.getSpriteScale() * (target.isPlayer() ? 0.5 : 1));
-        targetSprite.setAlpha(1);
+      if (targetSubstitute != null) {
+        const offset = target.getSubstituteOffset();
+        targetSprite
+          .setPosition(target.x - offset[0], target.y - offset[1])
+          .setScale(target.getSpriteScale() * (target.isPlayer() ? 0.5 : 1));
       } else {
-        targetSprite.setPosition(0, 0);
-        targetSprite.setScale(1);
-        targetSprite.setAlpha(1);
+        targetSprite //
+          .setPosition(0, 0)
+          .setScale(1);
       }
       targetSprite.pipelineData["tone"] = [0.0, 0.0, 0.0, 0.0];
-      targetSprite.setAngle(0);
+      targetSprite //
+        .setAlpha(1)
+        .setAngle(0);
 
       // Remove animation event listeners
       userSprite.off("animationupdate");
