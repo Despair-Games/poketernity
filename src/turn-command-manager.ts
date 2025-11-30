@@ -78,67 +78,7 @@ export class TurnCommandManager {
   public commandsInProgress: number = 0;
 
   constructor() {
-    this.queue = new ShuffledPriorityQueue<TurnCommand>(TurnCommandManager.compare);
-  }
-
-  //#region Comparators
-
-  /**
-   * The main comparator used to sort turn commands. Consists of two sub-comparators
-   * that are sequentially applied:
-   * 1. Pre-Speed comparison modifiers, including command type, move priority, etc.
-   * 2. Speed comparison between the commands' source Pokemon.
-   *
-   * @see {@linkcode comparePreSpeed}
-   * @see {@linkcode compareSpeed}
-   */
-  private static compare(commandA: TurnCommand, commandB: TurnCommand): number {
-    return (
-      TurnCommandManager.comparePreSpeed(commandA, commandB) || TurnCommandManager.compareSpeed(commandA, commandB)
-    );
-  }
-
-  /**
-   * Prioritizes commands based on effects unrelated to the source Pokemon's Speed,
-   * including command type, move priority, and Speed-bypassing turn order modifiers
-   * such as the effects of Quash and Quick Draw.
-   */
-  private static comparePreSpeed(commandA: TurnCommand, commandB: TurnCommand): number {
-    if (commandA.command !== commandB.command) {
-      return COMMAND_PRIORITY_MAP[commandA.command] > COMMAND_PRIORITY_MAP[commandB.command] ? -1 : 1;
-    }
-    if (commandA.command === BattleCommand.FIGHT) {
-      const [aQuashed, bQuashed] = [commandA, commandB].map(({ pokemon }) => pokemon.hasTag(BattlerTagType.QUASHED));
-      if ((aQuashed || bQuashed) && aQuashed !== bQuashed) {
-        return aQuashed ? 1 : -1;
-      }
-
-      const priority = [commandA, commandB].map(({ pokemon, turnMove }) => {
-        const move = turnMove!.move;
-        return move.getPriority(pokemon, true);
-      });
-
-      const priorityBrackets = priority.map((p) => Math.ceil(p));
-      const bypassSpeed = [commandA, commandB].map(({ pokemon }) => pokemon.hasTag(BattlerTagType.BYPASS_SPEED));
-
-      if (
-        priority[0] !== priority[1]
-        && (priorityBrackets[0] !== priorityBrackets[1] || bypassSpeed[0] === bypassSpeed[1])
-      ) {
-        return priority[1] - priority[0];
-      }
-
-      if (bypassSpeed[0] !== bypassSpeed[1]) {
-        return bypassSpeed[0] ? -1 : 1;
-      }
-    }
-    return 0;
-  }
-
-  /** Prioritizes commands based on their source Pokemon's Speed. */
-  private static compareSpeed(commandA: TurnCommand, commandB: TurnCommand): number {
-    const [{ pokemon: pokemonA }, { pokemon: pokemonB }] = [commandA, commandB];
-    return speedOrderComparator<Pokemon>(pokemonA, pokemonB);
+    this.queue = new ShuffledPriorityQueue<TurnCommand>(compareTurnOrder);
   }
 
   //#region Public Methods
@@ -595,4 +535,62 @@ export class TurnCommandManager {
 
     this.appliedMoveHeaders = true;
   }
+}
+
+// #region Comparators
+
+/**
+ * The main comparator used to sort turn commands. Consists of two sub-comparators
+ * that are sequentially applied:
+ * 1. Pre-Speed comparison modifiers, including command type, move priority, etc.
+ * 2. Speed comparison between the commands' source Pokemon.
+ *
+ * @see {@linkcode comparePreSpeed}
+ * @see {@linkcode compareSpeed}
+ */
+function compareTurnOrder(commandA: TurnCommand, commandB: TurnCommand): number {
+  return comparePreSpeed(commandA, commandB) || compareSpeed(commandA, commandB);
+}
+
+/**
+ * Prioritizes commands based on effects unrelated to the source Pokemon's Speed,
+ * including command type, move priority, and Speed-bypassing turn order modifiers
+ * such as the effects of Quash and Quick Draw.
+ */
+function comparePreSpeed(commandA: TurnCommand, commandB: TurnCommand): number {
+  if (commandA.command !== commandB.command) {
+    return COMMAND_PRIORITY_MAP[commandA.command] > COMMAND_PRIORITY_MAP[commandB.command] ? -1 : 1;
+  }
+  if (commandA.command === BattleCommand.FIGHT) {
+    const [aQuashed, bQuashed] = [commandA, commandB].map(({ pokemon }) => pokemon.hasTag(BattlerTagType.QUASHED));
+    if ((aQuashed || bQuashed) && aQuashed !== bQuashed) {
+      return aQuashed ? 1 : -1;
+    }
+
+    const priority = [commandA, commandB].map(({ pokemon, turnMove }) => {
+      const move = turnMove!.move;
+      return move.getPriority(pokemon, true);
+    });
+
+    const priorityBrackets = priority.map((p) => Math.ceil(p));
+    const bypassSpeed = [commandA, commandB].map(({ pokemon }) => pokemon.hasTag(BattlerTagType.BYPASS_SPEED));
+
+    if (
+      priority[0] !== priority[1]
+      && (priorityBrackets[0] !== priorityBrackets[1] || bypassSpeed[0] === bypassSpeed[1])
+    ) {
+      return priority[1] - priority[0];
+    }
+
+    if (bypassSpeed[0] !== bypassSpeed[1]) {
+      return bypassSpeed[0] ? -1 : 1;
+    }
+  }
+  return 0;
+}
+
+/** Prioritizes commands based on their source Pokemon's Speed. */
+function compareSpeed(commandA: TurnCommand, commandB: TurnCommand): number {
+  const [{ pokemon: pokemonA }, { pokemon: pokemonB }] = [commandA, commandB];
+  return speedOrderComparator<Pokemon>(pokemonA, pokemonB);
 }
