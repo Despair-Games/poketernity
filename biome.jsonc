@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.2.5/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.3.4/schema.json",
   "vcs": {
     "enabled": false,
     "clientKind": "git",
@@ -20,19 +20,19 @@
     // and having to verify whether each individual file is ignored
     "includes": [
       "**",
-      "!**/.github/**/*",
-      "**/.github/**/*.ts",
-      "!**/.vscode/**/*",
-      "!**/build/**/*",
-      "!**/coverage/**/*",
-      "!**/dist/**/*",
-      "!**/docs/**/*",
-      "!**/node_modules/**/*",
-      "!**/public/**/*",
-      "!**/typedoc/**/*",
-      "!**/pnpm-lock.yml",
+      "!.github/**/*.*", // workaround due to bug, should be `"!.github"`
+      ".github/**/*.ts",
+      "!!.vscode",
+      "!!build",
+      "!!coverage",
+      "!!dist",
+      "!!docs",
+      "!public/**/*.*", // workaround due to bug, should be `"!public"`
+      "public/service-worker.js",
+      "!!typedoc",
+      "!pnpm-lock.yml",
       // this file is too big
-      "!**/src/data/tms.ts"
+      "!src/data/tms.ts"
     ]
   },
 
@@ -157,7 +157,8 @@
         "useErrorMessage": "error",
         "useGuardForIn": "error",
         "useNumberToFixedDigitsArgument": "error",
-        "noEvolvingTypes": "error"
+        "noEvolvingTypes": "error",
+        "noNonNullAssertedOptionalChain": "error"
       },
       "complexity": {
         "noExcessiveCognitiveComplexity": "info",
@@ -178,7 +179,6 @@
       "nursery": {
         "noShadow": "error",
         "noUselessUndefined": "error",
-        "noNonNullAssertedOptionalChain": "error",
         "useExplicitType": "off", // TODO: refactor and make "error"
         "noFloatingPromises": "warn", // TODO: refactor and make "error"
         "noMisusedPromises": "warn", // TODO: refactor and make "error"
@@ -246,16 +246,6 @@
         "rules": {
           "style": {
             "noDefaultExport": "off"
-          }
-        }
-      }
-    },
-    {
-      "includes": [".dependency-cruiser.cjs"],
-      "linter": {
-        "rules": {
-          "complexity": {
-            "noUselessStringConcat": "off" // disabled for readability of this particular file due to a bug
           }
         }
       }
