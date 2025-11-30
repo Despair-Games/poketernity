@@ -343,7 +343,7 @@ export class PhaseManager {
   /**
    * Creates a {@linkcode Phase} from the given parameters, then adds it
    * to the Phase Tree at the "deferred" level. This is equivalent to calling
-   * {@linkcode createPhase}, then {@linkcode unshiftPhase} for the created Phase.
+   * {@linkcode createPhase}, then {@linkcode deferPhase} for the created Phase.
    *
    * Note that this only supports deferring one Phase at a time. The best practice
    * to defer multiple Phases at once is to construct each phase with {@linkcode createPhase}, e.g.

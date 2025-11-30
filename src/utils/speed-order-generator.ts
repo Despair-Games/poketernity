@@ -30,8 +30,8 @@ export function* inSpeedOrder(side: ArenaTagSide = ArenaTagSide.BOTH): Generator
     queue.push(p);
   });
   while (!queue.isEmpty()) {
-    // If the queue is not empty, this can never be undefined
     i++;
+    // If the queue is not empty, this can never be undefined
     yield queue.pop()!;
   }
 
