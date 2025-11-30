@@ -110,7 +110,7 @@ import { type Achievement, achvs } from "#system/achievements";
 import { GameData } from "#system/game-data";
 import { initGameSpeed } from "#system/game-speed";
 import { settings } from "#system/settings-manager";
-import type { TrainerData } from "#system/trainer-data";
+import type { TrainerSaveData } from "#system/trainer-save-data";
 import { type Voucher, vouchers } from "#system/voucher";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import type { HeldModifierConfig, ModifierPredicate } from "#types/modifiers-types";
@@ -1156,7 +1156,7 @@ export class BattleScene extends SceneBase {
   newBattle(
     waveIndex?: number,
     battleType?: BattleType,
-    trainerData?: TrainerData | null,
+    trainerData?: TrainerSaveData | null,
     double?: boolean,
     mysteryEncounterType?: MysteryEncounterType,
   ): Battle {

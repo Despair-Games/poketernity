@@ -7,7 +7,7 @@ import type { PartyMemberStrength } from "#enums/party-member-strength";
 import type { SpeciesId } from "#enums/species-id";
 import type { TrainerGender } from "#enums/trainer-gender";
 import type { TrainerPoolTier } from "#enums/trainer-pool-tier";
-import { TrainerSlot } from "#enums/trainer-slot";
+import { type NonNullTrainerSlot, TrainerSlot } from "#enums/trainer-slot";
 import type { TrainerType } from "#enums/trainer-type";
 import type { EnemyPokemon, EnemyPokemonOptions } from "#field/enemy-pokemon";
 import type { PokemonSpeciesFilter } from "#types/ui-types";
@@ -99,7 +99,7 @@ export type TrainerConfigMap = Partial<Record<TrainerType, NewTrainerConfig>>;
  * A cache of {@linkcode NewTrainerConfig}s organized by {@linkcode TrainerSlot}.
  * All slots except for {@linkcode TrainerSlot.NONE} must have a mapped config.
  */
-type ConfigSlotMap = Record<Exclude<TrainerSlot, typeof TrainerSlot.NONE>, NewTrainerConfig>;
+type ConfigSlotMap = Record<NonNullTrainerSlot, NewTrainerConfig>;
 
 // #region CompoundTrainerConfig
 /**

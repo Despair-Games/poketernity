@@ -7,3 +7,4 @@ export const TrainerSlot = {
 } as const;
 
 export type TrainerSlot = ObjectValues<typeof TrainerSlot>;
+export type NonNullTrainerSlot = Exclude<TrainerSlot, typeof TrainerSlot.NONE>;

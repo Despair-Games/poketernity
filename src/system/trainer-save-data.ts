@@ -2,7 +2,7 @@ import type { TrainerType } from "#enums/trainer-type";
 import { TrainerVariant } from "#enums/trainer-variant";
 import { Trainer } from "#field/trainer";
 
-export class TrainerData {
+export class TrainerSaveData {
   public trainerType: TrainerType;
   public variant: TrainerVariant;
   public partyTemplateIndex: number;

@@ -1,14 +1,12 @@
 import { globalScene } from "#app/global-scene";
 import type { NewTrainerConfig } from "#data/new-trainer-config";
 import type { TrainerGender } from "#enums/trainer-gender";
-import type { TrainerSlot } from "#enums/trainer-slot";
+import type { NonNullTrainerSlot } from "#enums/trainer-slot";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import { coerceArray } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedInt } from "#utils/random-utils";
 import { getPartyPokemonLevel, getPartyPokemonSpecies } from "#utils/trainer-utils";
-
-type NonNullTrainerSlot = Exclude<TrainerSlot, typeof TrainerSlot.NONE>;
 
 export class TrainerData {
   public readonly trainerSlot: NonNullTrainerSlot;

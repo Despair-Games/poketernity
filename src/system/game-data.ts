@@ -69,7 +69,7 @@ import { GameStats } from "#system/game-stats";
 import { ModifierData } from "#system/modifier-data";
 import { PokemonData } from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
-import { TrainerData } from "#system/trainer-data";
+import { TrainerSaveData } from "#system/trainer-save-data";
 import { applySessionVersionMigration, applySystemVersionMigration } from "#system/version-converter";
 import { vouchers } from "#system/voucher";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
@@ -736,7 +736,7 @@ export class GameData {
       battleType: globalScene.currentBattle.battleType,
       trainer:
         globalScene.currentBattle.battleType === BattleType.TRAINER
-          ? new TrainerData(globalScene.currentBattle.trainer)
+          ? new TrainerSaveData(globalScene.currentBattle.trainer)
           : null,
       gameVersion: globalScene.game.config.gameVersion,
       timestamp: Date.now(),
@@ -1060,7 +1060,7 @@ export class GameData {
       }
 
       if (k === "trainer") {
-        return v ? new TrainerData(v) : null;
+        return v ? new TrainerSaveData(v) : null;
       }
 
       if (k === "modifiers" || k === "enemyModifiers") {
