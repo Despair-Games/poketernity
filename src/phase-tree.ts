@@ -1,5 +1,6 @@
 import type { Phase } from "#app/phase";
-import type { PhaseConditionFunc, PhaseKey, PhaseMap } from "#types/phase-types";
+// biome-ignore lint/correctness/noUnusedImports: suppression needed until Biome 2.3.8 update PR is merged
+import type { PhaseConditionFunc, PhaseKey, PhaseManager, PhaseMap } from "#types/phase-types";
 
 /**
  * Type representing the stubs used for dynamically scheduled {@linkcode Phase | Phases}.
@@ -11,9 +12,9 @@ export type DynamicPhaseMarker = {
 };
 
 /**
- * The Phase Tree accepts both {@linkcode Phase | Phases} and {@linkcode DynamicPhaseMarker | DynamicPhaseMarkers} as entries.
- * When the {@linkcode PhaseManager} receives a Phase from its Tree, it runs the Phase immediately.
- * When it receives a DynamicPhaseMarker, it retrieves a matching Phase from its
+ * The Phase Tree accepts both {@linkcode Phase}s and {@linkcode DynamicPhaseMarker}s as entries. \
+ * When the {@linkcode PhaseManager} receives a Phase from its Tree, it runs the Phase immediately. \
+ * When it receives a `DynamicPhaseMarker`, it retrieves a matching Phase from its
  * {@linkcode DynamicPhaseManager} and runs that Phase.
  */
 export type PhaseEntry = Phase | DynamicPhaseMarker;
@@ -61,6 +62,10 @@ export class PhaseTree {
     return this.levels.at(-1)!;
   }
 
+  /**
+   * @returns Whether the input is a {@linkcode Phase} or a
+   * {@linkcode DynamicPhaseMarker} based on whether it has a `start` method or not.
+   */
   public isPhase(entry: PhaseEntry): entry is Phase {
     return typeof entry["start"] === "function";
   }
@@ -82,8 +87,9 @@ export class PhaseTree {
   }
 
   /**
-   * Pushes a {@linkcode PhaseEntry} to the root level of the queue. It will run only after all previously queued phases have been executed.
-   * @param entry - The {@linkcode PhaseEntry} to be added
+   * Pushes one or more {@linkcode PhaseEntry}s to the root level of the queue. \
+   * They will run only after all previously queued phases have been executed.
+   * @param entries - The {@linkcode PhaseEntry}s to be added
    */
   public push(...entries: PhaseEntryInput): void {
     this.addToLevel(0, ...entries);
@@ -103,15 +109,15 @@ export class PhaseTree {
   }
 
   /**
-   * Adds one or more {@linkcode PhaseEntry | PhaseEntries} to the Tree,
+   * Adds one or more `PhaseEntries` to the Tree,
    * deferring them to execute only after unshifted Phases are exhausted.
    * @param entries - The {@linkcode PhaseEntry | PhaseEntries} to add and defer
    *
    * @privateRemarks
-   * Deferral is implemented by moving the queue at {@linkcode topLevel} up one level and inserting the new phase below it.
+   * Deferral is implemented by moving the queue at {@linkcode topLevel} up one level and inserting the new phase below it. \
    * {@linkcode deferredActive} is set until the moved queue (and anything added to it) is exhausted.
    *
-   * If {@linkcode deferredActive} is `true` when a deferred phase is added, the phase will be pushed to the second-highest level queue.
+   * If `deferredActive` is `true` when a deferred phase is added, the phase will be pushed to the second-highest level queue. \
    * That is, it will execute after the originally deferred phase, but there is no possibility for nesting with deferral.
    *
    * @todo `setPhaseQueueSplice` had strange behavior. This is simpler, but there are probably some remnant edge cases with the current implementation
@@ -141,7 +147,7 @@ export class PhaseTree {
   }
 
   /**
-   * Adds a {@linkcode PhaseEntry} after the first occurrence of the given type, or to the top of the Tree if no such phase exists
+   * Adds a `PhaseEntry` after the first occurrence of the given type, or to the top of the Tree if no such phase exists
    * @param phase - The {@linkcode PhaseEntry} to be added
    * @param type - A {@linkcode PhaseKey} representing the type to search for
    * @todo Dynamic phase markers are not recognized as their internal phase type
@@ -160,7 +166,7 @@ export class PhaseTree {
 
   /**
    * Removes and returns the first {@linkcode PhaseEntry} from the topmost level of the tree
-   * @returns - The next {@linkcode PhaseEntry}, or `undefined` if the Tree is empty
+   * @returns The next {@linkcode PhaseEntry}, or `undefined` if the Tree is empty
    */
   public getNextEntry(): PhaseEntry | undefined {
     this.unshifted = false;
@@ -174,7 +180,7 @@ export class PhaseTree {
   }
 
   /**
-   * Finds a particular {@linkcode Phase} in the Tree by searching in pop order
+   * Finds a particular `Phase` in the Tree by searching in pop order
    * @param phaseType - The {@linkcode PhaseKey | type} of phase to search for
    * @param phaseFilter - A {@linkcode PhaseConditionFunc} to specify conditions for the phase
    * @returns The matching {@linkcode Phase}, or `undefined` if none exists
@@ -193,11 +199,11 @@ export class PhaseTree {
   }
 
   /**
-   * Finds all {@linkcode Phase | Phases} in the Tree that are of the given
+   * Finds all Phases in the Tree that are of the given
    * phase type and meet the condition (if one is given)
    * @param phaseType - The {@linkcode PhaseKey | type} of phase to search for
-   * @param phaseFilter - A {@linkcode PhaseConditionFunc} to specify conditions for the phase
-   * @returns The matching {@linkcode Phase | Phases} in pop order, or `undefined` if none exist
+   * @param phaseFilter - (Optional) A {@linkcode PhaseConditionFunc} to specify conditions for the phase
+   * @returns The matching {@linkcode Phase}s in pop order, or `undefined` if none exist
    */
   public findAll<P extends PhaseKey>(phaseType: P, phaseFilter: PhaseConditionFunc<P> = () => true): PhaseMap[P][] {
     const phases: PhaseMap[P][] = [];
@@ -217,7 +223,7 @@ export class PhaseTree {
   /**
    * Finds and removes a single {@linkcode Phase} from the Tree
    * @param phaseType - The {@linkcode PhaseKey | type} of phase to search for
-   * @param phaseFilter - A {@linkcode PhaseConditionFunc} to specify conditions for the phase
+   * @param phaseFilter - (Optional) A {@linkcode PhaseConditionFunc} to specify conditions for the phase
    * @returns Whether a removal occurred
    */
   public remove<P extends PhaseKey>(phaseType: P, phaseFilter: PhaseConditionFunc<P> = () => true): boolean {
@@ -246,7 +252,7 @@ export class PhaseTree {
   /**
    * Determines if a particular phase exists in the Tree
    * @param phaseType - The {@linkcode PhaseKey | type} of phase to search for
-   * @param phaseFilter - A {@linkcode PhaseConditionFunc} to specify conditions for the phase
+   * @param phaseFilter - (Optional) A {@linkcode PhaseConditionFunc} to specify conditions for the phase
    * @returns Whether a matching phase exists
    */
   public has<P extends PhaseKey>(phaseType: P, phaseFilter: PhaseConditionFunc<P> = () => true): boolean {
