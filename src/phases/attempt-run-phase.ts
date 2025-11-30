@@ -90,6 +90,8 @@ export class AttemptRunPhase extends PokemonPhase {
     const { arena, arenaEnemy, audioManager, phaseManager } = globalScene;
     const enemyField = globalScene.getEnemyField().filter((p) => p.isActive(true));
 
+    phaseManager.clearAllPhases();
+
     audioManager.playSound("se/flee");
     phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("battle:runAwaySuccess"), undefined, true, 500);
 
@@ -106,9 +108,8 @@ export class AttemptRunPhase extends PokemonPhase {
 
     // TODO: Should this be run at the same time as the tween?
     await Promise.allSettled(enemyField.map((p) => p.hideInfo()));
-    enemyField.forEach((p) => p.destroy());
+    enemyField.forEach((p) => p.leaveField(false, false, true));
 
-    phaseManager.clearAllPhases();
     phaseManager.queueNextBattle(false);
   }
 

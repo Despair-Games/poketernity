@@ -1,3 +1,8 @@
+// biome-ignore-start lint/correctness/noUnusedImports: TSDoc imports
+import type { allMoves } from "#data/data-lists";
+import type { Move } from "#moves/move";
+// biome-ignore-end lint/correctness/noUnusedImports: TSDoc imports
+
 import type { AddSecondStrikeAbAttr } from "#abilities/add-second-strike-ab-attr";
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { PostAttackAbAttr } from "#abilities/post-attack-ab-attr";
@@ -69,7 +74,7 @@ export class MoveEffectPhase extends HitCheckPhase {
       return;
     }
 
-    /**
+    /*
      * Moves that target one or both sides of the field
      * bypass hit checks and other conditions at this point to
      * apply their effects without a specific target
@@ -122,7 +127,7 @@ export class MoveEffectPhase extends HitCheckPhase {
       }
     });
 
-    /**
+    /*
      * If this phase is for the first hit of the invoked move,
      * resolve the move's total hit count. This block combines the
      * effects of the move itself and Parental Bond to do so.
@@ -131,15 +136,14 @@ export class MoveEffectPhase extends HitCheckPhase {
       const hitCount = new NumberHolder(1);
       // Assume single target for multi hit
       applyMoveAttrs(MultiHitAttr, user, targets[0], move, hitCount);
-      // If Parental Bond is applicable, add another hit
       applyAbAttrs<AddSecondStrikeAbAttr>(AbAttrFlag.ADD_SECOND_STRIKE, user, false, move, targets[0], hitCount);
-      // TODO: re-add multi-lens calculation
-      // Set the user's relevant turnData fields to reflect the final hit count
+      // TODO: re-add multi-lens calculation here
+      // Set the user's relevant `turnData` fields to reflect the final hit count
       user.turnData.hitCount = hitCount.value;
       user.turnData.hitsLeft = hitCount.value;
     }
 
-    /**
+    /*
      * If the move has smart targeting (i.e. the move is Dragon Darts),
      * and the move is being used in a double battle,
      * alternate the base target on every second hit.
@@ -153,10 +157,11 @@ export class MoveEffectPhase extends HitCheckPhase {
     }
 
     // Update hit checks for each target
-    // biome-ignore lint/suspicious/noAssignInExpressions: the return value of the assignment isn't being used
-    targets.forEach((t, i) => (this.hitChecks[i] = this.hitCheck(t, this.canApplySmartTargeting())));
+    targets.forEach((t, i) => {
+      this.hitChecks[i] = this.hitCheck(t, this.canApplySmartTargeting());
+    });
 
-    /**
+    /*
      * If the move has smart targeting (i.e. the move is Dragon Darts),
      * the move is being used in a double battle,
      * and the move's current target was not successfully hit,
@@ -171,9 +176,9 @@ export class MoveEffectPhase extends HitCheckPhase {
       }
     }
 
-    /**
+    /*
      * Log to be entered into the user's move history once the move result is resolved.
-     * Note that `result` (a {@linkcode MoveResult}) logs whether the move was successfully
+     * Note that `result` (a `MoveResult`) logs whether the move was successfully
      * used in the sense of "Did it affect any of the targets?".
      */
     this.moveHistoryEntry = {
@@ -275,10 +280,10 @@ export class MoveEffectPhase extends HitCheckPhase {
 
   /**
    * Plays this phase's move's animation.
-   * @param user the {@linkcode Pokemon} using the move
+   * @param user - The {@linkcode Pokemon} using the move
    * @returns the Promise playing the animation
    */
-  protected playMoveAnim(user: Pokemon): Promise<void> {
+  protected async playMoveAnim(user: Pokemon): Promise<void> {
     return new Promise((resolve) => {
       const move = this.move.getMove();
       const firstTargetPokemon = this.getFirstTarget();
@@ -332,11 +337,11 @@ export class MoveEffectPhase extends HitCheckPhase {
   }
 
   /**
-   * Applies all effects for moves that target one or both sides of the field.
+   * Applies all effects for moves that target one or both sides of the field. \
    * This assumes such effects are implemented with {@linkcode MoveEffectTrigger | POST_APPLY}
    * effect triggers, and will try to play an animation even if no active Pokemon
    * are affected.
-   * @param user the {@linkcode Pokemon} using the move
+   * @param user - The {@linkcode Pokemon} using the move
    */
   private applyFieldMoveEffects(user: Pokemon): void {
     // Lapse `MOVE_EFFECT` effects (i.e. semi-invulnerability) when applicable
@@ -354,7 +359,7 @@ export class MoveEffectPhase extends HitCheckPhase {
     }
 
     new MoveAnim(this.move.moveId, user, affectedPokemon[0], true).play(false, () => {
-      /**
+      /*
        * Apply all move effect attributes from this move to the field.
        * NOTE: this assumes all field effects are implemented with the
        * `POST_APPLY` move effect trigger and are internally self-targeted.
@@ -377,7 +382,7 @@ export class MoveEffectPhase extends HitCheckPhase {
   /**
    * G-Max Moves applying positive effects to both the user and their active ally
    */
-  private applyGMaxUserEffects(user: Pokemon, target: Pokemon, firstTarget: boolean) {
+  private applyGMaxUserEffects(user: Pokemon, target: Pokemon, firstTarget: boolean): void {
     this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, firstTarget, true);
 
     // G-Max Gold Rush should not give money twice for double battles
@@ -388,12 +393,11 @@ export class MoveEffectPhase extends HitCheckPhase {
   }
 
   /**
-   * G-Max Moves apply their effects to both opponents (even if the target faints) and also
-   * ignores substitutes
-   *
-   * @todo: G-Max move edge cases like G-max Snooze
+   * G-Max Moves apply their effects to both opponents
+   * (even if the target faints) and also ignores substitutes
    */
-  private applyGMaxTargetEffects(user: Pokemon, target: Pokemon, hitResult: HitResult, firstTarget: boolean) {
+  // TODO: G-Max move edge cases like G-Max Snooze
+  private applyGMaxTargetEffects(user: Pokemon, target: Pokemon, hitResult: HitResult, firstTarget: boolean): void {
     const move = this.move.getMove();
 
     if (move.hitsSubstitute(user, target)) {
@@ -411,19 +415,18 @@ export class MoveEffectPhase extends HitCheckPhase {
 
   /**
    * Triggers move effects of the given move effect trigger.
-   * @param triggerType The {@linkcode MoveEffectTrigger} being applied
-   * @param user The {@linkcode Pokemon} using the move
-   * @param target The {@linkcode Pokemon} targeted by the move
-   * @param firstTarget Whether the target is the first to be hit by the current strike
-   * @param selfTarget If defined, limits the effects triggered to either self-targeted
+   * @param triggerType - The {@linkcode MoveEffectTrigger} being applied
+   * @param user - The {@linkcode Pokemon} using the move
+   * @param target - The Pokemon targeted by the move
+   * @param firstTarget - (Optional) Whether the target is the first to be hit by the current strike
+   * @param selfTarget - (Optional) If defined, limits the effects triggered to either self-targeted
    * effects (if set to `true`) or targeted effects (if set to `false`).
-   * @returns a `Promise` applying the relevant move effects.
    */
   protected triggerMoveEffects(
     triggerType: MoveEffectTrigger,
     user: Pokemon,
     target: Pokemon | null,
-    firstTarget?: boolean | null,
+    firstTarget?: boolean,
     selfTarget?: boolean,
   ): void {
     applyFilteredMoveAttrs(
@@ -438,13 +441,13 @@ export class MoveEffectPhase extends HitCheckPhase {
       target,
       this.move.getMove(),
     );
-    return;
   }
 
   /**
    * Apply the results of this phase's move to the given target
-   * @param target The {@linkcode Pokemon} struck by the move
-   * @param effectiveness The effectiveness of the move (as determined previously in {@linkcode hitCheck})
+   * @param target - The {@linkcode Pokemon} struck by the move
+   * @param effectiveness - The effectiveness of the move (as determined previously in {@linkcode hitCheck})
+   * @returns A {@linkcode HitResult} indicating move effectiveness
    */
   protected applyMove(target: Pokemon, effectiveness: TypeDamageMultiplier): HitResult {
     /** The {@linkcode Pokemon} using the move */
@@ -490,7 +493,7 @@ export class MoveEffectPhase extends HitCheckPhase {
       if (isBlockedBySubstitute) {
         substitute.hp -= dmg;
       }
-      /**
+      /*
        * We explicitly require to ignore the faint phase here, as we want to show the messages
        * about the critical hit and the super effective/not very effective messages before the faint phase.
        */
@@ -568,12 +571,12 @@ export class MoveEffectPhase extends HitCheckPhase {
   }
 
   /**
-   * Applies all effects aimed at the move's target.
+   * Applies all effects aimed at the move's target. \
    * To be used when the target is successfully and directly hit by the move.
-   * @param user the {@linkcode Pokemon} using the move
-   * @param target the {@linkcode Pokemon} targeted by the move
-   * @param hitResult the {@linkcode HitResult} obtained from applying the move
-   * @param firstTarget `true` if the target is the first Pokemon hit by the attack
+   * @param user - The {@linkcode Pokemon} using the move
+   * @param target - The Pokemon targeted by the move
+   * @param hitResult - The {@linkcode HitResult} obtained from applying the move
+   * @param firstTarget - Whether the target is the first Pokemon hit by the attack
    */
   protected applyOnTargetEffects(user: Pokemon, target: Pokemon, hitResult: HitResult, firstTarget: boolean): void {
     const move = this.move.getMove();
@@ -602,7 +605,7 @@ export class MoveEffectPhase extends HitCheckPhase {
   public override end(): void {
     const user = this.getUserPokemon();
 
-    /**
+    /*
      * If the move has smart targeting (e.g. Dragon Darts),
      * and the original target fainted due to the first hit,
      * redirect the next strike to the original target's ally.
@@ -617,7 +620,7 @@ export class MoveEffectPhase extends HitCheckPhase {
       }
     }
 
-    /**
+    /*
      * If this phase isn't for the invoked move's last strike,
      * unshift another MoveEffectPhase for the next strike.
      * Otherwise, queue a message indicating the number of times the move has struck
@@ -640,8 +643,9 @@ export class MoveEffectPhase extends HitCheckPhase {
         }
         globalScene.applyModifiers(HitHealModifier, this.isPlayer, user);
         // Clear all cached move effectiveness values among targets
-        // biome-ignore lint/suspicious/noAssignInExpressions: the return value of the assignment isn't being used
-        this.getTargets().forEach((target) => (target.turnData.moveEffectiveness = null));
+        this.getTargets().forEach((target) => {
+          target.turnData.moveEffectiveness = null;
+        });
       }
     }
 
@@ -652,7 +656,7 @@ export class MoveEffectPhase extends HitCheckPhase {
    * Applies reactive effects that occur when a Pokémon is hit.
    * (i.e. Effect Spore, Disguise, Liquid Ooze, Beak Blast)
    * @param user - The {@linkcode Pokemon} using this phase's invoked move
-   * @param target - {@linkcode Pokemon} the current target of this phase's invoked move
+   * @param target - The current target of this phase's invoked move
    */
   protected applyOnGetHitAbEffects(user: Pokemon, target: Pokemon): void {
     applyAbAttrs<PostDefendAbAttr>(AbAttrFlag.POST_DEFEND, target, false, user, this.move.getMove());
@@ -660,10 +664,10 @@ export class MoveEffectPhase extends HitCheckPhase {
   }
 
   /**
-   * Handles checking for and applying Flinches
+   * Handles checking for and applying flinches
    * @param user - The {@linkcode Pokemon} using this phase's invoked move
-   * @param target - {@linkcode Pokemon} the current target of this phase's invoked move
-   * @param dealsDamage - `true` if the attempted move successfully dealt damage
+   * @param target - The current target of this phase's invoked move
+   * @param dealsDamage - Whether the attempted move successfully dealt damage
    */
   protected applyHeldItemFlinchCheck(user: Pokemon, target: Pokemon, dealsDamage: boolean): void {
     if (this.move.getMove().hasAttr(FlinchAttr)) {
@@ -682,6 +686,7 @@ export class MoveEffectPhase extends HitCheckPhase {
       }
     }
   }
+
   /** Determines if this phase's move can be redirected by smart targeting */
   public canApplySmartTargeting(): boolean {
     const target = this.getFirstTarget();
@@ -708,7 +713,7 @@ export class MoveEffectPhase extends HitCheckPhase {
   }
 
   /**
-   * @returns An array of all {@linkcode Pokemon} targeted by this phase's invoked move.
+   * @returns An array of all {@linkcode Pokemon} targeted by this phase's invoked move. \
    * Unless the move is field-targeting, this array only includes active (e.g., non-fainted) targets.
    */
   public override getTargets(): Pokemon[] {

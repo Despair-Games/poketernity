@@ -533,24 +533,26 @@ export class GameManager {
 
   /**
    * Picks the {@linkcode BattleCommand.RUN} command and executes it.
+   * @remarks
    * **Must** be called during the {@linkcode CommandPhase}.
    */
-  async tryToRunAway() {
+  public tryToRunAway() {
     const commandPhase = this.scene.phaseManager.getCurrentPhase<CommandPhase>()!;
-    expect(commandPhase).toBeDefined();
+    expect(commandPhase.phaseName).toBe("CommandPhase");
 
     commandPhase.handleCommand(BattleCommand.RUN, 0);
   }
 
   /**
    * Picks the {@linkcode BattleCommand.BALL} command with the given {@linkcode ballType} and executes it.
+   * @remarks
    * **Must** be called during the {@linkcode CommandPhase}.
-   * @param ballType The type of Pokeball to throw
+   * @param ballType - The type of Pokeball to throw
    * @see {@linkcode PokeballType}
    */
-  async throwPokeball(ballType: PokeballType) {
+  public throwPokeball(ballType: PokeballType) {
     const commandPhase = this.scene.phaseManager.getCurrentPhase<CommandPhase>()!;
-    expect(commandPhase).toBeDefined();
+    expect(commandPhase.phaseName).toBe("CommandPhase");
 
     commandPhase.handleCommand(BattleCommand.BALL, ballType);
   }

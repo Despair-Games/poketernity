@@ -352,36 +352,38 @@ export class EnemyPokemon extends Pokemon {
             }
             return 0;
           });
-          let r = 0;
+          let chosenMoveIndex = 0;
           if (this.aiType === AiType.SMART_RANDOM) {
             // Has a 5/8 chance to select the best move, and a 3/8 chance to advance to the next best move (and repeat this roll)
-            while (r < sortedMovePool.length - 1 && globalScene.randBattleSeedInt(8) >= 5) {
-              r++;
+            while (chosenMoveIndex < sortedMovePool.length - 1 && globalScene.randBattleSeedInt(8) >= 5) {
+              chosenMoveIndex++;
             }
           } else if (this.aiType === AiType.SMART) {
             // The chance to advance to the next best move increases when the compared moves' scores are closer to each other.
             while (
-              r < sortedMovePool.length - 1
-              && moveScores[movePool.indexOf(sortedMovePool[r + 1])] / moveScores[movePool.indexOf(sortedMovePool[r])]
+              chosenMoveIndex < sortedMovePool.length - 1
+              && moveScores[movePool.indexOf(sortedMovePool[chosenMoveIndex + 1])]
+                / moveScores[movePool.indexOf(sortedMovePool[chosenMoveIndex])]
                 >= 0
               && globalScene.randBattleSeedInt(100)
                 < Math.round(
-                  (moveScores[movePool.indexOf(sortedMovePool[r + 1])]
-                    / moveScores[movePool.indexOf(sortedMovePool[r])])
+                  (moveScores[movePool.indexOf(sortedMovePool[chosenMoveIndex + 1])]
+                    / moveScores[movePool.indexOf(sortedMovePool[chosenMoveIndex])])
                     * 50,
                 )
             ) {
-              r++;
+              chosenMoveIndex++;
             }
           }
+
           // biome-ignore format: For some reason this gets broken into multiple lines
           console.log("Move Pool:", movePool.map((m) => m.name));
           console.log("Move Scores:", moveScores);
-          console.log("`r` value:", r);
           // biome-ignore format: For some reason this gets broken into multiple lines
           console.log("Sorted Move Pool:", sortedMovePool.map((m) => m.name));
+          console.log("Chosen move:", sortedMovePool[chosenMoveIndex].name);
 
-          const retMove = sortedMovePool[r].getMove();
+          const retMove = sortedMovePool[chosenMoveIndex].getMove();
           return { move: retMove, targets: moveTargets[retMove.id], type: this.getMoveType(retMove) };
         }
       }

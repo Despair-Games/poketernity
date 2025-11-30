@@ -34,6 +34,7 @@ import type { MoveTypeChangeAbAttr } from "#abilities/move-type-change-ab-attr";
 import type { MultCritAbAttr } from "#abilities/mult-crit-ab-attr";
 import type { PostDamageAbAttr } from "#abilities/post-damage-ab-attr";
 import type { PostItemLostAbAttr } from "#abilities/post-item-lost-ab-attr";
+import type { PreLeaveFieldAbAttr } from "#abilities/pre-leave-field-ab-attrs";
 import type { ReceivedMoveDamageMultiplierAbAttr } from "#abilities/received-move-damage-multiplier-ab-attr";
 import type { StabBoostAbAttr } from "#abilities/stab-boost-ab-attr";
 import type { StatusEffectImmunityAbAttr } from "#abilities/status-effect-immunity-ab-attr";
@@ -1732,10 +1733,21 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns `true` if the Pokemon has a passive
    */
   public hasPassive(): boolean {
-    // returns override if valid for current case
+    const {
+      HAS_PASSIVE_ABILITY_OVERRIDE,
+      ENEMY_HAS_PASSIVE_ABILITY_OVERRIDE,
+      PASSIVE_ABILITY_OVERRIDE,
+      ENEMY_PASSIVE_ABILITY_OVERRIDE,
+    } = activeOverrides;
     if (
-      (activeOverrides.PASSIVE_ABILITY_OVERRIDE !== AbilityId.NONE && this.isPlayer())
-      || (activeOverrides.ENEMY_PASSIVE_ABILITY_OVERRIDE !== AbilityId.NONE && !this.isPlayer())
+      (HAS_PASSIVE_ABILITY_OVERRIDE === false && this.isPlayer())
+      || (ENEMY_HAS_PASSIVE_ABILITY_OVERRIDE === false && !this.isPlayer())
+    ) {
+      return false;
+    }
+    if (
+      ((PASSIVE_ABILITY_OVERRIDE !== AbilityId.NONE || HAS_PASSIVE_ABILITY_OVERRIDE) && this.isPlayer())
+      || ((ENEMY_PASSIVE_ABILITY_OVERRIDE !== AbilityId.NONE || ENEMY_HAS_PASSIVE_ABILITY_OVERRIDE) && !this.isPlayer())
     ) {
       return true;
     }
@@ -4506,24 +4518,32 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   /**
    * Causes a Pokemon to leave the field (such as in preparation for a switch out/escape).
-   * @param clearEffects Indicates if effects should be cleared (true) or passed
-   * to the next pokemon, such as during a baton pass (false)
-   * @param hideInfo Indicates if this should also play the animation to hide the Pokemon's
-   * info container.
+   * @param clearEffects - (Default `true`) Whether effects should be cleared (`true`) or passed
+   *   to the next pokemon, such as during a baton pass (`false`)
+   * @param hideInfo - (Default `false`) Whether this should also play the animation to hide the Pokemon's info container.
+   * @param destroy - (Default `false`) Whether to destroy the pokemon object or not
    */
-  leaveField(clearEffects: boolean = true, hideInfo: boolean = true) {
+  public leaveField(clearEffects: boolean = true, hideInfo: boolean = true, destroy: boolean = false): void {
     this.resetSprite();
     this.resetTurnData();
+    globalScene
+      .getField(true)
+      .filter((p) => p !== this)
+      .forEach((p) => p.removeTagsBySourceId(this.id));
+
     if (clearEffects) {
       this.destroySubstitute();
       this.resetSummonData();
     }
+
     if (hideInfo) {
       this.hideInfo();
     }
-    globalScene.field.remove(this);
+
+    applyAbAttrs<PreLeaveFieldAbAttr>(AbAttrFlag.PRE_LEAVE_FIELD, this, false);
     this.setSwitchOutStatus(true);
     globalScene.triggerPokemonFormChange(this, SpeciesFormChangeActiveTrigger, true);
+    globalScene.field.remove(this, destroy);
   }
 
   override destroy(): void {

@@ -39,12 +39,12 @@
     <link rel="manifest" href="./manifest.webmanifest" />
     <script>
       if ("serviceWorker" in navigator) {
-        window.addEventListener("load", function () {
+        window.addEventListener("load", () => {
           navigator.serviceWorker.register("./service-worker.js").then(
-            function (registration) {
+            (_registration) => {
               console.log("ServiceWorker registration successful");
             },
-            function (err) {
+            (err) => {
               console.log("ServiceWorker registration failed: ", err);
             },
           );

@@ -38,9 +38,9 @@ export function transitionMysteryEncounterIntroVisuals(
           if (hide && destroy) {
             globalScene.field.remove(introVisuals, true);
 
-            enemyPokemon.forEach((pokemon) => {
-              globalScene.field.remove(pokemon, true);
-            });
+            for (const enemy of enemyPokemon) {
+              enemy.leaveField(false, true, true);
+            }
 
             globalScene.currentBattle.mysteryEncounter!.introVisuals = undefined;
           }

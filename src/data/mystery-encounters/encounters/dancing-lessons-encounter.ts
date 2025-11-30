@@ -100,7 +100,7 @@ export const DancingLessonsEncounter: MysteryEncounter = MysteryEncounterBuilder
 
     // Adds a real Pokemon sprite to the field (required for the animation)
     globalScene.getEnemyParty().forEach((enemy) => {
-      globalScene.field.remove(enemy, true);
+      enemy.leaveField(true, true, true);
     });
     globalScene.currentBattle.enemyParty = [oricorio];
     globalScene.field.add(oricorio);
@@ -288,16 +288,16 @@ export const DancingLessonsEncounter: MysteryEncounter = MysteryEncounterBuilder
 
 function hideOricorioPokemon() {
   return new Promise<void>((resolve) => {
-    const oricorioSprite = globalScene.getEnemyParty()[0];
+    const oricorio = globalScene.getEnemyParty()[0];
     globalScene.tweens.add({
-      targets: oricorioSprite,
+      targets: oricorio,
       x: "+=16",
       y: "-=16",
       alpha: 0,
       ease: "Sine.easeInOut",
       duration: 750,
       onComplete: () => {
-        globalScene.field.remove(oricorioSprite, true);
+        oricorio.leaveField(true, true, true);
         resolve();
       },
     });
