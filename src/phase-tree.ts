@@ -3,6 +3,7 @@ import type { DynamicPhaseManager } from "#app/dynamic-phase-manager";
 import type { Phase } from "#app/phase";
 // biome-ignore lint/correctness/noUnusedImports: suppression needed until Biome 2.3.8 update PR is merged
 import type { PhaseConditionFunc, PhaseKey, PhaseManager, PhaseMap } from "#types/phase-types";
+import type { NonEmptyArray } from "#types/utility-types";
 
 /**
  * Type representing the stubs used for dynamically scheduled {@linkcode Phase | Phases}.
@@ -20,7 +21,7 @@ export type DynamicPhaseMarker = {
  * {@linkcode DynamicPhaseManager} and runs that Phase.
  */
 export type PhaseEntry = Phase | DynamicPhaseMarker;
-export type PhaseEntryInput = [PhaseEntry, ...PhaseEntry[]];
+export type PhaseEntryInput = NonEmptyArray<PhaseEntry>;
 
 /**
  * The PhaseTree is the central storage location for {@linkcode Phase}s by the {@linkcode PhaseManager}.
@@ -79,11 +80,8 @@ export class PhaseTree {
    * @throws Error if `level` is out of legal bounds
    */
   private addToLevel(level: number, ...entries: PhaseEntryInput): void {
-    const addLevel = this.levels[level];
-    if (addLevel == null) {
-      throw new Error(
-        "Attempted to add a phase or marker to a nonexistent level of the PhaseTree!\nLevel: " + level.toString(),
-      );
+    if (this.levels[level] == null) {
+      throw new Error(`Attempted to add a phase or marker to a nonexistent level of the PhaseTree!\nLevel: ${level}`);
     }
     this.levels[level].push(...entries);
   }
@@ -116,12 +114,10 @@ export class PhaseTree {
    *
    * @privateRemarks
    * Deferral is implemented by moving the queue at {@linkcode topLevel} up one level and inserting the new phase below it. \
-   * {@linkcode deferredActive} is set until the moved queue (and anything added to it) is exhausted.
+   * Then {@linkcode deferred} is set until a Phase is shifted from the tree.
    *
-   * If `deferredActive` is `true` when a deferred phase is added, the phase will be pushed to the second-highest level queue. \
+   * If `deferred` is `true` when a deferred phase is added, the phase will be pushed to the second-highest level queue. \
    * That is, it will execute after the originally deferred phase, but there is no possibility for nesting with deferral.
-   *
-   * @todo `setPhaseQueueSplice` had strange behavior. This is simpler, but there are probably some remnant edge cases with the current implementation
    */
   public defer(...entries: PhaseEntryInput): void {
     if (!this.unshifted) {
@@ -135,10 +131,17 @@ export class PhaseTree {
     this.addToLevel(this.levels.length - 2, ...entries);
   }
 
-  public addBefore(type: PhaseKey, ...entries: PhaseEntryInput): boolean {
+  /**
+   * Helper method to prepend or append phase(s) to another phase.
+   * @param after - Whether to add the phase after or before the target phase
+   * @param phaseType - The {@linkcode PhaseKey | type of phase} to search for
+   * @param entries - The {@linkcode PhaseEntry | phase(s)} to be added
+   */
+  private addBeforeAfter(after: boolean, type: PhaseKey, ...entries: PhaseEntryInput): boolean {
+    const indexOffset = after ? 1 : 0;
     for (let i = this.levels.length - 1; i >= 0; i--) {
-      const insertIdx = this.levels[i].findIndex((p) => this.isPhase(p) && p.is(type));
-      if (insertIdx !== -1) {
+      const insertIdx = this.levels[i].findIndex((p) => this.isPhase(p) && p.is(type)) + indexOffset;
+      if (insertIdx !== -1 + indexOffset) {
         this.levels[i].splice(insertIdx, 0, ...entries);
         return true;
       }
@@ -148,21 +151,23 @@ export class PhaseTree {
   }
 
   /**
-   * Adds a `PhaseEntry` after the first occurrence of the given type, or to the top of the Tree if no such phase exists
-   * @param phase - The {@linkcode PhaseEntry} to be added
-   * @param type - A {@linkcode PhaseKey} representing the type to search for
+   * Adds a `PhaseEntry` before the first occurrence of the given type, or to the top of the Tree if no such phase exists
+   * @param phaseType - The {@linkcode PhaseKey | type of phase} to search for
+   * @param entries - The {@linkcode PhaseEntry | phase(s)} to be added
    * @todo Dynamic phase markers are not recognized as their internal phase type
    */
-  public addAfter(type: PhaseKey, ...entries: PhaseEntryInput): boolean {
-    for (let i = this.levels.length - 1; i >= 0; i--) {
-      const insertIdx = this.levels[i].findIndex((p) => this.isPhase(p) && p.is(type)) + 1;
-      if (insertIdx !== 0) {
-        this.levels[i].splice(insertIdx, 0, ...entries);
-        return true;
-      }
-    }
-    this.unshift(...entries);
-    return false;
+  public addBefore(phaseType: PhaseKey, ...entries: PhaseEntryInput): boolean {
+    return this.addBeforeAfter(false, phaseType, ...entries);
+  }
+
+  /**
+   * Adds a `PhaseEntry` after the first occurrence of the given type, or to the top of the Tree if no such phase exists
+   * @param phaseType - The {@linkcode PhaseKey | type of phase} to search for
+   * @param entries - The {@linkcode PhaseEntry | phase(s)} to be added
+   * @todo Dynamic phase markers are not recognized as their internal phase type
+   */
+  public addAfter(phaseType: PhaseKey, ...entries: PhaseEntryInput): boolean {
+    return this.addBeforeAfter(true, phaseType, ...entries);
   }
 
   /**
