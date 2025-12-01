@@ -10,10 +10,10 @@ import type {
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import type { SpeciesId } from "#enums/species-id";
 import { TrainerGender } from "#enums/trainer-gender";
-import type { TrainerType } from "#enums/trainer-type";
+import { TrainerType } from "#enums/trainer-type";
 import type { PokemonSpeciesFilter } from "#types/ui-types";
 import type { NonEmptyArray } from "#types/utility-types";
-import { isBetween } from "#utils/common-utils";
+import { enumValueToKey, isBetween } from "#utils/common-utils";
 import { randSeedItem } from "#utils/random-utils";
 
 // #region TrainerConfigBuilder
@@ -177,31 +177,61 @@ export class TrainerConfigBuilder {
 
   /**
    * Sets the background music to play when battling the Trainer.
-   * @param bgm - The background music to set
+   * @param bgm - The background music to set. This may be a {@linkcode TrainerType}
+   * or a direct path. A `TrainerType` input is equivalent to its key
+   * in snake-case as a path, e.g.
+   * ```
+   * withBattleBgm(TrainerType.ACE_TRAINER)
+   * ```
+   * is equivalent to
+   * ```
+   * withBattleBgm("ace_trainer")
+   * ```
    * @returns `this`
    */
-  public withBattleBgm(bgm: string): this {
-    this.config.battleBgm = () => bgm;
+  public withBattleBgm(bgm: TrainerType | string): this {
+    const bgmString = typeof bgm === "number" ? enumValueToKey(TrainerType, bgm).toLowerCase() : bgm;
+    this.config.battleBgm = () => bgmString;
     return this;
   }
 
   /**
    * Sets the background music to play during the Trainer's introduction dialogue.
-   * @param bgm - The background music to set
+   * @param bgm - The background music to set. This may be a {@linkcode TrainerType}
+   * or a direct path. A `TrainerType` input is equivalent to its key
+   * in snake-case as a path, e.g.
+   * ```
+   * withEncounterBgm(TrainerType.ACE_TRAINER)
+   * ```
+   * is equivalent to
+   * ```
+   * withEncounterBgm("ace_trainer")
+   * ```
    * @returns `this`
    */
-  public withEncounterBgm(bgm: string): this {
-    this.config.encounterBgm = () => bgm;
+  public withEncounterBgm(bgm: TrainerType | string): this {
+    const bgmString = typeof bgm === "number" ? enumValueToKey(TrainerType, bgm).toLowerCase() : bgm;
+    this.config.encounterBgm = () => bgmString;
     return this;
   }
 
   /**
    * Sets the background music to play when the Trainer is defeated.
-   * @param bgm - The background music to set
+   * @param bgm - The background music to set. This may be a {@linkcode TrainerType}
+   * or a direct path. A `TrainerType` input is equivalent to its key
+   * in snake-case as a path, e.g.
+   * ```
+   * withVictoryBgm(TrainerType.ACE_TRAINER)
+   * ```
+   * is equivalent to
+   * ```
+   * withVictoryBgm("ace_trainer")
+   * ```
    * @returns `this`
    */
-  public withVictoryBgm(bgm: string): this {
-    this.config.victoryBgm = () => bgm;
+  public withVictoryBgm(bgm: TrainerType | string): this {
+    const bgmString = typeof bgm === "number" ? enumValueToKey(TrainerType, bgm).toLowerCase() : bgm;
+    this.config.victoryBgm = () => bgmString;
     return this;
   }
 

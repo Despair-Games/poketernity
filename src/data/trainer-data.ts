@@ -28,7 +28,7 @@ export class TrainerData {
     this.name = config.name[this.gender]!();
     this.title = config.title[this.gender]!();
     this.spriteKey = config.spriteKey[this.gender]!();
-    this.dialogueSpriteKey = config.spriteKey[this.gender]?.();
+    this.dialogueSpriteKey = config.dialogueSpriteKey[this.gender]?.();
     this.isBoss = config.isBoss;
     this.battleBgm = config.battleBgm();
     this.encounterBgm = config.encounterBgm();
