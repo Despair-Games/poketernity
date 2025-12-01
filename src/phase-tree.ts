@@ -1,3 +1,5 @@
+// biome-ignore lint/correctness/noUnusedImports: suppression needed until Biome 2.3.8 update PR is merged
+import type { DynamicPhaseManager } from "#app/dynamic-phase-manager";
 import type { Phase } from "#app/phase";
 // biome-ignore lint/correctness/noUnusedImports: suppression needed until Biome 2.3.8 update PR is merged
 import type { PhaseConditionFunc, PhaseKey, PhaseManager, PhaseMap } from "#types/phase-types";
@@ -97,7 +99,6 @@ export class PhaseTree {
 
   /**
    * Used by the {@linkcode PhaseManager} to add phases to the Tree
-   * @param defer - Whether to defer the execution of this phase by allowing subsequently-added phases to run before it
    * @param entries - The {@linkcode PhaseEntry | PhaseEntries} to add
    */
   public unshift(...entries: PhaseEntryInput): void {
@@ -182,7 +183,7 @@ export class PhaseTree {
   /**
    * Finds a particular `Phase` in the Tree by searching in pop order
    * @param phaseType - The {@linkcode PhaseKey | type} of phase to search for
-   * @param phaseFilter - A {@linkcode PhaseConditionFunc} to specify conditions for the phase
+   * @param phaseFilter - (Optional) A {@linkcode PhaseConditionFunc} to specify conditions for the phase
    * @returns The matching {@linkcode Phase}, or `undefined` if none exists
    */
   public find<P extends PhaseKey>(
