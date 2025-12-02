@@ -9,7 +9,7 @@ import type { PokemonPhase } from "#phases/base/pokemon-phase";
  * dynamically
  * @todo Add dynamic scheduling support for `StatStageChangePhase`
  */
-export const dynamicPhaseKeys: PhaseKey[] = ["ObtainStatusEffectPhase", "PostSummonPhase"] as const;
+export const dynamicPhaseKeys: readonly PhaseKey[] = ["ObtainStatusEffectPhase", "PostSummonPhase"] as const;
 
 /**
  * The dynamic queue manager holds priority queues for phases which are queued as dynamic.
@@ -46,31 +46,31 @@ export class DynamicPhaseManager {
   }
 
   /**
-   * Returns the highest-priority (generally by speed) {@linkcode Phase} of the specified type
-   * @param type - The {@linkcode PhaseKey | type} to pop
+   * Returns the highest-priority (generally by speed) Phase of the specified type
+   * @param phaseType - The {@linkcode PhaseKey | type} to pop
    * @returns The popped {@linkcode Phase}, or `undefined` if none of the specified type exist
    */
-  public popNextPhase(type: PhaseKey): Phase | undefined {
-    return this.dynamicPhaseMap.get(type)?.pop();
+  public popNextPhase(phaseType: PhaseKey): Phase | undefined {
+    return this.dynamicPhaseMap.get(phaseType)?.pop();
   }
 
   /**
    * Determines if there is a queued dynamic {@linkcode Phase} meeting the conditions
-   * @param type - The {@linkcode PhaseKey | type} of phase to search for
-   * @param condition - An optional {@linkcode PhaseConditionFunc} to add conditions to the search
+   * @param phaseType - The {@linkcode PhaseKey | type} of phase to search for
+   * @param condition - A {@linkcode PhaseConditionFunc} to add conditions to the search
    * @returns Whether a matching phase exists
    */
-  public has<T extends PhaseKey>(type: T, condition: PhaseConditionFunc<T>): boolean {
-    return !!this.dynamicPhaseMap.get(type)?.has(condition);
+  public has<T extends PhaseKey>(phaseType: T, condition: PhaseConditionFunc<T>): boolean {
+    return !!this.dynamicPhaseMap.get(phaseType)?.has(condition);
   }
 
   /**
    * Finds and removes a single queued {@linkcode Phase}
-   * @param type - The {@linkcode PhaseKey | type} of phase to search for
+   * @param phaseType - The {@linkcode PhaseKey | type} of phase to search for
    * @param phaseFilter - A {@linkcode PhaseConditionFunc} to specify conditions for the phase
    * @returns Whether a removal occurred
    */
-  public remove<T extends PhaseKey>(type: T, condition: PhaseConditionFunc<T>): boolean {
-    return !!this.dynamicPhaseMap.get(type)?.remove(condition);
+  public remove<T extends PhaseKey>(phaseType: T, condition: PhaseConditionFunc<T>): boolean {
+    return !!this.dynamicPhaseMap.get(phaseType)?.remove(condition);
   }
 }

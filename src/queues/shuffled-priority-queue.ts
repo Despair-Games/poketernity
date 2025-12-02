@@ -7,10 +7,10 @@ type ComparatorFunc<T> = (a: T, b: T) => number;
  * Stores a list of elements.
  *
  * The ordering of this queue is dynamically updated such that the
- * highest-"priority" element is always popped first. Sorting order
- * is based on the provided {@linkcode comparator} function. All elements that have
- * the same priority (i.e. `comparator(A, B) === 0`) are ordered randomly
- * within the queue.
+ * highest-"priority" element is always popped first. \
+ * Sorting order is based on the provided {@linkcode comparator} function. \
+ * All elements that have the same priority (i.e. `comparator(A, B) === 0`)
+ * are ordered randomly within the queue.
  */
 export class ShuffledPriorityQueue<T> {
   protected queue: T[] = [];
