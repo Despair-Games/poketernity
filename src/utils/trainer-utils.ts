@@ -7,9 +7,33 @@ import type { PokemonSpecies } from "#data/pokemon-species";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import type { SpeciesId } from "#enums/species-id";
 import { TrainerPoolTier } from "#enums/trainer-pool-tier";
+import type { NonNullTrainerSlot } from "#enums/trainer-slot";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedInt, randSeedItem } from "#utils/random-utils";
+
+/**
+ * Determines the global seed offset used when generating a Pokemon (namely its species)
+ * from a {@linkcode TrainerPartyPokemonConfig}.
+ * @param trainerSlot - The {@linkcode TrainerSlot} of the Trainer whose Pokemon is being generated
+ * @param slotIndex - The party slot index of the Pokemon being generated
+ * @param baseOffset - (Optional) A base offset to override the {@linkcode globalScene.currentBattle.waveIndex | waveIndex} component
+ * @param useSameSeedForAllTrainers - (Default `false`) If `true`, the same seed offset
+ * will be used for all Trainers in the current battle for each slot index.
+ * @returns The final seed offset to generate the Pokemon in the given party slot
+ */
+export function getPartyMemberSeedOffset(
+  trainerSlot: NonNullTrainerSlot,
+  slotIndex: number,
+  baseOffset?: number,
+  useSameSeedForAllTrainers: boolean = false,
+): number {
+  return (
+    ((baseOffset ?? globalScene.currentBattle.waveIndex + (useSameSeedForAllTrainers ? 0 : trainerSlot))
+      + (slotIndex + 1))
+    << 8
+  );
+}
 
 /**
  * Determines the species of a Trainer's generated {@linkcode EnemyPokemon} based on the Pokemon's config.

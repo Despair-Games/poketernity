@@ -32,6 +32,8 @@ export class TrainerConfigBuilder {
     title: {},
     spriteKey: {},
     dialogueSpriteKey: {},
+    battleBgm: () => "battle_trainer",
+    victoryBgm: () => "victory_trainer",
     isBoss: false,
     partyConfigs: [],
     moneyMultiplier: () => 1,
@@ -178,19 +180,19 @@ export class TrainerConfigBuilder {
   /**
    * Sets the background music to play when battling the Trainer.
    * @param bgm - The background music to set. This may be a {@linkcode TrainerType}
-   * or a direct path. A `TrainerType` input is equivalent to its key
-   * in snake-case as a path, e.g.
+   * or a path or filename. A `TrainerType` input is equivalent to the path
+   * `"battle_"` + the `TrainerType`'s key in snake-case, e.g.
    * ```
    * withBattleBgm(TrainerType.ACE_TRAINER)
    * ```
    * is equivalent to
    * ```
-   * withBattleBgm("ace_trainer")
+   * withBattleBgm("battle_ace_trainer")
    * ```
    * @returns `this`
    */
   public withBattleBgm(bgm: TrainerType | string): this {
-    const bgmString = typeof bgm === "number" ? enumValueToKey(TrainerType, bgm).toLowerCase() : bgm;
+    const bgmString = typeof bgm === "number" ? `battle_${enumValueToKey(TrainerType, bgm).toLowerCase()}` : bgm;
     this.config.battleBgm = () => bgmString;
     return this;
   }
@@ -198,19 +200,19 @@ export class TrainerConfigBuilder {
   /**
    * Sets the background music to play during the Trainer's introduction dialogue.
    * @param bgm - The background music to set. This may be a {@linkcode TrainerType}
-   * or a direct path. A `TrainerType` input is equivalent to its key
-   * in snake-case as a path, e.g.
+   * or a direct path. A `TrainerType` input is equivalent to the path
+   * `"encounter_"` + the `TrainerType`'s key in snake-case, e.g.
    * ```
    * withEncounterBgm(TrainerType.ACE_TRAINER)
    * ```
    * is equivalent to
    * ```
-   * withEncounterBgm("ace_trainer")
+   * withEncounterBgm("encounter_ace_trainer")
    * ```
    * @returns `this`
    */
   public withEncounterBgm(bgm: TrainerType | string): this {
-    const bgmString = typeof bgm === "number" ? enumValueToKey(TrainerType, bgm).toLowerCase() : bgm;
+    const bgmString = typeof bgm === "number" ? `encounter_${enumValueToKey(TrainerType, bgm).toLowerCase()}` : bgm;
     this.config.encounterBgm = () => bgmString;
     return this;
   }
@@ -218,19 +220,19 @@ export class TrainerConfigBuilder {
   /**
    * Sets the background music to play when the Trainer is defeated.
    * @param bgm - The background music to set. This may be a {@linkcode TrainerType}
-   * or a direct path. A `TrainerType` input is equivalent to its key
-   * in snake-case as a path, e.g.
+   * or a direct path. A `TrainerType` input is equivalent to the path
+   * `"victory_"` + the `TrainerType`'s key in snake-case, e.g.
    * ```
    * withVictoryBgm(TrainerType.ACE_TRAINER)
    * ```
    * is equivalent to
    * ```
-   * withVictoryBgm("ace_trainer")
+   * withVictoryBgm("victory_ace_trainer")
    * ```
    * @returns `this`
    */
   public withVictoryBgm(bgm: TrainerType | string): this {
-    const bgmString = typeof bgm === "number" ? enumValueToKey(TrainerType, bgm).toLowerCase() : bgm;
+    const bgmString = typeof bgm === "number" ? `victory_${enumValueToKey(TrainerType, bgm).toLowerCase()}` : bgm;
     this.config.victoryBgm = () => bgmString;
     return this;
   }
@@ -465,6 +467,21 @@ export class TrainerConfigBuilder {
   }
 
   /**
+   * Sets a fixed base seed offset when generating the Trainer's party. Can be
+   * used for static party generation across multiple configs.
+   * @param offset - The base seed offset to set.
+   * @returns `this`
+   * @see {@linkcode NewTrainerConfig.partyBaseSeedOffset}
+   * @remarks
+   * For organization purposes, it's best to set `offset` to a {@linkcode TrainerType},
+   * but any number input is valid.
+   */
+  public withPartySeedOffset(offset: number): this {
+    this.config.partyBaseSeedOffset = offset;
+    return this;
+  }
+
+  /**
    * Sets a fixed multiplier for the money reward for defeating the Trainer.
    * @param multiplier - The multiplier to set
    * @returns `this`
@@ -478,12 +495,9 @@ export class TrainerConfigBuilder {
    * Sets the config to use the Rival character's assets
    * (i.e. name, title, sprite keys, and bgm).
    * @returns `this`
+   * @todo Add sprite keys
    */
   public withRivalAssets(): this {
-    return this.withFixedName("finn", TrainerGender.MALE)
-      .withFixedName("ivy", TrainerGender.FEMALE)
-      .withTitle("rival")
-      .withEncounterBgm("rival")
-      .withBattleBgm("battle_rival");
+    return this.withFixedName("finn", TrainerGender.MALE).withFixedName("ivy", TrainerGender.FEMALE).withTitle("rival");
   }
 }

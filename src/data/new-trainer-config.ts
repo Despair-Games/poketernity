@@ -83,6 +83,16 @@ export interface NewTrainerConfig {
    */
   partyConfigs: TrainerPartyPokemonConfig[];
   /**
+   * A fixed base seed offset component to be used when the Trainer's party is randomly generated.
+   * If multiple configs have the same seed offset and apply the same RNG for species generation,
+   * they will produce the same species of Pokemon.
+   *
+   * @privateRemarks
+   * For organization purposes, it's best to supply this with a {@linkcode TrainerType} when needed,
+   * but any number is valid.
+   */
+  partyBaseSeedOffset?: number;
+  /**
    * A generator to determine the amount of money granted to the Player after defeating the Trainer
    * (relative to the base money amount)
    * @see {@linkcode MoneyRewardPhase}
@@ -110,25 +120,61 @@ type ConfigSlotMap = Record<NonNullTrainerSlot, NewTrainerConfig>;
 export class CompoundTrainerConfig {
   public readonly configs: ConfigSlotMap;
   public readonly combinedTitle: string;
+  /**
+   * If `true`, all Trainers' party Pokemon are generated using the same seed
+   * offset. For example, if two party members' species are to be randomly selected
+   * from an {@link PartyPokemonConfig.speciesPool | untiered species pool}, their
+   * species will be of the same index within their respective pools.
+   *
+   * @privateRemarks
+   * This is currently only used for the Twins, and is meant to give them matching
+   * Pokemon pairs (e.g. Plusle + Minun).
+   */
+  public readonly useSameSeedForAllTrainers: boolean;
 
-  constructor(configs: ConfigSlotMap, combinedTitle: string) {
+  constructor(configs: ConfigSlotMap, combinedTitle: string, useSameSeedForAllTrainers: boolean = false) {
     this.configs = configs;
     this.combinedTitle = combinedTitle;
+    this.useSameSeedForAllTrainers = useSameSeedForAllTrainers;
   }
 
+  /**
+   * @returns `true` if this Trainer combination is considered a boss battle.
+   * @remarks
+   * A Compound Trainer battle is considered a boss battle if at least one of the
+   * Trainers involved {@link NewTrainerConfig.isBoss | is a boss}.
+   */
   public get isBoss(): boolean {
     const configValues = Object.values(this.configs).map((cfg) => cfg.isBoss);
     return configValues.includes(true);
   }
 
+  /**
+   * The generator used to determine the BGM to play during battle.
+   * @remarks
+   * Compound Trainer battles always use the battle BGM of the Trainer in the first
+   * slot ({@linkcode TrainerSlot.TRAINER}).
+   */
   public get battleBgm(): () => string {
     return this.configs[TrainerSlot.TRAINER].battleBgm;
   }
 
+  /**
+   * The generator used to determine the BGM to play during the Trainers' introduction.
+   * @remarks
+   * Compound Trainer battles always use the encounter BGM of the Trainer in the first
+   * slot ({@linkcode TrainerSlot.TRAINER}).
+   */
   public get encounterBgm(): () => string {
     return this.configs[TrainerSlot.TRAINER].encounterBgm;
   }
 
+  /**
+   * The generator used to determine the BGM to play when the Trainer is defeated.
+   * @remarks
+   * Compound Trainer battles always use the victory BGM of the Trainer in the first
+   * slot ({@linkcode TrainerSlot.TRAINER}).
+   */
   public get victoryBgm(): () => string {
     return this.configs[TrainerSlot.TRAINER].victoryBgm;
   }

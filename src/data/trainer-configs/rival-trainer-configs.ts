@@ -529,6 +529,9 @@ export const rivalTrainerConfigs: TrainerConfigs = {
 export const newRivalTrainerConfigs: TrainerConfigMap = {
   [TrainerType.RIVAL]: new TrainerConfigBuilder()
     .withRivalAssets()
+    .withEncounterBgm(TrainerType.RIVAL)
+    .withBattleBgm(TrainerType.RIVAL)
+    .withPartySeedOffset(TrainerType.RIVAL)
     .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
       abilityIndex: 0,
       strength: PartyMemberStrength.WEAKEST,
@@ -537,6 +540,9 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
     .build(),
   [TrainerType.RIVAL_2]: new TrainerConfigBuilder()
     .withRivalAssets()
+    .withEncounterBgm(TrainerType.RIVAL)
+    .withBattleBgm(TrainerType.RIVAL)
+    .withPartySeedOffset(TrainerType.RIVAL)
     .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
       abilityIndex: 0,
       strength: PartyMemberStrength.STRONG,
@@ -548,6 +554,9 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
     .build(),
   [TrainerType.RIVAL_3]: new TrainerConfigBuilder()
     .withRivalAssets()
+    .withEncounterBgm(TrainerType.RIVAL)
+    .withBattleBgm(TrainerType.RIVAL)
+    .withPartySeedOffset(TrainerType.RIVAL)
     .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
       abilityIndex: 0,
       strength: PartyMemberStrength.STRONG,
@@ -560,6 +569,9 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
     .build(),
   [TrainerType.RIVAL_4]: new TrainerConfigBuilder()
     .withRivalAssets()
+    .withEncounterBgm(TrainerType.RIVAL)
+    .withBattleBgm(TrainerType.RIVAL_2)
+    .withPartySeedOffset(TrainerType.RIVAL)
     .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
       abilityIndex: 0,
       strength: PartyMemberStrength.STRONG,
@@ -573,6 +585,9 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
     .build(),
   [TrainerType.RIVAL_5]: new TrainerConfigBuilder()
     .withRivalAssets()
+    .withEncounterBgm(TrainerType.RIVAL)
+    .withBattleBgm(TrainerType.RIVAL_3)
+    .withPartySeedOffset(TrainerType.RIVAL)
     .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
       abilityIndex: 0,
       boss: true,
@@ -596,6 +611,9 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
     .build(),
   [TrainerType.RIVAL_6]: new TrainerConfigBuilder()
     .withRivalAssets()
+    .withEncounterBgm("final")
+    .withBattleBgm(TrainerType.RIVAL_3)
+    .withPartySeedOffset(TrainerType.RIVAL)
     .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
       abilityIndex: 0,
       boss: true,

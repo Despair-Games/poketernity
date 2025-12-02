@@ -6,8 +6,13 @@ import type { EnemyPokemon } from "#field/enemy-pokemon";
 import { coerceArray } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedInt } from "#utils/random-utils";
-import { getPartyPokemonLevel, getPartyPokemonSpecies } from "#utils/trainer-utils";
+import { getPartyMemberSeedOffset, getPartyPokemonLevel, getPartyPokemonSpecies } from "#utils/trainer-utils";
 
+/**
+ * Class for storing all data for a specific Trainer instance as derived from a
+ * {@linkcode NewTrainerConfig}. When created, the Trainer's party of {@linkcode EnemyPokemon}
+ * is also generated and added to {@linkcode globalScene}.
+ */
 export class TrainerData {
   public readonly trainerSlot: NonNullTrainerSlot;
   public readonly name: string;
@@ -22,9 +27,9 @@ export class TrainerData {
   public readonly moneyMultiplier: number;
   public readonly gender: TrainerGender;
 
-  constructor(trainerSlot: NonNullTrainerSlot, config: NewTrainerConfig) {
+  constructor(trainerSlot: NonNullTrainerSlot, config: NewTrainerConfig, gender?: TrainerGender) {
     this.trainerSlot = trainerSlot;
-    this.gender = this.getGender(config);
+    this.gender = gender ?? this.getGender(config);
     this.name = config.name[this.gender]!();
     this.title = config.title[this.gender]!();
     this.spriteKey = config.spriteKey[this.gender]!();
@@ -33,7 +38,7 @@ export class TrainerData {
     this.battleBgm = config.battleBgm();
     this.encounterBgm = config.encounterBgm();
     this.victoryBgm = config.victoryBgm();
-    this.party = this.getParty(config);
+    this.party = this.getParty(trainerSlot, config);
     this.moneyMultiplier = config.moneyMultiplier();
   }
 
@@ -70,14 +75,21 @@ export class TrainerData {
    * @see {@linkcode getPartyPokemonLevel}
    * @see {@linkcode getPartyPokemonSpecies}
    */
-  private getParty({ partyConfigs }: NewTrainerConfig): EnemyPokemon[] {
+  private getParty(
+    trainerSlot: NonNullTrainerSlot,
+    { partyConfigs, partyBaseSeedOffset }: NewTrainerConfig,
+  ): EnemyPokemon[] {
+    const { waveIndex } = globalScene.currentBattle;
     const party: EnemyPokemon[] = [];
     for (const config of partyConfigs) {
       const strength = coerceArray(config.strength);
       for (let i = 0; i < config.count; i++) {
-        const level = getPartyPokemonLevel(strength[i] ?? strength.at(-1), globalScene.currentBattle.waveIndex);
-        const species = getPokemonSpecies(getPartyPokemonSpecies(level, party, config));
-        party.push(globalScene.addEnemyPokemon(species, level, config, config.postProcess));
+        const seedOffset = getPartyMemberSeedOffset(trainerSlot, party.length, partyBaseSeedOffset);
+        globalScene.executeWithSeedOffset(() => {
+          const level = getPartyPokemonLevel(strength[i] ?? strength.at(-1), waveIndex);
+          const species = getPokemonSpecies(getPartyPokemonSpecies(level, party, config));
+          party.push(globalScene.addEnemyPokemon(species, level, config, config.postProcess));
+        }, seedOffset);
       }
     }
     return party;
