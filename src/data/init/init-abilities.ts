@@ -414,7 +414,7 @@ export function initAbilities(): void {
         Stat.SPATK,
         1.5,
       ),
-    new Ability(AbilityId.FORECAST, 3) //
+    new Ability(AbilityId.FORECAST, 3, -2) //
       .uncopiable()
       .unreplaceable()
       .attr(PostSummonFormChangeByWeatherAbAttr)
@@ -569,7 +569,7 @@ export function initAbilities(): void {
       .attr(StatusEffectImmunityAbAttr)
       .condition(getWeatherCondition(...SUNNY_WEATHER_TYPES))
       .ignorable(),
-    new Ability(AbilityId.KLUTZ, 4) //
+    new Ability(AbilityId.KLUTZ, 4, 1) //
       .unimplemented(),
     new Ability(AbilityId.MOLD_BREAKER, 4) //
       .attr(PostSummonMessageAbAttr, (pokemon: Pokemon) =>
@@ -635,7 +635,7 @@ export function initAbilities(): void {
       .uncopiable()
       .unsuppressable()
       .unreplaceable(),
-    new Ability(AbilityId.FLOWER_GIFT, 4) //
+    new Ability(AbilityId.FLOWER_GIFT, 4, -2) //
       .conditionalAttr(getWeatherCondition(...SUNNY_WEATHER_TYPES), EffectiveStatMultiplierAbAttr, Stat.ATK, 1.5)
       .conditionalAttr(getWeatherCondition(...SUNNY_WEATHER_TYPES), EffectiveStatMultiplierAbAttr, Stat.SPDEF, 1.5)
       .uncopiable()
@@ -669,7 +669,7 @@ export function initAbilities(): void {
     new Ability(AbilityId.CONTRARY, 5) //
       .attr(StatStageChangeMultiplierAbAttr, -1)
       .ignorable(),
-    new Ability(AbilityId.UNNERVE, 5) //
+    new Ability(AbilityId.UNNERVE, 5, 1) //
       .attr(PreventBerryUseAbAttr),
     new Ability(AbilityId.DEFIANT, 5) //
       .attr(DefiantCompetitiveAbAttr, [Stat.ATK], 2),
@@ -975,7 +975,7 @@ export function initAbilities(): void {
         ConditionalCritAbAttr,
         (_user, target, _move) => !!target?.hasStatusEffect([StatusEffect.POISON, StatusEffect.TOXIC]),
       ),
-    new Ability(AbilityId.SHIELDS_DOWN, 7) //
+    new Ability(AbilityId.SHIELDS_DOWN, 7, -1) //
       .attr(PostBattleInitFormChangeAbAttr, () => 0)
       .attr(PostSummonFormChangeAbAttr, (p) => (p.formIndex % 7) + (p.getHpRatio() <= 0.5 ? 7 : 0))
       .attr(PostTurnFormChangeAbAttr, (p) => (p.formIndex % 7) + (p.getHpRatio() <= 0.5 ? 7 : 0))
@@ -1020,7 +1020,7 @@ export function initAbilities(): void {
       .attr(MoveTypeChangeAbAttr, ElementalType.ELECTRIC, 1.2, normalTypeMoveConversionCondition),
     new Ability(AbilityId.SURGE_SURFER, 7) //
       .conditionalAttr(getTerrainCondition(TerrainType.ELECTRIC), EffectiveStatMultiplierAbAttr, Stat.SPD, 2),
-    new Ability(AbilityId.SCHOOLING, 7) //
+    new Ability(AbilityId.SCHOOLING, 7, -1) //
       .attr(PostBattleInitFormChangeAbAttr, () => 0)
       .attr(PostSummonFormChangeAbAttr, (p) => (p.level < 20 || p.getHpRatio() <= 0.25 ? 0 : 1))
       .attr(PostTurnFormChangeAbAttr, (p) => (p.level < 20 || p.getHpRatio() <= 0.25 ? 0 : 1))
@@ -1274,7 +1274,7 @@ export function initAbilities(): void {
       .ignorable(),
     new Ability(AbilityId.RIPEN, 8) //
       .attr(DoubleBerryEffectAbAttr),
-    new Ability(AbilityId.ICE_FACE, 8) //
+    new Ability(AbilityId.ICE_FACE, 8, -2) //
       .uncopiable()
       .unsuppressable()
       .unreplaceable()
@@ -1313,7 +1313,7 @@ export function initAbilities(): void {
       .ignorable(),
     new Ability(AbilityId.POWER_SPOT, 8) //
       .attr(AllyMoveCategoryPowerBoostAbAttr, [MoveCategory.SPECIAL, MoveCategory.PHYSICAL], 1.3),
-    new Ability(AbilityId.MIMICRY, 8) //
+    new Ability(AbilityId.MIMICRY, 8, -1) //
       .attr(TerrainEventTypeChangeAbAttr),
     new Ability(AbilityId.SCREEN_CLEANER, 8) //
       .attr(PostSummonRemoveArenaTagAbAttr, [
@@ -1335,7 +1335,7 @@ export function initAbilities(): void {
       .edgeCase(),
     new Ability(AbilityId.GORILLA_TACTICS, 8) //
       .attr(GorillaTacticsAbAttr),
-    new Ability(AbilityId.NEUTRALIZING_GAS, 8) //
+    new Ability(AbilityId.NEUTRALIZING_GAS, 8, 2) //
       .attr(SuppressFieldAbilitiesAbAttr)
       .uncopiable()
       .noTransform()
@@ -1371,7 +1371,7 @@ export function initAbilities(): void {
       .attr(PostVictoryStatStageChangeAbAttr, Stat.ATK, 1),
     new Ability(AbilityId.GRIM_NEIGH, 8) //
       .attr(PostVictoryStatStageChangeAbAttr, Stat.SPATK, 1),
-    new Ability(AbilityId.AS_ONE_GLASTRIER, 8) //
+    new Ability(AbilityId.AS_ONE_GLASTRIER, 8, 1) //
       .attr(PostSummonMessageAbAttr, (pokemon: Pokemon) =>
         i18next.t("abilityTriggers:postSummonAsOneGlastrier", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
@@ -1382,7 +1382,7 @@ export function initAbilities(): void {
       .uncopiable()
       .unsuppressable()
       .unreplaceable(),
-    new Ability(AbilityId.AS_ONE_SPECTRIER, 8) //
+    new Ability(AbilityId.AS_ONE_SPECTRIER, 8, 1) //
       .attr(PostSummonMessageAbAttr, (pokemon: Pokemon) =>
         i18next.t("abilityTriggers:postSummonAsOneSpectrier", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
@@ -1478,7 +1478,7 @@ export function initAbilities(): void {
         (_target, _user, move) => move.category !== MoveCategory.STATUS,
         BattlerTagType.CHARGED,
       ),
-    new Ability(AbilityId.PROTOSYNTHESIS, 9) //
+    new Ability(AbilityId.PROTOSYNTHESIS, 9, -2) //
       .conditionalAttr(
         getWeatherCondition(...SUNNY_WEATHER_TYPES),
         PostSummonAddBattlerTagAbAttr,
@@ -1488,7 +1488,7 @@ export function initAbilities(): void {
       .attr(PostWeatherChangeAddBattlerTagAbAttr, BattlerTagType.PROTOSYNTHESIS, 0, ...SUNNY_WEATHER_TYPES)
       .uncopiable()
       .noTransform(),
-    new Ability(AbilityId.QUARK_DRIVE, 9) //
+    new Ability(AbilityId.QUARK_DRIVE, 9, -2) //
       .conditionalAttr(
         getTerrainCondition(TerrainType.ELECTRIC),
         PostSummonAddBattlerTagAbAttr,
@@ -1557,7 +1557,7 @@ export function initAbilities(): void {
       })
       // Counter resets every wave instead of on arena reset
       .partial(),
-    new Ability(AbilityId.COSTAR, 9) //
+    new Ability(AbilityId.COSTAR, 9, -2) //
       .attr(PostSummonCopyAllyStatsAbAttr),
     new Ability(AbilityId.TOXIC_DEBRIS, 9) //
       .attr(
@@ -1583,7 +1583,7 @@ export function initAbilities(): void {
       .ignorable(),
     new Ability(AbilityId.SUPERSWEET_SYRUP, 9) //
       .attr(PostSummonStatStageChangeAbAttr, [Stat.EVA], -1),
-    new Ability(AbilityId.HOSPITALITY, 9) //
+    new Ability(AbilityId.HOSPITALITY, 9, -2) //
       .attr(PostSummonAllyHealAbAttr, 4, true),
     new Ability(AbilityId.TOXIC_CHAIN, 9) //
       .attr(PostAttackApplyStatusEffectAbAttr, false, 30, StatusEffect.TOXIC)
@@ -1617,7 +1617,7 @@ export function initAbilities(): void {
       // TODO: confirm if this is true
       .unreplaceable()
       .noTransform(),
-    new Ability(AbilityId.TERA_SHIFT, 9) //
+    new Ability(AbilityId.TERA_SHIFT, 9, 2) //
       .attr(PostSummonFormChangeAbAttr, (p) => (p.getFormKey() ? 0 : 1))
       .uncopiable()
       .unsuppressable()
