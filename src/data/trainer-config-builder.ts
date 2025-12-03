@@ -1,12 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import type {
-  NewTrainerConfig,
-  SpeciesConfigOptions,
-  SpeciesFilterConfigOptions,
-  SpeciesPoolConfigOptions,
-  TieredSpeciesPool,
-  TrainerPartyPokemonConfig,
-} from "#data/new-trainer-config";
+import type { NewTrainerConfig, TieredSpeciesPool, TrainerPartyPokemonConfig } from "#data/new-trainer-config";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import type { SpeciesId } from "#enums/species-id";
 import { TrainerGender } from "#enums/trainer-gender";
@@ -15,6 +8,35 @@ import type { PokemonSpeciesFilter } from "#types/ui-types";
 import type { NonEmptyArray } from "#types/utility-types";
 import { enumValueToKey, isBetween } from "#utils/common-utils";
 import { randSeedItem } from "#utils/random-utils";
+
+type PartyPokemonOptions = Partial<TrainerPartyPokemonConfig>;
+type SpeciesPoolConfigOptions = Omit<PartyPokemonOptions, "tieredSpeciesPool" | "speciesPool" | "allowLegendaries">;
+type SpeciesConfigOptions = Omit<SpeciesPoolConfigOptions, "speciesFilter" | "allowDuplicates">;
+type SpeciesFilterConfigOptions = Omit<PartyPokemonOptions, "tieredSpeciesPool" | "speciesPool" | "speciesFilter">;
+
+/**
+ * The default values given to the {@linkcode PartyPokemonOptions} specified
+ * for all party Pokemon generation methods.
+ */
+const defaultPartyConfigOptions: TrainerPartyPokemonConfig = {
+  allowDuplicates: false,
+  // This defaults to `false` for filter-based generation methods, but is
+  // overwritten to `true` in pool-based methods. Pools presumably will not
+  // include undesired legend-like Pokemon, anyway.
+  allowLegendaries: false,
+  strength: PartyMemberStrength.AVERAGE,
+  count: 1,
+  ignoreEvolution: false,
+} as const;
+
+/**
+ * Inserts default values into the given options to form a valid config.
+ * @param options - The {@linkcode PartyPokemonOptions} on which the default values are added.
+ * @returns The {@linkcode TrainerPartyPokemonConfig} with the added default values.
+ */
+function addDefaultPartyOptions(options: PartyPokemonOptions): TrainerPartyPokemonConfig {
+  return { ...defaultPartyConfigOptions, ...options };
+}
 
 // #region TrainerConfigBuilder
 
@@ -242,47 +264,8 @@ export class TrainerConfigBuilder {
    * {@linkcode TrainerPartyPokemonConfig} to the Trainer's party.
    * @returns `this`
    */
-  public withPokemonFromConfig({
-    tieredSpeciesPool,
-    speciesPool,
-    speciesFilter,
-    allowDuplicates = false,
-    allowLegendaries = false,
-    strength = PartyMemberStrength.AVERAGE,
-    count = 1,
-    ignoreEvolution = false,
-    abilityIndex,
-    formIndex,
-    gender,
-    shiny,
-    variant,
-    ivs,
-    nature,
-    boss,
-    bossSegments,
-    postProcess,
-  }: TrainerPartyPokemonConfig): this {
-    this.config.partyConfigs!.push({
-      tieredSpeciesPool,
-      speciesPool,
-      speciesFilter,
-      allowDuplicates,
-      allowLegendaries,
-      strength,
-      count,
-      ignoreEvolution,
-      abilityIndex,
-      formIndex,
-      gender,
-      shiny,
-      variant,
-      ivs,
-      nature,
-      boss,
-      bossSegments,
-      postProcess,
-    });
-
+  public withPokemonFromConfig(config: TrainerPartyPokemonConfig): this {
+    this.config.partyConfigs!.push(config);
     return this;
   }
 
@@ -291,44 +274,11 @@ export class TrainerConfigBuilder {
    * @returns `this`
    * @todo Add odds for each tier to this doc
    */
-  public withPokemonFromTieredPool(
-    speciesPool: TieredSpeciesPool,
-    {
-      speciesFilter,
-      allowDuplicates = false,
-      strength = PartyMemberStrength.AVERAGE,
-      count = 1,
-      ignoreEvolution = false,
-      abilityIndex,
-      formIndex,
-      gender,
-      shiny,
-      variant,
-      ivs,
-      nature,
-      boss,
-      bossSegments,
-      postProcess,
-    }: SpeciesPoolConfigOptions,
-  ): this {
+  public withPokemonFromTieredPool(speciesPool: TieredSpeciesPool, options: SpeciesPoolConfigOptions = {}): this {
     return this.withPokemonFromConfig({
+      ...addDefaultPartyOptions(options),
       tieredSpeciesPool: speciesPool,
-      speciesFilter,
-      allowDuplicates,
       allowLegendaries: true,
-      strength,
-      count,
-      ignoreEvolution,
-      abilityIndex,
-      formIndex,
-      gender,
-      shiny,
-      variant,
-      ivs,
-      nature,
-      boss,
-      bossSegments,
-      postProcess,
     });
   }
 
@@ -336,89 +286,23 @@ export class TrainerConfigBuilder {
    * Appends a Pokemon of a set species to the Trainer's party.
    * @returns `this`
    */
-  public withPokemon(
-    species: SpeciesId,
-    {
-      strength = PartyMemberStrength.AVERAGE,
-      count = 1,
-      ignoreEvolution = false,
-      abilityIndex,
-      formIndex,
-      gender,
-      shiny,
-      variant,
-      ivs,
-      nature,
-      boss,
-      bossSegments,
-      postProcess,
-    }: SpeciesConfigOptions = {},
-  ): this {
-    return this.withPokemonFromPool([species], {
-      strength,
-      count,
-      ignoreEvolution,
-      abilityIndex,
-      formIndex,
-      gender,
-      shiny,
-      variant,
-      ivs,
-      nature,
-      boss,
-      bossSegments,
-      postProcess,
-    });
+  public withPokemon(species: SpeciesId, options: SpeciesConfigOptions = {}): this {
+    return this.withPokemonFromPool([species], options);
   }
 
   /**
    * Appends a Pokemon from a pool of species to the Trainer's party.
    * @param speciesPool - The set of {@linkcode SpeciesId} from which the Pokemon is generated.
    * When generated, the Pokemon will be of a random species from this pool
-   * @param ignoreEvolution - (Default `false`) If `true`, the generated Pokemon's final species will be identical to
-   * `species` regardless of the Pokemon's level. Otherwise, the Pokemon's final species is set to
-   * a stage in its evolution line that is appropriate for its level.
-   * @param postProcess - (Optional) A callback that may be used to apply custom characteristics
-   * to the Pokemon after it has been generated.
+   * @param options - The {@linkcode PartyPokemonOptions} to apply to the generated Pokemon.
+   * @see {@linkcode defaultPartyConfigOptions}
    */
-  public withPokemonFromPool(
-    speciesPool: Readonly<NonEmptyArray<SpeciesId>>,
-    {
-      speciesFilter,
-      allowDuplicates = false,
-      strength = PartyMemberStrength.AVERAGE,
-      count = 1,
-      ignoreEvolution = false,
-      abilityIndex,
-      formIndex,
-      gender,
-      shiny,
-      variant,
-      ivs,
-      nature,
-      boss,
-      bossSegments,
-      postProcess,
-    }: SpeciesPoolConfigOptions = {},
-  ): this {
+  public withPokemonFromPool(speciesPool: Readonly<NonEmptyArray<SpeciesId>>, options?: SpeciesPoolConfigOptions): this;
+  public withPokemonFromPool(speciesPool: NonEmptyArray<SpeciesId>, options: SpeciesPoolConfigOptions = {}): this {
     return this.withPokemonFromConfig({
+      ...addDefaultPartyOptions(options),
       speciesPool: [...speciesPool],
-      speciesFilter,
-      allowDuplicates,
       allowLegendaries: true,
-      strength,
-      count,
-      ignoreEvolution,
-      abilityIndex,
-      formIndex,
-      gender,
-      shiny,
-      variant,
-      ivs,
-      nature,
-      boss,
-      bossSegments,
-      postProcess,
     });
   }
 
@@ -426,43 +310,10 @@ export class TrainerConfigBuilder {
    * Appends a Pokemon of a {@link globalScene.randomSpecies | random species} that satisfies conditions
    * from the given filter and other parameters.
    */
-  public withPokemonFromFilter(
-    filter: PokemonSpeciesFilter,
-    {
-      allowDuplicates = false,
-      allowLegendaries = false,
-      strength = PartyMemberStrength.AVERAGE,
-      count = 1,
-      ignoreEvolution = false,
-      abilityIndex,
-      formIndex,
-      gender,
-      shiny,
-      variant,
-      ivs,
-      nature,
-      boss,
-      bossSegments,
-      postProcess,
-    }: SpeciesFilterConfigOptions = {},
-  ): this {
+  public withPokemonFromFilter(filter: PokemonSpeciesFilter, options: SpeciesFilterConfigOptions = {}): this {
     return this.withPokemonFromConfig({
+      ...addDefaultPartyOptions(options),
       speciesFilter: filter,
-      allowDuplicates,
-      allowLegendaries,
-      strength,
-      count,
-      ignoreEvolution,
-      abilityIndex,
-      formIndex,
-      gender,
-      shiny,
-      variant,
-      ivs,
-      nature,
-      boss,
-      bossSegments,
-      postProcess,
     });
   }
 

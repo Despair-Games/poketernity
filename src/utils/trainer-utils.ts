@@ -124,14 +124,13 @@ function getBasePartyPokemonTier(): TrainerPoolTier {
 
 /**
  * @param strength - The {@linkcode PartyMemberStrength} of a generated Pokemon
- * @param waveIndex - The current wave the player is on (not adjusted for the current game mode)
  * @returns The level of the generated Pokemon
  */
-export function getPartyPokemonLevel(strength: PartyMemberStrength, waveIndex: number): number {
+export function getPartyPokemonLevel(strength: PartyMemberStrength): number {
   let multiplier = getStrengthLevelMultiplier(strength);
   let levelOffset = 0;
 
-  const scaledWaveIndex = globalScene.gameMode.getWaveForDifficulty(waveIndex);
+  const scaledWaveIndex = globalScene.gameMode.getWaveForDifficulty(globalScene.currentBattle.waveIndex);
   const baseLevel = getLevelForWaveFunc(scaledWaveIndex);
 
   /**

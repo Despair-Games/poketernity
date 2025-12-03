@@ -79,14 +79,15 @@ export class TrainerData {
     trainerSlot: NonNullTrainerSlot,
     { partyConfigs, partyBaseSeedOffset }: NewTrainerConfig,
   ): EnemyPokemon[] {
-    const { waveIndex } = globalScene.currentBattle;
     const party: EnemyPokemon[] = [];
     for (const config of partyConfigs) {
-      const strength = coerceArray(config.strength);
+      const strength = config.variableStrength
+        ? coerceArray(config.variableStrength).map((strengthFn) => strengthFn())
+        : coerceArray(config.strength);
       for (let i = 0; i < config.count; i++) {
         const seedOffset = getPartyMemberSeedOffset(trainerSlot, party.length, partyBaseSeedOffset);
         globalScene.executeWithSeedOffset(() => {
-          const level = getPartyPokemonLevel(strength[i] ?? strength.at(-1), waveIndex);
+          const level = getPartyPokemonLevel(strength[i] ?? strength.at(-1));
           const species = getPokemonSpecies(getPartyPokemonSpecies(level, party, config));
           party.push(globalScene.addEnemyPokemon(species, level, config, config.postProcess));
         }, seedOffset);

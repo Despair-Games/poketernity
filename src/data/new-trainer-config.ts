@@ -11,7 +11,7 @@ import { type NonNullTrainerSlot, TrainerSlot } from "#enums/trainer-slot";
 import type { TrainerType } from "#enums/trainer-type";
 import type { EnemyPokemon, EnemyPokemonOptions } from "#field/enemy-pokemon";
 import type { PokemonSpeciesFilter } from "#types/ui-types";
-import type { NonEmptyArray } from "#types/utility-types";
+import type { CoercibleArray, NonEmptyArray } from "#types/utility-types";
 
 /**
  * A record of generator functions mapped by {@linkcode TrainerGender}. When generating
@@ -241,9 +241,16 @@ export interface TrainerPartyPokemonConfig extends ConfigurableEnemyPokemonOptio
   /**
    * The {@link PartyMemberStrength | strength} of the generated Pokemon.
    * Used to determine the Pokemon's level for the current wave.
-   * If set to an array, its length should be the same as {@linkcode count}
+   * If set to an array, its length should be equal to {@linkcode count}.
    */
-  strength: PartyMemberStrength | PartyMemberStrength[];
+  strength: CoercibleArray<PartyMemberStrength>;
+  /**
+   * (Optional) A set of functions to apply variable {@link PartyMemberStrength | strength}
+   * to generated Pokemon. If defined, this takes precedent over the config's
+   * {@linkcode strength} property. If set to an array, its length should be
+   * equal to {@linkcode count}.
+   */
+  variableStrength?: CoercibleArray<() => PartyMemberStrength>;
   /** The number of Pokemon to generate from this config */
   count: number;
   /**
@@ -252,6 +259,11 @@ export interface TrainerPartyPokemonConfig extends ConfigurableEnemyPokemonOptio
    * adjustment step is skipped.
    */
   ignoreEvolution: boolean;
+  /**
+   * (Optional) A condition for this config to apply when the Trainer's party is
+   * generated. If this condition isn't met, this config is ignored.
+   */
+  condition?: () => boolean;
   /**
    * (Optional) A callback function to change the properties of the generated
    * Pokemon after it is constructed.
@@ -262,11 +274,3 @@ export interface TrainerPartyPokemonConfig extends ConfigurableEnemyPokemonOptio
    */
   postProcess?: (pokemon: EnemyPokemon) => void;
 }
-
-export type SpeciesPoolConfigOptions = Partial<
-  Omit<TrainerPartyPokemonConfig, "tieredSpeciesPool" | "speciesPool" | "allowLegendaries">
->;
-export type SpeciesConfigOptions = Partial<Omit<SpeciesPoolConfigOptions, "speciesFilter" | "allowDuplicates">>;
-export type SpeciesFilterConfigOptions = Partial<
-  Omit<TrainerPartyPokemonConfig, "tieredSpeciesPool" | "speciesPool" | "speciesFilter">
->;
