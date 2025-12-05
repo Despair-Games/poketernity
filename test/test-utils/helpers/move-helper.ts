@@ -234,7 +234,7 @@ export class MoveHelper extends GameManagerHelper {
   /**
    * Emulate a player's target selection after a move is chosen, called automatically by {@linkcode MoveHelper.select}.
    * Will trigger during the next {@linkcode SelectTargetPhase}
-   * @param movePosition - The index of the move in the Pokemon's {@linkcode Pokemon.moveset | moveset}
+   * @param movePosition - The index of the move in the Pokemon's {@linkcode Pokemon._moveset | moveset}
    * @param targetIndex - The index of the attack target, or `undefined` for multi-target attacks
    */
   private selectTarget(movePosition: number, targetIndex?: BattlerIndex) {
