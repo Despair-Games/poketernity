@@ -188,6 +188,7 @@ export class CompoundTrainerConfig {
   }
 }
 
+// #endregion
 // #region PartyPokemonConfig
 
 /**

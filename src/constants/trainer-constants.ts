@@ -15,6 +15,11 @@ export const TRAINER_POOL_COMBINED_WEIGHT = Object.values(TRAINER_POOL_TIER_WEIG
 
 // #region Rival constants
 
+/**
+ * A list of all standard starters (e.g. Bulbasaur, Charmander, Squirtle).
+ * @privateRemarks
+ * Needs to be updated for every mainline generation released.
+ */
 export const RIVAL_SLOT_0_POKEMON = Object.freeze<NonEmptyArray<SpeciesId>>([
   SpeciesId.BULBASAUR,
   SpeciesId.CHARMANDER,
@@ -57,6 +62,7 @@ export const RIVAL_SLOT_1_POKEMON = Object.freeze<NonEmptyArray<SpeciesId>>([
   SpeciesId.WATTREL,
 ]);
 
+// #endregion
 // #region Gym Leader constants
 
 /**
@@ -82,3 +88,5 @@ export const GYM_LEADER_STRENGTH_TEMPLATES = Object.freeze<PartyMemberStrength[]
   ],
   [PartyMemberStrength.AVERAGE, ...new Array(4).fill(PartyMemberStrength.STRONG), PartyMemberStrength.STRONGER],
 ]);
+
+// #endregion
