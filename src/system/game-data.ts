@@ -1566,7 +1566,7 @@ export class GameData {
         }
         if (fromEgg) {
           candyMultiplier *= STARTER_CANDY_MULIPLIER_FOR_EGG;
-        } else if (pokemon.isBoss()) {
+        } else if (pokemon.boss) {
           candyMultiplier *= STARTER_CANDY_MULIPLIER_FOR_BOSS;
         }
         this.addStarterCandy(species, STARTER_CANDY_GAIN_FROM_CATCH * candyMultiplier);

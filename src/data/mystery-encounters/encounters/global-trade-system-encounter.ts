@@ -479,9 +479,11 @@ async function doTradeOptionPhaseCallback(): Promise<void> {
   // Pokeball to Ultra ball, randomly
   receivedPokemonData.pokeball = randInt(3) as PokeballType;
   const dataSource = new PokemonData(receivedPokemonData);
-  const newPlayerPokemon = globalScene.addPlayerPokemon(receivedPokemonData.species, receivedPokemonData.level, {
+  const newPlayerPokemon = globalScene.addPlayerPokemon(
+    receivedPokemonData.species,
+    receivedPokemonData.level,
     dataSource,
-  });
+  );
   globalScene.getPlayerParty().push(newPlayerPokemon);
   await newPlayerPokemon.loadAssets();
 

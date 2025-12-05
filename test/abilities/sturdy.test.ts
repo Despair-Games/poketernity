@@ -272,7 +272,7 @@ describe("Abilities - Sturdy", () => {
     await classicMode.startBattle(SpeciesId.LUCARIO);
     const enemy = field.getEnemyPokemon();
 
-    expect(enemy.isBoss()).toBe(true);
+    expect(enemy.boss).toBe(true);
     expect(enemy.bossSegments).toBe(2);
     expect(enemy.bossSegmentIndex).toBe(1);
     expect(enemy).toHaveFullHp();

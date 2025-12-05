@@ -225,8 +225,8 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
           enemySpecies = config.species;
           isBoss = config.isBoss;
           battle.enemyParty[e] = globalScene.addEnemyPokemon(enemySpecies, level, {
+            ...dataSource,
             boss: isBoss,
-            dataSource,
           });
         } else {
           battle.enemyParty[e] = battle.trainer.genPartyMember(e);
@@ -246,8 +246,8 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
         }
 
         battle.enemyParty[e] = globalScene.addEnemyPokemon(enemySpecies, level, {
+          ...dataSource,
           boss: isBoss,
-          dataSource,
         });
       }
     }
@@ -425,7 +425,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
     console.log(
       `Ability: ${enemyPokemon.getAbility().name}`,
       `| Passive Ability${enemyPokemon.hasPassive() ? "" : " (inactive)"}: ${enemyPokemon.getPassiveAbility().name}`,
-      `${enemyPokemon.isBoss() ? `| Boss Bars: ${enemyPokemon.bossSegments}` : ""}`,
+      `${enemyPokemon.boss ? `| Boss Bars: ${enemyPokemon.bossSegments}` : ""}`,
     );
     console.log("Moveset:", moveset);
   });

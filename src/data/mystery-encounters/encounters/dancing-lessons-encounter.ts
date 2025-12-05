@@ -95,7 +95,7 @@ export const DancingLessonsEncounter: MysteryEncounter = MysteryEncounterBuilder
     enemyPokemon.formIndex = getOricorioFormIndexForBiome(globalScene.arena.biomeId);
 
     const oricorioData = new PokemonData(enemyPokemon);
-    const oricorio = globalScene.addEnemyPokemon(species, level, { dataSource: oricorioData });
+    const oricorio = globalScene.addEnemyPokemon(species, level, oricorioData);
 
     // Adds a real Pokemon sprite to the field (required for the animation)
     globalScene.getEnemyParty().forEach((enemy) => {

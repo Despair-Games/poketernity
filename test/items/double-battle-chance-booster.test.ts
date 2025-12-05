@@ -42,8 +42,8 @@ describe("Items - Double Battle Chance Boosters", () => {
     const enemyField = game.scene.getEnemyField();
 
     expect(enemyField.length).toBe(2);
-    expect(enemyField[0].isBoss()).toBe(true);
-    expect(enemyField[1].isBoss()).toBe(true);
+    expect(enemyField[0].boss).toBe(true);
+    expect(enemyField[1].boss).toBe(true);
   });
 
   it("should renew how many battles are left of existing booster when picking up new booster of same tier", async () => {

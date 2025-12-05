@@ -69,9 +69,9 @@ describe("Boss Pokemon / Shields", () => {
 
     const boss1: EnemyPokemon = game.scene.getEnemyParty()[0]!;
     const boss2: EnemyPokemon = game.scene.getEnemyParty()[1]!;
-    expect(boss1.isBoss()).toBe(true);
+    expect(boss1.boss).toBe(true);
     expect(boss1.bossSegments).toBe(2);
-    expect(boss2.isBoss()).toBe(true);
+    expect(boss2.boss).toBe(true);
     expect(boss2.bossSegments).toBe(2);
   });
 
@@ -82,7 +82,7 @@ describe("Boss Pokemon / Shields", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     const segmentHp = enemyPokemon.getMaxHp() / enemyPokemon.bossSegments;
-    expect(enemyPokemon.isBoss()).toBe(true);
+    expect(enemyPokemon.boss).toBe(true);
     expect(enemyPokemon.bossSegments).toBe(3);
     expect(getTotalStatStageBoosts(enemyPokemon)).toBe(0);
 
@@ -115,7 +115,7 @@ describe("Boss Pokemon / Shields", () => {
     const boss1: EnemyPokemon = game.scene.getEnemyParty()[0]!;
     const boss1SegmentHp = boss1.getMaxHp() / boss1.bossSegments;
     const requiredDamageBoss1 = boss1SegmentHp * (1 + Math.pow(2, brokenShields));
-    expect(boss1.isBoss()).toBe(true);
+    expect(boss1.boss).toBe(true);
     expect(boss1.bossSegments).toBe(5);
     expect(boss1.bossSegmentIndex).toBe(4);
 
@@ -128,7 +128,7 @@ describe("Boss Pokemon / Shields", () => {
     const boss2SegmentHp = boss2.getMaxHp() / boss2.bossSegments;
     const requiredDamageBoss2 = boss2SegmentHp * (1 + Math.pow(2, brokenShields));
 
-    expect(boss2.isBoss()).toBe(true);
+    expect(boss2.boss).toBe(true);
     expect(boss2.bossSegments).toBe(5);
 
     // Enough damage to break through all shields
@@ -147,7 +147,7 @@ describe("Boss Pokemon / Shields", () => {
     const boss1: EnemyPokemon = game.scene.getEnemyParty()[0]!;
     const boss1SegmentHp = boss1.getMaxHp() / boss1.bossSegments;
     const singleShieldDamage = Math.ceil(boss1SegmentHp);
-    expect(boss1.isBoss()).toBe(true);
+    expect(boss1.boss).toBe(true);
     expect(boss1.bossSegments).toBe(shieldsToBreak + 1);
     expect(boss1.bossSegmentIndex).toBe(shieldsToBreak);
     expect(getTotalStatStageBoosts(boss1)).toBe(0);
@@ -171,7 +171,7 @@ describe("Boss Pokemon / Shields", () => {
     const boss2SegmentHp = boss2.getMaxHp() / boss2.bossSegments;
     const requiredDamage = boss2SegmentHp * (1 + Math.pow(2, shieldsToBreak - 1));
 
-    expect(boss2.isBoss()).toBe(true);
+    expect(boss2.boss).toBe(true);
     expect(boss2.bossSegments).toBe(shieldsToBreak + 1);
     expect(boss2.bossSegmentIndex).toBe(shieldsToBreak);
     expect(getTotalStatStageBoosts(boss2)).toBe(0);
@@ -192,7 +192,7 @@ describe("Boss Pokemon / Shields", () => {
     await game.classicMode.startBattle(SpeciesId.MEWTWO);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
-    expect(enemyPokemon.isBoss()).toBe(true);
+    expect(enemyPokemon.boss).toBe(true);
     expect(enemyPokemon.bossSegments).toBe(2);
     expect(getTotalStatStageBoosts(enemyPokemon)).toBe(0);
 

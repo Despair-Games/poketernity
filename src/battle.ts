@@ -231,7 +231,7 @@ export class Battle {
       partyMemberTurnMultiplier /= 1.5;
     }
     for (const p of globalScene.getEnemyParty()) {
-      if (p.isBoss()) {
+      if (p.boss) {
         partyMemberTurnMultiplier *= p.bossSegments / 1.5 / globalScene.getEnemyParty().length;
       }
     }

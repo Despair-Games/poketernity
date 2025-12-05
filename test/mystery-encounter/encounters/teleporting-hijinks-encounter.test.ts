@@ -189,7 +189,7 @@ describe("Teleporting Hijinks - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
       const enemyField = scene.getEnemyField();
       expect(enemyField[0].summonData.statStages).toEqual([0, 1, 0, 1, 1, 0, 0]);
-      expect(enemyField[0].isBoss()).toBe(true);
+      expect(enemyField[0].boss).toBe(true);
     });
 
     it("should start a battle against an extra enraged boss above wave 50", { retry: 5 }, async () => {
@@ -198,7 +198,7 @@ describe("Teleporting Hijinks - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
       const enemyField = scene.getEnemyField();
       expect(enemyField[0].summonData.statStages).toEqual([1, 1, 1, 1, 1, 0, 0]);
-      expect(enemyField[0].isBoss()).toBe(true);
+      expect(enemyField[0].boss).toBe(true);
     });
   });
 
@@ -261,7 +261,7 @@ describe("Teleporting Hijinks - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 2, undefined, true);
       const enemyField = scene.getEnemyField();
       expect(enemyField[0].summonData.statStages).toEqual([0, 1, 0, 1, 1, 0, 0]);
-      expect(enemyField[0].isBoss()).toBe(true);
+      expect(enemyField[0].boss).toBe(true);
     });
 
     it("should start a battle against an extra enraged boss above wave 50", { retry: 5 }, async () => {
@@ -270,7 +270,7 @@ describe("Teleporting Hijinks - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 2, undefined, true);
       const enemyField = scene.getEnemyField();
       expect(enemyField[0].summonData.statStages).toEqual([1, 1, 1, 1, 1, 0, 0]);
-      expect(enemyField[0].isBoss()).toBe(true);
+      expect(enemyField[0].boss).toBe(true);
     });
   });
 
@@ -295,7 +295,7 @@ describe("Teleporting Hijinks - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 3, undefined, true);
       const enemyField = scene.getEnemyField();
       expect(enemyField[0].summonData.statStages).toEqual([0, 0, 0, 0, 0, 0, 0]);
-      expect(enemyField[0].isBoss()).toBe(true);
+      expect(enemyField[0].boss).toBe(true);
     });
 
     it("should have Magnet and Metal Coat in rewards after battle", async () => {

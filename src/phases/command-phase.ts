@@ -274,7 +274,7 @@ export class CommandPhase extends BattlePhase {
               console.warn("Enemy Pokemon is missing when trying to throw Pokeball!");
               failCatchRun("battle:noPokeballForce");
             } else if (
-              targetPokemon.isBoss()
+              targetPokemon.boss
               && targetPokemon.bossSegmentIndex >= 1
               && !targetPokemon.hasAbility(AbilityId.WONDER_GUARD, false, true)
               && cursor !== PokeballType.MASTER_BALL

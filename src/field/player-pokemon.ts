@@ -27,29 +27,22 @@ import { getPokemonSpecies } from "#utils/pokemon-utils";
 export class PlayerPokemon extends Pokemon {
   public compatibleTms: MoveId[];
 
-  constructor(
-    species: PokemonSpecies,
-    level: number,
-    { abilityIndex, formIndex, gender, shiny, variant, ivs, nature, dataSource }: PokemonOptions = {},
-  ) {
-    super(106, 148, species, level, { abilityIndex, formIndex, gender, shiny, variant, ivs, nature, dataSource });
+  constructor(species: PokemonSpecies, level: number, options: PokemonOptions | Pokemon = {}) {
+    super(106, 148, species, level, options);
 
     if (activeOverrides.STATUS_OVERRIDE) {
       this.setStatus(activeOverrides.STATUS_OVERRIDE, { sleepTurnsRemaining: 4 });
     }
 
-    if (activeOverrides.SHINY_OVERRIDE) {
-      this.shiny = true;
+    this.shiny = activeOverrides.SHINY_OVERRIDE ?? this.shiny;
+    this.variant = activeOverrides.VARIANT_OVERRIDE ?? this.variant;
+    if (this.shiny) {
       this.initShinySparkle();
-    } else if (activeOverrides.SHINY_OVERRIDE === false) {
-      this.shiny = false;
     }
 
-    if (activeOverrides.VARIANT_OVERRIDE !== null && this.shiny) {
-      this.variant = activeOverrides.VARIANT_OVERRIDE;
-    }
+    this.nature = activeOverrides.NATURE_OVERRIDE ?? this.nature;
 
-    if (!dataSource) {
+    if (options["moveset"] == null) {
       if (
         globalScene.gameMode.isDaily
         || (activeOverrides.STARTER_SPECIES_OVERRIDE && activeOverrides.STARTER_SPECIES_OVERRIDE !== SpeciesId.KELDEO)
@@ -79,7 +72,7 @@ export class PlayerPokemon extends Pokemon {
     return true;
   }
 
-  isBoss(): boolean {
+  public override get boss(): boolean {
     return false;
   }
 
@@ -223,10 +216,7 @@ export class PlayerPokemon extends Pokemon {
             0,
           )
         : this.formIndex;
-    const ret = globalScene.addPlayerPokemon(evolutionSpecies, this.level, {
-      formIndex,
-      dataSource: this,
-    });
+    const ret = globalScene.addPlayerPokemon(evolutionSpecies, this.level, { ...this, formIndex });
     await ret.loadAssets();
     return ret;
   }

@@ -23,7 +23,7 @@ export class SacrificialAttr extends MoveEffectAttr {
   }
 
   override getUserBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {
-    if (user.isBoss()) {
+    if (user.boss) {
       return -20;
     }
     return Math.ceil(((1 - user.getHpRatio()) * 10 - 10) * (target.getAttackTypeEffectiveness(move.type, user) - 0.5));

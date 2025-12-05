@@ -38,7 +38,7 @@ export class HalfMaxHpRecoilAttr extends MoveEffectAttr {
   }
 
   override getUserBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {
-    if (user.isBoss()) {
+    if (user.boss) {
       return -10;
     }
     return Math.ceil(

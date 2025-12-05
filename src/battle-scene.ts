@@ -13,7 +13,7 @@ import { activeOverrides } from "#app/overrides";
 import type { Phase } from "#app/phase";
 import { PhaseManager } from "#app/phase-manager";
 import { SceneBase } from "#app/scene-base";
-import { IV_MAX, IV_MIN, LEVEL_CAP_SCALE_FACTOR } from "#constants/game-constants";
+import { LEVEL_CAP_SCALE_FACTOR } from "#constants/game-constants";
 import {
   ME_ANTI_VARIANCE_WEIGHT_MODIFIER,
   ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
@@ -55,7 +55,6 @@ import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import { SwitchType } from "#enums/switch-type";
 import { TextStyle } from "#enums/text-style";
-import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerVariant } from "#enums/trainer-variant";
 import type { UiWindowStyle } from "#enums/ui-window-style";
 import { NewArenaEvent } from "#events/battle-scene";
@@ -130,7 +129,7 @@ import { addTextObject } from "#ui/text-utils";
 import { UI } from "#ui/ui";
 import { setDocumentUiTheme, updateWindowStyle } from "#ui/ui-theme";
 import { loadCommonAnimAssets } from "#utils/anim-utils";
-import { BooleanHolder, enumValueToKey, fixedNumber, isBetween, NumberHolder, ValueHolder } from "#utils/common-utils";
+import { BooleanHolder, enumValueToKey, fixedNumber, NumberHolder, ValueHolder } from "#utils/common-utils";
 import { getModifierType } from "#utils/modifier-type-utils";
 import { loadMoveAnimAssets } from "#utils/move-anim-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
@@ -909,42 +908,12 @@ export class BattleScene extends SceneBase {
   public addPlayerPokemon(
     species: PokemonSpecies,
     level: number,
-    { abilityIndex, formIndex, gender, shiny, variant, ivs, nature, dataSource }: PokemonOptions = {},
+    options: PokemonOptions | Pokemon = {},
     postProcess?: (playerPokemon: PlayerPokemon) => void,
   ): PlayerPokemon {
-    const pokemon = new PlayerPokemon(species, level, {
-      abilityIndex,
-      formIndex,
-      gender,
-      shiny,
-      variant,
-      ivs,
-      nature,
-      dataSource,
-    });
+    const pokemon = new PlayerPokemon(species, level, options);
     if (postProcess) {
       postProcess(pokemon);
-    }
-
-    if (activeOverrides.IVS_OVERRIDE === null) {
-      // do nothing
-    } else if (Array.isArray(activeOverrides.IVS_OVERRIDE)) {
-      if (activeOverrides.IVS_OVERRIDE.length !== 6) {
-        throw new Error("The Player IVs override must be an array of length 6 or a number!");
-      }
-      if (activeOverrides.IVS_OVERRIDE.some((value) => !isBetween(value, IV_MIN, IV_MAX))) {
-        throw new Error(`All IVs in the player IV override must be between ${IV_MIN} and ${IV_MAX}!`);
-      }
-      pokemon.ivs = activeOverrides.IVS_OVERRIDE;
-    } else {
-      if (!isBetween(activeOverrides.IVS_OVERRIDE, IV_MIN, IV_MAX)) {
-        throw new Error(`The Player IV override must be a value between ${IV_MIN} and ${IV_MAX}!`);
-      }
-      pokemon.ivs = new Array(6).fill(activeOverrides.IVS_OVERRIDE);
-    }
-
-    if (activeOverrides.NATURE_OVERRIDE !== null) {
-      pokemon.nature = activeOverrides.NATURE_OVERRIDE;
     }
 
     pokemon.init();
@@ -954,88 +923,30 @@ export class BattleScene extends SceneBase {
   addEnemyPokemon(
     species: PokemonSpecies,
     level: number,
-    {
-      abilityIndex,
-      formIndex,
-      gender,
-      shiny,
-      variant,
-      ivs,
-      nature,
-      trainerSlot = TrainerSlot.NONE,
-      boss = false,
-      dataSource,
-    }: EnemyPokemonOptions = {},
+    options: EnemyPokemonOptions | Pokemon = {},
     postProcess?: (enemyPokemon: EnemyPokemon) => void,
   ): EnemyPokemon {
-    if (activeOverrides.ENEMY_LEVEL_OVERRIDE > 0) {
-      level = activeOverrides.ENEMY_LEVEL_OVERRIDE;
-    }
-    if (activeOverrides.ENEMY_SPECIES_OVERRIDE) {
-      species = getPokemonSpecies(activeOverrides.ENEMY_SPECIES_OVERRIDE);
+    const pokemon = new EnemyPokemon(species, level, options);
 
-      // The fact that a Pokemon is a boss or not can change based on its Species and level
-      boss = this.getEncounterBossSegments(this.currentBattle.waveIndex, level, species) > 1;
-
-      // Ensure the gender from the data source is valid for the overridden species
-      if (dataSource?.gender != null) {
-        if (dataSource.gender === Gender.GENDERLESS && species.malePercent != null) {
-          dataSource.gender = species.malePercent > 0 ? Gender.MALE : Gender.FEMALE;
-        } else if (dataSource.gender !== Gender.GENDERLESS && species.malePercent == null) {
-          dataSource.gender = Gender.GENDERLESS;
-        }
-      }
-    }
-
-    const pokemon = new EnemyPokemon(species, level, {
-      abilityIndex,
-      formIndex,
-      gender,
-      shiny,
-      variant,
-      ivs,
-      nature,
-      trainerSlot,
-      boss,
-      dataSource,
-    });
-
-    if (boss && !dataSource) {
+    if (pokemon.boss && options.ivs == null) {
+      /*
+       * Boss Pokemon with random IVs have their IVs rolled a second time.
+       * Their final IV for each stat is the weighted average of the two rolls,
+       * with the higher roll at 75% weighting.
+       *
+       * With the additional roll, Bosses' IVs are higher on average (~23 compared to ~15)
+       * and have less variance.
+       */
       const secondaryIvs = pokemon.generateIvs();
 
       for (let s = 0; s < pokemon.ivs.length; s++) {
-        pokemon.ivs[s] = Math.round(
-          Phaser.Math.Linear(
-            Math.min(pokemon.ivs[s], secondaryIvs[s]),
-            Math.max(pokemon.ivs[s], secondaryIvs[s]),
-            0.75,
-          ),
-        );
+        const ivMin = Math.min(pokemon.ivs[s], secondaryIvs[s]);
+        const ivMax = Math.max(pokemon.ivs[s], secondaryIvs[s]);
+        pokemon.ivs[s] = Math.round(0.75 * ivMax + 0.25 * ivMin);
       }
     }
     if (postProcess) {
       postProcess(pokemon);
-    }
-
-    if (activeOverrides.ENEMY_IVS_OVERRIDE === null) {
-      // do nothing
-    } else if (Array.isArray(activeOverrides.ENEMY_IVS_OVERRIDE)) {
-      if (activeOverrides.ENEMY_IVS_OVERRIDE.length !== 6) {
-        throw new Error("The Enemy IVs override must be an array of length 6 or a number!");
-      }
-      if (activeOverrides.ENEMY_IVS_OVERRIDE.some((value) => !isBetween(value, IV_MIN, IV_MAX))) {
-        throw new Error(`All IVs in the enemy IV override must be between ${IV_MIN} and ${IV_MAX}!`);
-      }
-      pokemon.ivs = activeOverrides.ENEMY_IVS_OVERRIDE;
-    } else {
-      if (!isBetween(activeOverrides.ENEMY_IVS_OVERRIDE, IV_MIN, IV_MAX)) {
-        throw new Error(`The Enemy IV override must be a value between ${IV_MIN} and ${IV_MAX}!`);
-      }
-      pokemon.ivs = new Array(6).fill(activeOverrides.ENEMY_IVS_OVERRIDE);
-    }
-
-    if (activeOverrides.ENEMY_NATURE_OVERRIDE !== null) {
-      pokemon.nature = activeOverrides.ENEMY_NATURE_OVERRIDE;
     }
 
     pokemon.init();
@@ -1636,19 +1547,16 @@ export class BattleScene extends SceneBase {
     species?: PokemonSpecies,
     forceBoss: boolean = false,
   ): number {
-    if (activeOverrides.ENEMY_HEALTH_SEGMENTS_OVERRIDE > 1) {
-      return activeOverrides.ENEMY_HEALTH_SEGMENTS_OVERRIDE;
-    }
-    if (activeOverrides.ENEMY_HEALTH_SEGMENTS_OVERRIDE === 1) {
-      // The rest of the code expects to be returned 0 and not 1 if the enemy is not a boss
-      return 0;
+    const override = activeOverrides.ENEMY_HEALTH_SEGMENTS_OVERRIDE;
+    if (override != null) {
+      return Math.max(0, override);
     }
 
     if (this.gameMode.isDaily && this.gameMode.isWaveFinal(waveIndex)) {
       return 5;
     }
 
-    let isBoss: boolean | undefined;
+    let isBoss: boolean = false;
     if (forceBoss || species?.isLegendLike()) {
       isBoss = true;
     } else {
@@ -1663,17 +1571,17 @@ export class BattleScene extends SceneBase {
       return 0;
     }
 
-    let ret: number = 2;
+    let segments: number = 2;
 
     if (level >= 100) {
-      ret++;
+      segments++;
     }
     if (species && species.baseTotal >= 670) {
-      ret++;
+      segments++;
     }
-    ret += Math.floor(waveIndex / 250);
+    segments += Math.floor(waveIndex / 250);
 
-    return ret;
+    return segments;
   }
 
   trySpreadPokerus(): void {
@@ -1969,7 +1877,7 @@ export class BattleScene extends SceneBase {
     this.findModifiers((m) => m.isPokemonHeldItemModifier() && m.pokemonId === enemy.id, false).map(
       (m) => (scoreIncrease *= (m as PokemonHeldItemModifier).getScoreMultiplier()),
     );
-    if (enemy.isBoss()) {
+    if (enemy.boss) {
       scoreIncrease *= Math.sqrt(enemy.bossSegments);
     }
     this.currentBattle.battleScore += Math.ceil(scoreIncrease);
@@ -2355,7 +2263,7 @@ export class BattleScene extends SceneBase {
         });
       } else {
         const isBoss =
-          enemyPokemon.isBoss()
+          enemyPokemon.boss
           || (this.currentBattle.battleType === BattleType.TRAINER && !!this.currentBattle.trainer?.config.isBoss);
         let upgradeChance = 32;
         if (isBoss) {
@@ -2761,7 +2669,7 @@ export class BattleScene extends SceneBase {
    * @param pokemon The (enemy) pokemon
    */
   initFinalBossPhaseTwo(pokemon: Pokemon): void {
-    if (pokemon.isEnemy() && pokemon.isBoss() && !pokemon.formIndex && pokemon.bossSegmentIndex < 1) {
+    if (pokemon.isEnemy() && pokemon.boss && !pokemon.formIndex && pokemon.bossSegmentIndex < 1) {
       this.audioManager.fadeOutBgm(fixedNumber(2000), false);
       this.ui.showDialogue(classicFinalBossDialogue.firstStageWin, pokemon.species.name, () => {
         const finalBossMBH = getModifierType(modifierTypes.MINI_BLACK_HOLE).newModifier(
@@ -3015,7 +2923,7 @@ export class BattleScene extends SceneBase {
     if (
       this.currentBattle.battleType !== BattleType.WILD
       || !pokemon.isEnemy()
-      || pokemon.isBoss()
+      || pokemon.boss
       || pokemon.level > source.level
     ) {
       return false;

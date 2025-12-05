@@ -237,11 +237,11 @@ class DefaultOverrides {
   /**
    * Override to give the enemy Pokemon a given amount of health segments
    *
-   * - `0` (default): the health segments will be handled normally based on wave, level and species
-   * - `1`: the Pokemon will have a single health segment and therefore will not be a boss
-   * - `2+`: the Pokemon will be a boss with the given number of health segments
+   * - `null` (default): the health segments will be handled normally based on wave, level and species
+   * - `0` (or less): the Pokemon will not be generated as a boss
+   * - `1` (or more): the Pokemon will be a boss with the given number of health segments
    */
-  readonly ENEMY_HEALTH_SEGMENTS_OVERRIDE: number = 0;
+  readonly ENEMY_HEALTH_SEGMENTS_OVERRIDE: number | null = null;
   /**
    * If `true`, every enemy Pokemon Terastallizes on the first turn that it decides to use a move.
    * If `false`, this override is ignored.

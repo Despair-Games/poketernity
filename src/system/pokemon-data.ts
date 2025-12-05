@@ -12,7 +12,7 @@ import { Nature } from "#enums/nature";
 import type { PokeballType } from "#enums/pokeball-type";
 import type { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
-import type { Pokemon } from "#field/pokemon";
+import type { Pokemon, PokemonOptions } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
 import type { CustomPokemonData, PokemonSummonData, SerializedSpeciesForm, Status } from "#types/pokemon-types";
 import { clamp, isPokemon } from "#utils/common-utils";
@@ -35,12 +35,12 @@ function deserializePokemonSpeciesForm(value: SerializedSpeciesForm | PokemonSpe
   return getPokemonSpeciesForm(speciesId, formIndex);
 }
 
-export class PokemonData {
+export class PokemonData implements PokemonOptions {
   public id: number;
   public personalityValue: number;
   public player: boolean;
   public speciesId: SpeciesId;
-  public nickname: string;
+  public nickname: string | null;
   public formIndex: number;
   public abilityIndex: number;
   public passive: boolean;
@@ -49,7 +49,6 @@ export class PokemonData {
   public pokeball: PokeballType;
   public level: number;
   public exp: number;
-  public levelExp: number;
   public gender: Gender;
   public hp: number;
   public stats: number[];
@@ -99,7 +98,6 @@ export class PokemonData {
     this.pokeball = source.pokeball;
     this.level = source.level;
     this.exp = source.exp;
-    this.levelExp = source.levelExp;
     this.gender = source.gender;
     this.hp = source.hp;
     this.stats = source.stats;
@@ -161,7 +159,7 @@ export class PokemonData {
     const species = getPokemonSpecies(this.speciesId);
     let ret: Pokemon;
     if (this.player) {
-      ret = globalScene.addPlayerPokemon(species, this.level, { dataSource: this }, (playerPokemon) => {
+      ret = globalScene.addPlayerPokemon(species, this.level, this, (playerPokemon) => {
         if (this.nickname) {
           playerPokemon.nickname = this.nickname;
         }
@@ -175,11 +173,7 @@ export class PokemonData {
           trainerSlot = TrainerSlot.TRAINER_PARTNER;
         }
       }
-      ret = globalScene.addEnemyPokemon(species, this.level, {
-        trainerSlot,
-        boss: this.boss,
-        dataSource: this,
-      });
+      ret = globalScene.addEnemyPokemon(species, this.level, { ...this, trainerSlot });
     }
     ret.primeSummonData(this.summonData);
     return ret;

@@ -4,7 +4,6 @@ import type { EncoreTag } from "#battler-tags/encore-tag";
 import { MOVE_LOCK_TAG_TYPES } from "#constants/battler-tag-constants";
 import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#constants/game-constants";
 import { allMoves } from "#data/data-lists";
-import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import type { PokemonSpecies } from "#data/pokemon-species";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { AiType } from "#enums/ai-type";
@@ -26,70 +25,53 @@ import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-fo
 import { CounterDamageAttr } from "#moves/counter-damage-attr";
 import { CritOnlyAttr } from "#moves/crit-only-attr";
 import { getMoveTargets } from "#moves/move";
-import type { PokemonData } from "#system/pokemon-data";
+import { PokemonData } from "#system/pokemon-data";
 import type { TurnMove } from "#types/move-types";
+import type { nil } from "#types/utility-types";
 import { EnemyBattleInfo } from "#ui/battle-info";
-import { isBetween, toDmgValue } from "#utils/common-utils";
+import { isBetween, isPokemon, toDmgValue } from "#utils/common-utils";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedInt, randSeedItem } from "#utils/random-utils";
 
 export interface EnemyPokemonOptions extends PokemonOptions {
   trainerSlot?: TrainerSlot;
   boss?: boolean;
-  dataSource?: PokemonData;
+  bossSegments?: number;
 }
 
 export class EnemyPokemon extends Pokemon {
   public trainerSlot: TrainerSlot;
   public aiType: AiType;
   /** The amount of hp-segments the boss has (if the pokemon is a boss). */
-  public bossSegments: number;
+  public bossSegments: number = 0;
   /** The index of the current hp-segment (if the pokemon is a boss). E.g. if the boss has 5 segments and the first 2 are cleared, this will be 2 */
-  public bossSegmentIndex: number;
+  public bossSegmentIndex: number = 0;
   public initialTeamIndex: number;
   /** To indicate if the instance was populated with a dataSource -> e.g. loaded & populated from session data */
   public readonly isPopulatedFromDataSource: boolean;
 
-  constructor(
-    species: PokemonSpecies,
-    level: number,
-    {
-      abilityIndex,
-      formIndex,
-      gender,
-      shiny,
-      variant,
-      ivs,
-      nature,
-      trainerSlot = TrainerSlot.NONE,
-      boss = false,
-      dataSource,
-    }: EnemyPokemonOptions = {},
-  ) {
-    super(236, 84, species, level, {
-      abilityIndex,
-      formIndex,
-      gender,
-      shiny,
-      variant,
-      ivs,
-      nature,
-      dataSource,
-    });
+  constructor(species: PokemonSpecies, level: number, options: EnemyPokemonOptions | Pokemon = {}) {
+    const finalSpecies = getPokemonSpecies(activeOverrides.ENEMY_SPECIES_OVERRIDE) ?? species;
+    const finalLevel = activeOverrides.ENEMY_LEVEL_OVERRIDE || level;
 
-    this.trainerSlot = trainerSlot;
+    super(236, 84, finalSpecies, finalLevel, options);
+
     this.initialTeamIndex = globalScene.currentBattle?.enemyParty.length ?? 0;
-    // if a dataSource is provided, then it was populated from dataSource
-    this.isPopulatedFromDataSource = !!dataSource;
-    if (boss) {
-      this.setBoss(boss, dataSource?.bossSegments);
-    }
+    this.isPopulatedFromDataSource = isPokemon(options) || options instanceof PokemonData;
+
+    this.trainerSlot = options["trainerSlot"] ?? TrainerSlot.NONE;
+
+    const bossSegmentsOverride = activeOverrides.ENEMY_HEALTH_SEGMENTS_OVERRIDE;
+    const boss =
+      (bossSegmentsOverride == null || bossSegmentsOverride > 0)
+      && (bossSegmentsOverride != null
+        || !!options.boss
+        || (options["bossSegments"] != null && options["bossSegments"] > 0));
+    const bossSegments: number | nil = bossSegmentsOverride != null ? bossSegmentsOverride : options["bossSegments"];
+    this.setBoss(boss, bossSegments);
 
     if (activeOverrides.ENEMY_STATUS_OVERRIDE) {
       this.setStatus(activeOverrides.ENEMY_STATUS_OVERRIDE, { sleepTurnsRemaining: 4 });
-    }
-
-    if (activeOverrides.ENEMY_GENDER_OVERRIDE) {
-      this.gender = activeOverrides.ENEMY_GENDER_OVERRIDE;
     }
 
     const speciesId = this.species.speciesId;
@@ -102,38 +84,27 @@ export class EnemyPokemon extends Pokemon {
       this.formIndex = activeOverrides.ENEMY_FORM_OVERRIDES[speciesId];
     }
 
-    if (!dataSource) {
+    if (options["moveset"] == null) {
       this.generateAndPopulateMoveset();
-
-      if (shiny === false || activeOverrides.ENEMY_SHINY_OVERRIDE === false) {
-        this.shiny = false;
-      } else {
-        this.trySetShiny();
-      }
-
-      if (!this.shiny && activeOverrides.ENEMY_SHINY_OVERRIDE) {
-        this.shiny = true;
-        this.initShinySparkle();
-      }
-
-      if (this.shiny) {
-        this.variant = this.generateShinyVariant();
-        if (activeOverrides.ENEMY_VARIANT_OVERRIDE !== null) {
-          this.variant = activeOverrides.ENEMY_VARIANT_OVERRIDE;
-        }
-      }
-
-      let sId = species.speciesId;
-      let preEvolution: SpeciesId = pokemonPreEvolutions[sId];
-      while (preEvolution) {
-        sId = preEvolution;
-        preEvolution = pokemonPreEvolutions[sId];
-      }
-
-      this.teraType = randSeedItem(this.getTypes(false, false, true));
     }
 
-    this.aiType = boss || this.hasTrainer() ? AiType.SMART : AiType.SMART_RANDOM;
+    this.gender = activeOverrides.ENEMY_GENDER_OVERRIDE ?? this.gender;
+    this.shiny = activeOverrides.ENEMY_SHINY_OVERRIDE ?? this.shiny;
+    this.variant = activeOverrides.ENEMY_VARIANT_OVERRIDE ?? this.variant;
+    if (this.shiny) {
+      this.initShinySparkle();
+    }
+
+    this.nature = activeOverrides.ENEMY_NATURE_OVERRIDE ?? this.nature;
+    this.calculateStats();
+
+    this.teraType = options.teraType ?? randSeedItem(this.getTypes(false, false, true));
+
+    this.aiType = this.boss || this.hasTrainer() ? AiType.SMART : AiType.SMART_RANDOM;
+  }
+
+  public override get boss(): boolean {
+    return this.bossSegments > 0;
   }
 
   initBattleInfo(): void {
@@ -147,17 +118,26 @@ export class EnemyPokemon extends Pokemon {
   }
 
   /**
-   * Sets the pokemons boss status. If true initializes the boss segments either from the arguments
-   * or through the the Scene.getEncounterBossSegments function
+   * Sets the Pokemon's Boss status and boss bars.
+   * @param boss - (Default `true`) Whether or not to set this Pokemon as a Boss
+   * @param bossSegments - (Default `null`) The number of boss bars to grant this Pokemon.
+   * If `null`, the number of boss bars is determined with {@linkcode globalScene.getEncounterBossSegments}.
+   * If {@linkcode boss} is `false`, the Pokemon's boss bars are always set to 0.
    *
-   * @param boss if the pokemon is a boss
-   * @param bossSegments amount of boss segments (health-bar segments)
+   * @privateRemarks
+   * {@linkcode bossSegments} should never be set to 0 when {@linkcode boss} is `true`.
+   * Setting {@linkcode bossSegments} to 0 implies that the Pokemon is not a boss.
    */
-  setBoss(boss: boolean = true, bossSegments: number = 0): void {
+  setBoss(boss: boolean = true, bossSegments: number | null = null): void {
     if (boss) {
       this.bossSegments =
         bossSegments
-        || globalScene.getEncounterBossSegments(globalScene.currentBattle.waveIndex, this.level, this.species, true);
+        ?? globalScene.getEncounterBossSegments(
+          globalScene.currentBattle?.waveIndex ?? 0,
+          this.level,
+          this.species,
+          true,
+        );
       this.bossSegmentIndex = this.bossSegments - 1;
     } else {
       this.bossSegments = 0;
@@ -516,10 +496,6 @@ export class EnemyPokemon extends Pokemon {
     return this.trainerSlot !== TrainerSlot.NONE;
   }
 
-  isBoss(): boolean {
-    return this.bossSegments > 0;
-  }
-
   getBossSegments(): number {
     return this.bossSegments;
   }
@@ -546,7 +522,7 @@ export class EnemyPokemon extends Pokemon {
       return 0;
     }
 
-    let clearedBossSegmentIndex = this.isBoss() ? this.bossSegmentIndex + 1 : 0;
+    let clearedBossSegmentIndex = this.boss ? this.bossSegmentIndex + 1 : 0;
 
     /**
      * Modify the damage with the {@linkcode DYNAMAX_DAMAGE_TAKEN_FACTOR} for the checks
@@ -554,7 +530,7 @@ export class EnemyPokemon extends Pokemon {
      */
     amount = this.isMax(false) && !ignoreDynamaxReduction ? toDmgValue(amount * DYNAMAX_DAMAGE_TAKEN_FACTOR) : amount;
 
-    if (this.isBoss() && !ignoreSegments) {
+    if (this.boss && !ignoreSegments) {
       // To consider a boss Pokemon as 1-hit faint, the damage calculation is different and depends on the hp segments.
       // Every segment past the first one gets a `x SegmentIndex` multiplier.
       // E.g. if the boss has 3 segments and each with 10 hp, the damage for the 1-hit faint must be at least `60`,
@@ -596,7 +572,7 @@ export class EnemyPokemon extends Pokemon {
 
     const damage = super.damage(amount, { preventEndure, ignoreFaintPhase, ignoreDynamaxReduction });
 
-    if (this.isBoss()) {
+    if (this.boss) {
       if (ignoreSegments) {
         const segmentSize = this.getMaxHp() / this.bossSegments;
         clearedBossSegmentIndex = Math.ceil(this.hp / segmentSize);
@@ -699,7 +675,7 @@ export class EnemyPokemon extends Pokemon {
       this.metBiome = globalScene.arena.biomeId;
       this.metWave = globalScene.currentBattle.waveIndex;
       this.metSpecies = this.species.speciesId;
-      const newPokemon = globalScene.addPlayerPokemon(this.species, this.level, { dataSource: this });
+      const newPokemon = globalScene.addPlayerPokemon(this.species, this.level, this);
 
       if (isBetween(slotIndex, 0, PLAYER_PARTY_MAX_SIZE - 1)) {
         party.splice(slotIndex, 0, newPokemon);

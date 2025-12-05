@@ -705,7 +705,7 @@ export async function catchPokemon(
           {
             label: i18next.t("menu:yes"),
             handler: () => {
-              const newPokemon = globalScene.addPlayerPokemon(pokemon.species, pokemon.level, { dataSource: pokemon });
+              const newPokemon = globalScene.addPlayerPokemon(pokemon.species, pokemon.level, pokemon);
               globalScene.ui.setMode<SummaryUiHandler>(
                 UiMode.SUMMARY,
                 newPokemon,

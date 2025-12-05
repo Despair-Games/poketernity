@@ -204,9 +204,11 @@ async function summonPlayerPokemon() {
     // Also loads Wobbuffet data (cannot be shiny)
     const enemySpecies = getPokemonSpecies(SpeciesId.WOBBUFFET);
     globalScene.currentBattle.enemyParty = [];
-    const wobbuffet = globalScene.addEnemyPokemon(enemySpecies, encounter.misc.playerPokemon.level, { shiny: false });
-    wobbuffet.ivs = [0, 0, 0, 0, 0, 0];
-    wobbuffet.setNature(Nature.MILD);
+    const wobbuffet = globalScene.addEnemyPokemon(enemySpecies, encounter.misc.playerPokemon.level, {
+      shiny: false,
+      ivs: [0, 0, 0, 0, 0, 0],
+      nature: Nature.MILD,
+    });
     wobbuffet.setAlpha(0);
     wobbuffet.setVisible(false);
     wobbuffet.calculateStats();

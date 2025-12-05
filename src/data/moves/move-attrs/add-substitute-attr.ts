@@ -45,7 +45,7 @@ export class AddSubstituteAttr extends MoveEffectAttr {
   }
 
   override getUserBenefitScore(user: Pokemon, _target: Pokemon, _move: Move): number {
-    if (user.isBoss()) {
+    if (user.boss) {
       return -10;
     }
     return 5;

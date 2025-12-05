@@ -146,7 +146,6 @@ import { VariableMoveCategoryAttr } from "#moves/variable-move-category-attr";
 import { VariableMoveTypeAttr } from "#moves/variable-move-type-attr";
 import { VariableMoveTypeChartAttr } from "#moves/variable-move-type-chart-attr";
 import { VariableMoveTypeMultiplierAttr } from "#moves/variable-move-type-multiplier-attr";
-import type { PokemonData } from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
 import type { AbAttrKey, AbAttrMap, AbilityFilterOptions } from "#types/ability-types";
 import type { DamageCalculationResult, DamageResult, LevelMoves, TurnMove } from "#types/move-types";
@@ -166,6 +165,7 @@ import {
   clamp,
   coerceArray,
   fixedNumber,
+  isBetween,
   NumberHolder,
   toDmgValue,
   ValueHolder,
@@ -178,14 +178,36 @@ import { inSpeedOrder } from "#utils/speed-order-generator";
 import i18next from "i18next";
 
 export interface PokemonOptions {
+  id?: number;
+  nickname?: string | null;
+  personalityValue?: number;
+  stats?: number[];
+  ivs?: number[];
+  nature?: Nature;
+  moveset?: PokemonMove[];
   abilityIndex?: number;
+  passive?: boolean;
   formIndex?: number;
   gender?: Gender;
   shiny?: boolean;
   variant?: Variant;
-  ivs?: number[];
-  nature?: Nature;
-  dataSource?: Pokemon | PokemonData;
+  pokeball?: PokeballType;
+  hp?: number;
+  status?: Status | null;
+  exp?: number;
+  friendship?: number;
+  pokerus?: boolean;
+  metLevel?: number;
+  metBiome?: BiomeId | -1;
+  metSpecies?: SpeciesId;
+  metWave?: number;
+  evoCounter?: number;
+  usedTMs?: MoveId[];
+  pauseEvolutions?: boolean;
+  teraType?: ElementalType;
+  isTerastallized?: boolean;
+  stellarTypesBoosted?: ElementalType[];
+  customPokemonData?: Partial<CustomPokemonData>;
 }
 
 interface AbilityData {
@@ -231,7 +253,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @see {@link https://bulbapedia.bulbagarden.net/wiki/Personality_value}
    */
   public personalityValue: number;
-  public nickname: string;
+  public nickname: string | null;
   public species: PokemonSpecies;
   public formIndex: number;
   public abilityIndex: number;
@@ -242,14 +264,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   protected battleInfo: BattleInfo;
   public level: number;
   public exp: number;
-  public levelExp: number;
   public gender: Gender;
   public hp: number;
   public stats: number[];
   public ivs: number[];
   public nature: Nature;
   protected moveset: PokemonMove[];
-  protected status: Status | null = null;
+  protected status: Status | null;
   public friendship: number;
   public metLevel: number;
   public metBiome: BiomeId | -1;
@@ -285,117 +306,71 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   private shinySparkle: Phaser.GameObjects.Sprite;
 
-  constructor(
-    x: number,
-    y: number,
-    species: PokemonSpecies,
-    level: number,
-    { abilityIndex, formIndex, gender, shiny, variant, ivs, nature, dataSource }: PokemonOptions = {},
-  ) {
+  constructor(x: number, y: number, species: PokemonSpecies, level: number, options: PokemonOptions | Pokemon = {}) {
     super(globalScene, x, y);
     this.type = "Pokemon";
 
     this.species = species;
-    // The `EnemyPokemon` constructor randomly picks from both types if applicable
-    this.teraType = species.type1;
-    this.pokeball = dataSource?.pokeball || PokeballType.POKEBALL;
     this.level = level;
+    this.exp = options.exp ?? getLevelTotalExp(level, species.growthRate);
+    this.friendship = options.friendship ?? this.species.baseFriendship;
+    this.pokeball = options.pokeball ?? PokeballType.POKEBALL;
     this.switchOutStatus = false;
 
-    if (abilityIndex != null) {
-      this.abilityIndex = abilityIndex;
+    // This may increment `nextPokemonID` twice, but shouldn't have any adverse effects...
+    this.id = options.id ?? globalScene.getNextPokemonID();
+    globalScene.updateNextPokemonID(this.id);
+
+    this.nickname = options.nickname ?? null;
+    this.personalityValue = options.personalityValue ?? this.randSeedInt(Math.pow(2, 32) - 1);
+
+    this.gender = options.gender ?? this.generateGender();
+
+    this.shiny = options.shiny ?? this.trySetShiny();
+    this.variant = options.variant ?? this.generateShinyVariant();
+
+    this.formIndex =
+      options.formIndex ?? globalScene.getSpeciesFormIndex(species, this.gender, this.nature, this.isPlayer());
+
+    this.resetCustomPokemonData(options.customPokemonData);
+
+    this.ivs = this.getIvOverrides() ?? options.ivs ?? this.generateIvs();
+    this.nature = options.nature ?? randSeedItem(Object.values(Nature));
+    if (options.stats != null) {
+      this.stats = options.stats;
     } else {
-      this.generateRandomAbility();
-    }
-    if (formIndex != null) {
-      this.formIndex = formIndex;
-    }
-    if (gender != null) {
-      this.gender = gender;
-    }
-    if (shiny != null) {
-      this.shiny = shiny;
-    }
-    if (variant != null) {
-      this.variant = variant;
-    }
-    this.exp = dataSource?.exp || getLevelTotalExp(this.level, species.growthRate);
-    this.levelExp = dataSource?.levelExp || 0;
-    if (dataSource) {
-      this.id = dataSource.id;
-      globalScene.updateNextPokemonID(this.id);
-      this.personalityValue = dataSource.personalityValue;
-      this.hp = dataSource.hp;
-      this.stats = dataSource.stats;
-      this.ivs = dataSource.ivs;
-      this.passive = dataSource.passive;
-      if (this.variant === undefined) {
-        this.variant = 0;
-      }
-      this.nature = dataSource.nature || (0 as Nature);
-      this.nickname = dataSource.nickname;
-      this.moveset = dataSource["moveset"];
-      this.status = dataSource["status"];
-      this.friendship = dataSource.friendship ?? this.species.baseFriendship;
-      this.metLevel = dataSource.metLevel || 5;
-      this.metBiome = dataSource.metBiome;
-      this.metSpecies =
-        dataSource.metSpecies ?? (this.metBiome !== -1 ? this.species.speciesId : this.species.getRootSpeciesId(true));
-      this.metWave = dataSource.metWave ?? (this.metBiome === -1 ? -1 : 0);
-      this.pauseEvolutions = dataSource.pauseEvolutions;
-      this.pokerus = dataSource.pokerus;
-      this.evoCounter = dataSource.evoCounter ?? 0;
-      this.usedTMs = dataSource.usedTMs ?? [];
-      this.resetCustomPokemonData(dataSource.customPokemonData);
-      this.teraType = dataSource.teraType;
-      this.isTerastallized = dataSource.isTerastallized;
-      this.stellarTypesBoosted = dataSource.stellarTypesBoosted ?? [];
-    } else {
-      this.id = globalScene.getNextPokemonID();
-      this.personalityValue = this.randSeedInt(Math.pow(2, 32) - 1);
-      this.ivs = ivs || this.generateIvs();
-
-      if (this.gender === undefined) {
-        this.generateGender();
-      }
-
-      if (this.formIndex === undefined) {
-        this.formIndex = globalScene.getSpeciesFormIndex(species, this.gender, this.nature, this.isPlayer());
-      }
-
-      if (this.shiny === undefined) {
-        this.trySetShiny();
-      }
-
-      if (this.variant === undefined) {
-        this.variant = this.shiny ? this.generateShinyVariant() : 0;
-      }
-
-      this.resetCustomPokemonData();
-
-      if (nature != null) {
-        this.setNature(nature);
-      } else {
-        this.generateNature();
-      }
-
-      this.friendship = species.baseFriendship;
-      this.metLevel = level;
-      this.metBiome = globalScene.currentBattle ? globalScene.arena.biomeId : -1;
-      this.metSpecies = species.speciesId;
-      this.metWave = globalScene.currentBattle ? globalScene.currentBattle.waveIndex : -1;
-      this.pokerus = false;
-    }
-
-    this.generateName();
-
-    if (!dataSource) {
       this.calculateStats();
     }
+    this.hp = options.hp ?? this.getMaxHp();
 
+    this.abilityIndex = options.abilityIndex ?? this.generateRandomAbility();
+    this.passive = options.passive ?? false;
+
+    this.moveset = options["moveset"] ?? [];
+    this.status = options["status"] ?? null;
+
+    this.metLevel = options.metLevel ?? level;
+    this.metBiome = options.metBiome ?? (globalScene.currentBattle ? globalScene.arena.biomeId : -1);
+    this.metSpecies = options.metSpecies ?? species.speciesId;
+    this.metWave = options.metWave ?? globalScene.currentBattle?.waveIndex ?? -1;
+    this.pokerus = options.pokerus ?? false;
+    this.usedTMs = options.usedTMs ?? [];
+    this.pauseEvolutions = options.pauseEvolutions ?? false;
+
+    // The `EnemyPokemon` constructor randomly picks from both types if applicable
+    this.teraType = options.teraType ?? species.type1;
+    this.isTerastallized = options.isTerastallized ?? false;
+    this.stellarTypesBoosted = options.stellarTypesBoosted ?? [];
+
+    this.generateName();
     this.resetWaveData();
     this.resetTurnData();
     this.resetSummonData();
+  }
+
+  /** The amount of exp the Pokemon has earned within its current level */
+  public get levelExp(): number {
+    return this.exp - getLevelTotalExp(this.level, this.species.growthRate);
   }
 
   /**
@@ -477,6 +452,40 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
   }
 
+  /**
+   * Determines the IV override for this Pokemon (either {@linkcode activeOverrides.IVS_OVERRIDE | IVS_OVERRIDE}
+   * or {@linkcode activeOverrides.ENEMY_IVS_OVERRIDE | ENEMY_IVS_OVERRIDE}), validates it, and
+   * returns it as a 6-element array if valid.
+   * If defined, the override must be one of the following:
+   * - A `number` between 0 and 31 (inclusive) to assign a single IV to all {@link PERMANENT_STATS | stats}.
+   * - A `number` array with 6 elements between 0 and 31 to assign a distinct IV to each stat.
+   * @returns The validated override as a 6-element array, or `null` if the override isn't defined.
+   * @throws if the override is defined, but doesn't meet the above conditions.
+   */
+  protected getIvOverrides(): number[] | null {
+    const ivOverride = this.isPlayer() ? activeOverrides.IVS_OVERRIDE : activeOverrides.ENEMY_IVS_OVERRIDE;
+    const errorTarget = this.isPlayer() ? "Player" : "Enemy";
+
+    if (ivOverride == null) {
+      return null;
+    }
+
+    if (Array.isArray(ivOverride)) {
+      if (ivOverride.length !== 6) {
+        throw new Error(`The ${errorTarget} IVs override must be an array of length 6 or a number!`);
+      }
+      if (ivOverride.some((value) => !isBetween(value, IV_MIN, IV_MAX))) {
+        throw new Error(`All IVs in the ${errorTarget} IV override must be between ${IV_MIN} and ${IV_MAX}!`);
+      }
+      return ivOverride;
+    }
+
+    if (!isBetween(ivOverride, IV_MIN, IV_MAX)) {
+      throw new Error(`The ${errorTarget} IV override must be a value between ${IV_MIN} and ${IV_MAX}!`);
+    }
+    return new Array(6).fill(ivOverride);
+  }
+
   /** @returns An array of 6 random numbers, each between `0-31` inclusive */
   public generateIvs(): number[] {
     const ivs: number[] = [];
@@ -489,21 +498,19 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   /**
    * Sets this Pokemon to have a random ability, including a small chance of generating its Hidden Ability.
    */
-  generateRandomAbility(): void {
-    const hiddenAbilityChance = new NumberHolder(BASE_HIDDEN_ABILITY_CHANCE);
+  private generateRandomAbility(): number {
+    const hiddenAbilityChance = new ValueHolder(BASE_HIDDEN_ABILITY_CHANCE);
     if (!this.hasTrainer()) {
       globalScene.applyModifiers(HiddenAbilityRateBoosterModifier, true, hiddenAbilityChance);
     }
 
     const hasHiddenAbility = !randSeedInt(hiddenAbilityChance.value);
     const randAbilityIndex = randSeedInt(2);
+
     if (this.species.abilityHidden && hasHiddenAbility) {
-      // If the species has a hidden ability and the hidden ability is present
-      this.abilityIndex = 2;
-    } else {
-      // If there is no hidden ability or species does not have a hidden ability
-      this.abilityIndex = this.species.ability2 !== this.species.ability1 ? randAbilityIndex : 0; // Use random ability index if species has a second ability, otherwise use 0
+      return 2;
     }
+    return this.species.ability2 !== this.species.ability1 ? randAbilityIndex : 0;
   }
 
   getNameToRender() {
@@ -1301,14 +1308,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /** Sets the pokemon's gender based on its species gender ratios */
-  protected generateGender(): void {
+  private generateGender(): Gender {
     if (this.species.malePercent === null) {
-      this.gender = Gender.GENDERLESS;
-    } else if (Phaser.Math.RND.frac() * 100 < this.species.malePercent) {
-      this.gender = Gender.MALE;
-    } else {
-      this.gender = Gender.FEMALE;
+      return Gender.GENDERLESS;
     }
+    if (Phaser.Math.RND.frac() * 100 < this.species.malePercent) {
+      return Gender.MALE;
+    }
+    return Gender.FEMALE;
   }
 
   public getGender(bypassSummonData: boolean = false): Gender {
@@ -1327,14 +1334,15 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return this.variant;
   }
 
-  abstract isBoss(): boolean;
+  /** @returns `true` if this Pokemon is a Boss */
+  public abstract get boss(): boolean;
 
   abstract getBossSegments(): number;
 
   abstract getBossSegmentIndex(): number;
 
   /**
-   * @param bypassSummonData - (Default `true`) Whether to get the Pokemon's actual/unmodified moveset (`true`)
+   * @param bypassSummonData - (Default `false`) Whether to get the Pokemon's actual/unmodified moveset (`true`)
    *   or the Pokemon's temporary/modified moveset (such as due to Transform) (`false`).
    * @returns The Pokemon's active moveset
    */
@@ -1701,7 +1709,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return false;
     }
 
-    return this.passive || this.isBoss();
+    return this.passive || this.boss;
   }
 
   /**
@@ -2140,7 +2148,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       const evolutionChain = this.species.getSimulatedEvolutionChain(
         this.level,
         this.hasTrainer(),
-        this.isBoss(),
+        this.boss,
         this.isPlayer(),
       );
       for (let e = 0; e < evolutionChain.length; e++) {
@@ -2311,6 +2319,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * - Has a 60% chance of returning `0` (basic shiny)
    */
   protected generateShinyVariant(): Variant {
+    if (!this.shiny) {
+      return 0;
+    }
     const formIndex: number = this.formIndex;
     let variantDataIndex: string | number = this.species.speciesId;
     if (this.species.forms.length > 0) {
@@ -2320,10 +2331,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       }
     }
     // Checks if there is no variant data for both the index or index with form
-    if (
-      !this.shiny
-      || (!Object.hasOwn(variantData, variantDataIndex) && !Object.hasOwn(variantData, this.species.speciesId))
-    ) {
+    if (!Object.hasOwn(variantData, variantDataIndex) && !Object.hasOwn(variantData, this.species.speciesId)) {
       return 0;
     }
     const rand = new NumberHolder(0);
@@ -2412,7 +2420,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           this.level >= 170
           && !movePool.some((m) => m[0] === moveId)
           && !allMoves.get(moveId).name.endsWith(" (N)")
-          && !this.isBoss()
+          && !this.boss
         ) {
           movePool.push([moveId, 30]);
         }
@@ -2420,7 +2428,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     // Bosses never get self ko moves
-    if (this.isBoss()) {
+    if (this.boss) {
       movePool = movePool.filter((m) => !allMoves.get(m[0]).hasAttr(SacrificialAttr));
     }
     if (this.hasTrainer()) {
@@ -2473,7 +2481,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (this.hasTrainer()) {
       weightMultiplier += 0.7;
     }
-    if (this.isBoss()) {
+    if (this.boss) {
       weightMultiplier += 0.4;
     }
     const baseWeights: [MoveId, number][] = movePool.map((m) => [
@@ -2482,7 +2490,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     ]);
 
     // Trainers and bosses always force a stab move
-    if (this.hasTrainer() || this.isBoss()) {
+    if (this.hasTrainer() || this.boss) {
       const stabMovePool = baseWeights.filter(
         (m) => allMoves.get(m[0]).category !== MoveCategory.STATUS && this.isOfType(allMoves.get(m[0]).type),
       );
@@ -2580,7 +2588,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       let xOffset = -150;
       if (this.isPlayer()) {
         xOffset = 150;
-      } else if (this.isBoss()) {
+      } else if (this.boss) {
         xOffset = -198;
       }
       this.battleInfo.setX(this.battleInfo.x + xOffset);
@@ -2590,7 +2598,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       }
       globalScene.tweens.add({
         targets: [this.battleInfo, this.battleInfo.expMaskRect],
-        x: this.isPlayer() ? "-=150" : `+=${this.isBoss() ? 246 : 150}`,
+        x: this.isPlayer() ? "-=150" : `+=${this.boss ? 246 : 150}`,
         duration: 1000,
         ease: "Cubic.easeOut",
       });
@@ -2602,7 +2610,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       if (this.battleInfo?.visible) {
         globalScene.tweens.add({
           targets: [this.battleInfo, this.battleInfo.expMaskRect],
-          x: this.isPlayer() ? "+=150" : `-=${this.isBoss() ? 246 : 150}`,
+          x: this.isPlayer() ? "+=150" : `-=${this.boss ? 246 : 150}`,
           duration: 500,
           ease: "Cubic.easeIn",
           onComplete: () => {
@@ -2613,7 +2621,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
             let xOffset = -150;
             if (this.isPlayer()) {
               xOffset = 150;
-            } else if (this.isBoss()) {
+            } else if (this.boss) {
               xOffset = -198;
             }
             this.battleInfo.setX(this.battleInfo.x - xOffset);
@@ -2669,7 +2677,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       console.log(initialExp, this.exp, getLevelTotalExp(this.level, this.species.growthRate));
       this.exp = Math.max(getLevelTotalExp(this.level, this.species.growthRate), initialExp);
     }
-    this.levelExp = this.exp - getLevelTotalExp(this.level, this.species.growthRate);
   }
 
   /**
@@ -3078,7 +3085,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     applyMoveAttrs(OneHitKOAttr, source, this, move, isOneHitKo);
 
     let ohkoDamage = 0;
-    if (this.isBoss()) {
+    if (this.boss) {
       // TODO: Potentially can cause a softlock against the pkr Eternatus boss on floor 200
       const segmentIndex = this.getBossSegmentIndex();
       const enemyHpAfter = Math.floor((this.getMaxHp() * segmentIndex) / this.getBossSegments());
@@ -3417,7 +3424,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   isBossImmune(): boolean {
-    return this.isBoss();
+    return this.boss;
   }
 
   /**

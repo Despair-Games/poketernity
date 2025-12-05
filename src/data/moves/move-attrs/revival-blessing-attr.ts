@@ -26,7 +26,7 @@ export class RevivalBlessingAttr extends MoveEffectAttr {
     if (user.isEnemy()) {
       // If used by an enemy trainer with at least one fainted non-boss Pokemon, this
       // revives one of said Pokemon selected at random.
-      const faintedPokemon = globalScene.getEnemyParty().filter((p) => p.isFainted() && !p.isBoss());
+      const faintedPokemon = globalScene.getEnemyParty().filter((p) => p.isFainted() && !p.boss);
       const pokemon = faintedPokemon[user.randSeedInt(faintedPokemon.length)];
       const slotIndex = globalScene.getEnemyParty().findIndex((p) => pokemon.id === p.id);
       const { currentBattle, phaseManager } = globalScene;
@@ -60,11 +60,11 @@ export class RevivalBlessingAttr extends MoveEffectAttr {
   override getCondition(): MoveConditionFunc {
     return (user, _target, _move) =>
       (user.isPlayer() && globalScene.getPlayerParty().some((p) => p.isFainted()))
-      || (user.isEnemy() && user.hasTrainer() && globalScene.getEnemyParty().some((p) => p.isFainted() && !p.isBoss()));
+      || (user.isEnemy() && user.hasTrainer() && globalScene.getEnemyParty().some((p) => p.isFainted() && !p.boss));
   }
 
   override getUserBenefitScore(user: Pokemon, _target: Pokemon, _move: Move): number {
-    if (user.hasTrainer() && globalScene.getEnemyParty().some((p) => p.isFainted() && !p.isBoss())) {
+    if (user.hasTrainer() && globalScene.getEnemyParty().some((p) => p.isFainted() && !p.boss)) {
       return 20;
     }
 

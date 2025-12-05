@@ -346,11 +346,11 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       expect(scene.currentBattle.trainer?.config.trainerType).toBe(TrainerType.BUG_TYPE_SUPERFAN);
       expect(enemyParty[0].species.speciesId).toBe(SpeciesId.BEEDRILL);
       expect(enemyParty[0].formIndex).toBe(1);
-      expect(enemyParty[0].isBoss()).toBe(true);
+      expect(enemyParty[0].boss).toBe(true);
       expect(enemyParty[0].bossSegments).toBe(2);
       expect(enemyParty[1].species.speciesId).toBe(SpeciesId.BUTTERFREE);
       expect(enemyParty[1].formIndex).toBe(1);
-      expect(enemyParty[1].isBoss()).toBe(true);
+      expect(enemyParty[1].boss).toBe(true);
       expect(enemyParty[1].bossSegments).toBe(2);
       expect(POOL_3_POKEMON.some((config) => enemyParty[2].species.speciesId === config.species)).toBe(true);
       expect(POOL_3_POKEMON.some((config) => enemyParty[3].species.speciesId === config.species)).toBe(true);

@@ -56,7 +56,7 @@ export class AttemptRunPhase extends PokemonPhase {
       playerField.reduce((total: number, playerPokemon: Pokemon) => total + playerPokemon.getStat(Stat.SPD), 0)
       / enemyField.length;
 
-    const isBoss = enemyField.some((p) => p.isBoss());
+    const isBoss = enemyField.some((p) => p.boss);
 
     /** The ratio between the speed of your active pokemon and the speed of the enemy field */
     const speedRatio = playerSpeed / enemySpeed;
