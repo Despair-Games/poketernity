@@ -1,12 +1,16 @@
 import { globalScene } from "#app/global-scene";
+import { activeOverrides as Overrides } from "#app/overrides";
+import { GYM_LEADER_STRENGTH_TEMPLATES } from "#constants/trainer-constants";
 import type { NewTrainerConfig, TieredSpeciesPool, TrainerPartyPokemonConfig } from "#data/new-trainer-config";
+import { signatureSpecies } from "#data/signature-species";
+import type { ElementalType } from "#enums/elemental-type";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import type { SpeciesId } from "#enums/species-id";
-import { TrainerGender } from "#enums/trainer-gender";
+import { type NonDefaultTrainerGender, TrainerGender } from "#enums/trainer-gender";
 import { TrainerType } from "#enums/trainer-type";
 import type { PokemonSpeciesFilter } from "#types/ui-types";
 import type { NonEmptyArray } from "#types/utility-types";
-import { enumValueToKey, isBetween } from "#utils/common-utils";
+import { coerceArray, enumValueToKey, isBetween } from "#utils/common-utils";
 import { randSeedItem } from "#utils/random-utils";
 
 type PartyPokemonOptions = Partial<TrainerPartyPokemonConfig>;
@@ -81,38 +85,50 @@ export class TrainerConfigBuilder {
    */
   private validate(config: Partial<NewTrainerConfig>): config is NewTrainerConfig {
     if (config.trainerType == null) {
-      console.error("trainerType is not defined!");
+      console.error("trainer-config-builder: trainerType is not defined!");
       return false;
     }
 
     if (this.possibleGenders.size === 0) {
       console.error(
-        "No supported genders detected. This may happen if the config's name, title, and/or sprite key(s) are not initialized.",
+        "trainer-config-builder: No supported genders detected. This may happen if the config's name, title, and/or sprite key(s) are not initialized.",
       );
       return false;
     }
 
     const requiredGenderMappedGeneratorKeys = ["name", "title", "spriteKey"] as const;
     for (const gender of this.possibleGenders) {
+      if (gender === TrainerGender.DEFAULT) {
+        continue;
+      }
+
       for (const k of requiredGenderMappedGeneratorKeys) {
         // We know `config[k]` is defined based on default values
-        if (config[k]![gender] == null) {
-          console.error(`${k} does not have a matching generator for supported gender ${gender}!`);
+        if (config[k]![gender] == null && config[k]![TrainerGender.DEFAULT] == null) {
+          console.error(
+            `trainer-config-builder: ${k} does not have a matching generator for supported gender ${gender}!`,
+          );
           return false;
         }
       }
 
       // This should be defined based on default values
       const dialogueSpriteKey = config.dialogueSpriteKey!;
-      if (Object.keys(dialogueSpriteKey).length > 0 && dialogueSpriteKey[gender] == null) {
-        console.error(`dialogueSpriteKey has a defined generator, but not for supported gender ${gender}!`);
+      if (
+        Object.keys(dialogueSpriteKey).length > 0
+        && dialogueSpriteKey[gender] == null
+        && dialogueSpriteKey[TrainerGender.DEFAULT] == null
+      ) {
+        console.error(
+          `trainer-config-builder: dialogueSpriteKey has a defined generator, but not for supported gender ${gender}!`,
+        );
         return false;
       }
     }
 
     const pokemonCount = config.partyConfigs!.reduce((total, { count }) => total + count, 0);
     if (!isBetween(pokemonCount, 1, 6)) {
-      console.error(`Invalid Pokemon count from config(s): ${pokemonCount}`);
+      console.error(`trainer-config-builder: Invalid Pokemon count from config(s): ${pokemonCount}`);
       return false;
     }
 
@@ -122,7 +138,7 @@ export class TrainerConfigBuilder {
   /** Validates and returns the builder's internal {@linkcode NewTrainerConfig} */
   public build(): NewTrainerConfig {
     if (!this.validate(this.config)) {
-      throw new Error(`Required fields missing in generated config: ${this.config}`);
+      throw new Error(`trainer-config-builder: Required fields missing in generated config: ${this.config}`);
     }
     return this.config;
   }
@@ -143,7 +159,7 @@ export class TrainerConfigBuilder {
    * @param gender - The {@linkcode TrainerGender} under which the name is assigned
    * @returns `this`
    */
-  public withFixedName(name: string, gender: TrainerGender = TrainerGender.MALE): this {
+  public withFixedName(name: string, gender: NonDefaultTrainerGender): this {
     this.possibleGenders.add(gender);
     this.config.name![gender] = () => name;
     return this;
@@ -156,7 +172,7 @@ export class TrainerConfigBuilder {
    * @param gender - The {@linkcode TrainerGender} under which the name is assigned
    * @returns `this`
    */
-  public withNameFromPool(names: string[], gender: TrainerGender = TrainerGender.MALE): this {
+  public withNameFromPool(names: string[], gender: NonDefaultTrainerGender): this {
     this.possibleGenders.add(gender);
     this.config.name![gender] = () => randSeedItem(names);
     return this;
@@ -168,7 +184,7 @@ export class TrainerConfigBuilder {
    * @param gender - The {@linkcode TrainerGender} under which the title is assigned
    * @returns `this`
    */
-  public withTitle(title: string, gender: TrainerGender = TrainerGender.MALE): this {
+  public withTitle(title: string, gender: TrainerGender = TrainerGender.DEFAULT): this {
     this.possibleGenders.add(gender);
     this.config.title![gender] = () => title;
     return this;
@@ -180,7 +196,7 @@ export class TrainerConfigBuilder {
    * @param gender - The {@linkcode TrainerGender} under which the sprite key is assigned
    * @returns `this`
    */
-  public withSpriteKey(spriteKey: string, gender: TrainerGender = TrainerGender.MALE): this {
+  public withSpriteKey(spriteKey: string, gender: TrainerGender = TrainerGender.DEFAULT): this {
     this.possibleGenders.add(gender);
     this.config.spriteKey![gender] = () => spriteKey;
     return this;
@@ -193,7 +209,7 @@ export class TrainerConfigBuilder {
    * @param gender - The {@linkcode TrainerGender} under which the sprite key is assigned
    * @returns `this`
    */
-  public withDialogueSpriteKey(spriteKey: string, gender: TrainerGender = TrainerGender.MALE): this {
+  public withDialogueSpriteKey(spriteKey: string, gender: TrainerGender = TrainerGender.DEFAULT): this {
     this.possibleGenders.add(gender);
     this.config.dialogueSpriteKey![gender] = () => spriteKey;
     return this;
@@ -256,6 +272,15 @@ export class TrainerConfigBuilder {
   public withVictoryBgm(bgm: TrainerType | string): this {
     const bgmString = typeof bgm === "number" ? `victory_${enumValueToKey(TrainerType, bgm).toLowerCase()}` : bgm;
     this.config.victoryBgm = () => bgmString;
+    return this;
+  }
+
+  /**
+   * Sets this Trainer as a "boss" Trainer.
+   * @returns `this`
+   */
+  public asBoss(): this {
+    this.config.isBoss = true;
     return this;
   }
 
@@ -351,4 +376,102 @@ export class TrainerConfigBuilder {
   public withRivalAssets(): this {
     return this.withFixedName("finn", TrainerGender.MALE).withFixedName("ivy", TrainerGender.FEMALE).withTitle("rival");
   }
+
+  /**
+   * Adds the assets and party generators for the Gym Leader of the given key.
+   *
+   * Gym Leaders' parties are generated based on three constant data structures:
+   * - {@linkcode signatureSpecies}, which defines fixed species pools for *N* Pokemon
+   * in the Gym Leader's party.
+   * - {@linkcode specialtyTypes}, which is used to filter randomly generated
+   * species for the remaining *(6 - N)* Pokemon.
+   * - {@linkcode GYM_LEADER_STRENGTH_TEMPLATES}, which defines the Gym Leader's
+   * party size and {@link PartyMemberStrength | strength} levels based on the
+   * current wave index.
+   *
+   * A Gym Leader's full party consists of the *(6 - N)* randomly generated Pokemon
+   * followed by the *N* Pokemon derived from {@linkcode signatureSpecies} in reverse order.
+   * However, if *S* is the length of the strength template corresponding to the current wave,
+   * then only the last *S* party Pokemon are included in the Gym Leader's party for the battle.
+   * @param key - The key of the Gym Leader's {@linkcode TrainerType}, e.g. `"BROCK"`
+   * @param gender - The Gym Leader's gender
+   * @param specialtyTypes - The Gym Leader's preferred {@linkcode ElementalType}(s). Randomly
+   * generated Pokemon outside of {@linkcode signatureSpecies} will be at least
+   * one of these types.
+   * @returns `this`
+   * @todo
+   * - Narrow `key` down to gym leader {@linkcode TrainerType}s
+   * - Should `region` use an enum?
+   */
+  public withGymLeaderConfig(
+    key: keyof typeof TrainerType,
+    gender: NonDefaultTrainerGender,
+    region: string,
+    ...specialtyTypes: ElementalType[]
+  ) {
+    const sigSpecies = signatureSpecies[key]?.map((s) => coerceArray(s));
+    if (sigSpecies == null) {
+      throw new Error(`trainer-config-builder: ${key} is not a Gym Leader!`);
+    }
+    for (let i = 0; i < 6 - sigSpecies.length; i++) {
+      this.withPokemonFromFilter(
+        (species) => specialtyTypes.some((s) => species.isOfType(s)) && !sigSpecies.flat().includes(species.speciesId),
+        {
+          condition: getGymLeaderPartyPokemonCondition(i),
+          variableStrength: () => getGymLeaderStrengthTemplate().at(i - 6) ?? PartyMemberStrength.AVERAGE,
+        },
+      );
+    }
+
+    for (let i = 0; i < sigSpecies.length; i++) {
+      this.withPokemonFromPool(sigSpecies.at(-(i + 1)) as NonEmptyArray<SpeciesId>, {
+        allowDuplicates: true,
+        condition: getGymLeaderPartyPokemonCondition(i),
+        variableStrength: () => getGymLeaderStrengthTemplate().at(i - sigSpecies.length) ?? PartyMemberStrength.AVERAGE,
+      });
+    }
+
+    return this.withFixedName(key.toLowerCase(), gender)
+      .withTitle(`gym_leader${gender === TrainerGender.MALE ? "" : "_female"}`)
+      .withSpriteKey(key.toLowerCase(), gender)
+      .withBattleBgm(`battle_${region}_gym`)
+      .withVictoryBgm("victory_gym")
+      .asBoss()
+      .withMoneyMultiplier(2.5);
+  }
+
+  public withPaldeaGymLeaderConfig(
+    key: keyof typeof TrainerType,
+    gender: NonDefaultTrainerGender,
+    ...specialtyTypes: ElementalType[]
+  ): this {
+    // TODO: Add logic to instantly Tera the Pokemon in the last party slot
+    return this.withGymLeaderConfig(key, gender, "paldea", ...specialtyTypes);
+  }
+}
+
+/**
+ * @returns The element of {@linkcode GYM_LEADER_STRENGTH_TEMPLATES} corresponding to
+ * the current wave. In Classic mode, the template used for Gym Leader party
+ * generation advances to the next index every 20 waves.
+ */
+function getGymLeaderStrengthTemplate(): PartyMemberStrength[] {
+  const currentWave = globalScene.currentBattle.waveIndex ?? Overrides.STARTING_WAVE_OVERRIDE;
+  const gymLeaderIndex = Math.min(Math.ceil(currentWave / 20), 8) - 1;
+  return GYM_LEADER_STRENGTH_TEMPLATES[gymLeaderIndex];
+}
+
+/**
+ * @param slotIndex - The index of the generated Pokemon in the Gym Leader's party,
+ * assuming the entire party is generated.
+ * @returns A condition function such that, if *S* is the size of the Gym Leader
+ * Strength Template for the current wave, only the last *S* {@linkcode TrainerPartyPokemonConfig}s
+ * will generate Pokemon.
+ * @see {@linkcode getGymLeaderStrengthTemplate}
+ */
+function getGymLeaderPartyPokemonCondition(slotIndex: number): () => boolean {
+  return () => {
+    const strengthTemplate = getGymLeaderStrengthTemplate();
+    return strengthTemplate.length >= 6 - slotIndex;
+  };
 }

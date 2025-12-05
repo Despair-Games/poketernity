@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
-import type { NewTrainerConfig } from "#data/new-trainer-config";
-import type { TrainerGender } from "#enums/trainer-gender";
+import type { NewTrainerConfig, TrainerAssetKey } from "#data/new-trainer-config";
+import { TrainerGender } from "#enums/trainer-gender";
 import type { NonNullTrainerSlot } from "#enums/trainer-slot";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import { coerceArray } from "#utils/common-utils";
@@ -30,10 +30,10 @@ export class TrainerData {
   constructor(trainerSlot: NonNullTrainerSlot, config: NewTrainerConfig, gender?: TrainerGender) {
     this.trainerSlot = trainerSlot;
     this.gender = gender ?? this.getGender(config);
-    this.name = config.name[this.gender]!();
-    this.title = config.title[this.gender]!();
-    this.spriteKey = config.spriteKey[this.gender]!();
-    this.dialogueSpriteKey = config.dialogueSpriteKey[this.gender]?.();
+    this.name = this.getGenderedAsset(config, "name")!;
+    this.title = this.getGenderedAsset(config, "title")!;
+    this.spriteKey = this.getGenderedAsset(config, "spriteKey")!;
+    this.dialogueSpriteKey = this.getGenderedAsset(config, "dialogueSpriteKey");
     this.isBoss = config.isBoss;
     this.battleBgm = config.battleBgm();
     this.encounterBgm = config.encounterBgm();
@@ -66,6 +66,22 @@ export class TrainerData {
   }
 
   /**
+   * @param config - The {@linkcode NewTrainerConfig} used to generate the asset
+   * @param key - The type of asset to generate
+   * @returns The asset (i18n key or path) generated corresponding to this Trainer's gender,
+   * or `undefined` if no asset can be generated under the given parameters.
+   * @privateRemarks {@linkcode gender} should be initialized before calling this method.
+   */
+  private getGenderedAsset(config: NewTrainerConfig, key: TrainerAssetKey): string | undefined {
+    const assetGenerator = config[key]?.[this.gender] ?? config[key]?.[TrainerGender.DEFAULT];
+    if (key !== "dialogueSpriteKey" && assetGenerator == null) {
+      throw new Error(`trainer-data: Cannot find asset for ${key} (gender=${this.gender})`);
+    }
+
+    return assetGenerator?.();
+  }
+
+  /**
    * Generates the Trainer's party of {@linkcode EnemyPokemon} from the given config
    * and adds them to {@linkcode globalScene}.
    * @param config - The {@linkcode NewTrainerConfig} used to generate the Trainer.
@@ -81,6 +97,9 @@ export class TrainerData {
   ): EnemyPokemon[] {
     const party: EnemyPokemon[] = [];
     for (const config of partyConfigs) {
+      if (config.condition && !config.condition()) {
+        continue;
+      }
       const strength = config.variableStrength
         ? coerceArray(config.variableStrength).map((strengthFn) => strengthFn())
         : coerceArray(config.strength);
@@ -92,6 +111,10 @@ export class TrainerData {
           party.push(globalScene.addEnemyPokemon(species, level, config, config.postProcess));
         }, seedOffset);
       }
+    }
+
+    if (party.length === 0) {
+      throw new Error("No valid party members generated!");
     }
     return party;
   }

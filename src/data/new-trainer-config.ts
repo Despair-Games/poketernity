@@ -23,6 +23,9 @@ import type { CoercibleArray, NonEmptyArray } from "#types/utility-types";
 type TrainerAssetGenerator<T = string> = Partial<Record<TrainerGender, () => T>>;
 
 // #region TrainerConfig
+
+export type TrainerAssetKey = "name" | "title" | "spriteKey" | "dialogueSpriteKey";
+
 /**
  * Interface for the specification of a generated Trainer. Most properties
  * in this object are "generators" -- functions that return the desired data.
