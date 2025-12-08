@@ -192,8 +192,8 @@ export class Ability {
 
   /**
    * Get all ability attributes that match the given {@linkcode key}
-   * @param key The {@linkcode AbAttrKey} to check for
-   * @returns Array of attributes that match the given {@linkcode key}, Empty Array if none match.
+   * @param key - The {@linkcode AbAttrKey} to check for
+   * @returns An array of attributes that match the given {@linkcode key} (can be empty if none match).
    */
   getAttrs<K extends AbAttrKey>(key: K): AbAttrMap[K][] {
     // TODO: Figure out how to remove `as AbAttrMap[K][]`.
@@ -204,7 +204,7 @@ export class Ability {
   /**
    * Check if an ability has an attribute that matches the given {@linkcode key}
    * @param key - The {@linkcode AbAttrKey} to check
-   * @returns `true` if the ability has an attribute with a matching key
+   * @returns Whether the ability has an attribute with a matching key
    */
   hasAttrOfKey<K extends AbAttrKey>(key: K): boolean {
     return this.attrs.some((abAttr) => abAttr.is(key));
@@ -297,6 +297,8 @@ export class Ability {
   edgeCase(): this {
     return this;
   }
+
+  // #endregion
 }
 
 /**
@@ -417,9 +419,10 @@ const AbilityAttrs = {
   VariableMovePowerAbAttr,
   WeightMultiplierAbAttr,
   WonderSkinAbAttr,
-};
+} as const;
+
 /**
- * A map of all referable {@linkcode AbAttr} constructors.
+ * A map of all {@linkcode AbAttr} constructors.
  * @see {@linkcode AbilityAttrs}
  */
 export type AbAttrConstructorMap = typeof AbilityAttrs;
