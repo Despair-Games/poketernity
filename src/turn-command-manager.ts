@@ -70,16 +70,12 @@ export interface TurnCommand {
  * as they are processed.
  */
 export class TurnCommandManager {
-  private readonly queue: ShuffledPriorityQueue<TurnCommand>;
+  private readonly queue: ShuffledPriorityQueue<TurnCommand> = new ShuffledPriorityQueue<TurnCommand>(compareTurnOrder);
 
   private orderIndex: number = 0;
   private appliedMoveHeaders = false;
   /** Tracks how many pending turn commands are currently in the phase queue */
   public commandsInProgress: number = 0;
-
-  constructor() {
-    this.queue = new ShuffledPriorityQueue<TurnCommand>(compareTurnOrder);
-  }
 
   //#region Public Methods
 
@@ -561,9 +557,10 @@ function comparePreSpeed(commandA: TurnCommand, commandB: TurnCommand): number {
   if (commandA.command !== commandB.command) {
     return COMMAND_PRIORITY_MAP[commandA.command] > COMMAND_PRIORITY_MAP[commandB.command] ? -1 : 1;
   }
+
   if (commandA.command === BattleCommand.FIGHT) {
     const [aQuashed, bQuashed] = [commandA, commandB].map(({ pokemon }) => pokemon.hasTag(BattlerTagType.QUASHED));
-    if ((aQuashed || bQuashed) && aQuashed !== bQuashed) {
+    if (aQuashed !== bQuashed) {
       return aQuashed ? 1 : -1;
     }
 
