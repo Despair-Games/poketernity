@@ -3946,7 +3946,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
     const doExit = () => {
       ui.setMode<StarterSelectUiHandler>(UiMode.STARTER_SELECT);
-      globalScene.phaseManager.clearPhaseQueue();
+      globalScene.phaseManager.clear();
       if (globalScene.gameMode.isChallenge) {
         globalScene.phaseManager.pushPhase(
           globalScene.phaseManager.createPhase("SelectChallengePhase"),

@@ -42,6 +42,7 @@ import { addTextObject } from "#ui/text-utils";
 import { hslToHex } from "#utils/color-utils";
 import { BooleanHolder, NumberHolder, toDmgValue } from "#utils/common-utils";
 import { getModifierType } from "#utils/modifier-type-utils";
+import { inSpeedOrder } from "#utils/speed-order-generator";
 import i18next from "i18next";
 
 const iconOverflowIndex = 24;
@@ -1927,8 +1928,9 @@ export class PokemonInstantReviveModifier extends PokemonHeldItemModifier {
     pokemon.resetStatus(false, true);
 
     // Reapply Commander on the Pokemon's side of the field, if applicable
-    const field = pokemon.getField();
-    field.forEach((p) => applyAbAttrs("CommanderAbAttr", p, false));
+    for (const p of inSpeedOrder(pokemon.getArenaTagSide())) {
+      applyAbAttrs("CommanderAbAttr", p, false);
+    }
     return true;
   }
 

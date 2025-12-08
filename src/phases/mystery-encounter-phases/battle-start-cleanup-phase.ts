@@ -45,9 +45,7 @@ export class MysteryEncounterBattleStartCleanupPhase extends Phase {
     });
 
     // Remove any status tick phases
-    while (globalScene.phaseManager.findPhase((p) => p.is("PostTurnStatusEffectPhase"))) {
-      globalScene.phaseManager.tryRemovePhase((p) => p.is("PostTurnStatusEffectPhase"));
-    }
+    globalScene.phaseManager.removeAllPhasesOfType("PostTurnStatusEffectPhase");
 
     /** The total number of Pokemon in the player's party that can legally fight */
     const legalPlayerPokemon = globalScene.getPokemonAllowedInBattle();

@@ -4,8 +4,6 @@ import { globalScene } from "#app/global-scene";
 import { getCharVariantFromDialogue } from "#data/dialogue";
 import type { PokemonSpecies } from "#data/pokemon-species";
 import { AchvCategory } from "#enums/achv-category";
-import { BattleType } from "#enums/battle-type";
-import { BattlerIndex } from "#enums/battler-index";
 import { PlayerGender } from "#enums/player-gender";
 import { TrainerType } from "#enums/trainer-type";
 import { UiMode } from "#enums/ui-mode";
@@ -66,30 +64,9 @@ export class GameOverPhase extends BattlePhase {
       const reloadGame = (): void => {
         ui.fadeOut(1250).then(() => {
           globalScene.reset();
-          globalScene.phaseManager.clearPhaseQueue();
+          globalScene.phaseManager.clear();
           gameData.loadSession(globalScene.sessionSlotId).then(() => {
             globalScene.phaseManager.createAndPushPhase("EncounterPhase", true);
-
-            const availablePartyMembers = globalScene.getPokemonAllowedInBattle().length;
-
-            globalScene.phaseManager.createAndPushPhase("SummonPhase", BattlerIndex.PLAYER, {
-              loaded: true,
-              delayPostSummon: true,
-            });
-            if (currentBattle.double && availablePartyMembers > 1) {
-              globalScene.phaseManager.createAndPushPhase("SummonPhase", BattlerIndex.PLAYER_2, {
-                loaded: true,
-                delayPostSummon: true,
-              });
-            }
-            // TODO: Should this also check `!gameMode.isDaily` like in `TitlePhase.end()`?
-            if (currentBattle.waveIndex > 1 && currentBattle.battleType !== BattleType.TRAINER) {
-              globalScene.phaseManager.createAndPushPhase("CheckSwitchPhase", 0, currentBattle.double);
-              if (currentBattle.double && availablePartyMembers > 1) {
-                globalScene.phaseManager.createAndPushPhase("CheckSwitchPhase", 1, currentBattle.double);
-              }
-            }
-
             ui.fadeIn(1250);
             this.end();
           });
@@ -144,7 +121,7 @@ export class GameOverPhase extends BattlePhase {
         ui.fadeOut(fadeDuration).then(() => {
           activeBattlers.map((a) => a.setVisible(false));
           globalScene.setFieldScale(1, true);
-          globalScene.phaseManager.clearPhaseQueue();
+          globalScene.phaseManager.clear();
           ui.clearText();
 
           if (this.isVictory && gameMode.isChallenge) {

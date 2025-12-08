@@ -4,6 +4,7 @@ import { BATTLE_STATS } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
+import { inSpeedOrder } from "#utils/speed-order-generator";
 import i18next from "i18next";
 
 /**
@@ -23,8 +24,9 @@ export class ResetStatsAttr extends MoveEffectAttr {
   override applyEffect(_user: Pokemon, target: Pokemon, _move: Move): boolean {
     if (this.targetAllPokemon) {
       // Target all pokemon on the field when Freezy Frost or Haze are used
-      const activePokemon = globalScene.getField(true);
-      activePokemon.forEach((p) => this.resetStats(p));
+      for (const pokemon of inSpeedOrder()) {
+        this.resetStats(pokemon);
+      }
       globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("moveTriggers:statEliminated"));
     } else {
       // Affects only the single target when Clear Smog is used

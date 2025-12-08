@@ -78,32 +78,32 @@ describe("Ability - Drizzle", () => {
     expect(game).not.toHaveWeather(WeatherType.RAIN);
   });
 
-  it.each(primalWeather)("should not override primal $name weather", async (_name, weatherType) => {
+  it.each(primalWeather)("should not override primal %s weather", async (_name, weatherType) => {
     const { phaseInterceptor, classicMode } = game;
 
     await classicMode.runToSummon(SpeciesId.FEEBAS);
     game.scene.arena.trySetWeather(weatherType, false);
     expect(game).toHaveWeather(weatherType);
 
-    await phaseInterceptor.to("PostSummonPhase");
+    await phaseInterceptor.to("CommandPhase");
 
     expect(game).not.toHaveWeather(WeatherType.RAIN);
   });
 
-  it.each(replaceableWeather)("should replace $name weather", async (_name, weatherType) => {
+  it.each(replaceableWeather)("should replace %s weather", async (_name, weatherType) => {
     const { phaseInterceptor, classicMode } = game;
 
     await classicMode.runToSummon(SpeciesId.FEEBAS);
     game.scene.arena.trySetWeather(weatherType, false);
     expect(game).toHaveWeather(weatherType);
 
-    await phaseInterceptor.to("PostSummonPhase");
+    await phaseInterceptor.to("CommandPhase");
 
     expect(game).toHaveWeather(WeatherType.RAIN);
   });
 
   it.each(weatherSuppressingAbilities)(
-    "should not be stopped from setting weather by $name ability",
+    "should not be stopped from setting weather by %s ability",
     async (_name, abilityId) => {
       const { override, classicMode, move, textInterceptor } = game;
       override.enemyAbility(abilityId);

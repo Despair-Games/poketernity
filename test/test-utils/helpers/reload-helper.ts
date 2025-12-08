@@ -33,7 +33,7 @@ export class ReloadHelper extends GameManagerHelper {
     const { scene, phaseInterceptor } = this.game;
     const titlePhase = scene.phaseManager.createPhase("TitlePhase");
 
-    scene.phaseManager.clearPhaseQueue();
+    scene.phaseManager.clear();
 
     // Set the last saved session to the desired session data
     vi.spyOn(scene.gameData, "getSession").mockReturnValue(

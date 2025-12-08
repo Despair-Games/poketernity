@@ -1,11 +1,11 @@
 import { globalScene } from "#app/global-scene";
-import { FieldPhase } from "#phases/base/field-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
 import i18next from "i18next";
 
 /**
  * Displays the message for when the level cap increases
  */
-export class LevelCapPhase extends FieldPhase {
+export class LevelCapPhase extends BattlePhase {
   public override readonly phaseName = "LevelCapPhase";
 
   public override start(): void {
@@ -16,7 +16,8 @@ export class LevelCapPhase extends FieldPhase {
         callback: () => this.end(),
         prompt: true,
       });
-      this.executeForAll((pokemon) => pokemon.updateInfo(true));
+
+      globalScene.getField(true).forEach((p) => p.updateInfo(true));
     });
   }
 }

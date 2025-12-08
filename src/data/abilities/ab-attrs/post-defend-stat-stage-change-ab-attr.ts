@@ -4,6 +4,7 @@ import type { BattleStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { PokemonDefendCondition } from "#types/move-types";
+import { speedOrderComparator } from "#utils/speed-order-utils";
 
 /**
  * Activates after receiving an attack and if certain conditions are met, changes the effective stats
@@ -53,7 +54,7 @@ export class PostDefendStatStageChangeAbAttr extends PostDefendAbAttr {
       if (allyPokemon) {
         otherPokemon.push(allyPokemon);
       }
-      for (const other of otherPokemon) {
+      for (const other of otherPokemon.toSorted(speedOrderComparator)) {
         globalScene.phaseManager.createAndUnshiftPhase(
           "StatStageChangePhase",
           other.getBattlerIndex(),

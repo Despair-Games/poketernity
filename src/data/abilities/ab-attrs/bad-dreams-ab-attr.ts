@@ -7,6 +7,7 @@ import { HitResult } from "#enums/hit-result";
 import { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#field/pokemon";
 import { toDmgValue } from "#utils/common-utils";
+import { inSpeedOrder } from "#utils/speed-order-generator";
 import i18next from "i18next";
 
 /**
@@ -26,7 +27,7 @@ export class BadDreamsAbAttr extends AbAttr {
       return;
     }
 
-    for (const opp of pokemon.getOpponents()) {
+    for (const opp of inSpeedOrder(pokemon.getOpposingArenaTagSide())) {
       const isAsleep = opp.hasStatusEffect(StatusEffect.SLEEP);
       const blocksNonDirectDamage = opp.hasAbilityWithAttr("BlockNonDirectDamageAbAttr");
       // TODO: Workaround because Drowsy sets the sleep status AFTER applying bad dreams due to "asPhase = true"

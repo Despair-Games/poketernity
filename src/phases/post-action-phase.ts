@@ -42,10 +42,6 @@ export class PostActionPhase extends PokemonPhase {
     turnManager.commandsInProgress--;
 
     if (turnManager.commandsInProgress < 1) {
-      // Reset turn order in case the last action affected Speed
-      turnManager.setTurnOrder();
-      // Pull commands from the turn manager until empty or
-      // a phase is queued
       turnManager.scheduleNextValidCommand();
     }
 

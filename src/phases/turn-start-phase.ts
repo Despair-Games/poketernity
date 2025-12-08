@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
-import { FieldPhase } from "#phases/base/field-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
 
-export class TurnStartPhase extends FieldPhase {
+export class TurnStartPhase extends BattlePhase {
   public override readonly phaseName = "TurnStartPhase";
 
   public override start(): void {

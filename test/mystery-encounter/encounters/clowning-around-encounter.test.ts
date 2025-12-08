@@ -200,7 +200,7 @@ describe("Clowning Around - Mystery Encounter", () => {
       game.move.use(MoveId.DAZZLING_GLEAM);
       await game.phaseInterceptor.to("MysteryEncounterRewardsPhase");
 
-      expect(game.scene.phaseManager.hasPhase((phase) => phase.is("MysteryEncounterRewardsPhase"), true)).toBe(false);
+      expect(game.scene.phaseManager.hasPhaseOfType("MysteryEncounterRewardsPhase")).toBe(false);
     });
 
     it("should let the player gain the ability after battle completion", async () => {

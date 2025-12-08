@@ -1,8 +1,8 @@
-import { globalScene } from "#app/global-scene";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
+import { inSpeedOrder } from "#utils/speed-order-generator";
 
 /**
  * Attribute to remove all Substitutes from the field.
@@ -15,9 +15,9 @@ export class RemoveAllSubstitutesAttr extends MoveEffectAttr {
   }
 
   override applyEffect(_user: Pokemon, _target: Pokemon, _move: Move): boolean {
-    globalScene
-      .getField(true)
-      .forEach((pokemon) => pokemon.findAndRemoveTags((tag) => tag.tagType === BattlerTagType.SUBSTITUTE));
+    for (const pokemon of inSpeedOrder()) {
+      pokemon.findAndRemoveTags((tag) => tag.tagType === BattlerTagType.SUBSTITUTE);
+    }
     return true;
   }
 }

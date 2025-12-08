@@ -625,8 +625,7 @@ function onGameOver() {
   globalScene.audioManager.playBgm(globalScene.arena.bgm);
 
   // Clear any leftover battle phases
-  globalScene.phaseManager.clearPhaseQueue();
-  globalScene.phaseManager.clearPhaseQueueSplice();
+  globalScene.phaseManager.clear();
 
   // Return enemy Pokemon
   const pokemon = globalScene.getEnemyPokemon();

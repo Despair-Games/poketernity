@@ -41,7 +41,7 @@ describe("Moves - Floral Healing", () => {
     enemy.hp = 1;
 
     game.move.select(MoveId.FLORAL_HEALING);
-    await game.toEndOfTurn();
+    await game.toNextTurn();
 
     expect(enemy.hp).toBe(51);
   });
@@ -56,8 +56,9 @@ describe("Moves - Floral Healing", () => {
     enemy.hp = 1;
 
     game.move.select(MoveId.FLORAL_HEALING);
-    await game.toEndOfTurn();
+    await game.toNextTurn();
 
-    expect(enemy.hp).toBe(67);
+    // 1 + 66 (Floral Healing) + 6 (Grassy Terrain)
+    expect(enemy.hp).toBe(73);
   });
 });

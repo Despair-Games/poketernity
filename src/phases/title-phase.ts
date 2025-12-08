@@ -4,8 +4,6 @@ import { getGameMode, getModeName } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { fetchDailyRunSeed, getDailyRunStarters } from "#data/daily-run";
-import { BattleType } from "#enums/battle-type";
-import { BattlerIndex } from "#enums/battler-index";
 import { GameModes } from "#enums/game-modes";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
@@ -179,7 +177,7 @@ export class TitlePhase extends Phase {
     const { gameData, time, ui } = globalScene;
 
     ui.setMode<SaveSlotSelectUiHandler>(UiMode.SAVE_SLOT, SaveSlotUiMode.SAVE, (slotId: number) => {
-      globalScene.phaseManager.clearPhaseQueue();
+      globalScene.phaseManager.clear();
       if (slotId === -1) {
         globalScene.phaseManager.toTitleScreen();
         return super.end();
@@ -270,42 +268,22 @@ export class TitlePhase extends Phase {
   }
 
   public override end(): void {
-    const { arena, currentBattle, gameData } = globalScene;
+    const { arena, gameData } = globalScene;
 
     if (!this.loaded && !globalScene.gameMode.isDaily) {
       globalScene.loadBgm(arena.bgm);
       globalScene.gameMode = getGameMode(this.gameMode);
       if (this.gameMode === GameModes.CHALLENGE) {
-        globalScene.phaseManager.createAndPushPhase("SelectChallengePhase");
+        globalScene.phaseManager.createAndUnshiftPhase("SelectChallengePhase");
       } else {
-        globalScene.phaseManager.createAndPushPhase("SelectStarterPhase");
+        globalScene.phaseManager.createAndUnshiftPhase("SelectStarterPhase");
       }
       globalScene.newArena(globalScene.gameMode.getStartingBiome());
     } else {
       globalScene.audioManager.playBgm();
     }
 
-    globalScene.phaseManager.createAndPushPhase("EncounterPhase", this.loaded);
-
-    if (this.loaded) {
-      const { battleType, double, waveIndex } = currentBattle;
-      const availablePartyMembers = globalScene.getPokemonAllowedInBattle().length;
-
-      globalScene.phaseManager.createAndPushPhase("SummonPhase", BattlerIndex.PLAYER, { loaded: true });
-      if (double && availablePartyMembers > 1) {
-        globalScene.phaseManager.createAndPushPhase("SummonPhase", BattlerIndex.PLAYER_2, { loaded: true });
-      }
-
-      if (battleType !== BattleType.TRAINER && (waveIndex > 1 || !globalScene.gameMode.isDaily)) {
-        const minPartySize = double ? 2 : 1;
-        if (availablePartyMembers > minPartySize) {
-          globalScene.phaseManager.createAndPushPhase("CheckSwitchPhase", 0, double);
-          if (double) {
-            globalScene.phaseManager.createAndPushPhase("CheckSwitchPhase", 1, double);
-          }
-        }
-      }
-    }
+    globalScene.phaseManager.createAndUnshiftPhase("EncounterPhase", this.loaded);
 
     for (const achv of Object.keys(gameData.achvUnlocks)) {
       if (Object.hasOwn(vouchers, achv) && achv !== "CLASSIC_VICTORY") {

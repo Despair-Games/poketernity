@@ -44,6 +44,7 @@ import { HitCheckPhase } from "#phases/base/hit-check-phase";
 import type { AttackMoveResult, DamageResult, TurnMove } from "#types/move-types";
 import { BooleanHolder, NumberHolder } from "#utils/common-utils";
 import { applyFilteredMoveAttrs, applyMoveAttrs, isFieldTargeted } from "#utils/move-utils";
+import { speedOrderComparator } from "#utils/speed-order-utils";
 import i18next from "i18next";
 
 export class MoveEffectPhase extends HitCheckPhase {
@@ -708,13 +709,16 @@ export class MoveEffectPhase extends HitCheckPhase {
   }
 
   /**
-   * @returns An array of all {@linkcode Pokemon} targeted by this phase's invoked move. \
+   * @returns An array of all {@linkcode Pokemon} targeted by this phase's invoked move, in speed order. \
    * Unless the move is field-targeting, this array only includes active (e.g., non-fainted) targets.
    */
   public override getTargets(): Pokemon[] {
     const targets = this.adjustedTargets ?? this.targets;
     const activeOnly = !this.move.getMove().isFieldTarget();
-    return globalScene.getField(activeOnly).filter((p) => targets.includes(p.getBattlerIndex()));
+    return globalScene
+      .getField(activeOnly)
+      .filter((p) => targets.includes(p.getBattlerIndex()))
+      .sort(speedOrderComparator);
   }
 
   /** @returns A new `MoveEffectPhase` with the same properties as this phase */

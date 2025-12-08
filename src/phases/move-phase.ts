@@ -34,6 +34,7 @@ import { VariableMoveMessageAttr } from "#moves/variable-move-message-attr";
 import { BattlePhase } from "#phases/base/battle-phase";
 import { BooleanHolder, NumberHolder } from "#utils/common-utils";
 import { applyMoveAttrs, isFieldTargeted } from "#utils/move-utils";
+import { inSpeedOrder } from "#utils/speed-order-generator";
 import { getStatusEffectActivationText, getStatusEffectHealText } from "#utils/status-effect-utils";
 import i18next from "i18next";
 
@@ -342,7 +343,7 @@ export class MovePhase extends BattlePhase {
       return;
     }
 
-    for (const opponent of this.pokemon.getOpponents()) {
+    for (const opponent of inSpeedOrder(this.pokemon.getOpposingArenaTagSide())) {
       if (
         applyBattlerTags<ImprisoningTag>(
           BattlerTagType.IMPRISONING,
@@ -619,9 +620,9 @@ export class MovePhase extends BattlePhase {
     // Handle Dancer, which triggers immediately after a move is used (rather than waiting on `this.end()`).
     // Note that the `!this.followUp` check here prevents an infinite Dancer loop.
     if (this.pokemonMove.getMove().checkFlag(MoveFlags.DANCE_MOVE, this.pokemon, targets[0]) && !this.followUp) {
-      globalScene.getField(true).forEach((pokemon) => {
+      for (const pokemon of inSpeedOrder()) {
         applyAbAttrs("PostMoveUsedAbAttr", pokemon, false, this.pokemonMove, this.pokemon, this.targets);
-      });
+      }
     }
   }
 
@@ -694,6 +695,7 @@ export class MovePhase extends BattlePhase {
       const redirectTarget = new NumberHolder(currentTarget);
 
       // check move redirection abilities of every pokemon *except* the user.
+      // TODO: Should this be applied in Speed order?
       globalScene
         .getField(true)
         .filter((p) => p !== this.pokemon)

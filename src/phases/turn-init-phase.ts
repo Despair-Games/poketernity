@@ -6,10 +6,10 @@ import {
   handleMysteryEncounterBattleStartEffects,
   handleMysteryEncounterTurnStartEffects,
 } from "#mystery-encounters/encounter-phase-utils";
-import { FieldPhase } from "#phases/base/field-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
 import i18next from "i18next";
 
-export class TurnInitPhase extends FieldPhase {
+export class TurnInitPhase extends BattlePhase {
   public override readonly phaseName = "TurnInitPhase";
 
   public override start(): void {

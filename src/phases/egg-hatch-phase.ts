@@ -219,7 +219,7 @@ export class EggHatchPhase extends Phase {
   }
 
   public override end(): void {
-    if (globalScene.phaseManager.findPhase((p) => p instanceof EggHatchPhase)) {
+    if (globalScene.phaseManager.findPhaseOfType("EggHatchPhase")) {
       // There are more eggs about to hatch, clear up the handler
       this.eggHatchHandler.prepareForNextEgg();
     } else {

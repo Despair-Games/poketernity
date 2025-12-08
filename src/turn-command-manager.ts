@@ -6,10 +6,8 @@ import type { MovePhase } from "#phases/move-phase";
 
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import { globalScene } from "#app/global-scene";
-import type { TrickRoomTag } from "#arena-tags/trick-room-tag";
+import { ShuffledPriorityQueue } from "#app/queues/shuffled-priority-queue";
 import { AbilityId } from "#enums/ability-id";
-import { ArenaTagSide } from "#enums/arena-tag-side";
-import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleCommand } from "#enums/battle-command";
 import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -22,8 +20,7 @@ import { BypassSpeedChanceModifier } from "#modifier/modifier";
 import { MoveHeaderAttr } from "#moves/move-header-attr";
 import { PursuitAttr } from "#moves/pursuit-attr";
 import type { TurnMove } from "#types/move-types";
-import { BooleanHolder } from "#utils/common-utils";
-import { randSeedShuffle } from "#utils/random-utils";
+import { speedOrderComparator } from "#utils/speed-order-utils";
 
 /** Lower number = lower priority */
 const COMMAND_PRIORITY_MAP = {
@@ -65,15 +62,21 @@ export interface TurnCommand {
   args?: any[];
 }
 
+/**
+ * Processes all commands selected by active Pokemon in a turn
+ * of battle, translating them into {@linkcode Phase | Phases} based on their
+ * respective command type. Turn commands are dynamically ordered
+ * as they are processed.
+ */
 export class TurnCommandManager {
-  /** The internal {@linkcode TurnCommand} queue. */
-  private turnCommands: TurnCommand[] = [];
+  private readonly queue: ShuffledPriorityQueue<TurnCommand> = new ShuffledPriorityQueue<TurnCommand>(compareTurnOrder);
+
   private orderIndex: number = 0;
   private appliedMoveHeaders = false;
   /** Tracks how many pending turn commands are currently in the phase queue */
   public commandsInProgress: number = 0;
 
-  // #region Public Methods
+  //#region Public Methods
 
   /**
    * Adds a command to the command queue.
@@ -85,18 +88,8 @@ export class TurnCommandManager {
     const { pokemon } = turnCommand;
     pokemon.turnData.turnCommand = turnCommand;
     // Remove any existing commands by the Pokemon before adding
-    this.tryRemoveCommand((tc) => tc.pokemon === pokemon);
-    this.turnCommands.push(turnCommand);
-  }
-
-  /**
-   * Sorts the turn command queue by the command's turn order
-   * @param quiet if `true`, applies abilities and other field effects silently
-   */
-  public setTurnOrder(quiet: boolean = true): void {
-    this.shuffle(); // shuffle the list before sorting so speed ties produce random results
-    this.sortBySpeed();
-    this.sortPostSpeed(quiet);
+    this.queue.remove((tc) => tc.pokemon === pokemon);
+    this.queue.push(turnCommand);
   }
 
   /**
@@ -107,7 +100,7 @@ export class TurnCommandManager {
    * `true`, or `undefined` if no such turn command exists.
    */
   public findCommand(commandFilter: TurnCommandFilter): TurnCommand | undefined {
-    return this.turnCommands.find(commandFilter);
+    return this.queue.find(commandFilter);
   }
 
   /**
@@ -128,10 +121,7 @@ export class TurnCommandManager {
    * @returns the {@linkcode TurnCommand} that was removed, or `undefined` if no command is removed
    */
   public tryRemoveCommand(commandFilter: TurnCommandFilter): TurnCommand | undefined {
-    const cmdIndex = this.turnCommands.findIndex(commandFilter);
-    if (cmdIndex > -1) {
-      return this.turnCommands.splice(cmdIndex, 1)[0];
-    }
+    return this.queue.remove(commandFilter);
   }
 
   /**
@@ -160,7 +150,7 @@ export class TurnCommandManager {
       return;
     }
 
-    this.turnCommands.forEach((tc) => {
+    this.queue.forEach((tc) => {
       if (
         tc.command === BattleCommand.FIGHT
         && tc.pokemon.isPlayer() !== removedPokemon.isPlayer()
@@ -178,8 +168,8 @@ export class TurnCommandManager {
    * If no valid command is found, this ends the current turn.
    */
   public scheduleNextValidCommand(): void {
-    while (!this.isEmpty()) {
-      if (!this.appliedMoveHeaders && this.turnCommands.every((tc) => tc.command === BattleCommand.FIGHT)) {
+    while (!this.queue.isEmpty()) {
+      if (!this.appliedMoveHeaders && this.queue.every((tc) => tc.command === BattleCommand.FIGHT)) {
         this.applyMoveHeaderAttrs();
       }
 
@@ -198,7 +188,7 @@ export class TurnCommandManager {
    * @returns `true` if a command is found and scheduled for execution
    */
   public preemptCommand(commandFilter: TurnCommandFilter): boolean {
-    const turnCommand = this.tryRemoveCommand(commandFilter);
+    const turnCommand = this.queue.remove(commandFilter);
     if (turnCommand && this.handleCommand(turnCommand)) {
       turnCommand.pokemon.turnData.order = this.orderIndex++;
       this.commandsInProgress++;
@@ -227,8 +217,6 @@ export class TurnCommandManager {
     this.appliedMoveHeaders = false;
     // Apply speed-bypassing effects for all remaining Pokemon
     this.applyBypassSpeedEffects();
-    // Shuffle and sort turn commands by speed, command type, priority, etc.
-    this.setTurnOrder(false);
     // Add the first valid command to the phase queue.
     this.scheduleNextValidCommand();
   }
@@ -242,10 +230,6 @@ export class TurnCommandManager {
       phaseManager.createPhase("CheckStatusEffectPhase"),
       phaseManager.createPhase("TurnEndPhase"),
     );
-  }
-
-  public isEmpty(): boolean {
-    return !this.turnCommands.length;
   }
 
   /**
@@ -318,80 +302,12 @@ export class TurnCommandManager {
     return true;
   }
 
-  // #region Private Methods
-
-  /** Randomly shuffles the turn command queue. */
-  private shuffle(): void {
-    // This is seeded with the current turn to prevent an inconsistency where it
-    // was varying based on how long since you last reloaded
-    globalScene.executeWithSeedOffset(
-      () => {
-        this.turnCommands = randSeedShuffle(this.turnCommands);
-      },
-      globalScene.currentBattle.turn * 1000 + this.turnCommands.length,
-      globalScene.waveSeed,
-    );
+  /** @returns `true` if the turn command queue is empty */
+  public isEmpty(): boolean {
+    return this.queue.isEmpty();
   }
 
-  /**
-   * Sorts turn commands in decreasing order of their Pokemon's Speed
-   * stat. If Trick Room is active, this sorts commands in increasing
-   * order of Speed instead.
-   */
-  private sortBySpeed(): void {
-    this.turnCommands.sort((a, b) => {
-      const [aSpeed, bSpeed] = [a, b].map((command) => command.pokemon.getEffectiveStat(Stat.SPD));
-      return bSpeed - aSpeed;
-    });
-
-    /** 'true' if Trick Room is on the field. */
-    const speedReversed = new BooleanHolder(false);
-    globalScene.arena.applyTags<TrickRoomTag>(ArenaTagType.TRICK_ROOM, ArenaTagSide.BOTH, false, speedReversed);
-
-    if (speedReversed.value) {
-      this.turnCommands = this.turnCommands.reverse();
-    }
-  }
-
-  /**
-   * Comparison function used to sort turn commands by
-   * command type, move priority, and other factors.
-   * A negative number implies that command `a` should precede `b`.
-   * @param quiet if `true`, applies abilities and other field effects silently
-   */
-  private sortPostSpeed(quiet: boolean = true): void {
-    this.turnCommands.sort((a: TurnCommand, b: TurnCommand) => {
-      if (a.command !== b.command) {
-        return COMMAND_PRIORITY_MAP[a.command] > COMMAND_PRIORITY_MAP[b.command] ? -1 : 1;
-      }
-      if (a.command === BattleCommand.FIGHT) {
-        const [aQuashed, bQuashed] = [a, b].map((tc) => tc.pokemon.hasTag(BattlerTagType.QUASHED));
-        if ((aQuashed || bQuashed) && aQuashed !== bQuashed) {
-          return aQuashed ? 1 : -1;
-        }
-
-        const priority = [a, b].map((tc) => {
-          const move = tc.turnMove!.move;
-          return move.getPriority(tc.pokemon, quiet);
-        });
-
-        const priorityBrackets = priority.map((p) => Math.ceil(p));
-        const bypassSpeed = [a, b].map((tc) => tc.pokemon.hasTag(BattlerTagType.BYPASS_SPEED));
-
-        if (
-          priority[0] !== priority[1]
-          && (priorityBrackets[0] !== priorityBrackets[1] || bypassSpeed[0] === bypassSpeed[1])
-        ) {
-          return priority[1] - priority[0];
-        }
-
-        if (bypassSpeed[0] !== bypassSpeed[1]) {
-          return bypassSpeed[0] ? -1 : 1;
-        }
-      }
-      return 0;
-    });
-  }
+  //#region Private Methods
 
   /**
    * Dequeues the next turn command and pushes a {@linkcode Phase} based on
@@ -399,7 +315,7 @@ export class TurnCommandManager {
    * @returns `true` if a phase was queued as a result of this call.
    */
   private shiftNextCommand(): boolean {
-    const nextCommand = this.turnCommands.shift();
+    const nextCommand = this.queue.pop();
     if (nextCommand && this.handleCommand(nextCommand)) {
       nextCommand.pokemon.turnData.order = this.orderIndex++;
       this.commandsInProgress++;
@@ -576,10 +492,10 @@ export class TurnCommandManager {
    * Claw cannot also apply.
    */
   private applyBypassSpeedEffects(): void {
-    this.turnCommands.forEach((tc) => {
+    this.queue.forEach((tc) => {
       const { pokemon, turnMove } = tc;
       // Only apply to fight commands
-      if (!turnMove) {
+      if (turnMove == null) {
         return;
       }
 
@@ -595,7 +511,7 @@ export class TurnCommandManager {
    * @see {@linkcode MoveHeaderAttr}
    */
   private applyMoveHeaderAttrs(): void {
-    this.turnCommands.forEach((tc) => {
+    this.queue.forEach((tc) => {
       if (tc.command !== BattleCommand.FIGHT) {
         return;
       }
@@ -614,4 +530,63 @@ export class TurnCommandManager {
 
     this.appliedMoveHeaders = true;
   }
+}
+
+// #region Comparators
+
+/**
+ * The main comparator used to sort turn commands. Consists of two sub-comparators
+ * that are sequentially applied:
+ * 1. Pre-Speed comparison modifiers, including command type, move priority, etc.
+ * 2. Speed comparison between the commands' source Pokemon.
+ *
+ * @see {@linkcode comparePreSpeed}
+ * @see {@linkcode compareSpeed}
+ */
+function compareTurnOrder(commandA: TurnCommand, commandB: TurnCommand): number {
+  return comparePreSpeed(commandA, commandB) || compareSpeed(commandA, commandB);
+}
+
+/**
+ * Prioritizes commands based on effects unrelated to the source Pokemon's Speed,
+ * including command type, move priority, and Speed-bypassing turn order modifiers
+ * such as the effects of Quash and Quick Draw.
+ */
+function comparePreSpeed(commandA: TurnCommand, commandB: TurnCommand): number {
+  if (commandA.command !== commandB.command) {
+    return COMMAND_PRIORITY_MAP[commandA.command] > COMMAND_PRIORITY_MAP[commandB.command] ? -1 : 1;
+  }
+
+  if (commandA.command === BattleCommand.FIGHT) {
+    const [aQuashed, bQuashed] = [commandA, commandB].map(({ pokemon }) => pokemon.hasTag(BattlerTagType.QUASHED));
+    if (aQuashed !== bQuashed) {
+      return aQuashed ? 1 : -1;
+    }
+
+    const priority = [commandA, commandB].map(({ pokemon, turnMove }) => {
+      const move = turnMove!.move;
+      return move.getPriority(pokemon, true);
+    });
+
+    const priorityBrackets = priority.map((p) => Math.ceil(p));
+    const bypassSpeed = [commandA, commandB].map(({ pokemon }) => pokemon.hasTag(BattlerTagType.BYPASS_SPEED));
+
+    if (
+      priority[0] !== priority[1]
+      && (priorityBrackets[0] !== priorityBrackets[1] || bypassSpeed[0] === bypassSpeed[1])
+    ) {
+      return priority[1] - priority[0];
+    }
+
+    if (bypassSpeed[0] !== bypassSpeed[1]) {
+      return bypassSpeed[0] ? -1 : 1;
+    }
+  }
+  return 0;
+}
+
+/** Prioritizes commands based on their source Pokemon's Speed. */
+function compareSpeed(commandA: TurnCommand, commandB: TurnCommand): number {
+  const [{ pokemon: pokemonA }, { pokemon: pokemonB }] = [commandA, commandB];
+  return speedOrderComparator<Pokemon>(pokemonA, pokemonB);
 }

@@ -261,7 +261,7 @@ export class GameData {
           globalScene.ui.savingIcon.hide();
           if (error) {
             if (error.startsWith("session out of date")) {
-              globalScene.phaseManager.clearPhaseQueue();
+              globalScene.phaseManager.clear();
               globalScene.phaseManager.createAndUnshiftPhase("ReloadSessionPhase");
             }
             console.error(error);
@@ -546,7 +546,7 @@ export class GameData {
     const systemData = await api.savedata.system.verify({ clientSessionId });
 
     if (systemData) {
-      globalScene.phaseManager.clearPhaseQueue();
+      globalScene.phaseManager.clear();
       globalScene.phaseManager.createAndUnshiftPhase("ReloadSessionPhase", JSON.stringify(systemData));
       this.clearLocalData();
       return false;
@@ -957,7 +957,7 @@ export class GameData {
         api.savedata.session.delete({ slot: slotId, clientSessionId }).then((error) => {
           if (error) {
             if (error.startsWith("session out of date")) {
-              globalScene.phaseManager.clearPhaseQueue();
+              globalScene.phaseManager.clear();
               globalScene.phaseManager.createAndUnshiftPhase("ReloadSessionPhase");
             }
             console.error(error);
@@ -1026,7 +1026,7 @@ export class GameData {
 
       if (jsonResponse?.error) {
         if (jsonResponse?.error?.startsWith("session out of date")) {
-          globalScene.phaseManager.clearPhaseQueue();
+          globalScene.phaseManager.clear();
           globalScene.phaseManager.createAndUnshiftPhase("ReloadSessionPhase");
         }
 
@@ -1166,7 +1166,7 @@ export class GameData {
             }
             if (error) {
               if (error.startsWith("session out of date")) {
-                globalScene.phaseManager.clearPhaseQueue();
+                globalScene.phaseManager.clear();
                 globalScene.phaseManager.createAndUnshiftPhase("ReloadSessionPhase");
               }
               console.error(error);

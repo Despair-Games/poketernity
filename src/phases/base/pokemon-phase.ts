@@ -2,13 +2,13 @@ import { globalScene } from "#app/global-scene";
 import { BattlerIndex, type FieldBattlerIndex } from "#enums/battler-index";
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { Pokemon } from "#field/pokemon";
-import { FieldPhase } from "#phases/base/field-phase";
+import { BattlePhase } from "#phases/base/battle-phase";
 import type { nil } from "#types/utility-types";
 
 /**
  * Provides helper functions to get the pokemon involved in the phase
  */
-export abstract class PokemonPhase extends FieldPhase {
+export abstract class PokemonPhase extends BattlePhase {
   /** FieldBattlerIndex of the target Pokemon, or its ID */
   public readonly battlerIndex: FieldBattlerIndex | number;
   public readonly isPlayer: boolean;

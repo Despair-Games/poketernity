@@ -4,6 +4,7 @@ import type { SkyDropTag } from "#battler-tags/sky-drop-tag";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
+import { inSpeedOrder } from "#utils/speed-order-generator";
 import i18next from "i18next";
 
 /**
@@ -21,7 +22,7 @@ export class GravityTag extends SerializableArenaTag {
 
   override onAdd(): void {
     globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("arenaTag:gravityOnAdd"));
-    globalScene.getField(true).forEach((pokemon) => {
+    for (const pokemon of inSpeedOrder()) {
       if (pokemon) {
         pokemon.removeTag(BattlerTagType.FLOATING);
         pokemon.removeTag(BattlerTagType.TELEKINESIS);
@@ -30,7 +31,7 @@ export class GravityTag extends SerializableArenaTag {
         }
         pokemon.getTag<SkyDropTag>(BattlerTagType.SKY_DROP)?.clearSkyDropEffects();
       }
-    });
+    }
   }
 
   override onRemove(): void {
