@@ -37,6 +37,7 @@ export class TurnEndPhase extends FieldPhase {
         }
         applyAbAttrs("PostTurnAbAttr", pokemon, false);
         // TODO: Temporary workaround so that bad dreams doesn't hurt Pokemon waking up in the same turn. cf https://github.com/Despair-Games/poketernity/issues/1211
+        // cf https://github.com/smogon/pokemon-showdown/blob/master/data/abilities.ts `onResidualOrder` and `onResidualSubOrder`
         applyAbAttrs("BadDreamsAbAttr", pokemon, false);
       }
 
