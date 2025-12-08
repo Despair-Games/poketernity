@@ -8,6 +8,7 @@ import type { MoveCategory } from "#enums/move-category";
  */
 export class AllyMoveCategoryPowerBoostAbAttr extends FieldMovePowerBoostAbAttr {
   protected override readonly abAttrKey = "AllyMoveCategoryPowerBoostAbAttr";
+
   constructor(boostedCategories: MoveCategory[], powerMultiplier: number) {
     super((_pokemon, _defender, move) => !!move && boostedCategories.includes(move.category), powerMultiplier);
   }
