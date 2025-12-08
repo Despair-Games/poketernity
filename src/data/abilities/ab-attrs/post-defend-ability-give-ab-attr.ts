@@ -32,7 +32,7 @@ export class PostDefendAbilityGiveAbAttr extends PostDefendAbAttr {
     return (
       move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
       && ability.isSuppressable
-      && ability.hasAttrOfKey("PostDefendAbilityGiveAbAttr")
+      && ability.hasAttr("PostDefendAbilityGiveAbAttr")
       && !attacker.isMax()
     );
   }

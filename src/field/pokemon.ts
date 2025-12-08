@@ -1720,7 +1720,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (this.summonData.abilitySuppressed && ability.isSuppressable) {
       return false;
     }
-    if (this.isOnField() && !ability.hasAttrOfKey("SuppressFieldAbilitiesAbAttr")) {
+    if (this.isOnField() && !ability.hasAttr("SuppressFieldAbilitiesAbAttr")) {
       const suppressed = new ValueHolder(false);
       globalScene
         .getField(true)
@@ -1730,7 +1730,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           // causes an infinite loop.
           const suppressingAbility = p
             .getAbilities()
-            .find(({ ability: ab }) => ab.hasAttrOfKey("SuppressFieldAbilitiesAbAttr"));
+            .find(({ ability: ab }) => ab.hasAttr("SuppressFieldAbilitiesAbAttr"));
           if (suppressingAbility != null && p.canApplyAbility(suppressingAbility.passive)) {
             suppressingAbility.ability.getAttrs("SuppressFieldAbilitiesAbAttr")[0]?.apply(p, true, suppressed, ability);
           }
@@ -1772,14 +1772,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns Whether an ability with that attribute is present and active
    */
   public hasAbilityWithAttr(abAttrKey: AbAttrKey, canApply: boolean = true, bypassSummonData?: boolean): boolean {
-    if ((!canApply || this.canApplyAbility()) && this.getAbility(bypassSummonData).hasAttrOfKey(abAttrKey)) {
+    if ((!canApply || this.canApplyAbility()) && this.getAbility(bypassSummonData).hasAttr(abAttrKey)) {
       return true;
     }
-    if (
-      this.hasPassive()
-      && (!canApply || this.canApplyAbility(true))
-      && this.getPassiveAbility().hasAttrOfKey(abAttrKey)
-    ) {
+    if (this.hasPassive() && (!canApply || this.canApplyAbility(true)) && this.getPassiveAbility().hasAttr(abAttrKey)) {
       return true;
     }
     return false;

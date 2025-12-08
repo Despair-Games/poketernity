@@ -206,7 +206,7 @@ export class Ability {
    * @param key - The {@linkcode AbAttrKey} to check
    * @returns Whether the ability has an attribute with a matching key
    */
-  hasAttrOfKey<K extends AbAttrKey>(key: K): boolean {
+  hasAttr<K extends AbAttrKey>(key: K): boolean {
     return this.attrs.some((abAttr) => abAttr.is(key));
   }
 
