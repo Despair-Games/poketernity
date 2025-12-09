@@ -42,7 +42,7 @@ export class AbilityChangeAttr extends MoveEffectAttr {
 
   override getCondition(): MoveConditionFunc {
     return (user, target, _move) =>
-      (this.selfTarget ? user : target).getAbility().isReplaceable
+      (this.selfTarget ? user : target).getAbility().replaceable
       && (this.selfTarget ? user : target).getAbility().id !== this.ability;
   }
 }

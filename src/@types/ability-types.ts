@@ -2,7 +2,7 @@
 import type { PokemonWaveData } from "#types/pokemon-types";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
-import type { AbAttrConstructorMap } from "#abilities/ability";
+import type { AbAttrConstructorMap } from "#abilities/ab-attr-constructor-map";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 

@@ -1728,10 +1728,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
     const ability = passive ? this.getPassiveAbility() : this.getAbility();
     const arena = globalScene?.arena;
-    if (arena.ignoreAbilities && arena.ignoringEffectSource !== this.getBattlerIndex() && ability.isIgnorable) {
+    if (arena.ignoreAbilities && arena.ignoringEffectSource !== this.getBattlerIndex() && ability.ignorable) {
       return false;
     }
-    if (this.summonData.abilitySuppressed && ability.isSuppressable) {
+    if (this.summonData.abilitySuppressed && ability.suppressable) {
       return false;
     }
     if (this.isOnField() && !ability.hasAttr("SuppressFieldAbilitiesAbAttr")) {
@@ -1753,7 +1753,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         return false;
       }
     }
-    return (this.hp > 0 || ability.isBypassFaint) && !ability.conditions.find((condition) => !condition(this));
+    return (this.hp > 0 || ability.bypassFaint) && !ability.conditions.find((condition) => !condition(this));
   }
 
   /**

@@ -16,6 +16,6 @@ export class SuppressFieldAbilitiesAbAttr extends AbAttr {
   }
 
   public override canApply(...[, , , ability]: Parameters<this["apply"]>): boolean {
-    return ability.isSuppressable && !ability.hasAttr("SuppressFieldAbilitiesAbAttr");
+    return ability.suppressable && !ability.hasAttr("SuppressFieldAbilitiesAbAttr");
   }
 }
