@@ -140,9 +140,9 @@ export class EncounterPhase extends BattlePhase {
           if (speciesOverride) {
             enemySpecies = getPokemonSpecies(speciesOverride);
           }
-          const bossSegments = globalScene.getEncounterBossSegments(waveIndex, level, enemySpecies);
+          const boss = globalScene.getEncounterBossSegments(waveIndex, level, enemySpecies) > 0;
           currentBattle.enemyParty[e] = globalScene.addEnemyPokemon(enemySpecies, level, {
-            bossSegments,
+            boss,
             ivs: isClassicFinalBoss ? new Array(6).fill(31) : undefined,
           });
           globalScene
