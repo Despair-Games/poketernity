@@ -317,9 +317,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.pokeball = options.pokeball ?? PokeballType.POKEBALL;
     this.switchOutStatus = false;
 
-    // This may increment `nextPokemonID` twice, but shouldn't have any adverse effects...
-    this.id = options.id ?? globalScene.getNextPokemonID();
-    globalScene.updateNextPokemonID(this.id);
+    if (options.id != null) {
+      this.id = options.id;
+      globalScene.updateNextPokemonID(this.id);
+    } else {
+      this.id = globalScene.getNextPokemonID();
+    }
 
     this.nickname = options.nickname ?? null;
     this.personalityValue = options.personalityValue ?? this.randSeedInt(Math.pow(2, 32) - 1);
