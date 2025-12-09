@@ -5,3 +5,5 @@ onlyBuiltDependencies:
   - unrs-resolver
 
 shellEmulator: true
+
+minimumReleaseAge: 1440
