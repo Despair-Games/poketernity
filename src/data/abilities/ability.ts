@@ -156,12 +156,16 @@ export class Ability {
    * @todo Implement the effects of the flag
    */
   public worksWhenTransformed: boolean = true;
+  /** Determines priority bracket for post-summon ability activation */
+  // TODO: implement its effects
+  public postSummonPriority: number;
   public attrs: AbAttr[] = [];
   public conditions: AbAttrCondition[] = [];
 
-  constructor(id: AbilityId, generation: number) {
+  constructor(id: AbilityId, generation: number, postSummonPriority: number = 0) {
     this.id = id;
     this.generation = generation;
+    this.postSummonPriority = postSummonPriority;
   }
 
   /**
