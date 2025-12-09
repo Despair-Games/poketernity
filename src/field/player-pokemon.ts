@@ -165,7 +165,7 @@ export class PlayerPokemon extends Pokemon {
     // Add friendship to this PlayerPokemon
     this.friendship = Math.min(this.friendship + amount.value, 255);
     globalScene.validateAchievements(AchvCategory.FRIENDSHIP, this);
-    }
+  }
 
   /**
    * Not used right now
