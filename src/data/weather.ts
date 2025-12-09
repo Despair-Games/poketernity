@@ -1,7 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { DAMAGING_WEATHER_TYPES, PRIMAL_WEATHER_TYPES } from "#constants/weather-constants";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { CommonAnim } from "#enums/common-anim";
 import { ElementalType } from "#enums/elemental-type";
 import { WeatherType } from "#enums/weather-type";
@@ -135,7 +134,7 @@ export class Weather {
   isEffectSuppressed(): boolean {
     const field = globalScene.getField(true);
     return field.some(
-      (p) => p.hasAbilityWithAttr(AbAttrFlag.SUPPRESS_WEATHER_EFFECT, false) && !p.summonData.abilitySuppressed,
+      (p) => p.hasAbilityWithAttr("SuppressWeatherEffectAbAttr", false) && !p.summonData.abilitySuppressed,
     );
   }
 }

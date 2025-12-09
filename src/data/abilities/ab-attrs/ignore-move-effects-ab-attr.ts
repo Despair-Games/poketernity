@@ -1,5 +1,4 @@
 import { PreDefendAbAttr } from "#abilities/pre-defend-ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { ValueHolder } from "#utils/common-utils";
@@ -9,10 +8,7 @@ import type { ValueHolder } from "#utils/common-utils";
  * @see {@linkcode applyPreDefend}
  */
 export class IgnoreMoveEffectsAbAttr extends PreDefendAbAttr {
-  constructor() {
-    super();
-    this._flags.add(AbAttrFlag.IGNORE_MOVE_EFFECTS);
-  }
+  protected override readonly abAttrKey = "IgnoreMoveEffectsAbAttr";
 
   public override apply(
     _pokemon: Pokemon,

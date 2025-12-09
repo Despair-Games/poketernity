@@ -1,5 +1,4 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { ValueHolder } from "#utils/common-utils";
 
@@ -8,10 +7,7 @@ import type { ValueHolder } from "#utils/common-utils";
  * Allows the source's moves to bypass the effects of opposing Light Screen, Reflect, Aurora Veil, Safeguard, Mist, and Substitute.
  */
 export class InfiltratorAbAttr extends AbAttr {
-  constructor() {
-    super();
-    this._flags.add(AbAttrFlag.INFILTRATOR);
-  }
+  protected override readonly abAttrKey = "InfiltratorAbAttr";
 
   public override apply(_pokemon: Pokemon, _simulated: boolean, bypassed: ValueHolder<boolean>): void {
     bypassed.value = true;

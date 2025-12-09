@@ -4,17 +4,12 @@ import type { Weather } from "#data/weather";
 
 import { AbAttr } from "#abilities/ab-attr";
 import { globalScene } from "#app/global-scene";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
 
 /** Base class for ability attributes that trigger when a pokemon leaves the field for any reason. */
 export abstract class PreLeaveFieldAbAttr extends AbAttr {
-  constructor(showAbility?: boolean) {
-    super(showAbility);
-
-    this._flags.add(AbAttrFlag.PRE_LEAVE_FIELD);
-  }
+  public override readonly abAttrKey = "PreLeaveFieldAbAttr";
 
   public abstract override apply(_pokemon: Pokemon, _simulated: boolean): void;
 }

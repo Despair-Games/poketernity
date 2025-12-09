@@ -1,7 +1,6 @@
 /* biome-ignore-all lint/style/noNestedTernary: all of this is going to be deleted soon anyway */
 
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { CommanderAbAttr } from "#abilities/commander-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { activeOverrides } from "#app/overrides";
@@ -9,7 +8,6 @@ import { FRIENDSHIP_GAIN_FROM_CANDY } from "#constants/friendship-constants";
 import { getBerryEffectFunc, getBerryPredicate } from "#data/berry";
 import { getLevelTotalExp } from "#data/exp";
 import { MAX_PER_TYPE_POKEBALLS } from "#data/pokeball";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
 import type { ElementalType } from "#enums/elemental-type";
@@ -1931,7 +1929,7 @@ export class PokemonInstantReviveModifier extends PokemonHeldItemModifier {
 
     // Reapply Commander on the Pokemon's side of the field, if applicable
     for (const p of inSpeedOrder(pokemon.getArenaTagSide())) {
-      applyAbAttrs<CommanderAbAttr>(AbAttrFlag.COMMANDER, p, false);
+      applyAbAttrs("CommanderAbAttr", p, false);
     }
     return true;
   }

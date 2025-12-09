@@ -1,4 +1,3 @@
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { BattleCommand } from "#enums/battle-command";
 import { BattlerIndex } from "#enums/battler-index";
@@ -181,7 +180,7 @@ describe.todo("Abilities - Neutralizing Gas", () => {
     await game.classicMode.startBattle(SpeciesId.MAGIKARP);
 
     const enemy = game.scene.getEnemyPokemon()!;
-    const weatherChangeAttr = enemy.getAbilityAttrs(AbAttrFlag.POST_WEATHER_CHANGE, false)[0];
+    const weatherChangeAttr = enemy.getAbilityAttrs("PostWeatherChangeAbAttr", false)[0];
     vi.spyOn(weatherChangeAttr, "apply");
 
     // expect(game.scene.arena.getTag(ArenaTagType.NEUTRALIZING_GAS)).toBeDefined();

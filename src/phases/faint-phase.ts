@@ -1,13 +1,13 @@
 /* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
+import type { PostFaintAbAttr } from "#abilities/post-faint-ab-attr";
+import type { PostKnockOutAbAttr } from "#abilities/post-knock-out-ab-attr";
+import type { PostVictoryAbAttr } from "#abilities/post-victory-ab-attr";
 import type { BattlerTag } from "#battler-tags/battler-tag";
 import type { GameOverPhase } from "#phases/game-over-phase";
 import type { MovePhase } from "#phases/move-phase";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { PostFaintAbAttr } from "#abilities/post-faint-ab-attr";
-import type { PostKnockOutAbAttr } from "#abilities/post-knock-out-ab-attr";
-import type { PostVictoryAbAttr } from "#abilities/post-victory-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { DestinyBondTag } from "#battler-tags/destiny-bond-tag";
@@ -16,7 +16,6 @@ import type { SkyDropTag } from "#battler-tags/sky-drop-tag";
 import { FRIENDSHIP_LOST_FROM_FAINTING } from "#constants/friendship-constants";
 import { allMoves } from "#data/data-lists";
 import { classicFinalBossDialogue } from "#data/dialogue";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattleType } from "#enums/battle-type";
 import type { FieldBattlerIndex } from "#enums/battler-index";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
@@ -156,25 +155,19 @@ export class FaintPhase extends PokemonPhase {
 
     if (this.source && pokemon.turnData.attacksReceived.length > 0) {
       const lastAttack = pokemon.turnData.attacksReceived[0];
-      applyAbAttrs<PostFaintAbAttr>(
-        AbAttrFlag.POST_FAINT,
-        pokemon,
-        false,
-        this.source,
-        allMoves.get(lastAttack.moveId),
-      );
+      applyAbAttrs("PostFaintAbAttr", pokemon, false, this.source, allMoves.get(lastAttack.moveId));
     } else {
       // If killed by indirect damage, apply post-faint abilities without providing the source of fatal damage
-      applyAbAttrs<PostFaintAbAttr>(AbAttrFlag.POST_FAINT, pokemon, false);
+      applyAbAttrs("PostFaintAbAttr", pokemon, false);
     }
 
     for (const p of inSpeedOrder()) {
-      applyAbAttrs<PostKnockOutAbAttr>(AbAttrFlag.POST_KNOCK_OUT, p, false, pokemon);
+      applyAbAttrs("PostKnockOutAbAttr", p, false, pokemon);
     }
     if (pokemon.turnData.attacksReceived.length > 0) {
       const defeatSource = globalScene.getPokemonById(pokemon.turnData.attacksReceived[0].sourceId);
       if (defeatSource?.isOnField()) {
-        applyAbAttrs<PostVictoryAbAttr>(AbAttrFlag.POST_VICTORY, defeatSource, false);
+        applyAbAttrs("PostVictoryAbAttr", defeatSource, false);
         // TODO: Refactor Fell Stinger
         const pvmove = allMoves.get(pokemon.turnData.attacksReceived[0].moveId);
         const pvattrs = pvmove.getAttrs(PostVictoryStatStageChangeAttr);

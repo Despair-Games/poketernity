@@ -4,7 +4,6 @@ import type { MovePhase } from "#phases/move-phase";
 
 import { PreDefendAbAttr } from "#abilities/pre-defend-ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { ValueHolder } from "#utils/common-utils";
@@ -17,9 +16,10 @@ import i18next from "i18next";
  * can be found in {@linkcode MovePhase.tryReflectMove}.
  */
 export class ReflectMovesAbAttr extends PreDefendAbAttr {
+  protected override readonly abAttrKey = "ReflectMovesAbAttr";
+
   constructor() {
     super(true);
-    this._flags.add(AbAttrFlag.REFLECT_MOVES);
   }
 
   public override apply(

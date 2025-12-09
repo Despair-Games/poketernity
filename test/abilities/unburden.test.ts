@@ -1,4 +1,3 @@
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -273,7 +272,7 @@ describe("Abilities - Unburden", () => {
     const [treecko, purrloin] = game.scene.getPlayerParty();
     const initialTreeckoSpeed = treecko.getStat(Stat.SPD);
     const initialPurrloinSpeed = purrloin.getStat(Stat.SPD);
-    const unburdenAttr = treecko.getAbilityAttrs(AbAttrFlag.POST_ITEM_LOST)[0];
+    const unburdenAttr = treecko.getAbilityAttrs("PostItemLostAbAttr")[0];
     vi.spyOn(unburdenAttr, "apply");
 
     // Player uses Baton Pass, which also passes the Baton item

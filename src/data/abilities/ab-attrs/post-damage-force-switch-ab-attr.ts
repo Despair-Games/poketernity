@@ -1,7 +1,6 @@
 import { PostDamageAbAttr } from "#abilities/post-damage-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { allMoves } from "#data/data-lists";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { BattleType } from "#enums/battle-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -25,7 +24,6 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
 
   constructor(hpRatio: number = 0.5) {
     super();
-    this._flags.add(AbAttrFlag.POST_DAMAGE_FORCE_SWITCH);
     this.hpRatio = hpRatio;
   }
 

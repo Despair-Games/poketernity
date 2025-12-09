@@ -1,9 +1,7 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { InfiltratorAbAttr } from "#abilities/infiltrator-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { SerializableArenaTag } from "#arena-tags/arena-tag";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveId } from "#enums/move-id";
@@ -50,7 +48,7 @@ export class MistTag extends SerializableArenaTag {
   override apply(simulated: boolean, attacker: Pokemon | undefined, cancelled: BooleanHolder): boolean {
     if (attacker?.isActive(true)) {
       const bypassed = new BooleanHolder(false);
-      applyAbAttrs<InfiltratorAbAttr>(AbAttrFlag.INFILTRATOR, attacker, simulated, bypassed);
+      applyAbAttrs("InfiltratorAbAttr", attacker, simulated, bypassed);
       if (bypassed.value) {
         return false;
       }

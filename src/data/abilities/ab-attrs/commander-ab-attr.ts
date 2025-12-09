@@ -1,7 +1,6 @@
 import { AbAttr } from "#abilities/ab-attr";
 import { globalScene } from "#app/global-scene";
 import type { SkyDropTag } from "#battler-tags/sky-drop-tag";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
@@ -16,9 +15,10 @@ import type { Pokemon } from "#field/pokemon";
  * causing attacks that target the source to always miss.
  */
 export class CommanderAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "CommanderAbAttr";
+
   constructor() {
     super(true);
-    this._flags.add(AbAttrFlag.COMMANDER);
   }
 
   public override apply(pokemon: Pokemon, simulated: boolean): void {

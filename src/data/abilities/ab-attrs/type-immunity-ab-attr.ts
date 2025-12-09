@@ -1,6 +1,5 @@
 import { PreDefendAbAttr } from "#abilities/pre-defend-ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
@@ -14,12 +13,12 @@ import i18next from "i18next";
  * @see {@linkcode getCondition}
  */
 export class TypeImmunityAbAttr extends PreDefendAbAttr {
+  protected override readonly abAttrKey = "TypeImmunityAbAttr";
   private readonly immuneType: ElementalType;
   private readonly condition: AbAttrCondition;
 
   constructor(immuneType: ElementalType, condition: AbAttrCondition = () => true) {
     super(true);
-    this._flags.add(AbAttrFlag.TYPE_IMMUNITY);
 
     this.immuneType = immuneType;
     this.condition = condition;

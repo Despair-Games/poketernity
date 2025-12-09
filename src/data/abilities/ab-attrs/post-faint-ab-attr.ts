@@ -1,12 +1,12 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 
 export abstract class PostFaintAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "PostFaintAbAttr";
+
   constructor() {
     super(true);
-    this._flags.add(AbAttrFlag.POST_FAINT);
   }
 
   /**

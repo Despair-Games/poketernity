@@ -1,9 +1,9 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export class FlinchEffectAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "FlinchEffectAbAttr";
+
   constructor() {
     super(true);
-    this._flags.add(AbAttrFlag.FLINCH_EFFECT);
   }
 }

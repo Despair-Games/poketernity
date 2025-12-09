@@ -1,8 +1,6 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { RecoveryBoostAbAttr } from "#abilities/recovery-boost-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
@@ -36,7 +34,7 @@ export class HealAttr extends MoveEffectAttr {
    */
   protected getHealRatio(user: Pokemon, target: Pokemon, move: Move): number {
     const healRatio = new NumberHolder(this.healRatio);
-    applyAbAttrs<RecoveryBoostAbAttr>(AbAttrFlag.RECOVERY_BOOST, user, false, move, target, healRatio);
+    applyAbAttrs("RecoveryBoostAbAttr", user, false, move, target, healRatio);
     return healRatio.value;
   }
 

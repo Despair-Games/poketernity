@@ -1,6 +1,4 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { MaxMultiHitAbAttr } from "#abilities/max-multi-hit-ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { MultiHitType } from "#enums/multi-hit-type";
 import { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#field/pokemon";
@@ -78,7 +76,7 @@ export class MultiHitAttr extends MoveAttr {
          */
         const rand = user.randSeedInt(20);
         const hitValue = new NumberHolder(rand);
-        applyAbAttrs<MaxMultiHitAbAttr>(AbAttrFlag.MAX_MULTI_HIT, user, false, hitValue);
+        applyAbAttrs("MaxMultiHitAbAttr", user, false, hitValue);
         if (hitValue.value >= 13) {
           return 2;
         }

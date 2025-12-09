@@ -1,5 +1,4 @@
 import { FieldMovePowerBoostAbAttr } from "#abilities/field-move-power-boost-ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { MoveCategory } from "#enums/move-category";
 
 /**
@@ -8,8 +7,9 @@ import type { MoveCategory } from "#enums/move-category";
  * @param powerMultiplier - The multiplier to apply to the move's power.
  */
 export class AllyMoveCategoryPowerBoostAbAttr extends FieldMovePowerBoostAbAttr {
+  protected override readonly abAttrKey = "AllyMoveCategoryPowerBoostAbAttr";
+
   constructor(boostedCategories: MoveCategory[], powerMultiplier: number) {
     super((_pokemon, _defender, move) => !!move && boostedCategories.includes(move.category), powerMultiplier);
-    this._flags.add(AbAttrFlag.ALLY_MOVE_CATEGORY_POWER_BOOST);
   }
 }

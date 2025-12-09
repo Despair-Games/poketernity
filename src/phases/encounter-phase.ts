@@ -4,7 +4,6 @@ import type { NextEncounterPhase } from "#phases/next-encounter-phase";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { SyncEncounterNatureAbAttr } from "#abilities/sync-encounter-nature-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { activeOverrides } from "#app/overrides";
@@ -13,7 +12,6 @@ import { PLAYER_PARTY_MAX_SIZE } from "#constants/game-constants";
 import { ME_WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#constants/mystery-encounter-constants";
 import { getCharVariantFromDialogue } from "#data/dialogue";
 import { getNatureName } from "#data/nature";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattleType } from "#enums/battle-type";
 import { BattlerIndex } from "#enums/battler-index";
 import { BiomeId } from "#enums/biome-id";
@@ -151,12 +149,7 @@ export class EncounterPhase extends BattlePhase {
             .slice(0, double ? 2 : 1)
             .reverse()
             .forEach((playerPokemon) => {
-              applyAbAttrs<SyncEncounterNatureAbAttr>(
-                AbAttrFlag.SYNC_ENCOUNTER_NATURE,
-                playerPokemon,
-                false,
-                currentBattle.enemyParty[e],
-              );
+              applyAbAttrs("SyncEncounterNatureAbAttr", playerPokemon, false, currentBattle.enemyParty[e]);
             });
         }
       }

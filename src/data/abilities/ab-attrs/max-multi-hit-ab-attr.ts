@@ -3,15 +3,11 @@ import type { MultiHitAttr } from "#moves/multi-hit-attr";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { ValueHolder } from "#utils/common-utils";
 
 export class MaxMultiHitAbAttr extends AbAttr {
-  constructor() {
-    super();
-    this._flags.add(AbAttrFlag.MAX_MULTI_HIT);
-  }
+  protected override readonly abAttrKey = "MaxMultiHitAbAttr";
 
   /**
    * A {@linkcode hitValue} in the interval `[0, 2]` yields 5 strikes for 2- to 5-strike moves.

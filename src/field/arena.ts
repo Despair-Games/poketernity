@@ -1,7 +1,4 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { PostTerrainChangeAbAttr } from "#abilities/post-terrain-change-ab-attr";
-import type { PostWeatherChangeAbAttr } from "#abilities/post-weather-change-ab-attr";
-import type { TerrainEventTypeChangeAbAttr } from "#abilities/terrain-event-type-change-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { activeOverrides } from "#app/overrides";
 import type { ArenaTag } from "#arena-tags/arena-tag";
@@ -16,7 +13,6 @@ import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrig
 import type { PokemonSpecies } from "#data/pokemon-species";
 import { getTerrainAnim, getTerrainClearMessage, getTerrainStartMessage, Terrain } from "#data/terrain";
 import { getWeatherAnim, getWeatherClearMessage, getWeatherStartMessage, Weather } from "#data/weather";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { ArenaTagType } from "#enums/arena-tag-type";
@@ -263,7 +259,7 @@ export class Arena {
         pokemon.findAndRemoveTags(
           (tag) => "weatherTypes" in tag && !(tag.weatherTypes as WeatherType[]).find((wt) => wt === newWeatherType),
         );
-        applyAbAttrs<PostWeatherChangeAbAttr>(AbAttrFlag.POST_WEATHER_CHANGE, pokemon, false, newWeatherType);
+        applyAbAttrs("PostWeatherChangeAbAttr", pokemon, false, newWeatherType);
       });
 
     return true;
@@ -424,8 +420,8 @@ export class Arena {
         pokemon.findAndRemoveTags(
           (tag) => "terrainTypes" in tag && !(tag.terrainTypes as TerrainType[]).find((tt) => tt === terrain),
         );
-        applyAbAttrs<PostTerrainChangeAbAttr>(AbAttrFlag.POST_TERRAIN_CHANGE, pokemon, false, terrain);
-        applyAbAttrs<TerrainEventTypeChangeAbAttr>(AbAttrFlag.TERRAIN_EVENT_TYPE_CHANGE, pokemon, false, false);
+        applyAbAttrs("PostTerrainChangeAbAttr", pokemon, false, terrain);
+        applyAbAttrs("TerrainEventTypeChangeAbAttr", pokemon, false, false);
       });
 
     return true;

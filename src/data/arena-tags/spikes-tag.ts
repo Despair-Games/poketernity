@@ -1,9 +1,7 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { EntryHazardTag } from "#arena-tags/entry-hazard-tag";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { HitResult } from "#enums/hit-result";
@@ -46,7 +44,7 @@ export class SpikesTag extends EntryHazardTag {
   protected override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
     if (pokemon.isGrounded()) {
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, simulated, cancelled);
+      applyAbAttrs("BlockNonDirectDamageAbAttr", pokemon, simulated, cancelled);
 
       if (simulated) {
         return !cancelled.value;

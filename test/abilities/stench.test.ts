@@ -1,5 +1,4 @@
 import type { PostAttackApplyBattlerTagAbAttr } from "#abilities/post-attack-apply-battler-tag-ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
@@ -39,9 +38,7 @@ describe("Abilities - Stench", () => {
     await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const playerPokemon = game.scene.getPlayerPokemon();
-    const abilityAttr = playerPokemon!
-      .getAbility()
-      .getAttrs<PostAttackApplyBattlerTagAbAttr>(AbAttrFlag.POST_ATTACK_APPLY_BATTLER_TAG)[0];
+    const abilityAttr = playerPokemon!.getAbility().getAttrs("PostAttackAbAttr")[0] as PostAttackApplyBattlerTagAbAttr;
     vi.spyOn(abilityAttr, "getChance");
     game.move.select(MoveId.TACKLE);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
@@ -54,9 +51,7 @@ describe("Abilities - Stench", () => {
     await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const playerPokemon = game.scene.getPlayerPokemon();
-    const abilityAttr = playerPokemon!
-      .getAbility()
-      .getAttrs<PostAttackApplyBattlerTagAbAttr>(AbAttrFlag.POST_ATTACK_APPLY_BATTLER_TAG)[0];
+    const abilityAttr = playerPokemon!.getAbility().getAttrs("PostAttackAbAttr")[0] as PostAttackApplyBattlerTagAbAttr;
     const headbuttMove = playerPokemon
       ?.getMoveset()
       .find((m) => m?.moveId === MoveId.HEADBUTT)
@@ -74,9 +69,7 @@ describe("Abilities - Stench", () => {
     await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const playerPokemon = game.scene.getPlayerPokemon();
-    const abilityAttr = playerPokemon!
-      .getAbility()
-      .getAttrs<PostAttackApplyBattlerTagAbAttr>(AbAttrFlag.POST_ATTACK_APPLY_BATTLER_TAG)[0];
+    const abilityAttr = playerPokemon!.getAbility().getAttrs("PostAttackAbAttr")[0] as PostAttackApplyBattlerTagAbAttr;
 
     game.move.select(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.SUBSTITUTE);
@@ -98,9 +91,7 @@ describe("Abilities - Stench", () => {
     await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
-    const abilityAttr = playerPokemon
-      .getAbility()
-      .getAttrs<PostAttackApplyBattlerTagAbAttr>(AbAttrFlag.POST_ATTACK_APPLY_BATTLER_TAG)[0];
+    const abilityAttr = playerPokemon.getAbility().getAttrs("PostAttackAbAttr")[0] as PostAttackApplyBattlerTagAbAttr;
 
     vi.spyOn(abilityAttr, "getChance");
 

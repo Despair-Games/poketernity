@@ -1,5 +1,4 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
@@ -12,12 +11,12 @@ import i18next from "i18next";
  * - Damp
  */
 export class FieldPreventExplosionLikeAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "FieldPreventExplosionLikeAbAttr";
   private moveUser: string;
   private moveName: string;
 
   constructor() {
     super(true);
-    this._flags.add(AbAttrFlag.FIELD_PREVENT_EXPLOSION_LIKE);
   }
 
   /**

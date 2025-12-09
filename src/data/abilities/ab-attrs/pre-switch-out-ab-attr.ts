@@ -1,12 +1,8 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 
 export abstract class PreSwitchOutAbAttr extends AbAttr {
-  constructor() {
-    super();
-    this._flags.add(AbAttrFlag.PRE_SWITCH_OUT);
-  }
+  protected override readonly abAttrKey = "PreSwitchOutAbAttr";
 
   /**
    * Applies an effect before the source switches out of the field

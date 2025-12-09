@@ -1,5 +1,4 @@
 import { PreDefendAbAttr } from "#abilities/pre-defend-ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { ValueHolder } from "#utils/common-utils";
@@ -11,12 +10,12 @@ type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => bo
 //#endregion
 
 export class ReceivedMoveDamageMultiplierAbAttr extends PreDefendAbAttr {
+  protected override readonly abAttrKey = "ReceivedMoveDamageMultiplierAbAttr";
   protected readonly condition: PokemonDefendCondition;
   private readonly damageMultiplier: number;
 
   constructor(condition: PokemonDefendCondition, damageMultiplier: number, showAbility: boolean = false) {
     super(showAbility);
-    this._flags.add(AbAttrFlag.RECEIVED_MOVE_DAMAGE_MULTIPLIER);
 
     this.condition = condition;
     this.damageMultiplier = damageMultiplier;

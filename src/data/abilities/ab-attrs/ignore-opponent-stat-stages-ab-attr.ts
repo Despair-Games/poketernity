@@ -1,5 +1,4 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BATTLE_STATS, type BattleStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { ValueHolder } from "#utils/common-utils";
@@ -9,11 +8,11 @@ import type { ValueHolder } from "#utils/common-utils";
  * @param stats the stats that should be ignored
  */
 export class IgnoreOpponentStatStagesAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "IgnoreOpponentStatStagesAbAttr";
   private readonly stats: readonly BattleStat[];
 
   constructor(stats: readonly BattleStat[] = BATTLE_STATS) {
     super();
-    this._flags.add(AbAttrFlag.IGNORE_OPPONENT_STAT_STAGES);
 
     this.stats = stats;
   }

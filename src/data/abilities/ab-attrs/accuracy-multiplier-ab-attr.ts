@@ -1,5 +1,4 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { UserMoveConditionFunc } from "#types/move-types";
@@ -11,12 +10,12 @@ import type { ValueHolder } from "#utils/common-utils";
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Hustle_(Ability) | Hustle}.
  */
 export class AccuracyMultiplierAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "AccuracyMultiplierAbAttr";
   protected readonly multiplier: number;
   protected readonly condition: UserMoveConditionFunc;
 
   constructor(multiplier: number, condition: UserMoveConditionFunc = () => true) {
     super();
-    this._flags.add(AbAttrFlag.ACCURACY_MULTIPLIER);
 
     this.multiplier = multiplier;
     this.condition = condition;

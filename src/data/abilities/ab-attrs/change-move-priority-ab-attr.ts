@@ -1,5 +1,4 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { ValueHolder } from "#utils/common-utils";
@@ -19,14 +18,14 @@ type AbAttrMoveCondition = (pokemon: Pokemon, move: Move) => boolean;
  * +-----------------+--------------+-------------------------+
  */
 export class ChangeMovePriorityAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "ChangeMovePriorityAbAttr";
   /** The condition moves must follow for the priority change to apply */
   private readonly condition: AbAttrMoveCondition;
   /** The amount of priority added or subtracted */
   private readonly changeAmount: number;
 
   constructor(condition: AbAttrMoveCondition, changeAmount: number) {
-    super(true);
-    this._flags.add(AbAttrFlag.CHANGE_MOVE_PRIORITY);
+    super();
 
     this.condition = condition;
     this.changeAmount = changeAmount;

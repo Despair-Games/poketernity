@@ -1,11 +1,9 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { SturdyAbAttr } from "#abilities/sturdy-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { activeOverrides } from "#app/overrides";
 import { BattlerTag } from "#battler-tags/battler-tag";
 import { allMoves } from "#data/data-lists";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -94,8 +92,8 @@ export class ConfusedTag extends BattlerTag {
         );
 
         if (pokemon.isFullHp()) {
-          applyAbAttrs<SturdyAbAttr>(
-            AbAttrFlag.STURDY,
+          applyAbAttrs(
+            "SturdyAbAttr",
             pokemon,
             false,
             pokemon,

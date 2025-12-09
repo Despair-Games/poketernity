@@ -1,8 +1,6 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { BlockItemTheftAbAttr } from "#abilities/block-item-theft-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { PokemonHeldItemModifier } from "#modifier/modifier";
 import type { Move } from "#moves/move";
@@ -34,7 +32,7 @@ export class RemoveHeldItemAttr extends MoveEffectAttr {
 
     const cancelled = new BooleanHolder(false);
 
-    applyAbAttrs<BlockItemTheftAbAttr>(AbAttrFlag.BLOCK_ITEM_THEFT, target, false, cancelled);
+    applyAbAttrs("BlockItemTheftAbAttr", target, false, cancelled);
 
     if (cancelled.value === true) {
       return false;

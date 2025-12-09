@@ -1,11 +1,11 @@
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { EffectiveStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import { toDmgValue } from "#utils/common-utils";
+import { toDmgValue, ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -32,7 +32,8 @@ export class HitHealAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     let healAmount = 0;
     let message = "";
-    const reverseDrain = target.hasAbilityWithAttr(AbAttrFlag.REVERSE_DRAIN, false);
+    const reverseDrain = new ValueHolder(false);
+    applyAbAttrs("ReverseDrainAbAttr", target, false, user, reverseDrain);
     if (this.healStat !== null) {
       // Strength Sap formula
       healAmount = target.getEffectiveStat(this.healStat);
@@ -42,8 +43,8 @@ export class HitHealAttr extends MoveEffectAttr {
       healAmount = toDmgValue(user.turnData.singleHitDamageDealt * this.healRatio);
       message = i18next.t("battle:regainHealth", { pokemonName: getPokemonNameWithAffix(user) });
     }
-    if (reverseDrain) {
-      if (user.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)) {
+    if (reverseDrain.value) {
+      if (user.hasAbilityWithAttr("BlockNonDirectDamageAbAttr")) {
         healAmount = 0;
         message = "";
       } else {

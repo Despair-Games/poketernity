@@ -1,9 +1,7 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { BattlerTag } from "#battler-tags/battler-tag";
 import { GULP_MISSILE_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitResult } from "#enums/hit-result";
@@ -41,7 +39,7 @@ export class GulpMissileTag extends BattlerTag {
       }
 
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, attacker, false, cancelled);
+      applyAbAttrs("BlockNonDirectDamageAbAttr", attacker, false, cancelled);
 
       if (!cancelled.value) {
         attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() / 4), {

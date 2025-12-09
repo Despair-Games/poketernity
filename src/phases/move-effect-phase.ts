@@ -3,11 +3,7 @@ import type { allMoves } from "#data/data-lists";
 import type { Move } from "#moves/move";
 // biome-ignore-end lint/correctness/noUnusedImports: TSDoc imports
 
-import type { AddSecondStrikeAbAttr } from "#abilities/add-second-strike-ab-attr";
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { PostAttackAbAttr } from "#abilities/post-attack-ab-attr";
-import type { PostDamageAbAttr } from "#abilities/post-damage-ab-attr";
-import type { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
 import { MoveAnim } from "#animations/move-anim";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -16,7 +12,6 @@ import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import type { TypeBoostTag } from "#battler-tags/type-boost-tag";
 import { TYPE_BOOST_TAG_TYPES } from "#constants/battler-tag-constants";
 import type { TypeDamageMultiplier } from "#data/type";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { BattlerIndex, type FieldBattlerIndex } from "#enums/battler-index";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
@@ -137,7 +132,7 @@ export class MoveEffectPhase extends HitCheckPhase {
       const hitCount = new NumberHolder(1);
       // Assume single target for multi hit
       applyMoveAttrs(MultiHitAttr, user, targets[0], move, hitCount);
-      applyAbAttrs<AddSecondStrikeAbAttr>(AbAttrFlag.ADD_SECOND_STRIKE, user, false, move, targets[0], hitCount);
+      applyAbAttrs("AddSecondStrikeAbAttr", user, false, move, targets[0], hitCount);
       // TODO: re-add multi-lens calculation here
       // Set the user's relevant `turnData` fields to reflect the final hit count
       user.turnData.hitCount = hitCount.value;
@@ -332,7 +327,7 @@ export class MoveEffectPhase extends HitCheckPhase {
 
       // Multi-hit check for Wimp Out/Emergency Exit
       if (user.turnData.hitCount > 1) {
-        applyAbAttrs<PostDamageAbAttr>(AbAttrFlag.POST_DAMAGE, target, false, 0, user);
+        applyAbAttrs("PostDamageAbAttr", target, false, 0, user);
       }
     }
   }
@@ -595,7 +590,7 @@ export class MoveEffectPhase extends HitCheckPhase {
     this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, firstTarget, false);
     this.applyHeldItemFlinchCheck(user, target, dealsDamage);
     this.applyOnGetHitAbEffects(user, target);
-    applyAbAttrs<PostAttackAbAttr>(AbAttrFlag.POST_ATTACK, user, false, target, move);
+    applyAbAttrs("PostAttackAbAttr", user, false, target, move);
 
     // Apply Grip Claw's chance to steal an item from the target
     if (move.isAttackMove(user, target)) {
@@ -660,7 +655,7 @@ export class MoveEffectPhase extends HitCheckPhase {
    * @param target - The current target of this phase's invoked move
    */
   protected applyOnGetHitAbEffects(user: Pokemon, target: Pokemon): void {
-    applyAbAttrs<PostDefendAbAttr>(AbAttrFlag.POST_DEFEND, target, false, user, this.move.getMove());
+    applyAbAttrs("PostDefendAbAttr", target, false, user, this.move.getMove());
     target.lapseTags(BattlerTagLapseType.AFTER_HIT);
   }
 
@@ -677,7 +672,7 @@ export class MoveEffectPhase extends HitCheckPhase {
 
     if (
       dealsDamage
-      && !target.hasAbilityWithAttr(AbAttrFlag.IGNORE_MOVE_EFFECTS)
+      && !target.hasAbilityWithAttr("IgnoreMoveEffectsAbAttr")
       && !this.move.getMove().hitsSubstitute(user, target)
     ) {
       const flinched = new BooleanHolder(false);

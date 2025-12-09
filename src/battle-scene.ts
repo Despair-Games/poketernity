@@ -1,9 +1,5 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { BlockItemTheftAbAttr } from "#abilities/block-item-theft-ab-attr";
-import type { DoubleBattleChanceAbAttr } from "#abilities/double-battle-chance-ab-attr";
 import type { ForceSwitchOutImmunityAbAttr } from "#abilities/force-switch-out-immunity-ab-attr";
-import type { PostBattleInitAbAttr } from "#abilities/post-battle-init-ab-attr";
-import type { PostItemLostAbAttr } from "#abilities/post-item-lost-ab-attr";
 import { Animation } from "#app/animations";
 import { AudioManager } from "#app/audio-manager";
 import { Battle, type FixedBattleConfig } from "#app/battle";
@@ -36,7 +32,6 @@ import type { PokemonSpecies } from "#data/pokemon-species";
 import { resetStarterColors, starterColors } from "#data/starter-colors";
 import { getTypeRgb } from "#data/type";
 import { type Variant, variantData } from "#data/variant";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { AchvCategory } from "#enums/achv-category";
 import { BattleType } from "#enums/battle-type";
 import { BattlerIndex, type FieldBattlerIndex } from "#enums/battler-index";
@@ -1235,9 +1230,7 @@ export class BattleScene extends SceneBase {
   getDoubleBattleChance(newWaveIndex: number, playerField: PlayerPokemon[]) {
     const doubleChance = new NumberHolder(newWaveIndex % 10 === 0 ? 32 : 8);
     this.applyModifiers(DoubleBattleChanceBoosterModifier, true, doubleChance);
-    playerField.forEach((p) =>
-      applyAbAttrs<DoubleBattleChanceAbAttr>(AbAttrFlag.DOUBLE_BATTLE_CHANCE, p, false, doubleChance),
-    );
+    playerField.forEach((p) => applyAbAttrs("DoubleBattleChanceAbAttr", p, false, doubleChance));
     return Math.max(doubleChance.value, 1);
   }
 
@@ -1413,7 +1406,7 @@ export class BattleScene extends SceneBase {
           pokemon.resetWaveData();
           pokemon.resetTera(); // TODO: put this in resetWaveData once Arena reset behavior is changed?
 
-          applyAbAttrs<PostBattleInitAbAttr>(AbAttrFlag.POST_BATTLE_INIT, pokemon, false);
+          applyAbAttrs("PostBattleInitAbAttr", pokemon, false);
 
           // In Scarlet/Violet, the player's Tera Orb automatically recharges after every battle once they've caught Terapagos
           // The player's Tera Orb also automatically recharges when fighting the Elite 4 or in Area Zero (the endgame area)
@@ -2184,7 +2177,7 @@ export class BattleScene extends SceneBase {
     const cancelled = new ValueHolder(false);
 
     if (source?.isOpponent(target)) {
-      applyAbAttrs<BlockItemTheftAbAttr>(AbAttrFlag.BLOCK_ITEM_THEFT, source, simulated, cancelled);
+      applyAbAttrs("BlockItemTheftAbAttr", source, simulated, cancelled);
     }
 
     if (cancelled.value) {
@@ -2240,7 +2233,7 @@ export class BattleScene extends SceneBase {
     const cancelled = new BooleanHolder(false);
 
     if (source && source.isPlayer() !== target.isPlayer()) {
-      applyAbAttrs<BlockItemTheftAbAttr>(AbAttrFlag.BLOCK_ITEM_THEFT, source, false, cancelled);
+      applyAbAttrs("BlockItemTheftAbAttr", source, false, cancelled);
     }
 
     if (cancelled.value) {
@@ -2280,13 +2273,13 @@ export class BattleScene extends SceneBase {
           if (target.isPlayer()) {
             this.addModifier(newItemModifier, ignoreUpdate, playSound, false, instant);
             if (source && itemLost) {
-              applyAbAttrs<PostItemLostAbAttr>(AbAttrFlag.POST_ITEM_LOST, source, false);
+              applyAbAttrs("PostItemLostAbAttr", source, false);
             }
             return true;
           }
           this.addEnemyModifier(newItemModifier, ignoreUpdate, instant);
           if (source && itemLost) {
-            applyAbAttrs<PostItemLostAbAttr>(AbAttrFlag.POST_ITEM_LOST, source, false);
+            applyAbAttrs("PostItemLostAbAttr", source, false);
           }
           return true;
         }
@@ -2943,12 +2936,7 @@ export class BattleScene extends SceneBase {
 
     if (switchType === SwitchType.FORCE_SWITCH) {
       const blockedByAbility = new ValueHolder(false);
-      applyAbAttrs<ForceSwitchOutImmunityAbAttr>(
-        AbAttrFlag.FORCE_SWITCH_OUT_IMMUNITY,
-        pokemon,
-        false,
-        blockedByAbility,
-      );
+      applyAbAttrs("ForceSwitchOutImmunityAbAttr", pokemon, false, blockedByAbility);
 
       if (blockedByAbility.value || pokemon.isMax()) {
         return false;
@@ -3036,7 +3024,7 @@ export class BattleScene extends SceneBase {
     }
 
     const blockedByAbility = new ValueHolder(false);
-    applyAbAttrs<ForceSwitchOutImmunityAbAttr>(AbAttrFlag.FORCE_SWITCH_OUT_IMMUNITY, pokemon, false, blockedByAbility);
+    applyAbAttrs("ForceSwitchOutImmunityAbAttr", pokemon, false, blockedByAbility);
 
     return !(blockedByAbility.value || pokemon.isMax());
   }

@@ -3,10 +3,8 @@ import type { RecallPhase } from "#phases/recall-phase";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { PreSwitchOutAbAttr } from "#abilities/pre-switch-out-ab-attr";
 import { globalScene } from "#app/global-scene";
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { FieldBattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PartyOption } from "#enums/party-option";
@@ -132,7 +130,7 @@ export class SwitchPhase extends PokemonPhase {
     const switchedInPokemon = party[this.switchInIndex];
 
     // Apply pre-switch effects from abilities (e.g. Regenerator)
-    applyAbAttrs<PreSwitchOutAbAttr>(AbAttrFlag.PRE_SWITCH_OUT, activePokemon, false);
+    applyAbAttrs("PreSwitchOutAbAttr", activePokemon, false);
 
     // Remove all tags applied to the active Pokemon's opponents by the active Pokemon
     // (e.g. the "binding" effect from Bind, Fire Spin, etc.)

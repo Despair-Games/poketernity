@@ -3,7 +3,6 @@ import type { AbilityId } from "#enums/ability-id";
 /* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
@@ -19,10 +18,7 @@ import type { ValueHolder } from "#utils/common-utils";
  * @see {@link https://github.com/Despair-Games/poketernity/blob/beta/docs/stab.md}
  */
 export class StabBoostAbAttr extends AbAttr {
-  constructor() {
-    super();
-    this._flags.add(AbAttrFlag.STAB_BOOST);
-  }
+  protected override readonly abAttrKey = "StabBoostAbAttr";
 
   /**
    * @param pokemon - The {@linkcode Pokemon} with this ability

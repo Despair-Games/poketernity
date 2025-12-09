@@ -1,5 +1,4 @@
 import { PostAttackAbAttr } from "#abilities/post-attack-ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { MoveFlags } from "#enums/move-flags";
 import type { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#field/pokemon";
@@ -25,7 +24,6 @@ export class PostAttackApplyStatusEffectAbAttr extends PostAttackAbAttr {
 
   constructor(contactRequired: boolean, chance: number, ...effects: StatusEffect[]) {
     super();
-    this._flags.add(AbAttrFlag.POST_ATTACK_APPLY_STATUS_EFFECT);
 
     this.contactRequired = contactRequired;
     this.chance = chance;
@@ -59,7 +57,7 @@ export class PostAttackApplyStatusEffectAbAttr extends PostAttackAbAttr {
      */
     return (
       move.isAttackMove()
-      && !target.hasAbilityWithAttr(AbAttrFlag.IGNORE_MOVE_EFFECTS)
+      && !target.hasAbilityWithAttr("IgnoreMoveEffectsAbAttr")
       && target.id !== attacker.id
       && (!this.contactRequired || move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, target))
       && target.randSeedInt(100) < this.chance

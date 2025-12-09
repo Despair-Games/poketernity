@@ -1,8 +1,6 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { ProtectStatAbAttr } from "#abilities/protect-stat-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { EntryHazardTag } from "#arena-tags/entry-hazard-tag";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveId } from "#enums/move-id";
@@ -45,7 +43,7 @@ export class StickyWebTag extends EntryHazardTag {
   override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
     if (pokemon.isGrounded()) {
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs<ProtectStatAbAttr>(AbAttrFlag.PROTECT_STAT, pokemon, simulated, Stat.SPD, cancelled);
+      applyAbAttrs("ProtectStatAbAttr", pokemon, simulated, Stat.SPD, cancelled);
 
       if (simulated) {
         return !cancelled.value;

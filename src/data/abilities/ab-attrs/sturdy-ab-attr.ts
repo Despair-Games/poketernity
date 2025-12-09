@@ -1,5 +1,4 @@
 import { PreDefendAbAttr } from "#abilities/pre-defend-ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
@@ -12,10 +11,7 @@ import type { ValueHolder } from "#utils/common-utils";
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Sturdy_(Ability) | Sturdy Ability - Bulbapedia}
  */
 export class SturdyAbAttr extends PreDefendAbAttr {
-  constructor() {
-    super();
-    this._flags.add(AbAttrFlag.STURDY);
-  }
+  protected override readonly abAttrKey = "SturdyAbAttr";
 
   public override apply(
     pokemon: Pokemon,

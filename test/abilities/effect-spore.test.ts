@@ -1,7 +1,6 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { EffectSporeAbAttr } from "#abilities/effect-spore-ab-attr";
 import { allMoves } from "#data/data-lists";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
@@ -41,7 +40,7 @@ describe("Abilities - Effect Spore", () => {
   it("should have a chance of inflicting a status effect if user is hit with a contact move", async () => {
     await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
-    const abilityAttr = game.field.getPlayerPokemon().getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0];
+    const abilityAttr = game.field.getPlayerPokemon().getAbilityAttrs("PostDefendAbAttr")[0] as EffectSporeAbAttr;
     vi.spyOn(abilityAttr, "apply");
     const enemy = game.field.getEnemyPokemon();
 
@@ -58,7 +57,7 @@ describe("Abilities - Effect Spore", () => {
     await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemy = game.field.getEnemyPokemon();
-    const abilityAttr = game.field.getPlayerPokemon().getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0];
+    const abilityAttr = game.field.getPlayerPokemon().getAbilityAttrs("PostDefendAbAttr")[0] as EffectSporeAbAttr;
     vi.spyOn(abilityAttr, "apply");
 
     game.move.select(MoveId.SPLASH);
@@ -74,7 +73,7 @@ describe("Abilities - Effect Spore", () => {
     await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemy = game.field.getEnemyPokemon();
-    const abilityAttr = game.field.getPlayerPokemon().getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0];
+    const abilityAttr = game.field.getPlayerPokemon().getAbilityAttrs("PostDefendAbAttr")[0] as EffectSporeAbAttr;
     vi.spyOn(abilityAttr, "apply");
 
     game.move.select(MoveId.SPLASH);
@@ -89,7 +88,7 @@ describe("Abilities - Effect Spore", () => {
     await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
     const enemy = game.field.getEnemyPokemon();
-    const abilityAttr = game.field.getPlayerPokemon().getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0];
+    const abilityAttr = game.field.getPlayerPokemon().getAbilityAttrs("PostDefendAbAttr")[0] as EffectSporeAbAttr;
     vi.spyOn(abilityAttr, "apply");
 
     game.move.select(MoveId.SPLASH);
@@ -124,7 +123,7 @@ describe("Abilities - Effect Spore", () => {
     // Apply the Effect Spore attr while simulating the full range of possible RNG rolls.
     // Unfortunately, actually using Tackle 100 times takes too long, so we only apply the attr.
     await game.rng.equalSample(100, () => {
-      applyAbAttrs<EffectSporeAbAttr>(AbAttrFlag.EFFECT_SPORE, player, false, enemy, allMoves.get(MoveId.TACKLE));
+      applyAbAttrs("PostDefendAbAttr", player, false, enemy, allMoves.get(MoveId.TACKLE));
     });
 
     expect(sleepCount).toBe(11);

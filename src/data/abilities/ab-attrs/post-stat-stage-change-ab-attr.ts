@@ -1,12 +1,12 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { BattleStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 
 export abstract class PostStatStageChangeAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "PostStatStageChangeAbAttr";
+
   constructor() {
     super(true);
-    this._flags.add(AbAttrFlag.POST_STAT_STAGE_CHANGE);
   }
 
   /**

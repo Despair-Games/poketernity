@@ -1,5 +1,4 @@
 import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { MoveFlags } from "#enums/move-flags";
 import type { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#field/pokemon";
@@ -25,7 +24,6 @@ export class PostDefendContactApplyStatusEffectAbAttr extends PostDefendAbAttr {
 
   constructor(chance: number, effects: StatusEffect | StatusEffect[]) {
     super();
-    this._flags.add(AbAttrFlag.POST_DEFEND_CONTACT_APPLY_STATUS_EFFECT);
 
     this.chance = chance;
     this.statusEffects = this.statusEffects.concat(effects);

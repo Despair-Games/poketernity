@@ -1,14 +1,11 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
-import type { BlockRecoilDamageAbAttr } from "#abilities/block-recoil-damage-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { HitResult } from "#enums/hit-result";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import { BooleanHolder, toDmgValue } from "#utils/common-utils";
+import { toDmgValue, ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -28,10 +25,10 @@ export class RecoilAttr extends MoveEffectAttr {
   }
 
   override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
-    const cancelled = new BooleanHolder(false);
+    const cancelled = new ValueHolder(false);
     if (!this.unblockable) {
-      applyAbAttrs<BlockRecoilDamageAbAttr>(AbAttrFlag.BLOCK_RECOIL_DAMAGE, user, false, cancelled);
-      applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, user, false, cancelled);
+      applyAbAttrs("BlockRecoilDamageAbAttr", user, false, cancelled);
+      applyAbAttrs("BlockNonDirectDamageAbAttr", user, false, cancelled);
     }
 
     if (cancelled.value) {

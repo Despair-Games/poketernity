@@ -1,11 +1,11 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 
 export abstract class PostBattleAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "PostBattleAbAttr";
+
   constructor() {
     super(true);
-    this._flags.add(AbAttrFlag.POST_BATTLE);
   }
 
   /**

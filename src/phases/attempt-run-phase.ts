@@ -1,6 +1,5 @@
 import { globalScene } from "#app/global-scene";
 import { activeOverrides } from "#app/overrides";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
@@ -29,7 +28,7 @@ export class AttemptRunPhase extends PokemonPhase {
     }
 
     const playerField = globalScene.getPlayerField().filter((p) => p.isActive(true));
-    if (playerField.some((p) => p.hasAbilityWithAttr(AbAttrFlag.RUN_SUCCESS))) {
+    if (playerField.some((p) => p.hasAbilityWithAttr("RunSuccessAbAttr"))) {
       return true;
     }
 

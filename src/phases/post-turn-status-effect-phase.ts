@@ -1,11 +1,7 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
-import type { BlockStatusDamageAbAttr } from "#abilities/block-status-damage-ab-attr";
-import type { ReduceBurnDamageAbAttr } from "#abilities/reduce-burn-damage-ab-attr";
 import { CommonBattleAnim } from "#animations/common-battle-anim";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { CommonAnim } from "#enums/common-anim";
 import { StatusEffect } from "#enums/status-effect";
 import { PokemonPhase } from "#phases/base/pokemon-phase";
@@ -30,8 +26,8 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
     pokemon.advanceStatusCounter();
 
     const cancelled = new BooleanHolder(false);
-    applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
-    applyAbAttrs<BlockStatusDamageAbAttr>(AbAttrFlag.BLOCK_STATUS_DAMAGE, pokemon, false, cancelled);
+    applyAbAttrs("BlockNonDirectDamageAbAttr", pokemon, false, cancelled);
+    applyAbAttrs("BlockStatusDamageAbAttr", pokemon, false, cancelled);
 
     if (cancelled.value) {
       this.end();
@@ -53,7 +49,7 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
         break;
       case StatusEffect.BURN:
         damage.value = pokemon.getMaxHp() / 16;
-        applyAbAttrs<ReduceBurnDamageAbAttr>(AbAttrFlag.REDUCE_BURN_DAMAGE, pokemon, false, damage);
+        applyAbAttrs("ReduceBurnDamageAbAttr", pokemon, false, damage);
         break;
     }
 

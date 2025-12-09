@@ -1,13 +1,8 @@
 import { PreSetStatusEffectImmunityAbAttr } from "#abilities/pre-set-status-effect-immunity-ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
-import type { StatusEffect } from "#enums/status-effect";
 
 /**
  * Provides immunity to status effects to the user.
  */
 export class StatusEffectImmunityAbAttr extends PreSetStatusEffectImmunityAbAttr {
-  constructor(...immuneEffects: StatusEffect[]) {
-    super(...immuneEffects);
-    this._flags.add(AbAttrFlag.STATUS_EFFECT_IMMUNITY);
-  }
+  protected override readonly abAttrKey = "StatusEffectImmunityAbAttr";
 }

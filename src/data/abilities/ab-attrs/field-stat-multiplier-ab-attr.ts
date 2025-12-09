@@ -1,5 +1,4 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { AbilityId } from "#enums/ability-id";
 import type { EffectiveStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
@@ -12,6 +11,7 @@ type TargetCondition = (params: { pokemon: Pokemon; target: Pokemon; abilitiesAp
  * provided they meet set conditions.
  */
 export class FieldStatMultiplierAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "FieldStatMultiplierAbAttr";
   private readonly stat: EffectiveStat;
   private readonly multiplier: number;
   /** A condition the target must satisfy to be affected by this attribute */
@@ -19,7 +19,6 @@ export class FieldStatMultiplierAbAttr extends AbAttr {
 
   constructor(stat: EffectiveStat, multiplier: number, targetCondition: TargetCondition = () => true) {
     super(false);
-    this._flags.add(AbAttrFlag.FIELD_STAT_MULTIPLIER);
 
     this.stat = stat;
     this.multiplier = multiplier;

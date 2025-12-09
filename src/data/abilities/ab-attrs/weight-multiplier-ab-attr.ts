@@ -1,5 +1,4 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { ValueHolder } from "#utils/common-utils";
 
@@ -8,11 +7,11 @@ import type { ValueHolder } from "#utils/common-utils";
  * Used for Heavy Metal (doubling weight) and Light Metal (halving weight)
  */
 export class WeightMultiplierAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "WeightMultiplierAbAttr";
   private readonly multiplier: number;
 
   constructor(multiplier: number) {
     super();
-    this._flags.add(AbAttrFlag.WEIGHT_MULTIPLIER);
 
     this.multiplier = multiplier;
   }

@@ -1,6 +1,5 @@
 import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { HitResult } from "#enums/hit-result";
 import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#field/pokemon";
@@ -28,7 +27,7 @@ export class PostDefendContactDamageAbAttr extends PostDefendAbAttr {
   public override canApply(...[pokemon, , attacker, move]: Parameters<this["apply"]>): boolean {
     return (
       move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
-      && !attacker.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)
+      && !attacker.hasAbilityWithAttr("BlockNonDirectDamageAbAttr")
     );
   }
 

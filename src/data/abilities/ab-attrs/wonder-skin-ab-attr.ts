@@ -1,5 +1,4 @@
 import { PreDefendAbAttr } from "#abilities/pre-defend-ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { MoveCategory } from "#enums/move-category";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
@@ -10,10 +9,7 @@ import type { ValueHolder } from "#utils/common-utils";
  * Used by Wonder Skin.
  */
 export class WonderSkinAbAttr extends PreDefendAbAttr {
-  constructor() {
-    super();
-    this._flags.add(AbAttrFlag.WONDER_SKIN);
-  }
+  protected override readonly abAttrKey = "WonderSkinAbAttr";
 
   public override apply(
     _pokemon: Pokemon,

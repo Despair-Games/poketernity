@@ -1,5 +1,4 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#field/pokemon";
 
@@ -15,9 +14,10 @@ const syncStatuses = Object.freeze<ReadonlySet<StatusEffect>>(
  * Used for {@linkcode https://bulbapedia.bulbagarden.net/wiki/Synchronize_(Ability) | Synchronize}.
  */
 export class SynchronizeStatusAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "SynchronizeStatusAbAttr";
+
   constructor() {
     super(true);
-    this._flags.add(AbAttrFlag.SYNCHRONIZE_STATUS);
   }
 
   /**

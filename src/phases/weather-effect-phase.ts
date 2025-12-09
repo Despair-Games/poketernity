@@ -1,13 +1,8 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
-import type { PostWeatherLapseAbAttr } from "#abilities/post-weather-lapse-ab-attr";
-import type { PreWeatherDamageAbAttr } from "#abilities/pre-weather-damage-ab-attr";
-import type { SuppressWeatherEffectAbAttr } from "#abilities/suppress-weather-effect-ab-attr";
 import { CommonBattleAnim } from "#animations/common-battle-anim";
 import { globalScene } from "#app/global-scene";
 import { WEATHER_DAMAGE_RATIO } from "#constants/weather-constants";
 import { getWeatherDamageMessage, getWeatherLapseMessage, type Weather } from "#data/weather";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
 import { HitResult } from "#enums/hit-result";
@@ -72,7 +67,7 @@ export class WeatherEffectPhase extends BattlePhase {
 
     for (const pokemon of inSpeedOrder()) {
       this.tryInflictWeatherDamage(weather, pokemon);
-      applyAbAttrs<PostWeatherLapseAbAttr>(AbAttrFlag.POST_WEATHER_LAPSE, pokemon, false);
+      applyAbAttrs("PostWeatherLapseAbAttr", pokemon, false);
     }
   }
 
@@ -89,7 +84,7 @@ export class WeatherEffectPhase extends BattlePhase {
     const cancelled = new ValueHolder(false);
 
     for (const pokemon of inSpeedOrder()) {
-      applyAbAttrs<SuppressWeatherEffectAbAttr>(AbAttrFlag.SUPPRESS_WEATHER_EFFECT, pokemon, false, weather, cancelled);
+      applyAbAttrs("SuppressWeatherEffectAbAttr", pokemon, false, weather, cancelled);
       if (cancelled.value) {
         break;
       }
@@ -113,8 +108,8 @@ export class WeatherEffectPhase extends BattlePhase {
 
     const cancelled = new ValueHolder(false);
 
-    applyAbAttrs<PreWeatherDamageAbAttr>(AbAttrFlag.PRE_WEATHER_DAMAGE, pokemon, false, weather, cancelled);
-    applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
+    applyAbAttrs("PreWeatherDamageAbAttr", pokemon, false, weather, cancelled);
+    applyAbAttrs("BlockNonDirectDamageAbAttr", pokemon, false, cancelled);
 
     if (
       cancelled.value

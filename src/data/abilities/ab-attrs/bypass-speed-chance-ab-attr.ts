@@ -1,6 +1,5 @@
 import { AbAttr } from "#abilities/ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
@@ -11,12 +10,12 @@ import i18next from "i18next";
  * If the Ability activates, this is announced at the start of the turn (after move selection).
  */
 export class BypassSpeedChanceAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "BypassSpeedChanceAbAttr";
   /** The percent chance for this effect to apply */
   public readonly chance: number;
 
   constructor(chance: number) {
     super(true);
-    this._flags.add(AbAttrFlag.BYPASS_SPEED_CHANCE);
     this.chance = chance;
   }
 

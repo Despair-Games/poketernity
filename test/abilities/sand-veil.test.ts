@@ -1,6 +1,4 @@
-import type { EvasivenessMultiplierAbAttr } from "#abilities/evasiveness-multiplier-ab-attr";
 import { allAbilities } from "#data/data-lists";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
@@ -41,9 +39,7 @@ describe("Abilities - Sand Veil", () => {
 
     game.field.mockAbility(leadPokemon[0], AbilityId.SAND_VEIL);
 
-    const sandVeilAttr = allAbilities[AbilityId.SAND_VEIL].getAttrs<EvasivenessMultiplierAbAttr>(
-      AbAttrFlag.EVASIVENESS_MULTIPLIER,
-    )[0];
+    const sandVeilAttr = allAbilities[AbilityId.SAND_VEIL].getAttrs("EvasivenessMultiplierAbAttr")[0];
     vi.spyOn(sandVeilAttr, "apply").mockImplementation((_pokemon, _simulated, statValue) => {
       statValue.value = -1;
       return true;

@@ -1,12 +1,9 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { BlockItemTheftAbAttr } from "#abilities/block-item-theft-ab-attr";
-import type { PostItemLostAbAttr } from "#abilities/post-item-lost-ab-attr";
 import { globalScene } from "#app/global-scene";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import { EatBerryAttr } from "#moves/eat-berry-attr";
 import type { Move } from "#moves/move";
-import { BooleanHolder } from "#utils/common-utils";
+import { ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -21,8 +18,8 @@ export class StealEatBerryAttr extends EatBerryAttr {
   }
 
   override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
-    const cancelled = new BooleanHolder(false);
-    applyAbAttrs<BlockItemTheftAbAttr>(AbAttrFlag.BLOCK_ITEM_THEFT, target, false, cancelled); // check for abilities that block item theft
+    const cancelled = new ValueHolder(false);
+    applyAbAttrs("BlockItemTheftAbAttr", target, false, cancelled);
     if (cancelled.value === true) {
       return false;
     }
@@ -33,7 +30,7 @@ export class StealEatBerryAttr extends EatBerryAttr {
     }
     // if the target has berries, pick a random berry and steal it
     this.chosenBerry = heldBerries[user.randSeedInt(heldBerries.length)];
-    applyAbAttrs<PostItemLostAbAttr>(AbAttrFlag.POST_ITEM_LOST, target, false);
+    applyAbAttrs("PostItemLostAbAttr", target, false);
     const message = i18next.t("battle:stealEatBerry", {
       pokemonName: user.name,
       targetName: target.name,

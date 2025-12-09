@@ -1,14 +1,14 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 
 /**
  * Triggers after the Pokemon takes any damage
  */
 export abstract class PostDamageAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "PostDamageAbAttr";
+
   constructor() {
     super(true);
-    this._flags.add(AbAttrFlag.POST_DAMAGE);
   }
 
   /**

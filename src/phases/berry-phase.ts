@@ -1,8 +1,5 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { HealFromBerryUseAbAttr } from "#abilities/heal-from-berry-use-ab-attr";
-import type { PreventBerryUseAbAttr } from "#abilities/prevent-berry-use-ab-attr";
 import { globalScene } from "#app/global-scene";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { CommonAnim } from "#enums/common-anim";
 import { BerryUsedEvent } from "#events/battle-scene";
 import { BerryModifier } from "#modifier/modifier";
@@ -25,7 +22,7 @@ export class BerryPhase extends BattlePhase {
       if (hasUsableBerry) {
         const cancelled = new ValueHolder(false);
         for (const opp of inSpeedOrder(pokemon.getOpposingArenaTagSide())) {
-          applyAbAttrs<PreventBerryUseAbAttr>(AbAttrFlag.PREVENT_BERRY_USE, opp, false, pokemon, cancelled);
+          applyAbAttrs("PreventBerryUseAbAttr", opp, false, pokemon, cancelled);
           if (cancelled.value) {
             return;
           }
@@ -48,7 +45,7 @@ export class BerryPhase extends BattlePhase {
 
         globalScene.updateModifiers(pokemon.isPlayer());
 
-        applyAbAttrs<HealFromBerryUseAbAttr>(AbAttrFlag.HEAL_FROM_BERRY_USE, pokemon, false);
+        applyAbAttrs("HealFromBerryUseAbAttr", pokemon, false);
       }
     }
 

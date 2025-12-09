@@ -1,15 +1,16 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
+import type { AbAttrKey } from "#types/ability-types";
 
 /**
  * Base class for effects that activate when the source Pokemon enters the field.
  * @todo Most post-summon abilities should activate when the pokemon gains the ability (such as from Skill Swap)
  */
 export abstract class PostSummonAbAttr extends AbAttr {
+  protected override readonly abAttrKey: AbAttrKey = "PostSummonAbAttr";
+
   constructor(showAbility: boolean = true) {
     super(showAbility);
-    this._flags.add(AbAttrFlag.POST_SUMMON);
   }
 
   /**

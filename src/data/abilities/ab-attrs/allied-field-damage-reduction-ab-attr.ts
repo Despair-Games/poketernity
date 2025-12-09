@@ -1,5 +1,4 @@
 import { PreDefendAbAttr } from "#abilities/pre-defend-ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { NumberHolder } from "#utils/common-utils";
@@ -8,11 +7,11 @@ import type { NumberHolder } from "#utils/common-utils";
  * Reduces the damage dealt to an allied Pokemon. Used by Friend Guard.
  */
 export class AlliedFieldDamageReductionAbAttr extends PreDefendAbAttr {
+  protected override readonly abAttrKey = "AlliedFieldDamageReductionAbAttr";
   private readonly damageMultiplier: number;
 
   constructor(damageMultiplier: number) {
     super();
-    this._flags.add(AbAttrFlag.ALLIED_FIELD_DAMAGE_REDUCTION);
     this.damageMultiplier = damageMultiplier;
   }
 

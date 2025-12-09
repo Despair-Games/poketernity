@@ -1,8 +1,6 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { PostTurnAbAttr } from "#abilities/post-turn-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { TerrainType } from "#enums/terrain-type";
 import { TurnEndEvent } from "#events/battle-scene";
@@ -38,9 +36,10 @@ export class TurnEndPhase extends BattlePhase {
             },
           );
         }
-        applyAbAttrs<PostTurnAbAttr>(AbAttrFlag.POST_TURN, pokemon, false);
+        applyAbAttrs("PostTurnAbAttr", pokemon, false);
         // TODO: Temporary workaround so that bad dreams doesn't hurt Pokemon waking up in the same turn. cf https://github.com/Despair-Games/poketernity/issues/1211
-        applyAbAttrs<PostTurnAbAttr>(AbAttrFlag.BAD_DREAMS, pokemon, false);
+        // cf https://github.com/smogon/pokemon-showdown/blob/master/data/abilities.ts `onResidualOrder` and `onResidualSubOrder`
+        applyAbAttrs("BadDreamsAbAttr", pokemon, false);
       }
 
       globalScene.applyModifiers(TurnStatusEffectModifier, pokemon.isPlayer(), pokemon);

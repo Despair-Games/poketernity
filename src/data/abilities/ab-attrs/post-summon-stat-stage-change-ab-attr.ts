@@ -1,9 +1,6 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { IntimidateImmunityAbAttr } from "#abilities/intimidate-immunity-ab-attr";
-import type { PostIntimidateStatStageChangeAbAttr } from "#abilities/post-intimidate-stat-stage-change-ab-attr";
 import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import { globalScene } from "#app/global-scene";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { BattleStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
@@ -50,7 +47,7 @@ export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
           continue;
         }
 
-        applyAbAttrs<IntimidateImmunityAbAttr>(AbAttrFlag.INTIMIDATE_IMMUNITY, opponent, simulated, cancelled);
+        applyAbAttrs("IntimidateImmunityAbAttr", opponent, simulated, cancelled);
       }
 
       if (!cancelled.value) {
@@ -64,11 +61,7 @@ export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
       }
 
       if (this.intimidate) {
-        applyAbAttrs<PostIntimidateStatStageChangeAbAttr>(
-          AbAttrFlag.POST_INTIMIDATE_STAT_STAGE_CHANGE,
-          opponent,
-          simulated,
-        );
+        applyAbAttrs("PostIntimidateStatStageChangeAbAttr", opponent, simulated);
       }
     }
   }
@@ -86,7 +79,7 @@ export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
 
       if (this.intimidate) {
         const cancelled = new ValueHolder(false);
-        applyAbAttrs<IntimidateImmunityAbAttr>(AbAttrFlag.INTIMIDATE_IMMUNITY, opp, simulated, cancelled);
+        applyAbAttrs("IntimidateImmunityAbAttr", opp, simulated, cancelled);
         return !cancelled.value;
       }
       return true;

@@ -1,7 +1,6 @@
 import { AbAttr } from "#abilities/ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import { clamp, toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
@@ -12,12 +11,12 @@ import i18next from "i18next";
  * @see {@linkcode apply()} for implementation
  */
 export class HealFromBerryUseAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "HealFromBerryUseAbAttr";
   /** Percent of Max HP to heal */
   private readonly healRatio: number;
 
   constructor(healRatio: number) {
     super(true);
-    this._flags.add(AbAttrFlag.HEAL_FROM_BERRY_USE);
 
     this.healRatio = clamp(healRatio, 0, 1);
   }

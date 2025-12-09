@@ -2,7 +2,6 @@ import { AbAttr } from "#abilities/ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { DrowsyTag } from "#battler-tags/drowsy-tag";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitResult } from "#enums/hit-result";
 import { StatusEffect } from "#enums/status-effect";
@@ -17,9 +16,10 @@ import i18next from "i18next";
  * @todo This should extend `PostTurnAbAttr` but currently does not as a workaround until proper ability timing is implemented.
  */
 export class BadDreamsAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "BadDreamsAbAttr";
+
   constructor() {
     super(true);
-    this._flags.add(AbAttrFlag.BAD_DREAMS);
   }
 
   public override apply(pokemon: Pokemon, simulated: boolean): void {
@@ -29,7 +29,7 @@ export class BadDreamsAbAttr extends AbAttr {
 
     for (const opp of inSpeedOrder(pokemon.getOpposingArenaTagSide())) {
       const isAsleep = opp.hasStatusEffect(StatusEffect.SLEEP);
-      const blocksNonDirectDamage = opp.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE);
+      const blocksNonDirectDamage = opp.hasAbilityWithAttr("BlockNonDirectDamageAbAttr");
       // TODO: Workaround because Drowsy sets the sleep status AFTER applying bad dreams due to "asPhase = true"
       const willFallAsleep =
         opp.getTag<DrowsyTag>(BattlerTagType.DROWSY)?.turnCount === 1 && opp.canSetStatus(StatusEffect.SLEEP, true);
@@ -53,9 +53,7 @@ export class BadDreamsAbAttr extends AbAttr {
         opp.getTag(BattlerTagType.DROWSY)?.turnCount === 1 && opp.canSetStatus(StatusEffect.SLEEP, simulated);
 
       return (
-        (isAsleep || willFallAsleep)
-        && !opp.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)
-        && !opp.switchOutStatus
+        (isAsleep || willFallAsleep) && !opp.hasAbilityWithAttr("BlockNonDirectDamageAbAttr") && !opp.switchOutStatus
       );
     });
   }

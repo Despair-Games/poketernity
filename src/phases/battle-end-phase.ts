@@ -1,7 +1,5 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { PostBattleAbAttr } from "#abilities/post-battle-ab-attr";
 import { globalScene } from "#app/global-scene";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { LapsingPersistentModifier, LapsingPokemonHeldItemModifier } from "#modifier/modifier";
 import { BattlePhase } from "#phases/base/battle-phase";
 
@@ -32,7 +30,7 @@ export class BattleEndPhase extends BattlePhase {
     }
 
     for (const pokemon of globalScene.getPokemonAllowedInBattle()) {
-      applyAbAttrs<PostBattleAbAttr>(AbAttrFlag.POST_BATTLE, pokemon, false, this.isVictory);
+      applyAbAttrs("PostBattleAbAttr", pokemon, false, this.isVictory);
     }
 
     if (this.isVictory) {

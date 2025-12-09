@@ -1,6 +1,5 @@
 import type { PostDefendContactApplyStatusEffectAbAttr } from "#abilities/post-defend-contact-apply-status-effect-ab-attr";
 import { allAbilities } from "#data/data-lists";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
@@ -138,13 +137,10 @@ describe("Moves - Safeguard", () => {
 
   it("protects from ability-inflicted status", async () => {
     game.override.ability(AbilityId.STATIC);
-    vi.spyOn(
-      allAbilities[AbilityId.STATIC].getAttrs<PostDefendContactApplyStatusEffectAbAttr>(
-        AbAttrFlag.POST_DEFEND_CONTACT_APPLY_STATUS_EFFECT,
-      )[0],
-      "chance",
-      "get",
-    ).mockReturnValue(100);
+    const staticAttr = allAbilities[AbilityId.STATIC].getAttrs(
+      "PostDefendAbAttr",
+    )[0] as PostDefendContactApplyStatusEffectAbAttr;
+    vi.spyOn(staticAttr, "chance", "get").mockReturnValue(100);
     await game.classicMode.startBattle(SpeciesId.DRATINI);
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 

@@ -1,5 +1,4 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { ValueHolder } from "#utils/common-utils";
 
@@ -8,10 +7,7 @@ import type { ValueHolder } from "#utils/common-utils";
  * occurring.
  */
 export class DoubleBattleChanceAbAttr extends AbAttr {
-  constructor() {
-    super();
-    this._flags.add(AbAttrFlag.DOUBLE_BATTLE_CHANCE);
-  }
+  protected override readonly abAttrKey = "DoubleBattleChanceAbAttr";
 
   /**
    * Increases the chance of a double battle occurring

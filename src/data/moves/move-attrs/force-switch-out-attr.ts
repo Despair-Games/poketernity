@@ -1,8 +1,7 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { ForceSwitchOutImmunityAbAttr } from "#abilities/force-switch-out-immunity-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { AbilityId } from "#enums/ability-id";
 import { BattleType } from "#enums/battle-type";
 import { MoveId } from "#enums/move-id";
 import { SwitchType } from "#enums/switch-type";
@@ -36,7 +35,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
     // If Wimp Out/Emergency Exit activates as a result of U-turn, Volt Switch, or Flip Turn,
     // the forced switch from the respective move is nullified
     if (
-      target.getAbility().hasAttrFlag(AbAttrFlag.POST_DAMAGE_FORCE_SWITCH)
+      [AbilityId.EMERGENCY_EXIT, AbilityId.WIMP_OUT].some((abId) => target.hasAbility(abId))
       && [MoveId.U_TURN, MoveId.VOLT_SWITCH, MoveId.FLIP_TURN].includes(move.id)
       && this.hpDroppedBelowHalf(target)
     ) {
@@ -93,7 +92,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
     }
 
     const blockedByAbility = new ValueHolder(false);
-    applyAbAttrs<ForceSwitchOutImmunityAbAttr>(AbAttrFlag.FORCE_SWITCH_OUT_IMMUNITY, target, false, blockedByAbility);
+    applyAbAttrs("ForceSwitchOutImmunityAbAttr", target, false, blockedByAbility);
     return blockedByAbility.value
       ? i18next.t("moveTriggers:cannotBeSwitchedOut", { pokemonName: getPokemonNameWithAffix(target) })
       : null;

@@ -1,5 +1,4 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#field/pokemon";
 
@@ -10,12 +9,8 @@ import type { Pokemon } from "#field/pokemon";
  * @param statusEffect - The {@linkcode StatusEffect} to check for
  */
 export class ReduceSleepDurationAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "ReduceSleepDurationAbAttr";
   private readonly statusEffect: StatusEffect = StatusEffect.SLEEP;
-
-  constructor() {
-    super();
-    this._flags.add(AbAttrFlag.REDUCE_SLEEP_DURATION);
-  }
 
   public override apply(pokemon: Pokemon, _simulated: boolean, _statusEffect: StatusEffect): void {
     pokemon.advanceStatusCounter();

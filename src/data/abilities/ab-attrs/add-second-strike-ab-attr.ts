@@ -1,5 +1,4 @@
 import { PreAttackAbAttr } from "#abilities/pre-attack-ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { ValueHolder } from "#utils/common-utils";
@@ -10,11 +9,11 @@ import type { ValueHolder } from "#utils/common-utils";
  * @param damageMultiplier the damage multiplier for the second strike, relative to the first.
  */
 export class AddSecondStrikeAbAttr extends PreAttackAbAttr {
+  protected override readonly abAttrKey = "AddSecondStrikeAbAttr";
   private readonly damageMultiplier: number;
 
   constructor(damageMultiplier: number) {
     super();
-    this._flags.add(AbAttrFlag.ADD_SECOND_STRIKE);
 
     this.damageMultiplier = damageMultiplier;
   }

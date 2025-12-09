@@ -1,12 +1,12 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { TerrainType } from "#enums/terrain-type";
 import type { Pokemon } from "#field/pokemon";
 
 export abstract class PostTerrainChangeAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "PostTerrainChangeAbAttr";
+
   constructor() {
     super(true);
-    this._flags.add(AbAttrFlag.POST_TERRAIN_CHANGE);
   }
 
   /**

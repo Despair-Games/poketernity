@@ -1,6 +1,5 @@
 import type { BattlerTag } from "#battler-tags/battler-tag";
 import { DamageProtectedTag } from "#battler-tags/damage-protected-tag";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitResult } from "#enums/hit-result";
 import { MoveFlags } from "#enums/move-flags";
@@ -39,7 +38,7 @@ export class ContactDamageProtectedTag extends DamageProtectedTag {
     if (
       !simulated
       && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker)
-      && !attacker.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)
+      && !attacker.hasAbilityWithAttr("BlockNonDirectDamageAbAttr")
     ) {
       attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio)), {
         result: HitResult.OTHER,

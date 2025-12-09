@@ -1,15 +1,13 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import type { BlockNonDirectDamageAbAttr } from "#abilities/block-non-direct-damage-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTag } from "#battler-tags/battler-tag";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
 import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
-import { BooleanHolder, toDmgValue } from "#utils/common-utils";
+import { toDmgValue, ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -31,8 +29,8 @@ export class CursedTag extends BattlerTag {
     if (ret) {
       globalScene.phaseManager.createAndUnshiftPhase("CommonAnimPhase", CommonAnim.CURSE, pokemon.getBattlerIndex());
 
-      const cancelled = new BooleanHolder(false);
-      applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
+      const cancelled = new ValueHolder(false);
+      applyAbAttrs("BlockNonDirectDamageAbAttr", pokemon, false, cancelled);
 
       if (!cancelled.value) {
         pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 4));

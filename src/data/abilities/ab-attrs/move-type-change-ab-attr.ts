@@ -1,5 +1,4 @@
 import { PreAttackAbAttr } from "#abilities/pre-attack-ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
@@ -7,13 +6,13 @@ import type { PokemonAttackCondition } from "#types/move-types";
 import type { ValueHolder } from "#utils/common-utils";
 
 export class MoveTypeChangeAbAttr extends PreAttackAbAttr {
+  protected override readonly abAttrKey = "MoveTypeChangeAbAttr";
   private readonly newType: ElementalType;
   private readonly powerMultiplier: number;
   private readonly condition: PokemonAttackCondition;
 
   constructor(newType: ElementalType, powerMultiplier: number, condition: PokemonAttackCondition) {
     super();
-    this._flags.add(AbAttrFlag.MOVE_TYPE_CHANGE);
 
     this.newType = newType;
     this.powerMultiplier = powerMultiplier;

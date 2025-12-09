@@ -1,5 +1,4 @@
 import { AbAttr } from "#abilities/ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { PokemonAttackCondition } from "#types/move-types";
@@ -10,11 +9,11 @@ import type { ValueHolder } from "#utils/common-utils";
  * @see {@linkcode apply}
  */
 export class ConditionalCritAbAttr extends AbAttr {
+  protected override readonly abAttrKey = "ConditionalCritAbAttr";
   private readonly condition: PokemonAttackCondition;
 
   constructor(condition: PokemonAttackCondition) {
     super();
-    this._flags.add(AbAttrFlag.CONDITIONAL_CRIT);
 
     this.condition = condition;
   }
