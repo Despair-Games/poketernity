@@ -35,33 +35,26 @@ export class CheckSwitchPhase extends BattlePhase {
     const pokemon = globalScene.getPlayerField()[this.fieldIndex];
     const { field, phaseManager, ui } = globalScene;
 
-    // End this phase early...
-
-    // ...if the user is playing in Set Mode
     if (settings.general.battleStyle === BattleStyle.SET) {
       super.end();
       return;
     }
 
-    // ...if the checked Pokemon is somehow not on the field
-    if (field.getAll().indexOf(pokemon) === -1) {
+    if (!field.getAll().includes(pokemon)) {
       phaseManager.createAndUnshiftPhase("SummonPhase", pokemon.getBattlerIndex(), { delayPostSummon: true });
       this.end();
       return;
     }
 
-    // ...if there are no other allowed Pokemon in the player's party to switch with
-    if (
-      !globalScene
-        .getPlayerParty()
-        .slice(1)
-        .filter((p) => p.isActive()).length
-    ) {
+    const reservePokemon = globalScene
+      .getPlayerParty()
+      .slice(1) // shouldn't this be `.slice(doubleBattle ? 2 : 1)`?
+      .filter((p) => p.isAllowedInBattle());
+    if (reservePokemon.length === 0) {
       this.end();
       return;
     }
 
-    // ...or if any player Pokemon has an effect that prevents the checked Pokemon from switching
     if (
       pokemon.hasTag(...MOVE_LOCK_TAG_TYPES)
       || pokemon.isTrapped()
@@ -96,13 +89,15 @@ export class CheckSwitchPhase extends BattlePhase {
     );
   }
 
-  private onCancel(): void {
-    globalScene.ui.setMessageMode().then(() => this.end());
+  private async onCancel(): Promise<void> {
+    await globalScene.ui.setMessageMode();
+    this.end();
   }
 
-  private onPartyModeSelection(cursor: number, option: PartyOption): void {
+  private async onPartyModeSelection(cursor: number, option: PartyOption): Promise<void> {
     if (option === PartyOption.CANCEL) {
-      globalScene.ui.setMessageMode().then(() => this.start());
+      await globalScene.ui.setMessageMode();
+      this.start();
       return;
     }
 
@@ -112,6 +107,7 @@ export class CheckSwitchPhase extends BattlePhase {
       phaseManager.createPhase("SwitchPhase", this.fieldIndex, SwitchType.INITIAL_SWITCH, cursor),
     );
 
-    globalScene.ui.setMessageMode().then(() => this.end());
+    await globalScene.ui.setMessageMode();
+    this.end();
   }
 }
