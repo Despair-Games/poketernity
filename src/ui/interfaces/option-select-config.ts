@@ -44,7 +44,7 @@ export interface OptionSelectItem {
    * Handler called when that option is selected.
    * @returns `true` to play the "success" sfx, `false` for the "error" sfx
    */
-  handler: () => boolean;
+  handler: () => boolean | Promise<boolean>;
   /** Optional handler for when the cursor is moved to that option. */
   readonly onHover?: () => void;
   /** Set to `true` to keep the menu open after this option was selected. */
