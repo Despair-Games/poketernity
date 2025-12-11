@@ -5,19 +5,18 @@ import type {
   VerifySystemSavedataRequest,
   VerifySystemSavedataResponse,
 } from "#types/api-types";
+import type { SystemSaveData } from "#types/system-data";
 
-/**
- * A wrapper for system savedata API requests.
- */
+/** A wrapper for system savedata API requests. */
 export class SystemSavedataApi extends ApiBase {
   //#region Public
 
   /**
-   * Get a system savedata.
-   * @param params The {@linkcode GetSystemSavedataRequest} to send
-   * @returns The system savedata as `string` or `null` on error
+   * Get the system savedata.
+   * @param params - The {@linkcode GetSystemSavedataRequest} to send
+   * @returns The system savedata as `string`, or `null` on error
    */
-  public async get(params: GetSystemSavedataRequest) {
+  public async get(params: GetSystemSavedataRequest): Promise<string | null> {
     try {
       const urlSearchParams = this.toUrlSearchParams(params);
       const response = await this.doGet(`/savedata/system/get?${urlSearchParams}`);
@@ -32,13 +31,12 @@ export class SystemSavedataApi extends ApiBase {
 
   /**
    * Verify if the session is valid.
-   * If not the {@linkcode SystemSaveData} is returned.
-   * @param params The {@linkcode VerifySystemSavedataRequest} to send
+   * If not, the `SystemSaveData` is returned.
+   * @param params - The {@linkcode VerifySystemSavedataRequest} to send
    * @returns A {@linkcode SystemSaveData} if **NOT** valid, otherwise `null`.
-   *
-   * TODO: add handling for errors
    */
-  public async verify(params: VerifySystemSavedataRequest) {
+  // TODO: add handling for errors
+  public async verify(params: VerifySystemSavedataRequest): Promise<SystemSaveData | null> {
     const urlSearchParams = this.toUrlSearchParams(params);
     const response = await this.doGet(`/savedata/system/verify?${urlSearchParams}`);
 
@@ -57,12 +55,12 @@ export class SystemSavedataApi extends ApiBase {
   }
 
   /**
-   * Update a system savedata.
-   * @param params The {@linkcode UpdateSystemSavedataRequest} to send
-   * @param rawSystemData The raw {@linkcode SystemSaveData}
+   * Update the system savedata.
+   * @param params - The {@linkcode UpdateSystemSavedataRequest} to send
+   * @param rawSystemData - The raw {@linkcode SystemSaveData}
    * @returns An error message if something went wrong
    */
-  public async update(params: UpdateSystemSavedataRequest, rawSystemData: string) {
+  public async update(params: UpdateSystemSavedataRequest, rawSystemData: string): Promise<string> {
     try {
       const urSearchParams = this.toUrlSearchParams(params);
       const response = await this.doPost(`/savedata/system/update?${urSearchParams}`, rawSystemData);
@@ -74,4 +72,6 @@ export class SystemSavedataApi extends ApiBase {
 
     return "Unknown Error";
   }
+
+  //#endregion
 }
