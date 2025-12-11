@@ -204,7 +204,20 @@ export class CompoundTrainerConfig {
  * ```
  */
 export type TieredSpeciesPool = Partial<Record<TrainerPoolTier, SpeciesId[]>>;
-type ConfigurableEnemyPokemonOptions = Omit<EnemyPokemonOptions, "trainerSlot" | "dataSource">;
+/** Enemy Pokemon generation options that may be set for a Trainer's party Pokemon */
+type ConfigurableEnemyPokemonOptions = Omit<
+  EnemyPokemonOptions,
+  | "id"
+  | "trainerSlot"
+  | "metLevel"
+  | "metBiome"
+  | "metSpecies"
+  | "metWave"
+  | "evoCounter"
+  | "usedTMs"
+  | "pauseEvolutions"
+  | "stellarTypesBoosted"
+>;
 
 /**
  * Interface for the specification of one or more Pokemon within a Trainer's party
@@ -271,10 +284,6 @@ export interface TrainerPartyPokemonConfig extends ConfigurableEnemyPokemonOptio
   /**
    * (Optional) A callback function to change the properties of the generated
    * Pokemon after it is constructed.
-   * @remarks
-   * For the time being, this is the only way to set a generated Pokemon's
-   * properties. This function should not make any changes to game state other
-   * than to the generated Pokemon.
    */
   postProcess?: (pokemon: EnemyPokemon) => void;
 }

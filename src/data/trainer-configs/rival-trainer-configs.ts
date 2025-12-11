@@ -598,15 +598,13 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
     .withPokemonFromFilter((species) => species.isSingleStage() && species.baseTotal >= 450)
     .withPokemonFromFilter((species) => species.baseTotal >= 540, { count: 2 })
     .withPokemon(SpeciesId.RAYQUAZA, {
+      pokeball: PokeballType.MASTER_BALL,
       ignoreEvolution: true,
       shiny: true,
       variant: 1,
       boss: true,
       bossSegments: 3,
       strength: PartyMemberStrength.STRONG,
-      postProcess: (p) => {
-        p.pokeball = PokeballType.MASTER_BALL;
-      },
     })
     .build(),
   [TrainerType.RIVAL_6]: new TrainerConfigBuilder()
@@ -627,15 +625,13 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
     .withPokemonFromFilter((species) => species.isSingleStage() && species.baseTotal >= 450)
     .withPokemonFromFilter((species) => species.baseTotal >= 540, { count: 2 })
     .withPokemon(SpeciesId.RAYQUAZA, {
+      pokeball: PokeballType.MASTER_BALL,
       ignoreEvolution: true,
       formIndex: 1, // Mega Rayquaza
       shiny: true,
       variant: 1,
       boss: true,
       strength: PartyMemberStrength.STRONGER,
-      postProcess: (p) => {
-        p.pokeball = PokeballType.MASTER_BALL;
-      },
     })
     .build(),
 };
