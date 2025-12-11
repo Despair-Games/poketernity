@@ -125,8 +125,8 @@ export class UiInputs {
     return actions;
   }
 
-  buttonDirection(direction: Button): void {
-    const inputSuccess = globalScene.ui.processInput(direction);
+  async buttonDirection(direction: Button): Promise<void> {
+    const inputSuccess = await globalScene.ui.processInput(direction);
     const vibrationLength = 5;
     this.doVibration(inputSuccess, vibrationLength);
   }

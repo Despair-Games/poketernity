@@ -152,7 +152,7 @@ export abstract class UiHandler {
    */
   protected abstract clear(): void;
 
-  public abstract processInput(button: Button): boolean;
+  public abstract processInput(button: Button): boolean | Promise<boolean>;
 
   /** @deprecated */
   public getUi() {

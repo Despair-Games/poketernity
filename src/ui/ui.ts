@@ -491,7 +491,7 @@ export class UI extends Phaser.GameObjects.Container {
     return true;
   }
 
-  public processInput(button: Button): boolean {
+  public async processInput(button: Button): Promise<boolean> {
     if (this.overlayActive) {
       return false;
     }
@@ -502,7 +502,7 @@ export class UI extends Phaser.GameObjects.Container {
       return handler.processTutorialInput(button);
     }
 
-    return handler.processInput(button);
+    return await handler.processInput(button);
   }
 
   public async showTextPromise(

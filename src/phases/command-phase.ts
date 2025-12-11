@@ -12,6 +12,7 @@ import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleCommand } from "#enums/battle-command";
 import { BattleType } from "#enums/battle-type";
+import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BiomeId } from "#enums/biome-id";
 import { FieldPosition } from "#enums/field-position";
@@ -45,7 +46,7 @@ export class CommandPhase extends BattlePhase {
     this.fieldIndex = fieldIndex;
   }
 
-  public override start(): void {
+  public override async start(): Promise<void> {
     const { currentBattle, ui } = globalScene;
     const { turnManager } = globalScene.currentBattle;
 
@@ -63,7 +64,7 @@ export class CommandPhase extends BattlePhase {
         if (allyPokemon) {
           const allyCommand = turnManager.findCommandFromPokemon(allyPokemon);
           if (allyCommand?.command === BattleCommand.BALL || allyCommand?.command === BattleCommand.RUN) {
-            this.end();
+            await this.end();
             return;
           }
         }
@@ -72,7 +73,7 @@ export class CommandPhase extends BattlePhase {
 
     // If the Pokemon has applied Commander's effects to its ally, skip this command
     if (currentBattle?.double && pokemon.getAlly()?.getTag(BattlerTagType.COMMANDED)?.getSourcePokemon() === pokemon) {
-      this.end();
+      await this.end();
       return;
     }
 
@@ -82,7 +83,7 @@ export class CommandPhase extends BattlePhase {
     const moveQueue = pokemon.getMoveQueue();
 
     while (
-      moveQueue.length
+      moveQueue.length > 0
       && moveQueue[0]
       && moveQueue[0].move.id !== MoveId.NONE
       && !moveQueue[0].virtual
@@ -97,7 +98,7 @@ export class CommandPhase extends BattlePhase {
     if (moveQueue.length > 0) {
       const queuedMove = moveQueue[0];
       if (queuedMove.move.id === MoveId.NONE) {
-        this.handleCommand(BattleCommand.FIGHT, -1);
+        await this.handleCommand(BattleCommand.FIGHT, -1);
       } else {
         const moveIndex = pokemon.getMoveset().findIndex((m) => m.moveId === queuedMove.move.id);
         if (
@@ -105,7 +106,7 @@ export class CommandPhase extends BattlePhase {
           || queuedMove.virtual
         ) {
           MOVE_LOCK_TAG_TYPES.forEach((tagType) => pokemon.lapseTag(tagType));
-          this.handleCommand(BattleCommand.FIGHT, moveIndex, queuedMove.ignorePP, queuedMove);
+          await this.handleCommand(BattleCommand.FIGHT, moveIndex, queuedMove.ignorePP, queuedMove);
         } else {
           ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);
         }
@@ -123,7 +124,10 @@ export class CommandPhase extends BattlePhase {
    * @param cursor - Cursor index for the selected Pokeball
    * @returns `true` if the command was successful
    */
-  public handleCommand(command: typeof BattleCommand.BALL | typeof BattleCommand.RUN, cursor: number): boolean;
+  public async handleCommand(
+    command: typeof BattleCommand.BALL | typeof BattleCommand.RUN,
+    cursor: number,
+  ): Promise<boolean>;
   /**
    * @param command - Which of {@linkcode BattleCommand.FIGHT} or {@linkcode BattleCommand.TERA} was chosen
    * @param cursor - Cursor index for the selected Move
@@ -131,15 +135,20 @@ export class CommandPhase extends BattlePhase {
    * @param turnMove - (optional) A {@linkcode TurnMove} object for an existing queued move
    * @returns `true` if the command was successful
    */
-  public handleCommand(command: FightCommand, cursor: number, ignorePp?: boolean, turnMove?: TurnMove): boolean;
+  public async handleCommand(
+    command: FightCommand,
+    cursor: number,
+    ignorePp?: boolean,
+    turnMove?: TurnMove,
+  ): Promise<boolean>;
   /**
    * @param command - {@linkcode BattleCommand.POKEMON}
    * @param cursor - Cursor index for the selected Pokemon
    * @param isBaton - `true` if the pokemon being switched out is holding the Baton item
    * @returns `true` if the command was successful
    */
-  public handleCommand(command: typeof BattleCommand.POKEMON, cursor: number, isBaton: boolean): boolean;
-  public handleCommand(command: BattleCommand, cursor: number, ...args: unknown[]): boolean {
+  public async handleCommand(command: typeof BattleCommand.POKEMON, cursor: number, isBaton: boolean): Promise<boolean>;
+  public async handleCommand(command: BattleCommand, cursor: number, ...args: unknown[]): Promise<boolean> {
     // TODO: refactor this function
     const pokemon = this.getPokemon();
     let success: boolean = false;
@@ -163,7 +172,7 @@ export class CommandPhase extends BattlePhase {
       case BattleCommand.FIGHT: {
         const ignorePp = args[0] as boolean | undefined;
         const turnMove: TurnMove | undefined = args.length === 2 ? (args[1] as TurnMove) : undefined;
-        const useStruggle = cursor > -1 && !pokemon.getMoveset().filter((m) => m.isUsable(pokemon)).length;
+        const useStruggle = cursor > -1 && pokemon.getMoveset().filter((m) => m.isUsable(pokemon)).length === 0;
 
         if (cursor === -1 || pokemon.trySelectMove(cursor, ignorePp) || useStruggle) {
           let moveId: MoveId;
@@ -210,7 +219,7 @@ export class CommandPhase extends BattlePhase {
           } else if (
             turnCommand.turnMove
             && pokemon.hasTag(BattlerTagType.CHARGING)
-            && pokemon.getMoveQueue().length >= 1
+            && pokemon.getMoveQueue().length > 0
           ) {
             turnCommand.turnMove.targets = pokemon.getMoveQueue()[0].targets;
           } else {
@@ -372,16 +381,16 @@ export class CommandPhase extends BattlePhase {
     }
 
     if (success) {
-      this.end();
+      await this.end();
     }
 
     return success;
   }
 
-  public cancel(): void {
+  public async cancel(): Promise<void> {
     if (this.fieldIndex) {
       globalScene.phaseManager.unshiftPhase(new CommandPhase(0), new CommandPhase(1));
-      this.end();
+      await this.end();
     }
   }
 
@@ -393,7 +402,8 @@ export class CommandPhase extends BattlePhase {
     return globalScene.getPlayerField()[this.fieldIndex];
   }
 
-  public override end(): void {
-    globalScene.ui.setMessageMode().then(() => super.end());
+  public override async end(): Promise<void> {
+    await globalScene.ui.setMessageMode();
+    super.end();
   }
 }
