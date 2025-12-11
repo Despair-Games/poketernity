@@ -43,8 +43,8 @@ export class GameOverPhase extends BattlePhase {
     this.isVictory = isVictory;
   }
 
-  public override start(): void {
-    const { currentBattle, gameData, gameMode, ui } = globalScene;
+  public override async start(): Promise<void> {
+    const { currentBattle, gameData, gameMode, phaseManager, ui, sessionSlotId } = globalScene;
 
     // Failsafe if players somehow skip floor 200 in classic mode
     if (gameMode.isClassic && currentBattle.waveIndex > 200) {
@@ -59,26 +59,24 @@ export class GameOverPhase extends BattlePhase {
     }
 
     if (this.isVictory || !settings.general.enableRetries) {
-      this.handleGameOver();
+      await this.handleGameOver();
     } else {
-      const reloadGame = (): void => {
-        ui.fadeOut(1250).then(() => {
-          globalScene.reset();
-          globalScene.phaseManager.clear();
-          gameData.loadSession(globalScene.sessionSlotId).then(() => {
-            globalScene.phaseManager.createAndPushPhase("EncounterPhase", true);
-            ui.fadeIn(1250);
-            this.end();
-          });
-        });
+      const reloadGame = async (): Promise<void> => {
+        await ui.fadeOut(1250);
+        globalScene.reset();
+        phaseManager.clear();
+        await gameData.loadSession(sessionSlotId);
+        phaseManager.createAndPushPhase("EncounterPhase", true);
+        ui.fadeIn(1250);
+        this.end();
       };
 
       ui.showText(i18next.t("battle:retryBattle"), {
         callback: () => {
           const retryOptions: ConfirmModeConfig = {
             yesHandler: reloadGame,
-            noHandler: () => {
-              this.handleGameOver();
+            noHandler: async () => {
+              await this.handleGameOver();
             },
             inputDelay: 1000,
           };
@@ -88,12 +86,12 @@ export class GameOverPhase extends BattlePhase {
     }
   }
 
-  protected handleGameOver(): void {
-    const { gameData, gameMode, ui } = globalScene;
+  protected async handleGameOver(): Promise<void> {
+    const { audioManager, charSprite, gameData, gameMode, phaseManager, ui, sessionSlotId, time } = globalScene;
 
     const doGameOver = (newClear: boolean): void => {
       globalScene.disableMenu = true;
-      globalScene.time.delayedCall(1000, () => {
+      time.delayedCall(1000, async () => {
         let firstClear = false;
 
         if (this.isVictory && newClear) {
@@ -114,89 +112,74 @@ export class GameOverPhase extends BattlePhase {
         }
 
         const fadeDuration = this.isVictory ? 10000 : 5000;
-        globalScene.audioManager.fadeOutBgm(fadeDuration, true);
+        audioManager.fadeOutBgm(fadeDuration, true);
         const activeBattlers = globalScene.getField().filter((p) => p?.isActive(true));
         activeBattlers.map((p) => p.hideInfo());
 
-        ui.fadeOut(fadeDuration).then(() => {
-          activeBattlers.map((a) => a.setVisible(false));
-          globalScene.setFieldScale(1, true);
-          globalScene.phaseManager.clear();
-          ui.clearText();
+        await ui.fadeOut(fadeDuration);
+        activeBattlers.map((a) => a.setVisible(false));
+        globalScene.setFieldScale(1, true);
+        phaseManager.clear();
+        ui.clearText();
 
-          if (this.isVictory && gameMode.isChallenge) {
-            gameMode.challenges.forEach((c) => globalScene.validateAchvs(AchvCategory.CHALLENGE, c));
-          }
+        if (this.isVictory && gameMode.isChallenge) {
+          gameMode.challenges.forEach((c) => globalScene.validateAchvs(AchvCategory.CHALLENGE, c));
+        }
 
-          const clear = (endCardPhase?: EndCardPhase): void => {
-            if (this.isVictory && newClear) {
-              this.handleUnlocks();
+        const clear = async (endCardPhase?: EndCardPhase): Promise<void> => {
+          if (this.isVictory && newClear) {
+            this.handleUnlocks();
 
-              for (const species of this.firstRibbons) {
-                globalScene.phaseManager.createAndUnshiftPhase(
-                  "RibbonModifierRewardPhase",
-                  modifierTypes.VOUCHER_PLUS,
-                  species,
-                );
-              }
-
-              if (!firstClear) {
-                globalScene.phaseManager.createAndUnshiftPhase(
-                  "GameOverModifierRewardPhase",
-                  modifierTypes.VOUCHER_PREMIUM,
-                );
-              }
+            for (const species of this.firstRibbons) {
+              phaseManager.createAndUnshiftPhase("RibbonModifierRewardPhase", modifierTypes.VOUCHER_PLUS, species);
             }
 
-            this.getRunHistoryEntry().then((runHistoryEntry) => {
-              gameData.saveRunHistory(runHistoryEntry, this.isVictory);
-              globalScene.phaseManager.createAndPushPhase("PostGameOverPhase", endCardPhase);
-              this.end();
-            });
+            if (!firstClear) {
+              phaseManager.createAndUnshiftPhase("GameOverModifierRewardPhase", modifierTypes.VOUCHER_PREMIUM);
+            }
+          }
+
+          const runHistoryEntry = await this.getRunHistoryEntry();
+          gameData.saveRunHistory(runHistoryEntry, this.isVictory);
+          phaseManager.createAndPushPhase("PostGameOverPhase", endCardPhase);
+          this.end();
+        };
+
+        if (this.isVictory && gameMode.isClassic) {
+          const dialogueKey = "miscDialogue:ending";
+          const displayEndCard = async (): Promise<void> => {
+            const endCardPhase = phaseManager.createPhase("EndCardPhase");
+            phaseManager.unshiftPhase(endCardPhase);
+            await clear(endCardPhase);
           };
 
-          if (this.isVictory && gameMode.isClassic) {
-            const dialogueKey = "miscDialogue:ending";
-            const displayEndCard = (): void => {
-              const endCardPhase = globalScene.phaseManager.createPhase("EndCardPhase");
-              globalScene.phaseManager.unshiftPhase(endCardPhase);
-              clear(endCardPhase);
-            };
-
-            const playerGender = settings.display.playerGender;
-            if (ui.shouldSkipDialogue(dialogueKey)) {
-              displayEndCard();
-            } else {
-              ui.fadeIn(500).then(() => {
-                const genderIndex = playerGender ?? PlayerGender.UNSET;
-                const genderStr = enumValueToKey(PlayerGender, genderIndex).toLowerCase();
-                // Dialogue has to be retrieved so that the rival's expressions can be loaded and shown via getCharVariantFromDialogue
-                const dialogue = i18next.t(dialogueKey, { context: genderStr });
-                const rivalName =
-                  playerGender === PlayerGender.FEMALE
-                    ? allTrainerConfigs[TrainerType.RIVAL].name
-                    : allTrainerConfigs[TrainerType.RIVAL].nameFemale;
-
-                globalScene.charSprite
-                  .showCharacter(
-                    `rival_${playerGender === PlayerGender.FEMALE ? "m" : "f"}`,
-                    getCharVariantFromDialogue(dialogue),
-                  )
-                  .then(() => {
-                    ui.showDialogue(dialogueKey, rivalName, () => {
-                      ui.fadeOut(500).then(() => {
-                        globalScene.charSprite.hide().then(() => {
-                          displayEndCard();
-                        });
-                      });
-                    });
-                  });
-              });
-            }
+          const playerGender = settings.display.playerGender;
+          if (ui.shouldSkipDialogue(dialogueKey)) {
+            await displayEndCard();
           } else {
-            clear();
+            await ui.fadeIn(500);
+            const genderIndex = playerGender ?? PlayerGender.UNSET;
+            const genderStr = enumValueToKey(PlayerGender, genderIndex).toLowerCase();
+            // Dialogue has to be retrieved so that the rival's expressions can be loaded and shown via getCharVariantFromDialogue
+            const dialogue = i18next.t(dialogueKey, { context: genderStr });
+            const rivalName =
+              playerGender === PlayerGender.FEMALE
+                ? allTrainerConfigs[TrainerType.RIVAL].name
+                : allTrainerConfigs[TrainerType.RIVAL].nameFemale;
+
+            await charSprite.showCharacter(
+              `rival_${playerGender === PlayerGender.FEMALE ? "m" : "f"}`,
+              getCharVariantFromDialogue(dialogue),
+            );
+            ui.showDialogue(dialogueKey, rivalName, async () => {
+              await ui.fadeOut(500);
+              await charSprite.hide();
+              await displayEndCard();
+            });
           }
-        });
+        } else {
+          await clear();
+        }
       });
     };
 
@@ -206,35 +189,37 @@ export class GameOverPhase extends BattlePhase {
      * If Offline, execute offlineNewClear() only for victory, a localStorage implementation of newClear daily run checks
      */
     if (!api.isLocal || api.isConnected) {
-      api.savedata.session
-        .newclear({ slot: globalScene.sessionSlotId, isVictory: this.isVictory, clientSessionId })
-        .then((success) => doGameOver(success));
-    } else if (this.isVictory) {
-      gameData.offlineNewClear().then((result) => {
-        doGameOver(result);
+      const success = await api.savedata.session.newclear({
+        slot: sessionSlotId,
+        isVictory: this.isVictory,
+        clientSessionId,
       });
+      doGameOver(success);
+    } else if (this.isVictory) {
+      const result = await gameData.offlineNewClear();
+      doGameOver(result);
     } else {
       doGameOver(false);
     }
   }
 
   protected handleUnlocks(): void {
-    const { gameData, gameMode } = globalScene;
+    const { gameData, gameMode, phaseManager } = globalScene;
 
     if (this.isVictory && gameMode.isClassic) {
       if (!gameData.unlocks[Unlockables.CHALLENGE_MODE]) {
-        globalScene.phaseManager.createAndUnshiftPhase("UnlockPhase", Unlockables.CHALLENGE_MODE);
+        phaseManager.createAndUnshiftPhase("UnlockPhase", Unlockables.CHALLENGE_MODE);
       }
 
       if (!gameData.unlocks[Unlockables.MINI_BLACK_HOLE]) {
-        globalScene.phaseManager.createAndUnshiftPhase("UnlockPhase", Unlockables.MINI_BLACK_HOLE);
+        phaseManager.createAndUnshiftPhase("UnlockPhase", Unlockables.MINI_BLACK_HOLE);
       }
 
       if (
         !gameData.unlocks[Unlockables.EVIOLITE]
         && globalScene.getPlayerParty().some((p) => p.getSpeciesForm(true).speciesId in pokemonEvolutions)
       ) {
-        globalScene.phaseManager.createAndUnshiftPhase("UnlockPhase", Unlockables.EVIOLITE);
+        phaseManager.createAndUnshiftPhase("UnlockPhase", Unlockables.EVIOLITE);
       }
     }
   }
@@ -253,9 +238,9 @@ export class GameOverPhase extends BattlePhase {
    * @returns A promise containing the {@linkcode SessionSaveData}
    */
   private async getRunHistoryEntry(): Promise<SessionSaveData> {
-    const { currentBattle, gameData } = globalScene;
+    const { currentBattle, gameData, sessionSlotId } = globalScene;
 
-    const preWaveSessionData = await gameData.getSession(globalScene.sessionSlotId);
+    const preWaveSessionData = await gameData.getSession(sessionSlotId);
     const sessionSaveData = gameData.getSessionSaveData();
 
     if (preWaveSessionData) {
