@@ -118,9 +118,9 @@ export class AudioManager {
 
   /**
    * Fades out the current BGM track.
-   * @param duration - The duration of the fade out, in milliseconds.
-   * @param destroy - If `true`, the BGM will be destroyed after fading out.
-   * @returns `true` if the BGM was faded out, `false` otherwise.
+   * @param duration - (Default `500`) The duration of the fade out, in milliseconds.
+   * @param destroy - (Default `true`) Whether the BGM will be destroyed after fading out.
+   * @returns Whether the BGM was faded out successfully.
    */
   public fadeOutBgm(duration: number = 500, destroy: boolean = true): boolean {
     if (!this.bgm) {
