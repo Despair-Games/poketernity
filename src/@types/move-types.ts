@@ -1,13 +1,10 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: TSDoc imports */
 import type { ConditionalProtectTag } from "#arena-tags/conditional-protect-tag";
-import type { SpeciesId } from "#enums/species-id";
-/* biome-ignore-end lint/correctness/noUnusedImports: TSDoc imports */
-
 import type { BattlerIndex, FieldBattlerIndex } from "#enums/battler-index";
 import type { ElementalType } from "#enums/elemental-type";
 import type { HitResult } from "#enums/hit-result";
 import type { MoveId } from "#enums/move-id";
 import type { MoveResult } from "#enums/move-result";
+import type { SpeciesId } from "#enums/species-id";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 

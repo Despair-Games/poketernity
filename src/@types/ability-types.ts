@@ -1,10 +1,7 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { PokemonWaveData } from "#types/pokemon-types";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import type { AbAttrConstructorMap } from "#abilities/ab-attr-constructor-map";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
+import type { PokemonWaveData } from "#types/pokemon-types";
 
 /** Union type of all referable ability attribute class names as strings */
 export type AbAttrKey = keyof AbAttrConstructorMap;

@@ -1,10 +1,3 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { NewArenaEvent } from "#events/battle-scene";
-import type { Arena } from "#field/arena";
-import type { AttemptRunPhase } from "#phases/attempt-run-phase";
-import type { GameManager } from "#test/test-utils/game-manager";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import type { BattleStyle } from "#app/overrides";
 import { activeOverrides, defaultOverrides } from "#app/overrides";
 import { timedEventManager } from "#app/timed-event-manager";
@@ -22,7 +15,11 @@ import { TerrainType } from "#enums/terrain-type";
 import { TrainerType } from "#enums/trainer-type";
 import type { Unlockables } from "#enums/unlockables";
 import { WeatherType } from "#enums/weather-type";
+import type { NewArenaEvent } from "#events/battle-scene";
+import type { Arena } from "#field/arena";
 import type { ModifierOverride } from "#modifier/modifier-type";
+import type { AttemptRunPhase } from "#phases/attempt-run-phase";
+import type { GameManager } from "#test/test-utils/game-manager";
 import { GameManagerHelper } from "#test/test-utils/helpers/game-manager-helper";
 import type { TimedEvent } from "#types/timed-event";
 import { coerceArray, enumValueToKey } from "#utils/common-utils";

@@ -1,8 +1,5 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { VariableMovePowerAbAttr } from "#abilities/variable-move-power-ab-attr";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import { PreAttackAbAttr } from "#abilities/pre-attack-ab-attr";
+import type { VariableMovePowerAbAttr } from "#abilities/variable-move-power-ab-attr";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import type { PokemonAttackCondition } from "#types/move-types";

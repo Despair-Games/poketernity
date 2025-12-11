@@ -1,7 +1,3 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { Arena } from "#field/arena";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import type { BiomeId } from "#enums/biome-id";
 import type { BiomePoolTier } from "#enums/biome-pool-tier";
 import type { SpeciesId } from "#enums/species-id";
@@ -9,6 +5,7 @@ import type { TerrainType } from "#enums/terrain-type";
 import type { TimeOfDay } from "#enums/time-of-day";
 import type { TrainerType } from "#enums/trainer-type";
 import type { WeatherType } from "#enums/weather-type";
+import type { Arena } from "#field/arena";
 
 /**
  * @todo

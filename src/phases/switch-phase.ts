@@ -1,7 +1,3 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { RecallPhase } from "#phases/recall-phase";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import { globalScene } from "#app/global-scene";
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
@@ -15,6 +11,7 @@ import { UiMode } from "#enums/ui-mode";
 import type { Pokemon } from "#field/pokemon";
 import type { SwitchEffectTransferModifier } from "#modifier/modifier";
 import { PokemonPhase } from "#phases/base/pokemon-phase";
+import type { RecallPhase } from "#phases/recall-phase";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
 import { inSpeedOrder } from "#utils/speed-order-generator";
 

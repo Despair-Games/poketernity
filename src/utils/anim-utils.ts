@@ -1,13 +1,10 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { initCommonAnims } from "#init/init-common-anims";
-import type { initEncounterAnims } from "#init/init-encounter-anims";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import type { LegacyAnimConfig } from "#animations/anim-config";
 import { commonAnims } from "#animations/common-anims";
 import { encounterAnims } from "#animations/encounter-anims";
 import { globalScene } from "#app/global-scene";
 import { ImagesFolder } from "#enums/images-folder";
+import type { initCommonAnims } from "#init/init-common-anims";
+import type { initEncounterAnims } from "#init/init-encounter-anims";
 import type { Scene } from "phaser";
 
 type TweenBuilderConfig = Phaser.Types.Tweens.TweenBuilderConfig;

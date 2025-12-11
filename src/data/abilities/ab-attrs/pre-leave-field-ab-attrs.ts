@@ -1,9 +1,6 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: TSDoc imports */
-import type { Weather } from "#data/weather";
-/* biome-ignore-end lint/correctness/noUnusedImports: TSDoc imports */
-
 import { AbAttr } from "#abilities/ab-attr";
 import { globalScene } from "#app/global-scene";
+import type { Weather } from "#data/weather";
 import { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
 

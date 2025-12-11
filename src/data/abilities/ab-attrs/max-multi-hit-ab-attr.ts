@@ -1,9 +1,6 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { MultiHitAttr } from "#moves/multi-hit-attr";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import { AbAttr } from "#abilities/ab-attr";
 import type { Pokemon } from "#field/pokemon";
+import type { MultiHitAttr } from "#moves/multi-hit-attr";
 import type { ValueHolder } from "#utils/common-utils";
 
 export class MaxMultiHitAbAttr extends AbAttr {

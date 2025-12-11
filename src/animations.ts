@@ -1,7 +1,4 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { BattleAnim } from "#animations/battle-anims";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import { globalScene } from "#app/global-scene";
 import type { Variant } from "#data/variant";
 import { PokeballType } from "#enums/pokeball-type";

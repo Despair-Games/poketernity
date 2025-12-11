@@ -1,7 +1,3 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { Pokemon } from "#field/pokemon";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import type { BattleAnim } from "#animations/battle-anims";
 import type { easeFunctions } from "#animations/ease-functions";
 import type { MoveAnim } from "#animations/move-anim";
@@ -11,6 +7,7 @@ import { AnimFocus } from "#enums/anim-focus";
 import { AnimFrameTarget } from "#enums/anim-frame-target";
 import type { AnimTimedEventType } from "#enums/anim-timed-event-type";
 import type { MoveId } from "#enums/move-id";
+import type { Pokemon } from "#field/pokemon";
 import { getFrameMs } from "#utils/common-utils";
 import type Phaser from "phaser";
 

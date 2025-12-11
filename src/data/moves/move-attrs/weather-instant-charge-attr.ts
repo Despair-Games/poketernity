@@ -1,10 +1,7 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { ChargingMove } from "#moves/move";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import { globalScene } from "#app/global-scene";
 import type { WeatherType } from "#enums/weather-type";
 import { InstantChargeAttr } from "#moves/instant-charge-attr";
+import type { ChargingMove } from "#moves/move";
 import type { NonEmptyArray } from "#types/utility-types";
 
 /**

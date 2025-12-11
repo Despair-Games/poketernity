@@ -1,7 +1,3 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { GeneralSettingsUiHandler } from "#ui/general-settings-ui-handler";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import { GAME_SPEEDS } from "#constants/app-constants";
 import { BattleStyle } from "#enums/battle-style";
 import { DamageNumbersMode } from "#enums/damage-numbers-mode";
@@ -187,7 +183,7 @@ export const generalSettingsUiItems: SettingsUiItem<GeneralSettingsKey>[] = [
     options: [
       {
         value: 0,
-        /** Replaced with the actual label in {@linkcode GeneralSettingsUiHandler.updateMoveTouchControlsSettingsLabel} */
+        // Replaced with the actual label in `GeneralSettingsUiHandler#updateMoveTouchControlsSettingsLabel`
         label: "ORIENTATION",
       },
       {

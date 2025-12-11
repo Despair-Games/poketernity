@@ -1,11 +1,7 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { MysteryEncounterOption } from "#mystery-encounters/mystery-encounter-option";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { transitionMysteryEncounterIntroVisuals } from "#mystery-encounters/encounter-visuals-utils";
-import type { OptionPhaseCallback } from "#mystery-encounters/mystery-encounter-option";
+import type { MysteryEncounterOption, OptionPhaseCallback } from "#mystery-encounters/mystery-encounter-option";
 
 /**
  * Will handle (in order):

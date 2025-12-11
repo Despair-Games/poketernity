@@ -1,8 +1,3 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { CommandPhase } from "#phases/command-phase";
-import type { TurnEndPhase } from "#phases/turn-end-phase";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import { updateUserInfo } from "#app/account";
 import { BattleScene } from "#app/battle-scene";
 import { getGameMode } from "#app/game-mode";
@@ -27,6 +22,8 @@ import type { Pokemon } from "#field/pokemon";
 import { Trainer } from "#field/trainer";
 import { ModifierTypeOption } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
+import type { CommandPhase } from "#phases/command-phase";
+import type { TurnEndPhase } from "#phases/turn-end-phase";
 import { settings } from "#system/settings-manager";
 import { ErrorInterceptor } from "#test/test-utils/error-interceptor";
 import { generateStarter, waitUntil } from "#test/test-utils/game-manager-utils";

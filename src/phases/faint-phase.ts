@@ -1,15 +1,10 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
+import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { PostFaintAbAttr } from "#abilities/post-faint-ab-attr";
 import type { PostKnockOutAbAttr } from "#abilities/post-knock-out-ab-attr";
 import type { PostVictoryAbAttr } from "#abilities/post-victory-ab-attr";
-import type { BattlerTag } from "#battler-tags/battler-tag";
-import type { GameOverPhase } from "#phases/game-over-phase";
-import type { MovePhase } from "#phases/move-phase";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
-import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import type { BattlerTag } from "#battler-tags/battler-tag";
 import type { DestinyBondTag } from "#battler-tags/destiny-bond-tag";
 import type { GrudgeTag } from "#battler-tags/grudge-tag";
 import type { SkyDropTag } from "#battler-tags/sky-drop-tag";
@@ -28,6 +23,8 @@ import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-fo
 import { PokemonInstantReviveModifier } from "#modifier/modifier";
 import { PostVictoryStatStageChangeAttr } from "#moves/post-victory-stat-stage-change-attr";
 import { PokemonPhase } from "#phases/base/pokemon-phase";
+import type { GameOverPhase } from "#phases/game-over-phase";
+import type { MovePhase } from "#phases/move-phase";
 import { inSpeedOrder } from "#utils/speed-order-generator";
 import i18next from "i18next";
 

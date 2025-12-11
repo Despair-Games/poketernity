@@ -1,9 +1,6 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
+import { ImagesFolder } from "#enums/images-folder";
 import { UiTheme } from "#enums/ui-theme";
 import { UiWindowStyle } from "#enums/ui-window-style";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
-import { ImagesFolder } from "#enums/images-folder";
 import { settings } from "#system/settings-manager";
 import { windowStyleDependantAtlases } from "#ui/ui-theme";
 import { coerceArray, enumValueToKey } from "#utils/common-utils";
