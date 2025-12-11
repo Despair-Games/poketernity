@@ -56,7 +56,7 @@ export class TitlePhase extends Phase {
   }
 
   protected showOptions(): void {
-    const { gameData, ui } = globalScene;
+    const { gameData, phaseManager, ui } = globalScene;
     const titleOptions: OptionSelectItem[] = [];
 
     if (loggedInUser && loggedInUser.lastSessionSlot > -1) {
@@ -107,7 +107,7 @@ export class TitlePhase extends Phase {
           opts.push({
             label: i18next.t("menu:cancel"),
             handler: () => {
-              globalScene.phaseManager.toTitleScreen({ clearPhaseQueue: true });
+              phaseManager.toTitleScreen({ clearPhaseQueue: true });
               super.end();
               return true;
             },
@@ -148,7 +148,7 @@ export class TitlePhase extends Phase {
       options: titleOptions,
       blockCancelButton: true,
     };
-    globalScene.ui.setMode<TitleUiHandler>(UiMode.TITLE, config);
+    ui.setMode<TitleUiHandler>(UiMode.TITLE, config);
   }
 
   public loadSaveSlot(slotId: number): void {
@@ -174,115 +174,114 @@ export class TitlePhase extends Phase {
   }
 
   public initDailyRun(): void {
-    const { gameData, time, ui } = globalScene;
+    const { arena, audioManager, gameData, phaseManager, time, ui } = globalScene;
 
-    ui.setMode<SaveSlotSelectUiHandler>(UiMode.SAVE_SLOT, SaveSlotUiMode.SAVE, (slotId: number) => {
-      globalScene.phaseManager.clear();
+    const generateDaily = async (seed: string): Promise<void> => {
+      const gameMode = getGameMode(GameModes.DAILY);
+      globalScene.gameMode = gameMode;
+
+      globalScene.setSeed(seed);
+      globalScene.resetSeed(0);
+
+      globalScene.money = gameMode.getStartingMoney();
+
+      const starters = getDailyRunStarters(seed);
+      const startingLevel = gameMode.getStartingLevel();
+      const party = globalScene.getPlayerParty();
+      const loadPokemonAssets: Promise<void>[] = [];
+
+      for (const starter of starters) {
+        const starterProps = gameData.getSpeciesDexAttrProps(starter.species, starter.dexAttr);
+        const { abilityIndex, nature } = starter;
+        const { gender, shiny, variant } = starterProps;
+        const formIndex = Math.min(starterProps.formIndex, Math.max(starter.species.forms.length - 1, 0));
+        const starterPokemon = globalScene.addPlayerPokemon(starter.species, startingLevel, {
+          abilityIndex,
+          formIndex,
+          gender,
+          shiny,
+          variant,
+          nature,
+        });
+        starterPokemon.setVisible(false);
+        party.push(starterPokemon);
+        loadPokemonAssets.push(starterPokemon.loadAssets());
+      }
+
+      regenerateModifierPoolThresholds(party, ModifierPoolType.DAILY_STARTER);
+
+      const modifiers: Modifier[] = new Array(3)
+        .fill(null)
+        .map(() => modifierTypes.EXP_SHARE().withIdFromFunc(modifierTypes.EXP_SHARE).newModifier())
+        .concat(
+          new Array(3)
+            .fill(null)
+            .map(() => modifierTypes.GOLDEN_EXP_CHARM().withIdFromFunc(modifierTypes.GOLDEN_EXP_CHARM).newModifier()),
+        )
+        .concat([modifierTypes.MAP().withIdFromFunc(modifierTypes.MAP).newModifier()])
+        .concat(getDailyRunStarterModifiers(party))
+        .filter((m) => m !== null);
+
+      for (const m of modifiers) {
+        globalScene.addModifier(m, true, false, false, true);
+      }
+      globalScene.updateModifiers(true, true);
+
+      await Promise.all(loadPokemonAssets);
+      time.delayedCall(500, () => audioManager.playBgm());
+      gameData.gameStats.dailyRunSessionsPlayed++;
+      globalScene.newArena(gameMode.getStartingBiome());
+      globalScene.newBattle();
+      arena.init();
+      globalScene.sessionPlayTime = 0;
+      globalScene.lastSavePlayTime = 0;
+      this.end();
+    };
+
+    const slotSelectCallback = async (slotId: number): Promise<void> => {
+      phaseManager.clear();
       if (slotId === -1) {
-        globalScene.phaseManager.toTitleScreen();
+        phaseManager.toTitleScreen();
         return super.end();
       }
       globalScene.sessionSlotId = slotId;
 
-      const generateDaily = (seed: string): void => {
-        const gameMode = getGameMode(GameModes.DAILY);
-        globalScene.gameMode = gameMode;
-
-        globalScene.setSeed(seed);
-        globalScene.resetSeed(0);
-
-        globalScene.money = gameMode.getStartingMoney();
-
-        const starters = getDailyRunStarters(seed);
-        const startingLevel = gameMode.getStartingLevel();
-        const party = globalScene.getPlayerParty();
-        const loadPokemonAssets: Promise<void>[] = [];
-
-        for (const starter of starters) {
-          const starterProps = gameData.getSpeciesDexAttrProps(starter.species, starter.dexAttr);
-          const { abilityIndex, nature } = starter;
-          const { gender, shiny, variant } = starterProps;
-          const formIndex = Math.min(starterProps.formIndex, Math.max(starter.species.forms.length - 1, 0));
-          const starterPokemon = globalScene.addPlayerPokemon(starter.species, startingLevel, {
-            abilityIndex,
-            formIndex,
-            gender,
-            shiny,
-            variant,
-            nature,
-          });
-          starterPokemon.setVisible(false);
-          party.push(starterPokemon);
-          loadPokemonAssets.push(starterPokemon.loadAssets());
-        }
-
-        regenerateModifierPoolThresholds(party, ModifierPoolType.DAILY_STARTER);
-
-        const modifiers: Modifier[] = new Array(3)
-          .fill(null)
-          .map(() => modifierTypes.EXP_SHARE().withIdFromFunc(modifierTypes.EXP_SHARE).newModifier())
-          .concat(
-            new Array(3)
-              .fill(null)
-              .map(() => modifierTypes.GOLDEN_EXP_CHARM().withIdFromFunc(modifierTypes.GOLDEN_EXP_CHARM).newModifier()),
-          )
-          .concat([modifierTypes.MAP().withIdFromFunc(modifierTypes.MAP).newModifier()])
-          .concat(getDailyRunStarterModifiers(party))
-          .filter((m) => m !== null);
-
-        for (const m of modifiers) {
-          globalScene.addModifier(m, true, false, false, true);
-        }
-        globalScene.updateModifiers(true, true);
-
-        Promise.all(loadPokemonAssets).then(() => {
-          time.delayedCall(500, () => globalScene.audioManager.playBgm());
-          gameData.gameStats.dailyRunSessionsPlayed++;
-          globalScene.newArena(gameMode.getStartingBiome());
-          globalScene.newBattle();
-          globalScene.arena.init();
-          globalScene.sessionPlayTime = 0;
-          globalScene.lastSavePlayTime = 0;
-          this.end();
-        });
-      };
-
       // If Online, calls seed fetch from db to generate daily run. If Offline, generates a daily run based on current date.
       if (!api.isLocal || api.isConnected) {
-        fetchDailyRunSeed()
-          .then((seed) => {
-            if (seed) {
-              generateDaily(seed);
-            } else {
-              throw new Error("Daily run seed is null!");
-            }
-          })
-          .catch((err) => {
-            console.error("Failed to load daily run:\n", err);
-          });
+        try {
+          const seed = await fetchDailyRunSeed();
+          if (!seed) {
+            throw new Error("Daily run seed is `null`!");
+          }
+          await generateDaily(seed);
+        } catch (err) {
+          console.error("Failed to load daily run!\n", err);
+        }
       } else {
-        generateDaily(btoa(new Date().toISOString().substring(0, 10)));
+        await generateDaily(btoa(new Date().toISOString().substring(0, 10)));
       }
-    });
+    };
+
+    ui.setMode<SaveSlotSelectUiHandler>(UiMode.SAVE_SLOT, SaveSlotUiMode.SAVE, slotSelectCallback);
   }
 
   public override end(): void {
-    const { arena, gameData } = globalScene;
+    const { arena, audioManager, gameData, gameMode, phaseManager } = globalScene;
 
-    if (!this.loaded && !globalScene.gameMode.isDaily) {
+    if (!this.loaded && !gameMode.isDaily) {
       globalScene.loadBgm(arena.bgm);
       globalScene.gameMode = getGameMode(this.gameMode);
       if (this.gameMode === GameModes.CHALLENGE) {
-        globalScene.phaseManager.createAndUnshiftPhase("SelectChallengePhase");
+        phaseManager.createAndUnshiftPhase("SelectChallengePhase");
       } else {
-        globalScene.phaseManager.createAndUnshiftPhase("SelectStarterPhase");
+        phaseManager.createAndUnshiftPhase("SelectStarterPhase");
       }
-      globalScene.newArena(globalScene.gameMode.getStartingBiome());
+      globalScene.newArena(gameMode.getStartingBiome());
     } else {
-      globalScene.audioManager.playBgm();
+      audioManager.playBgm();
     }
 
-    globalScene.phaseManager.createAndUnshiftPhase("EncounterPhase", this.loaded);
+    phaseManager.createAndUnshiftPhase("EncounterPhase", this.loaded);
 
     for (const achv of Object.keys(gameData.achvUnlocks)) {
       if (Object.hasOwn(vouchers, achv) && achv !== "CLASSIC_VICTORY") {
