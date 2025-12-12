@@ -112,7 +112,7 @@ export type TrainerConfigMap = Partial<Record<TrainerType, NewTrainerConfig>>;
  * A cache of {@linkcode NewTrainerConfig}s organized by {@linkcode TrainerSlot}.
  * All slots except for {@linkcode TrainerSlot.NONE} must have a mapped config.
  */
-type ConfigSlotMap = Record<NonNullTrainerSlot, NewTrainerConfig>;
+export type TrainerSlotMap<T> = Record<NonNullTrainerSlot, T>;
 
 // #region CompoundTrainerConfig
 /**
@@ -121,7 +121,7 @@ type ConfigSlotMap = Record<NonNullTrainerSlot, NewTrainerConfig>;
  * included configs.
  */
 export class CompoundTrainerConfig {
-  public readonly configs: ConfigSlotMap;
+  public readonly configs: TrainerSlotMap<NewTrainerConfig>;
   public readonly combinedTitle: string;
   /**
    * If `true`, all Trainers' party Pokemon are generated using the same seed
@@ -135,7 +135,11 @@ export class CompoundTrainerConfig {
    */
   public readonly useSameSeedForAllTrainers: boolean;
 
-  constructor(configs: ConfigSlotMap, combinedTitle: string, useSameSeedForAllTrainers: boolean = false) {
+  constructor(
+    configs: TrainerSlotMap<NewTrainerConfig>,
+    combinedTitle: string,
+    useSameSeedForAllTrainers: boolean = false,
+  ) {
     this.configs = configs;
     this.combinedTitle = combinedTitle;
     this.useSameSeedForAllTrainers = useSameSeedForAllTrainers;
@@ -148,8 +152,7 @@ export class CompoundTrainerConfig {
    * Trainers involved {@link NewTrainerConfig.isBoss | is a boss}.
    */
   public get isBoss(): boolean {
-    const configValues = Object.values(this.configs).map((cfg) => cfg.isBoss);
-    return configValues.includes(true);
+    return Object.values(this.configs).some((cfg) => cfg.isBoss);
   }
 
   /**

@@ -4,23 +4,26 @@ import type { EntryHazardTag } from "#arena-tags/entry-hazard-tag";
 import { ENTRY_HAZARD_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
 import { LEVEL_CAP_SCALE_FACTOR } from "#constants/game-constants";
 import { getLevelForWaveFunc } from "#data/exp";
+import type { TrainerSlotMap } from "#data/new-trainer-config";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import type { PokemonSpecies } from "#data/pokemon-species";
 import { signatureSpecies } from "#data/signature-species";
 import type { TrainerConfig, TrainerPartyTemplate } from "#data/trainer-config";
 import { TrainerPartyCompoundTemplate, trainerPartyTemplates } from "#data/trainer-config";
+import { type CompoundTrainerData, TrainerData } from "#data/trainer-data";
 import { trainerNamePools } from "#data/trainer-names";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { SpeciesId } from "#enums/species-id";
 import { TeraAIMode } from "#enums/tera-ai-mode";
 import { TrainerPoolTier } from "#enums/trainer-pool-tier";
-import { TrainerSlot } from "#enums/trainer-slot";
+import { type NonNullTrainerSlot, TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
 import { TrainerVariant } from "#enums/trainer-variant";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PersistentModifier } from "#modifier/modifier";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
+import { playTween } from "#utils/anim-utils";
 import { enumValueToKey } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedInt, randSeedItem } from "#utils/random-utils";
@@ -784,5 +787,195 @@ export class Trainer extends Phaser.GameObjects.Container {
       return true;
     }
     return false;
+  }
+}
+
+interface InitSpriteOptions {
+  hasShadow?: boolean;
+  visible?: boolean;
+}
+
+interface TintOptions {
+  color?: number;
+  alpha?: number;
+  duration?: number;
+  ease?: string;
+}
+
+interface UntintOptions {
+  duration?: number;
+  ease?: string;
+}
+
+const TRAINER_SPRITE_DOUBLE_BATTLE_X_POSITIONS: TrainerSlotMap<number> = {
+  [TrainerSlot.TRAINER]: -4,
+  [TrainerSlot.TRAINER_PARTNER]: 28,
+};
+
+export class TrainerSprite extends Phaser.GameObjects.Container {
+  constructor({ spriteKey }: TrainerData) {
+    super(globalScene, -72, 80);
+    this.type = "TrainerSprite";
+
+    // Main sprite
+    this.initSprite(spriteKey, { hasShadow: true });
+    // Tint sprite
+    this.initSprite(spriteKey, { visible: false });
+  }
+
+  /**
+   * Initializes a Sprite and adds it to this container
+   * @param spriteKey - The texture of the added sprite
+   * @param hasShadow - (Default `false`) If `true`, adds a shadow to the sprite
+   * @param visible - (Default `true`) Whether to show the sprite after adding it
+   * @returns The added {@linkcode Phaser.GameObjects.Sprite | Sprite}
+   */
+  private initSprite(
+    spriteKey: string,
+    { hasShadow = false, visible = true }: InitSpriteOptions = {},
+  ): Phaser.GameObjects.Sprite {
+    const sprite = globalScene
+      .addFieldSprite(0, 0, spriteKey)
+      .setOrigin(0.5, 1)
+      .setPipeline(globalScene.spritePipeline, {
+        tone: [0.0, 0.0, 0.0, 0.0],
+        hasShadow,
+      })
+      .setVisible(visible);
+
+    this.add(sprite);
+
+    return sprite;
+  }
+
+  /** @returns The Trainer's sprite list (i.e. `[sprite, tintSprite]`) */
+  private get sprites(): Phaser.GameObjects.Sprite[] {
+    return this.list.filter((gameObj) => gameObj instanceof Phaser.GameObjects.Sprite);
+  }
+
+  /**
+   * Applies a "tint fill" to the main sprite by layering the filled tint sprite
+   * over it.
+   * @param color - (Default `0xffffff` (white)) The color of the tint sprite
+   * @param alpha - (Default 1) The final opacity of the tint sprite
+   * @param duration - (Default 0) The time (ms) to apply the tint. If set to 0,
+   * the tint is applied instantly.
+   * @param ease - (Default "Linear") The easing function for interpolation
+   * @async
+   */
+  public async tint({ color = 0xffffff, alpha = 1, duration = 0, ease = "Linear" }: TintOptions = {}): Promise<void> {
+    const [, tintSprite] = this.sprites;
+
+    tintSprite.setTintFill(color);
+    tintSprite.setVisible(true);
+    if (duration > 0) {
+      tintSprite.setAlpha(0);
+
+      await playTween({
+        targets: tintSprite,
+        alpha,
+        duration,
+        ease,
+      });
+    } else {
+      tintSprite.setAlpha(alpha);
+    }
+  }
+
+  /**
+   * If visible, hides the tint sprite.
+   * @param duration - (Default 0) The time (ms) to fade out the tint. If set to 0,
+   * the tint is hidden instantly.
+   * @param ease - (Default "Linear") The easing function for interpolation
+   * @async
+   */
+  public async untint({ duration = 0, ease = "Linear" }: UntintOptions = {}): Promise<void> {
+    const [, tintSprite] = this.sprites;
+    if (!tintSprite.visible) {
+      return;
+    }
+
+    if (duration > 0) {
+      await playTween({
+        targets: tintSprite,
+        alpha: 0,
+        duration,
+        ease,
+      });
+    }
+
+    tintSprite.setVisible(false);
+    tintSprite.setAlpha(1);
+  }
+
+  public playAnim(): void {
+    this.sprites.forEach((sprite) => this.tryPlaySprite(sprite));
+  }
+
+  /**
+   * Plays an individual sprite's animation (if it has one).
+   * @param sprite - The {@linkcode Phaser.GameObjects.Sprite | Sprite} to animate
+   * @returns `true` if the sprite animated correctly
+   */
+  private tryPlaySprite(sprite: Phaser.GameObjects.Sprite): boolean {
+    const animConfig = {
+      key: sprite.texture.key,
+      repeat: 0,
+      startFrame: 0,
+    };
+
+    // Show an error in the console if there isn't a texture loaded
+    if (sprite.texture.key === "__MISSING") {
+      console.error(`No texture found for '${animConfig.key}'!`);
+
+      return false;
+    }
+
+    // Don't try to play an animation when there isn't one
+    if (sprite.texture.frameTotal <= 1) {
+      console.warn(`No animation found for '${animConfig.key}'. Is this intentional?`);
+
+      return false;
+    }
+
+    sprite.play(animConfig);
+    return true;
+  }
+}
+
+/**
+ * A container for one or more {@linkcode TrainerSprite}s to be displayed during a battle.
+ */
+export class TrainerSpriteSet extends Phaser.GameObjects.Container {
+  public trainerSprites: Partial<TrainerSlotMap<TrainerSprite>>;
+
+  constructor(data: TrainerData | CompoundTrainerData) {
+    super(globalScene, -72, 80);
+    this.type = "TrainerSpriteSet";
+
+    if (data instanceof TrainerData) {
+      this.trainerSprites[data.trainerSlot] = new TrainerSprite(data);
+    } else {
+      for (const [key, td] of Object.entries(data.trainerData)) {
+        const trainerSlot = Number(key) as NonNullTrainerSlot;
+        this.trainerSprites[trainerSlot] = new TrainerSprite(td);
+      }
+    }
+
+    const entries = Object.entries(this.trainerSprites);
+    for (const [key, trainerSprite] of entries) {
+      this.add(trainerSprite);
+
+      if (entries.length === 2) {
+        const trainerSlot = Number(key) as NonNullTrainerSlot;
+        trainerSprite.x += TRAINER_SPRITE_DOUBLE_BATTLE_X_POSITIONS[trainerSlot];
+      }
+    }
+  }
+
+  public playAnim(trainerSlots?: NonNullTrainerSlot[]) {
+    const spritesToPlay = trainerSlots?.map((slot) => this.trainerSprites[slot]) ?? Object.values(this.trainerSprites);
+
+    spritesToPlay.forEach((trainerSprite) => trainerSprite?.playAnim());
   }
 }

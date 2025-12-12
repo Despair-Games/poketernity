@@ -1,5 +1,10 @@
 import { globalScene } from "#app/global-scene";
-import type { NewTrainerConfig, TrainerAssetKey } from "#data/new-trainer-config";
+import type {
+  CompoundTrainerConfig,
+  NewTrainerConfig,
+  TrainerAssetKey,
+  TrainerSlotMap,
+} from "#data/new-trainer-config";
 import { TrainerGender } from "#enums/trainer-gender";
 import type { NonNullTrainerSlot } from "#enums/trainer-slot";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
@@ -27,7 +32,12 @@ export class TrainerData {
   public readonly moneyMultiplier: number;
   public readonly gender: TrainerGender;
 
-  constructor(trainerSlot: NonNullTrainerSlot, config: NewTrainerConfig, gender?: TrainerGender) {
+  constructor(
+    trainerSlot: NonNullTrainerSlot,
+    config: NewTrainerConfig,
+    gender?: TrainerGender,
+    useSameSeedForAllTrainers: boolean = false,
+  ) {
     this.trainerSlot = trainerSlot;
     this.gender = gender ?? this.getGender(config);
     this.name = this.getGenderedAsset(config, "name")!;
@@ -38,7 +48,7 @@ export class TrainerData {
     this.battleBgm = config.battleBgm();
     this.encounterBgm = config.encounterBgm();
     this.victoryBgm = config.victoryBgm();
-    this.party = this.getParty(trainerSlot, config);
+    this.party = this.getParty(trainerSlot, config, useSameSeedForAllTrainers);
     this.moneyMultiplier = config.moneyMultiplier();
   }
 
@@ -84,8 +94,12 @@ export class TrainerData {
   /**
    * Generates the Trainer's party of {@linkcode EnemyPokemon} from the given config
    * and adds them to {@linkcode globalScene}.
-   * @param config - The {@linkcode NewTrainerConfig} used to generate the Trainer.
-   * This method only uses this config's {@linkcode partyConfigs} property.
+   * @param trainerSlot - The {@linkcode TrainerSlot} this Trainer occupies
+   * @param config - The {@linkcode NewTrainerConfig} used to generate this Trainer.
+   * This method only uses the {@linkcode partyConfigs} and {@linkcode partyBaseSeedOffset} properties.
+   * @param useSameSeedForAllTrainers - If `true`, RNG during Pokemon generation
+   * will disregard {@linkcode trainerSlot} in its seed offset, allowing Trainers
+   * in multiple slots to use the same seed.
    * @returns An array of {@linkcode EnemyPokemon} representing the Trainer's
    * party in slot order.
    * @see {@linkcode getPartyPokemonLevel}
@@ -94,6 +108,7 @@ export class TrainerData {
   private getParty(
     trainerSlot: NonNullTrainerSlot,
     { partyConfigs, partyBaseSeedOffset }: NewTrainerConfig,
+    useSameSeedForAllTrainers: boolean,
   ): EnemyPokemon[] {
     const party: EnemyPokemon[] = [];
     for (const config of partyConfigs) {
@@ -104,7 +119,12 @@ export class TrainerData {
         ? coerceArray(config.variableStrength).map((strengthFn) => strengthFn())
         : coerceArray(config.strength);
       for (let i = 0; i < config.count; i++) {
-        const seedOffset = getPartyMemberSeedOffset(trainerSlot, party.length, partyBaseSeedOffset);
+        const seedOffset = getPartyMemberSeedOffset(
+          trainerSlot,
+          party.length,
+          partyBaseSeedOffset,
+          useSameSeedForAllTrainers,
+        );
         globalScene.executeWithSeedOffset(() => {
           const level = getPartyPokemonLevel(strength[i] ?? strength.at(-1));
           const species = getPokemonSpecies(getPartyPokemonSpecies(level, party, config));
@@ -117,5 +137,35 @@ export class TrainerData {
       throw new Error("No valid party members generated!");
     }
     return party;
+  }
+}
+
+export class CompoundTrainerData {
+  public readonly trainerData: TrainerSlotMap<TrainerData>;
+  public readonly title: string;
+  public readonly isBoss: boolean;
+  public readonly moneyMultiplier: number;
+  public readonly encounterBgm: string;
+  public readonly battleBgm: string;
+  public readonly victoryBgm: string;
+
+  constructor(config: CompoundTrainerConfig, genders: Partial<TrainerSlotMap<TrainerGender>> = {}) {
+    for (const [slot, cfg] of Object.entries(config.configs)) {
+      const trainerSlot = Number(slot) as NonNullTrainerSlot;
+      this.trainerData[slot] = new TrainerData(
+        trainerSlot,
+        cfg,
+        genders[trainerSlot],
+        config.useSameSeedForAllTrainers,
+      );
+    }
+
+    this.title = config.combinedTitle;
+    this.isBoss = config.isBoss;
+    this.moneyMultiplier = config.moneyMultiplier();
+
+    this.encounterBgm = config.encounterBgm();
+    this.battleBgm = config.battleBgm();
+    this.victoryBgm = config.victoryBgm();
   }
 }
