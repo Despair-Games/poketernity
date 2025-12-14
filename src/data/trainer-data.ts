@@ -39,7 +39,7 @@ export class TrainerData {
     useSameSeedForAllTrainers: boolean = false,
   ) {
     this.trainerSlot = trainerSlot;
-    this.gender = gender ?? this.getGender(config);
+    this.gender = gender ?? this.initGender(config);
     this.name = this.getGenderedAsset(config, "name")!;
     this.title = this.getGenderedAsset(config, "title")!;
     this.spriteKey = this.getGenderedAsset(config, "spriteKey")!;
@@ -48,7 +48,7 @@ export class TrainerData {
     this.battleBgm = config.battleBgm();
     this.encounterBgm = config.encounterBgm();
     this.victoryBgm = config.victoryBgm();
-    this.party = this.getParty(trainerSlot, config, useSameSeedForAllTrainers);
+    this.party = this.generateParty(trainerSlot, config, useSameSeedForAllTrainers);
     this.moneyMultiplier = config.moneyMultiplier();
   }
 
@@ -61,7 +61,7 @@ export class TrainerData {
    * @param config - The {@linkcode NewTrainerConfig} used to generate the Trainer.
    * @returns The Trainer's {@linkcode TrainerGender}.
    */
-  private getGender(config: NewTrainerConfig): TrainerGender {
+  private initGender(config: NewTrainerConfig): TrainerGender {
     const supportedGenders = Object.keys(config.name).map((k) => Number(k) as TrainerGender);
 
     const genderWeights = supportedGenders.map((g) => config.name[g]!.length);
@@ -105,7 +105,7 @@ export class TrainerData {
    * @see {@linkcode getPartyPokemonLevel}
    * @see {@linkcode getPartyPokemonSpecies}
    */
-  private getParty(
+  private generateParty(
     trainerSlot: NonNullTrainerSlot,
     { partyConfigs, partyBaseSeedOffset }: NewTrainerConfig,
     useSameSeedForAllTrainers: boolean,

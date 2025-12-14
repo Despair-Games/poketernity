@@ -954,6 +954,7 @@ export class TrainerSpriteSet extends Phaser.GameObjects.Container {
     this.type = "TrainerSpriteSet";
 
     if (data instanceof TrainerData) {
+      // TODO: Should this be hardcoded to `TrainerSlot.TRAINER`?
       this.trainerSprites[data.trainerSlot] = new TrainerSprite(data);
     } else {
       for (const [key, td] of Object.entries(data.trainerData)) {
