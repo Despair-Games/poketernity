@@ -155,11 +155,13 @@ export class PokemonSpecies extends PokemonSpeciesForm {
 
     while (unprocessedSpecies.length > 0) {
       const evolutions = pokemonEvolutions[unprocessedSpecies.shift()!];
-      const discoveredSpecies = [...new Set(evolutions.map((e) => e.speciesId))];
-      discoveredSpecies.forEach((s) => {
-        relatedSpecies.add(s);
-        unprocessedSpecies.push(s);
-      });
+      if (evolutions != null) {
+        const discoveredSpecies = [...new Set(evolutions.map((e) => e.speciesId))];
+        discoveredSpecies.forEach((s) => {
+          relatedSpecies.add(s);
+          unprocessedSpecies.push(s);
+        });
+      }
     }
     return relatedSpecies;
   }

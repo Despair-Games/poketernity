@@ -374,7 +374,11 @@ export class TrainerConfigBuilder {
    * @todo Add sprite keys
    */
   public withRivalAssets(): this {
-    return this.withFixedName("finn", TrainerGender.MALE).withFixedName("ivy", TrainerGender.FEMALE).withTitle("rival");
+    return this.withFixedName("finn", TrainerGender.MALE)
+      .withFixedName("ivy", TrainerGender.FEMALE)
+      .withTitle("rival")
+      .withSpriteKey("rival_m", TrainerGender.MALE)
+      .withSpriteKey("rival_f", TrainerGender.FEMALE);
   }
 
   /**
@@ -431,7 +435,8 @@ export class TrainerConfigBuilder {
       });
     }
 
-    return this.withFixedName(key.toLowerCase(), gender)
+    return this.withTrainerType(TrainerType[key])
+      .withFixedName(key.toLowerCase(), gender)
       .withTitle(`gym_leader${gender === TrainerGender.MALE ? "" : "_female"}`)
       .withSpriteKey(key.toLowerCase(), gender)
       .withBattleBgm(`battle_${region}_gym`)

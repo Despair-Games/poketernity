@@ -7,6 +7,7 @@ import type {
 } from "#data/new-trainer-config";
 import { TrainerGender } from "#enums/trainer-gender";
 import type { NonNullTrainerSlot } from "#enums/trainer-slot";
+import type { TrainerType } from "#enums/trainer-type";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import { coerceArray } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
@@ -20,6 +21,7 @@ import { getPartyMemberSeedOffset, getPartyPokemonLevel, getPartyPokemonSpecies 
  */
 export class TrainerData {
   public readonly trainerSlot: NonNullTrainerSlot;
+  public readonly trainerType: TrainerType;
   public readonly name: string;
   public readonly title: string;
   public readonly spriteKey: string;
@@ -39,6 +41,7 @@ export class TrainerData {
     useSameSeedForAllTrainers: boolean = false,
   ) {
     this.trainerSlot = trainerSlot;
+    this.trainerType = config.trainerType;
     this.gender = gender ?? this.initGender(config);
     this.name = this.getGenderedAsset(config, "name")!;
     this.title = this.getGenderedAsset(config, "title")!;
