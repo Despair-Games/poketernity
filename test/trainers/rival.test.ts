@@ -25,7 +25,7 @@ describe("Trainers - Rival", async () => {
     game.override.disableExpGain = false;
     game.override.battleType("single");
 
-    await game.classicMode.startBattle(SpeciesId.MAGIKARP);
+    await game.classicMode.runToSummon(SpeciesId.MAGIKARP);
 
     rivalData = getRivalParties();
   });
