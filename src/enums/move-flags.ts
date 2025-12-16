@@ -1,8 +1,5 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { AbilityId } from "#enums/ability-id";
 import type { MoveId } from "#enums/move-id";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import type { ObjectValues } from "#types/utility-types";
 
 export const MoveFlags = {
