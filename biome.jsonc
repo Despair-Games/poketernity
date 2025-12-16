@@ -191,7 +191,8 @@
         "noParametersOnlyUsedInRecursion": "error",
         "useSpread": "error",
         "noProto": "error",
-        "noMultiStr": "error"
+        "noMultiStr": "error",
+        "useRegexpExec": "error"
       },
       "performance": {
         "noNamespaceImport": "error",
