@@ -11,7 +11,6 @@ import {
   AB_FLAG_WORKS_WHEN_TRANSFORMED,
 } from "#constants/ability-constants";
 import type { AbilityId } from "#enums/ability-id";
-// biome-ignore lint/correctness/noUnusedImports: TSDoc import
 import type { MoveId } from "#enums/move-id";
 import type { AbAttrCondition } from "#types/ability-types";
 import type { Constructor } from "#types/utility-types";
