@@ -22,7 +22,6 @@ describe("Trainers - Rival", async () => {
   beforeEach(async () => {
     game = new GameManager(phaserGame);
 
-    game.override.disableExpGain = false;
     game.override.battleType("single");
 
     await game.classicMode.runToSummon(SpeciesId.MAGIKARP);

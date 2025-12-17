@@ -74,7 +74,7 @@ export interface NewTrainerConfig {
   /**
    * A generator to determine the background music to play during the Trainer's introduction.
    */
-  encounterBgm: () => string;
+  encounterBgm?: () => string;
   /**
    * A generator to determine the background music to play when the Trainer is defeated.
    * @todo Add default value
@@ -171,8 +171,8 @@ export class CompoundTrainerConfig {
    * Compound Trainer battles always use the encounter BGM of the Trainer in the first
    * slot ({@linkcode TrainerSlot.TRAINER}).
    */
-  public get encounterBgm(): () => string {
-    return this.configs[TrainerSlot.TRAINER].encounterBgm;
+  public get encounterBgm(): (() => string) | undefined {
+    return this.configs[TrainerSlot.TRAINER]?.encounterBgm ?? this.configs[TrainerSlot.TRAINER_PARTNER]?.encounterBgm;
   }
 
   /**

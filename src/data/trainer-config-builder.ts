@@ -2,6 +2,7 @@ import { globalScene } from "#app/global-scene";
 import { activeOverrides as Overrides } from "#app/overrides";
 import { GYM_LEADER_STRENGTH_TEMPLATES } from "#constants/trainer-constants";
 import type { NewTrainerConfig, TieredSpeciesPool, TrainerPartyPokemonConfig } from "#data/new-trainer-config";
+import type { PokemonSpecies } from "#data/pokemon-species";
 import { signatureSpecies } from "#data/signature-species";
 import type { ElementalType } from "#enums/elemental-type";
 import { PartyMemberStrength } from "#enums/party-member-strength";
@@ -11,6 +12,7 @@ import { TrainerType } from "#enums/trainer-type";
 import type { PokemonSpeciesFilter } from "#types/ui-types";
 import type { NonEmptyArray } from "#types/utility-types";
 import { coerceArray, enumValueToKey, isBetween } from "#utils/common-utils";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedItem } from "#utils/random-utils";
 
 type PartyPokemonOptions = Partial<TrainerPartyPokemonConfig>;
@@ -417,21 +419,20 @@ export class TrainerConfigBuilder {
     if (sigSpecies == null) {
       throw new Error(`trainer-config-builder: ${key} is not a Gym Leader!`);
     }
-    for (let i = 0; i < 6 - sigSpecies.length; i++) {
-      this.withPokemonFromFilter(
-        (species) => specialtyTypes.some((s) => species.isOfType(s)) && !sigSpecies.flat().includes(species.speciesId),
-        {
-          condition: getGymLeaderPartyPokemonCondition(i),
-          variableStrength: () => getGymLeaderStrengthTemplate().at(i - 6) ?? PartyMemberStrength.AVERAGE,
-        },
-      );
+
+    let i: number;
+    for (i = 0; i < 6 - sigSpecies.length; i++) {
+      this.withPokemonFromFilter(gymLeaderRandomPokemonFilter(key, specialtyTypes), {
+        condition: getGymLeaderPartyPokemonCondition(i),
+        variableStrength: () => getGymLeaderStrengthTemplate().at(i - 6) ?? PartyMemberStrength.AVERAGE,
+      });
     }
 
-    for (let i = 0; i < sigSpecies.length; i++) {
-      this.withPokemonFromPool(sigSpecies.at(-(i + 1)) as NonEmptyArray<SpeciesId>, {
+    for (let j = 0; j < sigSpecies.length; j++) {
+      this.withPokemonFromPool(sigSpecies.at(-(j + 1)) as NonEmptyArray<SpeciesId>, {
         allowDuplicates: true,
-        condition: getGymLeaderPartyPokemonCondition(i),
-        variableStrength: () => getGymLeaderStrengthTemplate().at(i - sigSpecies.length) ?? PartyMemberStrength.AVERAGE,
+        condition: getGymLeaderPartyPokemonCondition(i + j),
+        variableStrength: () => getGymLeaderStrengthTemplate()[i + j] ?? PartyMemberStrength.AVERAGE,
       });
     }
 
@@ -478,5 +479,18 @@ function getGymLeaderPartyPokemonCondition(slotIndex: number): () => boolean {
   return () => {
     const strengthTemplate = getGymLeaderStrengthTemplate();
     return strengthTemplate.length >= 6 - slotIndex;
+  };
+}
+
+function gymLeaderRandomPokemonFilter(
+  key: keyof typeof TrainerType,
+  specialtyTypes: ElementalType[],
+): (species: PokemonSpecies) => boolean {
+  return (species) => {
+    const sigSpecies = signatureSpecies[key].flat();
+    const firstStageSpecies = getPokemonSpecies(species.getFirstStageSpecies());
+    return (
+      specialtyTypes.some((t) => firstStageSpecies.isOfType(t)) && !sigSpecies.includes(firstStageSpecies.speciesId)
+    );
   };
 }

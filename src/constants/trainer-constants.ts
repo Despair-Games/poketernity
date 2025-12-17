@@ -87,6 +87,7 @@ export const GYM_LEADER_STRENGTH_TEMPLATES = Object.freeze<PartyMemberStrength[]
     PartyMemberStrength.STRONGER,
   ],
   [PartyMemberStrength.AVERAGE, ...new Array(4).fill(PartyMemberStrength.STRONG), PartyMemberStrength.STRONGER],
+  [new Array(5).fill(PartyMemberStrength.STRONG), PartyMemberStrength.STRONGER],
 ]);
 
 // #endregion

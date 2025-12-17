@@ -28,7 +28,7 @@ export class TrainerData {
   public readonly dialogueSpriteKey?: string;
   public readonly isBoss: boolean;
   public readonly battleBgm: string;
-  public readonly encounterBgm: string;
+  public readonly encounterBgm?: string;
   public readonly victoryBgm: string;
   public readonly party: EnemyPokemon[];
   public readonly moneyMultiplier: number;
@@ -49,7 +49,7 @@ export class TrainerData {
     this.dialogueSpriteKey = this.getGenderedAsset(config, "dialogueSpriteKey");
     this.isBoss = config.isBoss;
     this.battleBgm = config.battleBgm();
-    this.encounterBgm = config.encounterBgm();
+    this.encounterBgm = config.encounterBgm?.();
     this.victoryBgm = config.victoryBgm();
     this.party = this.generateParty(trainerSlot, config, useSameSeedForAllTrainers);
     this.moneyMultiplier = config.moneyMultiplier();
@@ -148,7 +148,7 @@ export class CompoundTrainerData {
   public readonly title: string;
   public readonly isBoss: boolean;
   public readonly moneyMultiplier: number;
-  public readonly encounterBgm: string;
+  public readonly encounterBgm?: string;
   public readonly battleBgm: string;
   public readonly victoryBgm: string;
 
@@ -167,7 +167,7 @@ export class CompoundTrainerData {
     this.isBoss = config.isBoss;
     this.moneyMultiplier = config.moneyMultiplier();
 
-    this.encounterBgm = config.encounterBgm();
+    this.encounterBgm = config.encounterBgm?.();
     this.battleBgm = config.battleBgm();
     this.victoryBgm = config.victoryBgm();
   }
