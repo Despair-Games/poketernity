@@ -18,6 +18,7 @@ import type { ToHaveStatMatcherOptions } from "#test/test-utils/matchers/to-have
 import type { ToHaveStatusEffectMatcherOptions } from "#test/test-utils/matchers/to-have-status-effect-matcher";
 import type { ToHaveUsedMoveMatcherOptions } from "#test/test-utils/matchers/to-have-used-move-matcher";
 import type { ToHaveTakenDamageMatcherOptions } from "#test/test-utils/matchers/to-have-taken-damage-matcher";
+import type { CoercibleArray } from "#types/utility-types";
 
 declare module "vitest" {
   interface Assertion {
@@ -130,5 +131,15 @@ declare module "vitest" {
      * _Includes a check for hp being `0`._
      */
     toHaveFainted(): void;
+
+    /**
+     * Matcher to check if a {@linkcode Pokemon} is of or related to a species.
+     * @param expectedSpeciesId - The expected {@linkcode SpeciesId}. May be set to an
+     * array to check for multiple species.
+     * @param strict - (Default `true`) If `true`, this requires the input's species to exactly match
+     * any of {@linkcode expectedSpeciesId}. If `false`, the input may be of a species in any of the
+     * expected species' evolution trees to pass.
+     */
+    toBeOfSpecies(expectedSpeciesId: CoercibleArray<SpeciesId>, strict?: boolean);
   }
 }

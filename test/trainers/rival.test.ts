@@ -33,6 +33,7 @@ describe("Trainers - Rival", async () => {
     game.phaseInterceptor.restoreOg();
   });
 
+  // TODO: does this actually test anything with `BattleScene.randBattleSeedInt` mocked out?
   it("should generate the same Pokemon across all configs", () => {
     for (let i = 0; i < rivalData.length - 1; i++) {
       const partyA = rivalData[i].map((p) => p.species.speciesId);
@@ -43,11 +44,11 @@ describe("Trainers - Rival", async () => {
   });
 
   it("should lead with a random First Partner Pokemon across all configs", () => {
-    rivalData.forEach((party) => expect(party[0].species.speciesId).toBeOneOf([...RIVAL_SLOT_0_POKEMON]));
+    rivalData.forEach((party) => expect(party[0]).toBeOfSpecies([...RIVAL_SLOT_0_POKEMON]));
   });
 
   it("should have a random Route 1 Bird Pokemon across all configs", () => {
-    rivalData.forEach((party) => expect(party[1].species.speciesId).toBeOneOf([...RIVAL_SLOT_1_POKEMON]));
+    rivalData.forEach((party) => expect(party[1]).toBeOfSpecies([...RIVAL_SLOT_1_POKEMON]));
   });
 });
 

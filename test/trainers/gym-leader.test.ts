@@ -60,6 +60,7 @@ describe("Trainers - Gym Leaders", async () => {
 
   describe.each(testGymLeaders)("$name", ({ name, specialtyType }) => {
     const sigSpecies = signatureSpecies[name];
+
     describe.each(waveTestCases)("Wave $wave", ({ wave, expectedPartySize }) => {
       let party: EnemyPokemon[];
 
@@ -82,11 +83,8 @@ describe("Trainers - Gym Leaders", async () => {
       });
 
       it("should have their first signature species in their last party slot", () => {
-        const lastPokemonRelatedSpecies = party.at(-1)?.species.getRelatedSpecies();
-        expect(lastPokemonRelatedSpecies).toBeDefined();
-
         const firstSignatureSpecies = coerceArray(sigSpecies[0]);
-        expect([...lastPokemonRelatedSpecies!].some((s) => firstSignatureSpecies.includes(s))).toBeTruthy();
+        expect(party.at(-1)).toBeOfSpecies(firstSignatureSpecies, false);
       });
 
       const numRandomPokemon = expectedPartySize - sigSpecies.length;
@@ -99,10 +97,7 @@ describe("Trainers - Gym Leaders", async () => {
             expect(firstStageSpecies.speciesId).not.toBeOneOf(sigSpecies.flat());
           }
 
-          const nonRandomPokemonRelatedSpecies = party[numRandomPokemon].species.getRelatedSpecies();
-          expect(
-            [...nonRandomPokemonRelatedSpecies].some((s) => coerceArray(sigSpecies.at(-1)!).includes(s)),
-          ).toBeTruthy();
+          expect(party[numRandomPokemon]).toBeOfSpecies(sigSpecies.at(-1), false);
         });
       }
     });
