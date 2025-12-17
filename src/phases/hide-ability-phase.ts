@@ -12,8 +12,9 @@ export class HideAbilityPhase extends Phase {
     this.isPlayer = pokemon.isPlayer();
   }
 
-  public override start(): void {
+  public override async start(): Promise<void> {
     const abilityBar = this.isPlayer ? globalScene.playerAbilityBar : globalScene.enemyAbilityBar;
-    abilityBar.hide().then(this.end);
+    await abilityBar.hide();
+    this.end();
   }
 }
