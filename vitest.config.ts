@@ -40,7 +40,7 @@ export default defineProject(({ mode }) => ({
  * Class for sorting test files in the desired order.
  */
 class MySequencer extends BaseSequencer {
-  async sort(files: TestSpecification[]) {
+  public override async sort(files: TestSpecification[]) {
     files = await super.sort(files);
 
     return files.sort((a, b) => {
