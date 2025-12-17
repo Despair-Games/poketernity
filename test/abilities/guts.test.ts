@@ -79,22 +79,20 @@ describe("Ability - Guts", () => {
     expect(player).toHaveBattlerTag(BattlerTagType.CONFUSED);
   });
 
-  it.each(nonVolatileStatusEffects)(
-    "should apply a 1.5x attack boost with '%s' status effect",
-    async (_name, statusEffect) => {
-      const { override, classicMode, field, move } = game;
-      override.statusEffect(statusEffect);
+  it.each(nonVolatileStatusEffects)(//
+  "should apply a 1.5x attack boost with '%s' status effect", async (_name, statusEffect) => {
+    const { override, classicMode, field, move } = game;
+    override.statusEffect(statusEffect);
 
-      await classicMode.startBattle(SpeciesId.FEEBAS);
-      const player = field.getPlayerPokemon();
-      move.use(MoveId.SPLASH);
-      await game.toEndOfTurn();
-      const playerAtk = player.getStat(Stat.ATK);
+    await classicMode.startBattle(SpeciesId.FEEBAS);
+    const player = field.getPlayerPokemon();
+    move.use(MoveId.SPLASH);
+    await game.toEndOfTurn();
+    const playerAtk = player.getStat(Stat.ATK);
 
-      expect(player).toHaveStatusEffect(statusEffect);
-      expect(player).toHaveEffectiveStat(Stat.ATK, Math.floor(playerAtk * 1.5));
-    },
-  );
+    expect(player).toHaveStatusEffect(statusEffect);
+    expect(player).toHaveEffectiveStat(Stat.ATK, Math.floor(playerAtk * 1.5));
+  });
 
   it.each([
     { id: AbilityId.HUSTLE, name: "Hustle", multiplier: 1.5 },

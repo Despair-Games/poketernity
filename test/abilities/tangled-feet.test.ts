@@ -125,6 +125,7 @@ describe("Ability - Tangled Feet", () => {
       expect(enemyPkm.getAccuracyMultiplier).toHaveLastReturnedWith(1);
     });
 
+    // biome-ignore format: prefer pre-2.3.6 formatting
     it.each([
       {
         passiveAbilityName: "Sand Veil",
@@ -158,9 +159,8 @@ describe("Ability - Tangled Feet", () => {
         await game.toEndOfTurn();
 
         expect(playerPkm).toHaveBattlerTag(BattlerTagType.CONFUSED);
-        expect(enemyPkm.getAccuracyMultiplier).toHaveLastReturnedWith(
-          1 / passiveAbilityMultiplier / tangledFeetMultiplier,
-        );
+        const finalMultiplier = 1 / passiveAbilityMultiplier / tangledFeetMultiplier;
+        expect(enemyPkm.getAccuracyMultiplier).toHaveLastReturnedWith(finalMultiplier);
       },
     );
   });

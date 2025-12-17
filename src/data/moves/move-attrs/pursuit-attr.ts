@@ -1,8 +1,5 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { TurnCommandManager } from "#app/turn-command-manager";
 import type { PursuingTag } from "#battler-tags/pursuing-battler-tag";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import { MoveAttr } from "#moves/move-attr";
 
 /**

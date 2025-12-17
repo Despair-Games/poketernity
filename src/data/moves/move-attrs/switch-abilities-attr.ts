@@ -29,6 +29,6 @@ export class SwitchAbilitiesAttr extends MoveEffectAttr {
   }
 
   override getCondition(): MoveConditionFunc {
-    return (user, target, _move) => [user, target].every((pkmn) => pkmn.getAbility().isSwappable);
+    return (user, target, _move) => [user, target].every((pkmn) => pkmn.getAbility().swappable);
   }
 }

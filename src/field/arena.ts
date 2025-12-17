@@ -1071,19 +1071,23 @@ export class ArenaBase extends Phaser.GameObjects.Container {
     if (!this.player) {
       globalScene.executeWithSeedOffset(
         () => {
-          this.propValue = propValue === undefined ? (hasProps ? randSeedInt(8) : 0) : propValue;
+          if (propValue === undefined) {
+            this.propValue = hasProps ? randSeedInt(8) : 0;
+          } else {
+            this.propValue = propValue;
+          }
           this.props.forEach((prop, p) => {
             const propKey = `${biomeKey}_b${hasProps ? `_${p + 1}` : ""}`;
             prop.setTexture(propKey);
 
             if (hasProps && prop.texture.frameTotal > 1) {
-              const propFrameNames = globalScene.anims.generateFrameNames(propKey, {
-                zeroPad: 4,
-                suffix: ".png",
-                start: 1,
-                end: prop.texture.frameTotal - 1,
-              });
               if (!globalScene.anims.exists(propKey)) {
+                const propFrameNames = globalScene.anims.generateFrameNames(propKey, {
+                  zeroPad: 4,
+                  suffix: ".png",
+                  start: 1,
+                  end: prop.texture.frameTotal - 1,
+                });
                 globalScene.anims.create({
                   key: propKey,
                   frames: propFrameNames,

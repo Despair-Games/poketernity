@@ -1,9 +1,3 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: TSDoc imports */
-import type { ElementalType } from "#enums/elemental-type";
-import type { Pokemon } from "#field/pokemon";
-import type { SessionSaveData } from "#types/session-data";
-/* biome-ignore-end lint/correctness/noUnusedImports: TSDoc imports */
-
 import type { AuroraVeilTag } from "#arena-tags/aurora-veil-tag";
 import type { CraftyShieldTag } from "#arena-tags/crafty-shield-tag";
 import type { DelayedAttackTag } from "#arena-tags/delayed-attack-tag";
@@ -36,7 +30,10 @@ import type { WideGuardTag } from "#arena-tags/wide-guard-tag";
 import type { WishTag } from "#arena-tags/wish-tag";
 import type { ArenaTagSide } from "#enums/arena-tag-side";
 import type { ArenaTagType } from "#enums/arena-tag-type";
+import type { ElementalType } from "#enums/elemental-type";
 import type { MoveId } from "#enums/move-id";
+import type { Pokemon } from "#field/pokemon";
+import type { SessionSaveData } from "#types/session-data";
 import type { ObjectValues } from "#types/utility-types";
 
 /** Subset of {@linkcode ArenaTagType}s that deal type-based damage to pokemon that switch in. */

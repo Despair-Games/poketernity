@@ -1,8 +1,3 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { MoveId } from "#enums/move-id";
-import type { Pokemon } from "#field/pokemon";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import type { TurnCommand } from "#app/turn-command-manager";
 import type { BattlerTag } from "#battler-tags/battler-tag";
 import type { PokemonSpeciesForm } from "#data/pokemon-species-form";
@@ -11,9 +6,11 @@ import type { AbilityId } from "#enums/ability-id";
 import type { BerryType } from "#enums/berry-type";
 import type { ElementalType } from "#enums/elemental-type";
 import type { Gender } from "#enums/gender";
+import type { MoveId } from "#enums/move-id";
 import type { Nature } from "#enums/nature";
 import type { SpeciesId } from "#enums/species-id";
 import type { StatusEffect } from "#enums/status-effect";
+import type { Pokemon } from "#field/pokemon";
 import type { PokemonMove } from "#field/pokemon-move";
 import type { AttackMoveResult, TurnMove } from "#types/move-types";
 

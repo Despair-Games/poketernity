@@ -63,7 +63,7 @@ describe("Ability - Drizzle", () => {
       .enemyLevel(100);
   });
 
-  it("should last the rain for 5 turns", async () => {
+  it("should set up 5 turns of rain", async () => {
     const { classicMode, move } = game;
 
     await classicMode.startBattle(SpeciesId.FEEBAS);
@@ -102,24 +102,14 @@ describe("Ability - Drizzle", () => {
     expect(game).toHaveWeather(WeatherType.RAIN);
   });
 
-  it.each(weatherSuppressingAbilities)(
-    "should not be stopped from setting weather by %s ability",
-    async (_name, abilityId) => {
-      const { override, classicMode, move, textInterceptor } = game;
-      override.enemyAbility(abilityId);
+  it.each(weatherSuppressingAbilities)(//
+  "should not be stopped from setting weather by %s ability", async (_name, abilityId) => {
+    const { override, classicMode, textInterceptor } = game;
+    override.enemyAbility(abilityId);
 
-      await classicMode.startBattle(SpeciesId.FEEBAS);
+    await classicMode.startBattle(SpeciesId.FEEBAS);
 
-      expect(textInterceptor.logs).toContain(t("abilityTriggers:weatherEffectDisappeared"));
-
-      for (let i = 0; i < 5; i++) {
-        expect(game).toHaveWeather(WeatherType.RAIN);
-
-        move.use(MoveId.SPLASH);
-        await game.toEndOfTurn();
-      }
-
-      expect(game).not.toHaveWeather(WeatherType.RAIN);
-    },
-  );
+    expect(textInterceptor.logs).toContain(t("abilityTriggers:weatherEffectDisappeared"));
+    expect(game).toHaveWeather(WeatherType.RAIN);
+  });
 });

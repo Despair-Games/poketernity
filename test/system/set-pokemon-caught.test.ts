@@ -572,6 +572,7 @@ describe("Dex Data - Set Pokemon caught", () => {
     expect(lycanrocDexData.caughtAttr & gameData.getFormAttr(2)).toBeFalsy(); // midnight
   });
 
+  // biome-ignore format: prefer pre-2.3.6 formatting
   it.each([
     {
       caughtFormIndex: 4,

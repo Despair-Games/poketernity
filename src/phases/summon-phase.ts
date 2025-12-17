@@ -1,8 +1,3 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { EncounterPhase } from "#phases/encounter-phase";
-import type { PostSummonPhase } from "#phases/post-summon-phase";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { getPokeballAtlasKey, getPokeballTintColor } from "#data/pokeball";
@@ -14,6 +9,8 @@ import { PlayerGender } from "#enums/player-gender";
 import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeActiveTrigger } from "#form-change-triggers/species-form-change-active-trigger";
 import { PokemonPhase } from "#phases/base/pokemon-phase";
+import type { EncounterPhase } from "#phases/encounter-phase";
+import type { PostSummonPhase } from "#phases/post-summon-phase";
 import { settings } from "#system/settings-manager";
 import { playTween } from "#utils/anim-utils";
 import i18next from "i18next";

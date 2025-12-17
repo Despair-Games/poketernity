@@ -101,6 +101,7 @@ describe("Moves - Spectral Thief", () => {
     expect(enemy.waveData.abilitiesApplied.includes(AbilityId.CLEAR_BODY)).toBeFalsy();
   });
 
+  // biome-ignore format: prefer pre-2.3.6 formatting
   it.each([
     { abilityName: "Simple", abilityId: AbilityId.SIMPLE, multiplier: 2 },
     { abilityName: "Contrary", abilityId: AbilityId.CONTRARY, multiplier: -1 },

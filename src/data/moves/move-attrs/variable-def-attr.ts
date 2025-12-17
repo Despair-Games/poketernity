@@ -1,7 +1,4 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { Stat } from "#enums/stat";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveAttr } from "#moves/move-attr";

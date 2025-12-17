@@ -35,6 +35,7 @@ describe.todo("Items - Multi Lens", () => {
       .enemyLevel(99);
   });
 
+  // biome-ignore format: prefer pre-2.3.6 formatting
   it.each([
     { stackCount: 1, firstHitDamage: 0.75 },
     { stackCount: 2, firstHitDamage: 0.5 },

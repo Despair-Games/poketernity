@@ -1,6 +1,4 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { SupportedLanguage } from "#types/language";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
 
 export interface EventBanner {
   /** The base filename of the banner (without any language key or the extension). e.g. `welcome-event` */

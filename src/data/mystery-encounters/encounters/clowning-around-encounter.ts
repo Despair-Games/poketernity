@@ -1,7 +1,7 @@
-import { Ability } from "#abilities/ability";
 import { EncounterBattleAnim } from "#animations/encounter-battle-anim";
 import { globalScene } from "#app/global-scene";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
+import { allAbilities } from "#data/data-lists";
 import { TrainerPartyCompoundTemplate, TrainerPartyTemplate } from "#data/trainer-config";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
@@ -135,7 +135,7 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
 
     // Generate random ability for Blacephalon from pool
     const ability = RANDOM_ABILITY_POOL[randSeedInt(RANDOM_ABILITY_POOL.length)];
-    encounter.setDialogueToken("ability", new Ability(ability, 3).name);
+    encounter.setDialogueToken("ability", allAbilities[ability].name);
     encounter.misc = { ability };
 
     encounter.enemyPartyConfigs.push({

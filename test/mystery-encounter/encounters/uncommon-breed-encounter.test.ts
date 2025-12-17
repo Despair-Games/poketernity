@@ -124,7 +124,7 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       expect(enemyField.length).toBe(1);
       expect(enemyField[0].species.speciesId).toBe(speciesToSpawn);
 
-      const statStagePhases = unshiftPhaseSpy.mock.calls.filter((p) => p[0].is("StatStageChangePhase"))[0][0] as any;
+      const statStagePhases = unshiftPhaseSpy.mock.calls.find((p) => p[0].is("StatStageChangePhase"))?.[0] as any;
       expect(statStagePhases.stats).toEqual([Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD]);
 
       // Should have used its egg move pre-battle
@@ -151,7 +151,7 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       expect(enemyField.length).toBe(1);
       expect(enemyField[0].species.speciesId).toBe(speciesToSpawn);
 
-      const statStagePhases = unshiftPhaseSpy.mock.calls.filter((p) => p[0].is("StatStageChangePhase"))[0][0] as any;
+      const statStagePhases = unshiftPhaseSpy.mock.calls.find((p) => p[0].is("StatStageChangePhase"))?.[0] as any;
       expect(statStagePhases.stats).toEqual([Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD]);
 
       // Should have used its egg move pre-battle

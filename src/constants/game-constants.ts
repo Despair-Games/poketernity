@@ -1,11 +1,8 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { BattleStat } from "#enums/stat";
-import type { SystemSaveData } from "#types/system-data";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesId } from "#enums/species-id";
+import type { BattleStat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
+import type { SystemSaveData } from "#types/system-data";
 
 /** Max value for an integer attribute in {@linkcode SystemSaveData} */
 export const MAX_INT_ATTR_VALUE = 0x80000000;

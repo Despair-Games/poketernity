@@ -266,7 +266,7 @@ export class PlayerPokemon extends Pokemon {
       };
       // TODO: should this be done in "handleSpecialEvolutions" to keep all species-specific things in the same spot?
       if (preEvolutionSpecies.speciesId === SpeciesId.GIMMIGHOUL) {
-        const evotracker = this.getHeldItems().filter((m) => m instanceof EvoTrackerModifier)[0] ?? null;
+        const evotracker = this.getHeldItems().find((m) => m instanceof EvoTrackerModifier);
         if (evotracker) {
           globalScene.removeModifier(evotracker);
         }

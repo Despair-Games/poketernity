@@ -14,7 +14,7 @@ import i18next from "i18next";
  * Encore forces the target Pokemon to use its most-recent move for 3 turns
  */
 export class EncoreTag extends MoveRestrictionBattlerTag {
-  public moveId: MoveId;
+  public moveId: MoveId | undefined;
 
   constructor(sourceId: number) {
     super(
@@ -36,7 +36,7 @@ export class EncoreTag extends MoveRestrictionBattlerTag {
   }
 
   override onAdd(pokemon: Pokemon): void {
-    const lastMove = pokemon.getLastXMoves(-1).filter((mv) => !mv.virtual)[0];
+    const lastMove = pokemon.getLastXMoves(-1).find((mv) => !mv.virtual);
     this.moveId = lastMove?.move.id;
 
     globalScene.phaseManager.createAndUnshiftPhase(

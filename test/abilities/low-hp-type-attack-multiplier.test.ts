@@ -32,6 +32,7 @@ describe("Abilities - Overgrow/Blaze/Torrent/Swarm", () => {
       .enemyMoveset(MoveId.SPLASH);
   });
 
+  // biome-ignore format: prefer pre-2.3.6 formatting
   it.each([
     { abilityName: "Overgrow", ability: AbilityId.OVERGROW, moveId: MoveId.LEAFAGE },
     { abilityName: "Blaze", ability: AbilityId.BLAZE, moveId: MoveId.FIRE_FANG },
@@ -54,6 +55,7 @@ describe("Abilities - Overgrow/Blaze/Torrent/Swarm", () => {
     },
   );
 
+  // biome-ignore format: prefer pre-2.3.6 formatting
   it.each([
     { abilityName: "Overgrow", ability: AbilityId.OVERGROW, moveId: MoveId.ABSORB },
     { abilityName: "Blaze", ability: AbilityId.BLAZE, moveId: MoveId.EMBER },
@@ -76,6 +78,7 @@ describe("Abilities - Overgrow/Blaze/Torrent/Swarm", () => {
     },
   );
 
+  // biome-ignore format: prefer pre-2.3.6 formatting
   it.each([
     { abilityName: "Overgrow", ability: AbilityId.OVERGROW, moveId: MoveId.ABSORB },
     { abilityName: "Blaze", ability: AbilityId.BLAZE, moveId: MoveId.EMBER },

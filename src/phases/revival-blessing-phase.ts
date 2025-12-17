@@ -1,9 +1,3 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { FaintPhase } from "#phases/faint-phase";
-import type { SwitchPhase } from "#phases/switch-phase";
-import type { TurnEndPhase } from "#phases/turn-end-phase";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import { globalScene } from "#app/global-scene";
 import { BattlerIndex } from "#enums/battler-index";
 import { FieldPosition } from "#enums/field-position";
@@ -13,6 +7,9 @@ import { UiMode } from "#enums/ui-mode";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { BattlePhase } from "#phases/base/battle-phase";
+import type { FaintPhase } from "#phases/faint-phase";
+import type { SwitchPhase } from "#phases/switch-phase";
+import type { TurnEndPhase } from "#phases/turn-end-phase";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
 import { toDmgValue } from "#utils/common-utils";
 import { PartyFilterFainted } from "#utils/party-ui-utils";

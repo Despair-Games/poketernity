@@ -28,8 +28,6 @@ export class AbilityGiveAttr extends MoveEffectAttr {
 
   override getCondition(): MoveConditionFunc {
     return (user, target, _move) =>
-      user.getAbility().isCopiable
-      && target.getAbility().isReplaceable
-      && user.getAbility().id !== target.getAbility().id;
+      user.getAbility().copiable && target.getAbility().replaceable && user.getAbility().id !== target.getAbility().id;
   }
 }

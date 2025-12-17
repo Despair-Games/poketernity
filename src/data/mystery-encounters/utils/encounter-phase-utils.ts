@@ -1,7 +1,3 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { IMysteryEncounter } from "#mystery-encounters/mystery-encounter";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import type { Battle } from "#app/battle";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -46,6 +42,7 @@ import {
 } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
 import { showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
+import type { IMysteryEncounter } from "#mystery-encounters/mystery-encounter";
 import type { MysteryEncounterOption } from "#mystery-encounters/mystery-encounter-option";
 import type { PokemonData } from "#system/pokemon-data";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";

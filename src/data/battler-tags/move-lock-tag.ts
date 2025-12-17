@@ -1,9 +1,6 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { MOVE_LOCK_TAG_TYPES } from "#constants/battler-tag-constants";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import { globalScene } from "#app/global-scene";
 import { BattlerTag } from "#battler-tags/battler-tag";
+import type { MOVE_LOCK_TAG_TYPES } from "#constants/battler-tag-constants";
 import { allMoves } from "#data/data-lists";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";

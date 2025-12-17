@@ -1,13 +1,10 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { EnemyPokemon } from "#field/enemy-pokemon";
-import type { Pokemon } from "#field/pokemon";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import { globalScene } from "#app/global-scene";
 import { activeOverrides } from "#app/overrides";
 import { AbilityId } from "#enums/ability-id";
 import { BattleCommand } from "#enums/battle-command";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { Pokemon } from "#field/pokemon";
 import { BattlePhase } from "#phases/base/battle-phase";
 
 /**

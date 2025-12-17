@@ -32,7 +32,7 @@ export class PostSummonCopyAbilityAbAttr extends PostSummonAbAttr {
 
     this.target = randSeedItem(targets);
     // Wonder Guard is uncopiable by other effects, but Trace specifically can copy it
-    return this.target.getAbility().isCopiable || this.target.getAbility().id === AbilityId.WONDER_GUARD;
+    return this.target.getAbility().copiable || this.target.getAbility().id === AbilityId.WONDER_GUARD;
   }
 
   public override getTriggerMessage(pokemon: Pokemon, _abilityName: string): string {

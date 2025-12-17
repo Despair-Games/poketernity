@@ -1,12 +1,9 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { DAMAGING_TRAPPED_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { BattlerTag } from "#battler-tags/battler-tag";
 import { TrappedTag } from "#battler-tags/trapped-tag";
+import type { DAMAGING_TRAPPED_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
 import { TRAPPED_BATTLER_TAG_TYPES } from "#constants/battler-tag-constants";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";

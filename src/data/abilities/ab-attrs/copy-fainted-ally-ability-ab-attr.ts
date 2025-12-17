@@ -22,6 +22,6 @@ export class CopyFaintedAllyAbilityAbAttr extends PostKnockOutAbAttr {
   }
 
   public override canApply(...[pokemon, , knockedOutPokemon]: Parameters<this["apply"]>): boolean {
-    return !pokemon.isOpponent(knockedOutPokemon) && knockedOutPokemon.getAbility().isCopiable;
+    return !pokemon.isOpponent(knockedOutPokemon) && knockedOutPokemon.getAbility().copiable;
   }
 }

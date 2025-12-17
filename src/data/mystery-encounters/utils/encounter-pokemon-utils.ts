@@ -93,29 +93,34 @@ export function getSpriteKeysFromPokemon(pokemon: Pokemon): { spriteKey: string;
 }
 
 // TODO: Move all the helper functions to get player's random/highest level/lowest level/highest BST to a different utils
+// TODO: Refactor to remove the unsafe bangs from various functions
 
 /**
- * Will never remove the player's last non-fainted Pokemon (if they only have 1).
- * Otherwise, picks a Pokemon completely at random and removes from the party
- * @param isAllowed Default `false`. If `true`, only picks from legal mons. If no legal mons are found (or there is 1, with `doNotReturnLastAllowedMon = true`), will return a mon that is not allowed.
- * @param isFainted Default `false`. If `true`, includes fainted mons.
- * @param doNotReturnLastAllowedMon Default `false`. If `true`, will never return the last unfainted pokemon in the party. Useful when this function is being used to determine what Pokemon to remove from the party (Don't want to remove last unfainted)
+ * Will never remove the player's last non-fainted Pokemon (if they only have 1). \
+ * Otherwise, picks a Pokemon completely at random and removes from the party.
+ * @param legalOnly - (Default `false`) Whether to pick only from legal Pokemon. \
+ *   If no legal Pokemon are found (or there is 1, with `doNotReturnLastAllowedMon = true`), will return a mon that is not allowed.
+ * @param allowFainted - (Default `false`) Whether to include fainted Pokemon.
+ * @param doNotReturnLastAllowedMon - (Default `false`) If `true`, will never return the last unfainted pokemon in the party. \
+ *   Useful when this function is being used to determine what Pokemon to remove from the party (Don't want to remove last unfainted)
  * @returns a random player Pokemon
  */
 export function getRandomPlayerPokemon(
-  isAllowed: boolean = false,
-  isFainted: boolean = false,
+  legalOnly: boolean = false,
+  allowFainted: boolean = false,
   doNotReturnLastAllowedMon: boolean = false,
 ): PlayerPokemon {
   const party = globalScene.getPlayerParty();
   let chosenIndex: number;
   let chosenPokemon: PlayerPokemon | null = null;
-  const fullyLegalMons = party.filter((p) => (!isAllowed || p.isAllowedInChallenge()) && (isFainted || !p.isFainted()));
+  const fullyLegalMons = party.filter(
+    (p) => (!legalOnly || p.isAllowedInChallenge()) && (allowFainted || !p.isFainted()),
+  );
   const allowedOnlyMons = party.filter((p) => p.isAllowedInChallenge());
 
   if (doNotReturnLastAllowedMon && fullyLegalMons.length === 1) {
-    // If there is only 1 legal/unfainted mon left, select from fainted legal mons
-    const faintedLegalMons = party.filter((p) => (!isAllowed || p.isAllowedInChallenge()) && p.isFainted());
+    // If there is only 1 legal/unfainted mon left, select from fainted legal Pokemon
+    const faintedLegalMons = party.filter((p) => (!legalOnly || p.isAllowedInChallenge()) && p.isFainted());
     if (faintedLegalMons.length > 0) {
       chosenIndex = randSeedInt(faintedLegalMons.length);
       chosenPokemon = faintedLegalMons[chosenIndex];
@@ -125,7 +130,7 @@ export function getRandomPlayerPokemon(
     chosenIndex = randSeedInt(fullyLegalMons.length);
     chosenPokemon = fullyLegalMons[chosenIndex];
   }
-  if (!chosenPokemon && isAllowed && allowedOnlyMons.length > 0) {
+  if (!chosenPokemon && legalOnly && allowedOnlyMons.length > 0) {
     chosenIndex = randSeedInt(allowedOnlyMons.length);
     chosenPokemon = allowedOnlyMons[chosenIndex];
   }
@@ -139,123 +144,140 @@ export function getRandomPlayerPokemon(
 }
 
 /**
- * Helper function to get a player's Pokemon with the highest level (should be in a general utils rather than ME/utils)
- * Ties are broken by whatever mon is closer to the front of the party
- * @param isAllowed Default false. If true, only picks from legal mons.
- * @param isFainted Default false. If true, includes fainted mons.
+ * Helper function to get a player's Pokemon with the highest level. \
+ * Ties are broken by whatever Pokemon is closer to the front of the party.
+ * @param legalOnly - (Default `false`) Whether to pick only from legal Pokemon.
+ * @param allowFainted - (Default `false`) Whether to include fainted Pokemon.
  * @returns the player's highest leveled Pokemon
  */
-export function getHighestLevelPlayerPokemon(isAllowed: boolean = false, isFainted: boolean = false): PlayerPokemon {
+export function getHighestLevelPlayerPokemon(legalOnly: boolean = false, allowFainted: boolean = false): PlayerPokemon {
   const party = globalScene.getPlayerParty();
   let pokemon: PlayerPokemon | null = null;
 
   for (const p of party) {
-    if (isAllowed && !p.isAllowedInChallenge()) {
+    if (legalOnly && !p.isAllowedInChallenge()) {
       continue;
     }
-    if (!isFainted && p.isFainted()) {
+    if (!allowFainted && p.isFainted()) {
       continue;
     }
 
-    pokemon = pokemon ? (pokemon?.level < p?.level ? p : pokemon) : p;
+    if (pokemon) {
+      pokemon = pokemon.level < p.level ? p : pokemon;
+    } else {
+      pokemon = p;
+    }
   }
 
   return pokemon!;
 }
 
 /**
- * Helper function to get a player's Pokemon with the highest stat (should be in a general utils rather than ME/utils)
- * Ties are broken by whatever mon is closer to the front of the party
- * @param stat Stat to search for
- * @param isAllowed Default false. If true, only picks from legal mons.
- * @param isFainted Default false. If true, includes fainted mons.
+ * Helper function to get a player's Pokemon with the highest stat. \
+ * Ties are broken by whatever Pokemon is closer to the front of the party
+ * @param stat - Stat to search for
+ * @param legalOnly - (Default `false`) Whether to pick only from legal Pokemon.
+ * @param allowFainted - (Default `false`) Whether to include fainted Pokemon.
  * @returns the Player's Pokemon with the highest stat
  */
 export function getHighestStatPlayerPokemon(
   stat: PermanentStat,
-  isAllowed: boolean = false,
-  isFainted: boolean = false,
+  legalOnly: boolean = false,
+  allowFainted: boolean = false,
 ): PlayerPokemon {
   const party = globalScene.getPlayerParty();
   let pokemon: PlayerPokemon | null = null;
 
   for (const p of party) {
-    if (isAllowed && !p.isAllowedInChallenge()) {
+    if (legalOnly && !p.isAllowedInChallenge()) {
       continue;
     }
-    if (!isFainted && p.isFainted()) {
+    if (!allowFainted && p.isFainted()) {
       continue;
     }
 
-    pokemon = pokemon ? (pokemon.getStat(stat) < p?.getStat(stat) ? p : pokemon) : p;
+    if (pokemon) {
+      pokemon = pokemon.getStat(stat) < p.getStat(stat) ? p : pokemon;
+    } else {
+      pokemon = p;
+    }
   }
 
   return pokemon!;
 }
 
 /**
- * Helper function to get a player's Pokemon with the lowest level (should be in a general utils rather than ME/utils)
- * Ties are broken by whatever mon is closer to the front of the party
- * @param isAllowed Default false. If true, only picks from legal mons.
- * @param isFainted Default false. If true, includes fainted mons.
+ * Helper function to get a player's Pokemon with the lowest level. \
+ * Ties are broken by whatever Pokemon is closer to the front of the party
+ * @param legalOnly - (Default `false`) Whether to pick only from legal Pokemon.
+ * @param allowFainted - (Default `false`) Whether to include fainted Pokemon.
  * @returns the player's lowest leveled Pokemon
  */
-export function getLowestLevelPlayerPokemon(isAllowed: boolean = false, isFainted: boolean = false): PlayerPokemon {
+export function getLowestLevelPlayerPokemon(legalOnly: boolean = false, allowFainted: boolean = false): PlayerPokemon {
   const party = globalScene.getPlayerParty();
   let pokemon: PlayerPokemon | null = null;
 
   for (const p of party) {
-    if (isAllowed && !p.isAllowedInChallenge()) {
+    if (legalOnly && !p.isAllowedInChallenge()) {
       continue;
     }
-    if (!isFainted && p.isFainted()) {
+    if (!allowFainted && p.isFainted()) {
       continue;
     }
 
-    pokemon = pokemon ? (pokemon?.level > p?.level ? p : pokemon) : p;
+    if (pokemon) {
+      pokemon = pokemon.level > p.level ? p : pokemon;
+    } else {
+      pokemon = p;
+    }
   }
 
   return pokemon!;
 }
 
 /**
- * Helper function to get a player's Pokemon with the highest BST (should be in a general utils rather than ME/utils)
- * Ties are broken by whatever mon is closer to the front of the party
- * @param isAllowed Default false. If true, only picks from legal mons.
- * @param isFainted Default false. If true, includes fainted mons.
+ * Helper function to get a player's Pokemon with the highest BST. \
+ * Ties are broken by whatever Pokemon is closer to the front of the party
+ * @param legalOnly - (Default `false`) Whether to pick only from legal Pokemon.
+ * @param allowFainted - (Default `false`) Whether to include fainted Pokemon.
  * @returns the player's Pokemon with the highest BST
  */
 export function getHighestStatTotalPlayerPokemon(
-  isAllowed: boolean = false,
-  isFainted: boolean = false,
+  legalOnly: boolean = false,
+  allowFainted: boolean = false,
 ): PlayerPokemon {
   const party = globalScene.getPlayerParty();
   let pokemon: PlayerPokemon | null = null;
 
   for (const p of party) {
-    if (isAllowed && !p.isAllowedInChallenge()) {
+    if (legalOnly && !p.isAllowedInChallenge()) {
       continue;
     }
-    if (!isFainted && p.isFainted()) {
+    if (!allowFainted && p.isFainted()) {
       continue;
     }
 
-    pokemon = pokemon ? (pokemon?.stats.reduce((a, b) => a + b) < p?.stats.reduce((a, b) => a + b) ? p : pokemon) : p;
+    if (pokemon) {
+      pokemon = pokemon.stats.reduce((a, b) => a + b) < p.stats.reduce((a, b) => a + b) ? p : pokemon;
+    } else {
+      pokemon = p;
+    }
   }
 
   return pokemon!;
 }
 
 /**
- * Function to get a random starter
- * NOTE: This returns ANY random species, including those locked behind eggs, etc.
+ * Function to get a random starter.
+ * @remarks
+ * This returns ANY random species, including those locked behind eggs, etc.
  * @param starterTiers - either a starter tier or a list representing the min and max starter tiers
  * @param excludedSpecies - species to be excluded
  * @param types - list of types to filter for
  * @param allowSubLegendary - whether or not sub legends are allowed
  * @param allowLegendary - whether or not legends are allowed
  * @param allowMythical - whether or not mythicals are allowed
- * @returns a randomly generated Species (dfeault Bulbasaur if all filters fail)
+ * @returns a randomly generated Species (or Bulbasaur if all filters fail)
  */
 export function getRandomSpeciesByStarterCost(
   starterTiers: number | [number, number],

@@ -136,31 +136,28 @@ describe("Moves - Protect", () => {
     [1 / 3, 1],
     [1 / 9, 2],
     [1 / 27, 3],
-  ])(
-    "should have a success rate of %d after being used %d consecutive time(s) successfully",
-    async (expectedRate, numUses) => {
-      await game.classicMode.startBattle(SpeciesId.CHARIZARD);
+  ])("should have a success rate of %d after being used %d consecutive time(s) successfully", async (expectedRate, numUses) => {
+    await game.classicMode.startBattle(SpeciesId.CHARIZARD);
 
-      const protect = allMoves.get(MoveId.PROTECT);
-      const protectAttr = protect.getAttrs(ProtectAttr)[0];
-      vi.spyOn(protect, "applyConditions").mockReturnValue(true);
+    const protect = allMoves.get(MoveId.PROTECT);
+    const protectAttr = protect.getAttrs(ProtectAttr)[0];
+    vi.spyOn(protect, "applyConditions").mockReturnValue(true);
 
-      for (let i = 0; i < numUses; i++) {
-        game.move.use(MoveId.PROTECT);
-        await game.toNextTurn();
+    for (let i = 0; i < numUses; i++) {
+      game.move.use(MoveId.PROTECT);
+      await game.toNextTurn();
+    }
+
+    const player = game.field.getPlayerPokemon();
+
+    let successes = 0;
+    const numTrials = 1000;
+    await game.rng.equalSample(numTrials, () => {
+      if (protectAttr.getCondition()(player, player, allMoves.get(MoveId.PROTECT))) {
+        successes++;
       }
+    });
 
-      const player = game.field.getPlayerPokemon();
-
-      let successes = 0;
-      const numTrials = 1000;
-      await game.rng.equalSample(numTrials, () => {
-        if (protectAttr.getCondition()(player, player, allMoves.get(MoveId.PROTECT))) {
-          successes++;
-        }
-      });
-
-      expect(successes / numTrials).toBeCloseTo(expectedRate);
-    },
-  );
+    expect(successes / numTrials).toBeCloseTo(expectedRate);
+  });
 });

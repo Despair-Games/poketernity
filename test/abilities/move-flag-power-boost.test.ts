@@ -32,6 +32,7 @@ describe("Abilities - Move Flag Power Boost Ability Attr", () => {
   });
 
   // Note: All affected moves have been verified to have the flag required by all_moves
+  // biome-ignore format: prefer pre-2.3.6 formatting
   it.each([
     {
       ability: AbilityId.MEGA_LAUNCHER,
@@ -94,8 +95,7 @@ describe("Abilities - Move Flag Power Boost Ability Attr", () => {
       game.move.select(move);
       await game.move.forceHit();
       await game.toEndOfTurn();
-      // @ts-expect-error - `hasFlag()` is private but we want to validate the flag is set
-      expect(moveUsed.hasFlag(moveFlag)).toBe(true);
+      expect(moveUsed["hasFlag"](moveFlag)).toBe(true);
       expect(moveUsed.checkFlag(moveFlag, playerPokemon)).toBe(true);
       expect(moveUsed.calculateBattlePower).toHaveLastReturnedWith(moveUsed.power * factor);
     },

@@ -23,6 +23,9 @@ export class HitsTagAttr extends MoveAttr {
   }
 
   override getTargetBenefitScore(_user: Pokemon, target: Pokemon, _move: Move): number {
-    return target.hasTag(this.tagType) ? (this.doubleDamage ? 10 : 5) : 0;
+    if (target.hasTag(this.tagType)) {
+      return this.doubleDamage ? 10 : 5;
+    }
+    return 0;
   }
 }

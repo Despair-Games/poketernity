@@ -1,14 +1,11 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { handleMysteryEncounterBattleStartEffects } from "#mystery-encounters/encounter-phase-utils";
-import type { MysteryEncounter } from "#mystery-encounters/mystery-encounter";
-import type { TurnEndPhase } from "#phases/turn-end-phase";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { SwitchType } from "#enums/switch-type";
+import type { handleMysteryEncounterBattleStartEffects } from "#mystery-encounters/encounter-phase-utils";
+import type { MysteryEncounter } from "#mystery-encounters/mystery-encounter";
+import type { TurnEndPhase } from "#phases/turn-end-phase";
 
 /**
  * Runs at the beginning of an Encounter's battle.

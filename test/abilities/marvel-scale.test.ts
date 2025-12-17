@@ -77,22 +77,20 @@ describe("Ability - Marvel Scale", () => {
     expect(player).toHaveEffectiveStat(Stat.DEF, playerDef);
   });
 
-  it.each(nonVolatileStatusEffects)(
-    "should apply a 1.5x defense boost with $statusEffectName status effect",
-    async ({ statusEffectId }) => {
-      const { override, classicMode, field } = game;
-      override.statusEffect(statusEffectId);
+  it.each(nonVolatileStatusEffects)(//
+  "should apply a 1.5x defense boost with $statusEffectName status effect", async ({ statusEffectId }) => {
+    const { override, classicMode, field } = game;
+    override.statusEffect(statusEffectId);
 
-      await classicMode.startBattle(SpeciesId.FEEBAS);
-      const player = field.getPlayerPokemon();
-      game.move.use(MoveId.SPLASH);
-      await game.toEndOfTurn();
-      const playerDef = player.getStat(Stat.DEF);
+    await classicMode.startBattle(SpeciesId.FEEBAS);
+    const player = field.getPlayerPokemon();
+    game.move.use(MoveId.SPLASH);
+    await game.toEndOfTurn();
+    const playerDef = player.getStat(Stat.DEF);
 
-      expect(player.hasNonVolatileStatusEffect()).toBe(true);
-      expect(player).toHaveEffectiveStat(Stat.DEF, Math.floor(playerDef * 1.5));
-    },
-  );
+    expect(player.hasNonVolatileStatusEffect()).toBe(true);
+    expect(player).toHaveEffectiveStat(Stat.DEF, Math.floor(playerDef * 1.5));
+  });
 
   it("should stack with 'Fur Coat' ability", async () => {
     const { override, field, classicMode } = game;

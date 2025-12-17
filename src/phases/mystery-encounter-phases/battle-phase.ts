@@ -1,7 +1,3 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { PostSummonPhase } from "#phases/post-summon-phase";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { getCharVariantFromDialogue } from "#data/dialogue";
@@ -10,6 +6,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { IvScannerModifier } from "#modifier/modifier";
+import type { PostSummonPhase } from "#phases/post-summon-phase";
 import { randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 

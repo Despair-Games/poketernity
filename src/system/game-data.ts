@@ -246,9 +246,12 @@ export class GameData {
       globalScene.ui.savingIcon.show();
       const data = this.getSystemSaveData();
 
-      const systemData = JSON.stringify(data, (_k: any, v: any) =>
-        typeof v === "bigint" ? (v <= MAX_INT_ATTR_VALUE ? Number(v) : v.toString()) : v,
-      );
+      const systemData = JSON.stringify(data, (_k: any, v: any) => {
+        if (typeof v === "bigint") {
+          return v <= MAX_INT_ATTR_VALUE ? Number(v) : v.toString();
+        }
+        return v;
+      });
 
       localStorage.setItem(getLocalStorageKey(GameDataType.SYSTEM), encrypt(systemData, BYPASS_LOGIN));
 
@@ -467,8 +470,9 @@ export class GameData {
     let timestamps = Object.keys(runHistoryData).map(Number);
 
     // Arbitrary limit of 25 entries per user --> Can increase or decrease
+    // TODO: Would something like `timestamps.sort(...).splice(RUN_HISTORY_LIMIT)` be better?
     while (timestamps.length >= RUN_HISTORY_LIMIT) {
-      const oldestTimestamp = Math.min.apply(Math, timestamps).toString();
+      const oldestTimestamp = Math.min(...timestamps).toString();
       delete runHistoryData[oldestTimestamp];
       timestamps = Object.keys(runHistoryData).map(Number);
     }
@@ -1146,9 +1150,12 @@ export class GameData {
         localStorage.setItem(
           systemStorageKey,
           encrypt(
-            JSON.stringify(systemData, (_k: any, v: any) =>
-              typeof v === "bigint" ? (v <= MAX_INT_ATTR_VALUE ? Number(v) : v.toString()) : v,
-            ),
+            JSON.stringify(systemData, (_k: any, v: any) => {
+              if (typeof v === "bigint") {
+                return v <= MAX_INT_ATTR_VALUE ? Number(v) : v.toString();
+              }
+              return v;
+            }),
             BYPASS_LOGIN,
           ),
         );

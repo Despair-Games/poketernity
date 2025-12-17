@@ -21,9 +21,7 @@ export class PostDefendAbilitySwapAbAttr extends PostDefendAbAttr {
 
   public override canApply(...[pokemon, , attacker, move]: Parameters<this["apply"]>): boolean {
     return (
-      move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
-      && attacker.getAbility().isSwappable
-      && !attacker.isMax()
+      move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon) && attacker.getAbility().swappable && !attacker.isMax()
     );
   }
 

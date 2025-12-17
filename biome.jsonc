@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.3.4/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.3.8/schema.json",
   "vcs": {
     "enabled": false,
     "clientKind": "git",
@@ -68,7 +68,8 @@
         "noPrivateImports": "error",
         "noUndeclaredDependencies": "error",
         "useJsonImportAttributes": "off", // "Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'. ts(2823)"
-        "useSingleJsDocAsterisk": "error"
+        "useSingleJsDocAsterisk": "error",
+        "noUnusedPrivateClassMembers": "error"
       },
       "style": {
         "useEnumInitializers": "off", // large enums like Moves/Species would make this cumbersome
@@ -184,7 +185,13 @@
         "noMisusedPromises": "warn", // TODO: refactor and make "error"
         "useExhaustiveSwitchCases": "error",
         "noUnnecessaryConditions": "off", // TODO: enable when the false positives are fixed
-        "noImportCycles": "error" // overlaps with depcruiser but this will allow diagnostics to be shown in the IDE
+        "noImportCycles": "error", // overlaps with depcruiser but this will allow diagnostics to be shown in the IDE
+        "useArraySortCompare": "error",
+        "useFind": "error",
+        "noParametersOnlyUsedInRecursion": "error",
+        "useSpread": "error",
+        "noProto": "error",
+        "noMultiStr": "error"
       },
       "performance": {
         "noNamespaceImport": "error",

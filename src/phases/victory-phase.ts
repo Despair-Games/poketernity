@@ -1,7 +1,3 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { GameOverPhase } from "#phases/game-over-phase";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import { globalScene } from "#app/global-scene";
 import { EVIL_BOSS_2_WAVE } from "#constants/wave-constants";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -9,6 +5,7 @@ import { BattleType } from "#enums/battle-type";
 import type { CustomModifierSettings } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
 import { PokemonPhase } from "#phases/base/pokemon-phase";
+import type { GameOverPhase } from "#phases/game-over-phase";
 
 /**
  * Handles various effects when the player clears a wave:

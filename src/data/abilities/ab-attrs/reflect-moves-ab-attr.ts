@@ -1,11 +1,8 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { MovePhase } from "#phases/move-phase";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import { PreDefendAbAttr } from "#abilities/pre-defend-ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
+import type { MovePhase } from "#phases/move-phase";
 import type { ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 

@@ -1,8 +1,5 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { Stat } from "#enums/stat";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import { ShuffledPriorityQueue } from "#app/queues/shuffled-priority-queue";
+import type { Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import { speedOrderComparator } from "#utils/speed-order-utils";
 

@@ -1,8 +1,3 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { NewBiomeEncounterPhase } from "#phases/new-biome-encounter-phase";
-import type { NextEncounterPhase } from "#phases/next-encounter-phase";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -38,6 +33,8 @@ import { getEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import { doTrainerExclamation } from "#mystery-encounters/encounter-phase-utils";
 import { getGoldenBugNetSpecies } from "#mystery-encounters/encounter-pokemon-utils";
 import { BattlePhase } from "#phases/base/battle-phase";
+import type { NewBiomeEncounterPhase } from "#phases/new-biome-encounter-phase";
+import type { NextEncounterPhase } from "#phases/next-encounter-phase";
 import { achvs } from "#system/achievements";
 import { settings } from "#system/settings-manager";
 import type { PhaseKey } from "#types/phase-types";

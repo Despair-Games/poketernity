@@ -1,8 +1,5 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
-import type { UiMode } from "#enums/ui-mode";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import type { TextStyle } from "#enums/text-style";
+import type { UiMode } from "#enums/ui-mode";
 
 /**
  * Customizations options for UI's {@linkcode UiMode.OPTION_SELECT}
