@@ -449,4 +449,24 @@ describe("Abilities - Parental Bond", () => {
     expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(-1);
     expect(playerPokemon.turnData.hitCount).toBe(2);
   });
+
+  it("should not reduce damage against the remaining target if the first one faints", async () => {
+    game.override.battleType("double");
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
+
+    const player = game.field.getPlayerPokemon();
+    const [enemy1, enemy2] = game.scene.getEnemyField();
+
+    // Mock base damage for both mons for consistent results
+    vi.spyOn(enemy1, "getBaseDamage").mockReturnValue(100);
+    vi.spyOn(enemy2, "getBaseDamage").mockReturnValue(100);
+    enemy1.hp = 1;
+
+    game.move.use(MoveId.HYPER_VOICE);
+    await game.toEndOfTurn();
+
+    expect(enemy1).toHaveFainted();
+    expect(player).not.toHaveAbilityApplied(AbilityId.PARENTAL_BOND);
+    expect(enemy2).toHaveTakenDamage(100);
+  });
 });

@@ -10,13 +10,6 @@ import type { ValueHolder } from "#utils/common-utils";
  */
 export class AddSecondStrikeAbAttr extends PreAttackAbAttr {
   protected override readonly abAttrKey = "AddSecondStrikeAbAttr";
-  private readonly damageMultiplier: number;
-
-  constructor(damageMultiplier: number) {
-    super();
-
-    this.damageMultiplier = damageMultiplier;
-  }
 
   /**
    * If conditions are met, this increases the move's hit count (via args[0])
@@ -30,27 +23,20 @@ export class AddSecondStrikeAbAttr extends PreAttackAbAttr {
    * @returns `true` if the given move is modified by this effect
    */
   public override apply(
-    pokemon: Pokemon,
+    _pokemon: Pokemon,
     _simulated: boolean,
     _move: Move,
     _defender: Pokemon,
-    hitCount?: ValueHolder<number>,
-    multiplier?: ValueHolder<number>,
+    hitCount: ValueHolder<number>,
   ): void {
-    if (hitCount?.value) {
-      hitCount.value += 1;
-    }
-
-    if (multiplier?.value && pokemon.turnData.hitsLeft === 1) {
-      multiplier.value = this.damageMultiplier;
-    }
+    hitCount.value += 1;
   }
 
   /**
    * @returns `true` if the move being used satisfies {@linkcode Move.canBeMultiStrikeEnhanced | conditions}
    * to be multi-strike-enhanced.
    */
-  public override canApply(...[pokemon, , move]: Parameters<this["apply"]>): boolean {
-    return move.canBeMultiStrikeEnhanced(pokemon);
+  public override canApply(...[pokemon, , move, defender]: Parameters<this["apply"]>): boolean {
+    return move.canBeMultiStrikeEnhanced(pokemon, defender);
   }
 }

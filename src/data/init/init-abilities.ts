@@ -1086,7 +1086,16 @@ export function initAbilities(): void {
       .attr(MoveTypeChangeAbAttr, ElementalType.FLYING, 1.2, normalTypeMoveConversionCondition)
       .build(),
     new AbBuilder(AbilityId.PARENTAL_BOND, 6) //
-      .attr(AddSecondStrikeAbAttr, 0.25)
+      .attr(AddSecondStrikeAbAttr)
+      .attr(
+        DamageBoostAbAttr,
+        0.25,
+        (user, target, move) =>
+          !!user
+          && user.turnData.hitCount > 1 // move was originally multi hit
+          && user.turnData.hitsLeft === 1 // move is on its final strike
+          && !!move?.canBeMultiStrikeEnhanced(user, target),
+      )
       .build(),
     new AbBuilder(AbilityId.DARK_AURA, 6) //
       .attr(PostSummonMessageAbAttr, (pokemon: Pokemon) =>
