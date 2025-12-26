@@ -69,7 +69,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
 
     this.excludedMenus = () => [
       {
-        excluded: globalScene.phaseManager.getCurrentPhase()?.is("SelectModifierPhase") ?? false,
+        excluded: globalScene.phaseManager.getCurrentPhase().is("SelectModifierPhase"),
         options: [MenuOptions.EGG_GACHA, MenuOptions.EGG_LIST],
       },
       { excluded: BYPASS_LOGIN, options: [MenuOptions.LOG_OUT] },

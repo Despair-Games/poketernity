@@ -945,7 +945,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
       // During the Pokemon's MoveEffect phase, the offset is removed to put the Pokemon "in focus"
       const currentPhase = globalScene.phaseManager.getCurrentPhase();
-      if (currentPhase?.is("MoveEffectPhase") && currentPhase.getPokemon() === this) {
+      if (currentPhase.is("MoveEffectPhase") && currentPhase.getPokemon() === this) {
         return false;
       }
       return true;
@@ -4020,7 +4020,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
      */
     if (effect === StatusEffect.SLEEP || effect === StatusEffect.FREEZE) {
       const currentPhase = globalScene.phaseManager.getCurrentPhase();
-      if (currentPhase?.is("MoveEffectPhase") && currentPhase.getUserPokemon() === this) {
+      if (currentPhase.is("MoveEffectPhase") && currentPhase.getUserPokemon() === this) {
         this.stopMultiHit();
       }
     }

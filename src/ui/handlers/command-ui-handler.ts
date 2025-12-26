@@ -127,7 +127,7 @@ export class CommandUiHandler extends UiHandler {
           case BattleCommand.FIGHT:
             ui.setMode<FightUiHandler>(
               UiMode.FIGHT,
-              globalScene.phaseManager.getCurrentPhase<CommandPhase>()?.getFieldIndex(),
+              globalScene.phaseManager.getCurrentPhase<CommandPhase>().getFieldIndex(),
             );
             success = true;
             break;
@@ -139,27 +139,27 @@ export class CommandUiHandler extends UiHandler {
             ui.setMode<PartyUiHandler>(
               UiMode.PARTY,
               PartyUiMode.SWITCH,
-              globalScene.phaseManager.getCurrentPhase<CommandPhase>()?.getPokemon().getFieldIndex(),
+              globalScene.phaseManager.getCurrentPhase<CommandPhase>().getPokemon().getFieldIndex(),
               null,
               PartyFilterNonFainted,
             );
             success = true;
             break;
           case BattleCommand.RUN:
-            globalScene.phaseManager.getCurrentPhase<CommandPhase>()?.handleCommand(BattleCommand.RUN, 0);
+            globalScene.phaseManager.getCurrentPhase<CommandPhase>().handleCommand(BattleCommand.RUN, 0);
             success = true;
             break;
           case BattleCommand.TERA:
             ui.setMode<FightUiHandler>(
               UiMode.FIGHT,
-              globalScene.phaseManager.getCurrentPhase<CommandPhase>()?.getFieldIndex(),
+              globalScene.phaseManager.getCurrentPhase<CommandPhase>().getFieldIndex(),
               BattleCommand.TERA,
             );
             success = true;
             break;
         }
       } else {
-        (globalScene.phaseManager.getCurrentPhase() as CommandPhase).cancel();
+        globalScene.phaseManager.getCurrentPhase<CommandPhase>().cancel();
       }
     } else {
       switch (button) {
@@ -285,9 +285,10 @@ export class CommandUiHandler extends UiHandler {
   private getCommandPhase(): CommandPhase {
     let commandPhase: CommandPhase;
     const currentPhase = globalScene.phaseManager.getCurrentPhase();
-    if (currentPhase?.is("CommandPhase")) {
+    if (currentPhase.is("CommandPhase")) {
       commandPhase = currentPhase;
     } else {
+      console.log("Got standby phase in `CommandUiHandler#getCommandPhase`");
       commandPhase = globalScene.phaseManager.getStandbyPhase() as CommandPhase;
     }
     return commandPhase;

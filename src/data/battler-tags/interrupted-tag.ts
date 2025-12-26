@@ -35,7 +35,7 @@ export class InterruptedTag extends BattlerTag {
   }
 
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
-    (globalScene.phaseManager.getCurrentPhase() as MovePhase).cancel();
+    globalScene.phaseManager.getCurrentPhase<MovePhase>().cancel();
     return super.lapse(pokemon, lapseType);
   }
 }

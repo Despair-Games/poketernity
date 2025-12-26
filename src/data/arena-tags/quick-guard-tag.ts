@@ -17,7 +17,7 @@ const QuickGuardConditionFunc: ProtectConditionFunc = (moveId) => {
   const move = allMoves.get(moveId);
   const effectPhase = globalScene.phaseManager.getCurrentPhase();
 
-  if (effectPhase?.is("MoveEffectPhase")) {
+  if (effectPhase.is("MoveEffectPhase")) {
     const attacker = effectPhase.getUserPokemon();
     if (attacker) {
       return move.getPriority(attacker) > 0;

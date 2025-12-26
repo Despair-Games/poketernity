@@ -361,12 +361,12 @@ export class PhaseInterceptor {
     const instance = this.scene.ui;
     // @ts-expect-error: TypeScript doesn't like the `= never` from `UI#setMode`
     const ret = this.originalSetMode.apply(instance, [mode, ...args]);
-    if (currentPhase && !this.phases[currentPhase.constructor.name]) {
+    if (!this.phases[currentPhase.constructor.name]) {
       throw new Error(
         `missing ${currentPhase.constructor.name} in phaseInterceptor PHASES list  ---  Add it to PHASES inside of /test/utils/phaseInterceptor.ts`,
       );
     }
-    if (currentPhase && this.phases[currentPhase.constructor.name].endBySetMode) {
+    if (this.phases[currentPhase.constructor.name].endBySetMode) {
       this.inProgress?.callback();
       this.inProgress = undefined;
     }
@@ -378,11 +378,11 @@ export class PhaseInterceptor {
    */
   startPromptHandler() {
     this.promptInterval = setInterval(() => {
-      if (this.prompts.length) {
+      if (this.prompts.length > 0) {
         const actionForNextPrompt = this.prompts[0];
         const expireFn = actionForNextPrompt.expireFn?.();
         const currentMode = this.scene.ui.getMode();
-        const currentPhase = this.scene.phaseManager.getCurrentPhase()?.constructor.name;
+        const currentPhase = this.scene.phaseManager.getCurrentPhase().constructor.name;
         const currentHandler = this.scene.ui.getCurrentHandler();
         if (expireFn) {
           this.prompts.shift();

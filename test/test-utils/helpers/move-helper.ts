@@ -34,8 +34,7 @@ export class MoveHelper extends GameManagerHelper {
   public async forceHit(): Promise<void> {
     await this.game.phaseInterceptor.to("MoveEffectPhase", false);
     const moveEffectPhase = this.game.scene.phaseManager.getCurrentPhase<MoveEffectPhase>();
-    expect(moveEffectPhase).toBeDefined();
-    const move = moveEffectPhase!.move.getMove();
+    const move = moveEffectPhase.move.getMove();
     vi.spyOn(move, "calculateBattleAccuracy").mockImplementation((user, _target, _simulated) => {
       console.log(chalk.gray(`- Forcing hit on ${getPokemonNameWithAffix(user)}'s ${move.name}! - `));
       return -1;
@@ -168,7 +167,7 @@ export class MoveHelper extends GameManagerHelper {
     // Wait for the next EnemyCommandPhase to start
     await this.game.phaseInterceptor.to("EnemyCommandPhase", false);
     const enemy =
-      this.game.scene.getEnemyField()[this.game.scene.phaseManager.getCurrentPhase<EnemyCommandPhase>()!.fieldIndex];
+      this.game.scene.getEnemyField()[this.game.scene.phaseManager.getCurrentPhase<EnemyCommandPhase>().fieldIndex];
     const legalTargets = getMoveTargets(enemy, moveId);
 
     vi.spyOn(enemy, "getNextMove").mockReturnValueOnce({
@@ -202,7 +201,7 @@ export class MoveHelper extends GameManagerHelper {
     // Wait for the next EnemyCommandPhase to start
     await this.game.phaseInterceptor.to("EnemyCommandPhase", false);
     const enemy =
-      this.game.scene.getEnemyField()[this.game.scene.phaseManager.getCurrentPhase<EnemyCommandPhase>()!.fieldIndex];
+      this.game.scene.getEnemyField()[this.game.scene.phaseManager.getCurrentPhase<EnemyCommandPhase>().fieldIndex];
 
     if (coerceArray(activeOverrides.ENEMY_MOVESET_OVERRIDE).length > 0) {
       vi.spyOn(activeOverrides, "ENEMY_MOVESET_OVERRIDE", "get").mockReturnValue([]);
@@ -243,7 +242,7 @@ export class MoveHelper extends GameManagerHelper {
       UiMode.TARGET_SELECT,
       () => {
         const handler = this.game.scene.ui.getCurrentHandler<TargetSelectUiHandler>();
-        const phase = this.game.scene.phaseManager.getCurrentPhase<SelectTargetPhase>()!;
+        const phase = this.game.scene.phaseManager.getCurrentPhase<SelectTargetPhase>();
         const move = phase.getPokemon().getMoveset()[movePosition].getMove();
         if (!move.isMultiTarget()) {
           handler.setCursor(targetIndex ?? BattlerIndex.ENEMY);

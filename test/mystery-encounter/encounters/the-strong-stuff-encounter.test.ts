@@ -192,7 +192,7 @@ describe("The Strong Stuff - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 2, undefined, true);
 
       const enemy = game.field.getEnemyPokemon();
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("CommandPhase");
       expect(enemy.species.speciesId).toBe(SpeciesId.SHUCKLE);
       expect(enemy.summonData.statStages).toEqual([0, 2, 0, 2, 0, 0, 0]);
       const shuckleItems = enemy.getHeldItems();
@@ -221,7 +221,7 @@ describe("The Strong Stuff - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 2, undefined, true);
       await skipBattleRunMysteryEncounterRewardsPhase(game);
       await game.phaseInterceptor.to("SelectModifierPhase", false);
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SelectModifierPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("SelectModifierPhase");
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);

@@ -233,7 +233,7 @@ export class EggHatchSummaryUiHandler extends MessageUiHandler {
         error = true;
       } else {
         const phase = globalScene.phaseManager.getCurrentPhase();
-        if (phase?.is("EggSummaryPhase")) {
+        if (phase.is("EggSummaryPhase")) {
           phase.end();
         }
         success = true;

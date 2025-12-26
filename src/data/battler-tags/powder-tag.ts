@@ -9,7 +9,7 @@ import { ElementalType } from "#enums/elemental-type";
 import { HitResult } from "#enums/hit-result";
 import { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
-import { BooleanHolder } from "#utils/common-utils";
+import { ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -40,41 +40,40 @@ export class PowderTag extends BattlerTag {
    * @returns `true` if the tag should not expire after this lapse; `false` otherwise.
    */
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
-    if (lapseType === BattlerTagLapseType.PRE_MOVE) {
-      const currPhase = globalScene.phaseManager.getCurrentPhase();
-      if (currPhase?.is("MovePhase")) {
-        const move = currPhase.pokemonMove.getMove();
-        const weather = globalScene.arena.weather;
-        if (
-          pokemon.getMoveType(move) === ElementalType.FIRE
-          && !(weather && weather.weatherType === WeatherType.HEAVY_RAIN && !weather.isEffectSuppressed())
-        ) {
-          currPhase.fail();
-          currPhase.showMoveText();
+    if (lapseType !== BattlerTagLapseType.PRE_MOVE) {
+      return super.lapse(pokemon, lapseType);
+    }
 
-          globalScene.phaseManager.createAndUnshiftPhase(
-            "CommonAnimPhase",
-            CommonAnim.POWDER,
-            pokemon.getBattlerIndex(),
-          );
-
-          const cancelDamage = new BooleanHolder(false);
-          applyAbAttrs("BlockNonDirectDamageAbAttr", pokemon, false, cancelDamage);
-          if (!cancelDamage.value) {
-            pokemon.damageAndUpdate(Math.floor(pokemon.getMaxHp() / 4), {
-              result: HitResult.OTHER,
-            });
-          }
-
-          // "When the flame touched the powder\non the Pokémon, it exploded!"
-          globalScene.phaseManager.createAndUnshiftPhase(
-            "MessagePhase",
-            i18next.t("battlerTags:powderLapse", { moveName: currPhase.pokemonMove.name }),
-          );
-        }
-      }
+    const currPhase = globalScene.phaseManager.getCurrentPhase();
+    if (!currPhase.is("MovePhase")) {
       return true;
     }
-    return super.lapse(pokemon, lapseType);
+
+    const move = currPhase.pokemonMove.getMove();
+    const weather = globalScene.arena.weather;
+    if (
+      pokemon.getMoveType(move) === ElementalType.FIRE
+      && !(weather && weather.weatherType === WeatherType.HEAVY_RAIN && !weather.isEffectSuppressed())
+    ) {
+      currPhase.fail();
+      currPhase.showMoveText();
+
+      globalScene.phaseManager.createAndUnshiftPhase("CommonAnimPhase", CommonAnim.POWDER, pokemon.getBattlerIndex());
+
+      const cancelDamage = new ValueHolder(false);
+      applyAbAttrs("BlockNonDirectDamageAbAttr", pokemon, false, cancelDamage);
+      if (!cancelDamage.value) {
+        pokemon.damageAndUpdate(Math.floor(pokemon.getMaxHp() / 4), {
+          result: HitResult.OTHER,
+        });
+      }
+
+      // "When the flame touched the powder\non the Pokémon, it exploded!"
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
+        i18next.t("battlerTags:powderLapse", { moveName: currPhase.pokemonMove.name }),
+      );
+    }
+    return true;
   }
 }

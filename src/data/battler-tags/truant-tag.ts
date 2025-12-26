@@ -28,7 +28,7 @@ export class TruantTag extends AbilityBattlerTag {
 
     if (lastMove && lastMove.move.id !== MoveId.NONE) {
       const { phaseManager } = globalScene;
-      phaseManager.getCurrentPhase<MovePhase>()?.cancel();
+      phaseManager.getCurrentPhase<MovePhase>().cancel();
       phaseManager.unshiftPhase(
         phaseManager.createPhase("ShowAbilityPhase", pokemon, passive),
         phaseManager.createPhase(

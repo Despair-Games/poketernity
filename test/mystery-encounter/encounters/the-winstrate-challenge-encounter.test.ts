@@ -256,7 +256,7 @@ describe("The Winstrate Challenge - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.THE_WINSTRATE_CHALLENGE, defaultParty);
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("CommandPhase");
       expect(scene.currentBattle.trainer).toBeDefined();
       expect(scene.currentBattle.trainer!.config.trainerType).toBe(TrainerType.VICTOR);
       expect(scene.currentBattle.mysteryEncounter?.enemyPartyConfigs.length).toBe(4);
@@ -289,7 +289,7 @@ describe("The Winstrate Challenge - Mystery Encounter", () => {
       // Should have Macho Brace in the rewards
       await skipBattleToNextBattle(game, true);
       await game.phaseInterceptor.to("SelectModifierPhase", false);
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SelectModifierPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("SelectModifierPhase");
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
@@ -329,7 +329,7 @@ describe("The Winstrate Challenge - Mystery Encounter", () => {
     it("should have a Rarer Candy in the rewards", async () => {
       await game.runToMysteryEncounter(MysteryEncounterType.THE_WINSTRATE_CHALLENGE, defaultParty);
       await runMysteryEncounterToEnd(game, 2);
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SelectModifierPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("SelectModifierPhase");
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);

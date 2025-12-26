@@ -151,26 +151,25 @@ describe("Teleporting Hijinks - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.TELEPORTING_HIJINKS, defaultParty);
       await game.phaseInterceptor.to("MysteryEncounterPhase", false);
 
-      const encounterPhase = scene.phaseManager.getCurrentPhase();
-      expect(encounterPhase?.phaseName).toBe("MysteryEncounterPhase");
-      const mysteryEncounterPhase = encounterPhase as MysteryEncounterPhase;
-      vi.spyOn(mysteryEncounterPhase, "continueEncounter");
-      vi.spyOn(mysteryEncounterPhase, "handleOptionSelect");
+      const encounterPhase = scene.phaseManager.getCurrentPhase<MysteryEncounterPhase>();
+      expect(encounterPhase.phaseName).toBe("MysteryEncounterPhase");
+      vi.spyOn(encounterPhase, "continueEncounter");
+      vi.spyOn(encounterPhase, "handleOptionSelect");
       vi.spyOn(scene.ui, "playError");
 
       await runSelectMysteryEncounterOption(game, 1);
 
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("MysteryEncounterPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("MysteryEncounterPhase");
       expect(scene.ui.playError).not.toHaveBeenCalled(); // No error sfx, option is disabled
-      expect(mysteryEncounterPhase.handleOptionSelect).not.toHaveBeenCalled();
-      expect(mysteryEncounterPhase.continueEncounter).not.toHaveBeenCalled();
+      expect(encounterPhase.handleOptionSelect).not.toHaveBeenCalled();
+      expect(encounterPhase.continueEncounter).not.toHaveBeenCalled();
     });
 
     it("should be selectable if the player has enough money", async () => {
       await game.runToMysteryEncounter(MysteryEncounterType.TELEPORTING_HIJINKS, defaultParty);
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("CommandPhase");
     });
 
     it("should transport to a new area", async () => {
@@ -223,26 +222,25 @@ describe("Teleporting Hijinks - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.TELEPORTING_HIJINKS, [SpeciesId.BLASTOISE]);
       await game.phaseInterceptor.to("MysteryEncounterPhase", false);
 
-      const encounterPhase = scene.phaseManager.getCurrentPhase();
-      expect(encounterPhase?.phaseName).toBe("MysteryEncounterPhase");
-      const mysteryEncounterPhase = encounterPhase as MysteryEncounterPhase;
-      vi.spyOn(mysteryEncounterPhase, "continueEncounter");
-      vi.spyOn(mysteryEncounterPhase, "handleOptionSelect");
+      const encounterPhase = scene.phaseManager.getCurrentPhase<MysteryEncounterPhase>();
+      expect(encounterPhase.phaseName).toBe("MysteryEncounterPhase");
+      vi.spyOn(encounterPhase, "continueEncounter");
+      vi.spyOn(encounterPhase, "handleOptionSelect");
       vi.spyOn(scene.ui, "playError");
 
       await runSelectMysteryEncounterOption(game, 2);
 
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("MysteryEncounterPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("MysteryEncounterPhase");
       expect(scene.ui.playError).not.toHaveBeenCalled(); // No error sfx, option is disabled
-      expect(mysteryEncounterPhase.handleOptionSelect).not.toHaveBeenCalled();
-      expect(mysteryEncounterPhase.continueEncounter).not.toHaveBeenCalled();
+      expect(encounterPhase.handleOptionSelect).not.toHaveBeenCalled();
+      expect(encounterPhase.continueEncounter).not.toHaveBeenCalled();
     });
 
     it("should be selectable if the player has the right type pokemon", async () => {
       await game.runToMysteryEncounter(MysteryEncounterType.TELEPORTING_HIJINKS, [SpeciesId.METAGROSS]);
       await runMysteryEncounterToEnd(game, 2, undefined, true);
 
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("CommandPhase");
     });
 
     it("should transport to a new area", async () => {
@@ -303,7 +301,7 @@ describe("Teleporting Hijinks - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 3, undefined, true);
       await skipBattleRunMysteryEncounterRewardsPhase(game);
       await game.phaseInterceptor.to("SelectModifierPhase", false);
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SelectModifierPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("SelectModifierPhase");
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);

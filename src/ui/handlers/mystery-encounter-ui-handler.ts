@@ -190,7 +190,7 @@ export class MysteryEncounterUiHandler extends UiHandler {
         ) {
           success = false;
         } else if (
-          (globalScene.phaseManager.getCurrentPhase() as MysteryEncounterPhase).handleOptionSelect(selected, cursor)
+          globalScene.phaseManager.getCurrentPhase<MysteryEncounterPhase>().handleOptionSelect(selected, cursor)
         ) {
           success = true;
         } else {

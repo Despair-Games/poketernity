@@ -168,8 +168,8 @@ describe.todo("Abilities - Neutralizing Gas", () => {
 
     // TODO: add currentphase helper that `expect`s the correct phase
     const commandPhase = game.scene.phaseManager.getCurrentPhase<CommandPhase>();
-    expect(commandPhase?.phaseName).toBe("CommandPhase");
-    commandPhase!.handleCommand(BattleCommand.RUN, 0);
+    expect(commandPhase.phaseName).toBe("CommandPhase");
+    commandPhase.handleCommand(BattleCommand.RUN, 0);
     await game.toEndOfTurn();
 
     // expect(game.scene.arena.getTag(ArenaTagType.NEUTRALIZING_GAS)).toBeUndefined();

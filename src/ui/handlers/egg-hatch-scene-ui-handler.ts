@@ -2,7 +2,6 @@ import { globalScene } from "#app/global-scene";
 import { GAME_HEIGHT } from "#constants/ui-constants";
 import { Button } from "#enums/button";
 import { UiMode } from "#enums/ui-mode";
-import { EggHatchPhase } from "#phases/egg-hatch-phase";
 import { UiHandler } from "#ui/ui-handler";
 
 export class EggHatchSceneUiHandler extends UiHandler {
@@ -55,7 +54,7 @@ export class EggHatchSceneUiHandler extends UiHandler {
   public override processInput(button: Button): boolean {
     if (button === Button.ACTION || button === Button.CANCEL) {
       const phase = globalScene.phaseManager.getCurrentPhase();
-      if (phase instanceof EggHatchPhase && phase.trySkip()) {
+      if (phase.is("EggHatchPhase") && phase.trySkip()) {
         return true;
       }
     }

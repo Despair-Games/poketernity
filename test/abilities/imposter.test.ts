@@ -126,7 +126,7 @@ describe("Abilities - Imposter", () => {
     await game.move.forceEnemyMove(MoveId.MEMENTO);
     await game.toNextWave();
 
-    expect(game.scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
+    expect(game.scene.phaseManager.getCurrentPhase().phaseName).toBe("CommandPhase");
     expect(game.scene.currentBattle.waveIndex).toBe(2);
 
     await game.reload.reloadSession();

@@ -102,20 +102,22 @@ export class SubstituteTag extends BattlerTag {
   /** If the Substitute redirects damage, queue a message to indicate it. */
   onHit(pokemon: Pokemon): void {
     const moveEffectPhase = globalScene.phaseManager.getCurrentPhase();
-    if (moveEffectPhase?.is("MoveEffectPhase")) {
-      const attacker = moveEffectPhase.getUserPokemon();
-      if (!attacker) {
-        return;
-      }
-      const move = moveEffectPhase.move.getMove();
-      const firstHit = attacker.turnData.hitCount === attacker.turnData.hitsLeft;
+    if (!moveEffectPhase.is("MoveEffectPhase")) {
+      return;
+    }
 
-      if (firstHit && move.hitsSubstitute(attacker, pokemon)) {
-        globalScene.phaseManager.createAndUnshiftPhase(
-          "MessagePhase",
-          i18next.t("battlerTags:substituteOnHit", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
-        );
-      }
+    const attacker = moveEffectPhase.getUserPokemon();
+    if (!attacker) {
+      return;
+    }
+    const move = moveEffectPhase.move.getMove();
+    const firstHit = attacker.turnData.hitCount === attacker.turnData.hitsLeft;
+
+    if (firstHit && move.hitsSubstitute(attacker, pokemon)) {
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
+        i18next.t("battlerTags:substituteOnHit", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+      );
     }
   }
 

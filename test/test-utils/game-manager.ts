@@ -151,7 +151,7 @@ export class GameManager {
    * Ends the current phase.
    */
   endPhase() {
-    this.scene.phaseManager.getCurrentPhase()?.end();
+    this.scene.phaseManager.getCurrentPhase().end();
   }
 
   /**
@@ -367,7 +367,7 @@ export class GameManager {
    * @returns True if the current phase matches the target phase, otherwise false.
    */
   isCurrentPhase(phaseTarget: PhaseKey) {
-    return this.scene.phaseManager.getCurrentPhase()?.is(phaseTarget);
+    return this.scene.phaseManager.getCurrentPhase().is(phaseTarget);
   }
 
   /**
@@ -529,7 +529,7 @@ export class GameManager {
    * **Must** be called during the {@linkcode CommandPhase}.
    */
   public tryToRunAway() {
-    const commandPhase = this.scene.phaseManager.getCurrentPhase<CommandPhase>()!;
+    const commandPhase = this.scene.phaseManager.getCurrentPhase<CommandPhase>();
     expect(commandPhase.phaseName).toBe("CommandPhase");
 
     commandPhase.handleCommand(BattleCommand.RUN, 0);
@@ -543,7 +543,7 @@ export class GameManager {
    * @see {@linkcode PokeballType}
    */
   public throwPokeball(ballType: PokeballType) {
-    const commandPhase = this.scene.phaseManager.getCurrentPhase<CommandPhase>()!;
+    const commandPhase = this.scene.phaseManager.getCurrentPhase<CommandPhase>();
     expect(commandPhase.phaseName).toBe("CommandPhase");
 
     commandPhase.handleCommand(BattleCommand.BALL, ballType);

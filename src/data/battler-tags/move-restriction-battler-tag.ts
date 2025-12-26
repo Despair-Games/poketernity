@@ -9,11 +9,11 @@ import type { Move } from "#moves/move";
 import type { MovePhase } from "#phases/move-phase";
 
 /**
- * Base class for tags that restrict the usage of moves.
- * This effect is generally referred to as "disabling" a move in-game.
+ * Base class for tags that restrict the usage of moves. \
+ * This effect is generally referred to as "disabling" a move in-game. \
  * This is not to be confused with {@linkcode MoveId.DISABLE}.
  *
- * Descendants can override {@linkcode isMoveRestricted} to restrict moves that match a condition.
+ * Descendants can override {@linkcode isMoveRestricted} to restrict moves that match a condition. \
  * A restricted move gets cancelled before it is used.
  *
  * Players and enemies should not be allowed to select restricted moves.
@@ -22,25 +22,24 @@ import type { MovePhase } from "#phases/move-phase";
  * Tags that use or subclass this should be added to {@linkcode RESTRICTING_TAG_TYPES}
  */
 export abstract class MoveRestrictionBattlerTag extends BattlerTag implements RestrictingBattlerTag {
-  /** @override */
-  override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
-    if (lapseType === BattlerTagLapseType.PRE_MOVE) {
-      // Cancel the affected pokemon's selected move
-      const phase = globalScene.phaseManager.getCurrentPhase() as MovePhase;
-      const { pokemonMove } = phase;
-
-      if (this.isMoveRestricted(pokemonMove.moveId, pokemon)) {
-        const interruptedText = this.getInterruptedText(pokemon, pokemonMove.moveId);
-        if (interruptedText) {
-          globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", interruptedText);
-        }
-        phase.cancel();
-      }
-
-      return true;
+  public override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
+    if (lapseType !== BattlerTagLapseType.PRE_MOVE) {
+      return super.lapse(pokemon, lapseType);
     }
 
-    return super.lapse(pokemon, lapseType);
+    // Cancel the affected pokemon's selected move
+    const phase = globalScene.phaseManager.getCurrentPhase<MovePhase>();
+    const { pokemonMove } = phase;
+
+    if (this.isMoveRestricted(pokemonMove.moveId, pokemon)) {
+      const interruptedText = this.getInterruptedText(pokemon, pokemonMove.moveId);
+      if (interruptedText) {
+        globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", interruptedText);
+      }
+      phase.cancel();
+    }
+
+    return true;
   }
 
   /**
@@ -70,7 +69,7 @@ export abstract class MoveRestrictionBattlerTag extends BattlerTag implements Re
    * @param moveId - {@linkcode MoveId | move} that is having its selection denied
    * @returns text to display when the player attempts to select the restricted move
    */
-  abstract getSelectionDeniedText(pokemon: Pokemon, moveId: MoveId): string;
+  public abstract getSelectionDeniedText(pokemon: Pokemon, moveId: MoveId): string;
 
   /**
    * Gets the text to display when a move's execution is prevented as a result of the restriction.
@@ -81,7 +80,7 @@ export abstract class MoveRestrictionBattlerTag extends BattlerTag implements Re
    * @param _moveId - The {@linkcode MoveId | move} being interrupted
    * @returns text to display when the move is interrupted
    */
-  abstract getInterruptedText(_pokemon: Pokemon, _moveId: MoveId): string;
+  public abstract getInterruptedText(_pokemon: Pokemon, _moveId: MoveId): string;
 
   /**
    * Gets the last valid move from the pokemon's move history.

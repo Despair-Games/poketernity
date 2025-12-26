@@ -243,7 +243,7 @@ export class PhaseManager {
    */
   private standbyPhase: Phase | null = null;
 
-  public getCurrentPhase<P extends Phase = Phase>(): P | null {
+  public getCurrentPhase<P extends Phase = Phase>(): P {
     return this.currentPhase as P;
   }
 
@@ -393,8 +393,7 @@ export class PhaseManager {
     if (phaseEntry == null) {
       this.dynamicPhaseManager.clearQueues();
       this.currentPhase = this.createPhase("TurnInitPhase");
-      console.log(`%cStart Phase ${this.currentPhase.constructor.name}`, "color:green;");
-      this.currentPhase.start();
+      this.startCurrentPhase();
       return;
     }
 
@@ -403,6 +402,10 @@ export class PhaseManager {
       : (this.dynamicPhaseManager.popNextPhase(phaseEntry.phaseType) ?? this.createPhase("TurnInitPhase"));
 
     this.currentPhase = phase;
+    this.startCurrentPhase();
+  }
+
+  private startCurrentPhase(): void {
     console.log(`%cStart Phase ${this.currentPhase.constructor.name}`, "color:green;");
     this.currentPhase.start();
   }
@@ -421,8 +424,7 @@ export class PhaseManager {
 
     this.standbyPhase = this.currentPhase;
     this.currentPhase = phase;
-    console.log(`%cStart Phase ${phase.constructor.name}`, "color:green;");
-    phase.start();
+    this.startCurrentPhase();
 
     return true;
   }

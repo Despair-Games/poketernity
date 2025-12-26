@@ -3956,7 +3956,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         globalScene.phaseManager.toTitleScreen();
       }
       this.clearText();
-      globalScene.phaseManager.getCurrentPhase()?.end();
+      globalScene.phaseManager.getCurrentPhase().end();
     };
     const cancelExit = () => {
       ui.setMode<StarterSelectUiHandler>(UiMode.STARTER_SELECT);

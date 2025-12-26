@@ -72,7 +72,7 @@ export class FormChangeSceneUiHandler extends MessageUiHandler {
     if (this.canCancel && button === Button.CANCEL) {
       this.canCancel = false;
       const currentPhase = globalScene.phaseManager.getCurrentPhase();
-      if (currentPhase?.is("EvolutionPhase")) {
+      if (currentPhase.is("EvolutionPhase")) {
         currentPhase.cancelEvolution();
       }
       return true;

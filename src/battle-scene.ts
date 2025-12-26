@@ -1420,8 +1420,8 @@ export class BattleScene extends SceneBase {
     }
 
     const isEggPhase: boolean =
-      !!this.phaseManager.getCurrentPhase()?.is("EggHatchPhase")
-      || !!this.phaseManager.getCurrentPhase()?.is("EggLapsePhase");
+      this.phaseManager.getCurrentPhase().is("EggHatchPhase")
+      || this.phaseManager.getCurrentPhase().is("EggLapsePhase");
 
     switch (species.speciesId) {
       case SpeciesId.UNOWN:

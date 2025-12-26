@@ -223,7 +223,7 @@ describe("Global Trade System - Mystery Encounter", () => {
       scene.updateModifiers(true);
 
       await runMysteryEncounterToEnd(game, 3, { partySlot: 1, optionNumber: 1 });
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SelectModifierPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("SelectModifierPhase");
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);

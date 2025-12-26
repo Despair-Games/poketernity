@@ -35,7 +35,7 @@ export class ShellTrapTag extends BattlerTag {
    */
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     if (lapseType === BattlerTagLapseType.AFTER_HIT) {
-      const phaseData = getMoveEffectPhaseData(pokemon);
+      const phaseData = getMoveEffectPhaseData();
 
       // Trap should only be triggered by opponent's Physical moves
       if (phaseData?.move.category === MoveCategory.PHYSICAL && pokemon.isOpponent(phaseData.attacker)) {

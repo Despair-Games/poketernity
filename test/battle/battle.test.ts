@@ -79,7 +79,7 @@ describe("Test Phase Interceptor", () => {
   it("newGame one-liner", async () => {
     await game.classicMode.startBattle(SpeciesId.FEEBAS);
     expect(game.scene.ui?.getMode()).toBe(UiMode.COMMAND);
-    expect(game.scene.phaseManager.getCurrentPhase()!.constructor.name).toBe("CommandPhase");
+    expect(game.scene.phaseManager.getCurrentPhase().constructor.name).toBe("CommandPhase");
   });
 
   it("wrong phase", async () => {
@@ -227,7 +227,7 @@ describe("Test Battle Phase", () => {
     game.override.ability(AbilityId.HYDRATION);
     await game.classicMode.startBattle(SpeciesId.BLASTOISE, SpeciesId.CHARIZARD);
     expect(game.scene.ui?.getMode()).toBe(UiMode.COMMAND);
-    expect(game.scene.phaseManager.getCurrentPhase()!.constructor.name).toBe("CommandPhase");
+    expect(game.scene.phaseManager.getCurrentPhase().constructor.name).toBe("CommandPhase");
   });
 
   it("1vs1", async () => {
@@ -237,7 +237,7 @@ describe("Test Battle Phase", () => {
     game.override.ability(AbilityId.HYDRATION);
     await game.classicMode.startBattle(SpeciesId.BLASTOISE);
     expect(game.scene.ui?.getMode()).toBe(UiMode.COMMAND);
-    expect(game.scene.phaseManager.getCurrentPhase()!.constructor.name).toBe("CommandPhase");
+    expect(game.scene.phaseManager.getCurrentPhase().constructor.name).toBe("CommandPhase");
   });
 
   it("2vs2", async () => {
@@ -248,7 +248,7 @@ describe("Test Battle Phase", () => {
     game.override.startingWave(3);
     await game.classicMode.startBattle(SpeciesId.BLASTOISE, SpeciesId.CHARIZARD);
     expect(game.scene.ui?.getMode()).toBe(UiMode.COMMAND);
-    expect(game.scene.phaseManager.getCurrentPhase()!.constructor.name).toBe("CommandPhase");
+    expect(game.scene.phaseManager.getCurrentPhase().constructor.name).toBe("CommandPhase");
   });
 
   it("4vs2", async () => {
@@ -259,7 +259,7 @@ describe("Test Battle Phase", () => {
     game.override.startingWave(3);
     await game.classicMode.startBattle(SpeciesId.BLASTOISE, SpeciesId.CHARIZARD, SpeciesId.DARKRAI, SpeciesId.GABITE);
     expect(game.scene.ui?.getMode()).toBe(UiMode.COMMAND);
-    expect(game.scene.phaseManager.getCurrentPhase()!.constructor.name).toBe("CommandPhase");
+    expect(game.scene.phaseManager.getCurrentPhase().constructor.name).toBe("CommandPhase");
   });
 
   it("kill opponent pokemon", async () => {

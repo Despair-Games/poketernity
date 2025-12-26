@@ -11,11 +11,9 @@ import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#field/pokemon";
 import { SpeciesFormChangeManualTrigger } from "#form-change-triggers/species-form-change-manual-trigger";
-import { BooleanHolder, toDmgValue } from "#utils/common-utils";
+import { toDmgValue, ValueHolder } from "#utils/common-utils";
 
-/**
- * Battler tag for Gulp Missile used by Cramorant.
- */
+/** Battler tag for Gulp Missile used by Cramorant. */
 export class GulpMissileTag extends BattlerTag {
   constructor(tagType: BattlerTagType, sourceMoveId: MoveId) {
     super(tagType, BattlerTagLapseType.HIT, 0, sourceMoveId);
@@ -27,38 +25,41 @@ export class GulpMissileTag extends BattlerTag {
     }
 
     const moveEffectPhase = globalScene.phaseManager.getCurrentPhase();
-    if (moveEffectPhase?.is("MoveEffectPhase")) {
-      const attacker = moveEffectPhase.getUserPokemon();
-
-      if (!attacker) {
-        return false;
-      }
-
-      if (moveEffectPhase.move.getMove().hitsSubstitute(attacker, pokemon)) {
-        return true;
-      }
-
-      const cancelled = new BooleanHolder(false);
-      applyAbAttrs("BlockNonDirectDamageAbAttr", attacker, false, cancelled);
-
-      if (!cancelled.value) {
-        attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() / 4), {
-          result: HitResult.OTHER,
-        });
-      }
-
-      if (this.tagType === BattlerTagType.GULP_MISSILE_ARROKUDA) {
-        globalScene.phaseManager.createAndUnshiftPhase(
-          "StatStageChangePhase",
-          attacker.getBattlerIndex(),
-          pokemon,
-          [Stat.DEF],
-          -1,
-        );
-      } else {
-        attacker.trySetStatus(StatusEffect.PARALYSIS, true, pokemon);
-      }
+    if (!moveEffectPhase.is("MoveEffectPhase")) {
+      return false;
     }
+
+    const attacker = moveEffectPhase.getUserPokemon();
+
+    if (!attacker) {
+      return false;
+    }
+
+    if (moveEffectPhase.move.getMove().hitsSubstitute(attacker, pokemon)) {
+      return true;
+    }
+
+    const cancelled = new ValueHolder(false);
+    applyAbAttrs("BlockNonDirectDamageAbAttr", attacker, false, cancelled);
+
+    if (!cancelled.value) {
+      attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() / 4), {
+        result: HitResult.OTHER,
+      });
+    }
+
+    if (this.tagType === BattlerTagType.GULP_MISSILE_ARROKUDA) {
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "StatStageChangePhase",
+        attacker.getBattlerIndex(),
+        pokemon,
+        [Stat.DEF],
+        -1,
+      );
+    } else {
+      attacker.trySetStatus(StatusEffect.PARALYSIS, true, pokemon);
+    }
+
     return false;
   }
 
