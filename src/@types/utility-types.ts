@@ -79,3 +79,21 @@ export type NonEmptyArray<T> = [T, ...T[]];
 export type InferKeys<O extends object, V> = {
   [K in keyof O]: O[K] extends V ? K : never;
 }[keyof O];
+
+// #region Enum Types
+// temporary, will not be necessary after all TypeScript Enums are removed
+
+/** Union type accepting any TS Enum or `const object`, with or without reverse mapping. */
+export type EnumOrObject = Record<string | number, string | number>;
+
+/**
+ * Generic type constraint representing a TS numeric enum with reverse mappings.
+ * @example
+ * TSNumericEnum<typeof WeatherType>
+ */
+export type TSNumericEnum<T extends EnumOrObject> = number extends ObjectValues<T> ? T : never;
+
+/** Generic type constraint representing a non reverse-mapped TS enum or `const object`. */
+export type NormalEnum<T extends EnumOrObject> = Exclude<T, TSNumericEnum<T>>;
+
+// #endregion
