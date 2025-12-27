@@ -10,7 +10,7 @@ import type { PokemonSpecies } from "#data/pokemon-species";
 import { signatureSpecies } from "#data/signature-species";
 import type { TrainerConfig, TrainerPartyTemplate } from "#data/trainer-config";
 import { TrainerPartyCompoundTemplate, trainerPartyTemplates } from "#data/trainer-config";
-import { type CompoundTrainerData, TrainerData } from "#data/trainer-data";
+import type { TrainerData, TrainerDataSet } from "#data/trainer-data";
 import { trainerNamePools } from "#data/trainer-names";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { PartyMemberStrength } from "#enums/party-member-strength";
@@ -949,18 +949,13 @@ export class TrainerSprite extends Phaser.GameObjects.Container {
 export class TrainerSpriteSet extends Phaser.GameObjects.Container {
   public trainerSprites: Partial<TrainerSlotMap<TrainerSprite>>;
 
-  constructor(data: TrainerData | CompoundTrainerData) {
+  constructor(source: TrainerDataSet) {
     super(globalScene, -72, 80);
     this.type = "TrainerSpriteSet";
 
-    if (data instanceof TrainerData) {
-      // TODO: Should this be hardcoded to `TrainerSlot.TRAINER`?
-      this.trainerSprites[data.trainerSlot] = new TrainerSprite(data);
-    } else {
-      for (const [key, td] of Object.entries(data.trainerData)) {
-        const trainerSlot = Number(key) as NonNullTrainerSlot;
-        this.trainerSprites[trainerSlot] = new TrainerSprite(td);
-      }
+    for (const [key, td] of Object.entries(source.trainerData)) {
+      const trainerSlot = Number(key) as NonNullTrainerSlot;
+      this.trainerSprites[trainerSlot] = new TrainerSprite(td);
     }
 
     const entries = Object.entries(this.trainerSprites);
