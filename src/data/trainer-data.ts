@@ -2,17 +2,20 @@ import { globalScene } from "#app/global-scene";
 import type {
   CompoundTrainerConfig,
   NewTrainerConfig,
+  RequireOneTrainer,
   TrainerAssetKey,
   TrainerSlotMap,
 } from "#data/new-trainer-config";
 import { TrainerGender } from "#enums/trainer-gender";
-import type { NonNullTrainerSlot } from "#enums/trainer-slot";
+import { type NonNullTrainerSlot, TrainerSlot } from "#enums/trainer-slot";
 import type { TrainerType } from "#enums/trainer-type";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import { coerceArray } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedInt } from "#utils/random-utils";
 import { getPartyMemberSeedOffset, getPartyPokemonLevel, getPartyPokemonSpecies } from "#utils/trainer-utils";
+
+// #region TrainerData
 
 /**
  * Class for storing all data for a specific Trainer instance as derived from a
@@ -143,14 +146,12 @@ export class TrainerData {
   }
 }
 
+// #endregion
+// #region CompoundTrainerData
+
 export class CompoundTrainerData {
   public readonly trainerData: TrainerSlotMap<TrainerData>;
   public readonly title: string;
-  public readonly isBoss: boolean;
-  public readonly moneyMultiplier: number;
-  public readonly encounterBgm?: string;
-  public readonly battleBgm: string;
-  public readonly victoryBgm: string;
 
   constructor(config: CompoundTrainerConfig, genders: Partial<TrainerSlotMap<TrainerGender>> = {}) {
     for (const [slot, cfg] of Object.entries(config.configs)) {
@@ -162,13 +163,68 @@ export class CompoundTrainerData {
         config.useSameSeedForAllTrainers,
       );
     }
-
     this.title = config.combinedTitle;
-    this.isBoss = config.isBoss;
-    this.moneyMultiplier = config.moneyMultiplier();
+  }
+}
 
-    this.encounterBgm = config.encounterBgm?.();
-    this.battleBgm = config.battleBgm();
-    this.victoryBgm = config.victoryBgm();
+// #endregion
+// #region TrainerDataSet
+
+/**
+ * A container for the {@linkcode TrainerData} of all Trainers involved in a battle.
+ * Includes getters to resolve conflicting data between multiple Trainers.
+ */
+export class TrainerDataSet {
+  /** The {@linkcode TrainerData} of all involved Trainers, organized by {@linkcode TrainerSlot} */
+  public readonly trainerData: RequireOneTrainer<TrainerData>;
+  /** The title of the Trainer set, to be displayed at the start of the battle */
+  public readonly title: string;
+
+  constructor(source: TrainerData | CompoundTrainerData) {
+    this.trainerData = source instanceof TrainerData ? { [TrainerSlot.TRAINER]: source } : source.trainerData;
+
+    this.title = source.title;
+  }
+
+  /**
+   * @returns `true` if this Trainer combination is considered a boss battle.
+   * @remarks
+   * A Compound Trainer battle is considered a boss battle if at least one of the
+   * Trainers involved {@link NewTrainerConfig.isBoss | is a boss}.
+   */
+  public get isBoss(): boolean {
+    return Object.values(this.trainerData).some((td) => td.isBoss);
+  }
+
+  /**
+   * The BGM to play during the Trainers' introduction dialogue. Multi-Trainer
+   * battles use the first defined encounter BGM override in slot order (if any exist).
+   */
+  public get encounterBgm(): string | undefined {
+    return Object.values(this.trainerData).find((td) => td.encounterBgm != null)?.encounterBgm;
+  }
+
+  /**
+   * The BGM to play during battle. Multi-Trainer battles always use the battle
+   * BGM of the Trainer in the first slot ({@linkcode TrainerSlot.TRAINER}).
+   */
+  public get battleBgm(): string {
+    return this.trainerData[TrainerSlot.TRAINER].battleBgm;
+  }
+
+  /**
+   * The BGM to play when the Trainer(s) are defeated. Multi-Trainer battles always use
+   * the victory BGM of the Trainer in the first slot ({@linkcode TrainerSlot.TRAINER}).
+   */
+  public get victoryBgm(): string {
+    return this.trainerData[TrainerSlot.TRAINER].victoryBgm;
+  }
+
+  /**
+   * The money reward multiplier for defeating all Trainers in this battle.
+   * @todo Should this use the maximum money multiplier among all Trainers (current) or some other formula?
+   */
+  public get moneyMultiplier(): number {
+    return Math.max(...Object.values(this.trainerData).map((td) => td.moneyMultiplier));
   }
 }

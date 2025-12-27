@@ -109,10 +109,17 @@ export interface NewTrainerConfig {
 export type TrainerConfigMap = Partial<Record<TrainerType, NewTrainerConfig>>;
 
 /**
- * A cache of {@linkcode NewTrainerConfig}s organized by {@linkcode TrainerSlot}.
+ * A record of data organized by {@linkcode TrainerSlot}.
  * All slots except for {@linkcode TrainerSlot.NONE} must have a mapped config.
  */
 export type TrainerSlotMap<T> = Record<NonNullTrainerSlot, T>;
+/**
+ * A {@linkcode TrainerSlotMap} where only the first slot ({@linkcode TrainerSlot.TRAINER})
+ * must be defined. Other slots are optional.
+ */
+export type RequireOneTrainer<T> = Partial<TrainerSlotMap<T>> & {
+  [TrainerSlot.TRAINER]: T;
+};
 
 // #region CompoundTrainerConfig
 /**
@@ -143,51 +150,6 @@ export class CompoundTrainerConfig {
     this.configs = configs;
     this.combinedTitle = combinedTitle;
     this.useSameSeedForAllTrainers = useSameSeedForAllTrainers;
-  }
-
-  /**
-   * @returns `true` if this Trainer combination is considered a boss battle.
-   * @remarks
-   * A Compound Trainer battle is considered a boss battle if at least one of the
-   * Trainers involved {@link NewTrainerConfig.isBoss | is a boss}.
-   */
-  public get isBoss(): boolean {
-    return Object.values(this.configs).some((cfg) => cfg.isBoss);
-  }
-
-  /**
-   * The generator used to determine the BGM to play during battle.
-   * @remarks
-   * Compound Trainer battles always use the battle BGM of the Trainer in the first
-   * slot ({@linkcode TrainerSlot.TRAINER}).
-   */
-  public get battleBgm(): () => string {
-    return this.configs[TrainerSlot.TRAINER].battleBgm;
-  }
-
-  /**
-   * The generator used to determine the BGM to play during the Trainers' introduction.
-   * @remarks
-   * Compound Trainer battles always use the encounter BGM of the Trainer in the first
-   * slot ({@linkcode TrainerSlot.TRAINER}).
-   */
-  public get encounterBgm(): (() => string) | undefined {
-    return this.configs[TrainerSlot.TRAINER]?.encounterBgm ?? this.configs[TrainerSlot.TRAINER_PARTNER]?.encounterBgm;
-  }
-
-  /**
-   * The generator used to determine the BGM to play when the Trainer is defeated.
-   * @remarks
-   * Compound Trainer battles always use the victory BGM of the Trainer in the first
-   * slot ({@linkcode TrainerSlot.TRAINER}).
-   */
-  public get victoryBgm(): () => string {
-    return this.configs[TrainerSlot.TRAINER].victoryBgm;
-  }
-
-  // TODO: Should this use the maximum money multiplier or some other formula?
-  public get moneyMultiplier(): () => number {
-    return () => Math.max(...Object.values(this.configs).map((cfg) => cfg.moneyMultiplier()));
   }
 }
 
