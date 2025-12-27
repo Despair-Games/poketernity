@@ -1,57 +1,62 @@
 import { WeatherType } from "#enums/weather-type";
+import { getEnumStr } from "#test/test-utils/string-utils";
 import { isGameManagerInstance, receivedStr } from "#test/test-utils/test-utils";
-import { enumValueToKey } from "#utils/common-utils";
-import { capitalizeString } from "#utils/string-utils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
 /**
- * Matcher to check if the {@linkcode WeatherType} is as expected
- * @param received - The object to check. Expects an instance of {@linkcode GameManager}.
- * @param expectedWeatherType - The expected {@linkcode WeatherType}
+ * Matcher that checks if the current weather is as expected.
+ * @param received - The object to check. Should be the current {@linkcode GameManager}
+ * @param expected - The expected {@linkcode WeatherType}
  * @returns Whether the matcher passed
  */
-export function toHaveWeatherMatcher(
-  this: MatcherState,
+export function toHaveWeather(
+  this: Readonly<MatcherState>,
   received: unknown,
-  expectedWeatherType: WeatherType,
+  expected: WeatherType,
 ): SyncExpectationResult {
   if (!isGameManagerInstance(received)) {
     return {
       pass: this.isNot,
-      message: () => `Expected GameManager, but got ${receivedStr(received)}!`,
+      message: () => `Expected to receive a GameManager, but got ${receivedStr(received)}!`,
     };
   }
 
   if (!received.scene?.arena) {
     return {
       pass: this.isNot,
-      message: () => `Expected GameManager.${received.scene ? "scene" : "scene.arena"} to be defined!`,
+      message: () => `Expected GameManager.${received.scene ? "scene.arena" : "scene"} to be defined!`,
     };
   }
 
-  const pass = received.scene.arena.hasWeather(expectedWeatherType);
-
-  const weatherStr = toWeatherStr(expectedWeatherType);
-  const actualWeatherStr = toWeatherStr(received.scene.arena.weatherType);
+  const actual = received.scene.arena.weatherType;
+  const pass = actual === expected;
+  const actualStr = toWeatherStr(actual);
+  const expectedStr = toWeatherStr(expected);
 
   return {
     pass,
     message: () =>
       pass
-        ? `Expected Arena to NOT have weather ${weatherStr}, but it did.`
-        : `Expected Arena to have weather ${weatherStr}, but got ${actualWeatherStr}`,
+        ? `Expected the Arena to NOT have ${expectedStr} active, but it did!`
+        : `Expected the Arena to have ${expectedStr} active, but got ${actualStr} instead!`,
+    expected,
+    actual,
   };
 }
 
 //#region Helpers
 
 /**
- * Get a human readable string of the WeatherType
+ * Get a human readable representation of the current weather.
  * @param weatherType - The {@linkcode WeatherType} to transform
  * @returns A human readable string
  */
 function toWeatherStr(weatherType: WeatherType) {
-  return capitalizeString(enumValueToKey(WeatherType, weatherType), "_", false, true);
+  if (weatherType === WeatherType.NONE) {
+    return "no weather";
+  }
+
+  return getEnumStr(WeatherType, weatherType, { casing: "Title", suffix: " Weather" });
 }
 
 //#endregion

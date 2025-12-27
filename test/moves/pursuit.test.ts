@@ -136,7 +136,7 @@ describe("Move - Pursuit", () => {
       await game.toEndOfTurn();
 
       expect(magikarp).not.toHaveFullHp();
-      expect(enemy).toHaveMoveResult(MoveResult.SUCCESS);
+      expect(enemy).toHaveUsedMove({ moveId: MoveId.PURSUIT, result: MoveResult.SUCCESS });
     });
   });
 

@@ -77,7 +77,7 @@ describe("Moves - Mirror Move", () => {
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 
-    expect(game.field.getPlayerPokemon()).toHaveMoveResult(MoveResult.FAIL);
+    expect(game.field.getPlayerPokemon()).toHaveUsedMove({ moveId: MoveId.MIRROR_MOVE, result: MoveResult.FAIL });
   });
 
   it("should fail if the target last used Mirror Move, without any infinite loop", async () => {
@@ -88,7 +88,7 @@ describe("Moves - Mirror Move", () => {
     await game.toEndOfTurn();
 
     for (const pokemon of game.scene.getField()) {
-      expect(pokemon).toHaveMoveResult(MoveResult.FAIL);
+      expect(pokemon).toHaveUsedMove({ moveId: MoveId.MIRROR_MOVE, result: MoveResult.FAIL });
     }
   });
 });

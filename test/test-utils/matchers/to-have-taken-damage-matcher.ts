@@ -1,49 +1,41 @@
 import { getPokemonNameWithAffix } from "#app/messages";
+import type { Pokemon } from "#field/pokemon";
 import { isPokemonInstance, receivedStr } from "#test/test-utils/test-utils";
 import { toDmgValue } from "#utils/common-utils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
-//#region Types
-
-export interface ToHaveTakenDamageMatcherOptions {
-  /** Whether to skip the internal {@linkcode toDmgValue} call. @defaultValue false */
-  skipToDmgValue?: boolean;
-}
-
-//#endregion
-
 /**
- * Matcher to check if a Pokemon has taken a specific amount of damage.
- * Unless specified, will run the expected damage value through {@linkcode toDmgValue}
- * to round it down and make it a minimum of 1.
+ * Check whether a `Pokemon` has taken a specific amount of damage.
  * @param received - The object to check. Should be a {@linkcode Pokemon}.
- * @param expectedDamageTaken - The expected amount of damage the {@linkcode Pokemon} has taken
+ * @param expectedDamageTaken - The amount of damage that should have been taken
+ * @param roundDown - (Default `true`) Whether to round down `expectedDamageTaken` with `toDmgValue` (enforces a minimum of 1)
  * @returns Whether the matcher passed
  */
-export function toHaveTakenDamageMatcher(
-  this: MatcherState,
+export function toHaveTakenDamage(
+  this: Readonly<MatcherState>,
   received: unknown,
   expectedDamageTaken: number,
-  { skipToDmgValue = false }: ToHaveTakenDamageMatcherOptions = {},
+  roundDown: boolean = true,
 ): SyncExpectationResult {
   if (!isPokemonInstance(received)) {
     return {
       pass: this.isNot,
-      message: () => `Expected Pokemon, but got ${receivedStr(received)}!`,
+      message: () => `Expected to receive a Pokémon, but got ${receivedStr(received)}!`,
     };
   }
 
-  const expectedDmgValue = skipToDmgValue ? expectedDamageTaken : toDmgValue(expectedDamageTaken);
-  const actualDmgValue = received.getInverseHp();
-  const pass = actualDmgValue === expectedDmgValue;
-
+  const expected = roundDown ? toDmgValue(expectedDamageTaken) : expectedDamageTaken;
+  const actual = received.getInverseHp();
+  const pass = actual === expected;
   const pkmName = getPokemonNameWithAffix(received);
 
   return {
     pass,
     message: () =>
       pass
-        ? `Expected ${pkmName} to NOT have taken ${expectedDmgValue} damage, but it did!`
-        : `Expected ${pkmName} to have taken ${expectedDmgValue} damage, but got ${actualDmgValue}.`,
+        ? `Expected ${pkmName} to NOT have taken ${expected} damage, but it did!`
+        : `Expected ${pkmName} to have taken ${expected} damage, but got ${actual} instead!`,
+    expected,
+    actual,
   };
 }

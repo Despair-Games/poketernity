@@ -50,7 +50,7 @@ describe("Moves - Magic Coat", () => {
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.toEndOfTurn();
-    expect(enemy).toHaveMoveResult(MoveResult.FAIL);
+    expect(enemy).toHaveUsedMove({ moveId: MoveId.MAGIC_COAT, result: MoveResult.FAIL });
     expect(enemy.getTag(BattlerTagType.MAGIC_COAT)).toBeUndefined();
   });
 
@@ -62,7 +62,7 @@ describe("Moves - Magic Coat", () => {
     game.move.use(MoveId.INSTRUCT);
 
     await game.toEndOfTurn();
-    expect(enemy).toHaveMoveResult(MoveResult.FAIL);
+    expect(enemy).toHaveUsedMove({ moveId: MoveId.MAGIC_COAT, result: MoveResult.FAIL });
   });
 
   it("should reflect basic status moves (enemy)", async () => {
@@ -262,7 +262,7 @@ describe("Moves - Magic Coat", () => {
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.toNextTurn();
-    expect(enemy).toHaveMoveResult(MoveResult.FAIL);
+    expect(enemy).toHaveUsedMove({ moveId: MoveId.SPORE, result: MoveResult.FAIL });
 
     game.move.use(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.STOMPING_TANTRUM);

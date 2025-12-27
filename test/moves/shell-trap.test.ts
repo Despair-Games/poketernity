@@ -138,7 +138,7 @@ describe("Moves - Shell Trap", () => {
 
     await game.toEndOfTurn();
 
-    expect(playerPokemon).toHaveMoveResult(MoveResult.FAIL);
+    expect(playerPokemon).toHaveUsedMove({ moveId: MoveId.SHELL_TRAP, result: MoveResult.FAIL });
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
   });
 });

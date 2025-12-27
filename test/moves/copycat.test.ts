@@ -61,7 +61,7 @@ describe("Moves - Copycat", () => {
     game.move.select(MoveId.COPYCAT);
     await game.toNextTurn();
 
-    expect(game.field.getPlayerPokemon()).toHaveMoveResult(MoveResult.FAIL);
+    expect(game.field.getPlayerPokemon()).toHaveUsedMove({ moveId: MoveId.COPYCAT, result: MoveResult.FAIL });
   });
 
   it("should copy the called move when the last move successfully calls another", async () => {

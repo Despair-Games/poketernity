@@ -103,7 +103,7 @@ describe("Status Effects", () => {
       await game.toNextTurn();
 
       expect(game.field.getEnemyPokemon().isFullHp()).toBe(true);
-      expect(game.field.getPlayerPokemon()).toHaveMoveResult(MoveResult.FAIL);
+      expect(game.field.getPlayerPokemon()).toHaveUsedMove({ moveId: MoveId.NONE, result: MoveResult.FAIL });
     });
   });
 
@@ -138,29 +138,29 @@ describe("Status Effects", () => {
 
       const player = game.scene.getPlayerPokemon()!;
       player.trySetStatus(StatusEffect.SLEEP, false, undefined, 4);
-      expect(player).toHaveStatusEffect(StatusEffect.SLEEP, { ignoreMockAbility: true });
+      expect(player).toHaveStatusEffect({ effect: StatusEffect.SLEEP, sleepTurnsRemaining: 4 });
 
       game.move.select(MoveId.SPLASH);
       await game.toNextTurn();
 
-      expect(player).toHaveStatusEffect(StatusEffect.SLEEP, { ignoreMockAbility: true });
+      expect(player).toHaveStatusEffect({ effect: StatusEffect.SLEEP, sleepTurnsRemaining: 3 });
 
       game.move.select(MoveId.SPLASH);
       await game.toNextTurn();
 
-      expect(player).toHaveStatusEffect(StatusEffect.SLEEP, { ignoreMockAbility: true });
+      expect(player).toHaveStatusEffect({ effect: StatusEffect.SLEEP, sleepTurnsRemaining: 2 });
 
       game.move.select(MoveId.SPLASH);
       await game.toNextTurn();
 
-      expect(player).toHaveStatusEffect(StatusEffect.SLEEP, { ignoreMockAbility: true });
-      expect(player).toHaveMoveResult(MoveResult.FAIL);
+      expect(player).toHaveStatusEffect({ effect: StatusEffect.SLEEP, sleepTurnsRemaining: 1 });
+      expect(player).toHaveUsedMove({ moveId: MoveId.NONE, result: MoveResult.FAIL });
 
       game.move.select(MoveId.SPLASH);
       await game.toNextTurn();
 
-      expect(player).toHaveStatusEffect(StatusEffect.NONE, { ignoreMockAbility: true });
-      expect(player).toHaveMoveResult(MoveResult.SUCCESS);
+      expect(player).toHaveStatusEffect(StatusEffect.NONE);
+      expect(player).toHaveUsedMove({ moveId: MoveId.SPLASH, result: MoveResult.SUCCESS });
     });
   });
 

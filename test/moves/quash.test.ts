@@ -70,7 +70,7 @@ describe("Moves - Quash", () => {
 
     setFieldSpeed();
 
-    /**
+    /*
      * Player 1 selects Quash targeting Player 2, then Player 2 selects Splash.
      * Both moves should have boosted priority from Prankster, but Player 2
      * should move last after being quashed.
@@ -89,7 +89,7 @@ describe("Moves - Quash", () => {
 
     setFieldSpeed();
 
-    /**
+    /*
      * Player 1 selects Splash, then Player 2 selects Quash targeting Player 1.
      * Player 1 should act first in the turn, meaning Player 2's Quash should fail.
      */
@@ -98,7 +98,7 @@ describe("Moves - Quash", () => {
 
     await game.toEndOfTurn();
 
-    expect(game.scene.getPlayerField()[1]).toHaveMoveResult(MoveResult.FAIL);
+    expect(game.scene.getPlayerField()[1]).toHaveUsedMove({ moveId: MoveId.QUASH, result: MoveResult.FAIL });
     expect(game.field.getTurnOrder()).toEqual(game.field.getSpeedOrder());
   });
 
@@ -107,7 +107,7 @@ describe("Moves - Quash", () => {
 
     setFieldSpeed();
 
-    /**
+    /*
      * Both players target Enemy 2 with Quash.
      * Since Player 2 is slower, its Quash should fail and not Player 1's.
      */
@@ -116,8 +116,8 @@ describe("Moves - Quash", () => {
 
     await game.toEndOfTurn();
 
-    expect(game.scene.getPlayerField()[0]).toHaveMoveResult(MoveResult.SUCCESS);
-    expect(game.scene.getPlayerField()[1]).toHaveMoveResult(MoveResult.FAIL);
+    expect(game.scene.getPlayerField()[0]).toHaveUsedMove({ moveId: MoveId.QUASH, result: MoveResult.SUCCESS });
+    expect(game.scene.getPlayerField()[1]).toHaveUsedMove({ moveId: MoveId.QUASH, result: MoveResult.FAIL });
     // Both used Quash on the slowest enemy, so turn order should match speed order
     expect(game.field.getTurnOrder()).toEqual(game.field.getSpeedOrder());
   });

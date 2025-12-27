@@ -44,9 +44,9 @@ describe("Moves - Upper Hand", () => {
     game.move.select(MoveId.UPPER_HAND);
     await game.toEndOfTurn();
 
-    expect(feebas).toHaveMoveResult(MoveResult.SUCCESS);
-    expect(magikarp.isFullHp()).toBeFalsy();
-    expect(feebas.isFullHp()).toBeTruthy();
+    expect(feebas).toHaveUsedMove({ moveId: MoveId.UPPER_HAND, result: MoveResult.SUCCESS });
+    expect(magikarp).not.toHaveFullHp();
+    expect(feebas).toHaveFullHp();
   });
 
   it.each([
@@ -62,7 +62,7 @@ describe("Moves - Upper Hand", () => {
     game.move.select(MoveId.UPPER_HAND);
     await game.toEndOfTurn();
 
-    expect(feebas).toHaveMoveResult(MoveResult.FAIL);
+    expect(feebas).toHaveUsedMove({ moveId: MoveId.UPPER_HAND, result: MoveResult.FAIL });
   });
 
   it("should flinch the opponent before they use an attack boosted by Gale Wings", async () => {
@@ -76,7 +76,7 @@ describe("Moves - Upper Hand", () => {
     game.move.select(MoveId.UPPER_HAND);
     await game.toEndOfTurn();
 
-    expect(feebas).toHaveMoveResult(MoveResult.SUCCESS);
+    expect(feebas).toHaveUsedMove({ moveId: MoveId.UPPER_HAND, result: MoveResult.SUCCESS });
     expect(magikarp.isFullHp()).toBeFalsy();
     expect(feebas.isFullHp()).toBeTruthy();
   });
@@ -93,7 +93,7 @@ describe("Moves - Upper Hand", () => {
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
 
-    expect(feebas).toHaveMoveResult(MoveResult.FAIL);
+    expect(feebas).toHaveUsedMove({ moveId: MoveId.UPPER_HAND, result: MoveResult.FAIL });
     expect(feebas.isFullHp()).toBeFalsy();
   });
 });

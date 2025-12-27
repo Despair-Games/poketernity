@@ -45,7 +45,7 @@ describe("Abilities - Good As Gold", () => {
     game.move.use(MoveId.GROWL);
     await game.toEndOfTurn();
 
-    expect(player).toHaveMoveResult(MoveResult.FAIL);
+    expect(player).toHaveUsedMove({ moveId: MoveId.GROWL, result: MoveResult.FAIL });
     expect(enemy.getStatStage(Stat.ATK)).toBe(0);
   });
 
@@ -58,7 +58,7 @@ describe("Abilities - Good As Gold", () => {
     game.move.use(MoveId.TACKLE);
     await game.toEndOfTurn();
 
-    expect(player).toHaveMoveResult(MoveResult.SUCCESS);
+    expect(player).toHaveUsedMove({ moveId: MoveId.TACKLE, result: MoveResult.SUCCESS });
     expect(enemy.isFullHp()).toBeFalsy();
   });
 
@@ -72,7 +72,7 @@ describe("Abilities - Good As Gold", () => {
 
     await game.toEndOfTurn();
 
-    expect(enemy).toHaveMoveResult(MoveResult.SUCCESS);
+    expect(enemy).toHaveUsedMove({ moveId: MoveId.SWORDS_DANCE, result: MoveResult.SUCCESS });
     expect(enemy.getStatStage(Stat.ATK)).toBe(2);
   });
 
@@ -84,7 +84,7 @@ describe("Abilities - Good As Gold", () => {
     game.move.use(MoveId.STEALTH_ROCK);
 
     await game.toEndOfTurn();
-    expect(player).toHaveMoveResult(MoveResult.SUCCESS);
+    expect(player).toHaveUsedMove({ moveId: MoveId.STEALTH_ROCK, result: MoveResult.SUCCESS });
     expect(game.scene.arena.hasTag(ArenaTagType.STEALTH_ROCK, ArenaTagSide.ENEMY)).toBeTruthy();
   });
 
@@ -100,7 +100,7 @@ describe("Abilities - Good As Gold", () => {
 
     await game.toEndOfTurn();
 
-    expect(player).toHaveMoveResult(MoveResult.SUCCESS);
+    expect(player).toHaveUsedMove({ moveId: MoveId.HAZE, result: MoveResult.SUCCESS });
     expect(enemy.getStatStage(Stat.ATK)).toBe(0);
   });
 });

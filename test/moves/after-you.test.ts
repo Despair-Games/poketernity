@@ -58,6 +58,6 @@ describe("Moves - After You", () => {
     await game.phaseInterceptor.to("PostActionPhase");
     await game.phaseInterceptor.to("MovePhase");
 
-    expect(game.scene.getPlayerField()[1]).toHaveMoveResult(MoveResult.FAIL);
+    expect(game.scene.getPlayerField()[1]).toHaveUsedMove({ moveId: MoveId.AFTER_YOU, result: MoveResult.FAIL });
   });
 });

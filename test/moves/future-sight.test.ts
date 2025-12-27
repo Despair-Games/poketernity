@@ -90,8 +90,8 @@ describe("Moves - Future Sight", () => {
 
     await passTurns(2);
 
-    expect(game.field.getEnemyPokemon().isFullHp()).toBeTruthy();
-    expect(game.field.getPlayerPokemon()).toHaveMoveResult(MoveResult.FAIL);
+    expect(game.field.getEnemyPokemon()).toHaveFullHp();
+    expect(game.field.getPlayerPokemon()).toHaveUsedMove({ moveId: MoveId.FUTURE_SIGHT, result: MoveResult.FAIL });
   });
 
   it("should inflict damage as a Normal-type move if the user is active with Normalize", async () => {
@@ -106,8 +106,8 @@ describe("Moves - Future Sight", () => {
 
     await passTurns(2);
 
-    expect(game.field.getEnemyPokemon().isFullHp()).toBeTruthy();
-    expect(game.field.getPlayerPokemon()).toHaveMoveResult(MoveResult.FAIL);
+    expect(game.field.getEnemyPokemon()).toHaveFullHp();
+    expect(game.field.getPlayerPokemon()).toHaveUsedMove({ moveId: MoveId.FUTURE_SIGHT, result: MoveResult.FAIL });
   });
 
   it("the target should endure inflicted damage from this move with Sturdy", async () => {
@@ -151,7 +151,7 @@ describe("Moves - Future Sight", () => {
 
     await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
-    const playerPokemon = game.scene.getPlayerField();
+    const playerPokemon = game.scene.getPlayerField()[1];
 
     game.move.select(MoveId.FUTURE_SIGHT, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.FUTURE_SIGHT, 1, BattlerIndex.ENEMY);
@@ -159,7 +159,7 @@ describe("Moves - Future Sight", () => {
     await game.toEndOfTurn();
 
     expect(game.scene.arena.hasTag(ArenaTagType.DELAYED_ATTACK, ArenaTagSide.ENEMY)).toBeTruthy();
-    expect(playerPokemon[1]).toHaveMoveResult(MoveResult.FAIL);
+    expect(playerPokemon).toHaveUsedMove({ moveId: MoveId.FUTURE_SIGHT, result: MoveResult.FAIL });
   });
 
   it("can be used alongside Doom Desire against different targets", async () => {

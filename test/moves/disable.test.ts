@@ -118,7 +118,7 @@ describe("Moves - Disable", () => {
     game.move.select(MoveId.DISABLE);
     await game.toNextTurn();
 
-    expect(player).toHaveMoveResult(MoveResult.FAIL);
+    expect(player).toHaveUsedMove({ moveId: MoveId.DISABLE, result: MoveResult.FAIL });
     expect(enemy).toHaveUsedMove(MoveId.STRUGGLE);
     expect(enemy.isMoveRestricted(MoveId.STRUGGLE)).toBeFalsy();
   }, 20000);

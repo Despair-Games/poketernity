@@ -62,7 +62,7 @@ describe("Moves - Assist", () => {
 
     game.move.select(MoveId.ASSIST, 0);
     await game.toNextTurn();
-    expect(feebas).toHaveMoveResult(MoveResult.FAIL);
+    expect(feebas).toHaveUsedMove({ moveId: MoveId.ASSIST, result: MoveResult.FAIL });
   });
 
   it("should fail if ally has no usable moves and user has usable moves", async () => {
@@ -82,7 +82,7 @@ describe("Moves - Assist", () => {
     game.move.select(MoveId.PROTECT, 1);
     await game.toNextTurn();
 
-    expect(feebas).toHaveMoveResult(MoveResult.FAIL);
+    expect(feebas).toHaveUsedMove({ moveId: MoveId.ASSIST, result: MoveResult.FAIL });
   });
 
   it("should apply secondary effects of a move", async () => {
@@ -96,6 +96,6 @@ describe("Moves - Assist", () => {
     game.move.select(MoveId.ASSIST, 1);
     await game.toNextTurn();
 
-    expect(feebas.isFullHp()).toBeFalsy(); // should receive recoil damage from Wood Hammer
+    expect(feebas).not.toHaveFullHp(); // should receive recoil damage from Wood Hammer
   });
 });

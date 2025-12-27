@@ -1,56 +1,59 @@
 import { TerrainType } from "#enums/terrain-type";
+import { getEnumStr } from "#test/test-utils/string-utils";
 import { isGameManagerInstance, receivedStr } from "#test/test-utils/test-utils";
-import { enumValueToKey } from "#utils/common-utils";
-import { capitalizeString } from "#utils/string-utils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
 /**
- * Matcher to check if the {@linkcode TerrainType} is as expected
- * @param received - The object to check. Expects an instance of {@linkcode GameManager}.
- * @param expectedTerrainType - The expected {@linkcode TerrainType}
+ * Check whether the currently active terrain is of the specified type.
+ * @param received - The object to check. Should be the current {@linkcode GameManager}.
+ * @param expected - The expected {@linkcode TerrainType}, or {@linkcode TerrainType.NONE} if no terrain should be active
  * @returns Whether the matcher passed
  */
-export function toHaveTerrainMatcher(
-  this: MatcherState,
+export function toHaveTerrain(
+  this: Readonly<MatcherState>,
   received: unknown,
-  expectedTerrainType: TerrainType,
+  expected: TerrainType,
 ): SyncExpectationResult {
   if (!isGameManagerInstance(received)) {
     return {
       pass: this.isNot,
-      message: () => `Expected GameManager, but got ${receivedStr(received)}!`,
+      message: () => `Expected to receive a GameManager, but got ${receivedStr(received)}!`,
     };
   }
 
   if (!received.scene?.arena) {
     return {
       pass: this.isNot,
-      message: () => `Expected GameManager.${received.scene ? "scene" : "scene.arena"} to be defined!`,
+      message: () => `Expected GameManager.${received.scene ? "scene.arena" : "scene"} to be defined!`,
     };
   }
 
-  const pass = received.scene.arena.hasTerrain(expectedTerrainType);
-  const terrainStr = toTerrainStr(expectedTerrainType);
-  const actualTerrainStr = toTerrainStr(received.scene.arena.terrainType);
+  const actual = received.scene.arena.terrainType;
+  const pass = actual === expected;
+
+  const actualStr = toTerrainStr(actual);
+  const expectedStr = toTerrainStr(expected);
 
   return {
     pass,
     message: () =>
       pass
-        ? `Expected Arena to NOT have ${terrainStr} Terrain, but it did.`
-        : `Expected Arena to have ${terrainStr} Terrain, but got ${actualTerrainStr} Terrain.`,
+        ? `Expected the Arena to NOT have ${expectedStr} active, but it did!`
+        : `Expected the Arena to have ${expectedStr} active, but got ${actualStr} instead!`,
+    expected,
+    actual,
   };
 }
 
-//#region Helpers
-
 /**
- * Get a human readable string of the TerrainType
+ * Get a human readable string of the current terrain.
  * @param terrainType - The {@linkcode TerrainType} to transform
  * @returns A human readable string
  */
 function toTerrainStr(terrainType: TerrainType) {
-  return capitalizeString(enumValueToKey(TerrainType, terrainType), "_", false, true);
+  if (terrainType === TerrainType.NONE) {
+    return "no terrain";
+  }
+  // "Electric Terrain (=2)"
+  return getEnumStr(TerrainType, terrainType, { casing: "Title", suffix: " Terrain" });
 }
-
-//#endregion

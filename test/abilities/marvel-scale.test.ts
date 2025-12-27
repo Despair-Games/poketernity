@@ -98,13 +98,13 @@ describe("Ability - Marvel Scale", () => {
 
     await classicMode.startBattle(SpeciesId.FEEBAS);
     const player = field.getPlayerPokemon();
-    const enemy = field.getEnemyPokemon();
+    const opponent = field.getEnemyPokemon();
     game.move.use(MoveId.SPLASH);
     await game.toEndOfTurn();
     const playerDef = player.getStat(Stat.DEF);
 
     expect(player.hasNonVolatileStatusEffect()).toBe(true);
-    expect(player).toHaveEffectiveStat(Stat.DEF, Math.floor(playerDef * 1.5 * 2.0), { enemy });
+    expect(player).toHaveEffectiveStat(Stat.DEF, Math.floor(playerDef * 1.5 * 2.0), { opponent });
   });
 
   it("should stack with 'Grass Pelt' ability", async () => {
@@ -113,13 +113,13 @@ describe("Ability - Marvel Scale", () => {
 
     await classicMode.startBattle(SpeciesId.FEEBAS);
     const player = field.getPlayerPokemon();
-    const enemy = field.getEnemyPokemon();
+    const opponent = field.getEnemyPokemon();
     game.move.use(MoveId.GRASSY_TERRAIN);
     await game.toEndOfTurn();
     const playerDef = player.getStat(Stat.DEF);
 
     expect(player.hasNonVolatileStatusEffect()).toBe(true);
     expect(game).toHaveTerrain(TerrainType.GRASSY);
-    expect(player).toHaveEffectiveStat(Stat.DEF, Math.floor(playerDef * 1.5 * 1.5), { enemy });
+    expect(player).toHaveEffectiveStat(Stat.DEF, Math.floor(playerDef * 1.5 * 1.5), { opponent });
   });
 });

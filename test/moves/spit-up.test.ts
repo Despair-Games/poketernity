@@ -122,7 +122,7 @@ describe("Moves - Spit Up", () => {
     game.move.select(MoveId.SPIT_UP);
     await game.phaseInterceptor.to("TurnInitPhase");
 
-    expect(pokemon).toHaveMoveResult(MoveResult.FAIL);
+    expect(pokemon).toHaveUsedMove({ moveId: MoveId.SPIT_UP, result: MoveResult.FAIL });
     expect(spitUp.calculateBattlePower).not.toHaveBeenCalled();
   });
 
@@ -144,7 +144,7 @@ describe("Moves - Spit Up", () => {
 
       await game.phaseInterceptor.to("TurnInitPhase");
 
-      expect(pokemon).toHaveMoveResult(MoveResult.SUCCESS);
+      expect(pokemon).toHaveUsedMove({ moveId: MoveId.SPIT_UP, result: MoveResult.SUCCESS });
 
       expect(spitUp.calculateBattlePower).toHaveBeenCalledOnce();
 
@@ -172,7 +172,7 @@ describe("Moves - Spit Up", () => {
       game.move.select(MoveId.SPIT_UP);
       await game.phaseInterceptor.to("TurnInitPhase");
 
-      expect(pokemon).toHaveMoveResult(MoveResult.SUCCESS);
+      expect(pokemon).toHaveUsedMove({ moveId: MoveId.SPIT_UP, result: MoveResult.SUCCESS });
 
       expect(spitUp.calculateBattlePower).toHaveBeenCalledOnce();
 

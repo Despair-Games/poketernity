@@ -41,7 +41,7 @@ describe("Abilities - Bulletproof", () => {
     game.move.select(MoveId.SPLASH, 1);
     await game.toEndOfTurn();
 
-    expect(playerPokemon1).toHaveMoveResult(MoveResult.FAIL);
+    expect(playerPokemon1).toHaveUsedMove({ moveId: MoveId.POLLEN_PUFF, result: MoveResult.FAIL });
     expect(playerPokemon2.hp).toBe(1);
   });
 });

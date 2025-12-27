@@ -239,7 +239,7 @@
     },
     {
       // This section is to improve the bug tester workflow
-      "includes": ["**/src/overrides.ts"],
+      "includes": ["src/overrides.ts"],
       "linter": {
         "rules": {
           "correctness": {
@@ -252,7 +252,7 @@
       }
     },
     {
-      "includes": ["**/src/plugins/i18n.ts", "**/eslint.config.js", "**/vite.config.ts", "**/vitest.config.ts"],
+      "includes": ["src/plugins/i18n.ts", "**/vite.config.ts", "**/vitest.config.ts"],
       "linter": {
         "rules": {
           "style": {

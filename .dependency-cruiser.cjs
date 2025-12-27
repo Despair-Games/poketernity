@@ -2,12 +2,25 @@
 module.exports = {
   forbidden: [
     {
+      name: "no-non-type-@type-exports",
+      severity: "error",
+      comment:
+        "Files in `@types/` should not export anything but types and interfaces. "
+        + "The folder is intended to house imports that are removed at runtime, "
+        + "and thus should not contain anything with a bearing on runtime code.",
+      from: {},
+      to: {
+        path: ["(^|/)src/@types", "(^|/)test/@types"],
+        dependencyTypesNot: ["type-only"],
+      },
+    },
+    {
       name: "only-type-imports",
       severity: "error",
       comment: "Files in 'enums/' and '@types/' must only use type imports.",
       from: {
-        path: ["(^|/)src/@types", "(^|/)src/enums"],
-        pathNot: ["(^|/)src/@types/phaser.d.ts"],
+        path: ["(^|/)src/@types", "(^|/)src/enums", "(^|/)test/@types"],
+        pathNot: ["(^|/)src/@types/phaser[.]d[.]ts", "(^|/)test/@types/vitest[.]d[.]ts"],
       },
       to: {
         dependencyTypesNot: ["type-only"],

@@ -90,6 +90,9 @@ importers:
       phaser3spectorjs:
         specifier: ^0.0.8
         version: 0.0.8
+      type-fest:
+        specifier: ^5.4.4
+        version: 5.4.4
       typedoc:
         specifier: ^0.28.17
         version: 0.28.17(typescript@5.9.3)

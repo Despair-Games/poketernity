@@ -149,7 +149,7 @@ describe("Moves - Instruct", () => {
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
 
-    expect(game.field.getPlayerPokemon()).toHaveMoveResult(MoveResult.FAIL);
+    expect(game.field.getPlayerPokemon()).toHaveUsedMove({ moveId: MoveId.INSTRUCT, result: MoveResult.FAIL });
     expect(enemyPokemon.getMoveHistory().length).toBe(1);
   });
 
@@ -162,7 +162,7 @@ describe("Moves - Instruct", () => {
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toEndOfTurn();
 
-    expect(game.field.getPlayerPokemon()).toHaveMoveResult(MoveResult.FAIL);
+    expect(game.field.getPlayerPokemon()).toHaveUsedMove({ moveId: MoveId.INSTRUCT, result: MoveResult.FAIL });
   });
 
   it("should attempt to call enemy's disabled move, but move use itself should fail", async () => {
@@ -182,22 +182,16 @@ describe("Moves - Instruct", () => {
 
     const playerPokemon = game.field.getPlayerPokemon();
     const enemyPokemon = game.field.getEnemyPokemon();
-    expect(playerPokemon).toHaveMoveResult(MoveResult.SUCCESS);
-    expect(enemyPokemon).toHaveMoveResult(MoveResult.FAIL);
-    expect(
-      game.scene
-        .getEnemyPokemon()!
-        .getMoveset()
-        .find((m) => m?.moveId === MoveId.SONIC_BOOM)?.ppUsed,
-    ).toBe(1);
+    expect(playerPokemon).toHaveUsedMove({ moveId: MoveId.INSTRUCT, result: MoveResult.SUCCESS });
+    expect(enemyPokemon).toHaveUsedMove({ moveId: MoveId.NONE, result: MoveResult.FAIL });
+    expect(enemyPokemon).toHaveUsedPP(MoveId.SONIC_BOOM, 1);
   });
 
   it("should not repeat enemy's move through protect", async () => {
     await game.classicMode.startBattle(SpeciesId.AMOONGUSS);
 
-    const MoveToUse = MoveId.PROTECT;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
-    game.move.changeMoveset(enemyPokemon, MoveToUse);
+    game.move.changeMoveset(enemyPokemon, MoveId.PROTECT);
     game.move.select(MoveId.INSTRUCT);
     await game.move.forceEnemyMove(MoveId.PROTECT);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
@@ -205,7 +199,7 @@ describe("Moves - Instruct", () => {
 
     expect(enemyPokemon).toHaveUsedMove(MoveId.PROTECT);
     expect(enemyPokemon).not.toHaveUsedMove(MoveId.PROTECT, { moveCount: -1, index: 1 }); // not used because protect failed
-    expect(enemyPokemon.getMoveset().find((m) => m?.moveId === MoveId.PROTECT)?.ppUsed).toBe(1);
+    expect(enemyPokemon).toHaveUsedPP(MoveId.PROTECT, 1);
   });
 
   it("should not repeat enemy's charging move", async () => {
@@ -229,13 +223,13 @@ describe("Moves - Instruct", () => {
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
-    expect(player).toHaveMoveResult(MoveResult.FAIL);
+    expect(player).toHaveUsedMove({ moveId: MoveId.INSTRUCT, result: MoveResult.FAIL });
 
     game.move.select(MoveId.INSTRUCT);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
 
-    expect(player).toHaveMoveResult(MoveResult.FAIL);
+    expect(player).toHaveUsedMove({ moveId: MoveId.INSTRUCT, result: MoveResult.FAIL });
   });
 
   it("should not repeat dance move not known by target", async () => {
@@ -253,7 +247,7 @@ describe("Moves - Instruct", () => {
     game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.toEndOfTurn();
 
-    expect(game.scene.getPlayerField()[0]).toHaveMoveResult(MoveResult.FAIL);
+    expect(game.scene.getPlayerField()[0]).toHaveUsedMove({ moveId: MoveId.INSTRUCT, result: MoveResult.FAIL });
   });
 
   it("should cause multi-hit moves to hit the appropriate number of times in singles", async () => {
