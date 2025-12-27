@@ -111,14 +111,10 @@ function applyAbAttrsInternal<K extends AbAttrKey>(
       // @ts-expect-error: TS doesn't narrow `args` correctly (See above)
       attr.apply(pokemon, simulated, ...args);
 
-      if (!pokemon.summonData.abilitiesApplied.includes(ability.id)) {
-        pokemon.summonData.abilitiesApplied.push(ability.id);
-      }
+      pokemon.summonData.abilitiesApplied.add(ability.id);
 
-      if (!pokemon.waveData.abilitiesApplied.includes(ability.id)) {
-        pokemon.waveData.abilitiesApplied.push(ability.id);
-        pokemon.waveData.abilitiesRevealed.push(ability.id);
-      }
+      pokemon.waveData.abilitiesApplied.add(ability.id);
+      pokemon.waveData.abilitiesRevealed.add(ability.id);
 
       if (attr.showAbility && !simulated) {
         globalScene.phaseManager.createAndUnshiftPhase("HideAbilityPhase", pokemon);

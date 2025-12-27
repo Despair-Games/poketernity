@@ -95,7 +95,7 @@ describe("Moves - Tera Blast", () => {
 
     game.move.select(MoveId.TERA_BLAST);
     await game.toEndOfTurn();
-    expect(game.field.getEnemyPokemon().waveData.abilitiesApplied).toContain(AbilityId.TOXIC_DEBRIS);
+    expect(game.field.getEnemyPokemon()).toHaveAbilityApplied(AbilityId.TOXIC_DEBRIS);
   });
 
   it("causes stat drops if user is Stellar tera type", async () => {

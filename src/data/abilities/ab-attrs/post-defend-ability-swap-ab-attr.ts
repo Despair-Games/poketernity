@@ -12,10 +12,10 @@ export class PostDefendAbilitySwapAbAttr extends PostDefendAbAttr {
       const attackerAbilityId = attacker.getAbility().id;
 
       attacker.summonData.ability = sourceAbilityId;
-      attacker.waveData.abilitiesRevealed.push(sourceAbilityId);
+      attacker.waveData.abilitiesRevealed.add(sourceAbilityId);
 
       pokemon.summonData.ability = attackerAbilityId;
-      pokemon.waveData.abilitiesRevealed.push(attackerAbilityId);
+      pokemon.waveData.abilitiesRevealed.add(attackerAbilityId);
     }
   }
 

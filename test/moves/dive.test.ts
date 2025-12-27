@@ -106,7 +106,7 @@ describe("Moves - Dive", () => {
 
     await game.phaseInterceptor.to("PostActionPhase");
     expect(playerPokemon.hp).toBeLessThan(playerPokemon.getMaxHp());
-    expect(enemyPokemon.waveData.abilitiesApplied[0]).toBe(AbilityId.ROUGH_SKIN);
+    expect(enemyPokemon).toHaveAbilityApplied(AbilityId.ROUGH_SKIN);
   });
 
   it("should cancel attack after Harsh Sunlight is set", async () => {
