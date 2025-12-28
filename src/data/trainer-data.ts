@@ -189,7 +189,7 @@ export class TrainerDataSet {
   /**
    * @returns `true` if this Trainer combination is considered a boss battle.
    * @remarks
-   * A Compound Trainer battle is considered a boss battle if at least one of the
+   * Multi-Trainer battles are considered boss battles if at least one of the
    * Trainers involved {@link NewTrainerConfig.isBoss | is a boss}.
    */
   public get isBoss(): boolean {

@@ -969,7 +969,43 @@ export class TrainerSpriteSet extends Phaser.GameObjects.Container {
     }
   }
 
-  public playAnim(trainerSlots?: NonNullTrainerSlot[]) {
+  /**
+   * Tints the {@linkcode TrainerSprite} for the Trainer at the given slot.
+   * @param trainerSlot - The {@linkcode TrainerSlot} of the Trainer sprite to tint
+   * @param options - (Optional) The {@link TintOptions | properties} of the tinting effect
+   * @async
+   * @see {@linkcode TrainerSprite.tint}
+   */
+  public async tint(trainerSlot: NonNullTrainerSlot, options: TintOptions = {}): Promise<void> {
+    const sprite = this.trainerSprites[trainerSlot];
+
+    if (sprite == null) {
+      console.warn(`tint: Trainer slot ${trainerSlot} does not have a defined Trainer!`);
+      return;
+    }
+
+    await sprite.tint(options);
+  }
+
+  /**
+   * Untints the {@linkcode TrainerSprite} for the Trainer at the given slot.
+   * @param trainerSlot - The {@linkcode TrainerSlot} of the Trainer sprite to untint
+   * @param options - (Optional) The {@link UntintOptions | properties} of the untinting effect
+   * @async
+   * @see {@linkcode TrainerSprite.untint}
+   */
+  public async untint(trainerSlot: NonNullTrainerSlot, options: UntintOptions = {}) {
+    const sprite = this.trainerSprites[trainerSlot];
+
+    if (sprite == null) {
+      console.warn(`untint: Trainer slot ${trainerSlot} does not have a defined Trainer!`);
+      return;
+    }
+
+    await sprite.untint(options);
+  }
+
+  public playAnim(trainerSlots?: NonNullTrainerSlot[]): void {
     const spritesToPlay = trainerSlots?.map((slot) => this.trainerSprites[slot]) ?? Object.values(this.trainerSprites);
 
     spritesToPlay.forEach((trainerSprite) => trainerSprite?.playAnim());
