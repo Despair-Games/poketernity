@@ -953,10 +953,9 @@ export class TrainerSpriteSet extends Phaser.GameObjects.Container {
     super(globalScene, -72, 80);
     this.type = "TrainerSpriteSet";
 
-    for (const [key, td] of Object.entries(source.trainerData)) {
-      const trainerSlot = Number(key) as NonNullTrainerSlot;
-      this.trainerSprites[trainerSlot] = new TrainerSprite(td);
-    }
+    this.trainerSprites = Object.fromEntries(
+      Object.entries(source.trainerData).map(([key, td]) => [key, new TrainerSprite(td)]),
+    );
 
     const entries = Object.entries(this.trainerSprites);
     for (const [key, trainerSprite] of entries) {

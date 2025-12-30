@@ -112,7 +112,7 @@ export type TrainerConfigMap = Partial<Record<TrainerType, NewTrainerConfig>>;
  * A record of data organized by {@linkcode TrainerSlot}.
  * All slots except for {@linkcode TrainerSlot.NONE} must have a mapped config.
  */
-export type TrainerSlotMap<T> = Record<NonNullTrainerSlot, T>;
+export type TrainerSlotMap<T> = Readonly<Record<NonNullTrainerSlot, T>>;
 /**
  * A {@linkcode TrainerSlotMap} where only the first slot ({@linkcode TrainerSlot.TRAINER})
  * must be defined. Other slots are optional.
