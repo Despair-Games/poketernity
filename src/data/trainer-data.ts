@@ -37,6 +37,16 @@ export class TrainerData {
   public readonly moneyMultiplier: number;
   public readonly gender: TrainerGender;
 
+  /**
+   * @param trainerSlot - The {@linkcode TrainerSlot} to which the Trainer belongs.
+   * This must not be {@linkcode TrainerSlot.NONE}.
+   * @param config - The {@linkcode NewTrainerConfig} from which the data is generated
+   * @param gender - (Optional) The Trainer's {@linkcode TrainerGender}. If not defined,
+   * the Trainer's gender is {@link initGender | determined randomly}.
+   * @param useSameSeedForAllTrainers - (Default `false`) If `true`, other
+   * Trainers in the same battle will use the same seed offset for global RNG
+   * calls (assuming they also have this set to `true` for their construction)
+   */
   constructor(
     trainerSlot: NonNullTrainerSlot,
     config: NewTrainerConfig,
@@ -153,6 +163,12 @@ export class CompoundTrainerData {
   public readonly trainerData: TrainerSlotMap<TrainerData>;
   public readonly title: string;
 
+  /**
+   * @param config - The {@linkcode CompoundTrainerConfig} from which the data is generated
+   * @param genders - The {@linkcode TrainerGender}s of each Trainer, organized by {@linkcode TrainerSlot}.
+   * If a gender isn't specified for a slot, that slot's Trainer will be given a
+   * random gender (see {@linkcode TrainerData.initGender}).
+   */
   constructor(config: CompoundTrainerConfig, genders: Partial<TrainerSlotMap<TrainerGender>> = {}) {
     for (const [slot, cfg] of Object.entries(config.configs)) {
       const trainerSlot = Number(slot) as NonNullTrainerSlot;
@@ -179,6 +195,30 @@ export class TrainerDataSet {
   public readonly trainerData: RequireOneTrainer<TrainerData>;
   /** The title of the Trainer set, to be displayed at the start of the battle */
   public readonly title: string;
+
+  /**
+   * Builds a {@linkcode TrainerDataSet} from a single Trainer's {@linkcode NewTrainerConfig}.
+   * This is a shorthand for constructing a {@linkcode TrainerData} instance, then
+   * building a `TrainerDataSet` from that instance.
+   *
+   * This method's parameters mirror those of the {@linkcode TrainerData} constructor.
+   * @returns The constructed {@linkcode TrainerDataSet}
+   */
+  public static fromConfig(...params: ConstructorParameters<typeof TrainerData>): TrainerDataSet {
+    return new TrainerDataSet(new TrainerData(...params));
+  }
+
+  /**
+   * Builds a {@linkcode TrainerDataSet} from a {@linkcode CompoundTrainerConfig} (for multi-Trainer battles).
+   * This is a shorthand for constructing a {@linkcode CompoundTrainerData} instance,
+   * then building a `TrainerDataSet` from that instance.
+   *
+   * This method's parameters mirror those of the {@linkcode CompoundTrainerData} constructor.
+   * @returns The constructed {@linkcode TrainerDataSet}
+   */
+  public static fromCompoundConfig(...params: ConstructorParameters<typeof CompoundTrainerData>): TrainerDataSet {
+    return new TrainerDataSet(new CompoundTrainerData(...params));
+  }
 
   constructor(source: TrainerData | CompoundTrainerData) {
     this.trainerData = source instanceof TrainerData ? { [TrainerSlot.TRAINER]: source } : source.trainerData;
