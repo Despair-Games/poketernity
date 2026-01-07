@@ -184,7 +184,7 @@ describe("Abilities - Wimp Out", () => {
     game.selectPartyPokemon(1);
     await game.phaseInterceptor.to("SwitchPhase", false);
 
-    expect(wimpod.summonData.abilitiesApplied).not.toContain(AbilityId.WIMP_OUT);
+    expect(wimpod).not.toHaveAbilityApplied(AbilityId.WIMP_OUT);
 
     await game.toEndOfTurn();
 
@@ -562,6 +562,6 @@ describe("Abilities - Wimp Out", () => {
     expect(enemy1.getHpRatio()).toBeLessThanOrEqual(0.5);
     expect(enemy1).not.toHaveFainted();
     expect(enemy1.isOnField()).toBeTruthy();
-    expect(enemy1.waveData.abilitiesApplied.includes(AbilityId.WIMP_OUT)).toBeFalsy();
+    expect(enemy1).not.toHaveAbilityApplied(AbilityId.WIMP_OUT);
   });
 });

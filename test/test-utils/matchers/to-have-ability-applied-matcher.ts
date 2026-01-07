@@ -5,9 +5,9 @@ import { isPokemonInstance, receivedStr } from "#test/test-utils/test-utils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
 /**
- * Matcher to check if a {@linkcode Pokemon} had a specific {@linkcode AbilityId} applied.
- * @param received - The object to check. Should be a {@linkcode Pokemon}.
- * @param expectedAbility - The {@linkcode AbilityId} to check for.
+ * Matcher that checks if a {@linkcode Pokemon} has applied a specific {@linkcode AbilityId}.
+ * @param received - The object to check. Should be a {@linkcode Pokemon}
+ * @param expectedAbility - The {@linkcode AbilityId} to check for
  * @returns Whether the matcher passed
  */
 export function toHaveAbilityAppliedMatcher(
@@ -18,11 +18,11 @@ export function toHaveAbilityAppliedMatcher(
   if (!isPokemonInstance(received)) {
     return {
       pass: this.isNot,
-      message: () => `Expected Pokemon, but got ${receivedStr(received)}!`,
+      message: () => `Expected to receive a Pokemon, but got ${receivedStr(received)}!`,
     };
   }
 
-  const pass = received.summonData.abilitiesApplied.includes(expectedAbilityId);
+  const pass = received.waveData.abilitiesApplied.has(expectedAbilityId);
 
   const pkmName = getPokemonNameWithAffix(received);
   const expectedAbilityStr = `${AbilityId[expectedAbilityId]} (=${expectedAbilityId})`;
@@ -31,7 +31,9 @@ export function toHaveAbilityAppliedMatcher(
     pass,
     message: () =>
       pass
-        ? `Expected ${pkmName} to NOT have ${expectedAbilityStr} ability applied, but it did!`
-        : `Expected ${pkmName} to have ${expectedAbilityStr} ability applied, but it did not.`,
+        ? `Expected ${pkmName} to NOT have applied ${expectedAbilityStr}, but it did!`
+        : `Expected ${pkmName} to have applied ${expectedAbilityStr}, but it didn't!`,
+    expected: expectedAbilityId,
+    actual: received.waveData.abilitiesApplied,
   };
 }

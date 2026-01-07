@@ -335,7 +335,7 @@ export class BattleScene extends SceneBase {
     );
   }
 
-  async preload() {
+  public async preload() {
     // TODO: Move all RNG-related code outside of `battle-scene.ts`.
     if (DEBUG_RNG) {
       /**
@@ -381,7 +381,21 @@ export class BattleScene extends SceneBase {
       };
     }
 
-    await this.initVariantData();
+    /**
+     * These moves serve as fallback animations for other moves without loaded animations,
+     * and must be loaded prior to game start.
+     */
+    const defaultMoves = [MoveId.TACKLE, MoveId.TAIL_WHIP, MoveId.FOCUS_ENERGY, MoveId.STRUGGLE];
+    try {
+      await Promise.all([
+        this.initVariantData(),
+        initCommonAnims().then(() => loadCommonAnimAssets(true)),
+        Promise.all(defaultMoves.map((m) => initMoveAnim(m))).then(() => loadMoveAnimAssets(defaultMoves, true)),
+        this.initStarterColors(),
+      ]);
+    } catch (err) {
+      throw new Error(`Unexpected error during \`BattleScene#preLoad\`!\nReason: ${err}`);
+    }
   }
 
   create() {
@@ -646,20 +660,10 @@ export class BattleScene extends SceneBase {
 
     ui.setup();
 
-    const defaultMoves = [MoveId.TACKLE, MoveId.TAIL_WHIP, MoveId.FOCUS_ENERGY, MoveId.STRUGGLE];
+    this.phaseManager.createAndPushPhase("LoginPhase");
+    this.phaseManager.toTitleScreen();
 
-    Promise.all([
-      initCommonAnims().then(() => loadCommonAnimAssets(true)),
-      Promise.all(
-        [MoveId.TACKLE, MoveId.TAIL_WHIP, MoveId.FOCUS_ENERGY, MoveId.STRUGGLE].map((m) => initMoveAnim(m)),
-      ).then(() => loadMoveAnimAssets(defaultMoves, true)),
-      this.initStarterColors(),
-    ]).then(() => {
-      this.phaseManager.createAndPushPhase("LoginPhase");
-      this.phaseManager.toTitleScreen();
-
-      this.phaseManager.shiftPhase();
-    });
+    this.phaseManager.shiftPhase();
   }
 
   initSession(): void {

@@ -107,12 +107,13 @@ export function getPokemonMoveName(pokemon: Pokemon, moveId: MoveId, bypassSummo
 export function summonDataToJSON(this: PokemonSummonData): SerializedPokemonSummonData {
   // Pokemon species forms are never saved, only the species ID.
   const speciesForm = this.speciesForm;
-  const t = {
+  const t: SerializedPokemonSummonData = {
     // the "as omit" is required to avoid TS resolving the overwritten properties to `never`
     // We coerce `null` to `undefined` in the type, as the for loop below replaces `null` with `undefined`
     ...(this as Omit<CoerceNullPropertiesToUndefined<PokemonSummonData>, "speciesForm">),
     speciesForm:
       speciesForm == null ? undefined : { speciesId: speciesForm.speciesId, formIndex: speciesForm.formIndex },
+    abilitiesApplied: [...this.abilitiesApplied.values()],
   };
   // Replace `null` with `undefined`, as `undefined` never gets serialized
   for (const [key, value] of Object.entries(t)) {

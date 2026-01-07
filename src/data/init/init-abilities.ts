@@ -1992,7 +1992,7 @@ function getSheerForceHitDisableAbCondition(): AbAttrCondition {
  */
 function getOncePerBattleCondition(ability: AbilityId): AbAttrCondition {
   return (pokemon: Pokemon) => {
-    return !pokemon.waveData.abilitiesApplied.includes(ability);
+    return !pokemon.waveData.abilitiesApplied.has(ability);
   };
 }
 
