@@ -1,5 +1,5 @@
 export function rgbHexToRgba(hex: string): { r: number; g: number; b: number; a: number } {
-  const color = hex.match(/^([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i) ?? ["000000", "00", "00", "00"];
+  const color = /^([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i.exec(hex) ?? ["000000", "00", "00", "00"];
   return {
     r: Number.parseInt(color[1], 16),
     g: Number.parseInt(color[2], 16),

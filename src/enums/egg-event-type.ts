@@ -1,7 +1,4 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { MoveUsedEvent } from "#events/battle-scene";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import type { ObjectValues } from "#types/utility-types";
 
 export const EggEventType = {
