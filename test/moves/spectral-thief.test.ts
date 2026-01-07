@@ -98,7 +98,7 @@ describe("Moves - Spectral Thief", () => {
 
     expect(player.getStatStage(Stat.DEF)).toBe(2);
     expect(enemy.getStatStage(Stat.DEF)).toBe(0);
-    expect(enemy.waveData.abilitiesApplied.includes(AbilityId.CLEAR_BODY)).toBeFalsy();
+    expect(enemy).not.toHaveAbilityApplied(AbilityId.CLEAR_BODY);
   });
 
   // biome-ignore format: prefer pre-2.3.6 formatting
@@ -143,6 +143,6 @@ describe("Moves - Spectral Thief", () => {
     expect(player.getStatStage(Stat.DEF)).toBe(2);
     expect(enemy.getStatStage(Stat.DEF)).toBe(0);
     expect(enemy.getStatStage(Stat.ATK)).toBe(0);
-    expect(enemy.waveData.abilitiesApplied.includes(AbilityId.DEFIANT)).toBeFalsy();
+    expect(enemy).not.toHaveAbilityApplied(AbilityId.DEFIANT);
   });
 });

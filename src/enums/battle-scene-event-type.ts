@@ -1,4 +1,3 @@
-/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { BattleScene } from "#app/battle-scene";
 import type {
   BerryUsedEvent,
@@ -10,8 +9,6 @@ import type {
   TurnInitEvent,
 } from "#events/battle-scene";
 import type { Arena } from "#field/arena";
-/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
-
 import type { ObjectValues } from "#types/utility-types";
 
 /** Alias for all {@linkcode BattleScene} events */

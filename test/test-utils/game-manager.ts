@@ -26,7 +26,7 @@ import type { CommandPhase } from "#phases/command-phase";
 import type { TurnEndPhase } from "#phases/turn-end-phase";
 import { settings } from "#system/settings-manager";
 import { ErrorInterceptor } from "#test/test-utils/error-interceptor";
-import { generateStarter, waitUntil } from "#test/test-utils/game-manager-utils";
+import { generateStarter } from "#test/test-utils/game-manager-utils";
 import { GameWrapper } from "#test/test-utils/game-wrapper";
 import { ChallengeModeHelper } from "#test/test-utils/helpers/challenge-mode-helper";
 import { ClassicModeHelper } from "#test/test-utils/helpers/classic-mode-helper";
@@ -83,30 +83,16 @@ export class GameManager {
     BattleScene.prototype.randBattleSeedInt = (range, min: number = 0) => min + range - 1; // This simulates a max roll
     this.gameWrapper = new GameWrapper(phaserGame, bypassLogin);
 
-    let firstTimeScene = false;
     if (globalScene) {
       this.scene = globalScene;
+      this.phaseInterceptor = new PhaseInterceptor(this.scene);
+      this.resetScene();
     } else {
       this.scene = new BattleScene();
+      this.phaseInterceptor = new PhaseInterceptor(this.scene);
       this.gameWrapper.setScene(this.scene);
-      firstTimeScene = true;
     }
 
-    this.phaseInterceptor = new PhaseInterceptor(this.scene);
-
-    if (!firstTimeScene) {
-      this.scene.reset(false, true);
-
-      this.scene.phaseManager.clear();
-      this.scene.ui.resetHandlers(); // reset ui state
-
-      // This part, in particular, must not be run before the PhaseInterceptor has been initialized.
-      this.scene.phaseManager.createAndPushPhase("LoginPhase");
-      this.scene.phaseManager.toTitleScreen();
-      this.scene.phaseManager.shiftPhase();
-
-      this.gameWrapper.scene = this.scene;
-    }
     this.textInterceptor = new TextInterceptor(this.scene);
     this.override = new OverridesHelper(this);
     this.move = new MoveHelper(this);
@@ -129,6 +115,20 @@ export class GameManager {
     global.fetch = vi.fn(MockFetch) as any;
   }
 
+  private resetScene(): void {
+    this.scene.reset(false, true);
+
+    this.scene.phaseManager.clear();
+    this.scene.ui.resetHandlers(); // reset ui state
+
+    // This part, in particular, must not be run before the PhaseInterceptor has been initialized.
+    this.scene.phaseManager.createAndPushPhase("LoginPhase");
+    this.scene.phaseManager.toTitleScreen();
+    this.scene.phaseManager.shiftPhase();
+
+    this.gameWrapper.scene = this.scene;
+  }
+
   /**
    * Sets the game mode.
    * @param mode - The mode to set.
@@ -143,11 +143,8 @@ export class GameManager {
    * @param mode - The mode to wait for.
    * @returns A promise that resolves when the mode is set.
    */
-  waitMode(mode: UiMode): Promise<void> {
-    return new Promise(async (resolve) => {
-      await waitUntil(() => this.scene.ui?.getMode() === mode);
-      return resolve();
-    });
+  public async waitMode(mode: UiMode): Promise<void> {
+    await vi.waitUntil(() => this.scene.ui?.getMode() === mode);
   }
 
   /**

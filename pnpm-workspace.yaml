@@ -7,3 +7,5 @@ onlyBuiltDependencies:
 shellEmulator: true
 
 minimumReleaseAge: 1440
+minimumReleaseAgeExclude:
+- "@biomejs/*"

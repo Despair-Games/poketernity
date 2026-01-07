@@ -1618,7 +1618,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   public hasRevealedAbility(abilityId: AbilityId) {
-    return this.waveData.abilitiesRevealed.includes(abilityId);
+    return this.waveData.abilitiesRevealed.has(abilityId);
   }
 
   /**
@@ -4163,7 +4163,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       moveQueue: [],
       tags: [],
       abilitySuppressed: false,
-      abilitiesApplied: [],
+      abilitiesApplied: new Set(),
       speciesForm: null,
       ability: AbilityId.NONE,
       passiveAbility: AbilityId.NONE,
@@ -4214,8 +4214,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.waveData = {
       hitCount: 0,
       berriesEaten: [],
-      abilitiesApplied: [],
-      abilitiesRevealed: [],
+      abilitiesApplied: new Set(),
+      abilitiesRevealed: new Set(),
     };
   }
 

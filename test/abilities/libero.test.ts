@@ -66,7 +66,8 @@ describe.each([
     game.move.use(MoveId.AGILITY);
     await game.toEndOfTurn();
 
-    expect(leadPokemon.summonData.abilitiesApplied.filter((a) => a === ability)).toHaveLength(1);
+    // can't use custom matcher as it checks `waveData` and this needs to check `summonData` (if it's ever re-enabled)
+    expect(leadPokemon.summonData.abilitiesApplied).toContain(ability);
     const leadPokemonType = enumValueToKey(ElementalType, leadPokemon.getTypes()[0]);
     const moveType = enumValueToKey(ElementalType, allMoves.get(MoveId.AGILITY).type);
     expect(leadPokemonType).not.toBe(moveType);
@@ -94,7 +95,7 @@ describe.each([
     game.move.use(MoveId.WEATHER_BALL);
     await game.toEndOfTurn();
 
-    expect(leadPokemon.summonData.abilitiesApplied).toContain(ability);
+    expect(leadPokemon).toHaveAbilityApplied(ability);
     expect(leadPokemon.getTypes()).toHaveLength(1);
     const leadPokemonType = enumValueToKey(ElementalType, leadPokemon.getTypes()[0]);
     const moveType = enumValueToKey(ElementalType, ElementalType.FIRE);
@@ -111,7 +112,7 @@ describe.each([
     game.move.use(MoveId.TACKLE);
     await game.toEndOfTurn();
 
-    expect(leadPokemon.summonData.abilitiesApplied).toContain(ability);
+    expect(leadPokemon).toHaveAbilityApplied(ability);
     expect(leadPokemon.getTypes()).toHaveLength(1);
     const leadPokemonType = enumValueToKey(ElementalType, leadPokemon.getTypes()[0]);
     const moveType = enumValueToKey(ElementalType, ElementalType.ICE);
@@ -191,7 +192,7 @@ describe.each([
     game.move.use(MoveId.SPLASH);
     await game.toEndOfTurn();
 
-    expect(leadPokemon.summonData.abilitiesApplied).not.toContain(ability);
+    expect(leadPokemon).not.toHaveAbilityApplied(ability);
   });
 
   it("is not applied if pokemon's modified type is the same as the move's type", async () => {
@@ -203,7 +204,7 @@ describe.each([
     game.move.use(MoveId.SPLASH);
     await game.toEndOfTurn();
 
-    expect(leadPokemon.summonData.abilitiesApplied).not.toContain(ability);
+    expect(leadPokemon).not.toHaveAbilityApplied(ability);
   });
 
   it("is not applied if pokemon is terastallized", async () => {
@@ -215,7 +216,7 @@ describe.each([
     game.move.use(MoveId.SPLASH);
     await game.toEndOfTurn();
 
-    expect(leadPokemon.summonData.abilitiesApplied).not.toContain(ability);
+    expect(leadPokemon).not.toHaveAbilityApplied(ability);
   });
 
   it("is not applied if pokemon uses struggle", async () => {
@@ -226,7 +227,7 @@ describe.each([
     game.move.use(MoveId.STRUGGLE);
     await game.toEndOfTurn();
 
-    expect(leadPokemon.summonData.abilitiesApplied).not.toContain(ability);
+    expect(leadPokemon).not.toHaveAbilityApplied(ability);
   });
 
   it("is not applied if the pokemon's move fails", async () => {
@@ -237,7 +238,7 @@ describe.each([
     game.move.use(MoveId.BURN_UP);
     await game.toEndOfTurn();
 
-    expect(leadPokemon.summonData.abilitiesApplied).not.toContain(ability);
+    expect(leadPokemon).not.toHaveAbilityApplied(ability);
   });
 
   it("applies correctly even if the pokemon's Trick-or-Treat fails", async () => {
@@ -266,7 +267,7 @@ describe.each([
   });
 
   function testPokemonTypeMatchesDefaultMoveType(pokemon: PlayerPokemon, moveId: MoveId) {
-    expect(pokemon.summonData.abilitiesApplied).toContain(ability);
+    expect(pokemon).toHaveAbilityApplied(ability);
     expect(pokemon.getTypes()).toHaveLength(1);
     const pokemonType = enumValueToKey(ElementalType, pokemon.getTypes()[0]);
     const moveType = enumValueToKey(ElementalType, allMoves.get(moveId).type);

@@ -239,7 +239,7 @@ describe("Abilities - Mirror Armor", () => {
     game.move.use(MoveId.GROWL);
     await game.toEndOfTurn();
 
-    expect(player.waveData.abilitiesApplied).toContain(AbilityId.CLEAR_BODY);
+    expect(player).toHaveAbilityApplied(AbilityId.CLEAR_BODY);
     expect(player.getStatStage(Stat.ATK)).toBe(0);
     expect(enemy.getStatStage(Stat.ATK)).toBe(0);
   });

@@ -66,3 +66,6 @@ export const SAVE_SLOT_LIMIT: number = 5;
 
 /** Whether the app is running in beta (or development) mode. */
 export const IS_BETA = import.meta.env.MODE === "beta";
+
+/** Whether the app is running in a test environment */
+export const IS_TEST = import.meta.env.NODE_ENV === "test";
