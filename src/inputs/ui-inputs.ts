@@ -104,23 +104,23 @@ export class UiInputs {
 
   private getActionsKeyUp(): ActionKeys {
     const actions: ActionKeys = {
-      [Button.UP]: () => {},
-      [Button.DOWN]: () => {},
-      [Button.LEFT]: () => {},
-      [Button.RIGHT]: () => {},
-      [Button.SUBMIT]: () => {},
-      [Button.ACTION]: () => {},
-      [Button.CANCEL]: () => {},
-      [Button.MENU]: () => {},
+      [Button.UP]: () => undefined,
+      [Button.DOWN]: () => undefined,
+      [Button.LEFT]: () => undefined,
+      [Button.RIGHT]: () => undefined,
+      [Button.SUBMIT]: () => undefined,
+      [Button.ACTION]: () => undefined,
+      [Button.CANCEL]: () => undefined,
+      [Button.MENU]: () => undefined,
       [Button.STATS]: () => this.buttonStats(false),
-      [Button.CYCLE_SHINY]: () => {},
-      [Button.CYCLE_FORM]: () => {},
-      [Button.CYCLE_GENDER]: () => {},
-      [Button.CYCLE_ABILITY]: () => {},
-      [Button.CYCLE_NATURE]: () => {},
+      [Button.CYCLE_SHINY]: () => undefined,
+      [Button.CYCLE_FORM]: () => undefined,
+      [Button.CYCLE_GENDER]: () => undefined,
+      [Button.CYCLE_ABILITY]: () => undefined,
+      [Button.CYCLE_NATURE]: () => undefined,
       [Button.CYCLE_TERA]: () => this.buttonInfo(false),
-      [Button.SPEED_UP]: () => {},
-      [Button.SLOW_DOWN]: () => {},
+      [Button.SPEED_UP]: () => undefined,
+      [Button.SLOW_DOWN]: () => undefined,
     };
     return actions;
   }

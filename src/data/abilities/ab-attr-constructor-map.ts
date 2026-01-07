@@ -1,4 +1,3 @@
-// biome-ignore lint/correctness/noUnusedImports: TSDoc import
 import type { AbAttr } from "#abilities/ab-attr";
 import { AccuracyMultiplierAbAttr } from "#abilities/accuracy-multiplier-ab-attr";
 import { AddSecondStrikeAbAttr } from "#abilities/add-second-strike-ab-attr";
@@ -112,7 +111,6 @@ import { UserFieldStatusEffectImmunityAbAttr } from "#abilities/user-field-statu
 import { VariableMovePowerAbAttr } from "#abilities/variable-move-power-ab-attr";
 import { WeightMultiplierAbAttr } from "#abilities/weight-multiplier-ab-attr";
 import { WonderSkinAbAttr } from "#abilities/wonder-skin-ab-attr";
-// biome-ignore lint/correctness/noUnusedImports: TSDoc import
 import type { AbAttrKey } from "#types/ability-types";
 
 /**
