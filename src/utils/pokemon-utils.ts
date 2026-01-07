@@ -51,13 +51,7 @@ export function getPokemonSpeciesForm(species: SpeciesId, formIndex: number): Po
  * @returns a list of species IDs belonging to the group
  */
 export function getSpecialSpeciesList(group: SpeciesGroups, includeLegends?: boolean): SpeciesId[] {
-  const speciesList = allSpecies
-    .map((s) => {
-      if (s.group === group) {
-        return s.speciesId;
-      }
-    })
-    .filter((s) => s != null);
+  const speciesList = allSpecies.filter((s) => s.group === group).map((s) => s.speciesId);
 
   if (includeLegends && group === SpeciesGroups.ULTRA_BEAST) {
     speciesList.push(SpeciesId.COSMOG, SpeciesId.COSMOEM, SpeciesId.LUNALA, SpeciesId.SOLGALEO, SpeciesId.NECROZMA);
@@ -65,7 +59,7 @@ export function getSpecialSpeciesList(group: SpeciesGroups, includeLegends?: boo
     speciesList.push(SpeciesId.KORAIDON, SpeciesId.MIRAIDON);
   }
 
-  return speciesList as SpeciesId[];
+  return speciesList;
 }
 
 /**

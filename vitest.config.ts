@@ -1,8 +1,8 @@
-import { defineProject } from "vitest/config";
+import { defineConfig } from "vitest/config";
 import { BaseSequencer, type TestSpecification } from "vitest/node";
 import { defaultConfig } from "./vite.config";
 
-export default defineProject(({ mode }) => ({
+export default defineConfig(({ mode }) => ({
   ...defaultConfig,
   test: {
     testTimeout: 20000,
@@ -23,7 +23,7 @@ export default defineProject(({ mode }) => ({
     coverage: {
       provider: "istanbul" as const,
       reportsDirectory: "coverage" as const,
-      reporters: ["text-summary", "html"],
+      reporter: ["text-summary", "html"],
     },
     name: "main",
     include: ["./test/**/*.{test,spec}.ts"],
