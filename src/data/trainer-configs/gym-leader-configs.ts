@@ -1,7 +1,10 @@
+import type { TrainerConfigMap } from "#data/new-trainer-config";
 import { signatureSpecies } from "#data/signature-species";
 import type { TrainerConfigs } from "#data/trainer-config";
 import { TrainerConfig } from "#data/trainer-config";
+import { TrainerConfigBuilder } from "#data/trainer-config-builder";
 import { ElementalType } from "#enums/elemental-type";
+import { TrainerGender } from "#enums/trainer-gender";
 import { TrainerType } from "#enums/trainer-type";
 
 export const gymLeaderTrainerConfigs: TrainerConfigs = {
@@ -258,4 +261,231 @@ export const gymLeaderTrainerConfigs: TrainerConfigs = {
     true,
     ElementalType.ICE,
   ),
+};
+
+export const newGymLeaderTrainerConfigs: TrainerConfigMap = {
+  [TrainerType.BROCK]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("BROCK", TrainerGender.MALE, "kanto", ElementalType.ROCK)
+    .build(),
+  [TrainerType.MISTY]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("MISTY", TrainerGender.FEMALE, "kanto", ElementalType.WATER)
+    .build(),
+  [TrainerType.LT_SURGE]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("LT_SURGE", TrainerGender.MALE, "kanto", ElementalType.ELECTRIC)
+    .build(),
+  [TrainerType.ERIKA]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("ERIKA", TrainerGender.FEMALE, "kanto", ElementalType.GRASS)
+    .build(),
+  [TrainerType.JANINE]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("JANINE", TrainerGender.FEMALE, "kanto", ElementalType.POISON)
+    .build(),
+  [TrainerType.SABRINA]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("SABRINA", TrainerGender.FEMALE, "kanto", ElementalType.PSYCHIC)
+    .build(),
+  [TrainerType.BLAINE]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("BLAINE", TrainerGender.MALE, "kanto", ElementalType.FIRE)
+    .build(),
+  [TrainerType.GIOVANNI]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("GIOVANNI", TrainerGender.MALE, "kanto", ElementalType.GROUND)
+    .build(),
+  [TrainerType.FALKNER]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("FALKNER", TrainerGender.MALE, "johto", ElementalType.FLYING)
+    .build(),
+  [TrainerType.BUGSY]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("BUGSY", TrainerGender.MALE, "johto", ElementalType.BUG)
+    .build(),
+  [TrainerType.WHITNEY]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("WHITNEY", TrainerGender.FEMALE, "johto", ElementalType.NORMAL)
+    .build(),
+  [TrainerType.MORTY]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("MORTY", TrainerGender.MALE, "johto", ElementalType.GHOST)
+    .build(),
+  [TrainerType.CHUCK]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("CHUCK", TrainerGender.MALE, "johto", ElementalType.FIGHTING)
+    .build(),
+  [TrainerType.JASMINE]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("JASMINE", TrainerGender.FEMALE, "johto", ElementalType.STEEL)
+    .build(),
+  [TrainerType.PRYCE]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("PRYCE", TrainerGender.MALE, "johto", ElementalType.ICE)
+    .build(),
+  [TrainerType.CLAIR]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("CLAIR", TrainerGender.FEMALE, "johto", ElementalType.DRAGON)
+    .build(),
+  [TrainerType.ROXANNE]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("ROXANNE", TrainerGender.FEMALE, "hoenn", ElementalType.ROCK)
+    .build(),
+  [TrainerType.BRAWLY]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("BRAWLY", TrainerGender.MALE, "hoenn", ElementalType.FIGHTING)
+    .build(),
+  [TrainerType.WATTSON]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("WATTSON", TrainerGender.MALE, "hoenn", ElementalType.ELECTRIC)
+    .build(),
+  [TrainerType.FLANNERY]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("FLANNERY", TrainerGender.FEMALE, "hoenn", ElementalType.FIRE)
+    .build(),
+  [TrainerType.NORMAN]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("NORMAN", TrainerGender.MALE, "hoenn", ElementalType.NORMAL)
+    .build(),
+  [TrainerType.WINONA]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("WINONA", TrainerGender.FEMALE, "hoenn", ElementalType.FLYING)
+    .build(),
+  // TODO: Create double "TATE_LIZA" config
+  [TrainerType.TATE]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("TATE", TrainerGender.MALE, "hoenn", ElementalType.PSYCHIC)
+    .build(),
+  [TrainerType.LIZA]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("LIZA", TrainerGender.FEMALE, "hoenn", ElementalType.PSYCHIC)
+    .build(),
+  [TrainerType.JUAN]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("JUAN", TrainerGender.MALE, "hoenn", ElementalType.WATER)
+    .build(),
+  [TrainerType.ROARK]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("ROARK", TrainerGender.MALE, "sinnoh", ElementalType.ROCK)
+    .build(),
+  [TrainerType.GARDENIA]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("GARDENIA", TrainerGender.FEMALE, "sinnoh", ElementalType.GRASS)
+    .build(),
+  [TrainerType.MAYLENE]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("MAYLENE", TrainerGender.FEMALE, "sinnoh", ElementalType.FIGHTING)
+    .build(),
+  [TrainerType.CRASHER_WAKE]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("CRASHER_WAKE", TrainerGender.MALE, "sinnoh", ElementalType.WATER)
+    .build(),
+  [TrainerType.FANTINA]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("FANTINA", TrainerGender.FEMALE, "sinnoh", ElementalType.GHOST)
+    .build(),
+  [TrainerType.BYRON]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("BYRON", TrainerGender.MALE, "sinnoh", ElementalType.STEEL)
+    .build(),
+  [TrainerType.CANDICE]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("CANDICE", TrainerGender.FEMALE, "sinnoh", ElementalType.ICE)
+    .build(),
+  [TrainerType.VOLKNER]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("VOLKNER", TrainerGender.MALE, "sinnoh", ElementalType.ELECTRIC)
+    .build(),
+  [TrainerType.CILAN]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("CILAN", TrainerGender.MALE, "unova", ElementalType.GRASS)
+    .build(),
+  [TrainerType.CHILI]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("CHILI", TrainerGender.MALE, "unova", ElementalType.FIRE)
+    .build(),
+  [TrainerType.CRESS]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("CRESS", TrainerGender.MALE, "unova", ElementalType.WATER)
+    .build(),
+  [TrainerType.CHEREN]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("CHEREN", TrainerGender.MALE, "unova", ElementalType.NORMAL)
+    .build(),
+  [TrainerType.LENORA]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("LENORA", TrainerGender.FEMALE, "unova", ElementalType.NORMAL)
+    .build(),
+  [TrainerType.ROXIE]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("ROXIE", TrainerGender.FEMALE, "unova", ElementalType.POISON)
+    .build(),
+  [TrainerType.BURGH]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("BURGH", TrainerGender.MALE, "unova", ElementalType.BUG)
+    .build(),
+  [TrainerType.ELESA]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("ELESA", TrainerGender.FEMALE, "unova", ElementalType.ELECTRIC)
+    .build(),
+  [TrainerType.CLAY]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("CLAY", TrainerGender.MALE, "unova", ElementalType.GROUND)
+    .build(),
+  [TrainerType.SKYLA]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("SKYLA", TrainerGender.FEMALE, "unova", ElementalType.FLYING)
+    .build(),
+  [TrainerType.BRYCEN]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("BRYCEN", TrainerGender.MALE, "unova", ElementalType.ICE)
+    .build(),
+  [TrainerType.DRAYDEN]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("DRAYDEN", TrainerGender.MALE, "unova", ElementalType.DRAGON)
+    .build(),
+  [TrainerType.MARLON]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("MARLON", TrainerGender.MALE, "unova", ElementalType.WATER)
+    .build(),
+  [TrainerType.VIOLA]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("VIOLA", TrainerGender.FEMALE, "kalos", ElementalType.BUG)
+    .build(),
+  [TrainerType.GRANT]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("GRANT", TrainerGender.MALE, "kalos", ElementalType.ROCK)
+    .build(),
+  [TrainerType.KORRINA]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("KORRINA", TrainerGender.FEMALE, "kalos", ElementalType.FIGHTING)
+    .build(),
+  [TrainerType.RAMOS]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("RAMOS", TrainerGender.MALE, "kalos", ElementalType.GRASS)
+    .build(),
+  [TrainerType.CLEMONT]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("CLEMONT", TrainerGender.MALE, "kalos", ElementalType.ELECTRIC)
+    .build(),
+  [TrainerType.VALERIE]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("VALERIE", TrainerGender.FEMALE, "kalos", ElementalType.FAIRY)
+    .build(),
+  [TrainerType.OLYMPIA]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("OLYMPIA", TrainerGender.FEMALE, "kalos", ElementalType.PSYCHIC)
+    .build(),
+  [TrainerType.WULFRIC]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("WULFRIC", TrainerGender.MALE, "kalos", ElementalType.ICE)
+    .build(),
+  [TrainerType.MILO]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("MILO", TrainerGender.MALE, "galar", ElementalType.GRASS)
+    .build(),
+  [TrainerType.NESSA]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("NESSA", TrainerGender.FEMALE, "galar", ElementalType.WATER)
+    .build(),
+  [TrainerType.KABU]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("KABU", TrainerGender.MALE, "galar", ElementalType.FIRE)
+    .build(),
+  [TrainerType.BEA]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("BEA", TrainerGender.FEMALE, "galar", ElementalType.FIGHTING)
+    .build(),
+  [TrainerType.ALLISTER]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("ALLISTER", TrainerGender.MALE, "galar", ElementalType.GHOST)
+    .build(),
+  [TrainerType.OPAL]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("OPAL", TrainerGender.FEMALE, "galar", ElementalType.FAIRY)
+    .build(),
+  [TrainerType.BEDE]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("BEDE", TrainerGender.MALE, "galar", ElementalType.FAIRY)
+    .build(),
+  [TrainerType.GORDIE]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("GORDIE", TrainerGender.MALE, "galar", ElementalType.ROCK)
+    .build(),
+  [TrainerType.MELONY]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("MELONY", TrainerGender.FEMALE, "galar", ElementalType.ICE)
+    .build(),
+  // TODO: Add double "PIERS_MARNIE" config
+  [TrainerType.PIERS]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("PIERS", TrainerGender.MALE, "galar", ElementalType.DARK)
+    .build(),
+  [TrainerType.MARNIE]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("MARNIE", TrainerGender.FEMALE, "galar", ElementalType.DARK)
+    .build(),
+  [TrainerType.RAIHAN]: new TrainerConfigBuilder()
+    .withGymLeaderConfig("RAIHAN", TrainerGender.MALE, "galar", ElementalType.DRAGON)
+    .build(),
+  [TrainerType.KATY]: new TrainerConfigBuilder()
+    .withPaldeaGymLeaderConfig("KATY", TrainerGender.FEMALE, ElementalType.BUG)
+    .build(),
+  [TrainerType.BRASSIUS]: new TrainerConfigBuilder()
+    .withPaldeaGymLeaderConfig("BRASSIUS", TrainerGender.MALE, ElementalType.GRASS)
+    .build(),
+  [TrainerType.IONO]: new TrainerConfigBuilder()
+    .withPaldeaGymLeaderConfig("IONO", TrainerGender.FEMALE, ElementalType.ELECTRIC)
+    .build(),
+  [TrainerType.KOFU]: new TrainerConfigBuilder()
+    .withPaldeaGymLeaderConfig("KOFU", TrainerGender.MALE, ElementalType.WATER)
+    .build(),
+  [TrainerType.LARRY]: new TrainerConfigBuilder()
+    .withPaldeaGymLeaderConfig("LARRY", TrainerGender.MALE, ElementalType.NORMAL)
+    .build(),
+  [TrainerType.RYME]: new TrainerConfigBuilder()
+    .withPaldeaGymLeaderConfig("RYME", TrainerGender.FEMALE, ElementalType.GHOST)
+    .build(),
+  [TrainerType.TULIP]: new TrainerConfigBuilder()
+    .withPaldeaGymLeaderConfig("TULIP", TrainerGender.FEMALE, ElementalType.PSYCHIC)
+    .build(),
+  [TrainerType.GRUSHA]: new TrainerConfigBuilder()
+    .withPaldeaGymLeaderConfig("GRUSHA", TrainerGender.MALE, ElementalType.ICE)
+    .build(),
 };

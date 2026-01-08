@@ -27,7 +27,6 @@ import { allBiomes, allSpecies } from "#data/data-lists";
 import { classicFinalBossDialogue } from "#data/dialogue";
 import { getLevelForWaveFunc } from "#data/exp";
 import { pokemonFormChanges, type SpeciesFormChange } from "#data/pokemon-forms";
-import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import type { PokemonSpecies } from "#data/pokemon-species";
 import { resetStarterColors, starterColors } from "#data/starter-colors";
 import { getTypeRgb } from "#data/type";
@@ -111,7 +110,7 @@ import { type Achievement, achvs } from "#system/achievements";
 import { GameData } from "#system/game-data";
 import { initGameSpeed } from "#system/game-speed";
 import { settings } from "#system/settings-manager";
-import type { TrainerData } from "#system/trainer-data";
+import type { TrainerSaveData } from "#system/trainer-save-data";
 import { type Voucher, vouchers } from "#system/voucher";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import type { HeldModifierConfig, ModifierPredicate } from "#types/modifiers-types";
@@ -1161,7 +1160,7 @@ export class BattleScene extends SceneBase {
   newBattle(
     waveIndex?: number,
     battleType?: BattleType,
-    trainerData?: TrainerData | null,
+    trainerData?: TrainerSaveData | null,
     double?: boolean,
     mysteryEncounterType?: MysteryEncounterType,
   ): Battle {
@@ -1933,9 +1932,7 @@ export class BattleScene extends SceneBase {
               .filter(speciesFilter)
               .map((s) => {
                 if (!filterAllEvolutions) {
-                  while (Object.hasOwn(pokemonPreEvolutions, s.speciesId)) {
-                    s = getPokemonSpecies(pokemonPreEvolutions[s.speciesId]);
-                  }
+                  return getPokemonSpecies(s.getFirstStageSpecies());
                 }
                 return s;
               }),

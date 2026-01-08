@@ -1,3 +1,4 @@
+import { toBeOfSpeciesMatcher } from "#test/test-utils/matchers/to-be-of-species-matcher";
 import { toHaveAbilityAppliedMatcher } from "#test/test-utils/matchers/to-have-ability-applied-matcher";
 import { toHaveBattlerTagMatcher } from "#test/test-utils/matchers/to-have-battler-tag-type-matcher";
 import { toHaveEffectiveStatMatcher } from "#test/test-utils/matchers/to-have-effective-stat-matcher";
@@ -34,4 +35,5 @@ expect.extend({
   toHaveAbilityApplied: toHaveAbilityAppliedMatcher,
   toHaveHp: toHaveHpMatcher,
   toHaveFainted: toHaveFaintedMatcher,
+  toBeOfSpecies: toBeOfSpeciesMatcher,
 });

@@ -96,8 +96,8 @@ export abstract class PokemonSpeciesForm {
    */
   getRootSpeciesId(forStarter: boolean = false): SpeciesId {
     let ret = this.speciesId;
-    while (Object.hasOwn(pokemonPreEvolutions, ret) && (!forStarter || !Object.hasOwn(speciesStarterCosts, ret))) {
-      ret = pokemonPreEvolutions[ret];
+    while (pokemonPreEvolutions[ret] != null && (!forStarter || !Object.hasOwn(speciesStarterCosts, ret))) {
+      ret = pokemonPreEvolutions[ret]!;
     }
     return ret;
   }

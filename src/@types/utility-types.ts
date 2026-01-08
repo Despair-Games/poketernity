@@ -70,6 +70,9 @@ export type Mutable<T> = {
 /** Requires an array to contain at least one item. */
 export type NonEmptyArray<T> = [T, ...T[]];
 
+/** A value that can be coerced into an array. */
+export type CoercibleArray<T> = T | T[];
+
 /**
  * Type helper to obtain the keys associated with a given value inside an object. \
  * Acts similar to {@linkcode Pick}, except checking the object's values instead of its keys.

@@ -52,7 +52,6 @@ import { getNatureStatMultiplier } from "#data/nature";
 import { starterPassiveAbilities } from "#data/passives";
 import type { SpeciesEvolutionCondition, SpeciesFormEvolution } from "#data/pokemon-evolutions";
 import { type SpeciesFormChange, SpeciesFormChangeLapseTeraTrigger } from "#data/pokemon-forms";
-import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import type { PokemonSpecies } from "#data/pokemon-species";
 import type { PokemonSpeciesForm } from "#data/pokemon-species-form";
 import { BASE_HIDDEN_ABILITY_CHANCE, BASE_SHINY_CHANCE, SHINY_EPIC_CHANCE, SHINY_VARIANT_CHANCE } from "#data/rates";
@@ -1610,10 +1609,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return allAbilities[this.customPokemonData.passive];
     }
 
-    let starterSpeciesId = this.species.speciesId;
-    while (Object.hasOwn(pokemonPreEvolutions, starterSpeciesId)) {
-      starterSpeciesId = pokemonPreEvolutions[starterSpeciesId];
-    }
+    const starterSpeciesId = this.species.getFirstStageSpecies();
     return allAbilities[starterPassiveAbilities[starterSpeciesId]];
   }
 

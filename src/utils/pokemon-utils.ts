@@ -1,4 +1,6 @@
 import { globalScene } from "#app/global-scene";
+import { activeOverrides } from "#app/overrides";
+import { IV_MAX, IV_MIN } from "#constants/game-constants";
 import { allMoves, allSpecies } from "#data/data-lists";
 import type { PokemonSpecies } from "#data/pokemon-species";
 import type { PokemonSpeciesForm } from "#data/pokemon-species-form";
@@ -11,6 +13,7 @@ import { SpeciesId } from "#enums/species-id";
 import type { Pokemon } from "#field/pokemon";
 import type { PokemonSummonData, SerializedPokemonSummonData } from "#types/pokemon-types";
 import type { CoerceNullPropertiesToUndefined } from "#types/utility-types";
+import { isBetween } from "#utils/common-utils";
 import { randSeedIntRange, randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
@@ -138,4 +141,33 @@ export function getShinyDescriptor(variant: Variant): string {
     case 0:
       return i18next.t("common:commonShiny");
   }
+}
+
+/**
+ * Validates {@linkcode activeOverrides.ENEMY_IVS_OVERRIDE | ENEMY_IVS_OVERRIDE}.
+ * If defined, the override must be one of the following:
+ * - A `number` between 0 and 31 (inclusive) to assign a single IV to all {@link PERMANENT_STATS | stats}.
+ * - A `number` array with 6 elements between 0 and 31 to assign a distinct IV to each stat.
+ * @returns The validated override as a 6-element array, or `null` if the override isn't defined.
+ * @throws if the override is defined, but doesn't meet the above conditions.
+ */
+export function getEnemyIvOverrides(): number[] | null {
+  if (activeOverrides.ENEMY_IVS_OVERRIDE == null) {
+    return null;
+  }
+
+  if (Array.isArray(activeOverrides.ENEMY_IVS_OVERRIDE)) {
+    if (activeOverrides.ENEMY_IVS_OVERRIDE.length !== 6) {
+      throw new Error("The Enemy IVs override must be an array of length 6 or a number!");
+    }
+    if (activeOverrides.ENEMY_IVS_OVERRIDE.some((value) => !isBetween(value, IV_MIN, IV_MAX))) {
+      throw new Error(`All IVs in the enemy IV override must be between ${IV_MIN} and ${IV_MAX}!`);
+    }
+    return activeOverrides.ENEMY_IVS_OVERRIDE;
+  }
+
+  if (!isBetween(activeOverrides.ENEMY_IVS_OVERRIDE, IV_MIN, IV_MAX)) {
+    throw new Error(`The Enemy IV override must be a value between ${IV_MIN} and ${IV_MAX}!`);
+  }
+  return new Array(6).fill(activeOverrides.ENEMY_IVS_OVERRIDE);
 }

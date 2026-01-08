@@ -170,11 +170,7 @@ export class PokemonData implements PokemonOptions {
     const species = getPokemonSpecies(this.speciesId);
     let ret: Pokemon;
     if (this.player) {
-      ret = globalScene.addPlayerPokemon(species, this.level, this, (playerPokemon) => {
-        if (this.nickname) {
-          playerPokemon.nickname = this.nickname;
-        }
-      });
+      ret = globalScene.addPlayerPokemon(species, this.level, this);
     } else {
       let trainerSlot: TrainerSlot = TrainerSlot.NONE;
       if (battleType === BattleType.TRAINER) {

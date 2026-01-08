@@ -131,6 +131,42 @@ export class PokemonSpecies extends PokemonSpeciesForm {
   }
 
   /**
+   * @returns The {@linkcode SpeciesId} of the first Pokemon in this
+   * species' evolution chain.
+   * @privateRemarks
+   * This requires {@linkcode pokemonPreEvolutions} to be initialized.
+   */
+  public getFirstStageSpecies(): SpeciesId {
+    const preEvolution = pokemonPreEvolutions[this.speciesId];
+    if (preEvolution != null) {
+      return getPokemonSpecies(preEvolution).getFirstStageSpecies();
+    }
+    return this.speciesId;
+  }
+
+  /**
+   * @returns A set of all {@linkcode SpeciesId}s of Pokemon in this
+   * species' evolution chain (including this species).
+   */
+  public getRelatedSpecies(): ReadonlySet<SpeciesId> {
+    const firstStageSpecies = this.getFirstStageSpecies();
+    const relatedSpecies = new Set([firstStageSpecies]);
+    const unprocessedSpecies = [firstStageSpecies];
+
+    while (unprocessedSpecies.length > 0) {
+      const evolutions = pokemonEvolutions[unprocessedSpecies.shift()!];
+      if (evolutions != null) {
+        const discoveredSpecies = [...new Set(evolutions.map((e) => e.speciesId))];
+        discoveredSpecies.forEach((s) => {
+          relatedSpecies.add(s);
+          unprocessedSpecies.push(s);
+        });
+      }
+    }
+    return relatedSpecies;
+  }
+
+  /**
    * Calculates the correct evolution stage for an enemy Pokemon, applying pre-evolutions
    * and evolutions as necessary based on the Pokemon's level.
    * @param level The level of the Pokemon.
@@ -326,5 +362,13 @@ export class PokemonSpecies extends PokemonSpeciesForm {
    */
   isLegendLike(): boolean {
     return this.isSubLegendary() || this.isLegendary() || this.isMythical();
+  }
+
+  /**
+   * @returns Whether the Pokemon is single-stage (i.e. it doesn't
+   * have an evolution or pre-evolution).
+   */
+  isSingleStage(): boolean {
+    return pokemonEvolutions[this.speciesId] == null && pokemonPreEvolutions[this.speciesId] == null;
   }
 }

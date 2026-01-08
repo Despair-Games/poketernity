@@ -15,7 +15,7 @@ import { BattlePhase } from "#phases/base/battle-phase";
 import type { EndCardPhase } from "#phases/end-card-phase";
 import { achvs } from "#system/achievements";
 import { settings } from "#system/settings-manager";
-import { TrainerData } from "#system/trainer-data";
+import { TrainerSaveData } from "#system/trainer-save-data";
 import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import type { SessionSaveData } from "#types/session-data";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
@@ -262,7 +262,7 @@ export class GameOverPhase extends BattlePhase {
       sessionSaveData.modifiers = preWaveSessionData.modifiers;
       sessionSaveData.enemyModifiers = preWaveSessionData.enemyModifiers;
     }
-    sessionSaveData.trainer = currentBattle.trainer ? new TrainerData(currentBattle.trainer) : null;
+    sessionSaveData.trainer = currentBattle.trainer ? new TrainerSaveData(currentBattle.trainer) : null;
 
     return sessionSaveData;
   }

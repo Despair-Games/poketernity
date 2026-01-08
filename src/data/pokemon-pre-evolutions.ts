@@ -9,14 +9,12 @@ export function initPokemonPreEvolutions(): void {
   const megaFormKeys = [SpeciesFormKey.MEGA, "", SpeciesFormKey.MEGA_X, "", SpeciesFormKey.MEGA_Y].map(
     (sfk) => sfk as string,
   );
-  const prevolutionKeys = Object.keys(pokemonEvolutions);
-  prevolutionKeys.forEach((pk) => {
-    const evolutions = pokemonEvolutions[pk];
+  for (const [preEvolution, evolutions] of Object.entries(pokemonEvolutions)) {
     for (const ev of evolutions) {
-      if (ev.evoFormKey && megaFormKeys.indexOf(ev.evoFormKey) > -1) {
+      if (ev.evoFormKey && megaFormKeys.includes(ev.evoFormKey)) {
         continue;
       }
-      pokemonPreEvolutions[ev.speciesId] = Number.parseInt(pk) as SpeciesId;
+      pokemonPreEvolutions[ev.speciesId] = Number(preEvolution) as SpeciesId;
     }
-  });
+  }
 }

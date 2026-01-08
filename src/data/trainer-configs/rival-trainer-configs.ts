@@ -1,3 +1,5 @@
+import { RIVAL_SLOT_0_POKEMON, RIVAL_SLOT_1_POKEMON } from "#constants/trainer-constants";
+import type { TrainerConfigMap } from "#data/new-trainer-config";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import type { PokemonSpecies } from "#data/pokemon-species";
 import {
@@ -7,6 +9,8 @@ import {
   type TrainerConfigs,
   trainerPartyTemplates,
 } from "#data/trainer-config";
+import { TrainerConfigBuilder } from "#data/trainer-config-builder";
+import { PartyMemberStrength } from "#enums/party-member-strength";
 import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
@@ -159,7 +163,7 @@ export const rivalTrainerConfigs: TrainerConfigs = {
       getSpeciesFilterRandomPartyMemberFunc(
         (species: PokemonSpecies) =>
           !Object.hasOwn(pokemonEvolutions, species.speciesId)
-          && !Object.hasOwn(pokemonPreEvolutions, species.speciesId)
+          && pokemonPreEvolutions[species.speciesId] == null
           && species.baseTotal >= 450,
       ),
     ),
@@ -233,7 +237,7 @@ export const rivalTrainerConfigs: TrainerConfigs = {
       getSpeciesFilterRandomPartyMemberFunc(
         (species: PokemonSpecies) =>
           !Object.hasOwn(pokemonEvolutions, species.speciesId)
-          && !Object.hasOwn(pokemonPreEvolutions, species.speciesId)
+          && pokemonPreEvolutions[species.speciesId] == null
           && species.baseTotal >= 450,
       ),
     )
@@ -309,7 +313,7 @@ export const rivalTrainerConfigs: TrainerConfigs = {
       getSpeciesFilterRandomPartyMemberFunc(
         (species: PokemonSpecies) =>
           !Object.hasOwn(pokemonEvolutions, species.speciesId)
-          && !Object.hasOwn(pokemonPreEvolutions, species.speciesId)
+          && pokemonPreEvolutions[species.speciesId] == null
           && species.baseTotal >= 450,
       ),
     )
@@ -399,7 +403,7 @@ export const rivalTrainerConfigs: TrainerConfigs = {
       getSpeciesFilterRandomPartyMemberFunc(
         (species: PokemonSpecies) =>
           !Object.hasOwn(pokemonEvolutions, species.speciesId)
-          && !Object.hasOwn(pokemonPreEvolutions, species.speciesId)
+          && pokemonPreEvolutions[species.speciesId] == null
           && species.baseTotal >= 450,
       ),
     )
@@ -503,7 +507,7 @@ export const rivalTrainerConfigs: TrainerConfigs = {
       getSpeciesFilterRandomPartyMemberFunc(
         (species: PokemonSpecies) =>
           !Object.hasOwn(pokemonEvolutions, species.speciesId)
-          && !Object.hasOwn(pokemonPreEvolutions, species.speciesId)
+          && pokemonPreEvolutions[species.speciesId] == null
           && species.baseTotal >= 450,
       ),
     )
@@ -520,15 +524,120 @@ export const rivalTrainerConfigs: TrainerConfigs = {
         p.generateName();
       }),
     ),
-  // TODO: remove this when trainer teras are reworked
-  // .setGenModifiersFunc((party) => {
-  //   const starter = party[0];
-  //   return [
-  //     modifierTypes
-  //       .TERA_SHARD()
-  //       .generateType([], [starter.species.type1])!
-  //       .withIdFromFunc(modifierTypes.TERA_SHARD)
-  //       .newModifier(starter) as PersistentModifier,
-  //   ]; // TODO: is the bang correct?
-  // }),
+};
+
+export const newRivalTrainerConfigs: TrainerConfigMap = {
+  [TrainerType.RIVAL]: new TrainerConfigBuilder()
+    .withTrainerType(TrainerType.RIVAL)
+    .withRivalAssets()
+    .withEncounterBgm(TrainerType.RIVAL)
+    .withBattleBgm(TrainerType.RIVAL)
+    .withPartySeedOffset(TrainerType.RIVAL)
+    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
+      abilityIndex: 0,
+      strength: PartyMemberStrength.WEAKEST,
+    })
+    .withPokemonFromPool(RIVAL_SLOT_1_POKEMON, { strength: PartyMemberStrength.WEAKEST })
+    .build(),
+  [TrainerType.RIVAL_2]: new TrainerConfigBuilder()
+    .withTrainerType(TrainerType.RIVAL_2)
+    .withRivalAssets()
+    .withEncounterBgm(TrainerType.RIVAL)
+    .withBattleBgm(TrainerType.RIVAL)
+    .withPartySeedOffset(TrainerType.RIVAL)
+    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
+      abilityIndex: 0,
+      strength: PartyMemberStrength.STRONG,
+    })
+    .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
+    .withPokemonFromFilter((species: PokemonSpecies) => species.isSingleStage() && species.baseTotal >= 450, {
+      strength: PartyMemberStrength.WEAK,
+    })
+    .build(),
+  [TrainerType.RIVAL_3]: new TrainerConfigBuilder()
+    .withTrainerType(TrainerType.RIVAL_3)
+    .withRivalAssets()
+    .withEncounterBgm(TrainerType.RIVAL)
+    .withBattleBgm(TrainerType.RIVAL)
+    .withPartySeedOffset(TrainerType.RIVAL)
+    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
+      abilityIndex: 0,
+      strength: PartyMemberStrength.STRONG,
+    })
+    .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
+    .withPokemonFromFilter((species) => species.isSingleStage() && species.baseTotal >= 450)
+    .withPokemonFromFilter((species) => species.baseTotal >= 540, {
+      strength: [PartyMemberStrength.AVERAGE, PartyMemberStrength.WEAK],
+    })
+    .build(),
+  [TrainerType.RIVAL_4]: new TrainerConfigBuilder()
+    .withTrainerType(TrainerType.RIVAL_4)
+    .withRivalAssets()
+    .withEncounterBgm(TrainerType.RIVAL)
+    .withBattleBgm(TrainerType.RIVAL_2)
+    .withPartySeedOffset(TrainerType.RIVAL)
+    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
+      abilityIndex: 0,
+      strength: PartyMemberStrength.STRONG,
+    })
+    .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
+    .withPokemonFromFilter((species) => species.isSingleStage() && species.baseTotal >= 450)
+    .withPokemonFromFilter((species) => species.baseTotal >= 540, {
+      count: 2,
+      strength: PartyMemberStrength.WEAK,
+    })
+    .build(),
+  [TrainerType.RIVAL_5]: new TrainerConfigBuilder()
+    .withTrainerType(TrainerType.RIVAL_5)
+    .withRivalAssets()
+    .withEncounterBgm(TrainerType.RIVAL)
+    .withBattleBgm(TrainerType.RIVAL_3)
+    .withPartySeedOffset(TrainerType.RIVAL)
+    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
+      abilityIndex: 0,
+      boss: true,
+      bossSegments: 2,
+      strength: PartyMemberStrength.STRONG,
+    })
+    .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
+    .withPokemonFromFilter((species) => species.isSingleStage() && species.baseTotal >= 450)
+    .withPokemonFromFilter((species) => species.baseTotal >= 540, { count: 2 })
+    .withPokemon(SpeciesId.RAYQUAZA, {
+      pokeball: PokeballType.MASTER_BALL,
+      ignoreEvolution: true,
+      shiny: true,
+      variant: 1,
+      boss: true,
+      bossSegments: 3,
+      strength: PartyMemberStrength.STRONG,
+    })
+    .build(),
+  [TrainerType.RIVAL_6]: new TrainerConfigBuilder()
+    .withTrainerType(TrainerType.RIVAL_6)
+    .withRivalAssets()
+    .withEncounterBgm("final")
+    .withBattleBgm(TrainerType.RIVAL_3)
+    .withPartySeedOffset(TrainerType.RIVAL)
+    .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
+      abilityIndex: 0,
+      boss: true,
+      bossSegments: 3,
+      strength: PartyMemberStrength.STRONG,
+    })
+    .withPokemonFromPool(RIVAL_SLOT_1_POKEMON, {
+      boss: true,
+      bossSegments: 2,
+    })
+    .withPokemonFromFilter((species) => species.isSingleStage() && species.baseTotal >= 450)
+    .withPokemonFromFilter((species) => species.baseTotal >= 540, { count: 2 })
+    .withPokemon(SpeciesId.RAYQUAZA, {
+      pokeball: PokeballType.MASTER_BALL,
+      ignoreEvolution: true,
+      formIndex: 1, // Mega Rayquaza
+      shiny: true,
+      variant: 1,
+      boss: true,
+      strength: PartyMemberStrength.STRONGER,
+    })
+    .build(),
 };
