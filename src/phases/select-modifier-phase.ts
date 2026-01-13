@@ -29,6 +29,7 @@ import {
   TmModifierType,
 } from "#modifier/modifier-type";
 import { BattlePhase } from "#phases/base/battle-phase";
+import type { PartyModifierTransferSelectCallback } from "#types/ui-types";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import type { ModifierSelectUiHandler } from "#ui/modifier-select-ui-handler";
@@ -108,7 +109,11 @@ export class SelectModifierPhase extends BattlePhase {
 
     this.typeOptions = this.getModifierTypeOptions(modifierCount.value);
 
-    const modifierSelectCallback = (rowCursor: number, cursor: number): boolean => {
+    const modifierSelectCallback = (rowCursor?: number, cursor?: number): boolean => {
+      // biome-ignore lint/style/noParameterAssign: temporary pending modifier rework
+      rowCursor = rowCursor!;
+      // biome-ignore lint/style/noParameterAssign: temporary pending modifier rework
+      cursor = cursor!;
       if (rowCursor < 0 || cursor < 0) {
         const skipRewardConfirmOptions: ConfirmModeConfig = {
           yesHandler: () => {
@@ -163,46 +168,52 @@ export class SelectModifierPhase extends BattlePhase {
               }
               globalScene.audioManager.playSound("se/buy");
               break;
-            case 1:
+            case 1: {
+              const partyModifierTransferSelectCallback: PartyModifierTransferSelectCallback = (
+                fromSlotIndex: number,
+                itemIndex: number,
+                itemQuantity?: number,
+                toSlotIndex?: number,
+              ) => {
+                if (
+                  toSlotIndex !== undefined
+                  && fromSlotIndex < 6
+                  && toSlotIndex < 6
+                  && fromSlotIndex !== toSlotIndex
+                  && itemIndex > -1
+                ) {
+                  const itemModifiers = globalScene.findModifiers(
+                    (m) => m.isPokemonHeldItemModifier() && m.isTransferable && m.pokemonId === party[fromSlotIndex].id,
+                  ) as PokemonHeldItemModifier[];
+                  const itemModifier = itemModifiers[itemIndex];
+                  globalScene.tryTransferHeldItemModifier(
+                    itemModifier,
+                    party[toSlotIndex],
+                    true,
+                    itemQuantity,
+                    undefined,
+                    undefined,
+                    false,
+                  );
+                } else {
+                  ui.setMode<ModifierSelectUiHandler>(
+                    UiMode.MODIFIER_SELECT,
+                    this.isPlayer(),
+                    this.typeOptions,
+                    modifierSelectCallback,
+                    this.getRerollCost(globalScene.lockModifierTiers),
+                  );
+                }
+              };
               ui.setModeWithoutClear<PartyUiHandler>(
                 UiMode.PARTY,
                 PartyUiMode.MODIFIER_TRANSFER,
                 -1,
-                (fromSlotIndex: number, itemIndex: number, itemQuantity: number, toSlotIndex: number) => {
-                  if (
-                    toSlotIndex !== undefined
-                    && fromSlotIndex < 6
-                    && toSlotIndex < 6
-                    && fromSlotIndex !== toSlotIndex
-                    && itemIndex > -1
-                  ) {
-                    const itemModifiers = globalScene.findModifiers(
-                      (m) =>
-                        m.isPokemonHeldItemModifier() && m.isTransferable && m.pokemonId === party[fromSlotIndex].id,
-                    ) as PokemonHeldItemModifier[];
-                    const itemModifier = itemModifiers[itemIndex];
-                    globalScene.tryTransferHeldItemModifier(
-                      itemModifier,
-                      party[toSlotIndex],
-                      true,
-                      itemQuantity,
-                      undefined,
-                      undefined,
-                      false,
-                    );
-                  } else {
-                    ui.setMode<ModifierSelectUiHandler>(
-                      UiMode.MODIFIER_SELECT,
-                      this.isPlayer(),
-                      this.typeOptions,
-                      modifierSelectCallback,
-                      this.getRerollCost(globalScene.lockModifierTiers),
-                    );
-                  }
-                },
+                partyModifierTransferSelectCallback,
                 FilterItemMaxStacks,
               );
               break;
+            }
             case 2:
               ui.setModeWithoutClear<PartyUiHandler>(UiMode.PARTY, PartyUiMode.CHECK, -1, () => {
                 ui.setMode<ModifierSelectUiHandler>(
@@ -238,7 +249,7 @@ export class SelectModifierPhase extends BattlePhase {
             return true;
           }
 
-          if (this.typeOptions[cursor].type) {
+          if (cursor != null && this.typeOptions[cursor].type) {
             modifierType = this.typeOptions[cursor].type;
           }
           break;

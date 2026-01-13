@@ -236,19 +236,18 @@ describe("Part-Timer - Mystery Encounter", () => {
       });
       await game.phaseInterceptor.to("MysteryEncounterPhase", false);
 
-      const encounterPhase = scene.phaseManager.getCurrentPhase();
-      expect(encounterPhase?.phaseName).toBe("MysteryEncounterPhase");
-      const mysteryEncounterPhase = encounterPhase as MysteryEncounterPhase;
-      vi.spyOn(mysteryEncounterPhase, "continueEncounter");
-      vi.spyOn(mysteryEncounterPhase, "handleOptionSelect");
+      const encounterPhase = scene.phaseManager.getCurrentPhase<MysteryEncounterPhase>();
+      expect(encounterPhase.phaseName).toBe("MysteryEncounterPhase");
+      vi.spyOn(encounterPhase, "continueEncounter");
+      vi.spyOn(encounterPhase, "handleOptionSelect");
       vi.spyOn(scene.ui, "playError");
 
       await runSelectMysteryEncounterOption(game, 3);
 
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("MysteryEncounterPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("MysteryEncounterPhase");
       expect(scene.ui.playError).not.toHaveBeenCalled(); // No error sfx, option is disabled
-      expect(mysteryEncounterPhase.handleOptionSelect).not.toHaveBeenCalled();
-      expect(mysteryEncounterPhase.continueEncounter).not.toHaveBeenCalled();
+      expect(encounterPhase.handleOptionSelect).not.toHaveBeenCalled();
+      expect(encounterPhase.continueEncounter).not.toHaveBeenCalled();
       expect(EncounterPhaseUtils.updatePlayerMoney).not.toHaveBeenCalled();
     });
 

@@ -229,7 +229,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
       const enemyParty = scene.getEnemyParty();
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("CommandPhase");
       expect(enemyParty.length).toBe(2);
       expect(scene.currentBattle.trainer?.config.trainerType).toBe(TrainerType.BUG_TYPE_SUPERFAN);
       expect(enemyParty[0].species.speciesId).toBe(SpeciesId.BEEDRILL);
@@ -242,7 +242,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
       const enemyParty = scene.getEnemyParty();
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("CommandPhase");
       expect(enemyParty.length).toBe(3);
       expect(scene.currentBattle.trainer?.config.trainerType).toBe(TrainerType.BUG_TYPE_SUPERFAN);
       expect(enemyParty[0].species.speciesId).toBe(SpeciesId.BEEDRILL);
@@ -256,7 +256,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
       const enemyParty = scene.getEnemyParty();
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("CommandPhase");
       expect(enemyParty.length).toBe(4);
       expect(scene.currentBattle.trainer?.config.trainerType).toBe(TrainerType.BUG_TYPE_SUPERFAN);
       expect(enemyParty[0].species.speciesId).toBe(SpeciesId.BEEDRILL);
@@ -271,7 +271,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
       const enemyParty = scene.getEnemyParty();
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("CommandPhase");
       expect(enemyParty.length).toBe(5);
       expect(scene.currentBattle.trainer?.config.trainerType).toBe(TrainerType.BUG_TYPE_SUPERFAN);
       expect(enemyParty[0].species.speciesId).toBe(SpeciesId.BEEDRILL);
@@ -287,7 +287,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
       const enemyParty = scene.getEnemyParty();
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("CommandPhase");
       expect(enemyParty.length).toBe(5);
       expect(scene.currentBattle.trainer?.config.trainerType).toBe(TrainerType.BUG_TYPE_SUPERFAN);
       expect(enemyParty[0].species.speciesId).toBe(SpeciesId.BEEDRILL);
@@ -305,7 +305,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
       const enemyParty = scene.getEnemyParty();
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("CommandPhase");
       expect(enemyParty.length).toBe(5);
       expect(scene.currentBattle.trainer?.config.trainerType).toBe(TrainerType.BUG_TYPE_SUPERFAN);
       expect(enemyParty[0].species.speciesId).toBe(SpeciesId.BEEDRILL);
@@ -323,7 +323,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
       const enemyParty = scene.getEnemyParty();
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("CommandPhase");
       expect(enemyParty.length).toBe(5);
       expect(scene.currentBattle.trainer?.config.trainerType).toBe(TrainerType.BUG_TYPE_SUPERFAN);
       expect(enemyParty[0].species.speciesId).toBe(SpeciesId.BEEDRILL);
@@ -341,7 +341,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
       const enemyParty = scene.getEnemyParty();
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("CommandPhase");
       expect(enemyParty.length).toBe(5);
       expect(scene.currentBattle.trainer?.config.trainerType).toBe(TrainerType.BUG_TYPE_SUPERFAN);
       expect(enemyParty[0].species.speciesId).toBe(SpeciesId.BEEDRILL);
@@ -363,7 +363,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
       await skipBattleRunMysteryEncounterRewardsPhase(game, false);
 
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("MysteryEncounterRewardsPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("MysteryEncounterRewardsPhase");
 
       // Clear out prompt handlers created by `runMysteryEncounterToEnd`.
       // TODO: refactor the prompt handler queue to add this handler at the front of the queue instead.
@@ -398,26 +398,25 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.BUG_TYPE_SUPERFAN, [SpeciesId.ABRA]);
       await game.phaseInterceptor.to("MysteryEncounterPhase", false);
 
-      const encounterPhase = scene.phaseManager.getCurrentPhase();
-      expect(encounterPhase?.phaseName).toBe("MysteryEncounterPhase");
-      const mysteryEncounterPhase = encounterPhase as MysteryEncounterPhase;
-      vi.spyOn(mysteryEncounterPhase, "continueEncounter");
-      vi.spyOn(mysteryEncounterPhase, "handleOptionSelect");
+      const encounterPhase = scene.phaseManager.getCurrentPhase<MysteryEncounterPhase>();
+      expect(encounterPhase.phaseName).toBe("MysteryEncounterPhase");
+      vi.spyOn(encounterPhase, "continueEncounter");
+      vi.spyOn(encounterPhase, "handleOptionSelect");
       vi.spyOn(scene.ui, "playError");
 
       await runSelectMysteryEncounterOption(game, 2);
 
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("MysteryEncounterPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("MysteryEncounterPhase");
       expect(scene.ui.playError).not.toHaveBeenCalled(); // No error sfx, option is disabled
-      expect(mysteryEncounterPhase.handleOptionSelect).not.toHaveBeenCalled();
-      expect(mysteryEncounterPhase.continueEncounter).not.toHaveBeenCalled();
+      expect(encounterPhase.handleOptionSelect).not.toHaveBeenCalled();
+      expect(encounterPhase.continueEncounter).not.toHaveBeenCalled();
     });
 
     it("should proceed to rewards screen with 0-1 Bug Types reward options", async () => {
       await game.runToMysteryEncounter(MysteryEncounterType.BUG_TYPE_SUPERFAN, defaultParty);
       await runMysteryEncounterToEnd(game, 2);
 
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SelectModifierPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("SelectModifierPhase");
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
@@ -434,7 +433,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       ]);
       await runMysteryEncounterToEnd(game, 2);
 
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SelectModifierPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("SelectModifierPhase");
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
@@ -454,7 +453,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       ]);
       await runMysteryEncounterToEnd(game, 2);
 
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SelectModifierPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("SelectModifierPhase");
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
@@ -476,7 +475,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       ]);
       await runMysteryEncounterToEnd(game, 2);
 
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SelectModifierPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("SelectModifierPhase");
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
@@ -526,19 +525,18 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       await game.phaseInterceptor.to("MysteryEncounterPhase", false);
 
       game.scene.modifiers = [];
-      const encounterPhase = scene.phaseManager.getCurrentPhase();
-      expect(encounterPhase?.phaseName).toBe("MysteryEncounterPhase");
-      const mysteryEncounterPhase = encounterPhase as MysteryEncounterPhase;
-      vi.spyOn(mysteryEncounterPhase, "continueEncounter");
-      vi.spyOn(mysteryEncounterPhase, "handleOptionSelect");
+      const encounterPhase = scene.phaseManager.getCurrentPhase<MysteryEncounterPhase>();
+      expect(encounterPhase.phaseName).toBe("MysteryEncounterPhase");
+      vi.spyOn(encounterPhase, "continueEncounter");
+      vi.spyOn(encounterPhase, "handleOptionSelect");
       vi.spyOn(scene.ui, "playError");
 
       await runSelectMysteryEncounterOption(game, 3);
 
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("MysteryEncounterPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("MysteryEncounterPhase");
       expect(scene.ui.playError).not.toHaveBeenCalled(); // No error sfx, option is disabled
-      expect(mysteryEncounterPhase.handleOptionSelect).not.toHaveBeenCalled();
-      expect(mysteryEncounterPhase.continueEncounter).not.toHaveBeenCalled();
+      expect(encounterPhase.handleOptionSelect).not.toHaveBeenCalled();
+      expect(encounterPhase.continueEncounter).not.toHaveBeenCalled();
     });
 
     it("should remove the gifted item and proceed to rewards screen", async () => {
@@ -550,7 +548,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
 
       await runMysteryEncounterToEnd(game, 3, { partySlot: 1, optionNumber: 1 });
 
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SelectModifierPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("SelectModifierPhase");
       await game.phaseInterceptor.to("SelectModifierPhase");
 
       expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);

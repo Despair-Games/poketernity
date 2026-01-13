@@ -54,13 +54,7 @@ export function getPokemonSpeciesForm(species: SpeciesId, formIndex: number): Po
  * @returns a list of species IDs belonging to the group
  */
 export function getSpecialSpeciesList(group: SpeciesGroups, includeLegends?: boolean): SpeciesId[] {
-  const speciesList = allSpecies
-    .map((s) => {
-      if (s.group === group) {
-        return s.speciesId;
-      }
-    })
-    .filter((s) => s != null);
+  const speciesList = allSpecies.filter((s) => s.group === group).map((s) => s.speciesId);
 
   if (includeLegends && group === SpeciesGroups.ULTRA_BEAST) {
     speciesList.push(SpeciesId.COSMOG, SpeciesId.COSMOEM, SpeciesId.LUNALA, SpeciesId.SOLGALEO, SpeciesId.NECROZMA);
@@ -68,7 +62,7 @@ export function getSpecialSpeciesList(group: SpeciesGroups, includeLegends?: boo
     speciesList.push(SpeciesId.KORAIDON, SpeciesId.MIRAIDON);
   }
 
-  return speciesList as SpeciesId[];
+  return speciesList;
 }
 
 /**
@@ -116,12 +110,13 @@ export function getPokemonMoveName(pokemon: Pokemon, moveId: MoveId, bypassSummo
 export function summonDataToJSON(this: PokemonSummonData): SerializedPokemonSummonData {
   // Pokemon species forms are never saved, only the species ID.
   const speciesForm = this.speciesForm;
-  const t = {
+  const t: SerializedPokemonSummonData = {
     // the "as omit" is required to avoid TS resolving the overwritten properties to `never`
     // We coerce `null` to `undefined` in the type, as the for loop below replaces `null` with `undefined`
     ...(this as Omit<CoerceNullPropertiesToUndefined<PokemonSummonData>, "speciesForm">),
     speciesForm:
       speciesForm == null ? undefined : { speciesId: speciesForm.speciesId, formIndex: speciesForm.formIndex },
+    abilitiesApplied: [...this.abilitiesApplied.values()],
   };
   // Replace `null` with `undefined`, as `undefined` never gets serialized
   for (const [key, value] of Object.entries(t)) {

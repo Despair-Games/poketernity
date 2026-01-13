@@ -35,7 +35,7 @@ describe("Abilities - Poison Touch", () => {
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .enemyLevel(100);
-    vi.spyOn(globalScene, "randBattleSeedInt").mockImplementation((_range, min: 0) => min); // Force Poison RNG rolls to succeed
+    vi.spyOn(globalScene, "randBattleSeedInt").mockImplementation((_range, min) => min ?? 0); // Force Poison RNG rolls to succeed
   });
 
   /**

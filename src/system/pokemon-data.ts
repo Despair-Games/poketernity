@@ -14,7 +14,13 @@ import type { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { Pokemon, PokemonOptions } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
-import type { CustomPokemonData, PokemonSummonData, SerializedSpeciesForm, Status } from "#types/pokemon-types";
+import type {
+  CustomPokemonData,
+  PokemonSummonData,
+  SerializedPokemonSummonData,
+  SerializedSpeciesForm,
+  Status,
+} from "#types/pokemon-types";
 import { clamp, isPokemon } from "#utils/common-utils";
 import { getPokemonSpecies, getPokemonSpeciesForm, summonDataToJSON } from "#utils/pokemon-utils";
 
@@ -130,29 +136,34 @@ export class PokemonData implements PokemonOptions {
       return;
     }
 
-    // This is required because the full class object doesn't exist in save data
+    // #region Class reconstruction
+    // This is required because the full class/function data is not serialized to the save data
+
     this.moveset = source.moveset.map((m) => PokemonMove.loadMove(m)) ?? [
       new PokemonMove(MoveId.TACKLE),
       new PokemonMove(MoveId.GROWL),
     ];
 
     this.summonData = source.summonData;
+
+    const sourceSummonData = source.summonData as unknown as SerializedPokemonSummonData;
+
     this.summonData.toJSON = summonDataToJSON;
-    // This is required because the full class object doesn't exist in save data
-    this.summonData.moveset = source.summonData.moveset?.map((m) => PokemonMove.loadMove(m)) ?? [];
-    // This is required because the full class object doesn't exist in save data
-    this.summonData.tags = source.summonData.tags?.map((t) => loadBattlerTag(t)) ?? [];
-    if (source.summonData.speciesForm) {
-      this.summonData.speciesForm = deserializePokemonSpeciesForm(source.summonData.speciesForm);
+    this.summonData.moveset = sourceSummonData.moveset?.map((m) => PokemonMove.loadMove(m)) ?? [];
+    this.summonData.tags = sourceSummonData.tags?.map((t) => loadBattlerTag(t)) ?? [];
+    if (sourceSummonData.speciesForm) {
+      this.summonData.speciesForm = deserializePokemonSpeciesForm(sourceSummonData.speciesForm);
     }
+    this.summonData.abilitiesApplied = new Set(sourceSummonData.abilitiesApplied);
+
     for (const turnMove of this.summonData.moveHistory) {
-      // This is required because the full class object doesn't exist in save data
       turnMove.move = allMoves.get(turnMove.move.id);
     }
     for (const turnMove of this.summonData.moveQueue) {
-      // This is required because the full class object doesn't exist in save data
       turnMove.move = allMoves.get(turnMove.move.id);
     }
+
+    // #endregion
   }
 
   toPokemon(battleType?: BattleType, partyMemberIndex: number = 0, double: boolean = false): Pokemon {

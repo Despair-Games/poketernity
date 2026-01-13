@@ -398,7 +398,7 @@ export class PartyUiHandler extends MessageUiHandler {
               }
             } else if (
               option >= PartyOption.FORM_CHANGE_ITEM
-              && globalScene.phaseManager.getCurrentPhase()?.is("SelectModifierPhase")
+              && globalScene.phaseManager.getCurrentPhase().is("SelectModifierPhase")
             ) {
               if (this.partyUiMode === PartyUiMode.CHECK) {
                 const formChangeItemModifiers = this.getFormChangeItemsModifiers(pokemon);
@@ -407,11 +407,9 @@ export class PartyUiHandler extends MessageUiHandler {
                 globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeItemTrigger, false, true);
               }
             } else if (this.cursor) {
-              (globalScene.phaseManager.getCurrentPhase() as CommandPhase).handleCommand(
-                BattleCommand.POKEMON,
-                this.cursor,
-                option === PartyOption.PASS_BATON,
-              );
+              globalScene.phaseManager
+                .getCurrentPhase<CommandPhase>()
+                .handleCommand(BattleCommand.POKEMON, this.cursor, option === PartyOption.PASS_BATON);
             }
             if (
               this.partyUiMode !== PartyUiMode.MODIFIER
@@ -877,7 +875,7 @@ export class PartyUiHandler extends MessageUiHandler {
           this.options.push(PartyOption.RELEASE);
           break;
         case PartyUiMode.CHECK:
-          if (globalScene.phaseManager.getCurrentPhase()?.is("SelectModifierPhase")) {
+          if (globalScene.phaseManager.getCurrentPhase().is("SelectModifierPhase")) {
             formChangeItemModifiers = this.getFormChangeItemsModifiers(pokemon);
             for (let i = 0; i < formChangeItemModifiers.length; i++) {
               this.options.push(PartyOption.FORM_CHANGE_ITEM + i);

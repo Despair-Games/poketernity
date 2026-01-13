@@ -11,12 +11,12 @@ import type { StarterConfig, StarterMoveset } from "#types/starter-data";
 import { getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
 
 /** Function to convert Blob to string */
-export function blobToString(blob) {
+export function blobToString(blob: Blob): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
 
     reader.onloadend = () => {
-      resolve(reader.result);
+      resolve(reader.result as string);
     };
 
     reader.onerror = () => {
@@ -79,17 +79,6 @@ function getTestRunStarters(species: SpeciesId[]): StarterConfig[] {
     starters.push(starter);
   }
   return starters;
-}
-
-export function waitUntil(truth): Promise<unknown> {
-  return new Promise((resolve) => {
-    const interval = setInterval(() => {
-      if (truth()) {
-        clearInterval(interval);
-        resolve(true);
-      }
-    }, 1000);
-  });
 }
 
 /** Get the index of `move` from the moveset of the pokemon on the player's field at location `pokemonIndex` */

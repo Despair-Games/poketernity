@@ -56,7 +56,7 @@ export interface PokemonSummonData {
   /** Whether the pokemon's abilities are being suppressed by a move like {@linkcode MoveId.GASTRO_ACID | Gastro Acid} */
   abilitySuppressed: boolean;
   /** List of abilities that have been activated */
-  abilitiesApplied: AbilityId[];
+  abilitiesApplied: Set<AbilityId>;
   /** The {@linkcode PokemonSpeciesForm | species} this pokemon has transformed into */
   speciesForm: PokemonSpeciesForm | null;
   ability: AbilityId;
@@ -119,14 +119,14 @@ export interface PokemonWaveData {
   /** The berries eaten by the Pokemon */
   berriesEaten: BerryType[];
   /** The abilities this Pokemon has applied */
-  abilitiesApplied: AbilityId[];
+  abilitiesApplied: Set<AbilityId>;
   /**
    * The abilities revealed from this Pokemon.
    * This differs from {@linkcode abilitiesApplied} in that
    * effects such as Frisk and Trace can reveal abilities
    * without applying them.
    */
-  abilitiesRevealed: AbilityId[];
+  abilitiesRevealed: Set<AbilityId>;
 }
 
 /**

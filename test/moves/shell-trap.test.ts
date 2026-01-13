@@ -48,9 +48,9 @@ describe("Moves - Shell Trap", () => {
 
     await game.phaseInterceptor.to("PostActionPhase");
 
-    const movePhase = game.scene.phaseManager.getCurrentPhase();
-    expect(movePhase?.phaseName).toBe("MovePhase");
-    expect((movePhase as MovePhase).pokemon).toBe(playerPokemon[1]);
+    const movePhase = game.scene.phaseManager.getCurrentPhase<MovePhase>();
+    expect(movePhase.phaseName).toBe("MovePhase");
+    expect(movePhase.pokemon).toBe(playerPokemon[1]);
 
     await game.phaseInterceptor.to("PostActionPhase");
     enemyPokemon.forEach((p) => expect(p.hp).toBeLessThan(p.getMaxHp()));
@@ -71,9 +71,9 @@ describe("Moves - Shell Trap", () => {
 
     await game.phaseInterceptor.to("PostActionPhase");
 
-    const movePhase = game.scene.phaseManager.getCurrentPhase();
-    expect(movePhase?.phaseName).toBe("MovePhase");
-    expect((movePhase as MovePhase).pokemon).not.toBe(playerPokemon[1]);
+    const movePhase = game.scene.phaseManager.getCurrentPhase<MovePhase>();
+    expect(movePhase.phaseName).toBe("MovePhase");
+    expect(movePhase.pokemon).not.toBe(playerPokemon[1]);
 
     await game.toEndOfTurn();
     enemyPokemon.forEach((p) => expect(p.hp).toBe(p.getMaxHp()));
@@ -94,9 +94,9 @@ describe("Moves - Shell Trap", () => {
 
     await game.phaseInterceptor.to("PostActionPhase");
 
-    const movePhase = game.scene.phaseManager.getCurrentPhase();
-    expect(movePhase?.phaseName).toBe("MovePhase");
-    expect((movePhase as MovePhase).pokemon).not.toBe(playerPokemon[1]);
+    const movePhase = game.scene.phaseManager.getCurrentPhase<MovePhase>();
+    expect(movePhase.phaseName).toBe("MovePhase");
+    expect(movePhase.pokemon).not.toBe(playerPokemon[1]);
 
     await game.toEndOfTurn();
     enemyPokemon.forEach((p) => expect(p.hp).toBe(p.getMaxHp()));
@@ -115,9 +115,9 @@ describe("Moves - Shell Trap", () => {
 
     await game.phaseInterceptor.to("PostActionPhase");
 
-    const movePhase = game.scene.phaseManager.getCurrentPhase();
-    expect(movePhase?.phaseName).toBe("MovePhase");
-    expect((movePhase as MovePhase).pokemon).not.toBe(playerPokemon[1]);
+    const movePhase = game.scene.phaseManager.getCurrentPhase<MovePhase>();
+    expect(movePhase.phaseName).toBe("MovePhase");
+    expect(movePhase.pokemon).not.toBe(playerPokemon[1]);
 
     const enemyStartingHp = enemyPokemon.map((p) => p.hp);
 

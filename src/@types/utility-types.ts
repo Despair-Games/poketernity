@@ -1,21 +1,21 @@
 /**
  * Alias for the constructor of a class.
  * Can be used to build an object of templated type.
- *
+ * @remarks
  * Use {@linkcode AbstractConstructor} instead if comparing types
  */
-export type Constructor<T> = new (...args: unknown[]) => T;
+export type Constructor<T> = new (...args: any[]) => T;
 
 /**
  * Alias for an abstract constructor of a class.
  * Should be used when comparing types, e.g. with `instanceof`.
  */
-export type AbstractConstructor<T> = abstract new (...args: unknown[]) => T;
+export type AbstractConstructor<T> = abstract new (...args: any[]) => T;
 
 /** Utility type representing `null` or `undefined` */
 export type nil = null | undefined;
 
-export type ConditionFn = (...args: unknown[]) => boolean;
+export type AchvConditionFn<T = any> = (...args: T[]) => boolean;
 
 export type ObjectValues<T extends object> = T[keyof T];
 
@@ -82,3 +82,21 @@ export type CoercibleArray<T> = T | T[];
 export type InferKeys<O extends object, V> = {
   [K in keyof O]: O[K] extends V ? K : never;
 }[keyof O];
+
+// #region Enum Types
+// temporary, will not be necessary after all TypeScript Enums are removed
+
+/** Union type accepting any TS Enum or `const object`, with or without reverse mapping. */
+export type EnumOrObject = Record<string | number, string | number>;
+
+/**
+ * Generic type constraint representing a TS numeric enum with reverse mappings.
+ * @example
+ * TSNumericEnum<typeof WeatherType>
+ */
+export type TSNumericEnum<T extends EnumOrObject> = number extends ObjectValues<T> ? T : never;
+
+/** Generic type constraint representing a non reverse-mapped TS enum or `const object`. */
+export type NormalEnum<T extends EnumOrObject> = Exclude<T, TSNumericEnum<T>>;
+
+// #endregion

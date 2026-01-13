@@ -167,7 +167,7 @@ describe("Clowning Around - Mystery Encounter", () => {
       expect(scene.currentBattle.double).toBeTruthy();
       const [enemy1, enemy2] = scene.getEnemyField();
       [enemy1, enemy2].forEach((p) => expect(p).toBeDefined());
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("CommandPhase");
       expect(enemy1.species.speciesId).toBe(SpeciesId.MR_MIME);
       expect(enemy1.getMoveset(true).map((m) => m.moveId)).toEqual([
         MoveId.TEETER_DANCE,
@@ -208,7 +208,7 @@ describe("Clowning Around - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
       await skipBattleRunMysteryEncounterRewardsPhase(game);
       await game.phaseInterceptor.to("SelectModifierPhase", false);
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SelectModifierPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("SelectModifierPhase");
       await game.phaseInterceptor.to("SelectModifierPhase");
       const abilityToTrain = scene.currentBattle.mysteryEncounter?.misc.ability;
 
@@ -229,7 +229,7 @@ describe("Clowning Around - Mystery Encounter", () => {
 
       game.endPhase();
       await game.phaseInterceptor.to("PostMysteryEncounterPhase");
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("PostMysteryEncounterPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("PostMysteryEncounterPhase");
 
       await game.phaseInterceptor.to("NewBattlePhase", false);
 

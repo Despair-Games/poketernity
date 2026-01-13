@@ -53,13 +53,13 @@ export class GameWrapper {
       const currentPhase = globalScene.phaseManager.getCurrentPhase();
       let moveName = "N/A";
       let moveId = MoveId.NONE;
-      if (currentPhase?.is("MoveEffectPhase")) {
+      if (currentPhase.is("MoveEffectPhase")) {
         const move = currentPhase.move;
         moveName = move.name;
         moveId = move.moveId;
       }
       const isLowHpMove = lowHpMoves.includes(moveId);
-      /**
+      /*
        * Warn about Pokemon reaching low HP, as a measure to prevent flaky tests from Pokemon randomly fainting.
        *
        * The list of conditions required for the warning to show up are:

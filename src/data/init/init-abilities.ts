@@ -68,6 +68,7 @@ import { MoveFlagPowerBoostAbAttr } from "#abilities/move-flag-power-boost-ab-at
 import { MoveImmunityAbAttr } from "#abilities/move-immunity-ab-attr";
 import { MoveImmunityStatStageChangeAbAttr } from "#abilities/move-immunity-stat-stage-change-ab-attr";
 import { MovePowerBoostAbAttr } from "#abilities/move-power-boost-ab-attr";
+import { MovePowerMultiplierAbAttr } from "#abilities/move-power-multiplier-ab-attr";
 import { MoveTypeChangeAbAttr } from "#abilities/move-type-change-ab-attr";
 import { MoveTypePowerBoostAbAttr } from "#abilities/move-type-power-boost-ab-attr";
 import { MultCritAbAttr } from "#abilities/mult-crit-ab-attr";
@@ -168,7 +169,6 @@ import { TypeImmunityStatStageChangeAbAttr } from "#abilities/type-immunity-stat
 import { UserFieldBattlerTagImmunityAbAttr } from "#abilities/user-field-battler-tag-immunity-ab-attr";
 import { UserFieldMoveTypePowerBoostAbAttr } from "#abilities/user-field-move-type-power-boost-ab-attr";
 import { UserFieldStatusEffectImmunityAbAttr } from "#abilities/user-field-status-effect-immunity-ab-attr";
-import { VariableMovePowerBoostAbAttr } from "#abilities/variable-move-power-boost-ab-attr";
 import { WeatherBasedSpeedDoublerAbAttr } from "#abilities/weather-based-speed-doubler-ab-attr";
 import { WeightMultiplierAbAttr } from "#abilities/weight-multiplier-ab-attr";
 import { WonderSkinAbAttr } from "#abilities/wonder-skin-ab-attr";
@@ -1086,7 +1086,16 @@ export function initAbilities(): void {
       .attr(MoveTypeChangeAbAttr, ElementalType.FLYING, 1.2, normalTypeMoveConversionCondition)
       .build(),
     new AbBuilder(AbilityId.PARENTAL_BOND, 6) //
-      .attr(AddSecondStrikeAbAttr, 0.25)
+      .attr(AddSecondStrikeAbAttr)
+      .attr(
+        DamageBoostAbAttr,
+        0.25,
+        (user, target, move) =>
+          !!user
+          && user.turnData.hitCount > 1 // move was originally multi hit
+          && user.turnData.hitsLeft === 1 // move is on its final strike
+          && !!move?.canBeMultiStrikeEnhanced(user, target),
+      )
       .build(),
     new AbBuilder(AbilityId.DARK_AURA, 6) //
       .attr(PostSummonMessageAbAttr, (pokemon: Pokemon) =>
@@ -1744,7 +1753,6 @@ export function initAbilities(): void {
       // Custom implementation to allow more double battles
       .attr(DoubleBattleChanceAbAttr)
       .uncopiable()
-      .unreplaceable()
       // Encore, Frenzy, and other non-`TURN_END` tags don't lapse correctly on the commanding Pokemon.
       .edgeCase()
       .build(),
@@ -1840,7 +1848,7 @@ export function initAbilities(): void {
       .attr(MoveFlagPowerBoostAbAttr, MoveFlags.SLICING_MOVE, 1.5)
       .build(),
     new AbBuilder(AbilityId.SUPREME_OVERLORD, 9) //
-      .attr(VariableMovePowerBoostAbAttr, (user, _target, _move) => {
+      .attr(MovePowerMultiplierAbAttr, (user) => {
         const { playerFaints, enemyFaints } = globalScene.currentBattle;
         return 1 + 0.1 * Math.min(user.isPlayer() ? playerFaints : enemyFaints, 5);
       })
@@ -1930,18 +1938,14 @@ export function initAbilities(): void {
     new AbBuilder(AbilityId.TERA_SHELL, 9) //
       .attr(FullHpResistTypeAbAttr)
       .uncopiable()
-      .unreplaceable()
       .ignorable()
       .build(),
     new AbBuilder(AbilityId.TERAFORM_ZERO, 9) //
       .uncopiable()
-      .unreplaceable()
       .attr(PostTeraFormChangeClearWeatherTerrainAbAttr)
       .build(),
     new AbBuilder(AbilityId.POISON_PUPPETEER, 9) //
       .uncopiable()
-      // TODO: confirm if this is true
-      .unreplaceable()
       .attr(ConfusionOnStatusEffectAbAttr, StatusEffect.POISON, StatusEffect.TOXIC)
       .build(),
   );
@@ -1988,7 +1992,7 @@ function getSheerForceHitDisableAbCondition(): AbAttrCondition {
  */
 function getOncePerBattleCondition(ability: AbilityId): AbAttrCondition {
   return (pokemon: Pokemon) => {
-    return !pokemon.waveData.abilitiesApplied.includes(ability);
+    return !pokemon.waveData.abilitiesApplied.has(ability);
   };
 }
 

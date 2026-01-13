@@ -859,32 +859,41 @@ export abstract class Move {
   }
 
   /**
-   * Returns `true` if this move can be given additional strikes
-   * by enhancing effects.
+   * Check whether this Move can be given additional strikes from enhancing effects.
    * Currently used for {@link https://bulbapedia.bulbagarden.net/wiki/Parental_Bond_(Ability) | Parental Bond}
-   * and {@linkcode PokemonMultiHitModifier | Multi-Lens}.
-   * @param user The {@linkcode Pokemon} using the move
+   * and {@linkcode PokemonMultiHitModifier | Multi Lens}.
+   * @param user - The {@linkcode Pokemon} using the move
+   * @param target - The `target` of the move. Used for Pollen Puff
+   * @returns Whether this Move can be given additional strikes.
    */
-  canBeMultiStrikeEnhanced(user: Pokemon): boolean {
-    // Multi-strike enhancers...
+  public canBeMultiStrikeEnhanced(user: Pokemon, target?: Pokemon): boolean {
+    if (this.isChargingMove()) {
+      return false;
+    }
 
-    // ...cannot enhance moves that hit multiple targets
     const { targets, multiple } = getMoveTargets(user, this.id);
-    const isMultiTarget = multiple && targets.length > 1;
+    if (multiple && targets.length > 1) {
+      return false;
+    }
 
-    // ...cannot enhance multi-hit or sacrificial moves
+    if (
+      this.category === MoveCategory.STATUS
+      || (target != null && user.getMoveCategory(target, this) === MoveCategory.STATUS) // Pollen Puff check
+    ) {
+      return false;
+    }
+
     const exceptAttrs: AbstractConstructor<MoveAttr>[] = [MultiHitAttr, SacrificialAttr];
+    if (exceptAttrs.some((attr) => this.hasAttr(attr))) {
+      return false;
+    }
 
-    // ...and cannot enhance these specific moves.
     const exceptMoves: MoveId[] = [MoveId.FLING, MoveId.UPROAR, MoveId.ROLLOUT, MoveId.ICE_BALL, MoveId.ENDEAVOR];
+    if (exceptMoves.includes(this.id)) {
+      return false;
+    }
 
-    return (
-      !isMultiTarget
-      && !this.isChargingMove()
-      && !exceptAttrs.some((attr) => this.hasAttr(attr))
-      && !exceptMoves.some((id) => this.id === id)
-      && this.category !== MoveCategory.STATUS
-    );
+    return true;
   }
 
   /**

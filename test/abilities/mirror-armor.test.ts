@@ -100,7 +100,7 @@ describe("Abilities - Mirror Armor", () => {
     game.move.use(MoveId.OCTOLOCK);
 
     await game.toNextTurn();
-    [Stat.DEF, Stat.SPDEF].forEach((stat: BattleStat) => {
+    ([Stat.DEF, Stat.SPDEF] as readonly BattleStat[]).forEach((stat: BattleStat) => {
       expect(player.getStatStage(stat)).toBe(0);
       expect(enemy.getStatStage(stat)).toBe(-1);
     });
@@ -239,7 +239,7 @@ describe("Abilities - Mirror Armor", () => {
     game.move.use(MoveId.GROWL);
     await game.toEndOfTurn();
 
-    expect(player.waveData.abilitiesApplied).toContain(AbilityId.CLEAR_BODY);
+    expect(player).toHaveAbilityApplied(AbilityId.CLEAR_BODY);
     expect(player.getStatStage(Stat.ATK)).toBe(0);
     expect(enemy.getStatStage(Stat.ATK)).toBe(0);
   });

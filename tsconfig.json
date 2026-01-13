@@ -24,7 +24,7 @@
     "alwaysStrict": true,
     "strictBindCallApply": true,
     "strictBuiltinIteratorReturn": true,
-    "strictFunctionTypes": false, // TODO: refactor so this can be true
+    "strictFunctionTypes": true,
     "strictNullChecks": true,
     "strictPropertyInitialization": false, // TODO: refactor so this can be true
     "noImplicitAny": false, // TODO: refactor so this can be true

@@ -110,25 +110,24 @@ describe("Safari Zone - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.SAFARI_ZONE, defaultParty);
       await game.phaseInterceptor.to("MysteryEncounterPhase", false);
 
-      const encounterPhase = scene.phaseManager.getCurrentPhase();
-      expect(encounterPhase?.phaseName).toBe("MysteryEncounterPhase");
-      const mysteryEncounterPhase = encounterPhase as MysteryEncounterPhase;
-      vi.spyOn(mysteryEncounterPhase, "continueEncounter");
-      vi.spyOn(mysteryEncounterPhase, "handleOptionSelect");
+      const encounterPhase = scene.phaseManager.getCurrentPhase<MysteryEncounterPhase>();
+      expect(encounterPhase.phaseName).toBe("MysteryEncounterPhase");
+      vi.spyOn(encounterPhase, "continueEncounter");
+      vi.spyOn(encounterPhase, "handleOptionSelect");
       vi.spyOn(scene.ui, "playError");
 
       await runSelectMysteryEncounterOption(game, 1);
 
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("MysteryEncounterPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("MysteryEncounterPhase");
       expect(scene.ui.playError).not.toHaveBeenCalled(); // No error sfx, option is disabled
-      expect(mysteryEncounterPhase.handleOptionSelect).not.toHaveBeenCalled();
-      expect(mysteryEncounterPhase.continueEncounter).not.toHaveBeenCalled();
+      expect(encounterPhase.handleOptionSelect).not.toHaveBeenCalled();
+      expect(encounterPhase.continueEncounter).not.toHaveBeenCalled();
     });
 
     it("should not spawn any Paradox Pokemon", async () => {
       const NUM_ROLLS = 2000; // As long as this is greater than total number of species, this should cover all possible RNG rolls
 
-      vi.spyOn(Phaser.Math.RND, "shuffle").mockImplementation((arr: any[]) => arr);
+      vi.spyOn(Phaser.Math.RND, "shuffle").mockImplementation(<T>(arr: T[] | undefined): T[] => arr!);
 
       await game.rng.equalSample(NUM_ROLLS, () => {
         const simSpecies = getSafariSpeciesSpawn().speciesId;

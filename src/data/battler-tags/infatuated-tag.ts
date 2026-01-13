@@ -77,7 +77,7 @@ export class InfatuatedTag extends BattlerTag {
             pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
           }),
         );
-        (globalScene.phaseManager.getCurrentPhase() as MovePhase).cancel();
+        globalScene.phaseManager.getCurrentPhase<MovePhase>().cancel();
       }
     }
 

@@ -131,7 +131,7 @@ describe("Absolute Avarice - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
       const enemyField = scene.getEnemyField();
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("CommandPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("CommandPhase");
       expect(enemyField.length).toBe(1);
       expect(enemyField[0].species.speciesId).toBe(SpeciesId.GREEDENT);
       const moveset = enemyField[0].getMoveset(true).map((m) => m.moveId);
@@ -148,7 +148,7 @@ describe("Absolute Avarice - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
       await skipBattleRunMysteryEncounterRewardsPhase(game);
       await game.phaseInterceptor.to("SelectModifierPhase", false);
-      expect(scene.phaseManager.getCurrentPhase()?.phaseName).toBe("SelectModifierPhase");
+      expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("SelectModifierPhase");
 
       for (const partyPokemon of scene.getPlayerParty()) {
         const pokemonId = partyPokemon.id;

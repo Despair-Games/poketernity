@@ -69,7 +69,7 @@ describe("Abilities - Infiltrator", () => {
     ).damage;
 
     expect(postScreenDmg).toBe(preScreenDmg);
-    expect(player.waveData.abilitiesApplied[0]).toBe(AbilityId.INFILTRATOR);
+    expect(player).toHaveAbilityApplied(AbilityId.INFILTRATOR);
   });
 
   it("should bypass the target's Safeguard", async () => {
@@ -84,7 +84,7 @@ describe("Abilities - Infiltrator", () => {
 
     await game.toEndOfTurn();
     expect(enemy.getStatusEffect(true)).toBe(StatusEffect.SLEEP);
-    expect(player.waveData.abilitiesApplied[0]).toBe(AbilityId.INFILTRATOR);
+    expect(player).toHaveAbilityApplied(AbilityId.INFILTRATOR);
   });
 
   it("should bypass the target's Mist", async () => {
@@ -99,7 +99,7 @@ describe("Abilities - Infiltrator", () => {
 
     await game.phaseInterceptor.to("PostActionPhase");
     expect(enemy.getStatStage(Stat.ATK)).toBe(-1);
-    expect(player.waveData.abilitiesApplied[0]).toBe(AbilityId.INFILTRATOR);
+    expect(player).toHaveAbilityApplied(AbilityId.INFILTRATOR);
   });
 
   it("should bypass the target's Substitute", async () => {
@@ -114,6 +114,6 @@ describe("Abilities - Infiltrator", () => {
 
     await game.phaseInterceptor.to("PostActionPhase");
     expect(enemy.getStatStage(Stat.ATK)).toBe(-1);
-    expect(player.waveData.abilitiesApplied[0]).toBe(AbilityId.INFILTRATOR);
+    expect(player).toHaveAbilityApplied(AbilityId.INFILTRATOR);
   });
 });

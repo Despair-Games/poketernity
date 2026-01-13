@@ -104,7 +104,7 @@ export class ConfusedTag extends BattlerTag {
 
         pokemon.damageAndUpdate(damageHolder.value);
         pokemon.waveData.hitCount++;
-        globalScene.phaseManager.getCurrentPhase<MovePhase>()?.cancel();
+        globalScene.phaseManager.getCurrentPhase<MovePhase>().cancel();
       }
     }
 

@@ -1,6 +1,6 @@
 import { AchvTier } from "#enums/achv-tier";
 import { VoucherType } from "#enums/voucher-type";
-import type { ConditionFn } from "#types/utility-types";
+import type { AchvConditionFn } from "#types/utility-types";
 import i18next from "i18next";
 
 export class Voucher {
@@ -9,9 +9,9 @@ export class Voucher {
   public description: string;
 
   /** Currently unused */
-  private readonly conditionFunc?: ConditionFn;
+  private readonly conditionFunc: AchvConditionFn;
 
-  constructor(voucherType: VoucherType, description: string, conditionFunc?: ConditionFn) {
+  constructor(voucherType: VoucherType, description: string, conditionFunc: AchvConditionFn = () => true) {
     this.description = description;
     this.voucherType = voucherType;
     this.conditionFunc = conditionFunc;

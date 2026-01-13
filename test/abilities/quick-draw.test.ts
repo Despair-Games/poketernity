@@ -48,7 +48,7 @@ describe("Abilities - Quick Draw", () => {
     await game.toEndOfTurn();
 
     expect(player.turnData.order).toBeLessThan(enemy.turnData.order);
-    expect(player.waveData.abilitiesApplied).toContain(AbilityId.QUICK_DRAW);
+    expect(player).toHaveAbilityApplied(AbilityId.QUICK_DRAW);
   });
 
   test("should not apply when the source uses a status move", async () => {
@@ -61,7 +61,7 @@ describe("Abilities - Quick Draw", () => {
     await game.toEndOfTurn();
 
     expect(player.turnData.order).toBeGreaterThan(enemy.turnData.order);
-    expect(player.waveData.abilitiesApplied).not.toContain(AbilityId.QUICK_DRAW);
+    expect(player).not.toHaveAbilityApplied(AbilityId.QUICK_DRAW);
   });
 
   test("should not cause the source to move before higher-priority moves", async () => {
@@ -75,6 +75,6 @@ describe("Abilities - Quick Draw", () => {
     await game.toEndOfTurn();
 
     expect(player.turnData.order).toBeGreaterThan(enemy.turnData.order);
-    expect(player.waveData.abilitiesApplied).contain(AbilityId.QUICK_DRAW);
+    expect(player).toHaveAbilityApplied(AbilityId.QUICK_DRAW);
   });
 });

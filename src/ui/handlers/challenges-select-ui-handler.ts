@@ -369,14 +369,14 @@ export class ChallengeSelectUiHandler extends UiHandler {
         this.updateChallengeArrows(this.startCursor.visible);
       } else {
         globalScene.phaseManager.toTitleScreen({ clearPhaseQueue: true });
-        globalScene.phaseManager.getCurrentPhase()?.end();
+        globalScene.phaseManager.getCurrentPhase().end();
       }
       success = true;
     } else if (button === Button.SUBMIT || button === Button.ACTION) {
       if (this.hasSelectedChallenge) {
         if (this.startCursor.visible) {
           globalScene.phaseManager.createAndUnshiftPhase("SelectStarterPhase");
-          globalScene.phaseManager.getCurrentPhase()?.end();
+          globalScene.phaseManager.getCurrentPhase().end();
         } else {
           this.startCursor.setVisible(true);
           this.cursorObj?.setVisible(false);

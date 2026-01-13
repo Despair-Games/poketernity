@@ -23,7 +23,7 @@ export class PostDefendAbilityGiveAbAttr extends PostDefendAbAttr {
   public override apply(_pokemon: Pokemon, simulated: boolean, attacker: Pokemon, _move: Move): void {
     if (!simulated) {
       attacker.summonData.ability = this.ability;
-      attacker.waveData.abilitiesRevealed.push(this.ability);
+      attacker.waveData.abilitiesRevealed.add(this.ability);
     }
   }
 

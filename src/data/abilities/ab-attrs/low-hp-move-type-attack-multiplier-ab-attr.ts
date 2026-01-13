@@ -4,6 +4,7 @@ import { MoveCategory } from "#enums/move-category";
 import { Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
+import type { PokemonAttackCondition } from "#types/move-types";
 
 /**
  * Ability attribute that multiplies the ability holder's attack/special attack stat (depends on the move's category) by 1.5 if it uses a move of a specific type at less than 1/3 HP
@@ -24,8 +25,8 @@ export class LowHpMoveTypeAttackMultiplierAbAttr extends EffectiveStatMultiplier
    * The constructor defaults to Stat.ATK since at the moment of the attribute's construction, the game does not know what move will be used.
    */
   constructor(boostedType: ElementalType) {
-    const condition = (pokemon: Pokemon, _target: Pokemon, move: Move): boolean => {
-      return move && pokemon.getHpRatio() <= 1 / 3 && pokemon.getMoveType(move) === boostedType;
+    const condition: PokemonAttackCondition = (pokemon: Pokemon, _target?: Pokemon, move?: Move): boolean => {
+      return !!move && pokemon.getHpRatio() <= 1 / 3 && pokemon.getMoveType(move) === boostedType;
     };
     super(Stat.ATK, 1.5, condition);
   }

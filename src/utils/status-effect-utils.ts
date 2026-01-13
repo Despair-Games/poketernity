@@ -34,7 +34,7 @@ function getStatusEffectMessageKey(statusEffect: StatusEffect | undefined): stri
  * @returns The localized obtain message for the status effect
  */
 export function getStatusEffectObtainText(
-  statusEffect: StatusEffect | undefined,
+  statusEffect: StatusEffect,
   pokemonNameWithAffix: string,
   sourceText?: string | null,
 ): string {

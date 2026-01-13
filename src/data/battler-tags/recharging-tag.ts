@@ -33,7 +33,7 @@ export class RechargingTag extends BattlerTag {
         "MessagePhase",
         i18next.t("battlerTags:rechargingLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
-      (globalScene.phaseManager.getCurrentPhase() as MovePhase).cancel();
+      globalScene.phaseManager.getCurrentPhase<MovePhase>().cancel();
       pokemon.getMoveQueue().shift();
     }
     return super.lapse(pokemon, lapseType);

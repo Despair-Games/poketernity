@@ -8,7 +8,7 @@ import { ElementalType } from "#enums/elemental-type";
 import { PlayerGender } from "#enums/player-gender";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import { settings } from "#system/settings-manager";
-import type { ConditionFn } from "#types/utility-types";
+import type { AchvConditionFn } from "#types/utility-types";
 import { enumValueToKey } from "#utils/common-utils";
 import i18next from "i18next";
 
@@ -25,9 +25,9 @@ export class Achievement {
   public hasParent: boolean;
   public readonly parentId: string;
 
-  private readonly conditionFunc?: ConditionFn;
+  private readonly conditionFunc: AchvConditionFn;
 
-  constructor(localizationKey: string, iconImage: string, conditionFunc?: ConditionFn) {
+  constructor(localizationKey: string, iconImage: string, conditionFunc: AchvConditionFn = () => true) {
     this._category = AchvCategory.UNSPECIFIED;
     this.localizationKey = localizationKey;
     this.descriptionKey = localizationKey;
