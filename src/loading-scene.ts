@@ -18,7 +18,6 @@ import { initAbilities } from "#init/init-abilities";
 import { initBiomes } from "#init/init-biomes";
 import { initMoves } from "#init/init-moves";
 import { initSpecies } from "#init/init-species";
-import { initTrainerTypeDialogue } from "#init/init-trainer-type-dialogue";
 import { initModifierPools } from "#modifier/init-modifier-pools";
 import { initModifierTypes } from "#modifier/init-modifier-types";
 import { initMysteryEncounters } from "#mystery-encounters/mystery-encounters";
@@ -367,7 +366,6 @@ export class LoadingScene extends SceneBase {
     initBiomes();
     initEggMoves();
     initPokemonForms();
-    initTrainerTypeDialogue();
     initSpecies();
     initMoves();
     initAbilities();
