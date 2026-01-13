@@ -1,5 +1,6 @@
 import { type NonDefaultTrainerGender, TrainerGender } from "#enums/trainer-gender";
 import { TrainerType } from "#enums/trainer-type";
+import { getEnumStr } from "#test/test-utils/string-utils";
 import { randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
 
@@ -1705,7 +1706,7 @@ export function getTrainerDialogue(
   }
 
   // TODO: replace with string util
-  const trainerTypeKey = Object.keys(TrainerType).find((k) => TrainerType[k] === trainerType)!;
+  const trainerTypeKey = getEnumStr(TrainerType, trainerType);
   const key =
     dialogueData.key ?? `${trainerTypeKey.toLowerCase()}${usedGender === TrainerGender.FEMALE ? "_female" : ""}`;
 
