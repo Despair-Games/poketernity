@@ -30,7 +30,9 @@ export class DoublePowerChanceAttr extends VariablePowerAttr {
   override apply(_user: Pokemon, _target: Pokemon, move: Move, power: NumberHolder): boolean {
     let rand: number;
     globalScene.executeWithSeedOffset(
-      () => (rand = randSeedInt(100)),
+      () => {
+        rand = randSeedInt(100);
+      },
       globalScene.currentBattle.turn << 6,
       globalScene.waveSeed,
     );

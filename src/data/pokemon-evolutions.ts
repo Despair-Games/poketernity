@@ -230,16 +230,17 @@ export class MoveKnownEvoCondition extends SpeciesEvolutionCondition {
   }
 }
 
-/** Dunsparce and Tandemous have a 1/100 chance of evolving into their alternate forms
- * TODO: Make a new evolution condition for them
- */
+/** Dunsparce and Tandemous have a 1/100 chance of evolving into their alternate forms */
+// TODO: Make a new evolution condition for them
 const RANDOM_FORM_EVO_CHANCE = 100;
 
 export class RngFormEvoCondition extends SpeciesEvolutionCondition {
   constructor() {
     super((p) => {
       let ret = false;
-      globalScene.executeWithSeedOffset(() => (ret = !randSeedInt(RANDOM_FORM_EVO_CHANCE)), p.id);
+      globalScene.executeWithSeedOffset(() => {
+        ret = !randSeedInt(RANDOM_FORM_EVO_CHANCE);
+      }, p.id);
       return ret;
     });
     this.description = "Happens with 1%";

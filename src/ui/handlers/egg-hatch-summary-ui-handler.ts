@@ -190,7 +190,9 @@ export class EggHatchSummaryUiHandler extends MessageUiHandler {
     // was skipped automatically and for 1 second otherwise
     const exitBlockingDuration = settings.general.eggSkipPreference === EggSkipPreference.ALWAYS ? 2000 : 1000;
     this.blockExit = true;
-    globalScene.time.delayedCall(exitBlockingDuration, () => (this.blockExit = false));
+    globalScene.time.delayedCall(exitBlockingDuration, () => {
+      this.blockExit = false;
+    });
 
     return true;
   }

@@ -66,14 +66,16 @@ describe("Enemy Commands - Move Selection", () => {
 
     const moveChoices: MoveChoiceSet = {};
     const enemyMoveset = enemyPokemon.getMoveset();
-    enemyMoveset.forEach((mv) => (moveChoices[mv!.moveId] = 0));
+    for (const mv of enemyMoveset) {
+      moveChoices[mv.moveId] = 0;
+    }
     getEnemyMoveChoices(enemyPokemon, moveChoices);
 
-    enemyMoveset.forEach((mv) => {
-      if (mv?.getMove().category === MoveCategory.STATUS) {
+    for (const mv of enemyMoveset) {
+      if (mv.getMove().category === MoveCategory.STATUS) {
         expect(moveChoices[mv.moveId]).toBe(0);
       }
-    });
+    }
   });
 
   it("should not select Last Resort if it would fail, even if the move KOs otherwise", async () => {
@@ -90,13 +92,15 @@ describe("Enemy Commands - Move Selection", () => {
 
     const moveChoices: MoveChoiceSet = {};
     const enemyMoveset = enemyPokemon.getMoveset();
-    enemyMoveset.forEach((mv) => (moveChoices[mv!.moveId] = 0));
+    for (const mv of enemyMoveset) {
+      moveChoices[mv.moveId] = 0;
+    }
     getEnemyMoveChoices(enemyPokemon, moveChoices);
 
-    enemyMoveset.forEach((mv) => {
-      if (mv?.getMove().category === MoveCategory.STATUS || mv?.moveId === MoveId.LAST_RESORT) {
+    for (const mv of enemyMoveset) {
+      if (mv.getMove().category === MoveCategory.STATUS || mv.moveId === MoveId.LAST_RESORT) {
         expect(moveChoices[mv.moveId]).toBe(0);
       }
-    });
+    }
   });
 });

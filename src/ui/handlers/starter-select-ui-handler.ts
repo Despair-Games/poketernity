@@ -1534,7 +1534,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
             .map((s) => s.generation)
             .reduce(
               (total: number, _gen: number, i: number) =>
-                (total += globalScene.gameData.getSpeciesStarterValue(this.starterSpecies[i].speciesId)),
+                total + globalScene.gameData.getSpeciesStarterValue(this.starterSpecies[i].speciesId),
               0,
             );
           const newCost = globalScene.gameData.getSpeciesStarterValue(this.lastSpecies.speciesId);
@@ -3849,7 +3849,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       .map((s) => s.generation)
       .reduce(
         (total: number, _gen: number, i: number) =>
-          (total += globalScene.gameData.getSpeciesStarterValue(this.starterSpecies[i].speciesId)),
+          total + globalScene.gameData.getSpeciesStarterValue(this.starterSpecies[i].speciesId),
         0,
       );
     const newValue = value + (add || 0);

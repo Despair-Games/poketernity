@@ -152,7 +152,9 @@ describe("Moves - Lunar Dance and Healing Wish", () => {
       );
 
       const [bulbasaur, charmander, squirtle, pikachu] = game.scene.getPlayerParty();
-      [squirtle, pikachu].forEach((p) => (p.hp = 1));
+      [squirtle, pikachu].forEach((p) => {
+        p.hp = 1;
+      });
 
       // Use HW/LD and send in Charmander. HW/LD's effect should be stored
       game.move.use(moveId);
@@ -214,7 +216,9 @@ describe("Moves - Lunar Dance and Healing Wish", () => {
     const [bulbasaur, charmander, squirtle, pikachu] = game.scene.getPlayerParty();
     [squirtle, pikachu].forEach((p) => {
       p.hp = 1;
-      p.getMoveset().forEach((mv) => (mv.ppUsed = 1));
+      p.getMoveset().forEach((mv) => {
+        mv.ppUsed = 1;
+      });
     });
 
     game.move.use(MoveId.LUNAR_DANCE);

@@ -6,12 +6,14 @@ import type { NumberHolder } from "#utils/common-utils";
 import { randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
 
-export const magnitudeMessageFunc = (_user: Pokemon, _target: Pokemon, _move: Move) => {
-  let message: string;
+// TODO: this is not correct, fix later
+const magnitudeThresholds = [5, 15, 35, 65, 75, 95];
+
+export const magnitudeMessageFunc = (_user: Pokemon, _target: Pokemon, _move: Move): string => {
+  let message!: string;
+
   globalScene.executeWithSeedOffset(
     () => {
-      const magnitudeThresholds = [5, 15, 35, 65, 75, 95];
-
       const rand = randSeedInt(100);
 
       let m = 0;
@@ -26,7 +28,8 @@ export const magnitudeMessageFunc = (_user: Pokemon, _target: Pokemon, _move: Mo
     globalScene.currentBattle.turn << 6,
     globalScene.waveSeed,
   );
-  return message!;
+
+  return message;
 };
 
 /**
@@ -35,25 +38,24 @@ export const magnitudeMessageFunc = (_user: Pokemon, _target: Pokemon, _move: Mo
  */
 export class MagnitudePowerAttr extends VariablePowerAttr {
   override apply(_user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {
-    const magnitudeThresholds = [5, 15, 35, 65, 75, 95];
     const magnitudePowers = [10, 30, 50, 70, 90, 100, 110, 150];
 
-    let rand: number;
-
     globalScene.executeWithSeedOffset(
-      () => (rand = randSeedInt(100)),
+      () => {
+        const rand = randSeedInt(100);
+
+        let m = 0;
+        for (; m < magnitudeThresholds.length; m++) {
+          if (rand < magnitudeThresholds[m]) {
+            break;
+          }
+        }
+
+        power.value = magnitudePowers[m];
+      },
       globalScene.currentBattle.turn << 6,
       globalScene.waveSeed,
     );
-
-    let m = 0;
-    for (; m < magnitudeThresholds.length; m++) {
-      if (rand! < magnitudeThresholds[m]) {
-        break;
-      }
-    }
-
-    power.value = magnitudePowers[m];
 
     return true;
   }

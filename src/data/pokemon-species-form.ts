@@ -237,7 +237,12 @@ export abstract class PokemonSpeciesForm {
     const baseSpriteKey = `${showGenderDiffs ? "female__" : ""}${this.speciesId}${formSpriteKey ? `-${formSpriteKey}` : ""}`;
 
     let config = variantData;
-    `${back ? "back__" : ""}${baseSpriteKey}`.split("__").map((p) => (config ? (config = config[p]) : null));
+    // TODO: this is dumb, fix this
+    `${back ? "back__" : ""}${baseSpriteKey}`.split("__").forEach((p) => {
+      if (config) {
+        config = config[p];
+      }
+    });
     const variantSet = config as VariantSet;
 
     return `${back ? "back__" : ""}${shiny && (!variantSet || (!variant && !variantSet[variant || 0])) ? "shiny__" : ""}${baseSpriteKey}${shiny && variantSet && variantSet[variant] === 2 ? `_${variant + 1}` : ""}`;

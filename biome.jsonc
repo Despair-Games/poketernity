@@ -192,7 +192,8 @@
         "useSpread": "error",
         "noProto": "error",
         "noMultiStr": "error",
-        "useRegexpExec": "error"
+        "useRegexpExec": "error",
+        "noReturnAssign": "error"
       },
       "performance": {
         "noNamespaceImport": "error",

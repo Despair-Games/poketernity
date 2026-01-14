@@ -705,7 +705,9 @@ export class BattleScene extends SceneBase {
     await this.cachedFetch("./images/pokemon/variant/_masterlist.json")
       .then((res) => res.json())
       .then((v) => {
-        Object.keys(v).forEach((k) => (variantData[k] = v[k]));
+        Object.keys(v).forEach((k) => {
+          variantData[k] = v[k];
+        });
         Promise.resolve();
       });
   }

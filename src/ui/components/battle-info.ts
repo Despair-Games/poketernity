@@ -491,7 +491,9 @@ export class BattleInfo extends Phaser.GameObjects.Container {
       this.statusIndicator,
       this.levelContainer,
     ];
-    offsetElements.forEach((el) => (el.y += 1.5 * (mini ? -1 : 1)));
+    offsetElements.forEach((el) => {
+      el.y += 1.5 * (mini ? -1 : 1);
+    });
 
     [this.type1Icon, this.type2Icon, this.type3Icon].forEach((el) => {
       el.x += 4 * (mini ? 1 : -1);
@@ -530,7 +532,9 @@ export class BattleInfo extends Phaser.GameObjects.Container {
         this.statusIndicator,
         this.levelContainer,
         this.statValuesContainer,
-      ].map((e) => (e.x += 48 * (isBoss ? -1 : 1)));
+      ].map((e) => {
+        e.x += 48 * (isBoss ? -1 : 1);
+      });
       this.hpBar.x += 38 * (isBoss ? -1 : 1);
       this.hpBar.y += 2 * (this.boss ? -1 : 1);
       this.hpBar.setTexture(`overlay_hp${isBoss ? "_boss" : ""}`);

@@ -67,7 +67,7 @@ export class EnemyCommandPhase extends BattlePhase {
 
         if (partyMemberScores.length) {
           const matchupScores = opponents.map((opp) => pokemon.getMatchupScore(opp));
-          const matchupScore = matchupScores.reduce((total, score) => (total += score), 0) / matchupScores.length;
+          const matchupScore = matchupScores.reduce((total, score) => total + score, 0) / matchupScores.length;
 
           const sortedPartyMemberScores = trainer.getSortedPartyMemberMatchupScores(partyMemberScores);
 

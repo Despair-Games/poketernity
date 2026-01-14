@@ -3630,8 +3630,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    */
   public transferTagsBySourceId(sourceId: number, newSourceId: number): void {
     const tags = this.summonData.tags;
-    // biome-ignore lint/suspicious/noAssignInExpressions: the return value of the assignment isn't being used
-    tags.filter((t) => t.sourceId === sourceId).forEach((t) => (t.sourceId = newSourceId));
+    tags.forEach((t) => {
+      if (t.sourceId === sourceId) {
+        t.sourceId = newSourceId;
+      }
+    });
   }
 
   // #endregion

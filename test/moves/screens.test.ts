@@ -65,7 +65,9 @@ describe("Moves - Screen Moves", () => {
     await game.toNextTurn();
 
     const oldDamages = enemyParty.map((p) => p.getInverseHp());
-    enemyParty.forEach((p) => (p.hp = p.getMaxHp()));
+    enemyParty.forEach((p) => {
+      p.hp = p.getMaxHp();
+    });
 
     // Turn 2: Player attacks again while the screen is up
     if (options?.addAuroraVeil) {

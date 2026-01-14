@@ -155,7 +155,8 @@ export class ModifierType {
           continue;
         }
         if (pool[tier].find((m) => (m as WeightedModifierType).modifierType.id === this.id)) {
-          return (this.tier = tier);
+          this.tier = tier;
+          return this.tier;
         }
       }
     }

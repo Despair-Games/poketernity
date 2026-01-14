@@ -620,7 +620,7 @@ export abstract class SettingsUiHandler extends MessageUiHandler {
    */
   computeLabelsPosition(labelDisplayWidth: number, labels: Phaser.GameObjects.Text[], positions: number[]): void {
     // width needed for all option values, without space between them
-    const totalWidth = labels.map((o) => o.displayWidth).reduce((total, width) => (total += width), 0);
+    const totalWidth = labels.map((o) => o.displayWidth).reduce((total, width) => total + width, 0);
 
     const labelWidth = Math.max(78, labelDisplayWidth + 8);
 

@@ -267,8 +267,9 @@ describe("Moves - Dragon Darts", () => {
     await game.classicMode.startBattle(SpeciesId.MAGIKARP, SpeciesId.FEEBAS);
 
     const enemyPokemon = game.scene.getEnemyField();
-    // biome-ignore lint/suspicious/noAssignInExpressions: The return value of the assignment is not being used
-    enemyPokemon.forEach((p) => (p.hp = 100));
+    enemyPokemon.forEach((p) => {
+      p.hp = 100;
+    });
     const enemyStartingHp = enemyPokemon.map((p) => p.hp);
 
     game.move.select(MoveId.DRAGON_DARTS, 0, BattlerIndex.ENEMY);

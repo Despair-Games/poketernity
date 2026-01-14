@@ -1174,15 +1174,21 @@ export function calculateMEAggregateStats(baseSpawnWeight: number): void {
     meanMEFloorsPerRunPerBiome.set(key, value / n);
   });
 
-  let stats = `Starting weight: ${baseSpawnWeight}\nAverage MEs per run: ${totalMean}\nStandard Deviation: ${totalStd}\nAvg Commons: ${commonMean}\nAvg Greats: ${uncommonMean}\nAvg Ultras: ${rareMean}\nAvg Epics: ${superRareMean}\n`;
+  let stats = `
+Starting weight: ${baseSpawnWeight}
+Average MEs per run: ${totalMean}
+Standard Deviation: ${totalStd}
+Avg Commons: ${commonMean}
+Avg Greats: ${uncommonMean}
+Avg Ultras: ${rareMean}
+Avg Epics: ${superRareMean}\n`.trimStart();
 
   const meanEncountersPerRunPerBiomeSorted = [...meanEncountersPerRunPerBiome.entries()].sort(
     (e1, e2) => e2[1] - e1[1],
   );
-  meanEncountersPerRunPerBiomeSorted.forEach(
-    (value) =>
-      (stats += `${value[0]}: avg valid floors ${meanMEFloorsPerRunPerBiome.get(value[0])}, avg MEs ${value[1]},\n`),
-  );
+  meanEncountersPerRunPerBiomeSorted.forEach((value) => {
+    stats += `${value[0]}: avg valid floors ${meanMEFloorsPerRunPerBiome.get(value[0])}, avg MEs ${value[1]},\n`;
+  });
 
   console.log(stats);
 }

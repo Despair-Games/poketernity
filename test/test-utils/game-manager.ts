@@ -3,7 +3,6 @@ import { BattleScene } from "#app/battle-scene";
 import { getGameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
 import { activeOverrides } from "#app/overrides";
-import type { AbilityId } from "#enums/ability-id";
 import { BattleCommand } from "#enums/battle-command";
 import type { FieldBattlerIndex } from "#enums/battler-index";
 import { Button } from "#enums/button";
@@ -18,7 +17,6 @@ import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PlayerPokemon } from "#field/player-pokemon";
-import type { Pokemon } from "#field/pokemon";
 import { Trainer } from "#field/trainer";
 import { ModifierTypeOption } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
@@ -503,24 +501,6 @@ export class GameManager {
     this.scene.clearEnemyHeldItemModifiers();
     this.scene.clearEnemyModifiers();
     console.log("Enemy held items removed");
-  }
-
-  /**
-   * Forces every player and enemy Pokemon of a certain species to have a certain ability.
-   *
-   * This function has higher priority over {@linkcode OverridesHelper.ability | override.ability}
-   * and {@linkcode OverridesHelper.enemyAbility | override.enemyAbility}.
-   * Also, unlike the overrides, this function can only be called after `startBattle()` has finished.
-   *
-   * @param speciesId - The ID of the species that is to receive the ability.
-   * @param abilityId - The ID of the ability to give.
-   */
-  forceSpeciesSpecificAbility(speciesId: SpeciesId, abilityId: AbilityId): void {
-    for (const p of (this.scene.getPlayerParty() as Pokemon[]).concat(this.scene.getEnemyParty())) {
-      if (p.species.speciesId === speciesId) {
-        this.field.mockAbility(p, abilityId);
-      }
-    }
   }
 
   /**
