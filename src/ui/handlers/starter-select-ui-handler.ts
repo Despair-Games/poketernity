@@ -1714,7 +1714,8 @@ export class StarterSelectUiHandler extends MessageUiHandler {
                             handler: () => {
                               // update default nature in starter save data
                               if (!starterAttributes) {
-                                starterAttributes = this.starterPreferences[this.lastSpecies.speciesId] = {};
+                                this.starterPreferences[this.lastSpecies.speciesId] = {};
+                                starterAttributes = this.starterPreferences[this.lastSpecies.speciesId];
                               }
                               starterAttributes.nature = n;
                               this.clearText();

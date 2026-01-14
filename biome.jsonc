@@ -193,7 +193,8 @@
         "noProto": "error",
         "noMultiStr": "error",
         "useRegexpExec": "error",
-        "noReturnAssign": "error"
+        "noReturnAssign": "error",
+        "noMultiAssign": "error"
       },
       "performance": {
         "noNamespaceImport": "error",
