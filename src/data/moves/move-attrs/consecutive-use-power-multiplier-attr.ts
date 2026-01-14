@@ -2,7 +2,6 @@ import { MoveResult } from "#enums/move-result";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MovePowerMultiplierAttr } from "#moves/move-power-multiplier-attr";
-import type { TurnMove } from "#types/move-types";
 
 /**
  * Abstract attribute to multiply move power based on the
@@ -14,17 +13,15 @@ export abstract class ConsecutiveUsePowerMultiplierAttr extends MovePowerMultipl
       const moveHistory = user.getLastXMoves(limit + 1).slice(1);
 
       let count = 0;
-      let turnMove: TurnMove | undefined;
+      let turnMove = moveHistory.shift();
 
-      while (
-        (turnMove = moveHistory.shift())?.move.id === move.id
-        && (!resetOnFail || turnMove?.result === MoveResult.SUCCESS)
-      ) {
+      while (turnMove?.move.id === move.id && (!resetOnFail || turnMove?.result === MoveResult.SUCCESS)) {
         if (count < limit - 1) {
           count++;
         } else {
           break;
         }
+        turnMove = moveHistory.shift();
       }
 
       return this.getMultiplier(count);

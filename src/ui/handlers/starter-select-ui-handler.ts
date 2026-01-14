@@ -3381,9 +3381,10 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     }
 
     if (species) {
-      if (shiny !== undefined ? !shiny : !(shiny = oldProps?.shiny)) {
-        this.dexAttrCursor |= DexAttr.NON_SHINY;
-      } else {
+      if (shiny === undefined) {
+        shiny = oldProps?.shiny;
+      }
+      if (shiny) {
         if (variant == null) {
           variant = oldProps?.variant ?? 0;
         }
@@ -3394,6 +3395,8 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         } else {
           this.dexAttrCursor |= DexAttr.SHINY_BASE_VARIANT;
         }
+      } else {
+        this.dexAttrCursor |= DexAttr.NON_SHINY;
       }
 
       female = female ?? oldProps?.gender === Gender.FEMALE;
@@ -3403,13 +3406,23 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         this.dexAttrCursor |= DexAttr.MALE;
       }
 
-      this.dexAttrCursor |= globalScene.gameData.getFormAttr(
-        formIndex !== undefined ? formIndex : (formIndex = oldProps!.formIndex),
-      );
-      this.abilityCursor = abilityIndex !== undefined ? abilityIndex : (abilityIndex = oldAbilityIndex);
+      if (formIndex === undefined) {
+        formIndex = oldProps!.formIndex;
+      }
+      this.dexAttrCursor |= globalScene.gameData.getFormAttr(formIndex);
+      if (abilityIndex === undefined) {
+        abilityIndex = oldAbilityIndex;
+      }
+      this.abilityCursor = abilityIndex;
       this.passiveEnabled = passiveEnabled ?? this.passiveEnabled;
-      this.natureCursor = natureIndex !== undefined ? natureIndex : (natureIndex = oldNatureIndex);
-      this.teraCursor = teraType == null ? (teraType = oldTeraType) : teraType;
+      if (natureIndex === undefined) {
+        natureIndex = oldNatureIndex;
+      }
+      this.natureCursor = natureIndex;
+      if (teraType == null) {
+        teraType = oldTeraType;
+      }
+      this.teraCursor = teraType;
       const [isInParty, partyIndex]: [boolean, number] = this.isInParty(species);
       if (isInParty) {
         this.updatePartyIcon(species, partyIndex);

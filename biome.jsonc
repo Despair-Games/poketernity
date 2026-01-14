@@ -142,7 +142,7 @@
       "suspicious": {
         "noDoubleEquals": "error",
         "noExplicitAny": "off", // TODO: Refactor and make this an error
-        "noAssignInExpressions": "warn", // TODO: refactor and make "error"
+        "noAssignInExpressions": "error",
         "noPrototypeBuiltins": "error",
         "noFallthroughSwitchClause": "error", // Prevents accidental automatic fallthroughs in switch cases (use disable comment if needed)
         "noImplicitAnyLet": "error",

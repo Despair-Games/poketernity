@@ -43,6 +43,7 @@ export async function populateAnims(): Promise<void> {
     let isOppMove: boolean | undefined;
     let commonAnimId: CommonAnim | undefined;
     let chargeAnimId: ChargeAnim | undefined;
+    // biome-ignore lint/suspicious/noAssignInExpressions: needs to be refactored
     if (!nameField.startsWith("name: Move:") && !(isOppMove = nameField.startsWith("name: OppMove:"))) {
       const nameMatch = commonNamePattern.exec(nameField)!; // TODO: is this bang correct?
       const name = nameMatch[2].toLowerCase();

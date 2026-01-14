@@ -17,14 +17,14 @@ export function initGameSpeed(this: BattleScene) {
   /**
    * Adjusts the given value based on the game speed or returns it as is.
    * @param num - The value to be evaluated. Can be either a `number` or an instance of {@linkcode FixedNumber}.
-   * @returns The original numeric value if `value` is an instance of {@linkcode FixedNumber} or if {@linkcode BattleScene.gameSpeed | gameSpeed} is `1`;
+   * @returns The original numeric value if `value` is an instance of {@linkcode FixedNumber};
    * otherwise, the value adjusted for the game speed.
    */
   const transformValue = (num: number | FixedNumber): number => {
     if (num instanceof FixedNumber) {
       return num.value;
     }
-    return settings.general.gameSpeed === 1 ? num : Math.ceil((num /= settings.general.gameSpeed));
+    return Math.ceil(num / settings.general.gameSpeed);
   };
 
   const originalAddEvent = this.time.addEvent;

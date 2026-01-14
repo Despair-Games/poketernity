@@ -273,17 +273,21 @@ export class SummaryUiHandler extends UiHandler {
     this.moveEffectContainer.add(this.moveCategoryIcon);
 
     const getSummaryPageBg = () => {
-      const ret = globalScene.add.sprite(0, 0, this.getPageKey(0));
-      ret.setOrigin(0, 1);
+      const ret = globalScene.add //
+        .sprite(0, 0, this.getPageKey(0))
+        .setOrigin(0, 1);
       return ret;
     };
 
-    this.summaryContainer.add((this.summaryPageContainer = globalScene.add.container(106, 0)));
-    this.summaryPageContainer.add(getSummaryPageBg());
-    this.summaryPageContainer.setVisible(false);
-    this.summaryContainer.add((this.summaryPageTransitionContainer = globalScene.add.container(106, 0)));
-    this.summaryPageTransitionContainer.add(getSummaryPageBg());
-    this.summaryPageTransitionContainer.setVisible(false);
+    this.summaryPageContainer = globalScene.add //
+      .container(106, 0)
+      .add(getSummaryPageBg())
+      .setVisible(false);
+    this.summaryPageTransitionContainer = globalScene.add //
+      .container(106, 0)
+      .add(getSummaryPageBg())
+      .setVisible(false);
+    this.summaryContainer.add([this.summaryPageContainer, this.summaryPageTransitionContainer]);
   }
 
   protected override tearDown(): void {
