@@ -142,6 +142,6 @@ async function runInteractive() {
 //#endregion
 //#region Run
 
-runInteractive();
+await runInteractive();
 
 //#endregion
