@@ -13,7 +13,7 @@ import { activeOverrides } from "#app/overrides";
 import type { Phase } from "#app/phase";
 import { PhaseManager } from "#app/phase-manager";
 import { SceneBase } from "#app/scene-base";
-import { IV_MAX, IV_MIN, LEVEL_CAP_SCALE_FACTOR, MAX_PARTY_LUCK_VALUE } from "#constants/game-constants";
+import { LEVEL_CAP_SCALE_FACTOR, MAX_PARTY_LUCK_VALUE } from "#constants/game-constants";
 import {
   ME_ANTI_VARIANCE_WEIGHT_MODIFIER,
   ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
@@ -959,9 +959,9 @@ export class BattleScene extends SceneBase {
       postProcess(pokemon);
     }
 
-  if (!skipInit) {
-    pokemon.init();
-  }
+    if (!skipInit) {
+      pokemon.init();
+    }
     return pokemon;
   }
 

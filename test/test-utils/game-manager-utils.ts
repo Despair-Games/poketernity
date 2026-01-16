@@ -43,14 +43,19 @@ export function generateStarter(scene: BattleScene, species: SpeciesId[]): Start
     const formIndex = Math.min(starterProps.formIndex, Math.max(starter.species.forms.length - 1, 0));
     const { abilityIndex, nature } = starter;
     const { gender, shiny, variant } = starterProps;
-    const starterPokemon = scene.addPlayerPokemon(starter.species, startingLevel, {
-      abilityIndex,
-      formIndex,
-      gender,
-      shiny,
-      variant,
-      nature,
-    }, true);
+    const starterPokemon = scene.addPlayerPokemon(
+      starter.species,
+      startingLevel,
+      {
+        abilityIndex,
+        formIndex,
+        gender,
+        shiny,
+        variant,
+        nature,
+      },
+      true,
+    );
     const moveset: MoveId[] = [];
     for (const move of starterPokemon.getMoveset(true)) {
       moveset.push(move.getMove().id);
@@ -102,15 +107,20 @@ export function initSceneWithoutEncounterPhase(scene: BattleScene, species: Spec
     const { abilityIndex, nature } = starter;
     const starterSpeciesId = starter.species.getRootSpeciesId(true);
     const ivs = scene.gameData.starterData[starterSpeciesId].ivs.slice(0);
-    const starterPokemon = scene.addPlayerPokemon(starter.species, scene.gameMode.getStartingLevel(), {
-      abilityIndex,
-      formIndex,
-      gender: Gender.MALE,
-      shiny,
-      variant,
-      ivs,
-      nature,
-    }, true);
+    const starterPokemon = scene.addPlayerPokemon(
+      starter.species,
+      scene.gameMode.getStartingLevel(),
+      {
+        abilityIndex,
+        formIndex,
+        gender: Gender.MALE,
+        shiny,
+        variant,
+        ivs,
+        nature,
+      },
+      true,
+    );
     starter.moveset && starterPokemon.tryPopulateMoveset(starter.moveset);
     scene.getPlayerParty().push(starterPokemon);
   });
