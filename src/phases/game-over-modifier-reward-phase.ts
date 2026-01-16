@@ -8,7 +8,7 @@ import i18next from "i18next";
 export class GameOverModifierRewardPhase extends ModifierRewardPhase {
   public override readonly phaseName = "GameOverModifierRewardPhase";
 
-  public override doReward(): Promise<void> {
+  public override async doReward(): Promise<void> {
     const { arenaBg, time, ui } = globalScene;
 
     return new Promise<void>((resolve) => {

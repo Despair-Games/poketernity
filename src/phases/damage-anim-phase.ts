@@ -6,9 +6,7 @@ import { settings } from "#system/settings-manager";
 import type { DamageResult } from "#types/move-types";
 import { fixedNumber } from "#utils/common-utils";
 
-/**
- * Displays damage numbers and plays move hit SFX during battle
- */
+/** Displays damage numbers and plays move hit SFX during battle */
 export class DamageAnimPhase extends PokemonPhase {
   public override readonly phaseName = "DamageAnimPhase";
 
@@ -29,26 +27,26 @@ export class DamageAnimPhase extends PokemonPhase {
     this.critical = critical;
   }
 
-  public override start(): void {
+  public override async start(): Promise<void> {
     if (this.damageResult === HitResult.ONE_HIT_KO) {
       if (settings.display.enableMoveAnimations) {
         globalScene.toggleInvert(true);
       }
-      globalScene.time.delayedCall(fixedNumber(1000), () => {
+      globalScene.time.delayedCall(fixedNumber(1000), async () => {
         globalScene.toggleInvert(false);
-        this.displayDamage();
+        await this.displayDamage();
       });
       return;
     }
 
-    this.displayDamage();
+    await this.displayDamage();
   }
 
   public updateAmount(amount: number): void {
     this.amount = amount;
   }
 
-  protected displayDamage(): void {
+  protected async displayDamage(): Promise<void> {
     switch (this.damageResult) {
       case HitResult.EFFECTIVE:
         globalScene.audioManager.playSound("se/hit");
@@ -72,21 +70,19 @@ export class DamageAnimPhase extends PokemonPhase {
         delay: 100,
         repeat: 5,
         startAt: 200,
-        callback: () => {
+        callback: async () => {
           this.getPokemon()
             .getSprite()
             .setVisible(flashTimer.repeatCount % 2 === 0);
           if (!flashTimer.repeatCount) {
-            this.getPokemon()
-              .updateInfo()
-              .then(() => this.end());
+            await this.getPokemon().updateInfo();
+            this.end();
           }
         },
       });
     } else {
-      this.getPokemon()
-        .updateInfo()
-        .then(() => this.end());
+      await this.getPokemon().updateInfo();
+      this.end();
     }
   }
 

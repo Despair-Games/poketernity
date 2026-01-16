@@ -77,7 +77,7 @@ export class BallUiHandler extends UiHandler {
     return true;
   }
 
-  public override processInput(button: Button): boolean {
+  public override async processInput(button: Button): Promise<boolean> {
     const ui = this.getUi();
 
     let success = false;
@@ -89,7 +89,7 @@ export class BallUiHandler extends UiHandler {
       success = true;
       if (button === Button.ACTION && this.cursor < pokeballTypeCount) {
         if (globalScene.pokeballCounts[this.cursor]) {
-          if (commandPhase.handleCommand(BattleCommand.BALL, this.cursor)) {
+          if (await commandPhase.handleCommand(BattleCommand.BALL, this.cursor)) {
             globalScene.ui.setMode<CommandUiHandler>(UiMode.COMMAND, commandPhase.getFieldIndex());
             globalScene.ui.setMessageMode();
             success = true;

@@ -79,152 +79,143 @@ export class EggHatchPhase extends Phase {
     this.eggsToHatchCount = eggsToHatchCount;
   }
 
-  public override start(): void {
-    globalScene.ui.setModeForceTransition<EggHatchSceneUiHandler>(UiMode.EGG_HATCH_SCENE).then(() => {
-      if (!this.egg) {
-        return this.end();
+  public override async start(): Promise<void> {
+    const { add, audioManager, fieldUI, gameData, spritePipeline, time, ui } = globalScene;
+
+    await ui.setModeForceTransition<EggHatchSceneUiHandler>(UiMode.EGG_HATCH_SCENE);
+
+    if (!this.egg) {
+      return this.end();
+    }
+
+    const eggIndex = gameData.eggs.findIndex((e) => e.id === this.egg.id);
+    if (eggIndex === -1) {
+      return this.end();
+    }
+
+    gameData.eggs.splice(eggIndex, 1);
+
+    audioManager.fadeOutBgm(undefined, false);
+
+    // TODO: the hatch phase and ui handler should not be intertwined in this way;
+    // the phase also should not be the one creating the graphical objects
+    this.eggHatchHandler = ui.getCurrentHandler<EggHatchSceneUiHandler>();
+
+    this.eggHatchContainer = this.eggHatchHandler.eggHatchContainer;
+
+    this.eggHatchBg = add //
+      .image(0, 0, "default_bg")
+      .setOrigin(0);
+    this.eggHatchContainer.add(this.eggHatchBg);
+
+    this.eggContainer = add.container(this.eggHatchBg.displayWidth / 2, this.eggHatchBg.displayHeight / 2);
+
+    this.eggSprite = add.sprite(0, 0, "egg", `egg_${this.egg.getKey()}`);
+    this.eggCrackSprite = add //
+      .sprite(0, 0, "egg_crack", "0")
+      .setVisible(false);
+
+    this.eggLightraysOverlay = add
+      .sprite(-this.eggHatchBg.displayWidth / 2 + 4, -this.eggHatchBg.displayHeight / 2, "egg_lightrays", "3")
+      .setOrigin(0)
+      .setVisible(false);
+
+    this.eggContainer.add([this.eggSprite, this.eggCrackSprite, this.eggLightraysOverlay]);
+    this.eggHatchContainer.add(this.eggContainer);
+
+    this.eggCounterContainer = new EggCounterContainer(this.eggsToHatchCount);
+    this.eggHatchContainer.add(this.eggCounterContainer);
+
+    const getPokemonSprite = (): Phaser.GameObjects.Sprite => {
+      const ret = add
+        .sprite(this.eggHatchBg.displayWidth / 2, this.eggHatchBg.displayHeight / 2, "pkmn__sub")
+        .setPipeline(spritePipeline, { tone: [0.0, 0.0, 0.0, 0.0], ignoreTimeTint: true });
+      return ret;
+    };
+
+    this.pokemonSprite = getPokemonSprite();
+    this.eggHatchContainer.add(this.pokemonSprite);
+
+    this.pokemonShinySparkle = add //
+      .sprite(this.pokemonSprite.x, this.pokemonSprite.y, "shiny")
+      .setVisible(false);
+
+    this.eggHatchContainer.add(this.pokemonShinySparkle);
+
+    this.eggHatchOverlay = add //
+      .rectangle(0, -GAME_HEIGHT, GAME_WIDTH, GAME_HEIGHT, 0xffffff)
+      .setOrigin(0)
+      .setAlpha(0);
+    fieldUI.add(this.eggHatchOverlay);
+
+    this.infoContainer = new PokemonInfoContainer();
+    this.infoContainer.setup();
+
+    this.eggHatchContainer.add(this.infoContainer);
+
+    const pokemon = this.generatePokemon();
+
+    this.pokemonSprite.setVisible(false);
+
+    this.pokemon = pokemon;
+
+    await pokemon.loadAssets();
+    this.canSkip = true;
+
+    time.delayedCall(1000, () => {
+      if (!this.hatched) {
+        this.evolutionBgm = audioManager.playSoundWithoutBgm("evolution");
       }
+    });
 
-      const eggIndex = globalScene.gameData.eggs.findIndex((e) => e.id === this.egg.id);
-
-      if (eggIndex === -1) {
-        return this.end();
+    // TODO: Is there a better way to handle these `if (hatched)` checks?
+    time.delayedCall(2000, async () => {
+      if (this.hatched) {
+        return;
       }
-
-      globalScene.gameData.eggs.splice(eggIndex, 1);
-
-      globalScene.audioManager.fadeOutBgm(undefined, false);
-
-      // TODO: the hatch phase and ui handler should not be intertwined in this way;
-      // the phase also should not be the one creating the graphical objects
-      this.eggHatchHandler = globalScene.ui.getCurrentHandler<EggHatchSceneUiHandler>();
-
-      this.eggHatchContainer = this.eggHatchHandler.eggHatchContainer;
-
-      this.eggHatchBg = globalScene.add.image(0, 0, "default_bg");
-      this.eggHatchBg.setOrigin(0, 0);
-      this.eggHatchContainer.add(this.eggHatchBg);
-
-      this.eggContainer = globalScene.add.container(
-        this.eggHatchBg.displayWidth / 2,
-        this.eggHatchBg.displayHeight / 2,
-      );
-
-      this.eggSprite = globalScene.add.sprite(0, 0, "egg", `egg_${this.egg.getKey()}`);
-      this.eggCrackSprite = globalScene.add.sprite(0, 0, "egg_crack", "0");
-      this.eggCrackSprite.setVisible(false);
-
-      this.eggLightraysOverlay = globalScene.add.sprite(
-        -this.eggHatchBg.displayWidth / 2 + 4,
-        -this.eggHatchBg.displayHeight / 2,
-        "egg_lightrays",
-        "3",
-      );
-      this.eggLightraysOverlay.setOrigin(0, 0);
-      this.eggLightraysOverlay.setVisible(false);
-
-      this.eggContainer.add(this.eggSprite);
-      this.eggContainer.add(this.eggCrackSprite);
-      this.eggContainer.add(this.eggLightraysOverlay);
-      this.eggHatchContainer.add(this.eggContainer);
-
-      this.eggCounterContainer = new EggCounterContainer(this.eggsToHatchCount);
-      this.eggHatchContainer.add(this.eggCounterContainer);
-
-      const getPokemonSprite = (): Phaser.GameObjects.Sprite => {
-        const ret = globalScene.add.sprite(
-          this.eggHatchBg.displayWidth / 2,
-          this.eggHatchBg.displayHeight / 2,
-          "pkmn__sub",
-        );
-        ret.setPipeline(globalScene.spritePipeline, { tone: [0.0, 0.0, 0.0, 0.0], ignoreTimeTint: true });
-        return ret;
-      };
-
-      this.pokemonSprite = getPokemonSprite();
-      this.eggHatchContainer.add(this.pokemonSprite);
-
-      this.pokemonShinySparkle = globalScene.add.sprite(this.pokemonSprite.x, this.pokemonSprite.y, "shiny");
-      this.pokemonShinySparkle.setVisible(false);
-
-      this.eggHatchContainer.add(this.pokemonShinySparkle);
-
-      this.eggHatchOverlay = globalScene.add.rectangle(0, -GAME_HEIGHT, GAME_WIDTH, GAME_HEIGHT, 0xffffff);
-      this.eggHatchOverlay.setOrigin(0, 0);
-      this.eggHatchOverlay.setAlpha(0);
-      globalScene.fieldUI.add(this.eggHatchOverlay);
-
-      this.infoContainer = new PokemonInfoContainer();
-      this.infoContainer.setup();
-
-      this.eggHatchContainer.add(this.infoContainer);
-
-      const pokemon = this.generatePokemon();
-
-      this.pokemonSprite.setVisible(false);
-
-      this.pokemon = pokemon;
-
-      pokemon.loadAssets().then(() => {
-        this.canSkip = true;
-
-        globalScene.time.delayedCall(1000, () => {
-          if (!this.hatched) {
-            this.evolutionBgm = globalScene.audioManager.playSoundWithoutBgm("evolution");
-          }
-        });
-
-        // TODO: Is there a better way to handle these `if (hatched)` checks?
-        globalScene.time.delayedCall(2000, () => {
+      this.eggCrackSprite.setVisible(true);
+      this.doSpray(1, this.eggSprite.displayHeight / -2);
+      await this.doEggShake(2);
+      if (this.hatched) {
+        return;
+      }
+      time.delayedCall(1000, async () => {
+        if (this.hatched) {
+          return;
+        }
+        this.doSpray(2, this.eggSprite.displayHeight / -4);
+        this.eggCrackSprite.setFrame("1");
+        time.delayedCall(125, () => this.eggCrackSprite.setFrame("2"));
+        await this.doEggShake(4);
+        if (this.hatched) {
+          return;
+        }
+        time.delayedCall(1000, async () => {
           if (this.hatched) {
             return;
           }
-          this.eggCrackSprite.setVisible(true);
-          this.doSpray(1, this.eggSprite.displayHeight / -2);
-          this.doEggShake(2).then(() => {
-            if (this.hatched) {
-              return;
-            }
-            globalScene.time.delayedCall(1000, () => {
-              if (this.hatched) {
-                return;
-              }
-              this.doSpray(2, this.eggSprite.displayHeight / -4);
-              this.eggCrackSprite.setFrame("1");
-              globalScene.time.delayedCall(125, () => this.eggCrackSprite.setFrame("2"));
-              this.doEggShake(4).then(() => {
-                if (this.hatched) {
-                  return;
-                }
-                globalScene.time.delayedCall(1000, () => {
-                  if (this.hatched) {
-                    return;
-                  }
-                  globalScene.audioManager.playSound("se/egg_crack");
-                  this.doSpray(4);
-                  this.eggCrackSprite.setFrame("3");
-                  globalScene.time.delayedCall(125, () => this.eggCrackSprite.setFrame("4"));
-                  this.doEggShake(8, 2).then(() => {
-                    if (!this.hatched) {
-                      this.doHatch();
-                    }
-                  });
-                });
-              });
-            });
-          });
+          audioManager.playSound("se/egg_crack");
+          this.doSpray(4);
+          this.eggCrackSprite.setFrame("3");
+          time.delayedCall(125, () => this.eggCrackSprite.setFrame("4"));
+          await this.doEggShake(8, 2);
+          if (!this.hatched) {
+            this.doHatch();
+          }
         });
       });
     });
   }
 
   public override end(): void {
-    if (globalScene.phaseManager.findPhaseOfType("EggHatchPhase")) {
+    const { time, phaseManager } = globalScene;
+
+    if (phaseManager.findPhaseOfType("EggHatchPhase")) {
       // There are more eggs about to hatch, clear up the handler
       this.eggHatchHandler.prepareForNextEgg();
     } else {
       // There are no more hatching eggs, re enable the modifiers
-      globalScene.time.delayedCall(250, () => globalScene.setModifiersVisible(true));
+      time.delayedCall(250, () => globalScene.setModifiersVisible(true));
     }
 
     this.pokemon?.destroy();
@@ -234,31 +225,34 @@ export class EggHatchPhase extends Phase {
 
   /**
    * Function that animates egg shaking
-   * @param intensity of horizontal shaking. Doubled on the first call (where count is 0)
-   * @param repeatCount the number of times this function should be called (asynchronous recursion?!?)
-   * @param count the current number of times this function has been called.
-   * @returns nothing since it's a Promise<void>
+   * @param intensity - The intensity of the horizontal shaking. Doubled on the first call (where count is `0`)
+   * @param repeatCount - The number of times this function should be called (asynchronous recursion?!?)
+   * @param count - The current number of times this function has been called.
    */
-  protected doEggShake(intensity: number, repeatCount: number = 0, count: number = 0): Promise<void> {
+  // TODO: use `playTween`
+  protected async doEggShake(intensity: number, repeatCount: number = 0, count: number = 0): Promise<void> {
+    const { audioManager, tweens } = globalScene;
+
     return new Promise((resolve) => {
-      globalScene.audioManager.playSound("se/pb_move");
-      globalScene.tweens.add({
+      audioManager.playSound("se/pb_move");
+      tweens.add({
         targets: this.eggContainer,
         x: `-=${intensity / (count ? 1 : 2)}`,
         ease: "Sine.easeInOut",
         duration: 125,
         onComplete: () => {
-          globalScene.tweens.add({
+          tweens.add({
             targets: this.eggContainer,
             x: `+=${intensity}`,
             ease: "Sine.easeInOut",
             duration: 250,
-            onComplete: () => {
+            onComplete: async () => {
               count++;
               if (count < repeatCount) {
-                return this.doEggShake(intensity, repeatCount, count).then(() => resolve());
+                await this.doEggShake(intensity, repeatCount, count);
+                return resolve();
               }
-              globalScene.tweens.add({
+              tweens.add({
                 targets: this.eggContainer,
                 x: `-=${intensity / 2}`,
                 ease: "Sine.easeInOut",
@@ -296,19 +290,20 @@ export class EggHatchPhase extends Phase {
    * Plays the animation of an egg hatch
    */
   protected doHatch(): void {
+    const { audioManager, time, tweens } = globalScene;
+
     this.canSkip = false;
     this.hatched = true;
     if (this.evolutionBgm) {
       SoundFade.fadeOut(globalScene, this.evolutionBgm, fixedNumber(100));
     }
     for (let e = 0; e < 5; e++) {
-      globalScene.time.delayedCall(fixedNumber(375 * e), () =>
-        globalScene.audioManager.playSound("se/egg_hatch", { volume: 1 - e * 0.2 }),
-      );
+      time.delayedCall(fixedNumber(375 * e), () => audioManager.playSound("se/egg_hatch", { volume: 1 - e * 0.2 }));
     }
-    this.eggLightraysOverlay.setVisible(true);
-    this.eggLightraysOverlay.play("egg_lightrays");
-    globalScene.tweens.add({
+    this.eggLightraysOverlay //
+      .setVisible(true)
+      .play("egg_lightrays");
+    tweens.add({
       duration: fixedNumber(125),
       targets: this.eggHatchOverlay,
       alpha: 1,
@@ -318,7 +313,7 @@ export class EggHatchPhase extends Phase {
         this.canSkip = true;
       },
     });
-    globalScene.time.delayedCall(fixedNumber(1500), () => {
+    time.delayedCall(fixedNumber(1500), () => {
       this.canSkip = false;
       if (!this.skipped) {
         this.doReveal();
@@ -330,6 +325,7 @@ export class EggHatchPhase extends Phase {
    * Function to do the logic and animation of completing a hatch and revealing the Pokemon
    */
   protected doReveal(): void {
+    const { animations, audioManager, gameData, time, tweens, ui } = globalScene;
     // set the previous dex data so info container can show new unlocks in egg summary
     const isShiny = this.pokemon.isShiny();
     this.eggContainer.setVisible(false);
@@ -337,44 +333,40 @@ export class EggHatchPhase extends Phase {
     const spriteKey = this.pokemon.getSpriteKey(true);
     this.pokemonSprite.play(spriteKey);
 
-    this.pokemonSprite.setPipelineData("ignoreTimeTint", true);
-    this.pokemonSprite.setPipelineData("spriteKey", this.pokemon.getSpriteKey());
-    this.pokemonSprite.setVisible(true);
+    this.pokemonSprite
+      .setPipelineData("ignoreTimeTint", true)
+      .setPipelineData("spriteKey", this.pokemon.getSpriteKey())
+      .setVisible(true);
 
-    globalScene.time.delayedCall(fixedNumber(250), () => {
+    time.delayedCall(fixedNumber(250), () => {
       this.eggsToHatchCount--;
       this.eggHatchHandler.eventTarget.dispatchEvent(new EggCountChangedEvent(this.eggsToHatchCount));
       this.pokemon.cry();
       if (isShiny) {
-        globalScene.time.delayedCall(fixedNumber(500), () => {
-          globalScene.animations.doShinySparkleAnim(this.pokemonShinySparkle, this.pokemon.variant);
+        time.delayedCall(fixedNumber(500), () => {
+          animations.doShinySparkleAnim(this.pokemonShinySparkle, this.pokemon.variant);
         });
       }
-      globalScene.time.delayedCall(fixedNumber((isShiny ? 750 : 250) + (this.skipped ? 0 : 1000)), () => {
-        this.infoContainer.show(this.pokemon, false, this.skipped ? 2 : 1);
+      time.delayedCall(fixedNumber((isShiny ? 750 : 250) + (this.skipped ? 0 : 1000)), async () => {
+        await this.infoContainer.show(this.pokemon, false, this.skipped ? 2 : 1);
 
-        globalScene.audioManager.playSoundWithoutBgm("evolution_fanfare");
+        audioManager.playSoundWithoutBgm("evolution_fanfare");
 
-        globalScene.ui.showText(
-          i18next.t("egg:hatchFromTheEgg", { pokemonName: getPokemonNameWithAffix(this.pokemon) }),
-          {
-            callback: () => {
-              globalScene.gameData.updateSpeciesDexIvs(this.pokemon.species.speciesId, this.pokemon.ivs);
-              globalScene.gameData.setPokemonCaught(this.pokemon, true, true).then(() => {
-                globalScene.gameData.setEggMoveUnlocked(this.pokemon.species, this.eggMoveIndex).then((value) => {
-                  this.eggHatchData.setEggMoveUnlocked(value);
-                  globalScene.ui.showText("", { delay: 0 });
-                  this.end();
-                });
-              });
-            },
-            prompt: true,
-            promptDelay: 3000,
+        ui.showText(i18next.t("egg:hatchFromTheEgg", { pokemonName: getPokemonNameWithAffix(this.pokemon) }), {
+          callback: async () => {
+            gameData.updateSpeciesDexIvs(this.pokemon.species.speciesId, this.pokemon.ivs);
+            await gameData.setPokemonCaught(this.pokemon, true, true);
+            const value = await gameData.setEggMoveUnlocked(this.pokemon.species, this.eggMoveIndex);
+            this.eggHatchData.setEggMoveUnlocked(value);
+            ui.showText("", { delay: 0 });
+            this.end();
           },
-        );
+          prompt: true,
+          promptDelay: 3000,
+        });
       });
     });
-    globalScene.tweens.add({
+    tweens.add({
       duration: fixedNumber(this.skipped ? 500 : 3000),
       targets: this.eggHatchOverlay,
       alpha: 0,
@@ -403,10 +395,12 @@ export class EggHatchPhase extends Phase {
    * @param offsetY how much to offset the Y coordinate
    */
   protected doSprayParticle(trigIndex: number, offsetY: number): void {
+    const { add, animations, tweens } = globalScene;
+
     const initialX = this.eggHatchBg.displayWidth / 2;
     const initialY = this.eggHatchBg.displayHeight / 2 + offsetY;
     const shardKey = this.egg.isManaphyEgg() ? "1" : this.egg.tier.toString();
-    const particle = globalScene.add.image(initialX, initialY, "egg_shard", `${shardKey}_${Math.floor(trigIndex / 2)}`);
+    const particle = add.image(initialX, initialY, "egg_shard", `${shardKey}_${Math.floor(trigIndex / 2)}`);
     this.eggHatchContainer.add(particle);
 
     let f = 0;
@@ -414,7 +408,7 @@ export class EggHatchPhase extends Phase {
     const speed = 3 - randInt(8);
     const amp = 24 + randInt(32);
 
-    const particleTimer = globalScene.tweens.addCounter({
+    const particleTimer = tweens.addCounter({
       repeat: -1,
       duration: getFrameMs(1),
       onRepeat: () => {
@@ -427,7 +421,7 @@ export class EggHatchPhase extends Phase {
       yOffset += speedMultiplier;
       if (trigIndex < 160) {
         particle.setPosition(initialX + (speed * f) / 3, initialY + yOffset);
-        particle.y += -globalScene.animations.sin(trigIndex, amp);
+        particle.y += -animations.sin(trigIndex, amp);
         if (f > 108) {
           particle.setScale(1 - (f - 108) / 20);
         }
