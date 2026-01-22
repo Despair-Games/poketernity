@@ -1,15 +1,15 @@
 import { AbAttr } from "#abilities/ab-attr";
 import type { ElementalType } from "#enums/elemental-type";
 import type { StatusEffect } from "#enums/status-effect";
-import type { Pokemon } from "#field/pokemon";
-import type { ValueHolder } from "#utils/common-utils";
+import type { IgnoreTypeStatusEffectImmunityAbAttrParams } from "#types/ab-attr-param-types";
 
 /**
  * If the defender is normally immune to a status effect due to its type, ignore that immunity.
- * Used by Corrosion
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Corrosion_(Ability) | Corrosion (Bulbapedia)}
  */
 export class IgnoreTypeStatusEffectImmunityAbAttr extends AbAttr {
   protected override readonly abAttrKey = "IgnoreTypeStatusEffectImmunityAbAttr";
+
   private readonly statusEffect: StatusEffect[];
   private readonly defenderType: ElementalType[];
 
@@ -20,17 +20,11 @@ export class IgnoreTypeStatusEffectImmunityAbAttr extends AbAttr {
     this.defenderType = defenderType;
   }
 
-  public override apply(
-    _pokemon: Pokemon,
-    _simulated: boolean,
-    cancelled: ValueHolder<boolean>,
-    _effect: StatusEffect,
-    _defType: ElementalType,
-  ): void {
+  public override apply({ cancelled }: IgnoreTypeStatusEffectImmunityAbAttrParams): void {
     cancelled.value = true;
   }
 
-  public override canApply(...[, , , effect, defType]: Parameters<this["apply"]>): boolean {
+  public override canApply({ effect, defType }: Parameters<this["apply"]>[0]): boolean {
     return this.statusEffect.includes(effect) && this.defenderType.includes(defType);
   }
 }

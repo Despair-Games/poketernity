@@ -3,13 +3,15 @@ import { globalScene } from "#app/global-scene";
 import { AbilityId } from "#enums/ability-id";
 import { SpeciesId } from "#enums/species-id";
 import type { WeatherType } from "#enums/weather-type";
-import type { Pokemon } from "#field/pokemon";
+import type { PostWeatherChangeAbAttrParams } from "#types/ab-attr-param-types";
 import type { NonEmptyArray } from "#types/utility-types";
 
 /**
  * Triggers weather-based form change when weather changes.
- * Used by Forecast and Flower Gift.
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Forecast_(Ability) | Forecast (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Flower_Gift_(Ability) | Flower Gift (Bulbapedia)}
  */
+// TODO: change `canApply`, cf https://github.com/pagefaultgames/pokerogue/pull/5857
 export class PostWeatherChangeFormChangeAbAttr extends PostWeatherChangeAbAttr {
   private readonly formRevertingWeathers: Readonly<NonEmptyArray<WeatherType>>;
 
@@ -19,7 +21,7 @@ export class PostWeatherChangeFormChangeAbAttr extends PostWeatherChangeAbAttr {
     this.formRevertingWeathers = formRevertingWeathers;
   }
 
-  public override apply(_pokemon: Pokemon, simulated: boolean, _weather: WeatherType): void {
+  public override apply({ simulated }: PostWeatherChangeAbAttrParams): void {
     if (simulated) {
       return;
     }
@@ -33,7 +35,7 @@ export class PostWeatherChangeFormChangeAbAttr extends PostWeatherChangeAbAttr {
     }
   }
 
-  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon }: Parameters<this["apply"]>[0]): boolean {
     const isCastformWithForecast =
       pokemon.species.speciesId === SpeciesId.CASTFORM && this.source.id === AbilityId.FORECAST;
     const isCherrimWithFlowerGift =

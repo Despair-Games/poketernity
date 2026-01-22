@@ -1,7 +1,7 @@
 import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { Pokemon } from "#field/pokemon";
+import type { BaseAbAttrParams } from "#types/ab-attr-param-types";
 import { toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
 
@@ -16,7 +16,7 @@ export class PostSummonAllyHealAbAttr extends PostSummonAbAttr {
     this.showAnim = showAnim;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean): void {
+  public override apply({ pokemon, simulated }: BaseAbAttrParams): void {
     const target = pokemon.getAlly();
     if (simulated || target == null) {
       return;
@@ -36,7 +36,7 @@ export class PostSummonAllyHealAbAttr extends PostSummonAbAttr {
     );
   }
 
-  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon }: Parameters<this["apply"]>[0]): boolean {
     return !!pokemon.getAlly()?.isActive(true);
   }
 }

@@ -1,14 +1,14 @@
 import { AbAttr } from "#abilities/ab-attr";
 import type { StatusEffect } from "#enums/status-effect";
-import type { Pokemon } from "#field/pokemon";
-import type { ValueHolder } from "#utils/common-utils";
+import type { MockStatusEffectAbAttrParams } from "#types/ab-attr-param-types";
 
 /**
  * Ability attribute that allows the ability holder to be treated as if it has a status effect.
- * Used by the ability Comatose
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Comatose_(Ability) | Comatose (Bulbapedia)}
  */
 export class MockStatusEffectAbAttr extends AbAttr {
   protected override readonly abAttrKey = "MockStatusEffectAbAttr";
+
   private readonly mockedStatus: StatusEffect;
 
   constructor(mockedStatus: StatusEffect) {
@@ -17,7 +17,7 @@ export class MockStatusEffectAbAttr extends AbAttr {
     this.mockedStatus = mockedStatus;
   }
 
-  public override apply(_pokemon: Pokemon, _simulated: boolean, statusEffect: ValueHolder<number>): void {
+  public override apply({ statusEffect }: MockStatusEffectAbAttrParams): void {
     statusEffect.value = this.mockedStatus;
   }
 }

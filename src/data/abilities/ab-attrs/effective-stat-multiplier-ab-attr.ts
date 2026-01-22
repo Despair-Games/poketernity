@@ -1,9 +1,7 @@
 import { AbAttr } from "#abilities/ab-attr";
-import type { BattleStat, EffectiveStat } from "#enums/stat";
-import type { Pokemon } from "#field/pokemon";
-import type { Move } from "#moves/move";
+import type { EffectiveStat } from "#enums/stat";
+import type { EffectiveStatMultiplierAbAttrParams } from "#types/ab-attr-param-types";
 import type { PokemonAttackCondition } from "#types/move-types";
-import type { ValueHolder } from "#utils/common-utils";
 
 /**
  * Ability attribute that multiplies one of the source Pokemon's
@@ -37,8 +35,10 @@ import type { ValueHolder } from "#utils/common-utils";
 +-----------------------+-------+--------+----------------------------------+
 ```
  */
+
 export class EffectiveStatMultiplierAbAttr extends AbAttr {
   protected override readonly abAttrKey = "EffectiveStatMultiplierAbAttr";
+
   protected stat: EffectiveStat;
   protected readonly multiplier: number;
   protected readonly condition: PokemonAttackCondition;
@@ -51,27 +51,11 @@ export class EffectiveStatMultiplierAbAttr extends AbAttr {
     this.condition = condition;
   }
 
-  /**
-   * Applies a multiplier to a given stat on the source if conditions are met.
-   * @param pokemon The {@linkcode Pokemon} with this ability
-   * @param simulated If `true`, suppresses changes to game state
-   * @param stat The {@linkcode BattleStat} being evaluated
-   * @param statValue A {@linkcode NumberHolder} containing the value of the evaluated stat
-   * @param move The {@linkcode Move} being used at the time of evaluation
-   * @param target The {@linkcode Pokemon} targeted by the move
-   */
-  public override apply(
-    _pokemon: Pokemon,
-    _simulated: boolean,
-    _stat: BattleStat,
-    statValue: ValueHolder<number>,
-    _move?: Move,
-    _target?: Pokemon,
-  ): void {
+  public override apply({ statValue }: EffectiveStatMultiplierAbAttrParams): void {
     statValue.value *= this.multiplier;
   }
 
-  public override canApply(...[pokemon, , stat, , move, target]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon, stat, move, target }: Parameters<this["apply"]>[0]): boolean {
     return stat === this.stat && this.condition(pokemon, target, move);
   }
 }

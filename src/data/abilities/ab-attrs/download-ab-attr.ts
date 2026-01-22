@@ -3,18 +3,17 @@ import { globalScene } from "#app/global-scene";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
+import type { BaseAbAttrParams } from "#types/ab-attr-param-types";
 
 /**
- * Download raises either the Attack stat or Special Attack stat by one stage depending on the foe's currently lowest defensive stat:
- * it will raise Attack if the foe's current Defense is lower than its current Special Defense stat;
- * otherwise, it will raise Special Attack.
+ * Download raises either the Attack stat or Special Attack stat \
+ * by one stage depending on the foe's currently lowest defensive stat.
+ *
+ * It will raise Attack if the foe's current Defense is lower than its current Special Defense stat, \
+ * otherwise it will raise Special Attack.
  */
 export class DownloadAbAttr extends PostSummonAbAttr {
-  /**
-   * @param pokemon The {@linkcode Pokemon} with this ability
-   * @returns Returns `true` if ability is used successful, `false` if not.
-   */
-  public override apply(pokemon: Pokemon, simulated: boolean): void {
+  public override apply({ pokemon, simulated }: BaseAbAttrParams): void {
     if (simulated) {
       return;
     }
@@ -32,7 +31,7 @@ export class DownloadAbAttr extends PostSummonAbAttr {
     );
   }
 
-  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon }: Parameters<this["apply"]>[0]): boolean {
     return pokemon.getOpponents().length > 0;
   }
 

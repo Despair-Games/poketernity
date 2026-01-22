@@ -5,7 +5,8 @@ import type { NonEmptyArray } from "#types/utility-types";
 import { getWeatherCondition } from "#utils/ability-utils";
 
 /**
- * Ability attribute that doubles speed if specific weather(s) are active
+ * Doubles the ability holder's speed if a specific weather is active.
+ *
  * Abilities with this attribute:
  * ```
 +-------------+------------------+
@@ -26,8 +27,8 @@ export class WeatherBasedSpeedDoublerAbAttr extends EffectiveStatMultiplierAbAtt
     this.weatherTypes = weatherTypes;
   }
 
-  public override canApply(...params: Parameters<this["apply"]>): boolean {
-    const [pokemon] = params;
-    return super.canApply(...params) && getWeatherCondition(...this.weatherTypes)(pokemon);
+  public override canApply(params: Parameters<this["apply"]>[0]): boolean {
+    const { pokemon } = params;
+    return super.canApply(params) && getWeatherCondition(...this.weatherTypes)(pokemon);
   }
 }

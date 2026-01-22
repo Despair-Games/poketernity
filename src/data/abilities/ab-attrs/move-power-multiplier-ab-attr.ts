@@ -1,13 +1,12 @@
 import { VariableMovePowerAbAttr } from "#abilities/variable-move-power-ab-attr";
 import type { Pokemon } from "#field/pokemon";
-import type { Move } from "#moves/move";
-import type { ValueHolder } from "#utils/common-utils";
+import type { VariableMovePowerAbAttrParams } from "#types/ab-attr-param-types";
 
 type PowerMultiplierFunction = (user: Pokemon) => number;
 
 /**
  * Abilities which cause a variable amount of power increase based on a given multiplier function.
- * Used by {@link https://bulbapedia.bulbagarden.net/wiki/Supreme_Overlord_(Ability) | Supreme Overlord}.
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Supreme_Overlord_(Ability) | Supreme Overlord (Bulbapedia)}
  * @param multFunc - A function which takes a `user` and returns a power multiplier.
  */
 export class MovePowerMultiplierAbAttr extends VariableMovePowerAbAttr {
@@ -19,17 +18,11 @@ export class MovePowerMultiplierAbAttr extends VariableMovePowerAbAttr {
     this.multFunc = multFunc;
   }
 
-  public override apply(
-    pokemon: Pokemon,
-    _simulated: boolean,
-    _move: Move,
-    _defender: Pokemon,
-    power: ValueHolder<number>,
-  ): void {
+  public override apply({ pokemon, power }: VariableMovePowerAbAttrParams): void {
     power.value *= this.multFunc(pokemon);
   }
 
-  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon }: Parameters<this["apply"]>[0]): boolean {
     return this.multFunc(pokemon) !== 1;
   }
 }

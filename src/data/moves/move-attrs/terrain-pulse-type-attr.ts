@@ -4,15 +4,15 @@ import { TerrainType } from "#enums/terrain-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { VariableMoveTypeAttr } from "#moves/variable-move-type-attr";
-import type { NumberHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 
 /**
  * Changes the move's type to match the current terrain.
  * Has no effect if the user is not grounded.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Terrain_Pulse_(move) | Terrain Pulse}.
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Terrain_Pulse_(move) | Terrain Pulse (Bulbapedia)}
  */
 export class TerrainPulseTypeAttr extends VariableMoveTypeAttr {
-  override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {
+  override apply(user: Pokemon, _target: Pokemon, move: Move, moveType: ValueHolder<ElementalType>): boolean {
     if (!user.isGrounded()) {
       return false;
     }
@@ -32,7 +32,12 @@ export class TerrainPulseTypeAttr extends VariableMoveTypeAttr {
         moveType.value = ElementalType.PSYCHIC;
         break;
       default:
-        return false;
+        if (moveType.value === move.type) {
+          return false;
+        }
+        // Force move to have its original typing if it changed
+        moveType.value = move.type;
+        break;
     }
     return true;
   }

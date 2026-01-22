@@ -2,13 +2,11 @@ import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
 import { globalScene } from "#app/global-scene";
 import type { BattleStat } from "#enums/stat";
 import { Stat } from "#enums/stat";
-import type { Pokemon } from "#field/pokemon";
-import type { Move } from "#moves/move";
+import type { PostDefendAbAttrParams } from "#types/ab-attr-param-types";
 
 /**
- * Attribute that prompts a stat stage change after the ability holder received a critical hit
- * Abilities using this attribute are:
- * - Anger Point: Maximizes Attack stat
+ * Attribute that prompts a stat stage change after the ability holder received a critical hit.
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Anger_Point_(Ability) | Anger Point (Bulbapedia)}
  */
 export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {
   private readonly stat: BattleStat;
@@ -21,7 +19,7 @@ export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {
     this.stages = stages;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean, _attacker: Pokemon, _move: Move): void {
+  public override apply({ pokemon, simulated }: PostDefendAbAttrParams): void {
     if (!simulated) {
       globalScene.phaseManager.createAndUnshiftPhase(
         "StatStageChangePhase",
@@ -33,7 +31,7 @@ export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {
     }
   }
 
-  public override canApply(...[pokemon, , attacker]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon, attacker }: Parameters<this["apply"]>[0]): boolean {
     const attacksReceivedEntry = pokemon.turnData.attacksReceived.at(-1);
 
     return (

@@ -1,7 +1,6 @@
 import { AbAttr } from "#abilities/ab-attr";
-import type { Pokemon } from "#field/pokemon";
 import type { MultiHitAttr } from "#moves/multi-hit-attr";
-import type { ValueHolder } from "#utils/common-utils";
+import type { MaxMultiHitAbAttrParams } from "#types/ab-attr-param-types";
 
 export class MaxMultiHitAbAttr extends AbAttr {
   protected override readonly abAttrKey = "MaxMultiHitAbAttr";
@@ -11,7 +10,7 @@ export class MaxMultiHitAbAttr extends AbAttr {
    * This forces `hitValue` to 0 to force the maximum number of strikes.
    * @see {@linkcode MultiHitAttr}
    */
-  public override apply(_pokemon: Pokemon, _simulated: boolean, hitValue: ValueHolder<number>): void {
+  public override apply({ hitValue }: MaxMultiHitAbAttrParams): void {
     hitValue.value = 0;
   }
 }

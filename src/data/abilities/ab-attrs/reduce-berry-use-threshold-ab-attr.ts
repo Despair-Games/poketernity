@@ -1,11 +1,10 @@
 import { AbAttr } from "#abilities/ab-attr";
-import type { Pokemon } from "#field/pokemon";
-import type { ValueHolder } from "#utils/common-utils";
+import type { ReduceBerryUseThresholdAbAttrParams } from "#types/ab-attr-param-types";
 
 export class ReduceBerryUseThresholdAbAttr extends AbAttr {
   protected override readonly abAttrKey = "ReduceBerryUseThresholdAbAttr";
 
-  public override apply(_pokemon: Pokemon, _simulated: boolean, threshold: ValueHolder<number>): void {
+  public override apply({ threshold }: ReduceBerryUseThresholdAbAttrParams): void {
     threshold.value *= 2;
   }
 }

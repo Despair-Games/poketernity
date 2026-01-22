@@ -1,7 +1,7 @@
 import type { ObjectValues } from "#types/utility-types";
 
 export const AbilityApplyMode = {
-  /** Applies abilities as normal, without restrictions */
+  /** Applies abilities normally */
   DEFAULT: 1,
   /** Only applies abilities that were previously applied in the current battle */
   REVEALED: 2,

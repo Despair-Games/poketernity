@@ -27,7 +27,7 @@ import { DoubleBattleChanceAbAttr } from "#abilities/double-battle-chance-ab-att
 import { DoubleBerryEffectAbAttr } from "#abilities/double-berry-effect-ab-attr";
 import { EffectSporeAbAttr } from "#abilities/effect-spore-ab-attr";
 import { EffectiveStatMultiplierAbAttr } from "#abilities/effective-stat-multiplier-ab-attr";
-import { EvasivenessMultiplierAbAttr } from "#abilities/evasiveness-multiplier-ab-attr";
+import { EvasionMultiplierAbAttr } from "#abilities/evasion-multiplier-ab-attr";
 import { FieldAccuracyMultiplierAbAttr } from "#abilities/field-accuracy-multiplier-ab-attr";
 import { FieldMoveTypePowerBoostAbAttr } from "#abilities/field-move-type-power-boost-ab-attr";
 import { FieldPreventExplosionLikeAbAttr } from "#abilities/field-prevent-explosion-like-ab-attr";
@@ -115,8 +115,16 @@ import type { AbAttrKey } from "#types/ability-types";
 
 /**
  * The complete list of referable {@linkcode AbAttr} types.
+ * @remarks
  * All calls to look up and/or apply attributes of a specific type
  * use an {@linkcode AbAttrKey} based on this object.
+ * @privateRemarks
+ * Some of our `AbAttr` classes violate Liskov Substitution Principle.
+ *
+ * `AbAttr`s that are not in this have subclasses with apply methods
+ * requiring different parameters than the base apply method.
+ *
+ * Such attributes may not be passed to the {@linkcode applyAbAttrs} method
  */
 const AbilityAttrs = {
   AccuracyMultiplierAbAttr,
@@ -147,7 +155,7 @@ const AbilityAttrs = {
   DoubleBerryEffectAbAttr,
   EffectSporeAbAttr,
   EffectiveStatMultiplierAbAttr,
-  EvasivenessMultiplierAbAttr,
+  EvasionMultiplierAbAttr,
   FieldAccuracyMultiplierAbAttr,
   FieldMoveTypePowerBoostAbAttr,
   FieldPreventExplosionLikeAbAttr,

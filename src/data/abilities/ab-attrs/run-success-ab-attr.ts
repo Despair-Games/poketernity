@@ -1,11 +1,10 @@
 import { AbAttr } from "#abilities/ab-attr";
-import type { Pokemon } from "#field/pokemon";
-import type { ValueHolder } from "#utils/common-utils";
+import type { RunSuccessAbAttrParams } from "#types/ab-attr-param-types";
 
 export class RunSuccessAbAttr extends AbAttr {
   protected override readonly abAttrKey = "RunSuccessAbAttr";
 
-  public override apply(_pokemon: Pokemon, _simulated: boolean, escapeChance: ValueHolder<number>): void {
+  public override apply({ escapeChance }: RunSuccessAbAttrParams): void {
     escapeChance.value = 256;
   }
 }

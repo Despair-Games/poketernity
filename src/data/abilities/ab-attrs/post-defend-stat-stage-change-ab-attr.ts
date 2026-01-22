@@ -1,13 +1,13 @@
 import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
 import { globalScene } from "#app/global-scene";
 import type { BattleStat } from "#enums/stat";
-import type { Pokemon } from "#field/pokemon";
-import type { Move } from "#moves/move";
+import type { PostDefendAbAttrParams } from "#types/ab-attr-param-types";
 import type { PokemonDefendCondition } from "#types/move-types";
 import { speedOrderComparator } from "#utils/speed-order-utils";
 
 /**
- * Activates after receiving an attack and if certain conditions are met, changes the effective stats
+ * Activates after receiving an attack and if certain conditions are met, changes the effective stats.
+ *
  * These abilities use this attribute:
  * - Weak Armor
  * - Justified
@@ -43,7 +43,7 @@ export class PostDefendStatStageChangeAbAttr extends PostDefendAbAttr {
     this.allOthers = allOthers;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, _move: Move): void {
+  public override apply({ pokemon, simulated, attacker }: PostDefendAbAttrParams): void {
     if (simulated) {
       return;
     }
@@ -75,7 +75,7 @@ export class PostDefendStatStageChangeAbAttr extends PostDefendAbAttr {
     );
   }
 
-  public override canApply(...[pokemon, , attacker, move]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon, attacker, move }: Parameters<this["apply"]>[0]): boolean {
     return this.condition(pokemon, attacker, move);
   }
 }

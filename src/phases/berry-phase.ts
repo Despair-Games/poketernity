@@ -22,7 +22,7 @@ export class BerryPhase extends BattlePhase {
       if (hasUsableBerry) {
         const cancelled = new ValueHolder(false);
         for (const opp of inSpeedOrder(pokemon.getOpposingArenaTagSide())) {
-          applyAbAttrs("PreventBerryUseAbAttr", opp, false, pokemon, cancelled);
+          applyAbAttrs("PreventBerryUseAbAttr", { pokemon: opp, simulated: false, target: pokemon, cancelled });
           if (cancelled.value) {
             return;
           }
@@ -45,7 +45,7 @@ export class BerryPhase extends BattlePhase {
 
         globalScene.updateModifiers(pokemon.isPlayer());
 
-        applyAbAttrs("HealFromBerryUseAbAttr", pokemon, false);
+        applyAbAttrs("HealFromBerryUseAbAttr", { pokemon, simulated: false });
       }
     }
 

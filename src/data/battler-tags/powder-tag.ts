@@ -7,15 +7,14 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
 import { ElementalType } from "#enums/elemental-type";
 import { HitResult } from "#enums/hit-result";
-import { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
 import { ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
- * Tag representing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Powder_(move) | Powder}.
- * When the afflicted Pokemon uses a Fire-type move, the move is cancelled, and the
- * Pokemon takes damage equal to 1/4 of it's maximum HP (rounded down).
+ * When the afflicted Pokemon uses a Fire-type move, the move is cancelled
+ * and the Pokemon takes damage equal to 1/4 of it's maximum HP (rounded down).
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Powder_(move) | Powder (Bulbapedia)}
  */
 export class PowderTag extends BattlerTag {
   constructor() {
@@ -50,30 +49,29 @@ export class PowderTag extends BattlerTag {
     }
 
     const move = currPhase.pokemonMove.getMove();
-    const weather = globalScene.arena.weather;
-    if (
-      pokemon.getMoveType(move) === ElementalType.FIRE
-      && !(weather && weather.weatherType === WeatherType.HEAVY_RAIN && !weather.isEffectSuppressed())
-    ) {
-      currPhase.fail();
-      currPhase.showMoveText();
-
-      globalScene.phaseManager.createAndUnshiftPhase("CommonAnimPhase", CommonAnim.POWDER, pokemon.getBattlerIndex());
-
-      const cancelDamage = new ValueHolder(false);
-      applyAbAttrs("BlockNonDirectDamageAbAttr", pokemon, false, cancelDamage);
-      if (!cancelDamage.value) {
-        pokemon.damageAndUpdate(Math.floor(pokemon.getMaxHp() / 4), {
-          result: HitResult.OTHER,
-        });
-      }
-
-      // "When the flame touched the powder\non the Pokémon, it exploded!"
-      globalScene.phaseManager.createAndUnshiftPhase(
-        "MessagePhase",
-        i18next.t("battlerTags:powderLapse", { moveName: currPhase.pokemonMove.name }),
-      );
+    if (pokemon.getMoveType(move) !== ElementalType.FIRE || globalScene.arena.isMoveWeatherCancelled(pokemon, move)) {
+      return true;
     }
+
+    currPhase.fail();
+    currPhase.showMoveText();
+
+    globalScene.phaseManager.createAndUnshiftPhase("CommonAnimPhase", CommonAnim.POWDER, pokemon.getBattlerIndex());
+
+    const cancelled = new ValueHolder(false);
+    applyAbAttrs("BlockNonDirectDamageAbAttr", { pokemon, simulated: false, cancelled });
+    if (!cancelled.value) {
+      pokemon.damageAndUpdate(Math.floor(pokemon.getMaxHp() / 4), {
+        result: HitResult.OTHER,
+      });
+    }
+
+    // "When the flame touched the powder\non the Pokémon, it exploded!"
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
+      i18next.t("battlerTags:powderLapse", { moveName: currPhase.pokemonMove.name }),
+    );
+
     return true;
   }
 }

@@ -2,11 +2,12 @@ import { FlinchEffectAbAttr } from "#abilities/flinch-effect-ab-attr";
 import { globalScene } from "#app/global-scene";
 import type { BattleStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
+import type { BaseAbAttrParams } from "#types/ab-attr-param-types";
 
 /**
- * Attribute that prompts a stat stage change after the ability holder is flinched.
- * Is only applied if the {@linkcode Pokemon} hasn't already acted this turn.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Steadfast_(Ability) Steadfast - Bulbapedia}
+ * Attribute that prompts a stat stage change after the ability holder is flinched. \
+ * Only applied if the {@linkcode Pokemon} hasn't already acted this turn.
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Steadfast_(Ability) Steadfast (Bulbapedia)}
  */
 export class FlinchStatStageChangeAbAttr extends FlinchEffectAbAttr {
   /** The {@linkcode BattleStat | stats} to change. */
@@ -22,7 +23,7 @@ export class FlinchStatStageChangeAbAttr extends FlinchEffectAbAttr {
     this.stages = stages;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean): void {
+  public override apply({ pokemon, simulated }: BaseAbAttrParams): void {
     if (!simulated) {
       globalScene.phaseManager.createAndUnshiftPhase(
         "StatStageChangePhase",

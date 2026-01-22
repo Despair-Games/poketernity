@@ -24,9 +24,12 @@ describe("Abilities - Damp", () => {
     game = new GameManager(phaserGame);
     game.override
       .ability(AbilityId.DAMP)
+      .battleType("single")
       .disableCrits()
       .enemySpecies(SpeciesId.MAGIKARP)
-      .enemyAbility(AbilityId.BALL_FETCH);
+      .enemyAbility(AbilityId.BALL_FETCH)
+      .enemyMoveset(MoveId.SPLASH)
+      .startingLevel(100);
   });
 
   it.each([
@@ -35,36 +38,32 @@ describe("Abilities - Damp", () => {
     { moveName: "Misty Explosion", moveId: MoveId.MISTY_EXPLOSION },
     { moveName: "Mind Blown", moveId: MoveId.MIND_BLOWN },
   ])("should prevent the move $moveName from being used", async ({ moveId }) => {
-    game.override.moveset([MoveId.SPLASH, moveId]).battleType("double").enemyMoveset(moveId);
+    game.override.battleType("double").enemyMoveset(moveId);
     await game.classicMode.startBattle(SpeciesId.FEEBAS, SpeciesId.ABRA);
+
     const playerPokemon2 = game.scene.getPlayerField()[1];
     const enemyPokemon1 = game.scene.getEnemyField()[0];
 
-    game.move.select(MoveId.SPLASH);
-    game.move.select(moveId, 1);
+    game.move.use(MoveId.SPLASH);
+    game.move.use(moveId, 1);
     await game.toEndOfTurn();
 
-    const player2MoveResult = playerPokemon2.getMoveHistory()[0];
-    const enemy1MoveResult = enemyPokemon1.getMoveHistory()[0];
-    expect(player2MoveResult.result).toBe(MoveResult.FAIL);
-    expect(enemy1MoveResult.result).toBe(MoveResult.FAIL);
+    expect(playerPokemon2).toHaveUsedMove({ moveId, result: MoveResult.FAIL });
+    expect(enemyPokemon1).toHaveUsedMove({ moveId, result: MoveResult.FAIL });
   });
 
   it("should prevent damage from the ability Aftermath", async () => {
-    game.override
-      .startingLevel(100)
-      .moveset(MoveId.TACKLE)
-      .battleType("single")
-      .enemyMoveset([MoveId.SPLASH])
-      .enemyAbility(AbilityId.AFTERMATH);
+    game.override.enemyAbility(AbilityId.AFTERMATH);
     await game.classicMode.startBattle(SpeciesId.FEEBAS);
-    const playerPokemon = game.scene.getPlayerPokemon();
-    const enemyPokemon = game.scene.getEnemyPokemon();
 
-    game.move.select(MoveId.TACKLE);
+    const playerPokemon = game.field.getPlayerPokemon();
+    const enemyPokemon = game.field.getEnemyPokemon();
+    enemyPokemon.hp = 1;
+
+    game.move.use(MoveId.TACKLE);
     await game.toEndOfTurn();
 
-    expect(playerPokemon?.isFullHp()).toBe(true);
-    expect(enemyPokemon?.isFainted()).toBe(true);
+    expect(playerPokemon).toHaveFullHp();
+    expect(enemyPokemon).toHaveFainted();
   });
 });

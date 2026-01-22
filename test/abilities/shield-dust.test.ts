@@ -6,7 +6,7 @@ import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import type { MoveEffectPhase } from "#phases/move-effect-phase";
 import { GameManager } from "#test/test-utils/game-manager";
-import { NumberHolder } from "#utils/common-utils";
+import { ValueHolder } from "#utils/common-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -26,36 +26,48 @@ describe("Abilities - Shield Dust", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single");
-    game.override.enemySpecies(SpeciesId.ONIX);
-    game.override.enemyAbility(AbilityId.SHIELD_DUST);
-    game.override.startingLevel(100);
-    game.override.moveset(MoveId.AIR_SLASH);
-    game.override.enemyMoveset(MoveId.TACKLE);
+    game.override
+      .battleType("single")
+      .ability(AbilityId.BALL_FETCH)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.SHIELD_DUST)
+      .startingLevel(100)
+      .moveset(MoveId.AIR_SLASH)
+      .enemyMoveset(MoveId.TACKLE);
   });
 
-  it("Shield Dust", async () => {
-    await game.classicMode.startBattle(SpeciesId.PIDGEOT);
+  it("should set secondary move effect chances to 0", async () => {
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
-    game.scene.getEnemyPokemon()!.stats[Stat.SPDEF] = 10000;
-    expect(game.scene.getPlayerPokemon()!.formIndex).toBe(0);
+    game.field.getEnemyPokemon().stats[Stat.SPDEF] = 10000;
+    expect(game.field.getPlayerPokemon().formIndex).toBe(0);
 
     game.move.select(MoveId.AIR_SLASH);
 
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase", false);
 
-    // Shield Dust negates secondary effect
-    const phase = game.scene.phaseManager.getCurrentPhase() as MoveEffectPhase;
+    const phase = game.scene.phaseManager.getCurrentPhase<MoveEffectPhase>();
     const move = phase.move.getMove();
     expect(move.id).toBe(MoveId.AIR_SLASH);
 
-    const chance = new NumberHolder(move.chance);
-    applyAbAttrs("MoveEffectChanceMultiplierAbAttr", phase.getUserPokemon()!, false, chance, move);
+    const moveChance = new ValueHolder(move.chance);
+    applyAbAttrs("MoveEffectChanceMultiplierAbAttr", {
+      pokemon: phase.getUserPokemon()!,
+      simulated: false,
+      moveChance,
+      move,
+    });
 
-    applyAbAttrs("IgnoreMoveEffectsAbAttr", phase.getFirstTarget()!, false, phase.getUserPokemon()!, move, chance);
-    expect(chance.value).toBe(0);
-  }, 20000);
+    applyAbAttrs("IgnoreMoveEffectsAbAttr", {
+      pokemon: phase.getFirstTarget()!,
+      simulated: false,
+      attacker: phase.getUserPokemon()!,
+      move,
+      effectChance: moveChance,
+    });
+    expect(moveChance.value).toBe(0);
+  });
 
-  //TODO King's Rock Interaction Unit Test
+  // TODO: King's Rock Interaction Unit Test
 });

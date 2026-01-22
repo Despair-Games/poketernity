@@ -123,7 +123,12 @@ describe("Abilities - Effect Spore", () => {
     // Apply the Effect Spore attr while simulating the full range of possible RNG rolls.
     // Unfortunately, actually using Tackle 100 times takes too long, so we only apply the attr.
     await game.rng.equalSample(100, () => {
-      applyAbAttrs("PostDefendAbAttr", player, false, enemy, allMoves.get(MoveId.TACKLE));
+      applyAbAttrs("PostDefendAbAttr", {
+        pokemon: player,
+        simulated: false,
+        attacker: enemy,
+        move: allMoves.get(MoveId.TACKLE),
+      });
     });
 
     expect(sleepCount).toBe(11);

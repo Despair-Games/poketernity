@@ -1,13 +1,14 @@
 import { AbAttr } from "#abilities/ab-attr";
 import { globalScene } from "#app/global-scene";
 import type { BattleStat } from "#enums/stat";
-import type { Pokemon } from "#field/pokemon";
+import type { BaseAbAttrParams } from "#types/ab-attr-param-types";
 
 /**
- * Used by Ogerpon's Embody Aspect ability.
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Embody_Aspect_(Ability) | Embody Aspect (Bulbapedia)}
  */
 export class PostTeraFormChangeStatChangeAbAttr extends AbAttr {
   protected override readonly abAttrKey = "PostTeraFormChangeStatChangeAbAttr";
+
   private readonly stats: BattleStat[];
   private readonly stages: number;
 
@@ -18,15 +19,17 @@ export class PostTeraFormChangeStatChangeAbAttr extends AbAttr {
     this.stages = stages;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean): void {
-    if (!simulated) {
-      globalScene.phaseManager.createAndUnshiftPhase(
-        "StatStageChangePhase",
-        pokemon.getBattlerIndex(),
-        pokemon,
-        this.stats,
-        this.stages,
-      );
+  public override apply({ pokemon, simulated }: BaseAbAttrParams): void {
+    if (simulated) {
+      return;
     }
+
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "StatStageChangePhase",
+      pokemon.getBattlerIndex(),
+      pokemon,
+      this.stats,
+      this.stages,
+    );
   }
 }

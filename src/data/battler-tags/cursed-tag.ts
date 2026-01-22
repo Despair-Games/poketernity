@@ -11,8 +11,8 @@ import { toDmgValue, ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
- * Tag representing the effect of Ghost-type {@link https://bulbapedia.bulbagarden.net/wiki/Curse_(move) | Curse},
- * which damages a Pokemon for 1/4th of its max HP each turn
+ * Damages a Pokemon for 1/4th of its max HP each turn.
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Curse_(move) | Curse (Bulbapedia)}
  */
 export class CursedTag extends BattlerTag {
   constructor(sourceId: number) {
@@ -24,23 +24,23 @@ export class CursedTag extends BattlerTag {
   }
 
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
-    const ret = lapseType !== BattlerTagLapseType.CUSTOM || super.lapse(pokemon, lapseType);
-
-    if (ret) {
-      globalScene.phaseManager.createAndUnshiftPhase("CommonAnimPhase", CommonAnim.CURSE, pokemon.getBattlerIndex());
-
-      const cancelled = new ValueHolder(false);
-      applyAbAttrs("BlockNonDirectDamageAbAttr", pokemon, false, cancelled);
-
-      if (!cancelled.value) {
-        pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 4));
-        globalScene.phaseManager.createAndUnshiftPhase(
-          "MessagePhase",
-          i18next.t("battlerTags:cursedLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
-        );
-      }
+    if (lapseType === BattlerTagLapseType.CUSTOM && !super.lapse(pokemon, lapseType)) {
+      return false;
     }
 
-    return ret;
+    globalScene.phaseManager.createAndUnshiftPhase("CommonAnimPhase", CommonAnim.CURSE, pokemon.getBattlerIndex());
+
+    const cancelled = new ValueHolder(false);
+    applyAbAttrs("BlockNonDirectDamageAbAttr", { pokemon, simulated: false, cancelled });
+
+    if (!cancelled.value) {
+      pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 4));
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
+        i18next.t("battlerTags:cursedLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+      );
+    }
+
+    return true;
   }
 }

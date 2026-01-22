@@ -1,5 +1,5 @@
 import { AbAttr } from "#abilities/ab-attr";
-import type { Pokemon } from "#field/pokemon";
+import type { PostKnockOutAbAttrParams } from "#types/ab-attr-param-types";
 
 export abstract class PostKnockOutAbAttr extends AbAttr {
   protected override readonly abAttrKey = "PostKnockOutAbAttr";
@@ -8,11 +8,5 @@ export abstract class PostKnockOutAbAttr extends AbAttr {
     super(true);
   }
 
-  /**
-   * Applies an effect after a Pokemon other than the source faints
-   * @param pokemon The {@linkcode Pokemon} with this ability
-   * @param simulated If `true`, suppresses changes to game state
-   * @param knockedOutPokemon The {@linkcode Pokemon} that fainted
-   */
-  public override apply(_pokemon: Pokemon, _simulated: boolean, _knockedOutPokemon: Pokemon): void {}
+  public abstract override apply(params: PostKnockOutAbAttrParams): void;
 }

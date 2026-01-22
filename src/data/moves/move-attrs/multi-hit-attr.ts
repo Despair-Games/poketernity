@@ -5,7 +5,7 @@ import type { Pokemon } from "#field/pokemon";
 import { ChangeMultiHitTypeAttr } from "#moves/change-multi-hit-type-attr";
 import type { Move } from "#moves/move";
 import { MoveAttr } from "#moves/move-attr";
-import { NumberHolder, ValueHolder } from "#utils/common-utils";
+import { ValueHolder } from "#utils/common-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
 
 /**
@@ -22,30 +22,25 @@ export class MultiHitAttr extends MoveAttr {
     super();
 
     this.intrinsicMultiHitType = multiHitType;
-    this.multiHitType = this.intrinsicMultiHitType;
-  }
-
-  // Currently used by `battle_bond.test.ts`
-  getMultiHitType(): MultiHitType {
-    return this.multiHitType;
+    this.multiHitType = multiHitType;
   }
 
   /**
-   * Set the hit count of an attack based on this attribute instance's {@linkcode MultiHitType}.
+   * Set the hit count of an attack based on this attribute instance's {@linkcode MultiHitType}. \
    * If the target has an immunity to this attack's types, the hit count will always be 1.
    *
-   * @param user {@linkcode Pokemon} that used the attack
-   * @param target {@linkcode Pokemon} targeted by the attack
-   * @param move {@linkcode Move} being used
-   * @param hitCount {@linkcode NumberHolder} storing the hit count of the attack
-   * @returns True
+   * @param user - The {@linkcode Pokemon} that used the attack
+   * @param target - The {@linkcode Pokemon} targeted by the attack
+   * @param move - The {@linkcode Move} being used
+   * @param hitCount - A {@linkcode ValueHolder} storing the hit count of the attack
+   * @returns `true`
    */
-  override apply(user: Pokemon, target: Pokemon, move: Move, hitCount: NumberHolder): boolean {
+  public override apply(user: Pokemon, target: Pokemon, move: Move, hitCount: ValueHolder<number>): boolean {
     const hitType = new ValueHolder(this.intrinsicMultiHitType);
     applyMoveAttrs(ChangeMultiHitTypeAttr, user, target, move, hitType);
     this.multiHitType = hitType.value;
 
-    hitCount.value = this.getHitCount(user, target);
+    hitCount.value = this.getHitCount(user);
     return true;
   }
 
@@ -54,29 +49,24 @@ export class MultiHitAttr extends MoveAttr {
   }
 
   /**
-   * Calculate the number of hits that an attack should have given this attribute's
-   * {@linkcode MultiHitType}.
-   *
-   * @param user {@linkcode Pokemon} using the attack
-   * @param _target {@linkcode Pokemon} targeted by the attack
+   * Calculate the number of hits that an attack should have given this attribute's {@linkcode MultiHitType}.
+   * @param user - The {@linkcode Pokemon} using the attack
    * @returns The number of hits this attack should deal
    */
-  getHitCount(user: Pokemon, _target: Pokemon): number {
+  private getHitCount(user: Pokemon): number {
     switch (this.multiHitType) {
       case MultiHitType._2_TO_5: {
         /**
-         * ```
          * | Hits | RNG rolls | Chance | %  |
-         * |------|-----------|--------|----|
+         * |:----:|:---------:|:------:|:--:|
          * | 2    | 13-19     | 7/20   | 35 |
          * | 3    | 6-12      | 7/20   | 35 |
          * | 4    | 3-5       | 3/20   | 15 |
          * | 5    | 0-2       | 3/20   | 15 |
-         * ```
          */
         const rand = user.randSeedInt(20);
-        const hitValue = new NumberHolder(rand);
-        applyAbAttrs("MaxMultiHitAbAttr", user, false, hitValue);
+        const hitValue = new ValueHolder(rand);
+        applyAbAttrs("MaxMultiHitAbAttr", { pokemon: user, simulated: false, hitValue });
         if (hitValue.value >= 13) {
           return 2;
         }
@@ -96,7 +86,6 @@ export class MultiHitAttr extends MoveAttr {
         return 10;
       case MultiHitType.BEAT_UP: {
         const party = user.getParty();
-        // No status means the ally pokemon can contribute to Beat Up
         return party.reduce((total, pokemon) => {
           return total + (pokemon.id === user.id || pokemon.getStatusEffect(true) === StatusEffect.NONE ? 1 : 0);
         }, 0);

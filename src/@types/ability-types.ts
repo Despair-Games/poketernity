@@ -13,23 +13,28 @@ export type AbAttrMap = {
 
 /** @interface */
 export type AbAttrParamMap = {
-  [K in keyof AbAttrMap]: Parameters<AbAttrMap[K]["apply"]>;
+  [K in keyof AbAttrMap]: Parameters<AbAttrMap[K]["apply"]>[0];
 };
 
 export type AbAttrCondition = (pokemon: Pokemon) => boolean;
 export type PreDefendAbAttrCondition = (pokemon: Pokemon, attacker: Pokemon, move: Move) => boolean;
 
-export interface AbilityFilterOptions {
-  /**
-   * If `true`, returns the Pokemon's base Ability whether or
-   * not it was overridden in battle (e.g. by Skill Swap or Entrainment)
-   */
+export interface ApplyAbAttrsOptions {
+  /** Whether to ignore ability override effects (e.g. Skill Swap) */
   bypassSummonData?: boolean;
   /**
-   * If `true`, filters out Abilities that have not been revealed to the field yet
+   * Whether to filter out abilities that have not been revealed to the field yet
    * @see {@linkcode PokemonWaveData.abilitiesRevealed}
    */
   revealedOnly?: boolean;
-  /** If `true`, filters out Abilities that are suppressed or ignored */
+  /** Whether to filter out abilities that are suppressed or ignored */
   canApplyOnly?: boolean;
+  /**
+   * Whether to apply the normal and/or passive abilities of the pokemon.
+   * @remarks
+   * If `undefined` both will be applied,
+   * otherwise only the regular (`false`) or passive (`true`) ability will be applied.
+   */
+  // TODO: not yet implemented
+  passive?: boolean | undefined;
 }

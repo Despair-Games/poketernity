@@ -47,9 +47,13 @@ export type DamageResult =
   | typeof HitResult.OTHER
   | typeof HitResult.SELF_KO;
 
-// TODO: Can any of these be combined? Should any of the params in PAC be optional?
+// TODO: move PAC/PDC to `ability-types.ts`
+// TODO: Can these be combined? Should any of the params in PAC be optional?
+// TODO: make PAC/PDC use object params? would make combining them easier if it's possible
 export type PokemonAttackCondition = (user: Pokemon, target?: Pokemon, move?: Move) => boolean;
 export type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => boolean;
+
+// TODO: make MCF use object params?
 export type MoveConditionFunc = (user: Pokemon, target: Pokemon, move: Move) => boolean;
 
 /**

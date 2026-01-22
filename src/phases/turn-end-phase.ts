@@ -36,10 +36,10 @@ export class TurnEndPhase extends BattlePhase {
             },
           );
         }
-        applyAbAttrs("PostTurnAbAttr", pokemon, false);
+        applyAbAttrs("PostTurnAbAttr", { pokemon, simulated: false });
         // TODO: Temporary workaround so that bad dreams doesn't hurt Pokemon waking up in the same turn. cf https://github.com/Despair-Games/poketernity/issues/1211
         // cf https://github.com/smogon/pokemon-showdown/blob/master/data/abilities.ts `onResidualOrder` and `onResidualSubOrder`
-        applyAbAttrs("BadDreamsAbAttr", pokemon, false);
+        applyAbAttrs("BadDreamsAbAttr", { pokemon, simulated: false });
       }
 
       globalScene.applyModifiers(TurnStatusEffectModifier, pokemon.isPlayer(), pokemon);

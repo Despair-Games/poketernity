@@ -1,16 +1,13 @@
-import { PreApplyBattlerTagAbAttr } from "#abilities/pre-apply-battler-tag-ab-attr";
+import { AbAttr } from "#abilities/ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { BattlerTag } from "#battler-tags/battler-tag";
 import type { BattlerTagType } from "#enums/battler-tag-type";
-import type { Pokemon } from "#field/pokemon";
+import type { PreApplyBattlerTagImmunityAbAttrParams } from "#types/ab-attr-param-types";
 import type { NonEmptyArray } from "#types/utility-types";
-import type { ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
-/**
- * Provides immunity to BattlerTags {@linkcode BattlerTag} to specified targets.
- */
-export abstract class PreApplyBattlerTagImmunityAbAttr extends PreApplyBattlerTagAbAttr {
+/** Provides immunity to specified {@linkcode BattlerTag}s. */
+export abstract class PreApplyBattlerTagImmunityAbAttr extends AbAttr {
   private readonly immuneTagTypes: Readonly<NonEmptyArray<BattlerTagType>>;
   private battlerTag: BattlerTag;
 
@@ -20,26 +17,21 @@ export abstract class PreApplyBattlerTagImmunityAbAttr extends PreApplyBattlerTa
     this.immuneTagTypes = immuneTagTypes;
   }
 
-  public override apply(
-    _pokemon: Pokemon,
-    _simulated: boolean,
-    _tag: BattlerTag,
-    cancelled: ValueHolder<boolean>,
-  ): void {
+  public override apply({ cancelled }: PreApplyBattlerTagImmunityAbAttrParams): void {
     cancelled.value = true;
   }
 
-  public override canApply(...[, simulated, tag]: Parameters<this["apply"]>): boolean {
-    if (this.immuneTagTypes.includes(tag.tagType)) {
-      if (!simulated) {
-        this.battlerTag = tag;
-      }
-      return true;
+  public override canApply({ simulated, battlerTag }: Parameters<this["apply"]>[0]): boolean {
+    if (!this.immuneTagTypes.includes(battlerTag.tagType)) {
+      return false;
     }
-    return false;
+    if (!simulated) {
+      this.battlerTag = battlerTag;
+    }
+    return true;
   }
 
-  public override getTriggerMessage(pokemon: Pokemon, abilityName: string): string {
+  public override getTriggerMessage({ pokemon }: Parameters<this["apply"]>[0], abilityName: string): string {
     return i18next.t("abilityTriggers:battlerTagImmunity", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       abilityName,

@@ -6,12 +6,10 @@ import { type BattleStat, Stat } from "#enums/stat";
 /**
  * Applies a stat change after a Pokémon is summoned,
  * conditioned on the presence of a specific arena tag.
- *
- * Used by Wind Rider.
- *
- * @param tagType the {@linkcode ArenaTagType} to check for
- * @param stats an array of {@linkcode BattleStat}s to change. Defaults to {@linkcode Stat.ATK}
- * @param stages how much to change the stat(s) by. Defaults to 1
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Wind_Rider_(Ability) | Wind Rider (Bulbapedia)}
+ * @param tagType - The {@linkcode ArenaTagType} to check for
+ * @param stats - (Default `[Stat.ATK]`) An array of {@linkcode BattleStat}s to change
+ * @param stages - (Default `1`) How much to change the stat(s) by
  */
 export class PostSummonStatStageChangeOnArenaAbAttr extends PostSummonStatStageChangeAbAttr {
   /** The type of arena tag that conditions the stat change. */
@@ -22,8 +20,8 @@ export class PostSummonStatStageChangeOnArenaAbAttr extends PostSummonStatStageC
     this.tagType = tagType;
   }
 
-  public override canApply(...params: Parameters<this["apply"]>): boolean {
-    const [pokemon] = params;
-    return globalScene.arena.hasTag(this.tagType, pokemon.getArenaTagSide()) && super.canApply(...params);
+  public override canApply(params: Parameters<this["apply"]>[0]): boolean {
+    const { pokemon } = params;
+    return globalScene.arena.hasTag(this.tagType, pokemon.getArenaTagSide()) && super.canApply(params);
   }
 }

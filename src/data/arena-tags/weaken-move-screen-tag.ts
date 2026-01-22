@@ -5,11 +5,9 @@ import { SCREEN_DOUBLES_DMG_FACTOR, SCREEN_SINGLES_DMG_FACTOR } from "#constants
 import type { MoveCategory } from "#enums/move-category";
 import type { Pokemon } from "#field/pokemon";
 import type { ArenaScreenTagType } from "#types/arena-tag-types";
-import { BooleanHolder, type NumberHolder } from "#utils/common-utils";
+import { ValueHolder } from "#utils/common-utils";
 
-/**
- * Reduces the damage of specific move categories in the arena.
- */
+/** Reduces the damage of specific move categories in the arena. */
 export abstract class WeakenMoveScreenTag extends SerializableArenaTag {
   public abstract override readonly tagType: ArenaScreenTagType;
 
@@ -18,28 +16,29 @@ export abstract class WeakenMoveScreenTag extends SerializableArenaTag {
 
   /**
    * Applies the weakening effect to the move.
-   *
-   * @param simulated n/a
-   * @param attacker the attacking {@linkcode Pokemon}
-   * @param moveCategory the attacking move's {@linkcode MoveCategory}.
-   * @param damageMultiplier A {@linkcode NumberHolder} containing the damage multiplier
-   * @returns `true` if the attacking move was weakened; `false` otherwise.
+   * @param simulated - Whether to suppress changes to the game state
+   * @param attacker - The attacking {@linkcode Pokemon}
+   * @param moveCategory - The attacking move's {@linkcode MoveCategory}.
+   * @param damageMultiplier - A {@linkcode ValueHolder} containing the damage multiplier
+   * @returns Whether the attacking move was weakened
    */
-  override apply(
+  public override apply(
     simulated: boolean,
     attacker: Pokemon,
     moveCategory: MoveCategory,
-    damageMultiplier: NumberHolder,
+    damageMultiplier: ValueHolder<number>,
   ): boolean {
-    if (this.weakenedCategories.includes(moveCategory)) {
-      const bypassed = new BooleanHolder(false);
-      applyAbAttrs("InfiltratorAbAttr", attacker, simulated, bypassed);
-      if (bypassed.value) {
-        return false;
-      }
-      damageMultiplier.value = globalScene.currentBattle.double ? SCREEN_DOUBLES_DMG_FACTOR : SCREEN_SINGLES_DMG_FACTOR;
-      return true;
+    if (!this.weakenedCategories.includes(moveCategory)) {
+      return false;
     }
-    return false;
+
+    const bypassed = new ValueHolder(false);
+    applyAbAttrs("InfiltratorAbAttr", { pokemon: attacker, simulated, bypassed });
+    if (bypassed.value) {
+      return false;
+    }
+
+    damageMultiplier.value = globalScene.currentBattle.double ? SCREEN_DOUBLES_DMG_FACTOR : SCREEN_SINGLES_DMG_FACTOR;
+    return true;
   }
 }

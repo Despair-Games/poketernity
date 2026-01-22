@@ -1,13 +1,10 @@
 import { AbAttr } from "#abilities/ab-attr";
 import { globalScene } from "#app/global-scene";
-import type { BattleStat } from "#enums/stat";
-import type { Pokemon } from "#field/pokemon";
-import type { ValueHolder } from "#utils/common-utils";
+import type { ReflectStatStageChangeAbAttrParams } from "#types/ab-attr-param-types";
 
 /**
- * Attribute to reflect stat-lowering effects from moves and abilities
- * back to their source.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Mirror_Armor_(Ability) | Mirror Armor}.
+ * Attribute to reflect stat-lowering effects from moves and abilities back to their source.
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Mirror_Armor_(Ability) | Mirror Armor (Bulbapedia)}.
  */
 export class ReflectStatStageChangeAbAttr extends AbAttr {
   protected override readonly abAttrKey = "ReflectStatStageChangeAbAttr";
@@ -16,26 +13,14 @@ export class ReflectStatStageChangeAbAttr extends AbAttr {
     super(true);
   }
 
-  /**
-   * If the current {@linkcode StatStageChangePhase} will lower the ability
-   * source's stat(s), queue a new phase targeting the effect source
-   * with the same stat stage changes.
-   * @param pokemon the {@linkcode Pokemon} with this ability
-   * @param simulated if `true`, suppresses changes to game state
-   * @param source the {@linkcode Pokemon} applying the original stat change
-   * @param stats the {@linkcode Stat | stats} being changed
-   * @param stages the stages by which {@linkcode stats} will change
-   * @param reflected a {@linkcode BooleanHolder} which, if set to `true`, cancels the current
-   * stat stage change phase
-   */
-  public override apply(
-    pokemon: Pokemon,
-    simulated: boolean,
-    source: Pokemon | undefined,
-    stats: BattleStat[],
-    stages: number,
-    reflected: ValueHolder<boolean>,
-  ): void {
+  public override apply({
+    pokemon,
+    simulated,
+    source,
+    stats,
+    stages,
+    reflected,
+  }: ReflectStatStageChangeAbAttrParams): void {
     if (!simulated && source) {
       const reflectedStats = stats.filter((stat) => pokemon.getStatStage(stat) > -6);
       globalScene.phaseManager.createAndUnshiftPhase(
@@ -47,10 +32,11 @@ export class ReflectStatStageChangeAbAttr extends AbAttr {
         { bypassReflect: true },
       );
     }
+    // TODO: shouldn't this be inside the `if`?
     reflected.value = true;
   }
 
-  public override canApply(...[pokemon, , source, stats, stages, reflected]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon, source, stats, stages, reflected }: Parameters<this["apply"]>[0]): boolean {
     return (
       pokemon !== source && stages < 0 && stats.some((stat) => pokemon.getStatStage(stat) > -6) && !reflected.value
     );

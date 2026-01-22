@@ -3,27 +3,29 @@ import { globalScene } from "#app/global-scene";
 import { BattleCommand } from "#enums/battle-command";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import type { ValueHolder } from "#utils/common-utils";
+import type { CancelledAbAttrParams } from "#types/ab-attr-param-types";
+
+type ConditionFunc = (pokemon: Pokemon, move: Move) => boolean;
 
 /**
- * This attribute checks if a Pokemon's move meets a provided condition to determine if the Pokemon can use Quick Claw
- * It was created because Pokemon with the ability Mycelium Might cannot access Quick Claw's benefits when using status moves.
- * @param condition checks if a move meets certain conditions
+ * If a Pokemon has Mycelium Might and is holding a Quick Claw, the Quick Claw cannot activate for status move.
+ * @see {@link https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9438575}
  */
 export class PreventBypassSpeedChanceAbAttr extends AbAttr {
   protected override readonly abAttrKey = "PreventBypassSpeedChanceAbAttr";
-  private readonly condition: (pokemon: Pokemon, move: Move) => boolean;
 
-  constructor(condition: (pokemon: Pokemon, move: Move) => boolean) {
+  private readonly condition: ConditionFunc;
+
+  constructor(condition: ConditionFunc) {
     super();
     this.condition = condition;
   }
 
-  public override apply(_pokemon: Pokemon, _simulated: boolean, cancelled: ValueHolder<boolean>): void {
+  public override apply({ cancelled }: CancelledAbAttrParams): void {
     cancelled.value = true;
   }
 
-  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon }: Parameters<this["apply"]>[0]): boolean {
     const turnCommand = globalScene.currentBattle.turnManager.findCommandFromPokemon(pokemon);
     const isCommandFight = turnCommand?.command === BattleCommand.FIGHT;
     const move = turnCommand?.turnMove?.move;

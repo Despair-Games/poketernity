@@ -10,14 +10,13 @@ import { AddSubstituteAttr } from "#moves/add-substitute-attr";
 import { CurseAttr } from "#moves/curse-attr";
 import { CutHpStatStageBoostAttr } from "#moves/cut-hp-stat-stage-boost-attr";
 import { HpSplitAttr } from "#moves/hp-split-attr";
+import type { PostDamageAbAttrParams } from "#types/ab-attr-param-types";
 import { toDmgValue } from "#utils/common-utils";
 
 /**
  * Ability attribute for forcing a Pokémon to switch out after its health drops below half.
- * This attribute checks various conditions related to the damage received, the moves used by the Pokémon
- * and its opponents, and determines whether a forced switch-out should occur.
- *
- * Used by Wimp Out and Emergency Exit
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Emergency_Exit_(Ability) | Emergency Exit (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Wimp_Out_(Ability) | Wimp Out (Bulbapedia)}
  */
 export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
   private readonly hpRatio: number;
@@ -27,7 +26,7 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
     this.hpRatio = hpRatio;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean, _damage: number, _source?: Pokemon): void {
+  public override apply({ pokemon, simulated }: PostDamageAbAttrParams): void {
     if (simulated) {
       return;
     }
@@ -39,7 +38,7 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
     globalScene.tryForceSwitchPokemon(pokemonIndex);
   }
 
-  public override canApply(...[pokemon, , damage, source]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon, damage, source }: Parameters<this["apply"]>[0]): boolean {
     // TODO: should other forms of semi-invulnerability cancel this effect?
     if (pokemon.hasTag(BattlerTagType.SKY_DROP)) {
       return false;
@@ -90,11 +89,9 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
 }
 
 /**
- * Calculates the amount of recovery from the Shell Bell item.
- *
  * If the Pokémon is holding a Shell Bell, this function computes the amount of health
- * recovered based on the damage dealt in the current turn. The recovery is multiplied by the
- * Shell Bell's modifier (if any).
+ * recovered based on the damage dealt in the current turn. \
+ * The recovery is multiplied by the Shell Bell's modifier (if any).
  *
  * @param pokemon - The Pokémon whose Shell Bell recovery is being calculated.
  * @returns The amount of health recovered by Shell Bell.

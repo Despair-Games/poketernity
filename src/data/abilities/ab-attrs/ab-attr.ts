@@ -1,6 +1,7 @@
 import type { Ability } from "#abilities/ability";
-import type { Pokemon } from "#field/pokemon";
+import type { BaseAbAttrParams } from "#types/ab-attr-param-types";
 import type { AbAttrCondition, AbAttrKey, AbAttrMap } from "#types/ability-types";
+import type { Exact } from "#types/utility-types";
 
 export abstract class AbAttr {
   /**
@@ -19,6 +20,7 @@ export abstract class AbAttr {
    * A condition for the attribute to apply.
    * Can be set by {@linkcode Ability.conditionalAttr}
    */
+  // TODO: make default to `() => true` instead of `undefined`/`null`
   private extraCondition: AbAttrCondition;
 
   constructor(showAbility: boolean = false) {
@@ -30,12 +32,15 @@ export abstract class AbAttr {
   }
 
   /**
-   * Applies the effects of this attribute.
-   * @param pokemon The {@linkcode Pokemon} with the ability
-   * @param simulated `true` if attribute effects should be resolved without changing game state
-   * @param args Any additional parameters or data to modify
+   * Apply ability effects without checking conditions.
+   * @remarks
+   * **Never call this method directly**, use {@linkcode applyAbAttrs} instead.
    */
-  public apply(_pokemon: Pokemon, _simulated: boolean, ..._args: unknown[]): void {}
+  public apply(_params: BaseAbAttrParams): void {}
+
+  // The `Exact` in the next two signatures enforces that the
+  // type of the _params operand is always compatible with the type of apply.
+  // This allows fewer fields, but never a type with more.
 
   /**
    * Determines whether or not this attribute's effect can be applied in the current game state.
@@ -44,18 +49,14 @@ export abstract class AbAttr {
    * and should always be run before `apply` is called.
    * @returns Whether this attribute's effect can be applied
    */
-  public canApply(..._params: Parameters<this["apply"]>) {
+  public canApply(_params: Exact<Parameters<this["apply"]>[0]>): boolean {
     return true;
   }
 
   /**
-   * @param pokemon - The {@linkcode Pokemon} with this ability
-   * @param abilityName - The localized name of the {@linkcode Ability} with this attribute
-   * @param args - Additional parameters for the trigger message. **NOTE**: This should be a subset
-   * of the additional parameters (i.e. `args`) given in {@linkcode apply}.
    * @returns A message to play when the ability applies successfully, or `null` if no message should play.
    */
-  public getTriggerMessage(_pokemon: Pokemon, _abilityName: string, ..._args: unknown[]): string | null {
+  public getTriggerMessage(_params: Exact<Parameters<this["apply"]>[0]>, _abilityName: string): string | null {
     return null;
   }
 
@@ -74,8 +75,7 @@ export abstract class AbAttr {
    * @returns `this`
    * @see {@linkcode Ability.conditionalAttr}
    */
-  public setCondition(condition: AbAttrCondition): this {
+  public setCondition(condition: AbAttrCondition): void {
     this.extraCondition = condition;
-    return this;
   }
 }

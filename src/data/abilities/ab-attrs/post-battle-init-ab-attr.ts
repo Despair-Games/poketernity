@@ -1,5 +1,5 @@
 import { AbAttr } from "#abilities/ab-attr";
-import type { Pokemon } from "#field/pokemon";
+import type { BaseAbAttrParams } from "#types/ab-attr-param-types";
 
 export abstract class PostBattleInitAbAttr extends AbAttr {
   protected override readonly abAttrKey = "PostBattleInitAbAttr";
@@ -8,10 +8,5 @@ export abstract class PostBattleInitAbAttr extends AbAttr {
     super(true);
   }
 
-  /**
-   * Applies an effect at the start of battle
-   * @param pokemon - The {@linkcode Pokemon} with this ability
-   * @param simulated - If `true`, suppresses changes to game state
-   */
-  public abstract override apply(pokemon: Pokemon, simulated: boolean): void;
+  public abstract override apply(params: BaseAbAttrParams): void;
 }

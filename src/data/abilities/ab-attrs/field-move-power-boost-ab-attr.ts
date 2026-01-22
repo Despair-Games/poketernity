@@ -1,12 +1,8 @@
 import { PreAttackAbAttr } from "#abilities/pre-attack-ab-attr";
-import type { Pokemon } from "#field/pokemon";
-import type { Move } from "#moves/move";
+import type { FieldMovePowerBoostAbAttrParams } from "#types/ab-attr-param-types";
 import type { PokemonAttackCondition } from "#types/move-types";
-import type { NumberHolder } from "#utils/common-utils";
 
-/**
- * Boosts the power of a Pokémon's move under certain conditions.
- */
+/** Boosts the power of a Pokémon's move under certain conditions. */
 export abstract class FieldMovePowerBoostAbAttr extends PreAttackAbAttr {
   private readonly condition: PokemonAttackCondition;
   private readonly powerMultiplier: number;
@@ -17,21 +13,16 @@ export abstract class FieldMovePowerBoostAbAttr extends PreAttackAbAttr {
    */
   constructor(condition: PokemonAttackCondition, powerMultiplier: number) {
     super();
+
     this.condition = condition;
     this.powerMultiplier = powerMultiplier;
   }
 
-  public override apply(
-    _pokemon: Pokemon,
-    _simulated: boolean,
-    _move: Move,
-    _defender: Pokemon,
-    movePower: NumberHolder,
-  ): void {
-    movePower.value *= this.powerMultiplier;
+  public override apply({ power }: FieldMovePowerBoostAbAttrParams): void {
+    power.value *= this.powerMultiplier;
   }
 
-  public override canApply(...[pokemon, , move, defender]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon, move, defender }: Parameters<this["apply"]>[0]): boolean {
     return this.condition(pokemon, defender, move);
   }
 }

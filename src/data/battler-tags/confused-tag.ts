@@ -13,11 +13,11 @@ import { Stat } from "#enums/stat";
 import { TerrainType } from "#enums/terrain-type";
 import type { Pokemon } from "#field/pokemon";
 import type { MovePhase } from "#phases/move-phase";
-import { NumberHolder, toDmgValue } from "#utils/common-utils";
+import { toDmgValue, ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
- * Tag representing the {@link https://bulbapedia.bulbagarden.net/wiki/Confusion_(status_condition) Confusion} status condition
+ * Tag representing the {@link https://bulbapedia.bulbagarden.net/wiki/Confusion_(status_condition) | Confusion} status condition
  */
 export class ConfusedTag extends BattlerTag {
   /** Chance of self-inflicted damage `= 33%` */
@@ -70,51 +70,49 @@ export class ConfusedTag extends BattlerTag {
       (lapseType !== BattlerTagLapseType.CUSTOM && super.lapse(pokemon, lapseType))
       || activeOverrides.STATUS_ACTIVATION_OVERRIDE != null;
 
-    if (ret) {
-      const pokemonNameWithAffix = getPokemonNameWithAffix(pokemon);
-
-      globalScene.phaseManager.createAndUnshiftPhase(
-        "MessagePhase",
-        i18next.t("battlerTags:confusedLapse", { pokemonNameWithAffix }),
-      );
-      globalScene.phaseManager.createAndUnshiftPhase(
-        "CommonAnimPhase",
-        CommonAnim.CONFUSION,
-        pokemon.getBattlerIndex(),
-      );
-
-      const damageHolder = new NumberHolder(this.getDamage(pokemon));
-
-      if (damageHolder.value > 0) {
-        globalScene.phaseManager.createAndUnshiftPhase(
-          "MessagePhase",
-          i18next.t("battlerTags:confusedLapseHurtItself"),
-        );
-
-        if (pokemon.isFullHp()) {
-          applyAbAttrs(
-            "SturdyAbAttr",
-            pokemon,
-            false,
-            pokemon,
-            allMoves.get(this.sourceMoveId ?? MoveId.NONE),
-            damageHolder,
-          );
-        }
-
-        pokemon.damageAndUpdate(damageHolder.value);
-        pokemon.waveData.hitCount++;
-        globalScene.phaseManager.getCurrentPhase<MovePhase>().cancel();
-      }
+    if (!ret) {
+      return false;
     }
 
-    return ret;
+    const { phaseManager } = globalScene;
+
+    const pokemonNameWithAffix = getPokemonNameWithAffix(pokemon);
+
+    phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
+      i18next.t("battlerTags:confusedLapse", { pokemonNameWithAffix }),
+    );
+    phaseManager.createAndUnshiftPhase("CommonAnimPhase", CommonAnim.CONFUSION, pokemon.getBattlerIndex());
+
+    const damageHolder = new ValueHolder(this.getDamage(pokemon));
+
+    if (damageHolder.value === 0) {
+      return true;
+    }
+
+    phaseManager.createAndUnshiftPhase("MessagePhase", i18next.t("battlerTags:confusedLapseHurtItself"));
+
+    if (pokemon.isFullHp()) {
+      applyAbAttrs("SturdyAbAttr", {
+        pokemon,
+        simulated: false,
+        attacker: pokemon,
+        move: allMoves.get(this.sourceMoveId ?? MoveId.NONE),
+        damage: damageHolder,
+      });
+    }
+
+    pokemon.damageAndUpdate(damageHolder.value);
+    pokemon.waveData.hitCount++;
+    phaseManager.getCurrentPhase<MovePhase>().cancel();
+
+    return true;
   }
 
   /**
    * Helper function for checking if Confusion activates and retrieving self-inflicted damage from confusion
-   * @param pokemon - the confused Pokemon
-   * @returns the amount of damage inflicted
+   * @param pokemon - The confused Pokemon
+   * @returns The amount of damage inflicted
    */
   public getDamage(pokemon: Pokemon): number {
     // 33% chance of hitting self with a 40 base power move

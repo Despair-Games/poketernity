@@ -10,7 +10,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import type { CommonAnim } from "#enums/common-anim";
 import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
-import { BooleanHolder, toDmgValue } from "#utils/common-utils";
+import { toDmgValue, ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -48,26 +48,26 @@ export abstract class DamagingTrapTag extends TrappedTag {
   }
 
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
-    const ret = super.lapse(pokemon, lapseType);
-
-    if (ret) {
-      globalScene.phaseManager.createAndUnshiftPhase(
-        "MessagePhase",
-        i18next.t("battlerTags:damagingTrapLapse", {
-          pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-          moveName: this.getMoveName(),
-        }),
-      );
-      globalScene.phaseManager.createAndUnshiftPhase("CommonAnimPhase", this.commonAnim, pokemon.getBattlerIndex());
-
-      const cancelled = new BooleanHolder(false);
-      applyAbAttrs("BlockNonDirectDamageAbAttr", pokemon, false, cancelled);
-
-      if (!cancelled.value) {
-        pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8));
-      }
+    if (!super.lapse(pokemon, lapseType)) {
+      return false;
     }
 
-    return ret;
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
+      i18next.t("battlerTags:damagingTrapLapse", {
+        pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+        moveName: this.getMoveName(),
+      }),
+    );
+    globalScene.phaseManager.createAndUnshiftPhase("CommonAnimPhase", this.commonAnim, pokemon.getBattlerIndex());
+
+    const cancelled = new ValueHolder(false);
+    applyAbAttrs("BlockNonDirectDamageAbAttr", { pokemon, simulated: false, cancelled });
+
+    if (!cancelled.value) {
+      pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8));
+    }
+
+    return true;
   }
 }

@@ -32,7 +32,7 @@ import { getMoveTargets, SelfStatusMove } from "#moves/move";
 import { PreMoveMessageAttr } from "#moves/pre-move-message-attr";
 import { VariableMoveMessageAttr } from "#moves/variable-move-message-attr";
 import { BattlePhase } from "#phases/base/battle-phase";
-import { BooleanHolder, NumberHolder } from "#utils/common-utils";
+import { BooleanHolder, ValueHolder } from "#utils/common-utils";
 import { applyMoveAttrs, isFieldTargeted } from "#utils/move-utils";
 import { inSpeedOrder } from "#utils/speed-order-generator";
 import { getStatusEffectActivationText, getStatusEffectHealText } from "#utils/status-effect-utils";
@@ -269,8 +269,8 @@ export class MovePhase extends BattlePhase {
       let activated = false;
       let healed = false;
 
-      const statusEffect = this.pokemon.getStatusEffect(true);
-      switch (statusEffect) {
+      const effect = this.pokemon.getStatusEffect(true);
+      switch (effect) {
         case StatusEffect.PARALYSIS:
           activated =
             (!this.pokemon.randSeedInt(4) || activeOverrides.STATUS_ACTIVATION_OVERRIDE === true)
@@ -278,7 +278,7 @@ export class MovePhase extends BattlePhase {
           break;
         case StatusEffect.SLEEP:
           applyMoveAttrs(BypassSleepAttr, this.pokemon, null, this.pokemonMove.getMove());
-          applyAbAttrs("ReduceSleepDurationAbAttr", this.pokemon, false, statusEffect);
+          applyAbAttrs("ReduceSleepDurationAbAttr", { pokemon: this.pokemon, simulated: false, effect });
           healed = this.pokemon.sleepTurnsRemaining <= 0;
           activated = !healed && !this.pokemon.hasTag(BattlerTagType.BYPASS_SLEEP);
           break;
@@ -301,17 +301,17 @@ export class MovePhase extends BattlePhase {
         this.cancel();
         globalScene.phaseManager.createAndUnshiftPhase(
           "MessagePhase",
-          getStatusEffectActivationText(statusEffect, getPokemonNameWithAffix(this.pokemon)),
+          getStatusEffectActivationText(effect, getPokemonNameWithAffix(this.pokemon)),
         );
         globalScene.phaseManager.createAndUnshiftPhase(
           "CommonAnimPhase",
-          (CommonAnim.POISON + (statusEffect - 1)) as CommonAnim,
+          (CommonAnim.POISON + (effect - 1)) as CommonAnim,
           this.pokemon.getBattlerIndex(),
         );
       } else if (healed) {
         globalScene.phaseManager.createAndUnshiftPhase(
           "MessagePhase",
-          getStatusEffectHealText(statusEffect, getPokemonNameWithAffix(this.pokemon)),
+          getStatusEffectHealText(effect, getPokemonNameWithAffix(this.pokemon)),
         );
         this.pokemon.resetStatus();
         this.pokemon.updateInfo();
@@ -463,9 +463,15 @@ export class MovePhase extends BattlePhase {
         continue;
       }
 
-      const reflected = new BooleanHolder(false);
+      const reflected = new ValueHolder(false);
       applyBattlerTags<MagicCoatTag>(BattlerTagType.MAGIC_COAT, target, false, this.pokemon, move, reflected);
-      applyAbAttrs("ReflectMovesAbAttr", target, false, this.pokemon, move, reflected);
+      applyAbAttrs("ReflectMovesAbAttr", {
+        pokemon: target,
+        simulated: false,
+        attacker: this.pokemon,
+        move,
+        reflected,
+      });
 
       if (reflected.value) {
         globalScene.phaseManager.createAndUnshiftPhase(
@@ -554,6 +560,7 @@ export class MovePhase extends BattlePhase {
 
     /**
      * Move conditions assume the move has a single target
+     *
      * TODO: is this sustainable?
      */
     const passesConditions = move.applyConditions(this.pokemon, targets[0] ?? null, move);
@@ -564,14 +571,18 @@ export class MovePhase extends BattlePhase {
 
     this.updateLastMoveId(success);
 
-    /**
+    /*
      * If the move has not failed, trigger ability-based user type changes and then execute it.
      *
      * Notably, Roar, Whirlwind, Trick-or-Treat, and Forest's Curse will trigger these type changes even
      * if the move fails.
      */
     if (success) {
-      applyAbAttrs("PokemonTypeChangeAbAttr", this.pokemon, false, this.pokemonMove.getMove());
+      applyAbAttrs("PokemonTypeChangeAbAttr", {
+        pokemon: this.pokemon,
+        simulated: false,
+        move: this.pokemonMove.getMove(),
+      });
       this.showPreMoveMessages();
       globalScene.phaseManager.createAndUnshiftPhase(
         "MoveEffectPhase",
@@ -583,7 +594,11 @@ export class MovePhase extends BattlePhase {
       if (
         [MoveId.ROAR, MoveId.WHIRLWIND, MoveId.TRICK_OR_TREAT, MoveId.FORESTS_CURSE].includes(this.pokemonMove.moveId)
       ) {
-        applyAbAttrs("PokemonTypeChangeAbAttr", this.pokemon, false, this.pokemonMove.getMove());
+        applyAbAttrs("PokemonTypeChangeAbAttr", {
+          pokemon: this.pokemon,
+          simulated: false,
+          move: this.pokemonMove.getMove(),
+        });
       }
 
       this.pokemon.pushMoveHistory({
@@ -595,7 +610,7 @@ export class MovePhase extends BattlePhase {
       });
 
       let failedText: string | undefined;
-      let failureMessage = move.getFailedText(this.pokemon, targets[0], move, new BooleanHolder(false));
+      let failureMessage = move.getFailedText(this.pokemon, targets[0], move, new ValueHolder(false));
 
       if (failedDueToWeather) {
         if (globalScene.arena.hasWeather(WeatherType.HARSH_SUN)) {
@@ -621,7 +636,13 @@ export class MovePhase extends BattlePhase {
     // Note that the `!this.followUp` check here prevents an infinite Dancer loop.
     if (this.pokemonMove.getMove().checkFlag(MoveFlags.DANCE_MOVE, this.pokemon, targets[0]) && !this.followUp) {
       for (const pokemon of inSpeedOrder()) {
-        applyAbAttrs("PostMoveUsedAbAttr", pokemon, false, this.pokemonMove, this.pokemon, this.targets);
+        applyAbAttrs("PostMoveUsedAbAttr", {
+          pokemon,
+          simulated: false,
+          move: this.pokemonMove,
+          source: this.pokemon,
+          targets: this.targets,
+        });
       }
     }
   }
@@ -635,7 +656,11 @@ export class MovePhase extends BattlePhase {
       this.updateLastMoveId(true);
 
       // Protean and Libero apply on the charging turn of charge moves
-      applyAbAttrs("PokemonTypeChangeAbAttr", this.pokemon, false, this.pokemonMove.getMove());
+      applyAbAttrs("PokemonTypeChangeAbAttr", {
+        pokemon: this.pokemon,
+        simulated: false,
+        move: this.pokemonMove.getMove(),
+      });
 
       globalScene.phaseManager.createAndUnshiftPhase(
         "MoveChargePhase",
@@ -692,7 +717,7 @@ export class MovePhase extends BattlePhase {
   protected resolveRedirectTarget(): void {
     if (this.targets.length === 1) {
       const currentTarget = this.targets[0];
-      const redirectTarget = new NumberHolder(currentTarget);
+      const redirectTarget = new ValueHolder(currentTarget);
 
       // check move redirection abilities of every pokemon *except* the user.
       // TODO: Should this be applied in Speed order?
@@ -700,7 +725,13 @@ export class MovePhase extends BattlePhase {
         .getField(true)
         .filter((p) => p !== this.pokemon)
         .forEach((p) =>
-          applyAbAttrs("RedirectMoveAbAttr", p, false, this.pokemonMove.moveId, this.pokemon, redirectTarget),
+          applyAbAttrs("RedirectMoveAbAttr", {
+            pokemon: p,
+            simulated: false,
+            moveId: this.pokemonMove.moveId,
+            user: this.pokemon,
+            target: redirectTarget,
+          }),
         );
 
       /** `true` if an Ability is responsible for redirecting the move to another target; `false` otherwise */

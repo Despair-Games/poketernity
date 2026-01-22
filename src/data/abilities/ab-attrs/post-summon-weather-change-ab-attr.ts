@@ -1,21 +1,22 @@
 import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import { globalScene } from "#app/global-scene";
 import type { WeatherType } from "#enums/weather-type";
-import type { Pokemon } from "#field/pokemon";
+import type { BaseAbAttrParams } from "#types/ab-attr-param-types";
 
 /**
- * Changes the weather, if possible, when a pokemon is summoned.
+ * Changes the weather, if possible, when a pokemon is summoned. \
+ * Note: Primal weather can only be overwritten by other Primal weather.
  *
- * | Ability           | Weather      | Turns | Notes              |
- * |-------------------|--------------|-------|--------------------|
- * | Drizzle           | Rain         |     5 |                    |
- * | Drought           | Sun          |     5 |                    |
- * | Sand Stream       | Sandstorm    |     5 |                    |
- * | Snow Warning      | Hail         |     5 |                    |
- * | Orichalcum Pulse  | Sun          |     5 |                    |
- * | Desolate Land     | Harsh Sun    |     ∞ | Primal (permanent) |
- * | Primordial Sea    | Heavy Rain   |     ∞ | Primal (permanent) |
- * | Delta Stream      | Strong Winds |     ∞ | Primal (permanent) |
+ * | Ability           | Weather               | Turns |
+ * |:-----------------:|:---------------------:|:-----:|
+ * | Drizzle           | Rain                  |   5   |
+ * | Drought           | Sun                   |   5   |
+ * | Orichalcum Pulse  | Sun                   |   5   |
+ * | Sand Stream       | Sandstorm             |   5   |
+ * | Snow Warning      | Hail                  |   5   |
+ * | Desolate Land     | Harsh Sun (Primal)    |   ∞   |
+ * | Primordial Sea    | Heavy Rain (Primal)   |   ∞   |
+ * | Delta Stream      | Strong Winds (Primal) |   ∞   |
  *
  * @param weatherType The {@linkcode WeatherType} to set
  */
@@ -28,13 +29,13 @@ export class PostSummonWeatherChangeAbAttr extends PostSummonAbAttr {
     this.weatherType = weatherType;
   }
 
-  public override apply(_pokemon: Pokemon, simulated: boolean): void {
+  public override apply({ simulated }: BaseAbAttrParams): void {
     if (!simulated) {
       globalScene.arena.trySetWeather(this.weatherType, true);
     }
   }
 
-  public override canApply(..._params: Parameters<this["apply"]>): boolean {
+  public override canApply(): boolean {
     return globalScene.arena.canSetWeather(this.weatherType);
   }
 }

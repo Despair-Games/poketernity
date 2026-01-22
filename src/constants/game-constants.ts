@@ -136,3 +136,6 @@ export const DEFAULT_STARTER_SPECIES = Object.freeze<SpeciesId[]>([
   SpeciesId.FUECOCO,
   SpeciesId.QUAXLY,
 ]);
+
+/** The raw percentage power boost for type boost items */
+export const TYPE_BOOST_ITEM_BOOST_PERCENT = 20;

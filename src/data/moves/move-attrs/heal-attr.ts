@@ -4,16 +4,13 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import { NumberHolder, toDmgValue } from "#utils/common-utils";
+import { toDmgValue, ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
-/**
- * Heals the user or target by {@linkcode healRatio} depending on the value of {@linkcode selfTarget}
- */
 export class HealAttr extends MoveEffectAttr {
-  /** The percentage of {@linkcode Stat.HP} to heal */
+  /** The percentage of {@linkcode Stat.HP | HP} to heal */
   private readonly healRatio: number;
-  /** Should an animation be shown? */
+  /** Whether an animation should  be shown */
   private readonly showAnim: boolean;
 
   constructor(healRatio: number = 1, showAnim: boolean = false, selfTarget: boolean = true) {
@@ -30,19 +27,19 @@ export class HealAttr extends MoveEffectAttr {
 
   /**
    * Helper function to obtain this attribute's heal ratio
-   * @returns a heal ratio in the interval [0, 1]
+   * @returns A heal ratio in the interval `[0, 1]`
    */
   protected getHealRatio(user: Pokemon, target: Pokemon, move: Move): number {
-    const healRatio = new NumberHolder(this.healRatio);
-    applyAbAttrs("RecoveryBoostAbAttr", user, false, move, target, healRatio);
+    const healRatio = new ValueHolder(this.healRatio);
+    applyAbAttrs("RecoveryBoostAbAttr", { pokemon: user, simulated: false, move, defender: target, healRatio });
     return healRatio.value;
   }
 
   /**
-   * Creates a new {@linkcode PokemonHealPhase}.
+   * Creates a new {@linkcode PokemonHealPhase}. \
    * This heals the target and shows the appropriate message.
    */
-  addHealPhase(target: Pokemon, healRatio: number) {
+  private addHealPhase(target: Pokemon, healRatio: number) {
     globalScene.phaseManager.createAndUnshiftPhase(
       "PokemonHealPhase",
       target.getBattlerIndex(),

@@ -1,11 +1,10 @@
 import { AbAttr } from "#abilities/ab-attr";
-import type { Pokemon } from "#field/pokemon";
-import type { ValueHolder } from "#utils/common-utils";
+import type { DoubleBerryEffectAbAttrParams } from "#types/ab-attr-param-types";
 
 export class DoubleBerryEffectAbAttr extends AbAttr {
   protected override readonly abAttrKey = "DoubleBerryEffectAbAttr";
 
-  public override apply(_pokemon: Pokemon, _simulated: boolean, berryEffect: ValueHolder<number>): void {
+  public override apply({ berryEffect }: DoubleBerryEffectAbAttrParams): void {
     berryEffect.value *= 2;
   }
 }

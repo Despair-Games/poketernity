@@ -64,8 +64,9 @@ describe("Abilities - BATTLE BOND", () => {
 
     let actualMultiHitType: MultiHitType | null = null;
     const multiHitAttr = waterShuriken.getAttrs(MultiHitAttr)[0];
-    vi.spyOn(multiHitAttr, "getHitCount").mockImplementation(() => {
-      actualMultiHitType = multiHitAttr.getMultiHitType();
+    // `as any` because `getHitCount` is `private`
+    vi.spyOn(multiHitAttr as any, "getHitCount").mockImplementation(() => {
+      actualMultiHitType = multiHitAttr["multiHitType"];
       return 3;
     });
 

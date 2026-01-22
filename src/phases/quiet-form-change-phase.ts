@@ -151,13 +151,12 @@ export class QuietFormChangePhase extends BattlePhase {
 
     if (this.formChange.trigger instanceof SpeciesFormChangeTeraTrigger) {
       // TODO: add simulated support?
-      applyAbAttrs("PostTeraFormChangeStatChangeAbAttr", this.pokemon, false);
-      /**
+      applyAbAttrs("PostTeraFormChangeStatChangeAbAttr", { pokemon: this.pokemon, simulated: false });
+      /*
        * TODO: Smogon suggests this is tied to tera so move to `terastallization-phase` and
-       * rename the AbAttr in case we want randomizer modes where other Pokemon may have
-       * Tera Zero
+       * rename the AbAttr in case we want randomizer modes where other Pokemon may have Teraform Zero
        */
-      applyAbAttrs("PostTeraFormChangeClearWeatherTerrainAbAttr", this.pokemon, false);
+      applyAbAttrs("PostTeraFormChangeClearWeatherTerrainAbAttr", { pokemon: this.pokemon, simulated: false });
     }
 
     super.end();

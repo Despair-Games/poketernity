@@ -1,36 +1,29 @@
 import { AbAttr } from "#abilities/ab-attr";
-import type { Pokemon } from "#field/pokemon";
-import type { Move } from "#moves/move";
-import type { PokemonAttackCondition } from "#types/move-types";
-import type { ValueHolder } from "#utils/common-utils";
+import type { RecoveryBoostAbAttrParams } from "#types/ab-attr-param-types";
+import type { MoveConditionFunc } from "#types/move-types";
 
 /**
  * Ability attribute that boosts a move's recovery by a certain factor if it meets specific conditions
- * Used by abilities like...
- * - Mega Launcher (Recovery move must have a PULSE_MOVE flag)
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Mega_Launcher_(Ability) | Mega Launcher (Bulbapedia)}
  */
 export class RecoveryBoostAbAttr extends AbAttr {
   protected override readonly abAttrKey = "RecoveryBoostAbAttr";
-  private readonly condition: PokemonAttackCondition;
+
+  private readonly condition: MoveConditionFunc;
   private readonly recoveryMultiplier: number;
 
-  constructor(condition: PokemonAttackCondition, recoveryMultiplier: number) {
+  constructor(condition: MoveConditionFunc, recoveryMultiplier: number) {
     super();
+
     this.condition = condition;
     this.recoveryMultiplier = recoveryMultiplier;
   }
 
-  public override apply(
-    _pokemon: Pokemon,
-    _simulated: boolean,
-    _move: Move,
-    _defender: Pokemon,
-    healRatio: ValueHolder<number>,
-  ): void {
+  public override apply({ healRatio }: RecoveryBoostAbAttrParams): void {
     healRatio.value *= this.recoveryMultiplier;
   }
 
-  public override canApply(...[pokemon, , move, defender]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon, move, defender }: Parameters<this["apply"]>[0]): boolean {
     return this.condition(pokemon, defender, move);
   }
 }

@@ -19,7 +19,7 @@ export class GulpMissileTag extends BattlerTag {
     super(tagType, BattlerTagLapseType.HIT, 0, sourceMoveId);
   }
 
-  override lapse(pokemon: Pokemon, _lapseType: BattlerTagLapseType): boolean {
+  public override lapse(pokemon: Pokemon): boolean {
     if (pokemon.hasTag(BattlerTagType.UNDERWATER)) {
       return true;
     }
@@ -40,7 +40,7 @@ export class GulpMissileTag extends BattlerTag {
     }
 
     const cancelled = new ValueHolder(false);
-    applyAbAttrs("BlockNonDirectDamageAbAttr", attacker, false, cancelled);
+    applyAbAttrs("BlockNonDirectDamageAbAttr", { pokemon: attacker, simulated: false, cancelled });
 
     if (!cancelled.value) {
       attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() / 4), {
@@ -65,10 +65,10 @@ export class GulpMissileTag extends BattlerTag {
 
   /**
    * Gulp Missile's initial form changes are triggered by using Surf and Dive.
-   * @param pokemon The Pokemon with Gulp Missile ability.
-   * @returns Whether the BattlerTag can be added.
+   * @param pokemon - The Pokemon with Gulp Missile ability.
+   * @returns Whether the `BattlerTag` can be added.
    */
-  override canAdd(pokemon: Pokemon): boolean {
+  public override canAdd(pokemon: Pokemon): boolean {
     const isSurfOrDive = [MoveId.SURF, MoveId.DIVE].includes(this.sourceMoveId);
     const isNormalForm = pokemon.formIndex === 0 && !pokemon.hasTag(...GULP_MISSILE_BATTLER_TAG_TYPES);
     const isCramorant = pokemon.species.speciesId === SpeciesId.CRAMORANT;
@@ -76,13 +76,15 @@ export class GulpMissileTag extends BattlerTag {
     return isSurfOrDive && isNormalForm && isCramorant;
   }
 
-  override onAdd(pokemon: Pokemon): void {
+  public override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
+
     globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger);
   }
 
-  override onRemove(pokemon: Pokemon): void {
+  public override onRemove(pokemon: Pokemon): void {
     super.onRemove(pokemon);
+
     globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger);
   }
 }

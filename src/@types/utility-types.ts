@@ -138,3 +138,23 @@ export type Negate<N extends number> =
               `-${N}` extends `${infer R extends number}`
               ? R
               : number;
+
+/**
+ * Exactly matches the type of the argument, preventing adding additional properties.
+ *
+ * ⚠️ Should never be used with `extends`, as this will nullify the exactness of the type.
+ *
+ * As an example, used to ensure that the parameters of {@linkcode AbAttr.canApply} and {@linkcode AbAttr.getTriggerMessage}
+ * are compatible with the type of its {@linkcode AbAttr.apply | apply} method.
+ *
+ * @typeParam T - The type to match exactly
+ */
+export type Exact<T> = {
+  [K in keyof T]: T[K];
+};
+
+/**
+ * Type hint that indicates that the type is intended to be closed to a specific shape.
+ * Does not actually do anything special, is really just an alias for X.
+ */
+export type Closed<X> = X;

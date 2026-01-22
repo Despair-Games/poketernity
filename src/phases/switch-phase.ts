@@ -127,7 +127,7 @@ export class SwitchPhase extends PokemonPhase {
     const switchedInPokemon = party[this.switchInIndex];
 
     // Apply pre-switch effects from abilities (e.g. Regenerator)
-    applyAbAttrs("PreSwitchOutAbAttr", activePokemon, false);
+    applyAbAttrs("PreSwitchOutAbAttr", { pokemon: activePokemon, simulated: false });
 
     // Remove all tags applied to the active Pokemon's opponents by the active Pokemon
     // (e.g. the "binding" effect from Bind, Fire Spin, etc.)

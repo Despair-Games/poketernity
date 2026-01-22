@@ -1,13 +1,13 @@
 import { PreDefendAbAttr } from "#abilities/pre-defend-ab-attr";
-import type { Pokemon } from "#field/pokemon";
-import type { Move } from "#moves/move";
-import type { NumberHolder } from "#utils/common-utils";
+import type { PreDefendModifyMultiplierAbAttrParams } from "#types/ab-attr-param-types";
 
 /**
- * Reduces the damage dealt to an allied Pokemon. Used by Friend Guard.
+ * Reduces the damage dealt to an allied Pokemon.
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Friend_Guard_(Ability) | Friend Guard (Bulbapedia)}
  */
 export class AlliedFieldDamageReductionAbAttr extends PreDefendAbAttr {
   protected override readonly abAttrKey = "AlliedFieldDamageReductionAbAttr";
+
   private readonly damageMultiplier: number;
 
   constructor(damageMultiplier: number) {
@@ -15,13 +15,7 @@ export class AlliedFieldDamageReductionAbAttr extends PreDefendAbAttr {
     this.damageMultiplier = damageMultiplier;
   }
 
-  public override apply(
-    _pokemon: Pokemon,
-    _simulated: boolean,
-    _attacker: Pokemon,
-    _move: Move,
-    multiplier: NumberHolder,
-  ): void {
+  public override apply({ multiplier }: PreDefendModifyMultiplierAbAttrParams): void {
     multiplier.value *= this.damageMultiplier;
   }
 }

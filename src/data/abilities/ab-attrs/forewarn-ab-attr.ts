@@ -2,14 +2,14 @@ import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { MoveId } from "#enums/move-id";
-import type { Pokemon } from "#field/pokemon";
 import type { PokemonMove } from "#field/pokemon-move";
 import type { Move } from "#moves/move";
 import { OneHitKOAttr } from "#moves/one-hit-ko-attr";
+import type { BaseAbAttrParams } from "#types/ab-attr-param-types";
 import i18next from "i18next";
 
 export class ForewarnAbAttr extends PostSummonAbAttr {
-  public override apply(pokemon: Pokemon, simulated: boolean): void {
+  public override apply({ pokemon, simulated }: BaseAbAttrParams): void {
     let maxPowerSeen = 0;
     let moveName = "";
     let movePower = 0;
@@ -26,6 +26,7 @@ export class ForewarnAbAttr extends PostSummonAbAttr {
         movePower = 1;
       } else if (move.hasAttr(OneHitKOAttr)) {
         movePower = 150;
+        // TODO: check if the move has `CounterDamageAttr` instead
       } else if (move.id === MoveId.COUNTER || move.id === MoveId.MIRROR_COAT || move.id === MoveId.METAL_BURST) {
         movePower = 120;
       } else if (move.power === -1) {

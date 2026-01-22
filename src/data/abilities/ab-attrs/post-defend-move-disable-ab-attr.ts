@@ -1,8 +1,7 @@
 import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveFlags } from "#enums/move-flags";
-import type { Pokemon } from "#field/pokemon";
-import type { Move } from "#moves/move";
+import type { PostDefendAbAttrParams } from "#types/ab-attr-param-types";
 
 export class PostDefendMoveDisableAbAttr extends PostDefendAbAttr {
   // TODO: create a generic way to do ability chances, like with moves
@@ -15,13 +14,13 @@ export class PostDefendMoveDisableAbAttr extends PostDefendAbAttr {
     this.chance = chance;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, _move: Move): void {
+  public override apply({ pokemon, simulated, attacker }: PostDefendAbAttrParams): void {
     if (!simulated) {
       attacker.addTag(BattlerTagType.DISABLED, 4, 0, pokemon.id);
     }
   }
 
-  public override canApply(...[pokemon, , attacker, move]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon, attacker, move }: Parameters<this["apply"]>[0]): boolean {
     return (
       !attacker.hasTag(BattlerTagType.DISABLED)
       && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)

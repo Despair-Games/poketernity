@@ -27,8 +27,8 @@ export class RecoilAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
     const cancelled = new ValueHolder(false);
     if (!this.unblockable) {
-      applyAbAttrs("BlockRecoilDamageAbAttr", user, false, cancelled);
-      applyAbAttrs("BlockNonDirectDamageAbAttr", user, false, cancelled);
+      applyAbAttrs("BlockRecoilDamageAbAttr", { pokemon: user, simulated: false, cancelled });
+      applyAbAttrs("BlockNonDirectDamageAbAttr", { pokemon: user, simulated: false, cancelled });
     }
 
     if (cancelled.value) {

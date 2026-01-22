@@ -6,13 +6,13 @@ import { MoveEffectTrigger } from "#enums/move-effect-trigger";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import { BooleanHolder, toDmgValue } from "#utils/common-utils";
+import { toDmgValue, ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
  * Attribute used for moves which cut the user's Max HP in half.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Mind_Blown_(move) | Mind Blown}
- * and {@linkcode https://bulbapedia.bulbagarden.net/wiki/Steel_Beam_(move) | Steel Beam}.
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Mind_Blown_(move) | Mind Blown (Bulbapedia)}
+ * @see {@linkcode https://bulbapedia.bulbagarden.net/wiki/Steel_Beam_(move) | Steel Beam (Bulbapedia)}
  */
 export class HalfMaxHpRecoilAttr extends MoveEffectAttr {
   constructor() {
@@ -20,20 +20,22 @@ export class HalfMaxHpRecoilAttr extends MoveEffectAttr {
   }
 
   override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
-    const cancelled = new BooleanHolder(false);
-    // Check to see if the Pokemon has an ability that blocks non-direct damage
-    applyAbAttrs("BlockNonDirectDamageAbAttr", user, false, cancelled);
-    if (!cancelled.value) {
-      user.damageAndUpdate(toDmgValue(user.getMaxHp() / 2), {
-        result: HitResult.OTHER,
-        ignoreSegments: true,
-        preventEndure: true,
-      });
-      globalScene.phaseManager.createAndUnshiftPhase(
-        "MessagePhase",
-        i18next.t("moveTriggers:cutHpPowerUpMove", { pokemonName: getPokemonNameWithAffix(user) }),
-      ); // Queue recoil message
+    const cancelled = new ValueHolder(false);
+    applyAbAttrs("BlockNonDirectDamageAbAttr", { pokemon: user, simulated: false, cancelled });
+    if (cancelled.value) {
+      return true;
     }
+
+    user.damageAndUpdate(toDmgValue(user.getMaxHp() / 2), {
+      result: HitResult.OTHER,
+      ignoreSegments: true,
+      preventEndure: true,
+    });
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
+      i18next.t("moveTriggers:cutHpPowerUpMove", { pokemonName: getPokemonNameWithAffix(user) }),
+    );
+
     return true;
   }
 

@@ -1,13 +1,12 @@
 import { PreWeatherDamageAbAttr } from "#abilities/pre-weather-damage-ab-attr";
-import type { Weather } from "#data/weather";
 import type { WeatherType } from "#enums/weather-type";
-import type { Pokemon } from "#field/pokemon";
+import type { PreWeatherEffectAbAttrParams } from "#types/ab-attr-param-types";
 import type { NonEmptyArray } from "#types/utility-types";
-import type { ValueHolder } from "#utils/common-utils";
 
 /**
- * Ability attribute that protects the holder against certain forms of weather damage
- * These abilities use this attribute:
+ * Ability attribute that protects the holder against certain forms of weather damage.
+ *
+ * Used by the following abilities:
  * ```
 +-----------+----------------------------------+
 |  Weather  |            Abilities             |
@@ -27,16 +26,11 @@ export class BlockWeatherDamageAbAttr extends PreWeatherDamageAbAttr {
     this.weatherTypes = weatherTypes;
   }
 
-  public override apply(
-    _pokemon: Pokemon,
-    _simulated: boolean,
-    _weather: Weather,
-    cancelled: ValueHolder<boolean>,
-  ): void {
+  public override apply({ cancelled }: PreWeatherEffectAbAttrParams): void {
     cancelled.value = true;
   }
 
-  public override canApply(...[, , weather]: Parameters<this["apply"]>): boolean {
+  public override canApply({ weather }: Parameters<this["apply"]>[0]): boolean {
     return this.weatherTypes.includes(weather.weatherType);
   }
 }

@@ -1,13 +1,14 @@
 import { AbAttr } from "#abilities/ab-attr";
-import type { Pokemon } from "#field/pokemon";
-import type { ValueHolder } from "#utils/common-utils";
+import type { WeightMultiplierAbAttrParams } from "#types/ab-attr-param-types";
 
 /**
- * Ability attribute used for abilites that change the ability owner's weight
- * Used for Heavy Metal (doubling weight) and Light Metal (halving weight)
+ * Multiplies the ability holder's weight
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Heavy_Metal_(Ability) | Heavy Metal (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Light_Metal_(Ability) | Light Metal (Bulbapedia)}
  */
 export class WeightMultiplierAbAttr extends AbAttr {
   protected override readonly abAttrKey = "WeightMultiplierAbAttr";
+
   private readonly multiplier: number;
 
   constructor(multiplier: number) {
@@ -16,7 +17,7 @@ export class WeightMultiplierAbAttr extends AbAttr {
     this.multiplier = multiplier;
   }
 
-  public override apply(_pokemon: Pokemon, _simulated: boolean, weight: ValueHolder<number>): void {
+  public override apply({ weight }: WeightMultiplierAbAttrParams): void {
     weight.value *= this.multiplier;
   }
 }

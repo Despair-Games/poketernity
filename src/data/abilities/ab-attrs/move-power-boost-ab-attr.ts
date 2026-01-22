@@ -1,8 +1,6 @@
 import { VariableMovePowerAbAttr } from "#abilities/variable-move-power-ab-attr";
-import type { Pokemon } from "#field/pokemon";
-import type { Move } from "#moves/move";
+import type { VariableMovePowerAbAttrParams } from "#types/ab-attr-param-types";
 import type { PokemonAttackCondition } from "#types/move-types";
-import type { ValueHolder } from "#utils/common-utils";
 
 export class MovePowerBoostAbAttr extends VariableMovePowerAbAttr {
   private readonly condition: PokemonAttackCondition;
@@ -10,21 +8,16 @@ export class MovePowerBoostAbAttr extends VariableMovePowerAbAttr {
 
   constructor(condition: PokemonAttackCondition, powerMultiplier: number) {
     super();
+
     this.condition = condition;
     this.powerMultiplier = powerMultiplier;
   }
 
-  public override apply(
-    _pokemon: Pokemon,
-    _simulated: boolean,
-    _move: Move,
-    _defender: Pokemon,
-    power: ValueHolder<number>,
-  ): void {
+  public override apply({ power }: VariableMovePowerAbAttrParams): void {
     power.value *= this.powerMultiplier;
   }
 
-  public override canApply(...[pokemon, , move, defender]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon, move, defender }: Parameters<this["apply"]>[0]): boolean {
     return this.condition(pokemon, defender, move);
   }
 }

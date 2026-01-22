@@ -1,17 +1,10 @@
 import { PreWeatherEffectAbAttr } from "#abilities/pre-weather-effect-ab-attr";
-import type { Weather } from "#data/weather";
-import type { Pokemon } from "#field/pokemon";
-import type { ValueHolder } from "#utils/common-utils";
+import type { PreWeatherEffectAbAttrParams } from "#types/ab-attr-param-types";
 
 export class SuppressWeatherEffectAbAttr extends PreWeatherEffectAbAttr {
   protected override readonly abAttrKey = "SuppressWeatherEffectAbAttr";
 
-  public override apply(
-    _pokemon: Pokemon,
-    _simulated: boolean,
-    _weather: Weather,
-    cancelled: ValueHolder<boolean>,
-  ): void {
+  public override apply({ cancelled }: PreWeatherEffectAbAttrParams): void {
     cancelled.value = true;
   }
 }

@@ -22,6 +22,7 @@ export class MoveFlagPowerBoostAbAttr extends MovePowerBoostAbAttr {
   constructor(flagRequired: MoveFlags, powerMultiplier: number) {
     const moveFlagCondition: PokemonAttackCondition = (user, _target, move) =>
       !!user && !!move?.checkFlag(flagRequired, user);
+
     super(moveFlagCondition, powerMultiplier);
   }
 }

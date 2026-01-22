@@ -8,14 +8,13 @@ import { CommonAnim } from "#enums/common-anim";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
-import { BooleanHolder, toDmgValue } from "#utils/common-utils";
+import { toDmgValue, ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
- * Tag indicating the owner is afflicted by the secondary effect of
- * {@link https://bulbapedia.bulbagarden.net/wiki/Salt_Cure_(move) | Salt Cure}.
- * Deals 1/8 of the owner's maximum HP as damage at the end of each turn, or
- * 1/4 if the owner is Water- or Steel-type.
+ * Deals 1/8 of the owner's maximum HP as damage at the end of each turn,
+ * or 1/4 if the owner is Water- or Steel-type.
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Salt_Cure_(move) | Salt Cure (Bulbapedia)}
  */
 export class SaltCuredTag extends BattlerTag {
   constructor(sourceId: number) {
@@ -32,32 +31,28 @@ export class SaltCuredTag extends BattlerTag {
   }
 
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
-    const ret = lapseType !== BattlerTagLapseType.CUSTOM || super.lapse(pokemon, lapseType);
-
-    if (ret) {
-      globalScene.phaseManager.createAndUnshiftPhase(
-        "CommonAnimPhase",
-        CommonAnim.SALT_CURE,
-        pokemon.getBattlerIndex(),
-      );
-
-      const cancelled = new BooleanHolder(false);
-      applyAbAttrs("BlockNonDirectDamageAbAttr", pokemon, false, cancelled);
-
-      if (!cancelled.value) {
-        const pokemonSteelOrWater = pokemon.isOfType(ElementalType.STEEL) || pokemon.isOfType(ElementalType.WATER);
-        pokemon.damageAndUpdate(toDmgValue(pokemonSteelOrWater ? pokemon.getMaxHp() / 4 : pokemon.getMaxHp() / 8));
-
-        globalScene.phaseManager.createAndUnshiftPhase(
-          "MessagePhase",
-          i18next.t("battlerTags:saltCuredLapse", {
-            pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-            moveName: this.getMoveName(),
-          }),
-        );
-      }
+    if (lapseType === BattlerTagLapseType.CUSTOM && !super.lapse(pokemon, lapseType)) {
+      return false;
     }
 
-    return ret;
+    globalScene.phaseManager.createAndUnshiftPhase("CommonAnimPhase", CommonAnim.SALT_CURE, pokemon.getBattlerIndex());
+
+    const cancelled = new ValueHolder(false);
+    applyAbAttrs("BlockNonDirectDamageAbAttr", { pokemon, simulated: false, cancelled });
+
+    if (!cancelled.value) {
+      const pokemonSteelOrWater = pokemon.isOfType(ElementalType.STEEL) || pokemon.isOfType(ElementalType.WATER);
+      pokemon.damageAndUpdate(toDmgValue(pokemonSteelOrWater ? pokemon.getMaxHp() / 4 : pokemon.getMaxHp() / 8));
+
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
+        i18next.t("battlerTags:saltCuredLapse", {
+          pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+          moveName: this.getMoveName(),
+        }),
+      );
+    }
+
+    return true;
   }
 }

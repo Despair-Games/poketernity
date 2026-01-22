@@ -2,7 +2,7 @@ import { PostWeatherLapseAbAttr } from "#abilities/post-weather-lapse-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { WeatherType } from "#enums/weather-type";
-import type { Pokemon } from "#field/pokemon";
+import type { BaseAbAttrParams } from "#types/ab-attr-param-types";
 import type { NonEmptyArray } from "#types/utility-types";
 import { toDmgValue } from "#utils/common-utils";
 import i18next from "i18next";
@@ -24,7 +24,7 @@ export class PostWeatherLapseHealAbAttr extends PostWeatherLapseAbAttr {
 
   /**
    * @param healRatio - Multiplied with the user's max HP to determine how much HP is healed
-   * @param weatherTypes - the {@linkcode WeatherType | weather} conditions during which the ability activates
+   * @param weatherTypes - The {@linkcode WeatherType | weather} conditions during which the ability activates
    */
   constructor(healRatio: number, ...weatherTypes: Readonly<NonEmptyArray<WeatherType>>) {
     super(...weatherTypes);
@@ -32,7 +32,7 @@ export class PostWeatherLapseHealAbAttr extends PostWeatherLapseAbAttr {
     this.healRatio = healRatio;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean): void {
+  public override apply({ pokemon, simulated }: BaseAbAttrParams): void {
     if (simulated) {
       return;
     }
@@ -51,7 +51,7 @@ export class PostWeatherLapseHealAbAttr extends PostWeatherLapseAbAttr {
     );
   }
 
-  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon }: Parameters<this["apply"]>[0]): boolean {
     return !pokemon.isFullHp();
   }
 }

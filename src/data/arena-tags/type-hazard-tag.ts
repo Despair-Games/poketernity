@@ -8,15 +8,12 @@ import { HitResult } from "#enums/hit-result";
 import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
 import type { TypeHazardTagType } from "#types/arena-tag-types";
-import { BooleanHolder, toDmgValue } from "#utils/common-utils";
+import { toDmgValue, ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
  * Class used for hazards that damage based on type.
- *
- * The two existing ones are
- * Pointed stones (produced by Stealth Rock and Stone Axe) and
- * Sharp steel (produced by G-Max Steelsurge)
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/List_of_moves_that_cause_entry_hazards#List_of_traps | Pointed stones and Sharp steel (Bulbapedia)}
  */
 export abstract class TypeHazardTag extends EntryHazardTag {
   public override readonly tagType: TypeHazardTagType;
@@ -34,12 +31,13 @@ export abstract class TypeHazardTag extends EntryHazardTag {
     activateTrapKey: string,
   ) {
     super(sourceMoveId, sourceId, side);
+
     this.#damagingType = damagingType;
     this.#onAddKey = onAddKey;
     this.#activateTrapKey = activateTrapKey;
   }
 
-  override onAdd(quiet: boolean = false): void {
+  public override onAdd(quiet: boolean = false): void {
     super.onAdd();
 
     const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
@@ -62,9 +60,9 @@ export abstract class TypeHazardTag extends EntryHazardTag {
     return effectiveness * 0.125;
   }
 
-  override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
-    const cancelled = new BooleanHolder(false);
-    applyAbAttrs("BlockNonDirectDamageAbAttr", pokemon, simulated, cancelled);
+  protected override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
+    const cancelled = new ValueHolder(false);
+    applyAbAttrs("BlockNonDirectDamageAbAttr", { pokemon, simulated, cancelled });
 
     if (cancelled.value) {
       return false;
@@ -72,23 +70,23 @@ export abstract class TypeHazardTag extends EntryHazardTag {
 
     const damageHpRatio = this.getDamageHpRatio(pokemon);
 
-    if (damageHpRatio) {
-      if (simulated) {
-        return true;
-      }
-      const damage = toDmgValue(pokemon.getMaxHp() * damageHpRatio);
-      globalScene.phaseManager.createAndUnshiftPhase(
-        "MessagePhase",
-        i18next.t(this.#activateTrapKey, { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
-      );
-      pokemon.damageAndUpdate(damage, { result: HitResult.OTHER });
+    if (!damageHpRatio) {
+      return false;
+    }
+    if (simulated) {
       return true;
     }
 
-    return false;
+    const damage = toDmgValue(pokemon.getMaxHp() * damageHpRatio);
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
+      i18next.t(this.#activateTrapKey, { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+    );
+    pokemon.damageAndUpdate(damage, { result: HitResult.OTHER });
+    return true;
   }
 
-  override getMatchupScoreMultiplier(pokemon: Pokemon): number {
+  public override getMatchupScoreMultiplier(pokemon: Pokemon): number {
     const damageHpRatio = this.getDamageHpRatio(pokemon);
     return Phaser.Math.Linear(super.getMatchupScoreMultiplier(pokemon), 1, 1 - Math.pow(damageHpRatio, damageHpRatio));
   }

@@ -10,44 +10,38 @@ import type { MovePhase } from "#phases/move-phase";
 import i18next from "i18next";
 
 /**
- * Tag representing the {@link https://bulbapedia.bulbagarden.net/wiki/Flinch | Flinch} status condition
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Flinch | Flinch (Bulbapedia)}
  */
 export class FlinchedTag extends BattlerTag {
   constructor(sourceMoveId: MoveId) {
     super(BattlerTagType.FLINCHED, [BattlerTagLapseType.PRE_MOVE, BattlerTagLapseType.TURN_END], 0, sourceMoveId);
   }
 
-  override canAdd(pokemon: Pokemon): boolean {
+  public override canAdd(pokemon: Pokemon): boolean {
     return !pokemon.isMax();
   }
 
-  override onAdd(pokemon: Pokemon): void {
+  public override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
   }
 
-  /**
-   * Cancels the Pokemon's next Move on the turn this tag is applied
-   * @param pokemon The {@linkcode Pokemon} with this tag
-   * @param lapseType The {@linkcode BattlerTagLapseType lapse type} used for this function call
-   * @returns `false` (This tag is always removed after applying its effects)
-   */
-  override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
-    if (lapseType === BattlerTagLapseType.PRE_MOVE) {
-      globalScene.phaseManager.getCurrentPhase<MovePhase>().cancel();
-      globalScene.phaseManager.createAndUnshiftPhase(
-        "MessagePhase",
-        i18next.t("battlerTags:flinchedLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
-      );
-
-      applyAbAttrs("FlinchEffectAbAttr", pokemon, false);
-
-      return true;
+  public override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
+    if (lapseType !== BattlerTagLapseType.PRE_MOVE) {
+      return super.lapse(pokemon, lapseType);
     }
 
-    return super.lapse(pokemon, lapseType);
+    globalScene.phaseManager.getCurrentPhase<MovePhase>().cancel();
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
+      i18next.t("battlerTags:flinchedLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+    );
+
+    applyAbAttrs("FlinchEffectAbAttr", { pokemon, simulated: false });
+
+    return true;
   }
 
-  override getDescriptor(): string {
+  public override getDescriptor(): string {
     return i18next.t("battlerTags:flinchedDesc");
   }
 }

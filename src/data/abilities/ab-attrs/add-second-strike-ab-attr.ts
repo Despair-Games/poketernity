@@ -1,42 +1,18 @@
 import { PreAttackAbAttr } from "#abilities/pre-attack-ab-attr";
-import type { Pokemon } from "#field/pokemon";
-import type { Move } from "#moves/move";
-import type { ValueHolder } from "#utils/common-utils";
+import type { AddSecondStrikeAbAttrParams } from "#types/ab-attr-param-types";
 
 /**
  * Attribute to convert single-strike moves to two-strike moves.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Parental_Bond_(Ability) | Parental Bond}.
- * @param damageMultiplier the damage multiplier for the second strike, relative to the first.
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Parental_Bond_(Ability) | Parental Bond (Bulbapedia)}
  */
 export class AddSecondStrikeAbAttr extends PreAttackAbAttr {
   protected override readonly abAttrKey = "AddSecondStrikeAbAttr";
 
-  /**
-   * If conditions are met, this increases the move's hit count (via args[0])
-   * or multiplies the damage of secondary strikes (via args[1])
-   * @param pokemon the {@linkcode Pokemon} using the move
-   * @param simulated if `true`, suppresses changes to game state
-   * @param move the {@linkcode Move} used by the ability source
-   * @param defender n/a
-   * @param hitCount a {@linkcode NumberHolder} containing the number of strikes this move currently has
-   * @param multiplier a {@linkcode NumberHolder} containing the damage multiplier for the current strike
-   * @returns `true` if the given move is modified by this effect
-   */
-  public override apply(
-    _pokemon: Pokemon,
-    _simulated: boolean,
-    _move: Move,
-    _defender: Pokemon,
-    hitCount: ValueHolder<number>,
-  ): void {
+  public override apply({ hitCount }: AddSecondStrikeAbAttrParams): void {
     hitCount.value += 1;
   }
 
-  /**
-   * @returns `true` if the move being used satisfies {@linkcode Move.canBeMultiStrikeEnhanced | conditions}
-   * to be multi-strike-enhanced.
-   */
-  public override canApply(...[pokemon, , move, defender]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon, move, defender }: Parameters<this["apply"]>[0]): boolean {
     return move.canBeMultiStrikeEnhanced(pokemon, defender);
   }
 }

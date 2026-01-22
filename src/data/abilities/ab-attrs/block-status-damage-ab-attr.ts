@@ -1,7 +1,6 @@
 import { AbAttr } from "#abilities/ab-attr";
 import type { StatusEffect } from "#enums/status-effect";
-import type { Pokemon } from "#field/pokemon";
-import type { ValueHolder } from "#utils/common-utils";
+import type { CancelledAbAttrParams } from "#types/ab-attr-param-types";
 
 /**
  * This attribute will block any status damage that you put in the parameter.
@@ -9,6 +8,8 @@ import type { ValueHolder } from "#utils/common-utils";
  */
 export class BlockStatusDamageAbAttr extends AbAttr {
   protected override readonly abAttrKey = "BlockStatusDamageAbAttr";
+
+  // TODO: use `NonEmptyArray`
   private readonly statusEffects: StatusEffect[];
 
   constructor(...effects: StatusEffect[]) {
@@ -17,11 +18,11 @@ export class BlockStatusDamageAbAttr extends AbAttr {
     this.statusEffects = effects;
   }
 
-  public override apply(_pokemon: Pokemon, _simulated: boolean, cancelled: ValueHolder<boolean>): void {
+  public override apply({ cancelled }: CancelledAbAttrParams): void {
     cancelled.value = true;
   }
 
-  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon }: Parameters<this["apply"]>[0]): boolean {
     return pokemon.hasStatusEffect(this.statusEffects);
   }
 }

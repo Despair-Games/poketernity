@@ -1,13 +1,13 @@
 import { AbAttr } from "#abilities/ab-attr";
-import type { Pokemon } from "#field/pokemon";
-import type { ValueHolder } from "#utils/common-utils";
+import type { BonusCritAbAttrParams } from "#types/ab-attr-param-types";
 
 /**
- * Ability attribute that provides bonus critical hit rate stages to the ability holder
- * It is used by the ability Super Luck, which provides a one stage boost to critical hit rate.
+ * Ability attribute that provides bonus critical hit rate stages to the ability holder.
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Super_Luck_(Ability) | Super Luck (Bulbapedia)}
  */
 export class BonusCritAbAttr extends AbAttr {
   protected override readonly abAttrKey = "BonusCritAbAttr";
+
   /** Additional critical hit stages provided by the ability. */
   private readonly stages: number;
 
@@ -16,7 +16,7 @@ export class BonusCritAbAttr extends AbAttr {
     this.stages = stages;
   }
 
-  public override apply(_pokemon: Pokemon, _simulated: boolean, critStage: ValueHolder<number>): void {
+  public override apply({ critStage }: BonusCritAbAttrParams): void {
     critStage.value += this.stages;
   }
 }

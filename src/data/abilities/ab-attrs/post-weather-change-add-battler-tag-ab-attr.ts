@@ -1,7 +1,7 @@
 import { PostWeatherChangeAbAttr } from "#abilities/post-weather-change-ab-attr";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { WeatherType } from "#enums/weather-type";
-import type { Pokemon } from "#field/pokemon";
+import type { PostWeatherChangeAbAttrParams } from "#types/ab-attr-param-types";
 import type { NonEmptyArray } from "#types/utility-types";
 
 export class PostWeatherChangeAddBattlerTagAbAttr extends PostWeatherChangeAbAttr {
@@ -17,13 +17,13 @@ export class PostWeatherChangeAddBattlerTagAbAttr extends PostWeatherChangeAbAtt
     this.weatherTypes = weatherTypes;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean, _weather: WeatherType): void {
+  public override apply({ pokemon, simulated }: PostWeatherChangeAbAttrParams): void {
     if (!simulated) {
       pokemon.addTag(this.tagType, this.turnCount);
     }
   }
 
-  public override canApply(...[pokemon, , weather]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon, weather }: Parameters<this["apply"]>[0]): boolean {
     return this.weatherTypes.includes(weather) && pokemon.canAddTag(this.tagType);
   }
 }

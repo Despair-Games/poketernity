@@ -22,7 +22,7 @@ export class SecretPowerAttr extends ChanceBasedMoveEffectAttr {
     super(false, { lastHitOnly: true });
   }
 
-  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
+  public override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     const terrain = globalScene.arena.terrainType;
     const biome = globalScene.arena.biomeId;
     const secondaryEffect = this.determineTerrainEffect(terrain) ?? this.determineBiomeEffect(biome);
@@ -33,10 +33,12 @@ export class SecretPowerAttr extends ChanceBasedMoveEffectAttr {
    * Determines the secondary effect based on terrain.
    * Takes precedence over biome-based effects.
    * ```
-   * Electric Terrain | Paralysis
-   * Misty Terrain    | SpAtk -1
-   * Grassy Terrain   | Sleep
-   * Psychic Terrain  | Speed -1
+   * | Terrain          | Effect    |
+   * |------------------|-----------|
+   * | Electric Terrain | Paralysis |
+   * | Misty Terrain    | SpAtk -1  |
+   * | Grassy Terrain   | Sleep     |
+   * | Psychic Terrain  | Speed -1  |
    * ```
    * @param terrain - {@linkcode TerrainType} The current terrain
    * @returns the chosen secondary effect {@linkcode MoveEffectAttr}
@@ -52,24 +54,27 @@ export class SecretPowerAttr extends ChanceBasedMoveEffectAttr {
       case TerrainType.PSYCHIC:
         return new StatStageChangeAttr([Stat.SPD], -1, false);
       default:
+        terrain satisfies typeof TerrainType.NONE;
         return;
     }
   }
 
   /**
    * Determines the secondary effect based on biome
-   * ```
-   * Town, Metropolis, Slum, Dojo, Laboratory, Power Plant + Default | Paralysis
-   * Plains, Grass, Tall Grass, Forest, Jungle, Meadow               | Sleep
-   * Swamp, Mountain, Temple, Ruins                                  | Speed -1
-   * Ice Cave, Snowy Forest                                          | Freeze
-   * Volcano                                                         | Burn
-   * Fairy Cave                                                      | SpAtk -1
-   * Desert, Construction Site, Beach, Island, Badlands              | Accuracy -1
-   * Sea, Lake, Seabed                                               | Atk -1
-   * Cave, Wasteland, Graveyard, Abyss, Space                        | Flinch
-   * End                                                             | Def -1
-   * ```
+   *
+   * | Biome                                                           | Effect      |
+   * |:---------------------------------------------------------------:|:-----------:|
+   * | Town, Metropolis, Slum, Dojo, Laboratory, Power Plant + Default | Paralysis   |
+   * | Plains, Grass, Tall Grass, Forest, Jungle, Meadow               | Sleep       |
+   * | Swamp, Mountain, Temple, Ruins                                  | Speed -1    |
+   * | Ice Cave, Snowy Forest                                          | Freeze      |
+   * | Volcano                                                         | Burn        |
+   * | Fairy Cave                                                      | SpAtk -1    |
+   * | Desert, Construction Site, Beach, Island, Badlands              | Accuracy -1 |
+   * | Sea, Lake, Seabed                                               | Atk -1      |
+   * | Cave, Wasteland, Graveyard, Abyss, Space                        | Flinch      |
+   * | End                                                             | Def -1      |
+   *
    * @param biome - The current {@linkcode BiomeId} the battle is set in
    * @returns the chosen secondary effect {@linkcode MoveEffectAttr}
    */
@@ -121,18 +126,23 @@ export class SecretPowerAttr extends ChanceBasedMoveEffectAttr {
       case BiomeId.LABORATORY:
       case BiomeId.POWER_PLANT:
       case BiomeId.CHARGESTONE_CAVE:
-      default:
         return new StatusEffectAttr(StatusEffect.PARALYSIS, false, undefined, undefined, -1);
     }
   }
 
   /** Secret Power ignores the move chance bonus from the Water + Fire Pledge combo effect */
-  override getMoveChance(user: Pokemon, target: Pokemon, move: Move): number {
+  public override getMoveChance(user: Pokemon, target: Pokemon, move: Move): number {
     const moveChance = new ValueHolder(this.effectChanceOverride ?? move.chance);
 
-    applyAbAttrs("MoveEffectChanceMultiplierAbAttr", user, false, moveChance, move);
+    applyAbAttrs("MoveEffectChanceMultiplierAbAttr", { pokemon: user, simulated: false, moveChance, move });
 
-    applyAbAttrs("IgnoreMoveEffectsAbAttr", target, false, user, move, moveChance);
+    applyAbAttrs("IgnoreMoveEffectsAbAttr", {
+      pokemon: target,
+      simulated: false,
+      attacker: user,
+      move,
+      effectChance: moveChance,
+    });
 
     return moveChance.value;
   }

@@ -19,7 +19,7 @@ export class StealEatBerryAttr extends EatBerryAttr {
 
   override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
     const cancelled = new ValueHolder(false);
-    applyAbAttrs("BlockItemTheftAbAttr", target, false, cancelled);
+    applyAbAttrs("BlockItemTheftAbAttr", { pokemon: target, simulated: false, cancelled });
     if (cancelled.value === true) {
       return false;
     }
@@ -30,7 +30,7 @@ export class StealEatBerryAttr extends EatBerryAttr {
     }
     // if the target has berries, pick a random berry and steal it
     this.chosenBerry = heldBerries[user.randSeedInt(heldBerries.length)];
-    applyAbAttrs("PostItemLostAbAttr", target, false);
+    applyAbAttrs("PostItemLostAbAttr", { pokemon: target, simulated: false });
     const message = i18next.t("battle:stealEatBerry", {
       pokemonName: user.name,
       targetName: target.name,
