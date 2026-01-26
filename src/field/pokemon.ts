@@ -3024,17 +3024,19 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     effectiveness?: TypeDamageMultiplier,
   ): DamageCalculationResult {
     const { arena } = globalScene;
+
     const applyAbFunc = getAbApplyFunc(abilityApplyMode);
-    const damage = new NumberHolder(0);
+
+    const damage = new ValueHolder(0);
     const defendingSide = this.getArenaTagSide();
-
     const moveCategory = source.getMoveCategory(this, move);
-
     /** The move's type after type-changing effects are applied */
     const moveType = source.getMoveType(move);
-
     /** If `value` is `true`, cancels the move and suppresses "No Effect" messages */
-    const cancelled = new BooleanHolder(false);
+    const cancelled = new ValueHolder(false);
+
+    const weatherDamageMultiplier = new ValueHolder(arena.getWeatherDamageMultiplier(moveType));
+    applyMoveAttrs(IgnoreWeatherTypeDebuffAttr, source, this, move, weatherDamageMultiplier);
 
     /**
      * The effectiveness of the move being used. Along with type matchups, this
@@ -3046,14 +3048,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const typeMultiplier =
       effectiveness ?? this.getMoveEffectiveness(source, move, abilityApplyMode, simulated, cancelled);
 
-    const isPhysical = moveCategory === MoveCategory.PHYSICAL;
-
-    const weatherDamageMultiplier = new ValueHolder(arena.getWeatherDamageMultiplier(moveType));
-    applyMoveAttrs(IgnoreWeatherTypeDebuffAttr, source, this, move, weatherDamageMultiplier);
-
-    const terrainDamageMultiplier = source.isGrounded() ? arena.getTerrainDamageMultiplier(moveType) : 1;
-
-    const isTypeImmune = typeMultiplier * weatherDamageMultiplier.value * terrainDamageMultiplier === 0;
+    const isTypeImmune = typeMultiplier === 0;
 
     if (cancelled.value || isTypeImmune) {
       return {
@@ -3064,7 +3059,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     // If the attack deals fixed damage, return a result with that much damage
-    const fixedDamage = new NumberHolder(0);
+    const fixedDamage = new ValueHolder(0);
     applyMoveAttrs(FixedDamageAttr, source, this, move, fixedDamage);
     if (fixedDamage.value) {
       // TODO: re-add multi-lens calculation
@@ -3081,7 +3076,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
      * If the attack is a one-hit KO move, return a result equal to the Pokemon's HP bar
      * Or to the next unbroken health segment if the target is a boss
      */
-    const isOneHitKo = new BooleanHolder(false);
+    const isOneHitKo = new ValueHolder(false);
     applyMoveAttrs(OneHitKOAttr, source, this, move, isOneHitKo);
 
     let ohkoDamage = 0;
@@ -3103,7 +3098,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     /** Behemoth Bash, Behemoth Blade, and Dynamax Cannon do double damage to G-Max Pokemon (except Eternamax) */
-    const gmaxBonusDamageMultiplier = new NumberHolder(1);
+    const gmaxBonusDamageMultiplier = new ValueHolder(1);
     applyMoveAttrs(DoubleDamageToMaxAttr, source, this, move, gmaxBonusDamageMultiplier);
 
     /**
@@ -3122,13 +3117,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     // TODO: re-add multi-lens calculation here
 
     /** Doubles damage if this Pokemon's last move was Glaive Rush */
-    const glaiveRushMultiplier = new NumberHolder(1);
+    const glaiveRushMultiplier = new ValueHolder(1);
     if (this.hasTag(BattlerTagType.RECEIVE_DOUBLE_DAMAGE)) {
       glaiveRushMultiplier.value = 2;
     }
 
     /** The damage multiplier when the given move critically hits */
-    const criticalMultiplier = new NumberHolder(isCritical ? 1.5 : 1);
+    const criticalMultiplier = new ValueHolder(isCritical ? 1.5 : 1);
     applyAbAttrs("MultCritAbAttr", source, simulated, criticalMultiplier);
 
     /**
@@ -3140,10 +3135,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     /** A damage multiplier for when the attack is of the same type as the attacker type/teraType. */
     const stabMultiplier = this.calcStabMultiplierForTakingDamage(source, move, abilityApplyMode, simulated);
 
+    const isPhysical = moveCategory === MoveCategory.PHYSICAL;
+
     /** Halves damage if the attacker is using a physical attack while burned */
-    const burnMultiplier = new NumberHolder(1);
+    const burnMultiplier = new ValueHolder(1);
     if (isPhysical && source.hasStatusEffect(StatusEffect.BURN) && !move.hasAttr(BypassBurnDamageReductionAttr)) {
-      const burnDamageReductionCancelled = new BooleanHolder(false);
+      const burnDamageReductionCancelled = new ValueHolder(false);
       applyAbFunc("BypassBurnDamageReductionAbAttr", source, simulated, burnDamageReductionCancelled);
       if (!burnDamageReductionCancelled.value) {
         burnMultiplier.value = 0.5;
@@ -3151,7 +3148,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     /** Reduces damage if this Pokemon has a relevant screen (e.g. Light Screen for special attacks) */
-    const screenMultiplier = new NumberHolder(1);
+    const screenMultiplier = new ValueHolder(1);
 
     /** Critical hits ignore the damage reduction from screens */
     if (!isCritical) {
@@ -3171,7 +3168,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
      * AND
      * The move doubles damage when used against that tag
      */
-    const hitsTagMultiplier = new NumberHolder(1);
+    const hitsTagMultiplier = new ValueHolder(1);
     move
       .getAttrs(HitsTagAttr)
       .filter((hta) => hta.doubleDamage)
@@ -3188,12 +3185,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         : 1;
 
     /** Doubles damage if the attacker has Tinted Lens and is using a resisted move */
-    const tintedLensMultiplier = new NumberHolder(1);
+    const tintedLensMultiplier = new ValueHolder(1);
     applyAbFunc("DamageBoostAbAttr", source, simulated, move, this, tintedLensMultiplier);
 
     /** Apply this Pokemon's post-calc defensive modifiers (e.g. Fur Coat) */
-    const receivedDamageMultiplier = new NumberHolder(1);
-    const alliedFieldDamageMultiplier = new NumberHolder(1);
+    const receivedDamageMultiplier = new ValueHolder(1);
+    const alliedFieldDamageMultiplier = new ValueHolder(1);
 
     applyAbFunc("ReceivedMoveDamageMultiplierAbAttr", this, simulated, source, move, receivedDamageMultiplier);
 
@@ -3216,7 +3213,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       * gmaxBonusDamageMultiplier.value
       * multiLensDamageMultiplier.value
       * weatherDamageMultiplier.value
-      * terrainDamageMultiplier
       * glaiveRushMultiplier.value
       * criticalMultiplier.value
       * randomMultiplier

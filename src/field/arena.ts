@@ -19,7 +19,7 @@ import type { ArenaTagType } from "#enums/arena-tag-type";
 import type { BattlerIndex, FieldBattlerIndex } from "#enums/battler-index";
 import { BiomeId } from "#enums/biome-id";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
-import type { ElementalType } from "#enums/elemental-type";
+import { ElementalType } from "#enums/elemental-type";
 import type { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { TerrainType } from "#enums/terrain-type";
@@ -454,10 +454,19 @@ export class Arena {
 
   /**
    * @param attackType - The {@linkcode ElementalType} of the attack
-   * @returns The terrain damage multiplier
+   * @returns The terrain power multiplier
    */
-  public getTerrainDamageMultiplier(attackType: ElementalType): number {
-    return this.terrain?.getAttackTypeMultiplier(attackType) ?? 1;
+  public getTerrainPowerMultiplier(attackType: ElementalType): number {
+    if (this.terrainType === TerrainType.ELECTRIC && attackType === ElementalType.ELECTRIC) {
+      return 1.3;
+    }
+    if (this.terrainType === TerrainType.GRASSY && attackType === ElementalType.GRASS) {
+      return 1.3;
+    }
+    if (this.terrainType === TerrainType.PSYCHIC && attackType === ElementalType.PSYCHIC) {
+      return 1.3;
+    }
+    return 1;
   }
 
   // #endregion

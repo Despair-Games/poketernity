@@ -769,17 +769,19 @@ export abstract class Move {
   /**
    * Calculates the power of a move in battle based on various conditions and attributes.
    *
-   * @param source {@linkcode Pokemon} The Pokémon using the move.
-   * @param target {@linkcode Pokemon} The Pokémon being targeted by the move.
-   * @returns The calculated power of the move.
+   * @param source - The {@linkcode Pokemon} using the move
+   * @param target - The Pokémon being targeted by the move
+   * @returns The calculated power of the move
    */
   calculateBattlePower(source: Pokemon, target: Pokemon, simulated: boolean = false): number {
     if (this.category === MoveCategory.STATUS) {
       return -1;
     }
 
-    const power = new NumberHolder(this.power);
-    const typeChangeMovePowerMultiplier = new NumberHolder(1);
+    const { arena } = globalScene;
+
+    const power = new ValueHolder(this.power);
+    const typeChangeMovePowerMultiplier = new ValueHolder(1);
 
     applyAbAttrs("MoveTypeChangeAbAttr", source, true, this, target, undefined, typeChangeMovePowerMultiplier);
 
@@ -829,7 +831,7 @@ export abstract class Move {
     }
 
     if (!this.hasAttr(TypelessAttr)) {
-      globalScene.arena.applyTags<WeakenMoveTypeTag>(
+      arena.applyTags<WeakenMoveTypeTag>(
         [...WEAKEN_MOVE_TYPE_ARENA_TAG_TYPES],
         ArenaTagSide.BOTH,
         simulated,
@@ -845,6 +847,10 @@ export abstract class Move {
 
     applyBattlerTags<MeFirstPowerBoostTag>(BattlerTagType.ME_FIRST_POWER_BOOST, source, simulated, power);
     applyBattlerTags<PursuingTag>(BattlerTagType.PURSUING, source, simulated, power);
+
+    if (source.isGrounded()) {
+      power.value *= arena.getTerrainPowerMultiplier(source.getMoveType(this));
+    }
 
     return power.value;
   }
