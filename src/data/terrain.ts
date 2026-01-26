@@ -1,7 +1,6 @@
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { BattlerIndex } from "#enums/battler-index";
 import { CommonAnim } from "#enums/common-anim";
-import { ElementalType } from "#enums/elemental-type";
 import { TerrainType } from "#enums/terrain-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
@@ -32,34 +31,6 @@ export class Terrain {
     }
 
     return true;
-  }
-
-  /**
-   * Function to return a multiplier for specific types
-   * Electric, Grassy, and Psychic give their corresponding types 30% boost
-   * @param attackType - the Attacking  {@linkcode ElementalType}
-   * @returns a multiplier (1.3 or 1)
-   */
-  getAttackTypeMultiplier(attackType: ElementalType): number {
-    switch (this.terrainType) {
-      case TerrainType.ELECTRIC:
-        if (attackType === ElementalType.ELECTRIC) {
-          return 1.3;
-        }
-        break;
-      case TerrainType.GRASSY:
-        if (attackType === ElementalType.GRASS) {
-          return 1.3;
-        }
-        break;
-      case TerrainType.PSYCHIC:
-        if (attackType === ElementalType.PSYCHIC) {
-          return 1.3;
-        }
-        break;
-    }
-
-    return 1;
   }
 
   /**

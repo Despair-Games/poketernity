@@ -3052,17 +3052,19 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     effectiveness?: TypeDamageMultiplier,
   ): DamageCalculationResult {
     const { arena } = globalScene;
+
     const applyAbFunc = getAbApplyFunc(abilityApplyMode);
+
     const damage = new ValueHolder(0);
     const defendingSide = this.getArenaTagSide();
-
     const moveCategory = source.getMoveCategory(this, move);
-
     /** The move's type after type-changing effects are applied */
     const moveType = source.getMoveType(move);
-
     /** If `value` is `true`, cancels the move and suppresses "No Effect" messages */
     const cancelled = new ValueHolder(false);
+
+    const weatherDamageMultiplier = new ValueHolder(arena.getWeatherDamageMultiplier(moveType));
+    applyMoveAttrs(IgnoreWeatherTypeDebuffAttr, source, this, move, weatherDamageMultiplier);
 
     /**
      * The effectiveness of the move being used. Along with type matchups, this
@@ -3074,14 +3076,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const typeMultiplier =
       effectiveness ?? this.getMoveEffectiveness(source, move, abilityApplyMode, simulated, cancelled);
 
-    const isPhysical = moveCategory === MoveCategory.PHYSICAL;
-
-    const weatherDamageMultiplier = new ValueHolder(arena.getWeatherDamageMultiplier(moveType));
-    applyMoveAttrs(IgnoreWeatherTypeDebuffAttr, source, this, move, weatherDamageMultiplier);
-
-    const terrainDamageMultiplier = source.isGrounded() ? arena.getTerrainDamageMultiplier(moveType) : 1;
-
-    const isTypeImmune = typeMultiplier * weatherDamageMultiplier.value * terrainDamageMultiplier === 0;
+    const isTypeImmune = typeMultiplier === 0;
 
     if (cancelled.value || isTypeImmune) {
       return {
@@ -3109,7 +3104,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
      * If the attack is a one-hit KO move, return a result equal to the Pokemon's HP bar
      * Or to the next unbroken health segment if the target is a boss
      */
-    const isOneHitKo = new BooleanHolder(false);
+    const isOneHitKo = new ValueHolder(false);
     applyMoveAttrs(OneHitKOAttr, source, this, move, isOneHitKo);
 
     let ohkoDamage = 0;
@@ -3167,6 +3162,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     /** A damage multiplier for when the attack is of the same type as the attacker type/teraType. */
     const stabMultiplier = this.calcStabMultiplierForTakingDamage(source, move, abilityApplyMode, simulated);
+
+    const isPhysical = moveCategory === MoveCategory.PHYSICAL;
 
     /** Halves damage if the attacker is using a physical attack while burned */
     const burnMultiplier = new ValueHolder(1);
@@ -3258,7 +3255,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       * gmaxBonusDamageMultiplier.value
       * multiLensDamageMultiplier.value
       * weatherDamageMultiplier.value
-      * terrainDamageMultiplier
       * glaiveRushMultiplier.value
       * critMultiplier.value
       * randomMultiplier

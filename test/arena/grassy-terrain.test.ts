@@ -27,29 +27,32 @@ describe("Arena - Grassy Terrain", () => {
     game.override
       .battleType("single")
       .disableCrits()
-      .enemyLevel(1)
+      .enemyLevel(100)
+      .startingLevel(100)
       .enemySpecies(SpeciesId.SHUCKLE)
       .enemyAbility(AbilityId.STURDY)
       .enemyMoveset(MoveId.SPLASH)
-      .moveset([MoveId.GRASSY_TERRAIN, MoveId.EARTHQUAKE])
       .ability(AbilityId.NO_GUARD);
   });
 
   it("should halve the damage of Earthquake", async () => {
-    await game.classicMode.startBattle(SpeciesId.TAUROS);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
+
+    const enemy = game.field.getEnemyPokemon();
 
     const eq = allMoves.get(MoveId.EARTHQUAKE);
     vi.spyOn(eq, "calculateBattlePower");
 
-    game.move.select(MoveId.EARTHQUAKE);
+    game.move.use(MoveId.EARTHQUAKE);
     await game.toNextTurn();
 
     expect(eq.calculateBattlePower).toHaveLastReturnedWith(100);
+    enemy.hp = enemy.getMaxHp();
 
-    game.move.select(MoveId.GRASSY_TERRAIN);
+    game.move.use(MoveId.GRASSY_TERRAIN);
     await game.toNextTurn();
 
-    game.move.select(MoveId.EARTHQUAKE);
+    game.move.use(MoveId.EARTHQUAKE);
     await game.toEndOfTurn();
 
     expect(eq.calculateBattlePower).toHaveLastReturnedWith(50);
@@ -63,13 +66,14 @@ describe("Arena - Grassy Terrain", () => {
     const eq = allMoves.get(MoveId.EARTHQUAKE);
     vi.spyOn(eq, "calculateBattlePower");
 
-    game.move.select(MoveId.GRASSY_TERRAIN);
+    game.move.use(MoveId.GRASSY_TERRAIN);
     await game.toNextTurn();
 
-    game.move.select(MoveId.EARTHQUAKE);
+    game.move.use(MoveId.EARTHQUAKE);
     await game.toEndOfTurn();
 
     expect(eq.calculateBattlePower).toHaveLastReturnedWith(100);
+    expect(game.field.getEnemyPokemon()).not.toHaveFullHp();
   });
 
   it("should heal grounded Pokemon for each turn, including the turn when terrain expires", async () => {
@@ -81,17 +85,14 @@ describe("Arena - Grassy Terrain", () => {
     // Should heal for 5 turns, including the turn when terrain expires
     game.move.use(MoveId.GRASSY_TERRAIN);
     await game.toNextTurn();
-    game.move.use(MoveId.SPLASH);
-    await game.toNextTurn();
-    game.move.use(MoveId.SPLASH);
-    await game.toNextTurn();
-    game.move.use(MoveId.SPLASH);
-    await game.toNextTurn();
-    game.move.use(MoveId.SPLASH);
-    await game.toNextTurn();
+    expect(pokemon).toHaveHp(1 + toDmgValue(pokemon.getMaxHp() / 16));
+    for (let i = 2; i < 6; i++) {
+      game.move.use(MoveId.SPLASH);
+      await game.toNextTurn();
+      expect(pokemon).toHaveHp(1 + i * toDmgValue(pokemon.getMaxHp() / 16));
+    }
 
-    expect(game.scene.arena.terrain).toBeFalsy();
-    expect(pokemon.hp).toBe(1 + 5 * toDmgValue(pokemon.getMaxHp() / 16));
+    expect(game).toHaveTerrain(TerrainType.NONE);
   });
 
   it("should not heal ungrounded Pokemon", async () => {
@@ -102,7 +103,29 @@ describe("Arena - Grassy Terrain", () => {
     game.move.use(MoveId.GRASSY_TERRAIN);
     await game.toNextTurn();
 
-    expect(game.scene.arena.hasTerrain(TerrainType.GRASSY)).toBe(true);
-    expect(pokemon.hp).toBe(1);
+    expect(game).toHaveTerrain(TerrainType.GRASSY);
+    expect(pokemon).toHaveHp(1);
+  });
+
+  it("should increase the power of Grass-type moves by 1.3x", async () => {
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
+
+    const enemy = game.field.getEnemyPokemon();
+
+    const moveSpy = vi.spyOn(allMoves.get(MoveId.ENERGY_BALL), "calculateBattlePower");
+
+    game.move.use(MoveId.ENERGY_BALL);
+    await game.toNextTurn();
+
+    expect(moveSpy).toHaveReturnedWith(90);
+    enemy.hp = enemy.getMaxHp();
+
+    game.move.use(MoveId.GRASSY_TERRAIN);
+    await game.toNextTurn();
+
+    game.move.use(MoveId.ENERGY_BALL);
+    await game.toEndOfTurn();
+
+    expect(moveSpy).toHaveReturnedWith(90 * 1.3);
   });
 });
