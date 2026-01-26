@@ -429,18 +429,23 @@ export class Arena {
 
   /**
    * Checks to see if the current terrain will cancel a move
-   * @param user - The Pokemon using the move
-   * @param targets - The Pokemon being targetted
-   * @param move - The move being used
-   * @returns whether the move was cancelled by terrain
+   * @param user - The {@linkcode Pokemon} using the move
+   * @param targets - The {@linkcode BattlerIndex}es of the Pokemon being targetted
+   * @param move - The {@linkcode Move} being used
+   * @returns Whether the move was cancelled by terrain
    */
   public isMoveTerrainCancelled(user: Pokemon, targets: BattlerIndex[], move: Move): boolean {
-    return !!this.terrain?.isMoveTerrainCancelled(user, targets, move);
+    if (this.terrainType === TerrainType.PSYCHIC) {
+      return (
+        move.getPriority(user) > 0
+        && !move.isMultiTarget()
+        && user.getOpponents().some((o) => targets.includes(o.getBattlerIndex()) && o.isGrounded())
+      );
+    }
+    return false;
   }
 
-  /**
-   * Sets a random terrain based on the biome
-   */
+  /** Sets a random terrain based on the biome */
   public setRandomTerrain(): void {
     const terrainPool = allBiomes.get(this.biomeId).terrainPool;
     const terrainMap = new Map<TerrainType, number>();

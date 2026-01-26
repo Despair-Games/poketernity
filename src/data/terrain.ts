@@ -1,10 +1,7 @@
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { BattlerIndex } from "#enums/battler-index";
 import { CommonAnim } from "#enums/common-anim";
 import { TerrainType } from "#enums/terrain-type";
 import type { Pokemon } from "#field/pokemon";
-import type { Move } from "#moves/move";
-import { ProtectAttr } from "#moves/protect-attr";
 import i18next from "i18next";
 
 /** Class representing Terrain effects */
@@ -31,29 +28,6 @@ export class Terrain {
     }
 
     return true;
-  }
-
-  /**
-   * Checks if the weather should cancel the move
-   * Psychic terrain cancels positive priority moves that target grounded Pokemon
-   * @param user - The attacker {@linkcode Pokemon}
-   * @param targets - The targets' {@linkcode BattlerIndex}
-   * @param move - The {@linkcode Move} being used
-   * @returns true if the move is cancelled, false otherwise
-   */
-  isMoveTerrainCancelled(user: Pokemon, targets: BattlerIndex[], move: Move): boolean {
-    switch (this.terrainType) {
-      case TerrainType.PSYCHIC:
-        if (!move.hasAttr(ProtectAttr)) {
-          // Cancels move if the move has positive priority and targets a Pokemon grounded on the Psychic Terrain
-          return (
-            move.getPriority(user) > 0
-            && user.getOpponents().some((o) => targets.includes(o.getBattlerIndex()) && o.isGrounded())
-          );
-        }
-    }
-
-    return false;
   }
 }
 
