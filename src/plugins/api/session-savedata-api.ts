@@ -9,9 +9,7 @@ import type {
 } from "#types/api-types";
 import type { SessionSaveData } from "#types/session-data";
 
-/**
- * A wrapper for session savedata API requests.
- */
+/** A wrapper for session savedata API requests. */
 export class SessionSavedataApi extends ApiBase {
   //#region Public
 
@@ -40,7 +38,7 @@ export class SessionSavedataApi extends ApiBase {
    * @param params The {@linkcode GetSessionSavedataRequest} to send
    * @returns The session as `string`
    */
-  public async get(params: GetSessionSavedataRequest) {
+  public async get(params: GetSessionSavedataRequest): Promise<string | null> {
     try {
       const urlSearchParams = this.toUrlSearchParams(params);
       const response = await this.doGet(`/savedata/session/get?${urlSearchParams}`);
@@ -58,7 +56,7 @@ export class SessionSavedataApi extends ApiBase {
    * @param rawSavedata The raw savedata (as `string`)
    * @returns An error message if something went wrong
    */
-  public async update(params: UpdateSessionSavedataRequest, rawSavedata: string) {
+  public async update(params: UpdateSessionSavedataRequest, rawSavedata: string): Promise<string> {
     try {
       const urlSearchParams = this.toUrlSearchParams(params);
       const response = await this.doPost(`/savedata/session/update?${urlSearchParams}`, rawSavedata);
@@ -76,7 +74,7 @@ export class SessionSavedataApi extends ApiBase {
    * @param params The {@linkcode DeleteSessionSavedataRequest} to send
    * @returns An error message if something went wrong
    */
-  public async delete(params: DeleteSessionSavedataRequest) {
+  public async delete(params: DeleteSessionSavedataRequest): Promise<string | null> {
     try {
       const urlSearchParams = this.toUrlSearchParams(params);
       const response = await this.doGet(`/savedata/session/delete?${urlSearchParams}`);
@@ -98,7 +96,10 @@ export class SessionSavedataApi extends ApiBase {
    * @param params The {@linkcode ClearSessionSavedataRequest} to send
    * @param sessionData The {@linkcode SessionSaveData} object
    */
-  public async clear(params: ClearSessionSavedataRequest, sessionData: SessionSaveData) {
+  public async clear(
+    params: ClearSessionSavedataRequest,
+    sessionData: SessionSaveData,
+  ): Promise<ClearSessionSavedataResponse> {
     try {
       const urlSearchParams = this.toUrlSearchParams(params);
       const response = await this.doPost(`/savedata/session/clear?${urlSearchParams}`, sessionData);
@@ -113,4 +114,6 @@ export class SessionSavedataApi extends ApiBase {
       success: false,
     } as ClearSessionSavedataResponse;
   }
+
+  //#endregion
 }

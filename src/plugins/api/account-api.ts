@@ -8,9 +8,7 @@ import type {
 } from "#types/api-types";
 import { removeCookie, setCookie } from "#utils/app-utils";
 
-/**
- * A wrapper for the account API requests.
- */
+/** A wrapper for the account API requests. */
 export class AccountApi extends ApiBase {
   //#region Public
 
@@ -39,7 +37,7 @@ export class AccountApi extends ApiBase {
    * @param registerData The {@linkcode AccountRegisterRequest} to send
    * @returns An error message if something went wrong
    */
-  public async register(registerData: AccountRegisterRequest) {
+  public async register(registerData: AccountRegisterRequest): Promise<string | null> {
     try {
       const response = await this.doPost("/account/register", registerData, "form-urlencoded");
 
@@ -60,7 +58,7 @@ export class AccountApi extends ApiBase {
    * @param loginData The {@linkcode AccountLoginRequest} to send
    * @returns An error message if something went wrong
    */
-  public async login(loginData: AccountLoginRequest) {
+  public async login(loginData: AccountLoginRequest): Promise<string | null> {
     try {
       const response = await this.doPost("/account/login", loginData, "form-urlencoded");
 
@@ -82,7 +80,7 @@ export class AccountApi extends ApiBase {
    * Send a logout request.
    * **Always** (no matter if failed or not) removes the session cookie.
    */
-  public async logout() {
+  public async logout(): Promise<void> {
     try {
       const response = await this.doGet("/account/logout");
 
@@ -95,4 +93,6 @@ export class AccountApi extends ApiBase {
 
     removeCookie(SESSION_ID_COOKIE); // we are always clearing the cookie.
   }
+
+  //#endregion
 }

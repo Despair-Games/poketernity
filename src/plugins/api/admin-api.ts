@@ -16,7 +16,7 @@ export class AdminApi extends ApiBase {
    * @param params The {@linkcode LinkAccountToDiscordIdRequest} to send
    * @returns `null` if successful, error message if not
    */
-  public async linkAccountToDiscord(params: LinkAccountToDiscordIdRequest) {
+  public async linkAccountToDiscord(params: LinkAccountToDiscordIdRequest): Promise<string | null> {
     try {
       const response = await this.doPost("/admin/account/discordLink", params, "form-urlencoded");
 
@@ -40,7 +40,7 @@ export class AdminApi extends ApiBase {
    * @param params The {@linkcode UnlinkAccountFromDiscordIdRequest} to send
    * @returns `null` if successful, error message if not
    */
-  public async unlinkAccountFromDiscord(params: UnlinkAccountFromDiscordIdRequest) {
+  public async unlinkAccountFromDiscord(params: UnlinkAccountFromDiscordIdRequest): Promise<string | null> {
     try {
       const response = await this.doPost("/admin/account/discordUnlink", params, "form-urlencoded");
 
@@ -64,7 +64,7 @@ export class AdminApi extends ApiBase {
    * @param params The {@linkcode LinkAccountToGoogledIdRequest} to send
    * @returns `null` if successful, error message if not
    */
-  public async linkAccountToGoogleId(params: LinkAccountToGoogledIdRequest) {
+  public async linkAccountToGoogleId(params: LinkAccountToGoogledIdRequest): Promise<string | null> {
     try {
       const response = await this.doPost("/admin/account/googleLink", params, "form-urlencoded");
 
@@ -88,7 +88,7 @@ export class AdminApi extends ApiBase {
    * @param params The {@linkcode UnlinkAccountFromGoogledIdRequest} to send
    * @returns `null` if successful, error message if not
    */
-  public async unlinkAccountFromGoogleId(params: UnlinkAccountFromGoogledIdRequest) {
+  public async unlinkAccountFromGoogleId(params: UnlinkAccountFromGoogledIdRequest): Promise<string | null> {
     try {
       const response = await this.doPost("/admin/account/googleUnlink", params, "form-urlencoded");
 

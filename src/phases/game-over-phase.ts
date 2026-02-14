@@ -1,6 +1,7 @@
 import { api } from "#api/api";
 import { clientSessionId } from "#app/account";
 import { globalScene } from "#app/global-scene";
+import { BYPASS_LOGIN } from "#constants/app-constants";
 import { getCharVariantFromDialogue } from "#data/dialogue";
 import type { PokemonSpecies } from "#data/pokemon-species";
 import { AchvCategory } from "#enums/achv-category";
@@ -200,12 +201,9 @@ export class GameOverPhase extends BattlePhase {
       });
     };
 
-    /**
-     * Check to see if the game is running offline
-     * If Online, execute apiFetch as intended
-     * If Offline, execute offlineNewClear() only for victory, a localStorage implementation of newClear daily run checks
-     */
-    if (!api.isLocal || api.isConnected) {
+    // If Online, execute `apiFetch` as intended
+    // If Offline, execute `offlineNewClear()` only for victory, a localStorage implementation of `newClear` daily run checks
+    if (!BYPASS_LOGIN || api.isConnected) {
       api.savedata.session
         .newclear({ slot: globalScene.sessionSlotId, isVictory: this.isVictory, clientSessionId })
         .then((success) => doGameOver(success));

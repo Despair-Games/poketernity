@@ -3,6 +3,7 @@ import { loggedInUser } from "#app/account";
 import { getGameMode, getModeName } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
+import { BYPASS_LOGIN } from "#constants/app-constants";
 import { fetchDailyRunSeed, getDailyRunStarters } from "#data/daily-run";
 import { GameModes } from "#enums/game-modes";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
@@ -247,8 +248,9 @@ export class TitlePhase extends Phase {
         });
       };
 
-      // If Online, calls seed fetch from db to generate daily run. If Offline, generates a daily run based on current date.
-      if (!api.isLocal || api.isConnected) {
+      // If Online, calls seed fetch from db to generate daily run.
+      // If Offline, generates a daily run based on current date.
+      if (!BYPASS_LOGIN || api.isConnected) {
         fetchDailyRunSeed()
           .then((seed) => {
             if (seed) {

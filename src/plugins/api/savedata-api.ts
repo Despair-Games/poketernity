@@ -4,15 +4,14 @@ import { SystemSavedataApi } from "#api/system-savedata-api";
 import { MAX_INT_ATTR_VALUE } from "#constants/game-constants";
 import type { UpdateAllSavedataRequest } from "#types/api-types";
 
-/**
- * A wrapper for savedata API requests.
- */
+/** A wrapper for savedata API requests. */
 export class SavedataApi extends ApiBase {
   //#region Fields
 
   public readonly system: SystemSavedataApi;
   public readonly session: SessionSavedataApi;
 
+  //#endregion
   //#region Public
 
   constructor(base: string) {
@@ -26,7 +25,7 @@ export class SavedataApi extends ApiBase {
    * @param bodyData The {@linkcode UpdateAllSavedataRequest | request data} to send
    * @returns An error message if something went wrong
    */
-  public async updateAll(bodyData: UpdateAllSavedataRequest) {
+  public async updateAll(bodyData: UpdateAllSavedataRequest): Promise<string> {
     try {
       const rawBodyData = JSON.stringify(bodyData, (_k: any, v: any) => {
         if (typeof v === "bigint") {
@@ -41,4 +40,6 @@ export class SavedataApi extends ApiBase {
       return "Unknown error";
     }
   }
+
+  //#endregion
 }

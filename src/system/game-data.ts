@@ -88,7 +88,7 @@ import { randInt } from "#utils/random-utils";
 import { AES, enc } from "crypto-js";
 import i18next from "i18next";
 
-const saveKey = "x0i2O7WRiANTqPmZ"; // Temporary; secure encryption is not yet necessary
+const saveKey = "x0i2O7WRiANTqPmZ";
 
 function encrypt(data: string, bypassLogin: boolean): string {
   if (bypassLogin) {
@@ -415,42 +415,12 @@ export class GameData {
    * At the moment, only retrievable from locale cache
    */
   async getRunHistoryData(): Promise<RunHistoryData> {
-    if (!api.isLocal) {
-      /**
-       * Networking Code DO NOT DELETE!
-       * Note: Might have to be migrated to `api.ts`
-       *
-      const response = await Utils.apiFetch("savedata/runHistory", true);
-      const data = await response.json();
-      */
-      const lsItemKey = getLocalStorageKey(GameDataType.RUN_HISTORY);
-      const lsItem = localStorage.getItem(lsItemKey);
-      if (lsItem) {
-        const cachedResponse = lsItem;
-        if (cachedResponse) {
-          const runHistory = JSON.parse(decrypt(cachedResponse, BYPASS_LOGIN));
-          return runHistory;
-        }
-        return {};
-        // check to see whether cachedData or serverData is more up-to-date
-        /**
-       * Networking Code DO NOT DELETE!
-       *
-        if ( Object.keys(cachedRHData).length >= Object.keys(data).length ) {
-          return cachedRHData;
-        }
-        */
-      }
-      localStorage.setItem(lsItemKey, "");
-      return {};
-    }
     const lsItemKey = getLocalStorageKey(GameDataType.RUN_HISTORY);
     const lsItem = localStorage.getItem(lsItemKey);
     if (lsItem) {
       const cachedResponse = lsItem;
       if (cachedResponse) {
-        const runHistory: RunHistoryData = JSON.parse(decrypt(cachedResponse, BYPASS_LOGIN));
-        return runHistory;
+        return JSON.parse(decrypt(cachedResponse, BYPASS_LOGIN));
       }
       return {};
     }
@@ -460,9 +430,10 @@ export class GameData {
 
   /**
    * Saves a new entry to Run History
-   * @param runEntry: most recent SessionSaveData of the run
-   * @param isVictory: result of the run
-   * Arbitrary limit of 25 runs per player - Will delete runs, starting with the oldest one, if needed
+   * @param runEntry - Most recent SessionSaveData of the run
+   * @param isVictory - Result of the run
+   * @remarks
+   * Currently limited to 25 runs. If a 26th run would be saved, the oldest is deleted.
    */
   async saveRunHistory(runEntry: SessionSaveData, isVictory: boolean): Promise<boolean> {
     const runHistoryData = await this.getRunHistoryData();
@@ -487,20 +458,6 @@ export class GameData {
       getLocalStorageKey(GameDataType.RUN_HISTORY),
       encrypt(JSON.stringify(runHistoryData), BYPASS_LOGIN),
     );
-    /**
-     * Networking Code DO NOT DELETE
-     *
-    if (!Utils.isLocal) {
-      try {
-        await Utils.apiPost("savedata/runHistory", JSON.stringify(runHistoryData), undefined, true);
-        return true;
-      } catch (err) {
-        console.log("savedata/runHistory POST failed : ", err);
-        return false;
-      }
-    }
-    NOTE: should be adopted to `api.ts`
-    */
     return true;
   }
 

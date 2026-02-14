@@ -1,6 +1,6 @@
 import { getModeName } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
-import { SAVE_SLOT_LIMIT } from "#constants/app-constants";
+import { IS_BETA, IS_DEV, SAVE_SLOT_LIMIT } from "#constants/app-constants";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { Button } from "#enums/button";
 import { RunDisplayMode } from "#enums/run-display-mode";
@@ -138,7 +138,7 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
                   },
                   canBypassInputDelay: true,
                   yOffset: 28,
-                  inputDelay: import.meta.env.DEV ? 300 : 2000,
+                  inputDelay: IS_DEV || IS_BETA ? 300 : 2000,
                 };
                 ui.showText(i18next.t("saveSlotSelectUiHandler:overwriteData"), {
                   callback: () => ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, overwriteDataOptions),

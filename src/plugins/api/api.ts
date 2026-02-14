@@ -5,9 +5,7 @@ import { DailyApi } from "#api/daily-api";
 import { SavedataApi } from "#api/savedata-api";
 import type { TitleStatsResponse } from "#types/api-types";
 
-/**
- * A wrapper for API requests.
- */
+/** A wrapper for API requests. */
 class Api extends ApiBase {
   //#region Fields
 
@@ -18,11 +16,10 @@ class Api extends ApiBase {
   public readonly admin: AdminApi;
   public readonly savedata: SavedataApi;
 
-  /** Wheter the hostname is 'localhost' or an IP address, and ensure a port is specified. */
-  private readonly _isLocal: boolean;
   /** Whether the server/api is connected. By default we assume `true`. */
   private _isConnected: boolean;
 
+  //#endregion
   //#region Public
 
   constructor(base: string) {
@@ -31,26 +28,17 @@ class Api extends ApiBase {
     this.daily = new DailyApi(base);
     this.admin = new AdminApi(base);
     this.savedata = new SavedataApi(base);
-    this._isLocal =
-      ((window.location.hostname === "localhost" || /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/.test(window.location.hostname))
-        && window.location.port !== "")
-      || window.location.hostname === "";
   }
 
   /** Whether the server/api is connected. By default we assume `true`. */
-  public get isConnected() {
+  public get isConnected(): boolean {
     return this._isConnected;
-  }
-
-  /** Wheter the hostname is 'localhost' or an IP address, and ensure a port is specified. */
-  public get isLocal() {
-    return this._isLocal;
   }
 
   /**
    * Request game title-stats.
    */
-  public async getGameTitleStats() {
+  public async getGameTitleStats(): Promise<TitleStatsResponse | null> {
     if (!this.isConnected) {
       this.printServerNotConnectedWarning();
       return null;
@@ -69,7 +57,7 @@ class Api extends ApiBase {
    * Unlink the currently logged in user from Discord.
    * @returns `true` if unlinking was successful, `false` if not
    */
-  public async unlinkDiscord() {
+  public async unlinkDiscord(): Promise<boolean> {
     if (!this.isConnected) {
       this.printServerNotConnectedWarning();
       return false;
@@ -92,7 +80,7 @@ class Api extends ApiBase {
    * Unlink the currently logged in user from Google.
    * @returns `true` if unlinking was successful, `false` if not
    */
-  public async unlinkGoogle() {
+  public async unlinkGoogle(): Promise<boolean> {
     if (!this.isConnected) {
       this.printServerNotConnectedWarning();
       return false;
@@ -116,7 +104,7 @@ class Api extends ApiBase {
    * @remarks
    * We have no dedicated ping/status endpoint yet, so we ping the game title stats endpoint, but without printing any errors by default.
    */
-  async ping() {
+  public async ping(): Promise<void> {
     try {
       const response = await this.doGet("/game/titlestats");
       const data = await response.json();
@@ -129,14 +117,14 @@ class Api extends ApiBase {
       }
     }
     if (import.meta.env.VITE_API_DEBUG === "1") {
-      console.log("isLocalServerConnected:", this.isConnected);
+      console.log("`Api#isConnected`:", this.isConnected);
     }
   }
 
   //#endregion
   //#region Private
 
-  private printServerNotConnectedWarning() {
+  private printServerNotConnectedWarning(): void {
     if (import.meta.env.VITE_API_DEBUG === "1") {
       console.warn(this.ERR_SERVER_NOT_CONNECTED);
     }

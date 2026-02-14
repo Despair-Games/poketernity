@@ -1,8 +1,6 @@
 import { ApiBase } from "#api/api-base";
 
-/**
- * A wrapper for daily-run API requests.
- */
+/** A wrapper for daily-run API requests. */
 export class DailyApi extends ApiBase {
   //#region Public
 
@@ -10,7 +8,7 @@ export class DailyApi extends ApiBase {
    * Request the daily-run seed.
    * @returns The active daily-run seed as `string`.
    */
-  public async getSeed() {
+  public async getSeed(): Promise<string | null> {
     try {
       const response = await this.doGet("/daily/seed");
       return response.text();
@@ -19,4 +17,6 @@ export class DailyApi extends ApiBase {
       return null;
     }
   }
+
+  //#endregion
 }

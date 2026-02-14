@@ -10,19 +10,21 @@ export abstract class ApiBase {
 
   protected readonly base: string;
 
+  //#endregion
   //#region Public
 
   constructor(base: string) {
     this.base = base;
   }
 
+  //#endregion
   //#region Protected
 
   /**
    * Send a GET request.
    * @param path The path to send the request to.
    */
-  protected async doGet(path: string) {
+  protected async doGet(path: string): Promise<Response> {
     return this.doFetch(path, { method: "GET" });
   }
 
@@ -32,7 +34,7 @@ export abstract class ApiBase {
    * @param bodyData The body-data to send.
    * @param dataType The data-type of the {@linkcode bodyData}.
    */
-  protected async doPost<D = undefined>(path: string, bodyData?: D, dataType: DataType = "json") {
+  protected async doPost<D = undefined>(path: string, bodyData?: D, dataType: DataType = "json"): Promise<Response> {
     let body: string | undefined;
     const headers: HeadersInit = {};
 
@@ -83,11 +85,13 @@ export abstract class ApiBase {
    * @param data the data to transform to {@linkcode URLSearchParams}
    * @returns a {@linkcode URLSearchParams} representaton of {@linkcode data}
    */
-  protected toUrlSearchParams<D extends Record<string, any>>(data: D) {
+  protected toUrlSearchParams<D extends Record<string, any>>(data: D): URLSearchParams {
     const arr = Object.entries(data)
       .map(([key, value]) => [key, String(value ?? "")])
       .filter(([, value]) => value !== "");
 
     return new URLSearchParams(arr);
   }
+
+  //#endregion
 }

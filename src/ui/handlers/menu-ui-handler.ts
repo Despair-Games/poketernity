@@ -2,7 +2,7 @@ import { api } from "#api/api";
 import { loggedInUser, updateUserInfo } from "#app/account";
 import { globalScene } from "#app/global-scene";
 import { handleTutorial } from "#app/tutorial";
-import { BYPASS_LOGIN, IS_BETA, SAVE_SLOT_LIMIT, SESSION_ID_COOKIE } from "#constants/app-constants";
+import { BYPASS_LOGIN, IS_BETA, IS_DEV, SAVE_SLOT_LIMIT, SESSION_ID_COOKIE } from "#constants/app-constants";
 import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { AdminMode } from "#enums/admin-mode";
 import { Button } from "#enums/button";
@@ -223,7 +223,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
       });
     };
     // Import Session
-    if (api.isLocal || IS_BETA) {
+    if (IS_DEV || IS_BETA) {
       manageDataOptions.push({
         label: i18next.t("menuUiHandler:importSession"),
         handler: () => {
@@ -281,7 +281,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
       keepOpen: true,
     });
     // Import Data
-    if (api.isLocal || IS_BETA) {
+    if (IS_DEV || IS_BETA) {
       manageDataOptions.push({
         label: i18next.t("menuUiHandler:importData"),
         handler: () => {
@@ -320,8 +320,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
     );
 
     // TODO: fully remove test dialogue option and related handlers
-    if (api.isLocal || IS_BETA) {
-      // this should make sure we don't have this option in live
+    if (IS_DEV || IS_BETA) {
       manageDataOptions.push({
         label: "Test Dialogue",
         handler: () => {
