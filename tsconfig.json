@@ -87,5 +87,6 @@
       "#app/*": ["./src/*.ts"]
     }
   },
-  "exclude": ["node_modules", "dist"]
+  "include": ["**/*.ts", "**/*.d.ts", "**/*.mts"],
+  "exclude": ["dist", "node_modules"]
 }
