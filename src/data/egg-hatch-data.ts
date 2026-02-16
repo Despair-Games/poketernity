@@ -4,92 +4,61 @@ import type { DexEntry } from "#types/dex-data";
 import type { StarterDataEntry } from "#types/starter-data";
 
 /**
- * Stores data associated with a specific egg and the hatched pokemon
- * Allows hatch info to be stored at hatch then retrieved for display during egg summary
+ * Stores data associated with a specific egg and the hatched pokemon.
+ *
+ * Allows hatch info to be stored at hatch then retrieved for display during egg summary.
  */
 export class EggHatchData {
-  /** the pokemon that hatched from the file (including shiny, IVs, ability) */
-  public pokemon: PlayerPokemon;
-  /** index of the egg move from the hatched pokemon (not stored in PlayerPokemon) */
-  public eggMoveIndex: number;
-  /** boolean indicating if the egg move for the hatch is new */
+  /** The Pokemon that hatched from the egg (including shiny, IVs, ability) */
+  public readonly pokemon: PlayerPokemon;
+  /** The index of the egg move from the hatched Pokemon (not stored in `PlayerPokemon`) */
+  public readonly eggMoveIndex: number;
+  /** Whether the egg move for the hatch is new */
   public eggMoveUnlocked: boolean;
-  /** stored copy of the hatched pokemon's dex entry before it was updated due to hatch */
-  public dexEntryBeforeUpdate: DexEntry;
-  /** stored copy of the hatched pokemon's starter entry before it was updated due to hatch */
-  public starterDataEntryBeforeUpdate: StarterDataEntry;
+  /** A copy of the hatched Pokemon's dex entry before it was updated due to hatching */
+  private _dexEntryBeforeUpdate: DexEntry;
+  /** A copy of the hatched Pokemon's starter entry before it was updated due to hatching */
+  private _starterDataEntryBeforeUpdate: StarterDataEntry;
 
   constructor(pokemon: PlayerPokemon, eggMoveIndex: number) {
     this.pokemon = pokemon;
     this.eggMoveIndex = eggMoveIndex;
   }
 
-  /**
-   * Sets the boolean for if the egg move for the hatch is a new unlock
-   * @param unlocked True if the EM is new
-   */
-  setEggMoveUnlocked(unlocked: boolean) {
-    this.eggMoveUnlocked = unlocked;
+  public get dexEntryBeforeUpdate(): DexEntry {
+    return this._dexEntryBeforeUpdate;
+  }
+
+  public get starterDataEntryBeforeUpdate(): StarterDataEntry {
+    return this._starterDataEntryBeforeUpdate;
   }
 
   /**
-   * Stores a copy of the current DexEntry of the pokemon and StarterDataEntry of its starter
-   * Used before updating the dex, so comparing the pokemon to these entries will show the new attributes
+   * Stores a copy of the current {@linkcode DexEntry} of the pokemon and {@linkcode StarterDataEntry} of its starter.
+   *
+   * Used before updating the dex, so comparing the pokemon to these entries will show the new attributes.
    */
-  setDex() {
+  public storeDexAndStarterEntries(): void {
     const currDexEntry = globalScene.gameData.dexData[this.pokemon.species.speciesId];
     const currStarterDataEntry = globalScene.gameData.starterData[this.pokemon.species.getRootSpeciesId()];
-    this.dexEntryBeforeUpdate = {
-      seenAttr: currDexEntry.seenAttr,
-      caughtAttr: currDexEntry.caughtAttr,
-      seenCount: currDexEntry.seenCount,
-      caughtCount: currDexEntry.caughtCount,
-      hatchedCount: currDexEntry.hatchedCount,
-    };
-    this.starterDataEntryBeforeUpdate = {
-      moveset: currStarterDataEntry.moveset,
-      eggMoves: currStarterDataEntry.eggMoves,
-      candyCount: currStarterDataEntry.candyCount,
-      candyProgress: currStarterDataEntry.candyProgress,
-      abilityAttr: currStarterDataEntry.abilityAttr,
-      natureAttr: currStarterDataEntry.natureAttr,
-      ivs: [...currStarterDataEntry.ivs],
-      valueReduction: currStarterDataEntry.valueReduction,
-      classicWinCount: currStarterDataEntry.classicWinCount,
-    };
+    this._dexEntryBeforeUpdate = { ...currDexEntry };
+    this._starterDataEntryBeforeUpdate = { ...currStarterDataEntry, ivs: [...currStarterDataEntry.ivs] };
   }
 
   /**
-   * Gets the dex entry before update
-   * @returns Dex Entry corresponding to this pokemon before the pokemon was added / updated to dex
+   * Update the pokedex data corresponding with the new hatch's pokemon data.
+   *
+   * Also sets whether the egg move is a new unlock or not.
+   * @param showMessage - (Default `false`) Whether to show messages for the new catches and egg moves
    */
-  getDex(): DexEntry {
-    return this.dexEntryBeforeUpdate;
-  }
-
-  /**
-   * Gets the starter dex entry before update
-   * @returns Starter Dex Entry corresponding to this pokemon before the pokemon was added / updated to dex
-   */
-  getStarterEntry(): StarterDataEntry {
-    return this.starterDataEntryBeforeUpdate;
-  }
-
-  /**
-   * Update the pokedex data corresponding with the new hatch's pokemon data
-   * Also sets whether the egg move is a new unlock or not
-   * @param showMessage boolean to show messages for the new catches and egg moves (false by default)
-   * @returns
-   */
-  updatePokemon(showMessage: boolean = false) {
-    return new Promise<void>((resolve) => {
-      globalScene.gameData.setPokemonCaught(this.pokemon, true, true, showMessage).then(() => {
-        globalScene.gameData.updateSpeciesDexIvs(this.pokemon.species.speciesId, this.pokemon.ivs);
-        globalScene.gameData.setEggMoveUnlocked(this.pokemon.species, this.eggMoveIndex, showMessage).then((value) => {
-          this.setEggMoveUnlocked(value);
-          resolve();
-        });
-      });
-    });
+  public async updatePokemon(showMessage: boolean = false): Promise<void> {
+    await globalScene.gameData.setPokemonCaught(this.pokemon, true, true, showMessage);
+    globalScene.gameData.updateSpeciesDexIvs(this.pokemon.species.speciesId, this.pokemon.ivs);
+    const unlocked = await globalScene.gameData.setEggMoveUnlocked(
+      this.pokemon.species,
+      this.eggMoveIndex,
+      showMessage,
+    );
+    this.eggMoveUnlocked = unlocked;
   }
 }

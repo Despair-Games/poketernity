@@ -126,7 +126,7 @@ export class EggLapsePhase extends Phase {
         // At the very least we should destroy them when we are done with them
         ret = egg.generatePlayerPokemon();
         newHatchData = new EggHatchData(ret, egg.eggMoveIndex);
-        newHatchData.setDex();
+        newHatchData.storeDexAndStarterEntries();
         this.eggHatchData.push(newHatchData);
       },
       egg.id,

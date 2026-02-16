@@ -165,6 +165,8 @@ export class EggHatchPhase extends Phase {
 
       this.pokemon = pokemon;
 
+      // biome-ignore-start lint/nursery/noFloatingPromises: needs to be cleaned up
+      // biome-ignore-start lint/nursery/noNestedPromises: needs to be cleaned up
       pokemon.loadAssets().then(() => {
         this.canSkip = true;
 
@@ -215,6 +217,8 @@ export class EggHatchPhase extends Phase {
           });
         });
       });
+      // biome-ignore-end lint/nursery/noNestedPromises: end
+      // biome-ignore-end lint/nursery/noFloatingPromises: end
     });
   }
 
@@ -360,13 +364,14 @@ export class EggHatchPhase extends Phase {
           {
             callback: () => {
               globalScene.gameData.updateSpeciesDexIvs(this.pokemon.species.speciesId, this.pokemon.ivs);
-              globalScene.gameData.setPokemonCaught(this.pokemon, true, true).then(() => {
-                globalScene.gameData.setEggMoveUnlocked(this.pokemon.species, this.eggMoveIndex).then((value) => {
-                  this.eggHatchData.setEggMoveUnlocked(value);
+              globalScene.gameData
+                .setPokemonCaught(this.pokemon, true, true)
+                .then(() => globalScene.gameData.setEggMoveUnlocked(this.pokemon.species, this.eggMoveIndex))
+                .then((value) => {
+                  this.eggHatchData.eggMoveUnlocked = value;
                   globalScene.ui.showText("", { delay: 0 });
                   this.end();
                 });
-              });
             },
             prompt: true,
             promptDelay: 3000,
