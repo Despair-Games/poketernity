@@ -1039,6 +1039,7 @@ export function getMoveTargets(user: Pokemon, moveId: MoveId, replaceTarget?: Mo
   let targets: BattlerIndex[] | undefined;
   let multiple = false;
 
+  // biome-ignore lint/nursery/useExhaustiveSwitchCases: false positive
   switch (moveTarget) {
     case MoveTarget.USER:
     case MoveTarget.PARTY:

@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.3.11/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.4.0/schema.json",
   "vcs": {
     "enabled": false,
     "clientKind": "git",
@@ -159,7 +159,8 @@
         "useGuardForIn": "error",
         "useNumberToFixedDigitsArgument": "error",
         "noEvolvingTypes": "error",
-        "noNonNullAssertedOptionalChain": "error"
+        "noNonNullAssertedOptionalChain": "error",
+        "noImportCycles": "error" // overlaps with depcruiser but this will allow diagnostics to be shown in the IDE
       },
       "complexity": {
         "noExcessiveCognitiveComplexity": "info",
@@ -175,17 +176,16 @@
         "useIndexOf": "error",
         "noVoid": "error",
         "useWhile": "error",
-        "noUselessStringConcat": "error"
+        "noUselessStringConcat": "error",
+        "noUselessUndefined": "error"
       },
       "nursery": {
         "noShadow": "error",
-        "noUselessUndefined": "error",
         "useExplicitType": "off", // TODO: refactor and make "error"
         "noFloatingPromises": "warn", // TODO: refactor and make "error"
         "noMisusedPromises": "warn", // TODO: refactor and make "error"
         "useExhaustiveSwitchCases": "error",
         "noUnnecessaryConditions": "off", // TODO: enable when the false positives are fixed
-        "noImportCycles": "error", // overlaps with depcruiser but this will allow diagnostics to be shown in the IDE
         "useArraySortCompare": "error",
         "useFind": "error",
         "noParametersOnlyUsedInRecursion": "error",

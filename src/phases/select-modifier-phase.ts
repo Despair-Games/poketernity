@@ -239,6 +239,9 @@ export class SelectModifierPhase extends BattlePhase {
               uiHandler.updateRerollCostText();
               return false;
             }
+            default:
+              console.error("Invalid cursor value in `SelectModifierPhase`:", cursor);
+              return false;
           }
           return true;
         case 1:
