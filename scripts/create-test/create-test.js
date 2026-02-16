@@ -62,6 +62,7 @@ async function promptTestType() {
     return await promptTestType();
   }
 
+  // @ts-expect-error: ?
   return typeAnswer;
 }
 
