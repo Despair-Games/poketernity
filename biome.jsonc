@@ -194,7 +194,8 @@
         "noMultiStr": "error",
         "useRegexpExec": "error",
         "noReturnAssign": "error",
-        "noMultiAssign": "error"
+        "noMultiAssign": "error",
+        "noNestedPromises": "error"
       },
       "performance": {
         "noNamespaceImport": "error",
