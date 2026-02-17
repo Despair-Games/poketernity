@@ -7,23 +7,23 @@ import { MoveId } from "#enums/move-id";
 import { initMoveChargeAnim } from "#init/init-move-charge-anim";
 import { BeakBlastHeaderAttr } from "#moves/beak-blast-header-attr";
 import { DelayedAttackAttr } from "#moves/delayed-attack-attr";
-import type { ChargingMove } from "#moves/move";
+import type { Move } from "#moves/move";
 import { animationFileName } from "#utils/string-utils";
 
 //#region Exports
 
-export function initMoveAnim(move: MoveId): Promise<void> {
+export async function initMoveAnim(moveId: MoveId): Promise<void> {
   return new Promise((resolve) => {
-    if (moveAnims.has(move)) {
-      if (moveAnims.get(move) !== null) {
+    const move = allMoves.get(moveId);
+    if (moveAnims.has(moveId)) {
+      if (moveAnims.get(moveId) !== null) {
         resolve();
       } else {
         const loadedCheckTimer = setInterval(() => {
-          if (moveAnims.get(move) !== null) {
-            const chargeAnimSource = allMoves.get(move).isChargingMove()
-              ? (allMoves.get(move) as ChargingMove)
-              : (allMoves.get(move).getAttrs(DelayedAttackAttr)[0]
-                ?? allMoves.get(move).getAttrs(BeakBlastHeaderAttr)[0]);
+          if (moveAnims.get(moveId) !== null) {
+            const chargeAnimSource = move.isChargingMove()
+              ? move
+              : (move.getAttrs(DelayedAttackAttr)[0] ?? move.getAttrs(BeakBlastHeaderAttr)[0]);
             if (chargeAnimSource && chargeAnims.get(chargeAnimSource.chargeAnim) === null) {
               return;
             }
@@ -33,45 +33,45 @@ export function initMoveAnim(move: MoveId): Promise<void> {
         }, 50);
       }
     } else {
-      moveAnims.set(move, null);
+      moveAnims.set(moveId, null);
       let defaultMoveAnim: MoveId = MoveId.TAIL_WHIP;
-      if (allMoves.get(move).isAttackMove()) {
+      if (move.isAttackMove()) {
         defaultMoveAnim = MoveId.TACKLE;
-      } else if (allMoves.get(move).isSelfStatusMove()) {
+      } else if ((move as Move).isSelfStatusMove()) {
         defaultMoveAnim = MoveId.FOCUS_ENERGY;
       }
 
       globalScene
-        .cachedFetch(`./battle-anims/${animationFileName(move)}.json`)
+        .cachedFetch(`./battle-anims/${animationFileName(moveId)}.json`)
         .then((response) => {
           const contentType = response.headers.get("content-type");
           if (!response.ok || contentType?.indexOf("application/json") === -1) {
-            useDefaultAnim(move, defaultMoveAnim);
-            logMissingMoveAnim(move, response.status, response.statusText);
+            useDefaultAnim(moveId, defaultMoveAnim);
+            logMissingMoveAnim(moveId, response.status, response.statusText);
             return resolve();
           }
           return response.json();
         })
         .then((ba) => {
           if (Array.isArray(ba)) {
-            populateMoveAnim(move, ba[0]);
-            populateMoveAnim(move, ba[1]);
+            populateMoveAnim(moveId, ba[0]);
+            populateMoveAnim(moveId, ba[1]);
           } else {
-            populateMoveAnim(move, ba);
+            populateMoveAnim(moveId, ba);
           }
-          const chargeAnimSource = allMoves.get(move).isChargingMove()
-            ? (allMoves.get(move) as ChargingMove)
-            : (allMoves.get(move).getAttrs(DelayedAttackAttr)[0]
-              ?? allMoves.get(move).getAttrs(BeakBlastHeaderAttr)[0]);
+          const chargeAnimSource = move.isChargingMove()
+            ? move
+            : (move.getAttrs(DelayedAttackAttr)[0] ?? move.getAttrs(BeakBlastHeaderAttr)[0]);
           if (chargeAnimSource) {
+            // biome-ignore lint/nursery/noNestedPromises: not sure how to fix
             initMoveChargeAnim(chargeAnimSource.chargeAnim).then(() => resolve());
           } else {
             resolve();
           }
         })
         .catch((error) => {
-          useDefaultAnim(move, defaultMoveAnim);
-          logMissingMoveAnim(move, error);
+          useDefaultAnim(moveId, defaultMoveAnim);
+          logMissingMoveAnim(moveId, error);
           return resolve();
         });
     }

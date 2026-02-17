@@ -76,18 +76,18 @@ export class TrainerVictoryPhase extends BattlePhase {
             showMessageOrEnd();
           };
           let showMessageOrEnd = (): void => this.end();
-          if (victoryMessages.length) {
+          if (victoryMessages.length > 0) {
             if (trainer.config.hasCharSprite && !ui.shouldSkipDialogue(message)) {
               const originalFunc = showMessageOrEnd;
               showMessageOrEnd = (): Promise<void> =>
-                charSprite.hide().then(() => globalScene.hideFieldOverlay(250).then(() => originalFunc()));
+                charSprite
+                  .hide()
+                  .then(() => globalScene.hideFieldOverlay(250))
+                  .then(() => originalFunc());
               globalScene
                 .showFieldOverlay(500)
-                .then(() =>
-                  charSprite
-                    .showCharacter(trainer.getKey(), getCharVariantFromDialogue(victoryMessages[0]))
-                    .then(() => showMessage()),
-                );
+                .then(() => charSprite.showCharacter(trainer.getKey(), getCharVariantFromDialogue(victoryMessages[0])))
+                .then(() => showMessage());
             } else {
               showMessage();
             }

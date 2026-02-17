@@ -103,6 +103,7 @@ export class RegistrationFormUiHandler extends FormModalUiHandler {
         if (registerError) {
           onFail(registerError);
         } else {
+          // biome-ignore lint/nursery/noNestedPromises: not fixable (yet)?
           api.account.login({ username: usernameInput.text, password: passwordInput.text }).then((loginError) => {
             if (loginError) {
               onFail(loginError);

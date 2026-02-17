@@ -170,9 +170,9 @@ const mainMenuAccessedModes: readonly UiMode[] = [
 const DEFAULT_MODE = UiMode.MESSAGE;
 
 export class UI extends Phaser.GameObjects.Container {
-  private mode: UiMode;
-  private modeChain: UiMode[];
-  private readonly handlers: Map<UiMode, UiHandler>;
+  private mode: UiMode = DEFAULT_MODE;
+  private modeChain: UiMode[] = [];
+  private readonly handlers: Map<UiMode, UiHandler> = new Map<UiMode, UiHandler>();
   private overlay: Phaser.GameObjects.Rectangle;
   public achvBar: AchvBar; // TODO: make private and add helper functions
   public bgmBar: BgmBar; // TODO: make private and add helper functions
@@ -192,10 +192,6 @@ export class UI extends Phaser.GameObjects.Container {
 
   constructor() {
     super(globalScene, 0, GAME_HEIGHT);
-
-    this.mode = DEFAULT_MODE;
-    this.modeChain = [];
-    this.handlers = new Map<UiMode, UiHandler>();
   }
 
   public setup(): void {
@@ -962,12 +958,14 @@ export class UI extends Phaser.GameObjects.Container {
    * Revert through all the modes currently in the mode chain.
    * @returns Promise that resolves when the mode chain is empty.
    */
-  public revertModes(): Promise<void> {
+  public async revertModes(): Promise<void> {
     return new Promise<void>((resolve) => {
-      if (!this?.modeChain?.length) {
+      if (this.modeChain.length === 0) {
         return resolve();
       }
-      this.revertMode().then((success) => executeIf(success, this.revertModes).then(() => resolve()));
+      this.revertMode()
+        .then((success) => executeIf(success, this.revertModes))
+        .then(() => resolve());
     });
   }
 

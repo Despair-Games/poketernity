@@ -3757,7 +3757,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return this.summonData.moveQueue;
   }
 
-  changeForm(formChange: SpeciesFormChange): Promise<void> {
+  public async changeForm(formChange: SpeciesFormChange): Promise<void> {
     return new Promise((resolve) => {
       this.formIndex = Math.max(
         this.species.forms.findIndex((f) => f.formKey === formChange.formKey),
@@ -3771,11 +3771,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       }
       globalScene.gameData.setPokemonSeen(this, false);
       this.setScale(this.getSpriteScale());
-      this.loadAssets().then(() => {
-        this.calculateStats();
-        globalScene.updateModifiers(this.isPlayer(), true);
-        Promise.all([this.updateInfo(), globalScene.updateFieldScale()]).then(() => resolve());
-      });
+      this.loadAssets()
+        .then(() => {
+          this.calculateStats();
+          globalScene.updateModifiers(this.isPlayer(), true);
+          return Promise.all([this.updateInfo(), globalScene.updateFieldScale()]);
+        })
+        .then(() => resolve());
     });
   }
 

@@ -257,6 +257,7 @@ export class AttemptCapturePhase extends PokemonPhase {
 
     gameData.updateSpeciesDexIvs(pokemon.species.getRootSpeciesId(true), pokemon.ivs);
 
+    // TODO: untangle this callback hell
     ui.showText(i18next.t("battle:pokemonCaught", { pokemonName: getPokemonNameWithAffix(pokemon) }), {
       callback: () => {
         const end = (): void => {
@@ -299,6 +300,7 @@ export class AttemptCapturePhase extends PokemonPhase {
                       SummaryUiMode.DEFAULT,
                       SummaryUiPage.PROFILE,
                       () => {
+                        // biome-ignore lint/nursery/noNestedPromises: not fixable (yet)?
                         ui.setMessageMode().then(() => {
                           promptRelease();
                         });
@@ -332,6 +334,7 @@ export class AttemptCapturePhase extends PokemonPhase {
                 {
                   label: i18next.t("menu:no"),
                   handler: () => {
+                    // biome-ignore lint/nursery/noNestedPromises: not fixable (yet)?
                     ui.setMessageMode().then(() => {
                       removePokemon();
                       end();

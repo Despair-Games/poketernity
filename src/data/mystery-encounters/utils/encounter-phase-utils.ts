@@ -664,7 +664,7 @@ interface PokemonAndOptionSelected {
  * @param selectablePokemonFilter - The filter for selectable Pokemon
  * @param onHoverOverCancelOption - The function that is called when hovering over the cancel option
  */
-export function selectOptionThenPokemon(
+export async function selectOptionThenPokemon(
   options: OptionSelectItem[],
   optionSelectPromptKey: string,
   selectablePokemonFilter?: PokemonSelectFilter,
@@ -676,6 +676,7 @@ export function selectOptionThenPokemon(
     const displayOptions = (cfg: OptionSelectModeConfig) => {
       globalScene.ui.setMessageMode().then(() => {
         if (optionSelectPromptKey) {
+          // biome-ignore lint/nursery/noNestedPromises: not sure how to fix this
           showEncounterText(optionSelectPromptKey).then(() => {
             // Do hover over the starting selection option
             if (fullOptions[0].onHover) {

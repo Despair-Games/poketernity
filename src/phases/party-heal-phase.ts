@@ -2,9 +2,7 @@ import { globalScene } from "#app/global-scene";
 import { BattlePhase } from "#phases/base/battle-phase";
 import { fixedNumber } from "#utils/common-utils";
 
-/**
- * Fully heals the player's party, usually occurs after every 10th wave
- */
+/** Fully heals the player's party. Usually occurs after every 10th wave. */
 export class PartyHealPhase extends BattlePhase {
   public override readonly phaseName = "PartyHealPhase";
 
@@ -39,6 +37,7 @@ export class PartyHealPhase extends BattlePhase {
         if (this.resumeBgm && bgmPlaying) {
           globalScene.audioManager.playBgm();
         }
+        // biome-ignore lint/nursery/noNestedPromises: not fixable (yet)?
         ui.fadeIn(500).then(() => this.end());
       });
     });

@@ -581,9 +581,10 @@ export class MenuUiHandler extends OptionSelectUiHandler {
                   window.open(discordUrl, "_self");
                   return true;
                 }
-                api.unlinkDiscord().then((_isSuccess) => {
-                  updateUserInfo().then(() => globalScene.reset(true, true));
-                });
+                api
+                  .unlinkDiscord()
+                  .then(() => updateUserInfo())
+                  .then(() => globalScene.reset(true, true));
                 return true;
               },
             },
@@ -601,9 +602,10 @@ export class MenuUiHandler extends OptionSelectUiHandler {
                   window.open(googleUrl, "_self");
                   return true;
                 }
-                api.unlinkGoogle().then((_isSuccess) => {
-                  updateUserInfo().then(() => globalScene.reset(true, true));
-                });
+                api
+                  .unlinkGoogle()
+                  .then(() => updateUserInfo())
+                  .then(() => globalScene.reset(true, true));
                 return true;
               },
             },
@@ -657,9 +659,10 @@ export class MenuUiHandler extends OptionSelectUiHandler {
           ui.setMode<LoadingModalUiHandler>(UiMode.LOADING, {
             buttonActions: [],
             fadeOut: () =>
-              api.account.logout().then(() => {
-                updateUserInfo().then(() => globalScene.reset(true, true));
-              }),
+              api.account
+                .logout()
+                .then(() => updateUserInfo())
+                .then(() => globalScene.reset(true, true)),
           });
         };
         if (globalScene.currentBattle) {

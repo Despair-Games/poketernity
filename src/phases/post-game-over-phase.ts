@@ -22,7 +22,8 @@ export class PostGameOverPhase extends Phase {
         if (!isSuccess) {
           return globalScene.reset(true);
         }
-        gameData.tryClearSession(sessionSlotId).then((success: boolean | [boolean, boolean]) => {
+        // biome-ignore lint/nursery/noNestedPromises: not fixable (yet)?
+        gameData.tryClearSession(sessionSlotId).then((success) => {
           if (!success[0]) {
             return globalScene.reset(true);
           }

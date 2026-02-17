@@ -1,3 +1,5 @@
+// biome-ignore-all lint/nursery/noNestedPromises: requires significant refactoring
+
 import { api } from "#api/api";
 import { clientSessionId, getLocalStorageKey, loggedInUser, updateUserInfo } from "#app/account";
 import { getGameMode } from "#app/game-mode";

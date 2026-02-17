@@ -225,7 +225,7 @@ export class PlayerPokemon extends Pokemon {
    * @param evolution - The {@linkcode SpeciesFormEvolution} to use
    * @returns array of {@linkcode SpeciesId} of unlocked starters, if any (root species will be last in the array)
    */
-  public evolve(evolution: SpeciesFormEvolution | null): Promise<SpeciesId[]> {
+  public async evolve(evolution: SpeciesFormEvolution | null): Promise<SpeciesId[]> {
     if (!evolution) {
       return new Promise((resolve) => resolve([]));
     }
@@ -259,10 +259,12 @@ export class PlayerPokemon extends Pokemon {
       this.compatibleTms.splice(0, this.compatibleTms.length);
       this.generateCompatibleTms();
       const updateAndResolve = (unlockedStarters: SpeciesId[]) => {
-        this.loadAssets().then(() => {
-          this.calculateStats();
-          this.updateInfo(true).then(() => resolve(unlockedStarters));
-        });
+        this.loadAssets()
+          .then(() => {
+            this.calculateStats();
+            return this.updateInfo(true);
+          })
+          .then(() => resolve(unlockedStarters));
       };
       // TODO: should this be done in "handleSpecialEvolutions" to keep all species-specific things in the same spot?
       if (preEvolutionSpecies.speciesId === SpeciesId.GIMMIGHOUL) {
@@ -342,7 +344,7 @@ export class PlayerPokemon extends Pokemon {
     return ret;
   }
 
-  override changeForm(formChange: SpeciesFormChange): Promise<void> {
+  override async changeForm(formChange: SpeciesFormChange): Promise<void> {
     return new Promise((resolve) => {
       const previousFormIndex = this.formIndex;
       this.formIndex = Math.max(
@@ -378,11 +380,13 @@ export class PlayerPokemon extends Pokemon {
       this.compatibleTms.splice(0, this.compatibleTms.length);
       this.generateCompatibleTms();
       const updateAndResolve = () => {
-        this.loadAssets().then(() => {
-          this.calculateStats();
-          globalScene.updateModifiers(true, true);
-          this.updateInfo(true).then(() => resolve());
-        });
+        this.loadAssets()
+          .then(() => {
+            this.calculateStats();
+            globalScene.updateModifiers(true, true);
+            return this.updateInfo(true);
+          })
+          .then(() => resolve());
       };
       if (!globalScene.gameMode.isDaily || this.metBiome > -1) {
         globalScene.gameData.setPokemonSeen(this, false);

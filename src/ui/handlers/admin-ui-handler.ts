@@ -228,6 +228,7 @@ export class AdminUiHandler extends FormModalUiHandler {
                   }
                   // success, reload panel with new results
                   globalScene.ui.setMode<LoadingModalUiHandler>(UiMode.LOADING, { buttonActions: [] });
+                  // biome-ignore lint/nursery/noNestedPromises: not fixable (yet)?
                   this.adminSearch(adminResult).then((res) => {
                     if (res.error) {
                       return this.showMessage(res.errorType, adminResult, true);
