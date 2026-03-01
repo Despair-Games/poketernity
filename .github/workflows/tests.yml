@@ -1,23 +1,50 @@
 name: Tests
 
 on:
-  # Trigger the workflow on push or pull request,
-  # but only for the main branch
   push:
     branches:
-      - main # Trigger on push events to the main branch
-      - beta # Trigger on push events to the beta branch
+      - main
+      - beta
   pull_request:
     branches:
-      - main # Trigger on pull request events targeting the main branch
-      - beta # Trigger on pull request events targeting the beta branch
+      - main
+      - beta
   merge_group:
     types: [checks_requested]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
 jobs:
+  check-path-change-filter:
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      all: ${{ steps.filter.outputs.all }}
+    steps:
+      - name: Checkout GitHub repository
+        uses: actions/checkout@v6
+        with:
+          sparse-checkout: |
+            .github/test-filters.yml
+
+      - uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # v3.0.2
+        id: filter
+        with:
+          filters: .github/test-filters.yml
+
   run-tests:
     name: Run Tests
+    needs: check-path-change-filter
+    if: ${{ needs.check-path-change-filter.outputs.all == 'true'}}
     strategy:
+      # don't stop upon 1 shard failing
+      fail-fast: false
       matrix:
         shard: [1, 2, 3, 4, 5]
     uses: ./.github/workflows/test-shard-template.yml

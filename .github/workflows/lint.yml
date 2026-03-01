@@ -11,81 +11,78 @@ on:
       - beta
   merge_group:
     types: [checks_requested]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
 
 jobs:
+  linting-path-filter:
+    name: Linting path filter
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      all: ${{ steps.filter.outputs.all }}
+      ts-files: ${{ steps.filter.outputs.ts-files }}
+      js-files: ${{ steps.filter.outputs.js-files }}
+    steps:
+      - name: Checkout GitHub repository
+        uses: actions/checkout@v6
+        with:
+          sparse-checkout: |
+            .github/lint-filters.yml
+
+      - uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # v3.0.2
+        id: filter
+        with:
+          filters: .github/lint-filters.yml
+
   run-linters:
     name: Run all linters
+    timeout-minutes: 10
     runs-on: ubuntu-latest
+    needs: linting-path-filter
+    if: ${{ needs.linting-path-filter.outputs.all == 'true' || needs.linting-path-filter.outputs.ts-files == 'true' || needs.linting-path-filter.outputs.js-files == 'true' }}
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: "recursive"
-      
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
 
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: ".nvmrc"
-          cache: "pnpm"
+      - uses: ./.github/actions/setup-deps
 
-      - name: Install Node modules
-        run: pnpm i
-      
-      # Lint files with Biome-Lint - https://biomejs.dev/linter/
-      - name: Run Biome-Lint
+      # Lint files with Biome - https://biomejs.dev/linter/
+      - name: Lint with Biome
         run: pnpm biome-ci
-        id: biome_lint
-        continue-on-error: true
-      
+        if: ${{ !cancelled() }}
+
       # Validate dependencies with dependency-cruiser - https://github.com/sverweij/dependency-cruiser
-      - name: Run Dependency-Cruise
+      - name: Run Dependency Cruiser
         run: pnpm depcruise
-        id: depcruise
-        continue-on-error: true
+        if: ${{ !cancelled() }}
 
       # Validate types with tsc - https://www.typescriptlang.org/docs/handbook/compiler-options.html#using-the-cli
-      - name: Run Typecheck
+      - name: Run Typecheck (TS files)
         run: pnpm typecheck
-        id: typecheck
-        continue-on-error: true
-      
-      - name: Evaluate for Errors
-        env:
-          BIOME_LINT_OUTCOME: ${{ steps.biome_lint.outcome }}
-          DEPCRUISE_OUTCOME: ${{ steps.depcruise.outcome }}
-          TYPECHECK_OUTCOME: ${{ steps.typecheck.outcome }}
-        run: |
-          # Check for Errors
+        if: ${{ !cancelled() && (needs.linting-path-filter.outputs.all == 'true' || needs.linting-path-filter.outputs.ts-files == 'true') }}
 
-          RED='\033[0;31m'
-          GREEN='\033[0;32m'
-          NC='\033[0m' # No Color
+      # Run tsc again on all JS files.
+      # Required in order to use separate rules for different types of files
+      - name: Run Typecheck (JS files)
+        run: pnpm typecheck:js
+        if: ${{ !cancelled() && (needs.linting-path-filter.outputs.all == 'true' || needs.linting-path-filter.outputs.js-files == 'true') }}
 
-          print_result() {
-            local name=$1
-            local outcome=$2
-            if [ "$outcome" == "success" ]; then
-              echo -e "${GREEN}✅ $name: $outcome${NC}"
-            else
-              echo -e "${RED}❌ $name: $outcome${NC}"
-            fi
-          }
+      # Lint TS/JS files with tsgo to ensure compatibility - https://github.com/microsoft/typescript-go
+      - name: Run Typecheck (tsgo, TS files)
+        run: pnpm dlx @typescript/native-preview
+        if: ${{ !cancelled() && (needs.linting-path-filter.outputs.all == 'true' || needs.linting-path-filter.outputs.ts-files == 'true') }}
 
-          print_result "Biome" "$BIOME_LINT_OUTCOME"
-          print_result "Depcruise" "$DEPCRUISE_OUTCOME"
-          print_result "Typecheck" "$TYPECHECK_OUTCOME"
-
-          if [[ "$BIOME_LINT_OUTCOME" != "success" || \
-                "$DEPCRUISE_OUTCOME" != "success" || \
-                "$TYPECHECK_OUTCOME" != "success" ]]; then
-            echo -e "\n${RED}❌ One or more checks failed.${NC}"
-            exit 1
-          fi
-
-          echo -e "\n${GREEN}✅ All checks passed.${NC}"
+      - name: Run Typecheck (tsgo, JS files)
+        run: pnpm dlx @typescript/native-preview -p jsconfig.json
+        if: ${{ !cancelled() && (needs.linting-path-filter.outputs.all == 'true' || needs.linting-path-filter.outputs.js-files == 'true') }}
