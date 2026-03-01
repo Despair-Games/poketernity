@@ -3,64 +3,29 @@
 <!-- Feel free to look at other PRs for examples -->
 
 <!--
-The PR title must match this format (and is ideally less than or equal to 72 characters):
+Make sure your title matches the https://www.conventionalcommits.org/en/v1.0.0/ format.
+
+Ideally the title is less than or equal to 72 characters (GitHub cuts off commit titles longer than this length).
+
+See https://github.com/pagefaultgames/pokerogue/blob/beta/PULL_REQUESTS.md for more information on the allowed scopes and prefixes.
+
+Example:
 
 fix(move): Future Sight no longer crashes
 ^   ^      ^
 |   |      |__ Subject
 |   |_________ Scope (optional)
 |_____________ Prefix
-
-You should add a `!` before the `:` if the PR includes a version increase / save migrator. Example:
-refactor!: change Tera mechanic to match mainline
-
-List of valid prefixes:
-  balance - Primarily a balance change
-  deps - Primarily adding/updating/removing dependencies
-  dev - Improving the developer experience (such as by modifying lint rules or creating cli scripts)
-  docs - Primarily adding/updating documentation
-  feat - Adding a new feature (e.g. adding a new implementation of a move) or redesigning an existing feature
-  fix - Fixing a bug
-  github - Updating the CI pipeline or otherwise modifying something in the `./github/` directory
-  i18n - Updating the localization submodule, adding new translatable text, etc
-  misc - A change that doesn't fit any other category
-  refactor - A change that doesn't impact functionality or fix any bugs (except incidentally)
-  revert - Reverting a previous commit
-  test - Primarily adding/updating tests or modifying the test framework
-
-List of valid scopes:
-  ability
-  ai
-  anomaly - Formerly "Mystery Encounters"
-  audio
-  battle - Relating to the general battle engine
-  biomes
-  challenge
-  data - Data not covered by other scopes, such as TM lists
-  event
-  graphics - Anything related to art/graphics (adding new sprites, fixing a sprite that isn't displaying, etc)
-  item
-  move
-  ui - UI/UX
-
-List of valid "prefix(scope)" combinations:
-  balance - ability, ai, anomaly, biomes, challenge, item, move
-  deps - N/A
-  dev - N/A
-  docs - N/A
-  feat - All
-  fix - All
-  github - N/A
-  i18n - N/A
-  misc - N/A
-  refactor - All
-  revert - N/A
-  test - N/A
 -->
 
 <!--
-Make sure that this PR is not overlapping with someone else's work
-Please try to keep the PR self-contained (and small)
+Make sure that this PR is not overlapping with someone else's work.
+Please try to keep the PR self-contained (don't change a bunch of unrelated things).
+-->
+<!--
+The first section is mandatory if there are user-facing changes (it will be used as the base for a changelog entry).
+The second and third section are mandatory.
+The screenshot/video section is mandatory if you made any visual changes (such as to UI elements).
 -->
 
 ## What are the changes the user will see?
@@ -70,29 +35,41 @@ Please try to keep the PR self-contained (and small)
 ## Why am I making these changes?
 
 <!--
-Explain why you decided to introduce these changes
-Does it come from an issue or another PR? Please link it
-Explain why you believe this can enhance user experience
+Explain why you decided to introduce these changes.
+Does it come from an issue or another PR? Link to them if possible.
+Explain why you believe this can enhance user experience.
 -->
 <!--
 If there are existing GitHub issues related to the PR that would be fixed,
-you can add "Fixes #[issue number]" (ie: "Fixes #1234") to link an issue to your PR
+you can add "Fixes #[issue number]" (e.g.: "Fixes #1234") to link an issue to your PR
 so that it will automatically be closed when the PR is merged.
 -->
 
 ## What are the changes from a developer perspective?
 
 <!--
-Explicitly state what are the changes introduced by the PR
-You can make use of a comparison between what was the state before and after your PR changes
+Describe the codebase changes introduced by the PR.
+You can make use of a comparison between the state of the code before and after your changes.
 Ex: What files have been changed? What classes/functions/variables/etc have been added or changed?
 -->
 
 ## Screenshots/Videos
 
 <!--
-If your changes are changing anything on the user experience, please provide visual proofs of it
-Please take screenshots/videos before and after your changes, to show what is brought by this PR
+If you are changing anything visual (such as UI/UX), put screenshot(s) and/or video(s) showing the changes here.
+
+Please use one or more collapsible blocks, e.g.:
+
+<details><summary>Before</summary>
+
+[before screenshot here]
+
+</details>
+<details><summary>After</summary>
+
+[after screenshot here]
+
+</details>
 -->
 
 ## How to test the changes?
@@ -106,32 +83,44 @@ Do the reviewers need to do something special in order to test your changes?
 
 ## Checklist
 
-- [ ] ⚠️ If this is a PR for `main` (such as a hotfix), has the game version been updated (`pnpm update-version:patch` / `pnpm update-version:minor`?
-- [ ] Otherwise: **I'm using `beta` as my base branch**
-- [ ] There is no overlap with another PR?
-- [ ] The PR is self-contained and cannot be split into smaller PRs?
-- [ ] Have I provided a clear explanation of the changes?
-- [ ] Have I tested the changes manually?
-- [ ] Are all unit tests still passing? (`pnpm test:silent`)
-  - [ ] Have I created new automated tests (`pnpm test:create`) or updated existing tests related to the PR's changes?
-- [ ] Have I provided screenshots/videos of the changes (if applicable)?
-  - [ ] Have I made sure that any UI change works for both UI themes (dark and light)?
+<!--
+If an item isn't valid (for example, you didn't make any locales changes)
+you can cross it out using the tilde character (~), e.g.:
+- ~[ ] A locales PR been created on the [locales](https://github.com/despair-games/poketernity-locales) repo~
+-->
+<!-- - [ ] ⚠️ If this is a PR for `main` (such as a hotfix), the game version been updated (`pnpm update-version:patch` / `pnpm update-version:minor`) -->
+- [ ] <!--Otherwise: -->**I'm using `beta` as my base branch**
+- [ ] There is no overlap with another PR
+- [ ] The PR is self-contained and cannot be split into smaller PRs
+- [ ] I have provided a clear explanation of the changes
+- [ ] The PR title matches the format described in [PULL_REQUESTS.md](https://github.com/pagefaultgames/pokerogue/blob/beta/PULL_REQUESTS.md)
+- [ ] I have tested the changes manually
+- [ ] The full test suite still passes (`pnpm test:silent`)
+  - [ ] I have created new automated tests (`pnpm test:create`) or updated existing tests related to the PR's changes
+- [ ] I have provided screenshots/videos of the changes (if applicable)
+  - [ ] I have made sure that any UI change works for both the dark and light UI themes (if applicable)
 
 #### Are there any localization additions or changes? If so:
 
-- [ ] Has a locales PR been created on the [locales](https://github.com/despair-games/poketernity-locales) repo?
-  - [ ] If so, please leave a link to it here:
-- [ ] Have I added the `Localization` tag to this PR?
-<!-- not relevant for now - [ ] Has the translation team been contacted for proofreading/translation? -->
-<!-- You can find a summarized version of the merging process surrounding locale PRs in your locale PR itself. For full instructions, check [localization.md](https://github.com/Despair-Games/poketernity/blob/beta/docs/localization.md) -->
+- [ ] A locales PR been created on the [locales](https://github.com/despair-games/poketernity-locales) repo
+  - [ ] Link to locales PR: 
+- [ ] I have added the `Localization` tag to this PR
+<!--
+You can find a summarized version of the merging process surrounding locale PRs in your locale PR itself.
+For full instructions, check [localization.md](https://github.com/Despair-Games/poketernity/blob/beta/docs/localization.md)
+-->
 
 #### If there are no locale changes:
-- [ ] Have I made sure **not** to commit any changes to the locale repo on this branch?
-<!-- check the `Files Changed` tab on the PR to be sure. 
-`public/locales` should not appear here, or it will create needless conflicts for future PRs and could potentially roll back changes already merged to beta. -->
+- [ ] I have made sure **not** to commit any changes to the locales repo on this branch
+<!--
+check the `Files Changed` tab on the PR to be sure. 
+`public/locales` should not appear here, or it will create needless conflicts for future PRs and could potentially roll back changes already merged to beta.
+-->
 
-<!-- How to fix it if no: -->
-<!-- #### Using the Command Line:
+<!--
+How to fix it if no:
+
+#### Using the Command Line:
 - Go to https://github.com/Despair-Games/poketernity/tree/beta/public and copy the hash of the current locale commit beta is pointing to
 - If the hash corresponds to the latest commit in the locale repo:
   - `pnpm update-locales:remote`
@@ -147,4 +136,5 @@ Do the reviewers need to do something special in order to test your changes?
  /!\ anyone using another tool, feel free to add instructions there /!\
 
 You may have to do this again later and fix conflicts if beta keeps updating the locale repo.
-**When fixing conflicts, make sure you prioritize the latest commit between the one on beta and this branch, to avoid any rollbacks.** -->
+**When fixing conflicts, make sure you prioritize the latest commit between the one on beta and this branch, to avoid any rollbacks.**
+-->

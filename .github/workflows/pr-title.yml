@@ -6,6 +6,12 @@ on:
       - beta
     types: [opened, edited, reopened, synchronize]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
 jobs:
   lint-pr:
     name: Lint PR title
@@ -13,6 +19,13 @@ jobs:
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v4
+        with:
+          submodules: false
+          sparse-checkout: |
+            pnpm-lock.yaml
+            .nvmrc
+            .github/scripts/pr-title.mts
+          sparse-checkout-cone-mode: false
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -20,15 +33,15 @@ jobs:
           version: 10
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: ".nvmrc"
           cache: "pnpm"
 
       - name: Install Node.js dependencies
-        run: pnpm add @actions/core @actions/github tsx
+        run: pnpm add @actions/core @actions/github
 
       - name: Lint PR title
-        run: pnpm exec tsx ./.github/scripts/pr-title.ts
+        run: node ./.github/scripts/pr-title.mts
         env:
           INPUT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
