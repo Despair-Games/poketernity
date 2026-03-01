@@ -46,18 +46,18 @@ describe("Moves - Thrash", () => {
     game.move.use(MoveId.THRASH);
     await game.toNextTurn();
 
-    const thrashTag = player.getTag(BattlerTagType.FRENZY);
-    expect(thrashTag).toBeDefined();
-    expect(player.getTag(BattlerTagType.CONFUSED)).toBeUndefined();
+    expect(player).toHaveBattlerTag(BattlerTagType.FRENZY);
+    expect(player).not.toHaveBattlerTag(BattlerTagType.CONFUSED);
+    const thrashTag = player.getTag(BattlerTagType.FRENZY)!;
 
-    const turnCount = thrashTag!.turnCount;
+    const turnCount = thrashTag.turnCount;
     expect(turnCount).toBeOneOf([1, 2]);
     for (let i = 0; i < turnCount; i++) {
       await game.toNextTurn();
     }
 
     expect(player.getMoveHistory().every((tm) => tm.move.id === MoveId.THRASH)).toBeTruthy();
-    expect(player.getTag(BattlerTagType.CONFUSED)).toBeDefined();
+    expect(player).toHaveBattlerTag(BattlerTagType.CONFUSED);
   });
 
   it("should not lock the user into using Thrash when the move has no effect", async () => {
@@ -70,7 +70,7 @@ describe("Moves - Thrash", () => {
     game.move.use(MoveId.THRASH);
     await game.toNextTurn();
 
-    expect(player.getTag(BattlerTagType.FRENZY)).toBeUndefined();
+    expect(player).not.toHaveBattlerTag(BattlerTagType.FRENZY);
     expect(player.getMoveQueue()).toHaveLength(0);
   });
 
@@ -88,8 +88,8 @@ describe("Moves - Thrash", () => {
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
-    expect(player.getTag(BattlerTagType.FRENZY)).toBeUndefined();
-    expect(player.getTag(BattlerTagType.CONFUSED)).toBeUndefined();
+    expect(player).not.toHaveBattlerTag(BattlerTagType.FRENZY);
+    expect(player).not.toHaveBattlerTag(BattlerTagType.CONFUSED);
   });
 
   it("should cancel future uses of Thrash if interrupted by flinching", async () => {
@@ -104,8 +104,8 @@ describe("Moves - Thrash", () => {
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
-    expect(player.getTag(BattlerTagType.FRENZY)).toBeUndefined();
-    expect(player.getTag(BattlerTagType.CONFUSED)).toBeUndefined();
+    expect(player).not.toHaveBattlerTag(BattlerTagType.FRENZY);
+    expect(player).not.toHaveBattlerTag(BattlerTagType.CONFUSED);
   });
 
   it("should confuse the user if the user is interrupted on the last turn of frenzy", async () => {
@@ -128,9 +128,9 @@ describe("Moves - Thrash", () => {
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
-    expect(player).toHaveMoveResult(MoveResult.FAIL);
-    expect(player.getTag(BattlerTagType.FRENZY)).toBeUndefined();
-    expect(player.getTag(BattlerTagType.CONFUSED)).toBeDefined();
+    expect(player).toHaveUsedMove({ moveId: MoveId.NONE, result: MoveResult.FAIL });
+    expect(player).not.toHaveBattlerTag(BattlerTagType.FRENZY);
+    expect(player).toHaveBattlerTag(BattlerTagType.CONFUSED);
   });
 
   it("should continue execution between waves", async () => {
@@ -143,7 +143,7 @@ describe("Moves - Thrash", () => {
     game.move.use(MoveId.THRASH);
     await game.toNextWave();
 
-    expect(player.getTag(BattlerTagType.FRENZY)).toBeDefined();
+    expect(player).toHaveBattlerTag(BattlerTagType.FRENZY);
     expect(player.getMoveQueue()[0]).toMatchObject({
       move: expect.objectContaining({ id: MoveId.THRASH }),
       targets: [BattlerIndex.ENEMY],
@@ -153,6 +153,6 @@ describe("Moves - Thrash", () => {
     const nextEnemy = game.field.getEnemyPokemon();
 
     await game.phaseInterceptor.to("FaintPhase", false);
-    expect(nextEnemy.isFainted()).toBeTruthy();
+    expect(nextEnemy).toHaveFainted();
   });
 });

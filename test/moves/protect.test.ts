@@ -128,8 +128,8 @@ describe("Moves - Protect", () => {
 
     await game.toEndOfTurn();
 
-    expect(enemyPokemon).toHaveMoveResult(MoveResult.SUCCESS);
-    expect(leadPokemon).toHaveMoveResult(MoveResult.FAIL);
+    expect(enemyPokemon).toHaveUsedMove({ moveId: MoveId.PROTECT, result: MoveResult.SUCCESS });
+    expect(leadPokemon).toHaveUsedMove({ moveId: MoveId.PROTECT, result: MoveResult.FAIL });
   });
 
   it.each([

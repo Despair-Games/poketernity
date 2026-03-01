@@ -1,66 +1,64 @@
 import { getPokemonNameWithAffix } from "#app/messages";
-import { type EffectiveStat, Stat } from "#enums/stat";
+import type { EffectiveStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
+import type { toHaveStat } from "#test/test-utils/matchers/to-have-stat-matcher";
+import { getStatName } from "#test/test-utils/string-utils";
 import { isPokemonInstance, receivedStr } from "#test/test-utils/test-utils";
-import { enumValueToKey } from "#utils/common-utils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
-export interface ToHaveEffectiveStatMatcherOptions {
-  /**
-   * The target {@linkcode Pokemon}
-   * @see {@linkcode Pokemon#getEffectiveStat}
-   */
-  enemy?: Pokemon;
-  /**
-   * The {@linkcode Move} being used
-   * @see {@linkcode Pokemon#getEffectiveStat}
-   */
+/** @see {@linkcode Pokemon.getEffectiveStat} */
+export interface ToHaveEffectiveStatOptions {
+  /** The opposing {@linkcode Pokemon} */
+  opponent?: Pokemon;
+  /** The {@linkcode Move} being used */
   move?: Move;
   /**
-   * Determines whether a critical hit has occurred or not (`false` by default)
-   * @see {@linkcode Pokemon#getEffectiveStat}
+   * Whether a critical hit occurred or not
+   * @defaultValue `false`
    */
   isCritical?: boolean;
 }
 
 /**
- * Matcher to check if a {@linkcode Pokemon}'s effective stat equals the expected value
- * @param received - The object to check. Should be a {@linkcode Pokemon}.
+ * Check whether a Pokemon's effective stat is as expected.
+ * @remarks
+ * This checks the value after all stat value modifications have occured. \
+ * If you want to query the raw stat value **before** modifiers are applied,
+ * use {@linkcode Pokemon.getStat} + {@linkcode toHaveStat} instead.
+ * @param received - The object to check. Should be a {@linkcode Pokemon}
  * @param stat - The {@linkcode EffectiveStat} to check
- * @param expectedValue - The expected value of the {@linkcode stat}
- * @param options - The {@linkcode ToHaveEffectiveStatMatcherOptions}
+ * @param expected - The expected value of the stat; should be a positive integer
+ * @param __namedParameters - (Optional) See {@linkcode ToHaveEffectiveStatOptions}
  * @returns Whether the matcher passed
  */
-export function toHaveEffectiveStatMatcher(
-  this: MatcherState,
+export function toHaveEffectiveStat(
+  this: Readonly<MatcherState>,
   received: unknown,
   stat: EffectiveStat,
-  expectedValue: number,
-  { enemy, move, isCritical = false }: ToHaveEffectiveStatMatcherOptions = {},
+  expected: number,
+  { opponent, move, isCritical = false }: ToHaveEffectiveStatOptions = {},
 ): SyncExpectationResult {
   if (!isPokemonInstance(received)) {
     return {
       pass: this.isNot,
-      message: () => `Expected Pokemon, but got ${receivedStr(received)}!`,
+      message: () => `Expected to receive a Pokémon, but got ${receivedStr(received)}!`,
     };
   }
 
-  const actualValue = received.getEffectiveStat(stat, {
-    opponent: enemy,
-    move,
-    isCritical,
-  });
-  const pass = actualValue === expectedValue;
+  const actual = received.getEffectiveStat(stat, { opponent, move, isCritical });
+  const pass = actual === expected;
 
   const pkmName = getPokemonNameWithAffix(received);
-  const statName = enumValueToKey(Stat, stat);
+  const statName = getStatName(stat);
 
   return {
     pass,
     message: () =>
       pass
-        ? `Expected ${pkmName} to NOT have EFFECTIVE ${statName}=${expectedValue}, but it did.`
-        : `Expected ${pkmName} to have EFFECTIVE ${statName}=${expectedValue}, but got ${actualValue}.`,
+        ? `Expected ${pkmName} to NOT have ${expected} ${statName}, but it did!`
+        : `Expected ${pkmName} to have ${expected} ${statName}, but got ${actual} instead!`,
+    expected,
+    actual,
   };
 }

@@ -283,7 +283,7 @@ describe("Abilities - Magic Bounce", () => {
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.toNextTurn();
-    expect(enemy).toHaveMoveResult(MoveResult.FAIL);
+    expect(enemy).toHaveUsedMove({ moveId: MoveId.SPORE, result: MoveResult.FAIL });
 
     game.move.use(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.STOMPING_TANTRUM);

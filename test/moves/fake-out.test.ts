@@ -44,8 +44,8 @@ describe("Moves - Fake Out", () => {
     game.move.select(MoveId.FAKE_OUT, 1, BattlerIndex.ENEMY_2);
     await game.toNextTurn();
 
-    expect(enemy1).toHaveMoveResult(MoveResult.FAIL);
-    expect(enemy2).toHaveMoveResult(MoveResult.FAIL);
+    expect(enemy1).toHaveUsedMove({ moveId: MoveId.NONE, result: MoveResult.FAIL });
+    expect(enemy2).toHaveUsedMove({ moveId: MoveId.NONE, result: MoveResult.FAIL });
   });
 
   it("can only be used on the first turn a pokemon is sent out in a battle", async () => {
@@ -142,7 +142,7 @@ describe("Moves - Fake Out", () => {
     expect(enemy.hp).toBeLessThan(enemyStartingHp);
     expect(enemy.getTag(BattlerTagType.FLINCHED)).toBeDefined();
     expect(player.turnData.acted).toBeTruthy();
-    expect(player).toHaveMoveResult(MoveResult.SUCCESS);
+    expect(player).toHaveUsedMove({ moveId: MoveId.FAKE_OUT, result: MoveResult.SUCCESS });
   });
 
   it("can be used after the user is sent out via Wimp Out", async () => {
@@ -166,6 +166,6 @@ describe("Moves - Fake Out", () => {
     expect(enemy.isFullHp()).toBeFalsy();
     expect(enemy.getTag(BattlerTagType.FLINCHED)).toBeDefined();
     expect(player.turnData.acted).toBeTruthy();
-    expect(player).toHaveMoveResult(MoveResult.SUCCESS);
+    expect(player).toHaveUsedMove({ moveId: MoveId.FAKE_OUT, result: MoveResult.SUCCESS });
   });
 });

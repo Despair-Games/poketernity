@@ -46,7 +46,7 @@ describe("Moves - Dive", () => {
 
     await game.toEndOfTurn();
     expect(playerPokemon.getTag(BattlerTagType.UNDERWATER)).toBeDefined();
-    expect(enemyPokemon).toHaveMoveResult(MoveResult.MISS);
+    expect(enemyPokemon).toHaveUsedMove({ moveId: MoveId.TACKLE, result: MoveResult.MISS });
     expect(playerPokemon.hp).toBe(playerPokemon.getMaxHp());
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
     expect(playerPokemon.getMoveQueue()[0].move.id).toBe(MoveId.DIVE);
@@ -72,7 +72,7 @@ describe("Moves - Dive", () => {
 
     await game.toEndOfTurn();
     expect(playerPokemon.hp).toBeLessThan(playerPokemon.getMaxHp());
-    expect(enemyPokemon).toHaveMoveResult(MoveResult.SUCCESS);
+    expect(enemyPokemon).toHaveUsedMove({ moveId: MoveId.TACKLE, result: MoveResult.SUCCESS });
   });
 
   it("should not expend PP when the attack phase is cancelled", async () => {
@@ -124,7 +124,7 @@ describe("Moves - Dive", () => {
     game.scene.arena.trySetWeather(WeatherType.HARSH_SUN, false);
 
     await game.phaseInterceptor.to("PostActionPhase");
-    expect(playerPokemon).toHaveMoveResult(MoveResult.FAIL);
+    expect(playerPokemon).toHaveUsedMove({ moveId: MoveId.DIVE, result: MoveResult.FAIL });
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
     expect(playerPokemon.getTag(BattlerTagType.UNDERWATER)).toBeUndefined();
 

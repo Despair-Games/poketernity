@@ -43,6 +43,6 @@ describe("Move - Terrain Pulse", () => {
     await game.toEndOfTurn();
 
     expect(game.field.getEnemyPokemon()).not.toHaveFullHp();
-    expect(game.field.getPlayerPokemon()).toHaveMoveResult(MoveResult.SUCCESS);
+    expect(game.field.getPlayerPokemon()).toHaveUsedMove({ moveId: MoveId.TERRAIN_PULSE, result: MoveResult.SUCCESS });
   });
 });

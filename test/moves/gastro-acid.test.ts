@@ -22,14 +22,15 @@ describe("Moves - Gastro Acid", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("double");
-    game.override.startingLevel(1);
-    game.override.enemyLevel(100);
-    game.override.ability(AbilityId.NONE);
-    game.override.moveset([MoveId.GASTRO_ACID, MoveId.WATER_GUN, MoveId.SPLASH, MoveId.CORE_ENFORCER]);
-    game.override.enemySpecies(SpeciesId.BIDOOF);
-    game.override.enemyMoveset(MoveId.SPLASH);
-    game.override.enemyAbility(AbilityId.WATER_ABSORB);
+    game.override
+      .battleType("double")
+      .startingLevel(1)
+      .enemyLevel(100)
+      .ability(AbilityId.BALL_FETCH)
+      .moveset([MoveId.GASTRO_ACID, MoveId.WATER_GUN, MoveId.SPLASH, MoveId.CORE_ENFORCER])
+      .enemySpecies(SpeciesId.BIDOOF)
+      .enemyMoveset(MoveId.SPLASH)
+      .enemyAbility(AbilityId.WATER_ABSORB);
   });
 
   it("suppresses effect of ability", async () => {
@@ -69,12 +70,12 @@ describe("Moves - Gastro Acid", () => {
     // Force player to be slower to enable Core Enforcer to proc its suppression effect
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
-    await game.phaseInterceptor.to("TurnInitPhase");
+    await game.toNextTurn();
 
     game.move.select(MoveId.GASTRO_ACID);
 
-    await game.phaseInterceptor.to("TurnInitPhase");
+    await game.toEndOfTurn();
 
-    expect(game.field.getPlayerPokemon()).toHaveMoveResult(MoveResult.FAIL);
+    expect(game.field.getPlayerPokemon()).toHaveUsedMove({ moveId: MoveId.GASTRO_ACID, result: MoveResult.FAIL });
   });
 });

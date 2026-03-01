@@ -3,21 +3,21 @@ import { isPokemonInstance, receivedStr } from "#test/test-utils/test-utils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
 /**
- * Matcher to check if a Pokemon has fainted
+ * Matcher that checks if a Pokemon is at full hp.
  * @param received - The object to check. Should be a {@linkcode Pokemon}.
  * @returns Whether the matcher passed
  */
-export function toHaveFaintedMatcher(this: MatcherState, received: unknown): SyncExpectationResult {
+export function toHaveFullHp(this: Readonly<MatcherState>, received: unknown): SyncExpectationResult {
   if (!isPokemonInstance(received)) {
     return {
       pass: this.isNot,
-      message: () => `Expected Pokemon, but got ${receivedStr(received)}!`,
+      message: () => `Expected to receive a Pokémon, but got ${receivedStr(received)}!`,
     };
   }
 
-  const { hp } = received;
-  const maxHp = received.getMaxHp();
-  const pass = received.isFainted();
+  const pass = received.isFullHp();
+  const expected = received.getMaxHp();
+  const actual = received.hp;
 
   const pkmName = getPokemonNameWithAffix(received);
 
@@ -25,7 +25,9 @@ export function toHaveFaintedMatcher(this: MatcherState, received: unknown): Syn
     pass,
     message: () =>
       pass
-        ? `Expected ${pkmName} NOT to have fainted, but it did! (${hp}/${maxHp} HP)`
-        : `Expected ${pkmName} to have fainted, but it did not. (${hp}/${maxHp} HP)`,
+        ? `Expected ${pkmName} to NOT have full hp, but it did!`
+        : `Expected ${pkmName} to have full hp, but it didn't! (${actual}/${expected} HP)`,
+    expected,
+    actual,
   };
 }

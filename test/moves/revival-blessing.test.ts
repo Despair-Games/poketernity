@@ -85,7 +85,7 @@ describe("Moves - Revival Blessing", () => {
     await game.phaseInterceptor.to("PostActionPhase", false);
 
     const player = game.scene.getPlayerPokemon()!;
-    expect(player).toHaveMoveResult(MoveResult.FAIL);
+    expect(player).toHaveUsedMove({ moveId: MoveId.REVIVAL_BLESSING, result: MoveResult.FAIL });
   });
 
   it("should revive a player pokemon and immediately send it back out if used in the same turn it fainted in doubles", async () => {

@@ -42,7 +42,7 @@ describe("Moves - Torment", () => {
     await game.move.selectEnemyMove(MoveId.TORMENT);
     await game.toNextTurn();
     expect(playerPokemon).toHaveUsedMove(MoveId.TACKLE);
-    expect(playerPokemon).toHaveMoveResult(MoveResult.SUCCESS);
+    expect(playerPokemon).toHaveUsedMove({ moveId: MoveId.TACKLE, result: MoveResult.SUCCESS });
     expect(playerPokemon?.getTag(BattlerTagType.TORMENT)).toBeDefined();
 
     // Second turn, Torment forces Struggle to occur

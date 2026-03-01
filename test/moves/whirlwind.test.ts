@@ -44,7 +44,7 @@ describe("Moves - Whirlwind", () => {
     await game.toEndOfTurn();
 
     expect(staraptor).toHaveBattlerTag(BattlerTagType.MID_AIR);
-    expect(game.field.getEnemyPokemon()).toHaveMoveResult(MoveResult.MISS);
+    expect(game.field.getEnemyPokemon()).toHaveUsedMove({ moveId: MoveId.WHIRLWIND, result: MoveResult.MISS });
   });
 
   it("should not hit a target carried by Sky Drop", async () => {
@@ -63,7 +63,7 @@ describe("Moves - Whirlwind", () => {
     await game.toEndOfTurn();
 
     [staraptor, enemyPokemon[0]].forEach((p) => expect(p.getTag(BattlerTagType.SKY_DROP)).toBeDefined());
-    expect(pidgeot).toHaveMoveResult(MoveResult.MISS);
+    expect(pidgeot).toHaveUsedMove({ moveId: MoveId.WHIRLWIND, result: MoveResult.MISS });
   });
 
   it("should force switches randomly", async () => {

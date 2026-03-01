@@ -1,52 +1,49 @@
 import { getPokemonNameWithAffix } from "#app/messages";
-import { type PermanentStat, Stat } from "#enums/stat";
+import type { PermanentStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
+import { toHaveEffectiveStat } from "#test/test-utils/matchers/to-have-effective-stat-matcher";
+import { getStatName } from "#test/test-utils/string-utils";
 import { isPokemonInstance, receivedStr } from "#test/test-utils/test-utils";
-import { enumValueToKey } from "#utils/common-utils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
-export interface ToHaveStatMatcherOptions {
-  /**
-   * Prefer actual stats (`true`) or "in-battle" stats (`false`). Default is `true`.
-   * @see {@linkcode Pokemon.getStat}
-   */
-  bypassSummonData?: boolean;
-}
-
 /**
- * Matcher to check if a Pokemon's stat equals the expected value
+ * Check whether a Pokemon's stat equals is as expected
+ * @remarks
+ * This checks the stat **before** modifiers are applied.
+ * If you want to check the stat **after** modifiers are applied, use {@linkcode toHaveEffectiveStat}.
  * @param received - The object to check. Should be a {@linkcode Pokemon}.
  * @param stat - The {@linkcode PermanentStat} to check
- * @param expectedValue - The expected value of the {@linkcode stat}
- * @param options - The {@linkcode ToHaveStatMatcherOptions} (optional)
+ * @param expected - The expected value of the stat; should be a positive integer
+ * @param bypassSummonData - (Default `true`) Whether to ignore temporary stat changes (such as from Transform)
  * @returns Whether the matcher passed
  */
-export function toHaveStatMatcher(
+export function toHaveStat(
   this: MatcherState,
   received: unknown,
   stat: PermanentStat,
-  expectedValue: number,
-  { bypassSummonData = true }: ToHaveStatMatcherOptions = {},
+  expected: number,
+  bypassSummonData: boolean = true,
 ): SyncExpectationResult {
   if (!isPokemonInstance(received)) {
     return {
       pass: this.isNot,
-      message: () => `Expected Pokemon, but got ${receivedStr(received)}!`,
+      message: () => `Expected to receive a Pokémon, but got ${receivedStr(received)}!`,
     };
   }
 
-  const pokemon = received as Pokemon;
-  const actualValue = pokemon.getStat(stat, bypassSummonData);
-  const pass = actualValue === expectedValue;
+  const actual = received.getStat(stat, bypassSummonData);
+  const pass = actual === expected;
 
-  const pkmName = getPokemonNameWithAffix(pokemon);
-  const statName = enumValueToKey(Stat, stat);
+  const pkmName = getPokemonNameWithAffix(received);
+  const statName = getStatName(stat);
 
   return {
     pass,
     message: () =>
       pass
-        ? `Expected ${pkmName} to NOT have ${statName}=${expectedValue}, but it did.`
-        : `Expected ${pkmName} to have ${statName}=${expectedValue}, but got ${actualValue}.`,
+        ? `Expected ${pkmName} to NOT have ${expected} ${statName}, but it did!`
+        : `Expected ${pkmName} to have ${expected} ${statName}, but got ${actual} instead!`,
+    expected,
+    actual,
   };
 }

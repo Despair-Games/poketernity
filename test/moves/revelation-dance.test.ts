@@ -44,6 +44,9 @@ describe("Move - Revelation Dance", () => {
     await game.toEndOfTurn();
 
     expect(game.field.getEnemyPokemon()).not.toHaveFullHp();
-    expect(game.field.getPlayerPokemon()).toHaveMoveResult(MoveResult.SUCCESS);
+    expect(game.field.getPlayerPokemon()).toHaveUsedMove({
+      moveId: MoveId.REVELATION_DANCE,
+      result: MoveResult.SUCCESS,
+    });
   });
 });

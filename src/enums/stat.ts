@@ -1,4 +1,5 @@
-import type { ObjectValues } from "#types/utility-types";
+import type { Negate, ObjectValues } from "#types/utility-types";
+import type { IntClosedRange } from "type-fest";
 
 /** Enum that comprises all possible stat-related attributes, in-battle and permanent, of a Pokemon. */
 export const Stat = {
@@ -41,6 +42,9 @@ export type BattleStat = (typeof BATTLE_STATS)[number];
 export const TEMP_BATTLE_STATS = [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD, Stat.ACC] as const;
 /** Type used to describe the stats that have X item (`TEMP_STAT_STAGE_BOOSTER`) equivalents. */
 export type TempBattleStat = (typeof TEMP_BATTLE_STATS)[number];
+
+/** Union type representing the possible values of a single stat stage. */
+export type StatStage = IntClosedRange<0, 6> | Negate<IntClosedRange<0, 6>>;
 
 /**
  * Provides the translation key corresponding to the amount of stat stages being changed

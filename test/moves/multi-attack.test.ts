@@ -43,6 +43,6 @@ describe("Move - Multi Attack", () => {
     await game.toEndOfTurn();
 
     expect(game.field.getEnemyPokemon()).not.toHaveFullHp();
-    expect(game.field.getPlayerPokemon()).toHaveMoveResult(MoveResult.SUCCESS);
+    expect(game.field.getPlayerPokemon()).toHaveUsedMove({ moveId: MoveId.MULTI_ATTACK, result: MoveResult.SUCCESS });
   });
 });

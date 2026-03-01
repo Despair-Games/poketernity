@@ -1470,6 +1470,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param bypassSummonData - If `true`, ignore ability changing effects; Default: `false`
    * @returns array of {@linkcode ElementalType}
    */
+  // TODO: change return type to `NonEmptyArray<ElementalType>`
   public getTypes(
     includeTeraType = false,
     forDefend: boolean = false,

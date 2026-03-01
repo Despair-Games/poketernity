@@ -63,6 +63,6 @@ describe("Moves - Shed Tail", () => {
     await game.toEndOfTurn();
 
     expect(magikarp.isOnField()).toBeTruthy();
-    expect(magikarp).toHaveMoveResult(MoveResult.FAIL);
+    expect(magikarp).toHaveUsedMove({ moveId: MoveId.SHED_TAIL, result: MoveResult.FAIL });
   });
 });

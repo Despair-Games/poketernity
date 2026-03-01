@@ -443,7 +443,7 @@ describe("Moves - Substitute", () => {
 
     await game.toEndOfTurn();
 
-    expect(playerPokemon).toHaveMoveResult(MoveResult.SUCCESS);
+    expect(playerPokemon).toHaveUsedMove({ moveId: MoveId.FOCUS_PUNCH, result: MoveResult.SUCCESS });
     expect(enemyPokemon.hp).toBeLessThan(enemyPokemon.getMaxHp());
   });
 
@@ -461,7 +461,7 @@ describe("Moves - Substitute", () => {
 
     await game.toEndOfTurn();
 
-    expect(playerPokemon).toHaveMoveResult(MoveResult.FAIL);
+    expect(playerPokemon).toHaveUsedMove({ moveId: MoveId.SHELL_TRAP, result: MoveResult.FAIL });
   });
 
   it("should not allow Beak Blast to burn opponents when hit", async () => {
@@ -497,7 +497,7 @@ describe("Moves - Substitute", () => {
 
     await game.toEndOfTurn();
 
-    expect(playerPokemon).toHaveMoveResult(MoveResult.FAIL);
+    expect(playerPokemon).toHaveUsedMove({ moveId: MoveId.NONE, result: MoveResult.FAIL });
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
   });
 

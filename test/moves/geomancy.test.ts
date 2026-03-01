@@ -44,14 +44,14 @@ describe("Moves - Geomancy", () => {
 
     await game.toEndOfTurn();
     affectedStats.forEach((stat) => expect(player.getStatStage(stat)).toBe(0));
-    expect(player).toHaveMoveResult(MoveResult.OTHER);
+    expect(player).toHaveUsedMove({ moveId: MoveId.GEOMANCY, result: MoveResult.OTHER });
 
     await game.toEndOfTurn();
     affectedStats.forEach((stat) => expect(player.getStatStage(stat)).toBe(2));
     expect(player.getMoveHistory()).toHaveLength(2);
-    expect(player).toHaveMoveResult(MoveResult.SUCCESS);
+    expect(player).toHaveUsedMove({ moveId: MoveId.GEOMANCY, result: MoveResult.SUCCESS });
 
-    const playerGeomancy = player.getMoveset().find((mv) => mv && mv.moveId === MoveId.GEOMANCY);
+    const playerGeomancy = player.getMoveset().find((mv) => mv.moveId === MoveId.GEOMANCY);
     expect(playerGeomancy?.ppUsed).toBe(1);
   });
 
@@ -71,9 +71,9 @@ describe("Moves - Geomancy", () => {
     await game.toEndOfTurn();
     affectedStats.forEach((stat) => expect(player.getStatStage(stat)).toBe(2));
     expect(player.getMoveHistory()).toHaveLength(2);
-    expect(player).toHaveMoveResult(MoveResult.SUCCESS);
+    expect(player).toHaveUsedMove({ moveId: MoveId.GEOMANCY, result: MoveResult.SUCCESS });
 
-    const playerGeomancy = player.getMoveset().find((mv) => mv && mv.moveId === MoveId.GEOMANCY);
+    const playerGeomancy = player.getMoveset().find((mv) => mv.moveId === MoveId.GEOMANCY);
     expect(playerGeomancy?.ppUsed).toBe(1);
   });
 });

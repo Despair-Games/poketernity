@@ -97,7 +97,7 @@ describe("Abilities - Sturdy", () => {
     move.use(MoveId.FISSURE);
     await game.toEndOfTurn();
 
-    expect(player).toHaveMoveResult(MoveResult.FAIL);
+    expect(player).toHaveUsedMove({ moveId: MoveId.FISSURE, result: MoveResult.FAIL });
     expect(enemy).toHaveFullHp();
   });
 

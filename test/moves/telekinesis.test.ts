@@ -119,6 +119,6 @@ describe("Moves - Telekinesis", () => {
     expect(enemyOpponent.getTag(BattlerTagType.INGRAIN)).toBeDefined();
     expect(enemyOpponent.getTag(BattlerTagType.IGNORE_FLYING)).toBeDefined();
     expect(enemyOpponent.getTag(BattlerTagType.FLOATING)).toBeUndefined();
-    expect(playerPokemon).toHaveMoveResult(MoveResult.SUCCESS);
+    expect(playerPokemon).toHaveUsedMove({ moveId: MoveId.MUD_SHOT, result: MoveResult.SUCCESS });
   });
 });
