@@ -16,7 +16,7 @@
     },
     {
       "tagName": "@interface",
-      "syntaxKind": "block"
+      "syntaxKind": "modifier"
     }
   ]
 }
