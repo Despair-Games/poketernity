@@ -565,7 +565,7 @@ export class Trainer extends Phaser.GameObjects.Container {
         if (forSwitch && !pkmn.isOnField()) {
           globalScene.arena
             .getTags<EntryHazardTag>((t) => ENTRY_HAZARD_ARENA_TAG_TYPES.includes(t.tagType), ArenaTagSide.ENEMY)
-            ?.map((t) => {
+            ?.forEach((t) => {
               score *= t.getMatchupScoreMultiplier(pkmn);
             });
         }
@@ -733,7 +733,7 @@ export class Trainer extends Phaser.GameObjects.Container {
 
   tint(color: number, alpha?: number, duration?: number, ease?: string): void {
     const tintSprites = this.getTintSprites();
-    tintSprites.map((tintSprite) => {
+    tintSprites.forEach((tintSprite) => {
       tintSprite.setTintFill(color);
       tintSprite.setVisible(true);
 
@@ -754,7 +754,7 @@ export class Trainer extends Phaser.GameObjects.Container {
 
   untint(duration: number, ease?: string): void {
     const tintSprites = this.getTintSprites();
-    tintSprites.map((tintSprite) => {
+    tintSprites.forEach((tintSprite) => {
       if (duration) {
         globalScene.tweens.add({
           targets: tintSprite,

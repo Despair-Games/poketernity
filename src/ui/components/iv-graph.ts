@@ -129,7 +129,7 @@ export class IVGraph extends Phaser.GameObjects.Container {
     const lastIvChartData = this.statsIvsCache || defaultIvChartData;
     this.statsIvsCache = ivChartData.slice(0);
 
-    this.ivStatValueTexts.map((t: BBCodeText, i: number) => {
+    this.ivStatValueTexts.forEach((t: BBCodeText, i: number) => {
       let label = "";
 
       // Check to see if IVs are 31, if so change the text style to gold, otherwise leave them be.

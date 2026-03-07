@@ -16,6 +16,7 @@ export class TestDialogueUiHandler extends FormModalUiHandler {
     super.setup();
 
     const flattenKeys = (i18nObject: object = {}, topKey?: string, middleKey?: string[]): any[] => {
+      // biome-ignore-start lint/suspicious/useIterableCallbackReturn: TODO: fix?
       return Object.keys(i18nObject)
         .map((t, i) => {
           const value = Object.values(i18nObject)[i];
@@ -40,6 +41,7 @@ export class TestDialogueUiHandler extends FormModalUiHandler {
           }
         })
         .filter((t) => t);
+      // biome-ignore-end lint/suspicious/useIterableCallbackReturn: TODO: fix?
     };
 
     const keysInArrays = flattenKeys(i18next.getDataByLanguage(String(i18next.resolvedLanguage))).filter(

@@ -204,7 +204,7 @@ export class LegacyAnimConfig {
       this.id = source.id;
       this.graphic = source.graphic;
       const frames: any[][] = source.frames;
-      frames.map((animFrames) => {
+      frames.forEach((animFrames) => {
         for (let f = 0; f < animFrames.length; f++) {
           animFrames[f] = new ImportedAnimFrame(animFrames[f]);
         }

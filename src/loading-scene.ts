@@ -207,7 +207,7 @@ export class LoadingScene extends SceneBase {
 
     // Load arena images
     this.loadImage("default_bg", ImagesFolder.ARENAS);
-    Object.values(BiomeId).map((bt) => {
+    Object.values(BiomeId).forEach((bt) => {
       const btKey = enumValueToKey(BiomeId, bt).toLowerCase();
       const isBaseAnimated = btKey === "end";
       const baseAKey = `${btKey}_a`;
