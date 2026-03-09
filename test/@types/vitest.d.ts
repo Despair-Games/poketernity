@@ -194,7 +194,7 @@ interface PokemonMatchers {
    * ```
    */
   toHaveUsedMove<I extends number>(
-    expectedMove: MoveId | OneOther<MatcherTurnMove, "move" | "moveId">,
+    expectedMove: MoveId | OneOther<MatcherTurnMove, "move"> | OneOther<MatcherTurnMove, "moveId">,
     options?: ToHaveUsedMoveOptionsWithTypeGuard<I>,
   ): void;
 

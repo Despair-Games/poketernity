@@ -25,8 +25,8 @@ export interface ToHaveUsedMoveOptions {
   moveCount?: number;
 }
 
-export interface MatcherTurnMove extends Partial<TurnMove> {
-  moveId?: MoveId;
+export interface MatcherTurnMove extends TurnMove {
+  moveId: MoveId;
 }
 
 //#endregion
@@ -55,7 +55,7 @@ export interface MatcherTurnMove extends Partial<TurnMove> {
 export function toHaveUsedMove(
   this: Readonly<MatcherState>,
   received: unknown,
-  expected: MoveId | OneOther<MatcherTurnMove, "move" | "moveId">,
+  expected: MoveId | OneOther<MatcherTurnMove, "move"> | OneOther<MatcherTurnMove, "moveId">,
   { index = 0, moveCount = 1 }: ToHaveUsedMoveOptions = {},
 ): SyncExpectationResult {
   if (!isPokemonInstance(received)) {
