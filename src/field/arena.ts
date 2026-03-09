@@ -255,7 +255,7 @@ export class Arena {
     globalScene
       .getField(true)
       .filter((p) => p.isOnField())
-      .map((pokemon) => {
+      .forEach((pokemon) => {
         pokemon.findAndRemoveTags(
           (tag) => "weatherTypes" in tag && !(tag.weatherTypes as WeatherType[]).find((wt) => wt === newWeatherType),
         );
@@ -416,7 +416,7 @@ export class Arena {
     globalScene
       .getField(true)
       .filter((p) => p.isOnField())
-      .map((pokemon) => {
+      .forEach((pokemon) => {
         pokemon.findAndRemoveTags(
           (tag) => "terrainTypes" in tag && !(tag.terrainTypes as TerrainType[]).find((tt) => tt === terrain),
         );

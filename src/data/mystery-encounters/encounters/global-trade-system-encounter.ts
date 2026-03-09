@@ -602,7 +602,7 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
     receivedPokemonTintSprite.setVisible(false);
     receivedPokemonTintSprite.setTintFill(getPokeballTintColor(receivedPokemon.pokeball));
 
-    [tradedPokemonSprite, tradedPokemonTintSprite].map((sprite) => {
+    [tradedPokemonSprite, tradedPokemonTintSprite].forEach((sprite) => {
       const spriteKey = tradedPokemon.getSpriteKey(true);
       sprite.play(spriteKey);
 
@@ -621,7 +621,7 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
       sprite.pipelineData[key] = tradedPokemon.getSprite().pipelineData[key];
     });
 
-    [receivedPokemonSprite, receivedPokemonTintSprite].map((sprite) => {
+    [receivedPokemonSprite, receivedPokemonTintSprite].forEach((sprite) => {
       const spriteKey = receivedPokemon.getSpriteKey(true);
       sprite.play(spriteKey);
 

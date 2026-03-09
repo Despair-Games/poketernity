@@ -15,7 +15,7 @@ export class LastResortAttr extends MoveAttr {
     return (user: Pokemon, _target: Pokemon, move: Move) => {
       const uniqueUsedMoveIds = new Set<MoveId>();
       const movesetMoveIds = user.getMoveset().map((m) => m.moveId);
-      user.getMoveHistory().map((m) => {
+      user.getMoveHistory().forEach((m) => {
         if (m.move.id !== move.id && movesetMoveIds.find((mm) => mm === m.move.id)) {
           uniqueUsedMoveIds.add(m.move.id);
         }

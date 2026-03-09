@@ -155,7 +155,12 @@
         "noDocumentCookie": "off", // Firefox has minimal support for the "Cookie Store API"
         "noConstantBinaryExpressions": "error",
         "noTsIgnore": "error",
-        "useIterableCallbackReturn": "off", // TODO: re-enable if the rule is changed to be type-aware
+        "useIterableCallbackReturn": {
+          "level": "error",
+          "options": {
+            "checkForEach": false
+          }
+        },
         "useErrorMessage": "error",
         "useGuardForIn": "error",
         "useNumberToFixedDigitsArgument": "error",

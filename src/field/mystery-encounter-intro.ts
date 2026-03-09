@@ -260,7 +260,7 @@ export class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Container {
       return;
     }
 
-    this.getSprites().map((sprite, i) => {
+    this.getSprites().forEach((sprite, i) => {
       if (!this.spriteConfigs[i].isItem) {
         sprite.setTexture(this.spriteConfigs[i].spriteKey).setFrame(0);
         if (sprite.texture.frameTotal > 1) {
@@ -270,7 +270,7 @@ export class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Container {
         }
       }
     });
-    this.getTintSprites().map((tintSprite, i) => {
+    this.getTintSprites().forEach((tintSprite, i) => {
       if (!this.spriteConfigs[i].isItem) {
         tintSprite.setTexture(this.spriteConfigs[i].spriteKey).setFrame(0);
         if (tintSprite.texture.frameTotal > 1) {
@@ -442,7 +442,7 @@ export class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Container {
    */
   tintAll(color: number, alpha?: number, duration?: number, ease?: string): void {
     const tintSprites = this.getTintSprites();
-    tintSprites.map((tintSprite) => {
+    tintSprites.forEach((tintSprite) => {
       this.tint(tintSprite, color, alpha, duration, ease);
     });
   }
@@ -479,7 +479,7 @@ export class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Container {
    */
   untintAll(duration: number, ease?: string): void {
     const tintSprites = this.getTintSprites();
-    tintSprites.map((tintSprite) => {
+    tintSprites.forEach((tintSprite) => {
       this.untint(tintSprite, duration, ease);
     });
   }

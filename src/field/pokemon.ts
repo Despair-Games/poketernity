@@ -878,7 +878,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   updateSpritePipelineData(): void {
     [this.getSprite(), this.getTintSprite()]
       .filter((s) => !!s)
-      .map((s) => {
+      .forEach((s) => {
         s.pipelineData["teraColor"] = getTypeRgb(this.teraType);
         s.pipelineData["isTerastallized"] = this.isTerastallized;
       });

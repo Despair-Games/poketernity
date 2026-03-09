@@ -191,7 +191,7 @@ export class TargetSelectUiHandler extends UiHandler {
 
     const targetsBattleInfo = this.targetsHighlighted.map((target) => target.getBattleInfo());
 
-    targetsBattleInfo.map((info) => {
+    targetsBattleInfo.forEach((info) => {
       this.targetBattleInfoMoveTween.push(
         globalScene.tweens.add({
           targets: [info],
