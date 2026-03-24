@@ -15,6 +15,7 @@ import { PokemonInfoContainer } from "#ui/pokemon-info-container";
 import { fixedNumber, getFrameMs } from "#utils/common-utils";
 import { randInt } from "#utils/random-utils";
 import i18next from "i18next";
+import type Phaser from "phaser";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 
 /**
@@ -79,147 +80,154 @@ export class EggHatchPhase extends Phase {
     this.eggsToHatchCount = eggsToHatchCount;
   }
 
-  public override start(): void {
-    globalScene.ui.setModeForceTransition<EggHatchSceneUiHandler>(UiMode.EGG_HATCH_SCENE).then(() => {
-      if (!this.egg) {
-        return this.end();
+  public override async start(): Promise<void> {
+    await globalScene.ui.setModeForceTransition<EggHatchSceneUiHandler>(UiMode.EGG_HATCH_SCENE);
+
+    if (!this.egg) {
+      return this.end();
+    }
+
+    const eggIndex = globalScene.gameData.eggs.findIndex((e) => e.id === this.egg.id);
+    if (eggIndex === -1) {
+      return this.end();
+    }
+
+    globalScene.gameData.eggs.splice(eggIndex, 1);
+
+    globalScene.audioManager.fadeOutBgm(undefined, false);
+
+    // TODO: the hatch phase and ui handler should not be intertwined in this way;
+    // the phase also should not be the one creating the graphical objects
+    this.eggHatchHandler = globalScene.ui.getCurrentHandler<EggHatchSceneUiHandler>();
+
+    this.eggHatchContainer = this.eggHatchHandler.eggHatchContainer;
+
+    this.eggHatchBg = globalScene.add //
+      .image(0, 0, "default_bg")
+      .setOrigin(0);
+    this.eggHatchContainer.add(this.eggHatchBg);
+
+    this.eggContainer = globalScene.add.container(this.eggHatchBg.displayWidth / 2, this.eggHatchBg.displayHeight / 2);
+
+    this.eggSprite = globalScene.add.sprite(0, 0, "egg", `egg_${this.egg.getKey()}`);
+
+    this.eggCrackSprite = globalScene.add //
+      .sprite(0, 0, "egg_crack", "0")
+      .setVisible(false);
+
+    this.eggLightraysOverlay = globalScene.add
+      .sprite(-this.eggHatchBg.displayWidth / 2 + 4, -this.eggHatchBg.displayHeight / 2, "egg_lightrays", "3")
+      .setOrigin(0)
+      .setVisible(false);
+
+    this.eggContainer.add([this.eggSprite, this.eggCrackSprite, this.eggLightraysOverlay]);
+    this.eggHatchContainer.add(this.eggContainer);
+
+    this.eggCounterContainer = new EggCounterContainer(this.eggsToHatchCount);
+    this.eggHatchContainer.add(this.eggCounterContainer);
+
+    const getPokemonSprite = (): Phaser.GameObjects.Sprite => {
+      const ret = globalScene.add
+        .sprite(this.eggHatchBg.displayWidth / 2, this.eggHatchBg.displayHeight / 2, "pkmn__sub")
+        .setPipeline(globalScene.spritePipeline, { tone: [0.0, 0.0, 0.0, 0.0], ignoreTimeTint: true });
+      return ret;
+    };
+
+    this.pokemonSprite = getPokemonSprite();
+    this.eggHatchContainer.add(this.pokemonSprite);
+
+    this.pokemonShinySparkle = globalScene.add
+      .sprite(this.pokemonSprite.x, this.pokemonSprite.y, "shiny")
+      .setVisible(false);
+
+    this.eggHatchContainer.add(this.pokemonShinySparkle);
+
+    this.eggHatchOverlay = globalScene.add
+      .rectangle(0, -GAME_HEIGHT, GAME_WIDTH, GAME_HEIGHT, 0xffffff)
+      .setOrigin(0)
+      .setAlpha(0);
+    globalScene.fieldUI.add(this.eggHatchOverlay);
+
+    this.infoContainer = new PokemonInfoContainer();
+    this.infoContainer.setup();
+
+    this.eggHatchContainer.add(this.infoContainer);
+
+    const pokemon = this.generatePokemon();
+
+    this.pokemonSprite.setVisible(false);
+
+    this.pokemon = pokemon;
+
+    /** Helper function to turn Phaser's `delayedCall` into an awaitable `Promise` */
+    const wait = (ms: number) => new Promise<void>((resolve) => globalScene.time.delayedCall(ms, resolve));
+
+    await pokemon.loadAssets();
+    this.canSkip = true;
+
+    // We trigger the BGM without awaiting it so it doesn't block the animation timeline
+    // biome-ignore lint/nursery/noFloatingPromises: there's no need for error handling
+    wait(1000).then(() => {
+      if (!this.hatched) {
+        this.evolutionBgm = globalScene.audioManager.playSoundWithoutBgm("evolution");
       }
-
-      const eggIndex = globalScene.gameData.eggs.findIndex((e) => e.id === this.egg.id);
-
-      if (eggIndex === -1) {
-        return this.end();
-      }
-
-      globalScene.gameData.eggs.splice(eggIndex, 1);
-
-      globalScene.audioManager.fadeOutBgm(undefined, false);
-
-      // TODO: the hatch phase and ui handler should not be intertwined in this way;
-      // the phase also should not be the one creating the graphical objects
-      this.eggHatchHandler = globalScene.ui.getCurrentHandler<EggHatchSceneUiHandler>();
-
-      this.eggHatchContainer = this.eggHatchHandler.eggHatchContainer;
-
-      this.eggHatchBg = globalScene.add.image(0, 0, "default_bg");
-      this.eggHatchBg.setOrigin(0, 0);
-      this.eggHatchContainer.add(this.eggHatchBg);
-
-      this.eggContainer = globalScene.add.container(
-        this.eggHatchBg.displayWidth / 2,
-        this.eggHatchBg.displayHeight / 2,
-      );
-
-      this.eggSprite = globalScene.add.sprite(0, 0, "egg", `egg_${this.egg.getKey()}`);
-      this.eggCrackSprite = globalScene.add.sprite(0, 0, "egg_crack", "0");
-      this.eggCrackSprite.setVisible(false);
-
-      this.eggLightraysOverlay = globalScene.add.sprite(
-        -this.eggHatchBg.displayWidth / 2 + 4,
-        -this.eggHatchBg.displayHeight / 2,
-        "egg_lightrays",
-        "3",
-      );
-      this.eggLightraysOverlay.setOrigin(0, 0);
-      this.eggLightraysOverlay.setVisible(false);
-
-      this.eggContainer.add(this.eggSprite);
-      this.eggContainer.add(this.eggCrackSprite);
-      this.eggContainer.add(this.eggLightraysOverlay);
-      this.eggHatchContainer.add(this.eggContainer);
-
-      this.eggCounterContainer = new EggCounterContainer(this.eggsToHatchCount);
-      this.eggHatchContainer.add(this.eggCounterContainer);
-
-      const getPokemonSprite = (): Phaser.GameObjects.Sprite => {
-        const ret = globalScene.add.sprite(
-          this.eggHatchBg.displayWidth / 2,
-          this.eggHatchBg.displayHeight / 2,
-          "pkmn__sub",
-        );
-        ret.setPipeline(globalScene.spritePipeline, { tone: [0.0, 0.0, 0.0, 0.0], ignoreTimeTint: true });
-        return ret;
-      };
-
-      this.pokemonSprite = getPokemonSprite();
-      this.eggHatchContainer.add(this.pokemonSprite);
-
-      this.pokemonShinySparkle = globalScene.add.sprite(this.pokemonSprite.x, this.pokemonSprite.y, "shiny");
-      this.pokemonShinySparkle.setVisible(false);
-
-      this.eggHatchContainer.add(this.pokemonShinySparkle);
-
-      this.eggHatchOverlay = globalScene.add.rectangle(0, -GAME_HEIGHT, GAME_WIDTH, GAME_HEIGHT, 0xffffff);
-      this.eggHatchOverlay.setOrigin(0, 0);
-      this.eggHatchOverlay.setAlpha(0);
-      globalScene.fieldUI.add(this.eggHatchOverlay);
-
-      this.infoContainer = new PokemonInfoContainer();
-      this.infoContainer.setup();
-
-      this.eggHatchContainer.add(this.infoContainer);
-
-      const pokemon = this.generatePokemon();
-
-      this.pokemonSprite.setVisible(false);
-
-      this.pokemon = pokemon;
-
-      // biome-ignore-start lint/nursery/noFloatingPromises: needs to be cleaned up
-      // biome-ignore-start lint/nursery/noNestedPromises: needs to be cleaned up
-      pokemon.loadAssets().then(() => {
-        this.canSkip = true;
-
-        globalScene.time.delayedCall(1000, () => {
-          if (!this.hatched) {
-            this.evolutionBgm = globalScene.audioManager.playSoundWithoutBgm("evolution");
-          }
-        });
-
-        // TODO: Is there a better way to handle these `if (hatched)` checks?
-        globalScene.time.delayedCall(2000, () => {
-          if (this.hatched) {
-            return;
-          }
-          this.eggCrackSprite.setVisible(true);
-          this.doSpray(1, this.eggSprite.displayHeight / -2);
-          this.doEggShake(2).then(() => {
-            if (this.hatched) {
-              return;
-            }
-            globalScene.time.delayedCall(1000, () => {
-              if (this.hatched) {
-                return;
-              }
-              this.doSpray(2, this.eggSprite.displayHeight / -4);
-              this.eggCrackSprite.setFrame("1");
-              globalScene.time.delayedCall(125, () => this.eggCrackSprite.setFrame("2"));
-              this.doEggShake(4).then(() => {
-                if (this.hatched) {
-                  return;
-                }
-                globalScene.time.delayedCall(1000, () => {
-                  if (this.hatched) {
-                    return;
-                  }
-                  globalScene.audioManager.playSound("se/egg_crack");
-                  this.doSpray(4);
-                  this.eggCrackSprite.setFrame("3");
-                  globalScene.time.delayedCall(125, () => this.eggCrackSprite.setFrame("4"));
-                  this.doEggShake(8, 2).then(() => {
-                    if (!this.hatched) {
-                      this.doHatch();
-                    }
-                  });
-                });
-              });
-            });
-          });
-        });
-      });
-      // biome-ignore-end lint/nursery/noNestedPromises: end
-      // biome-ignore-end lint/nursery/noFloatingPromises: end
     });
+
+    // Sequential animation timeline
+    await wait(2000);
+    if (this.hatched) {
+      return;
+    }
+
+    this.eggCrackSprite.setVisible(true);
+    this.doSpray(1, this.eggSprite.displayHeight / -2);
+
+    await this.doEggShake(2);
+    if (this.hatched) {
+      return;
+    }
+
+    await wait(1000);
+    if (this.hatched) {
+      return;
+    }
+
+    this.doSpray(2, this.eggSprite.displayHeight / -4);
+    this.eggCrackSprite.setFrame("1");
+
+    // Non-blocking frame update
+    // biome-ignore lint/nursery/noFloatingPromises: there's no need for error handling
+    wait(125).then(() => {
+      if (!this.hatched) {
+        this.eggCrackSprite.setFrame("2");
+      }
+    });
+
+    await this.doEggShake(4);
+    if (this.hatched) {
+      return;
+    }
+
+    await wait(1000);
+    if (this.hatched) {
+      return;
+    }
+
+    globalScene.audioManager.playSound("se/egg_crack");
+    this.doSpray(4);
+    this.eggCrackSprite.setFrame("3");
+
+    // biome-ignore lint/nursery/noFloatingPromises: there's no need for error handling
+    wait(125).then(() => {
+      if (!this.hatched) {
+        this.eggCrackSprite.setFrame("4");
+      }
+    });
+
+    await this.doEggShake(8, 2);
+    if (!this.hatched) {
+      this.doHatch();
+    }
   }
 
   public override end(): void {

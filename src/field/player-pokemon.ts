@@ -1,5 +1,4 @@
 import { globalScene } from "#app/global-scene";
-import { getPokemonNameWithAffix } from "#app/messages";
 import { activeOverrides } from "#app/overrides";
 import { timedEventManager } from "#app/timed-event-manager";
 import { FRIENDSHIP_GAIN_CUTOFF } from "#constants/friendship-constants";
@@ -227,62 +226,60 @@ export class PlayerPokemon extends Pokemon {
    */
   public async evolve(evolution: SpeciesFormEvolution | null): Promise<SpeciesId[]> {
     if (!evolution) {
-      return new Promise((resolve) => resolve([]));
+      return [];
     }
-    return new Promise((resolve) => {
-      const preEvolutionSpecies = this.species;
 
-      this.pauseEvolutions = false;
-      // Handles Nincada evolving into Ninjask + Shedinja
-      this.handleShedinjaEvolution(evolution);
-      this.species = getPokemonSpecies(evolution.speciesId);
-      if (evolution.preFormKey !== null) {
-        const formIndex = Math.max(
-          this.species.forms.findIndex((f) => f.formKey === evolution.evoFormKey),
-          0,
-        );
-        this.formIndex = formIndex;
-      }
-      this.generateName();
-      if ([0, 1, 2].includes(this.abilityIndex)) {
-        // Handles cases where a Pokemon with HA evolves into a Pokemon with no HA
-        if (this.abilityIndex === 2 && this.getSpeciesForm().abilityHidden === AbilityId.NONE) {
-          this.abilityIndex = 0;
-        }
-      } else {
-        // Prevent pokemon with an illegal ability value from breaking things
+    const preEvolutionSpecies = this.species;
+    this.pauseEvolutions = false;
+    // Handles Nincada evolving into Ninjask + Shedinja
+    this.handleShedinjaEvolution(evolution);
+    this.species = getPokemonSpecies(evolution.speciesId);
+
+    if (evolution.preFormKey !== null) {
+      let formIndex = this.species.forms.findIndex((f) => f.formKey === evolution.evoFormKey);
+      if (formIndex === -1) {
+        formIndex = 0;
         console.warn(
-          `${getPokemonNameWithAffix(this)}'s ability index is somehow an illegal value (${this.abilityIndex}), please report this.`,
+          `Tried to set an invalid form when evolving "${preEvolutionSpecies.name}" into "${this.name}"!\n`
+            + `Pre-evolution form key: ${evolution.preFormKey} | Evolution form key: ${evolution.evoFormKey}`,
         );
+      }
+      this.formIndex = formIndex;
+    }
+    this.generateName();
+
+    if ([0, 1, 2].includes(this.abilityIndex)) {
+      // Handles cases where a Pokemon with HA evolves into a Pokemon with no HA
+      if (this.abilityIndex === 2 && this.getSpeciesForm().abilityHidden === AbilityId.NONE) {
         this.abilityIndex = 0;
       }
-      this.compatibleTms.splice(0, this.compatibleTms.length);
-      this.generateCompatibleTms();
-      const updateAndResolve = (unlockedStarters: SpeciesId[]) => {
-        this.loadAssets()
-          .then(() => {
-            this.calculateStats();
-            return this.updateInfo(true);
-          })
-          .then(() => resolve(unlockedStarters));
-      };
-      // TODO: should this be done in "handleSpecialEvolutions" to keep all species-specific things in the same spot?
-      if (preEvolutionSpecies.speciesId === SpeciesId.GIMMIGHOUL) {
-        const evotracker = this.getHeldItems().find((m) => m instanceof EvoTrackerModifier);
-        if (evotracker) {
-          globalScene.removeModifier(evotracker);
-        }
+    } else {
+      // Prevent pokemon with an illegal ability value from breaking things
+      console.warn(`${this.name}'s ability index is somehow an illegal value (${this.abilityIndex}) after evolving!`);
+      this.abilityIndex = 0;
+    }
+
+    this.generateCompatibleTms();
+
+    // TODO: should this be done in "handleSpecialEvolutions" to keep all species-specific things in the same spot?
+    if (preEvolutionSpecies.speciesId === SpeciesId.GIMMIGHOUL) {
+      const evotracker = this.getHeldItems().find((m) => m instanceof EvoTrackerModifier);
+      if (evotracker) {
+        globalScene.removeModifier(evotracker);
       }
-      if (!globalScene.gameMode.isDaily || this.metBiome > -1) {
-        globalScene.gameData.updateSpeciesDexIvs(this.species.speciesId, this.ivs);
-        globalScene.gameData.setPokemonSeen(this, false);
-        globalScene.gameData.setPokemonCaught(this, false, false, false).then((unlockedStarters) => {
-          updateAndResolve(unlockedStarters);
-        });
-      } else {
-        updateAndResolve([]);
-      }
-    });
+    }
+
+    let unlockedStarters: SpeciesId[] = [];
+    if (!globalScene.gameMode.isDaily || this.metBiome > -1) {
+      globalScene.gameData.updateSpeciesDexIvs(this.species.speciesId, this.ivs);
+      globalScene.gameData.setPokemonSeen(this, false);
+      unlockedStarters = await globalScene.gameData.setPokemonCaught(this, false, false, false);
+    }
+
+    await this.loadAssets();
+    this.calculateStats();
+    await this.updateInfo(true);
+    return unlockedStarters;
   }
 
   private handleShedinjaEvolution(evolution: SpeciesFormEvolution) {
