@@ -9,3 +9,9 @@ shellEmulator: true
 minimumReleaseAge: 1440
 minimumReleaseAgeExclude:
 - "@biomejs/*"
+
+overrides:
+  undici@<6.24.0: '>=6.24.0'
+  undici-types@<6.24.0: '>=6.24.0'
+  undici@>=7.0.0 <7.24.0: '>=7.24.0'
+  undici-types@>=7.0.0 <7.24.0: '>=7.24.0'
