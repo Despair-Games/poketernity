@@ -6,10 +6,12 @@ import type { PokemonWaveData } from "#types/pokemon-types";
 /** Union type of all referable ability attribute class names as strings */
 export type AbAttrKey = keyof AbAttrConstructorMap;
 
+/** @interface */
 export type AbAttrMap = {
   [K in keyof AbAttrConstructorMap]: InstanceType<AbAttrConstructorMap[K]>;
 };
 
+/** @interface */
 export type AbAttrParamMap = {
   [K in keyof AbAttrMap]: Parameters<AbAttrMap[K]["apply"]>;
 };

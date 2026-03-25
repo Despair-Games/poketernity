@@ -73,8 +73,9 @@ describe("Moves - Imprison", () => {
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     await game.toNextTurn();
-    playerPokemon.forEach((p) => expect(p).toHaveMoveResult(MoveResult.SUCCESS));
-    enemyPokemon.forEach((p) => expect(p).toHaveMoveResult(MoveResult.FAIL));
+    expect(playerPokemon[0]).toHaveUsedMove({ moveId: MoveId.IMPRISON, result: MoveResult.SUCCESS });
+    expect(playerPokemon[1]).toHaveUsedMove({ moveId: MoveId.SPLASH, result: MoveResult.SUCCESS });
+    enemyPokemon.forEach((p) => expect(p).toHaveUsedMove({ moveId: MoveId.NONE, result: MoveResult.FAIL }));
   });
 
   it("should not interrupt moves invoked by Sleep Talk", async () => {
@@ -119,7 +120,7 @@ describe("Moves - Imprison", () => {
     await game.toNextTurn();
 
     [feebas, magikarp].forEach((p) => expect(p.getTag(BattlerTagType.IMPRISONING)).toBeDefined());
-    enemyPokemon.forEach((p) => expect(p).toHaveMoveResult(MoveResult.FAIL));
+    enemyPokemon.forEach((p) => expect(p).toHaveUsedMove({ moveId: MoveId.NONE, result: MoveResult.FAIL }));
 
     game.move.select(MoveId.SPLASH, 0);
     game.move.select(MoveId.CELEBRATE, 1);

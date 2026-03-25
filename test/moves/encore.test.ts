@@ -84,7 +84,7 @@ describe("Moves - Encore", () => {
       game.setTurnOrder(turnOrder);
 
       await game.toEndOfTurn();
-      expect(playerPokemon).toHaveMoveResult(MoveResult.FAIL);
+      expect(playerPokemon).toHaveUsedMove({ moveId: MoveId.ENCORE, result: MoveResult.FAIL });
       expect(enemyPokemon.getTag(BattlerTagType.ENCORE)).toBeUndefined();
     });
   });

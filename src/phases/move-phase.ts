@@ -795,6 +795,7 @@ export class MovePhase extends BattlePhase {
       }
 
       this.pokemon.pushMoveHistory({
+        // TODO: this is not always accurate
         move: SelfStatusMove.none(),
         result: MoveResult.FAIL,
         type: ElementalType.UNKNOWN,

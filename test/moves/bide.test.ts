@@ -80,11 +80,11 @@ describe("Moves - Bide", () => {
 
     for (let i = 0; i < 2; i++) {
       await game.toEndOfTurn();
-      expect(player).toHaveMoveResult(MoveResult.SUCCESS);
+      expect(player).toHaveUsedMove({ moveId: MoveId.BIDE, result: MoveResult.SUCCESS });
     }
 
     await game.toEndOfTurn();
-    expect(player).toHaveMoveResult(MoveResult.FAIL);
+    expect(player).toHaveUsedMove({ moveId: MoveId.BIDE, result: MoveResult.FAIL });
   });
 
   it("should stop execution if the user falls asleep", async () => {
@@ -127,7 +127,7 @@ describe("Moves - Bide", () => {
       await game.toEndOfTurn();
     }
 
-    expect(player).toHaveMoveResult(MoveResult.FAIL);
+    expect(player).toHaveUsedMove({ moveId: MoveId.BIDE, result: MoveResult.FAIL });
     expect(enemy).toHaveFullHp();
   });
 

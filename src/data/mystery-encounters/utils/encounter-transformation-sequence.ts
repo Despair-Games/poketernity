@@ -55,7 +55,7 @@ export function doPokemonTransformationSequence(
     pokemonEvoTintSprite.setVisible(false);
     pokemonEvoTintSprite.setTintFill(0xffffff);
 
-    [pokemonSprite, pokemonTintSprite, pokemonEvoSprite, pokemonEvoTintSprite].map((sprite) => {
+    [pokemonSprite, pokemonTintSprite, pokemonEvoSprite, pokemonEvoTintSprite].forEach((sprite) => {
       const spriteKey = previousPokemon.getSpriteKey(true);
       sprite.play(spriteKey);
 
@@ -74,7 +74,7 @@ export function doPokemonTransformationSequence(
       sprite.pipelineData[key] = previousPokemon.getSprite().pipelineData[key];
     });
 
-    [pokemonEvoSprite, pokemonEvoTintSprite].map((sprite) => {
+    [pokemonEvoSprite, pokemonEvoTintSprite].forEach((sprite) => {
       const spriteKey = transformPokemon.getSpriteKey(true);
       sprite.play(spriteKey);
 

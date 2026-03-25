@@ -149,7 +149,7 @@ describe("Moves - Conversion 2", () => {
 
     await game.toEndOfTurn();
 
-    expect(player).toHaveMoveResult(MoveResult.FAIL);
+    expect(player).toHaveUsedMove({ moveId: MoveId.CONVERSION_2, result: MoveResult.FAIL });
     expect(player.isOfType(ElementalType.WATER)).toBeTruthy();
   });
 
@@ -166,7 +166,7 @@ describe("Moves - Conversion 2", () => {
 
     await game.toEndOfTurn();
 
-    expect(player).toHaveMoveResult(MoveResult.FAIL);
+    expect(player).toHaveUsedMove({ moveId: MoveId.CONVERSION_2, result: MoveResult.FAIL });
     expect(player.isOfType(ElementalType.WATER)).toBeTruthy();
   });
 
@@ -181,7 +181,7 @@ describe("Moves - Conversion 2", () => {
     await game.toEndOfTurn();
 
     // Ghost is resisted only by Dark and Normal. Obstagoon is of both types.
-    expect(player).toHaveMoveResult(MoveResult.FAIL);
+    expect(player).toHaveUsedMove({ moveId: MoveId.CONVERSION_2, result: MoveResult.FAIL });
     expect(player.getTypes()).toEqual([ElementalType.DARK, ElementalType.NORMAL]);
   });
 

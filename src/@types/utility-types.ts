@@ -1,20 +1,25 @@
+import type { NegativeInfinity, PositiveInfinity } from "type-fest";
+
 /**
- * Alias for the constructor of a class.
+ * Alias for the constructor of a class. \
  * Can be used to build an object of templated type.
  * @remarks
  * Use {@linkcode AbstractConstructor} instead if comparing types
  */
+// TODO: remove and use the one from "type-fest" instead
 export type Constructor<T> = new (...args: any[]) => T;
 
 /**
- * Alias for an abstract constructor of a class.
+ * Alias for an abstract constructor of a class. \
  * Should be used when comparing types, e.g. with `instanceof`.
  */
+// TODO: remove and use the one from "type-fest" instead
 export type AbstractConstructor<T> = abstract new (...args: any[]) => T;
 
 /** Utility type representing `null` or `undefined` */
 export type nil = null | undefined;
 
+/** Used by achievements and vouchers */
 export type AchvConditionFn<T = any> = (...args: T[]) => boolean;
 
 export type ObjectValues<T extends object> = T[keyof T];
@@ -97,3 +102,39 @@ export type TSNumericEnum<T extends EnumOrObject> = number extends ObjectValues<
 export type NormalEnum<T extends EnumOrObject> = Exclude<T, TSNumericEnum<T>>;
 
 // #endregion
+
+/**
+ * Type helper to mark all properties in `T` as optional, while still mandating that at least 1
+ * of its properties be present.
+ *
+ * Distinct from {@linkcode Partial} as this requires at least 1 property to _not_ be undefined.
+ * @typeParam T - The object type to render partial
+ */
+export type AtLeastOne<T extends object> = Partial<T> & ObjectValues<{ [K in keyof T]: Pick<Required<T>, K> }>;
+
+/**
+ * Negate a number, converting its sign from positive to negative or vice versa.
+ * @typeParam N - The number to negate
+ * @privateRemarks
+ * This should be used sparingly due to being slow for TypeScript to validate. \
+ * Moreover, `tsc`'s limitations on "round-tripping" of numbers inside template literals
+ * will cause this to fail for numbers not already in "simplest form"
+ * (cf. https://github.com/microsoft/TypeScript/issues/57404).
+ */
+export type Negate<N extends number> =
+  // Handle edge cases
+  number extends N
+    ? number
+    : N extends 0
+      ? 0
+      : N extends PositiveInfinity
+        ? NegativeInfinity
+        : N extends NegativeInfinity
+          ? PositiveInfinity
+          : // Handle negative numbers
+            `${N}` extends `-${infer P extends number}`
+            ? P
+            : // Handle positive numbers
+              `-${N}` extends `${infer R extends number}`
+              ? R
+              : number;

@@ -75,6 +75,7 @@ describe("Moves - Metal Burst", () => {
 
     expect(enemy1.isFainted()).toBe(true);
     expect(enemy2.isFainted()).toBe(true);
-    expect(game.field.getPlayerPokemon()).toHaveMoveResult(MoveResult.FAIL);
+    // `MoveId.NONE` is not accurate but `MovePhase` is currently bugged
+    expect(game.field.getPlayerPokemon()).toHaveUsedMove({ moveId: MoveId.NONE, result: MoveResult.FAIL });
   });
 });

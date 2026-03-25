@@ -1,0 +1,17 @@
+all:
+  - "package.json"
+  - "pnpm-lock.yaml"
+  - ".nvmrc"
+  - ".env*"
+  - ".github/workflows/lint.yml"
+ts-files:
+  - "{src,test,.github}/**/*.{ts,mts}"
+  - "global.d.ts"
+  - "vite.config.ts"
+  - "vitest.config.ts"
+  - "tsconfig.json"
+js-files:
+  - "scripts/**/*.{js,mjs}"
+  - ".dependency-cruiser.cjs"
+  - "typedoc.config.js"
+  - "jsconfig.json"

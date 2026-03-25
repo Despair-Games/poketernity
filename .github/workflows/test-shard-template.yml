@@ -4,35 +4,26 @@ on:
   workflow_call:
     inputs:
       shard:
+        description: The numerical index of the current shard; must be no greater than totalShards.
         required: true
         type: number
       totalShards:
+        description: The total number of shards to split tests into; should be the same across shards.
         required: true
         type: number
 
 jobs:
   test:
     name: Shard ${{ inputs.shard }} of ${{ inputs.totalShards }}
+    timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: "recursive"
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: ".nvmrc"
-          cache: "pnpm"
-
-      - name: Install Node.js dependencies
-        run: pnpm i
+      - uses: ./.github/actions/setup-deps
 
       - name: Run tests
         run: pnpm test:silent --shard=${{ inputs.shard }}/${{ inputs.totalShards }}

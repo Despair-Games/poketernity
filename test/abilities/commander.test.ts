@@ -65,7 +65,9 @@ describe("Abilities - Commander", () => {
     expect(turnManager.findCommandFromPokemon(tatsugiri)).toBeUndefined();
 
     await game.toEndOfTurn();
-    game.scene.getEnemyField().forEach((enemy) => expect(enemy).toHaveMoveResult(MoveResult.MISS));
+    game.scene
+      .getEnemyField()
+      .forEach((enemy) => expect(enemy).toHaveUsedMove({ moveId: MoveId.TACKLE, result: MoveResult.MISS }));
     expect(tatsugiri.isFullHp()).toBeTruthy();
   });
 

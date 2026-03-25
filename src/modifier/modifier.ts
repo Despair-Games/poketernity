@@ -2645,7 +2645,7 @@ export class MoneyRewardModifier extends ConsumableModifier {
 
     globalScene.addMoney(moneyAmount.value);
 
-    globalScene.getPlayerParty().map((p) => {
+    globalScene.getPlayerParty().forEach((p) => {
       if (p.species?.speciesId === SpeciesId.GIMMIGHOUL) {
         if (p.evoCounter) {
           p.evoCounter += Math.min(Math.floor(this.moneyMultiplier), 3);

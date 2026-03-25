@@ -228,7 +228,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
     // this tells us whether or not to use the player or enemy battle stat order
     this.statOrder = this.player ? this.statOrderPlayer : this.statOrderEnemy;
 
-    this.statOrder.map((s, i) => {
+    this.statOrder.forEach((s, i) => {
       // we do a check for i > statOverflow to see when the stat labels go onto the next column
       // For enemies, we have HP (i=0) by itself then a new column, so we check for i > 0
       // For players, we don't have HP, so we start with i = 0 and i = 1 for our first column, and so need to check for i > 1
@@ -532,7 +532,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
         this.statusIndicator,
         this.levelContainer,
         this.statValuesContainer,
-      ].map((e) => {
+      ].forEach((e) => {
         e.x += 48 * (isBoss ? -1 : 1);
       });
       this.hpBar.x += 38 * (isBoss ? -1 : 1);
@@ -876,7 +876,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
   }
 
   updateStats(stats: number[]): void {
-    this.statOrder.map((s, i) => {
+    this.statOrder.forEach((s, i) => {
       if (s !== Stat.HP) {
         this.statNumbers[i].setFrame(stats[s - 1].toString());
       }

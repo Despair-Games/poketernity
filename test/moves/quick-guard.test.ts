@@ -98,7 +98,7 @@ describe("Moves - Quick Guard", () => {
 
     await game.toEndOfTurn();
 
-    expect(enemyPokemon).toHaveMoveResult(MoveResult.SUCCESS);
-    expect(playerPokemon).toHaveMoveResult(MoveResult.FAIL);
+    expect(enemyPokemon).toHaveUsedMove({ moveId: MoveId.QUICK_GUARD, result: MoveResult.SUCCESS });
+    expect(playerPokemon).toHaveUsedMove({ moveId: MoveId.QUICK_GUARD, result: MoveResult.FAIL });
   });
 });

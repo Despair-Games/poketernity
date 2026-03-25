@@ -2682,6 +2682,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       const isVariant2Caught: boolean = (caughtAttr & DexAttr.SHINY_RARE_VARIANT) > 0;
       const isVariant3Caught: boolean = (caughtAttr & DexAttr.SHINY_EPIC_VARIANT) > 0;
       const isUncaught = !isNonShinyCaught && !isVariant1Caught && !isVariant2Caught && !isVariant3Caught;
+      // biome-ignore lint/suspicious/useIterableCallbackReturn: TODO: refactor SSUI
       const fitsCaught = this.filterBar.getVals(DropDownColumn.CAUGHT).some((caught) => {
         if (caught === "SHINY3") {
           return isVariant3Caught;
@@ -2703,6 +2704,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       // Passive Filter
       const isPassiveUnlocked = globalScene.gameData.isPassiveUnlocked(container.species.speciesId);
       const isPassiveUnlockable = this.isPassiveAvailable(container.species.speciesId) && !isPassiveUnlocked;
+      // biome-ignore lint/suspicious/useIterableCallbackReturn: TODO: refactor SSUI
       const fitsPassive = this.filterBar.getVals(DropDownColumn.UNLOCKS).some((unlocks) => {
         if (unlocks.val === "PASSIVE" && unlocks.state === DropDownState.ON) {
           return isPassiveUnlocked;
@@ -2722,6 +2724,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       const isCostReduced = starterData.valueReduction > 0;
       const isCostFullyReduced = starterData.valueReduction === valueReductionMax;
       const isCostReductionUnlockable = this.isValueReductionAvailable(container.species.speciesId);
+      // biome-ignore lint/suspicious/useIterableCallbackReturn: TODO: refactor SSUI
       const fitsCostReduction = this.filterBar.getVals(DropDownColumn.UNLOCKS).some((unlocks) => {
         if (unlocks.val === "COST_REDUCTION" && unlocks.state === DropDownState.ON) {
           return isCostFullyReduced;
@@ -2742,6 +2745,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
       // Favorite Filter
       const isFavorite = this.starterPreferences[container.species.speciesId]?.favorite ?? false;
+      // biome-ignore lint/suspicious/useIterableCallbackReturn: TODO: refactor SSUI
       const fitsFavorite = this.filterBar.getVals(DropDownColumn.MISC).some((misc) => {
         if (misc.val === "FAVORITE" && misc.state === DropDownState.ON) {
           return isFavorite;
@@ -2758,6 +2762,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       const hasWon = starterData.classicWinCount > 0;
       const hasNotWon = starterData.classicWinCount === 0;
       const isUndefined = starterData.classicWinCount === undefined;
+      // biome-ignore lint/suspicious/useIterableCallbackReturn: TODO: refactor SSUI
       const fitsWin = this.filterBar.getVals(DropDownColumn.MISC).some((misc) => {
         if (misc.val === "WIN" && misc.state === DropDownState.ON) {
           return hasWon;
@@ -2775,6 +2780,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         container.species.abilityHidden !== container.species.ability1
         && container.species.abilityHidden !== AbilityId.NONE;
       const hasHA = starterData.abilityAttr & AbilityAttr.ABILITY_HIDDEN;
+      // biome-ignore lint/suspicious/useIterableCallbackReturn: TODO: refactor SSUI
       const fitsHA = this.filterBar.getVals(DropDownColumn.MISC).some((misc) => {
         if (misc.val === "HIDDEN_ABILITY" && misc.state === DropDownState.ON) {
           return hasHA;
@@ -2789,6 +2795,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
       // Egg Purchasable Filter
       const isEggPurchasable = this.isSameSpeciesEggAvailable(container.species.speciesId);
+      // biome-ignore lint/suspicious/useIterableCallbackReturn: TODO: refactor SSUI
       const fitsEgg = this.filterBar.getVals(DropDownColumn.MISC).some((misc) => {
         if (misc.val === "EGG" && misc.state === DropDownState.ON) {
           return isEggPurchasable;
@@ -2802,6 +2809,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       });
 
       // Pokerus Filter
+      // biome-ignore lint/suspicious/useIterableCallbackReturn: TODO: refactor SSUI
       const fitsPokerus = this.filterBar.getVals(DropDownColumn.MISC).some((misc) => {
         if (misc.val === "POKERUS" && misc.state === DropDownState.ON) {
           return this.pokerusSpecies.includes(container.species);

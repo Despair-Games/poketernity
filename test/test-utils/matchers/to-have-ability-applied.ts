@@ -1,19 +1,20 @@
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbilityId } from "#enums/ability-id";
 import type { Pokemon } from "#field/pokemon";
+import { getEnumStr } from "#test/test-utils/string-utils";
 import { isPokemonInstance, receivedStr } from "#test/test-utils/test-utils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
 /**
- * Matcher that checks if a {@linkcode Pokemon} has applied a specific {@linkcode AbilityId}.
+ * Check whether a Pokemon has activated a specific ability.
  * @param received - The object to check. Should be a {@linkcode Pokemon}
  * @param expectedAbility - The {@linkcode AbilityId} to check for
  * @returns Whether the matcher passed
  */
-export function toHaveAbilityAppliedMatcher(
-  this: MatcherState,
+export function toHaveAbilityApplied(
+  this: Readonly<MatcherState>,
   received: unknown,
-  expectedAbilityId: AbilityId,
+  expected: AbilityId,
 ): SyncExpectationResult {
   if (!isPokemonInstance(received)) {
     return {
@@ -22,10 +23,11 @@ export function toHaveAbilityAppliedMatcher(
     };
   }
 
-  const pass = received.waveData.abilitiesApplied.has(expectedAbilityId);
+  const actual = received.waveData.abilitiesApplied;
+  const pass = actual.has(expected);
 
   const pkmName = getPokemonNameWithAffix(received);
-  const expectedAbilityStr = `${AbilityId[expectedAbilityId]} (=${expectedAbilityId})`;
+  const expectedAbilityStr = getEnumStr(AbilityId, expected);
 
   return {
     pass,
@@ -33,7 +35,7 @@ export function toHaveAbilityAppliedMatcher(
       pass
         ? `Expected ${pkmName} to NOT have applied ${expectedAbilityStr}, but it did!`
         : `Expected ${pkmName} to have applied ${expectedAbilityStr}, but it didn't!`,
-    expected: expectedAbilityId,
-    actual: received.waveData.abilitiesApplied,
+    expected,
+    actual,
   };
 }

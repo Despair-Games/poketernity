@@ -5,13 +5,15 @@ import { isPokemonInstance, receivedStr } from "#test/test-utils/test-utils";
 import { enumValueToKey } from "#utils/common-utils";
 import type { MatcherState, SyncExpectationResult } from "@vitest/expect";
 
+// TODO: update this after porting battlertag serialization
+
 /**
  * Matcher to check if a {@linkcode Pokemon} has a specific {@linkcode BattlerTagType}.
  * @param received - The object to check. Should be a {@linkcode Pokemon}.
  * @param expectedBattlerTagType - The {@linkcode BattlerTagType} to check for.
  * @returns Whether the matcher passed
  */
-export function toHaveBattlerTagMatcher(
+export function toHaveBattlerTag(
   this: MatcherState,
   received: unknown,
   expectedBattlerTagType: BattlerTagType,

@@ -49,7 +49,7 @@ describe("Moves - Fly", () => {
 
     await game.toEndOfTurn();
     expect(playerPokemon.getTag(BattlerTagType.MID_AIR)).toBeDefined();
-    expect(enemyPokemon).toHaveMoveResult(MoveResult.MISS);
+    expect(enemyPokemon).toHaveUsedMove({ moveId: MoveId.TACKLE, result: MoveResult.MISS });
     expect(playerPokemon.hp).toBe(playerPokemon.getMaxHp());
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
     expect(playerPokemon.getMoveQueue()[0].move.id).toBe(MoveId.FLY);
@@ -59,7 +59,7 @@ describe("Moves - Fly", () => {
     expect(enemyPokemon.hp).toBeLessThan(enemyPokemon.getMaxHp());
     expect(playerPokemon.getMoveHistory()).toHaveLength(2);
 
-    const playerFly = playerPokemon.getMoveset().find((mv) => mv && mv.moveId === MoveId.FLY);
+    const playerFly = playerPokemon.getMoveset().find((mv) => mv.moveId === MoveId.FLY);
     expect(playerFly?.ppUsed).toBe(1);
   });
 
@@ -75,7 +75,7 @@ describe("Moves - Fly", () => {
 
     await game.toEndOfTurn();
     expect(playerPokemon.hp).toBeLessThan(playerPokemon.getMaxHp());
-    expect(enemyPokemon).toHaveMoveResult(MoveResult.SUCCESS);
+    expect(enemyPokemon).toHaveUsedMove({ moveId: MoveId.TACKLE, result: MoveResult.SUCCESS });
   });
 
   it("should not expend PP when the attack phase is cancelled", async () => {
@@ -91,7 +91,7 @@ describe("Moves - Fly", () => {
     expect(playerPokemon.getTag(BattlerTagType.MID_AIR)).toBeUndefined();
     expect(playerPokemon.getStatusEffect(true)).toBe(StatusEffect.SLEEP);
 
-    const playerFly = playerPokemon.getMoveset().find((mv) => mv && mv.moveId === MoveId.FLY);
+    const playerFly = playerPokemon.getMoveset().find((mv) => mv.moveId === MoveId.FLY);
     expect(playerFly?.ppUsed).toBe(0);
   });
 
@@ -112,10 +112,10 @@ describe("Moves - Fly", () => {
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.toEndOfTurn();
-    expect(playerPokemon).toHaveMoveResult(MoveResult.FAIL);
-    expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
+    expect(playerPokemon).toHaveUsedMove({ moveId: MoveId.NONE, result: MoveResult.FAIL });
+    expect(enemyPokemon).toHaveFullHp();
 
-    const playerFly = playerPokemon.getMoveset().find((mv) => mv && mv.moveId === MoveId.FLY);
+    const playerFly = playerPokemon.getMoveset().find((mv) => mv.moveId === MoveId.FLY);
     expect(playerFly?.ppUsed).toBe(0);
   });
 });

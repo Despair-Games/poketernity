@@ -42,7 +42,7 @@ describe("Moves - Sleep Talk", () => {
 
     game.move.select(MoveId.SLEEP_TALK);
     await game.toNextTurn();
-    expect(game.field.getPlayerPokemon()).toHaveMoveResult(MoveResult.FAIL);
+    expect(game.field.getPlayerPokemon()).toHaveUsedMove({ moveId: MoveId.SLEEP_TALK, result: MoveResult.FAIL });
   });
 
   it("should fail if the user has no valid moves", async () => {
@@ -51,7 +51,7 @@ describe("Moves - Sleep Talk", () => {
 
     game.move.select(MoveId.SLEEP_TALK);
     await game.toNextTurn();
-    expect(game.field.getPlayerPokemon()).toHaveMoveResult(MoveResult.FAIL);
+    expect(game.field.getPlayerPokemon()).toHaveUsedMove({ moveId: MoveId.SLEEP_TALK, result: MoveResult.FAIL });
   });
 
   it("should call a random valid move if the user is asleep", async () => {

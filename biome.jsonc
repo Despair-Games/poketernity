@@ -20,14 +20,15 @@
     // and having to verify whether each individual file is ignored
     "includes": [
       "**",
-      "!.github/**/*.*", // workaround due to bug, should be `"!.github"`
+      "!.github/**/*.*", // workaround due to bug/design limitation, should be `"!.github"`
       ".github/**/*.ts",
+      ".github/**/*.mts",
       "!!.vscode",
       "!!build",
       "!!coverage",
       "!!dist",
       "!!docs",
-      "!public/**/*.*", // workaround due to bug, should be `"!public"`
+      "!public/**/*.*", // workaround due to bug/design limitation, should be `"!public"`
       "public/service-worker.js",
       "!!typedoc",
       "!pnpm-lock.yml",
@@ -154,7 +155,12 @@
         "noDocumentCookie": "off", // Firefox has minimal support for the "Cookie Store API"
         "noConstantBinaryExpressions": "error",
         "noTsIgnore": "error",
-        "useIterableCallbackReturn": "off", // TODO: re-enable if the rule is changed to be type-aware
+        "useIterableCallbackReturn": {
+          "level": "error",
+          "options": {
+            "checkForEach": false
+          }
+        },
         "useErrorMessage": "error",
         "useGuardForIn": "error",
         "useNumberToFixedDigitsArgument": "error",
@@ -239,7 +245,7 @@
     },
     {
       // This section is to improve the bug tester workflow
-      "includes": ["**/src/overrides.ts"],
+      "includes": ["src/overrides.ts"],
       "linter": {
         "rules": {
           "correctness": {
@@ -252,7 +258,7 @@
       }
     },
     {
-      "includes": ["**/src/plugins/i18n.ts", "**/eslint.config.js", "**/vite.config.ts", "**/vitest.config.ts"],
+      "includes": ["src/plugins/i18n.ts", "**/vite.config.ts", "**/vitest.config.ts"],
       "linter": {
         "rules": {
           "style": {

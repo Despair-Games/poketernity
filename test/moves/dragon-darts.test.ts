@@ -258,7 +258,7 @@ describe("Moves - Dragon Darts", () => {
     await game.toEndOfTurn();
 
     playerPokemon.forEach((p) => expect(p.isFullHp()).toBeTruthy());
-    expect(enemy1).toHaveMoveResult(MoveResult.FAIL);
+    expect(enemy1).toHaveUsedMove({ moveId: MoveId.DRAGON_DARTS, result: MoveResult.FAIL });
   });
 
   it("should not trigger ability effects when redirecting", async () => {
