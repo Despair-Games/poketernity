@@ -85,4 +85,5 @@ jobs:
 
       - name: Run Typecheck (tsgo, JS files)
         run: pnpm dlx @typescript/native-preview -p jsconfig.json
-        if: ${{ !cancelled() && (needs.linting-path-filter.outputs.all == 'true' || needs.linting-path-filter.outputs.js-files == 'true') }}
+        if: false # temporarily disabled due to inconsistency in TS7 vs TS5 behavior
+        # if: ${{ !cancelled() && (needs.linting-path-filter.outputs.all == 'true' || needs.linting-path-filter.outputs.js-files == 'true') }}
