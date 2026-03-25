@@ -100,8 +100,8 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
     const shouldReplaceQ = i18next.t("battle:learnMoveReplaceQuestion", { moveName: move.name });
     const preQText = [learnMovePrompt, moveLimitReached].join("$");
 
-    await ui.showTextPromise(preQText);
-    await ui.showTextPromise(shouldReplaceQ, undefined, false);
+    await ui.showTextPromise(preQText, { prompt: true });
+    await ui.showTextPromise(shouldReplaceQ);
 
     const options: ConfirmModeConfig = {
       yesHandler: () => {
@@ -130,7 +130,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
     const { ui } = globalScene;
 
     ui.setMode<MessageUiHandler>(this.messageMode);
-    await ui.showTextPromise(i18next.t("battle:learnMoveForgetQuestion"), undefined, true);
+    await ui.showTextPromise(i18next.t("battle:learnMoveForgetQuestion"), { prompt: true });
     await ui.setModeWithoutClear<SummaryUiHandler>(
       UiMode.SUMMARY,
       pokemon,
@@ -171,7 +171,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
   protected async rejectMoveAndEnd(move: Move, pokemon: Pokemon): Promise<void> {
     const { ui } = globalScene;
 
-    await ui.showTextPromise(i18next.t("battle:learnMoveStopTeaching", { moveName: move.name }), undefined, false);
+    await ui.showTextPromise(i18next.t("battle:learnMoveStopTeaching", { moveName: move.name }));
 
     const options: ConfirmModeConfig = {
       yesHandler: () => {
@@ -181,8 +181,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
             pokemonName: getPokemonNameWithAffix(pokemon),
             moveName: move.name,
           }),
-          undefined,
-          true,
+          { prompt: true },
         ).then(() => this.end());
         return true;
       },
@@ -246,7 +245,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
     });
 
     if (textMessage) {
-      await ui.showTextPromise(textMessage);
+      await ui.showTextPromise(textMessage, { prompt: true });
     }
 
     globalScene.audioManager.playSound("level_up_fanfare"); // Sound loaded into game as is

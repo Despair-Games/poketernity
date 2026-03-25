@@ -65,6 +65,7 @@ describe("Mystery Encounter Phases", () => {
 
     it("Selects an option for MysteryEncounterPhase", async () => {
       const { ui } = game.scene;
+      vi.spyOn(ui, "showDialoguePromise");
       vi.spyOn(ui, "showDialogue");
       vi.spyOn(ui, "showText");
       await game.runToMysteryEncounter(MysteryEncounterType.MYSTERIOUS_CHALLENGERS, [
@@ -89,11 +90,7 @@ describe("Mystery Encounter Phases", () => {
       expect(ui.getMode()).toBe(UiMode.MESSAGE);
       expect(ui.showDialogue).toHaveBeenCalledTimes(1);
       expect(ui.showText).toHaveBeenCalledTimes(2);
-      expect(ui.showDialogue).toHaveBeenCalledWith(
-        i18next.t("battle:mysteryEncounterAppeared"),
-        "???",
-        expect.any(Function),
-      );
+      expect(ui.showDialoguePromise).toHaveBeenCalledWith(i18next.t("battle:mysteryEncounterAppeared"), "???");
       expect(ui.showText).toHaveBeenCalledWith(i18next.t("mysteryEncounters/mysteriousChallengers:intro"), {
         callback: expect.any(Function),
         callbackDelay: 750,

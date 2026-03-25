@@ -502,42 +502,47 @@ export class UI extends Phaser.GameObjects.Container {
 
   public async showTextPromise(
     text: string,
-    callbackDelay: number = 0,
-    prompt: boolean = true,
-    promptDelay?: number,
+    { delay, callbackDelay = 0, prompt, promptDelay }: Omit<ShowTextOptions, "callback"> = {},
   ): Promise<void> {
-    if (text == null) {
-      console.error("Missing `text` param for `UI#showTextPromise`!");
-      text = "";
-    }
     return new Promise<void>((resolve) => {
-      this.showText(text, { callback: () => resolve(), callbackDelay, prompt, promptDelay });
+      this.showText(text, { delay, callback: () => resolve(), callbackDelay, prompt, promptDelay });
     });
   }
 
   public showText(text: string, { delay, callback, callbackDelay, prompt, promptDelay }: ShowTextOptions = {}): void {
-    if (prompt && text.indexOf("$") > -1) {
-      const messagePages = text.split(/\$/g).map((m) => m.trim());
-      let showMessageAndCallback = () => callback?.();
-      for (let p = messagePages.length - 1; p >= 0; p--) {
-        const originalFunc = showMessageAndCallback;
-        showMessageAndCallback = () => this.showText(messagePages[p], { callback: originalFunc, prompt: true });
-      }
-      showMessageAndCallback();
-    } else {
+    if (!prompt || !text.includes("$")) {
       this.getCurrentMessageHandler().showText(text, { delay, callback, callbackDelay, prompt, promptDelay });
+      return;
     }
+
+    const messagePages = text.split(/\$/g).map((m) => m.trim());
+    let showMessageAndCallback = () => callback?.();
+    for (let p = messagePages.length - 1; p >= 0; p--) {
+      const originalFunc = showMessageAndCallback;
+      showMessageAndCallback = () => this.showText(messagePages[p], { callback: originalFunc, prompt: true });
+    }
+    showMessageAndCallback();
   }
 
+  public async showDialoguePromise(
+    keyOrText: string,
+    name: string,
+    { delay, callbackDelay, promptDelay }: { delay?: number; callbackDelay?: number; promptDelay?: number } = {},
+  ): Promise<void> {
+    return new Promise<void>((resolve) => {
+      this.showDialogue(keyOrText, name, () => resolve(), delay, callbackDelay, promptDelay);
+    });
+  }
+
+  // TODO: convert to use object param for optional params
   public showDialogue(
     keyOrText: string,
     name: string,
     callback: VoidFunction,
-    delay?: number,
+    delay: number = 0,
     callbackDelay?: number,
     promptDelay?: number,
   ): void {
-    delay = delay ?? 0;
     // Get localized dialogue (if available)
     let hasi18n = false;
     let text = keyOrText;
