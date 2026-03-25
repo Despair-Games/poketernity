@@ -3,7 +3,6 @@ import { logUiDebug, logUiVerbose } from "#app/loggers";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
 import { BattleSceneEventType } from "#enums/battle-scene-event-type";
 import type { Button } from "#enums/button";
-import { Device } from "#enums/device";
 import { PlayerGender } from "#enums/player-gender";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
@@ -958,15 +957,13 @@ export class UI extends Phaser.GameObjects.Container {
    * Revert through all the modes currently in the mode chain.
    * @returns Promise that resolves when the mode chain is empty.
    */
+  // TODO: this is unused, do we need it?
   public async revertModes(): Promise<void> {
-    return new Promise<void>((resolve) => {
-      if (this.modeChain.length === 0) {
-        return resolve();
-      }
-      this.revertMode()
-        .then((success) => executeIf(success, this.revertModes))
-        .then(() => resolve());
-    });
+    if (this.modeChain.length === 0) {
+      return;
+    }
+    const success = await this.revertMode();
+    await executeIf(success, this.revertModes);
   }
 
   /**
@@ -974,20 +971,5 @@ export class UI extends Phaser.GameObjects.Container {
    */
   public getModeChain(): UiMode[] {
     return this.modeChain;
-  }
-
-  /**
-   * getGamepadType - returns the type of gamepad being used
-   * inputMethod could be "keyboard" or "touch" or "gamepad"
-   * if inputMethod is "keyboard" or "touch", then the inputMethod is returned
-   * if inputMethod is "gamepad", then the gamepad type is returned it could be "xbox" or "dualshock"
-   * @returns gamepad type
-   * @todo why is this here?
-   */
-  public getGamepadType(): string {
-    if (globalScene.inputMethod === "gamepad") {
-      return globalScene.inputController.getActiveConfig(Device.GAMEPAD)?.padType ?? globalScene.inputMethod;
-    }
-    return globalScene.inputMethod;
   }
 }

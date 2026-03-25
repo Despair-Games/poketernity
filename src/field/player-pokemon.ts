@@ -341,57 +341,48 @@ export class PlayerPokemon extends Pokemon {
     return ret;
   }
 
-  override async changeForm(formChange: SpeciesFormChange): Promise<void> {
-    return new Promise((resolve) => {
-      const previousFormIndex = this.formIndex;
-      this.formIndex = Math.max(
-        this.species.forms.findIndex((f) => f.formKey === formChange.formKey),
-        0,
-      );
-      this.generateName();
-      const abilityCount = this.getSpeciesForm().getAbilityCount();
-      if (this.abilityIndex >= abilityCount) {
-        // Shouldn't happen
-        this.abilityIndex = abilityCount - 1;
+  public override async changeForm(formChange: SpeciesFormChange): Promise<void> {
+    const previousFormIndex = this.formIndex;
+
+    let newFormIndex = this.species.forms.findIndex((f) => f.formKey === formChange.formKey);
+    if (newFormIndex === -1) {
+      console.warn(`Tried to set an invalid form index for ${this.name} during form change!\nForm change:`, formChange);
+      newFormIndex = 0;
+    }
+    this.formIndex = newFormIndex;
+
+    this.generateName();
+
+    // In cases where a form change updates the type of a Pokemon from its previous form (Arceus, Silvally, Castform, etc.),
+    // persist that type change in customPokemonData if necessary
+    const baseForm = this.species.forms[previousFormIndex];
+    const baseFormTypes = [baseForm.type1, baseForm.type2];
+    if (this.customPokemonData.types.length > 0) {
+      if (this.getSpeciesForm().type1 !== baseFormTypes[0]) {
+        this.customPokemonData.types[0] = this.getSpeciesForm().type1;
       }
 
-      // In cases where a form change updates the type of a Pokemon from its previous form (Arceus, Silvally, Castform, etc.),
-      // persist that type change in customPokemonData if necessary
-      const baseForm = this.species.forms[previousFormIndex];
-      const baseFormTypes = [baseForm.type1, baseForm.type2];
-      if (this.customPokemonData.types.length > 0) {
-        if (this.getSpeciesForm().type1 !== baseFormTypes[0]) {
-          this.customPokemonData.types[0] = this.getSpeciesForm().type1;
-        }
-
-        const type2 = this.getSpeciesForm().type2;
-        if (type2 != null && type2 !== baseFormTypes[1]) {
-          if (this.customPokemonData.types.length > 1) {
-            this.customPokemonData.types[1] = type2;
-          } else {
-            this.customPokemonData.types.push(type2);
-          }
+      const type2 = this.getSpeciesForm().type2;
+      if (type2 != null && type2 !== baseFormTypes[1]) {
+        if (this.customPokemonData.types.length > 1) {
+          this.customPokemonData.types[1] = type2;
+        } else {
+          this.customPokemonData.types.push(type2);
         }
       }
+    }
 
-      this.compatibleTms.splice(0, this.compatibleTms.length);
-      this.generateCompatibleTms();
-      const updateAndResolve = () => {
-        this.loadAssets()
-          .then(() => {
-            this.calculateStats();
-            globalScene.updateModifiers(true, true);
-            return this.updateInfo(true);
-          })
-          .then(() => resolve());
-      };
-      if (!globalScene.gameMode.isDaily || this.metBiome > -1) {
-        globalScene.gameData.setPokemonSeen(this, false);
-        globalScene.gameData.setPokemonCaught(this, false).then(() => updateAndResolve());
-      } else {
-        updateAndResolve();
-      }
-    });
+    this.generateCompatibleTms();
+
+    if (!globalScene.gameMode.isDaily || this.metBiome > -1) {
+      globalScene.gameData.setPokemonSeen(this, false);
+      await globalScene.gameData.setPokemonCaught(this, false);
+    }
+
+    await this.loadAssets();
+    this.calculateStats();
+    globalScene.updateModifiers(true, true);
+    await this.updateInfo(true);
   }
 
   /**

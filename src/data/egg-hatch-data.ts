@@ -39,8 +39,11 @@ export class EggHatchData {
    * Used before updating the dex, so comparing the pokemon to these entries will show the new attributes.
    */
   public storeDexAndStarterEntries(): void {
-    const currDexEntry = globalScene.gameData.dexData[this.pokemon.species.speciesId];
-    const currStarterDataEntry = globalScene.gameData.starterData[this.pokemon.species.getRootSpeciesId()];
+    const { gameData } = globalScene;
+
+    const currDexEntry = gameData.dexData[this.pokemon.species.speciesId];
+    const currStarterDataEntry = gameData.starterData[this.pokemon.species.getRootSpeciesId()];
+
     this._dexEntryBeforeUpdate = { ...currDexEntry };
     this._starterDataEntryBeforeUpdate = { ...currStarterDataEntry, ivs: [...currStarterDataEntry.ivs] };
   }
@@ -52,13 +55,12 @@ export class EggHatchData {
    * @param showMessage - (Default `false`) Whether to show messages for the new catches and egg moves
    */
   public async updatePokemon(showMessage: boolean = false): Promise<void> {
-    await globalScene.gameData.setPokemonCaught(this.pokemon, true, true, showMessage);
-    globalScene.gameData.updateSpeciesDexIvs(this.pokemon.species.speciesId, this.pokemon.ivs);
-    const unlocked = await globalScene.gameData.setEggMoveUnlocked(
-      this.pokemon.species,
-      this.eggMoveIndex,
-      showMessage,
-    );
+    const { gameData } = globalScene;
+
+    await gameData.setPokemonCaught(this.pokemon, true, true, showMessage);
+    gameData.updateSpeciesDexIvs(this.pokemon.species.speciesId, this.pokemon.ivs);
+
+    const unlocked = await gameData.setEggMoveUnlocked(this.pokemon.species, this.eggMoveIndex, showMessage);
     this.eggMoveUnlocked = unlocked;
   }
 }

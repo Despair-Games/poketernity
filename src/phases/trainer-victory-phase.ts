@@ -17,6 +17,7 @@ export class TrainerVictoryPhase extends BattlePhase {
   public override start(): void {
     const { charSprite, currentBattle, ui } = globalScene;
     const { trainer, waveIndex } = currentBattle;
+
     globalScene.disableMenu = true;
 
     if (!trainer) {
@@ -55,49 +56,45 @@ export class TrainerVictoryPhase extends BattlePhase {
       );
     }
 
-    ui.showText(
-      i18next.t("battle:trainerDefeated", {
-        trainerName: trainer.getName(TrainerSlot.NONE, true),
-      }),
-      {
-        callback: () => {
-          const victoryMessages = trainer.getVictoryMessages();
-          let message: string;
-          globalScene.executeWithSeedOffset(() => {
-            message = randSeedItem(victoryMessages);
-          }, waveIndex);
-          message = message!; // tell TS compiler it's defined now
+    ui.showText(i18next.t("battle:trainerDefeated", { trainerName: trainer.getName(TrainerSlot.NONE, true) }), {
+      callback: () => {
+        const victoryMessages = trainer.getVictoryMessages();
+        let message!: string;
+        globalScene.executeWithSeedOffset(() => {
+          message = randSeedItem(victoryMessages);
+        }, waveIndex);
 
-          const showMessage = (): void => {
+        let showMessageOrEnd = (): void => this.end();
+        const showMessage = (): void => {
+          const originalFunc = showMessageOrEnd;
+          showMessageOrEnd = (): void =>
+            ui.showDialogue(message, trainer.getName(TrainerSlot.TRAINER, true), originalFunc);
+
+          showMessageOrEnd();
+        };
+
+        if (victoryMessages.length > 0) {
+          if (trainer.config.hasCharSprite && !ui.shouldSkipDialogue(message)) {
             const originalFunc = showMessageOrEnd;
-            showMessageOrEnd = (): void =>
-              ui.showDialogue(message, trainer.getName(TrainerSlot.TRAINER, true), originalFunc);
+            showMessageOrEnd = (): Promise<void> =>
+              charSprite
+                .hide()
+                .then(() => globalScene.hideFieldOverlay(250))
+                .then(() => originalFunc());
 
-            showMessageOrEnd();
-          };
-          let showMessageOrEnd = (): void => this.end();
-          if (victoryMessages.length > 0) {
-            if (trainer.config.hasCharSprite && !ui.shouldSkipDialogue(message)) {
-              const originalFunc = showMessageOrEnd;
-              showMessageOrEnd = (): Promise<void> =>
-                charSprite
-                  .hide()
-                  .then(() => globalScene.hideFieldOverlay(250))
-                  .then(() => originalFunc());
-              globalScene
-                .showFieldOverlay(500)
-                .then(() => charSprite.showCharacter(trainer.getKey(), getCharVariantFromDialogue(victoryMessages[0])))
-                .then(() => showMessage());
-            } else {
-              showMessage();
-            }
+            globalScene
+              .showFieldOverlay(500)
+              .then(() => charSprite.showCharacter(trainer.getKey(), getCharVariantFromDialogue(victoryMessages[0])))
+              .then(() => showMessage());
           } else {
-            showMessageOrEnd();
+            showMessage();
           }
-        },
-        prompt: true,
+        } else {
+          showMessageOrEnd();
+        }
       },
-    );
+      prompt: true,
+    });
 
     this.showEnemyTrainer();
   }

@@ -14,7 +14,7 @@ export class PartyHealPhase extends BattlePhase {
     this.resumeBgm = resumeBgm;
   }
 
-  public override start(): void {
+  public override async start(): Promise<void> {
     const { time, ui } = globalScene;
 
     const bgmPlaying = globalScene.audioManager.isBgmPlaying();
@@ -22,24 +22,25 @@ export class PartyHealPhase extends BattlePhase {
       globalScene.audioManager.fadeOutBgm(1000, false);
     }
 
-    ui.fadeOut(1000).then(() => {
-      for (const pokemon of globalScene.getPlayerParty()) {
-        pokemon.hp = pokemon.getMaxHp();
-        pokemon.resetStatus();
-        pokemon.restoreMovePP();
-        pokemon.updateInfo(true);
-      }
-      globalScene.playerTerasUsed = 0;
+    await ui.fadeOut(1000);
 
-      const healSong = globalScene.audioManager.playSoundWithoutBgm("heal");
-      time.delayedCall(fixedNumber(healSong.totalDuration * 1000), () => {
-        healSong.destroy();
-        if (this.resumeBgm && bgmPlaying) {
-          globalScene.audioManager.playBgm();
-        }
-        // biome-ignore lint/nursery/noNestedPromises: not fixable (yet)?
-        ui.fadeIn(500).then(() => this.end());
-      });
-    });
+    for (const pokemon of globalScene.getPlayerParty()) {
+      pokemon.hp = pokemon.getMaxHp();
+      pokemon.resetStatus();
+      pokemon.restoreMovePP();
+      pokemon.updateInfo(true);
+    }
+    globalScene.playerTerasUsed = 0;
+
+    const healSong = globalScene.audioManager.playSoundWithoutBgm("heal");
+    await new Promise((resolve) => time.delayedCall(fixedNumber(healSong.totalDuration * 1000), resolve));
+    healSong.destroy();
+
+    if (this.resumeBgm && bgmPlaying) {
+      globalScene.audioManager.playBgm();
+    }
+
+    await ui.fadeIn(500);
+    this.end();
   }
 }

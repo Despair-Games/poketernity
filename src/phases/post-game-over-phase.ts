@@ -14,37 +14,32 @@ export class PostGameOverPhase extends Phase {
     this.endCardPhase = endCardPhase;
   }
 
-  public override start(): void {
+  public override async start(): Promise<void> {
     const { gameData, sessionSlotId, ui } = globalScene;
 
-    const saveAndReset = (): void => {
-      gameData.saveAll(true, true, true).then((isSuccess) => {
-        if (!isSuccess) {
-          return globalScene.reset(true);
-        }
-        // biome-ignore lint/nursery/noNestedPromises: not fixable (yet)?
-        gameData.tryClearSession(sessionSlotId).then((success) => {
-          if (!success[0]) {
-            return globalScene.reset(true);
-          }
-          globalScene.reset();
-          globalScene.phaseManager.toTitleScreen({ eager: true });
-          globalScene.eventTarget.dispatchEvent(new GameOverEvent());
-          this.end();
-        });
-      });
-    };
-
     if (this.endCardPhase) {
-      ui.fadeOut(500).then(() => {
-        ui.getMessageHandler()?.bg.setVisible(true);
+      await ui.fadeOut(500);
 
-        this.endCardPhase?.endCard.destroy();
-        this.endCardPhase?.text.destroy();
-        saveAndReset();
-      });
-    } else {
-      saveAndReset();
+      ui.getMessageHandler()?.bg.setVisible(true);
+
+      this.endCardPhase?.endCard.destroy();
+      this.endCardPhase?.text.destroy();
     }
+
+    const saveSuccess = await gameData.saveAll(true, true, true);
+    if (!saveSuccess) {
+      return globalScene.reset(true);
+    }
+
+    const sessionClearSuccess = await gameData.tryClearSession(sessionSlotId);
+    if (!sessionClearSuccess[0]) {
+      return globalScene.reset(true);
+    }
+
+    globalScene.reset();
+    globalScene.phaseManager.toTitleScreen({ eager: true });
+    globalScene.eventTarget.dispatchEvent(new GameOverEvent());
+
+    this.end();
   }
 }

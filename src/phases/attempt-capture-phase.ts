@@ -257,7 +257,7 @@ export class AttemptCapturePhase extends PokemonPhase {
 
     gameData.updateSpeciesDexIvs(pokemon.species.getRootSpeciesId(true), pokemon.ivs);
 
-    // TODO: untangle this callback hell
+    // TODO: https://github.com/pagefaultgames/pokerogue/pull/7145
     ui.showText(i18next.t("battle:pokemonCaught", { pokemonName: getPokemonNameWithAffix(pokemon) }), {
       callback: () => {
         const end = (): void => {
@@ -286,6 +286,7 @@ export class AttemptCapturePhase extends PokemonPhase {
             end();
           }
         };
+        // biome-ignore lint/nursery/noFloatingPromises: see above todo
         Promise.all([pokemon.hideInfo(), gameData.setPokemonCaught(pokemon)]).then(() => {
           if (globalScene.getPlayerParty().length === PLAYER_PARTY_MAX_SIZE) {
             const addToPartyMenuConfig: OptionSelectModeConfig = {
@@ -300,7 +301,7 @@ export class AttemptCapturePhase extends PokemonPhase {
                       SummaryUiMode.DEFAULT,
                       SummaryUiPage.PROFILE,
                       () => {
-                        // biome-ignore lint/nursery/noNestedPromises: not fixable (yet)?
+                        // biome-ignore lint/nursery/noNestedPromises: see above todo
                         ui.setMessageMode().then(() => {
                           promptRelease();
                         });
@@ -334,7 +335,7 @@ export class AttemptCapturePhase extends PokemonPhase {
                 {
                   label: i18next.t("menu:no"),
                   handler: () => {
-                    // biome-ignore lint/nursery/noNestedPromises: not fixable (yet)?
+                    // biome-ignore lint/nursery/noNestedPromises: see above todo
                     ui.setMessageMode().then(() => {
                       removePokemon();
                       end();

@@ -10,6 +10,7 @@ import { BattleType } from "#enums/battle-type";
 import { Button } from "#enums/button";
 import { Challenges } from "#enums/challenges";
 import { CommonColor, TypeColor, TypeShadowColor } from "#enums/color";
+import { Device } from "#enums/device";
 import { ElementalType } from "#enums/elemental-type";
 import { GameModes } from "#enums/game-modes";
 import { ImagesFolder } from "#enums/images-folder";
@@ -160,6 +161,20 @@ export class RunInfoUiHandler extends UiHandler {
   }
 
   /**
+   * `inputMethod` could be "keyboard" or "touch" or "gamepad". \
+   * If `inputMethod` is "keyboard" or "touch", then the inputMethod is returned. \
+   * If `inputMethod` is "gamepad", then the gamepad type is returned it could be "xbox" or "dualshock".
+   * @returns The type of gamepad being used
+   */
+  // TODO: should this exist?
+  private getGamepadType(): string {
+    if (globalScene.inputMethod === "gamepad") {
+      return globalScene.inputController.getActiveConfig(Device.GAMEPAD)?.padType ?? globalScene.inputMethod;
+    }
+    return globalScene.inputMethod;
+  }
+
+  /**
    * Creates and adds the header background, title text, and important buttons to RunInfoUiHandler
    * It does check if the run has modifiers before adding a button for the user to display their party's held items
    * It does not check if the run has any PokemonHeldItemModifiers though.
@@ -173,7 +188,7 @@ export class RunInfoUiHandler extends UiHandler {
       const actionButtonContainer = globalScene.add.container(headerBgCoords.x, headerBgCoords.y);
       const viewItemsLabel = addTextObject(-7, 0, i18next.t("runHistory:viewHeldItems"), TextStyle.TOOLTIP_CONTENT);
       viewItemsLabel.setOrigin(1, 0.5);
-      const gamepadType = this.getUi().getGamepadType();
+      const gamepadType = this.getGamepadType();
       let viewItemsIcon: Phaser.GameObjects.Sprite;
       const iconXPosition = Math.floor(-viewItemsLabel.displayWidth - 8);
       if (gamepadType === "touch") {
@@ -233,7 +248,7 @@ export class RunInfoUiHandler extends UiHandler {
         TextStyle.TOOLTIP_CONTENT,
       );
       const viewEndArtLabel = addTextObject(8, 12, i18next.t("runHistory:viewEndingSplash"), TextStyle.TOOLTIP_CONTENT);
-      const gamepadType = this.getUi().getGamepadType();
+      const gamepadType = this.getGamepadType();
       let viewHallOfFameIcon: Phaser.GameObjects.Sprite;
       let viewEndArtIcon: Phaser.GameObjects.Sprite;
       if (gamepadType === "touch") {
