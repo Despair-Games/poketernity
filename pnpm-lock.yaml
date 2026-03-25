@@ -4,6 +4,12 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  undici@<6.24.0: '>=6.24.0'
+  undici-types@<6.24.0: '>=6.24.0'
+  undici@>=7.0.0 <7.24.0: '>=7.24.0'
+  undici-types@>=7.0.0 <7.24.0: '>=7.24.0'
+
 importers:
 
   .:
@@ -1811,18 +1817,11 @@ packages:
   uc.micro@2.1.0:
     resolution: {integrity: sha512-ARDJmphmdvUk6Glw7y9DQ2bFkKBHwQHLi2lsaH6PPmz/Ka9sFOBsBluozhDltWmnv9u/cF6Rt87znRTPV+yp/A==}
 
-  undici-types@7.16.0:
-    resolution: {integrity: sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw==}
+  undici-types@7.24.5:
+    resolution: {integrity: sha512-kNh333UBSbgK35OIW7FwJTr9tTfVIG51Fm1tSVT7m8foPHfDVjsb7OIee/q/rs3bB2aV/3qOPgG5mHNWl1odiA==}
 
-  undici-types@7.22.0:
-    resolution: {integrity: sha512-RKZvifiL60xdsIuC80UY0dq8Z7DbJUV8/l2hOVbyZAxBzEeQU4Z58+4ZzJ6WN2Lidi9KzT5EbiGX+PI/UGYuRw==}
-
-  undici@6.23.0:
-    resolution: {integrity: sha512-VfQPToRA5FZs/qJxLIinmU59u0r7LXqoJkCzinq3ckNJp3vKEh7jTWN589YQ5+aoAC/TGRLyJLCPKcLQbM8r9g==}
-    engines: {node: '>=18.17'}
-
-  undici@7.22.0:
-    resolution: {integrity: sha512-RqslV2Us5BrllB+JeiZnK4peryVTndy9Dnqq62S3yYRRTj0tFQCwEniUy2167skdGOy3vqRzEvl1Dm4sV2ReDg==}
+  undici@7.24.5:
+    resolution: {integrity: sha512-3IWdCpjgxp15CbJnsi/Y9TCDE7HWVN19j1hmzVhoAkY/+CJx449tVxT5wZc1Gwg8J+P0LWvzlBzxYRnHJ+1i7Q==}
     engines: {node: '>=20.18.1'}
 
   universal-user-agent@7.0.3:
@@ -2021,19 +2020,19 @@ snapshots:
       '@octokit/plugin-rest-endpoint-methods': 17.0.0(@octokit/core@7.0.6)
       '@octokit/request': 10.0.8
       '@octokit/request-error': 7.1.0
-      undici: 6.23.0
+      undici: 7.24.5
     optional: true
 
   '@actions/http-client@3.0.2':
     dependencies:
       tunnel: 0.0.6
-      undici: 6.23.0
+      undici: 7.24.5
     optional: true
 
   '@actions/http-client@4.0.0':
     dependencies:
       tunnel: 0.0.6
-      undici: 6.23.0
+      undici: 7.24.5
     optional: true
 
   '@actions/io@3.0.2':
@@ -2675,11 +2674,11 @@ snapshots:
       '@types/node': 24.12.0
       '@types/tough-cookie': 4.0.5
       parse5: 7.3.0
-      undici-types: 7.22.0
+      undici-types: 7.24.5
 
   '@types/node@24.12.0':
     dependencies:
-      undici-types: 7.16.0
+      undici-types: 7.24.5
 
   '@types/statuses@2.0.6': {}
 
@@ -3160,7 +3159,7 @@ snapshots:
       saxes: 6.0.0
       symbol-tree: 3.2.4
       tough-cookie: 6.0.0
-      undici: 7.22.0
+      undici: 7.24.5
       w3c-xmlserializer: 5.0.0
       webidl-conversions: 8.0.1
       whatwg-mimetype: 5.0.0
@@ -3598,14 +3597,9 @@ snapshots:
 
   uc.micro@2.1.0: {}
 
-  undici-types@7.16.0: {}
+  undici-types@7.24.5: {}
 
-  undici-types@7.22.0: {}
-
-  undici@6.23.0:
-    optional: true
-
-  undici@7.22.0: {}
+  undici@7.24.5: {}
 
   universal-user-agent@7.0.3:
     optional: true
