@@ -9,6 +9,7 @@ import type { PokemonSpecies } from "#data/pokemon-species";
 import { CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER, getCandyProgressRequirement, speciesStarterCosts } from "#data/starters";
 import { reverseCompatibleTms, tmSpecies } from "#data/tms";
 import { AbilityId } from "#enums/ability-id";
+import { AchvCategory } from "#enums/achv-category";
 import type { FieldBattlerIndex } from "#enums/battler-index";
 import { EventModifierType } from "#enums/event-modifier-type";
 import { Gender } from "#enums/gender";
@@ -18,7 +19,6 @@ import type { EnemyPokemon } from "#field/enemy-pokemon";
 import { Pokemon, type PokemonOptions } from "#field/pokemon";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import { EvoTrackerModifier, PokemonFriendshipBoosterModifier, type PokemonHeldItemModifier } from "#modifier/modifier";
-import { achvs } from "#system/achievements";
 import type { StarterMoveset } from "#types/starter-data";
 import { PlayerBattleInfo } from "#ui/battle-info";
 import { NumberHolder } from "#utils/common-utils";
@@ -164,9 +164,7 @@ export class PlayerPokemon extends Pokemon {
 
     // Add friendship to this PlayerPokemon
     this.friendship = Math.min(this.friendship + amount.value, 255);
-    if (this.friendship === 255) {
-      globalScene.validateAchv(achvs.MAX_FRIENDSHIP);
-    }
+    globalScene.validateAchievements(AchvCategory.FRIENDSHIP, this);
   }
 
   /**

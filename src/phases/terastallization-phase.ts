@@ -2,6 +2,7 @@ import { CommonBattleAnim } from "#animations/common-battle-anim";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { SpeciesFormChangeTeraTrigger } from "#data/pokemon-forms";
+import { AchvCategory } from "#enums/achv-category";
 import { CommonAnim } from "#enums/common-anim";
 import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#field/pokemon";
@@ -41,6 +42,7 @@ export class TerastallizationPhase extends BattlePhase {
 
     if (this.pokemon.isPlayer()) {
       globalScene.playerTerasUsed += 1;
+      globalScene.validateAchievements(AchvCategory.TERASTALLIZE, this.pokemon.teraType);
     }
 
     globalScene.triggerPokemonFormChange(this.pokemon, SpeciesFormChangeTeraTrigger);

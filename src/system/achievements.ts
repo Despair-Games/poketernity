@@ -13,7 +13,8 @@ import { enumValueToKey } from "#utils/common-utils";
 import i18next from "i18next";
 
 // Note: Refer to https://github.com/Despair-Games/poketernity/pull/775/files for removed achv code
-export class Achievement {
+/** @deprecated */
+export class OldAchievement {
   protected _category: AchvCategory;
   protected readonly localizationKey: string;
   protected descriptionKey: string;
@@ -76,7 +77,8 @@ export class Achievement {
   }
 }
 
-export class RibbonAchv extends Achievement {
+/** @deprecated */
+export class RibbonAchv extends OldAchievement {
   public readonly ribbonAmount: number;
 
   constructor(localizationKey: string, ribbonAmount: number, iconImage: string) {
@@ -87,13 +89,15 @@ export class RibbonAchv extends Achievement {
   }
 }
 
-export class ChallengeAchv extends Achievement {
+/** @deprecated */
+export class ChallengeAchv extends OldAchievement {
   constructor(localizationKey: string, iconImage: string, challengeFunc: (challenge: Challenge) => boolean) {
     super(localizationKey, iconImage, (challenge: Challenge) => challengeFunc(challenge));
     this._category = AchvCategory.CHALLENGE;
   }
 }
 
+/** @deprecated */
 export class MonoGenAchv extends ChallengeAchv {
   constructor(localizationKey: string, gen: number, iconImage: string) {
     super(
@@ -107,6 +111,7 @@ export class MonoGenAchv extends ChallengeAchv {
   }
 }
 
+/** @deprecated */
 export class MonoTypeAchv extends ChallengeAchv {
   constructor(type: ElementalType, iconImage: string) {
     super(
@@ -122,26 +127,27 @@ export class MonoTypeAchv extends ChallengeAchv {
   }
 }
 
+/** @deprecated */
 export const achvs = {
   _10_RIBBONS: new RibbonAchv("10_RIBBONS", 10, "bronze_ribbon"),
   _25_RIBBONS: new RibbonAchv("25_RIBBONS", 25, "great_ribbon").setSecret(true),
   _50_RIBBONS: new RibbonAchv("50_RIBBONS", 50, "ultra_ribbon").setSecret(true),
   _75_RIBBONS: new RibbonAchv("75_RIBBONS", 75, "epic_ribbon").setSecret(true),
   _100_RIBBONS: new RibbonAchv("100_RIBBONS", 100, "master_ribbon").setSecret(true),
-  MAX_FRIENDSHIP: new Achievement("MAX_FRIENDSHIP", "soothe_bell"),
-  MEGA_EVOLVE: new Achievement("MEGA_EVOLVE", "mega_bracelet"),
-  GIGANTAMAX: new Achievement("GIGANTAMAX", "dynamax_band"),
-  TERASTALLIZE: new Achievement("TERASTALLIZE", "tera_orb"),
-  STELLAR_TERASTALLIZE: new Achievement("STELLAR_TERASTALLIZE", "stellar_tera_shard").setSecret(true),
-  CATCH_MYTHICAL: new Achievement("CATCH_MYTHICAL", "strange_ball").setSecret(),
-  CATCH_SUB_LEGENDARY: new Achievement("CATCH_SUB_LEGENDARY", "rb").setSecret(),
-  CATCH_LEGENDARY: new Achievement("CATCH_LEGENDARY", "mb").setSecret(),
-  SEE_SHINY: new Achievement("SEE_SHINY", "pb_gold"),
-  SHINY_PARTY: new Achievement("SHINY_PARTY", "shiny_charm").setSecret(),
-  HIDDEN_ABILITY: new Achievement("HIDDEN_ABILITY", "ability_charm"),
-  PERFECT_IVS: new Achievement("PERFECT_IVS", "blunder_policy"),
-  CLASSIC_VICTORY: new Achievement("CLASSIC_VICTORY", "relic_crown"),
-  UNEVOLVED_CLASSIC_VICTORY: new Achievement("UNEVOLVED_CLASSIC_VICTORY", "eviolite", () =>
+  MAX_FRIENDSHIP: new OldAchievement("MAX_FRIENDSHIP", "soothe_bell"),
+  MEGA_EVOLVE: new OldAchievement("MEGA_EVOLVE", "mega_bracelet"),
+  GIGANTAMAX: new OldAchievement("GIGANTAMAX", "dynamax_band"),
+  TERASTALLIZE: new OldAchievement("TERASTALLIZE", "tera_orb"),
+  STELLAR_TERASTALLIZE: new OldAchievement("STELLAR_TERASTALLIZE", "stellar_tera_shard").setSecret(true),
+  CATCH_MYTHICAL: new OldAchievement("CATCH_MYTHICAL", "strange_ball").setSecret(),
+  CATCH_SUB_LEGENDARY: new OldAchievement("CATCH_SUB_LEGENDARY", "rb").setSecret(),
+  CATCH_LEGENDARY: new OldAchievement("CATCH_LEGENDARY", "mb").setSecret(),
+  SEE_SHINY: new OldAchievement("SEE_SHINY", "pb_gold"),
+  SHINY_PARTY: new OldAchievement("SHINY_PARTY", "shiny_charm").setSecret(),
+  HIDDEN_ABILITY: new OldAchievement("HIDDEN_ABILITY", "ability_charm"),
+  PERFECT_IVS: new OldAchievement("PERFECT_IVS", "blunder_policy"),
+  CLASSIC_VICTORY: new OldAchievement("CLASSIC_VICTORY", "relic_crown"),
+  UNEVOLVED_CLASSIC_VICTORY: new OldAchievement("UNEVOLVED_CLASSIC_VICTORY", "eviolite", () =>
     globalScene.getPlayerParty().some((p) => p.getSpeciesForm(true).speciesId in pokemonEvolutions),
   ),
   MONO_GEN_ONE_VICTORY: new MonoGenAchv("MONO_GEN_ONE", 1, "ribbon_gen1"),
@@ -182,6 +188,7 @@ export const achvs = {
   INVERSE_BATTLE: new ChallengeAchv("INVERSE_BATTLE", "inverse", (c) => c.isInverseBattleChallenge() && c.value > 0),
 };
 
+/** @deprecated */
 export function initAchievements() {
   const achvKeys = Object.keys(achvs);
   achvKeys.forEach((a: string, i: number) => {

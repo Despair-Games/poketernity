@@ -3,10 +3,10 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { activeOverrides } from "#app/overrides";
 import { handleTutorial } from "#app/tutorial";
-import { PLAYER_PARTY_MAX_SIZE } from "#constants/game-constants";
 import { ME_WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#constants/mystery-encounter-constants";
 import { getCharVariantFromDialogue } from "#data/dialogue";
 import { getNatureName } from "#data/nature";
+import { AchvCategory } from "#enums/achv-category";
 import { BattleType } from "#enums/battle-type";
 import { BattlerIndex } from "#enums/battler-index";
 import { BiomeId } from "#enums/biome-id";
@@ -35,7 +35,6 @@ import { getGoldenBugNetSpecies } from "#mystery-encounters/encounter-pokemon-ut
 import { BattlePhase } from "#phases/base/battle-phase";
 import type { NewBiomeEncounterPhase } from "#phases/new-biome-encounter-phase";
 import type { NextEncounterPhase } from "#phases/next-encounter-phase";
-import { achvs } from "#system/achievements";
 import { settings } from "#system/settings-manager";
 import type { PhaseKey } from "#types/phase-types";
 import { loadEncounterAnimAssets } from "#utils/anim-utils";
@@ -208,10 +207,6 @@ export class EncounterPhase extends BattlePhase {
       return true;
     });
 
-    if (globalScene.getPlayerParty().filter((p) => p.isShiny()).length === PLAYER_PARTY_MAX_SIZE) {
-      globalScene.validateAchv(achvs.SHINY_PARTY);
-    }
-
     if (battleType === BattleType.TRAINER && trainer) {
       loadEnemyAssets.push(trainer.loadAssets().then(() => trainer.initSprite()));
     } else if (currentBattle.isBattleMysteryEncounter()) {
@@ -338,6 +333,7 @@ export class EncounterPhase extends BattlePhase {
         pokemon.resetWaveData();
       }
     }
+    globalScene.validateAchievements(AchvCategory.PARTY, globalScene.getPlayerParty());
 
     const enemyField = globalScene.getEnemyField();
     tweens.add({
@@ -406,10 +402,8 @@ export class EncounterPhase extends BattlePhase {
         enemyPokemon.untint(100, "Sine.easeOut");
         enemyPokemon.cry();
         enemyPokemon.showInfo();
-        if (enemyPokemon.isShiny()) {
-          globalScene.validateAchv(achvs.SEE_SHINY);
-        }
       });
+      globalScene.validateAchievements(AchvCategory.ENCOUNTER, enemyField);
       globalScene.updateFieldScale();
       if (showEncounterMessage) {
         ui.showText(this.getEncounterMessage(), { callback: () => this.end(), callbackDelay: 1500 });

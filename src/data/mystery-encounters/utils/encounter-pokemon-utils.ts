@@ -9,6 +9,7 @@ import {
 import type { PokemonSpecies } from "#data/pokemon-species";
 import { speciesStarterCosts } from "#data/starters";
 import type { AbilityId } from "#enums/ability-id";
+import { AchvCategory } from "#enums/achv-category";
 import type { ElementalType } from "#enums/elemental-type";
 import { Gender } from "#enums/gender";
 import type { PartyOption } from "#enums/party-option";
@@ -698,9 +699,7 @@ export async function catchPokemon(
     const addToParty = async (slotIndex?: number) => {
       const newPokemon = pokemon.addToParty(pokeballType, slotIndex);
       const modifiers = globalScene.findModifiers((m) => m.isPokemonHeldItemModifier(), false);
-      if (globalScene.getPlayerParty().filter((p) => p.isShiny()).length === 6) {
-        globalScene.validateAchv(achvs.SHINY_PARTY);
-      }
+      globalScene.validateAchievements(AchvCategory.PARTY, globalScene.getPlayerParty());
       await Promise.all(modifiers.map((m) => globalScene.addModifier(m, true)));
       globalScene.updateModifiers(true);
       removePokemon();
