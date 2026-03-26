@@ -664,104 +664,102 @@ interface PokemonAndOptionSelected {
  * @param selectablePokemonFilter - The filter for selectable Pokemon
  * @param onHoverOverCancelOption - The function that is called when hovering over the cancel option
  */
-export function selectOptionThenPokemon(
+export async function selectOptionThenPokemon(
   options: OptionSelectItem[],
   optionSelectPromptKey: string,
   selectablePokemonFilter?: PokemonSelectFilter,
   onHoverOverCancelOption?: () => void,
 ): Promise<PokemonAndOptionSelected | null> {
-  return new Promise<PokemonAndOptionSelected | null>((resolve) => {
-    const modeToSetOnExit = globalScene.ui.getMode();
+  const { promise, resolve } = Promise.withResolvers<PokemonAndOptionSelected | null>();
 
-    const displayOptions = (cfg: OptionSelectModeConfig) => {
-      globalScene.ui.setMessageMode().then(() => {
-        if (optionSelectPromptKey) {
-          showEncounterText(optionSelectPromptKey).then(() => {
-            // Do hover over the starting selection option
-            if (fullOptions[0].onHover) {
-              fullOptions[0].onHover();
-            }
-            globalScene.ui.setMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, cfg);
-          });
-        } else {
-          // Do hover over the starting selection option
-          if (fullOptions[0].onHover) {
-            fullOptions[0].onHover();
-          }
-          globalScene.ui.setMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, cfg);
-        }
-      });
-    };
+  const modeToSetOnExit = globalScene.ui.getMode();
 
-    const selectPokemonAfterOption = (selectedOptionIndex: number) => {
-      // Open party screen to choose a Pokemon
-      globalScene.ui.setMode<PartyUiHandler>(
-        UiMode.PARTY,
-        PartyUiMode.SELECT,
-        -1,
-        (slotIndex: number, _option: PartyOption) => {
-          if (slotIndex < globalScene.getPlayerParty().length) {
-            // Pokemon and option selected
-            // TODO: we should make use of ui.revertMode because
-            // the mode getting set here does not get the parameters it may expect
-            globalScene.ui.setMode<UiHandler>(modeToSetOnExit).then(() => {
-              const result: PokemonAndOptionSelected = {
-                selectedPokemonIndex: slotIndex,
-                selectedOptionIndex,
-              };
-              resolve(result);
-            });
-          } else {
-            // Back to first option select screen
-            displayOptions(config);
-          }
-        },
-        selectablePokemonFilter,
-      );
-    };
+  const displayOptions = async (cfg: OptionSelectModeConfig) => {
+    await globalScene.ui.setMessageMode();
+    if (optionSelectPromptKey) {
+      await showEncounterText(optionSelectPromptKey);
+      // Do hover over the starting selection option
+      if (fullOptions[0].onHover) {
+        fullOptions[0].onHover();
+      }
+      globalScene.ui.setMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, cfg);
+    } else {
+      // Do hover over the starting selection option
+      if (fullOptions[0].onHover) {
+        fullOptions[0].onHover();
+      }
+      globalScene.ui.setMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, cfg);
+    }
+  };
 
-    // Always appends a cancel option to bottom of options
-    const fullOptions = options
-      .map((option, index) => {
-        // Update handler to resolve promise
-        // TODO: don't update the handler like this
-        const onSelect = option.handler;
-        option.handler = () => {
-          onSelect();
-          selectPokemonAfterOption(index);
-          return true;
-        };
-        return option;
-      })
-      .concat({
-        label: i18next.t("menu:cancel"),
-        handler: () => {
-          globalScene.ui.clearText();
+  const selectPokemonAfterOption = (selectedOptionIndex: number) => {
+    // Open party screen to choose a Pokemon
+    globalScene.ui.setMode<PartyUiHandler>(
+      UiMode.PARTY,
+      PartyUiMode.SELECT,
+      -1,
+      async (slotIndex: number, _option: PartyOption) => {
+        if (slotIndex < globalScene.getPlayerParty().length) {
+          // Pokemon and option selected
           // TODO: we should make use of ui.revertMode because
           // the mode getting set here does not get the parameters it may expect
-          globalScene.ui.setMode<UiHandler>(modeToSetOnExit);
-          resolve(null);
-          return true;
-        },
-        onHover: () => {
-          if (onHoverOverCancelOption) {
-            onHoverOverCancelOption();
-          }
-          showEncounterText(i18next.t("mysteryEncounterMessages:cancel_option"), {
-            delay: 0,
-            prompt: false,
-          });
-        },
-      });
+          await globalScene.ui.setMode<UiHandler>(modeToSetOnExit);
+          const result: PokemonAndOptionSelected = {
+            selectedPokemonIndex: slotIndex,
+            selectedOptionIndex,
+          };
+          resolve(result);
+        } else {
+          // Back to first option select screen
+          await displayOptions(config);
+        }
+      },
+      selectablePokemonFilter,
+    );
+  };
 
-    const config: OptionSelectModeConfig = {
-      options: fullOptions,
-      maxOptions: 7,
-      yOffset: 48,
-    };
+  // Always appends a cancel option to bottom of options
+  const fullOptions = options
+    .map((option, index) => {
+      // Update handler to resolve promise
+      // TODO: don't update the handler like this
+      const onSelect = option.handler;
+      option.handler = () => {
+        onSelect();
+        selectPokemonAfterOption(index);
+        return true;
+      };
+      return option;
+    })
+    .concat({
+      label: i18next.t("menu:cancel"),
+      handler: () => {
+        globalScene.ui.clearText();
+        // TODO: we should make use of ui.revertMode because
+        // the mode getting set here does not get the parameters it may expect
+        globalScene.ui.setMode<UiHandler>(modeToSetOnExit);
+        resolve(null);
+        return true;
+      },
+      onHover: async () => {
+        if (onHoverOverCancelOption) {
+          onHoverOverCancelOption();
+        }
+        await showEncounterText(i18next.t("mysteryEncounterMessages:cancel_option"), {
+          delay: 0,
+          prompt: false,
+        });
+      },
+    });
 
-    displayOptions(config);
-  });
+  const config: OptionSelectModeConfig = {
+    options: fullOptions,
+    maxOptions: 7,
+    yOffset: 48,
+  };
+
+  await displayOptions(config);
+  return promise;
 }
 
 /**

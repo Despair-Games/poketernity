@@ -28,9 +28,7 @@ export class MysteryEncounterBattlePhase extends Phase {
     this.disableSwitch = disableSwitch;
   }
 
-  /**
-   * Sets up a ME battle
-   */
+  /** Sets up a ME battle */
   public override start(): void {
     this.doMysteryEncounterBattle();
   }
@@ -61,18 +59,18 @@ export class MysteryEncounterBattlePhase extends Phase {
 
   /** Queues {@linkcode SummonPhase}s for the new battle, and handles trainer animations/dialogue if it's a Trainer battle */
   private doMysteryEncounterBattle(): void {
-    const { currentBattle, ui } = globalScene;
+    const { audioManager, charSprite, currentBattle, pbTray, pbTrayEnemy, phaseManager, ui } = globalScene;
     const { double, mysteryEncounter, trainer } = currentBattle;
 
     const encounterMode = mysteryEncounter?.encounterMode;
     if (encounterMode === MysteryEncounterMode.WILD_BATTLE || encounterMode === MysteryEncounterMode.BOSS_BATTLE) {
       if (encounterMode === MysteryEncounterMode.BOSS_BATTLE) {
-        globalScene.audioManager.playBgm();
+        audioManager.playBgm();
       }
       const availablePartyMembers = globalScene.getEnemyParty().filter((p) => !p.isFainted()).length;
-      globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.ENEMY, { delayPostSummon: true });
+      phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.ENEMY, { delayPostSummon: true });
       if (double && availablePartyMembers > 1) {
-        globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.ENEMY_2, { delayPostSummon: true });
+        phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.ENEMY_2, { delayPostSummon: true });
       }
 
       if (mysteryEncounter?.hideBattleIntroMessage) {
@@ -84,15 +82,15 @@ export class MysteryEncounterBattlePhase extends Phase {
       this.showEnemyTrainer();
       const doSummon = (): void => {
         currentBattle.started = true;
-        globalScene.audioManager.playBgm();
-        globalScene.pbTray.showPbTray(globalScene.getPlayerParty());
-        globalScene.pbTrayEnemy.showPbTray(globalScene.getEnemyParty());
+        audioManager.playBgm();
+        pbTray.showPbTray(globalScene.getPlayerParty());
+        pbTrayEnemy.showPbTray(globalScene.getEnemyParty());
         const doTrainerSummon = (): void => {
           this.hideEnemyTrainer();
           const availablePartyMembers = globalScene.getEnemyParty().filter((p) => !p.isFainted()).length;
-          globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.ENEMY, { delayPostSummon: true });
+          phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.ENEMY, { delayPostSummon: true });
           if (double && availablePartyMembers > 1) {
-            globalScene.phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.ENEMY_2, {
+            phaseManager.createAndUnshiftPhase("SummonPhase", BattlerIndex.ENEMY_2, {
               delayPostSummon: true,
             });
           }
@@ -107,27 +105,26 @@ export class MysteryEncounterBattlePhase extends Phase {
 
       const encounterMessages = trainer?.getEncounterMessages();
 
-      if (!encounterMessages || !encounterMessages.length) {
+      if (!encounterMessages || encounterMessages.length === 0) {
         doSummon();
       } else {
-        let message: string;
+        let message!: string;
         globalScene.executeWithSeedOffset(() => {
           message = randSeedItem(encounterMessages);
         }, mysteryEncounter?.getSeedOffset() ?? 0);
-        message = message!; // tell TS compiler it's defined now
         const showDialogueAndSummon = (): void => {
-          ui.showDialogue(message, trainer?.getName(TrainerSlot.NONE, true) ?? "", () => {
-            globalScene.charSprite.hide().then(() => globalScene.hideFieldOverlay(250).then(() => doSummon()));
-          });
+          ui.showDialogue(message, trainer?.getName(TrainerSlot.NONE, true) ?? "", () =>
+            charSprite
+              .hide()
+              .then(() => globalScene.hideFieldOverlay(250))
+              .then(() => doSummon()),
+          );
         };
         if (trainer?.config.hasCharSprite && !ui.shouldSkipDialogue(message)) {
           globalScene
             .showFieldOverlay(500)
-            .then(() =>
-              globalScene.charSprite
-                .showCharacter(trainer.getKey(), getCharVariantFromDialogue(encounterMessages[0]))
-                .then(() => showDialogueAndSummon()),
-            );
+            .then(() => charSprite.showCharacter(trainer.getKey(), getCharVariantFromDialogue(encounterMessages[0])))
+            .then(() => showDialogueAndSummon());
         } else {
           showDialogueAndSummon();
         }

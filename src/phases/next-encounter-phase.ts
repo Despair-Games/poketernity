@@ -2,6 +2,7 @@ import { globalScene } from "#app/global-scene";
 import { FRIENDSHIP_GAIN_PER_WAVE } from "#constants/friendship-constants";
 import { EncounterPhase } from "#phases/encounter-phase";
 import type { PhaseKey } from "#types/phase-types";
+import { playTween } from "#utils/anim-utils";
 
 /**
  * Triggers the next encounter (no biome change)
@@ -9,7 +10,7 @@ import type { PhaseKey } from "#types/phase-types";
 export class NextEncounterPhase extends EncounterPhase {
   public override readonly phaseName: PhaseKey = "NextEncounterPhase";
 
-  protected override doEncounter(): void {
+  protected override async doEncounter(): Promise<void> {
     const { arena, arenaEnemy, arenaNextEnemy, currentBattle, field, lastEnemyTrainer, lastMysteryEncounter, tweens } =
       globalScene;
     const { isClassicFinalBoss, mysteryEncounter, trainer } = currentBattle;
@@ -19,7 +20,7 @@ export class NextEncounterPhase extends EncounterPhase {
     for (const pokemon of globalScene.getPlayerParty()) {
       if (pokemon) {
         pokemon.resetWaveData();
-        /**
+        /*
          * TODO: Known bug where this gets called after the session has been saved so
          * reloading a session will cause this 1 friendship gain to be lost. See
          * https://github.com/Despair-Games/poketernity/issues/395
@@ -55,33 +56,35 @@ export class NextEncounterPhase extends EncounterPhase {
       }
     }
 
-    tweens.add({
+    await playTween({
       targets: moveTargets.flat(),
       x: "+=300",
       duration: 2000,
-      onComplete: () => {
-        arenaEnemy.setBiome(arena.biomeId);
-        arenaEnemy.setX(arenaNextEnemy.x);
-        arenaEnemy.setAlpha(1);
-        arenaNextEnemy.setX(arenaNextEnemy.x - 300);
-        arenaNextEnemy.setVisible(false);
-        if (lastEnemyTrainer) {
-          lastEnemyTrainer.destroy();
-        }
-        if (lastEncounterVisuals) {
-          field.remove(lastEncounterVisuals, true);
-          if (lastMysteryEncounter) {
-            lastMysteryEncounter.introVisuals = undefined;
-          }
-        }
-
-        if (isClassicFinalBoss) {
-          this.displayFinalBossDialogue();
-        } else {
-          this.doEncounterCommon();
-        }
-      },
     });
+
+    arenaEnemy.setBiome(arena.biomeId);
+    arenaEnemy.setX(arenaNextEnemy.x);
+    arenaEnemy.setAlpha(1);
+
+    arenaNextEnemy.setX(arenaNextEnemy.x - 300);
+    arenaNextEnemy.setVisible(false);
+
+    if (lastEnemyTrainer) {
+      lastEnemyTrainer.destroy();
+    }
+
+    if (lastEncounterVisuals) {
+      field.remove(lastEncounterVisuals, true);
+      if (lastMysteryEncounter) {
+        lastMysteryEncounter.introVisuals = undefined;
+      }
+    }
+
+    if (isClassicFinalBoss) {
+      await this.displayFinalBossDialogue();
+    } else {
+      await this.doEncounterCommon();
+    }
   }
 
   /**

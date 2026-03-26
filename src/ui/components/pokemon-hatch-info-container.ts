@@ -150,7 +150,7 @@ export class PokemonHatchInfoContainer extends PokemonInfoContainer {
     const species = pokemon.species;
     this.displayPokemon(pokemon);
 
-    super.show(pokemon, false, 1, hatchInfo.getDex(), hatchInfo.getStarterEntry(), true);
+    super.show(pokemon, false, 1, hatchInfo.dexEntryBeforeUpdate, hatchInfo.starterDataEntryBeforeUpdate, true);
     const colorScheme = starterColors[species.speciesId];
 
     this.pokemonCandyIcon.setTint(argbFromRgba(rgbHexToRgba(colorScheme[0])));

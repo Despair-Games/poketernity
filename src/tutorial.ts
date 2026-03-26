@@ -1,3 +1,5 @@
+// biome-ignore-all lint/nursery/noNestedPromises: can't fix while using callbacks (?)
+
 import { globalScene } from "#app/global-scene";
 import { activeOverrides } from "#app/overrides";
 import { Tutorial } from "#enums/tutorial";

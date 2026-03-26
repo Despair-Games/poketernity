@@ -63,15 +63,17 @@ export class GameOverPhase extends BattlePhase {
       this.handleGameOver();
     } else {
       const reloadGame = (): void => {
-        ui.fadeOut(1250).then(() => {
-          globalScene.reset();
-          globalScene.phaseManager.clear();
-          gameData.loadSession(globalScene.sessionSlotId).then(() => {
+        ui.fadeOut(1250)
+          .then(() => {
+            globalScene.reset();
+            globalScene.phaseManager.clear();
+            return gameData.loadSession(globalScene.sessionSlotId);
+          })
+          .then(() => {
             globalScene.phaseManager.createAndPushPhase("EncounterPhase", true);
             ui.fadeIn(1250);
             this.end();
           });
-        });
       };
 
       ui.showText(i18next.t("battle:retryBattle"), {
@@ -184,13 +186,14 @@ export class GameOverPhase extends BattlePhase {
                     getCharVariantFromDialogue(dialogue),
                   )
                   .then(() => {
-                    ui.showDialogue(dialogueKey, rivalName, () => {
-                      ui.fadeOut(500).then(() => {
-                        globalScene.charSprite.hide().then(() => {
-                          displayEndCard();
-                        });
-                      });
-                    });
+                    ui.showDialogue(dialogueKey, rivalName, () =>
+                      ui
+                        .fadeOut(500)
+                        // biome-ignore lint/nursery/noNestedPromises: not fixable (yet)?
+                        .then(() => globalScene.charSprite.hide())
+                        // biome-ignore lint/nursery/noNestedPromises: not fixable (yet)?
+                        .then(() => displayEndCard()),
+                    );
                   });
               });
             }

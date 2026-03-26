@@ -3758,26 +3758,20 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return this.summonData.moveQueue;
   }
 
-  changeForm(formChange: SpeciesFormChange): Promise<void> {
-    return new Promise((resolve) => {
-      this.formIndex = Math.max(
-        this.species.forms.findIndex((f) => f.formKey === formChange.formKey),
-        0,
-      );
-      this.generateName();
-      const abilityCount = this.getSpeciesForm().getAbilityCount();
-      if (this.abilityIndex >= abilityCount) {
-        // Shouldn't happen
-        this.abilityIndex = abilityCount - 1;
-      }
-      globalScene.gameData.setPokemonSeen(this, false);
-      this.setScale(this.getSpriteScale());
-      this.loadAssets().then(() => {
-        this.calculateStats();
-        globalScene.updateModifiers(this.isPlayer(), true);
-        Promise.all([this.updateInfo(), globalScene.updateFieldScale()]).then(() => resolve());
-      });
-    });
+  public async changeForm(formChange: SpeciesFormChange): Promise<void> {
+    let newFormIndex = this.species.forms.findIndex((f) => f.formKey === formChange.formKey);
+    if (newFormIndex === -1) {
+      newFormIndex = 0;
+      console.warn(`Tried to set invalid form for "${this.name}"!\n`, formChange);
+    }
+    this.formIndex = newFormIndex;
+    this.generateName();
+    globalScene.gameData.setPokemonSeen(this, false);
+    this.setScale(this.getSpriteScale());
+    await this.loadAssets();
+    this.calculateStats();
+    globalScene.updateModifiers(this.isPlayer(), true);
+    await Promise.all([this.updateInfo(), globalScene.updateFieldScale()]);
   }
 
   cry(soundConfig?: Phaser.Types.Sound.SoundConfig): AnySound {

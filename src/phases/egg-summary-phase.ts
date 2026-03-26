@@ -30,7 +30,7 @@ export class EggSummaryPhase extends Phase {
             globalScene.audioManager.fadeOutBgm(undefined, false);
           });
       } else {
-        this.eggHatchData[i].setDex();
+        this.eggHatchData[i].storeDexAndStarterEntries();
         this.eggHatchData[i].updatePokemon().then(() => {
           if (i < this.eggHatchData.length) {
             updateNextPokemon(i + 1);

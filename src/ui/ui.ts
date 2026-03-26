@@ -3,7 +3,6 @@ import { logUiDebug, logUiVerbose } from "#app/loggers";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
 import { BattleSceneEventType } from "#enums/battle-scene-event-type";
 import type { Button } from "#enums/button";
-import { Device } from "#enums/device";
 import { PlayerGender } from "#enums/player-gender";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
@@ -170,9 +169,9 @@ const mainMenuAccessedModes: readonly UiMode[] = [
 const DEFAULT_MODE = UiMode.MESSAGE;
 
 export class UI extends Phaser.GameObjects.Container {
-  private mode: UiMode;
-  private modeChain: UiMode[];
-  private readonly handlers: Map<UiMode, UiHandler>;
+  private mode: UiMode = DEFAULT_MODE;
+  private modeChain: UiMode[] = [];
+  private readonly handlers: Map<UiMode, UiHandler> = new Map<UiMode, UiHandler>();
   private overlay: Phaser.GameObjects.Rectangle;
   public achvBar: AchvBar; // TODO: make private and add helper functions
   public bgmBar: BgmBar; // TODO: make private and add helper functions
@@ -192,10 +191,6 @@ export class UI extends Phaser.GameObjects.Container {
 
   constructor() {
     super(globalScene, 0, GAME_HEIGHT);
-
-    this.mode = DEFAULT_MODE;
-    this.modeChain = [];
-    this.handlers = new Map<UiMode, UiHandler>();
   }
 
   public setup(): void {
@@ -507,42 +502,47 @@ export class UI extends Phaser.GameObjects.Container {
 
   public async showTextPromise(
     text: string,
-    callbackDelay: number = 0,
-    prompt: boolean = true,
-    promptDelay?: number,
+    { delay, callbackDelay = 0, prompt, promptDelay }: Omit<ShowTextOptions, "callback"> = {},
   ): Promise<void> {
-    if (text == null) {
-      console.error("Missing `text` param for `UI#showTextPromise`!");
-      text = "";
-    }
     return new Promise<void>((resolve) => {
-      this.showText(text, { callback: () => resolve(), callbackDelay, prompt, promptDelay });
+      this.showText(text, { delay, callback: () => resolve(), callbackDelay, prompt, promptDelay });
     });
   }
 
   public showText(text: string, { delay, callback, callbackDelay, prompt, promptDelay }: ShowTextOptions = {}): void {
-    if (prompt && text.indexOf("$") > -1) {
-      const messagePages = text.split(/\$/g).map((m) => m.trim());
-      let showMessageAndCallback = () => callback?.();
-      for (let p = messagePages.length - 1; p >= 0; p--) {
-        const originalFunc = showMessageAndCallback;
-        showMessageAndCallback = () => this.showText(messagePages[p], { callback: originalFunc, prompt: true });
-      }
-      showMessageAndCallback();
-    } else {
+    if (!prompt || !text.includes("$")) {
       this.getCurrentMessageHandler().showText(text, { delay, callback, callbackDelay, prompt, promptDelay });
+      return;
     }
+
+    const messagePages = text.split(/\$/g).map((m) => m.trim());
+    let showMessageAndCallback = () => callback?.();
+    for (let p = messagePages.length - 1; p >= 0; p--) {
+      const originalFunc = showMessageAndCallback;
+      showMessageAndCallback = () => this.showText(messagePages[p], { callback: originalFunc, prompt: true });
+    }
+    showMessageAndCallback();
   }
 
+  public async showDialoguePromise(
+    keyOrText: string,
+    name: string,
+    { delay, callbackDelay, promptDelay }: { delay?: number; callbackDelay?: number; promptDelay?: number } = {},
+  ): Promise<void> {
+    return new Promise<void>((resolve) => {
+      this.showDialogue(keyOrText, name, () => resolve(), delay, callbackDelay, promptDelay);
+    });
+  }
+
+  // TODO: convert to use object param for optional params
   public showDialogue(
     keyOrText: string,
     name: string,
     callback: VoidFunction,
-    delay?: number,
+    delay: number = 0,
     callbackDelay?: number,
     promptDelay?: number,
   ): void {
-    delay = delay ?? 0;
     // Get localized dialogue (if available)
     let hasi18n = false;
     let text = keyOrText;
@@ -962,13 +962,13 @@ export class UI extends Phaser.GameObjects.Container {
    * Revert through all the modes currently in the mode chain.
    * @returns Promise that resolves when the mode chain is empty.
    */
-  public revertModes(): Promise<void> {
-    return new Promise<void>((resolve) => {
-      if (!this?.modeChain?.length) {
-        return resolve();
-      }
-      this.revertMode().then((success) => executeIf(success, this.revertModes).then(() => resolve()));
-    });
+  // TODO: this is unused, do we need it?
+  public async revertModes(): Promise<void> {
+    if (this.modeChain.length === 0) {
+      return;
+    }
+    const success = await this.revertMode();
+    await executeIf(success, this.revertModes);
   }
 
   /**
@@ -976,20 +976,5 @@ export class UI extends Phaser.GameObjects.Container {
    */
   public getModeChain(): UiMode[] {
     return this.modeChain;
-  }
-
-  /**
-   * getGamepadType - returns the type of gamepad being used
-   * inputMethod could be "keyboard" or "touch" or "gamepad"
-   * if inputMethod is "keyboard" or "touch", then the inputMethod is returned
-   * if inputMethod is "gamepad", then the gamepad type is returned it could be "xbox" or "dualshock"
-   * @returns gamepad type
-   * @todo why is this here?
-   */
-  public getGamepadType(): string {
-    if (globalScene.inputMethod === "gamepad") {
-      return globalScene.inputController.getActiveConfig(Device.GAMEPAD)?.padType ?? globalScene.inputMethod;
-    }
-    return globalScene.inputMethod;
   }
 }
