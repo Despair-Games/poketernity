@@ -127,7 +127,7 @@ export abstract class PokemonSpeciesForm {
    * @returns Number of abilities
    */
   getAbilityCount(): number {
-    return this.abilityHidden !== AbilityId.NONE ? 3 : 2;
+    return this.abilityHidden === AbilityId.NONE ? 2 : 3;
   }
 
   /**

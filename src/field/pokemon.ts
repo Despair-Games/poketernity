@@ -314,11 +314,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.pokeball = options.pokeball ?? PokeballType.POKEBALL;
     this.switchOutStatus = false;
 
-    if (options.id != null) {
+    if (options.id == null) {
+      this.id = globalScene.getNextPokemonID();
+    } else {
       this.id = options.id;
       globalScene.updateNextPokemonID(this.id);
-    } else {
-      this.id = globalScene.getNextPokemonID();
     }
 
     this.nickname = options.nickname ?? null;
@@ -336,10 +336,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     this.ivs = this.getIvOverrides() ?? options.ivs ?? this.generateIvs();
     this.nature = options.nature ?? randSeedItem(Object.values(Nature));
-    if (options.stats != null) {
-      this.stats = options.stats;
-    } else {
+    if (options.stats == null) {
       this.calculateStats();
+    } else {
+      this.stats = options.stats;
     }
     this.hp = options.hp ?? this.getMaxHp();
 
@@ -510,7 +510,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (this.species.abilityHidden && hasHiddenAbility) {
       return 2;
     }
-    return this.species.ability2 !== this.species.ability1 ? randAbilityIndex : 0;
+    return this.species.ability2 === this.species.ability1 ? 0 : randAbilityIndex;
   }
 
   getNameToRender() {
@@ -671,7 +671,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (!speciesForm.isStarterSelectable && speciesForm.isPokemonForm()) {
       if (speciesForm.baseFormKey) {
         const baseFormIndex = this.species.forms.findIndex((form) => form.formKey === speciesForm.baseFormKey);
-        return baseFormIndex !== -1 ? baseFormIndex : 0;
+        return baseFormIndex === -1 ? 0 : baseFormIndex;
       }
       return 0;
     }
@@ -1268,7 +1268,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   getNature(): Nature {
-    return this.customPokemonData.nature !== -1 ? this.customPokemonData.nature : this.nature;
+    return this.customPokemonData.nature === -1 ? this.nature : this.customPokemonData.nature;
   }
 
   setNature(nature: Nature): void {
@@ -2534,14 +2534,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
               )
             ) {
               ret = Math.ceil(Math.sqrt(m[1]));
-            } else if (allMoves.get(m[0]).category !== MoveCategory.STATUS) {
+            } else if (allMoves.get(m[0]).category === MoveCategory.STATUS) {
+              ret = m[1];
+            } else {
               ret = Math.ceil(
                 (m[1]
                   / Math.max(Math.pow(4, this.moveset.filter((mo) => (mo.getMove().power ?? 0) > 1).length) / 8, 0.5))
                   * (this.isOfType(allMoves.get(m[0]).type) ? 2 : 1),
               );
-            } else {
-              ret = m[1];
             }
             return [m[0], ret];
           });
@@ -4039,9 +4039,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     if (effect === StatusEffect.SLEEP) {
       sleepTurnsRemaining.value =
-        turnsRemaining !== 0
-          ? turnsRemaining
-          : this.randSeedIntRange(DEFAULT_MIN_SLEEP_DURATION, DEFAULT_MAX_SLEEP_DURATION);
+        turnsRemaining === 0
+          ? this.randSeedIntRange(DEFAULT_MIN_SLEEP_DURATION, DEFAULT_MAX_SLEEP_DURATION)
+          : turnsRemaining;
 
       this.setFrameRate(4);
 

@@ -605,7 +605,7 @@ function parseEggMoves(content: string): void {
 
     for (let m = 0; m < 4; m++) {
       const moveName = cols[m + 1].trim();
-      const moveIndex = moveName !== "N/A" ? moveNames.indexOf(moveName.toLowerCase()) : -1;
+      const moveIndex = moveName === "N/A" ? -1 : moveNames.indexOf(moveName.toLowerCase());
       eggMoves.push(moveIndex > -1 ? (moveIndex as MoveId) : MoveId.NONE);
 
       if (moveIndex === -1) {

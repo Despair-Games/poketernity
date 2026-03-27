@@ -59,12 +59,12 @@ function renderBranchNameElement() {
 
 console.log("dev.ts imported!");
 
-if (document.readyState !== "loading") {
-  renderBranchNameElement();
-} else {
+if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", () => {
     renderBranchNameElement();
   });
+} else {
+  renderBranchNameElement();
 }
 
 //#endregion

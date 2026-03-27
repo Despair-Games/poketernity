@@ -241,13 +241,13 @@ export class Arena {
       newWeatherDuration = 0;
     }
 
-    if (newWeatherType !== WeatherType.NONE) {
+    if (newWeatherType === WeatherType.NONE) {
+      globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", getWeatherClearMessage(oldWeatherType));
+      this.weather = null;
+    } else {
       globalScene.phaseManager.createAndUnshiftPhase("CommonAnimPhase", getWeatherAnim(newWeatherType));
       globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", getWeatherStartMessage(newWeatherType));
       this.weather = new Weather(newWeatherType, newWeatherDuration);
-    } else {
-      globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", getWeatherClearMessage(oldWeatherType));
-      this.weather = null;
     }
 
     this.eventTarget.dispatchEvent(new WeatherChangedEvent(oldWeatherType, newWeatherType, newWeatherDuration));

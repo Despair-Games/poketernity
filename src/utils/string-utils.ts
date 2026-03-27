@@ -181,7 +181,7 @@ export function capitalizeString(
     const splitedStr = str.toLowerCase().split(sep);
 
     for (let i = +lowerFirstChar; i < splitedStr?.length; i++) {
-      splitedStr[i] = splitedStr[i].charAt(0).toUpperCase() + splitedStr[i].substring(1);
+      splitedStr[i] = splitedStr[i].charAt(0).toUpperCase() + splitedStr[i].slice(1);
     }
 
     return returnWithSpaces ? splitedStr.join(" ") : splitedStr.join("");
@@ -407,7 +407,7 @@ export function chunkString(str: string, length: number): string[] {
   const chunks = new Array(numChunks);
 
   for (let i = 0; i < numChunks; i++) {
-    chunks[i] = str.substring(i * length, (i + 1) * length);
+    chunks[i] = str.slice(i * length, (i + 1) * length);
   }
 
   return chunks;

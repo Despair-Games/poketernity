@@ -48,7 +48,7 @@ export class SceneBase extends Phaser.Scene {
   }
 
   loadImage(key: string, imageFolder: ImagesFolder = ImagesFolder.ROOT, options?: TextureLoadingOptions) {
-    const folder = imageFolder !== ImagesFolder.ROOT ? imageFolder + "/" : "";
+    const folder = imageFolder === ImagesFolder.ROOT ? "" : imageFolder + "/";
     const filenameRoot = options ? this.getFilenameRoot(key, options) : key;
     this.load.image(key, this.getCachedUrl(`images/${folder}${filenameRoot}.png`));
   }
@@ -63,7 +63,7 @@ export class SceneBase extends Phaser.Scene {
     if (options?.windowStyleDependant && !windowStyleDependantAtlases.includes(key)) {
       windowStyleDependantAtlases.push(key);
     }
-    const folder = imageFolder !== ImagesFolder.ROOT ? imageFolder + "/" : "";
+    const folder = imageFolder === ImagesFolder.ROOT ? "" : imageFolder + "/";
     const filenameRoot = options ? this.getFilenameRoot(key, options) : key;
     this.load.spritesheet(key, this.getCachedUrl(`images/${folder}${filenameRoot}.png`), {
       frameWidth: width,
@@ -75,7 +75,7 @@ export class SceneBase extends Phaser.Scene {
     if (options?.windowStyleDependant && !windowStyleDependantAtlases.includes(key)) {
       windowStyleDependantAtlases.push(key);
     }
-    const folder = imageFolder !== ImagesFolder.ROOT ? imageFolder + "/" : "";
+    const folder = imageFolder === ImagesFolder.ROOT ? "" : imageFolder + "/";
     const atlasFilenameRoot = options?.filenameRoot ?? key;
     const imageFilenameRoot = options ? this.getFilenameRoot(key, options) : key;
     this.load.atlas(

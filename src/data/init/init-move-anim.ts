@@ -16,9 +16,7 @@ export async function initMoveAnim(moveId: MoveId): Promise<void> {
   return new Promise((resolve) => {
     const move = allMoves.get(moveId);
     if (moveAnims.has(moveId)) {
-      if (moveAnims.get(moveId) !== null) {
-        resolve();
-      } else {
+      if (moveAnims.get(moveId) === null) {
         const loadedCheckTimer = setInterval(() => {
           if (moveAnims.get(moveId) !== null) {
             const chargeAnimSource = move.isChargingMove()
@@ -31,6 +29,8 @@ export async function initMoveAnim(moveId: MoveId): Promise<void> {
             resolve();
           }
         }, 50);
+      } else {
+        resolve();
       }
     } else {
       moveAnims.set(moveId, null);

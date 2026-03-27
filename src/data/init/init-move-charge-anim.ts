@@ -9,15 +9,15 @@ import { enumValueToKey } from "#utils/common-utils";
 export function initMoveChargeAnim(chargeAnim: ChargeAnim): Promise<void> {
   return new Promise((resolve) => {
     if (chargeAnims.has(chargeAnim)) {
-      if (chargeAnims.get(chargeAnim) !== null) {
-        resolve();
-      } else {
+      if (chargeAnims.get(chargeAnim) === null) {
         const loadedCheckTimer = setInterval(() => {
           if (chargeAnims.get(chargeAnim) !== null) {
             clearInterval(loadedCheckTimer);
             resolve();
           }
         }, 50);
+      } else {
+        resolve();
       }
     } else {
       chargeAnims.set(chargeAnim, null);

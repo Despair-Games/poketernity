@@ -799,7 +799,7 @@ export class GameData {
 
           const battleType = data.battleType || 0;
           const trainerConfig = data.trainer ? allTrainerConfigs[data.trainer.trainerType] : null;
-          const mysteryEncounterType = data.mysteryEncounterType !== -1 ? data.mysteryEncounterType : undefined;
+          const mysteryEncounterType = data.mysteryEncounterType === -1 ? undefined : data.mysteryEncounterType;
           const battle = globalScene.newBattle(
             data.waveIndex,
             battleType,

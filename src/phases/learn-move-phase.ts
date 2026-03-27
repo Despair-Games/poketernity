@@ -221,15 +221,15 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
       pokemon.usedTMs.push(this.moveId);
       globalScene.phaseManager.removePhase("SelectModifierPhase");
     } else if (this.learnMoveType === LearnMoveType.MEMORY) {
-      if (this.cost !== -1) {
+      if (this.cost === -1) {
+        globalScene.phaseManager.removePhase("SelectModifierPhase");
+      } else {
         if (!activeOverrides.WAIVE_SHOP_FEES_OVERRIDE) {
           globalScene.money -= this.cost;
           globalScene.updateMoneyText();
           globalScene.animateMoneyChanged(false);
         }
         globalScene.audioManager.playSound("se/buy");
-      } else {
-        globalScene.phaseManager.removePhase("SelectModifierPhase");
       }
     }
 
