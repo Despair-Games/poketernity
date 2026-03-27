@@ -237,15 +237,15 @@ export abstract class BattleAnim {
         .setAlpha(1)
         .setAngle(0);
       userSprite.pipelineData["tone"] = [0.0, 0.0, 0.0, 0.0];
-      if (targetSubstitute != null) {
+      if (targetSubstitute == null) {
+        targetSprite //
+          .setPosition(0, 0)
+          .setScale(1);
+      } else {
         const offset = target.getSubstituteOffset();
         targetSprite
           .setPosition(target.x - offset[0], target.y - offset[1])
           .setScale(target.getSpriteScale() * (target.isPlayer() ? 0.5 : 1));
-      } else {
-        targetSprite //
-          .setPosition(0, 0)
-          .setScale(1);
       }
       targetSprite.pipelineData["tone"] = [0.0, 0.0, 0.0, 0.0];
       targetSprite //
@@ -327,70 +327,7 @@ export abstract class BattleAnim {
           let t = 0;
           let g = 0;
           for (const frame of spriteFrames) {
-            if (frame.target !== AnimFrameTarget.IMAGE) {
-              const isUser = frame.target === AnimFrameTarget.SOURCE;
-              if (isUser && target === user) {
-                continue;
-              }
-              if (this.playRegardlessOfIssues && frame.target === AnimFrameTarget.TARGET && !target.isOnField()) {
-                continue;
-              }
-              const sprites = spriteCache[isUser ? AnimFrameTarget.SOURCE : AnimFrameTarget.TARGET];
-              const spriteSource = isUser ? userSprite : targetSprite;
-              if ((isUser ? u : t) === sprites.length) {
-                if (isUser || !targetSubstitute) {
-                  /** Create (and pipeline) a duplicate Pokemon sprite to animate on */
-                  const sprite = globalScene.addPokemonSprite(
-                    isUser ? user : target,
-                    0,
-                    0,
-                    spriteSource.texture,
-                    spriteSource.frame.name,
-                    true,
-                  );
-                  sprite.pipelineData["spriteColors"] = (isUser ? user : target).getSprite().pipelineData[
-                    "spriteColors"
-                  ];
-                  sprite.setPipelineData("spriteKey", (isUser ? user : target).getBattleSpriteKey());
-                  sprite.setPipelineData("ignoreFieldPos", true);
-                  spriteSource.on("animationupdate", (_anim, spriteFrame) => sprite.setFrame(spriteFrame.textureFrame));
-                  globalScene.field.add(sprite);
-                  sprites.push(sprite);
-                } else {
-                  /** Create a duplicate Substitute sprite to animate on */
-                  const sprite = globalScene.addFieldSprite(spriteSource.x, spriteSource.y, spriteSource.texture);
-                  spriteSource.on("animationupdate", (_anim, spriteFrame) => sprite.setFrame(spriteFrame.textureFrame));
-                  globalScene.field.add(sprite);
-                  sprites.push(sprite);
-                }
-              }
-
-              /** Set the Pokemon (or substitute) sprite's properties to match frame data */
-              const spriteIndex = isUser ? u++ : t++;
-              const pokemonSprite = sprites[spriteIndex];
-              const graphicFrameData = frameData.get(frame.target)!.get(spriteIndex)!; // TODO: are the bangs correct?
-              const spriteSourceScale =
-                isUser || !targetSubstitute
-                  ? spriteSource.parentContainer.scale
-                  : target.getSpriteScale() * (target.isPlayer() ? 0.5 : 1);
-              pokemonSprite.setPosition(
-                graphicFrameData.x,
-                graphicFrameData.y - (spriteSource.height / 2) * (spriteSourceScale - 1),
-              );
-
-              pokemonSprite.setAngle(graphicFrameData.angle);
-              pokemonSprite.setScale(
-                graphicFrameData.zoomX * spriteSourceScale,
-                graphicFrameData.zoomY * spriteSourceScale,
-              );
-
-              pokemonSprite.setData("locked", frame.locked);
-
-              pokemonSprite.setAlpha(frame.opacity / 255);
-              pokemonSprite.pipelineData["tone"] = frame.tone;
-              pokemonSprite.setVisible(frame.visible && (isUser ? user.visible : target.visible));
-              pokemonSprite.setBlendMode(blendModeMap[frame.blendType]);
-            } else {
+            if (frame.target === AnimFrameTarget.IMAGE) {
               const sprites = spriteCache[AnimFrameTarget.IMAGE];
               if (g === sprites.length) {
                 const newSprite: Phaser.GameObjects.Sprite = globalScene.addFieldSprite(0, 0, anim!.graphic, 1); // TODO: is the bang correct?
@@ -453,6 +390,69 @@ export abstract class BattleAnim {
               moveSprite.setAlpha(frame.opacity / 255);
               moveSprite.setVisible(frame.visible);
               moveSprite.setBlendMode(blendModeMap[frame.blendType]);
+            } else {
+              const isUser = frame.target === AnimFrameTarget.SOURCE;
+              if (isUser && target === user) {
+                continue;
+              }
+              if (this.playRegardlessOfIssues && frame.target === AnimFrameTarget.TARGET && !target.isOnField()) {
+                continue;
+              }
+              const sprites = spriteCache[isUser ? AnimFrameTarget.SOURCE : AnimFrameTarget.TARGET];
+              const spriteSource = isUser ? userSprite : targetSprite;
+              if ((isUser ? u : t) === sprites.length) {
+                if (isUser || !targetSubstitute) {
+                  /** Create (and pipeline) a duplicate Pokemon sprite to animate on */
+                  const sprite = globalScene.addPokemonSprite(
+                    isUser ? user : target,
+                    0,
+                    0,
+                    spriteSource.texture,
+                    spriteSource.frame.name,
+                    true,
+                  );
+                  sprite.pipelineData["spriteColors"] = (isUser ? user : target).getSprite().pipelineData[
+                    "spriteColors"
+                  ];
+                  sprite.setPipelineData("spriteKey", (isUser ? user : target).getBattleSpriteKey());
+                  sprite.setPipelineData("ignoreFieldPos", true);
+                  spriteSource.on("animationupdate", (_anim, spriteFrame) => sprite.setFrame(spriteFrame.textureFrame));
+                  globalScene.field.add(sprite);
+                  sprites.push(sprite);
+                } else {
+                  /** Create a duplicate Substitute sprite to animate on */
+                  const sprite = globalScene.addFieldSprite(spriteSource.x, spriteSource.y, spriteSource.texture);
+                  spriteSource.on("animationupdate", (_anim, spriteFrame) => sprite.setFrame(spriteFrame.textureFrame));
+                  globalScene.field.add(sprite);
+                  sprites.push(sprite);
+                }
+              }
+
+              /** Set the Pokemon (or substitute) sprite's properties to match frame data */
+              const spriteIndex = isUser ? u++ : t++;
+              const pokemonSprite = sprites[spriteIndex];
+              const graphicFrameData = frameData.get(frame.target)!.get(spriteIndex)!; // TODO: are the bangs correct?
+              const spriteSourceScale =
+                isUser || !targetSubstitute
+                  ? spriteSource.parentContainer.scale
+                  : target.getSpriteScale() * (target.isPlayer() ? 0.5 : 1);
+              pokemonSprite.setPosition(
+                graphicFrameData.x,
+                graphicFrameData.y - (spriteSource.height / 2) * (spriteSourceScale - 1),
+              );
+
+              pokemonSprite.setAngle(graphicFrameData.angle);
+              pokemonSprite.setScale(
+                graphicFrameData.zoomX * spriteSourceScale,
+                graphicFrameData.zoomY * spriteSourceScale,
+              );
+
+              pokemonSprite.setData("locked", frame.locked);
+
+              pokemonSprite.setAlpha(frame.opacity / 255);
+              pokemonSprite.pipelineData["tone"] = frame.tone;
+              pokemonSprite.setVisible(frame.visible && (isUser ? user.visible : target.visible));
+              pokemonSprite.setBlendMode(blendModeMap[frame.blendType]);
             }
           }
           if (anim?.frameTimedEvents.has(f)) {

@@ -510,13 +510,13 @@ export function getTextStyle(style: TextStyle): TextStyleOptions {
     const lang = i18next.resolvedLanguage ?? DEFAULT_LANGUAGE_KEY;
     if (fontStyle[lang] !== undefined) {
       fontStyleId = fontStyle[lang];
-    } else if (fontStyle[DEFAULT_LANGUAGE_KEY] !== undefined) {
-      fontStyleId = fontStyle[DEFAULT_LANGUAGE_KEY];
-    } else {
+    } else if (fontStyle[DEFAULT_LANGUAGE_KEY] === undefined) {
       console.warn(
         `TextStyleId "${enumValueToKey(TextStyle, style)}" missing format for default langauge key "${DEFAULT_LANGUAGE_KEY}"`,
       );
       fontStyleId = Object.values(fontStyle)[0]; // default to the first defined format
+    } else {
+      fontStyleId = fontStyle[DEFAULT_LANGUAGE_KEY];
     }
   }
 

@@ -151,9 +151,9 @@ export class IVGraph extends Phaser.GameObjects.Container {
     const newColor = ivs.every((iv) => iv === 31) ? 0xe8e8a8 : 0x98d8a0;
     const oldColor = this.ivChart.fillColor;
     const interpolateColor =
-      oldColor !== newColor
-        ? [Phaser.Display.Color.IntegerToColor(oldColor), Phaser.Display.Color.IntegerToColor(newColor)]
-        : null;
+      oldColor === newColor
+        ? null
+        : [Phaser.Display.Color.IntegerToColor(oldColor), Phaser.Display.Color.IntegerToColor(newColor)];
 
     globalScene.tweens.addCounter({
       from: 0,

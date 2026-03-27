@@ -260,7 +260,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
         statX + statLabel.width,
         statY,
         "pbinfo_stat_numbers",
-        this.statOrder[i] !== Stat.HP ? "3" : "empty",
+        this.statOrder[i] === Stat.HP ? "empty" : "3",
       );
       statNumber.setName("icon_stat_number_" + i.toString());
       statNumber.setOrigin(0, 0);
@@ -755,7 +755,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
     while (
       nameTextWidth
       > (this.player || !this.boss ? 60 : 98)
-        - ((pokemon.gender !== Gender.GENDERLESS ? 6 : 0)
+        - ((pokemon.gender === Gender.GENDERLESS ? 0 : 6)
           + (pokemon.isShiny() ? 8 : 0)
           + (Math.min(pokemon.level.toString().length, 3) - 3) * 8)
     ) {

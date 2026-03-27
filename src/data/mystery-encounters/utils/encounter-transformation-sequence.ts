@@ -28,7 +28,7 @@ export function doPokemonTransformationSequence(
       xOffset = 100;
     }
     // Centered transformations occur at a lower y Position
-    const yOffset = screenPosition !== TransformationScreenPosition.CENTER ? -15 : 0;
+    const yOffset = screenPosition === TransformationScreenPosition.CENTER ? 0 : -15;
 
     const getPokemonSprite = (): Phaser.GameObjects.Sprite => {
       const ret = globalScene.addPokemonSprite(

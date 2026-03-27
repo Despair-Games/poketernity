@@ -34,6 +34,8 @@ const languageSettings: { [key: string]: LanguageSetting } = {
   },
 };
 
+const NUM_CHARS_BEFORE_CUTOFF = 16;
+
 export class PokemonInfoContainer extends Phaser.GameObjects.Container {
   private readonly infoWindowWidth = 104;
 
@@ -51,9 +53,7 @@ export class PokemonInfoContainer extends Phaser.GameObjects.Container {
   private pokemonMovesContainers: Phaser.GameObjects.Container[];
   private pokemonMoveBgs: Phaser.GameObjects.NineSlice[];
   private pokemonMoveLabels: Phaser.GameObjects.Text[];
-  private infoBg;
-
-  private readonly numCharsBeforeCutoff = 16;
+  private infoBg: Phaser.GameObjects.NineSlice;
 
   private readonly initialX: number;
   private movesContainerInitialX: number;
@@ -280,11 +280,9 @@ export class PokemonInfoContainer extends Phaser.GameObjects.Container {
         }
 
         this.pokemonFormText.setText(
-          formName.length > this.numCharsBeforeCutoff
-            ? formName.substring(0, this.numCharsBeforeCutoff - 3) + "..."
-            : formName,
+          formName.length > NUM_CHARS_BEFORE_CUTOFF ? formName.slice(0, NUM_CHARS_BEFORE_CUTOFF - 3) + "..." : formName,
         );
-        if (formName.length > this.numCharsBeforeCutoff) {
+        if (formName.length > NUM_CHARS_BEFORE_CUTOFF) {
           this.pokemonFormText.setInteractive(
             new Phaser.Geom.Rectangle(0, 0, this.pokemonFormText.width, this.pokemonFormText.height),
             Phaser.Geom.Rectangle.Contains,

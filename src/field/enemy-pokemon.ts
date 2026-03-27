@@ -67,7 +67,7 @@ export class EnemyPokemon extends Pokemon {
       && (bossSegmentsOverride != null
         || !!options.boss
         || (options["bossSegments"] != null && options["bossSegments"] > 0));
-    const bossSegments: number | nil = bossSegmentsOverride != null ? bossSegmentsOverride : options["bossSegments"];
+    const bossSegments: number | nil = bossSegmentsOverride == null ? options["bossSegments"] : bossSegmentsOverride;
     this.setBoss(boss, bossSegments);
 
     if (activeOverrides.ENEMY_STATUS_OVERRIDE) {

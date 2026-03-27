@@ -104,9 +104,9 @@ export class Battle {
     this.trainer = trainer ?? null;
     this.isClassicFinalBoss = this.gameMode.isClassic && this.gameMode.isWaveFinal(this.waveIndex);
     this.enemyLevels =
-      battleType !== BattleType.TRAINER
-        ? new Array(double ? 2 : 1).fill(null).map(() => this.getLevelForWave())
-        : trainer?.getPartyLevels(this.waveIndex);
+      battleType === BattleType.TRAINER
+        ? trainer?.getPartyLevels(this.waveIndex)
+        : new Array(double ? 2 : 1).fill(null).map(() => this.getLevelForWave());
     this.double = double ?? false;
     this.turnManager = new TurnCommandManager();
   }

@@ -919,10 +919,11 @@ export class SummaryUiHandler extends UiHandler {
           statLabel.setOrigin(0.5, 0);
           statsContainer.add(statLabel);
 
+          // TODO: are these bangs correct?
           const statValueText =
-            stat !== Stat.HP
-              ? formatStat(this.pokemon!.getStat(stat)) // TODO: is this bang correct?
-              : `${formatStat(this.pokemon!.hp, true)}/${formatStat(this.pokemon!.getMaxHp(), true)}`; // TODO: are those bangs correct?
+            stat === Stat.HP
+              ? `${formatStat(this.pokemon!.hp, true)}/${formatStat(this.pokemon!.getMaxHp(), true)}`
+              : formatStat(this.pokemon!.getStat(stat));
 
           const statValue = addTextObject(120 + 88 * colIndex, 56 + 16 * rowIndex, statValueText, TextStyle.WINDOW_ALT);
           statValue.setOrigin(1, 0);

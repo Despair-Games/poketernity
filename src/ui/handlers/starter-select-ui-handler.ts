@@ -1498,13 +1498,13 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       let starterAttributes = this.starterPreferences[this.lastSpecies.speciesId];
 
       // this gets the correct pokemon cursor depending on whether you're in the starter grid or the party icons
-      if (this.currentMode !== StarterSelectMode.PARTY) {
-        starterContainer = this.filteredStarterContainers[this.cursor];
-      } else {
+      if (this.currentMode === StarterSelectMode.PARTY) {
         starterContainer =
           this.filteredStarterContainers[
             this.filteredStarterContainers.findIndex((container) => container.species === this.lastSpecies)
           ];
+      } else {
+        starterContainer = this.filteredStarterContainers[this.cursor];
       }
 
       if (button === Button.ACTION) {
@@ -3360,7 +3360,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     const oldNatureIndex =
       this.natureCursor > -1 ? this.natureCursor : globalScene.gameData.getSpeciesDefaultNature(species);
     const oldTeraType =
-      this.teraCursor !== ElementalType.UNKNOWN ? this.teraCursor : (species?.type1 ?? ElementalType.UNKNOWN);
+      this.teraCursor === ElementalType.UNKNOWN ? (species?.type1 ?? ElementalType.UNKNOWN) : this.teraCursor;
     this.dexAttrCursor = 0n;
     this.abilityCursor = -1;
     this.natureCursor = -1;
@@ -3781,17 +3781,17 @@ export class StarterSelectUiHandler extends MessageUiHandler {
   }
 
   setTypeIcons(type1: ElementalType | null, type2: ElementalType | null): void {
-    if (type1 !== null) {
+    if (type1 === null) {
+      this.type1Icon.setVisible(false);
+    } else {
       this.type1Icon.setVisible(true);
       this.type1Icon.setFrame(enumValueToKey(ElementalType, type1).toLowerCase());
-    } else {
-      this.type1Icon.setVisible(false);
     }
-    if (type2 !== null) {
+    if (type2 === null) {
+      this.type2Icon.setVisible(false);
+    } else {
       this.type2Icon.setVisible(true);
       this.type2Icon.setFrame(enumValueToKey(ElementalType, type2).toLowerCase());
-    } else {
-      this.type2Icon.setVisible(false);
     }
   }
 
@@ -4111,10 +4111,10 @@ export class StarterSelectUiHandler extends MessageUiHandler {
      */
     const unlockedVariants = globalScene.gameData.getUnlockedVariantsAttr(caughtAttr, getRarestVariant);
     if (unlockedVariants.length > 0 && this.starterPreferences[speciesId]?.shiny !== false) {
-      if (this.starterPreferences[speciesId]?.variant !== undefined) {
-        props += BigInt(1 << this.starterPreferences[speciesId].variant) * DexAttr.SHINY_BASE_VARIANT;
-      } else {
+      if (this.starterPreferences[speciesId]?.variant === undefined) {
         props += unlockedVariants[0];
+      } else {
+        props += BigInt(1 << this.starterPreferences[speciesId].variant) * DexAttr.SHINY_BASE_VARIANT;
       }
     } else {
       props += DexAttr.NON_SHINY;

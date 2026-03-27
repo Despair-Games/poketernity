@@ -291,24 +291,22 @@ export class PartyUiHandler extends MessageUiHandler {
                 && m.matchType(getTransferrableItemsFromPokemon(pokemon)[this.transferOptionCursor]),
             );
             const partySlot = this.partySlots.find((m) => m.getPokemon() === newPokemon); // this gets pokemon [p] for us
-            if (p !== this.transferCursor) {
+            if (p === this.transferCursor) {
+              // this else relates to the transfer pokemon. We set the text to be blank so there's no "Able"/"Not able" text
+              ableToTransfer = "";
               // this skips adding the able/not able labels on the pokemon doing the transfer
-              if (matchingModifier) {
-                // if matchingModifier exists then the item exists on the new pokemon
-                if (matchingModifier.getMaxStackCount() === matchingModifier.stackCount) {
-                  // checks to see if the stack of items is at max stack; if so, set the description label to "Not able"
-                  ableToTransfer = "Not able";
-                } else {
-                  // if the pokemon isn't at max stack, make the label "Able"
-                  ableToTransfer = "Able";
-                }
+            } else if (matchingModifier) {
+              // if matchingModifier exists then the item exists on the new pokemon
+              if (matchingModifier.getMaxStackCount() === matchingModifier.stackCount) {
+                // checks to see if the stack of items is at max stack; if so, set the description label to "Not able"
+                ableToTransfer = "Not able";
               } else {
-                // if matchingModifier doesn't exist, that means the pokemon doesn't have any of the item, and we need to show "Able"
+                // if the pokemon isn't at max stack, make the label "Able"
                 ableToTransfer = "Able";
               }
             } else {
-              // this else relates to the transfer pokemon. We set the text to be blank so there's no "Able"/"Not able" text
-              ableToTransfer = "";
+              // if matchingModifier doesn't exist, that means the pokemon doesn't have any of the item, and we need to show "Able"
+              ableToTransfer = "Able";
             }
             partySlot?.slotHpBar.setVisible(false);
             partySlot?.slotHpOverlay.setVisible(false);
@@ -348,7 +346,14 @@ export class PartyUiHandler extends MessageUiHandler {
             globalScene.findModifiers<PokemonHeldItemModifier>(
               (m) => m.isPokemonHeldItemModifier() && m.isTransferable && m.pokemonId === pkmn.id,
             );
-          if (option !== PartyOption.TRANSFER) {
+          if (option === PartyOption.TRANSFER) {
+            filterResult = (this.selectFilter as PokemonModifierTransferSelectFilter)(
+              pokemon,
+              getTransferrableItemsFromPokemon(globalScene.getPlayerParty()[this.transferCursor])[
+                this.transferOptionCursor
+              ],
+            );
+          } else {
             filterResult = (this.selectFilter as PokemonSelectFilter)(pokemon);
             if (filterResult === null && (option === PartyOption.SEND_OUT || option === PartyOption.PASS_BATON)) {
               filterResult = this.FilterChallengeLegal(pokemon);
@@ -356,13 +361,6 @@ export class PartyUiHandler extends MessageUiHandler {
             if (filterResult === null && this.partyUiMode === PartyUiMode.MOVE_MODIFIER) {
               filterResult = this.moveSelectFilter(pokemon.getMoveset(true)[this.optionsCursor]);
             }
-          } else {
-            filterResult = (this.selectFilter as PokemonModifierTransferSelectFilter)(
-              pokemon,
-              getTransferrableItemsFromPokemon(globalScene.getPlayerParty()[this.transferCursor])[
-                this.transferOptionCursor
-              ],
-            );
           }
           if (filterResult === null) {
             this.clearOptions();
@@ -1343,12 +1341,7 @@ class PartySlot extends Phaser.GameObjects.Container {
 
     slotInfoContainer.add([this.slotHpBar, this.slotHpOverlay, this.slotHpText, this.slotDescriptionLabel]);
 
-    if (partyUiMode !== PartyUiMode.TM_MODIFIER) {
-      this.slotDescriptionLabel.setVisible(false);
-      this.slotHpBar.setVisible(true);
-      this.slotHpOverlay.setVisible(true);
-      this.slotHpText.setVisible(true);
-    } else {
+    if (partyUiMode === PartyUiMode.TM_MODIFIER) {
       this.slotHpBar.setVisible(false);
       this.slotHpOverlay.setVisible(false);
       this.slotHpText.setVisible(false);
@@ -1364,6 +1357,11 @@ class PartySlot extends Phaser.GameObjects.Container {
 
       this.slotDescriptionLabel.setText(slotTmText);
       this.slotDescriptionLabel.setVisible(true);
+    } else {
+      this.slotDescriptionLabel.setVisible(false);
+      this.slotHpBar.setVisible(true);
+      this.slotHpOverlay.setVisible(true);
+      this.slotHpText.setVisible(true);
     }
   }
 

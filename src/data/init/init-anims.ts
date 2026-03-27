@@ -120,7 +120,7 @@ export async function populateAnims(): Promise<void> {
           break;
         }
         case "graphic": {
-          const graphic = fieldData !== "''" ? fieldData : "";
+          const graphic = fieldData === "''" ? "" : fieldData;
           anim.graphic = graphic.indexOf(".") > -1 ? graphic.slice(0, fieldData.indexOf(".")) : graphic;
           break;
         }

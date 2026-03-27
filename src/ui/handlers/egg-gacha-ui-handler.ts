@@ -23,9 +23,9 @@ import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedShuffle } from "#utils/random-utils";
 import i18next from "i18next";
 
-/**
- * TODO: This should extend (Base)OptionSelectUiHandler
- */
+const SCALE = 1 / TEXT_SCALE;
+
+// TODO: This should extend (Base)OptionSelectUiHandler
 export class EggGachaUiHandler extends MessageUiHandler {
   private eggGachaContainer: Phaser.GameObjects.Container;
   private eggGachaMessageBox: Phaser.GameObjects.NineSlice;
@@ -48,8 +48,6 @@ export class EggGachaUiHandler extends MessageUiHandler {
   private transitionCancelled: boolean;
   private summaryFinished: boolean;
   private readonly defaultText: string;
-
-  private readonly scale: number = 1 / TEXT_SCALE;
 
   constructor() {
     super(UiMode.EGG_GACHA);
@@ -212,7 +210,7 @@ export class EggGachaUiHandler extends MessageUiHandler {
     this.eggGachaOptionsContainer = globalScene.add.container(GAME_WIDTH, 148);
     this.eggGachaContainer.add(this.eggGachaOptionsContainer);
 
-    this.eggGachaOptionSelectBg = addWindow(0, 0, 96, 16 + 576 * this.scale);
+    this.eggGachaOptionSelectBg = addWindow(0, 0, 96, 16 + 576 * SCALE);
     this.eggGachaOptionSelectBg.setOrigin(1, 1);
     this.eggGachaOptionsContainer.add(this.eggGachaOptionSelectBg);
 
@@ -251,7 +249,7 @@ export class EggGachaUiHandler extends MessageUiHandler {
       .map((option) => {
         const desc = option.description.split(" ");
         if (desc[0].length < 2) {
-          desc[0] += ["zh", "ko"].includes(resolvedLanguage.substring(0, 2)) ? " " : "  ";
+          desc[0] += ["zh", "ko"].includes(resolvedLanguage.slice(0, 2)) ? " " : "  ";
         }
         if (option.multiplier === multiplierOne) {
           desc[0] = " " + desc[0];
@@ -269,8 +267,8 @@ export class EggGachaUiHandler extends MessageUiHandler {
 
     pullOptions.forEach((option, i) => {
       const icon = globalScene.add.sprite(0, 0, "items", option.icon);
-      icon.setScale(3 * this.scale);
-      icon.setPositionRelative(this.eggGachaOptionSelectBg, 20, 9 + (48 + i * 96) * this.scale);
+      icon.setScale(3 * SCALE);
+      icon.setPositionRelative(this.eggGachaOptionSelectBg, 20, 9 + (48 + i * 96) * SCALE);
       this.eggGachaOptionsContainer.add(icon);
     });
 
@@ -806,8 +804,8 @@ export class EggGachaUiHandler extends MessageUiHandler {
       this.eggGachaOptionsContainer.add(this.cursorObj);
     }
 
-    this.cursorObj.setScale(this.scale * 6);
-    this.cursorObj.setPositionRelative(this.eggGachaOptionSelectBg, 10, 9 + (48 + this.cursor * 96) * this.scale);
+    this.cursorObj.setScale(SCALE * 6);
+    this.cursorObj.setPositionRelative(this.eggGachaOptionSelectBg, 10, 9 + (48 + this.cursor * 96) * SCALE);
 
     return ret;
   }

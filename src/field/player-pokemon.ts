@@ -209,12 +209,12 @@ export class PlayerPokemon extends Pokemon {
 
     const evolutionSpecies = getPokemonSpecies(evolution.speciesId);
     const formIndex =
-      evolution.evoFormKey !== null
-        ? Math.max(
+      evolution.evoFormKey === null
+        ? this.formIndex
+        : Math.max(
             evolutionSpecies.forms.findIndex((f) => f.formKey === evolution.evoFormKey),
             0,
-          )
-        : this.formIndex;
+          );
     const ret = globalScene.addPlayerPokemon(evolutionSpecies, this.level, { ...this, formIndex });
     await ret.loadAssets();
     return ret;

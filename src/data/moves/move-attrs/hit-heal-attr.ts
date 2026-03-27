@@ -34,14 +34,14 @@ export class HitHealAttr extends MoveEffectAttr {
     let message = "";
     const reverseDrain = new ValueHolder(false);
     applyAbAttrs("ReverseDrainAbAttr", target, false, user, reverseDrain);
-    if (this.healStat !== null) {
-      // Strength Sap formula
-      healAmount = target.getEffectiveStat(this.healStat);
-      message = i18next.t("battle:drainMessage", { pokemonName: getPokemonNameWithAffix(target) });
-    } else {
+    if (this.healStat === null) {
       // Default healing formula used by draining moves like Absorb, Draining Kiss, Bitter Blade, etc.
       healAmount = toDmgValue(user.turnData.singleHitDamageDealt * this.healRatio);
       message = i18next.t("battle:regainHealth", { pokemonName: getPokemonNameWithAffix(user) });
+    } else {
+      // Strength Sap formula
+      healAmount = target.getEffectiveStat(this.healStat);
+      message = i18next.t("battle:drainMessage", { pokemonName: getPokemonNameWithAffix(target) });
     }
     if (reverseDrain.value) {
       if (user.hasAbilityWithAttr("BlockNonDirectDamageAbAttr")) {

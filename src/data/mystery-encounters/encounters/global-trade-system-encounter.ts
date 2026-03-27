@@ -182,12 +182,12 @@ export const GlobalTradeSystemEncounter: MysteryEncounter = MysteryEncounterBuil
                   i18next.t("pokemonInfoContainer:ability")
                   + " "
                   + tradePokemon.getAbility().name
-                  + (tradePokemon.getGender() !== Gender.GENDERLESS
-                    ? "     |     "
+                  + (tradePokemon.getGender() === Gender.GENDERLESS
+                    ? ""
+                    : "     |     "
                       + i18next.t("pokemonInfoContainer:gender")
                       + " "
-                      + getGenderSymbol(tradePokemon.getGender())
-                    : "");
+                      + getGenderSymbol(tradePokemon.getGender()));
                 const line2 =
                   i18next.t("pokemonInfoContainer:nature")
                   + " "
