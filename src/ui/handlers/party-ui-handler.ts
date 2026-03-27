@@ -292,7 +292,7 @@ export class PartyUiHandler extends MessageUiHandler {
             );
             const partySlot = this.partySlots.find((m) => m.getPokemon() === newPokemon); // this gets pokemon [p] for us
             if (p === this.transferCursor) {
-              // this else relates to the transfer pokemon. We set the text to be blank so there's no "Able"/"Not able" text
+              // this relates to the transfer pokemon. We set the text to be blank so there's no "Able"/"Not able" text
               ableToTransfer = "";
               // this skips adding the able/not able labels on the pokemon doing the transfer
             } else if (matchingModifier) {
