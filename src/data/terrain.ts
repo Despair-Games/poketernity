@@ -64,7 +64,7 @@ export class Terrain {
  * @param terrainType - The {@linkcode TerrainType}
  * @returns the associated name, or an empty string if there is none
  */
-function getTerrainName(terrainType: TerrainType): string {
+export function getTerrainName(terrainType: TerrainType): string {
   switch (terrainType) {
     case TerrainType.MISTY:
       return i18next.t("terrain:misty");

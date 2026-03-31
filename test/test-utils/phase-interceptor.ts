@@ -36,6 +36,7 @@ import { NextEncounterPhase } from "#phases/next-encounter-phase";
 import { ObtainStatusEffectPhase } from "#phases/obtain-status-effect-phase";
 import { PartyExpPhase } from "#phases/party-exp-phase";
 import { PartyHealPhase } from "#phases/party-heal-phase";
+import { PokemonHealPhase } from "#phases/pokemon-heal-phase";
 import { PostActionPhase } from "#phases/post-action-phase";
 import { PostGameOverPhase } from "#phases/post-game-over-phase";
 import { PostKnockoutPhase } from "#phases/post-knockout-phase";
@@ -145,6 +146,7 @@ const PHASES = [
   RevivalBlessingPhase,
   PostKnockoutPhase,
   ObtainStatusEffectPhase,
+  PokemonHealPhase,
 ] as const;
 
 type PhaseInterceptorPhase = PhaseClass | PhaseKey;

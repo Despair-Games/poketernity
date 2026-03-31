@@ -21,6 +21,7 @@ import { MoveId } from "#enums/move-id";
 import { MoveTarget } from "#enums/move-target";
 import type { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
+import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
 import { AttackTypeBoosterModifier } from "#modifier/modifier";
@@ -863,6 +864,14 @@ export abstract class Move {
 
     if (source.isGrounded()) {
       power.value *= arena.getTerrainPowerMultiplier(source.getMoveType(this));
+    }
+
+    if (
+      target.isGrounded()
+      && globalScene.arena.terrainType === TerrainType.MISTY
+      && this.type === ElementalType.DRAGON
+    ) {
+      power.value *= 0.5;
     }
 
     return power.value;
