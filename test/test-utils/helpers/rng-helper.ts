@@ -6,12 +6,12 @@ export class RngHelper extends GameManagerHelper {
    * Performs the RNG experiment dictated by `fn` while sampling uniformly n times from
    * the full range of possible RNG values, where n is the number of trials to perform.
    *
-   * Specifically, this function divides the interval of possible RNG values into
-   * n equal slices, then samples exactly once from the midpoint of each interval, and
-   * rounds down as necessary for integer-based RNG functions.
+   * Specifically, this function divides the interval of possible RNG values into n equal slices,
+   * then samples exactly once from the midpoint of each interval,
+   * and rounds down as necessary for integer-based RNG functions.
    *
-   * @param numTrials The number of trials to perform.
-   * @param fn The function to be called during each trial.
+   * @param numTrials - The number of trials to perform.
+   * @param fn - The function to be called during each trial.
    * @example
    * ```
    * let zeroCounter = 0;

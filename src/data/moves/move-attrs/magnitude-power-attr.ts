@@ -2,14 +2,13 @@ import { globalScene } from "#app/global-scene";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { VariablePowerAttr } from "#moves/variable-power-attr";
-import type { NumberHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 import { randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
 
-// TODO: this is not correct, fix later
-const magnitudeThresholds = [5, 15, 35, 65, 75, 95];
+const magnitudeThresholds = [5, 15, 35, 65, 85, 95];
 
-export const magnitudeMessageFunc = (_user: Pokemon, _target: Pokemon, _move: Move): string => {
+export const magnitudeMessageFunc = (): string => {
   let message!: string;
 
   globalScene.executeWithSeedOffset(
@@ -37,8 +36,8 @@ export const magnitudeMessageFunc = (_user: Pokemon, _target: Pokemon, _move: Mo
  * {@link https://bulbapedia.bulbagarden.net/wiki/Magnitude_(move) | Magnitude} level.
  */
 export class MagnitudePowerAttr extends VariablePowerAttr {
-  override apply(_user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {
-    const magnitudePowers = [10, 30, 50, 70, 90, 100, 110, 150];
+  override apply(_user: Pokemon, _target: Pokemon, _move: Move, power: ValueHolder<number>): boolean {
+    const magnitudePowers = [10, 30, 50, 70, 90, 110, 150];
 
     globalScene.executeWithSeedOffset(
       () => {
