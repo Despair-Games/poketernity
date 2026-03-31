@@ -278,7 +278,7 @@ describe("Terrain -", () => {
       // blissey is grounded & protected, shuckle isn't
       expect(blissey).not.toHaveBattlerTag(BattlerTagType.CONFUSED);
       expect(shuckle).toHaveBattlerTag(BattlerTagType.CONFUSED);
-      // TODO: port https://github.com/pagefaultgames/pokerogue/pull/5931
+      // TODO: port https://github.com/pagefaultgames/pokerogue/pull/5931 and https://github.com/pagefaultgames/pokerogue/pull/6987
       // expect(game).toHaveShownMessage(
       //   i18next.t("terrain:mistyBlockMessage", {
       //     pokemonNameWithAffix: getPokemonNameWithAffix(blissey),
