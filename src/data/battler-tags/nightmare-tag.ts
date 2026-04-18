@@ -12,7 +12,7 @@ import i18next from "i18next";
 
 /**
  * Damages the owner by 1/4 of its maximum HP at the end of each turn if it is asleep.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Nightmare_(move) | Nightmare (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Nightmare_(move)}
  */
 export class NightmareTag extends BattlerTag {
   constructor() {

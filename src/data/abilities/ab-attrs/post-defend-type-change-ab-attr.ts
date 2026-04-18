@@ -5,20 +5,20 @@ import type { PostDefendAbAttrParams } from "#types/ab-attr-param-types";
 import { enumValueToKey } from "#utils/common-utils";
 import i18next from "i18next";
 
-/** @see {@link https://bulbapedia.bulbagarden.net/wiki/Color_Change_(Ability) | Color Change (Bulbapedia)} */
+/** @see {@link https://bulbapedia.bulbagarden.net/wiki/Color_Change_(Ability)} */
 export class PostDefendTypeChangeAbAttr extends PostDefendAbAttr {
   public override apply({ pokemon, simulated, attacker, move }: PostDefendAbAttrParams): void {
     if (simulated) {
       return;
     }
 
-    const moveType = attacker.getMoveType(move);
-    pokemon.setTemporaryTypes(moveType);
+    pokemon.setTemporaryTypes(attacker.getMoveType(move));
   }
 
   public override canApply({ pokemon, attacker, move }: Parameters<this["apply"]>[0]): boolean {
     const moveType = attacker.getMoveType(move);
     const pokemonTypes = pokemon.getTypes(true, true);
+
     return move.isAttackMove(attacker, pokemon) && !pokemon.isTerastallized && !pokemonTypes.includes(moveType);
   }
 

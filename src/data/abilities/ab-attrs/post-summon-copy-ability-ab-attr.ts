@@ -8,7 +8,7 @@ import i18next from "i18next";
 
 /**
  * Temporarily sets the user's ability to be the same as the target's ability.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Trace_(Ability) | Trace (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Trace_(Ability)}
  */
 export class PostSummonCopyAbilityAbAttr extends PostSummonAbAttr {
   private target: Pokemon;

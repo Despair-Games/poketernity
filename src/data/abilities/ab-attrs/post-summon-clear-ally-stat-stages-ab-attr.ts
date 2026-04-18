@@ -7,7 +7,7 @@ import i18next from "i18next";
 
 /**
  * Resets an ally's temporary stat boots to zero with no regard to whether this is a positive or negative change
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Curious_Medicine_(Ability) | Curious Medicine (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Curious_Medicine_(Ability)}
  */
 export class PostSummonClearAllyStatStagesAbAttr extends PostSummonAbAttr {
   public override apply({ pokemon, simulated }: BaseAbAttrParams): void {

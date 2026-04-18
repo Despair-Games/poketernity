@@ -13,7 +13,7 @@ import i18next from "i18next";
 /**
  * Applies up to 3 layers of Spikes, dealing 1/8th, 1/6th, or 1/4th of the the Pokémon's HP
  * in damage for 1, 2, or 3 layers of Spikes respectively if they are summoned into this trap.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Spikes_(move) | Spikes (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Spikes_(move)}
  */
 export class SpikesTag extends EntryHazardTag {
   public override readonly tagType = ArenaTagType.SPIKES;

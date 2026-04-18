@@ -12,7 +12,7 @@ import i18next from "i18next";
 /**
  * Heals user as a side effect of a move that hits a target. \
  * Healing is based on {@linkcode healRatio} * the amount of damage dealt or a stat of the target.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Category:HP-draining_moves | HP-draining moves}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Category:HP-draining_moves}
  */
 // TODO: make Strength Sap use a subclass
 export class HitHealAttr extends MoveEffectAttr {
@@ -30,7 +30,7 @@ export class HitHealAttr extends MoveEffectAttr {
    * Heals the user the determined amount and possibly displays a message about regaining health.
    *
    * If the target has the {@linkcode ReverseDrainAbAttr},
-   * all healing is instead converted o damage to the user.
+   * all healing is instead converted to damage to the user.
    */
   override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     let healAmount = 0;
@@ -67,13 +67,6 @@ export class HitHealAttr extends MoveEffectAttr {
     return true;
   }
 
-  /**
-   * Used by the Enemy AI to rank an attack based on a given user
-   * @param user {@linkcode Pokemon} using this move
-   * @param target {@linkcode Pokemon} target of this move
-   * @param move {@linkcode Move} being used
-   * @returns an integer. Higher means enemy is more likely to use that move.
-   */
   override getUserBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {
     if (this.healStat) {
       const healAmount = target.getEffectiveStat(this.healStat);

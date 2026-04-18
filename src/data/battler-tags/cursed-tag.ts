@@ -12,7 +12,7 @@ import i18next from "i18next";
 
 /**
  * Damages a Pokemon for 1/4th of its max HP each turn.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Curse_(move) | Curse (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Curse_(move)}
  */
 export class CursedTag extends BattlerTag {
   constructor(sourceId: number) {

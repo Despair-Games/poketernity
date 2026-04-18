@@ -32,14 +32,14 @@ export class SecretPowerAttr extends ChanceBasedMoveEffectAttr {
   /**
    * Determines the secondary effect based on terrain.
    * Takes precedence over biome-based effects.
-   * ```
+   *
    * | Terrain          | Effect    |
-   * |------------------|-----------|
+   * |:----------------:|:---------:|
    * | Electric Terrain | Paralysis |
    * | Misty Terrain    | SpAtk -1  |
    * | Grassy Terrain   | Sleep     |
    * | Psychic Terrain  | Speed -1  |
-   * ```
+   *
    * @param terrain - {@linkcode TerrainType} The current terrain
    * @returns the chosen secondary effect {@linkcode MoveEffectAttr}
    */

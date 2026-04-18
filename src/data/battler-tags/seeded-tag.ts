@@ -15,7 +15,7 @@ import i18next from "i18next";
 /**
  * Steals 1/8 of the owner's maximum HP at the end of each turn,
  * giving it to the Pokemon in the position of the original user.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Seeding | Seeding (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Seeding}
  */
 export class SeededTag extends BattlerTag {
   public declare sourceId: number;
@@ -74,15 +74,12 @@ export class SeededTag extends BattlerTag {
     applyAbAttrs("ReverseDrainAbAttr", { pokemon, simulated: false, attacker: source, reversed });
 
     const i18nKey = `battlerTags:seededLapse${reversed.value ? "Shed" : ""}`;
+    const message = i18next.t(i18nKey, { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) });
     globalScene.phaseManager.createAndUnshiftPhase(
       "PokemonHealPhase",
       source.getBattlerIndex(),
       reversed.value ? damage * -1 : damage,
-      {
-        message: i18next.t(i18nKey, { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
-        showFullHpMessage: false,
-        skipAnim: true,
-      },
+      { message, showFullHpMessage: false, skipAnim: true },
     );
 
     return true;

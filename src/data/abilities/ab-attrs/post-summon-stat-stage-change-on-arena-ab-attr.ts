@@ -6,7 +6,7 @@ import { type BattleStat, Stat } from "#enums/stat";
 /**
  * Applies a stat change after a Pokémon is summoned,
  * conditioned on the presence of a specific arena tag.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Wind_Rider_(Ability) | Wind Rider (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Wind_Rider_(Ability)}
  * @param tagType - The {@linkcode ArenaTagType} to check for
  * @param stats - (Default `[Stat.ATK]`) An array of {@linkcode BattleStat}s to change
  * @param stages - (Default `1`) How much to change the stat(s) by

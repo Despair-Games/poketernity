@@ -10,9 +10,9 @@ import i18next from "i18next";
 
 /**
  * Attribute that damages an attacker for a fraction of its HP if the attacker KOs the user with a contact move.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Aftermath_(Ability) | Aftermath (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Aftermath_(Ability)}
  * @privateRemarks
- * Currently can only be used for Aftermath due to the `applyAbAttrs("FieldPreventExplosionLikeAbAttr", ...)`
+ * Currently can only be used for Aftermath due to the `applyAbAttrs("FieldPreventExplosionLikeAbAttr", ...)` in `canApply`
  */
 export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
   /**

@@ -17,7 +17,7 @@ import { toDmgValue, ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
- * Tag representing the {@link https://bulbapedia.bulbagarden.net/wiki/Confusion_(status_condition) | Confusion} status condition
+ * Tag representing the {@link https://bulbapedia.bulbagarden.net/wiki/Confusion_(status_condition) | Confusion} volatile status condition
  */
 export class ConfusedTag extends BattlerTag {
   /** Chance of self-inflicted damage `= 33%` */

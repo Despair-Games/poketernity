@@ -15,7 +15,7 @@ interface TerrainEventTypeChangeAbAttrParams extends BaseAbAttrParams {
 
 /**
  * This applies a terrain-based type change to the Pokemon.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Mimicry_(Ability) | Mimicry (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Mimicry_(Ability)}
  */
 // TODO: split into 2 `AbAttr`s to remove `onSummon` and `.is` override jank
 export class TerrainEventTypeChangeAbAttr extends PostSummonAbAttr {
@@ -35,11 +35,11 @@ export class TerrainEventTypeChangeAbAttr extends PostSummonAbAttr {
     }
 
     const currentTerrain = globalScene.arena.terrainType;
-    // `onSummon` will never be `true` in `canApply()` so it cannot be checked there
-    if (onSummon && currentTerrain === TerrainType.NONE) {
-      return;
-    }
     if (currentTerrain === TerrainType.NONE) {
+      // `onSummon` will never be `true` in `canApply()` so it cannot be checked there
+      if (onSummon) {
+        return;
+      }
       pokemon.summonData.types = [];
       pokemon.updateInfo();
       return;

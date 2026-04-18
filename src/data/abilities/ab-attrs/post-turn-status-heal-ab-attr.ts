@@ -11,6 +11,7 @@ import i18next from "i18next";
  * @param effects - The {@linkcode StatusEffect | status effect(s)} that will qualify healing the ability pokemon
  */
 export class PostTurnStatusHealAbAttr extends PostTurnAbAttr {
+  // TODO: use `NonEmptyArray`
   private readonly effects: StatusEffect[];
 
   constructor(...effects: StatusEffect[]) {

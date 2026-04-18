@@ -7,8 +7,8 @@ import { ValueHolder } from "#utils/common-utils";
 
 /**
  * Tag to allow the affected Pokemon's move to go first in its priority bracket.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Quick_Draw_(Ability) | Quick Draw (Bulbapedia)}
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Quick_Claw | Quick Claw (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Quick_Draw_(Ability)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Quick_Claw}
  */
 export class BypassSpeedTag extends BattlerTag {
   constructor() {

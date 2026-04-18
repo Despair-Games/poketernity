@@ -3,7 +3,7 @@ import type { IgnoreMoveEffectsAbAttrParams } from "#types/ab-attr-param-types";
 
 /**
  * Sets incoming moves additional effect chance to zero, ignoring all effects from moves.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Shield_Dust_(Ability) | Shield Dust (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Shield_Dust_(Ability)}
  */
 export class IgnoreMoveEffectsAbAttr extends PreDefendAbAttr {
   protected override readonly abAttrKey = "IgnoreMoveEffectsAbAttr";

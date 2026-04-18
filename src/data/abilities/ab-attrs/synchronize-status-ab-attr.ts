@@ -10,7 +10,7 @@ const syncStatuses = Object.freeze<ReadonlySet<StatusEffect>>(
 /**
  * If another Pokemon burns, paralyzes, poisons, or badly poisons this Pokemon,
  * that Pokemon receives the same non-volatile status condition.
- * @see {@linkcode https://bulbapedia.bulbagarden.net/wiki/Synchronize_(Ability) | Synchronize (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Synchronize_(Ability)}
  */
 export class SynchronizeStatusAbAttr extends AbAttr {
   protected override readonly abAttrKey = "SynchronizeStatusAbAttr";

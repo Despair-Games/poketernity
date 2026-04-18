@@ -6,7 +6,7 @@ import { NeutralDamageAgainstFlyingTypeMultiplierAttr } from "#moves/neutral-dam
  * Provides immunity to Ground-type attacks.
  * @remarks
  * Unlike other immunity-granting abilities, Levitate only applies to attacks.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Levitate_(Ability) | Levitate (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Levitate_(Ability)}
  */
 export class LevitateImmunityAbAttr extends TypeImmunityAbAttr {
   /**

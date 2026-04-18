@@ -6,7 +6,7 @@ import i18next from "i18next";
 
 /**
  * Attribute used for abilities that damage the opponent based on the damage done to the ability holder.
- * @see {@linkcode https://bulbapedia.bulbagarden.net/wiki/Innards_Out_(Ability) | Innards Out (Bulbapedia)}
+ * @see {@linkcode https://bulbapedia.bulbagarden.net/wiki/Innards_Out_(Ability)}
  */
 export class PostFaintHPDamageAbAttr extends PostFaintAbAttr {
   public override apply({ pokemon, simulated, attacker }: PostFaintAbAttrParams): void {
@@ -23,7 +23,7 @@ export class PostFaintHPDamageAbAttr extends PostFaintAbAttr {
   }
 
   public override canApply({ attacker, move }: Parameters<this["apply"]>[0]): boolean {
-    return move != null && attacker != null && attacker.isOnField();
+    return move != null && !!attacker?.isOnField();
   }
 
   public override getTriggerMessage({ pokemon }: Parameters<this["apply"]>[0], abilityName: string): string {

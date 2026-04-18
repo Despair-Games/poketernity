@@ -7,7 +7,7 @@ import { CommonAnim } from "#enums/common-anim";
 import { ElementalType } from "#enums/elemental-type";
 import type { MoveId } from "#enums/move-id";
 import type { TypeImmuneDamageOverTimeTagType } from "#types/arena-tag-types";
-import { BooleanHolder, enumValueToKey, toDmgValue } from "#utils/common-utils";
+import { enumValueToKey, toDmgValue, ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -67,7 +67,7 @@ export class TypeImmuneDamageOverTimeTag extends SerializableArenaTag {
     field
       .filter((pokemon) => pokemon.isActive(true) && !pokemon.isOfType(this.#immuneType) && !pokemon.switchOutStatus)
       .forEach((pokemon) => {
-        const cancelled = new BooleanHolder(false);
+        const cancelled = new ValueHolder(false);
         applyAbAttrs("BlockNonDirectDamageAbAttr", { pokemon, simulated: false, cancelled });
         if (cancelled.value) {
           return;

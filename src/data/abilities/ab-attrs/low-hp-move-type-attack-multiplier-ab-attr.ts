@@ -24,7 +24,8 @@ import type { PokemonAttackCondition } from "#types/move-types";
  */
 export class LowHpMoveTypeAttackMultiplierAbAttr extends EffectiveStatMultiplierAbAttr {
   /**
-   * The constructor defaults to Stat.ATK since at the moment of the attribute's construction, the game does not know what move will be used.
+   * The constructor defaults to `Stat.ATK` since at the moment of the attribute's construction,
+   * the game does not know what move will be used.
    */
   constructor(boostedType: ElementalType) {
     const condition: PokemonAttackCondition = (pokemon: Pokemon, _target?: Pokemon, move?: Move): boolean =>

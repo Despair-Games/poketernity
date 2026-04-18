@@ -7,8 +7,8 @@ import { enumValueToKey, type ValueHolder } from "#utils/common-utils";
 
 /**
  * Attribute to change a move's type based on the user's form if they are an Arceus or Silvally.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Judgment_(move) | Judgment (Bulbapedia)}
- * @see {@linkcode https://bulbapedia.bulbagarden.net/wiki/Multi-Attack_(move) | Multi-Attack (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Judgment_(move)}
+ * @see {@linkcode https://bulbapedia.bulbagarden.net/wiki/Multi-Attack_(move)}
  */
 export class FormChangeItemTypeAttr extends VariableMoveTypeAttr {
   override apply(user: Pokemon, _target: Pokemon, move: Move, moveType: ValueHolder<ElementalType>): boolean {

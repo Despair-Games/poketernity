@@ -5,7 +5,7 @@ import type { ConfusionOnStatusEffectAbAttrParams } from "#types/ab-attr-param-t
 
 /**
  * This attribute applies confusion to the target whenever the user directly poisons them with a move.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Poison_Puppeteer_(Ability) | Poison Puppeteer (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Poison_Puppeteer_(Ability)}
  */
 export class ConfusionOnStatusEffectAbAttr extends AbAttr {
   protected override readonly abAttrKey = "ConfusionOnStatusEffectAbAttr";

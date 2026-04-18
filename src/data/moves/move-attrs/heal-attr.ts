@@ -10,7 +10,7 @@ import i18next from "i18next";
 export class HealAttr extends MoveEffectAttr {
   /** The percentage of {@linkcode Stat.HP | HP} to heal */
   private readonly healRatio: number;
-  /** Whether an animation should  be shown */
+  /** Whether an animation should be shown */
   private readonly showAnim: boolean;
 
   constructor(healRatio: number = 1, showAnim: boolean = false, selfTarget: boolean = true) {

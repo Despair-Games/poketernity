@@ -2,7 +2,7 @@ import { PostAttackAbAttr } from "#abilities/post-attack-ab-attr";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { PostAttackAbAttrParams } from "#types/ab-attr-param-types";
 
-/** Ability attribute for {@link https://bulbapedia.bulbagarden.net/wiki/Gorilla_Tactics_(Ability) | Gorilla Tactics (Bulbapedia)} */
+/** @see {@link https://bulbapedia.bulbagarden.net/wiki/Gorilla_Tactics_(Ability)} */
 export class GorillaTacticsAbAttr extends PostAttackAbAttr {
   constructor() {
     super(false);

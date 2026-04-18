@@ -7,7 +7,7 @@ import { toDmgValue, ValueHolder } from "#utils/common-utils";
 
 /**
  * Applies damage to the target's ally equal to 1/16 of that ally's max HP.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Flame_Burst_(move) | Flame Burst (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Flame_Burst_(move)}
  */
 export class FlameBurstAttr extends MoveEffectAttr {
   constructor() {

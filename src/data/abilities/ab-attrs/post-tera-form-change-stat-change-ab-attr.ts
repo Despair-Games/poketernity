@@ -4,7 +4,7 @@ import type { BattleStat } from "#enums/stat";
 import type { BaseAbAttrParams } from "#types/ab-attr-param-types";
 
 /**
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Embody_Aspect_(Ability) | Embody Aspect (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Embody_Aspect_(Ability)}
  */
 export class PostTeraFormChangeStatChangeAbAttr extends AbAttr {
   protected override readonly abAttrKey = "PostTeraFormChangeStatChangeAbAttr";

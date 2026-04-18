@@ -6,7 +6,7 @@ type PowerMultiplierFunction = (user: Pokemon) => number;
 
 /**
  * Abilities which cause a variable amount of power increase based on a given multiplier function.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Supreme_Overlord_(Ability) | Supreme Overlord (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Supreme_Overlord_(Ability)}
  * @param multFunc - A function which takes a `user` and returns a power multiplier.
  */
 export class MovePowerMultiplierAbAttr extends VariableMovePowerAbAttr {

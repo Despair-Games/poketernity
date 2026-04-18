@@ -13,7 +13,7 @@ import type { BaseAbAttrParams } from "#types/ab-attr-param-types";
  * When the source of an ability with this attribute detects a Dondozo as their active ally, the source \
  * "jumps into the Dondozo's mouth," sharply boosting the Dondozo's stats, cancelling the source's moves, \
  * and causing attacks that target the source to always miss.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Commander_(Ability) | Commander (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Commander_(Ability)}
  */
 export class CommanderAbAttr extends AbAttr {
   protected override readonly abAttrKey = "CommanderAbAttr";

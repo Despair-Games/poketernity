@@ -5,8 +5,8 @@ import { getPokemonWithWeatherBasedForms } from "#utils/ability-utils";
 
 /**
  * Used for weather suppressing abilities to trigger weather-based form changes upon being fainted.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Cloud_Nine_(Ability) | Cloud Nine (Bulbapedia)}
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Air_Lock_(Ability) | Air Lock (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Cloud_Nine_(Ability)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Air_Lock_(Ability)}
  */
 export class PostFaintUnsuppressedWeatherFormChangeAbAttr extends PostFaintAbAttr {
   public override apply({ simulated }: PostFaintAbAttrParams): void {

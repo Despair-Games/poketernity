@@ -3,8 +3,8 @@ import type { WeightMultiplierAbAttrParams } from "#types/ab-attr-param-types";
 
 /**
  * Multiplies the ability holder's weight
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Heavy_Metal_(Ability) | Heavy Metal (Bulbapedia)}
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Light_Metal_(Ability) | Light Metal (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Heavy_Metal_(Ability)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Light_Metal_(Ability)}
  */
 export class WeightMultiplierAbAttr extends AbAttr {
   protected override readonly abAttrKey = "WeightMultiplierAbAttr";

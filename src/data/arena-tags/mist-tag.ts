@@ -11,7 +11,7 @@ import i18next from "i18next";
 
 /**
  * Prevents Pokémon on the opposing side from lowering the stats of the Pokémon in the Mist.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Mist_(move) | Mist (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Mist_(move)}
  */
 export class MistTag extends SerializableArenaTag {
   public override readonly tagType = ArenaTagType.MIST;

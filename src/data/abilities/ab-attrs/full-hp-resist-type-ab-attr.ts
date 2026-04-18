@@ -6,7 +6,7 @@ import i18next from "i18next";
 
 /**
  * When the source is at full HP, incoming attacks will have a maximum `0.5x` type effectiveness multiplier.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Tera_Shell_(Ability) | Tera Shell (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Tera_Shell_(Ability)}
  */
 export class FullHpResistTypeAbAttr extends PreDefendAbAttr {
   protected override readonly abAttrKey = "FullHpResistTypeAbAttr";

@@ -6,7 +6,7 @@ import type { BaseAbAttrParams } from "#types/ab-attr-param-types";
 /**
  * Attribute to randomly increase one stat stage by 2 and decrease a different stat stage by 1. \
  * Any stat stage at +6 or -6 is excluded from being increased or decreased, respectively.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Moody_(Ability) | Moody (Bulbapedia)}.
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Moody_(Ability)}.
  */
 export class MoodyAbAttr extends PostTurnAbAttr {
   public override apply({ pokemon, simulated }: BaseAbAttrParams): void {

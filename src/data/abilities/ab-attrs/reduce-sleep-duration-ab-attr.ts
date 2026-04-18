@@ -5,7 +5,7 @@ import type { StatusEffectAbAttrParams } from "#types/ab-attr-param-types";
 /**
  * This attribute reduces the duration of sleep by half by causing
  * the sleep turns remaining counter to tick down an extra time each turn.
- * @see {@linkcode https://bulbapedia.bulbagarden.net/wiki/Early_Bird_(Ability) | Early Bird (Bulbapedia)}
+ * @see {@linkcode https://bulbapedia.bulbagarden.net/wiki/Early_Bird_(Ability)}
  */
 export class ReduceSleepDurationAbAttr extends AbAttr {
   protected override readonly abAttrKey = "ReduceSleepDurationAbAttr";

@@ -10,7 +10,7 @@ import type { MovePhase } from "#phases/move-phase";
 import i18next from "i18next";
 
 /**
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Flinch | Flinch (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Flinch}
  */
 export class FlinchedTag extends BattlerTag {
   constructor(sourceMoveId: MoveId) {

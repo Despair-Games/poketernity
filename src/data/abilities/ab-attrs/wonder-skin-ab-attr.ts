@@ -4,7 +4,7 @@ import type { WonderSkinAbAttrParams } from "#types/ab-attr-param-types";
 
 /**
  * Reduces the accuracy of status moves used against the Pokémon with this ability to 50%.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Wonder_Skin_(Ability) | Wonder Skin (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Wonder_Skin_(Ability)}
  */
 export class WonderSkinAbAttr extends PreDefendAbAttr {
   protected override readonly abAttrKey = "WonderSkinAbAttr";

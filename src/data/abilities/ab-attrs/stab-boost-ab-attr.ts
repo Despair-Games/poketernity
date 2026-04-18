@@ -7,7 +7,7 @@ import type { StabBoostAbAttrParams } from "#types/ab-attr-param-types";
  * If the Pokemon is terastallized, then the STAB multiplier is only applied if the move type is the same as the tera type. \
  * The total STAB multiplier is capped at `2.25`.
  *
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Adaptability_(Ability) | Adaptability (Ability) - Bulbapedia}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Adaptability_(Ability)}
  * @see {@link https://github.com/Despair-Games/poketernity/blob/beta/docs/stab.md}
  */
 export class StabBoostAbAttr extends AbAttr {

@@ -10,7 +10,7 @@ import i18next from "i18next";
  *
  * The ability Aftermath's Japanese name means `Induced Explosion` which is why it is included here.
  *
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Damp_(Ability) | Damp (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Damp_(Ability)}
  */
 export class FieldPreventExplosionLikeAbAttr extends AbAttr {
   protected override readonly abAttrKey = "FieldPreventExplosionLikeAbAttr";

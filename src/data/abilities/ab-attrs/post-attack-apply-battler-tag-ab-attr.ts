@@ -9,7 +9,7 @@ type ChanceFunc = (user: Pokemon, target: Pokemon, move: Move) => number;
 
 /**
  * Ability attribute that applies a battler tag to the target after an attack
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Stench_(Ability) | Stench (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Stench_(Ability)}
  */
 export class PostAttackApplyBattlerTagAbAttr extends PostAttackAbAttr {
   private readonly contactRequired: boolean;

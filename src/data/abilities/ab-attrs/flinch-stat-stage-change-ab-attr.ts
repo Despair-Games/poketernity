@@ -7,7 +7,7 @@ import type { BaseAbAttrParams } from "#types/ab-attr-param-types";
 /**
  * Attribute that prompts a stat stage change after the ability holder is flinched. \
  * Only applied if the {@linkcode Pokemon} hasn't already acted this turn.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Steadfast_(Ability) Steadfast (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Steadfast_(Ability)}
  */
 export class FlinchStatStageChangeAbAttr extends FlinchEffectAbAttr {
   /** The {@linkcode BattleStat | stats} to change. */

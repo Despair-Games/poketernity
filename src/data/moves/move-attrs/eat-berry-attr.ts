@@ -9,8 +9,8 @@ import { ValueHolder } from "#utils/common-utils";
 
 /**
  * Attribute that causes targets of the move to eat a berry.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Stuff_Cheeks_(move) | Stuff Cheeks (Bulbapedia)}
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Teatime_(move) | Teatime (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Stuff_Cheeks_(move)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Teatime_(move)}
  */
 export class EatBerryAttr extends MoveEffectAttr {
   protected chosenBerry: BerryModifier;

@@ -9,7 +9,7 @@ import type { ValueHolder } from "#utils/common-utils";
 /**
  * Changes the move's type to match the current terrain.
  * Has no effect if the user is not grounded.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Terrain_Pulse_(move) | Terrain Pulse (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Terrain_Pulse_(move)}
  */
 export class TerrainPulseTypeAttr extends VariableMoveTypeAttr {
   override apply(user: Pokemon, _target: Pokemon, move: Move, moveType: ValueHolder<ElementalType>): boolean {

@@ -4,7 +4,7 @@ import type { BaseAbAttrParams } from "#types/ab-attr-param-types";
 
 /**
  * Applies a Battler Tag to the Pokemon after it loses or consumes an item.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Unburden_(Ability) | Unburden (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Unburden_(Ability)}
  */
 export class PostItemLostApplyBattlerTagAbAttr extends PostItemLostAbAttr {
   private readonly tagType: BattlerTagType;

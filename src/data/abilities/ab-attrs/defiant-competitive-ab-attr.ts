@@ -11,8 +11,8 @@ import type { PostStatStageChangeAbAttrParams } from "#types/ab-attr-param-types
  * | Defiant     | +2 Atk      |
  * | Competitive | +2 SpA      |
  *
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Defiant_(ability) | Defiant (Bulbapedia)}
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Competitive_(ability) | Competitive (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Defiant_(ability)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Competitive_(ability)}
  */
 export class DefiantCompetitiveAbAttr extends PostStatStageChangeAbAttr {
   // TODO: use `NonEmptyArray`

@@ -4,7 +4,7 @@ import type { ReflectStatStageChangeAbAttrParams } from "#types/ab-attr-param-ty
 
 /**
  * Attribute to reflect stat-lowering effects from moves and abilities back to their source.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Mirror_Armor_(Ability) | Mirror Armor (Bulbapedia)}.
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Mirror_Armor_(Ability)}.
  */
 export class ReflectStatStageChangeAbAttr extends AbAttr {
   protected override readonly abAttrKey = "ReflectStatStageChangeAbAttr";

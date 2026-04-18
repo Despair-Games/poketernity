@@ -8,7 +8,11 @@ import type { MoveEffectChanceMultiplierAbAttrParams } from "#types/ab-attr-para
  */
 const exceptMoves = Object.freeze<MoveId[]>([MoveId.ORDER_UP, MoveId.ELECTRO_SHOT]);
 
-/** Modifies moves additional effects with multipliers, such as Sheer Force and Serene Grace. */
+/**
+ * Applies a multiplier to the chance of a move's secondary effect
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Sheer_Force_(Ability)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Serene_Grace_(Ability)}
+ */
 export class MoveEffectChanceMultiplierAbAttr extends AbAttr {
   protected override readonly abAttrKey = "MoveEffectChanceMultiplierAbAttr";
 

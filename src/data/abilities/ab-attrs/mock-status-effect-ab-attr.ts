@@ -4,7 +4,7 @@ import type { MockStatusEffectAbAttrParams } from "#types/ab-attr-param-types";
 
 /**
  * Ability attribute that allows the ability holder to be treated as if it has a status effect.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Comatose_(Ability) | Comatose (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Comatose_(Ability)}
  */
 export class MockStatusEffectAbAttr extends AbAttr {
   protected override readonly abAttrKey = "MockStatusEffectAbAttr";

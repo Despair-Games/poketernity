@@ -11,7 +11,7 @@ import i18next from "i18next";
 export class ProtectStatAbAttr extends PreStatStageChangeAbAttr {
   protected override readonly abAttrKey = "ProtectStatAbAttr";
 
-  /** {@linkcode BattleStat} to protect or `undefined` if **all** {@linkcode BattleStat} are protected */
+  /** {@linkcode BattleStat} to protect or `undefined` if **all** `BattleStat`s are protected */
   private readonly protectedStat?: BattleStat;
 
   constructor(protectedStat?: BattleStat) {

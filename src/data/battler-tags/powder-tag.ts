@@ -14,7 +14,7 @@ import i18next from "i18next";
 /**
  * When the afflicted Pokemon uses a Fire-type move, the move is cancelled
  * and the Pokemon takes damage equal to 1/4 of it's maximum HP (rounded down).
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Powder_(move) | Powder (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Powder_(move)}
  */
 export class PowderTag extends BattlerTag {
   constructor() {

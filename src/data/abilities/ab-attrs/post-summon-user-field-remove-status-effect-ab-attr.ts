@@ -8,7 +8,7 @@ import { getStatusEffectHealText } from "#utils/status-effect-utils";
 
 /**
  * Removes supplied status effects from the user's field.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Pastel_Veil_(Ability) | Pastel Veil (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Pastel_Veil_(Ability)}
  */
 export class PostSummonUserFieldRemoveStatusEffectAbAttr extends PostSummonAbAttr {
   private readonly statusEffects: StatusEffect[];

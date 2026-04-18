@@ -9,8 +9,8 @@ import type { PokemonDefendCondition } from "#types/move-types";
  * Negates the damage from the first hit of a damaging move,
  * then removes the appropriate `BattlerTag` from the pokemon.
  *
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Disguise_(Ability) | Disguise (Bulbapedia)}
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Ice_Face_(Ability) | Ice Face (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Disguise_(Ability)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Ice_Face_(Ability)}
  */
 export class FormBlockDamageAbAttr extends ReceivedMoveDamageMultiplierAbAttr {
   private readonly multiplier: number;

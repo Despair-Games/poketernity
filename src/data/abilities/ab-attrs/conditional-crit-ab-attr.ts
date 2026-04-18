@@ -4,7 +4,7 @@ import type { PokemonAttackCondition } from "#types/move-types";
 
 /**
  * Guarantees a critical hit according to the given condition, except if target prevents critical hits.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Merciless_(Ability) | Merciless (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Merciless_(Ability)}
  */
 export class ConditionalCritAbAttr extends AbAttr {
   protected override readonly abAttrKey = "ConditionalCritAbAttr";

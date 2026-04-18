@@ -2,7 +2,7 @@ import { TypeImmunityAbAttr } from "#abilities/type-immunity-ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
 
-/** Used by Wonder Guard */
+/** @see {@link https://bulbapedia.bulbagarden.net/wiki/Wonder_Guard_(Ability)} */
 export class NonSuperEffectiveImmunityAbAttr extends TypeImmunityAbAttr {
   constructor() {
     // This `AbAttr` ignores the superclass's `immuneType` field and overrides the methods that make use of it

@@ -11,8 +11,8 @@ import i18next from "i18next";
 
 /**
  * Attribute used for moves which cut the user's Max HP in half.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Mind_Blown_(move) | Mind Blown (Bulbapedia)}
- * @see {@linkcode https://bulbapedia.bulbagarden.net/wiki/Steel_Beam_(move) | Steel Beam (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Mind_Blown_(move)}
+ * @see {@linkcode https://bulbapedia.bulbagarden.net/wiki/Steel_Beam_(move)}
  */
 export class HalfMaxHpRecoilAttr extends MoveEffectAttr {
   constructor() {

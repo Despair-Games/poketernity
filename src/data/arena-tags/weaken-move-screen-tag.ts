@@ -9,7 +9,7 @@ import { ValueHolder } from "#utils/common-utils";
 
 /** Reduces the damage of specific move categories in the arena. */
 export abstract class WeakenMoveScreenTag extends SerializableArenaTag {
-  public abstract override readonly tagType: ArenaScreenTagType;
+  public declare abstract readonly tagType: ArenaScreenTagType;
 
   // Getter to avoid unnecessary serialization and prevent modification
   protected abstract get weakenedCategories(): MoveCategory[];

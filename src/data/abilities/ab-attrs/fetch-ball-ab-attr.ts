@@ -7,7 +7,7 @@ import i18next from "i18next";
 
 /**
  * Attribute to add the last used Pokeball in the current battle back into the player's inventory.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Ball_Fetch_(Ability) | Ball Fetch (Bulbapedia)}.
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Ball_Fetch_(Ability)}.
  */
 export class FetchBallAbAttr extends PostTurnAbAttr {
   public override apply({ pokemon, simulated }: BaseAbAttrParams): void {

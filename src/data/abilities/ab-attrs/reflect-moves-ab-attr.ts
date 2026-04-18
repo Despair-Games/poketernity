@@ -9,7 +9,7 @@ import i18next from "i18next";
  * @remarks
  * Most of the logic on whether the move meets conditions to be reflected
  * can be found in {@linkcode MovePhase.tryReflectMove}.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Magic_Bounce_(Ability) | Magic Bounce (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Magic_Bounce_(Ability)}
  */
 export class ReflectMovesAbAttr extends PreDefendAbAttr {
   protected override readonly abAttrKey = "ReflectMovesAbAttr";

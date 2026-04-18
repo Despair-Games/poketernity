@@ -2839,15 +2839,15 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param move - The {@linkcode Move} being used
    * @returns The calculated accuracy multiplier.
    *
-   * ```
-   * | For ACC and EVA  | -6  | -5  | -4  | -3  | -2  | -1  |  0  | +1  | +2  | +3  | +4  | +5  | +6  |
-   * |------------------|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
-   * | Stage (EVA)      | +6  | +5  | +4  | +3  | +2  | +1  |  0  | -1  | -2  | -3  | -4  | -5  | -6  |
-   * | Gen V+           | 3/9 | 3/8 | 3/7 | 3/6 | 3/5 | 3/4 | 3/3 | 4/3 | 5/3 | 6/3 | 7/3 | 8/3 | 9/3 |
-   * ```
-   * @see {@link https://bulbapedia.bulbagarden.net/wiki/Stat_modifier#Stage_multipliers | Stat Stage multipliers (Bulbapedia)}
+   * |                     |     |     |     |     |     |     |     |     |     |     |     |     |     |
+   * |:-------------------:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+   * | Stat Stage (ACC)    | -6  | -5  | -4  | -3  | -2  | -1  |  0  | +1  | +2  | +3  | +4  | +5  | +6  |
+   * | Stat Stage (EVA)    | +6  | +5  | +4  | +3  | +2  | +1  |  0  | -1  | -2  | -3  | -4  | -5  | -6  |
+   * | Multiplier (Gen V+) | 3/9 | 3/8 | 3/7 | 3/6 | 3/5 | 3/4 | 3/3 | 4/3 | 5/3 | 6/3 | 7/3 | 8/3 | 9/3 |
+   *
+   * @see {@link https://bulbapedia.bulbagarden.net/wiki/Stat_modifier#Stage_multipliers}
    */
-  getAccuracyMultiplier(target: Pokemon, move: Move, simulated: boolean = true): number {
+  public getAccuracyMultiplier(target: Pokemon, move: Move, simulated: boolean = true): number {
     const isOhko = move.hasAttr(OneHitKOAccuracyAttr);
     if (isOhko) {
       return 1;
@@ -3937,15 +3937,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   /**
    * Checks if a status effect can be applied to the Pokemon.
    * @param effect - The {@linkcode StatusEffect | status effect} to check
-   * @param quiet - (Default `false`) Whether in-battle messages should trigger or not
+   * @param simulated - (Default `false`) Whether in-battle messages should trigger or not
    * @param overrideStatus - (Default `false`) Whether the Pokemon's current status can be overriden
    * @param sourcePokemon - (Default `null`) The Pokemon that is setting the status effect, if applicable
    * @param ignoreField - (Default `false`) Whether to ignore field effects (weather, terrain, etc.)
    */
-  // TODO: `quiet` should not be used in place of `simulated` if it is intended to do as the docs suggest
-  canSetStatus(
+  public canSetStatus(
     effect: StatusEffect,
-    quiet: boolean = false,
+    simulated: boolean = false,
     overrideStatus: boolean = false,
     sourcePokemon: Pokemon | null = null,
     ignoreField: boolean = false,
@@ -4008,7 +4007,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         const preventSleep = new ValueHolder(false);
         globalScene
           .getField(true)
-          .forEach((p) => applyBattlerTags<UproarTag>(BattlerTagType.UPROAR, p, quiet, this, preventSleep));
+          .forEach((p) => applyBattlerTags<UproarTag>(BattlerTagType.UPROAR, p, simulated, this, preventSleep));
 
         if (preventSleep.value || (this.isGrounded() && globalScene.arena.hasTerrain(TerrainType.ELECTRIC))) {
           return false;
@@ -4031,11 +4030,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     const cancelled = new ValueHolder(false);
-    applyAbAttrs("StatusEffectImmunityAbAttr", { pokemon: this, simulated: quiet, effect, cancelled });
+    applyAbAttrs("StatusEffectImmunityAbAttr", { pokemon: this, simulated, effect, cancelled });
 
     const userField = this.getField();
     userField.forEach((pokemon) =>
-      applyAbAttrs("UserFieldStatusEffectImmunityAbAttr", { pokemon, simulated: quiet, effect, cancelled }),
+      applyAbAttrs("UserFieldStatusEffectImmunityAbAttr", { pokemon, simulated, effect, cancelled }),
     );
 
     if (cancelled.value) {
@@ -4480,7 +4479,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @remarks
    * Does nothing if this Pokemon is somehow not the owner of the held item.
    * @param heldItem - The item stack to be reduced by 1.
-   * @param forBattle - (Default `true`) If `false`, do not trigger in-battle effects (such as Unburden) from losing the item.
+   * @param forBattle - (Default `true`) If `false`, do not trigger in-battle effects (such as Unburden) from losing the item. \
    *   For example, set this to `false` if the Pokemon is giving away the held item for a Mystery Encounter.
    * @returns Whether the item was removed successfully
    */

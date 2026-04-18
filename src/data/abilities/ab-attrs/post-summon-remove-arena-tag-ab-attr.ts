@@ -5,7 +5,7 @@ import type { BaseAbAttrParams } from "#types/ab-attr-param-types";
 
 /**
  * Removes specified arena tags when a Pokemon is summoned.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Screen_Cleaner_(Ability) | Screen Cleaner (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Screen_Cleaner_(Ability)}
  * @param arenaTags - The {@linkcode ArenaTagType | arena tags} to be removed
  */
 export class PostSummonRemoveArenaTagAbAttr extends PostSummonAbAttr {

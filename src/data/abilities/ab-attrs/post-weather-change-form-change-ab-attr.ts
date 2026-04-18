@@ -8,8 +8,8 @@ import type { NonEmptyArray } from "#types/utility-types";
 
 /**
  * Triggers weather-based form change when weather changes.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Forecast_(Ability) | Forecast (Bulbapedia)}
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Flower_Gift_(Ability) | Flower Gift (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Forecast_(Ability)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Flower_Gift_(Ability)}
  */
 // TODO: change `canApply`, cf https://github.com/pagefaultgames/pokerogue/pull/5857
 export class PostWeatherChangeFormChangeAbAttr extends PostWeatherChangeAbAttr {

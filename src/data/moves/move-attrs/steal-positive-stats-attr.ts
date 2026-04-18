@@ -11,7 +11,7 @@ import i18next from "i18next";
 
 /**
  * Attribute to steal the target's positive stat stages.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Spectral_Thief_(move) | Spectral Thief (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Spectral_Thief_(move)}
  */
 export class StealPositiveStatsAttr extends MoveEffectAttr {
   constructor() {

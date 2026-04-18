@@ -6,7 +6,7 @@ import type { PostDefendAbAttrParams } from "#types/ab-attr-param-types";
 
 /**
  * Attribute that prompts a stat stage change after the ability holder received a critical hit.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Anger_Point_(Ability) | Anger Point (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Anger_Point_(Ability)}
  */
 export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {
   private readonly stat: BattleStat;

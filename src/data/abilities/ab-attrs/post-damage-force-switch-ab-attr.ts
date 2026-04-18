@@ -15,8 +15,8 @@ import { toDmgValue } from "#utils/common-utils";
 
 /**
  * Ability attribute for forcing a Pokémon to switch out after its health drops below half.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Emergency_Exit_(Ability) | Emergency Exit (Bulbapedia)}
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Wimp_Out_(Ability) | Wimp Out (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Emergency_Exit_(Ability)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Wimp_Out_(Ability)}
  */
 export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
   private readonly hpRatio: number;

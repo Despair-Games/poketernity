@@ -8,7 +8,7 @@ import type { ValueHolder } from "#utils/common-utils";
 
 /**
  * Attribute to change a move's type to match the active weather.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Weather_Ball_(move) | Weather Ball (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Weather_Ball_(move)}
  */
 export class WeatherBallTypeAttr extends VariableMoveTypeAttr {
   override apply(_user: Pokemon, _target: Pokemon, move: Move, moveType: ValueHolder<ElementalType>): boolean {

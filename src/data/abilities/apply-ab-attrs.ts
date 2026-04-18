@@ -91,6 +91,7 @@ function applyAbAttrsInternal<K extends AbAttrKey>(
       // the type of the argument expected by `attr.canApply()`. This is OK, because we know that
       // `attr` is an instance of the `abAttrKey` class provided to the method, and typescript _will_ check
       // that the `params` object has the correct properties for that class at the callsites.
+      // cf https://stackoverflow.com/a/72891234
       const applied = attr.canApply(params as any);
       if (!applied) {
         continue;

@@ -64,8 +64,7 @@ export class MultiHitAttr extends MoveAttr {
          * | 4    | 3-5       | 3/20   | 15 |
          * | 5    | 0-2       | 3/20   | 15 |
          */
-        const rand = user.randSeedInt(20);
-        const hitValue = new ValueHolder(rand);
+        const hitValue = new ValueHolder(user.randSeedInt(20));
         applyAbAttrs("MaxMultiHitAbAttr", { pokemon: user, simulated: false, hitValue });
         if (hitValue.value >= 13) {
           return 2;

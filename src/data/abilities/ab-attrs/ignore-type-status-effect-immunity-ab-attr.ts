@@ -5,7 +5,7 @@ import type { IgnoreTypeStatusEffectImmunityAbAttrParams } from "#types/ab-attr-
 
 /**
  * If the defender is normally immune to a status effect due to its type, ignore that immunity.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Corrosion_(Ability) | Corrosion (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Corrosion_(Ability)}
  */
 export class IgnoreTypeStatusEffectImmunityAbAttr extends AbAttr {
   protected override readonly abAttrKey = "IgnoreTypeStatusEffectImmunityAbAttr";

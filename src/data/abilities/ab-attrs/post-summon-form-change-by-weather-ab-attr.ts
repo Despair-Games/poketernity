@@ -7,8 +7,8 @@ import type { BaseAbAttrParams } from "#types/ab-attr-param-types";
 
 /**
  * Triggers weather-based form change when summoned into an active weather.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Forecast_(Ability) | Forecast (Bulbapedia)}
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Flower_Gift_(Ability) | Flower Gift (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Forecast_(Ability)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Flower_Gift_(Ability)}
  */
 // TODO: implement https://github.com/pagefaultgames/pokerogue/pull/5857
 // don't forget `PostWeatherChangeFormChangeAbAttr`'s `canApply`

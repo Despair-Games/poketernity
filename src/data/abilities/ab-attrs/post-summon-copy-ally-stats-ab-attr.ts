@@ -6,7 +6,7 @@ import i18next from "i18next";
 
 /**
  * Copies the stat stages and critical hit stage of the user's ally.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Costar_(Ability) | Costar (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Costar_(Ability)}
  */
 export class PostSummonCopyAllyStatsAbAttr extends PostSummonAbAttr {
   public override apply({ pokemon, simulated }: BaseAbAttrParams): void {

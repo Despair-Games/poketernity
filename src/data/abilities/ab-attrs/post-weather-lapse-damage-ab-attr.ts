@@ -10,15 +10,11 @@ import i18next from "i18next";
 
 /**
  * These abilities inflict damage on the ability holder under specific weather conditions.
- *
- * | Ability     | Weather Condition           | Effect                                            | Notes                                                   |
- * |-------------|-----------------------------|---------------------------------------------------|---------------------------------------------------------|
- * | Solar Power |**\|** (Extremely) Harsh Sun |**\|** Inflicts 1/8 of the user's max HP as damage |**\|** No damage if sunny weather fades on the same turn |
- * | Dry Skin    |**\|** (Extremely) Harsh Sun |**\|** Inflicts 1/8 of the user's max HP as damage |**\|** -                                                 |
- *
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Solar_Power_(Ability) Solar Power (Ability) - Bulbapedia}
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Dry_Skin_(Ability) Dry Skin (Ability) - Bulbapedia}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Solar_Power_(Ability)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Dry_Skin_(Ability)}
  */
+// TODO: confirm that Dry Skin and Solar Power have differing effects if sun ends the same turn
+// Supposedly, Dry Skin will take damage at EoT if the sun ends that turn, whereas Solar Power will not
 export class PostWeatherLapseDamageAbAttr extends PostWeatherLapseAbAttr {
   private readonly damageFactor: number;
 
@@ -34,16 +30,13 @@ export class PostWeatherLapseDamageAbAttr extends PostWeatherLapseAbAttr {
     }
 
     const abilityName = this.source.name;
+    const pokemonNameWithAffix = getPokemonNameWithAffix(pokemon);
     globalScene.phaseManager.createAndUnshiftPhase(
       "MessagePhase",
-      i18next.t("abilityTriggers:postWeatherLapseDamage", {
-        pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-        abilityName,
-      }),
+      i18next.t("abilityTriggers:postWeatherLapseDamage", { pokemonNameWithAffix, abilityName }),
     );
-    pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() * this.damageFactor), {
-      result: HitResult.OTHER,
-    });
+
+    pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() * this.damageFactor), { result: HitResult.OTHER });
   }
 
   public override canApply({ pokemon }: Parameters<this["apply"]>[0]): boolean {

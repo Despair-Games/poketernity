@@ -6,7 +6,7 @@ import type { BaseAbAttrParams } from "#types/ab-attr-param-types";
 
 /**
  * Clears weather (including Primal weather) and terrain after Terastallization
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Teraform_Zero_(Ability) | Teraform Zero (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Teraform_Zero_(Ability)}
  */
 export class PostTeraFormChangeClearWeatherTerrainAbAttr extends AbAttr {
   protected override readonly abAttrKey = "PostTeraFormChangeClearWeatherTerrainAbAttr";

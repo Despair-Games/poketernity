@@ -204,5 +204,5 @@ export abstract class ArenaTag implements BaseArenaTag {
  * Abstract class for arena tags that can persist across turns.
  */
 export abstract class SerializableArenaTag extends ArenaTag {
-  abstract override readonly tagType: SerializableArenaTagType;
+  public declare abstract readonly tagType: SerializableArenaTagType;
 }

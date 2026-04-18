@@ -8,7 +8,7 @@ import type { CancelledAbAttrParams } from "#types/ab-attr-param-types";
 type ConditionFunc = (pokemon: Pokemon, move: Move) => boolean;
 
 /**
- * If a Pokemon has Mycelium Might and is holding a Quick Claw, the Quick Claw cannot activate for status move.
+ * If a Pokemon has Mycelium Might and is holding a Quick Claw, the Quick Claw cannot activate for status moves.
  * @see {@link https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9438575}
  */
 export class PreventBypassSpeedChanceAbAttr extends AbAttr {

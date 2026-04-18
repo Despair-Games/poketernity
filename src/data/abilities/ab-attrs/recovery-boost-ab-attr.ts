@@ -4,7 +4,7 @@ import type { MoveConditionFunc } from "#types/move-types";
 
 /**
  * Ability attribute that boosts a move's recovery by a certain factor if it meets specific conditions
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Mega_Launcher_(Ability) | Mega Launcher (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Mega_Launcher_(Ability)}
  */
 export class RecoveryBoostAbAttr extends AbAttr {
   protected override readonly abAttrKey = "RecoveryBoostAbAttr";

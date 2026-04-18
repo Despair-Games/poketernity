@@ -6,7 +6,7 @@ import { randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
 /**
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Imposter_(Ability) | Imposter (Bulbapedia)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Imposter_(Ability)}
  */
 export class PostSummonTransformAbAttr extends PostSummonAbAttr {
   public override apply({ pokemon, simulated }: BaseAbAttrParams): void {
