@@ -3,7 +3,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { Pokemon } from "#field/pokemon";
 import type { PokemonHeldItemModifier } from "#modifier/modifier";
-import type { Move } from "#moves/move";
+import type { PostDefendAbAttrParams } from "#types/ab-attr-param-types";
 import type { PokemonDefendCondition } from "#types/move-types";
 import { randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
@@ -17,28 +17,30 @@ export class PostDefendStealHeldItemAbAttr extends PostDefendAbAttr {
     this.condition = condition;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, _move: Move): void {
+  public override apply({ pokemon, simulated, attacker }: PostDefendAbAttrParams): void {
     if (simulated) {
       return;
     }
 
     const heldItems = this.getTargetHeldItems(attacker).filter((i) => i.isTransferable);
-    if (heldItems.length > 0) {
-      const stolenItem = randSeedItem(heldItems);
-      if (globalScene.tryTransferHeldItemModifier(stolenItem, pokemon, false)) {
-        globalScene.phaseManager.createAndUnshiftPhase(
-          "MessagePhase",
-          i18next.t("abilityTriggers:postDefendStealHeldItem", {
-            pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-            attackerName: attacker.name,
-            stolenItemType: stolenItem.type.name,
-          }),
-        );
-      }
+    if (heldItems.length === 0) {
+      return;
+    }
+
+    const stolenItem = randSeedItem(heldItems);
+    if (globalScene.tryTransferHeldItemModifier(stolenItem, pokemon, false)) {
+      globalScene.phaseManager.createAndUnshiftPhase(
+        "MessagePhase",
+        i18next.t("abilityTriggers:postDefendStealHeldItem", {
+          pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+          attackerName: attacker.name,
+          stolenItemType: stolenItem.type.name,
+        }),
+      );
     }
   }
 
-  public override canApply(...[pokemon, , attacker, move]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon, attacker, move }: Parameters<this["apply"]>[0]): boolean {
     if (!move.isAttackMove(attacker, pokemon) || !this.condition(pokemon, attacker, move)) {
       return false;
     }
@@ -50,6 +52,6 @@ export class PostDefendStealHeldItemAbAttr extends PostDefendAbAttr {
     return globalScene.findModifiers(
       (m) => m.isPokemonHeldItemModifier() && m.pokemonId === target.id,
       target.isPlayer(),
-    ) as PokemonHeldItemModifier[];
+    );
   }
 }

@@ -4,14 +4,14 @@ import { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { VariableMoveTypeAttr } from "#moves/variable-move-type-attr";
-import type { NumberHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 
 /**
  * Attribute to change a move's type to match the active weather.
- * Used by {@link https://bulbapedia.bulbagarden.net/wiki/Weather_Ball_(move) | Weather Ball}.
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Weather_Ball_(move)}
  */
 export class WeatherBallTypeAttr extends VariableMoveTypeAttr {
-  override apply(_user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {
+  override apply(_user: Pokemon, _target: Pokemon, move: Move, moveType: ValueHolder<ElementalType>): boolean {
     if (globalScene.arena.weather?.isEffectSuppressed()) {
       return false;
     }
@@ -33,7 +33,12 @@ export class WeatherBallTypeAttr extends VariableMoveTypeAttr {
         moveType.value = ElementalType.ICE;
         return true;
       default:
-        return false;
+        if (moveType.value === move.type) {
+          return false;
+        }
+        // Force move to have its original typing if it changed
+        moveType.value = move.type;
+        return true;
     }
   }
 }

@@ -125,10 +125,10 @@ describe("Ability - Guts", () => {
     expect(player).toHaveStatusEffect(StatusEffect.BURN);
     expect(enemy).toHaveTakenDamage(5);
 
-    const burnDamageReductionCancelled = new ValueHolder(false);
-    applyAbAttrs("BypassBurnDamageReductionAbAttr", player, true, burnDamageReductionCancelled);
+    const cancelled = new ValueHolder(false);
+    applyAbAttrs("BypassBurnDamageReductionAbAttr", { pokemon: player, simulated: true, cancelled });
 
-    expect(burnDamageReductionCancelled.value).toBe(true);
+    expect(cancelled.value).toBe(true);
   });
 
   it("should not boost atk when thawing itself", async () => {

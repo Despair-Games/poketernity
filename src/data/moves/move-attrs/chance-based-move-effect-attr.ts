@@ -5,7 +5,7 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr, type MoveEffectAttrOptions } from "#moves/move-effect-attr";
-import { NumberHolder } from "#utils/common-utils";
+import { ValueHolder } from "#utils/common-utils";
 
 export interface ChanceBasedMoveEffectAttrOptions extends MoveEffectAttrOptions {
   /** Overrides the secondary effect chance for this attr if set. */
@@ -52,15 +52,21 @@ export abstract class ChanceBasedMoveEffectAttr extends MoveEffectAttr {
    * effect is guaranteed to apply.
    */
   public getMoveChance(user: Pokemon, target: Pokemon, move: Move): number {
-    const moveChance = new NumberHolder(this.effectChanceOverride ?? move.chance);
+    const moveChance = new ValueHolder(this.effectChanceOverride ?? move.chance);
 
-    applyAbAttrs("MoveEffectChanceMultiplierAbAttr", user, false, moveChance, move);
+    applyAbAttrs("MoveEffectChanceMultiplierAbAttr", { pokemon: user, simulated: false, moveChance, move });
 
     const userSide = user.getArenaTagSide();
     globalScene.arena.applyTags<WaterFirePledgeTag>(ArenaTagType.WATER_FIRE_PLEDGE, userSide, false, moveChance);
 
     if (!this.selfTarget) {
-      applyAbAttrs("IgnoreMoveEffectsAbAttr", target, false, user, move, moveChance);
+      applyAbAttrs("IgnoreMoveEffectsAbAttr", {
+        pokemon: target,
+        simulated: false,
+        attacker: user,
+        move,
+        effectChance: moveChance,
+      });
     }
     return moveChance.value;
   }

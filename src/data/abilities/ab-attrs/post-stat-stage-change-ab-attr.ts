@@ -1,6 +1,5 @@
 import { AbAttr } from "#abilities/ab-attr";
-import type { BattleStat } from "#enums/stat";
-import type { Pokemon } from "#field/pokemon";
+import type { PostStatStageChangeAbAttrParams } from "#types/ab-attr-param-types";
 
 export abstract class PostStatStageChangeAbAttr extends AbAttr {
   protected override readonly abAttrKey = "PostStatStageChangeAbAttr";
@@ -9,21 +8,5 @@ export abstract class PostStatStageChangeAbAttr extends AbAttr {
     super(true);
   }
 
-  /**
-   * Applies an effect after the source's stat stage(s) change
-   * @param pokemon - The {@linkcode Pokemon} with this ability
-   * @param simulated - If `true`, suppresses changes to game state
-   * @param statsChanged - The {@linkcode BattleStat}s being changed
-   * @param stagesChanged - The change in stat stages
-   * @param source - The source Pokemon that inflicted/activated the stat change
-   * @param isStickyWeb - `true` if and only if Sticky Web inflicted the stat change
-   */
-  public abstract override apply(
-    _pokemon: Pokemon,
-    _simulated: boolean,
-    _statsChanged: BattleStat[],
-    _stagesChanged: number,
-    _source: Pokemon | undefined,
-    _isStickyWeb: boolean,
-  ): void;
+  public abstract override apply(params: PostStatStageChangeAbAttrParams): void;
 }

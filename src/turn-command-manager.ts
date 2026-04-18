@@ -496,7 +496,7 @@ export class TurnCommandManager {
         return;
       }
 
-      applyAbAttrs("BypassSpeedChanceAbAttr", pokemon, false, turnMove.move);
+      applyAbAttrs("BypassSpeedChanceAbAttr", { pokemon, simulated: false, move: turnMove.move });
       globalScene.applyModifiers(BypassSpeedChanceModifier, pokemon.isPlayer(), pokemon);
     });
   }

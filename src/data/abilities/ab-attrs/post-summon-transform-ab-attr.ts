@@ -1,15 +1,15 @@
 import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { Pokemon } from "#field/pokemon";
+import type { BaseAbAttrParams } from "#types/ab-attr-param-types";
 import { randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
 /**
- * Used by Imposter
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Imposter_(Ability)}
  */
 export class PostSummonTransformAbAttr extends PostSummonAbAttr {
-  public override apply(pokemon: Pokemon, simulated: boolean): void {
+  public override apply({ pokemon, simulated }: BaseAbAttrParams): void {
     const targets = pokemon.getOpponents();
     if (simulated || targets.length === 0) {
       return;
@@ -30,7 +30,7 @@ export class PostSummonTransformAbAttr extends PostSummonAbAttr {
     );
   }
 
-  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon }: Parameters<this["apply"]>[0]): boolean {
     return pokemon.getOpponents().length > 0;
   }
 }

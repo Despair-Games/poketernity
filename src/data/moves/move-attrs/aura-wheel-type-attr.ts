@@ -3,18 +3,14 @@ import { SpeciesId } from "#enums/species-id";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { VariableMoveTypeAttr } from "#moves/variable-move-type-attr";
-import { NumberHolder } from "#utils/common-utils";
+import type { ValueHolder } from "#utils/common-utils";
 
 /**
  * Attribute to change the move's type to Dark when used by Morpeko in Hangry Mode form.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Aura_Wheel_(move) | Aura Wheel}.
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Aura_Wheel_(move)}
  */
 export class AuraWheelTypeAttr extends VariableMoveTypeAttr {
-  override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {
-    if (!(moveType instanceof NumberHolder)) {
-      return false;
-    }
-
+  override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: ValueHolder<ElementalType>): boolean {
     if (user.species.speciesId === SpeciesId.MORPEKO) {
       const form = user.formIndex;
 

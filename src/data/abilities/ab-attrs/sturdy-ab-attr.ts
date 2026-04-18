@@ -1,8 +1,6 @@
 import { PreDefendAbAttr } from "#abilities/pre-defend-ab-attr";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import type { Pokemon } from "#field/pokemon";
-import type { Move } from "#moves/move";
-import type { ValueHolder } from "#utils/common-utils";
+import type { SturdyAbAttrParams } from "#types/ab-attr-param-types";
 
 /**
  * If the pokemon with this `AbAttr` is full HP and is hit with a move that would 1-hit faint it,
@@ -13,19 +11,13 @@ import type { ValueHolder } from "#utils/common-utils";
 export class SturdyAbAttr extends PreDefendAbAttr {
   protected override readonly abAttrKey = "SturdyAbAttr";
 
-  public override apply(
-    pokemon: Pokemon,
-    simulated: boolean,
-    _attacker: Pokemon,
-    _move: Move,
-    _damage: ValueHolder<number>,
-  ): void {
+  public override apply({ pokemon, simulated }: SturdyAbAttrParams): void {
     if (!simulated) {
       pokemon.addTag(BattlerTagType.STURDY, 1);
     }
   }
 
-  public override canApply(...[pokemon, , , , damage]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon, damage }: Parameters<this["apply"]>[0]): boolean {
     return pokemon.isFullHp() && pokemon.getMaxHp() > 1 && damage.value >= pokemon.hp;
   }
 }

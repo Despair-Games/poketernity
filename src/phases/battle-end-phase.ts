@@ -30,7 +30,7 @@ export class BattleEndPhase extends BattlePhase {
     }
 
     for (const pokemon of globalScene.getPokemonAllowedInBattle()) {
-      applyAbAttrs("PostBattleAbAttr", pokemon, false, this.isVictory);
+      applyAbAttrs("PostBattleAbAttr", { pokemon, simulated: false, isVictory: this.isVictory });
     }
 
     if (this.isVictory) {

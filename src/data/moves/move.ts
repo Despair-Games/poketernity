@@ -41,7 +41,7 @@ import { VariablePowerAttr } from "#moves/variable-power-attr";
 import { VariableTargetAttr } from "#moves/variable-target-attr";
 import type { MoveConditionFunc } from "#types/move-types";
 import type { AbstractConstructor, Constructor, nil } from "#types/utility-types";
-import { BooleanHolder, NumberHolder, ValueHolder } from "#utils/common-utils";
+import { ValueHolder } from "#utils/common-utils";
 import { applyMoveAttrs } from "#utils/move-utils";
 import { toCamelCaseString } from "#utils/string-utils";
 import i18next from "i18next";
@@ -330,9 +330,9 @@ export abstract class Move {
       return false;
     }
 
-    const bypassed = new BooleanHolder(false);
+    const bypassed = new ValueHolder(false);
     // TODO: Allow this to be simulated
-    applyAbAttrs("InfiltratorAbAttr", user, false, bypassed);
+    applyAbAttrs("InfiltratorAbAttr", { pokemon: user, simulated: false, bypassed });
 
     return !bypassed.value && !this.hasFlag(MoveFlags.SOUND_MOVE) && !this.hasFlag(MoveFlags.IGNORE_SUBSTITUTE);
   }
@@ -344,7 +344,7 @@ export abstract class Move {
    */
   condition(condition: MoveCondition | MoveConditionFunc): this {
     if (typeof condition === "function") {
-      condition = new MoveCondition(condition as MoveConditionFunc);
+      condition = new MoveCondition(condition);
     }
     this.conditions.push(condition);
 
@@ -638,9 +638,9 @@ export abstract class Move {
         break;
       case MoveFlags.IGNORE_ABILITIES:
         if (user.hasAbilityWithAttr("MoveAbilityBypassAbAttr")) {
-          const abilityEffectsIgnored = new ValueHolder(false);
-          applyAbAttrs("MoveAbilityBypassAbAttr", user, false, abilityEffectsIgnored, this);
-          if (abilityEffectsIgnored.value) {
+          const cancelled = new ValueHolder(false);
+          applyAbAttrs("MoveAbilityBypassAbAttr", { pokemon: user, simulated: false, cancelled, move: this });
+          if (cancelled.value) {
             return true;
           }
         }
@@ -680,7 +680,7 @@ export abstract class Move {
    * @param cancelled {@linkcode BooleanHolder} to hold boolean value
    * @returns string of the custom failure text, or `null` if it uses the default text ("But it failed!")
    */
-  getFailedText(user: Pokemon, target: Pokemon, move: Move, cancelled: BooleanHolder): string | null {
+  getFailedText(user: Pokemon, target: Pokemon, move: Move, cancelled: ValueHolder<boolean>): string | null {
     for (const attr of this.attrs) {
       const failedText = attr.getFailedText(user, target, move, cancelled);
       if (failedText !== null) {
@@ -743,10 +743,10 @@ export abstract class Move {
    * @returns The calculated accuracy of the move.
    */
   calculateBattleAccuracy(user: Pokemon, target: Pokemon, simulated: boolean = false) {
-    const moveAccuracy = new NumberHolder(this.accuracy);
+    const moveAccuracy = new ValueHolder(this.accuracy);
 
     applyMoveAttrs(VariableAccuracyAttr, user, target, this, moveAccuracy);
-    applyAbAttrs("WonderSkinAbAttr", target, simulated, user, this, moveAccuracy);
+    applyAbAttrs("WonderSkinAbAttr", { pokemon: target, simulated, attacker: user, move: this, moveAccuracy });
 
     if (moveAccuracy.value === -1) {
       return moveAccuracy.value;
@@ -778,14 +778,20 @@ export abstract class Move {
       return -1;
     }
 
-    const power = new NumberHolder(this.power);
-    const typeChangeMovePowerMultiplier = new NumberHolder(1);
+    const power = new ValueHolder(this.power);
+    const typeChangeHolder = new ValueHolder(this.type);
 
-    applyAbAttrs("MoveTypeChangeAbAttr", source, true, this, target, undefined, typeChangeMovePowerMultiplier);
+    applyAbAttrs("MoveTypeChangeAbAttr", {
+      pokemon: source,
+      simulated,
+      move: this,
+      moveType: typeChangeHolder,
+      defender: target,
+    });
 
     applyMoveAttrs(VariablePowerAttr, source, target, this, power);
 
-    applyAbAttrs("VariableMovePowerAbAttr", source, simulated, this, target, power);
+    applyAbAttrs("VariableMovePowerAbAttr", { pokemon: source, simulated, move: this, defender: target, power });
 
     const sourceTeraType = source.teraType;
     if (
@@ -801,9 +807,16 @@ export abstract class Move {
 
     const allyPokemon = source.getAlly();
     if (allyPokemon) {
-      applyAbAttrs("AllyMoveCategoryPowerBoostAbAttr", allyPokemon, simulated, this, target, power);
+      applyAbAttrs("AllyMoveCategoryPowerBoostAbAttr", {
+        pokemon: allyPokemon,
+        simulated,
+        move: this,
+        defender: target,
+        power,
+      });
     }
 
+    // TODO: this should be using `applyAbAttrs`
     const fieldAuras = new Set(
       globalScene.getField(true).flatMap((p) =>
         p.getAbilityAttrs("FieldMoveTypePowerBoostAbAttr").filter((attr) => {
@@ -813,16 +826,16 @@ export abstract class Move {
       ),
     );
     for (const aura of fieldAuras) {
-      aura.apply(source, simulated, this, target, power);
+      aura.apply({ pokemon: source, simulated, move: this, defender: target, power });
     }
 
-    const alliedField: Pokemon[] = source.getField();
-    alliedField.forEach((p) => applyAbAttrs("UserFieldMoveTypePowerBoostAbAttr", p, simulated, this, target, power));
-
-    power.value *= typeChangeMovePowerMultiplier.value;
+    const alliedField = source.getField();
+    alliedField.forEach((pokemon) =>
+      applyAbAttrs("UserFieldMoveTypePowerBoostAbAttr", { pokemon, simulated, move: this, defender: target, power }),
+    );
 
     const typeBoost = source.findTag<TypeBoostTag>(
-      (t) => t.isType<TypeBoostTag>(...TYPE_BOOST_TAG_TYPES) && t.boostedType === this.type,
+      (t) => t.isType<TypeBoostTag>(...TYPE_BOOST_TAG_TYPES) && t.boostedType === typeChangeHolder.value,
     );
     if (typeBoost) {
       power.value *= typeBoost.boostValue;
@@ -833,10 +846,10 @@ export abstract class Move {
         [...WEAKEN_MOVE_TYPE_ARENA_TAG_TYPES],
         ArenaTagSide.BOTH,
         simulated,
-        this.type,
+        typeChangeHolder.value,
         power,
       );
-      globalScene.applyModifiers(AttackTypeBoosterModifier, source.isPlayer(), source, this.type, power);
+      globalScene.applyModifiers(AttackTypeBoosterModifier, source.isPlayer(), source, typeChangeHolder.value, power);
     }
 
     if (source.hasTag(BattlerTagType.HELPING_HAND)) {
@@ -850,10 +863,10 @@ export abstract class Move {
   }
 
   getPriority(user: Pokemon, simulated: boolean = true) {
-    const priority = new NumberHolder(this.priority);
+    const priority = new ValueHolder(this.priority);
 
     applyMoveAttrs(IncrementMovePriorityAttr, user, null, this, priority);
-    applyAbAttrs("ChangeMovePriorityAbAttr", user, simulated, this, priority);
+    applyAbAttrs("ChangeMovePriorityAbAttr", { pokemon: user, simulated, move: this, priority });
 
     return priority.value;
   }
@@ -942,7 +955,7 @@ export class AttackMove extends Move {
     attackScore = Math.pow(effectiveness - 1, 2) * effectiveness < 1 ? -2 : 2;
     if (attackScore) {
       if (this.category === MoveCategory.PHYSICAL) {
-        const atk = new NumberHolder(user.getEffectiveStat(Stat.ATK, { opponent: target }));
+        const atk = new ValueHolder(user.getEffectiveStat(Stat.ATK, { opponent: target }));
         if (atk.value > user.getEffectiveStat(Stat.SPATK, { opponent: target })) {
           const statRatio = user.getEffectiveStat(Stat.SPATK, { opponent: target }) / atk.value;
           if (statRatio <= 0.75) {
@@ -952,7 +965,7 @@ export class AttackMove extends Move {
           }
         }
       } else {
-        const spAtk = new NumberHolder(user.getEffectiveStat(Stat.SPATK, { opponent: target }));
+        const spAtk = new ValueHolder(user.getEffectiveStat(Stat.SPATK, { opponent: target }));
         if (spAtk.value > user.getEffectiveStat(Stat.ATK, { opponent: target })) {
           const statRatio = user.getEffectiveStat(Stat.ATK, { opponent: target }) / spAtk.value;
           if (statRatio <= 0.75) {
@@ -963,7 +976,7 @@ export class AttackMove extends Move {
         }
       }
 
-      const power = new NumberHolder(this.power);
+      const power = new ValueHolder(this.power);
       applyMoveAttrs(VariablePowerAttr, user, target, move, power);
 
       attackScore += Math.floor(power.value / 5);

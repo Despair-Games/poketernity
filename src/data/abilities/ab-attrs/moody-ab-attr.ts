@@ -1,16 +1,15 @@
 import { PostTurnAbAttr } from "#abilities/post-turn-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { EFFECTIVE_STATS } from "#enums/stat";
-import type { Pokemon } from "#field/pokemon";
+import type { BaseAbAttrParams } from "#types/ab-attr-param-types";
 
 /**
- * Attribute to randomly increase one stat stage by 2 and decrease a different
- * stat stage by 1. Any stat stage at +6 or -6 is excluded from being increased
- * or decreased, respectively.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Moody_(Ability) | Moody}.
+ * Attribute to randomly increase one stat stage by 2 and decrease a different stat stage by 1. \
+ * Any stat stage at +6 or -6 is excluded from being increased or decreased, respectively.
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Moody_(Ability)}.
  */
 export class MoodyAbAttr extends PostTurnAbAttr {
-  public override apply(pokemon: Pokemon, simulated: boolean): void {
+  public override apply({ pokemon, simulated }: BaseAbAttrParams): void {
     if (simulated) {
       return;
     }
@@ -29,6 +28,7 @@ export class MoodyAbAttr extends PostTurnAbAttr {
         2,
       );
     }
+
     if (canLower.length > 0) {
       const loweredStat = canLower[pokemon.randSeedInt(canLower.length)];
       globalScene.phaseManager.createAndUnshiftPhase(

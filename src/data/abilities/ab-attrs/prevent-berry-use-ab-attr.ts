@@ -1,7 +1,6 @@
 import { AbAttr } from "#abilities/ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { Pokemon } from "#field/pokemon";
-import type { ValueHolder } from "#utils/common-utils";
+import type { PreventBerryUseAbAttrParams } from "#types/ab-attr-param-types";
 import i18next from "i18next";
 
 export class PreventBerryUseAbAttr extends AbAttr {
@@ -11,16 +10,11 @@ export class PreventBerryUseAbAttr extends AbAttr {
     super(true);
   }
 
-  public override apply(
-    _pokemon: Pokemon,
-    _simulated: boolean,
-    _target: Pokemon,
-    cancelled: ValueHolder<boolean>,
-  ): void {
+  public override apply({ cancelled }: PreventBerryUseAbAttrParams): void {
     cancelled.value = true;
   }
 
-  public override getTriggerMessage(_pokemon: Pokemon, _abilityName: string, target: Pokemon): string {
+  public override getTriggerMessage({ target }: Parameters<this["apply"]>[0]): string {
     return i18next.t("abilityTriggers:preventBerryUse", { pokemonNameWithAffix: getPokemonNameWithAffix(target) });
   }
 }

@@ -5,6 +5,7 @@ import { globalScene } from "#app/global-scene";
 import { logModifiers } from "#app/loggers";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { activeOverrides } from "#app/overrides";
+import { TYPE_BOOST_ITEM_BOOST_PERCENT } from "#constants/game-constants";
 import { PARTY_UI_NO_EFFECT_MSG_i18N_KEY } from "#constants/ui-constants";
 import { allMoves } from "#data/data-lists";
 import { getNatureName, getNatureStatMultiplier } from "#data/nature";
@@ -1184,7 +1185,7 @@ export class AttackTypeBoosterModifierTypeGenerator extends ModifierTypeGenerato
   constructor() {
     super((party: Pokemon[], pregenArgs?: any[]) => {
       if (pregenArgs && pregenArgs.length === 1 && pregenArgs[0] in Object.values(ElementalType)) {
-        return new AttackTypeBoosterModifierType(pregenArgs[0] as ElementalType, 20);
+        return new AttackTypeBoosterModifierType(pregenArgs[0] as ElementalType, TYPE_BOOST_ITEM_BOOST_PERCENT);
       }
 
       const attackMoveTypes = party.flatMap((p) =>
@@ -1194,7 +1195,7 @@ export class AttackTypeBoosterModifierTypeGenerator extends ModifierTypeGenerato
           .filter((m) => m.isAttackMove())
           .map((m) => m.type),
       );
-      if (!attackMoveTypes.length) {
+      if (attackMoveTypes.length === 0) {
         return null;
       }
 
@@ -1232,7 +1233,7 @@ export class AttackTypeBoosterModifierTypeGenerator extends ModifierTypeGenerato
         weight += typeWeight;
       }
 
-      return new AttackTypeBoosterModifierType(type!, 20);
+      return new AttackTypeBoosterModifierType(type!, TYPE_BOOST_ITEM_BOOST_PERCENT);
     });
   }
 }

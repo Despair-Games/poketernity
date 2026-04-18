@@ -5,7 +5,7 @@ import type { Pokemon } from "#field/pokemon";
 import type { PokemonHeldItemModifier } from "#modifier/modifier";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import { BooleanHolder } from "#utils/common-utils";
+import { ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -30,9 +30,9 @@ export class RemoveHeldItemAttr extends MoveEffectAttr {
       return false;
     }
 
-    const cancelled = new BooleanHolder(false);
+    const cancelled = new ValueHolder(false);
 
-    applyAbAttrs("BlockItemTheftAbAttr", target, false, cancelled);
+    applyAbAttrs("BlockItemTheftAbAttr", { pokemon: target, simulated: false, cancelled });
 
     if (cancelled.value === true) {
       return false;
@@ -45,7 +45,7 @@ export class RemoveHeldItemAttr extends MoveEffectAttr {
       heldItems = heldItems.filter((m) => m.isBerryModifier() && m.pokemonId === target.id, target.isPlayer());
     }
 
-    if (heldItems.length) {
+    if (heldItems.length > 0) {
       const removedItem = heldItems[user.randSeedInt(heldItems.length)];
 
       // Decrease item amount and update icon
@@ -85,11 +85,11 @@ export class RemoveHeldItemAttr extends MoveEffectAttr {
 
   override getUserBenefitScore(_user: Pokemon, target: Pokemon, _move: Move): number {
     const heldItems = this.getTargetHeldItems(target);
-    return heldItems.length ? 5 : 0;
+    return heldItems.length > 0 ? 5 : 0;
   }
 
   override getTargetBenefitScore(_user: Pokemon, target: Pokemon, _move: Move): number {
     const heldItems = this.getTargetHeldItems(target);
-    return heldItems.length ? -5 : 0;
+    return heldItems.length > 0 ? -5 : 0;
   }
 }

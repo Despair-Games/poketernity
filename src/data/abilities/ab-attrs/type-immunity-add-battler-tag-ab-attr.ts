@@ -1,10 +1,8 @@
 import { TypeImmunityAbAttr } from "#abilities/type-immunity-ab-attr";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { ElementalType } from "#enums/elemental-type";
-import type { Pokemon } from "#field/pokemon";
-import type { Move } from "#moves/move";
+import type { TypeImmunityAbAttrParams } from "#types/ab-attr-param-types";
 import type { AbAttrCondition } from "#types/ability-types";
-import type { ValueHolder } from "#utils/common-utils";
 
 export class TypeImmunityAddBattlerTagAbAttr extends TypeImmunityAbAttr {
   private readonly tagType: BattlerTagType;
@@ -17,22 +15,16 @@ export class TypeImmunityAddBattlerTagAbAttr extends TypeImmunityAbAttr {
     this.turnCount = turnCount;
   }
 
-  public override apply(
-    pokemon: Pokemon,
-    simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    cancelled: ValueHolder<boolean>,
-    typeMultiplier: ValueHolder<number>,
-  ): void {
-    super.apply(pokemon, simulated, attacker, move, cancelled, typeMultiplier);
+  public override apply(params: TypeImmunityAbAttrParams): void {
+    const { simulated, pokemon } = params;
+    super.apply(params);
     if (!simulated) {
       pokemon.addTag(this.tagType, this.turnCount, undefined, pokemon.id);
     }
   }
 
   // The added battler tag supplies the trigger message instead
-  public override getTriggerMessage(_pokemon: Pokemon, _abilityName: string): string | null {
+  public override getTriggerMessage(): string | null {
     return null;
   }
 }

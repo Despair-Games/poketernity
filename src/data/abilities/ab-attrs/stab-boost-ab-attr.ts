@@ -1,30 +1,19 @@
 import { AbAttr } from "#abilities/ab-attr";
-import type { AbilityId } from "#enums/ability-id";
 import { ElementalType } from "#enums/elemental-type";
-import type { Pokemon } from "#field/pokemon";
-import type { Move } from "#moves/move";
-import type { ValueHolder } from "#utils/common-utils";
+import type { StabBoostAbAttrParams } from "#types/ab-attr-param-types";
 
 /**
- * Increases the STAB multiplier by `+0.5` if the move type is the same as one of the pokemon's types.
- * If the Pokemon is terastallized, then the STAB multiplier is only applied if the move type is the same as the tera type.
+ * Increases the STAB multiplier by `+0.5` if the move type is the same as one of the pokemon's types. \
+ * If the Pokemon is terastallized, then the STAB multiplier is only applied if the move type is the same as the tera type. \
  * The total STAB multiplier is capped at `2.25`.
  *
- * Used for the {@linkcode AbilityId.ADAPTABILITY | Adaptability} ability.
- * @see {@link https://bulbapedia.bulbagarden.net/wiki/Adaptability_(Ability) | Adaptability (Ability) - Bulbapedia}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Adaptability_(Ability)}
  * @see {@link https://github.com/Despair-Games/poketernity/blob/beta/docs/stab.md}
  */
 export class StabBoostAbAttr extends AbAttr {
   protected override readonly abAttrKey = "StabBoostAbAttr";
 
-  /**
-   * @param pokemon - The {@linkcode Pokemon} with this ability
-   * @param _simulated - n/a
-   * @param move - The {@linkcode Move} being used
-   * @param stabMultiplier - A {@linkcode NumberHolder} containing the move's STAB multiplier for the current attack
-   * @returns `true` if the STAB multiplier was increased
-   */
-  public override apply(pokemon: Pokemon, _simulated: boolean, move: Move, stabMultiplier: ValueHolder<number>): void {
+  public override apply({ pokemon, move, stabMultiplier }: StabBoostAbAttrParams): void {
     if (pokemon.isTerastallized) {
       if (pokemon.getTypes().includes(pokemon.teraType) && pokemon.teraType === pokemon.getMoveType(move)) {
         // If the tera type is one of the pokemon's original types then the STAB multiplier is increased by 0.25 (to 2.25)
@@ -39,7 +28,7 @@ export class StabBoostAbAttr extends AbAttr {
     }
   }
 
-  public override canApply(...[pokemon, , move]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon, move }: Parameters<this["apply"]>[0]): boolean {
     const moveType = pokemon.getMoveType(move);
     return moveType !== ElementalType.STELLAR && pokemon.getTypes(true).includes(moveType);
   }

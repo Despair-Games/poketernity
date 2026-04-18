@@ -2,7 +2,8 @@ import { AbAttr } from "#abilities/ab-attr";
 import type { AbilityId } from "#enums/ability-id";
 import type { EffectiveStat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
-import type { ValueHolder } from "#utils/common-utils";
+import type { FieldStatMultiplierAbAttrParams } from "#types/ab-attr-param-types";
+import type { Exact } from "#types/utility-types";
 
 type TargetCondition = (params: { pokemon: Pokemon; target: Pokemon; abilitiesApplied: Set<AbilityId> }) => boolean;
 
@@ -25,28 +26,12 @@ export class FieldStatMultiplierAbAttr extends AbAttr {
     this.targetCondition = targetCondition;
   }
 
-  /**
-   * Multiplies the given stat value by this attribute's multiplier
-   * @param pokemon The {@linkcode Pokemon} with this ability
-   * @param simulated If `true`, suppresses changes to game state
-   * @param stat The {@linkcode EffectiveStat} being checked
-   * @param statValue {@linkcode NumberHolder} the value of the checked stat
-   * @param target The {@linkcode Pokemon} to which the ability may apply
-   * @param hasApplied {@linkcode BooleanHolder} whether or not another multiplier has been applied to this stat
-   */
-  public override apply(
-    _pokemon: Pokemon,
-    _simulated: boolean,
-    _stat: EffectiveStat,
-    statValue: ValueHolder<number>,
-    _target: Pokemon,
-    abilitiesApplied: Set<AbilityId>,
-  ): void {
+  public override apply({ statValue, abilitiesApplied }: FieldStatMultiplierAbAttrParams): void {
     statValue.value *= this.multiplier;
     abilitiesApplied.add(this.source.id);
   }
 
-  public override canApply(...[pokemon, , stat, , target, abilitiesApplied]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon, stat, target, abilitiesApplied }: Exact<Parameters<this["apply"]>[0]>): boolean {
     return stat === this.stat && this.targetCondition({ pokemon, target, abilitiesApplied });
   }
 }

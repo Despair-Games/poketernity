@@ -2,7 +2,6 @@ import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/game-manager";
-import type { NumberHolder } from "#utils/common-utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -41,7 +40,7 @@ describe("Abilities - Punk Rock", () => {
     game.move.select(MoveId.UPROAR);
     await game.toEndOfTurn();
 
-    const damageMultiplier = (abilitySpy.mock.lastCall?.[4] as NumberHolder).value;
+    const damageMultiplier = abilitySpy.mock.lastCall?.[0].multiplier.value;
     expect(damageMultiplier).toBe(0.5);
   });
 });

@@ -9,7 +9,7 @@ import type { PokemonMove } from "#field/pokemon-move";
 import type { Move, MoveAttrFilter } from "#moves/move";
 import type { MoveAttr } from "#moves/move-attr";
 import type { AbstractConstructor } from "#types/utility-types";
-import { BooleanHolder, getTSEnumKeys, toDmgValue } from "#utils/common-utils";
+import { getTSEnumKeys, toDmgValue, ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 //#region Exports
@@ -17,8 +17,8 @@ import i18next from "i18next";
 export const FilterAllMoves = (_pokemonMove: PokemonMove) => null;
 
 export const crashDamageFunc = (user: Pokemon, _move: Move): boolean => {
-  const cancelled = new BooleanHolder(false);
-  applyAbAttrs("BlockNonDirectDamageAbAttr", user, false, cancelled);
+  const cancelled = new ValueHolder(false);
+  applyAbAttrs("BlockNonDirectDamageAbAttr", { pokemon: user, simulated: false, cancelled });
   if (cancelled.value) {
     return false;
   }

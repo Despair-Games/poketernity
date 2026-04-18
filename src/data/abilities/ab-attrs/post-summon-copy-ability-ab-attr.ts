@@ -2,17 +2,19 @@ import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbilityId } from "#enums/ability-id";
 import type { Pokemon } from "#field/pokemon";
+import type { BaseAbAttrParams } from "#types/ab-attr-param-types";
 import { randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
 /**
- * Attempts to copy a pokemon's ability. Used by Trace.
+ * Temporarily sets the user's ability to be the same as the target's ability.
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Trace_(Ability)}
  */
 export class PostSummonCopyAbilityAbAttr extends PostSummonAbAttr {
   private target: Pokemon;
   private targetAbilityName: string;
 
-  public override apply(pokemon: Pokemon, simulated: boolean): void {
+  public override apply({ pokemon, simulated }: BaseAbAttrParams): void {
     if (simulated) {
       return;
     }
@@ -24,7 +26,7 @@ export class PostSummonCopyAbilityAbAttr extends PostSummonAbAttr {
     pokemon.updateInfo();
   }
 
-  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon }: Parameters<this["apply"]>[0]): boolean {
     const targets = pokemon.getOpponents();
     if (targets.length === 0) {
       return false;
@@ -35,7 +37,7 @@ export class PostSummonCopyAbilityAbAttr extends PostSummonAbAttr {
     return this.target.getAbility().copiable || this.target.getAbility().id === AbilityId.WONDER_GUARD;
   }
 
-  public override getTriggerMessage(pokemon: Pokemon, _abilityName: string): string {
+  public override getTriggerMessage({ pokemon }: Parameters<this["apply"]>[0]): string {
     return i18next.t("abilityTriggers:trace", {
       pokemonName: getPokemonNameWithAffix(pokemon),
       targetName: getPokemonNameWithAffix(this.target),

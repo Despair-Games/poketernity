@@ -1154,10 +1154,12 @@ export class BattleScene extends SceneBase {
   }
 
   getDoubleBattleChance(newWaveIndex: number, playerField: PlayerPokemon[]) {
-    const doubleChance = new NumberHolder(newWaveIndex % 10 === 0 ? 32 : 8);
-    this.applyModifiers(DoubleBattleChanceBoosterModifier, true, doubleChance);
-    playerField.forEach((p) => applyAbAttrs("DoubleBattleChanceAbAttr", p, false, doubleChance));
-    return Math.max(doubleChance.value, 1);
+    const doubleBattleChance = new ValueHolder(newWaveIndex % 10 === 0 ? 32 : 8);
+    this.applyModifiers(DoubleBattleChanceBoosterModifier, true, doubleBattleChance);
+    playerField.forEach((p) =>
+      applyAbAttrs("DoubleBattleChanceAbAttr", { pokemon: p, simulated: false, doubleBattleChance }),
+    );
+    return Math.max(doubleBattleChance.value, 1);
   }
 
   newBattle(
@@ -1330,9 +1332,9 @@ export class BattleScene extends SceneBase {
 
         for (const pokemon of this.getPlayerParty()) {
           pokemon.resetWaveData();
-          pokemon.resetTera(); // TODO: put this in resetWaveData once Arena reset behavior is changed?
+          pokemon.resetTera();
 
-          applyAbAttrs("PostBattleInitAbAttr", pokemon, false);
+          applyAbAttrs("PostBattleInitAbAttr", { pokemon, simulated: false });
 
           // In Scarlet/Violet, the player's Tera Orb automatically recharges after every battle once they've caught Terapagos
           // The player's Tera Orb also automatically recharges when fighting the Elite 4 or in Area Zero (the endgame area)
@@ -2103,7 +2105,7 @@ export class BattleScene extends SceneBase {
     const cancelled = new ValueHolder(false);
 
     if (source?.isOpponent(target)) {
-      applyAbAttrs("BlockItemTheftAbAttr", source, simulated, cancelled);
+      applyAbAttrs("BlockItemTheftAbAttr", { pokemon: source, simulated, cancelled });
     }
 
     if (cancelled.value) {
@@ -2159,7 +2161,7 @@ export class BattleScene extends SceneBase {
     const cancelled = new BooleanHolder(false);
 
     if (source && source.isPlayer() !== target.isPlayer()) {
-      applyAbAttrs("BlockItemTheftAbAttr", source, false, cancelled);
+      applyAbAttrs("BlockItemTheftAbAttr", { pokemon: source, simulated: false, cancelled });
     }
 
     if (cancelled.value) {
@@ -2199,13 +2201,13 @@ export class BattleScene extends SceneBase {
           if (target.isPlayer()) {
             this.addModifier(newItemModifier, ignoreUpdate, playSound, false, instant);
             if (source && itemLost) {
-              applyAbAttrs("PostItemLostAbAttr", source, false);
+              applyAbAttrs("PostItemLostAbAttr", { pokemon: source, simulated: false });
             }
             return true;
           }
           this.addEnemyModifier(newItemModifier, ignoreUpdate, instant);
           if (source && itemLost) {
-            applyAbAttrs("PostItemLostAbAttr", source, false);
+            applyAbAttrs("PostItemLostAbAttr", { pokemon: source, simulated: false });
           }
           return true;
         }
@@ -2861,10 +2863,10 @@ export class BattleScene extends SceneBase {
     }
 
     if (switchType === SwitchType.FORCE_SWITCH) {
-      const blockedByAbility = new ValueHolder(false);
-      applyAbAttrs("ForceSwitchOutImmunityAbAttr", pokemon, false, blockedByAbility);
+      const cancelled = new ValueHolder(false);
+      applyAbAttrs("ForceSwitchOutImmunityAbAttr", { pokemon, simulated: false, cancelled });
 
-      if (blockedByAbility.value || pokemon.isMax()) {
+      if (cancelled.value || pokemon.isMax()) {
         return false;
       }
     }
@@ -2949,10 +2951,10 @@ export class BattleScene extends SceneBase {
       return false;
     }
 
-    const blockedByAbility = new ValueHolder(false);
-    applyAbAttrs("ForceSwitchOutImmunityAbAttr", pokemon, false, blockedByAbility);
+    const cancelled = new ValueHolder(false);
+    applyAbAttrs("ForceSwitchOutImmunityAbAttr", { pokemon, simulated: false, cancelled });
 
-    return !(blockedByAbility.value || pokemon.isMax());
+    return !(cancelled.value || pokemon.isMax());
   }
 
   /**

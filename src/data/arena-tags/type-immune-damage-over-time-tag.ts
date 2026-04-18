@@ -6,9 +6,8 @@ import { ArenaTagSide } from "#enums/arena-tag-side";
 import { CommonAnim } from "#enums/common-anim";
 import { ElementalType } from "#enums/elemental-type";
 import type { MoveId } from "#enums/move-id";
-import type { Pokemon } from "#field/pokemon";
 import type { TypeImmuneDamageOverTimeTagType } from "#types/arena-tag-types";
-import { BooleanHolder, enumValueToKey, toDmgValue } from "#utils/common-utils";
+import { enumValueToKey, toDmgValue, ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -22,7 +21,7 @@ import i18next from "i18next";
  * - G-Max Volcalith: Rock
  */
 export class TypeImmuneDamageOverTimeTag extends SerializableArenaTag {
-  public override readonly tagType: TypeImmuneDamageOverTimeTagType;
+  public declare readonly tagType: TypeImmuneDamageOverTimeTagType;
 
   readonly #immuneType: ElementalType;
 
@@ -34,26 +33,26 @@ export class TypeImmuneDamageOverTimeTag extends SerializableArenaTag {
     immuneType: ElementalType,
   ) {
     super(4, sourceMoveId, sourceId, side);
+
     this.tagType = tagType;
     this.#immuneType = immuneType;
   }
 
   private getAnimationForType() {
     switch (this.#immuneType) {
-      case ElementalType.GRASS:
-        return CommonAnim.WRAP;
+      case ElementalType.ROCK:
+        return CommonAnim.SALT_CURE;
       case ElementalType.FIRE:
         return CommonAnim.FIRE_SPIN;
       case ElementalType.WATER:
         return CommonAnim.WHIRLPOOL;
-      case ElementalType.ROCK:
-        return CommonAnim.SALT_CURE;
+      case ElementalType.GRASS:
       default:
         return CommonAnim.WRAP;
     }
   }
 
-  override onAdd() {
+  public override onAdd() {
     globalScene.phaseManager.createAndUnshiftPhase(
       "MessagePhase",
       i18next.t(
@@ -62,15 +61,14 @@ export class TypeImmuneDamageOverTimeTag extends SerializableArenaTag {
     );
   }
 
-  override lapse(): boolean {
-    const field: Pokemon[] =
-      this.side === ArenaTagSide.PLAYER ? globalScene.getPlayerField() : globalScene.getEnemyField();
+  public override lapse(): boolean {
+    const field = this.side === ArenaTagSide.PLAYER ? globalScene.getPlayerField() : globalScene.getEnemyField();
 
     field
       .filter((pokemon) => pokemon.isActive(true) && !pokemon.isOfType(this.#immuneType) && !pokemon.switchOutStatus)
       .forEach((pokemon) => {
-        const cancelled = new BooleanHolder(false);
-        applyAbAttrs("BlockNonDirectDamageAbAttr", pokemon, false, cancelled);
+        const cancelled = new ValueHolder(false);
+        applyAbAttrs("BlockNonDirectDamageAbAttr", { pokemon, simulated: false, cancelled });
         if (cancelled.value) {
           return;
         }

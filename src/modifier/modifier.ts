@@ -40,7 +40,7 @@ import type {
 import { modifierTypes } from "#modifier/modifier-types";
 import { addTextObject } from "#ui/text-utils";
 import { hslToHex } from "#utils/color-utils";
-import { BooleanHolder, NumberHolder, toDmgValue } from "#utils/common-utils";
+import { BooleanHolder, NumberHolder, toDmgValue, type ValueHolder } from "#utils/common-utils";
 import { getModifierType } from "#utils/modifier-type-utils";
 import { inSpeedOrder } from "#utils/speed-order-generator";
 import i18next from "i18next";
@@ -1440,11 +1440,12 @@ export class AttackTypeBoosterModifier extends PokemonHeldItemModifier {
    * @param movePower the {@linkcode NumberHolder} that holds the power of the move
    * @returns `true` if boosts should be applied to the move.
    */
-  override shouldApply(pokemon?: Pokemon, moveType?: ElementalType, movePower?: NumberHolder): boolean {
+  override shouldApply(pokemon?: Pokemon, moveType?: ElementalType, movePower?: ValueHolder<number>): boolean {
     return (
       super.shouldApply(pokemon, moveType, movePower)
       && typeof moveType === "number"
-      && movePower instanceof NumberHolder
+      && !!movePower
+      && this.moveType === moveType
     );
   }
 
@@ -1929,7 +1930,7 @@ export class PokemonInstantReviveModifier extends PokemonHeldItemModifier {
 
     // Reapply Commander on the Pokemon's side of the field, if applicable
     for (const p of inSpeedOrder(pokemon.getArenaTagSide())) {
-      applyAbAttrs("CommanderAbAttr", p, false);
+      applyAbAttrs("CommanderAbAttr", { pokemon: p, simulated: false });
     }
     return true;
   }

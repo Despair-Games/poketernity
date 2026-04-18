@@ -2,13 +2,13 @@ import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { AbilityId } from "#enums/ability-id";
 import { MoveFlags } from "#enums/move-flags";
-import type { Pokemon } from "#field/pokemon";
-import type { Move } from "#moves/move";
+import type { PostDefendAbAttrParams } from "#types/ab-attr-param-types";
 import type { AbAttrKey, AbAttrMap } from "#types/ability-types";
 import i18next from "i18next";
 
 export class PostDefendAbilityGiveAbAttr extends PostDefendAbAttr {
   protected override readonly abAttrKey = "PostDefendAbilityGiveAbAttr";
+
   private readonly ability: AbilityId;
 
   constructor(ability: AbilityId) {
@@ -17,17 +17,19 @@ export class PostDefendAbilityGiveAbAttr extends PostDefendAbAttr {
   }
 
   public override is<K extends AbAttrKey>(abAttrKey: K): this is AbAttrMap[K] {
+    // this allows the `AbAttr` to be applied by `applyAbAttrs("PostDefendAbAttr", ...)`
+    // while allowing `.hasAttr("PostDefendAbilityGiveAbAttr")` to work
     return abAttrKey === this.abAttrKey || abAttrKey === "PostDefendAbAttr";
   }
 
-  public override apply(_pokemon: Pokemon, simulated: boolean, attacker: Pokemon, _move: Move): void {
+  public override apply({ simulated, attacker }: PostDefendAbAttrParams): void {
     if (!simulated) {
       attacker.summonData.ability = this.ability;
       attacker.waveData.abilitiesRevealed.add(this.ability);
     }
   }
 
-  public override canApply(...[pokemon, , attacker, move]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon, attacker, move }: Parameters<this["apply"]>[0]): boolean {
     const ability = attacker.getAbility();
     return (
       move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
@@ -37,7 +39,7 @@ export class PostDefendAbilityGiveAbAttr extends PostDefendAbAttr {
     );
   }
 
-  public override getTriggerMessage(pokemon: Pokemon, abilityName: string): string {
+  public override getTriggerMessage({ pokemon }: Parameters<this["apply"]>[0], abilityName: string): string {
     return i18next.t("abilityTriggers:postDefendAbilityGive", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       abilityName,

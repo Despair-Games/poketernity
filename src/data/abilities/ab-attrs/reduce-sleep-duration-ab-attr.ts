@@ -1,22 +1,22 @@
 import { AbAttr } from "#abilities/ab-attr";
 import { StatusEffect } from "#enums/status-effect";
-import type { Pokemon } from "#field/pokemon";
+import type { StatusEffectAbAttrParams } from "#types/ab-attr-param-types";
 
 /**
- * This attribute reduces the duration of sleep by half and is used by the ability Early Bird.
- * Early Bird halves the sleep duration. When the Pokémon is put to sleep, the number of turns it will remain asleep is preset, between 1 and 3.
- * This number of turns is halved for a Pokémon with Early Bird, rounded down if it is odd. So if only 1 turn is preset, it is rounded down to 0, causing the Pokémon to wake up the next time it moves.
- * @param statusEffect - The {@linkcode StatusEffect} to check for
+ * This attribute reduces the duration of sleep by half by causing
+ * the sleep turns remaining counter to tick down an extra time each turn.
+ * @see {@linkcode https://bulbapedia.bulbagarden.net/wiki/Early_Bird_(Ability)}
  */
 export class ReduceSleepDurationAbAttr extends AbAttr {
   protected override readonly abAttrKey = "ReduceSleepDurationAbAttr";
-  private readonly statusEffect: StatusEffect = StatusEffect.SLEEP;
 
-  public override apply(pokemon: Pokemon, _simulated: boolean, _statusEffect: StatusEffect): void {
+  private readonly statusEffect = StatusEffect.SLEEP;
+
+  public override apply({ pokemon }: StatusEffectAbAttrParams): void {
     pokemon.advanceStatusCounter();
   }
 
-  public override canApply(...[, , statusEffect]: Parameters<this["apply"]>): boolean {
-    return statusEffect === this.statusEffect;
+  public override canApply({ effect }: Parameters<this["apply"]>[0]): boolean {
+    return effect === this.statusEffect;
   }
 }

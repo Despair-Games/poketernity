@@ -103,20 +103,22 @@ export abstract class ArenaTag implements BaseArenaTag {
 
   /**
    * Applies the tag's effect(s). Should be called via {@linkcode Arena.applyTags}.
-   * @param _simulated - If `true`, should suppress changes to game state
-   * @param _args - Additional arguments
+   * @param simulated - If `true`, should suppress changes to game state
+   * @param args - Additional arguments
    * @returns `true` if effects are applied successfully.
    */
-  public apply(_simulated: boolean, ..._args: unknown[]): boolean {
+  // biome-ignore lint/correctness/noUnusedFunctionParameters: pseudo-abstract method
+  public apply(simulated: boolean, ...args: unknown[]): boolean {
     return true;
   }
 
   /**
    * Applies effects when the tag is first added to the field.
-   * @param _quiet - (Default `false`) If `true`, should suppress game messages during execution
+   * @param quiet - (Default `false`) If `true`, should suppress game messages during execution
    * @see {@linkcode Arena.addTag}
    */
-  public onAdd(_quiet: boolean = false): void {}
+  // biome-ignore lint/correctness/noUnusedFunctionParameters: pseudo-abstract method
+  public onAdd(quiet: boolean = false): void {}
 
   /**
    * Applies effects when the tag is removed from the field.
@@ -202,5 +204,5 @@ export abstract class ArenaTag implements BaseArenaTag {
  * Abstract class for arena tags that can persist across turns.
  */
 export abstract class SerializableArenaTag extends ArenaTag {
-  abstract override readonly tagType: SerializableArenaTagType;
+  public declare abstract readonly tagType: SerializableArenaTagType;
 }

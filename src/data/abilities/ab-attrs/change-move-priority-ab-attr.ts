@@ -1,12 +1,13 @@
 import { AbAttr } from "#abilities/ab-attr";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
-import type { ValueHolder } from "#utils/common-utils";
+import type { ChangeMovePriorityAbAttrParams } from "#types/ab-attr-param-types";
 
 type AbAttrMoveCondition = (pokemon: Pokemon, move: Move) => boolean;
 
 /**
- * This ability attribute changes the priority of the ability holder's moves by a specified amount if certain conditions have been met
+ * This ability attribute changes the priority of the ability holder's moves by a specified amount if certain conditions have been met.
+ * ```
  * +-----------------+--------------+-------------------------+
  * |  Ability Name   | Priority +/- |        Condition        |
  * +-----------------+--------------+-------------------------+
@@ -16,9 +17,11 @@ type AbAttrMoveCondition = (pokemon: Pokemon, move: Move) => boolean;
  * | Mycellium Might | -0.2         | Status Moves            |
  * | Stall           | -0.2         |                         |
  * +-----------------+--------------+-------------------------+
+ * ```
  */
 export class ChangeMovePriorityAbAttr extends AbAttr {
   protected override readonly abAttrKey = "ChangeMovePriorityAbAttr";
+
   /** The condition moves must follow for the priority change to apply */
   private readonly condition: AbAttrMoveCondition;
   /** The amount of priority added or subtracted */
@@ -31,11 +34,11 @@ export class ChangeMovePriorityAbAttr extends AbAttr {
     this.changeAmount = changeAmount;
   }
 
-  public override apply(_pokemon: Pokemon, _simulated: boolean, _move: Move, priority: ValueHolder<number>): void {
+  public override apply({ priority }: ChangeMovePriorityAbAttrParams): void {
     priority.value += this.changeAmount;
   }
 
-  public override canApply(...[pokemon, , move]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon, move }: Parameters<this["apply"]>[0]): boolean {
     return this.condition(pokemon, move);
   }
 }

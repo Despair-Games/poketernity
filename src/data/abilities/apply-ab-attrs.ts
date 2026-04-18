@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
-import type { AbAttrKey, AbAttrMap, AbAttrParamMap, AbilityFilterOptions } from "#types/ability-types";
+import type { AbAttrKey, AbAttrMap, AbAttrParamMap, ApplyAbAttrsOptions } from "#types/ability-types";
 
 //#region ApplyAbAttrsResult
 
@@ -19,25 +19,23 @@ interface ApplyAbAttrResult<K extends AbAttrKey> {
 
 /**
  * Apply abilities with the {@linkcode AbilityApplyMode.DEFAULT | DEFAULT} ability mode.
- * @typeParam TAttr - The specific ability attribute type.
  * @param abAttrKey - The {@linkcode AbAttrKey} to apply
  * @param params - The parameters for the given attribute's `apply` function
  * @returns An array of {@linkcode ApplyAbAttrResult | applied ability attributes}
  *
  * @see {@linkcode applyAbAttrsInternal}
  */
-export function applyAbAttrs<K extends AbAttrKey>(abAttrKey: K, ...params: AbAttrParamMap[K]): ApplyAbAttrResult<K>[] {
-  return applyAbAttrsInternal<K>({ canApplyOnly: true }, abAttrKey, ...params);
+export function applyAbAttrs<K extends AbAttrKey>(abAttrKey: K, params: AbAttrParamMap[K]): ApplyAbAttrResult<K>[] {
+  return applyAbAttrsInternal<K>({ canApplyOnly: true }, abAttrKey, params);
 }
 
 /**
  * Obtains the function to apply abilities corresponding to the given mode
  * @param mode - The {@linkcode AbilityApplyMode} determining how abilities are applied
  * @returns The function to apply abilities based on the mode:
- * - {@linkcode AbilityApplyMode.DEFAULT | DEFAULT} - Applies abilities without restriction
- *     (as long as they meet conditions to apply).
+ * - {@linkcode AbilityApplyMode.DEFAULT | DEFAULT} - Applies abilities normally.
  * - {@linkcode AbilityApplyMode.REVEALED | REVEALED} - Only applies abilities that have
- *     previously applied in the current battle.
+ *   been revealed in the current battle. Used for AI attack simulations.
  * - {@linkcode AbilityApplyMode.IGNORE | IGNORE} - Does nothing and returns an empty array.
  *
  * @see {@linkcode applyAbAttrs} (Default)
@@ -60,7 +58,6 @@ export function getAbApplyFunc(mode: AbilityApplyMode) {
 
 /**
  * Applies a Pokemon's ability attributes of matching type
- * @typeParam TAttr - The specific ability attribute type.
  * @param abAttrKey - The {@linkcode AbAttrKey} to apply
  * @param params - The parameters for the given attribute's `apply` function. This should include:
  * - `pokemon`: The {@linkcode Pokemon} with the ability
@@ -70,17 +67,17 @@ export function getAbApplyFunc(mode: AbilityApplyMode) {
  * @see {@linkcode AbAttr}
  */
 function applyAbAttrsInternal<K extends AbAttrKey>(
-  abFilterOptions: AbilityFilterOptions,
+  abFilterOptions: ApplyAbAttrsOptions,
   abAttrKey: K,
-  ...params: AbAttrParamMap[K]
+  params: AbAttrParamMap[K],
 ): ApplyAbAttrResult<K>[] {
   const results: ApplyAbAttrResult<K>[] = [];
-  const [pokemon, simulated, ...args] = params;
+  const { pokemon, simulated } = params;
   const abilities = pokemon.getAbilities(abFilterOptions);
 
-  abilities.forEach(({ ability, passive }) => {
+  for (const { ability, passive } of abilities) {
     if (passive && pokemon.getPassiveAbility().id === pokemon.getAbility().id) {
-      return;
+      continue;
     }
 
     const matchingAttrs = ability.getAttrs(abAttrKey).filter((attr) => {
@@ -88,28 +85,28 @@ function applyAbAttrsInternal<K extends AbAttrKey>(
       return !condition || condition(pokemon);
     });
 
-    matchingAttrs.forEach((attr) => {
+    for (const attr of matchingAttrs) {
       let message: ApplyAbAttrResult<K>["message"] = null;
-      // Typescript does not support narrowing the type of operands in generic methods, hence the `as any` inclusion
-      // (see https://stackoverflow.com/a/72891234)
-      // @ts-expect-error
-      const applied = attr.canApply(...params);
+      // We require an `as any` cast to suppress an error about the `params` type not being assignable to
+      // the type of the argument expected by `attr.canApply()`. This is OK, because we know that
+      // `attr` is an instance of the `abAttrKey` class provided to the method, and typescript _will_ check
+      // that the `params` object has the correct properties for that class at the callsites.
+      // cf https://stackoverflow.com/a/72891234
+      const applied = attr.canApply(params as any);
       if (!applied) {
-        return;
+        continue;
       }
 
       if (attr.showAbility && !simulated) {
         globalScene.phaseManager.createAndUnshiftPhase("ShowAbilityPhase", pokemon, passive);
       }
 
-      // @ts-expect-error: TS doesn't narrow `args` correctly (See above)
-      message = attr.getTriggerMessage(pokemon, ability.name, ...args);
+      message = attr.getTriggerMessage(params as any, ability.name);
       if (message && !simulated) {
         globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", message);
       }
 
-      // @ts-expect-error: TS doesn't narrow `args` correctly (See above)
-      attr.apply(pokemon, simulated, ...args);
+      attr.apply(params as any);
 
       pokemon.summonData.abilitiesApplied.add(ability.id);
 
@@ -121,8 +118,8 @@ function applyAbAttrsInternal<K extends AbAttrKey>(
       }
 
       results.push({ attr, applied, message });
-    });
-  });
+    }
+  }
 
   return results;
 }
@@ -133,8 +130,8 @@ function applyAbAttrsInternal<K extends AbAttrKey>(
  * @param params - The parameters for the given attribute's `apply` function
  * @returns An array of {@linkcode ApplyAbAttrResult | applied ability attributes}
  */
-function applyRevealedAbAttrs<K extends AbAttrKey>(abAttrKey: K, ...params: AbAttrParamMap[K]): ApplyAbAttrResult<K>[] {
-  return applyAbAttrsInternal<K>({ canApplyOnly: true, revealedOnly: true }, abAttrKey, ...params);
+function applyRevealedAbAttrs<K extends AbAttrKey>(abAttrKey: K, params: AbAttrParamMap[K]): ApplyAbAttrResult<K>[] {
+  return applyAbAttrsInternal<K>({ canApplyOnly: true, revealedOnly: true }, abAttrKey, params);
 }
 
 /**
@@ -146,7 +143,7 @@ function applyRevealedAbAttrs<K extends AbAttrKey>(abAttrKey: K, ...params: AbAt
  * a strongly-typed function instead of `() => []`. This shouldn't
  * be used outside of that context.
  */
-function applyNoAbAttrs<K extends AbAttrKey>(_abAttrKey: K, ..._params: AbAttrParamMap[K]): ApplyAbAttrResult<K>[] {
+function applyNoAbAttrs<K extends AbAttrKey>(_abAttrKey: K, _params: AbAttrParamMap[K]): ApplyAbAttrResult<K>[] {
   return [];
 }
 

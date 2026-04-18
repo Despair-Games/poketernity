@@ -1,16 +1,15 @@
 import { PreDefendAbAttr } from "#abilities/pre-defend-ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { Pokemon } from "#field/pokemon";
-import type { Move } from "#moves/move";
 import type { MovePhase } from "#phases/move-phase";
-import type { ValueHolder } from "#utils/common-utils";
+import type { ReflectMovesAbAttrParams } from "#types/ab-attr-param-types";
 import i18next from "i18next";
 
 /**
- * Attribute to apply the effects of {@linkcode https://bulbapedia.bulbagarden.net/wiki/Magic_Bounce_(Ability) | Magic Bounce}
- * on an incoming move, reflecting the move back to the user.
+ * Attribute to reflect a move back to the user.
+ * @remarks
  * Most of the logic on whether the move meets conditions to be reflected
  * can be found in {@linkcode MovePhase.tryReflectMove}.
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Magic_Bounce_(Ability)}
  */
 export class ReflectMovesAbAttr extends PreDefendAbAttr {
   protected override readonly abAttrKey = "ReflectMovesAbAttr";
@@ -19,21 +18,15 @@ export class ReflectMovesAbAttr extends PreDefendAbAttr {
     super(true);
   }
 
-  public override apply(
-    _pokemon: Pokemon,
-    _simulated: boolean,
-    _attacker: Pokemon,
-    _move: Move,
-    reflected: ValueHolder<boolean>,
-  ): void {
+  public override apply({ reflected }: ReflectMovesAbAttrParams): void {
     reflected.value = true;
   }
 
-  public override canApply(...[, , , , reflected]: Parameters<this["apply"]>): boolean {
+  public override canApply({ reflected }: Parameters<this["apply"]>[0]): boolean {
     return !reflected.value;
   }
 
-  public override getTriggerMessage(pokemon: Pokemon, _abilityName: string, _attacker: Pokemon, move: Move): string {
+  public override getTriggerMessage({ pokemon, move }: Parameters<this["apply"]>[0]): string {
     // "{pokemonNameWithAffix} bounced the {moveName} back!"
     return i18next.t("abilityTriggers:magicBounceOnReflect", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),

@@ -1,17 +1,14 @@
 import { PostAttackAbAttr } from "#abilities/post-attack-ab-attr";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import type { Pokemon } from "#field/pokemon";
-import type { Move } from "#moves/move";
+import type { PostAttackAbAttrParams } from "#types/ab-attr-param-types";
 
-/**
- * Ability attribute for Gorilla Tactics
- */
+/** @see {@link https://bulbapedia.bulbagarden.net/wiki/Gorilla_Tactics_(Ability)} */
 export class GorillaTacticsAbAttr extends PostAttackAbAttr {
   constructor() {
     super(false);
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean, _defender: Pokemon, _move: Move): void {
+  public override apply({ pokemon, simulated }: PostAttackAbAttrParams): void {
     if (simulated) {
       return;
     }
@@ -19,8 +16,8 @@ export class GorillaTacticsAbAttr extends PostAttackAbAttr {
     pokemon.addTag(BattlerTagType.GORILLA_TACTICS);
   }
 
-  public override canApply(...params: Parameters<this["apply"]>): boolean {
-    const [pokemon] = params;
-    return super.canApply(...params) && !pokemon.hasTag(BattlerTagType.GORILLA_TACTICS);
+  public override canApply(params: Parameters<this["apply"]>[0]): boolean {
+    const { pokemon } = params;
+    return super.canApply(params) && !pokemon.hasTag(BattlerTagType.GORILLA_TACTICS);
   }
 }

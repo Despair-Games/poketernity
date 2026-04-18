@@ -7,12 +7,13 @@ import { MoveId } from "#enums/move-id";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { SpeciesId } from "#enums/species-id";
 import type { Pokemon } from "#field/pokemon";
+import type { BaseAbAttrParams } from "#types/ab-attr-param-types";
 
 /**
- * Attribute implementing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Commander_(Ability) | Commander}.
- * When the source of an ability with this attribute detects a Dondozo as their active ally, the source "jumps
- * into the Dondozo's mouth," sharply boosting the Dondozo's stats, cancelling the source's moves, and
- * causing attacks that target the source to always miss.
+ * When the source of an ability with this attribute detects a Dondozo as their active ally, the source \
+ * "jumps into the Dondozo's mouth," sharply boosting the Dondozo's stats, cancelling the source's moves, \
+ * and causing attacks that target the source to always miss.
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Commander_(Ability)}
  */
 export class CommanderAbAttr extends AbAttr {
   protected override readonly abAttrKey = "CommanderAbAttr";
@@ -21,7 +22,7 @@ export class CommanderAbAttr extends AbAttr {
     super(true);
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean): void {
+  public override apply({ pokemon, simulated }: BaseAbAttrParams): void {
     if (simulated) {
       return;
     }
@@ -35,7 +36,7 @@ export class CommanderAbAttr extends AbAttr {
     this.cancelQueuedMove(pokemon);
   }
 
-  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon }: Parameters<this["apply"]>[0]): boolean {
     const ally = pokemon.getAlly();
 
     return (
@@ -48,7 +49,7 @@ export class CommanderAbAttr extends AbAttr {
 
   /**
    * Cancels all commands from the given Pokemon for the current turn
-   * @param pokemon The {@linkcode Pokemon} with this ability
+   * @param pokemon - The {@linkcode Pokemon} with this ability
    */
   private cancelQueuedMove(pokemon: Pokemon): void {
     const { turnManager } = globalScene.currentBattle;

@@ -3,34 +3,43 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { ElementalType } from "#enums/elemental-type";
 import { TerrainType } from "#enums/terrain-type";
-import type { Pokemon } from "#field/pokemon";
+import type { BaseAbAttrParams } from "#types/ab-attr-param-types";
 import type { AbAttrKey, AbAttrMap } from "#types/ability-types";
 import { enumValueToKey } from "#utils/common-utils";
 import i18next from "i18next";
 
+interface TerrainEventTypeChangeAbAttrParams extends BaseAbAttrParams {
+  /** @defaultValue `true` */
+  onSummon?: boolean;
+}
+
 /**
  * This applies a terrain-based type change to the Pokemon.
- * Used by Mimicry.
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Mimicry_(Ability)}
  */
+// TODO: split into 2 `AbAttr`s to remove `onSummon` and `.is` override jank
 export class TerrainEventTypeChangeAbAttr extends PostSummonAbAttr {
   protected override readonly abAttrKey = "TerrainEventTypeChangeAbAttr";
 
   /**
-   * @todo This is a temporary workaround for this attribute being recycled
-   * as a post-summon effect. This attribute's behavior should probably be split
-   * into two attributes.
+   * @todo This is a temporary workaround for this attribute being recycled as a post-summon effect.
+   * This attribute's behavior should probably be split into two attributes.
    */
   public override is<K extends AbAttrKey>(abAttrKey: K): this is AbAttrMap[K] {
     return super.is(abAttrKey) || abAttrKey === "PostSummonAbAttr";
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean, _onSummon: boolean = true): void {
+  public override apply({ pokemon, simulated, onSummon = true }: TerrainEventTypeChangeAbAttrParams): void {
     if (simulated) {
       return;
     }
 
     const currentTerrain = globalScene.arena.terrainType;
     if (currentTerrain === TerrainType.NONE) {
+      // `onSummon` will never be `true` in `canApply()` so it cannot be checked there
+      if (onSummon) {
+        return;
+      }
       pokemon.summonData.types = [];
       pokemon.updateInfo();
       return;
@@ -46,8 +55,8 @@ export class TerrainEventTypeChangeAbAttr extends PostSummonAbAttr {
     }
   }
 
-  public override canApply(...[pokemon, , onSummon]: Parameters<this["apply"]>): boolean {
-    return !pokemon.isTerastallized && (!onSummon || !globalScene.arena.hasTerrain(TerrainType.NONE));
+  public override canApply({ pokemon }: Parameters<this["apply"]>[0]): boolean {
+    return !pokemon.isTerastallized;
   }
 
   /**
@@ -71,7 +80,7 @@ export class TerrainEventTypeChangeAbAttr extends PostSummonAbAttr {
     }
   }
 
-  public override getTriggerMessage(pokemon: Pokemon, _abilityName: string) {
+  public override getTriggerMessage({ pokemon }: Parameters<this["apply"]>[0]) {
     const currentTerrain = globalScene.arena.terrainType;
     const pokemonNameWithAffix = getPokemonNameWithAffix(pokemon);
     if (currentTerrain === TerrainType.NONE) {

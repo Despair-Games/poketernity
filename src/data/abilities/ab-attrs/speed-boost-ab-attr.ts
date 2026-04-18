@@ -1,10 +1,10 @@
 import { PostTurnAbAttr } from "#abilities/post-turn-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { Stat } from "#enums/stat";
-import type { Pokemon } from "#field/pokemon";
+import type { BaseAbAttrParams } from "#types/ab-attr-param-types";
 
 export class SpeedBoostAbAttr extends PostTurnAbAttr {
-  public override apply(pokemon: Pokemon, simulated: boolean): void {
+  public override apply({ pokemon, simulated }: BaseAbAttrParams): void {
     if (!simulated) {
       globalScene.phaseManager.createAndUnshiftPhase(
         "StatStageChangePhase",
@@ -16,7 +16,7 @@ export class SpeedBoostAbAttr extends PostTurnAbAttr {
     }
   }
 
-  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon }: Parameters<this["apply"]>[0]): boolean {
     const { switchedInThisTurn, failedRunAway } = pokemon.turnData;
     return !switchedInThisTurn && !failedRunAway;
   }

@@ -4,6 +4,7 @@ import { activeOverrides } from "#app/overrides";
 import type { ArenaTag } from "#arena-tags/arena-tag";
 import type { EntryHazardTag } from "#arena-tags/entry-hazard-tag";
 import { getArenaTag } from "#arena-tags/utils/get-arena-tag";
+import type { TerrainHighestStatBoostTag } from "#battler-tags/terrain-highest-stat-boost-tag";
 import { ENTRY_HAZARD_ARENA_TAG_TYPES } from "#constants/arena-tag-constants";
 import { DEFAULT_NEW_TERRAIN_DURATION } from "#constants/game-constants";
 import { DEFAULT_NEW_WEATHER_DURATION, PRIMAL_WEATHER_TYPES } from "#constants/weather-constants";
@@ -17,6 +18,7 @@ import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import type { BattlerIndex, FieldBattlerIndex } from "#enums/battler-index";
+import { BattlerTagType } from "#enums/battler-tag-type";
 import { BiomeId } from "#enums/biome-id";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
 import type { ElementalType } from "#enums/elemental-type";
@@ -259,7 +261,7 @@ export class Arena {
         pokemon.findAndRemoveTags(
           (tag) => "weatherTypes" in tag && !(tag.weatherTypes as WeatherType[]).find((wt) => wt === newWeatherType),
         );
-        applyAbAttrs("PostWeatherChangeAbAttr", pokemon, false, newWeatherType);
+        applyAbAttrs("PostWeatherChangeAbAttr", { pokemon, simulated: false, weather: newWeatherType });
       });
 
     return true;
@@ -418,10 +420,12 @@ export class Arena {
       .filter((p) => p.isOnField())
       .forEach((pokemon) => {
         pokemon.findAndRemoveTags(
-          (tag) => "terrainTypes" in tag && !(tag.terrainTypes as TerrainType[]).find((tt) => tt === terrain),
+          (tag) =>
+            tag.isType<TerrainHighestStatBoostTag>(BattlerTagType.QUARK_DRIVE)
+            && !tag.terrainTypes.some((tt) => tt === terrain),
         );
-        applyAbAttrs("PostTerrainChangeAbAttr", pokemon, false, terrain);
-        applyAbAttrs("TerrainEventTypeChangeAbAttr", pokemon, false, false);
+        applyAbAttrs("PostTerrainChangeAbAttr", { pokemon, simulated: false, terrain });
+        applyAbAttrs("TerrainEventTypeChangeAbAttr", { pokemon, simulated: false, onSummon: false });
       });
 
     return true;

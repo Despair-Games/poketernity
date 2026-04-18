@@ -1,7 +1,7 @@
 import { PostTerrainChangeAbAttr } from "#abilities/post-terrain-change-ab-attr";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { TerrainType } from "#enums/terrain-type";
-import type { Pokemon } from "#field/pokemon";
+import type { PostTerrainChangeAbAttrParams } from "#types/ab-attr-param-types";
 import type { NonEmptyArray } from "#types/utility-types";
 
 export class PostTerrainChangeAddBattlerTagAbAttr extends PostTerrainChangeAbAttr {
@@ -17,13 +17,13 @@ export class PostTerrainChangeAddBattlerTagAbAttr extends PostTerrainChangeAbAtt
     this.terrainTypes = terrainTypes;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean, _terrain: TerrainType): void {
+  public override apply({ pokemon, simulated }: PostTerrainChangeAbAttrParams): void {
     if (!simulated) {
       pokemon.addTag(this.tagType, this.turnCount);
     }
   }
 
-  public override canApply(...[pokemon, , terrain]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon, terrain }: Parameters<this["apply"]>[0]): boolean {
     return this.terrainTypes.includes(terrain) && pokemon.canAddTag(this.tagType);
   }
 }

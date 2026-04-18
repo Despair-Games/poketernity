@@ -1,10 +1,8 @@
 import { MoveImmunityAbAttr } from "#abilities/move-immunity-ab-attr";
 import { globalScene } from "#app/global-scene";
 import type { BattleStat } from "#enums/stat";
-import type { Pokemon } from "#field/pokemon";
-import type { Move } from "#moves/move";
+import type { MoveImmunityAbAttrParams } from "#types/ab-attr-param-types";
 import type { PreDefendAbAttrCondition } from "#types/ability-types";
-import type { ValueHolder } from "#utils/common-utils";
 
 export class MoveImmunityStatStageChangeAbAttr extends MoveImmunityAbAttr {
   private readonly stat: BattleStat;
@@ -12,26 +10,26 @@ export class MoveImmunityStatStageChangeAbAttr extends MoveImmunityAbAttr {
 
   constructor(immuneCondition: PreDefendAbAttrCondition, stat: BattleStat, stages: number) {
     super(immuneCondition);
+
     this.stat = stat;
     this.stages = stages;
   }
 
-  public override apply(
-    pokemon: Pokemon,
-    simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    cancelled: ValueHolder<boolean>,
-  ): void {
-    super.apply(pokemon, simulated, attacker, move, cancelled);
-    if (!simulated) {
-      globalScene.phaseManager.createAndUnshiftPhase(
-        "StatStageChangePhase",
-        pokemon.getBattlerIndex(),
-        pokemon,
-        [this.stat],
-        this.stages,
-      );
+  public override apply(params: MoveImmunityAbAttrParams): void {
+    super.apply(params);
+
+    const { pokemon, simulated } = params;
+
+    if (simulated) {
+      return;
     }
+
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "StatStageChangePhase",
+      pokemon.getBattlerIndex(),
+      pokemon,
+      [this.stat],
+      this.stages,
+    );
   }
 }

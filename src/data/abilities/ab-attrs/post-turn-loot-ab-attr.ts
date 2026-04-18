@@ -4,6 +4,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { Pokemon } from "#field/pokemon";
 import { BerryModifier } from "#modifier/modifier";
 import { BerryModifierType } from "#modifier/modifier-type";
+import type { BaseAbAttrParams } from "#types/ab-attr-param-types";
 import { clamp } from "#utils/common-utils";
 import { randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
@@ -14,7 +15,7 @@ import i18next from "i18next";
  * @param procChance - Chance to create an item
  */
 export class PostTurnLootAbAttr extends PostTurnAbAttr {
-  /** @todo The `HELD_BERRIES` option is unsupported and never used */
+  // TODO: The `HELD_BERRIES` option is unsupported and never used
   private readonly itemType: "EATEN_BERRIES" | "HELD_BERRIES";
   private readonly procChance: (pokemon: Pokemon) => number;
 
@@ -25,15 +26,15 @@ export class PostTurnLootAbAttr extends PostTurnAbAttr {
     this.procChance = procChance;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  public override apply({ pokemon, simulated }: BaseAbAttrParams): boolean {
     if (this.itemType === "EATEN_BERRIES") {
       return this.createEatenBerry(pokemon, simulated);
     }
     return false;
   }
 
-  /** @todo This can check item usage more thoroughly when modifier bullshit is sorted out */
-  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+  // TODO: This can check item usage more thoroughly when modifier bullshit is sorted out
+  public override canApply({ pokemon }: Parameters<this["apply"]>[0]): boolean {
     const pass = Phaser.Math.RND.realInRange(0, 1);
     if (clamp(this.procChance(pokemon), 0, 1) < pass) {
       return false;
@@ -45,11 +46,11 @@ export class PostTurnLootAbAttr extends PostTurnAbAttr {
 
   /**
    * Create a new berry chosen randomly from the berries the pokemon ate this battle
-   * @param pokemon The pokemon with this ability
-   * @param simulated whether the associated ability call is simulated
-   * @returns whether a new berry was created
+   * @param pokemon - The pokemon with this ability
+   * @param simulated - whether the associated ability call is simulated
+   * @returns Whether a new berry was created
    */
-  createEatenBerry(pokemon: Pokemon, simulated: boolean): boolean {
+  private createEatenBerry(pokemon: Pokemon, simulated: boolean): boolean {
     const berriesEaten = pokemon.waveData.berriesEaten;
 
     if (berriesEaten.length === 0) {

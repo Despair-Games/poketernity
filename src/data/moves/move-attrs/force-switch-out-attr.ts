@@ -91,9 +91,9 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
       return null;
     }
 
-    const blockedByAbility = new ValueHolder(false);
-    applyAbAttrs("ForceSwitchOutImmunityAbAttr", target, false, blockedByAbility);
-    return blockedByAbility.value
+    const cancelled = new ValueHolder(false);
+    applyAbAttrs("ForceSwitchOutImmunityAbAttr", { pokemon: target, simulated: false, cancelled });
+    return cancelled.value
       ? i18next.t("moveTriggers:cannotBeSwitchedOut", { pokemonName: getPokemonNameWithAffix(target) })
       : null;
   }
@@ -116,8 +116,8 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
   }
 
   /**
-   * Helper function to check if the Pokémon's health is below half after taking damage.
-   * Used for an edge case interaction with Wimp Out/Emergency Exit.
+   * Helper function to check if the Pokémon's health is below half after taking damage. \
+   * Used for an edge case interaction with Wimp Out/Emergency Exit. \
    * If the Ability activates due to being hit by U-turn or Volt Switch, the user of that move will not be switched out.
    */
   private hpDroppedBelowHalf(target: Pokemon): boolean {

@@ -18,9 +18,9 @@ import { toCamelCaseString } from "#utils/string-utils";
 import i18next from "i18next";
 
 export class Ability {
-  public id: AbilityId;
+  public readonly id: AbilityId;
   /** The generation the ability was introduced in. */
-  public generation: number;
+  public readonly generation: number;
   /** The ability's localized name. May include " (P)" or " (N)" if the ability isn't fully implemented. */
   public readonly name: string;
   /** The ability's localized description. */
@@ -30,6 +30,7 @@ export class Ability {
   public postSummonPriority: number;
   public attrs: AbAttr[] = [];
   public conditions: AbAttrCondition[] = [];
+
   private readonly flags: number;
 
   private constructor(builder: AbBuilder) {

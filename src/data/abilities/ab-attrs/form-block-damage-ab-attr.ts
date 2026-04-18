@@ -2,15 +2,15 @@ import { ReceivedMoveDamageMultiplierAbAttr } from "#abilities/received-move-dam
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import { HitResult } from "#enums/hit-result";
 import type { Pokemon } from "#field/pokemon";
-import type { Move } from "#moves/move";
+import type { ReceivedMoveDamageMultiplierAbAttrParams } from "#types/ab-attr-param-types";
 import type { PokemonDefendCondition } from "#types/move-types";
-import type { ValueHolder } from "#utils/common-utils";
 
 /**
  * Negates the damage from the first hit of a damaging move,
  * then removes the appropriate `BattlerTag` from the pokemon.
  *
- * This is used in the Disguise and Ice Face abilities.
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Disguise_(Ability)}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Ice_Face_(Ability)}
  */
 export class FormBlockDamageAbAttr extends ReceivedMoveDamageMultiplierAbAttr {
   private readonly multiplier: number;
@@ -33,18 +33,14 @@ export class FormBlockDamageAbAttr extends ReceivedMoveDamageMultiplierAbAttr {
     this.triggerMessageFunc = triggerMessageFunc;
   }
 
-  public override apply(
-    pokemon: Pokemon,
-    simulated: boolean,
-    _attacker: Pokemon,
-    _move: Move,
-    multiplier: ValueHolder<number>,
-  ): void {
+  public override apply({ pokemon, simulated, multiplier }: ReceivedMoveDamageMultiplierAbAttrParams): void {
     if (simulated) {
       return;
     }
+
     multiplier.value *= this.multiplier;
     pokemon.removeTag(this.tagType);
+
     if (this.recoilDamageFunc) {
       pokemon.damageAndUpdate(this.recoilDamageFunc(pokemon), {
         result: HitResult.OTHER,
@@ -54,7 +50,7 @@ export class FormBlockDamageAbAttr extends ReceivedMoveDamageMultiplierAbAttr {
     }
   }
 
-  public override canApply(...[pokemon, , attacker, move]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon, attacker, move }: Parameters<this["apply"]>[0]): boolean {
     return this.condition(pokemon, attacker, move) && !move.hitsSubstitute(attacker, pokemon);
   }
 
@@ -64,7 +60,7 @@ export class FormBlockDamageAbAttr extends ReceivedMoveDamageMultiplierAbAttr {
    * @param abilityName The name of the ability.
    * @returns The trigger message.
    */
-  public override getTriggerMessage(pokemon: Pokemon, abilityName: string): string {
+  public override getTriggerMessage({ pokemon }: Parameters<this["apply"]>[0], abilityName: string): string {
     return this.triggerMessageFunc(pokemon, abilityName);
   }
 }

@@ -2,23 +2,24 @@ import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { StatusEffect } from "#enums/status-effect";
-import type { Pokemon } from "#field/pokemon";
+import type { BaseAbAttrParams } from "#types/ab-attr-param-types";
 import { inSpeedOrder } from "#utils/speed-order-generator";
 import { getStatusEffectHealText } from "#utils/status-effect-utils";
 
 /**
- * Removes supplied status effects from the user's field. Used by Pastel Veil.
+ * Removes supplied status effects from the user's field.
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Pastel_Veil_(Ability)}
  */
 export class PostSummonUserFieldRemoveStatusEffectAbAttr extends PostSummonAbAttr {
   private readonly statusEffects: StatusEffect[];
 
-  constructor(...statusEffect: StatusEffect[]) {
+  constructor(...statusEffects: StatusEffect[]) {
     super();
 
-    this.statusEffects = statusEffect;
+    this.statusEffects = statusEffects;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean): void {
+  public override apply({ pokemon, simulated }: BaseAbAttrParams): void {
     if (simulated) {
       return;
     }
@@ -35,7 +36,7 @@ export class PostSummonUserFieldRemoveStatusEffectAbAttr extends PostSummonAbAtt
     }
   }
 
-  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon }: Parameters<this["apply"]>[0]): boolean {
     return pokemon.getField().some((p) => p.isActive(true) && p.hasStatusEffect(this.statusEffects, false, true));
   }
 }

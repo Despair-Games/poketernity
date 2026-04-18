@@ -1,8 +1,7 @@
 import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
 import { globalScene } from "#app/global-scene";
 import type { BattleStat } from "#enums/stat";
-import type { Pokemon } from "#field/pokemon";
-import type { Move } from "#moves/move";
+import type { PostDefendAbAttrParams } from "#types/ab-attr-param-types";
 import type { PokemonDefendCondition } from "#types/move-types";
 
 export class PostDefendHpGatedStatStageChangeAbAttr extends PostDefendAbAttr {
@@ -28,7 +27,7 @@ export class PostDefendHpGatedStatStageChangeAbAttr extends PostDefendAbAttr {
     this.selfTarget = selfTarget;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, _move: Move): void {
+  public override apply({ pokemon, simulated, attacker }: PostDefendAbAttrParams): void {
     if (!simulated) {
       globalScene.phaseManager.createAndUnshiftPhase(
         "StatStageChangePhase",
@@ -40,11 +39,9 @@ export class PostDefendHpGatedStatStageChangeAbAttr extends PostDefendAbAttr {
     }
   }
 
-  public override canApply(...[pokemon, , attacker, move]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon, attacker, move }: Parameters<this["apply"]>[0]): boolean {
     const hpGateFlat = Math.ceil(pokemon.getMaxHp() * this.hpGate);
-    // TODO: Normalize `attacksReceived[]` checks
-    const lastAttackReceived = pokemon.turnData.attacksReceived.at(-1);
-    const damageReceived = lastAttackReceived?.damage ?? 0;
+    const damageReceived = pokemon.turnData.attacksReceived.at(-1)?.damage ?? 0;
 
     return (
       this.condition(pokemon, attacker, move) && pokemon.hp <= hpGateFlat && pokemon.hp + damageReceived > hpGateFlat

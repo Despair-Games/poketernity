@@ -1,6 +1,7 @@
 import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import { globalScene } from "#app/global-scene";
 import type { Pokemon } from "#field/pokemon";
+import type { BaseAbAttrParams } from "#types/ab-attr-param-types";
 
 export class PostSummonMessageAbAttr extends PostSummonAbAttr {
   private readonly messageFunc: (pokemon: Pokemon) => string;
@@ -11,7 +12,7 @@ export class PostSummonMessageAbAttr extends PostSummonAbAttr {
     this.messageFunc = messageFunc;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean): void {
+  public override apply({ pokemon, simulated }: BaseAbAttrParams): void {
     if (!simulated) {
       globalScene.phaseManager.createAndUnshiftPhase("MessagePhase", this.messageFunc(pokemon));
     }

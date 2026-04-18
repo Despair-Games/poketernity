@@ -6,7 +6,7 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveId } from "#enums/move-id";
 import { Stat } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
-import { BooleanHolder, NumberHolder } from "#utils/common-utils";
+import { ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
@@ -25,8 +25,8 @@ export class StickyWebTag extends EntryHazardTag {
     super(MoveId.STICKY_WEB, sourceId, side);
   }
 
-  /** @todo Should `quiet` ever be `true`? */
-  override onAdd(quiet: boolean = false): void {
+  // TODO Should `quiet` ever be `true`?
+  public override onAdd(quiet: boolean = false): void {
     super.onAdd();
     const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
     if (!quiet && source) {
@@ -40,35 +40,34 @@ export class StickyWebTag extends EntryHazardTag {
     }
   }
 
-  override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
-    if (pokemon.isGrounded()) {
-      const cancelled = new BooleanHolder(false);
-      applyAbAttrs("ProtectStatAbAttr", pokemon, simulated, Stat.SPD, cancelled);
-
-      if (simulated) {
-        return !cancelled.value;
-      }
-
-      if (!cancelled.value) {
-        globalScene.phaseManager.createAndUnshiftPhase(
-          "MessagePhase",
-          i18next.t("arenaTag:stickyWebActivateTrap", { pokemonName: pokemon.getNameToRender() }),
-        );
-        const stages = new NumberHolder(-1);
-        globalScene.phaseManager.createAndUnshiftPhase(
-          "StatStageChangePhase",
-          pokemon.getBattlerIndex(),
-          this.getSourcePokemon(),
-          [Stat.SPD],
-          stages.value,
-          {
-            isStickyWeb: true,
-          },
-        );
-        return true;
-      }
+  public override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
+    if (!pokemon.isGrounded()) {
+      return false;
     }
 
-    return false;
+    const cancelled = new ValueHolder(false);
+    applyAbAttrs("ProtectStatAbAttr", { pokemon, simulated, stat: Stat.SPD, cancelled });
+
+    if (simulated) {
+      return !cancelled.value;
+    }
+    if (cancelled.value) {
+      return false;
+    }
+
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "MessagePhase",
+      i18next.t("arenaTag:stickyWebActivateTrap", { pokemonName: pokemon.getNameToRender() }),
+    );
+    const stages = new ValueHolder(-1);
+    globalScene.phaseManager.createAndUnshiftPhase(
+      "StatStageChangePhase",
+      pokemon.getBattlerIndex(),
+      this.getSourcePokemon(),
+      [Stat.SPD],
+      stages.value,
+      { isStickyWeb: true },
+    );
+    return true;
   }
 }

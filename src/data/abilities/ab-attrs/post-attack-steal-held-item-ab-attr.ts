@@ -3,11 +3,11 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { Pokemon } from "#field/pokemon";
 import type { PokemonHeldItemModifier } from "#modifier/modifier";
-import type { Move } from "#moves/move";
+import type { PostAttackAbAttrParams } from "#types/ab-attr-param-types";
 import i18next from "i18next";
 
 export class PostAttackStealHeldItemAbAttr extends PostAttackAbAttr {
-  public override apply(pokemon: Pokemon, simulated: boolean, defender: Pokemon, _move: Move): void {
+  public override apply({ pokemon, simulated, defender }: PostAttackAbAttrParams): void {
     if (simulated) {
       return;
     }
@@ -32,8 +32,7 @@ export class PostAttackStealHeldItemAbAttr extends PostAttackAbAttr {
     );
   }
 
-  public override canApply(...params: Parameters<this["apply"]>): boolean {
-    const [, , defender] = params;
+  public override canApply({ defender }: Parameters<this["apply"]>[0]): boolean {
     return this.getTargetHeldItems(defender).some((i) => i.isTransferable);
   }
 
@@ -41,6 +40,6 @@ export class PostAttackStealHeldItemAbAttr extends PostAttackAbAttr {
     return globalScene.findModifiers(
       (m) => m.isPokemonHeldItemModifier() && m.pokemonId === target.id,
       target.isPlayer(),
-    ) as PokemonHeldItemModifier[];
+    );
   }
 }

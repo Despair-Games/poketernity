@@ -1,14 +1,15 @@
 import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BATTLE_STATS } from "#enums/stat";
-import type { Pokemon } from "#field/pokemon";
+import type { BaseAbAttrParams } from "#types/ab-attr-param-types";
 import i18next from "i18next";
 
 /**
- * Attempt to copy the stat changes on an ally pokemon. Used by Costar.
+ * Copies the stat stages and critical hit stage of the user's ally.
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Costar_(Ability)}
  */
 export class PostSummonCopyAllyStatsAbAttr extends PostSummonAbAttr {
-  public override apply(pokemon: Pokemon, simulated: boolean): void {
+  public override apply({ pokemon, simulated }: BaseAbAttrParams): void {
     const ally = pokemon.getAlly();
     if (simulated || !ally?.isActive(true)) {
       return;
@@ -20,12 +21,12 @@ export class PostSummonCopyAllyStatsAbAttr extends PostSummonAbAttr {
     pokemon.updateInfo();
   }
 
-  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon }: Parameters<this["apply"]>[0]): boolean {
     const ally = pokemon.getAlly();
     return !!ally?.isActive(true) && ally.getStatStages().some((s) => s !== 0);
   }
 
-  public override getTriggerMessage(pokemon: Pokemon, _abilityName: string): string {
+  public override getTriggerMessage({ pokemon }: Parameters<this["apply"]>[0]): string {
     return i18next.t("abilityTriggers:costar", {
       pokemonName: getPokemonNameWithAffix(pokemon),
       allyName: getPokemonNameWithAffix(pokemon.getAlly()),

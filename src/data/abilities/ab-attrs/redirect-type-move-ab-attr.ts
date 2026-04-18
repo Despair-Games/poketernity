@@ -7,12 +7,13 @@ export class RedirectTypeMoveAbAttr extends RedirectMoveAbAttr {
 
   constructor(type: ElementalType) {
     super();
+
     this.type = type;
   }
 
-  public override canApply(...params: Parameters<this["apply"]>): boolean {
-    const [, , moveId, user] = params;
+  public override canApply(params: Parameters<this["apply"]>[0]): boolean {
+    const { moveId, user } = params;
     const move = allMoves.get(moveId);
-    return super.canApply(...params) && user.getMoveType(move) === this.type;
+    return super.canApply(params) && user.getMoveType(move) === this.type;
   }
 }

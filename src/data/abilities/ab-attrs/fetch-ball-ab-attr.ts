@@ -2,16 +2,15 @@ import { PostTurnAbAttr } from "#abilities/post-turn-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { getPokeballName } from "#data/pokeball";
-import type { Pokemon } from "#field/pokemon";
+import type { BaseAbAttrParams } from "#types/ab-attr-param-types";
 import i18next from "i18next";
 
 /**
- * Attribute to add the last used Pokeball in the current battle
- * back into the player's inventory.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Ball_Fetch_(Ability) | Ball Fetch}.
+ * Attribute to add the last used Pokeball in the current battle back into the player's inventory.
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Ball_Fetch_(Ability)}.
  */
 export class FetchBallAbAttr extends PostTurnAbAttr {
-  public override apply(pokemon: Pokemon, simulated: boolean): void {
+  public override apply({ pokemon, simulated }: BaseAbAttrParams): void {
     if (simulated) {
       return;
     }
@@ -32,7 +31,7 @@ export class FetchBallAbAttr extends PostTurnAbAttr {
     );
   }
 
-  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon }: Parameters<this["apply"]>[0]): boolean {
     const { lastUsedPokeball } = globalScene.currentBattle;
     return lastUsedPokeball != null && pokemon.isPlayer();
   }

@@ -67,7 +67,7 @@ export class WeatherEffectPhase extends BattlePhase {
 
     for (const pokemon of inSpeedOrder()) {
       this.tryInflictWeatherDamage(weather, pokemon);
-      applyAbAttrs("PostWeatherLapseAbAttr", pokemon, false);
+      applyAbAttrs("PostWeatherLapseAbAttr", { pokemon, simulated: false });
     }
   }
 
@@ -84,7 +84,7 @@ export class WeatherEffectPhase extends BattlePhase {
     const cancelled = new ValueHolder(false);
 
     for (const pokemon of inSpeedOrder()) {
-      applyAbAttrs("SuppressWeatherEffectAbAttr", pokemon, false, weather, cancelled);
+      applyAbAttrs("SuppressWeatherEffectAbAttr", { pokemon, simulated: false, weather, cancelled });
       if (cancelled.value) {
         break;
       }
@@ -108,8 +108,8 @@ export class WeatherEffectPhase extends BattlePhase {
 
     const cancelled = new ValueHolder(false);
 
-    applyAbAttrs("PreWeatherDamageAbAttr", pokemon, false, weather, cancelled);
-    applyAbAttrs("BlockNonDirectDamageAbAttr", pokemon, false, cancelled);
+    applyAbAttrs("PreWeatherDamageAbAttr", { pokemon, simulated: false, weather, cancelled });
+    applyAbAttrs("BlockNonDirectDamageAbAttr", { pokemon, simulated: false, cancelled });
 
     if (
       cancelled.value

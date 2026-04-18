@@ -1,6 +1,6 @@
 import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import type { BattlerTagType } from "#enums/battler-tag-type";
-import type { Pokemon } from "#field/pokemon";
+import type { BaseAbAttrParams } from "#types/ab-attr-param-types";
 
 export class PostSummonAddBattlerTagAbAttr extends PostSummonAbAttr {
   private readonly tagType: BattlerTagType;
@@ -13,13 +13,13 @@ export class PostSummonAddBattlerTagAbAttr extends PostSummonAbAttr {
     this.turnCount = turnCount;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean): void {
+  public override apply({ pokemon, simulated }: BaseAbAttrParams): void {
     if (!simulated) {
       pokemon.addTag(this.tagType, this.turnCount);
     }
   }
 
-  public override canApply(...[pokemon]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon }: Parameters<this["apply"]>[0]): boolean {
     return pokemon.canAddTag(this.tagType);
   }
 }

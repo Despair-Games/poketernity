@@ -7,7 +7,9 @@ import type { Move } from "#moves/move";
 import type { PokemonAttackCondition } from "#types/move-types";
 
 /**
- * Ability attribute that multiplies the ability holder's attack/special attack stat (depends on the move's category) by 1.5 if it uses a move of a specific type at less than 1/3 HP
+ * Ability attribute that multiplies the ability holder's attack pr special attack stat (depending on the move's category) \
+ * by `1.5` if it uses a move of a specific type at less than `1/3` HP.
+ * 
  * These abilities use this attribute:
  * ```text
 +--------------+-------+
@@ -22,20 +24,21 @@ import type { PokemonAttackCondition } from "#types/move-types";
  */
 export class LowHpMoveTypeAttackMultiplierAbAttr extends EffectiveStatMultiplierAbAttr {
   /**
-   * The constructor defaults to Stat.ATK since at the moment of the attribute's construction, the game does not know what move will be used.
+   * The constructor defaults to `Stat.ATK` since at the moment of the attribute's construction,
+   * the game does not know what move will be used.
    */
   constructor(boostedType: ElementalType) {
-    const condition: PokemonAttackCondition = (pokemon: Pokemon, _target?: Pokemon, move?: Move): boolean => {
-      return !!move && pokemon.getHpRatio() <= 1 / 3 && pokemon.getMoveType(move) === boostedType;
-    };
+    const condition: PokemonAttackCondition = (pokemon: Pokemon, _target?: Pokemon, move?: Move): boolean =>
+      !!move && pokemon.getHpRatio() <= 1 / 3 && pokemon.getMoveType(move) === boostedType;
+
     super(Stat.ATK, 1.5, condition);
   }
 
-  public override canApply(...params: Parameters<this["apply"]>): boolean {
-    const [pokemon, , , , move, target] = params;
+  public override canApply(params: Parameters<this["apply"]>[0]): boolean {
+    const { pokemon, move, target } = params;
     const category = move != null && target != null ? pokemon.getMoveCategory(target, move) : move?.category;
     this.stat = category === MoveCategory.SPECIAL ? Stat.SPATK : Stat.ATK;
 
-    return super.canApply(...params);
+    return super.canApply(params);
   }
 }

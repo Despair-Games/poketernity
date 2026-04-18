@@ -2,8 +2,7 @@ import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveFlags } from "#enums/move-flags";
-import type { Pokemon } from "#field/pokemon";
-import type { Move } from "#moves/move";
+import type { PostDefendAbAttrParams } from "#types/ab-attr-param-types";
 import i18next from "i18next";
 
 /**
@@ -12,21 +11,18 @@ import i18next from "i18next";
  * the attacker doesn't already have the Perish Song tag.
  */
 export class PostDefendPerishSongAbAttr extends PostDefendAbAttr {
-  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, _move: Move): void {
+  public override apply({ pokemon, simulated, attacker }: PostDefendAbAttrParams): void {
     if (!simulated) {
       attacker.addTag(BattlerTagType.PERISH_SONG, 4);
       pokemon.addTag(BattlerTagType.PERISH_SONG, 4);
     }
   }
 
-  public override canApply(...[pokemon, , attacker, move]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon, attacker, move }: Parameters<this["apply"]>[0]): boolean {
     return move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon) && attacker.canAddTag(BattlerTagType.PERISH_SONG);
   }
 
-  public override getTriggerMessage(pokemon: Pokemon, abilityName: string): string {
-    return i18next.t("abilityTriggers:perishBody", {
-      pokemonName: getPokemonNameWithAffix(pokemon),
-      abilityName,
-    });
+  public override getTriggerMessage({ pokemon }: Parameters<this["apply"]>[0], abilityName: string): string {
+    return i18next.t("abilityTriggers:perishBody", { pokemonName: getPokemonNameWithAffix(pokemon), abilityName });
   }
 }

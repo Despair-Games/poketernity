@@ -2,14 +2,11 @@ import { PreAttackAbAttr } from "#abilities/pre-attack-ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
-import type { Pokemon } from "#field/pokemon";
-import type { Move } from "#moves/move";
+import type { PreAttackAbAttrParams } from "#types/ab-attr-param-types";
 import { enumValueToKey } from "#utils/common-utils";
 import i18next from "i18next";
 
-/**
- * Ability attribute for changing a pokemon's type before using a move
- */
+/** Ability attribute for changing a pokemon's type before using a move */
 export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
   protected override readonly abAttrKey = "PokemonTypeChangeAbAttr";
 
@@ -17,14 +14,14 @@ export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
     super(true);
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean, move: Move): void {
+  public override apply({ pokemon, simulated, move }: Omit<PreAttackAbAttrParams, "defender">): void {
     if (!simulated) {
       pokemon.setTemporaryTypes(pokemon.getMoveType(move));
       pokemon.updateInfo();
     }
   }
 
-  public override canApply(...[pokemon, , move]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon, move }: Parameters<this["apply"]>[0]): boolean {
     return (
       !pokemon.isTerastallized
       && move.id !== MoveId.STRUGGLE
@@ -33,7 +30,7 @@ export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
     );
   }
 
-  public override getTriggerMessage(pokemon: Pokemon, _abilityName: string, move: Move): string {
+  public override getTriggerMessage({ pokemon, move }: Parameters<this["apply"]>[0], _abilityName: string): string {
     return i18next.t("abilityTriggers:pokemonTypeChange", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       moveType: i18next.t(`pokemonInfo:Type.${enumValueToKey(ElementalType, pokemon.getMoveType(move))}`),

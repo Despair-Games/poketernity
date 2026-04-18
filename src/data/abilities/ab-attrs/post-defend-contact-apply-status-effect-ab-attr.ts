@@ -1,8 +1,8 @@
 import { PostDefendAbAttr } from "#abilities/post-defend-ab-attr";
 import { MoveFlags } from "#enums/move-flags";
 import type { StatusEffect } from "#enums/status-effect";
-import type { Pokemon } from "#field/pokemon";
-import type { Move } from "#moves/move";
+import type { PostDefendAbAttrParams } from "#types/ab-attr-param-types";
+import type { NonEmptyArray } from "#types/utility-types";
 
 /**
  * Ability attribute that inflicts a status on the attacking Pokemon if the attacker used a contact move on the ability holder
@@ -20,29 +20,26 @@ The code is future-proofed so that it can accept a list of multiple status effec
 */
 export class PostDefendContactApplyStatusEffectAbAttr extends PostDefendAbAttr {
   public readonly chance: number;
-  private readonly statusEffects: StatusEffect[] = [];
+  private readonly effects: Readonly<NonEmptyArray<StatusEffect>>;
 
-  constructor(chance: number, effects: StatusEffect | StatusEffect[]) {
+  constructor(chance: number, ...effects: Readonly<NonEmptyArray<StatusEffect>>) {
     super();
 
     this.chance = chance;
-    this.statusEffects = this.statusEffects.concat(effects);
+    this.effects = effects;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, _move: Move): void {
+  public override apply({ pokemon, simulated, attacker }: PostDefendAbAttrParams): void {
     if (simulated) {
       return;
     }
 
-    const status =
-      this.statusEffects.length === 1
-        ? this.statusEffects[0]
-        : this.statusEffects[pokemon.randSeedInt(this.statusEffects.length)];
+    const status = this.effects.length === 1 ? this.effects[0] : this.effects[pokemon.randSeedInt(this.effects.length)];
 
     attacker.trySetStatus(status, true, pokemon);
   }
 
-  public override canApply(...[pokemon, , attacker, move]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon, attacker, move }: Parameters<this["apply"]>[0]): boolean {
     return (
       move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
       && !attacker.hasNonVolatileStatusEffect()

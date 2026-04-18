@@ -31,9 +31,9 @@ export class PostSummonPhase extends PokemonPhase {
       pokemon.lapseTag(BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON);
     }
 
-    applyAbAttrs("PostSummonAbAttr", pokemon, false);
+    applyAbAttrs("PostSummonAbAttr", { pokemon, simulated: false });
     for (const p of inSpeedOrder()) {
-      applyAbAttrs("CommanderAbAttr", p, false);
+      applyAbAttrs("CommanderAbAttr", { pokemon: p, simulated: false });
     }
 
     // If the Pokemon takes a different form when active, change its form

@@ -1,7 +1,6 @@
 import { AbAttr } from "#abilities/ab-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { Pokemon } from "#field/pokemon";
-import type { ValueHolder } from "#utils/common-utils";
+import type { CancelledAbAttrParams } from "#types/ab-attr-param-types";
 import i18next from "i18next";
 
 export class BlockItemTheftAbAttr extends AbAttr {
@@ -11,11 +10,11 @@ export class BlockItemTheftAbAttr extends AbAttr {
     super(true);
   }
 
-  public override apply(_pokemon: Pokemon, _simulated: boolean, cancelled: ValueHolder<boolean>): void {
+  public override apply({ cancelled }: CancelledAbAttrParams): void {
     cancelled.value = true;
   }
 
-  public override getTriggerMessage(pokemon: Pokemon, abilityName: string) {
+  public override getTriggerMessage({ pokemon }: Parameters<this["apply"]>[0], abilityName: string) {
     return i18next.t("abilityTriggers:blockItemTheft", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       abilityName,

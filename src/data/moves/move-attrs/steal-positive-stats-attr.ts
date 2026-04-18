@@ -6,38 +6,41 @@ import { BATTLE_STATS } from "#enums/stat";
 import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveEffectAttr } from "#moves/move-effect-attr";
-import { NumberHolder } from "#utils/common-utils";
+import { ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
  * Attribute to steal the target's positive stat stages.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Spectral_Thief_(move) | Spectral Thief}.
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Spectral_Thief_(move)}
  */
 export class StealPositiveStatsAttr extends MoveEffectAttr {
   constructor() {
     super(false, { trigger: MoveEffectTrigger.PRE_APPLY });
   }
 
-  override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
+  public override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     let statsStolen: boolean = false;
     for (const s of BATTLE_STATS) {
-      if (target.getStatStage(s) > 0) {
-        const userStatChange = new NumberHolder(target.getStatStage(s));
-        applyAbAttrs("StatStageChangeMultiplierAbAttr", user, false, userStatChange);
-        user.setStatStage(s, user.getStatStage(s) + userStatChange.value);
-        target.setStatStage(s, 0);
+      if (target.getStatStage(s) <= 0) {
+        continue;
       }
+
+      const stages = new ValueHolder(target.getStatStage(s));
+      applyAbAttrs("StatStageChangeMultiplierAbAttr", { pokemon: user, simulated: false, stages });
+
+      user.setStatStage(s, user.getStatStage(s) + stages.value);
+      target.setStatStage(s, 0);
+
       user.updateInfo();
       target.updateInfo();
+
       statsStolen = true;
     }
 
     if (statsStolen) {
       globalScene.phaseManager.createAndUnshiftPhase(
         "MessagePhase",
-        i18next.t("moveTriggers:stealPositiveStats", {
-          pokemonName: getPokemonNameWithAffix(user),
-        }),
+        i18next.t("moveTriggers:stealPositiveStats", { pokemonName: getPokemonNameWithAffix(user) }),
       );
     }
 

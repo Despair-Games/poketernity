@@ -129,7 +129,7 @@ export class MoveEffectPhase extends HitCheckPhase {
       const hitCount = new NumberHolder(1);
       // Assume single target for multi hit
       applyMoveAttrs(MultiHitAttr, user, targets[0], move, hitCount);
-      applyAbAttrs("AddSecondStrikeAbAttr", user, false, move, targets[0], hitCount);
+      applyAbAttrs("AddSecondStrikeAbAttr", { pokemon: user, simulated: false, move, defender: targets[0], hitCount });
       // TODO: re-add multi-lens calculation here
       // Set the user's relevant `turnData` fields to reflect the final hit count
       user.turnData.hitCount = hitCount.value;
@@ -324,7 +324,7 @@ export class MoveEffectPhase extends HitCheckPhase {
 
       // Multi-hit check for Wimp Out/Emergency Exit
       if (user.turnData.hitCount > 1) {
-        applyAbAttrs("PostDamageAbAttr", target, false, 0, user);
+        applyAbAttrs("PostDamageAbAttr", { pokemon: target, simulated: false, damage: 0, source: user });
       }
     }
   }
@@ -587,7 +587,7 @@ export class MoveEffectPhase extends HitCheckPhase {
     this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, firstTarget, false);
     this.applyHeldItemFlinchCheck(user, target, dealsDamage);
     this.applyOnGetHitAbEffects(user, target);
-    applyAbAttrs("PostAttackAbAttr", user, false, target, move);
+    applyAbAttrs("PostAttackAbAttr", { pokemon: user, simulated: false, defender: target, move });
 
     // Apply Grip Claw's chance to steal an item from the target
     if (move.isAttackMove(user, target)) {
@@ -652,7 +652,7 @@ export class MoveEffectPhase extends HitCheckPhase {
    * @param target - The current target of this phase's invoked move
    */
   protected applyOnGetHitAbEffects(user: Pokemon, target: Pokemon): void {
-    applyAbAttrs("PostDefendAbAttr", target, false, user, this.move.getMove());
+    applyAbAttrs("PostDefendAbAttr", { pokemon: target, simulated: false, attacker: user, move: this.move.getMove() });
     target.lapseTags(BattlerTagLapseType.AFTER_HIT);
   }
 

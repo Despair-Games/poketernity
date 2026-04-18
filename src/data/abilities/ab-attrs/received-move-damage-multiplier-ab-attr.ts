@@ -1,16 +1,10 @@
 import { PreDefendAbAttr } from "#abilities/pre-defend-ab-attr";
-import type { Pokemon } from "#field/pokemon";
-import type { Move } from "#moves/move";
-import type { ValueHolder } from "#utils/common-utils";
-
-//#region Types
-
-type PokemonDefendCondition = (target: Pokemon, user: Pokemon, move: Move) => boolean;
-
-//#endregion
+import type { ReceivedMoveDamageMultiplierAbAttrParams } from "#types/ab-attr-param-types";
+import type { PokemonDefendCondition } from "#types/move-types";
 
 export class ReceivedMoveDamageMultiplierAbAttr extends PreDefendAbAttr {
   protected override readonly abAttrKey = "ReceivedMoveDamageMultiplierAbAttr";
+
   protected readonly condition: PokemonDefendCondition;
   private readonly damageMultiplier: number;
 
@@ -21,24 +15,11 @@ export class ReceivedMoveDamageMultiplierAbAttr extends PreDefendAbAttr {
     this.damageMultiplier = damageMultiplier;
   }
 
-  /**
-   * @param pokemon - The Pokémon with the ability.
-   * @param simulated - If `true` then the game state will not be modified.
-   * @param attacker - The attacking Pokémon.
-   * @param move - The move being used.
-   * @param multiplier - The damage multiplier.
-   */
-  public override apply(
-    _pokemon: Pokemon,
-    _simulated: boolean,
-    _attacker: Pokemon,
-    _move: Move,
-    multiplier: ValueHolder<number>,
-  ): void {
+  public override apply({ multiplier }: ReceivedMoveDamageMultiplierAbAttrParams): void {
     multiplier.value *= this.damageMultiplier;
   }
 
-  public override canApply(...[pokemon, , attacker, move]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon, attacker, move }: Parameters<this["apply"]>[0]): boolean {
     return this.condition(pokemon, attacker, move);
   }
 }

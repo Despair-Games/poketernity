@@ -3,7 +3,7 @@ import type { Pokemon } from "#field/pokemon";
 import type { Move } from "#moves/move";
 import { MoveAttr } from "#moves/move-attr";
 import type { MoveConditionFunc } from "#types/move-types";
-import { BooleanHolder } from "#utils/common-utils";
+import { ValueHolder } from "#utils/common-utils";
 
 /**
  * Attribute to mark a move as a {@link https://bulbapedia.bulbagarden.net/wiki/One-hit_knockout_move | one-hit knockout}
@@ -12,14 +12,11 @@ import { BooleanHolder } from "#utils/common-utils";
 export class OneHitKOAttr extends MoveAttr {
   /**
    * If the target is not a Boss, flags the given move as a one-hit KO
-   * @param _user the {@linkcode Pokemon} using the move
-   * @param _target the {@linkcode Pokemon} targeted by the move
-   * @param _move the {@linkcode Move} being used
-   * @param isOneHitKo a {@linkcode BooleanHolder} containing a flag which, if set to `true`, marks
-   * the current attack as a one-hit KO
+   * @param isOneHitKo - A {@linkcode ValueHolder} containing a flag which, if set to `true`,
+   * marks the current attack as a one-hit KO
    * @returns `true` if the move is flagged as a one-hit KO
    */
-  override apply(_user: Pokemon, _target: Pokemon, _move: Move, isOneHitKo: BooleanHolder): boolean {
+  override apply(_user: Pokemon, _target: Pokemon, _move: Move, isOneHitKo: ValueHolder<boolean>): boolean {
     isOneHitKo.value = true;
 
     return true;
@@ -27,8 +24,8 @@ export class OneHitKOAttr extends MoveAttr {
 
   override getCondition(): MoveConditionFunc {
     return (user, target, _move) => {
-      const cancelled = new BooleanHolder(false);
-      applyAbAttrs("BlockOneHitKOAbAttr", target, false, cancelled);
+      const cancelled = new ValueHolder(false);
+      applyAbAttrs("BlockOneHitKOAbAttr", { pokemon: target, simulated: false, cancelled });
       return !cancelled.value && user.level >= target.level && !target.isMax(false);
     };
   }

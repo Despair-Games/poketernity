@@ -32,7 +32,7 @@ import { DoubleBerryEffectAbAttr } from "#abilities/double-berry-effect-ab-attr"
 import { DownloadAbAttr } from "#abilities/download-ab-attr";
 import { EffectSporeAbAttr } from "#abilities/effect-spore-ab-attr";
 import { EffectiveStatMultiplierAbAttr } from "#abilities/effective-stat-multiplier-ab-attr";
-import { EvasivenessMultiplierAbAttr } from "#abilities/evasiveness-multiplier-ab-attr";
+import { EvasionMultiplierAbAttr } from "#abilities/evasion-multiplier-ab-attr";
 import { FetchBallAbAttr } from "#abilities/fetch-ball-ab-attr";
 import { FieldAccuracyMultiplierAbAttr } from "#abilities/field-accuracy-multiplier-ab-attr";
 import { FieldMoveTypePowerBoostAbAttr } from "#abilities/field-move-type-power-boost-ab-attr";
@@ -116,7 +116,6 @@ import { PostSummonStatStageChangeAbAttr } from "#abilities/post-summon-stat-sta
 import { PostSummonStatStageChangeOnArenaAbAttr } from "#abilities/post-summon-stat-stage-change-on-arena-ab-attr";
 import { PostSummonTerrainChangeAbAttr } from "#abilities/post-summon-terrain-change-ab-attr";
 import { PostSummonTransformAbAttr } from "#abilities/post-summon-transform-ab-attr";
-import { PostSummonUnnamedMessageAbAttr } from "#abilities/post-summon-unnamed-message-ab-attr";
 import { PostSummonUserFieldRemoveStatusEffectAbAttr } from "#abilities/post-summon-user-field-remove-status-effect-ab-attr";
 import { PostSummonWeatherChangeAbAttr } from "#abilities/post-summon-weather-change-ab-attr";
 import { PostSummonWeatherSuppressedFormChangeAbAttr } from "#abilities/post-summon-weather-suppressed-form-change-ab-attr";
@@ -241,7 +240,7 @@ export function initAbilities(): void {
       .ignorable()
       .build(),
     new AbBuilder(AbilityId.SAND_VEIL, 3) //
-      .attr(EvasivenessMultiplierAbAttr, 1.2)
+      .attr(EvasionMultiplierAbAttr, 1.2)
       .attr(BlockWeatherDamageAbAttr, WeatherType.SANDSTORM)
       .condition(getWeatherCondition(WeatherType.SANDSTORM))
       .ignorable()
@@ -265,7 +264,7 @@ export function initAbilities(): void {
       .build(),
     new AbBuilder(AbilityId.CLOUD_NINE, 3) //
       .attr(SuppressWeatherEffectAbAttr)
-      .attr(PostSummonUnnamedMessageAbAttr, i18next.t("abilityTriggers:weatherEffectDisappeared"))
+      .attr(PostSummonMessageAbAttr, () => i18next.t("abilityTriggers:weatherEffectDisappeared"))
       .attr(PostSummonWeatherSuppressedFormChangeAbAttr)
       .attr(PostFaintUnsuppressedWeatherFormChangeAbAttr)
       .bypassFaint()
@@ -544,13 +543,13 @@ export function initAbilities(): void {
       .build(),
     new AbBuilder(AbilityId.AIR_LOCK, 3) //
       .attr(SuppressWeatherEffectAbAttr)
-      .attr(PostSummonUnnamedMessageAbAttr, i18next.t("abilityTriggers:weatherEffectDisappeared"))
+      .attr(PostSummonMessageAbAttr, () => i18next.t("abilityTriggers:weatherEffectDisappeared"))
       .attr(PostSummonWeatherSuppressedFormChangeAbAttr)
       .attr(PostFaintUnsuppressedWeatherFormChangeAbAttr)
       .bypassFaint()
       .build(),
     new AbBuilder(AbilityId.TANGLED_FEET, 4) //
-      .conditionalAttr((pokemon) => pokemon.hasTag(BattlerTagType.CONFUSED), EvasivenessMultiplierAbAttr, 2)
+      .conditionalAttr((pokemon) => pokemon.hasTag(BattlerTagType.CONFUSED), EvasionMultiplierAbAttr, 2)
       .ignorable()
       .build(),
     new AbBuilder(AbilityId.MOTOR_DRIVE, 4) //
@@ -575,7 +574,7 @@ export function initAbilities(): void {
       .attr(FlinchStatStageChangeAbAttr, [Stat.SPD], 1)
       .build(),
     new AbBuilder(AbilityId.SNOW_CLOAK, 4) //
-      .attr(EvasivenessMultiplierAbAttr, 1.2)
+      .attr(EvasionMultiplierAbAttr, 1.2)
       .attr(BlockWeatherDamageAbAttr, WeatherType.HAIL)
       .condition(getWeatherCondition(...SNOWY_WEATHER_TYPES))
       .ignorable()
@@ -638,7 +637,8 @@ export function initAbilities(): void {
       .conditionalAttr((pokemon) => pokemon.hasNonVolatileStatusEffect(), EffectiveStatMultiplierAbAttr, Stat.SPD, 1.5)
       .build(),
     new AbBuilder(AbilityId.NORMALIZE, 4) //
-      .attr(MoveTypeChangeAbAttr, ElementalType.NORMAL, 1.2, anyTypeMoveConversionCondition)
+      .attr(MoveTypeChangeAbAttr, ElementalType.NORMAL, anyTypeMoveConversionCondition)
+      .attr(MovePowerBoostAbAttr, anyTypeMoveConversionCondition, 1.2)
       .build(),
     new AbBuilder(AbilityId.SNIPER, 4) //
       .attr(MultCritAbAttr, 1.5)
@@ -1035,7 +1035,8 @@ export function initAbilities(): void {
       .attr(MoveFlagPowerBoostAbAttr, MoveFlags.BITING_MOVE, 1.5)
       .build(),
     new AbBuilder(AbilityId.REFRIGERATE, 6) //
-      .attr(MoveTypeChangeAbAttr, ElementalType.ICE, 1.2, normalTypeMoveConversionCondition)
+      .attr(MoveTypeChangeAbAttr, ElementalType.ICE, normalTypeMoveConversionCondition)
+      .attr(MovePowerBoostAbAttr, normalTypeMoveConversionCondition, 1.2)
       .build(),
     new AbBuilder(AbilityId.SWEET_VEIL, 6) //
       .attr(UserFieldStatusEffectImmunityAbAttr, StatusEffect.SLEEP)
@@ -1054,11 +1055,7 @@ export function initAbilities(): void {
       .build(),
     new AbBuilder(AbilityId.MEGA_LAUNCHER, 6) //
       .attr(MoveFlagPowerBoostAbAttr, MoveFlags.PULSE_MOVE, 1.5)
-      .attr(
-        RecoveryBoostAbAttr,
-        (pokemon, _target, move) => !!pokemon && !!move?.checkFlag(MoveFlags.PULSE_MOVE, pokemon),
-        1.5,
-      )
+      .attr(RecoveryBoostAbAttr, (pokemon, _target, move) => move.checkFlag(MoveFlags.PULSE_MOVE, pokemon), 1.5)
       .build(),
     new AbBuilder(AbilityId.GRASS_PELT, 6) //
       .conditionalAttr(getTerrainCondition(TerrainType.GRASSY), EffectiveStatMultiplierAbAttr, Stat.DEF, 1.5)
@@ -1071,7 +1068,8 @@ export function initAbilities(): void {
       .attr(MoveFlagPowerBoostAbAttr, MoveFlags.MAKES_CONTACT, 1.3)
       .build(),
     new AbBuilder(AbilityId.PIXILATE, 6) //
-      .attr(MoveTypeChangeAbAttr, ElementalType.FAIRY, 1.2, normalTypeMoveConversionCondition)
+      .attr(MoveTypeChangeAbAttr, ElementalType.FAIRY, normalTypeMoveConversionCondition)
+      .attr(MovePowerBoostAbAttr, normalTypeMoveConversionCondition, 1.2)
       .build(),
     new AbBuilder(AbilityId.GOOEY, 6) //
       .attr(
@@ -1083,7 +1081,8 @@ export function initAbilities(): void {
       )
       .build(),
     new AbBuilder(AbilityId.AERILATE, 6) //
-      .attr(MoveTypeChangeAbAttr, ElementalType.FLYING, 1.2, normalTypeMoveConversionCondition)
+      .attr(MoveTypeChangeAbAttr, ElementalType.FLYING, normalTypeMoveConversionCondition)
+      .attr(MovePowerBoostAbAttr, normalTypeMoveConversionCondition, 1.2)
       .build(),
     new AbBuilder(AbilityId.PARENTAL_BOND, 6) //
       .attr(AddSecondStrikeAbAttr)
@@ -1224,7 +1223,6 @@ export function initAbilities(): void {
       .attr(
         MoveTypeChangeAbAttr,
         ElementalType.WATER,
-        1,
         (user, target, move) => !!user && !!move?.checkFlag(MoveFlags.SOUND_MOVE, user, target),
       )
       .build(),
@@ -1232,7 +1230,8 @@ export function initAbilities(): void {
       .attr(ChangeMovePriorityAbAttr, (pokemon, move) => move.checkFlag(MoveFlags.TRIAGE_MOVE, pokemon), 3)
       .build(),
     new AbBuilder(AbilityId.GALVANIZE, 7) //
-      .attr(MoveTypeChangeAbAttr, ElementalType.ELECTRIC, 1.2, normalTypeMoveConversionCondition)
+      .attr(MoveTypeChangeAbAttr, ElementalType.ELECTRIC, normalTypeMoveConversionCondition)
+      .attr(MovePowerBoostAbAttr, normalTypeMoveConversionCondition, 1.2)
       .build(),
     new AbBuilder(AbilityId.SURGE_SURFER, 7) //
       .conditionalAttr(getTerrainCondition(TerrainType.ELECTRIC), EffectiveStatMultiplierAbAttr, Stat.SPD, 2)

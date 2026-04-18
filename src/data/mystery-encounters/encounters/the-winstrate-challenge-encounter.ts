@@ -170,7 +170,9 @@ async function spawnNextTrainerOrEndEncounter() {
   }
 }
 
-function endTrainerBattleAndShowDialogue(): Promise<void> {
+async function endTrainerBattleAndShowDialogue(): Promise<void> {
+  // biome-ignore lint/suspicious/noAsyncPromiseExecutor: TODO: fix this
+  // biome-ignore lint/nursery/noMisusedPromises: TODO: fix this
   return new Promise(async (resolve) => {
     if (globalScene.currentBattle.mysteryEncounter!.enemyPartyConfigs.length === 0) {
       // Battle is over
@@ -208,7 +210,7 @@ function endTrainerBattleAndShowDialogue(): Promise<void> {
         }
 
         pokemon.resetWaveData();
-        applyAbAttrs("PostBattleInitAbAttr", pokemon, false);
+        applyAbAttrs("PostBattleInitAbAttr", { pokemon, simulated: false });
       }
 
       globalScene.phaseManager.createAndUnshiftPhase("ShowTrainerPhase");

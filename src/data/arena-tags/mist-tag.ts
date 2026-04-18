@@ -6,12 +6,12 @@ import type { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#field/pokemon";
-import { BooleanHolder } from "#utils/common-utils";
+import { type BooleanHolder, ValueHolder } from "#utils/common-utils";
 import i18next from "i18next";
 
 /**
- * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Mist_(move) Mist}.
  * Prevents Pokémon on the opposing side from lowering the stats of the Pokémon in the Mist.
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Mist_(move)}
  */
 export class MistTag extends SerializableArenaTag {
   public override readonly tagType = ArenaTagType.MIST;
@@ -26,13 +26,15 @@ export class MistTag extends SerializableArenaTag {
     if (this.sourceId) {
       const source = globalScene.getPokemonById(this.sourceId);
 
-      if (!quiet && source) {
+      if (!quiet) {
+        if (!source) {
+          console.warn("Failed to get source for MistTag onAdd");
+          return;
+        }
         globalScene.phaseManager.createAndUnshiftPhase(
           "MessagePhase",
           i18next.t("arenaTag:mistOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(source) }),
         );
-      } else if (!quiet) {
-        console.warn("Failed to get source for MistTag onAdd");
       }
     }
   }
@@ -47,8 +49,8 @@ export class MistTag extends SerializableArenaTag {
    */
   override apply(simulated: boolean, attacker: Pokemon | undefined, cancelled: BooleanHolder): boolean {
     if (attacker?.isActive(true)) {
-      const bypassed = new BooleanHolder(false);
-      applyAbAttrs("InfiltratorAbAttr", attacker, simulated, bypassed);
+      const bypassed = new ValueHolder(false);
+      applyAbAttrs("InfiltratorAbAttr", { pokemon: attacker, simulated, bypassed });
       if (bypassed.value) {
         return false;
       }

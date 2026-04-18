@@ -3,7 +3,7 @@ import { PostSummonAbAttr } from "#abilities/post-summon-ab-attr";
 import { globalScene } from "#app/global-scene";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { BattleStat } from "#enums/stat";
-import type { Pokemon } from "#field/pokemon";
+import type { BaseAbAttrParams } from "#types/ab-attr-param-types";
 import { ValueHolder } from "#utils/common-utils";
 import { inSpeedOrder } from "#utils/speed-order-generator";
 
@@ -22,7 +22,7 @@ export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
     this.intimidate = intimidate;
   }
 
-  public override apply(pokemon: Pokemon, simulated: boolean): void {
+  public override apply({ pokemon, simulated }: BaseAbAttrParams): void {
     if (simulated) {
       return;
     }
@@ -47,7 +47,7 @@ export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
           continue;
         }
 
-        applyAbAttrs("IntimidateImmunityAbAttr", opponent, simulated, cancelled);
+        applyAbAttrs("IntimidateImmunityAbAttr", { pokemon: opponent, simulated, cancelled });
       }
 
       if (!cancelled.value) {
@@ -60,13 +60,14 @@ export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
         );
       }
 
+      // TODO: should this run if `cancelled.value` is `true`?
       if (this.intimidate) {
-        applyAbAttrs("PostIntimidateStatStageChangeAbAttr", opponent, simulated);
+        applyAbAttrs("PostIntimidateStatStageChangeAbAttr", { pokemon: opponent, simulated });
       }
     }
   }
 
-  public override canApply(...[pokemon, simulated]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon, simulated }: Parameters<this["apply"]>[0]): boolean {
     if (this.selfTarget) {
       return true;
     }
@@ -79,7 +80,7 @@ export class PostSummonStatStageChangeAbAttr extends PostSummonAbAttr {
 
       if (this.intimidate) {
         const cancelled = new ValueHolder(false);
-        applyAbAttrs("IntimidateImmunityAbAttr", opp, simulated, cancelled);
+        applyAbAttrs("IntimidateImmunityAbAttr", { pokemon: opp, simulated, cancelled });
         return !cancelled.value;
       }
       return true;

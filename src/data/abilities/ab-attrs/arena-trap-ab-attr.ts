@@ -3,7 +3,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { AbilityId } from "#enums/ability-id";
 import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#field/pokemon";
-import type { BooleanHolder } from "#utils/common-utils";
+import type { ArenaTrapAbAttrParams } from "#types/ab-attr-param-types";
 import i18next from "i18next";
 
 type ArenaTrapCondition = (user: Pokemon, target: Pokemon) => boolean;
@@ -11,38 +11,28 @@ type ArenaTrapCondition = (user: Pokemon, target: Pokemon) => boolean;
 /**
  * Determines whether a Pokemon is blocked from switching/running away
  * because of a trapping ability or move.
+ * @remarks
+ * Conditions that prevent a Pokemon from being trapped:
+ * - If the enemy is a Ghost type
+ * - If the enemy has the ability Run Away
+ * - If the user has Magnet Pull and the enemy is not a Steel type
+ * - If the user has Arena Trap and the enemy is not grounded
  */
 export class ArenaTrapAbAttr extends AbAttr {
   protected override readonly abAttrKey = "ArenaTrapAbAttr";
+
   protected readonly arenaTrapCondition: ArenaTrapCondition;
 
   constructor(condition: ArenaTrapCondition) {
     super(false);
     this.arenaTrapCondition = condition;
   }
-  /**
-   * Checks if enemy Pokemon is trapped by an Arena Trap-esque ability:
-   * - If the enemy is a Ghost type, it is not trapped
-   * - If the enemy has the ability Run Away, it is not trapped.
-   * - If the user has Magnet Pull and the enemy is not a Steel type, it is not trapped.
-   * - If the user has Arena Trap and the enemy is not grounded, it is not trapped.
-   * @param pokemon The {@link Pokemon} with this {@link AbAttr}
-   * @param simulated n/a
-   * @param trapped {@link BooleanHolder} indicating whether the other Pokemon is trapped or not
-   * @param trappedPokemon The {@link Pokemon} that is affected by an Arena Trap ability
-   * @returns `true` if enemy Pokemon is trapped
-   */
-  public override apply(
-    _pokemon: Pokemon,
-    _simulated: boolean,
-    trapped: BooleanHolder,
-    _trappedPokemon: Pokemon,
-  ): void {
-    trapped.value = true;
+
+  public override apply({ isTrapped }: ArenaTrapAbAttrParams): void {
+    isTrapped.value = true;
   }
 
-  /** @returns `true` if the target Pokemon can be trapped by this effect. */
-  public override canApply(...[pokemon, , , trappedPokemon]: Parameters<this["apply"]>): boolean {
+  public override canApply({ pokemon, trappedPokemon }: Parameters<this["apply"]>[0]): boolean {
     return (
       this.arenaTrapCondition(pokemon, trappedPokemon)
       && !trappedPokemon.isOfType(ElementalType.GHOST, true, true)
@@ -50,7 +40,7 @@ export class ArenaTrapAbAttr extends AbAttr {
     );
   }
 
-  public override getTriggerMessage(pokemon: Pokemon, abilityName: string): string {
+  public override getTriggerMessage({ pokemon }: Parameters<this["apply"]>[0], abilityName: string): string {
     return i18next.t("abilityTriggers:arenaTrap", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       abilityName,

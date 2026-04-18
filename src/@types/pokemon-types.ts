@@ -101,6 +101,7 @@ export interface PokemonTurnData {
   totalDamageDealt: number;
   singleHitDamageDealt: number;
   damageTaken: number;
+  // TODO: examine the usage of `.attacksReceived`
   attacksReceived: AttackMoveResult[];
   order: number;
   statStagesIncreased: boolean;
