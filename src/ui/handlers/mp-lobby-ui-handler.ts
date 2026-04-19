@@ -9,6 +9,7 @@ import { WindowVariant } from "#enums/window-variant";
 import { MpClient } from "#multiplayer/mp-client";
 import { registerMpEventHandlers } from "#multiplayer/mp-event-handler";
 import type { LobbyParticipantDto, LobbyUpdateMessage, RunStartedMessage } from "#multiplayer/mp-protocol";
+import { setMpSeed } from "#multiplayer/mp-rng";
 import { MpSession } from "#multiplayer/mp-session";
 import type { TitlePhase } from "#phases/title-phase";
 import { FormModalUiHandler } from "#ui/form-modal-ui-handler";
@@ -375,6 +376,9 @@ export class MpLobbyUiHandler extends FormModalUiHandler {
 
     mpSession.startRun(msg);
     mpSession.initSubsystems();
+
+    // Apply the shared seed so both clients generate identical encounters
+    setMpSeed(msg.seed);
 
     // Register global MP event handlers (reconnect overlay, etc.)
     registerMpEventHandlers();
