@@ -1,3 +1,4 @@
+import type { MpClient } from "./mp-client";
 import { MpCommandSync } from "./mp-command-sync";
 import { MpDesyncGuard } from "./mp-desync-guard";
 import { MpPhaseGate } from "./mp-phase-gate";
@@ -15,6 +16,7 @@ export class MpSession {
   public isHost: boolean = false;
   public clientBuildHash: string = "";
 
+  private _client: MpClient | null = null;
   private readonly _peers: Map<string, PeerInfo> = new Map();
   private _lobbyParticipants: LobbyParticipantDto[] = [];
   private _currentTurn: number = 0;
@@ -26,6 +28,14 @@ export class MpSession {
 
   get peers(): ReadonlyMap<string, PeerInfo> {
     return this._peers;
+  }
+
+  get client(): MpClient | null {
+    return this._client;
+  }
+
+  set client(value: MpClient | null) {
+    this._client = value;
   }
 
   get lobbyParticipants(): readonly LobbyParticipantDto[] {

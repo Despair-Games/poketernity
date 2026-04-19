@@ -37,6 +37,8 @@ import { LoginFormUiHandler } from "#ui/login-form-ui-handler";
 import { MenuUiHandler } from "#ui/menu-ui-handler";
 import { MessageUiHandler } from "#ui/message-ui-handler";
 import { ModifierSelectUiHandler } from "#ui/modifier-select-ui-handler";
+import { MpLobbyUiHandler } from "#ui/mp-lobby-ui-handler";
+import { MpReconnectModalUiHandler } from "#ui/mp-reconnect-modal-ui-handler";
 import { MysteryEncounterUiHandler } from "#ui/mystery-encounter-ui-handler";
 import { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 import { PartyUiHandler } from "#ui/party-ui-handler";
@@ -120,10 +122,12 @@ const noTransitionModes: readonly UiMode[] = [
   UiMode.ADMIN,
   UiMode.MYSTERY_ENCOUNTER,
   UiMode.RUN_INFO,
+  UiMode.MP_LOBBY,
+  UiMode.MP_RECONNECT,
 ] as const;
 
 /** List of ui modes that can always be destroyed after use. */
-const alwaysDestroyModes: readonly UiMode[] = [UiMode.UNAVAILABLE, UiMode.SESSION_RELOAD] as const;
+const alwaysDestroyModes: readonly UiMode[] = [UiMode.UNAVAILABLE, UiMode.SESSION_RELOAD, UiMode.MP_RECONNECT] as const;
 
 /** List of ui modes used during run preparation that can be destroyed when in a run. */
 const runPrepModes: readonly UiMode[] = [
@@ -358,6 +362,10 @@ export class UI extends Phaser.GameObjects.Container {
         return new AdminUiHandler();
       case UiMode.MYSTERY_ENCOUNTER:
         return new MysteryEncounterUiHandler();
+      case UiMode.MP_LOBBY:
+        return new MpLobbyUiHandler();
+      case UiMode.MP_RECONNECT:
+        return new MpReconnectModalUiHandler();
     }
   }
 

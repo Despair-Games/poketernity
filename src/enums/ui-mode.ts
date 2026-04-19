@@ -43,6 +43,8 @@ export const UiMode = {
   AUTO_COMPLETE: 40,
   ADMIN: 41,
   MYSTERY_ENCOUNTER: 42,
+  MP_LOBBY: 43,
+  MP_RECONNECT: 44,
 } as const;
 
 export type UiMode = ObjectValues<typeof UiMode>;

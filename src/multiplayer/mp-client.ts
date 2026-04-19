@@ -113,6 +113,10 @@ export class MpClient {
     await this._invoke("Heartbeat");
   }
 
+  async convertToSolo(): Promise<void> {
+    await this._invoke("ConvertToSolo");
+  }
+
   // --- Private methods ---
 
   private async _invoke(method: string, ...args: any[]): Promise<void> {

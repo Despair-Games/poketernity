@@ -729,7 +729,7 @@ export class GameData {
       const sessionStorageKey = getLocalStorageKey(GameDataType.SESSION, slotId);
       const sessionData = localStorage.getItem(sessionStorageKey);
       if (!BYPASS_LOGIN && !sessionData) {
-        api.savedata.session.get({ slot: slotId, clientSessionId }).then(async (response) => {
+        await api.savedata.session.get({ slot: slotId, clientSessionId }).then(async (response) => {
           if (!response || response?.length === 0 || response?.[0] !== "{") {
             console.error(response);
             return resolve(null);
@@ -1178,7 +1178,7 @@ export class GameData {
         }
 
         promise.then((response) => {
-          if (!response?.length || response[0] !== "{") {
+          if (!response || response.length === 0 || response[0] !== "{") {
             console.error(response);
             resolve(false);
             return;
@@ -1356,7 +1356,7 @@ export class GameData {
       defaultNaturesAttr |= 1 << nature;
     }
 
-    const starterSpeciesIds = Object.keys(speciesStarterCosts).map((k) => Number.parseInt(k) as SpeciesId);
+    const starterSpeciesIds = Object.keys(speciesStarterCosts).map((k) => Number.parseInt(k, 10) as SpeciesId);
 
     for (const speciesId of starterSpeciesIds) {
       const isDefaultStarter = DEFAULT_STARTER_SPECIES.includes(speciesId);
