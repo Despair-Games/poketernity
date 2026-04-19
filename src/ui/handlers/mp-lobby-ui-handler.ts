@@ -1,5 +1,6 @@
 import { eventBus } from "#app/event-bus";
 import { globalScene, mpSession, setMpSession } from "#app/global-scene";
+import { SESSION_ID_COOKIE } from "#constants/app-constants";
 import { Button } from "#enums/button";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
@@ -12,6 +13,7 @@ import { FormModalUiHandler } from "#ui/form-modal-ui-handler";
 import type { FormModalConfig, InputFieldConfig, ModalConfig } from "#ui/modal-config";
 import { addTextObject } from "#ui/text-utils";
 import { addWindow } from "#ui/ui-theme";
+import { getCookie } from "#utils/app-utils";
 
 type LobbyState = "initial" | "hosting" | "joined";
 
@@ -257,7 +259,8 @@ export class MpLobbyUiHandler extends FormModalUiHandler {
       session.client = this.mpClient;
 
       const serverUrl = import.meta.env.VITE_SERVER_URL ?? "";
-      await this.mpClient.connect(serverUrl, "");
+      const token = getCookie(SESSION_ID_COOKIE);
+      await this.mpClient.connect(serverUrl, token);
       await this.mpClient.createLobby({ mode: "coop" });
 
       this.lobbyState = "hosting";
@@ -288,7 +291,8 @@ export class MpLobbyUiHandler extends FormModalUiHandler {
       session.client = this.mpClient;
 
       const serverUrl = import.meta.env.VITE_SERVER_URL ?? "";
-      await this.mpClient.connect(serverUrl, "");
+      const token = getCookie(SESSION_ID_COOKIE);
+      await this.mpClient.connect(serverUrl, token);
       await this.mpClient.joinLobby({ inviteCode });
 
       this.lobbyState = "joined";
