@@ -13,3 +13,24 @@ export type TouchControlsEvent =
   | "touchControls/move/reset";
 
 export type SettingsEvent = "settings/updated" | "settings/update/failed" | "settings/saved";
+
+/**
+ * Multiplayer events emitted by the MP client and consumed by game systems.
+ */
+export type MultiplayerEvent =
+  | "mp:connected"
+  | "mp:disconnected"
+  | "mp:connection-error"
+  | "mp:reconnecting"
+  | "mp:reconnected"
+  | "mp:lobby-update"
+  | "mp:run-started"
+  | "mp:turn-resolved"
+  | "mp:desync"
+  | "mp:peer-disconnected"
+  | "mp:peer-reconnected"
+  | "mp:session-ended"
+  | "mp:submit-command"
+  | "mp:peer-joined"
+  | "mp:peer-left"
+  | "mp:turn-sync";

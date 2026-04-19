@@ -1,7 +1,7 @@
-import type { InputsEvent, SettingsEvent, TouchControlsEvent } from "#types/event-bus-types";
+import type { InputsEvent, MultiplayerEvent, SettingsEvent, TouchControlsEvent } from "#types/event-bus-types";
 import Phaser from "phaser";
 
-type EventName = SettingsEvent | InputsEvent | TouchControlsEvent;
+type EventName = SettingsEvent | InputsEvent | TouchControlsEvent | MultiplayerEvent;
 type CallbackFn<D> = (data: D) => void;
 
 /**

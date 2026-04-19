@@ -84,6 +84,7 @@
       ],
       "#utils/*": ["./src/utils/*.ts"],
       "#data/*": ["./src/data/*.ts"],
+      "#multiplayer/*": ["./src/multiplayer/*.ts"],
       "#app/*": ["./src/*.ts"]
     }
   },
