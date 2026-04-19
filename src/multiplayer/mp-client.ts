@@ -7,6 +7,7 @@ import type {
   PeerDisconnectedMessage,
   PeerReconnectedMessage,
   RunStartedMessage,
+  SelfIdentifyMessage,
   SessionEndedMessage,
   SetReadyRequest,
   SubmitCommandRequest,
@@ -133,6 +134,10 @@ export class MpClient {
     if (!this._connection) {
       return;
     }
+
+    this._connection.on("SelfIdentify", (msg: SelfIdentifyMessage) => {
+      eventBus.emit("mp:self-identify" as any, msg);
+    });
 
     this._connection.on("LobbyUpdate", (msg: LobbyUpdateMessage) => {
       eventBus.emit("mp:lobby-update" as any, msg);

@@ -65,6 +65,11 @@ export interface DesyncDetectedMessage {
   peerHashes: Record<string, string>;
 }
 
+export interface SelfIdentifyMessage {
+  userId: string;
+  username: string;
+}
+
 export interface PeerDisconnectedMessage {
   peerId: string;
   username: string;

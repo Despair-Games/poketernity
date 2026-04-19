@@ -8,7 +8,12 @@ import { UiMode } from "#enums/ui-mode";
 import { WindowVariant } from "#enums/window-variant";
 import { MpClient } from "#multiplayer/mp-client";
 import { registerMpEventHandlers } from "#multiplayer/mp-event-handler";
-import type { LobbyParticipantDto, LobbyUpdateMessage, RunStartedMessage } from "#multiplayer/mp-protocol";
+import type {
+  LobbyParticipantDto,
+  LobbyUpdateMessage,
+  RunStartedMessage,
+  SelfIdentifyMessage,
+} from "#multiplayer/mp-protocol";
 import { setMpSeed } from "#multiplayer/mp-rng";
 import { MpSession } from "#multiplayer/mp-session";
 import type { TitlePhase } from "#phases/title-phase";
@@ -50,11 +55,13 @@ export class MpLobbyUiHandler extends FormModalUiHandler {
   // Bound event handlers for cleanup
   private readonly boundOnLobbyUpdate: (msg: LobbyUpdateMessage) => void;
   private readonly boundOnRunStarted: (msg: RunStartedMessage) => void;
+  private readonly boundOnSelfIdentify: (msg: SelfIdentifyMessage) => void;
 
   constructor() {
     super(UiMode.MP_LOBBY);
     this.boundOnLobbyUpdate = this.onLobbyUpdate.bind(this);
     this.boundOnRunStarted = this.onRunStarted.bind(this);
+    this.boundOnSelfIdentify = this.onSelfIdentify.bind(this);
   }
 
   protected override getModalTitle(): string {
@@ -229,6 +236,7 @@ export class MpLobbyUiHandler extends FormModalUiHandler {
     }
 
     // Subscribe to multiplayer events
+    eventBus.on("mp:self-identify" as any, this.boundOnSelfIdentify);
     eventBus.on("mp:lobby-update" as any, this.boundOnLobbyUpdate);
     eventBus.on("mp:run-started" as any, this.boundOnRunStarted);
 
@@ -398,6 +406,14 @@ export class MpLobbyUiHandler extends FormModalUiHandler {
     }
   }
 
+  private onSelfIdentify(msg: SelfIdentifyMessage): void {
+    if (mpSession) {
+      mpSession.localUserId = msg.userId;
+      mpSession.localUsername = msg.username;
+      console.log(`[MpLobby] Identified as ${msg.username} (${msg.userId})`);
+    }
+  }
+
   // --- View updates ---
 
   private updateLobbyView(): void {
@@ -486,6 +502,7 @@ export class MpLobbyUiHandler extends FormModalUiHandler {
 
   protected override clear(): void {
     // Unsubscribe from events
+    eventBus.off("mp:self-identify" as any, this.boundOnSelfIdentify);
     eventBus.off("mp:lobby-update" as any, this.boundOnLobbyUpdate);
     eventBus.off("mp:run-started" as any, this.boundOnRunStarted);
 

@@ -1,4 +1,4 @@
-import { globalScene } from "#app/global-scene";
+import { globalScene, mpSession } from "#app/global-scene";
 import type { TurnCommand } from "#app/turn-command-manager";
 import { allMoves } from "#data/data-lists";
 import type { BattleCommand } from "#enums/battle-command";
@@ -88,10 +88,16 @@ export function deserializeTurnCommand(cmd: SerializedTurnCommand): TurnCommand 
 
 /**
  * Parse peer command data and apply all valid commands to the turn manager.
+ * Filters out the local player's own commands (already in the queue).
  */
 export function applyPeerCommands(peerCommands: PeerCommandData[]): void {
+  const localUserId = mpSession?.localUserId;
   const turnManager = globalScene.currentBattle.turnManager;
   for (const peerData of peerCommands) {
+    // Skip our own commands — they're already in the queue
+    if (localUserId && peerData.userId === localUserId) {
+      continue;
+    }
     const commands: SerializedTurnCommand[] = JSON.parse(peerData.commandJson);
     for (const cmd of commands) {
       const turnCommand = deserializeTurnCommand(cmd);

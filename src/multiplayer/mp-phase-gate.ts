@@ -66,7 +66,14 @@ export class MpPhaseGate {
     if (phaseName === "TurnStartPhase") {
       this.syncTurnCommands().catch((err) => {
         console.error("[MP] Turn command sync failed:", err);
+        // Release the gate on error so the game doesn't freeze
+        this.release();
       });
+    } else {
+      // For non-turn sync phases (SelectModifier, SelectBiome, EggHatch),
+      // both clients produce identical results from the shared seed.
+      // Auto-release after a microtask to maintain the gating contract.
+      queueMicrotask(() => this.release());
     }
 
     return new Promise<void>((resolve) => {
@@ -109,6 +116,10 @@ export class MpPhaseGate {
     });
     const localCommandJson = JSON.stringify(localCommands);
 
+    console.log(
+      `[MP] Submitting ${localCommands.length} commands for turn ${this.session.currentTurn}, wave ${this.session.currentWave}`,
+    );
+
     // Finalize the desync hash for this turn
     const stateHash = this._desyncGuard.finalizeTurn(this.session.currentTurn);
 
@@ -122,6 +133,8 @@ export class MpPhaseGate {
 
     // Apply peer commands to the turn queue
     applyPeerCommands(peerCommands);
+
+    console.log(`[MP] Turn ${this.session.currentTurn} synced — applied ${peerCommands.length} peer command sets`);
 
     // Advance the session turn counter
     this.session.advanceTurn();
