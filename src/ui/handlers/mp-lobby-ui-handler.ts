@@ -2,6 +2,7 @@ import { eventBus } from "#app/event-bus";
 import { globalScene, mpSession, setMpSession } from "#app/global-scene";
 import { SESSION_ID_COOKIE } from "#constants/app-constants";
 import { Button } from "#enums/button";
+import { GameModes } from "#enums/game-modes";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { WindowVariant } from "#enums/window-variant";
@@ -9,6 +10,7 @@ import { MpClient } from "#multiplayer/mp-client";
 import { registerMpEventHandlers } from "#multiplayer/mp-event-handler";
 import type { LobbyParticipantDto, LobbyUpdateMessage, RunStartedMessage } from "#multiplayer/mp-protocol";
 import { MpSession } from "#multiplayer/mp-session";
+import type { TitlePhase } from "#phases/title-phase";
 import { FormModalUiHandler } from "#ui/form-modal-ui-handler";
 import type { FormModalConfig, InputFieldConfig, ModalConfig } from "#ui/modal-config";
 import { addTextObject } from "#ui/text-utils";
@@ -377,9 +379,19 @@ export class MpLobbyUiHandler extends FormModalUiHandler {
     // Register global MP event handlers (reconnect overlay, etc.)
     registerMpEventHandlers();
 
-    // Close lobby UI and transition to game
+    // Close lobby UI
     this.clear();
     globalScene.ui.revertMode();
+
+    // Trigger the normal game start flow through TitlePhase
+    const currentPhase = globalScene.phaseManager.getCurrentPhase();
+    if (currentPhase.is("TitlePhase")) {
+      const titlePhase = currentPhase as TitlePhase;
+      titlePhase.gameMode = GameModes.CLASSIC;
+      globalScene.ui.setMessageMode();
+      globalScene.ui.clearText();
+      titlePhase.end();
+    }
   }
 
   // --- View updates ---
