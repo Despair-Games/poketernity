@@ -66,14 +66,14 @@ export class MpLobbyUiHandler extends FormModalUiHandler {
   }
 
   protected override getWidth(): number {
-    return 200;
+    return 150;
   }
 
   protected override getHeight(_config?: ModalConfig): number {
     if (this.lobbyState === "initial") {
-      return 80;
+      return 70;
     }
-    return 140;
+    return 90;
   }
 
   protected override getMargin(): [number, number, number, number] {
