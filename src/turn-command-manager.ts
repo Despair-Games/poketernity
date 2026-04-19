@@ -304,6 +304,14 @@ export class TurnCommandManager {
     return this.queue.isEmpty();
   }
 
+  /**
+   * Iterate over all commands currently in the queue without removing them.
+   * Used by multiplayer command serialization.
+   */
+  public forEachCommand(callbackFn: (command: TurnCommand) => void): void {
+    this.queue.forEach(callbackFn);
+  }
+
   //#region Private Methods
 
   /**

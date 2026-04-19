@@ -1,4 +1,5 @@
 import { DynamicPhaseManager, dynamicPhaseKeys } from "#app/dynamic-phase-manager";
+import { mpSession } from "#app/global-scene";
 import type { Phase } from "#app/phase";
 import { type PhaseEntryInput, PhaseTree } from "#app/phase-tree";
 import type { DestinyBondTag } from "#battler-tags/destiny-bond-tag";
@@ -406,7 +407,25 @@ export class PhaseManager {
   }
 
   private startCurrentPhase(): void {
-    console.log(`%cStart Phase ${this.currentPhase.constructor.name}`, "color:green;");
+    const phaseName = this.currentPhase.phaseName;
+    console.log(`%cStart Phase ${phaseName}`, "color:green;");
+
+    // Record phase execution for MP desync detection
+    mpSession?.desyncGuard?.recordPhase(phaseName);
+
+    // Gate sync boundary phases in multiplayer
+    if (mpSession?.phaseGate?.shouldGate(phaseName)) {
+      mpSession.phaseGate
+        .gate(phaseName)
+        .then(() => {
+          this.currentPhase.start();
+        })
+        .catch((err) => {
+          console.error("[MP] Phase gate failed:", err);
+        });
+      return;
+    }
+
     this.currentPhase.start();
   }
 

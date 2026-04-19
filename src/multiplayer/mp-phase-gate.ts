@@ -1,3 +1,5 @@
+import { globalScene } from "#app/global-scene";
+import { applyPeerCommands, type SerializedTurnCommand, serializeTurnCommand } from "./mp-command-serialization";
 import type { MpCommandSync } from "./mp-command-sync";
 import type { MpDesyncGuard } from "./mp-desync-guard";
 import type { MpSession } from "./mp-session";
@@ -53,10 +55,19 @@ export class MpPhaseGate {
   /**
    * Gate a phase — blocks execution until release() is called.
    * Returns a promise that resolves when the gate is released.
+   *
+   * For TurnStartPhase, this also kicks off the command sync flow
+   * (serialize → submit → wait for peer → apply → release).
    */
   async gate(phaseName: string): Promise<void> {
     this._gated = true;
     this._gatedPhaseName = phaseName;
+
+    if (phaseName === "TurnStartPhase") {
+      this.syncTurnCommands().catch((err) => {
+        console.error("[MP] Turn command sync failed:", err);
+      });
+    }
 
     return new Promise<void>((resolve) => {
       this._releaseCallback = resolve;
@@ -82,6 +93,41 @@ export class MpPhaseGate {
 
   get gatedPhaseName(): string | null {
     return this._gatedPhaseName;
+  }
+
+  /**
+   * Serializes local turn commands, submits them to the server,
+   * waits for the peer's commands, applies them, and releases the gate.
+   */
+  private async syncTurnCommands(): Promise<void> {
+    const turnManager = globalScene.currentBattle.turnManager;
+
+    // Serialize all local commands
+    const localCommands: SerializedTurnCommand[] = [];
+    turnManager.forEachCommand((cmd) => {
+      localCommands.push(serializeTurnCommand(cmd));
+    });
+    const localCommandJson = JSON.stringify(localCommands);
+
+    // Finalize the desync hash for this turn
+    const stateHash = this._desyncGuard.finalizeTurn(this.session.currentTurn);
+
+    // Submit to server and wait for the peer's commands
+    const peerCommands = await this._commandSync.submitAndWaitForPeer(
+      this.session.currentTurn,
+      this.session.currentWave,
+      localCommandJson,
+      stateHash,
+    );
+
+    // Apply peer commands to the turn queue
+    applyPeerCommands(peerCommands);
+
+    // Advance the session turn counter
+    this.session.advanceTurn();
+
+    // Release the gate so TurnStartPhase can proceed
+    this.release();
   }
 
   reset(): void {

@@ -1,3 +1,6 @@
+import { MpCommandSync } from "./mp-command-sync";
+import { MpDesyncGuard } from "./mp-desync-guard";
+import { MpPhaseGate } from "./mp-phase-gate";
 import type { LobbyParticipantDto, LobbyUpdateMessage, PeerInfo, RunStartedMessage } from "./mp-protocol";
 
 export type MpSessionStatus = "disconnected" | "lobby" | "ready" | "active" | "spectating" | "ended";
@@ -17,6 +20,10 @@ export class MpSession {
   private _currentTurn: number = 0;
   private _currentWave: number = 0;
 
+  private _phaseGate: MpPhaseGate | null = null;
+  private _commandSync: MpCommandSync | null = null;
+  private _desyncGuard: MpDesyncGuard | null = null;
+
   get peers(): ReadonlyMap<string, PeerInfo> {
     return this._peers;
   }
@@ -31,6 +38,18 @@ export class MpSession {
 
   get currentWave(): number {
     return this._currentWave;
+  }
+
+  get phaseGate(): MpPhaseGate | null {
+    return this._phaseGate;
+  }
+
+  get commandSync(): MpCommandSync | null {
+    return this._commandSync;
+  }
+
+  get desyncGuard(): MpDesyncGuard | null {
+    return this._desyncGuard;
   }
 
   get partnerId(): string | undefined {
@@ -49,6 +68,16 @@ export class MpSession {
 
   get isInLobby(): boolean {
     return this.status === "lobby" || this.status === "ready";
+  }
+
+  /**
+   * Initialize the multiplayer subsystems (phase gate, command sync, desync guard).
+   * Should be called after the session transitions to active state.
+   */
+  initSubsystems(): void {
+    this._desyncGuard = new MpDesyncGuard();
+    this._commandSync = new MpCommandSync();
+    this._phaseGate = new MpPhaseGate(this, this._commandSync, this._desyncGuard);
   }
 
   updateFromLobby(msg: LobbyUpdateMessage): void {
@@ -104,5 +133,12 @@ export class MpSession {
     this._lobbyParticipants = [];
     this._currentTurn = 0;
     this._currentWave = 0;
+
+    this._phaseGate?.reset();
+    this._commandSync?.reset();
+    this._desyncGuard?.reset();
+    this._phaseGate = null;
+    this._commandSync = null;
+    this._desyncGuard = null;
   }
 }
