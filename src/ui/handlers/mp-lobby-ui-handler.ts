@@ -5,6 +5,7 @@ import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { WindowVariant } from "#enums/window-variant";
 import { MpClient } from "#multiplayer/mp-client";
+import { registerMpEventHandlers } from "#multiplayer/mp-event-handler";
 import type { LobbyParticipantDto, LobbyUpdateMessage, RunStartedMessage } from "#multiplayer/mp-protocol";
 import { MpSession } from "#multiplayer/mp-session";
 import { FormModalUiHandler } from "#ui/form-modal-ui-handler";
@@ -368,6 +369,9 @@ export class MpLobbyUiHandler extends FormModalUiHandler {
 
     mpSession.startRun(msg);
     mpSession.initSubsystems();
+
+    // Register global MP event handlers (reconnect overlay, etc.)
+    registerMpEventHandlers();
 
     // Close lobby UI and transition to game
     this.clear();

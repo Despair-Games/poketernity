@@ -17,6 +17,7 @@ import { modifierTypes } from "#modifier/modifier-types";
 import { vouchers } from "#system/voucher";
 import type { SessionSaveData } from "#types/session-data";
 import type { GeneralSettingsUiHandler } from "#ui/general-settings-ui-handler";
+import type { MpLobbyUiHandler } from "#ui/mp-lobby-ui-handler";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#ui/option-select-config";
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 import type { SaveSlotSelectUiHandler } from "#ui/save-slot-select-ui-handler";
@@ -132,6 +133,22 @@ export class TitlePhase extends Phase {
               return this.showOptions();
             }
             this.loadSaveSlot(slotId);
+          });
+          return true;
+        },
+      },
+      {
+        label: "Multiplayer",
+        handler: () => {
+          if (BYPASS_LOGIN) {
+            return false;
+          }
+          ui.setOverlayMode<MpLobbyUiHandler>(UiMode.MP_LOBBY, {
+            buttonActions: [
+              () => true, // Create Game
+              () => true, // Join
+              () => true, // Back
+            ],
           });
           return true;
         },
