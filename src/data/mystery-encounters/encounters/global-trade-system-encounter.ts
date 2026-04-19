@@ -45,7 +45,7 @@ import { PokemonData } from "#system/pokemon-data";
 import type { OptionSelectItem } from "#ui/option-select-config";
 import { NumberHolder } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
-import { randInt, randItem, randSeedInt, randSeedItem, randSeedShuffle } from "#utils/random-utils";
+import { randItem, randSeedInt, randSeedItem, randSeedShuffle } from "#utils/random-utils";
 import i18next from "i18next";
 
 /** the i18n namespace for the encounter */
@@ -477,7 +477,7 @@ async function doTradeOptionPhaseCallback(): Promise<void> {
   // Set data properly, then generate the new Pokemon's assets
   receivedPokemonData.passive = tradedPokemon.passive;
   // Pokeball to Ultra ball, randomly
-  receivedPokemonData.pokeball = randInt(3) as PokeballType;
+  receivedPokemonData.pokeball = randSeedInt(3) as PokeballType;
   const dataSource = new PokemonData(receivedPokemonData);
   const newPlayerPokemon = globalScene.addPlayerPokemon(
     receivedPokemonData.species,
@@ -915,14 +915,14 @@ function doTradeReceivedSequence(
 function generateRandomTraderName() {
   const length = Object.keys(trainerNamePools).length;
   // +1 avoids TrainerType.UNKNOWN
-  let trainerTypePool = trainerNamePools[randInt(length) + 1];
+  let trainerTypePool = trainerNamePools[randSeedInt(length) + 1];
   while (!trainerTypePool) {
-    trainerTypePool = trainerNamePools[randInt(length) + 1];
+    trainerTypePool = trainerNamePools[randSeedInt(length) + 1];
   }
   // Some trainers have 2 gendered pools, some do not
-  const genderedPool = trainerTypePool[randInt(trainerTypePool.length)];
-  const trainerNameString = Array.isArray(genderedPool) ? genderedPool[randInt(genderedPool.length)] : genderedPool;
+  const genderedPool = trainerTypePool[randSeedInt(trainerTypePool.length)];
+  const trainerNameString = Array.isArray(genderedPool) ? genderedPool[randSeedInt(genderedPool.length)] : genderedPool;
   // Some names have an '&' symbol and need to be trimmed to a single name instead of a double name
   const trainerNames = trainerNameString.split(" & ");
-  return trainerNames[randInt(trainerNames.length)];
+  return trainerNames[randSeedInt(trainerNames.length)];
 }

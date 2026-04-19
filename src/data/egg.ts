@@ -36,7 +36,7 @@ import { VariantTier } from "#enums/variant-tier";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import { clamp } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
-import { randInt, randomString, randSeedInt } from "#utils/random-utils";
+import { randomString, randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
 
 export const EGG_SEED = 1073741824;
@@ -175,7 +175,7 @@ export class Egg {
           this.checkForPityTierOverrides();
         }
 
-        this._id = eggOptions.id ?? randInt(EGG_SEED, EGG_SEED * this._tier);
+        this._id = eggOptions.id ?? randSeedInt(EGG_SEED, EGG_SEED * this._tier);
 
         this._sourceType = eggOptions.sourceType;
         this._hatchWaves = eggOptions.hatchWaves ?? this.getEggTierDefaultHatchWaves();
@@ -379,7 +379,7 @@ export class Egg {
   private rollEggTier(): EggTier {
     const tierValueOffset =
       this._sourceType === EggSourceType.GACHA_LEGENDARY ? GACHA_LEGENDARY_UP_THRESHOLD_OFFSET : 0;
-    const tierValue = randInt(256);
+    const tierValue = randSeedInt(256);
     if (tierValue >= GACHA_DEFAULT_COMMON_EGG_THRESHOLD + tierValueOffset) {
       return EggTier.COMMON;
     }

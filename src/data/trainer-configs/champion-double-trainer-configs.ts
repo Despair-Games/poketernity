@@ -18,7 +18,7 @@ import { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
 import { TrainerVariant } from "#enums/trainer-variant";
-import { randInt } from "#utils/random-utils";
+import { randSeedInt } from "#utils/random-utils";
 
 export const championDoubleTrainerConfigs: TrainerConfigs = {
   [TrainerType.BLUE_RED]: new TrainerConfig(TrainerType.BLUE_RED)
@@ -277,7 +277,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
       5,
       getRandomPartyMemberFunc([SpeciesId.ROTOM], TrainerSlot.TRAINER_PARTNER, true, (p) => {
         p.setBoss(true, 2);
-        p.formIndex = randInt(p.getFormAmount(), 0); // Random Rotom form since he is the one introducing the rotom phone
+        p.formIndex = randSeedInt(p.getFormAmount(), 0); // Random Rotom form since he is the one introducing the rotom phone
         p.generateName();
         p.generateAndPopulateMoveset();
       }),

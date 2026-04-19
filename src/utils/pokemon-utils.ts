@@ -22,15 +22,13 @@ import i18next from "i18next";
 export function getPokemonSpecies(species: SpeciesId | SpeciesId[]): PokemonSpecies {
   // If a special pool (named trainers) is used here it CAN happen that they have a array as species (which means choose one of those two).
   // TODO: this should be handled elsewhere
-  if (Array.isArray(species)) {
-    species = species[Math.floor(Math.random() * species.length)];
+  const resolvedSpecies = Array.isArray(species) ? randSeedItem(species) : species;
+
+  if (resolvedSpecies >= 2000) {
+    return allSpecies.find((s) => s.speciesId === resolvedSpecies)!;
   }
 
-  if (species >= 2000) {
-    return allSpecies.find((s) => s.speciesId === species)!;
-  }
-
-  return allSpecies[species - 1];
+  return allSpecies[resolvedSpecies - 1];
 }
 
 export function getPokemonSpeciesForm(species: SpeciesId, formIndex: number): PokemonSpeciesForm {

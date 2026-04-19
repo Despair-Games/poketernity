@@ -86,7 +86,7 @@ import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { applyChallenges } from "#utils/challenge-utils";
 import { enumValueToKey, executeIf, fixedNumber, NumberHolder } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
-import { randInt } from "#utils/random-utils";
+import { randSeedInt } from "#utils/random-utils";
 import { AES, enc } from "crypto-js";
 import i18next from "i18next";
 
@@ -186,8 +186,8 @@ export class GameData {
 
   constructor() {
     this.loadMappingConfigs();
-    this.trainerId = randInt(65536);
-    this.secretId = randInt(65536);
+    this.trainerId = randSeedInt(65536);
+    this.secretId = randSeedInt(65536);
     this.starterData = {};
     this.gameStats = new GameStats();
     this.runHistory = {};
