@@ -136,7 +136,7 @@ export class MpLobbyUiHandler extends FormModalUiHandler {
     );
     this.addInteractionHoverEffect(this.readyButton);
 
-    const readyContainer = globalScene.add.container(50, 0);
+    const readyContainer = globalScene.add.container(25, 0);
     readyContainer.add(this.readyButton);
     readyContainer.add(this.readyLabel);
     this.lobbyButtonContainer.add(readyContainer);
@@ -162,7 +162,7 @@ export class MpLobbyUiHandler extends FormModalUiHandler {
     );
     this.addInteractionHoverEffect(this.startButton);
 
-    const startContainer = globalScene.add.container(100, 0);
+    const startContainer = globalScene.add.container(70, 0);
     startContainer.add(this.startButton);
     startContainer.add(this.startLabel);
     this.lobbyButtonContainer.add(startContainer);
@@ -188,7 +188,7 @@ export class MpLobbyUiHandler extends FormModalUiHandler {
     );
     this.addInteractionHoverEffect(this.leaveButton);
 
-    const leaveContainer = globalScene.add.container(150, 0);
+    const leaveContainer = globalScene.add.container(115, 0);
     leaveContainer.add(this.leaveButton);
     leaveContainer.add(this.leaveLabel);
     this.lobbyButtonContainer.add(leaveContainer);
