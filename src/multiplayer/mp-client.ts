@@ -50,8 +50,11 @@ export class MpClient {
       // Dynamic import to avoid bundling SignalR when not needed
       const signalR = await import("@microsoft/signalr");
 
+      // Extract the origin from the server URL (strip /api/v1 or similar path prefixes)
+      const baseUrl = serverUrl ? new URL(serverUrl).origin : "";
+
       this._connection = new signalR.HubConnectionBuilder()
-        .withUrl(`${serverUrl}${this._hubUrl}`, {
+        .withUrl(`${baseUrl}${this._hubUrl}`, {
           accessTokenFactory: () => this._accessToken,
         })
         .withAutomaticReconnect([0, 2000, 5000, 10000, 30000])
