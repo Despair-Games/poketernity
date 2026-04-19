@@ -73,7 +73,7 @@ export class MpLobbyUiHandler extends FormModalUiHandler {
     if (this.lobbyState === "initial") {
       return 70;
     }
-    return 90;
+    return 105;
   }
 
   protected override getMargin(): [number, number, number, number] {
@@ -449,7 +449,7 @@ export class MpLobbyUiHandler extends FormModalUiHandler {
       const hostTag = p.isHost ? " (Host)" : "";
       const displayText = `${readyIcon} ${p.username}${hostTag}`;
 
-      const text = addTextObject(0, i * 16, displayText, TextStyle.WINDOW_MODAL_INFO);
+      const text = addTextObject(0, i * 10, displayText, TextStyle.WINDOW_MODAL_INFO);
       this.participantListContainer.add(text);
       this.participantTexts.push(text);
     }
