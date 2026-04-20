@@ -108,16 +108,20 @@ export class MpPhaseGate {
    */
   private async syncTurnCommands(): Promise<void> {
     const turnManager = globalScene.currentBattle.turnManager;
+    const localUserId = this.session.localUserId;
 
-    // Serialize all local commands
+    // Serialize only player-owned commands (not enemy commands).
+    // Enemy commands are generated identically on both clients from the shared seed.
     const localCommands: SerializedTurnCommand[] = [];
     turnManager.forEachCommand((cmd) => {
-      localCommands.push(serializeTurnCommand(cmd));
+      if (cmd.pokemon.isPlayer() && cmd.pokemon.mpOwnerUserId === localUserId) {
+        localCommands.push(serializeTurnCommand(cmd));
+      }
     });
     const localCommandJson = JSON.stringify(localCommands);
 
     console.log(
-      `[MP] Submitting ${localCommands.length} commands for turn ${this.session.currentTurn}, wave ${this.session.currentWave}`,
+      `[MP] Submitting ${localCommands.length} player commands for turn ${this.session.currentTurn}, wave ${this.session.currentWave}`,
     );
 
     // Finalize the desync hash for this turn
