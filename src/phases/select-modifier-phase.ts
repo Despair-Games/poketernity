@@ -361,20 +361,35 @@ export class SelectModifierPhase extends BattlePhase {
             ? PartyUiMode.REMEMBER_MOVE_MODIFIER
             : PartyUiMode.MODIFIER;
       const tmMoveId = isTmModifier ? (modifierType as TmModifierType).moveId : undefined;
+
+      const applyToSlot = (slotIndex: number, option: PartyOption): void => {
+        ui.setMode<ModifierSelectUiHandler>(UiMode.MODIFIER_SELECT, this.isPlayer()).then(() => {
+          const modifier = isMoveModifier
+            ? modifierType.newModifier(party[slotIndex], option - PartyOption.MOVE_1)
+            : isRememberMoveModifier
+              ? modifierType.newModifier(party[slotIndex], option as number)
+              : modifierType.newModifier(party[slotIndex]);
+          applyModifier(modifier!, true); // TODO: is the bang correct?
+        });
+      };
+
       ui.setModeWithoutClear<PartyUiHandler>(
         UiMode.PARTY,
         partyUiMode,
         -1,
         (slotIndex: number, option: PartyOption) => {
           if (slotIndex < 6) {
-            ui.setMode<ModifierSelectUiHandler>(UiMode.MODIFIER_SELECT, this.isPlayer()).then(() => {
-              const modifier = isMoveModifier
-                ? modifierType.newModifier(party[slotIndex], option - PartyOption.MOVE_1)
-                : isRememberMoveModifier
-                  ? modifierType.newModifier(party[slotIndex], option as number)
-                  : modifierType.newModifier(party[slotIndex]);
-              applyModifier(modifier!, true); // TODO: is the bang correct?
-            });
+            // In multiplayer, sync the target selection so both clients apply to the same slot
+            if (mpSession?.isActive) {
+              const packed = slotIndex * 1000 + option;
+              submitDecisionAndWait("modifier_target", packed).then((resolvedPacked) => {
+                const resolvedSlot = Math.floor(resolvedPacked / 1000);
+                const resolvedOption = resolvedPacked % 1000;
+                applyToSlot(resolvedSlot, resolvedOption as PartyOption);
+              });
+              return;
+            }
+            applyToSlot(slotIndex, option);
           } else {
             ui.setMode<ModifierSelectUiHandler>(
               UiMode.MODIFIER_SELECT,

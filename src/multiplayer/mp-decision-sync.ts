@@ -1,7 +1,7 @@
 import { globalScene, mpSession } from "#app/global-scene";
 import type { DecisionResolvedMessage, SubmitDecisionRequest } from "./mp-protocol";
 
-type DecisionType = "modifier" | "biome" | "encounter";
+type DecisionType = "modifier" | "modifier_target" | "biome" | "encounter";
 
 let pendingResolve: ((resolvedIndex: number) => void) | null = null;
 let pendingDecisionType: DecisionType | null = null;

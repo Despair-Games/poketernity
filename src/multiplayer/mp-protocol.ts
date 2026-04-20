@@ -104,14 +104,14 @@ export interface SessionEndedMessage {
 
 // Client → Server
 export interface SubmitDecisionRequest {
-  decisionType: "modifier" | "biome" | "encounter";
+  decisionType: "modifier" | "modifier_target" | "biome" | "encounter";
   waveIndex: number;
   selectedIndex: number;
 }
 
 // Server → Client
 export interface DecisionResolvedMessage {
-  decisionType: "modifier" | "biome" | "encounter";
+  decisionType: "modifier" | "modifier_target" | "biome" | "encounter";
   waveIndex: number;
   resolvedIndex: number;
   resolutionMethod: "consensus" | "tiebreak";
