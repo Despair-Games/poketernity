@@ -1,4 +1,4 @@
-import { globalScene } from "#app/global-scene";
+import { globalScene, mpSession } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { GAME_WIDTH } from "#constants/ui-constants";
 import { allMoves } from "#data/data-lists";
@@ -569,6 +569,19 @@ export class PartyUiHandler extends MessageUiHandler {
     } else {
       if (button === Button.ACTION) {
         if (this.cursor < 6) {
+          // In MP, block selection of peer-owned Pokemon during switch/modal modes
+          const selectedPkmn = globalScene.getPlayerParty()[this.cursor];
+          if (
+            mpSession?.isActive
+            && selectedPkmn?.mpOwnerUserId
+            && selectedPkmn.mpOwnerUserId !== mpSession.localUserId
+            && (this.partyUiMode === PartyUiMode.MODAL_SWITCH
+              || this.partyUiMode === PartyUiMode.SWITCH
+              || this.partyUiMode === PartyUiMode.POST_BATTLE_SWITCH)
+          ) {
+            ui.playError();
+            return true;
+          }
           if (this.partyUiMode === PartyUiMode.MODIFIER_TRANSFER && !this.transferMode) {
             /** Initialize item quantities for the selected Pokemon */
             const itemModifiers = globalScene.findModifiers(

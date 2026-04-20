@@ -1,5 +1,5 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
-import { globalScene } from "#app/global-scene";
+import { globalScene, mpSession } from "#app/global-scene";
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import type { FieldBattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -66,6 +66,12 @@ export class SwitchPhase extends PokemonPhase {
     }
 
     if (this.isPlayer) {
+      // In MP, auto-select the next bench Pokemon for peer-owned slots
+      const pokemon = this.getPokemon();
+      if (mpSession?.isActive && pokemon.mpOwnerUserId && pokemon.mpOwnerUserId !== mpSession.localUserId) {
+        this.resolveAutoSwitch(pokemon.mpOwnerUserId);
+        return;
+      }
       this.resolvePlayerSwitchInIndex();
     } else {
       this.resolveEnemySwitchInIndex();
@@ -110,6 +116,25 @@ export class SwitchPhase extends PokemonPhase {
     );
 
     this.updatePokemonData();
+    this.end();
+  }
+
+  /**
+   * Auto-select the next available bench Pokemon belonging to the given owner.
+   * Used in multiplayer for peer-owned Pokemon that the local player cannot manually switch.
+   */
+  private resolveAutoSwitch(ownerUserId: string): void {
+    const party = globalScene.getPlayerParty();
+    const onField = globalScene.getPlayerField().map((p) => p?.id);
+    const candidate = party.findIndex(
+      (p) => p.mpOwnerUserId === ownerUserId && p.isAllowedInBattle() && !onField.includes(p.id),
+    );
+
+    if (candidate !== -1) {
+      this.switchInIndex = candidate;
+      this.updatePokemonData();
+    }
+    // If no candidate found, the peer's entire team is down — just end the phase
     this.end();
   }
 

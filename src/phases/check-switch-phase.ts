@@ -1,4 +1,4 @@
-import { globalScene } from "#app/global-scene";
+import { globalScene, mpSession } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { MOVE_LOCK_TAG_TYPES } from "#constants/battler-tag-constants";
 import { BattleStyle } from "#enums/battle-style";
@@ -36,6 +36,12 @@ export class CheckSwitchPhase extends BattlePhase {
     const { field, phaseManager, ui } = globalScene;
 
     // End this phase early...
+
+    // ...if the Pokemon is owned by the peer in multiplayer (peer controls their own switches)
+    if (mpSession?.isActive && pokemon.mpOwnerUserId && pokemon.mpOwnerUserId !== mpSession.localUserId) {
+      super.end();
+      return;
+    }
 
     // ...if the user is playing in Set Mode
     if (settings.general.battleStyle === BattleStyle.SET) {

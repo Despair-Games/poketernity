@@ -100,7 +100,8 @@ import {
   PokemonHeldItemModifierType,
 } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
-import { getMpSeed } from "#multiplayer/mp-rng";
+import { unregisterMpEventHandlers } from "#multiplayer/mp-event-handler";
+import { clearMpSeed, getMpSeed } from "#multiplayer/mp-rng";
 import { MysteryEncounter } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterSaveData } from "#mystery-encounters/mystery-encounter-save-data";
 import { allMysteryEncounters, mysteryEncountersByBiome } from "#mystery-encounters/mystery-encounters";
@@ -1038,6 +1039,14 @@ export class BattleScene extends SceneBase {
   }
 
   reset(clearScene: boolean = false, clearData: boolean = false): void {
+    // Clean up multiplayer session on reset (game over, return to title, etc.)
+    if (mpSession?.isActive || mpSession?.isInLobby) {
+      mpSession.client?.disconnect().catch(() => {});
+      mpSession.reset();
+      unregisterMpEventHandlers();
+      clearMpSeed();
+    }
+
     if (clearData) {
       this.gameData = new GameData();
     }
@@ -1306,6 +1315,11 @@ export class BattleScene extends SceneBase {
       this.waveSeed,
     );
     this.currentBattle.incrementTurn();
+
+    // Track the current wave in the multiplayer session
+    if (mpSession?.isActive) {
+      mpSession.setWave(newWaveIndex);
+    }
 
     if (newBattleType === BattleType.MYSTERY_ENCOUNTER) {
       // Will generate the actual Mystery Encounter during NextEncounterPhase, to ensure it uses proper biome

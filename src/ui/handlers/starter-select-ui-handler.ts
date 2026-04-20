@@ -1,5 +1,5 @@
 import { getLocalStorageKey } from "#app/account";
-import { globalScene } from "#app/global-scene";
+import { globalScene, mpSession } from "#app/global-scene";
 import { activeOverrides } from "#app/overrides";
 import { handleTutorial } from "#app/tutorial";
 import { PLAYER_PARTY_MAX_SIZE } from "#constants/game-constants";
@@ -1542,7 +1542,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
             !isDupe
             && isValidForChallenge.value
             && currentPartyValue + newCost <= this.getValueLimit()
-            && this.starterSpecies.length < PLAYER_PARTY_MAX_SIZE
+            && this.starterSpecies.length < (mpSession?.isActive ? 3 : PLAYER_PARTY_MAX_SIZE)
           ) {
             options = [
               {

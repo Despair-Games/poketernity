@@ -305,6 +305,11 @@ export class CommandPhase extends BattlePhase {
       }
       // biome-ignore lint/suspicious/noFallthroughSwitchClause: `Run` and `Pokemon` cases share checks for trapping
       case BattleCommand.RUN:
+        // Cannot flee during multiplayer co-op
+        if (mpSession?.isActive) {
+          failCatchRun("battle:noEscapeForce");
+          break;
+        }
         if (arena.biomeId === BiomeId.END || mysteryEncounter?.fleeAllowed === false) {
           failCatchRun("battle:noEscapeForce");
           break;
