@@ -1,4 +1,4 @@
-import { globalScene } from "#app/global-scene";
+import { globalScene, mpSession } from "#app/global-scene";
 import { CANVAS_SCALE, GAME_WIDTH } from "#constants/ui-constants";
 import { getLevelRelExp } from "#data/exp";
 import { getGenderSymbol, getGenderTextStyle } from "#data/gender";
@@ -45,6 +45,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
   private lastStats: string;
 
   private readonly box: Phaser.GameObjects.Sprite;
+  private readonly mpOwnerBadge: Phaser.GameObjects.Text;
   private readonly nameText: Phaser.GameObjects.Text;
   private readonly genderText: Phaser.GameObjects.Text;
   private readonly ownedIcon: Phaser.GameObjects.Sprite;
@@ -107,6 +108,12 @@ export class BattleInfo extends Phaser.GameObjects.Container {
     this.box.setName("box");
     this.box.setOrigin(1, 0.5);
     this.add(this.box);
+
+    this.mpOwnerBadge = addTextObject(player ? -129 : 0, player ? -15.2 : 0, "", TextStyle.BATTLE_INFO);
+    this.mpOwnerBadge.setName("text_mp_owner");
+    this.mpOwnerBadge.setOrigin(0, 0);
+    this.mpOwnerBadge.setVisible(false);
+    this.add(this.mpOwnerBadge);
 
     this.nameText = addTextObject(player ? -115 : -124, player ? -15.2 : -11.2, "", TextStyle.BATTLE_INFO);
     this.nameText.setName("text_name");
@@ -327,6 +334,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
 
   initInfo(pokemon: Pokemon) {
     this.updateNameText(pokemon);
+    this.updateMpOwnerBadge(pokemon);
     const nameTextWidth = this.nameText.displayWidth;
 
     this.name = pokemon.getNameToRender();
@@ -595,6 +603,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
 
       if (nameUpdated) {
         this.updateNameText(pokemon);
+        this.updateMpOwnerBadge(pokemon);
         this.genderText.setPositionRelative(this.nameText, this.nameText.displayWidth, 0);
       }
 
@@ -775,6 +784,17 @@ export class BattleInfo extends Phaser.GameObjects.Container {
         Phaser.Geom.Rectangle.Contains,
       );
     }
+  }
+
+  private updateMpOwnerBadge(pokemon: Pokemon): void {
+    if (!this.player || !mpSession?.isActive || !pokemon.mpOwnerUserId) {
+      this.mpOwnerBadge.setVisible(false);
+      return;
+    }
+    const isLocal = pokemon.mpOwnerUserId === mpSession.localUserId;
+    this.mpOwnerBadge.setText(isLocal ? "P1" : "P2");
+    this.mpOwnerBadge.setColor(isLocal ? "#4488ff" : "#ff8844");
+    this.mpOwnerBadge.setVisible(true);
   }
 
   updatePokemonExp(pokemon: Pokemon, instant?: boolean, levelDurationMultiplier: number = 1): Promise<void> {
