@@ -102,6 +102,7 @@ import {
 import { modifierTypes } from "#modifier/modifier-types";
 import { unregisterMpEventHandlers } from "#multiplayer/mp-event-handler";
 import { clearMpSeed, getMpSeed } from "#multiplayer/mp-rng";
+import { destroyWaitingOverlay } from "#multiplayer/mp-waiting-overlay";
 import { MysteryEncounter } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterSaveData } from "#mystery-encounters/mystery-encounter-save-data";
 import { allMysteryEncounters, mysteryEncountersByBiome } from "#mystery-encounters/mystery-encounters";
@@ -1045,6 +1046,7 @@ export class BattleScene extends SceneBase {
       mpSession.reset();
       unregisterMpEventHandlers();
       clearMpSeed();
+      destroyWaitingOverlay();
     }
 
     if (clearData) {

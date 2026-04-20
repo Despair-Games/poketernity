@@ -256,7 +256,6 @@ export class SelectModifierPhase extends BattlePhase {
           if (cursor != null && this.typeOptions[cursor].type) {
             // In multiplayer, submit decision and wait for consensus
             if (mpSession?.isActive) {
-              ui.showText("Waiting for partner...");
               submitDecisionAndWait("modifier", cursor).then((resolvedCursor) => {
                 const resolvedModType = this.typeOptions[resolvedCursor]?.type ?? this.typeOptions[cursor!]?.type;
                 if (resolvedModType) {

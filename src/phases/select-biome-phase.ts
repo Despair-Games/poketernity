@@ -58,7 +58,6 @@ export class SelectBiomePhase extends BattlePhase {
             handler: () => {
               // In multiplayer, submit choice and wait for consensus
               if (mpSession?.isActive) {
-                ui.showText("Waiting for partner...");
                 submitDecisionAndWait("biome", i).then((resolvedIdx) => {
                   ui.setMessageMode();
                   setNextBiome(biomeChoices[resolvedIdx] ?? b);

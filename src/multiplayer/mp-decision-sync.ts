@@ -1,5 +1,6 @@
 import { mpSession } from "#app/global-scene";
 import type { DecisionResolvedMessage, SubmitDecisionRequest } from "./mp-protocol";
+import { hideWaitingOverlay, showWaitingOverlay } from "./mp-waiting-overlay";
 
 type DecisionType = "modifier" | "biome" | "encounter";
 
@@ -24,6 +25,7 @@ export async function submitDecisionAndWait(decisionType: DecisionType, selected
   };
 
   pendingDecisionType = decisionType;
+  showWaitingOverlay();
 
   // Set up listener before submitting to avoid race
   const resultPromise = new Promise<number>((resolve) => {
@@ -46,6 +48,8 @@ export function onDecisionResolved(msg: DecisionResolvedMessage): void {
     `[MP] Decision '${msg.decisionType}' resolved to index ${msg.resolvedIndex} via ${msg.resolutionMethod} (wave ${msg.waveIndex})`,
   );
 
+  hideWaitingOverlay();
+
   if (pendingResolve && msg.decisionType === pendingDecisionType) {
     const resolve = pendingResolve;
     pendingResolve = null;
@@ -60,4 +64,5 @@ export function onDecisionResolved(msg: DecisionResolvedMessage): void {
 export function resetDecisionSync(): void {
   pendingResolve = null;
   pendingDecisionType = null;
+  hideWaitingOverlay();
 }
