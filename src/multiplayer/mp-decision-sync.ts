@@ -6,19 +6,20 @@ type DecisionType = "modifier" | "modifier_target" | "biome" | "encounter";
 let pendingResolve: ((resolvedIndex: number) => void) | null = null;
 let pendingDecisionType: DecisionType | null = null;
 let pendingLocalIndex: number | null = null;
-
-const OVERRIDE_LABELS: Partial<Record<DecisionType, string>> = {
-  modifier: "Partner's item was selected!",
-  modifier_target: "Partner's target was selected!",
-  biome: "Partner's biome was selected!",
-  encounter: "Partner's choice was selected!",
-};
+let pendingLabelResolver: ((index: number) => string) | null = null;
 
 /**
  * Submit a decision and wait for the server to resolve consensus.
  * Returns the resolved index (may differ from selectedIndex if tiebreak occurred).
+ *
+ * @param resolveLabel - Optional function that converts an index to a human-readable
+ *   label. Used to show a specific message when the partner's choice wins.
  */
-export async function submitDecisionAndWait(decisionType: DecisionType, selectedIndex: number): Promise<number> {
+export async function submitDecisionAndWait(
+  decisionType: DecisionType,
+  selectedIndex: number,
+  resolveLabel?: (index: number) => string,
+): Promise<number> {
   if (!mpSession?.isActive || !mpSession.client) {
     return selectedIndex;
   }
@@ -33,6 +34,7 @@ export async function submitDecisionAndWait(decisionType: DecisionType, selected
 
   pendingDecisionType = decisionType;
   pendingLocalIndex = selectedIndex;
+  pendingLabelResolver = resolveLabel ?? null;
   globalScene.ui.showText("Waiting for partner...");
 
   // Set up listener before submitting to avoid race
@@ -59,13 +61,16 @@ export function onDecisionResolved(msg: DecisionResolvedMessage): void {
   if (pendingResolve && msg.decisionType === pendingDecisionType) {
     const resolve = pendingResolve;
     const localIndex = pendingLocalIndex;
+    const labelResolver = pendingLabelResolver;
     pendingResolve = null;
     pendingDecisionType = null;
     pendingLocalIndex = null;
+    pendingLabelResolver = null;
 
     // If the resolved choice differs from what this player picked, show a brief message
     if (localIndex !== null && msg.resolvedIndex !== localIndex) {
-      const label = OVERRIDE_LABELS[msg.decisionType] ?? "Partner's choice was selected!";
+      const choiceName = labelResolver?.(msg.resolvedIndex);
+      const label = choiceName ? `${choiceName} was chosen!` : "Partner's choice was selected!";
       globalScene.ui.showText(label, {
         callbackDelay: 1500,
         callback: () => {
@@ -89,4 +94,5 @@ export function resetDecisionSync(): void {
   pendingResolve = null;
   pendingDecisionType = null;
   pendingLocalIndex = null;
+  pendingLabelResolver = null;
 }

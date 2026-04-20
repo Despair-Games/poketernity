@@ -67,7 +67,16 @@ export class MysteryEncounterPhase extends Phase {
   public handleOptionSelect(option: MysteryEncounterOption, index: number): boolean {
     // In multiplayer, submit choice and wait for consensus
     if (mpSession?.isActive) {
-      submitDecisionAndWait("encounter", index).then((resolvedIndex) => {
+      const encounter = globalScene.currentBattle.mysteryEncounter;
+      const labelResolver = (idx: number) => {
+        const opt = encounter?.options[idx];
+        const buttonKey = opt?.dialogue?.buttonLabel;
+        if (buttonKey) {
+          return getEncounterText(buttonKey) ?? `Option ${idx + 1}`;
+        }
+        return `Option ${idx + 1}`;
+      };
+      submitDecisionAndWait("encounter", index, labelResolver).then((resolvedIndex) => {
         const resolvedOption = globalScene.currentBattle.mysteryEncounter?.options[resolvedIndex] ?? option;
         this._applyOptionSelect(resolvedOption, resolvedIndex);
       });

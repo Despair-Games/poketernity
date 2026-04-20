@@ -256,7 +256,8 @@ export class SelectModifierPhase extends BattlePhase {
           if (cursor != null && this.typeOptions[cursor].type) {
             // In multiplayer, submit decision and wait for consensus
             if (mpSession?.isActive) {
-              submitDecisionAndWait("modifier", cursor).then((resolvedCursor) => {
+              const labelResolver = (idx: number) => this.typeOptions[idx]?.type?.name ?? "Unknown item";
+              submitDecisionAndWait("modifier", cursor, labelResolver).then((resolvedCursor) => {
                 const resolvedModType = this.typeOptions[resolvedCursor]?.type ?? this.typeOptions[cursor!]?.type;
                 if (resolvedModType) {
                   this._applyChosenModifier(resolvedModType, undefined, modifierSelectCallback);
@@ -382,7 +383,11 @@ export class SelectModifierPhase extends BattlePhase {
             // In multiplayer, sync the target selection so both clients apply to the same slot
             if (mpSession?.isActive) {
               const packed = slotIndex * 1000 + option;
-              submitDecisionAndWait("modifier_target", packed).then((resolvedPacked) => {
+              const labelResolver = (idx: number) => {
+                const slot = Math.floor(idx / 1000);
+                return party[slot]?.name ?? "Unknown";
+              };
+              submitDecisionAndWait("modifier_target", packed, labelResolver).then((resolvedPacked) => {
                 const resolvedSlot = Math.floor(resolvedPacked / 1000);
                 const resolvedOption = resolvedPacked % 1000;
                 applyToSlot(resolvedSlot, resolvedOption as PartyOption);
