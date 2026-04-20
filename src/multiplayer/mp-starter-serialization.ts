@@ -4,6 +4,7 @@ import type { ElementalType } from "#enums/elemental-type";
 import type { Gender } from "#enums/gender";
 import type { Nature } from "#enums/nature";
 import type { SpeciesId } from "#enums/species-id";
+import type { PlayerPokemon } from "#field/pokemon";
 import type { StarterConfig, StarterMoveset } from "#types/starter-data";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 
@@ -74,12 +75,15 @@ export function serializeStarters(starters: StarterConfig[]): string {
  *
  * @param starterDataJson - JSON string of SerializedStarter[]
  * @param ownerUserId - The userId of the player who owns these starters
- * @returns Promise that resolves when all Pokemon assets are loaded
+ * @returns Array of created PlayerPokemon (not yet added to party — caller must interleave)
  */
-export async function createPokemonFromSerializedStarters(starterDataJson: string, ownerUserId: string): Promise<void> {
+export async function createPokemonFromSerializedStarters(
+  starterDataJson: string,
+  ownerUserId: string,
+): Promise<PlayerPokemon[]> {
   const starters: SerializedStarter[] = JSON.parse(starterDataJson);
-  const party = globalScene.getPlayerParty();
   const { gameMode } = globalScene;
+  const pokemons: PlayerPokemon[] = [];
   const loadPromises: Promise<void>[] = [];
 
   for (const starter of starters) {
@@ -126,9 +130,10 @@ export async function createPokemonFromSerializedStarters(starterDataJson: strin
     pokemon.mpOwnerUserId = ownerUserId;
 
     pokemon.setVisible(false);
-    party.push(pokemon);
+    pokemons.push(pokemon);
     loadPromises.push(pokemon.loadAssets());
   }
 
   await Promise.all(loadPromises);
+  return pokemons;
 }

@@ -66,7 +66,8 @@ export class SelectStarterPhase extends Phase {
 
   /**
    * Build the merged party from all players' resolved starters.
-   * Host's Pokemon come first, then the peer's.
+   * Interleaves Pokemon so field positions alternate between players:
+   * [P1-slot0, P2-slot0, P1-slot1, P2-slot1, ...]
    */
   private initMpBattle(msg: StartersResolvedMessage): void {
     const { arena, audioManager, gameMode, gameData, sound, time } = globalScene;
@@ -75,13 +76,29 @@ export class SelectStarterPhase extends Phase {
 
     console.log(`[MP] Building merged party from ${msg.playerStarters.length} players`);
 
-    // Create Pokemon from all players' starters (host first, maintained by server ordering)
+    // Create Pokemon from all players' starters (returns arrays, not pushed to party yet)
     const loadPromises = msg.playerStarters.map((ps) =>
       createPokemonFromSerializedStarters(ps.starterDataJson, ps.userId),
     );
 
-    Promise.all(loadPromises).then(() => {
+    Promise.all(loadPromises).then((playerPokemonArrays) => {
       const party = globalScene.getPlayerParty();
+
+      // Interleave: [P1-slot0, P2-slot0, P1-slot1, P2-slot1, ...]
+      // This ensures field positions 0 and 1 map to different players in double battles
+      const maxSlots = Math.max(...playerPokemonArrays.map((arr) => arr.length));
+      for (let slot = 0; slot < maxSlots; slot++) {
+        for (const playerPokemons of playerPokemonArrays) {
+          if (slot < playerPokemons.length) {
+            party.push(playerPokemons[slot]);
+          }
+        }
+      }
+
+      console.log(
+        `[MP] Party built: ${party.map((p) => `${p.species.name} (owner: ${p.mpOwnerUserId?.slice(0, 8)})`).join(", ")}`,
+      );
+
       overrideModifiers();
       if (party.length > 0) {
         overrideHeldItems(party[0]);
@@ -96,6 +113,12 @@ export class SelectStarterPhase extends Phase {
 
       // Use slot 0 for MP runs (no save slot selection)
       globalScene.sessionSlotId = 0;
+
+      // Apply the shared MP seed BEFORE newBattle() so both clients
+      // generate identical encounters, enemy Pokemon, etc.
+      if (mpSession?.seed) {
+        globalScene.setSeed(mpSession.seed);
+      }
 
       globalScene.newBattle();
       arena.init();
