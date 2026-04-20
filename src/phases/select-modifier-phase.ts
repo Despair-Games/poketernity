@@ -1,6 +1,6 @@
 /* biome-ignore-all lint/style/noNestedTernary: modifiers are being deleted soon anyway */
 
-import { globalScene } from "#app/global-scene";
+import { globalScene, mpSession } from "#app/global-scene";
 import { activeOverrides } from "#app/overrides";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import type { ModifierTier } from "#enums/modifier-tier";
@@ -28,6 +28,7 @@ import {
   regenerateModifierPoolThresholds,
   TmModifierType,
 } from "#modifier/modifier-type";
+import { submitDecisionAndWait } from "#multiplayer/mp-decision-sync";
 import { BattlePhase } from "#phases/base/battle-phase";
 import type { PartyModifierTransferSelectCallback } from "#types/ui-types";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
@@ -253,6 +254,17 @@ export class SelectModifierPhase extends BattlePhase {
           }
 
           if (cursor != null && this.typeOptions[cursor].type) {
+            // In multiplayer, submit decision and wait for consensus
+            if (mpSession?.isActive) {
+              ui.showText("Waiting for partner...");
+              submitDecisionAndWait("modifier", cursor).then((resolvedCursor) => {
+                const resolvedModType = this.typeOptions[resolvedCursor]?.type ?? this.typeOptions[cursor!]?.type;
+                if (resolvedModType) {
+                  this._applyChosenModifier(resolvedModType, undefined, modifierSelectCallback);
+                }
+              });
+              return false;
+            }
             modifierType = this.typeOptions[cursor].type;
           }
           break;
@@ -278,86 +290,8 @@ export class SelectModifierPhase extends BattlePhase {
         return false;
       }
 
-      const applyModifier = (modifier: Modifier, playSound: boolean = false): void => {
-        const result = globalScene.addModifier(modifier, false, playSound, undefined, undefined, cost);
-        // Queue a copy of this phase when applying a TM or Memory Mushroom.
-        // If the player selects either of these, then escapes out of consuming them,
-        // they are returned to a shop in the same state.
-        if (modifier.type instanceof RememberMoveModifierType || modifier.type instanceof TmModifierType) {
-          globalScene.phaseManager.unshiftPhase(this.copy());
-        }
-
-        if (cost && !(modifier.type instanceof RememberMoveModifierType)) {
-          if (result) {
-            if (!activeOverrides.WAIVE_SHOP_FEES_OVERRIDE) {
-              globalScene.money -= cost;
-              globalScene.updateMoneyText();
-              globalScene.animateMoneyChanged(false);
-            }
-
-            globalScene.audioManager.playSound("se/buy");
-            ui.getCurrentHandler<ModifierSelectUiHandler>().updateCostText();
-          } else {
-            ui.playError();
-          }
-        } else {
-          ui.clearText();
-          ui.setMessageMode();
-          super.end();
-        }
-      };
-
-      if (modifierType instanceof PokemonModifierType) {
-        const pokemonModifierType = modifierType as PokemonModifierType;
-        const isMoveModifier = modifierType instanceof PokemonMoveModifierType;
-        const isTmModifier = modifierType instanceof TmModifierType;
-        const isRememberMoveModifier = modifierType instanceof RememberMoveModifierType;
-        const isPpRestoreModifier =
-          modifierType instanceof PokemonPpRestoreModifierType || modifierType instanceof PokemonPpUpModifierType;
-        const partyUiMode = isMoveModifier
-          ? PartyUiMode.MOVE_MODIFIER
-          : isTmModifier
-            ? PartyUiMode.TM_MODIFIER
-            : isRememberMoveModifier
-              ? PartyUiMode.REMEMBER_MOVE_MODIFIER
-              : PartyUiMode.MODIFIER;
-        const tmMoveId = isTmModifier ? (modifierType as TmModifierType).moveId : undefined;
-        ui.setModeWithoutClear<PartyUiHandler>(
-          UiMode.PARTY,
-          partyUiMode,
-          -1,
-          (slotIndex: number, option: PartyOption) => {
-            if (slotIndex < 6) {
-              ui.setMode<ModifierSelectUiHandler>(UiMode.MODIFIER_SELECT, this.isPlayer()).then(() => {
-                const modifier = isMoveModifier
-                  ? modifierType.newModifier(party[slotIndex], option - PartyOption.MOVE_1)
-                  : isRememberMoveModifier
-                    ? modifierType.newModifier(party[slotIndex], option as number)
-                    : modifierType.newModifier(party[slotIndex]);
-                applyModifier(modifier!, true); // TODO: is the bang correct?
-              });
-            } else {
-              ui.setMode<ModifierSelectUiHandler>(
-                UiMode.MODIFIER_SELECT,
-                this.isPlayer(),
-                this.typeOptions,
-                modifierSelectCallback,
-                this.getRerollCost(globalScene.lockModifierTiers),
-              );
-            }
-          },
-          pokemonModifierType.selectFilter,
-          modifierType instanceof PokemonMoveModifierType
-            ? (modifierType as PokemonMoveModifierType).moveSelectFilter
-            : undefined,
-          tmMoveId,
-          isPpRestoreModifier,
-        );
-      } else if (modifierType) {
-        const newModifier = modifierType.newModifier();
-        if (newModifier) {
-          applyModifier(newModifier);
-        }
+      if (modifierType) {
+        this._applyChosenModifier(modifierType, cost, modifierSelectCallback);
       }
 
       return !cost;
@@ -373,6 +307,98 @@ export class SelectModifierPhase extends BattlePhase {
 
   public updateSeed(): void {
     globalScene.resetSeed();
+  }
+
+  /**
+   * Apply a chosen modifier type. Extracted so it can be called both
+   * synchronously (single-player) and after async consensus (multiplayer).
+   */
+  private _applyChosenModifier(
+    modifierType: ModifierType,
+    cost: number | undefined,
+    modifierSelectCallback: (rowCursor?: number, cursor?: number) => boolean,
+  ): void {
+    const { ui } = globalScene;
+    const party = globalScene.getPlayerParty();
+
+    const applyModifier = (modifier: Modifier, playSound: boolean = false): void => {
+      const result = globalScene.addModifier(modifier, false, playSound, undefined, undefined, cost);
+      if (modifier.type instanceof RememberMoveModifierType || modifier.type instanceof TmModifierType) {
+        globalScene.phaseManager.unshiftPhase(this.copy());
+      }
+
+      if (cost && !(modifier.type instanceof RememberMoveModifierType)) {
+        if (result) {
+          if (!activeOverrides.WAIVE_SHOP_FEES_OVERRIDE) {
+            globalScene.money -= cost;
+            globalScene.updateMoneyText();
+            globalScene.animateMoneyChanged(false);
+          }
+
+          globalScene.audioManager.playSound("se/buy");
+          ui.getCurrentHandler<ModifierSelectUiHandler>().updateCostText();
+        } else {
+          ui.playError();
+        }
+      } else {
+        ui.clearText();
+        ui.setMessageMode();
+        super.end();
+      }
+    };
+
+    if (modifierType instanceof PokemonModifierType) {
+      const pokemonModifierType = modifierType as PokemonModifierType;
+      const isMoveModifier = modifierType instanceof PokemonMoveModifierType;
+      const isTmModifier = modifierType instanceof TmModifierType;
+      const isRememberMoveModifier = modifierType instanceof RememberMoveModifierType;
+      const isPpRestoreModifier =
+        modifierType instanceof PokemonPpRestoreModifierType || modifierType instanceof PokemonPpUpModifierType;
+      const partyUiMode = isMoveModifier
+        ? PartyUiMode.MOVE_MODIFIER
+        : isTmModifier
+          ? PartyUiMode.TM_MODIFIER
+          : isRememberMoveModifier
+            ? PartyUiMode.REMEMBER_MOVE_MODIFIER
+            : PartyUiMode.MODIFIER;
+      const tmMoveId = isTmModifier ? (modifierType as TmModifierType).moveId : undefined;
+      ui.setModeWithoutClear<PartyUiHandler>(
+        UiMode.PARTY,
+        partyUiMode,
+        -1,
+        (slotIndex: number, option: PartyOption) => {
+          if (slotIndex < 6) {
+            ui.setMode<ModifierSelectUiHandler>(UiMode.MODIFIER_SELECT, this.isPlayer()).then(() => {
+              const modifier = isMoveModifier
+                ? modifierType.newModifier(party[slotIndex], option - PartyOption.MOVE_1)
+                : isRememberMoveModifier
+                  ? modifierType.newModifier(party[slotIndex], option as number)
+                  : modifierType.newModifier(party[slotIndex]);
+              applyModifier(modifier!, true); // TODO: is the bang correct?
+            });
+          } else {
+            ui.setMode<ModifierSelectUiHandler>(
+              UiMode.MODIFIER_SELECT,
+              this.isPlayer(),
+              this.typeOptions,
+              modifierSelectCallback,
+              this.getRerollCost(globalScene.lockModifierTiers),
+            );
+          }
+        },
+        pokemonModifierType.selectFilter,
+        modifierType instanceof PokemonMoveModifierType
+          ? (modifierType as PokemonMoveModifierType).moveSelectFilter
+          : undefined,
+        tmMoveId,
+        isPpRestoreModifier,
+      );
+    } else {
+      const newModifier = modifierType.newModifier();
+      if (newModifier) {
+        applyModifier(newModifier);
+      }
+    }
   }
 
   public isPlayer(): boolean {

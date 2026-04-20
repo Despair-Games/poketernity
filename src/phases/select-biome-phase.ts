@@ -1,9 +1,10 @@
-import { globalScene } from "#app/global-scene";
+import { globalScene, mpSession } from "#app/global-scene";
 import { biomeLinks } from "#data/biome-links";
 import { getBiomeName } from "#data/biome-utils";
 import { BiomeId } from "#enums/biome-id";
 import { UiMode } from "#enums/ui-mode";
 import { MapModifier, MoneyInterestModifier } from "#modifier/modifier";
+import { submitDecisionAndWait } from "#multiplayer/mp-decision-sync";
 import { BattlePhase } from "#phases/base/battle-phase";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#ui/option-select-config";
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
@@ -51,10 +52,19 @@ export class SelectBiomePhase extends BattlePhase {
             .filter((b, _i) => !Array.isArray(b) || !randSeedInt(b[1]))
             .map((b) => (Array.isArray(b) ? b[0] : b));
         }, waveIndex);
-        const biomeSelectItems = biomeChoices.map((b) => {
+        const biomeSelectItems = biomeChoices.map((b, i) => {
           const ret: OptionSelectItem = {
             label: getBiomeName(b),
             handler: () => {
+              // In multiplayer, submit choice and wait for consensus
+              if (mpSession?.isActive) {
+                ui.showText("Waiting for partner...");
+                submitDecisionAndWait("biome", i).then((resolvedIdx) => {
+                  ui.setMessageMode();
+                  setNextBiome(biomeChoices[resolvedIdx] ?? b);
+                });
+                return true;
+              }
               ui.setMessageMode();
               setNextBiome(b);
               return true;

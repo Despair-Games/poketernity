@@ -1,6 +1,7 @@
 import { eventBus } from "#app/event-bus";
 import type {
   CreateLobbyRequest,
+  DecisionResolvedMessage,
   DesyncDetectedMessage,
   JoinLobbyRequest,
   LobbyUpdateMessage,
@@ -12,6 +13,7 @@ import type {
   SetReadyRequest,
   StartersResolvedMessage,
   SubmitCommandRequest,
+  SubmitDecisionRequest,
   SubmitStartersRequest,
   TurnResolvedMessage,
 } from "./mp-protocol";
@@ -123,6 +125,10 @@ export class MpClient {
     await this._invoke("Heartbeat");
   }
 
+  async submitDecision(request: SubmitDecisionRequest): Promise<void> {
+    await this._invoke("SubmitDecision", request);
+  }
+
   async convertToSolo(): Promise<void> {
     await this._invoke("ConvertToSolo");
   }
@@ -175,6 +181,10 @@ export class MpClient {
 
     this._connection.on("SessionEnded", (msg: SessionEndedMessage) => {
       eventBus.emit("mp:session-ended" as any, msg);
+    });
+
+    this._connection.on("DecisionResolved", (msg: DecisionResolvedMessage) => {
+      eventBus.emit("mp:decision-resolved" as any, msg);
     });
   }
 

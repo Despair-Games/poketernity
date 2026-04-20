@@ -100,6 +100,23 @@ export interface SessionEndedMessage {
   convertedToSoloByUserId?: string;
 }
 
+// --- Consensus Decision messages ---
+
+// Client → Server
+export interface SubmitDecisionRequest {
+  decisionType: "modifier" | "biome" | "encounter";
+  waveIndex: number;
+  selectedIndex: number;
+}
+
+// Server → Client
+export interface DecisionResolvedMessage {
+  decisionType: "modifier" | "biome" | "encounter";
+  waveIndex: number;
+  resolvedIndex: number;
+  resolutionMethod: "consensus" | "tiebreak";
+}
+
 // --- REST DTOs ---
 export interface CreateLobbyResponse {
   sessionId: string;

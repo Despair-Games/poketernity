@@ -1,6 +1,7 @@
-import { globalScene } from "#app/global-scene";
+import { globalScene, mpSession } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { UiMode } from "#enums/ui-mode";
+import { submitDecisionAndWait } from "#multiplayer/mp-decision-sync";
 import { getEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import type { OptionSelectSettings } from "#mystery-encounters/encounter-phase-utils";
 import type { MysteryEncounterDialogue, OptionTextDisplay } from "#mystery-encounters/mystery-encounter-dialogue";
@@ -64,6 +65,18 @@ export class MysteryEncounterPhase extends Phase {
    * @param index
    */
   public handleOptionSelect(option: MysteryEncounterOption, index: number): boolean {
+    // In multiplayer, submit choice and wait for consensus
+    if (mpSession?.isActive) {
+      submitDecisionAndWait("encounter", index).then((resolvedIndex) => {
+        const resolvedOption = globalScene.currentBattle.mysteryEncounter?.options[resolvedIndex] ?? option;
+        this._applyOptionSelect(resolvedOption, resolvedIndex);
+      });
+      return true;
+    }
+    return this._applyOptionSelect(option, index);
+  }
+
+  private _applyOptionSelect(option: MysteryEncounterOption, index: number): boolean {
     const { currentBattle, mysteryEncounterSaveData } = globalScene;
     const mysteryEncounter = currentBattle.mysteryEncounter!; // TODO: Resolve bang?
 

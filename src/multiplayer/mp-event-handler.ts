@@ -2,6 +2,7 @@ import { eventBus } from "#app/event-bus";
 import { globalScene, mpSession } from "#app/global-scene";
 import { UiMode } from "#enums/ui-mode";
 import type { MpReconnectModalUiHandler } from "#ui/mp-reconnect-modal-ui-handler";
+import { onDecisionResolved } from "./mp-decision-sync";
 import type {
   DesyncDetectedMessage,
   PeerDisconnectedMessage,
@@ -66,6 +67,7 @@ export function registerMpEventHandlers(): void {
   eventBus.on("mp:peer-disconnected" as any, onPeerDisconnected);
   eventBus.on("mp:peer-reconnected" as any, onPeerReconnected);
   eventBus.on("mp:session-ended" as any, onSessionEnded);
+  eventBus.on("mp:decision-resolved" as any, onDecisionResolved);
 }
 
 export function unregisterMpEventHandlers(): void {
@@ -79,4 +81,5 @@ export function unregisterMpEventHandlers(): void {
   eventBus.off("mp:peer-disconnected" as any, onPeerDisconnected);
   eventBus.off("mp:peer-reconnected" as any, onPeerReconnected);
   eventBus.off("mp:session-ended" as any, onSessionEnded);
+  eventBus.off("mp:decision-resolved" as any, onDecisionResolved);
 }
