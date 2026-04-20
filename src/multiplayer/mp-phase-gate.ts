@@ -3,7 +3,6 @@ import { applyPeerCommands, type SerializedTurnCommand, serializeTurnCommand } f
 import type { MpCommandSync } from "./mp-command-sync";
 import type { MpDesyncGuard } from "./mp-desync-guard";
 import type { MpSession } from "./mp-session";
-import { hideWaitingOverlay, showWaitingOverlay } from "./mp-waiting-overlay";
 
 /**
  * Phase gate names where multiplayer synchronization must occur.
@@ -125,7 +124,7 @@ export class MpPhaseGate {
       `[MP] Submitting ${localCommands.length} player commands for turn ${this.session.currentTurn}, wave ${this.session.currentWave}`,
     );
 
-    showWaitingOverlay();
+    globalScene.ui.showText("Waiting for partner...");
 
     // Finalize the desync hash for this turn
     const stateHash = this._desyncGuard.finalizeTurn(this.session.currentTurn);
@@ -138,7 +137,7 @@ export class MpPhaseGate {
       stateHash,
     );
 
-    hideWaitingOverlay();
+    globalScene.ui.clearText();
 
     // Apply peer commands to the turn queue
     applyPeerCommands(peerCommands);
