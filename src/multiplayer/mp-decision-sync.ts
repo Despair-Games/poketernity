@@ -5,6 +5,14 @@ type DecisionType = "modifier" | "modifier_target" | "biome" | "encounter";
 
 let pendingResolve: ((resolvedIndex: number) => void) | null = null;
 let pendingDecisionType: DecisionType | null = null;
+let pendingLocalIndex: number | null = null;
+
+const OVERRIDE_LABELS: Partial<Record<DecisionType, string>> = {
+  modifier: "Partner's item was selected!",
+  modifier_target: "Partner's target was selected!",
+  biome: "Partner's biome was selected!",
+  encounter: "Partner's choice was selected!",
+};
 
 /**
  * Submit a decision and wait for the server to resolve consensus.
@@ -24,6 +32,7 @@ export async function submitDecisionAndWait(decisionType: DecisionType, selected
   };
 
   pendingDecisionType = decisionType;
+  pendingLocalIndex = selectedIndex;
   globalScene.ui.showText("Waiting for partner...");
 
   // Set up listener before submitting to avoid race
@@ -47,13 +56,29 @@ export function onDecisionResolved(msg: DecisionResolvedMessage): void {
     `[MP] Decision '${msg.decisionType}' resolved to index ${msg.resolvedIndex} via ${msg.resolutionMethod} (wave ${msg.waveIndex})`,
   );
 
-  globalScene.ui.clearText();
-
   if (pendingResolve && msg.decisionType === pendingDecisionType) {
     const resolve = pendingResolve;
+    const localIndex = pendingLocalIndex;
     pendingResolve = null;
     pendingDecisionType = null;
-    resolve(msg.resolvedIndex);
+    pendingLocalIndex = null;
+
+    // If the resolved choice differs from what this player picked, show a brief message
+    if (localIndex !== null && msg.resolvedIndex !== localIndex) {
+      const label = OVERRIDE_LABELS[msg.decisionType] ?? "Partner's choice was selected!";
+      globalScene.ui.showText(label, {
+        callbackDelay: 1500,
+        callback: () => {
+          globalScene.ui.clearText();
+          resolve(msg.resolvedIndex);
+        },
+      });
+    } else {
+      globalScene.ui.clearText();
+      resolve(msg.resolvedIndex);
+    }
+  } else {
+    globalScene.ui.clearText();
   }
 }
 
@@ -63,4 +88,5 @@ export function onDecisionResolved(msg: DecisionResolvedMessage): void {
 export function resetDecisionSync(): void {
   pendingResolve = null;
   pendingDecisionType = null;
+  pendingLocalIndex = null;
 }
