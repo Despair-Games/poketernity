@@ -1,4 +1,4 @@
-import { globalScene } from "#app/global-scene";
+import { globalScene, mpSession } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { PLAYER_PARTY_MAX_SIZE } from "#constants/game-constants";
@@ -273,6 +273,10 @@ export class AttemptCapturePhase extends PokemonPhase {
         };
         const addToParty = (slotIndex?: number): void => {
           const newPokemon = pokemon.addToParty(this.pokeballType, slotIndex);
+          // In multiplayer, tag the caught Pokemon with the local player's userId
+          if (newPokemon && mpSession?.isActive) {
+            newPokemon.mpOwnerUserId = mpSession.localUserId;
+          }
           const modifiers = globalScene.findModifiers((m) => m.isPokemonHeldItemModifier(), false);
           if (globalScene.getPlayerParty().filter((p) => p.isShiny()).length === PLAYER_PARTY_MAX_SIZE) {
             globalScene.validateAchv(achvs.SHINY_PARTY);
