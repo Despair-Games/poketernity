@@ -5,7 +5,7 @@ import { AudioManager } from "#app/audio-manager";
 import { Battle, type FixedBattleConfig } from "#app/battle";
 import { eventBus } from "#app/event-bus";
 import { type GameMode, getGameMode } from "#app/game-mode";
-import { initGlobalScene } from "#app/global-scene";
+import { initGlobalScene, mpSession } from "#app/global-scene";
 import { LoadingScene } from "#app/loading-scene";
 import { CallSourceLogger, logModifiers } from "#app/loggers";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -1286,6 +1286,11 @@ export class BattleScene extends SceneBase {
     if (newBattleType === BattleType.MYSTERY_ENCOUNTER) {
       // Disable double battle on mystery encounters (it may be re-enabled as part of encounter)
       newDouble = false;
+    }
+
+    // Force double battles in multiplayer co-op so both players have Pokemon on the field
+    if (mpSession?.isActive && newBattleType !== BattleType.MYSTERY_ENCOUNTER) {
+      newDouble = true;
     }
 
     if (lastBattle?.double && !newDouble) {

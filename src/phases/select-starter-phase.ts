@@ -1,4 +1,5 @@
-import { globalScene } from "#app/global-scene";
+import { eventBus } from "#app/event-bus";
+import { globalScene, mpSession } from "#app/global-scene";
 import { activeOverrides } from "#app/overrides";
 import { Phase } from "#app/phase";
 import { ChallengeType } from "#enums/challenge-type";
@@ -6,6 +7,8 @@ import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 import { UiMode } from "#enums/ui-mode";
 import { SpeciesFormChangeMoveLearnedTrigger } from "#form-change-triggers/species-form-change-move-learned-trigger";
 import { overrideHeldItems, overrideModifiers } from "#modifier/modifier";
+import type { StartersResolvedMessage } from "#multiplayer/mp-protocol";
+import { createPokemonFromSerializedStarters, serializeStarters } from "#multiplayer/mp-starter-serialization";
 import type { StarterConfig } from "#types/starter-data";
 import type { SaveSlotSelectUiHandler } from "#ui/save-slot-select-ui-handler";
 import type { StarterSelectUiHandler } from "#ui/starter-select-ui-handler";
@@ -21,6 +24,13 @@ export class SelectStarterPhase extends Phase {
 
     globalScene.ui.setMode<StarterSelectUiHandler>(UiMode.STARTER_SELECT, (starters: StarterConfig[]) => {
       globalScene.ui.clearText();
+
+      // In multiplayer, skip save slot and submit starters to server
+      if (mpSession?.isActive) {
+        this.submitStartersAndWait(starters);
+        return;
+      }
+
       globalScene.ui.setMode<SaveSlotSelectUiHandler>(UiMode.SAVE_SLOT, SaveSlotUiMode.SAVE, (slotId: number) => {
         if (slotId === -1) {
           globalScene.phaseManager.toTitleScreen({ clearPhaseQueue: true });
@@ -29,6 +39,74 @@ export class SelectStarterPhase extends Phase {
         globalScene.sessionSlotId = slotId;
         this.initBattle(starters);
       });
+    });
+  }
+
+  /**
+   * In multiplayer mode, serialize starters and submit to the server.
+   * Waits for all players' starters to be resolved before building the merged party.
+   */
+  private submitStartersAndWait(starters: StarterConfig[]): void {
+    const starterDataJson = serializeStarters(starters);
+
+    const onStartersResolved = (msg: StartersResolvedMessage) => {
+      eventBus.off("mp:starters-resolved" as any, onStartersResolved);
+      this.initMpBattle(msg);
+    };
+    eventBus.on("mp:starters-resolved" as any, onStartersResolved);
+
+    const client = mpSession?.client;
+    if (client) {
+      client.submitStarters({ starterDataJson }).catch((err) => {
+        console.error("[MP] Failed to submit starters:", err);
+        eventBus.off("mp:starters-resolved" as any, onStartersResolved);
+      });
+    }
+  }
+
+  /**
+   * Build the merged party from all players' resolved starters.
+   * Host's Pokemon come first, then the peer's.
+   */
+  private initMpBattle(msg: StartersResolvedMessage): void {
+    const { arena, audioManager, gameMode, gameData, sound, time } = globalScene;
+    const { gameStats } = gameData;
+    const { isClassic } = gameMode;
+
+    console.log(`[MP] Building merged party from ${msg.playerStarters.length} players`);
+
+    // Create Pokemon from all players' starters (host first, maintained by server ordering)
+    const loadPromises = msg.playerStarters.map((ps) =>
+      createPokemonFromSerializedStarters(ps.starterDataJson, ps.userId),
+    );
+
+    Promise.all(loadPromises).then(() => {
+      const party = globalScene.getPlayerParty();
+      overrideModifiers();
+      if (party.length > 0) {
+        overrideHeldItems(party[0]);
+      }
+
+      SoundFade.fadeOut(globalScene, sound.get("menu"), 500, true);
+      time.delayedCall(500, () => audioManager.playBgm());
+
+      if (isClassic) {
+        gameStats.classicSessionsPlayed++;
+      }
+
+      // Use slot 0 for MP runs (no save slot selection)
+      globalScene.sessionSlotId = 0;
+
+      globalScene.newBattle();
+      arena.init();
+      globalScene.sessionPlayTime = 0;
+      globalScene.lastSavePlayTime = 0;
+
+      globalScene.getPlayerParty().forEach((p) => {
+        globalScene.triggerPokemonFormChange(p, SpeciesFormChangeMoveLearnedTrigger);
+      });
+
+      this.end();
     });
   }
 

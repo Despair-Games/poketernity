@@ -19,6 +19,10 @@ export interface SubmitCommandRequest {
   stateHash: string;
 }
 
+export interface SubmitStartersRequest {
+  starterDataJson: string;
+}
+
 // --- Server → Client messages ---
 export interface LobbyUpdateMessage {
   sessionId: string;
@@ -68,6 +72,16 @@ export interface DesyncDetectedMessage {
 export interface SelfIdentifyMessage {
   userId: string;
   username: string;
+}
+
+export interface StartersResolvedMessage {
+  playerStarters: PlayerStarterData[];
+}
+
+export interface PlayerStarterData {
+  userId: string;
+  username: string;
+  starterDataJson: string;
 }
 
 export interface PeerDisconnectedMessage {

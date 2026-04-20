@@ -1,4 +1,4 @@
-import { globalScene } from "#app/global-scene";
+import { globalScene, mpSession } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { TurnCommand } from "#app/turn-command-manager";
 import type { FairyLockTag } from "#arena-tags/fairy-lock-tag";
@@ -50,6 +50,13 @@ export class CommandPhase extends BattlePhase {
     const { turnManager } = globalScene.currentBattle;
 
     const pokemon = this.getPokemon();
+
+    // In multiplayer, skip command input for Pokemon owned by the peer.
+    // The peer's commands will be applied during TurnStartPhase sync.
+    if (mpSession?.isActive && pokemon.mpOwnerUserId && pokemon.mpOwnerUserId !== mpSession.localUserId) {
+      this.end();
+      return;
+    }
 
     globalScene.updateGameInfo();
 

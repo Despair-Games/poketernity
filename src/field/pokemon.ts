@@ -296,6 +296,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   public fieldPosition: FieldPosition;
 
+  /** In multiplayer co-op, tracks which player owns this Pokemon for command control */
+  public mpOwnerUserId?: string;
+
   public maskEnabled: boolean;
   public maskSprite: Phaser.GameObjects.Sprite | null;
 

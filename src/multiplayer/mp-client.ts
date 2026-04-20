@@ -10,7 +10,9 @@ import type {
   SelfIdentifyMessage,
   SessionEndedMessage,
   SetReadyRequest,
+  StartersResolvedMessage,
   SubmitCommandRequest,
+  SubmitStartersRequest,
   TurnResolvedMessage,
 } from "./mp-protocol";
 
@@ -113,6 +115,10 @@ export class MpClient {
     await this._invoke("SubmitCommand", request);
   }
 
+  async submitStarters(request: SubmitStartersRequest): Promise<void> {
+    await this._invoke("SubmitStarters", request);
+  }
+
   async heartbeat(): Promise<void> {
     await this._invoke("Heartbeat");
   }
@@ -145,6 +151,10 @@ export class MpClient {
 
     this._connection.on("RunStarted", (msg: RunStartedMessage) => {
       eventBus.emit("mp:run-started" as any, msg);
+    });
+
+    this._connection.on("StartersResolved", (msg: StartersResolvedMessage) => {
+      eventBus.emit("mp:starters-resolved" as any, msg);
     });
 
     this._connection.on("TurnResolved", (msg: TurnResolvedMessage) => {
