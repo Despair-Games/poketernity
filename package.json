@@ -26,7 +26,7 @@
     "biome-all:unsafe": "biome check --write --unsafe --no-errors-on-unmatched",
     "typedoc": "typedoc",
     "depcruise": "depcruise src test",
-    "postinstall": "lefthook install; git submodule update --init --recursive",
+    "postinstall": "lefthook install; git submodule update --init --recursive; git config --local blame.ignoreRevsFile .git-blame-ignore-revs",
     "update-version:patch": "pnpm version patch --force --no-git-tag-version",
     "update-version:minor": "pnpm version minor --force --no-git-tag-version",
     "update-locales:remote": "git submodule update --progress --init --recursive --force --remote"

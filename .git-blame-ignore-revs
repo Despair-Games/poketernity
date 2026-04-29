@@ -1,0 +1,166 @@
+# SPDX-FileCopyrightText: 2024-2026 NONE
+#
+# SPDX-License-Identifier: CC0-1.0
+
+# This file lists revisions of large-scale formatting, style and code movement changes so that
+# they can be excluded from git blame results.
+#
+# To set this file as the default ignore file for git blame, run:
+#   $ git config --local blame.ignoreRevsFile .git-blame-ignore-revs
+
+# ESLint - The Essential Linter and Formatter for JavaScript and TypeScript (#1224)
+bac6c22973fedff868e73a989443035c672e8f57
+
+# [Refactor] use typescript strict-null (#3259)
+a07d2c57a44361f4ad48e024067c9b7638c0d84d
+
+# [Test] Replace `doAttack()` with `move.select()` in tests (#3567)
+828897316e089ba390bc5fd3503e9175c7f45e8e
+
+# [Misc] Add eslint rule to enforce indenting of `case` statements (#4692)
+39abac65be26c2004ea1ca9a686cc8d7b35efb65
+
+# [Refactor] Apply Prettier styling (#1)
+088ca6ba98d98542ee3b42eeea6aba5a4e284df6
+
+# [Refactor] Create global scene variable (#5)
+8a3e677f76947f0a958b2f382befef39517e07b4
+
+# [Refactor] Replace namespace `* as Utils` imports with named imports (#7)
+d61e9bba1317cc00d511f722373553f74c1ba374
+
+# [Refactor] Add eslint rule to enforce type-only imports whenever possible (#8)
+7e26e35256ad210eee51e7530696e276d89e19bf
+
+# [Misc] Swap to `@btmills/prettier` fork (#13)
+ff8d2985e31cb87bedf02c82f3da6f46358504d1
+
+# [Refactor] Enable no implicit override (#23)
+027c5150f997366b9eda15136e1f5d9afc743961
+
+# [Dev] Update `no-unused-vars` Rule for Unused Parameters (#24)
+060780a99f547edfc21ab1589768b3dc166b1c24
+
+# [Refactor] Replace all uses of `integer` with `number` (#32)
+95f7ceb8a8fe93eed364a2d25bf527e280bea309
+
+# [Refactor] Cleanup leftover uses of `.scene` (#42)
+fbb351ccc1fb07a90dd3f328484f5c643a7335c7
+
+# [Misc] Remove unnecessary `globalScene` usage in `loading-scene.ts`
+5aeb08609c73d713fc2de156e020ab878977782e
+
+# [Misc] Replace `globalScene` with `this` in `BattleScene` (#316)
+73b6bc07ad450fdaf8c8278112b361bcafcc66e0
+
+# rename `enum Type` to `ElementType`
+396f2f31f3adc11c78a9d05f775272301db7a7da
+
+# [Refactor] Rename Moves to MoveId (#402)
+17f9468478faf6dc55c04348f90f8c897a465870
+
+# Reverted commit
+86c2b7ccde5dd6b678fb82d449c536cb7b561a49
+d4570e5330160467493e87b5c21b64fb09d66945
+
+# [Refactor] Rename `ElementType` to `ElementalType` (#417)
+1dd794a9d2eaf1207349c42cd7e18a2530ef835c
+
+# [Misc] Reformat `src/data/init/init-moves.ts` (#752)
+f325f1b19d1ea15df503ecbd41f6df2f73a9296d
+
+# [Misc] Organized `data` folder (#781)
+f158441400b26d875608ea325d88953275b485f3
+
+# [Misc] Organize UI folder (#832)
+b02e815fa1fe420ce1ac0d51397ae61e4d51f010
+
+# [Test] Remove deprecated `forceEnemyMove` and update its usages (#844)
+ca47f35b7b56872b79b182d62029ec957073c447
+
+# [Misc] Re-add type safety to `applyAbAttrs()` (#863)
+ed6010ac928e1972f1fdf712d3db2dfa30e8a62b
+
+# [Misc] Normalize enum names and filenames (#871)
+bdaed244d24162b542705f7b15c4962a11755c05
+
+# [Misc] Format `init-abilities` (#888)
+a01fce0819be88e87823ee6bc74670c80ca7ea1f
+
+# [Refactor] Remove a bunch of `!!` (#922)
+1d7d45cb6b9037ad7aeda14a83c30282543d15b6
+
+# [Refactor] Consolidate constants files into `src/constants/` (#1003)
+16a95b09a2b4ffe131cde908dd716f5ea94ec131
+
+# [Refactor][Tests] Remove `kill` wording from `GameManager` (#1016)
+49acc024b1ef451302b110d66217d34da2ec380a
+
+# [Refactor] Update `GameManager` method names (#1019)
+e4fb5e316349d98a8d3d5c35db5c58160c6a7ca0
+
+# [Refactor] Remove `src/interfaces/` folder (#1052)
+96564d4971b204d974821106b97e9b0b11d24edf
+
+# [Refactor] Organize utils (#1083)
+8ab72d1d39d9f68acff109f2e2eb525af3ebde83
+
+# [Refactor] Reduce test imports (#1089)
+3d78a41173c19f914d738a91206da335ca659188
+
+# [Refactor] Rename isNullOrUndefined to isNil and add TSDoc (#1092)
+2933918b04861d66736f93d1e55c43d1095c9f3a
+
+# [Dev][Refactor] Add -constants suffix to constants files (#1112)
+94e7a1d826ee8773580fe49d6731309c0ae1e650
+
+# [Refactor] Rename some ui handlers classes and function (#1146)
+34fa5e6522715dd7dc28103f5112d78c3bc6f762
+
+# [Dev] Replace ESLint with Biome (mostly) (#1156)
+29cc9f82fc835b210bc9b7ddceec442e4ad20601
+
+# [Dev] Add and apply import aliases (#1157)
+242a8b544be61b825dac28609de3f406211a5fc9
+
+# [Misc] Standardize filenames to "kebab-case" in `test/` (#1169)
+9ae95caf88ab9fc56b875a47b15ac5f5aa028853
+
+# [Misc] Standardize file names to kebab-case (#1171)
+0d8c0a1aae6f08e9b6fd840895009ce822de7114
+
+# [Dev] Enable lint/suspicious/noPrototypeBuiltins Biome rule (#1193)
+03d7c6db978500535a727def22b8fc0245976877
+
+# [Dev] Use Biome for unused imports rule (#1270)
+e74fe3774c0d3d6fb6ab25747ba40b9e873f4859
+
+# [Dev] Enable Biome import sorting (#1271)
+37d8c42fabf67996a12ea0a447650cd9a6fe9691
+
+# [Refactor] Remove unnecessary arena params (#1291)
+0a09962047416aade4943ee3011a69a6008093ba
+
+# dev: add additional Biome rules (#1326)
+618aee34eaa7d1b722e90448b941da28b9a88926
+
+# dev: re-enable auto-formatting of `init-[moves|abilities].ts` (#1327)
+cb7e33b1800aca3eca4fea44aeccfeb72d0349ce
+
+# dev: remove default export from `overrides.ts` (#1333)
+8131f17ae2d1f82d082957fb4530e52ee08585d0
+
+# dev: update Biome from `2.2.0` to `2.2.2` and add some rules (#1339)
+499f6665e8e1ff5d161e1029aeef50148c21ff2a
+
+# dev: upgrade `lint/nursery/noShadow` rule from "warn" to "error" (#1356)
+0c595bae2704df0dc4cdee3d9f9d8f16a81dd284
+
+# refactor: replace `isNil` with `== null` and `!= null` (#1363)
+4c4898ee992ff3b5f570b0697ca2e54c7eac7eb3
+
+# refactor: remove `null` from `PhaseManager#currentPhase` typing (#1408)
+eab1d4d7f7efd40d1bfd907158b64c645973529b
+
+# dev: update Biome from `2.4.0` to `2.4.9` and apply to repo (#1424)
+8b1dfd4ab31013217ec4e157f5b1ac3d8805cf4a
