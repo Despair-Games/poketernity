@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { activeOverrides as Overrides } from "#app/overrides";
+import { activeOverrides } from "#app/overrides";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
 import { EVIL_GRUNT_1_WAVE, EVIL_GRUNT_2_WAVE, EVIL_GRUNT_3_WAVE, EVIL_GRUNT_4_WAVE } from "#constants/wave-constants";
 import type { PokemonSpecies } from "#data/pokemon-species";
@@ -1633,7 +1633,7 @@ export function getWavePartyTemplate(...templates: TrainerPartyTemplate[]): Trai
   const wavesToScale = 30;
   const offsetWave = 20;
 
-  const wave = Overrides.STARTING_WAVE_OVERRIDE ?? 1;
+  const wave = activeOverrides.STARTING_WAVE_OVERRIDE ?? 1;
   const { currentBattle, gameMode } = globalScene;
   const adjustedWave = gameMode.getWaveForDifficulty(currentBattle?.waveIndex ?? wave, true);
   const targetTemplate = Math.ceil((adjustedWave - offsetWave) / wavesToScale);
@@ -1646,7 +1646,7 @@ export function getWavePartyTemplate(...templates: TrainerPartyTemplate[]): Trai
  */
 function getGymLeaderPartyTemplate(): TrainerPartyTemplate {
   const { currentBattle } = globalScene;
-  const currentWave = currentBattle?.waveIndex ?? Overrides.STARTING_WAVE_OVERRIDE;
+  const currentWave = currentBattle?.waveIndex ?? activeOverrides.STARTING_WAVE_OVERRIDE;
   // MEs can trigger a gym leader on any floor so this handles those cases
   const gymLeaderNumber = Math.min(Math.ceil(currentWave / 20), 8);
   // TODO: Need special balancing for daily mode
