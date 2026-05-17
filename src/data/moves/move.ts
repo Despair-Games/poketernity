@@ -21,6 +21,7 @@ import { MoveId } from "#enums/move-id";
 import { MoveTarget } from "#enums/move-target";
 import type { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
+import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
 import { AttackTypeBoosterModifier } from "#modifier/modifier";
@@ -769,14 +770,16 @@ export abstract class Move {
   /**
    * Calculates the power of a move in battle based on various conditions and attributes.
    *
-   * @param source {@linkcode Pokemon} The Pokémon using the move.
-   * @param target {@linkcode Pokemon} The Pokémon being targeted by the move.
-   * @returns The calculated power of the move.
+   * @param source - The {@linkcode Pokemon} using the move
+   * @param target - The Pokémon being targeted by the move
+   * @returns The calculated power of the move
    */
   calculateBattlePower(source: Pokemon, target: Pokemon, simulated: boolean = false): number {
     if (this.category === MoveCategory.STATUS) {
       return -1;
     }
+
+    const { arena } = globalScene;
 
     const power = new ValueHolder(this.power);
     const typeChangeHolder = new ValueHolder(this.type);
@@ -842,7 +845,7 @@ export abstract class Move {
     }
 
     if (!this.hasAttr(TypelessAttr)) {
-      globalScene.arena.applyTags<WeakenMoveTypeTag>(
+      arena.applyTags<WeakenMoveTypeTag>(
         [...WEAKEN_MOVE_TYPE_ARENA_TAG_TYPES],
         ArenaTagSide.BOTH,
         simulated,
@@ -858,6 +861,18 @@ export abstract class Move {
 
     applyBattlerTags<MeFirstPowerBoostTag>(BattlerTagType.ME_FIRST_POWER_BOOST, source, simulated, power);
     applyBattlerTags<PursuingTag>(BattlerTagType.PURSUING, source, simulated, power);
+
+    if (source.isGrounded()) {
+      power.value *= arena.getTerrainPowerMultiplier(source.getMoveType(this));
+    }
+
+    if (
+      target.isGrounded()
+      && globalScene.arena.terrainType === TerrainType.MISTY
+      && this.type === ElementalType.DRAGON
+    ) {
+      power.value *= 0.5;
+    }
 
     return power.value;
   }
