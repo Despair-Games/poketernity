@@ -79,7 +79,7 @@ describe("Trash to Treasure - Mystery Encounter", () => {
     TrashToTreasureEncounter.populateDialogueTokensFromRequirements();
     const onInitResult = onInit!();
 
-    expect(TrashToTreasureEncounter.enemyPartyConfigs).toEqual([
+    expect(TrashToTreasureEncounter.battleConfigs).toEqual([
       {
         levelAdditiveModifier: 0.5,
         disableSwitch: true,

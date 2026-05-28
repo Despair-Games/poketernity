@@ -1,11 +1,11 @@
-import type { TrainerConfigMap } from "#data/new-trainer-config";
 import { signatureSpecies } from "#data/signature-species";
-import type { TrainerConfigs } from "#data/trainer-config";
-import { TrainerConfig } from "#data/trainer-config";
-import { TrainerConfigBuilder } from "#data/trainer-config-builder";
 import { ElementalType } from "#enums/elemental-type";
 import { TrainerGender } from "#enums/trainer-gender";
 import { TrainerType } from "#enums/trainer-type";
+import type { TrainerConfigMap } from "#trainers/new-trainer-config";
+import type { TrainerConfigs } from "#trainers/trainer-config";
+import { TrainerConfig } from "#trainers/trainer-config";
+import { TrainerConfigBuilder } from "#trainers/trainer-config-builder";
 
 export const gymLeaderTrainerConfigs: TrainerConfigs = {
   [TrainerType.BROCK]: new TrainerConfig(TrainerType.BROCK)

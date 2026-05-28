@@ -2,7 +2,7 @@ import { TrainerType } from "#enums/trainer-type";
 import { VoucherType } from "#enums/voucher-type";
 import { achvs } from "#system/achievements";
 import { Voucher, vouchers } from "#system/voucher";
-import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
+import { allTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
 import i18next from "i18next";
 
 export function initVouchers() {

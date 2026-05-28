@@ -1,14 +1,14 @@
 import { globalScene } from "#app/global-scene";
+import { Phase } from "#app/phase";
 import type { SubstituteTag } from "#battler-tags/substitute-tag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { SpeciesId } from "#enums/species-id";
 import type { Pokemon } from "#field/pokemon";
-import { BattlePhase } from "#phases/base/battle-phase";
 import { playNumberTween, playTween } from "#utils/anim-utils";
 
 // TODO: This should probably be made into an abstract base class
-export class PokemonAnimPhase extends BattlePhase {
+export class PokemonAnimPhase extends Phase {
   public override readonly phaseName = "PokemonAnimPhase";
 
   /** The type of animation to play in this phase */

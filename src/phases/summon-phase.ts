@@ -226,20 +226,20 @@ export class SummonPhase extends PokemonPhase {
    * then hides itself as it announces the Pokemon entering the field.
    */
   private async playEnemyTrainerThrowSequence(): Promise<void> {
-    const { currentBattle, pbTrayEnemy, ui } = globalScene;
-    const { trainer } = currentBattle;
-    if (!trainer) {
+    const { currentBattle, enemyTrainers, pbTrayEnemy, ui } = globalScene;
+    const { trainerData } = currentBattle;
+    if (!enemyTrainers || !trainerData) {
       console.warn("SummonPhase: Enemy Trainer is missing!");
       return;
     }
 
-    if (!trainer.visible) {
+    if (!enemyTrainers.visible) {
       await this.playEnemyTrainerEntranceAnim();
     }
 
-    await Promise.allSettled([this.hideEnemyTrainer(), pbTrayEnemy.hide()]);
+    await Promise.allSettled([enemyTrainers.hide(), pbTrayEnemy.hide()]);
 
-    const trainerName = trainer.getName(this.getTrainerSlot());
+    const trainerName = trainerData.trainers[this.getTrainerSlot()];
     const pokemonName = this.getPokemon().getNameToRender();
     const message = i18next.t("battle:trainerSendOut", { trainerName, pokemonName });
 
@@ -248,10 +248,10 @@ export class SummonPhase extends PokemonPhase {
 
   /**
    * Plays an animation to move the enemy Trainer onto the field.
-   * This, of course, assumes the Pokemon to switch in is an enemy
+   * This assumes the Pokemon to switch in is an enemy.
    */
   private async playEnemyTrainerEntranceAnim(): Promise<void> {
-    await this.showEnemyTrainer(this.getTrainerSlot());
+    await globalScene.enemyTrainers?.show();
     await globalScene.pbTrayEnemy.showPbTray(globalScene.getEnemyParty());
     await new Promise<void>((resolve) => globalScene.time.delayedCall(1000, resolve));
   }
@@ -276,10 +276,10 @@ export class SummonPhase extends PokemonPhase {
     field.add(pokeball);
 
     if (this.fieldIndex === 1) {
-      pokemon.setFieldPosition(FieldPosition.RIGHT, 0);
+      await pokemon.setFieldPosition(FieldPosition.RIGHT, 0);
     } else {
       const availablePartyMembers = this.getAlliedParty().filter((p) => p.isAllowedInBattle()).length;
-      pokemon.setFieldPosition(
+      await pokemon.setFieldPosition(
         !currentBattle.double || availablePartyMembers === 1 ? FieldPosition.CENTER : FieldPosition.LEFT,
       );
     }

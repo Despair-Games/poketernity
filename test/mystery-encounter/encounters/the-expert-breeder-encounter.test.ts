@@ -18,6 +18,8 @@ import {
 } from "#test/mystery-encounter/encounter-test-utils";
 import { GameManager } from "#test/test-utils/game-manager";
 import { initSceneWithoutEncounterPhase } from "#test/test-utils/game-manager-utils";
+import { getEnumStr } from "#test/test-utils/string-utils";
+import type { NewTrainerConfig } from "#trainers/new-trainer-config";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const namespace = "mysteryEncounters/theExpertPokemonBreeder";
@@ -100,10 +102,16 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
     encounter.populateDialogueTokensFromRequirements();
     const onInitResult = onInit!();
 
-    expect(encounter.enemyPartyConfigs).toBeDefined();
-    expect(encounter.enemyPartyConfigs.length).toBe(1);
-    expect(encounter.enemyPartyConfigs[0].trainerType).toBe(TrainerType.EXPERT_POKEMON_BREEDER);
-    expect(encounter.enemyPartyConfigs[0].pokemonConfigs?.length).toBe(3);
+    expect(encounter.battleConfigs).toBeDefined();
+    expect(encounter.battleConfigs.length).toBe(1);
+    const battleConfig = encounter.battleConfigs[0];
+    if (battleConfig.battleType !== MysteryEncounterMode.TRAINER_BATTLE) {
+      expect.fail(`Battle config is of invalid type: ${getEnumStr(MysteryEncounterMode, battleConfig.battleType)}`);
+    }
+
+    const trainerConfig = battleConfig.trainerConfig as NewTrainerConfig;
+    expect(trainerConfig.trainerType).toBe(TrainerType.EXPERT_POKEMON_BREEDER);
+    expect(trainerConfig.partyConfigs).toBe(3);
     expect(encounter.spriteConfigs).toBeDefined();
     expect(encounter.spriteConfigs.length).toBe(2);
     expect(onInitResult).toBe(true);
@@ -155,7 +163,7 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
 
       // Check usual battle stuff
       expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("CommandPhase");
-      expect(scene.currentBattle.trainer).toBeDefined();
+      expect(scene.currentBattle.trainerData).toBeDefined();
       expect(scene.currentBattle.mysteryEncounter?.encounterMode).toBe(MysteryEncounterMode.TRAINER_BATTLE);
       expect(scene.getPlayerParty().length).toBe(1);
     });
@@ -240,7 +248,7 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
 
       // Check usual battle stuff
       expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("CommandPhase");
-      expect(scene.currentBattle.trainer).toBeDefined();
+      expect(scene.currentBattle.trainerData).toBeDefined();
       expect(scene.currentBattle.mysteryEncounter?.encounterMode).toBe(MysteryEncounterMode.TRAINER_BATTLE);
       expect(scene.getPlayerParty().length).toBe(1);
     });
@@ -324,7 +332,7 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
 
       // Check usual battle stuff
       expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("CommandPhase");
-      expect(scene.currentBattle.trainer).toBeDefined();
+      expect(scene.currentBattle.trainerData).toBeDefined();
       expect(scene.currentBattle.mysteryEncounter?.encounterMode).toBe(MysteryEncounterMode.TRAINER_BATTLE);
       expect(scene.getPlayerParty().length).toBe(1);
     });

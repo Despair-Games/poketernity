@@ -1,11 +1,12 @@
 import { globalScene } from "#app/global-scene";
 import { activeOverrides } from "#app/overrides";
+import { Phase } from "#app/phase";
 import { AbilityId } from "#enums/ability-id";
 import { BattleCommand } from "#enums/battle-command";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { TrainerSlot } from "#enums/trainer-slot";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { Pokemon } from "#field/pokemon";
-import { BattlePhase } from "#phases/base/battle-phase";
 
 /**
  * Phase for determining an enemy AI's action for the next turn.
@@ -18,7 +19,7 @@ import { BattlePhase } from "#phases/base/battle-phase";
  * @see {@linkcode Pokemon.getMatchupScore}
  * @see {@linkcode EnemyPokemon.getNextMove}
  */
-export class EnemyCommandPhase extends BattlePhase {
+export class EnemyCommandPhase extends Phase {
   public override readonly phaseName = "EnemyCommandPhase";
 
   public readonly fieldIndex: number;
@@ -37,12 +38,11 @@ export class EnemyCommandPhase extends BattlePhase {
 
     const pokemon = globalScene.getEnemyField()[this.fieldIndex];
 
-    const battle = globalScene.currentBattle;
-
-    const trainer = battle.trainer;
+    const { currentBattle } = globalScene;
+    const { trainerData } = currentBattle;
 
     if (
-      battle.double
+      currentBattle.double
       && pokemon.hasAbility(AbilityId.COMMANDER)
       && pokemon.getAlly()?.hasTag(BattlerTagType.COMMANDED)
     ) {
@@ -59,31 +59,31 @@ export class EnemyCommandPhase extends BattlePhase {
      * member's matchup score is 3x the active enemy's score (or 2x for "boss" trainers),
      * the enemy will switch to that Pokemon.
      */
-    if (trainer && !pokemon.getMoveQueue().length) {
+    if (trainerData && pokemon.trainerSlot !== TrainerSlot.NONE && !pokemon.getMoveQueue().length) {
       const opponents = pokemon.getOpponents();
+      const { ai } = trainerData.trainers[pokemon.trainerSlot]!;
 
       if (!pokemon.isTrapped()) {
-        const partyMemberScores = trainer.getPartyMemberMatchupScores(pokemon.trainerSlot, true);
+        const partyMemberScores = ai.getSortedPartyMemberMatchupScores(true);
 
         if (partyMemberScores.length) {
           const matchupScores = opponents.map((opp) => pokemon.getMatchupScore(opp));
           const matchupScore = matchupScores.reduce((total, score) => (total += score), 0) / matchupScores.length;
 
-          const sortedPartyMemberScores = trainer.getSortedPartyMemberMatchupScores(partyMemberScores);
+          const switchMultiplier =
+            1 - (currentBattle.enemySwitchCounter ? Math.pow(0.1, 1 / currentBattle.enemySwitchCounter) : 0);
 
-          const switchMultiplier = 1 - (battle.enemySwitchCounter ? Math.pow(0.1, 1 / battle.enemySwitchCounter) : 0);
+          if (partyMemberScores[0][1] * switchMultiplier >= matchupScore * (trainerData.isBoss ? 2 : 3)) {
+            const index = ai.getNextSummonIndex();
 
-          if (sortedPartyMemberScores[0][1] * switchMultiplier >= matchupScore * (trainer.config.isBoss ? 2 : 3)) {
-            const index = trainer.getNextSummonIndex(pokemon.trainerSlot, partyMemberScores);
-
-            battle.turnManager.addCommand({
+            currentBattle.turnManager.addCommand({
               pokemon,
               command: BattleCommand.POKEMON,
               cursor: index,
               args: [false],
             });
 
-            battle.enemySwitchCounter++;
+            currentBattle.enemySwitchCounter++;
 
             this.end();
             return;
@@ -92,18 +92,21 @@ export class EnemyCommandPhase extends BattlePhase {
       }
     }
 
+    const shouldTrainerTera =
+      pokemon.trainerSlot !== TrainerSlot.NONE && trainerData?.trainers[pokemon.trainerSlot]?.ai.shouldTera(pokemon);
+
     const command =
-      (activeOverrides.FORCE_ENEMY_TERA_OVERRIDE && !pokemon.isTerastallized) || trainer?.shouldTera(pokemon)
+      (activeOverrides.FORCE_ENEMY_TERA_OVERRIDE && !pokemon.isTerastallized) || shouldTrainerTera
         ? BattleCommand.TERA
         : BattleCommand.FIGHT;
 
-    battle.turnManager.addCommand({
+    currentBattle.turnManager.addCommand({
       pokemon,
       command,
       turnMove: pokemon.getNextMove(),
     });
 
-    battle.enemySwitchCounter = Math.max(battle.enemySwitchCounter - 1, 0);
+    currentBattle.enemySwitchCounter = Math.max(currentBattle.enemySwitchCounter - 1, 0);
 
     this.end();
   }

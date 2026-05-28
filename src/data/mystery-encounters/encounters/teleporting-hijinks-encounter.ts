@@ -5,20 +5,20 @@ import { TeleportingHijinksBiomeCandidates } from "#data/biome-utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { BiomeId } from "#enums/biome-id";
 import { ElementalType } from "#enums/elemental-type";
+import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { type BattleStat, Stat } from "#enums/stat";
 import { getBiomeKey } from "#field/arena";
 import { EnemyPokemon } from "#field/enemy-pokemon";
-import type { Pokemon } from "#field/pokemon";
 import { getPartyLuckValue } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
 import { queueEncounterMessage, showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import {
-  type EnemyPartyConfig,
   generateModifierTypeOption,
   initBattleWithEnemyConfig,
+  type MysteryEncounterBattleConfig,
   setEncounterExp,
   setEncounterRewards,
   updatePlayerMoney,
@@ -31,7 +31,6 @@ import { transitionMysteryEncounterIntroVisuals } from "#mystery-encounters/enco
 import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import { MoneyRequirement, WaveModulusRequirement } from "#mystery-encounters/mystery-encounter-requirements";
-import { PokemonData } from "#system/pokemon-data";
 import { randSeedInt } from "#utils/random-utils";
 
 /** the i18n namespace for this encounter */
@@ -101,7 +100,7 @@ export const TeleportingHijinksEncounter: MysteryEncounter = MysteryEncounterBui
         updatePlayerMoney(-globalScene.currentBattle.mysteryEncounter!.misc.price, true, false);
       })
       .withOptionPhase(async () => {
-        const config: EnemyPartyConfig = await doBiomeTransitionDialogueAndBattleInit();
+        const config: MysteryEncounterBattleConfig = await doBiomeTransitionDialogueAndBattleInit();
         setEncounterRewards({ fillRemaining: true });
         await initBattleWithEnemyConfig(config);
       })
@@ -121,7 +120,7 @@ export const TeleportingHijinksEncounter: MysteryEncounter = MysteryEncounterBui
         ],
       })
       .withOptionPhase(async () => {
-        const config: EnemyPartyConfig = await doBiomeTransitionDialogueAndBattleInit();
+        const config: MysteryEncounterBattleConfig = await doBiomeTransitionDialogueAndBattleInit();
         setEncounterRewards({ fillRemaining: true });
         setEncounterExp(globalScene.currentBattle.mysteryEncounter!.selectedOption!.primaryPokemon!.id, 100);
         await initBattleWithEnemyConfig(config);
@@ -152,15 +151,9 @@ export const TeleportingHijinksEncounter: MysteryEncounter = MysteryEncounterBui
       );
       const bossPokemon = new EnemyPokemon(bossSpecies, level, { boss: true });
       encounter.setDialogueToken("enemyPokemon", getPokemonNameWithAffix(bossPokemon));
-      const config: EnemyPartyConfig = {
-        pokemonConfigs: [
-          {
-            level,
-            species: bossSpecies,
-            dataSource: new PokemonData(bossPokemon),
-            isBoss: true,
-          },
-        ],
+      const config: MysteryEncounterBattleConfig = {
+        battleType: MysteryEncounterMode.WILD_BATTLE,
+        pokemonConfigs: [{ pokemon: bossPokemon }],
       };
 
       const magnet = generateModifierTypeOption(modifierTypes.ATTACK_TYPE_BOOSTER, [ElementalType.STEEL])!;
@@ -202,15 +195,13 @@ async function doBiomeTransitionDialogueAndBattleInit() {
       ? [Stat.DEF, Stat.SPDEF, Stat.SPD]
       : [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD];
 
-  const config: EnemyPartyConfig = {
+  const config: MysteryEncounterBattleConfig = {
+    battleType: MysteryEncounterMode.WILD_BATTLE,
     pokemonConfigs: [
       {
-        level,
-        species: bossSpecies,
-        dataSource: new PokemonData(bossPokemon),
-        isBoss: true,
-        tags: [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON],
-        mysteryEncounterBattleEffects: (pokemon: Pokemon) => {
+        pokemon: bossPokemon,
+        postProcess: (pokemon) => {
+          pokemon.addTag(BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON);
           queueEncounterMessage(`${namespace}:boss_enraged`);
           globalScene.phaseManager.createAndUnshiftPhase(
             "StatStageChangePhase",
@@ -230,7 +221,7 @@ async function doBiomeTransitionDialogueAndBattleInit() {
 async function animateBiomeChange(nextBiome: BiomeId) {
   return new Promise<void>((resolve) => {
     globalScene.tweens.add({
-      targets: [globalScene.arenaEnemy, globalScene.lastEnemyTrainer],
+      targets: [globalScene.arenaEnemy, globalScene.enemyTrainers],
       x: "+=300",
       duration: 2000,
       onComplete: () => {
@@ -259,9 +250,6 @@ async function animateBiomeChange(nextBiome: BiomeId) {
             globalScene.arenaNextEnemy.setBiome(nextBiome);
             globalScene.arenaBgTransition.setVisible(false);
             globalScene.arenaPlayerTransition.setVisible(false);
-            if (globalScene.lastEnemyTrainer) {
-              globalScene.lastEnemyTrainer.destroy();
-            }
 
             resolve();
 

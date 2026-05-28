@@ -1,14 +1,14 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { Phase } from "#app/phase";
 import { getSpeciesFormChangeMessage, type SpeciesFormChange, SpeciesFormChangeTeraTrigger } from "#data/pokemon-forms";
 import { getTypeRgb } from "#data/type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { Pokemon } from "#field/pokemon";
-import { BattlePhase } from "#phases/base/battle-phase";
 import { playTween } from "#utils/anim-utils";
 
-export class QuietFormChangePhase extends BattlePhase {
+export class QuietFormChangePhase extends Phase {
   public override readonly phaseName = "QuietFormChangePhase";
 
   protected readonly pokemon: Pokemon;

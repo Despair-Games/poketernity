@@ -1,13 +1,11 @@
 import type { BattleScene } from "#app/battle-scene";
 import { HumanTransitableBiomes } from "#data/biome-utils";
-import { TrainerConfig, TrainerPartyCompoundTemplate, TrainerPartyTemplate } from "#data/trainer-config";
 import { BiomeId } from "#enums/biome-id";
 import { ModifierTier } from "#enums/modifier-tier";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { PartyMemberStrength } from "#enums/party-member-strength";
 import { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
 import { MysteriousChallengersEncounter } from "#mystery-encounters/mysterious-challengers-encounter";
@@ -92,37 +90,24 @@ describe("Mysterious Challengers - Mystery Encounter", () => {
     encounter.populateDialogueTokensFromRequirements();
     const onInitResult = onInit!();
 
-    expect(encounter.enemyPartyConfigs).toBeDefined();
-    expect(encounter.enemyPartyConfigs.length).toBe(3);
-    expect(encounter.enemyPartyConfigs).toEqual([
+    expect(encounter.battleConfigs).toBeDefined();
+    expect(encounter.battleConfigs.length).toBe(3);
+    expect(encounter.battleConfigs).toEqual([
       {
-        trainerConfig: expect.any(TrainerConfig),
-        female: expect.any(Boolean),
+        battleType: MysteryEncounterMode.TRAINER_BATTLE,
+        trainerConfig: expect.anything(),
       },
       {
-        trainerConfig: expect.any(TrainerConfig),
-        levelAdditiveModifier: 1,
-        female: expect.any(Boolean),
+        battleType: MysteryEncounterMode.TRAINER_BATTLE,
+        trainerConfig: expect.anything(),
+        levelBoostMultiplier: 1,
       },
       {
-        trainerConfig: expect.any(TrainerConfig),
-        levelAdditiveModifier: 1.5,
-        female: expect.any(Boolean),
+        battleType: MysteryEncounterMode.TRAINER_BATTLE,
+        trainerConfig: expect.anything(),
+        levelBoostMultiplier: 1.5,
       },
     ]);
-    expect(encounter.enemyPartyConfigs[1].trainerConfig?.partyTemplates[0]).toEqual(
-      new TrainerPartyCompoundTemplate(
-        new TrainerPartyTemplate(1, PartyMemberStrength.STRONGER, false, true),
-        new TrainerPartyTemplate(3, PartyMemberStrength.AVERAGE, false, true),
-      ),
-    );
-    expect(encounter.enemyPartyConfigs[2].trainerConfig?.partyTemplates[0]).toEqual(
-      new TrainerPartyCompoundTemplate(
-        new TrainerPartyTemplate(2, PartyMemberStrength.AVERAGE),
-        new TrainerPartyTemplate(3, PartyMemberStrength.STRONG),
-        new TrainerPartyTemplate(1, PartyMemberStrength.STRONGER),
-      ),
-    );
     expect(encounter.spriteConfigs).toBeDefined();
     expect(encounter.spriteConfigs.length).toBe(3);
     expect(onInitResult).toBe(true);
@@ -149,7 +134,7 @@ describe("Mysterious Challengers - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
       expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("CommandPhase");
-      expect(scene.currentBattle.trainer).toBeDefined();
+      expect(scene.currentBattle.trainerData).toBeDefined();
       expect(scene.currentBattle.mysteryEncounter?.encounterMode).toBe(MysteryEncounterMode.TRAINER_BATTLE);
     });
 
@@ -191,7 +176,7 @@ describe("Mysterious Challengers - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 2, undefined, true);
 
       expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("CommandPhase");
-      expect(scene.currentBattle.trainer).toBeDefined();
+      expect(scene.currentBattle.trainerData).toBeDefined();
       expect(scene.currentBattle.mysteryEncounter?.encounterMode).toBe(MysteryEncounterMode.TRAINER_BATTLE);
     });
 
@@ -246,7 +231,7 @@ describe("Mysterious Challengers - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 3, undefined, true);
 
       expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("CommandPhase");
-      expect(scene.currentBattle.trainer).toBeDefined();
+      expect(scene.currentBattle.trainerData).toBeDefined();
       expect(scene.currentBattle.mysteryEncounter?.encounterMode).toBe(MysteryEncounterMode.TRAINER_BATTLE);
     });
 

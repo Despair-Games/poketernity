@@ -70,7 +70,7 @@
         "./src/system/version-migration/*.ts",
         "./src/system/*.ts"
       ],
-      "#trainer-configs/*": ["./src/data/trainer-configs/*.ts"],
+      "#trainers/*": ["./src/data/trainers/*.ts"],
       "#test/*": ["./test/*.ts"],
       "#types/*": ["./src/@types/*.ts"],
       "#ui/*": [

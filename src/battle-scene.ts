@@ -2,7 +2,7 @@ import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import type { ForceSwitchOutImmunityAbAttr } from "#abilities/force-switch-out-immunity-ab-attr";
 import { Animation } from "#app/animations";
 import { AudioManager } from "#app/audio-manager";
-import { Battle, type FixedBattleConfig } from "#app/battle";
+import { Battle } from "#app/battle";
 import { eventBus } from "#app/event-bus";
 import { type GameMode, getGameMode } from "#app/game-mode";
 import { initGlobalScene } from "#app/global-scene";
@@ -24,7 +24,7 @@ import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { ELITE_FOUR_1_WAVE } from "#constants/wave-constants";
 import { getBiomeName } from "#data/biome-utils";
 import { allBiomes, allSpecies } from "#data/data-lists";
-import { classicFinalBossDialogue } from "#data/dialogue";
+import { classicFinalBossDialogue, getCharVariantFromDialogue, type TrainerMessageType } from "#data/dialogue";
 import { getLevelForWaveFunc } from "#data/exp";
 import { pokemonFormChanges, type SpeciesFormChange } from "#data/pokemon-forms";
 import type { PokemonSpecies } from "#data/pokemon-species";
@@ -54,7 +54,7 @@ import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import { SwitchType } from "#enums/switch-type";
 import { TextStyle } from "#enums/text-style";
-import { TrainerVariant } from "#enums/trainer-variant";
+import { UiMode } from "#enums/ui-mode";
 import type { UiWindowStyle } from "#enums/ui-window-style";
 import { NewArenaEvent } from "#events/battle-scene";
 import { Arena, ArenaBase, getBgTerrainColorRatioForBiome } from "#field/arena";
@@ -63,7 +63,7 @@ import { EnemyPokemon, type EnemyPokemonOptions } from "#field/enemy-pokemon";
 import { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon, PokemonOptions } from "#field/pokemon";
 import { PokemonSpriteTeraSparkleHandler } from "#field/pokemon-sprite-tera-sparkle-handler";
-import { Trainer } from "#field/trainer";
+import { TrainerSpriteSet } from "#field/trainer-sprite";
 import { SpeciesFormChangeManualTrigger } from "#form-change-triggers/species-form-change-manual-trigger";
 import { SpeciesFormChangeTimeOfDayTrigger } from "#form-change-triggers/species-form-change-time-of-day-trigger";
 import type { SpeciesFormChangeTrigger } from "#form-change-triggers/species-form-change-trigger";
@@ -110,9 +110,9 @@ import { type Achievement, achvs } from "#system/achievements";
 import { GameData } from "#system/game-data";
 import { initGameSpeed } from "#system/game-speed";
 import { settings } from "#system/settings-manager";
-import type { TrainerSaveData } from "#system/trainer-save-data";
 import { type Voucher, vouchers } from "#system/voucher";
-import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
+import { allNewTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
+import { TrainerDataSet } from "#trainers/trainer-data";
 import type { HeldModifierConfig, ModifierPredicate } from "#types/modifiers-types";
 import type { AnySettingKey, SettingsUpdateEventArgs } from "#types/settings";
 import type { PokemonSpeciesFilter } from "#types/ui-types";
@@ -146,6 +146,14 @@ export interface PokeballCounts {
 export interface InfoToggle {
   toggleInfo(force?: boolean): void;
   isActive(): boolean;
+}
+
+interface NewBattleOptions {
+  waveIndex?: number;
+  battleType?: BattleType;
+  trainerData?: TrainerDataSet;
+  double?: boolean;
+  mysteryEncounterType?: MysteryEncounterType;
 }
 
 // #endregion
@@ -196,7 +204,7 @@ export class BattleScene extends SceneBase {
   public score: number;
   public lockModifierTiers: boolean;
   public trainer: Phaser.GameObjects.Sprite;
-  public lastEnemyTrainer: Trainer | null;
+  public _enemyTrainers: TrainerSpriteSet | null;
   public currentBattle: Battle;
   public pokeballCounts: PokeballCounts;
   public money: number;
@@ -274,6 +282,70 @@ export class BattleScene extends SceneBase {
     this.audioManager = new AudioManager();
     initGlobalScene(this);
     this.initSettingsEventListeners();
+  }
+
+  public get enemyTrainers(): TrainerSpriteSet | null {
+    return this._enemyTrainers;
+  }
+
+  public set enemyTrainers(value: TrainerSpriteSet | null) {
+    this._enemyTrainers?.destroy();
+    this._enemyTrainers = value;
+    if (this._enemyTrainers != null) {
+      this.field.add(this._enemyTrainers);
+    }
+  }
+
+  /**
+   * Initializes the Enemy Trainer sprites for a new battle
+   * @param trainerData - The {@linkcode TrainerDataSet} from which the Trainer's
+   * assets are derived
+   * @async
+   */
+  public async initEnemyTrainers(trainerData: TrainerDataSet): Promise<void> {
+    this.enemyTrainers = await TrainerSpriteSet.create(trainerData);
+  }
+
+  /**
+   * Shows all dialogue from the current battle's {@linkcode TrainerDataSet}
+   * in increasing order of {@linkcode TrainerSlot}, starting with {@linkcode TrainerSlot.TRAINER}.
+   * If a Trainer with dialogue also has a {@linkcode TrainerData.dialogueSpriteKey | dialogueSpriteKey},
+   * this also shows the Trianer's character sprite when playing its dialogue.
+   * @param messageType - The type of message to fetch from Trainer data.
+   * @async
+   */
+  public async showTrainerDialogue(messageType: TrainerMessageType): Promise<void> {
+    const { trainerData } = this.currentBattle;
+    if (trainerData == null) {
+      return;
+    }
+
+    const messages = trainerData.getDialogueQueue(messageType);
+    if (messages.length === 0) {
+      return;
+    }
+
+    for (const [slot, message] of messages) {
+      if (this.ui.shouldSkipDialogue(message)) {
+        continue;
+      }
+
+      if (this.ui.getMode() !== UiMode.MESSAGE) {
+        await this.ui.setMessageMode();
+      }
+
+      const dialogueSpriteKey = trainerData.trainers[slot]?.dialogueSpriteKey;
+      if (dialogueSpriteKey != null) {
+        await this.charSprite.hide();
+        await this.hideFieldOverlay(250);
+        await this.showFieldOverlay(300);
+        await this.charSprite.showCharacter(dialogueSpriteKey, getCharVariantFromDialogue(message));
+      }
+
+      await new Promise<void>((resolve) => {
+        this.ui.showDialogue(message, trainerData.getLocalizedName(), () => resolve());
+      });
+    }
   }
 
   private initSettingsEventListeners() {
@@ -1157,209 +1229,149 @@ export class BattleScene extends SceneBase {
     return Math.max(doubleChance.value, 1);
   }
 
-  newBattle(
-    waveIndex?: number,
-    battleType?: BattleType,
-    trainerData?: TrainerSaveData | null,
-    double?: boolean,
-    mysteryEncounterType?: MysteryEncounterType,
-  ): Battle {
-    const newWaveIndex = waveIndex || (this.currentBattle?.waveIndex || getStartingWave() - 1) + 1;
-    let newDouble: boolean | undefined;
-    let newBattleType: BattleType;
-    let newTrainer: Trainer | undefined;
-
-    let battleConfig: FixedBattleConfig | null = null;
+  public newBattle(options: NewBattleOptions = {}): Battle {
+    const { waveIndex, battleType, trainerData, double, mysteryEncounterType } = options;
+    const newWaveIndex = waveIndex ?? (this.currentBattle?.waveIndex ?? getStartingWave() - 1) + 1;
 
     this.resetSeed(newWaveIndex);
 
-    const playerField = this.getPlayerField();
+    if (trainerData) {
+      return this.initSeededBattle(this.gameMode, newWaveIndex, battleType ?? BattleType.TRAINER, trainerData);
+    }
 
-    if (this.gameMode.isFixedBattle(newWaveIndex) && trainerData == null) {
-      battleConfig = this.gameMode.getFixedBattle(newWaveIndex);
-      newDouble = battleConfig.double;
-      newBattleType = battleConfig.battleType;
-      this.executeWithSeedOffset(
-        () => {
-          newTrainer = battleConfig?.getTrainer();
-        },
-        (battleConfig.seedOffsetWaveIndex || newWaveIndex) << 8,
+    const battleConfig = this.gameMode.getFixedBattle(newWaveIndex);
+    if (battleConfig != null) {
+      return this.initSeededBattle(
+        this.gameMode,
+        newWaveIndex,
+        battleConfig.battleType,
+        battleConfig.getTrainerData?.(),
+        double,
       );
-      if (newTrainer) {
-        this.field.add(newTrainer);
-      }
-    } else {
-      if (!this.gameMode.hasTrainers) {
-        newBattleType = BattleType.WILD;
-      } else if (battleType === undefined) {
-        newBattleType = this.gameMode.isWaveTrainer(newWaveIndex) ? BattleType.TRAINER : BattleType.WILD;
-      } else {
-        newBattleType = battleType;
-      }
-
-      if (newBattleType === BattleType.TRAINER) {
-        const trainerType = activeOverrides.TRAINER_TYPE_OVERRIDE ?? this.arena.randomTrainerType(newWaveIndex);
-        let doubleTrainer = false;
-        if (allTrainerConfigs[trainerType].doubleOnly) {
-          doubleTrainer = true;
-        } else if (allTrainerConfigs[trainerType].hasDouble) {
-          doubleTrainer = !randSeedInt(this.getDoubleBattleChance(newWaveIndex, playerField));
-          // Add a check that special trainers can't be double except for tate and liza - they should use the normal double chance
-          if (
-            allTrainerConfigs[trainerType].trainerTypeDouble
-            // && ![TrainerType.TATE, TrainerType.LIZA].includes(trainerType) TODO: Add back special double trainers for doubles mode
-          ) {
-            doubleTrainer = false;
-          }
-        }
-        let variant: TrainerVariant = TrainerVariant.DEFAULT;
-        if (doubleTrainer) {
-          variant = TrainerVariant.DOUBLE;
-        } else if (randSeedInt(2)) {
-          variant = TrainerVariant.FEMALE;
-        }
-        newTrainer = trainerData == null ? new Trainer(trainerType, variant) : trainerData.toTrainer();
-        this.field.add(newTrainer);
-      }
-
-      // Check for mystery encounter
-      // Can only occur in place of a standard (non-boss) wild battle, waves 10-180
-      if (this.isWaveMysteryEncounter(newBattleType, newWaveIndex) || newBattleType === BattleType.MYSTERY_ENCOUNTER) {
-        newBattleType = BattleType.MYSTERY_ENCOUNTER;
-        // Reset to base spawn weight
-        this.mysteryEncounterSaveData.encounterSpawnChance = ME_BASE_SPAWN_WEIGHT;
-      }
     }
 
-    if (double === undefined && newWaveIndex > 1) {
-      if (newBattleType === BattleType.WILD && !this.gameMode.isWaveFinal(newWaveIndex)) {
-        newDouble = !randSeedInt(this.getDoubleBattleChance(newWaveIndex, playerField));
-      } else if (newBattleType === BattleType.TRAINER) {
-        newDouble = newTrainer?.variant === TrainerVariant.DOUBLE;
-      }
-    } else if (!battleConfig) {
-      newDouble = !!double;
+    if (this.gameMode.hasTrainers && this.gameMode.isWaveTrainer(newWaveIndex)) {
+      const trainerType = activeOverrides.TRAINER_TYPE_OVERRIDE ?? this.arena.randomTrainerType(newWaveIndex);
+
+      // TODO: integrate random double Trainer battles helper
+
+      const newTrainerData = TrainerDataSet.fromConfig(allNewTrainerConfigs[trainerType]!);
+
+      return this.initSeededBattle(this.gameMode, newWaveIndex, BattleType.TRAINER, newTrainerData, double);
     }
 
-    if (activeOverrides.BATTLE_TYPE_OVERRIDE != null) {
-      let doubleOverrideForWave: "single" | "double" | null = null;
+    if (this.isWaveMysteryEncounter(newWaveIndex)) {
+      this.mysteryEncounterSaveData.encounterSpawnChance = ME_BASE_SPAWN_WEIGHT;
+      // Will generate the actual Mystery Encounter during NextEncounterPhase to ensure it uses proper biome
+      this.currentBattle.mysteryEncounterType = mysteryEncounterType;
 
-      switch (activeOverrides.BATTLE_TYPE_OVERRIDE) {
-        case "double":
-          doubleOverrideForWave = "double";
-          break;
-        case "single":
-          doubleOverrideForWave = "single";
-          break;
-        case "even-doubles":
-          doubleOverrideForWave = newWaveIndex % 2 ? "single" : "double";
-          break;
-        case "odd-doubles":
-          doubleOverrideForWave = newWaveIndex % 2 ? "double" : "single";
-          break;
-      }
-
-      if (doubleOverrideForWave === "double") {
-        newDouble = true;
-      }
-      /**
-       * Override battles into single only if not fighting with trainers.
-       */
-      if (newBattleType !== BattleType.TRAINER && doubleOverrideForWave === "single") {
-        newDouble = false;
-      }
+      return this.initSeededBattle(this.gameMode, newWaveIndex, BattleType.MYSTERY_ENCOUNTER);
     }
 
+    let doubleOverrideForWave: "single" | "double" | null = null;
+    switch (activeOverrides.BATTLE_TYPE_OVERRIDE) {
+      case "double":
+        doubleOverrideForWave = "double";
+        break;
+      case "single":
+        doubleOverrideForWave = "single";
+        break;
+      case "even-doubles":
+        doubleOverrideForWave = newWaveIndex % 2 ? "single" : "double";
+        break;
+      case "odd-doubles":
+        doubleOverrideForWave = newWaveIndex % 2 ? "double" : "single";
+        break;
+    }
+
+    const newDouble =
+      !this.gameMode.isWaveFinal(newWaveIndex)
+      && doubleOverrideForWave !== "single"
+      && (doubleOverrideForWave === "double"
+        || !randSeedInt(this.getDoubleBattleChance(newWaveIndex, this.getPlayerField())));
+
+    return this.initSeededBattle(this.gameMode, newWaveIndex, BattleType.WILD, undefined, newDouble);
+  }
+
+  private initSeededBattle(...params: ConstructorParameters<typeof Battle>): Battle {
+    const waveIndex: number = params[1];
     const lastBattle = this.currentBattle;
-
     const maxExpLevel = this.getMaxExpLevel();
 
-    this.lastEnemyTrainer = lastBattle?.trainer ?? null;
     this.lastMysteryEncounter = lastBattle?.mysteryEncounter;
 
-    if (newBattleType === BattleType.MYSTERY_ENCOUNTER) {
-      // Disable double battle on mystery encounters (it may be re-enabled as part of encounter)
-      newDouble = false;
-    }
+    this.executeWithSeedOffset(
+      () => {
+        this.currentBattle = new Battle(...params);
+      },
+      waveIndex << 3,
+      this.waveSeed,
+    );
 
-    if (lastBattle?.double && !newDouble) {
+    if (lastBattle.double && !this.currentBattle.double) {
       this.phaseManager.removePhase("SwitchPhase");
       this.getPlayerField().forEach((p) => p.lapseTag(BattlerTagType.COMMANDED));
     }
 
-    this.executeWithSeedOffset(
-      () => {
-        this.currentBattle = new Battle(this.gameMode, newWaveIndex, newBattleType, newTrainer, newDouble);
-      },
-      newWaveIndex << 3,
-      this.waveSeed,
-    );
-    this.currentBattle.incrementTurn();
+    const isNewBiome = lastBattle.waveIndex % 10 === 0 || (this.gameMode.isDaily && lastBattle.waveIndex === 49);
+    const requiresArenaReset =
+      isNewBiome
+      || this.currentBattle.battleType === BattleType.TRAINER
+      || this.currentBattle.battleType === BattleType.MYSTERY_ENCOUNTER
+      || this.currentBattle.isClassicFinalBoss;
 
-    if (newBattleType === BattleType.MYSTERY_ENCOUNTER) {
-      // Will generate the actual Mystery Encounter during NextEncounterPhase, to ensure it uses proper biome
-      this.currentBattle.mysteryEncounterType = mysteryEncounterType;
+    this.getEnemyParty().forEach((enemyPokemon) => enemyPokemon.destroy());
+    this.trySpreadPokerus();
+
+    if (!isNewBiome && this.currentBattle.waveIndex % 10 === 5) {
+      this.arena.updatePoolsForTimeOfDay();
+    }
+    if (requiresArenaReset) {
+      this.arena.resetArenaEffects();
+
+      this.getPlayerField().forEach((p, i) => {
+        if (p.isOnField()) {
+          p.lapseTag(BattlerTagType.COMMANDED);
+          this.phaseManager.createAndPushPhase("RecallPhase", i);
+        }
+      });
     }
 
-    if (!waveIndex && lastBattle) {
-      const isDaily = this.gameMode.isDaily;
-      const isNewBiome = lastBattle.waveIndex % 10 === 0 || (isDaily && lastBattle.waveIndex === 49);
-      const resetArenaState =
-        isNewBiome
-        || this.currentBattle.battleType === BattleType.TRAINER
-        || this.currentBattle.battleType === BattleType.MYSTERY_ENCOUNTER
-        || this.currentBattle.isClassicFinalBoss;
-      this.getEnemyParty().forEach((enemyPokemon) => enemyPokemon.destroy());
-      this.trySpreadPokerus();
-      if (!isNewBiome && newWaveIndex % 10 === 5) {
-        this.arena.updatePoolsForTimeOfDay();
+    for (const pokemon of this.getPlayerParty()) {
+      pokemon.resetWaveData();
+      pokemon.resetTera(); // TODO: put this in resetWaveData once Arena reset behavior is changed?
+
+      applyAbAttrs("PostBattleInitAbAttr", pokemon, false);
+
+      // In Scarlet/Violet, the player's Tera Orb automatically recharges after every battle once they've caught Terapagos
+      // The player's Tera Orb also automatically recharges when fighting the Elite 4 or in Area Zero (the endgame area)
+      if (
+        (pokemon.species.speciesId === SpeciesId.TERAPAGOS && pokemon.isAllowedInChallenge())
+        || (this.gameMode.isClassic && this.currentBattle.waveIndex >= ELITE_FOUR_1_WAVE)
+      ) {
+        this.playerTerasUsed = 0;
       }
-      if (resetArenaState) {
-        this.arena.resetArenaEffects();
+    }
 
-        playerField.forEach((pokemon) => pokemon.lapseTag(BattlerTagType.COMMANDED));
+    if (!this.trainer.visible) {
+      this.phaseManager.createAndPushPhase("ShowTrainerPhase");
+    }
 
-        playerField.forEach((pokemon, p) => {
-          if (pokemon.isOnField()) {
-            this.phaseManager.createAndPushPhase("RecallPhase", p);
-          }
-        });
+    this.currentBattle.incrementTurn();
 
-        for (const pokemon of this.getPlayerParty()) {
-          pokemon.resetWaveData();
-          pokemon.resetTera(); // TODO: put this in resetWaveData once Arena reset behavior is changed?
+    for (const pokemon of this.getPlayerParty()) {
+      this.triggerPokemonFormChange(pokemon, SpeciesFormChangeTimeOfDayTrigger);
+    }
 
-          applyAbAttrs("PostBattleInitAbAttr", pokemon, false);
+    if (!this.gameMode.hasRandomBiomes && !isNewBiome) {
+      this.phaseManager.createAndPushPhase("NextEncounterPhase");
+    } else {
+      this.phaseManager.createAndPushPhase("SelectBiomePhase");
+      this.phaseManager.createAndPushPhase("NewBiomeEncounterPhase");
 
-          // In Scarlet/Violet, the player's Tera Orb automatically recharges after every battle once they've caught Terapagos
-          // The player's Tera Orb also automatically recharges when fighting the Elite 4 or in Area Zero (the endgame area)
-          if (
-            (pokemon.species.speciesId === SpeciesId.TERAPAGOS && pokemon.isAllowedInChallenge())
-            || (this.gameMode.isClassic && this.currentBattle.waveIndex >= ELITE_FOUR_1_WAVE)
-          ) {
-            this.playerTerasUsed = 0;
-          }
-        }
-
-        if (!this.trainer.visible) {
-          this.phaseManager.createAndPushPhase("ShowTrainerPhase");
-        }
-      }
-
-      for (const pokemon of this.getPlayerParty()) {
-        this.triggerPokemonFormChange(pokemon, SpeciesFormChangeTimeOfDayTrigger);
-      }
-
-      if (!this.gameMode.hasRandomBiomes && !isNewBiome) {
-        this.phaseManager.createAndPushPhase("NextEncounterPhase");
-      } else {
-        this.phaseManager.createAndPushPhase("SelectBiomePhase");
-        this.phaseManager.createAndPushPhase("NewBiomeEncounterPhase");
-
-        const newMaxExpLevel = this.getMaxExpLevel();
-        if (newMaxExpLevel > maxExpLevel) {
-          this.phaseManager.createAndPushPhase("LevelCapPhase");
-        }
+      const newMaxExpLevel = this.getMaxExpLevel();
+      if (newMaxExpLevel > maxExpLevel) {
+        this.phaseManager.createAndPushPhase("LevelCapPhase");
       }
     }
 
@@ -1414,7 +1426,7 @@ export class BattleScene extends SceneBase {
   }
 
   getSpeciesFormIndex(species: PokemonSpecies, gender?: Gender, nature?: Nature, ignoreArena?: boolean): number {
-    if (!species.forms?.length) {
+    if (species.forms?.length === 0) {
       return 0;
     }
 
@@ -2244,13 +2256,6 @@ export class BattleScene extends SceneBase {
 
     const party = this.getEnemyParty();
 
-    if (this.currentBattle.trainer) {
-      const modifiers = this.currentBattle.trainer.genModifiers(party);
-      for (const modifier of modifiers) {
-        this.addEnemyModifier(modifier, true, true);
-      }
-    }
-
     party.forEach((enemyPokemon: EnemyPokemon, i: number) => {
       if (heldModifiersConfigs && i < heldModifiersConfigs.length && heldModifiersConfigs[i]) {
         heldModifiersConfigs[i].forEach((mt) => {
@@ -2268,7 +2273,7 @@ export class BattleScene extends SceneBase {
       } else {
         const isBoss =
           enemyPokemon.boss
-          || (this.currentBattle.battleType === BattleType.TRAINER && !!this.currentBattle.trainer?.config.isBoss);
+          || (this.currentBattle.battleType === BattleType.TRAINER && !!this.currentBattle.trainerData?.isBoss);
         let upgradeChance = 32;
         if (isBoss) {
           upgradeChance /= 2;
@@ -2448,7 +2453,7 @@ export class BattleScene extends SceneBase {
     this.executeWithSeedOffset(
       () => {
         const shuffleModifiers = (mods) => {
-          if (mods.length < 1) {
+          if (mods.length === 0) {
             return mods;
           }
           const rand = randSeedInt(mods.length);
@@ -3030,11 +3035,10 @@ export class BattleScene extends SceneBase {
    * Even if returns `true`, does not guarantee that a wave will actually be a ME.
    * That check is made in {@linkcode BattleScene.isWaveMysteryEncounter} instead.
    */
-  isMysteryEncounterValidForWave(battleType: BattleType, waveIndex: number): boolean {
+  isMysteryEncounterValidForWave(waveIndex: number): boolean {
     const [lowestMysteryEncounterWave, highestMysteryEncounterWave] = this.gameMode.getMysteryEncounterLegalWaves();
     return (
       this.gameMode.hasMysteryEncounters
-      && battleType === BattleType.WILD
       && !this.gameMode.isBoss(waveIndex)
       && waveIndex < highestMysteryEncounterWave
       && waveIndex > lowestMysteryEncounterWave
@@ -3045,12 +3049,10 @@ export class BattleScene extends SceneBase {
    * Determines whether a wave should randomly generate a {@linkcode MysteryEncounter}.
    * Currently, the only modes that MEs are allowed in are Classic and Challenge.
    * Additionally, MEs cannot spawn outside of waves 10-180 in those modes
-   * @param newBattleType
-   * @param waveIndex
    */
-  private isWaveMysteryEncounter(newBattleType: BattleType, waveIndex: number): boolean {
+  private isWaveMysteryEncounter(waveIndex: number): boolean {
     const [lowestMysteryEncounterWave, highestMysteryEncounterWave] = this.gameMode.getMysteryEncounterLegalWaves();
-    if (this.isMysteryEncounterValidForWave(newBattleType, waveIndex)) {
+    if (this.isMysteryEncounterValidForWave(waveIndex)) {
       // Base spawn weight is BASE_MYSTERY_ENCOUNTER_SPAWN_WEIGHT/256, and increases by WEIGHT_INCREMENT_ON_SPAWN_MISS/256 for each missed attempt at spawning an encounter on a valid floor
       const sessionEncounterRate = this.mysteryEncounterSaveData.encounterSpawnChance;
       const encounteredEvents = this.mysteryEncounterSaveData.encounteredEvents;

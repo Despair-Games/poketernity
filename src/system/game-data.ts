@@ -48,7 +48,6 @@ import { Nature } from "#enums/nature";
 import { PlayerGender } from "#enums/player-gender";
 import type { SpeciesId } from "#enums/species-id";
 import { TerrainType } from "#enums/terrain-type";
-import { TrainerVariant } from "#enums/trainer-variant";
 import type { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
 import { Unlockables } from "#enums/unlockables";
@@ -69,10 +68,9 @@ import { GameStats } from "#system/game-stats";
 import { ModifierData } from "#system/modifier-data";
 import { PokemonData } from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
-import { TrainerSaveData } from "#system/trainer-save-data";
+import { NewTrainerSaveData, TrainerSaveDataSet } from "#system/trainer-save-data";
 import { applySessionVersionMigration, applySystemVersionMigration } from "#system/version-converter";
 import { vouchers } from "#system/voucher";
-import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
 import type { SerializedArenaData } from "#types/arena-types";
 import type { DexData, DexEntry } from "#types/dex-data";
 import type { InputInterfaceConfig } from "#types/inputs-types";
@@ -724,6 +722,7 @@ export class GameData {
 
   // Note: changing this requires testing run history (and updating `GameOverPhase.getRunHistoryEntry()` if necessary)
   public getSessionSaveData(): SessionSaveData {
+    const { trainerData } = globalScene.currentBattle;
     return {
       seed: globalScene.seed,
       playTime: globalScene.sessionPlayTime ?? 0,
@@ -738,10 +737,7 @@ export class GameData {
       score: globalScene.score,
       waveIndex: globalScene.currentBattle.waveIndex,
       battleType: globalScene.currentBattle.battleType,
-      trainer:
-        globalScene.currentBattle.battleType === BattleType.TRAINER
-          ? new TrainerSaveData(globalScene.currentBattle.trainer)
-          : null,
+      enemyTrainers: trainerData ? new TrainerSaveDataSet(trainerData) : undefined,
       gameVersion: globalScene.game.config.gameVersion,
       timestamp: Date.now(),
       challenges: globalScene.gameMode.challenges.map((c) => new ChallengeData(c)),
@@ -770,7 +766,7 @@ export class GameData {
       const sessionStorageKey = getLocalStorageKey(GameDataType.SESSION, slotId);
       const sessionData = localStorage.getItem(sessionStorageKey);
       if (!BYPASS_LOGIN && !sessionData) {
-        api.savedata.session.get({ slot: slotId, clientSessionId }).then(async (response) => {
+        await api.savedata.session.get({ slot: slotId, clientSessionId }).then(async (response) => {
           if (!response || response?.length === 0 || response?.[0] !== "{") {
             console.error(response);
             return resolve(null);
@@ -839,27 +835,22 @@ export class GameData {
           globalScene.newArena(data.arena.biomeId);
 
           const battleType = data.battleType || 0;
-          const trainerConfig = data.trainer ? allTrainerConfigs[data.trainer.trainerType] : null;
+          const trainerData = data.enemyTrainers?.toTrainerData();
           const mysteryEncounterType = data.mysteryEncounterType !== -1 ? data.mysteryEncounterType : undefined;
-          const battle = globalScene.newBattle(
-            data.waveIndex,
+          const double =
+            battleType === BattleType.TRAINER ? (trainerData?.double ?? false) : data.enemyParty.length > 1;
+          const battle = globalScene.newBattle({
+            waveIndex: data.waveIndex,
             battleType,
-            data.trainer,
-            battleType === BattleType.TRAINER
-              ? trainerConfig?.doubleOnly || data.trainer?.variant === TrainerVariant.DOUBLE
-              : data.enemyParty.length > 1,
+            trainerData,
+            double,
             mysteryEncounterType,
-          );
-          battle.enemyLevels = data.enemyParty.map((p) => p.level);
+          });
 
           globalScene.arena.init();
 
           data.enemyParty.forEach((enemyData, e) => {
-            const enemyPokemon = enemyData.toPokemon(
-              battleType,
-              e,
-              data.trainer?.variant === TrainerVariant.DOUBLE,
-            ) as EnemyPokemon;
+            const enemyPokemon = enemyData.toPokemon(battleType, e, double) as EnemyPokemon;
             battle.enemyParty[e] = enemyPokemon;
             if (battleType === BattleType.WILD) {
               battle.seenEnemyPartyMemberIds.add(enemyPokemon.id);
@@ -1064,7 +1055,7 @@ export class GameData {
       }
 
       if (k === "trainer") {
-        return v ? new TrainerSaveData(v) : null;
+        return v ? new NewTrainerSaveData(v) : null;
       }
 
       if (k === "modifiers" || k === "enemyModifiers") {
@@ -1219,7 +1210,7 @@ export class GameData {
         }
 
         promise.then((response) => {
-          if (!response?.length || response[0] !== "{") {
+          if (response?.length === 0 || response[0] !== "{") {
             console.error(response);
             resolve(false);
             return;
@@ -1397,7 +1388,7 @@ export class GameData {
       defaultNaturesAttr |= 1 << nature;
     }
 
-    const starterSpeciesIds = Object.keys(speciesStarterCosts).map((k) => Number.parseInt(k) as SpeciesId);
+    const starterSpeciesIds = Object.keys(speciesStarterCosts).map((k) => Number.parseInt(k, 10) as SpeciesId);
 
     for (const speciesId of starterSpeciesIds) {
       const isDefaultStarter = DEFAULT_STARTER_SPECIES.includes(speciesId);

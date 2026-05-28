@@ -1,16 +1,16 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { Phase } from "#app/phase";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { TerrainType } from "#enums/terrain-type";
 import { TurnEndEvent } from "#events/battle-scene";
 import type { Pokemon } from "#field/pokemon";
 import { TurnHealModifier, TurnHeldItemTransferModifier, TurnStatusEffectModifier } from "#modifier/modifier";
-import { BattlePhase } from "#phases/base/battle-phase";
 import { inSpeedOrder } from "#utils/speed-order-generator";
 import i18next from "i18next";
 
-export class TurnEndPhase extends BattlePhase {
+export class TurnEndPhase extends Phase {
   public override readonly phaseName = "TurnEndPhase";
 
   public override start(): void {

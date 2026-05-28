@@ -4,6 +4,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { BerryType } from "#enums/berry-type";
 import { MoveId } from "#enums/move-id";
+import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
@@ -18,10 +19,10 @@ import type { BerryModifierType, PokemonHeldItemModifierType } from "#modifier/m
 import { modifierTypes } from "#modifier/modifier-types";
 import { queueEncounterMessage } from "#mystery-encounters/encounter-dialogue-utils";
 import {
-  type EnemyPartyConfig,
   generateModifierType,
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
+  type MysteryEncounterBattleConfig,
   setEncounterRewards,
 } from "#mystery-encounters/encounter-phase-utils";
 import {
@@ -222,32 +223,34 @@ export const AbsoluteAvariceEncounter: MysteryEncounter = MysteryEncounterBuilde
       globalScene.currentBattle.waveIndex < 50 ? [Stat.SPDEF] : [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD];
 
     // Calculate boss mon
-    const config: EnemyPartyConfig = {
-      levelAdditiveModifier: 1,
+    const config: MysteryEncounterBattleConfig = {
+      battleType: MysteryEncounterMode.WILD_BATTLE,
+      levelBoostMultiplier: 1,
       pokemonConfigs: [
         {
-          species: getPokemonSpecies(SpeciesId.GREEDENT),
-          isBoss: true,
+          speciesPool: [SpeciesId.GREEDENT],
+          boss: true,
           bossSegments: 3,
           shiny: false, // Shiny lock because of consistency issues between the different options
-          moveSet: [MoveId.THRASH, MoveId.BODY_PRESS, MoveId.STUFF_CHEEKS, MoveId.CRUNCH],
-          modifierConfigs: bossModifierConfigs,
-          tags: [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON],
-          mysteryEncounterBattleEffects: (pokemon: Pokemon) => {
-            queueEncounterMessage(`${namespace}:option.1.boss_enraged`);
-            globalScene.phaseManager.createAndUnshiftPhase(
-              "StatStageChangePhase",
-              pokemon.getBattlerIndex(),
-              pokemon,
-              statChangesForBattle,
-              1,
-            );
+          moveset: [MoveId.THRASH, MoveId.BODY_PRESS, MoveId.STUFF_CHEEKS, MoveId.CRUNCH],
+          postProcess: (pokemon) => {
+            pokemon.addTag(BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON);
+            pokemon.mysteryEncounterBattleEffects = (p: Pokemon) => {
+              queueEncounterMessage(`${namespace}:option.1.boss_enraged`);
+              globalScene.phaseManager.createAndUnshiftPhase(
+                "StatStageChangePhase",
+                p.getBattlerIndex(),
+                p,
+                statChangesForBattle,
+                1,
+              );
+            };
           },
         },
       ],
     };
 
-    encounter.enemyPartyConfigs = [config];
+    encounter.battleConfigs = [config];
     encounter.setDialogueToken("greedentName", getPokemonSpecies(SpeciesId.GREEDENT).getName());
 
     return true;
@@ -309,7 +312,7 @@ export const AbsoluteAvariceEncounter: MysteryEncounter = MysteryEncounterBuilde
         });
 
         await transitionMysteryEncounterIntroVisuals(true, true, 500);
-        await initBattleWithEnemyConfig(encounter.enemyPartyConfigs[0]);
+        await initBattleWithEnemyConfig(encounter.battleConfigs[0]);
       })
       .build(),
   )

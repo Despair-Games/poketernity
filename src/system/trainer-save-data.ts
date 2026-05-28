@@ -1,43 +1,14 @@
-import type { RequireOneTrainer } from "#data/new-trainer-config";
-import { TrainerData, type TrainerDataSet } from "#data/trainer-data";
-import type { TrainerGender } from "#enums/trainer-gender";
+import type { NonDefaultTrainerGender } from "#enums/trainer-gender";
 import type { NonNullTrainerSlot } from "#enums/trainer-slot";
 import type { TrainerType } from "#enums/trainer-type";
-import { TrainerVariant } from "#enums/trainer-variant";
-import { Trainer } from "#field/trainer";
-import { allNewTrainerConfigs } from "#trainer-configs/all-trainer-configs";
-
-export class TrainerSaveData {
-  public trainerType: TrainerType;
-  public variant: TrainerVariant;
-  public partyTemplateIndex: number;
-  public name: string;
-  public partnerName: string;
-
-  constructor(source: Trainer | any) {
-    const sourceTrainer = source.type === "Trainer" ? (source as Trainer) : null;
-    this.trainerType = sourceTrainer ? sourceTrainer.config.trainerType : source.trainerType;
-    if (Object.hasOwn(source, "variant")) {
-      this.variant = source.variant;
-    } else if (source.female) {
-      this.variant = TrainerVariant.FEMALE;
-    } else {
-      this.variant = TrainerVariant.DEFAULT;
-    }
-    this.partyTemplateIndex = source.partyMemberTemplateIndex;
-    this.name = source.name;
-    this.partnerName = source.partnerName;
-  }
-
-  toTrainer(): Trainer {
-    return new Trainer(this.trainerType, this.variant, this.partyTemplateIndex, this.name, this.partnerName);
-  }
-}
+import type { RequireOneTrainer } from "#trainers/new-trainer-config";
+import { allNewTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
+import { TrainerData, TrainerDataSet } from "#trainers/trainer-data";
 
 export class NewTrainerSaveData {
   public readonly trainerSlot: NonNullTrainerSlot;
   public readonly trainerType: TrainerType;
-  public readonly gender: TrainerGender;
+  public readonly gender: NonDefaultTrainerGender;
   public readonly name: string;
   public readonly title: string;
   public readonly spriteKey: string;
@@ -78,8 +49,12 @@ export class TrainerSaveDataSet {
   constructor(source: TrainerDataSet) {
     // TODO: is this type-safe?
     this.trainerSaveData = Object.fromEntries(
-      Object.entries(source.trainerData).map(([key, data]) => [key, new NewTrainerSaveData(data)]),
+      Object.entries(source.trainers).map(([key, data]) => [key, new NewTrainerSaveData(data)]),
     ) as RequireOneTrainer<NewTrainerSaveData>;
     this.title = source.title;
+  }
+
+  public toTrainerData(): TrainerDataSet {
+    return new TrainerDataSet(this);
   }
 }

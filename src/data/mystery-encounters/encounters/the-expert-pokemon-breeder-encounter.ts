@@ -3,15 +3,12 @@ import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encount
 import type { EggOptions } from "#data/egg";
 import { getPokeballTintColor } from "#data/pokeball";
 import { speciesStarterCosts } from "#data/starters";
-import { BiomeId } from "#enums/biome-id";
 import { EggSourceType } from "#enums/egg-source-type";
 import { EggTier } from "#enums/egg-tier";
-import { ElementalType } from "#enums/elemental-type";
-import { MoveId } from "#enums/move-id";
+import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { Nature } from "#enums/nature";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import type { PlayerPokemon } from "#field/player-pokemon";
@@ -19,16 +16,14 @@ import type { PokemonHeldItemModifier } from "#modifier/modifier";
 import { modifierTypes } from "#modifier/modifier-types";
 import { getEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import {
-  type EnemyPartyConfig,
   handleMysteryEncounterBattleFailed,
   initBattleWithEnemyConfig,
+  type MysteryEncounterBattleConfig,
   setEncounterRewards,
 } from "#mystery-encounters/encounter-phase-utils";
 import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
-import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
-import { getPokemonSpecies } from "#utils/pokemon-utils";
-import { randSeedShuffle } from "#utils/random-utils";
+import { allNewTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
 import i18next from "i18next";
 
 /** the i18n namespace for the encounter */
@@ -37,82 +32,9 @@ const namespace = "mysteryEncounters/theExpertPokemonBreeder";
 const trainerNameKey = "trainerNames:expert_pokemon_breeder";
 
 const FIRST_STAGE_EVOLUTION_WAVE = 45;
-const SECOND_STAGE_EVOLUTION_WAVE = 60;
 const FINAL_STAGE_EVOLUTION_WAVE = 75;
 
 const FRIENDSHIP_ADDED = 20;
-
-class BreederSpeciesEvolution {
-  species: SpeciesId;
-  evolution: number;
-
-  constructor(species: SpeciesId, evolution: number) {
-    this.species = species;
-    this.evolution = evolution;
-  }
-}
-
-const POOL_1_POKEMON: (SpeciesId | BreederSpeciesEvolution)[][] = [
-  [SpeciesId.MUNCHLAX, new BreederSpeciesEvolution(SpeciesId.SNORLAX, SECOND_STAGE_EVOLUTION_WAVE)],
-  [
-    SpeciesId.HAPPINY,
-    new BreederSpeciesEvolution(SpeciesId.CHANSEY, FIRST_STAGE_EVOLUTION_WAVE),
-    new BreederSpeciesEvolution(SpeciesId.BLISSEY, FINAL_STAGE_EVOLUTION_WAVE),
-  ],
-  [
-    SpeciesId.MAGBY,
-    new BreederSpeciesEvolution(SpeciesId.MAGMAR, FIRST_STAGE_EVOLUTION_WAVE),
-    new BreederSpeciesEvolution(SpeciesId.MAGMORTAR, FINAL_STAGE_EVOLUTION_WAVE),
-  ],
-  [
-    SpeciesId.ELEKID,
-    new BreederSpeciesEvolution(SpeciesId.ELECTABUZZ, FIRST_STAGE_EVOLUTION_WAVE),
-    new BreederSpeciesEvolution(SpeciesId.ELECTIVIRE, FINAL_STAGE_EVOLUTION_WAVE),
-  ],
-  [SpeciesId.RIOLU, new BreederSpeciesEvolution(SpeciesId.LUCARIO, SECOND_STAGE_EVOLUTION_WAVE)],
-  [
-    SpeciesId.BUDEW,
-    new BreederSpeciesEvolution(SpeciesId.ROSELIA, FIRST_STAGE_EVOLUTION_WAVE),
-    new BreederSpeciesEvolution(SpeciesId.ROSERADE, FINAL_STAGE_EVOLUTION_WAVE),
-  ],
-  [SpeciesId.TOXEL, new BreederSpeciesEvolution(SpeciesId.TOXTRICITY, SECOND_STAGE_EVOLUTION_WAVE)],
-  [
-    SpeciesId.MIME_JR,
-    new BreederSpeciesEvolution(SpeciesId.GALAR_MR_MIME, FIRST_STAGE_EVOLUTION_WAVE),
-    new BreederSpeciesEvolution(SpeciesId.MR_RIME, FINAL_STAGE_EVOLUTION_WAVE),
-  ],
-];
-
-const POOL_2_POKEMON: (SpeciesId | BreederSpeciesEvolution)[][] = [
-  [
-    SpeciesId.PICHU,
-    new BreederSpeciesEvolution(SpeciesId.PIKACHU, FIRST_STAGE_EVOLUTION_WAVE),
-    new BreederSpeciesEvolution(SpeciesId.RAICHU, FINAL_STAGE_EVOLUTION_WAVE),
-  ],
-  [
-    SpeciesId.PICHU,
-    new BreederSpeciesEvolution(SpeciesId.PIKACHU, FIRST_STAGE_EVOLUTION_WAVE),
-    new BreederSpeciesEvolution(SpeciesId.ALOLA_RAICHU, FINAL_STAGE_EVOLUTION_WAVE),
-  ],
-  [SpeciesId.SMOOCHUM, new BreederSpeciesEvolution(SpeciesId.JYNX, SECOND_STAGE_EVOLUTION_WAVE)],
-  [SpeciesId.TYROGUE, new BreederSpeciesEvolution(SpeciesId.HITMONLEE, SECOND_STAGE_EVOLUTION_WAVE)],
-  [SpeciesId.TYROGUE, new BreederSpeciesEvolution(SpeciesId.HITMONCHAN, SECOND_STAGE_EVOLUTION_WAVE)],
-  [SpeciesId.TYROGUE, new BreederSpeciesEvolution(SpeciesId.HITMONTOP, SECOND_STAGE_EVOLUTION_WAVE)],
-  [
-    SpeciesId.IGGLYBUFF,
-    new BreederSpeciesEvolution(SpeciesId.JIGGLYPUFF, FIRST_STAGE_EVOLUTION_WAVE),
-    new BreederSpeciesEvolution(SpeciesId.WIGGLYTUFF, FINAL_STAGE_EVOLUTION_WAVE),
-  ],
-  [
-    SpeciesId.AZURILL,
-    new BreederSpeciesEvolution(SpeciesId.MARILL, FIRST_STAGE_EVOLUTION_WAVE),
-    new BreederSpeciesEvolution(SpeciesId.AZUMARILL, FINAL_STAGE_EVOLUTION_WAVE),
-  ],
-  [SpeciesId.WYNAUT, new BreederSpeciesEvolution(SpeciesId.WOBBUFFET, SECOND_STAGE_EVOLUTION_WAVE)],
-  [SpeciesId.CHINGLING, new BreederSpeciesEvolution(SpeciesId.CHIMECHO, SECOND_STAGE_EVOLUTION_WAVE)],
-  [SpeciesId.BONSLY, new BreederSpeciesEvolution(SpeciesId.SUDOWOODO, SECOND_STAGE_EVOLUTION_WAVE)],
-  [SpeciesId.MANTYKE, new BreederSpeciesEvolution(SpeciesId.MANTINE, SECOND_STAGE_EVOLUTION_WAVE)],
-];
 
 /**
  * The Expert Pokémon Breeder encounter.
@@ -139,8 +61,10 @@ export const TheExpertPokemonBreederEncounter: MysteryEncounter = MysteryEncount
     const waveIndex = globalScene.currentBattle.waveIndex;
     // Calculates what trainers are available for battle in the encounter
 
-    // If player is in space biome, uses special "Space" version of the trainer
-    encounter.enemyPartyConfigs = [getPartyConfig()];
+    encounter.battleConfigs.push({
+      battleType: MysteryEncounterMode.TRAINER_BATTLE,
+      trainerConfig: allNewTrainerConfigs[TrainerType.EXPERT_POKEMON_BREEDER]!,
+    });
 
     let cleffaSpecies: SpeciesId = SpeciesId.CLEFABLE;
     if (waveIndex < FIRST_STAGE_EVOLUTION_WAVE) {
@@ -274,7 +198,7 @@ export const TheExpertPokemonBreederEncounter: MysteryEncounter = MysteryEncount
       .withOptionPhase(async () => {
         const encounter = globalScene.currentBattle.mysteryEncounter!;
         // Spawn battle with first pokemon
-        const config: EnemyPartyConfig = encounter.enemyPartyConfigs[0];
+        const config: MysteryEncounterBattleConfig = encounter.battleConfigs[0];
 
         const { pokemon1, pokemon1CommonEggs, pokemon1RareEggs } = encounter.misc;
         encounter.misc.chosenPokemon = pokemon1;
@@ -326,7 +250,7 @@ export const TheExpertPokemonBreederEncounter: MysteryEncounter = MysteryEncount
       .withOptionPhase(async () => {
         const encounter = globalScene.currentBattle.mysteryEncounter!;
         // Spawn battle with second pokemon
-        const config: EnemyPartyConfig = encounter.enemyPartyConfigs[0];
+        const config: MysteryEncounterBattleConfig = encounter.battleConfigs[0];
 
         const { pokemon2, pokemon2CommonEggs, pokemon2RareEggs } = encounter.misc;
         encounter.misc.chosenPokemon = pokemon2;
@@ -378,7 +302,7 @@ export const TheExpertPokemonBreederEncounter: MysteryEncounter = MysteryEncount
       .withOptionPhase(async () => {
         const encounter = globalScene.currentBattle.mysteryEncounter!;
         // Spawn battle with third pokemon
-        const config: EnemyPartyConfig = encounter.enemyPartyConfigs[0];
+        const config: MysteryEncounterBattleConfig = encounter.battleConfigs[0];
 
         const { pokemon3, pokemon3CommonEggs, pokemon3RareEggs } = encounter.misc;
         encounter.misc.chosenPokemon = pokemon3;
@@ -423,101 +347,6 @@ export const TheExpertPokemonBreederEncounter: MysteryEncounter = MysteryEncount
     },
   ])
   .build();
-
-function getPartyConfig(): EnemyPartyConfig {
-  // Bug type superfan trainer config
-  const waveIndex = globalScene.currentBattle.waveIndex;
-  const breederConfig = allTrainerConfigs[TrainerType.EXPERT_POKEMON_BREEDER].clone();
-  breederConfig.name = i18next.t(trainerNameKey);
-
-  // First mon is *always* this special cleffa
-  let cleffaSpecies: SpeciesId = SpeciesId.CLEFABLE;
-  if (waveIndex < FIRST_STAGE_EVOLUTION_WAVE) {
-    cleffaSpecies = SpeciesId.CLEFFA;
-  } else if (waveIndex < FINAL_STAGE_EVOLUTION_WAVE) {
-    cleffaSpecies = SpeciesId.CLEFAIRY;
-  }
-  const baseConfig: EnemyPartyConfig = {
-    trainerType: TrainerType.EXPERT_POKEMON_BREEDER,
-    pokemonConfigs: [
-      {
-        nickname: i18next.t(`${namespace}:cleffa_1_nickname`, {
-          speciesName: getPokemonSpecies(cleffaSpecies).getName(),
-        }),
-        species: getPokemonSpecies(cleffaSpecies),
-        isBoss: false,
-        abilityIndex: 1, // Magic Guard
-        shiny: false,
-        nature: Nature.ADAMANT,
-        moveSet: [MoveId.METEOR_MASH, MoveId.FIRE_PUNCH, MoveId.ICE_PUNCH, MoveId.THUNDER_PUNCH],
-        ivs: [31, 31, 31, 31, 31, 31],
-        teraType: ElementalType.STEEL,
-      },
-    ],
-  };
-
-  if (globalScene.arena.biomeId === BiomeId.SPACE) {
-    // All 3 members always Cleffa line, but different configs
-    baseConfig.pokemonConfigs!.push(
-      {
-        nickname: i18next.t(`${namespace}:cleffa_2_nickname`, {
-          speciesName: getPokemonSpecies(cleffaSpecies).getName(),
-        }),
-        species: getPokemonSpecies(cleffaSpecies),
-        isBoss: false,
-        abilityIndex: 1, // Magic Guard
-        shiny: true,
-        variant: 1,
-        nature: Nature.MODEST,
-        moveSet: [MoveId.MOONBLAST, MoveId.MYSTICAL_FIRE, MoveId.ICE_BEAM, MoveId.THUNDERBOLT],
-        ivs: [31, 31, 31, 31, 31, 31],
-      },
-      {
-        nickname: i18next.t(`${namespace}:cleffa_3_nickname`, {
-          speciesName: getPokemonSpecies(cleffaSpecies).getName(),
-        }),
-        species: getPokemonSpecies(cleffaSpecies),
-        isBoss: false,
-        abilityIndex: 2, // Friend Guard / Unaware
-        shiny: true,
-        variant: 2,
-        nature: Nature.BOLD,
-        moveSet: [MoveId.TRI_ATTACK, MoveId.STORED_POWER, MoveId.TAKE_HEART, MoveId.MOONLIGHT],
-        ivs: [31, 31, 31, 31, 31, 31],
-      },
-    );
-  } else {
-    // Second member from pool 1
-    const pool1Species = getSpeciesFromPool(POOL_1_POKEMON, waveIndex);
-    // Third member from pool 2
-    const pool2Species = getSpeciesFromPool(POOL_2_POKEMON, waveIndex);
-
-    baseConfig.pokemonConfigs!.push(
-      {
-        species: getPokemonSpecies(pool1Species),
-        isBoss: false,
-        ivs: [31, 31, 31, 31, 31, 31],
-      },
-      {
-        species: getPokemonSpecies(pool2Species),
-        isBoss: false,
-        ivs: [31, 31, 31, 31, 31, 31],
-      },
-    );
-  }
-
-  return baseConfig;
-}
-
-function getSpeciesFromPool(speciesPool: (SpeciesId | BreederSpeciesEvolution)[][], waveIndex: number): SpeciesId {
-  const poolCopy = randSeedShuffle(speciesPool.slice(0));
-  const speciesEvolutions = poolCopy.pop()!.slice(0);
-  let speciesObject = speciesEvolutions.pop()!;
-  while (speciesObject instanceof BreederSpeciesEvolution && speciesObject.evolution > waveIndex) {
-    speciesObject = speciesEvolutions.pop()!;
-  }
-  return speciesObject instanceof BreederSpeciesEvolution ? speciesObject.species : speciesObject;
-}
 
 function calculateEggRewardsForPokemon(pokemon: PlayerPokemon): [number, number] {
   const bst = pokemon.getSpeciesForm().getBaseStatTotal();
@@ -646,18 +475,15 @@ function onGameOver() {
 
   // Show the enemy trainer
   globalScene.time.delayedCall(250, () => {
-    const sprites = globalScene.currentBattle.trainer?.getSprites();
-    const tintSprites = globalScene.currentBattle.trainer?.getTintSprites();
-    if (sprites && tintSprites) {
-      for (let i = 0; i < sprites.length; i++) {
-        sprites[i].setVisible(true);
-        tintSprites[i].setVisible(true);
-        sprites[i].clearTint();
-        tintSprites[i].clearTint();
-      }
+    const sprites = Object.values(globalScene.enemyTrainers!.trainerSprites).flatMap((ts) => ts.sprites);
+
+    for (const sprite of sprites) {
+      sprite.setVisible(true);
+      sprite.clearTint();
     }
+
     globalScene.tweens.add({
-      targets: globalScene.currentBattle.trainer,
+      targets: globalScene.enemyTrainers,
       x: "-=16",
       y: "+=16",
       alpha: 1,

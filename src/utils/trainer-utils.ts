@@ -2,13 +2,13 @@ import { globalScene } from "#app/global-scene";
 import { LEVEL_CAP_SCALE_FACTOR } from "#constants/game-constants";
 import { TRAINER_POOL_COMBINED_WEIGHT, TRAINER_POOL_TIER_WEIGHTS } from "#constants/trainer-constants";
 import { getLevelForWaveFunc } from "#data/exp";
-import type { TrainerPartyPokemonConfig } from "#data/new-trainer-config";
 import type { PokemonSpecies } from "#data/pokemon-species";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import type { SpeciesId } from "#enums/species-id";
 import { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import type { NonNullTrainerSlot } from "#enums/trainer-slot";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { TrainerPartyPokemonConfig } from "#trainers/new-trainer-config";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedInt, randSeedItem } from "#utils/random-utils";
 
@@ -160,7 +160,7 @@ export function getPartyPokemonLevel(strength: PartyMemberStrength): number {
  * Stronger trainers will have Pokemon at STRONG which is the level cap and STRONGER
  * actually goes over the level cap
  */
-function getStrengthLevelMultiplier(strength: PartyMemberStrength): number {
+export function getStrengthLevelMultiplier(strength: PartyMemberStrength): number {
   switch (strength) {
     // Currently this is only being used by Rival 1 to make their initial team level 5
     case PartyMemberStrength.WEAKEST:

@@ -1,10 +1,16 @@
 import type { FixedBattleConfig } from "#app/battle";
 import type { GameMode } from "#app/game-mode";
 import { DEFAULT_STARTER_IVS, DEFAULT_STARTER_SPECIES } from "#constants/game-constants";
+import {
+  CHAMPION_WAVE,
+  ELITE_FOUR_1_WAVE,
+  ELITE_FOUR_2_WAVE,
+  ELITE_FOUR_3_WAVE,
+  ELITE_FOUR_4_WAVE,
+} from "#constants/wave-constants";
 import { pokemonFormChanges } from "#data/pokemon-forms";
 import type { PokemonSpecies } from "#data/pokemon-species";
 import { speciesStarterCosts } from "#data/starters";
-import { BattleType } from "#enums/battle-type";
 import { Challenges } from "#enums/challenges";
 import { TypeColor, TypeShadowColor } from "#enums/color";
 import { ElementalType } from "#enums/elemental-type";
@@ -13,11 +19,11 @@ import type { MoveSourceType } from "#enums/move-source-type";
 import { Nature } from "#enums/nature";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
-import { TrainerVariant } from "#enums/trainer-variant";
 import type { Pokemon } from "#field/pokemon";
-import { Trainer } from "#field/trainer";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import type { DexAttrProps, GameData } from "#system/game-data";
+import { allNewTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
+import { TrainerDataSet } from "#trainers/trainer-data";
 import { type BooleanHolder, enumValueToKey, type NumberHolder } from "#utils/common-utils";
 import { getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
 import { randSeedItem } from "#utils/random-utils";
@@ -259,8 +265,8 @@ export abstract class Challenge {
 
   /**
    * An apply function for {@linkcode ChallengeType.FIXED_BATTLE} challenges. Derived classes should alter this.
-   * @param _waveIndex The current wave index.
-   * @param _battleConfig {@linkcode FixedBattleConfig} The battle config to modify.
+   * @param waveIndex - The current wave index.
+   * @param _battleConfig - The {@linkcode FixedBattleConfig} to modify.
    * @returns `true` if this function did anything.
    */
   applyFixedBattle(_waveIndex: number, _battleConfig: FixedBattleConfig): boolean {
@@ -409,7 +415,7 @@ export class SingleGenerationChallenge extends Challenge {
   override applyFixedBattle(waveIndex: number, battleConfig: FixedBattleConfig): boolean {
     let trainerTypes: TrainerType[] = [];
     switch (waveIndex) {
-      case 182:
+      case ELITE_FOUR_1_WAVE:
         trainerTypes = [
           TrainerType.LORELEI,
           TrainerType.WILL,
@@ -422,7 +428,7 @@ export class SingleGenerationChallenge extends Challenge {
           TrainerType.RIKA,
         ];
         break;
-      case 184:
+      case ELITE_FOUR_2_WAVE:
         trainerTypes = [
           TrainerType.BRUNO,
           TrainerType.KOGA,
@@ -435,7 +441,7 @@ export class SingleGenerationChallenge extends Challenge {
           TrainerType.POPPY,
         ];
         break;
-      case 186:
+      case ELITE_FOUR_3_WAVE:
         trainerTypes = [
           TrainerType.AGATHA,
           TrainerType.BRUNO,
@@ -448,7 +454,7 @@ export class SingleGenerationChallenge extends Challenge {
           TrainerType.LARRY_ELITE,
         ];
         break;
-      case 188:
+      case ELITE_FOUR_4_WAVE:
         trainerTypes = [
           TrainerType.LANCE,
           TrainerType.KAREN,
@@ -461,7 +467,7 @@ export class SingleGenerationChallenge extends Challenge {
           TrainerType.HASSEL,
         ];
         break;
-      case 190:
+      case CHAMPION_WAVE:
         trainerTypes = [
           TrainerType.BLUE,
           randSeedItem([TrainerType.RED, TrainerType.LANCE_CHAMPION]),
@@ -478,9 +484,8 @@ export class SingleGenerationChallenge extends Challenge {
     if (trainerTypes.length === 0) {
       return false;
     }
-    battleConfig
-      .setBattleType(BattleType.TRAINER)
-      .setGetTrainerFunc(() => new Trainer(trainerTypes[this.value - 1], TrainerVariant.DEFAULT));
+
+    battleConfig.getTrainerData = () => TrainerDataSet.fromConfig(allNewTrainerConfigs[trainerTypes[this.value - 1]]!);
     return true;
   }
 

@@ -1,11 +1,11 @@
 import { RIVAL_SLOT_0_POKEMON, RIVAL_SLOT_1_POKEMON } from "#constants/trainer-constants";
-import { TrainerData } from "#data/trainer-data";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerGender } from "#enums/trainer-gender";
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import { GameManager } from "#test/test-utils/game-manager";
-import { newRivalTrainerConfigs } from "#trainer-configs/rival-trainer-configs";
+import { newRivalTrainerConfigs } from "#trainers/trainer-configs/rival-trainer-configs";
+import { TrainerData } from "#trainers/trainer-data";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Trainers - Rival", async () => {

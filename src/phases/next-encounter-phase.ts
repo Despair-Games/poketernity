@@ -2,6 +2,7 @@ import { globalScene } from "#app/global-scene";
 import { FRIENDSHIP_GAIN_PER_WAVE } from "#constants/friendship-constants";
 import { EncounterPhase } from "#phases/encounter-phase";
 import type { PhaseKey } from "#types/phase-types";
+import { playTween } from "#utils/anim-utils";
 
 /**
  * Triggers the next encounter (no biome change)
@@ -9,10 +10,10 @@ import type { PhaseKey } from "#types/phase-types";
 export class NextEncounterPhase extends EncounterPhase {
   public override readonly phaseName: PhaseKey = "NextEncounterPhase";
 
-  protected override doEncounter(): void {
-    const { arena, arenaEnemy, arenaNextEnemy, currentBattle, field, lastEnemyTrainer, lastMysteryEncounter, tweens } =
+  protected override async doEncounter(): Promise<void> {
+    const { arena, arenaEnemy, arenaNextEnemy, currentBattle, enemyTrainers, field, lastMysteryEncounter, tweens } =
       globalScene;
-    const { isClassicFinalBoss, mysteryEncounter, trainer } = currentBattle;
+    const { isClassicFinalBoss, mysteryEncounter } = currentBattle;
 
     globalScene.audioManager.playBgm(undefined, true);
 
@@ -34,7 +35,7 @@ export class NextEncounterPhase extends EncounterPhase {
     arenaNextEnemy.setVisible(true);
 
     const enemyField = globalScene.getEnemyField();
-    const moveTargets: any[] = [arenaEnemy, arenaNextEnemy, trainer, enemyField, lastEnemyTrainer];
+    const moveTargets: any[] = [arenaEnemy, arenaNextEnemy, enemyTrainers, enemyField];
 
     const lastEncounterVisuals = lastMysteryEncounter?.introVisuals;
     if (lastEncounterVisuals) {
@@ -55,33 +56,29 @@ export class NextEncounterPhase extends EncounterPhase {
       }
     }
 
-    tweens.add({
+    await playTween({
       targets: moveTargets.flat(),
       x: "+=300",
       duration: 2000,
-      onComplete: () => {
-        arenaEnemy.setBiome(arena.biomeId);
-        arenaEnemy.setX(arenaNextEnemy.x);
-        arenaEnemy.setAlpha(1);
-        arenaNextEnemy.setX(arenaNextEnemy.x - 300);
-        arenaNextEnemy.setVisible(false);
-        if (lastEnemyTrainer) {
-          lastEnemyTrainer.destroy();
-        }
-        if (lastEncounterVisuals) {
-          field.remove(lastEncounterVisuals, true);
-          if (lastMysteryEncounter) {
-            lastMysteryEncounter.introVisuals = undefined;
-          }
-        }
-
-        if (isClassicFinalBoss) {
-          this.displayFinalBossDialogue();
-        } else {
-          this.doEncounterCommon();
-        }
-      },
     });
+
+    arenaEnemy.setBiome(arena.biomeId);
+    arenaEnemy.setX(arenaNextEnemy.x);
+    arenaEnemy.setAlpha(1);
+    arenaNextEnemy.setX(arenaNextEnemy.x - 300);
+    arenaNextEnemy.setVisible(false);
+    if (lastEncounterVisuals) {
+      field.remove(lastEncounterVisuals, true);
+      if (lastMysteryEncounter) {
+        lastMysteryEncounter.introVisuals = undefined;
+      }
+    }
+
+    if (isClassicFinalBoss) {
+      this.displayFinalBossDialogue();
+    } else {
+      await this.doEncounterCommon();
+    }
   }
 
   /**

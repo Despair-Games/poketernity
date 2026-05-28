@@ -1,4 +1,5 @@
 import { globalScene } from "#app/global-scene";
+import { Phase } from "#app/phase";
 import { BattlerIndex } from "#enums/battler-index";
 import { FieldPosition } from "#enums/field-position";
 import { PartyUiMode } from "#enums/party-ui-mode";
@@ -6,7 +7,6 @@ import { SwitchType } from "#enums/switch-type";
 import { UiMode } from "#enums/ui-mode";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
-import { BattlePhase } from "#phases/base/battle-phase";
 import type { FaintPhase } from "#phases/faint-phase";
 import type { SwitchPhase } from "#phases/switch-phase";
 import type { TurnEndPhase } from "#phases/turn-end-phase";
@@ -19,7 +19,7 @@ import i18next from "i18next";
  * Sets the Party UI and handles the effect of Revival Blessing
  * when used by one of the player's Pokemon.
  */
-export class RevivalBlessingPhase extends BattlePhase {
+export class RevivalBlessingPhase extends Phase {
   public override readonly phaseName = "RevivalBlessingPhase";
 
   protected readonly user: PlayerPokemon;

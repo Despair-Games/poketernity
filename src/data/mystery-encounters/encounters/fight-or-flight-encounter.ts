@@ -3,12 +3,12 @@ import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encount
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { ModifierTier } from "#enums/modifier-tier";
+import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import type { BattleStat } from "#enums/stat";
 import { EnemyPokemon } from "#field/enemy-pokemon";
-import type { Pokemon } from "#field/pokemon";
 import {
   getPartyLuckValue,
   getPlayerModifierTypeOptions,
@@ -17,9 +17,9 @@ import {
 } from "#modifier/modifier-type";
 import { queueEncounterMessage } from "#mystery-encounters/encounter-dialogue-utils";
 import {
-  type EnemyPartyConfig,
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
+  type MysteryEncounterBattleConfig,
   setEncounterExp,
   setEncounterRewards,
 } from "#mystery-encounters/encounter-phase-utils";
@@ -32,7 +32,6 @@ import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encount
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import { MoveRequirement } from "#mystery-encounters/mystery-encounter-requirements";
 import { STEALING_MOVES } from "#mystery-encounters/requirement-groups";
-import { PokemonData } from "#system/pokemon-data";
 import { randSeedInt } from "#utils/random-utils";
 
 /** the i18n namespace for the encounter */
@@ -70,15 +69,13 @@ export const FightOrFlightEncounter: MysteryEncounter = MysteryEncounterBuilder.
     );
     const bossPokemon = new EnemyPokemon(bossSpecies, level, { boss: true });
     encounter.setDialogueToken("enemyPokemon", bossPokemon.getNameToRender());
-    const config: EnemyPartyConfig = {
+    const config: MysteryEncounterBattleConfig = {
+      battleType: MysteryEncounterMode.WILD_BATTLE,
       pokemonConfigs: [
         {
-          level,
-          species: bossSpecies,
-          dataSource: new PokemonData(bossPokemon),
-          isBoss: true,
-          tags: [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON],
-          mysteryEncounterBattleEffects: (pokemon: Pokemon) => {
+          pokemon: bossPokemon,
+          postProcess: (pokemon) => {
+            pokemon.addTag(BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON);
             queueEncounterMessage(`${namespace}:option.1.stat_boost`);
             // Randomly boost 1 stat 2 stages
             // Cannot boost Spd, Acc, or Evasion
@@ -93,7 +90,7 @@ export const FightOrFlightEncounter: MysteryEncounter = MysteryEncounterBuilder.
         },
       ],
     };
-    encounter.enemyPartyConfigs = [config];
+    encounter.battleConfigs = [config];
 
     // Calculate item
     // Waves <=40: GREAT, 41-120: ULTRA, 121-160: EPIC, 161+: MASTER
@@ -163,7 +160,7 @@ export const FightOrFlightEncounter: MysteryEncounter = MysteryEncounterBuilder.
       // Pokemon will randomly boost 1 stat by 2 stages
       const item = globalScene.currentBattle.mysteryEncounter!.misc as ModifierTypeOption;
       setEncounterRewards({ guaranteedModifierTypeOptions: [item], fillRemaining: false });
-      await initBattleWithEnemyConfig(globalScene.currentBattle.mysteryEncounter!.enemyPartyConfigs[0]);
+      await initBattleWithEnemyConfig(globalScene.currentBattle.mysteryEncounter!.battleConfigs[0]);
     },
   )
   .withOption(
@@ -187,7 +184,12 @@ export const FightOrFlightEncounter: MysteryEncounter = MysteryEncounterBuilder.
 
         // Use primaryPokemon to execute the thievery
         const primaryPokemon = encounter.options[1].primaryPokemon!;
-        setEncounterExp(primaryPokemon.id, encounter.enemyPartyConfigs[0].pokemonConfigs![0].species.baseExp);
+        const battleCfg = encounter.battleConfigs[0];
+        const enemySpecies =
+          battleCfg.battleType === MysteryEncounterMode.WILD_BATTLE
+            ? battleCfg.pokemonConfigs[0].pokemon?.species
+            : undefined;
+        setEncounterExp(primaryPokemon.id, enemySpecies?.baseExp ?? 0);
         leaveEncounterWithoutBattle();
       })
       .build(),

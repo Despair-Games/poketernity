@@ -1,16 +1,16 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import { globalScene } from "#app/global-scene";
+import { Phase } from "#app/phase";
 import { CommonAnim } from "#enums/common-anim";
 import { BerryUsedEvent } from "#events/battle-scene";
 import { BerryModifier } from "#modifier/modifier";
-import { BattlePhase } from "#phases/base/battle-phase";
 import { ValueHolder } from "#utils/common-utils";
 import { inSpeedOrder } from "#utils/speed-order-generator";
 
 /**
  * The phase after attacks where the pokemon eat berries
  */
-export class BerryPhase extends BattlePhase {
+export class BerryPhase extends Phase {
   public override readonly phaseName = "BerryPhase";
 
   public override start(): void {

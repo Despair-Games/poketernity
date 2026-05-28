@@ -128,8 +128,8 @@ export const TrainerType = {
   VITO: 309,
   BUG_TYPE_SUPERFAN: 310,
   EXPERT_POKEMON_BREEDER: 311,
-  FUTURE_SELF_M: 312,
-  FUTURE_SELF_F: 313,
+  FUTURE_SELF: 312,
+  CLOWN: 314,
   // #endregion
 
   // #region Gym Leaders

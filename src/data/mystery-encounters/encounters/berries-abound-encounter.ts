@@ -5,13 +5,13 @@ import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encount
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
+import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { type BattleStat, PERMANENT_STATS, Stat } from "#enums/stat";
 import { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PlayerPokemon } from "#field/player-pokemon";
-import type { Pokemon } from "#field/pokemon";
 import type { BerryModifier } from "#modifier/modifier";
 import {
   type BerryModifierType,
@@ -22,11 +22,11 @@ import {
 import { modifierTypes } from "#modifier/modifier-types";
 import { queueEncounterMessage, showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import {
-  type EnemyPartyConfig,
   generateModifierType,
   generateModifierTypeOption,
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
+  type MysteryEncounterBattleConfig,
   setEncounterExp,
   setEncounterRewards,
 } from "#mystery-encounters/encounter-phase-utils";
@@ -39,7 +39,6 @@ import {
 } from "#mystery-encounters/encounter-pokemon-utils";
 import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
-import { PokemonData } from "#system/pokemon-data";
 import { randSeedInt } from "#utils/random-utils";
 
 /** the i18n namespace for the encounter */
@@ -77,17 +76,11 @@ export const BerriesAboundEncounter: MysteryEncounter = MysteryEncounterBuilder.
     );
     const bossPokemon = new EnemyPokemon(bossSpecies, level, { boss: true });
     encounter.setDialogueToken("enemyPokemon", getPokemonNameWithAffix(bossPokemon));
-    const config: EnemyPartyConfig = {
-      pokemonConfigs: [
-        {
-          level,
-          species: bossSpecies,
-          dataSource: new PokemonData(bossPokemon),
-          isBoss: true,
-        },
-      ],
+    const config: MysteryEncounterBattleConfig = {
+      battleType: MysteryEncounterMode.WILD_BATTLE,
+      pokemonConfigs: [{ pokemon: bossPokemon }],
     };
-    encounter.enemyPartyConfigs = [config];
+    encounter.battleConfigs = [config];
 
     // Calculate the number of extra berries that player receives
     // <=40: 2, 41-120: 4, 121-160: 5, 161+: 7
@@ -179,7 +172,7 @@ export const BerriesAboundEncounter: MysteryEncounter = MysteryEncounterBuilder.
         undefined,
         doBerryRewards,
       );
-      await initBattleWithEnemyConfig(globalScene.currentBattle.mysteryEncounter!.enemyPartyConfigs[0]);
+      await initBattleWithEnemyConfig(globalScene.currentBattle.mysteryEncounter!.battleConfigs[0]);
     },
   )
   .withOption(
@@ -225,18 +218,20 @@ export const BerriesAboundEncounter: MysteryEncounter = MysteryEncounterBuilder.
               ? [Stat.DEF, Stat.SPDEF, Stat.SPD]
               : [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD];
 
-          const config = globalScene.currentBattle.mysteryEncounter!.enemyPartyConfigs[0];
-          config.pokemonConfigs![0].tags = [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON];
-          config.pokemonConfigs![0].mysteryEncounterBattleEffects = (pokemon: Pokemon) => {
-            queueEncounterMessage(`${namespace}:option.2.boss_enraged`);
-            globalScene.phaseManager.createAndUnshiftPhase(
-              "StatStageChangePhase",
-              pokemon.getBattlerIndex(),
-              pokemon,
-              statChangesForBattle,
-              1,
-            );
-          };
+          const config = globalScene.currentBattle.mysteryEncounter!.battleConfigs[0];
+          if (config.battleType === MysteryEncounterMode.WILD_BATTLE) {
+            config.pokemonConfigs[0]["postProcess"] = (pokemon) => {
+              pokemon.addTag(BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON);
+              queueEncounterMessage(`${namespace}:option.2.boss_enraged`);
+              globalScene.phaseManager.createAndUnshiftPhase(
+                "StatStageChangePhase",
+                pokemon.getBattlerIndex(),
+                pokemon,
+                statChangesForBattle,
+                1,
+              );
+            };
+          }
           setEncounterRewards(
             { guaranteedModifierTypeOptions: shopOptions, fillRemaining: false },
             undefined,
@@ -263,7 +258,7 @@ export const BerriesAboundEncounter: MysteryEncounter = MysteryEncounterBuilder.
           }
         };
 
-        setEncounterExp(fastestPokemon.id, encounter.enemyPartyConfigs[0].pokemonConfigs![0].species.baseExp);
+        setEncounterExp(fastestPokemon.id, encounter.battleConfigs[0]["pokemonConfigs"][0].species.baseExp);
         setEncounterRewards(
           { guaranteedModifierTypeOptions: shopOptions, fillRemaining: false },
           undefined,

@@ -4,6 +4,7 @@ import { AbilityId } from "#enums/ability-id";
 import { BerryType } from "#enums/berry-type";
 import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
+import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
@@ -23,6 +24,7 @@ import {
 } from "#test/mystery-encounter/encounter-test-utils";
 import { GameManager } from "#test/test-utils/game-manager";
 import { initSceneWithoutEncounterPhase } from "#test/test-utils/game-manager-utils";
+import { getEnumStr } from "#test/test-utils/string-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -87,9 +89,11 @@ describe("Uncommon Breed - Mystery Encounter", () => {
     UncommonBreedEncounter.populateDialogueTokensFromRequirements();
     const onInitResult = onInit!();
 
-    const config = UncommonBreedEncounter.enemyPartyConfigs[0];
-    expect(config).toBeDefined();
-    expect(config.pokemonConfigs?.[0].isBoss).toBe(false);
+    const config = UncommonBreedEncounter.battleConfigs[0];
+    if (config.battleType !== MysteryEncounterMode.WILD_BATTLE) {
+      expect.fail(`Battle config is of invalid type: ${getEnumStr(MysteryEncounterMode, config.battleType)}`);
+    }
+    expect(config.pokemonConfigs?.[0].boss).toBe(false);
     expect(onInitResult).toBe(true);
   });
 
@@ -114,8 +118,12 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       const unshiftPhaseSpy = vi.spyOn(scene.phaseManager, "unshiftPhase");
       await game.runToMysteryEncounter(MysteryEncounterType.UNCOMMON_BREED, defaultParty);
 
-      const config = game.scene.currentBattle.mysteryEncounter!.enemyPartyConfigs[0];
-      const speciesToSpawn = config.pokemonConfigs![0].species.speciesId;
+      const config = game.scene.currentBattle.mysteryEncounter!.battleConfigs[0];
+      if (config.battleType !== MysteryEncounterMode.WILD_BATTLE) {
+        expect.fail(`Battle config is of invalid type: ${getEnumStr(MysteryEncounterMode, config.battleType)}`);
+      }
+      const pokemonConfig = config.pokemonConfigs[0];
+      const speciesToSpawn = pokemonConfig.pokemon?.species.speciesId ?? pokemonConfig.speciesPool?.[0];
 
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
@@ -130,7 +138,7 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       // Should have used its egg move pre-battle
       const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is("MovePhase")).map((p) => p[0]);
       expect(movePhases.length).toBe(1);
-      const eggMoves: MoveId[] = speciesEggMoves[getPokemonSpecies(speciesToSpawn).getRootSpeciesId()];
+      const eggMoves: MoveId[] = speciesEggMoves[getPokemonSpecies(speciesToSpawn!).getRootSpeciesId()];
       const usedMove = (movePhases[0] as MovePhase).pokemonMove.moveId;
       expect(eggMoves.includes(usedMove)).toBe(true);
     });
@@ -141,8 +149,12 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       const unshiftPhaseSpy = vi.spyOn(scene.phaseManager, "unshiftPhase");
       await game.runToMysteryEncounter(MysteryEncounterType.UNCOMMON_BREED, defaultParty);
 
-      const config = game.scene.currentBattle.mysteryEncounter!.enemyPartyConfigs[0];
-      const speciesToSpawn = config.pokemonConfigs![0].species.speciesId;
+      const config = game.scene.currentBattle.mysteryEncounter!.battleConfigs[0];
+      if (config.battleType !== MysteryEncounterMode.WILD_BATTLE) {
+        expect.fail(`Battle config is of invalid type: ${getEnumStr(MysteryEncounterMode, config.battleType)}`);
+      }
+      const pokemonConfig = config.pokemonConfigs[0];
+      const speciesToSpawn = pokemonConfig.pokemon?.species.speciesId ?? pokemonConfig.speciesPool?.[0];
 
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 
@@ -157,7 +169,7 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       // Should have used its egg move pre-battle
       const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is("MovePhase")).map((p) => p[0]);
       expect(movePhases.length).toBe(1);
-      const eggMoves: MoveId[] = speciesEggMoves[getPokemonSpecies(speciesToSpawn).getRootSpeciesId()];
+      const eggMoves: MoveId[] = speciesEggMoves[getPokemonSpecies(speciesToSpawn!).getRootSpeciesId()];
       const usedMove = (movePhases[0] as MovePhase).pokemonMove.moveId;
       expect(eggMoves.includes(usedMove)).toBe(true);
     });

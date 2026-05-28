@@ -1,6 +1,7 @@
 import type { BattleScene } from "#app/battle-scene";
 import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
+import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
@@ -17,6 +18,7 @@ import {
 } from "#test/mystery-encounter/encounter-test-utils";
 import { GameManager } from "#test/test-utils/game-manager";
 import { initSceneWithoutEncounterPhase } from "#test/test-utils/game-manager-utils";
+import { getEnumStr } from "#test/test-utils/string-utils";
 import type { ModifierSelectUiHandler } from "#ui/modifier-select-ui-handler";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -74,9 +76,12 @@ describe("Fight or Flight - Mystery Encounter", () => {
     FightOrFlightEncounter.populateDialogueTokensFromRequirements();
     const onInitResult = onInit!();
 
-    const config = FightOrFlightEncounter.enemyPartyConfigs[0];
-    expect(config).toBeDefined();
-    expect(config.pokemonConfigs?.[0].isBoss).toBe(true);
+    const config = FightOrFlightEncounter.battleConfigs[0];
+    if (config.battleType !== MysteryEncounterMode.WILD_BATTLE) {
+      expect.fail(`Battle config is of invalid type: ${getEnumStr(MysteryEncounterMode, config.battleType)}`);
+    }
+
+    expect(config.pokemonConfigs[0].boss).toBe(true);
     expect(onInitResult).toBe(true);
   });
 
@@ -99,8 +104,12 @@ describe("Fight or Flight - Mystery Encounter", () => {
     it("should start a fight against the boss", async () => {
       await game.runToMysteryEncounter(MysteryEncounterType.FIGHT_OR_FLIGHT, defaultParty);
 
-      const config = game.scene.currentBattle.mysteryEncounter!.enemyPartyConfigs[0];
-      const speciesToSpawn = config.pokemonConfigs?.[0].species.speciesId;
+      const config = game.scene.currentBattle.mysteryEncounter!.battleConfigs[0];
+      if (config.battleType !== MysteryEncounterMode.WILD_BATTLE) {
+        expect.fail(`Battle config is of invalid type: ${getEnumStr(MysteryEncounterMode, config.battleType)}`);
+      }
+      const pokemonConfig = config.pokemonConfigs[0];
+      const speciesToSpawn = pokemonConfig.pokemon?.species.speciesId ?? pokemonConfig.speciesPool?.[0];
 
       await runMysteryEncounterToEnd(game, 1, undefined, true);
 

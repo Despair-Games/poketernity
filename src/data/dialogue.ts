@@ -1,6 +1,5 @@
 import { type NonDefaultTrainerGender, TrainerGender } from "#enums/trainer-gender";
 import { TrainerType } from "#enums/trainer-type";
-import { getEnumStr } from "#test/test-utils/string-utils";
 import { randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
 
@@ -18,7 +17,7 @@ interface TrainerTypeMessages {
   /** The number of available defeat messages */
   defeat?: number;
 }
-type TrainerMessageType = keyof Omit<TrainerTypeMessages, "key">;
+export type TrainerMessageType = keyof Omit<TrainerTypeMessages, "key">;
 
 type GenderedTrainerTypeMessages = Partial<Record<TrainerGender, TrainerTypeMessages>>;
 type TrainerTypeDialogue = Partial<Record<TrainerType, GenderedTrainerTypeMessages>>;
@@ -1705,10 +1704,9 @@ export function getTrainerDialogue(
     return;
   }
 
-  // TODO: replace with string util
-  const trainerTypeKey = getEnumStr(TrainerType, trainerType);
+  const trainerTypeKey = Object.keys(TrainerType).find((k) => TrainerType[k] === trainerType);
   const key =
-    dialogueData.key ?? `${trainerTypeKey.toLowerCase()}${usedGender === TrainerGender.FEMALE ? "_female" : ""}`;
+    dialogueData.key ?? `${trainerTypeKey?.toLowerCase()}${usedGender === TrainerGender.FEMALE ? "_female" : ""}`;
 
   return i18next.t(`dialogue:${key}.${messageType}.${randSeedInt(numMessages) + 1}`);
 }

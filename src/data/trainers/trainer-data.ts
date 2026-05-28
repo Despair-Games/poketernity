@@ -1,19 +1,24 @@
 import { globalScene } from "#app/global-scene";
+import { getTrainerDialogue, type TrainerMessageType } from "#data/dialogue";
+import { type NonDefaultTrainerGender, TrainerGender } from "#enums/trainer-gender";
+import { type NonNullTrainerSlot, TrainerSlot } from "#enums/trainer-slot";
+import type { TrainerType } from "#enums/trainer-type";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
+import type { ModifierTypeFunc } from "#modifier/modifier-type";
+import type { TrainerSaveDataSet } from "#system/trainer-save-data";
 import type {
   CompoundTrainerConfig,
   NewTrainerConfig,
   RequireOneTrainer,
   TrainerAssetKey,
   TrainerSlotMap,
-} from "#data/new-trainer-config";
-import { TrainerGender } from "#enums/trainer-gender";
-import { type NonNullTrainerSlot, TrainerSlot } from "#enums/trainer-slot";
-import type { TrainerType } from "#enums/trainer-type";
-import type { EnemyPokemon } from "#field/enemy-pokemon";
+} from "#trainers/new-trainer-config";
+import { TrainerAi } from "#trainers/trainer-ai";
 import { coerceArray } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedInt } from "#utils/random-utils";
 import { getPartyMemberSeedOffset, getPartyPokemonLevel, getPartyPokemonSpecies } from "#utils/trainer-utils";
+import i18next from "i18next";
 
 // #region TrainerData
 
@@ -35,7 +40,9 @@ export class TrainerData {
   public readonly victoryBgm: string;
   public readonly party: EnemyPokemon[];
   public readonly moneyMultiplier: number;
-  public readonly gender: TrainerGender;
+  public readonly modifierRewards: ModifierTypeFunc[];
+  public readonly gender: NonDefaultTrainerGender;
+  public readonly ai: TrainerAi;
 
   /**
    * @param trainerSlot - The {@linkcode TrainerSlot} to which the Trainer belongs.
@@ -50,7 +57,7 @@ export class TrainerData {
   constructor(
     trainerSlot: NonNullTrainerSlot,
     config: NewTrainerConfig,
-    gender?: TrainerGender,
+    gender?: NonDefaultTrainerGender,
     useSameSeedForAllTrainers: boolean = false,
   ) {
     this.trainerSlot = trainerSlot;
@@ -64,8 +71,39 @@ export class TrainerData {
     this.battleBgm = config.battleBgm();
     this.encounterBgm = config.encounterBgm?.();
     this.victoryBgm = config.victoryBgm();
+    this.ai = new TrainerAi(this, config.aiType, config.teraMode);
     this.party = this.generateParty(trainerSlot, config, useSameSeedForAllTrainers);
     this.moneyMultiplier = config.moneyMultiplier();
+    this.modifierRewards = config.modifierRewards;
+  }
+
+  /**
+   * Obtains the Trainer's localized name in the format
+   * `"{{title}} {{name}}"`
+   * @param withTitle - (Default `true`) If `true`, includes the Trainer's
+   * title
+   * @returns The localized name
+   */
+  public getLocalizedName(withTitle: boolean = true) {
+    const title = withTitle ? `${i18next.t(`trainerClasses:${this.title}`)} ` : "";
+    const name = i18next.t(`trainerNames:${this.name}`);
+    return title + name;
+  }
+
+  /**
+   * Fetches a random message from the Trainer's dialogue pool for the given message type.
+   * The message selection is seeded by wave index.
+   * @param messageType - The type of message to fetch, e.g. `"encounter"`
+   * @returns A random message from the given message pool, or `undefined` if the Trainer
+   * does not have a populated message pool under the given type.
+   */
+  public getDialogue(messageType: TrainerMessageType): string | undefined {
+    let dialogue: string | undefined;
+    globalScene.executeWithSeedOffset(() => {
+      dialogue = getTrainerDialogue(messageType, this.trainerType, this.gender);
+    }, globalScene.currentBattle.waveIndex);
+
+    return dialogue;
   }
 
   /**
@@ -77,8 +115,8 @@ export class TrainerData {
    * @param config - The {@linkcode NewTrainerConfig} used to generate the Trainer.
    * @returns The Trainer's {@linkcode TrainerGender}.
    */
-  private initGender(config: NewTrainerConfig): TrainerGender {
-    const supportedGenders = Object.keys(config.name).map((k) => Number(k) as TrainerGender);
+  private initGender(config: NewTrainerConfig): NonDefaultTrainerGender {
+    const supportedGenders = Object.keys(config.name).map((k) => Number(k) as NonDefaultTrainerGender);
 
     const genderWeights = supportedGenders.map((g) => config.name[g]!.length);
     let roll = randSeedInt(genderWeights.reduce((total, w) => total + w));
@@ -127,14 +165,22 @@ export class TrainerData {
     useSameSeedForAllTrainers: boolean,
   ): EnemyPokemon[] {
     const party: EnemyPokemon[] = [];
+    const scaledWaveIndex = globalScene.gameMode.getWaveForDifficulty(globalScene.currentBattle.waveIndex);
+
     for (const config of partyConfigs) {
       if (config.condition && !config.condition()) {
         continue;
       }
-      const strength = config.variableStrength
-        ? coerceArray(config.variableStrength).map((strengthFn) => strengthFn())
-        : coerceArray(config.strength);
-      for (let i = 0; i < config.count; i++) {
+
+      const finalCfg = config.aiType
+        ? config
+        : {
+            ...config,
+            aiType: this.ai.aiType,
+          };
+
+      for (let i = 0; i < finalCfg.count; i++) {
+        const levelFuncs = coerceArray(finalCfg.levelFunc);
         const seedOffset = getPartyMemberSeedOffset(
           trainerSlot,
           party.length,
@@ -142,9 +188,9 @@ export class TrainerData {
           useSameSeedForAllTrainers,
         );
         globalScene.executeWithSeedOffset(() => {
-          const level = getPartyPokemonLevel(strength[i] ?? strength.at(-1));
-          const species = getPokemonSpecies(getPartyPokemonSpecies(level, party, config));
-          party.push(globalScene.addEnemyPokemon(species, level, config, config.postProcess));
+          const level = (levelFuncs[i] ?? levelFuncs.at(-1))(scaledWaveIndex);
+          const species = getPokemonSpecies(getPartyPokemonSpecies(level, party, finalCfg));
+          party.push(globalScene.addEnemyPokemon(species, level, finalCfg, finalCfg.postProcess));
         }, seedOffset);
       }
     }
@@ -169,7 +215,7 @@ export class CompoundTrainerData {
    * If a gender isn't specified for a slot, that slot's Trainer will be given a
    * random gender (see {@linkcode TrainerData.initGender}).
    */
-  constructor(config: CompoundTrainerConfig, genders: Partial<TrainerSlotMap<TrainerGender>> = {}) {
+  constructor(config: CompoundTrainerConfig, genders: Partial<TrainerSlotMap<NonDefaultTrainerGender>> = {}) {
     for (const [slot, cfg] of Object.entries(config.configs)) {
       const trainerSlot = Number(slot) as NonNullTrainerSlot;
       this.trainerData[slot] = new TrainerData(
@@ -186,13 +232,15 @@ export class CompoundTrainerData {
 // #endregion
 // #region TrainerDataSet
 
+type FromConfigParameters = ConstructorParameters<typeof TrainerData> extends [TrainerSlot, ...infer P] ? P : never;
+
 /**
  * A container for the {@linkcode TrainerData} of all Trainers involved in a battle.
  * Includes getters to resolve conflicting data between multiple Trainers.
  */
 export class TrainerDataSet {
   /** The {@linkcode TrainerData} of all involved Trainers, organized by {@linkcode TrainerSlot} */
-  public readonly trainerData: RequireOneTrainer<TrainerData>;
+  public readonly trainers: RequireOneTrainer<TrainerData>;
   /** The title of the Trainer set, to be displayed at the start of the battle */
   public readonly title: string;
 
@@ -204,8 +252,8 @@ export class TrainerDataSet {
    * This method's parameters mirror those of the {@linkcode TrainerData} constructor.
    * @returns The constructed {@linkcode TrainerDataSet}
    */
-  public static fromConfig(...params: ConstructorParameters<typeof TrainerData>): TrainerDataSet {
-    return new TrainerDataSet(new TrainerData(...params));
+  public static fromConfig(...params: FromConfigParameters): TrainerDataSet {
+    return new TrainerDataSet(new TrainerData(TrainerSlot.TRAINER, ...params));
   }
 
   /**
@@ -220,10 +268,48 @@ export class TrainerDataSet {
     return new TrainerDataSet(new CompoundTrainerData(...params));
   }
 
-  constructor(source: TrainerData | CompoundTrainerData) {
-    this.trainerData = source instanceof TrainerData ? { [TrainerSlot.TRAINER]: source } : source.trainerData;
+  constructor(source: TrainerData | CompoundTrainerData | TrainerSaveDataSet) {
+    if (source instanceof TrainerData) {
+      this.trainers = { [TrainerSlot.TRAINER]: source };
+    } else if (source instanceof CompoundTrainerData) {
+      this.trainers = source.trainerData;
+    } else {
+      // TODO: Is this typesafe?
+      this.trainers = Object.fromEntries(
+        Object.entries(source.trainerSaveData).map(([key, saveData]) => [key, saveData.toTrainerData()]),
+      ) as RequireOneTrainer<TrainerData>;
+    }
 
     this.title = source.title;
+  }
+
+  /**
+   * Obtains a localized name for the Trainer set. If this is a Trainer pair, each
+   * Trainer's individual title is omitted in favor of the combined title.
+   * @param withTitle - (Default `true`) If `true`, includes the Trainer set's {@linkcode TrainerDataSet.title | title}
+   * @returns The localized name(s) (and title if specified)
+   * @see {@linkcode TrainerData.getLocalizedName}
+   */
+  public getLocalizedName(withTitle: boolean = true) {
+    const title = withTitle ? `${i18next.t(`trainerClasses:${this.title}`)} ` : "";
+    const names = Object.values(this.trainers).map((td) => td.getLocalizedName(false));
+
+    if (names.length === 2) {
+      return (
+        title
+        + i18next.t("trainerNames:joinNames", {
+          name1: names[0],
+          name2: names[1],
+        })
+      );
+    }
+
+    return title + names[0];
+  }
+
+  /** Whether or not this set is to be used for a double battle */
+  public get double(): boolean {
+    return Object.values(this.trainers).length === 2;
   }
 
   /**
@@ -233,7 +319,7 @@ export class TrainerDataSet {
    * Trainers involved {@link NewTrainerConfig.isBoss | is a boss}.
    */
   public get isBoss(): boolean {
-    return Object.values(this.trainerData).some((td) => td.isBoss);
+    return Object.values(this.trainers).some((td) => td.isBoss);
   }
 
   /**
@@ -241,7 +327,7 @@ export class TrainerDataSet {
    * battles use the first defined encounter BGM override in slot order (if any exist).
    */
   public get encounterBgm(): string | undefined {
-    return Object.values(this.trainerData).find((td) => td.encounterBgm != null)?.encounterBgm;
+    return Object.values(this.trainers).find((td) => td.encounterBgm != null)?.encounterBgm;
   }
 
   /**
@@ -249,7 +335,7 @@ export class TrainerDataSet {
    * BGM of the Trainer in the first slot ({@linkcode TrainerSlot.TRAINER}).
    */
   public get battleBgm(): string {
-    return this.trainerData[TrainerSlot.TRAINER].battleBgm;
+    return this.trainers[TrainerSlot.TRAINER].battleBgm;
   }
 
   /**
@@ -257,7 +343,7 @@ export class TrainerDataSet {
    * the victory BGM of the Trainer in the first slot ({@linkcode TrainerSlot.TRAINER}).
    */
   public get victoryBgm(): string {
-    return this.trainerData[TrainerSlot.TRAINER].victoryBgm;
+    return this.trainers[TrainerSlot.TRAINER].victoryBgm;
   }
 
   /**
@@ -265,6 +351,49 @@ export class TrainerDataSet {
    * @todo Should this use the maximum money multiplier among all Trainers (current) or some other formula?
    */
   public get moneyMultiplier(): number {
-    return Math.max(...Object.values(this.trainerData).map((td) => td.moneyMultiplier));
+    return Math.max(...Object.values(this.trainers).map((td) => td.moneyMultiplier));
+  }
+
+  /** A map of each included Trainer's {@linkcode EnemyPokemon} organized by {@linkcode TrainerSlot}. */
+  public get party(): RequireOneTrainer<EnemyPokemon[]> {
+    return Object.fromEntries(
+      Object.entries(this.trainers).map(([key, tData]) => [key, tData.party]),
+    ) as RequireOneTrainer<EnemyPokemon[]>;
+  }
+
+  /**
+   * The combined party of all {@linkcode EnemyPokemon} involved in the Trainer battle.
+   * @remarks
+   * This should be injected into {@linkcode globalScene.currentBattle.enemyParty}
+   * once all Pokemon are fully generated for the Trainer battle.
+   * @todo Finalize this data structure. We may need to restrict individual
+   * Trainers' parties to length (6 / number of involved Trainers) and/or
+   * fill empty party slots with `undefined`
+   */
+  public get combinedParty(): EnemyPokemon[] {
+    return Object.values(this.trainers).flatMap((td) => td.party);
+  }
+
+  /**
+   * The {@linkcode ModifierTypeFunc}s to generate item rewards for defeating
+   * all Trainers in this battle.
+   */
+  public get modifierRewards(): ModifierTypeFunc[] {
+    const rewards: ModifierTypeFunc[] = [];
+    for (const trainer of Object.values(this.trainers)) {
+      rewards.push(...trainer.modifierRewards);
+    }
+    return rewards;
+  }
+
+  public getDialogueQueue(messageType: TrainerMessageType): [NonNullTrainerSlot, string][] {
+    const messages: [NonNullTrainerSlot, string][] = [];
+    for (const [slot, td] of Object.entries(this.trainers)) {
+      const message = td.getDialogue(messageType);
+      if (message) {
+        messages.push([Number(slot) as NonNullTrainerSlot, message]);
+      }
+    }
+    return messages;
   }
 }

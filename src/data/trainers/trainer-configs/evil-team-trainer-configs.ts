@@ -1,14 +1,14 @@
-import {
-  getEvilGruntPartyTemplate,
-  getRandomPartyMemberFunc,
-  TrainerConfig,
-  type TrainerConfigs,
-} from "#data/trainer-config";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
+import {
+  getEvilGruntPartyTemplate,
+  getRandomPartyMemberFunc,
+  TrainerConfig,
+  type TrainerConfigs,
+} from "#trainers/trainer-config";
 
 const teamStarCommonMoveset = [MoveId.SPIN_OUT, MoveId.SHIFT_GEAR, MoveId.HIGH_HORSEPOWER] as const;
 

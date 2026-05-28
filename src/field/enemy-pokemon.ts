@@ -37,6 +37,8 @@ export interface EnemyPokemonOptions extends PokemonOptions {
   trainerSlot?: TrainerSlot;
   boss?: boolean;
   bossSegments?: number;
+  aiType?: AiType;
+  instantTera?: boolean;
 }
 
 export class EnemyPokemon extends Pokemon {
@@ -47,6 +49,8 @@ export class EnemyPokemon extends Pokemon {
   /** The index of the current hp-segment (if the pokemon is a boss). E.g. if the boss has 5 segments and the first 2 are cleared, this will be 2 */
   public bossSegmentIndex: number = 0;
   public initialTeamIndex: number;
+  /** `true` if the pokemon should Terastallize on its first turn in battle */
+  public instantTera: boolean;
   /** To indicate if the instance was populated with a dataSource -> e.g. loaded & populated from session data */
   public readonly isPopulatedFromDataSource: boolean;
 
@@ -100,7 +104,15 @@ export class EnemyPokemon extends Pokemon {
 
     this.teraType = options.teraType ?? randSeedItem(this.getTypes(false, false, true));
 
-    this.aiType = this.boss || this.hasTrainer() ? AiType.SMART : AiType.SMART_RANDOM;
+    if (options["aiType"]) {
+      this.aiType = options["aiType"];
+    } else if (this.boss || this.hasTrainer()) {
+      this.aiType = AiType.SMART;
+    } else {
+      this.aiType = AiType.SMART_RANDOM;
+    }
+
+    this.instantTera = options["instantTera"] ?? false;
   }
 
   public override get boss(): boolean {

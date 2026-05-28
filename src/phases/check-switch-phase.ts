@@ -1,5 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { Phase } from "#app/phase";
 import { MOVE_LOCK_TAG_TYPES } from "#constants/battler-tag-constants";
 import { BattleStyle } from "#enums/battle-style";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -7,7 +8,6 @@ import { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { SwitchType } from "#enums/switch-type";
 import { UiMode } from "#enums/ui-mode";
-import { BattlePhase } from "#phases/base/battle-phase";
 import { settings } from "#system/settings-manager";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
@@ -17,7 +17,7 @@ import i18next from "i18next";
 /**
  * Handles the prompt to switch pokemon at the start of a battle when the player is playing in Switch mode
  */
-export class CheckSwitchPhase extends BattlePhase {
+export class CheckSwitchPhase extends Phase {
   public override readonly phaseName = "CheckSwitchPhase";
 
   protected readonly fieldIndex: number;

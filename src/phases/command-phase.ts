@@ -1,5 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { Phase } from "#app/phase";
 import type { TurnCommand } from "#app/turn-command-manager";
 import type { FairyLockTag } from "#arena-tags/fairy-lock-tag";
 import type { SkyDropTag } from "#battler-tags/sky-drop-tag";
@@ -21,7 +22,6 @@ import { PokeballType } from "#enums/pokeball-type";
 import { UiMode } from "#enums/ui-mode";
 import type { Pokemon } from "#field/pokemon";
 import { getMoveTargets, type MoveTargetSet } from "#moves/move";
-import { BattlePhase } from "#phases/base/battle-phase";
 import type { TurnMove } from "#types/move-types";
 import type { FightCommand } from "#types/ui-types";
 import type { CommandUiHandler } from "#ui/command-ui-handler";
@@ -33,7 +33,7 @@ import i18next from "i18next";
  * Handles the player's start-of-turn actions (`Fight/Ball/Pokemon/Run`) during a battle
  * @see {@linkcode handleCommand}
  */
-export class CommandPhase extends BattlePhase {
+export class CommandPhase extends Phase {
   public override readonly phaseName = "CommandPhase";
 
   /** TODO: Is this supposed to be a {@linkcode FieldPosition} or a {@linkcode BattlerIndex}? */

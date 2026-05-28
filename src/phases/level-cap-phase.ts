@@ -1,11 +1,11 @@
 import { globalScene } from "#app/global-scene";
-import { BattlePhase } from "#phases/base/battle-phase";
+import { Phase } from "#app/phase";
 import i18next from "i18next";
 
 /**
  * Displays the message for when the level cap increases
  */
-export class LevelCapPhase extends BattlePhase {
+export class LevelCapPhase extends Phase {
   public override readonly phaseName = "LevelCapPhase";
 
   public override start(): void {

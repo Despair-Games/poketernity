@@ -1,13 +1,13 @@
+import { Phase } from "#app/phase";
 import type { Pokemon } from "#field/pokemon";
 import type { PokemonMove } from "#field/pokemon-move";
 import { MoveHeaderAttr } from "#moves/move-header-attr";
-import { BattlePhase } from "#phases/base/battle-phase";
 import { applyMoveAttrs } from "#utils/move-utils";
 
 /**
  * Applies {@linkcode MoveHeaderAttr}s
  */
-export class MoveHeaderPhase extends BattlePhase {
+export class MoveHeaderPhase extends Phase {
   public override readonly phaseName = "MoveHeaderPhase";
 
   public readonly pokemon: Pokemon;

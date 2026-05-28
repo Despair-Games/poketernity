@@ -2,6 +2,7 @@
 
 import { globalScene } from "#app/global-scene";
 import { activeOverrides } from "#app/overrides";
+import { Phase } from "#app/phase";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import type { ModifierTier } from "#enums/modifier-tier";
 import { PartyOption } from "#enums/party-option";
@@ -28,7 +29,6 @@ import {
   regenerateModifierPoolThresholds,
   TmModifierType,
 } from "#modifier/modifier-type";
-import { BattlePhase } from "#phases/base/battle-phase";
 import type { PartyModifierTransferSelectCallback } from "#types/ui-types";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
@@ -50,7 +50,7 @@ interface SelectModifierPhaseOptions {
 
 //#endregion
 
-export class SelectModifierPhase extends BattlePhase {
+export class SelectModifierPhase extends Phase {
   public override readonly phaseName = "SelectModifierPhase";
 
   private readonly rerollCount: number;

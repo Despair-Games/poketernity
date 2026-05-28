@@ -7,7 +7,6 @@ import { ImagesFolder } from "#enums/images-folder";
 import { PlayerGender } from "#enums/player-gender";
 import { RunDisplayMode } from "#enums/run-display-mode";
 import { TextStyle } from "#enums/text-style";
-import { TrainerVariant } from "#enums/trainer-variant";
 import { UiMode } from "#enums/ui-mode";
 import type { RunEntry } from "#system/game-data";
 import type { PokemonData } from "#system/pokemon-data";
@@ -291,7 +290,10 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
       const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
       const genderStr = enumValueToKey(PlayerGender, genderIndex).toLowerCase();
       // Defeats from wild Pokemon battles will show the Pokemon responsible by the text of the run result.
-      if (data.battleType === BattleType.WILD || (data.battleType === BattleType.MYSTERY_ENCOUNTER && !data.trainer)) {
+      if (
+        data.battleType === BattleType.WILD
+        || (data.battleType === BattleType.MYSTERY_ENCOUNTER && !data.enemyTrainers)
+      ) {
         const enemyContainer = globalScene.add.container(8, 5);
         const gameOutcomeLabel = addTextObject(
           0,
@@ -317,30 +319,18 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
         this.add(enemyContainer);
       } else if (
         (data.battleType === BattleType.TRAINER || data.battleType === BattleType.MYSTERY_ENCOUNTER)
-        && data.trainer != null
+        && data.enemyTrainers != null
       ) {
         // Defeats from Trainers show the trainer's title and name
-        const tObj = data.trainer.toTrainer();
-        // Because of the interesting mechanics behind rival names, the rival name and title have to be retrieved differently
-        const RIVAL_TRAINER_ID_THRESHOLD = 375;
-        if (data.trainer.trainerType >= RIVAL_TRAINER_ID_THRESHOLD) {
-          const rivalName = tObj.variant === TrainerVariant.FEMALE ? "trainerNames:rival_female" : "trainerNames:rival";
-          const gameOutcomeLabel = addTextObject(
-            8,
-            5,
-            `${i18next.t("runHistory:defeatedRival", { context: genderStr })} ${i18next.t(rivalName)}`,
-            TextStyle.WINDOW,
-          );
-          this.add(gameOutcomeLabel);
-        } else {
-          const gameOutcomeLabel = addTextObject(
-            8,
-            5,
-            `${i18next.t("runHistory:defeatedTrainer", { context: genderStr })}${tObj.getName(0, true)}`,
-            TextStyle.WINDOW,
-          );
-          this.add(gameOutcomeLabel);
-        }
+        const trainerData = data.enemyTrainers.toTrainerData();
+        // TODO: This used to have a "defeatedRival" path, so locales may need to be updated
+        const gameOutcomeLabel = addTextObject(
+          8,
+          5,
+          `${i18next.t("runHistory:defeatedTrainer", { context: genderStr })}${trainerData.getLocalizedName()}`,
+          TextStyle.WINDOW,
+        );
+        this.add(gameOutcomeLabel);
       }
     }
 

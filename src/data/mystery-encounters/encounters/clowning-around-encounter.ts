@@ -1,9 +1,11 @@
 import { EncounterBattleAnim } from "#animations/encounter-battle-anim";
 import { globalScene } from "#app/global-scene";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
+import {
+  BLACEPHALON_RANDOM_ABILITY_POOL,
+  CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES,
+} from "#constants/mystery-encounter-constants";
 import { allAbilities } from "#data/data-lists";
-import { TrainerPartyCompoundTemplate, TrainerPartyTemplate } from "#data/trainer-config";
-import { AbilityId } from "#enums/ability-id";
+import type { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { BerryType } from "#enums/berry-type";
 import { Challenges } from "#enums/challenges";
@@ -13,6 +15,7 @@ import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { ModifierTier } from "#enums/modifier-tier";
 import { MoveCategory } from "#enums/move-category";
 import { MoveId } from "#enums/move-id";
+import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
@@ -26,7 +29,6 @@ import type { PokemonHeldItemModifierType } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
 import { showEncounterDialogue, showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import {
-  type EnemyPartyConfig,
   generateModifierType,
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
@@ -41,32 +43,15 @@ import {
 import { transitionMysteryEncounterIntroVisuals } from "#mystery-encounters/encounter-visuals-utils";
 import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
-import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
+import { TrainerPartyCompoundTemplate, TrainerPartyTemplate } from "#trainers/trainer-config";
+import { allNewTrainerConfigs, allTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { getPokemonSpecies, getRandomElementalType } from "#utils/pokemon-utils";
-import { randSeedInt, randSeedShuffle } from "#utils/random-utils";
+import { randSeedInt, randSeedItem, randSeedShuffle } from "#utils/random-utils";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/clowningAround";
-
-const RANDOM_ABILITY_POOL = [
-  AbilityId.STURDY,
-  AbilityId.PICKUP,
-  AbilityId.INTIMIDATE,
-  AbilityId.GUTS,
-  AbilityId.DROUGHT,
-  AbilityId.DRIZZLE,
-  AbilityId.SNOW_WARNING,
-  AbilityId.SAND_STREAM,
-  AbilityId.ELECTRIC_SURGE,
-  AbilityId.PSYCHIC_SURGE,
-  AbilityId.GRASSY_SURGE,
-  AbilityId.MISTY_SURGE,
-  AbilityId.MAGICIAN,
-  AbilityId.SHEER_FORCE,
-  AbilityId.PRANKSTER,
-];
 
 /**
  * Clowning Around encounter.
@@ -134,32 +119,19 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
     clownConfig.partyTemplateFunc = null; // Overrides party template func if it exists
 
     // Generate random ability for Blacephalon from pool
-    const ability = RANDOM_ABILITY_POOL[randSeedInt(RANDOM_ABILITY_POOL.length)];
+    // using the same seed offset as Blacephalon's `postProcess` in config
+    let ability: AbilityId;
+    globalScene.executeWithSeedOffset(() => {
+      ability = randSeedItem([...BLACEPHALON_RANDOM_ABILITY_POOL]);
+    }, globalScene.currentBattle.waveIndex << 8);
+    ability = ability!; // assert ability is defined
+
     encounter.setDialogueToken("ability", allAbilities[ability].name);
     encounter.misc = { ability };
 
-    encounter.enemyPartyConfigs.push({
-      trainerConfig: clownConfig,
-      pokemonConfigs: [
-        // Overrides first 2 pokemon to be Mr. Mime and Blacephalon
-        {
-          species: getPokemonSpecies(SpeciesId.MR_MIME),
-          isBoss: true,
-          moveSet: [MoveId.TEETER_DANCE, MoveId.ALLY_SWITCH, MoveId.DAZZLING_GLEAM, MoveId.PSYCHIC],
-        },
-        {
-          // Blacephalon has the random ability from pool, and 2 entirely random types to fit with the theme of the encounter
-          // TODO: should prevent it from rolling the same type twice
-          species: getPokemonSpecies(SpeciesId.BLACEPHALON),
-          customPokemonData: {
-            ability,
-            types: [getRandomElementalType(), getRandomElementalType()],
-          },
-          isBoss: true,
-          moveSet: [MoveId.TRICK, MoveId.HYPNOSIS, MoveId.SHADOW_BALL, MoveId.MIND_BLOWN],
-        },
-      ],
-      doubleBattle: true,
+    encounter.battleConfigs.push({
+      battleType: MysteryEncounterMode.TRAINER_BATTLE,
+      trainerConfig: allNewTrainerConfigs[TrainerType.HARLEQUIN]!,
     });
 
     // Load animations/sfx for start of fight moves
@@ -188,7 +160,7 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
       .withOptionPhase(async () => {
         const encounter = globalScene.currentBattle.mysteryEncounter!;
         // Spawn battle
-        const config: EnemyPartyConfig = encounter.enemyPartyConfigs[0];
+        const config = encounter.battleConfigs[0];
 
         setEncounterRewards({ fillRemaining: true });
 
@@ -228,7 +200,7 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
         // Play animations once ability swap is complete
         // Trainer sprite that is shown at end of battle is not the same as mystery encounter intro visuals
         globalScene.tweens.add({
-          targets: globalScene.currentBattle.trainer,
+          targets: globalScene.enemyTrainers,
           x: "+=16",
           y: "-=16",
           alpha: 0,

@@ -2,6 +2,7 @@ import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { activeOverrides } from "#app/overrides";
+import { Phase } from "#app/phase";
 import { applyBattlerTags } from "#battler-tags/apply-battler-tags";
 import type { CenterOfAttentionTag } from "#battler-tags/center-of-attention-tag";
 import type { ImprisoningTag } from "#battler-tags/imprisoning-tag";
@@ -31,7 +32,6 @@ import { HealStatusEffectAttr } from "#moves/heal-status-effect-attr";
 import { getMoveTargets, SelfStatusMove } from "#moves/move";
 import { PreMoveMessageAttr } from "#moves/pre-move-message-attr";
 import { VariableMoveMessageAttr } from "#moves/variable-move-message-attr";
-import { BattlePhase } from "#phases/base/battle-phase";
 import { BooleanHolder, NumberHolder } from "#utils/common-utils";
 import { applyMoveAttrs, isFieldTargeted } from "#utils/move-utils";
 import { inSpeedOrder } from "#utils/speed-order-generator";
@@ -78,7 +78,7 @@ interface MovePhaseOptions {
  *
  * If the move is successful, then a {@linkcode MoveEffectPhase} is queued.
  */
-export class MovePhase extends BattlePhase {
+export class MovePhase extends Phase {
   public override readonly phaseName = "MovePhase";
 
   /** The {@linkcode Pokemon} using the move */

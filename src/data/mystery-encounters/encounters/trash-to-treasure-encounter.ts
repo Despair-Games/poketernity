@@ -4,6 +4,7 @@ import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encount
 import { BattlerIndex } from "#enums/battler-index";
 import { ModifierTier } from "#enums/modifier-tier";
 import { MoveId } from "#enums/move-id";
+import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
@@ -14,19 +15,17 @@ import type { PokemonHeldItemModifierType } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
 import { showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import {
-  type EnemyPartyConfig,
-  type EnemyPokemonConfig,
   generateModifierType,
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
   loadCustomMovesForEncounter,
+  type MysteryEncounterBattleConfig,
   setEncounterRewards,
 } from "#mystery-encounters/encounter-phase-utils";
 import { applyModifierTypeToPlayerPokemon } from "#mystery-encounters/encounter-pokemon-utils";
 import { transitionMysteryEncounterIntroVisuals } from "#mystery-encounters/encounter-visuals-utils";
 import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
-import { getPokemonSpecies } from "#utils/pokemon-utils";
 
 /** the i18n namespace for this encounter */
 const namespace = "mysteryEncounters/trashToTreasure";
@@ -72,21 +71,25 @@ export const TrashToTreasureEncounter: MysteryEncounter = MysteryEncounterBuilde
     const encounter = globalScene.currentBattle.mysteryEncounter!;
 
     // Calculate boss mon (shiny locked)
-    const bossSpecies = getPokemonSpecies(SpeciesId.GARBODOR);
-    const pokemonConfig: EnemyPokemonConfig = {
-      species: bossSpecies,
-      isBoss: true,
-      shiny: false, // Shiny lock because of custom intro sprite
-      formIndex: 1, // Gmax
-      bossSegmentModifier: 1, // +1 Segment from normal
-      moveSet: [MoveId.PAYBACK, MoveId.GUNK_SHOT, MoveId.STOMPING_TANTRUM, MoveId.DRAIN_PUNCH],
-    };
-    const config: EnemyPartyConfig = {
-      levelAdditiveModifier: 0.5,
-      pokemonConfigs: [pokemonConfig],
+    const config: MysteryEncounterBattleConfig = {
+      battleType: MysteryEncounterMode.WILD_BATTLE,
+      levelBoostMultiplier: 0.5,
       disableSwitch: true,
+      pokemonConfigs: [
+        {
+          speciesPool: [SpeciesId.GARBODOR],
+          boss: true,
+          shiny: false,
+          formIndex: 1, // Gmax
+          moveset: [MoveId.PAYBACK, MoveId.GUNK_SHOT, MoveId.STOMPING_TANTRUM, MoveId.DRAIN_PUNCH],
+          postProcess: (pokemon) => {
+            // Add an extra boss segment
+            pokemon.setBoss(true, pokemon.bossSegments + 1);
+          },
+        },
+      ],
     };
-    encounter.enemyPartyConfigs = [config];
+    encounter.battleConfigs = [config];
 
     // Load animations/sfx for Garbodor fight start moves
     loadCustomMovesForEncounter([MoveId.TOXIC, MoveId.AMNESIA]);
@@ -169,7 +172,7 @@ export const TrashToTreasureEncounter: MysteryEncounter = MysteryEncounterBuilde
             ignorePp: true,
           },
         );
-        await initBattleWithEnemyConfig(encounter.enemyPartyConfigs[0]);
+        await initBattleWithEnemyConfig(encounter.battleConfigs[0]);
       })
       .build(),
   )

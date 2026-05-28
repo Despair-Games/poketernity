@@ -14,3 +14,5 @@ export const MysteryEncounterMode = {
 } as const;
 
 export type MysteryEncounterMode = ObjectValues<typeof MysteryEncounterMode>;
+
+export type MysteryEncounterBattleMode = ObjectValues<Omit<typeof MysteryEncounterMode, "DEFAULT" | "NO_BATTLE">>;

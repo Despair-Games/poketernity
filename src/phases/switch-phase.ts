@@ -99,15 +99,20 @@ export class SwitchPhase extends PokemonPhase {
   }
 
   private resolveEnemySwitchInIndex(): void {
-    const { trainer } = globalScene.currentBattle;
+    const pokemon = this.getPokemon();
+    if (!pokemon.isEnemy()) {
+      console.warn("SwitchPhase: Cannot resolve automatic switch selection; the switched Pokemon is not an enemy.");
+      return;
+    }
 
-    if (!trainer) {
+    const { trainerData } = globalScene.currentBattle;
+
+    if (!trainerData || pokemon.trainerSlot === TrainerSlot.NONE) {
       throw new Error("SwitchPhase: Enemy Pokemon does not have a trainer!");
     }
 
-    this.switchInIndex = trainer.getNextSummonIndex(
-      this.fieldIndex ? TrainerSlot.TRAINER_PARTNER : TrainerSlot.TRAINER,
-    );
+    const trainer = trainerData.trainers[pokemon.trainerSlot]!;
+    this.switchInIndex = trainer.ai.getNextSummonIndex();
 
     this.updatePokemonData();
     this.end();

@@ -2,15 +2,16 @@ import { globalScene } from "#app/global-scene";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
 import { ModifierTier } from "#enums/modifier-tier";
 import { MoveId } from "#enums/move-id";
+import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
 import { queueEncounterMessage, showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import {
-  type EnemyPartyConfig,
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
+  type MysteryEncounterBattleConfig,
   setEncounterRewards,
 } from "#mystery-encounters/encounter-phase-utils";
 import { getHighestLevelPlayerPokemon, koPlayerPokemon } from "#mystery-encounters/encounter-pokemon-utils";
@@ -75,20 +76,21 @@ export const MysteriousChestEncounter: MysteryEncounter = MysteryEncounterBuilde
     const encounter = globalScene.currentBattle.mysteryEncounter!;
 
     // Calculate boss mon
-    const config: EnemyPartyConfig = {
-      levelAdditiveModifier: 0.5,
+    const config: MysteryEncounterBattleConfig = {
+      battleType: MysteryEncounterMode.WILD_BATTLE,
+      levelBoostMultiplier: 0.5,
       disableSwitch: true,
       pokemonConfigs: [
         {
-          species: getPokemonSpecies(SpeciesId.GIMMIGHOUL),
+          speciesPool: [SpeciesId.GIMMIGHOUL],
           formIndex: 0,
-          isBoss: true,
-          moveSet: [MoveId.NASTY_PLOT, MoveId.SHADOW_BALL, MoveId.POWER_GEM, MoveId.THIEF],
+          boss: true,
+          moveset: [MoveId.NASTY_PLOT, MoveId.SHADOW_BALL, MoveId.POWER_GEM, MoveId.THIEF],
         },
       ],
     };
 
-    encounter.enemyPartyConfigs = [config];
+    encounter.battleConfigs = [config];
 
     encounter.setDialogueToken("gimmighoulName", getPokemonSpecies(SpeciesId.GIMMIGHOUL).getName());
     encounter.setDialogueToken("trapPercent", TRAP_PERCENT.toString());
@@ -188,7 +190,7 @@ export const MysteriousChestEncounter: MysteryEncounter = MysteryEncounterBuilde
             // Show which Pokemon was KOed, then start battle against Gimmighoul
             await transitionMysteryEncounterIntroVisuals(true, true, 500);
             setEncounterRewards({ fillRemaining: true });
-            await initBattleWithEnemyConfig(encounter.enemyPartyConfigs[0]);
+            await initBattleWithEnemyConfig(encounter.battleConfigs[0]);
           }
         }
       })

@@ -9,6 +9,7 @@ import { ElementalType } from "#enums/elemental-type";
 import { EncounterAnim } from "#enums/encounter-anim";
 import { Gender } from "#enums/gender";
 import { MoveId } from "#enums/move-id";
+import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
@@ -16,17 +17,16 @@ import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
-import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
 import type { AttackTypeBoosterModifierType } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
 import { queueEncounterMessage } from "#mystery-encounters/encounter-dialogue-utils";
 import {
-  type EnemyPartyConfig,
   generateModifierType,
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
   loadCustomMovesForEncounter,
+  type MysteryEncounterBattleConfig,
   setEncounterExp,
   setEncounterRewards,
 } from "#mystery-encounters/encounter-phase-utils";
@@ -80,15 +80,15 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
     const encounter = globalScene.currentBattle.mysteryEncounter!;
 
     // Calculate boss mons
-    const volcaronaSpecies = getPokemonSpecies(SpeciesId.VOLCARONA);
-    const config: EnemyPartyConfig = {
+    const config: MysteryEncounterBattleConfig = {
+      battleType: MysteryEncounterMode.WILD_BATTLE,
       pokemonConfigs: [
         {
-          species: volcaronaSpecies,
-          isBoss: false,
+          speciesPool: [SpeciesId.VOLCARONA],
+          boss: false,
           gender: Gender.MALE,
-          tags: [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON],
-          mysteryEncounterBattleEffects: (pokemon: Pokemon) => {
+          postProcess: (pokemon) => {
+            pokemon.addTag(BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON);
             globalScene.phaseManager.createAndUnshiftPhase(
               "StatStageChangePhase",
               pokemon.getBattlerIndex(),
@@ -99,11 +99,11 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
           },
         },
         {
-          species: volcaronaSpecies,
-          isBoss: false,
+          speciesPool: [SpeciesId.VOLCARONA],
+          boss: false,
           gender: Gender.FEMALE,
-          tags: [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON],
-          mysteryEncounterBattleEffects: (pokemon: Pokemon) => {
+          postProcess: (pokemon) => {
+            pokemon.addTag(BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON);
             globalScene.phaseManager.createAndUnshiftPhase(
               "StatStageChangePhase",
               pokemon.getBattlerIndex(),
@@ -114,10 +114,10 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
           },
         },
       ],
-      doubleBattle: true,
+      double: true,
       disableSwitch: true,
     };
-    encounter.enemyPartyConfigs = [config];
+    encounter.battleConfigs = [config];
 
     // Load hidden Volcarona sprites
     encounter.spriteConfigs = [
@@ -207,7 +207,7 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
           ignorePp: true,
         },
       );
-      await initBattleWithEnemyConfig(globalScene.currentBattle.mysteryEncounter!.enemyPartyConfigs[0]);
+      await initBattleWithEnemyConfig(globalScene.currentBattle.mysteryEncounter!.battleConfigs[0]);
     },
   )
   .withSimpleOption(

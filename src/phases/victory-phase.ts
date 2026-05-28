@@ -88,10 +88,10 @@ export class VictoryPhase extends PokemonPhase {
    * pass those settings to the upcoming {@linkcode SelectModifierPhase}.
    */
   protected getFixedBattleCustomModifiers(): CustomModifierSettings | undefined {
-    const gameMode = globalScene.gameMode;
-    const waveIndex = globalScene.currentBattle.waveIndex;
-    if (gameMode.isFixedBattle(waveIndex)) {
-      return gameMode.getFixedBattle(waveIndex).customModifierRewardSettings;
-    }
+    const {
+      currentBattle: { waveIndex },
+      gameMode,
+    } = globalScene;
+    return gameMode.getFixedBattle(waveIndex)?.customModifierRewardSettings;
   }
 }

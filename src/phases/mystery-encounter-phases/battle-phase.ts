@@ -1,13 +1,11 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import { getCharVariantFromDialogue } from "#data/dialogue";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { IvScannerModifier } from "#modifier/modifier";
 import type { PostSummonPhase } from "#phases/post-summon-phase";
-import { randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
 /**
@@ -38,7 +36,7 @@ export class MysteryEncounterBattlePhase extends Phase {
   /** Gets intro battle message for new battle */
   private getBattleMessage(): string {
     const { currentBattle } = globalScene;
-    const { double, mysteryEncounter, trainer } = currentBattle;
+    const { double, mysteryEncounter, trainerData } = currentBattle;
 
     const encounterMode = mysteryEncounter?.encounterMode;
     const enemyField = globalScene.getEnemyField();
@@ -50,7 +48,7 @@ export class MysteryEncounterBattlePhase extends Phase {
 
     if (encounterMode === MysteryEncounterMode.TRAINER_BATTLE) {
       return i18next.t(`battle:trainerAppeared${double ? "Double" : ""}`, {
-        trainerName: trainer?.getName(TrainerSlot.NONE, true),
+        trainerName: trainerData?.getLocalizedName(),
       });
     }
 
@@ -62,7 +60,7 @@ export class MysteryEncounterBattlePhase extends Phase {
   /** Queues {@linkcode SummonPhase}s for the new battle, and handles trainer animations/dialogue if it's a Trainer battle */
   private doMysteryEncounterBattle(): void {
     const { currentBattle, ui } = globalScene;
-    const { double, mysteryEncounter, trainer } = currentBattle;
+    const { double, mysteryEncounter } = currentBattle;
 
     const encounterMode = mysteryEncounter?.encounterMode;
     if (encounterMode === MysteryEncounterMode.WILD_BATTLE || encounterMode === MysteryEncounterMode.BOSS_BATTLE) {
@@ -105,33 +103,7 @@ export class MysteryEncounterBattlePhase extends Phase {
         }
       };
 
-      const encounterMessages = trainer?.getEncounterMessages();
-
-      if (!encounterMessages || !encounterMessages.length) {
-        doSummon();
-      } else {
-        let message: string;
-        globalScene.executeWithSeedOffset(() => {
-          message = randSeedItem(encounterMessages);
-        }, mysteryEncounter?.getSeedOffset() ?? 0);
-        message = message!; // tell TS compiler it's defined now
-        const showDialogueAndSummon = (): void => {
-          ui.showDialogue(message, trainer?.getName(TrainerSlot.NONE, true) ?? "", () => {
-            globalScene.charSprite.hide().then(() => globalScene.hideFieldOverlay(250).then(() => doSummon()));
-          });
-        };
-        if (trainer?.config.hasCharSprite && !ui.shouldSkipDialogue(message)) {
-          globalScene
-            .showFieldOverlay(500)
-            .then(() =>
-              globalScene.charSprite
-                .showCharacter(trainer.getKey(), getCharVariantFromDialogue(encounterMessages[0]))
-                .then(() => showDialogueAndSummon()),
-            );
-        } else {
-          showDialogueAndSummon();
-        }
-      }
+      globalScene.showTrainerDialogue("encounter").then(() => doSummon());
     }
   }
 
@@ -194,36 +166,38 @@ export class MysteryEncounterBattlePhase extends Phase {
 
   /** Ease in enemy trainer */
   private showEnemyTrainer(): void {
-    const { currentBattle, tweens } = globalScene;
-    const { trainer } = currentBattle;
+    const { enemyTrainers, tweens } = globalScene;
 
-    if (!trainer) {
+    if (!enemyTrainers) {
       return;
     }
-    trainer.alpha = 0;
-    trainer.x += 16;
-    trainer.y -= 16;
-    trainer.setVisible(true);
+    enemyTrainers.alpha = 0;
+    enemyTrainers.x += 16;
+    enemyTrainers.y -= 16;
+    enemyTrainers.setVisible(true);
     tweens.add({
-      targets: trainer,
+      targets: enemyTrainers,
       x: "-=16",
       y: "+=16",
       alpha: 1,
       ease: "Sine.easeInOut",
       duration: 750,
       onComplete: () => {
-        trainer.untint(100, "Sine.easeOut");
-        trainer.playAnim();
+        for (const slot of [TrainerSlot.TRAINER, TrainerSlot.TRAINER_PARTNER]) {
+          enemyTrainers.untint(slot, {
+            duration: 100,
+            ease: "Sine.easeOut",
+          });
+        }
+        enemyTrainers.playAnim();
       },
     });
   }
 
   private hideEnemyTrainer(): void {
-    const { currentBattle, tweens } = globalScene;
-    const { trainer } = currentBattle;
-
+    const { enemyTrainers, tweens } = globalScene;
     tweens.add({
-      targets: trainer,
+      targets: enemyTrainers,
       x: "+=16",
       y: "-=16",
       alpha: 0,

@@ -1,3 +1,9 @@
+//#region Generic ME constants
+
+import { AbilityId } from "#enums/ability-id";
+import { SpeciesId } from "#enums/species-id";
+import type { NonEmptyArray } from "#types/utility-types";
+
 /** Min - Max waves for mystery encounter in classic mode. */
 export const CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES = Object.freeze<[min: number, max: number]>([10, 180]);
 
@@ -48,3 +54,53 @@ export const ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET = 12;
  * ```
  */
 export const ME_ANTI_VARIANCE_WEIGHT_MODIFIER = 15;
+
+//#endregion
+//#region Clowning Around
+
+export const BLACEPHALON_RANDOM_ABILITY_POOL = Object.freeze<AbilityId[]>([
+  AbilityId.STURDY,
+  AbilityId.PICKUP,
+  AbilityId.INTIMIDATE,
+  AbilityId.GUTS,
+  AbilityId.DROUGHT,
+  AbilityId.DRIZZLE,
+  AbilityId.SNOW_WARNING,
+  AbilityId.SAND_STREAM,
+  AbilityId.ELECTRIC_SURGE,
+  AbilityId.PSYCHIC_SURGE,
+  AbilityId.GRASSY_SURGE,
+  AbilityId.MISTY_SURGE,
+  AbilityId.MAGICIAN,
+  AbilityId.SHEER_FORCE,
+  AbilityId.PRANKSTER,
+]);
+
+//#endregion
+//#region The Expert Pokemon Breeder
+
+export const EXPERT_POKEMON_BREEDER_POOL_1_POKEMON = Object.freeze<NonEmptyArray<SpeciesId>>([
+  SpeciesId.SNORLAX,
+  SpeciesId.BLISSEY,
+  SpeciesId.MAGMORTAR,
+  SpeciesId.ELECTIVIRE,
+  SpeciesId.LUCARIO,
+  SpeciesId.ROSERADE,
+  SpeciesId.TOXTRICITY,
+  SpeciesId.MR_MIME,
+]);
+
+export const EXPERT_POKEMON_BREEDER_POOL_2_POKEMON = Object.freeze<NonEmptyArray<SpeciesId>>([
+  SpeciesId.RAICHU,
+  SpeciesId.ALOLA_RAICHU,
+  SpeciesId.JYNX,
+  SpeciesId.HITMONLEE,
+  SpeciesId.HITMONCHAN,
+  SpeciesId.HITMONTOP,
+  SpeciesId.WIGGLYTUFF,
+  SpeciesId.AZUMARILL,
+  SpeciesId.WOBBUFFET,
+  SpeciesId.CHIMECHO,
+  SpeciesId.SUDOWOODO,
+  SpeciesId.MANTINE,
+]);

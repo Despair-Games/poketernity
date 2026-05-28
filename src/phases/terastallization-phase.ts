@@ -1,15 +1,15 @@
 import { CommonBattleAnim } from "#animations/common-battle-anim";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { Phase } from "#app/phase";
 import { SpeciesFormChangeTeraTrigger } from "#data/pokemon-forms";
 import { CommonAnim } from "#enums/common-anim";
 import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#field/pokemon";
-import { BattlePhase } from "#phases/base/battle-phase";
 import { enumValueToKey } from "#utils/common-utils";
 import i18next from "i18next";
 
-export class TerastallizationPhase extends BattlePhase {
+export class TerastallizationPhase extends Phase {
   public override readonly phaseName = "TerastallizationPhase";
 
   public pokemon: Pokemon;

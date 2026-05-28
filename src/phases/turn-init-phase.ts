@@ -1,4 +1,5 @@
 import { globalScene } from "#app/global-scene";
+import { Phase } from "#app/phase";
 import { SwitchType } from "#enums/switch-type";
 import { TurnInitEvent } from "#events/battle-scene";
 import type { PlayerPokemon } from "#field/player-pokemon";
@@ -6,10 +7,9 @@ import {
   handleMysteryEncounterBattleStartEffects,
   handleMysteryEncounterTurnStartEffects,
 } from "#mystery-encounters/encounter-phase-utils";
-import { BattlePhase } from "#phases/base/battle-phase";
 import i18next from "i18next";
 
-export class TurnInitPhase extends BattlePhase {
+export class TurnInitPhase extends Phase {
   public override readonly phaseName = "TurnInitPhase";
 
   public override start(): void {

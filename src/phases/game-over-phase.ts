@@ -1,6 +1,7 @@
 import { api } from "#api/api";
 import { clientSessionId } from "#app/account";
 import { globalScene } from "#app/global-scene";
+import { Phase } from "#app/phase";
 import { getCharVariantFromDialogue } from "#data/dialogue";
 import type { PokemonSpecies } from "#data/pokemon-species";
 import { AchvCategory } from "#enums/achv-category";
@@ -11,12 +12,11 @@ import { Unlockables } from "#enums/unlockables";
 import type { Pokemon } from "#field/pokemon";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import { modifierTypes } from "#modifier/modifier-types";
-import { BattlePhase } from "#phases/base/battle-phase";
 import type { EndCardPhase } from "#phases/end-card-phase";
 import { achvs } from "#system/achievements";
 import { settings } from "#system/settings-manager";
-import { TrainerSaveData } from "#system/trainer-save-data";
-import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
+import { TrainerSaveDataSet } from "#system/trainer-save-data";
+import { allTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
 import type { SessionSaveData } from "#types/session-data";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
@@ -31,7 +31,7 @@ import i18next from "i18next";
  * - Award unlockables if necessary
  * - Award ribbons + vouchers per player pokemon if a victory
  */
-export class GameOverPhase extends BattlePhase {
+export class GameOverPhase extends Phase {
   public override readonly phaseName = "GameOverPhase";
 
   private isVictory: boolean;
@@ -254,6 +254,7 @@ export class GameOverPhase extends BattlePhase {
    */
   private async getRunHistoryEntry(): Promise<SessionSaveData> {
     const { currentBattle, gameData } = globalScene;
+    const { trainerData } = currentBattle;
 
     const preWaveSessionData = await gameData.getSession(globalScene.sessionSlotId);
     const sessionSaveData = gameData.getSessionSaveData();
@@ -262,7 +263,10 @@ export class GameOverPhase extends BattlePhase {
       sessionSaveData.modifiers = preWaveSessionData.modifiers;
       sessionSaveData.enemyModifiers = preWaveSessionData.enemyModifiers;
     }
-    sessionSaveData.trainer = currentBattle.trainer ? new TrainerSaveData(currentBattle.trainer) : null;
+
+    if (trainerData) {
+      sessionSaveData.enemyTrainers = new TrainerSaveDataSet(trainerData);
+    }
 
     return sessionSaveData;
   }

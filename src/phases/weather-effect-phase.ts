@@ -1,6 +1,7 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import { CommonBattleAnim } from "#animations/common-battle-anim";
 import { globalScene } from "#app/global-scene";
+import { Phase } from "#app/phase";
 import { WEATHER_DAMAGE_RATIO } from "#constants/weather-constants";
 import { getWeatherDamageMessage, getWeatherLapseMessage, type Weather } from "#data/weather";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -8,7 +9,6 @@ import { CommonAnim } from "#enums/common-anim";
 import { HitResult } from "#enums/hit-result";
 import { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#field/pokemon";
-import { BattlePhase } from "#phases/base/battle-phase";
 import { toDmgValue, ValueHolder } from "#utils/common-utils";
 import { inSpeedOrder } from "#utils/speed-order-generator";
 
@@ -19,7 +19,7 @@ import { inSpeedOrder } from "#utils/speed-order-generator";
  * - all post-turn ability triggers dependent on the current weather
  * (e.g. Rain Dish, Dry Skin)
  */
-export class WeatherEffectPhase extends BattlePhase {
+export class WeatherEffectPhase extends Phase {
   public override readonly phaseName = "WeatherEffectPhase";
 
   public override start(): void {

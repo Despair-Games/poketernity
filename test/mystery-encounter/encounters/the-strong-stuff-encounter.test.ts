@@ -100,7 +100,7 @@ describe("The Strong Stuff - Mystery Encounter", () => {
     TheStrongStuffEncounter.populateDialogueTokensFromRequirements();
     const onInitResult = onInit!();
 
-    expect(TheStrongStuffEncounter.enemyPartyConfigs).toEqual([
+    expect(TheStrongStuffEncounter.battleConfigs).toEqual([
       {
         levelAdditiveModifier: 1,
         disableSwitch: true,

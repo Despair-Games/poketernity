@@ -1,17 +1,17 @@
 import { tmSpecies } from "#data/tms";
-import {
-  getRandomPartyMemberFunc,
-  getWavePartyTemplate,
-  TrainerConfig,
-  type TrainerConfigs,
-  trainerPartyTemplates,
-} from "#data/trainer-config";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
+import {
+  getRandomPartyMemberFunc,
+  getWavePartyTemplate,
+  TrainerConfig,
+  type TrainerConfigs,
+  trainerPartyTemplates,
+} from "#trainers/trainer-config";
 
 /**
  * If a trainer does not have any species filter then they use the default

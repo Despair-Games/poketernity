@@ -13,13 +13,13 @@ import {
   NEMONA_CHAMPION_THEME,
   SINNOH_CHAMPION_THEME,
 } from "#constants/music-constants";
-import { getRandomPartyMemberFunc, TrainerConfig, type TrainerConfigs } from "#data/trainer-config";
 import { ElementalType } from "#enums/elemental-type";
 import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
 import { TrainerVariant } from "#enums/trainer-variant";
+import { getRandomPartyMemberFunc, TrainerConfig, type TrainerConfigs } from "#trainers/trainer-config";
 
 export const championTrainerConfigs: TrainerConfigs = {
   [TrainerType.BLUE]: new TrainerConfig(TrainerType.BLUE)

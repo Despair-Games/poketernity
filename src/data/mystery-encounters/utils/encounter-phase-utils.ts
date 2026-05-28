@@ -1,61 +1,55 @@
-import type { Battle } from "#app/battle";
 import { globalScene } from "#app/global-scene";
-import { getPokemonNameWithAffix } from "#app/messages";
 import {
   ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
   ME_WEIGHT_INCREMENT_ON_SPAWN_MISS,
 } from "#constants/mystery-encounter-constants";
 import { biomeLinks } from "#data/biome-links";
 import { Egg, type EggOptions } from "#data/egg";
-import { getNatureName } from "#data/nature";
-import type { PokemonSpecies } from "#data/pokemon-species";
-import type { TrainerConfig } from "#data/trainer-config";
-import type { Variant } from "#data/variant";
-import type { AiType } from "#enums/ai-type";
-import { BattleType } from "#enums/battle-type";
-import type { BattlerTagType } from "#enums/battler-tag-type";
 import { BiomeId } from "#enums/biome-id";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
-import { ElementalType } from "#enums/elemental-type";
 import { FieldPosition } from "#enums/field-position";
-import type { Gender } from "#enums/gender";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import type { MoveId } from "#enums/move-id";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
-import type { Nature } from "#enums/nature";
+import { PartyMemberStrength } from "#enums/party-member-strength";
 import type { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
-import { StatusEffect } from "#enums/status-effect";
-import type { TrainerType } from "#enums/trainer-type";
-import { TrainerVariant } from "#enums/trainer-variant";
+import type { SpeciesId } from "#enums/species-id";
+import type { NonDefaultTrainerGender } from "#enums/trainer-gender";
+import { TrainerSlot } from "#enums/trainer-slot";
 import { UiMode } from "#enums/ui-mode";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
-import { Trainer } from "#field/trainer";
 import { initMoveAnim } from "#init/init-move-anim";
 import {
   type CustomModifierSettings,
   type ModifierType,
   ModifierTypeGenerator,
   ModifierTypeOption,
-  regenerateModifierPoolThresholds,
 } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
 import { showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import type { IMysteryEncounter } from "#mystery-encounters/mystery-encounter";
 import type { MysteryEncounterOption } from "#mystery-encounters/mystery-encounter-option";
-import type { PokemonData } from "#system/pokemon-data";
-import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
-import type { HeldModifierConfig } from "#types/modifiers-types";
-import type { CustomPokemonData } from "#types/pokemon-types";
+import {
+  type CompoundTrainerConfig,
+  type ConfigurableEnemyPokemonOptions,
+  isCompoundConfig,
+  type NewTrainerConfig,
+} from "#trainers/new-trainer-config";
+import { levelByStrength } from "#trainers/trainer-config-builder";
+import { TrainerDataSet } from "#trainers/trainer-data";
 import type { PokemonSelectFilter } from "#types/ui-types";
+import type { NonEmptyArray } from "#types/utility-types";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#ui/option-select-config";
 import type { OptionSelectUiHandler } from "#ui/option-select-ui-handler";
 import type { PartyUiHandler } from "#ui/party-ui-handler";
 import type { UiHandler } from "#ui/ui-handler";
 import { coerceArray, enumValueToKey } from "#utils/common-utils";
 import { loadMoveAnimAssets } from "#utils/move-anim-utils";
-import { randomString, randSeedInt } from "#utils/random-utils";
+import { getPokemonSpecies } from "#utils/pokemon-utils";
+import { randomString, randSeedInt, randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
 /**
@@ -84,50 +78,81 @@ export function doTrainerExclamation(): void {
   globalScene.audioManager.playSound("battle_anims/GEN8- Exclaim", { volume: 0.7 });
 }
 
-export interface EnemyPokemonConfig {
-  species: PokemonSpecies;
-  isBoss: boolean;
-  nickname?: string;
-  bossSegments?: number;
-  bossSegmentModifier?: number; // Additive to the determined segment number
-  customPokemonData?: Partial<CustomPokemonData>;
-  formIndex?: number;
-  abilityIndex?: number;
-  level?: number;
-  gender?: Gender;
-  passive?: boolean;
-  moveSet?: MoveId[];
-  nature?: Nature;
-  ivs?: [number, number, number, number, number, number];
-  shiny?: boolean;
-  /** Is only checked if Pokemon is shiny */
-  variant?: Variant;
-  /** Can set just the status, or pass a timer on the status turns */
-  status?: StatusEffect | [StatusEffect, number];
-  mysteryEncounterBattleEffects?: (pokemon: Pokemon) => void;
-  modifierConfigs?: HeldModifierConfig[];
-  tags?: BattlerTagType[];
-  dataSource?: PokemonData;
-  teraType?: ElementalType;
-  aiType?: AiType;
-}
-
-export interface EnemyPartyConfig {
-  /** Formula for enemy level: level += waveIndex / 10 * levelAdditiveModifier */
-  levelAdditiveModifier?: number;
-  doubleBattle?: boolean;
-  /** Generates trainer battle solely off trainer type */
-  trainerType?: TrainerType;
-  /** More customizable option for configuring trainer battle */
-  trainerConfig?: TrainerConfig;
-  pokemonConfigs?: EnemyPokemonConfig[];
-  /** `true` for female trainer, false for male */
-  female?: boolean;
+/** Generic configurable properties that may apply to all ME battles. */
+interface MysteryEncounterBattleSpec {
+  /**
+   * Enemy Pokemon may be given additional levels in Mystery Encounter battles for added difficulty.
+   * This acts as an optional multiplier for the base level boost (`floor(waveIndex / 10)`).
+   */
+  levelBoostMultiplier?: number;
   /** `true` will prevent player from switching */
   disableSwitch?: boolean;
   /** `true` or leaving undefined will increment dex seen count for the encounter battle, `false` will not */
   countAsSeen?: boolean;
 }
+
+/** Configurable properties that may only apply to Trainer battles. */
+interface MysteryEncounterTrainerSpec extends MysteryEncounterBattleSpec {
+  battleType: typeof MysteryEncounterMode.TRAINER_BATTLE;
+  /** The config to generate Trainer(s) for the battle. */
+  trainerConfig: NewTrainerConfig | CompoundTrainerConfig;
+  /**
+   * The {@linkcode TrainerGender gender} of the Trainer in this battle
+   * @todo Change data structure to support double battles
+   */
+  trainerGender?: NonDefaultTrainerGender | NonDefaultTrainerGender[];
+}
+
+/**
+ * Config to generate a custom {@linkcode EnemyPokemon} for wild ME battles.
+ */
+interface WildPartyPokemonConfig extends ConfigurableEnemyPokemonOptions {
+  /**
+   * A pre-built {@linkcode EnemyPokemon}. If defined, this Pokemon is forwarded
+   * to the battle instead of generating a new Pokemon.
+   */
+  pokemon?: EnemyPokemon;
+  /**
+   * The species pool from which a new Pokemon may be generated.
+   * Each species in this pool has an equal chance of being selected.
+   */
+  speciesPool?: NonEmptyArray<SpeciesId>;
+  /**
+   * (Optional) A function to determine the level of enemy Pokemon generated via
+   * {@linkcode speciesPool}. This should not include the level bonus
+   * granted via {@linkcode MysteryEncounterBattleSpec.levelBoostMultiplier}
+   * @param waveIndex - The scaled wave index for the current game mode
+   * @returns The generated Pokemon's level *prior to the level bonus from*
+   * `levelBoostMultiplier`
+   */
+  levelFunc?: (waveIndex: number) => number;
+  /**
+   * (Optional) A function to execute on this config's Pokemon after it is
+   * forwarded into battle (via {@linkcode pokemon}) or generated (via {@linkcode speciesPool})
+   * @param pokemon - The {@linkcode EnemyPokemon} represented by this config
+   */
+  postProcess?: (pokemon: EnemyPokemon) => void;
+}
+
+/** Configurable properties that may only apply to Wild (or trainerless) Battles */
+interface MysteryEncounterWildSpec extends MysteryEncounterBattleSpec {
+  battleType: typeof MysteryEncounterMode.WILD_BATTLE | typeof MysteryEncounterMode.BOSS_BATTLE;
+  /** Whether or not this config is for a double battle */
+  double?: boolean;
+  /**
+   * Config(s) to generate custom Pokemon for wild battles.
+   * This should be limited to 1-2 configs for single or double battles, respectively.
+   */
+  pokemonConfigs: WildPartyPokemonConfig[];
+  /**
+   * If `true` and the battle involves multiple {@linkcode pokemonConfigs}, the
+   * same seed offset will be used for species pool selection across all party
+   * slots (i.e. the same index in each pool will be selected).
+   */
+  useSameSeedForSpecies?: boolean;
+}
+
+export type MysteryEncounterBattleConfig = MysteryEncounterTrainerSpec | MysteryEncounterWildSpec;
 
 /**
  * Generates an enemy party for a mystery encounter battle
@@ -135,321 +160,128 @@ export interface EnemyPartyConfig {
  * Useful for tailoring specific battles to mystery encounters
  * @param partyConfig Can pass various customizable attributes for the enemy party, see EnemyPartyConfig
  */
-export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): Promise<void> {
-  const loaded: boolean = false;
-  const loadEnemyAssets: Promise<void>[] = [];
-
-  const battle: Battle = globalScene.currentBattle;
-
-  let doubleBattle: boolean = partyConfig?.doubleBattle ?? false;
-
-  // Trainer
-  const trainerType = partyConfig?.trainerType;
-  const partyTrainerConfig = partyConfig?.trainerConfig;
-  let trainerConfig: TrainerConfig;
-  if (trainerType != null || partyTrainerConfig) {
-    globalScene.currentBattle.mysteryEncounter!.encounterMode = MysteryEncounterMode.TRAINER_BATTLE;
-    if (globalScene.currentBattle.trainer) {
-      globalScene.currentBattle.trainer.setVisible(false);
-      globalScene.currentBattle.trainer.destroy();
-    }
-
-    trainerConfig = partyTrainerConfig ? partyTrainerConfig : allTrainerConfigs[trainerType!];
-
-    const doubleTrainer = trainerConfig.doubleOnly || (trainerConfig.hasDouble && !!partyConfig.doubleBattle);
-    doubleBattle = doubleTrainer;
-    const trainerFemale = partyConfig.female == null ? !randSeedInt(2) : partyConfig.female;
-    let trainerVariant: TrainerVariant = TrainerVariant.DEFAULT;
-    if (doubleTrainer) {
-      trainerVariant = TrainerVariant.DOUBLE;
-    } else if (trainerFemale) {
-      trainerVariant = TrainerVariant.FEMALE;
-    }
-    const newTrainer = new Trainer(
-      trainerConfig.trainerType,
-      trainerVariant,
-      undefined,
-      undefined,
-      undefined,
-      trainerConfig,
-    );
-    newTrainer.x += 300;
-    newTrainer.setVisible(false);
-    globalScene.field.add(newTrainer);
-    globalScene.currentBattle.trainer = newTrainer;
-    loadEnemyAssets.push(newTrainer.loadAssets().then(() => newTrainer.initSprite()));
-
-    battle.enemyLevels = globalScene.currentBattle.trainer.getPartyLevels(globalScene.currentBattle.waveIndex);
-  } else {
-    // Wild
-    globalScene.currentBattle.mysteryEncounter!.encounterMode = MysteryEncounterMode.WILD_BATTLE;
-
-    let numEnemies = 1;
-    if (partyConfig?.pokemonConfigs?.length) {
-      numEnemies = partyConfig.pokemonConfigs.length;
-    } else if (doubleBattle) {
-      numEnemies = 2;
-    }
-    battle.enemyLevels = new Array(numEnemies).fill(null).map(() => globalScene.currentBattle.getLevelForWave());
-  }
-
+export async function initBattleWithEnemyConfig(config: MysteryEncounterBattleConfig): Promise<void> {
+  // Remove and destroy all enemy Pokemon that may still be on the field
   for (const enemyPokemon of globalScene.getEnemyParty()) {
     enemyPokemon.leaveField(false, true, true);
   }
-  battle.enemyParty = [];
-  battle.double = doubleBattle;
 
-  // ME levels are modified by an additive value that scales with wave index
-  // Base scaling: Every 10 waves, modifier gets +1 level
-  // This can be amplified or counteracted by setting levelAdditiveModifier in config
-  // levelAdditiveModifier value of 0.5 will halve the modifier scaling, 2 will double it, etc.
-  // Leaving null/undefined will disable level scaling
-  const mult: number = partyConfig.levelAdditiveModifier == null ? 0 : partyConfig.levelAdditiveModifier;
-  const additive = Math.max(Math.round((globalScene.currentBattle.waveIndex / 10) * mult), 0);
-  battle.enemyLevels = battle.enemyLevels.map((level) => level + additive);
+  const { currentBattle, gameData } = globalScene;
+  currentBattle.mysteryEncounter!.encounterMode = config.battleType;
 
-  battle.enemyLevels.forEach((level, e) => {
-    let enemySpecies: PokemonSpecies | undefined;
-    let dataSource: PokemonData | undefined;
-    let isBoss = false;
-    if (!loaded) {
-      if ((trainerType != null || trainerConfig) && battle.trainer) {
-        // Allows overriding a trainer's pokemon to use specific species/data
-        if (partyConfig?.pokemonConfigs && e < partyConfig.pokemonConfigs.length) {
-          const config = partyConfig.pokemonConfigs[e];
-          level = config.level ? config.level : level;
-          dataSource = config.dataSource;
-          enemySpecies = config.species;
-          isBoss = config.isBoss;
-          battle.enemyParty[e] = globalScene.addEnemyPokemon(enemySpecies, level, {
-            ...dataSource,
-            boss: isBoss,
-          });
-        } else {
-          battle.enemyParty[e] = battle.trainer.genPartyMember(e);
-        }
-      } else {
-        if (partyConfig?.pokemonConfigs && e < partyConfig.pokemonConfigs.length) {
-          const config = partyConfig.pokemonConfigs[e];
-          level = config.level ? config.level : level;
-          dataSource = config.dataSource;
-          enemySpecies = config.species;
-          isBoss = config.isBoss;
-          if (isBoss) {
-            globalScene.currentBattle.mysteryEncounter!.encounterMode = MysteryEncounterMode.BOSS_BATTLE;
-          }
-        } else {
-          enemySpecies = globalScene.randomSpecies(battle.waveIndex, level, true);
-        }
+  if (config.battleType === MysteryEncounterMode.TRAINER_BATTLE) {
+    await initMysteryEncounterTrainerPokemon(config);
+  } else {
+    await initMysteryEncounterWildPokemon(config);
+  }
 
-        battle.enemyParty[e] = globalScene.addEnemyPokemon(enemySpecies, level, {
-          ...dataSource,
-          boss: isBoss,
-        });
-      }
-    }
-
-    const enemyPokemon = globalScene.getEnemyParty()[e];
-
-    // Make sure basic data is clean
-    enemyPokemon.hp = enemyPokemon.getMaxHp();
-    enemyPokemon.resetStatus();
-    enemyPokemon.passive = false;
-
-    if (e < (doubleBattle ? 2 : 1)) {
-      enemyPokemon.setX(-66 + enemyPokemon.getFieldPositionOffset()[0]);
-      enemyPokemon.resetSummonData();
-    }
-
-    if ((!loaded && partyConfig.countAsSeen == null) || partyConfig.countAsSeen) {
-      globalScene.gameData.setPokemonSeen(enemyPokemon, true, !!(trainerType || trainerConfig));
-    }
-
-    if (partyConfig?.pokemonConfigs && e < partyConfig.pokemonConfigs.length) {
-      const config = partyConfig.pokemonConfigs[e];
-
-      // Set form
-      if (config.nickname != null) {
-        enemyPokemon.nickname = btoa(unescape(encodeURIComponent(config.nickname)));
-      }
-
-      // Generate new id, reset status and HP in case using data source
-      // TODO: figure out if this is necessary
-      // if (config.dataSource) {
-      //   // remove old id from battlescene active id list here
-      //   enemyPokemon.id = enemyPokemon.generateId();
-      //   // add new id to battlescene active id list here
-      // }
-
-      // Set form
-      if (config.formIndex != null) {
-        enemyPokemon.formIndex = config.formIndex;
-      }
-
-      // Set shiny
-      if (config.shiny != null) {
-        enemyPokemon.shiny = config.shiny;
-      }
-
-      // Set Variant
-      if (enemyPokemon.shiny && config.variant != null) {
-        enemyPokemon.variant = config.variant;
-      }
-
-      // Set custom mystery encounter data fields (such as sprite scale, custom abilities, types, etc.)
-      if (config.customPokemonData != null) {
-        enemyPokemon.resetCustomPokemonData(config.customPokemonData);
-      }
-
-      // Set Boss
-      if (config.isBoss) {
-        let segments =
-          config.bossSegments == null
-            ? globalScene.getEncounterBossSegments(globalScene.currentBattle.waveIndex, level, enemySpecies, true)
-            : config.bossSegments!;
-        if (config.bossSegmentModifier != null) {
-          segments += config.bossSegmentModifier;
-        }
-        enemyPokemon.setBoss(true, segments);
-      }
-
-      // Set Passive
-      if (config.passive) {
-        enemyPokemon.passive = true;
-      }
-
-      // Set Nature
-      if (config.nature) {
-        enemyPokemon.nature = config.nature;
-      }
-
-      // Set IVs
-      if (config.ivs) {
-        enemyPokemon.ivs = config.ivs;
-      }
-
-      // Set Status
-      const statusEffects = config.status;
-      if (statusEffects) {
-        // Default to cureturn 3 for sleep
-        const status = Array.isArray(statusEffects) ? statusEffects[0] : statusEffects;
-        let cureTurn: number | undefined;
-        if (Array.isArray(statusEffects)) {
-          cureTurn = statusEffects[1];
-        } else if (statusEffects === StatusEffect.SLEEP) {
-          cureTurn = 3;
-        }
-        // @ts-expect-error - `Pokemon#setStatus` is `protected`; TODO: change this?
-        enemyPokemon.setStatus(status, { sleepTurnsRemaining: cureTurn });
-      }
-
-      // Set summon data fields
-      enemyPokemon.resetSummonData();
-
-      // Set ability
-      if (config.abilityIndex != null) {
-        enemyPokemon.abilityIndex = config.abilityIndex;
-      }
-
-      // Set gender
-      if (config.gender != null) {
-        enemyPokemon.gender = config.gender!;
-        enemyPokemon.summonData.gender = config.gender;
-      }
-
-      // Set AI type
-      if (config.aiType != null) {
-        enemyPokemon.aiType = config.aiType;
-      }
-
-      // Set moves
-      if (config?.moveSet && config.moveSet.length > 0) {
-        enemyPokemon.summonData.moveset = [];
-        enemyPokemon.setMoveset(...config.moveSet);
-      }
-
-      // Set tags
-      if (config.tags && config.tags.length > 0) {
-        const tags = config.tags;
-        tags.forEach((tag) => enemyPokemon.addTag(tag));
-      }
-
-      if (config.teraType != null && config.teraType !== ElementalType.UNKNOWN) {
-        enemyPokemon.teraType = config.teraType;
-        if (battle.trainer) {
-          battle.trainer.config.setInstantTera(e);
-        }
-      }
-
-      // mysteryEncounterBattleEffects will only be used IFF MYSTERY_ENCOUNTER_POST_SUMMON tag is applied
-      if (config.mysteryEncounterBattleEffects) {
-        enemyPokemon.mysteryEncounterBattleEffects = config.mysteryEncounterBattleEffects;
-      }
-
-      // Requires re-priming summon data to update everything properly
-      enemyPokemon.primeSummonData(enemyPokemon.summonData);
-
-      if (enemyPokemon.isShiny() && !enemyPokemon["shinySparkle"]) {
-        enemyPokemon.initShinySparkle();
-      }
-      enemyPokemon.initBattleInfo();
-      enemyPokemon.getBattleInfo().initInfo(enemyPokemon);
-      enemyPokemon.generateName();
-    }
-
-    loadEnemyAssets.push(enemyPokemon.loadAssets());
-
-    const stats: string[] = [
-      `HP: ${enemyPokemon.stats[0]} (${enemyPokemon.ivs[0]})`,
-      ` Atk: ${enemyPokemon.stats[1]} (${enemyPokemon.ivs[1]})`,
-      ` Def: ${enemyPokemon.stats[2]} (${enemyPokemon.ivs[2]})`,
-      ` Spatk: ${enemyPokemon.stats[3]} (${enemyPokemon.ivs[3]})`,
-      ` Spdef: ${enemyPokemon.stats[4]} (${enemyPokemon.ivs[4]})`,
-      ` Spd: ${enemyPokemon.stats[5]} (${enemyPokemon.ivs[5]})`,
-    ];
-    const moveset: string[] = [];
-    enemyPokemon.getMoveset().forEach((move) => {
-      moveset.push(move.name);
-    });
-
-    console.log(
-      `Pokemon: ${getPokemonNameWithAffix(enemyPokemon)}`,
-      `| Species ID: ${enemyPokemon.species.speciesId}`,
-      `| Level: ${enemyPokemon.level}`,
-      `| Nature: ${getNatureName(enemyPokemon.nature, true, true, true)}`,
+  if (config.countAsSeen ?? true) {
+    currentBattle.enemyParty.forEach((e) =>
+      gameData.setPokemonSeen(e, true, config.battleType === MysteryEncounterMode.TRAINER_BATTLE),
     );
-    console.log(`Stats (IVs): ${stats}`);
-    console.log(
-      `Ability: ${enemyPokemon.getAbility().name}`,
-      `| Passive Ability${enemyPokemon.hasPassive() ? "" : " (inactive)"}: ${enemyPokemon.getPassiveAbility().name}`,
-      `${enemyPokemon.boss ? `| Boss Bars: ${enemyPokemon.bossSegments}` : ""}`,
-    );
-    console.log("Moveset:", moveset);
-  });
+  }
 
-  globalScene.phaseManager.createAndPushPhase("MysteryEncounterBattlePhase", partyConfig.disableSwitch);
-
-  await Promise.all(loadEnemyAssets);
-  battle.enemyParty.forEach((enemyPokemon_2, e_1) => {
-    if (e_1 < (doubleBattle ? 2 : 1)) {
+  globalScene.phaseManager.createAndPushPhase("MysteryEncounterBattlePhase", config.disableSwitch);
+  currentBattle.enemyParty.forEach((enemyPokemon_2, e_1) => {
+    if (e_1 < (currentBattle.double ? 2 : 1)) {
       enemyPokemon_2.setVisible(false);
-      if (battle.double) {
+      if (currentBattle.double) {
         enemyPokemon_2.setFieldPosition(e_1 ? FieldPosition.RIGHT : FieldPosition.LEFT);
       }
       // Spawns at current visible field instead of on "next encounter" field (off screen to the left)
       enemyPokemon_2.x += 300;
     }
   });
-  if (!loaded) {
-    regenerateModifierPoolThresholds(
-      globalScene.getEnemyField(),
-      battle.battleType === BattleType.TRAINER ? ModifierPoolType.TRAINER : ModifierPoolType.WILD,
-    );
-    const customModifierTypes = partyConfig?.pokemonConfigs
-      ?.filter((config) => config?.modifierConfigs)
-      .map((config) => config.modifierConfigs!);
-    globalScene.generateEnemyModifiers(customModifierTypes);
+
+  // TODO: Re-add custom item (modifier) config logic
+}
+
+async function initMysteryEncounterTrainerPokemon(trainerSpec: MysteryEncounterTrainerSpec): Promise<void> {
+  const { trainerConfig, trainerGender, levelBoostMultiplier } = trainerSpec;
+  const { currentBattle } = globalScene;
+  const trainerGenderArr = coerceArray(trainerGender);
+  const trainerGenders = {
+    [TrainerSlot.TRAINER]: trainerGenderArr[0],
+    [TrainerSlot.TRAINER_PARTNER]: trainerGenderArr[1],
+  };
+
+  globalScene.enemyTrainers?.setVisible(false);
+
+  const scaledWaveIndex = globalScene.gameMode.getWaveForDifficulty(currentBattle.waveIndex);
+  const levelBonus = Math.max(Math.floor((scaledWaveIndex / 10) * (levelBoostMultiplier ?? 0)), 0);
+
+  if (isCompoundConfig(trainerConfig)) {
+    const configCopy = { ...trainerConfig };
+    for (const cfg of Object.values(configCopy.configs)) {
+      const adjPartyConfigs = cfg.partyConfigs.map((pkmCfg) => {
+        return {
+          ...pkmCfg,
+          levelFunc: coerceArray(pkmCfg.levelFunc).map((lf) => (waveIndex: number) => lf(waveIndex) + levelBonus),
+        };
+      });
+      cfg.partyConfigs = adjPartyConfigs;
+    }
+
+    currentBattle.trainerData = TrainerDataSet.fromCompoundConfig(configCopy, trainerGenders);
+  } else {
+    const adjPartyConfigs = trainerConfig.partyConfigs.map((cfg) => {
+      return {
+        ...cfg,
+        levelFunc: coerceArray(cfg.levelFunc).map((lf) => (waveIndex: number) => lf(waveIndex) + levelBonus),
+      };
+    });
+    const finalTrainerCfg: NewTrainerConfig = {
+      ...trainerConfig,
+      partyConfigs: adjPartyConfigs,
+    };
+
+    currentBattle.trainerData = TrainerDataSet.fromConfig(finalTrainerCfg, trainerGenders[TrainerSlot.TRAINER]);
   }
+
+  currentBattle.enemyParty = currentBattle.trainerData.combinedParty;
+  currentBattle.double = currentBattle.trainerData.double;
+  await globalScene.initEnemyTrainers(currentBattle.trainerData);
+
+  const enemyTrainers = globalScene.enemyTrainers!;
+  enemyTrainers.x += 300;
+  enemyTrainers.setVisible(false);
+}
+
+async function initMysteryEncounterWildPokemon(wildSpec: MysteryEncounterWildSpec): Promise<void> {
+  const { double, pokemonConfigs, levelBoostMultiplier, useSameSeedForSpecies } = wildSpec;
+  const { currentBattle } = globalScene;
+  const maxPartySize = double ? 2 : 1;
+
+  if (pokemonConfigs.length !== maxPartySize) {
+    throw new Error("Invalid party size for Wild Mystery Encounter battle");
+  }
+
+  const scaledWaveIndex = globalScene.gameMode.getWaveForDifficulty(currentBattle.waveIndex);
+  const levelBonus = Math.max(Math.floor((scaledWaveIndex / 10) * (levelBoostMultiplier ?? 0)), 0);
+
+  const party: EnemyPokemon[] = [];
+  for (const config of pokemonConfigs) {
+    if (config.pokemon != null) {
+      party.push(config.pokemon);
+      config.postProcess?.(config.pokemon);
+    } else if (config.speciesPool && config.speciesPool.length > 0) {
+      const levelFunc = config.levelFunc ?? levelByStrength(PartyMemberStrength.WEAK)[0];
+      const seedOffset = (scaledWaveIndex + (useSameSeedForSpecies ? 0 : party.length) + 1) << 8;
+
+      globalScene.executeWithSeedOffset(() => {
+        const level = levelFunc(scaledWaveIndex) + levelBonus;
+        const speciesId = getPokemonSpecies(randSeedItem(config.speciesPool!)).getEnemySpeciesForLevel(level);
+        const species = getPokemonSpecies(speciesId);
+
+        party.push(globalScene.addEnemyPokemon(species, level, config, config.postProcess));
+      }, seedOffset);
+    } else {
+      throw new Error("Invalid Pokemon config; `pokemon` and `speciesPool` are both undefined");
+    }
+  }
+
+  currentBattle.enemyParty = party;
+  currentBattle.double = double ?? false;
 }
 
 /**

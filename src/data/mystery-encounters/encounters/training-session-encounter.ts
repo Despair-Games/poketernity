@@ -4,27 +4,27 @@ import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encount
 import { allAbilities } from "#data/data-lists";
 import { getNatureName } from "#data/nature";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Nature } from "#enums/nature";
 import type { PermanentStat } from "#enums/stat";
+import { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { PokemonHeldItemModifier } from "#modifier/modifier";
 import { queueEncounterMessage, showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import {
-  type EnemyPartyConfig,
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
+  type MysteryEncounterBattleConfig,
   selectPokemonForOption,
   setEncounterRewards,
 } from "#mystery-encounters/encounter-phase-utils";
 import { isPokemonValidForEncounterOptionSelection } from "#mystery-encounters/encounter-pokemon-utils";
 import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
-import { PokemonData } from "#system/pokemon-data";
-import type { HeldModifierConfig } from "#types/modifiers-types";
 import type { OptionSelectItem } from "#ui/option-select-config";
 import { getStatKey } from "#utils/i18n-utils";
 import { randSeedShuffle } from "#utils/random-utils";
@@ -311,7 +311,11 @@ export const TrainingSessionEncounter: MysteryEncounter = MysteryEncounterBuilde
         const segments = Math.min(2 + Math.floor(globalScene.currentBattle.waveIndex / 30), 6);
         const modifiers = new ModifiersHolder();
         const config = getEnemyConfig(playerPokemon, segments, modifiers);
-        config.pokemonConfigs![0].tags = [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON];
+        if (config.battleType === MysteryEncounterMode.WILD_BATTLE) {
+          config.pokemonConfigs[0].postProcess = (pokemon) => {
+            pokemon.addTag(BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON);
+          };
+        }
         globalScene.removePokemonFromPlayerParty(playerPokemon, false);
 
         const onBeforeRewardsPhase = () => {
@@ -357,30 +361,36 @@ export const TrainingSessionEncounter: MysteryEncounter = MysteryEncounterBuilde
   )
   .build();
 
-function getEnemyConfig(playerPokemon: PlayerPokemon, segments: number, modifiers: ModifiersHolder): EnemyPartyConfig {
+function getEnemyConfig(
+  playerPokemon: PlayerPokemon,
+  segments: number,
+  _modifiers: ModifiersHolder,
+): MysteryEncounterBattleConfig {
   playerPokemon.resetSummonData();
 
   // Passes modifiers by reference
-  modifiers.value = playerPokemon.getHeldItems();
-  const modifierConfigs = modifiers.value.map((mod) => {
-    return {
-      modifier: mod.clone(),
-      isTransferable: false,
-      stackCount: mod.stackCount,
-    };
-  }) as HeldModifierConfig[];
+  // TODO: Re-integrate this into battle config
+  // modifiers.value = playerPokemon.getHeldItems();
+  // const modifierConfigs = modifiers.value.map((mod) => {
+  //   return {
+  //     modifier: mod.clone(),
+  //     isTransferable: false,
+  //     stackCount: mod.stackCount,
+  //   };
+  // }) as HeldModifierConfig[];
 
-  const data = new PokemonData(playerPokemon);
+  const enemyPokemon = new EnemyPokemon(playerPokemon.species, playerPokemon.level, {
+    ...playerPokemon,
+    boss: true,
+    bossSegments: segments,
+  });
+
   return {
+    battleType: MysteryEncounterMode.WILD_BATTLE,
     pokemonConfigs: [
       {
-        species: playerPokemon.species,
-        isBoss: true,
-        bossSegments: segments,
-        formIndex: playerPokemon.formIndex,
-        level: playerPokemon.level,
-        dataSource: data,
-        modifierConfigs,
+        pokemon: enemyPokemon,
+        // TODO: Re-add item configs
       },
     ],
   };

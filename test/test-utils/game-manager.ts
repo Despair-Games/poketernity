@@ -19,7 +19,6 @@ import { UiMode } from "#enums/ui-mode";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
-import { Trainer } from "#field/trainer";
 import { ModifierTypeOption } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
 import type { CommandPhase } from "#phases/command-phase";
@@ -42,6 +41,7 @@ import type { InputsHandler } from "#test/test-utils/inputs-handler";
 import { MockFetch } from "#test/test-utils/mocks/mock-fetch";
 import { PhaseInterceptor } from "#test/test-utils/phase-interceptor";
 import { TextInterceptor } from "#test/test-utils/text-interceptor";
+import { TrainerAi } from "#trainers/trainer-ai";
 import type { PhaseKey } from "#types/phase-types";
 import type { BattleMessageUiHandler } from "#ui/battle-message-ui-handler";
 import type { CommandUiHandler } from "#ui/command-ui-handler";
@@ -315,9 +315,9 @@ export class GameManager {
   }
 
   forceEnemyToSwitch() {
-    const originalMatchupScore = Trainer.prototype.getPartyMemberMatchupScores;
-    Trainer.prototype.getPartyMemberMatchupScores = () => {
-      Trainer.prototype.getPartyMemberMatchupScores = originalMatchupScore;
+    const originalMatchupScore = TrainerAi.prototype.getPartyMemberMatchupScores;
+    TrainerAi.prototype.getPartyMemberMatchupScores = () => {
+      TrainerAi.prototype.getPartyMemberMatchupScores = originalMatchupScore;
       return [
         [1, 100],
         [1, 100],

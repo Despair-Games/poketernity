@@ -1,19 +1,29 @@
 import { globalScene } from "#app/global-scene";
 import { activeOverrides as Overrides } from "#app/overrides";
 import { GYM_LEADER_STRENGTH_TEMPLATES } from "#constants/trainer-constants";
-import type { NewTrainerConfig, TieredSpeciesPool, TrainerPartyPokemonConfig } from "#data/new-trainer-config";
+import { getLevelForWaveFunc } from "#data/exp";
 import type { PokemonSpecies } from "#data/pokemon-species";
 import { signatureSpecies } from "#data/signature-species";
+import { AiType } from "#enums/ai-type";
 import type { ElementalType } from "#enums/elemental-type";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import type { SpeciesId } from "#enums/species-id";
+import { TeraAIMode } from "#enums/tera-ai-mode";
 import { type NonDefaultTrainerGender, TrainerGender } from "#enums/trainer-gender";
 import { TrainerType } from "#enums/trainer-type";
+import type { ModifierType } from "#modifier/modifier-type";
+import type {
+  LevelFunc,
+  NewTrainerConfig,
+  TieredSpeciesPool,
+  TrainerPartyPokemonConfig,
+} from "#trainers/new-trainer-config";
 import type { PokemonSpeciesFilter } from "#types/ui-types";
-import type { NonEmptyArray } from "#types/utility-types";
+import type { CoercibleArray, NonEmptyArray } from "#types/utility-types";
 import { coerceArray, enumValueToKey, isBetween } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedItem } from "#utils/random-utils";
+import { getStrengthLevelMultiplier } from "#utils/trainer-utils";
 
 type PartyPokemonOptions = Partial<TrainerPartyPokemonConfig>;
 type SpeciesPoolConfigOptions = Omit<PartyPokemonOptions, "tieredSpeciesPool" | "speciesPool" | "allowLegendaries">;
@@ -30,7 +40,7 @@ const defaultPartyConfigOptions: TrainerPartyPokemonConfig = {
   // overwritten to `true` in pool-based methods. Pools presumably will not
   // include undesired legend-like Pokemon, anyway.
   allowLegendaries: false,
-  strength: PartyMemberStrength.AVERAGE,
+  levelFunc: levelByStrength(PartyMemberStrength.AVERAGE),
   count: 1,
   ignoreEvolution: false,
 } as const;
@@ -65,6 +75,9 @@ export class TrainerConfigBuilder {
     isBoss: false,
     partyConfigs: [],
     moneyMultiplier: () => 1,
+    modifierRewards: [],
+    aiType: AiType.SMART,
+    teraMode: TeraAIMode.NONE,
   };
 
   /**
@@ -130,8 +143,7 @@ export class TrainerConfigBuilder {
 
     const pokemonCount = config.partyConfigs!.reduce((total, { count }) => total + count, 0);
     if (!isBetween(pokemonCount, 1, 6)) {
-      console.error(`trainer-config-builder: Invalid Pokemon count from config(s): ${pokemonCount}`);
-      return false;
+      console.warn(`trainer-config-builder: Invalid Pokemon count from config(s): ${pokemonCount}`);
     }
 
     return true;
@@ -370,6 +382,37 @@ export class TrainerConfigBuilder {
   }
 
   /**
+   * Adds an item reward of a fixed type for defeating the Trainer.
+   * @param modifierType - The {@linkcode ModifierType} of the item reward
+   * @returns `this`
+   */
+  public withModifierReward(modifierType: ModifierType): this {
+    this.config.modifierRewards!.push(() => modifierType);
+    return this;
+  }
+
+  /**
+   * Sets the Trainer's AI type to apply to all Pokemon by default.
+   * @param aiType - The {@linkcode AiType} to apply
+   * @returns `this`
+   */
+  public withAiType(aiType: AiType): this {
+    this.config.aiType = aiType;
+    return this;
+  }
+
+  /**
+   * Sets the Trainer's Tera mode, which determines when the Trainer
+   * will Terastallize its Pokemon.
+   * @param teraMode - The {@linkcode TeraAIMode} to set
+   * @returns `this`
+   */
+  public withTeraMode(teraMode: TeraAIMode): this {
+    this.config.teraMode = teraMode;
+    return this;
+  }
+
+  /**
    * Sets the config to use the Rival character's assets
    * (i.e. name, title, sprite keys, and bgm).
    * @returns `this`
@@ -424,7 +467,7 @@ export class TrainerConfigBuilder {
     for (i = 0; i < 6 - sigSpecies.length; i++) {
       this.withPokemonFromFilter(gymLeaderRandomPokemonFilter(key, specialtyTypes), {
         condition: getGymLeaderPartyPokemonCondition(i),
-        variableStrength: () => getGymLeaderStrengthTemplate().at(i - 6) ?? PartyMemberStrength.AVERAGE,
+        levelFunc: levelByStrength(() => getGymLeaderStrengthTemplate().at(i - 6) ?? PartyMemberStrength.AVERAGE),
       });
     }
 
@@ -432,7 +475,7 @@ export class TrainerConfigBuilder {
       this.withPokemonFromPool(sigSpecies.at(-(j + 1)) as NonEmptyArray<SpeciesId>, {
         allowDuplicates: true,
         condition: getGymLeaderPartyPokemonCondition(i + j),
-        variableStrength: () => getGymLeaderStrengthTemplate()[i + j] ?? PartyMemberStrength.AVERAGE,
+        levelFunc: levelByStrength(() => getGymLeaderStrengthTemplate()[i + j] ?? PartyMemberStrength.AVERAGE),
       });
     }
 
@@ -446,13 +489,30 @@ export class TrainerConfigBuilder {
       .withMoneyMultiplier(2.5);
   }
 
+  /**
+   * Adds the assets and generators for the Paldean Gym Leader of the given key.
+   * This follows the same process as {@linkcode withGymLeaderConfig}, except that
+   * the Paldean Gym Leader's final Pokemon is configured to instantly Terastallize
+   * into the Gym Leader's specialty type.
+   * @param key - The key of the Paldean Gym Leader's {@linkcode TrainerType}, e.g. "IONO"
+   * @param gender - The Gym Leader's {@linkcode TrainerGender}
+   * @param specialtyTypes - The Gym Leader's preferred {@linkcode ElementalType}(s).
+   * Randomly generated Pokemon outside of {@linkcode signatureSpecies} will be
+   * at least one of these types, and the Gym Leader's final Pokemon will
+   * instantly Terastallize into the first specified type.
+   * @returns `this`
+   */
   public withPaldeaGymLeaderConfig(
     key: keyof typeof TrainerType,
     gender: NonDefaultTrainerGender,
     ...specialtyTypes: ElementalType[]
   ): this {
-    // TODO: Add logic to instantly Tera the Pokemon in the last party slot
-    return this.withGymLeaderConfig(key, gender, "paldea", ...specialtyTypes);
+    this.withTeraMode(TeraAIMode.INSTANT).withGymLeaderConfig(key, gender, "paldea", ...specialtyTypes);
+    const signaturePokemonCfg = this.config.partyConfigs!.at(-1)!;
+    signaturePokemonCfg.teraType = specialtyTypes[0];
+    signaturePokemonCfg.instantTera = true;
+
+    return this;
   }
 }
 
@@ -493,4 +553,44 @@ function gymLeaderRandomPokemonFilter(
       specialtyTypes.some((t) => firstStageSpecies.isOfType(t)) && !sigSpecies.includes(firstStageSpecies.speciesId)
     );
   };
+}
+
+/**
+ * Determines the level(s) of one or more Pokemon in a Trainer's party
+ * based on fixed or variable {@linkcode PartyMemberStrength}(s).
+ * @param strength - The {@linkcode PartyMemberStrength}(s) of the party Pokemon.
+ * This may also include functions for variable strength.
+ * @returns The generator function(s) to determine the party Pokemon's level(s).
+ */
+export function levelByStrength(
+  strength: CoercibleArray<PartyMemberStrength | (() => PartyMemberStrength)>,
+): LevelFunc[] {
+  const levelFuncs: LevelFunc[] = [];
+
+  for (const s of coerceArray(strength)) {
+    const str = typeof s === "function" ? s() : s;
+
+    levelFuncs.push((waveIndex: number) => {
+      const baseLevel = getLevelForWaveFunc(waveIndex);
+      let multiplier = getStrengthLevelMultiplier(str);
+      let levelOffset = 0;
+
+      /**
+       * If the strength is WEAKER, WEAK, or AVERAGE,
+       * The multiplier is increased by .025 for every 25 scaled waves, with a max cap of 1.2
+       * This means that at a scaled wave index of 200 or higher multiplier will always be 1.2
+       *
+       * A negative level offset is then applied with a base of -1 for every 50 scaled waves,
+       * further scaled by 4 - the scaled multiplier
+       */
+      if (str < PartyMemberStrength.STRONG) {
+        multiplier = Math.min(multiplier + 0.025 * Math.floor(waveIndex / 25), 1.2);
+        levelOffset = -Math.floor((waveIndex / 50) * (4 - str));
+      }
+
+      return Math.ceil(baseLevel * multiplier) + levelOffset;
+    });
+  }
+
+  return levelFuncs;
 }

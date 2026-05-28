@@ -20,8 +20,9 @@ import { SettingKeyboard } from "#enums/setting-keyboard";
 import type { SpeciesId } from "#enums/species-id";
 import type { EffectiveStat } from "#enums/stat";
 import { TextStyle } from "#enums/text-style";
-import { TrainerVariant } from "#enums/trainer-variant";
+import { type NonNullTrainerSlot, TrainerSlot } from "#enums/trainer-slot";
 import { UiMode } from "#enums/ui-mode";
+import { loadTrainerSpriteAssets } from "#field/trainer-sprite";
 // biome-ignore lint/performance/noNamespaceImport: Something weird is going on here and I don't want to touch it
 import * as Modifier from "#modifier/modifier";
 import { getLuckString, getLuckTextTint } from "#modifier/modifier-type";
@@ -50,6 +51,33 @@ const RunInfoUiMode = {
 } as const;
 
 type RunInfoUiMode = ObjectValues<typeof RunInfoUiMode>;
+
+type TrainerSpriteSettings = {
+  scale: number;
+  doubleScale: number;
+  doublePositions: Record<NonNullTrainerSlot, [number, number]>;
+  containerPosition: [number, number];
+};
+
+const RUN_HISTORY_TRAINER_SPRITE_SETTINGS: TrainerSpriteSettings = {
+  scale: 0.35,
+  doubleScale: 0.2,
+  doublePositions: {
+    [TrainerSlot.TRAINER]: [-3, -3],
+    [TrainerSlot.TRAINER_PARTNER]: [5, -3],
+  },
+  containerPosition: [12, 38],
+} as const;
+
+const RUN_INFO_TRAINER_SPRITE_SETTINGS: TrainerSpriteSettings = {
+  scale: 0.55,
+  doubleScale: 0.55,
+  doublePositions: {
+    [TrainerSlot.TRAINER]: [-9, -3],
+    [TrainerSlot.TRAINER_PARTNER]: [5, -3],
+  },
+  containerPosition: [28, 34],
+} as const;
 
 /**
  * Some variables are protected because this UI class will most likely be extended in the future to display more information.
@@ -270,7 +298,7 @@ export class RunInfoUiHandler extends UiHandler {
       // Wild - Single and Doubles
       if (
         this.runInfo.battleType === BattleType.WILD
-        || (this.runInfo.battleType === BattleType.MYSTERY_ENCOUNTER && !this.runInfo.trainer)
+        || (this.runInfo.battleType === BattleType.MYSTERY_ENCOUNTER && !this.runInfo.enemyTrainers)
       ) {
         switch (this.runInfo.enemyParty.length) {
           case 1:
@@ -284,7 +312,7 @@ export class RunInfoUiHandler extends UiHandler {
         }
       } else if (
         this.runInfo.battleType === BattleType.TRAINER
-        || (this.runInfo.battleType === BattleType.MYSTERY_ENCOUNTER && this.runInfo.trainer)
+        || (this.runInfo.battleType === BattleType.MYSTERY_ENCOUNTER && this.runInfo.enemyTrainers)
       ) {
         this.parseTrainerDefeat(enemyContainer);
       }
@@ -308,7 +336,7 @@ export class RunInfoUiHandler extends UiHandler {
       } else if (this.runInfo.enemyParty.length === 2) {
         this.parseWildDoubleDefeat(enemyContainer);
       }
-    } else if (this.runInfo.battleType === BattleType.TRAINER && this.runInfo.trainer != null) {
+    } else if (this.runInfo.battleType === BattleType.TRAINER && this.runInfo.enemyTrainers != null) {
       this.showTrainerSprites(enemyContainer);
       const row_limit = 3;
       this.runInfo.enemyParty.forEach((p, i) => {
@@ -318,20 +346,10 @@ export class RunInfoUiHandler extends UiHandler {
         pokeball.setPosition(58 + (i % row_limit) * 8, i <= 2 ? 18 : 25);
         enemyContainer.add(pokeball);
       });
-      const trainerObj = this.runInfo.trainer.toTrainer();
-      const RIVAL_TRAINER_ID_THRESHOLD = 375;
-      let trainerName = "";
-      if (this.runInfo.trainer.trainerType >= RIVAL_TRAINER_ID_THRESHOLD) {
-        trainerName =
-          trainerObj.variant === TrainerVariant.FEMALE
-            ? i18next.t("trainerNames:rival_female")
-            : i18next.t("trainerNames:rival");
-      } else {
-        trainerName = trainerObj.getName(0, true);
-      }
+      const trainerData = this.runInfo.enemyTrainers.toTrainerData();
       const boxString = i18next
-        .t(trainerObj.variant !== TrainerVariant.DOUBLE ? "battle:trainerAppeared" : "battle:trainerAppearedDouble", {
-          trainerName,
+        .t(trainerData.double ? "battle:trainerAppeared" : "battle:trainerAppearedDouble", {
+          trainerName: trainerData.getLocalizedName(),
         })
         .replace(/\n/g, " ");
       const descContainer = globalScene.add.container(0, 0);
@@ -439,46 +457,38 @@ export class RunInfoUiHandler extends UiHandler {
    * Used by {@linkcode parseRunStatus} and {@linkcode parseTrainerDefeat}
    * @param enemyContainer a Phaser Container that should hold enemy sprites
    */
-  private showTrainerSprites(enemyContainer: Phaser.GameObjects.Container) {
-    const { trainer } = this.runInfo;
-    if (trainer == null) {
+  private async showTrainerSprites(enemyContainer: Phaser.GameObjects.Container) {
+    const { enemyTrainers } = this.runInfo;
+    if (enemyTrainers == null) {
       console.warn("Missing TrainerData in session data, cannot render trainer sprites");
       return;
     }
-    // Creating the trainer sprite and adding it to enemyContainer
-    const tObj = trainer.toTrainer();
-    // Loads trainer assets on demand, as they are not loaded by default in the scene
-    tObj.config.loadAssets(trainer.variant).then(() => {
-      const tObjSpriteKey = tObj.config.getSpriteKey(trainer.variant === TrainerVariant.FEMALE, false);
-      const tObjSprite = globalScene.add.sprite(0, 5, tObjSpriteKey);
-      if (trainer.variant === TrainerVariant.DOUBLE && !tObj.config.doubleOnly) {
-        const doubleContainer = globalScene.add.container(5, 8);
-        tObjSprite.setPosition(-3, -3);
-        const tObjPartnerSpriteKey = tObj.config.getSpriteKey(true, true);
-        const tObjPartnerSprite = globalScene.add.sprite(5, -3, tObjPartnerSpriteKey);
-        // Double Trainers have smaller sprites than Single Trainers
-        if (this.runDisplayMode === RunDisplayMode.RUN_HISTORY) {
-          tObjPartnerSprite.setScale(0.2);
-          tObjSprite.setScale(0.2);
-          doubleContainer.add(tObjSprite);
-          doubleContainer.add(tObjPartnerSprite);
-          doubleContainer.setPosition(12, 38);
-        } else {
-          tObjSprite.setScale(0.55);
-          tObjSprite.setPosition(-9, -3);
-          tObjPartnerSprite.setScale(0.55);
-          doubleContainer.add([tObjSprite, tObjPartnerSprite]);
-          doubleContainer.setPosition(28, 34);
-        }
-        enemyContainer.add(doubleContainer);
-      } else {
-        const scale = this.runDisplayMode === RunDisplayMode.RUN_HISTORY ? 0.35 : 0.55;
-        const position = this.runDisplayMode === RunDisplayMode.RUN_HISTORY ? [12, 28] : [30, 32];
-        tObjSprite.setScale(scale, scale);
-        tObjSprite.setPosition(position[0], position[1]);
-        enemyContainer.add(tObjSprite);
+
+    const spriteKeys: [NonNullTrainerSlot, string][] = Object.entries(enemyTrainers.trainerSaveData).map(
+      ([slot, saveData]) => [Number(slot) as NonNullTrainerSlot, saveData.spriteKey],
+    );
+    const trainerSpriteCont = globalScene.add.container(5, 8);
+    const double = spriteKeys.length === 2;
+
+    const spriteSettings =
+      this.runDisplayMode === RunDisplayMode.RUN_HISTORY
+        ? RUN_HISTORY_TRAINER_SPRITE_SETTINGS
+        : RUN_INFO_TRAINER_SPRITE_SETTINGS;
+
+    for (const [slot, spriteKey] of spriteKeys) {
+      await loadTrainerSpriteAssets(spriteKey);
+
+      const trainerSprite = globalScene.add.sprite(0, 0, spriteKey);
+      trainerSpriteCont.add(trainerSprite);
+
+      if (double) {
+        trainerSprite.setPosition(...spriteSettings.doublePositions[slot]);
       }
-    });
+    }
+
+    trainerSpriteCont.setScale(double ? spriteSettings.doubleScale : spriteSettings.scale);
+    trainerSpriteCont.setPosition(...spriteSettings.containerPosition);
+    enemyContainer.add(trainerSpriteCont);
   }
 
   /**

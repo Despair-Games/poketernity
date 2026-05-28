@@ -1,9 +1,9 @@
-import { getRandomPartyMemberFunc, TrainerConfig, type TrainerConfigs } from "#data/trainer-config";
 import { Gender } from "#enums/gender";
 import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
+import { getRandomPartyMemberFunc, TrainerConfig, type TrainerConfigs } from "#trainers/trainer-config";
 import { randSeedInt } from "#utils/random-utils";
 
 const ROCKET_BOSS_TITLE = "Rocket Boss";

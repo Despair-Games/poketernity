@@ -1,51 +1,41 @@
 import { globalScene } from "#app/global-scene";
-import { timedEventManager } from "#app/timed-event-manager";
-import { getCharVariantFromDialogue } from "#data/dialogue";
-import { EventModifierType } from "#enums/event-modifier-type";
+import { Phase } from "#app/phase";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
 import { modifierTypes } from "#modifier/modifier-types";
-import { BattlePhase } from "#phases/base/battle-phase";
 import { vouchers } from "#system/voucher";
 import { enumValueToKey } from "#utils/common-utils";
-import { randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
-export class TrainerVictoryPhase extends BattlePhase {
+export class TrainerVictoryPhase extends Phase {
   public override readonly phaseName = "TrainerVictoryPhase";
 
-  public override start(): void {
-    const { charSprite, currentBattle, ui } = globalScene;
-    const { trainer, waveIndex } = currentBattle;
+  public override async start(): Promise<void> {
+    const { currentBattle, enemyTrainers, ui } = globalScene;
+    const { trainerData } = currentBattle;
     globalScene.disableMenu = true;
 
-    if (!trainer) {
+    if (!trainerData) {
       this.end();
       return;
     }
 
-    globalScene.audioManager.playBgm(trainer.config.victoryBgm);
+    globalScene.audioManager.playBgm(trainerData.victoryBgm);
 
-    globalScene.phaseManager.createAndUnshiftPhase("MoneyRewardPhase", trainer.config.moneyMultiplier);
+    globalScene.phaseManager.createAndUnshiftPhase("MoneyRewardPhase", trainerData.moneyMultiplier);
 
-    const modifierRewardFuncs = trainer.config.modifierRewardFuncs;
+    const modifierRewardFuncs = trainerData.modifierRewards;
     for (const modifierRewardFunc of modifierRewardFuncs) {
       globalScene.phaseManager.createAndUnshiftPhase("ModifierRewardPhase", modifierRewardFunc);
     }
 
-    if (timedEventManager.isEventActive(EventModifierType.EXTRA_TRAINER_REWARDS)) {
-      for (const rewardFunc of trainer.config.eventRewardFuncs) {
-        globalScene.phaseManager.createAndUnshiftPhase("ModifierRewardPhase", rewardFunc);
-      }
-    }
-
-    const trainerType = trainer.config.trainerType;
+    const trainerType = trainerData.trainers[TrainerSlot.TRAINER].trainerType;
     const trainerTypeKey = enumValueToKey(TrainerType, trainerType);
     // Validate Voucher for boss trainers
     if (
       Object.hasOwn(vouchers, trainerTypeKey)
       && !globalScene.validateVoucher(vouchers[trainerTypeKey])
-      && trainer.config.isBoss
+      && trainerData.isBoss
     ) {
       globalScene.phaseManager.createAndUnshiftPhase(
         "ModifierRewardPhase",
@@ -55,50 +45,19 @@ export class TrainerVictoryPhase extends BattlePhase {
       );
     }
 
+    // TODO: Add name getter for `TrainerDataSet`
     ui.showText(
       i18next.t("battle:trainerDefeated", {
-        trainerName: trainer.getName(TrainerSlot.NONE, true),
+        trainerName: trainerData.getLocalizedName(),
       }),
       {
-        callback: () => {
-          const victoryMessages = trainer.getVictoryMessages();
-          let message: string;
-          globalScene.executeWithSeedOffset(() => {
-            message = randSeedItem(victoryMessages);
-          }, waveIndex);
-          message = message!; // tell TS compiler it's defined now
-
-          const showMessage = (): void => {
-            const originalFunc = showMessageOrEnd;
-            showMessageOrEnd = (): void =>
-              ui.showDialogue(message, trainer.getName(TrainerSlot.TRAINER, true), originalFunc);
-
-            showMessageOrEnd();
-          };
-          let showMessageOrEnd = (): void => this.end();
-          if (victoryMessages.length) {
-            if (trainer.config.hasCharSprite && !ui.shouldSkipDialogue(message)) {
-              const originalFunc = showMessageOrEnd;
-              showMessageOrEnd = (): Promise<void> =>
-                charSprite.hide().then(() => globalScene.hideFieldOverlay(250).then(() => originalFunc()));
-              globalScene
-                .showFieldOverlay(500)
-                .then(() =>
-                  charSprite
-                    .showCharacter(trainer.getKey(), getCharVariantFromDialogue(victoryMessages[0]))
-                    .then(() => showMessage()),
-                );
-            } else {
-              showMessage();
-            }
-          } else {
-            showMessageOrEnd();
-          }
+        callback: async () => {
+          await globalScene.showTrainerDialogue("victory");
         },
         prompt: true,
       },
     );
 
-    this.showEnemyTrainer();
+    await enemyTrainers?.show();
   }
 }

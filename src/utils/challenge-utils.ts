@@ -88,8 +88,8 @@ export function applyChallenges(
  * Apply all challenges that modify what fixed battles there are.
  * @param gameMode The current {@linkcode GameMode}
  * @param challengeType {@linkcode ChallengeType.FIXED_BATTLES}
- * @param waveIndex The current wave index.
- * @param battleConfig The {@link FixedBattleConfig} to modify.
+ * @param waveIndex - The current wave index.
+ * @param battleConfig - The {@link FixedBattleConfig} to modify.
  * @returns `true` if any challenge was successfully applied.
  */
 export function applyChallenges(

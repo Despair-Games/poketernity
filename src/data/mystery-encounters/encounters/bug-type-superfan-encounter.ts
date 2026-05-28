@@ -2,10 +2,10 @@ import { globalScene } from "#app/global-scene";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
 import { GAME_WIDTH } from "#constants/ui-constants";
 import { allMoves } from "#data/data-lists";
-import { getRandomPartyMemberFunc, TrainerPartyCompoundTemplate, TrainerPartyTemplate } from "#data/trainer-config";
 import { ElementalType } from "#enums/elemental-type";
 import { ModifierTier } from "#enums/modifier-tier";
 import { MoveId } from "#enums/move-id";
+import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
@@ -27,11 +27,11 @@ import type { AttackTypeBoosterModifierType, ModifierTypeOption } from "#modifie
 import { modifierTypes } from "#modifier/modifier-types";
 import { getEncounterText, showEncounterDialogue } from "#mystery-encounters/encounter-dialogue-utils";
 import {
-  type EnemyPartyConfig,
   generateModifierType,
   generateModifierTypeOption,
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
+  type MysteryEncounterBattleConfig,
   selectOptionThenPokemon,
   selectPokemonForOption,
   setEncounterRewards,
@@ -46,7 +46,8 @@ import {
   HeldItemRequirement,
   TypeRequirement,
 } from "#mystery-encounters/mystery-encounter-requirements";
-import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
+import { getRandomPartyMemberFunc, TrainerPartyCompoundTemplate, TrainerPartyTemplate } from "#trainers/trainer-config";
+import { allNewTrainerConfigs, allTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
 import { MoveInfoOverlay } from "#ui/move-info-overlay";
 import type { OptionSelectItem } from "#ui/option-select-config";
 import { randSeedInt, randSeedShuffle } from "#utils/random-utils";
@@ -210,9 +211,9 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
     // Bug type superfan trainer config
     const config = getTrainerConfigForWave(globalScene.currentBattle.waveIndex);
     const spriteKey = config.getSpriteKey();
-    encounter.enemyPartyConfigs.push({
-      trainerConfig: config,
-      female: true,
+    encounter.battleConfigs.push({
+      battleType: MysteryEncounterMode.TRAINER_BATTLE,
+      trainerConfig: allNewTrainerConfigs[TrainerType.BUG_TYPE_SUPERFAN]!,
     });
 
     let beedrillKeys: { spriteKey: string; fileRoot: string };
@@ -288,7 +289,7 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
     async () => {
       // Select battle the bug trainer
       const encounter = globalScene.currentBattle.mysteryEncounter!;
-      const config: EnemyPartyConfig = encounter.enemyPartyConfigs[0];
+      const config: MysteryEncounterBattleConfig = encounter.battleConfigs[0];
 
       // Init the moves available for tutor
       const moveTutorOptions: PokemonMove[] = [];
@@ -507,6 +508,7 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
   ])
   .build();
 
+// TODO: create a `NewTrainerConfig` to replace this
 function getTrainerConfigForWave(waveIndex: number) {
   // Bug type superfan trainer config
   const config = allTrainerConfigs[TrainerType.BUG_TYPE_SUPERFAN].clone();

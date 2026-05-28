@@ -1,4 +1,5 @@
 import type { BattleScene } from "#app/battle-scene";
+import { BLACEPHALON_RANDOM_ABILITY_POOL } from "#constants/mystery-encounter-constants";
 import { AbilityId } from "#enums/ability-id";
 import { BerryType } from "#enums/berry-type";
 import { BiomeId } from "#enums/biome-id";
@@ -6,10 +7,12 @@ import { Button } from "#enums/button";
 import { ElementalType } from "#enums/elemental-type";
 import { ModifierTier } from "#enums/modifier-tier";
 import { MoveId } from "#enums/move-id";
+import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
+import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
 import { UiMode } from "#enums/ui-mode";
 import type { Pokemon } from "#field/pokemon";
@@ -29,8 +32,10 @@ import {
 } from "#test/mystery-encounter/encounter-test-utils";
 import { GameManager } from "#test/test-utils/game-manager";
 import { initSceneWithoutEncounterPhase } from "#test/test-utils/game-manager-utils";
+import { getEnumStr } from "#test/test-utils/string-utils";
+import { isCompoundConfig, type NewTrainerConfig } from "#trainers/new-trainer-config";
+import { TrainerDataSet } from "#trainers/trainer-data";
 import * as MoveAnimUtils from "#utils/move-anim-utils";
-import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const namespace = "mysteryEncounters/clowningAround";
@@ -102,40 +107,45 @@ describe("Clowning Around - Mystery Encounter", () => {
 
     ClowningAroundEncounter.populateDialogueTokensFromRequirements();
     const onInitResult = onInit!();
-    const config = ClowningAroundEncounter.enemyPartyConfigs[0];
+    const config = ClowningAroundEncounter.battleConfigs[0];
+    if (config.battleType !== MysteryEncounterMode.TRAINER_BATTLE) {
+      expect.fail(`Battle config is of invalid type: ${getEnumStr(MysteryEncounterMode, config.battleType)}`);
+    }
 
-    expect(config.doubleBattle).toBe(true);
-    expect(config.trainerConfig?.trainerType).toBe(TrainerType.HARLEQUIN);
-    expect(config.pokemonConfigs?.[0]).toEqual({
-      species: getPokemonSpecies(SpeciesId.MR_MIME),
-      isBoss: true,
-      moveSet: [MoveId.TEETER_DANCE, MoveId.ALLY_SWITCH, MoveId.DAZZLING_GLEAM, MoveId.PSYCHIC],
-    });
-    expect(config.pokemonConfigs?.[1]).toEqual({
-      species: getPokemonSpecies(SpeciesId.BLACEPHALON),
-      customPokemonData: expect.anything(),
-      isBoss: true,
-      moveSet: [MoveId.TRICK, MoveId.HYPNOSIS, MoveId.SHADOW_BALL, MoveId.MIND_BLOWN],
-    });
-    expect(config.pokemonConfigs?.[1].customPokemonData?.types?.length).toBe(2);
-    expect([
-      AbilityId.STURDY,
-      AbilityId.PICKUP,
-      AbilityId.INTIMIDATE,
-      AbilityId.GUTS,
-      AbilityId.DROUGHT,
-      AbilityId.DRIZZLE,
-      AbilityId.SNOW_WARNING,
-      AbilityId.SAND_STREAM,
-      AbilityId.ELECTRIC_SURGE,
-      AbilityId.PSYCHIC_SURGE,
-      AbilityId.GRASSY_SURGE,
-      AbilityId.MISTY_SURGE,
-      AbilityId.MAGICIAN,
-      AbilityId.SHEER_FORCE,
-      AbilityId.PRANKSTER,
-    ]).toContain(config.pokemonConfigs?.[1].customPokemonData?.ability);
-    expect(ClowningAroundEncounter.misc.ability).toBe(config.pokemonConfigs?.[1].customPokemonData?.ability);
+    expect(isCompoundConfig(config.trainerConfig)).toBe(false);
+    const trainerConfig = config.trainerConfig as NewTrainerConfig;
+    const trainerData = TrainerDataSet.fromConfig(trainerConfig);
+    expect(trainerData.double).toBe(true);
+    const clown = trainerData.trainers[TrainerSlot.TRAINER];
+    expect(clown).toBeDefined();
+    expect(clown.trainerType).toBe(TrainerType.CLOWN);
+    const mrMime = clown.party[0];
+    expect(mrMime).toBeDefined();
+    expect(mrMime.species.speciesId).toBe(SpeciesId.MR_MIME);
+    expect(mrMime.boss).toBe(true);
+    expect(mrMime.getMoveset().map((mv) => mv.moveId)).toEqual([
+      MoveId.TEETER_DANCE,
+      MoveId.ALLY_SWITCH,
+      MoveId.DAZZLING_GLEAM,
+      MoveId.PSYCHIC,
+    ]);
+
+    const blacephalon = clown.party[1];
+    expect(blacephalon).toBeDefined();
+    expect(blacephalon.species.speciesId).toBe(SpeciesId.BLACEPHALON);
+    expect(blacephalon.boss).toBe(true);
+    expect(blacephalon.getMoveset().map((mv) => mv.moveId)).toEqual([
+      MoveId.TRICK,
+      MoveId.HYPNOSIS,
+      MoveId.SHADOW_BALL,
+      MoveId.MIND_BLOWN,
+    ]);
+    expect(blacephalon.customPokemonData).toBeDefined();
+    expect(blacephalon.customPokemonData.types).toHaveLength(2);
+    const blacephalonAbility = blacephalon.customPokemonData.ability;
+    expect(BLACEPHALON_RANDOM_ABILITY_POOL).toContain(blacephalon.customPokemonData.ability);
+
+    expect(ClowningAroundEncounter.misc.ability).toBe(blacephalonAbility);
     await vi.waitFor(() => expect(moveInitSpy).toHaveBeenCalled());
     await vi.waitFor(() => expect(moveLoadSpy).toHaveBeenCalled());
     expect(onInitResult).toBe(true);

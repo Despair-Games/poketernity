@@ -1,12 +1,12 @@
 import { applyAbAttrs } from "#abilities/apply-ab-attrs";
 import { globalScene } from "#app/global-scene";
+import { Phase } from "#app/phase";
 import type { LapsingPersistentModifier, LapsingPokemonHeldItemModifier } from "#modifier/modifier";
-import { BattlePhase } from "#phases/base/battle-phase";
 
 /**
  * Handles the effects that need to trigger after a battle ends (game stats updates, reducing item turn count, etc)
  */
-export class BattleEndPhase extends BattlePhase {
+export class BattleEndPhase extends Phase {
   public override readonly phaseName = "BattleEndPhase";
 
   /** If true, will increment battles won */
@@ -36,7 +36,7 @@ export class BattleEndPhase extends BattlePhase {
     if (this.isVictory) {
       currentBattle.addBattleScore();
 
-      if (currentBattle.trainer) {
+      if (currentBattle.trainerData) {
         gameData.gameStats.trainersDefeated++;
       }
 

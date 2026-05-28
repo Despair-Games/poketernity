@@ -1,7 +1,7 @@
 import { signatureSpecies } from "#data/signature-species";
-import { TrainerConfig, type TrainerConfigs } from "#data/trainer-config";
 import { ElementalType } from "#enums/elemental-type";
 import { TrainerType } from "#enums/trainer-type";
+import { TrainerConfig, type TrainerConfigs } from "#trainers/trainer-config";
 
 export const eliteFourTrainerConfigs: TrainerConfigs = {
   [TrainerType.LORELEI]: new TrainerConfig(TrainerType.LORELEI)

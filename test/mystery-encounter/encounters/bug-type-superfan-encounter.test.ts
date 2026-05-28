@@ -1,10 +1,13 @@
 import type { BattleScene } from "#app/battle-scene";
 import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
+import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
+import { TrainerGender } from "#enums/trainer-gender";
+import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
 import { UiMode } from "#enums/ui-mode";
 import { PokemonMove } from "#field/pokemon-move";
@@ -20,6 +23,7 @@ import {
 } from "#test/mystery-encounter/encounter-test-utils";
 import { GameManager } from "#test/test-utils/game-manager";
 import { initSceneWithoutEncounterPhase } from "#test/test-utils/game-manager-utils";
+import { getEnumStr } from "#test/test-utils/string-utils";
 import type { ModifierSelectUiHandler } from "#ui/modifier-select-ui-handler";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -198,12 +202,14 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
 
     BugTypeSuperfanEncounter.populateDialogueTokensFromRequirements();
     const onInitResult = onInit!();
-    const config = BugTypeSuperfanEncounter.enemyPartyConfigs[0];
+    const config = BugTypeSuperfanEncounter.battleConfigs[0];
+    if (config.battleType !== MysteryEncounterMode.TRAINER_BATTLE) {
+      expect.fail(`Battle config is of invalid type: ${getEnumStr(MysteryEncounterMode, config.battleType)}`);
+    }
 
     expect(config).toBeDefined();
-    expect(config.trainerConfig?.trainerType).toBe(TrainerType.BUG_TYPE_SUPERFAN);
-    expect(config.trainerConfig?.partyTemplates).toBeDefined();
-    expect(config.female).toBe(true);
+    expect(config.trainerConfig["trainerType"]).toBe(TrainerType.BUG_TYPE_SUPERFAN);
+    expect(config.trainerGender).toBe(TrainerGender.FEMALE);
     expect(onInitResult).toBe(true);
   });
 
@@ -231,7 +237,9 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       const enemyParty = scene.getEnemyParty();
       expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("CommandPhase");
       expect(enemyParty.length).toBe(2);
-      expect(scene.currentBattle.trainer?.config.trainerType).toBe(TrainerType.BUG_TYPE_SUPERFAN);
+      expect(scene.currentBattle.trainerData?.trainers[TrainerSlot.TRAINER].trainerType).toBe(
+        TrainerType.BUG_TYPE_SUPERFAN,
+      );
       expect(enemyParty[0].species.speciesId).toBe(SpeciesId.BEEDRILL);
       expect(enemyParty[1].species.speciesId).toBe(SpeciesId.BUTTERFREE);
     });
@@ -244,7 +252,9 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       const enemyParty = scene.getEnemyParty();
       expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("CommandPhase");
       expect(enemyParty.length).toBe(3);
-      expect(scene.currentBattle.trainer?.config.trainerType).toBe(TrainerType.BUG_TYPE_SUPERFAN);
+      expect(scene.currentBattle.trainerData?.trainers[TrainerSlot.TRAINER].trainerType).toBe(
+        TrainerType.BUG_TYPE_SUPERFAN,
+      );
       expect(enemyParty[0].species.speciesId).toBe(SpeciesId.BEEDRILL);
       expect(enemyParty[1].species.speciesId).toBe(SpeciesId.BUTTERFREE);
       expect(POOL_1_POKEMON.includes(enemyParty[2].species.speciesId)).toBe(true);
@@ -258,7 +268,9 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       const enemyParty = scene.getEnemyParty();
       expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("CommandPhase");
       expect(enemyParty.length).toBe(4);
-      expect(scene.currentBattle.trainer?.config.trainerType).toBe(TrainerType.BUG_TYPE_SUPERFAN);
+      expect(scene.currentBattle.trainerData?.trainers[TrainerSlot.TRAINER].trainerType).toBe(
+        TrainerType.BUG_TYPE_SUPERFAN,
+      );
       expect(enemyParty[0].species.speciesId).toBe(SpeciesId.BEEDRILL);
       expect(enemyParty[1].species.speciesId).toBe(SpeciesId.BUTTERFREE);
       expect(POOL_1_POKEMON.includes(enemyParty[2].species.speciesId)).toBe(true);
@@ -273,7 +285,9 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       const enemyParty = scene.getEnemyParty();
       expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("CommandPhase");
       expect(enemyParty.length).toBe(5);
-      expect(scene.currentBattle.trainer?.config.trainerType).toBe(TrainerType.BUG_TYPE_SUPERFAN);
+      expect(scene.currentBattle.trainerData?.trainers[TrainerSlot.TRAINER].trainerType).toBe(
+        TrainerType.BUG_TYPE_SUPERFAN,
+      );
       expect(enemyParty[0].species.speciesId).toBe(SpeciesId.BEEDRILL);
       expect(enemyParty[1].species.speciesId).toBe(SpeciesId.BUTTERFREE);
       expect(POOL_1_POKEMON.includes(enemyParty[2].species.speciesId)).toBe(true);
@@ -289,7 +303,9 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       const enemyParty = scene.getEnemyParty();
       expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("CommandPhase");
       expect(enemyParty.length).toBe(5);
-      expect(scene.currentBattle.trainer?.config.trainerType).toBe(TrainerType.BUG_TYPE_SUPERFAN);
+      expect(scene.currentBattle.trainerData?.trainers[TrainerSlot.TRAINER].trainerType).toBe(
+        TrainerType.BUG_TYPE_SUPERFAN,
+      );
       expect(enemyParty[0].species.speciesId).toBe(SpeciesId.BEEDRILL);
       expect(enemyParty[0].formIndex).toBe(1);
       expect(enemyParty[1].species.speciesId).toBe(SpeciesId.BUTTERFREE);
@@ -307,7 +323,9 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       const enemyParty = scene.getEnemyParty();
       expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("CommandPhase");
       expect(enemyParty.length).toBe(5);
-      expect(scene.currentBattle.trainer?.config.trainerType).toBe(TrainerType.BUG_TYPE_SUPERFAN);
+      expect(scene.currentBattle.trainerData?.trainers[TrainerSlot.TRAINER].trainerType).toBe(
+        TrainerType.BUG_TYPE_SUPERFAN,
+      );
       expect(enemyParty[0].species.speciesId).toBe(SpeciesId.BEEDRILL);
       expect(enemyParty[0].formIndex).toBe(1);
       expect(enemyParty[1].species.speciesId).toBe(SpeciesId.BUTTERFREE);
@@ -325,7 +343,9 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       const enemyParty = scene.getEnemyParty();
       expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("CommandPhase");
       expect(enemyParty.length).toBe(5);
-      expect(scene.currentBattle.trainer?.config.trainerType).toBe(TrainerType.BUG_TYPE_SUPERFAN);
+      expect(scene.currentBattle.trainerData?.trainers[TrainerSlot.TRAINER].trainerType).toBe(
+        TrainerType.BUG_TYPE_SUPERFAN,
+      );
       expect(enemyParty[0].species.speciesId).toBe(SpeciesId.BEEDRILL);
       expect(enemyParty[0].formIndex).toBe(1);
       expect(enemyParty[1].species.speciesId).toBe(SpeciesId.BUTTERFREE);
@@ -343,7 +363,9 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       const enemyParty = scene.getEnemyParty();
       expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("CommandPhase");
       expect(enemyParty.length).toBe(5);
-      expect(scene.currentBattle.trainer?.config.trainerType).toBe(TrainerType.BUG_TYPE_SUPERFAN);
+      expect(scene.currentBattle.trainerData?.trainers[TrainerSlot.TRAINER].trainerType).toBe(
+        TrainerType.BUG_TYPE_SUPERFAN,
+      );
       expect(enemyParty[0].species.speciesId).toBe(SpeciesId.BEEDRILL);
       expect(enemyParty[0].formIndex).toBe(1);
       expect(enemyParty[0].boss).toBe(true);

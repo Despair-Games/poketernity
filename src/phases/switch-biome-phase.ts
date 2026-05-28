@@ -1,9 +1,9 @@
 import { globalScene } from "#app/global-scene";
+import { Phase } from "#app/phase";
 import type { BiomeId } from "#enums/biome-id";
 import { getBiomeKey } from "#field/arena";
-import { BattlePhase } from "#phases/base/battle-phase";
 
-export class SwitchBiomePhase extends BattlePhase {
+export class SwitchBiomePhase extends Phase {
   public override readonly phaseName = "SwitchBiomePhase";
 
   private readonly nextBiome: BiomeId;
@@ -22,12 +22,12 @@ export class SwitchBiomePhase extends BattlePhase {
       arenaNextEnemy,
       arenaPlayer,
       arenaPlayerTransition,
-      lastEnemyTrainer,
+      enemyTrainers,
       tweens,
     } = globalScene;
 
     tweens.add({
-      targets: [arenaEnemy, lastEnemyTrainer],
+      targets: [arenaEnemy, enemyTrainers],
       x: "+=300",
       duration: 2000,
       onComplete: () => {
@@ -59,9 +59,8 @@ export class SwitchBiomePhase extends BattlePhase {
             arenaNextEnemy.setBiome(this.nextBiome);
             arenaBgTransition.setVisible(false);
             arenaPlayerTransition.setVisible(false);
-            if (lastEnemyTrainer) {
-              lastEnemyTrainer.destroy();
-            }
+            // TODO: Check timing of `enemyTrainers` initialization
+            enemyTrainers?.destroy();
 
             this.end();
           },

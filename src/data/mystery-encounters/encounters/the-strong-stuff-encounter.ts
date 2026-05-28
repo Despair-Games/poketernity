@@ -2,24 +2,21 @@ import { globalScene } from "#app/global-scene";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { BerryType } from "#enums/berry-type";
 import { MoveId } from "#enums/move-id";
+import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Nature } from "#enums/nature";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
-import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
-import type { PokemonHeldItemModifierType } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
 import { queueEncounterMessage, showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import {
-  type EnemyPartyConfig,
-  generateModifierType,
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
   loadCustomMovesForEncounter,
+  type MysteryEncounterBattleConfig,
   setEncounterRewards,
 } from "#mystery-encounters/encounter-phase-utils";
 import { modifyPlayerPokemonBST } from "#mystery-encounters/encounter-pokemon-utils";
@@ -79,38 +76,22 @@ export const TheStrongStuffEncounter: MysteryEncounter = MysteryEncounterBuilder
     const encounter = globalScene.currentBattle.mysteryEncounter!;
 
     // Calculate boss mon
-    const config: EnemyPartyConfig = {
-      levelAdditiveModifier: 1,
+    const config: MysteryEncounterBattleConfig = {
+      battleType: MysteryEncounterMode.WILD_BATTLE,
+      levelBoostMultiplier: 1,
       disableSwitch: true,
       pokemonConfigs: [
         {
-          species: getPokemonSpecies(SpeciesId.SHUCKLE),
-          isBoss: true,
+          speciesPool: [SpeciesId.SHUCKLE],
+          boss: true,
           bossSegments: 5,
           shiny: false, // Shiny lock because shiny is rolled only if the battle option is picked
           customPokemonData: { spriteScale: 1.25 },
           nature: Nature.BOLD,
-          moveSet: [MoveId.INFESTATION, MoveId.SALT_CURE, MoveId.GASTRO_ACID, MoveId.HEAL_ORDER],
-          modifierConfigs: [
-            {
-              modifier: generateModifierType(modifierTypes.BERRY, [BerryType.SITRUS]) as PokemonHeldItemModifierType,
-            },
-            {
-              modifier: generateModifierType(modifierTypes.BERRY, [BerryType.ENIGMA]) as PokemonHeldItemModifierType,
-            },
-            {
-              modifier: generateModifierType(modifierTypes.BERRY, [BerryType.APICOT]) as PokemonHeldItemModifierType,
-            },
-            {
-              modifier: generateModifierType(modifierTypes.BERRY, [BerryType.GANLON]) as PokemonHeldItemModifierType,
-            },
-            {
-              modifier: generateModifierType(modifierTypes.BERRY, [BerryType.LUM]) as PokemonHeldItemModifierType,
-              stackCount: 2,
-            },
-          ],
-          tags: [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON],
-          mysteryEncounterBattleEffects: (pokemon: Pokemon) => {
+          moveset: [MoveId.INFESTATION, MoveId.SALT_CURE, MoveId.GASTRO_ACID, MoveId.HEAL_ORDER],
+          // TODO: Re-add item configs (Sitrus, Enigma, Apicot, Ganlon, 2x Lum)
+          postProcess: (pokemon) => {
+            pokemon.addTag(BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON);
             queueEncounterMessage(`${namespace}:option.2.stat_boost`);
             globalScene.phaseManager.createAndUnshiftPhase(
               "StatStageChangePhase",
@@ -124,7 +105,7 @@ export const TheStrongStuffEncounter: MysteryEncounter = MysteryEncounterBuilder
       ],
     };
 
-    encounter.enemyPartyConfigs = [config];
+    encounter.battleConfigs = [config];
 
     loadCustomMovesForEncounter([MoveId.GASTRO_ACID, MoveId.STEALTH_ROCK]);
 
@@ -220,7 +201,7 @@ export const TheStrongStuffEncounter: MysteryEncounter = MysteryEncounterBuilder
 
       encounter.dialogue.outro = [];
       await transitionMysteryEncounterIntroVisuals(true, true, 500);
-      await initBattleWithEnemyConfig(encounter.enemyPartyConfigs[0]);
+      await initBattleWithEnemyConfig(encounter.battleConfigs[0]);
     },
   )
   .build();

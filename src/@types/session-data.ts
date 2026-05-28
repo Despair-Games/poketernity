@@ -7,7 +7,7 @@ import type { ArenaData } from "#system/arena-data";
 import type { ChallengeData } from "#system/challenge-data";
 import type { ModifierData } from "#system/modifier-data";
 import type { PokemonData } from "#system/pokemon-data";
-import type { TrainerSaveData } from "#system/trainer-save-data";
+import type { TrainerSaveDataSet } from "#system/trainer-save-data";
 
 /**
  * Save data for a run, as defined server-side
@@ -27,7 +27,7 @@ export interface SessionSaveData {
   waveIndex: number;
   battleType: BattleType;
   /** Only defined when the current wave is a trainer battle */
-  trainer: TrainerSaveData | null;
+  enemyTrainers?: TrainerSaveDataSet;
   gameVersion: string;
   timestamp: number;
   challenges: ChallengeData[];

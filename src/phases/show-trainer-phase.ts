@@ -1,9 +1,9 @@
 import { globalScene } from "#app/global-scene";
+import { Phase } from "#app/phase";
 import { PlayerGender } from "#enums/player-gender";
-import { BattlePhase } from "#phases/base/battle-phase";
 import { settings } from "#system/settings-manager";
 
-export class ShowTrainerPhase extends BattlePhase {
+export class ShowTrainerPhase extends Phase {
   public override readonly phaseName = "ShowTrainerPhase";
 
   public override start(): void {

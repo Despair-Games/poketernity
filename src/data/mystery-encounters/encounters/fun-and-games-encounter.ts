@@ -26,6 +26,7 @@ import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encount
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import { MoneyRequirement } from "#mystery-encounters/mystery-encounter-requirements";
 import { settings } from "#system/settings-manager";
+import { delay, playTween } from "#utils/anim-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import i18next from "i18next";
 
@@ -134,7 +135,11 @@ export const FunAndGamesEncounter: MysteryEncounter = MysteryEncounterBuilder.wi
         await showEncounterText(i18next.t("mysteryEncounterMessages:paid_money", { amount: moneyCost }));
 
         // Handlers for battle events
-        encounter.onTurnStart = handleNextTurn; // triggered during TurnInitPhase
+        // TODO: `onTurnStart` should be async
+        encounter.onTurnStart = () => {
+          handleNextTurn();
+          return true;
+        };
         encounter.doContinueEncounter = handleLoseMinigame; // triggered during MysteryEncounterRewardsPhase, post VictoryPhase if the player KOs Wobbuffet
 
         hideShowmanIntroSprite();
@@ -165,95 +170,88 @@ export const FunAndGamesEncounter: MysteryEncounter = MysteryEncounterBuilder.wi
   .build();
 
 async function summonPlayerPokemon() {
-  return new Promise<void>(async (resolve) => {
-    const encounter = globalScene.currentBattle.mysteryEncounter!;
+  const encounter = globalScene.currentBattle.mysteryEncounter!;
 
-    const playerPokemon = encounter.misc.playerPokemon;
-    // Swaps the chosen Pokemon and the first player's lead Pokemon in the party
-    const party = globalScene.getPlayerParty();
-    const chosenIndex = party.indexOf(playerPokemon);
-    if (chosenIndex !== 0) {
-      const leadPokemon = party[0];
-      party[0] = playerPokemon;
-      party[chosenIndex] = leadPokemon;
+  const playerPokemon = encounter.misc.playerPokemon;
+  // Swaps the chosen Pokemon and the first player's lead Pokemon in the party
+  const party = globalScene.getPlayerParty();
+  const chosenIndex = party.indexOf(playerPokemon);
+  if (chosenIndex !== 0) {
+    const leadPokemon = party[0];
+    party[0] = playerPokemon;
+    party[chosenIndex] = leadPokemon;
+  }
+
+  // Do trainer summon animation
+  let playerAnimationPromise: Promise<void> | undefined;
+  globalScene.ui.showText(i18next.t("battle:playerGo", { pokemonName: getPokemonNameWithAffix(playerPokemon) }));
+  globalScene.pbTray.hide();
+  globalScene.trainer.setTexture(
+    `trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`,
+  );
+  globalScene.time.delayedCall(562, () => {
+    globalScene.trainer.setFrame("2");
+    globalScene.time.delayedCall(64, () => {
+      globalScene.trainer.setFrame("3");
+    });
+  });
+  globalScene.tweens.add({
+    targets: globalScene.trainer,
+    x: -36,
+    duration: 1000,
+    onComplete: () => globalScene.trainer.setVisible(false),
+  });
+  globalScene.time.delayedCall(750, () => {
+    playerAnimationPromise = summonPlayerPokemonAnimation(playerPokemon);
+  });
+
+  // Also loads Wobbuffet data (cannot be shiny)
+  const enemySpecies = getPokemonSpecies(SpeciesId.WOBBUFFET);
+  globalScene.currentBattle.enemyParty = [];
+  const wobbuffet = globalScene.addEnemyPokemon(enemySpecies, encounter.misc.playerPokemon.level, {
+    shiny: false,
+    ivs: [0, 0, 0, 0, 0, 0],
+    nature: Nature.MILD,
+  });
+  wobbuffet.setAlpha(0);
+  wobbuffet.setVisible(false);
+  wobbuffet.calculateStats();
+  globalScene.currentBattle.enemyParty[0] = wobbuffet;
+  globalScene.gameData.setPokemonSeen(wobbuffet, true);
+  await wobbuffet.loadAssets();
+  const id = setInterval(checkPlayerAnimationPromise, 500);
+  async function checkPlayerAnimationPromise() {
+    if (playerAnimationPromise) {
+      clearInterval(id);
+      await playerAnimationPromise;
     }
+  }
+}
 
-    // Do trainer summon animation
-    let playerAnimationPromise: Promise<void> | undefined;
-    globalScene.ui.showText(i18next.t("battle:playerGo", { pokemonName: getPokemonNameWithAffix(playerPokemon) }));
-    globalScene.pbTray.hide();
-    globalScene.trainer.setTexture(
-      `trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`,
-    );
-    globalScene.time.delayedCall(562, () => {
-      globalScene.trainer.setFrame("2");
-      globalScene.time.delayedCall(64, () => {
-        globalScene.trainer.setFrame("3");
-      });
-    });
-    globalScene.tweens.add({
-      targets: globalScene.trainer,
-      x: -36,
-      duration: 1000,
-      onComplete: () => globalScene.trainer.setVisible(false),
-    });
-    globalScene.time.delayedCall(750, () => {
-      playerAnimationPromise = summonPlayerPokemonAnimation(playerPokemon);
-    });
-
-    // Also loads Wobbuffet data (cannot be shiny)
-    const enemySpecies = getPokemonSpecies(SpeciesId.WOBBUFFET);
+async function handleLoseMinigame() {
+  // Check Wobbuffet is still alive
+  const wobbuffet = globalScene.getEnemyPokemon();
+  if (!wobbuffet || wobbuffet.isFainted()) {
+    // Player loses
+    // End the battle
+    wobbuffet?.leaveField(true, true, true);
+    await transitionMysteryEncounterIntroVisuals(true, true);
     globalScene.currentBattle.enemyParty = [];
-    const wobbuffet = globalScene.addEnemyPokemon(enemySpecies, encounter.misc.playerPokemon.level, {
-      shiny: false,
-      ivs: [0, 0, 0, 0, 0, 0],
-      nature: Nature.MILD,
-    });
-    wobbuffet.setAlpha(0);
-    wobbuffet.setVisible(false);
-    wobbuffet.calculateStats();
-    globalScene.currentBattle.enemyParty[0] = wobbuffet;
-    globalScene.gameData.setPokemonSeen(wobbuffet, true);
-    await wobbuffet.loadAssets();
-    const id = setInterval(checkPlayerAnimationPromise, 500);
-    async function checkPlayerAnimationPromise() {
-      if (playerAnimationPromise) {
-        clearInterval(id);
-        await playerAnimationPromise;
-        resolve();
-      }
-    }
-  });
+    globalScene.currentBattle.mysteryEncounter!.doContinueEncounter = undefined;
+    leaveEncounterWithoutBattle(true);
+    await showEncounterText(`${namespace}:ko`);
+    const reviveCost = globalScene.getWaveMoneyAmount(1.5);
+    updatePlayerMoney(-reviveCost, true, false);
+  }
 }
 
-function handleLoseMinigame() {
-  return new Promise<void>(async (resolve) => {
-    // Check Wobbuffet is still alive
-    const wobbuffet = globalScene.getEnemyPokemon();
-    if (!wobbuffet || wobbuffet.isFainted()) {
-      // Player loses
-      // End the battle
-      wobbuffet?.leaveField(true, true, true);
-      transitionMysteryEncounterIntroVisuals(true, true);
-      globalScene.currentBattle.enemyParty = [];
-      globalScene.currentBattle.mysteryEncounter!.doContinueEncounter = undefined;
-      leaveEncounterWithoutBattle(true);
-      await showEncounterText(`${namespace}:ko`);
-      const reviveCost = globalScene.getWaveMoneyAmount(1.5);
-      updatePlayerMoney(-reviveCost, true, false);
-    }
-
-    resolve();
-  });
-}
-
-function handleNextTurn() {
+async function handleNextTurn() {
   const encounter = globalScene.currentBattle.mysteryEncounter!;
 
   const wobbuffet = globalScene.getEnemyPokemon();
   if (!wobbuffet) {
     // Should never be triggered, just handling the edge case
-    handleLoseMinigame();
+    await handleLoseMinigame();
     return true;
   }
   if (encounter.misc.turnsRemaining <= 0) {
@@ -325,80 +323,73 @@ async function showWobbuffetHealthBar() {
   globalScene.currentBattle.mysteryEncounter!.misc.wobbuffetHealth = wobbuffet.hp;
 }
 
-function summonPlayerPokemonAnimation(pokemon: PlayerPokemon): Promise<void> {
-  return new Promise<void>((resolve) => {
-    const pokeball = globalScene.addFieldSprite(36, 80, "pb", getPokeballAtlasKey(pokemon.pokeball));
-    pokeball.setVisible(false);
-    pokeball.setOrigin(0.5, 0.625);
-    globalScene.field.add(pokeball);
+async function summonPlayerPokemonAnimation(pokemon: PlayerPokemon): Promise<void> {
+  const pokeball = globalScene.addFieldSprite(36, 80, "pb", getPokeballAtlasKey(pokemon.pokeball));
+  pokeball.setVisible(false);
+  pokeball.setOrigin(0.5, 0.625);
+  globalScene.field.add(pokeball);
 
-    pokemon.setFieldPosition(FieldPosition.CENTER, 0);
+  await pokemon.setFieldPosition(FieldPosition.CENTER, 0);
 
-    const fpOffset = pokemon.getFieldPositionOffset();
+  const fpOffset = pokemon.getFieldPositionOffset();
 
-    pokeball.setVisible(true);
+  pokeball.setVisible(true);
 
-    globalScene.tweens.add({
-      targets: pokeball,
-      duration: 650,
-      x: 100 + fpOffset[0],
-    });
-
-    globalScene.tweens.add({
-      targets: pokeball,
-      duration: 150,
-      ease: "Cubic.easeOut",
-      y: 70 + fpOffset[1],
-      onComplete: () => {
-        globalScene.tweens.add({
-          targets: pokeball,
-          duration: 500,
-          ease: "Cubic.easeIn",
-          angle: 1440,
-          y: 132 + fpOffset[1],
-          onComplete: () => {
-            globalScene.audioManager.playSound("se/pb_rel");
-            pokeball.destroy();
-            globalScene.add.existing(pokemon);
-            globalScene.field.add(pokemon);
-            globalScene.animations.addPokeballOpenParticles(pokemon.x, pokemon.y - 16, pokemon.pokeball);
-            globalScene.updateModifiers(true);
-            globalScene.updateFieldScale();
-            pokemon.showInfo();
-            pokemon.playAnim();
-            pokemon.setVisible(true);
-            pokemon.getSprite().setVisible(true);
-            pokemon.setScale(0.5);
-            pokemon.tint(getPokeballTintColor(pokemon.pokeball));
-            pokemon.untint(250, "Sine.easeIn");
-            globalScene.updateFieldScale();
-            globalScene.tweens.add({
-              targets: pokemon,
-              duration: 250,
-              ease: "Sine.easeIn",
-              scale: pokemon.getSpriteScale(),
-              onComplete: () => {
-                pokemon.cry(pokemon.getHpRatio() > 0.25 ? undefined : { rate: 0.85 });
-                pokemon.getSprite().clearTint();
-                pokemon.resetSummonData();
-                globalScene.time.delayedCall(1000, () => {
-                  if (pokemon.isShiny()) {
-                    globalScene.phaseManager.createAndUnshiftPhase("ShinySparklePhase", pokemon.getBattlerIndex());
-                  }
-
-                  pokemon.resetTurnData();
-
-                  globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeActiveTrigger, true);
-                  globalScene.phaseManager.createAndPushPhase("PostSummonPhase", pokemon.getBattlerIndex());
-                  resolve();
-                });
-              },
-            });
-          },
-        });
-      },
-    });
+  globalScene.tweens.add({
+    targets: pokeball,
+    duration: 650,
+    x: 100 + fpOffset[0],
   });
+
+  await playTween({
+    targets: pokeball,
+    duration: 150,
+    ease: "Cubic.easeOut",
+    y: 70 + fpOffset[1],
+  });
+
+  await playTween({
+    targets: pokeball,
+    duration: 500,
+    ease: "Cubic.easeIn",
+    angle: 1440,
+    y: 132 + fpOffset[1],
+  });
+
+  globalScene.audioManager.playSound("se/pb_rel");
+  pokeball.destroy();
+  globalScene.add.existing(pokemon);
+  globalScene.field.add(pokemon);
+  globalScene.animations.addPokeballOpenParticles(pokemon.x, pokemon.y - 16, pokemon.pokeball);
+  globalScene.updateModifiers(true);
+  globalScene.updateFieldScale();
+  pokemon.showInfo();
+  pokemon.playAnim();
+  pokemon.setVisible(true);
+  pokemon.getSprite().setVisible(true);
+  pokemon.setScale(0.5);
+  pokemon.tint(getPokeballTintColor(pokemon.pokeball));
+  pokemon.untint(250, "Sine.easeIn");
+  globalScene.updateFieldScale();
+
+  await playTween({
+    targets: pokemon,
+    duration: 250,
+    ease: "Sine.easeIn",
+    scale: pokemon.getSpriteScale(),
+  });
+
+  pokemon.cry(pokemon.getHpRatio() > 0.25 ? undefined : { rate: 0.85 });
+  pokemon.getSprite().clearTint();
+  pokemon.resetSummonData();
+
+  await delay(1000);
+  if (pokemon.isShiny()) {
+    globalScene.phaseManager.createAndUnshiftPhase("ShinySparklePhase", pokemon.getBattlerIndex());
+  }
+  pokemon.resetTurnData();
+  globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeActiveTrigger, true);
+  globalScene.phaseManager.createAndPushPhase("PostSummonPhase", pokemon.getBattlerIndex());
 }
 
 function hideShowmanIntroSprite() {

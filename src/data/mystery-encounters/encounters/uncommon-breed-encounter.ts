@@ -3,21 +3,21 @@ import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encount
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { MoveId } from "#enums/move-id";
+import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PokeballType } from "#enums/pokeball-type";
 import { type BattleStat, Stat } from "#enums/stat";
 import { EnemyPokemon } from "#field/enemy-pokemon";
-import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
 import type { BerryModifier } from "#modifier/modifier";
 import { getPartyLuckValue } from "#modifier/modifier-type";
 import { queueEncounterMessage } from "#mystery-encounters/encounter-dialogue-utils";
 import {
-  type EnemyPartyConfig,
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
+  type MysteryEncounterBattleConfig,
   setEncounterExp,
   setEncounterRewards,
 } from "#mystery-encounters/encounter-phase-utils";
@@ -30,7 +30,6 @@ import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encount
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import { MoveRequirement, PersistentModifierRequirement } from "#mystery-encounters/mystery-encounter-requirements";
 import { CHARMING_MOVES } from "#mystery-encounters/requirement-groups";
-import { PokemonData } from "#system/pokemon-data";
 import { randSeedInt, randSeedItem } from "#utils/random-utils";
 
 /** the i18n namespace for the encounter */
@@ -92,20 +91,18 @@ export const UncommonBreedEncounter: MysteryEncounter = MysteryEncounterBuilder.
         ? [Stat.DEF, Stat.SPDEF, Stat.SPD]
         : [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD];
 
-    const config: EnemyPartyConfig = {
+    const config: MysteryEncounterBattleConfig = {
+      battleType: MysteryEncounterMode.WILD_BATTLE,
       pokemonConfigs: [
         {
-          level,
-          species,
-          dataSource: new PokemonData(pokemon),
-          isBoss: false,
-          tags: [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON],
-          mysteryEncounterBattleEffects: (pkmn: Pokemon) => {
+          pokemon,
+          postProcess: (pkm) => {
+            pkm.addTag(BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON);
             queueEncounterMessage(`${namespace}:option.1.stat_boost`);
             globalScene.phaseManager.createAndUnshiftPhase(
               "StatStageChangePhase",
-              pkmn.getBattlerIndex(),
-              pkmn,
+              pkm.getBattlerIndex(),
+              pkm,
               statChangesForBattle,
               1,
             );
@@ -113,7 +110,7 @@ export const UncommonBreedEncounter: MysteryEncounter = MysteryEncounterBuilder.
         },
       ],
     };
-    encounter.enemyPartyConfigs = [config];
+    encounter.battleConfigs = [config];
 
     const { spriteKey, fileRoot } = getSpriteKeysFromPokemon(pokemon);
     encounter.spriteConfigs = [
@@ -186,7 +183,7 @@ export const UncommonBreedEncounter: MysteryEncounter = MysteryEncounterBuilder.
       }
 
       setEncounterRewards({ fillRemaining: true });
-      await initBattleWithEnemyConfig(encounter.enemyPartyConfigs[0]);
+      await initBattleWithEnemyConfig(encounter.battleConfigs[0]);
     },
   )
   .withOption(

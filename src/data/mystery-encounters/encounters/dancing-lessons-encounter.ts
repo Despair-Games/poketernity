@@ -6,22 +6,23 @@ import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { EncounterAnim } from "#enums/encounter-anim";
 import { MoveId } from "#enums/move-id";
+import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
-import { EnemyPokemon } from "#field/enemy-pokemon";
+import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import { PokemonMove } from "#field/pokemon-move";
 import { modifierTypes } from "#modifier/modifier-types";
 import { getEncounterText, queueEncounterMessage } from "#mystery-encounters/encounter-dialogue-utils";
 import {
-  type EnemyPartyConfig,
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
+  type MysteryEncounterBattleConfig,
   selectPokemonForOption,
   setEncounterRewards,
 } from "#mystery-encounters/encounter-phase-utils";
@@ -81,21 +82,18 @@ export const DancingLessonsEncounter: MysteryEncounter = MysteryEncounterBuilder
 
     const species = getPokemonSpecies(SpeciesId.ORICORIO);
     const level = getEncounterPokemonLevelForWave(STANDARD_ENCOUNTER_BOOSTED_LEVEL_MODIFIER);
-    const enemyPokemon = new EnemyPokemon(species, level);
-    const moveset = enemyPokemon.getMoveset(true);
+    const oricorio = globalScene.addEnemyPokemon(species, level, {
+      boss: true,
+      formIndex: getOricorioFormIndexForBiome(globalScene.arena.biomeId),
+    });
+    const moveset = oricorio.getMoveset(true);
     if (!moveset.some((m) => m && m.getMove().id === MoveId.REVELATION_DANCE)) {
       if (moveset.length < 4) {
-        enemyPokemon.setMove(moveset.length, MoveId.REVELATION_DANCE);
+        oricorio.setMove(moveset.length, MoveId.REVELATION_DANCE);
       } else {
-        enemyPokemon.setMove(0, MoveId.REVELATION_DANCE);
+        oricorio.setMove(0, MoveId.REVELATION_DANCE);
       }
     }
-
-    // Set the form index based on the biome
-    enemyPokemon.formIndex = getOricorioFormIndexForBiome(globalScene.arena.biomeId);
-
-    const oricorioData = new PokemonData(enemyPokemon);
-    const oricorio = globalScene.addEnemyPokemon(species, level, oricorioData);
 
     // Adds a real Pokemon sprite to the field (required for the animation)
     globalScene.getEnemyParty().forEach((enemy) => {
@@ -107,15 +105,13 @@ export const DancingLessonsEncounter: MysteryEncounter = MysteryEncounterBuilder
     oricorio.x -= 300;
     encounter.loadAssets.push(oricorio.loadAssets());
 
-    const config: EnemyPartyConfig = {
+    const config: MysteryEncounterBattleConfig = {
+      battleType: MysteryEncounterMode.WILD_BATTLE,
       pokemonConfigs: [
         {
-          species,
-          dataSource: oricorioData,
-          isBoss: true,
-          // Gets +1 to all stats except SPD on battle start
-          tags: [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON],
-          mysteryEncounterBattleEffects: (pokemon: Pokemon) => {
+          pokemon: oricorio,
+          postProcess: (pokemon) => {
+            pokemon.addTag(BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON);
             queueEncounterMessage(`${namespace}:option.1.boss_enraged`);
             globalScene.phaseManager.createAndUnshiftPhase(
               "StatStageChangePhase",
@@ -128,9 +124,9 @@ export const DancingLessonsEncounter: MysteryEncounter = MysteryEncounterBuilder
         },
       ],
     };
-    encounter.enemyPartyConfigs = [config];
+    encounter.battleConfigs = [config];
     encounter.misc = {
-      oricorioData,
+      oricorioData: new PokemonData(oricorio),
     };
 
     encounter.setDialogueToken("oricorioName", getPokemonSpecies(SpeciesId.ORICORIO).getName());
@@ -161,7 +157,7 @@ export const DancingLessonsEncounter: MysteryEncounter = MysteryEncounterBuilder
 
         await hideOricorioPokemon();
         setEncounterRewards({ guaranteedModifierTypeFuncs: [modifierTypes.BATON], fillRemaining: true });
-        await initBattleWithEnemyConfig(encounter.enemyPartyConfigs[0]);
+        await initBattleWithEnemyConfig(encounter.battleConfigs[0]);
       })
       .build(),
   )

@@ -1,7 +1,7 @@
-import { TrainerConfigBuilder } from "#data/trainer-config-builder";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerGender } from "#enums/trainer-gender";
 import { TrainerType } from "#enums/trainer-type";
+import { TrainerConfigBuilder } from "#trainers/trainer-config-builder";
 import { afterEach, describe, expect, it } from "vitest";
 
 let trainerConfigBuilder = new TrainerConfigBuilder();

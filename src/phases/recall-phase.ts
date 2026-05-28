@@ -72,7 +72,7 @@ export class RecallPhase extends PokemonPhase {
       const text = this.isPlayer
         ? i18next.t("battle:playerComeBack", { pokemonName: getPokemonNameWithAffix(this.pokemon) })
         : i18next.t("battle:trainerComeBack", {
-            trainerName: globalScene.currentBattle.trainer?.getName(this.getTrainerSlot()),
+            trainerName: globalScene.currentBattle.trainerData!.trainers[this.getTrainerSlot()].getLocalizedName(),
             pokemonName: this.pokemon.getNameToRender(),
           });
       // TODO: check and adjust this delay if needed

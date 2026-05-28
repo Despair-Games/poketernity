@@ -1294,7 +1294,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       this.message.setY(singleLine ? -22 : -37);
     }
 
-    this.starterSelectMessageBoxContainer.setVisible(!!text?.length);
+    this.starterSelectMessageBoxContainer.setVisible(text?.length > 0);
   }
 
   /**
@@ -1383,7 +1383,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       } else if (this.statsMode) {
         this.toggleStatsMode(false);
         isSuccess = true;
-      } else if (this.starterSpecies.length) {
+      } else if (this.starterSpecies.length > 0) {
         this.popStarter(this.starterSpecies.length - 1);
         isSuccess = true;
         this.updateInstructions();
@@ -3976,7 +3976,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
   }
 
   tryStart(manualTrigger: boolean = false): boolean {
-    if (!this.starterSpecies.length) {
+    if (this.starterSpecies.length === 0) {
       return false;
     }
 
@@ -4177,7 +4177,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     this.starterSelectContainer.setVisible(false);
     this.blockInput = false;
 
-    while (this.starterSpecies.length) {
+    while (this.starterSpecies.length > 0) {
       this.popStarter(this.starterSpecies.length - 1);
     }
 

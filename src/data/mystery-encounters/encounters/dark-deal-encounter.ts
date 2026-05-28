@@ -2,23 +2,22 @@ import { globalScene } from "#app/global-scene";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#constants/mystery-encounter-constants";
 import { Challenges } from "#enums/challenges";
 import type { ElementalType } from "#enums/elemental-type";
+import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesGroups } from "#enums/species-groups";
 import { SpeciesId } from "#enums/species-id";
-import type { PokemonHeldItemModifier } from "#modifier/modifier";
 import { modifierTypes } from "#modifier/modifier-types";
 import {
-  type EnemyPartyConfig,
-  type EnemyPokemonConfig,
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
+  type MysteryEncounterBattleConfig,
 } from "#mystery-encounters/encounter-phase-utils";
 import { getRandomPlayerPokemon, getRandomSpeciesByStarterCost } from "#mystery-encounters/encounter-pokemon-utils";
 import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
-import { getPokemonSpecies, getSpecialSpeciesList } from "#utils/pokemon-utils";
+import { getSpecialSpeciesList } from "#utils/pokemon-utils";
 import { randSeedInt } from "#utils/random-utils";
 
 /** i18n namespace for encounter */
@@ -109,7 +108,7 @@ export const DarkDealEncounter: MysteryEncounter = MysteryEncounterBuilder.withE
           bossTypes = singleTypeChallenges.map((c) => (c.value - 1) as ElementalType);
         }
 
-        const bossModifiers: PokemonHeldItemModifier[] = encounter.misc.modifiers;
+        // const bossModifiers: PokemonHeldItemModifier[] = encounter.misc.modifiers;
         // Starter egg tier, 35/50/10/5 %odds for tiers 6/7/8/9+
         const roll = randSeedInt(100);
         let starterTier: number | [number, number] = [9, 10];
@@ -127,22 +126,17 @@ export const DarkDealEncounter: MysteryEncounter = MysteryEncounterBuilder.withE
           ...getSpecialSpeciesList(SpeciesGroups.PARADOX, true),
           SpeciesId.ETERNATUS,
         ];
-        const bossSpecies = getPokemonSpecies(getRandomSpeciesByStarterCost(starterTier, excludedBosses, bossTypes));
-        const pokemonConfig: EnemyPokemonConfig = {
-          species: bossSpecies,
-          isBoss: true,
-          modifierConfigs: bossModifiers.map((m) => {
-            return {
-              modifier: m,
-              stackCount: m.getStackCount(),
-            };
-          }),
-        };
-        if (bossSpecies.forms != null && bossSpecies.forms.length > 0) {
-          pokemonConfig.formIndex = 0;
-        }
-        const config: EnemyPartyConfig = {
-          pokemonConfigs: [pokemonConfig],
+        const bossSpecies = +getRandomSpeciesByStarterCost(starterTier, excludedBosses, bossTypes);
+        const config: MysteryEncounterBattleConfig = {
+          battleType: MysteryEncounterMode.WILD_BATTLE,
+          pokemonConfigs: [
+            {
+              speciesPool: [bossSpecies],
+              formIndex: 0,
+              boss: true,
+              // TODO: Re-add item configs
+            },
+          ],
         };
         await initBattleWithEnemyConfig(config);
       })

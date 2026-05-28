@@ -106,9 +106,9 @@ describe("A Trainer's Test - Mystery Encounter", () => {
       const enemyField = scene.getEnemyField();
       expect(scene.phaseManager.getCurrentPhase().phaseName).toBe("CommandPhase");
       expect(enemyField.length).toBe(1);
-      expect(scene.currentBattle.trainer).toBeDefined();
+      expect(scene.currentBattle.trainerData).toBeDefined();
       expect([TrainerType.BUCK, TrainerType.CHERYL, TrainerType.MARLEY, TrainerType.MIRA, TrainerType.RILEY]).toContain(
-        scene.currentBattle.trainer!.config.trainerType,
+        Object.values(scene.currentBattle.trainerData!.trainers).map((td) => td.trainerType),
       );
       expect(enemyField[0]).toBeDefined();
     });

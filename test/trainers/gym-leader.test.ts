@@ -1,13 +1,13 @@
 import { GYM_LEADER_STRENGTH_TEMPLATES } from "#constants/trainer-constants";
 import { signatureSpecies } from "#data/signature-species";
-import { TrainerData } from "#data/trainer-data";
 import { ElementalType } from "#enums/elemental-type";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import { GameManager } from "#test/test-utils/game-manager";
-import { newGymLeaderTrainerConfigs } from "#trainer-configs/gym-leader-configs";
+import { newGymLeaderTrainerConfigs } from "#trainers/trainer-configs/gym-leader-configs";
+import { TrainerData } from "#trainers/trainer-data";
 import { coerceArray } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";

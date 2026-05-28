@@ -12,7 +12,7 @@ import { MysteryEncounterIntroVisuals, type MysteryEncounterSpriteConfig } from 
 import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { PokemonMove } from "#field/pokemon-move";
-import type { EnemyPartyConfig } from "#mystery-encounters/encounter-phase-utils";
+import type { MysteryEncounterBattleConfig } from "#mystery-encounters/encounter-phase-utils";
 import type { MysteryEncounterDialogue, OptionTextDisplay } from "#mystery-encounters/mystery-encounter-dialogue";
 import {
   type MysteryEncounterOption,
@@ -81,7 +81,7 @@ export interface IMysteryEncounter {
   excludePrimaryFromSupportRequirements: boolean;
 
   dialogue: MysteryEncounterDialogue;
-  enemyPartyConfigs: EnemyPartyConfig[];
+  battleConfigs: MysteryEncounterBattleConfig[];
 
   dialogueTokens: Record<string, string>;
   expMultiplier: number;
@@ -219,7 +219,7 @@ export class MysteryEncounter implements IMysteryEncounter {
    * Can store multiple configs so that one can be chosen based on option selected
    * Should usually be defined in `onInit()` or `onPreOptionPhase()`
    */
-  enemyPartyConfigs: EnemyPartyConfig[];
+  battleConfigs: MysteryEncounterBattleConfig[];
   /**
    * Object instance containing sprite data for an encounter when it is being spawned
    * Otherwise, will be undefined
@@ -302,7 +302,7 @@ export class MysteryEncounter implements IMysteryEncounter {
     this.startOfBattleEffectsComplete = false;
     this.lockEncounterRewardTiers = true;
     this.dialogueTokens = {};
-    this.enemyPartyConfigs = [];
+    this.battleConfigs = [];
     this.startOfBattleEffects = [];
     this.introVisuals = undefined;
     this.misc = null;
@@ -549,7 +549,7 @@ export class MysteryEncounter implements IMysteryEncounter {
  */
 export class MysteryEncounterBuilder implements Partial<IMysteryEncounter> {
   options: [MysteryEncounterOption, MysteryEncounterOption, ...MysteryEncounterOption[]];
-  enemyPartyConfigs: EnemyPartyConfig[] = [];
+  battleConfigs: MysteryEncounterBattleConfig[] = [];
 
   localizationKey: string = "";
   dialogue: MysteryEncounterDialogue = {};

@@ -110,7 +110,7 @@ describe("Fiery Fallout - Mystery Encounter", () => {
     FieryFalloutEncounter.populateDialogueTokensFromRequirements();
     const onInitResult = onInit!();
 
-    expect(FieryFalloutEncounter.enemyPartyConfigs).toEqual([
+    expect(FieryFalloutEncounter.battleConfigs).toEqual([
       {
         pokemonConfigs: [
           {

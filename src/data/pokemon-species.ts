@@ -104,7 +104,7 @@ export class PokemonSpecies extends PokemonSpeciesForm {
    * @returns The localized name of the Pokemon species under the given form index
    */
   getName(formIndex?: number): string {
-    if (formIndex !== undefined && this.forms.length) {
+    if (formIndex !== undefined && this.forms.length > 0) {
       const form = this.forms[formIndex];
       let key: string | null;
       switch (form.formKey) {
@@ -176,7 +176,7 @@ export class PokemonSpecies extends PokemonSpeciesForm {
   getEnemySpeciesForLevel(level: number, forTrainer: boolean = false): SpeciesId {
     // Apply pre-evolutions
     const preEvolutionLevels = this.getPreEvolutionLevels();
-    if (preEvolutionLevels.length) {
+    if (preEvolutionLevels.length > 0) {
       for (let pl = preEvolutionLevels.length - 1; pl >= 0; pl--) {
         const preEvolutionLevel = preEvolutionLevels[pl];
         if (level < preEvolutionLevel[1]) {
@@ -224,7 +224,7 @@ export class PokemonSpecies extends PokemonSpeciesForm {
       for (const e of pokemonEvolutions[p]) {
         if (
           e.speciesId === this.speciesId
-          && (!this.forms.length || !e.evoFormKey || e.evoFormKey === this.forms[this.formIndex].formKey)
+          && (this.forms.length === 0 || !e.evoFormKey || e.evoFormKey === this.forms[this.formIndex].formKey)
           && preEvolutionLevels.every((pe) => pe[0] !== Number.parseInt(p, 10))
         ) {
           const speciesId = Number.parseInt(p, 10) as SpeciesId;

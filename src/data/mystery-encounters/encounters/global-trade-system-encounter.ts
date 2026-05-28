@@ -7,7 +7,6 @@ import { getGenderSymbol } from "#data/gender";
 import { getNatureName } from "#data/nature";
 import { getPokeballAtlasKey, getPokeballTintColor } from "#data/pokeball";
 import type { PokemonSpecies } from "#data/pokemon-species";
-import { trainerNamePools } from "#data/trainer-names";
 import { getTypeRgb } from "#data/type";
 import { EventModifierType } from "#enums/event-modifier-type";
 import { Gender } from "#enums/gender";
@@ -42,6 +41,7 @@ import { addPokemonDataToDexAndValidateAchievements } from "#mystery-encounters/
 import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import { PokemonData } from "#system/pokemon-data";
+import { trainerNamePools } from "#trainers/trainer-names";
 import type { OptionSelectItem } from "#ui/option-select-config";
 import { NumberHolder } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";

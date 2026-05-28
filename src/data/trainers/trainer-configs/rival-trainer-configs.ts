@@ -1,15 +1,6 @@
 import { RIVAL_SLOT_0_POKEMON, RIVAL_SLOT_1_POKEMON } from "#constants/trainer-constants";
-import type { TrainerConfigMap } from "#data/new-trainer-config";
 import { pokemonPreEvolutions } from "#data/pokemon-pre-evolutions";
 import type { PokemonSpecies } from "#data/pokemon-species";
-import {
-  getRandomPartyMemberFunc,
-  getSpeciesFilterRandomPartyMemberFunc,
-  TrainerConfig,
-  type TrainerConfigs,
-  trainerPartyTemplates,
-} from "#data/trainer-config";
-import { TrainerConfigBuilder } from "#data/trainer-config-builder";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { PokeballType } from "#enums/pokeball-type";
 import { SpeciesId } from "#enums/species-id";
@@ -17,6 +8,15 @@ import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import { modifierTypes } from "#modifier/modifier-types";
+import type { TrainerConfigMap } from "#trainers/new-trainer-config";
+import {
+  getRandomPartyMemberFunc,
+  getSpeciesFilterRandomPartyMemberFunc,
+  TrainerConfig,
+  type TrainerConfigs,
+  trainerPartyTemplates,
+} from "#trainers/trainer-config";
+import { levelByStrength, TrainerConfigBuilder } from "#trainers/trainer-config-builder";
 
 export const rivalTrainerConfigs: TrainerConfigs = {
   [TrainerType.RIVAL]: new TrainerConfig(TrainerType.RIVAL)
@@ -535,9 +535,9 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
     .withPartySeedOffset(TrainerType.RIVAL)
     .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
       abilityIndex: 0,
-      strength: PartyMemberStrength.WEAKEST,
+      levelFunc: levelByStrength(PartyMemberStrength.WEAKEST),
     })
-    .withPokemonFromPool(RIVAL_SLOT_1_POKEMON, { strength: PartyMemberStrength.WEAKEST })
+    .withPokemonFromPool(RIVAL_SLOT_1_POKEMON, { levelFunc: levelByStrength(PartyMemberStrength.WEAKEST) })
     .build(),
   [TrainerType.RIVAL_2]: new TrainerConfigBuilder()
     .withTrainerType(TrainerType.RIVAL_2)
@@ -547,11 +547,11 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
     .withPartySeedOffset(TrainerType.RIVAL)
     .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
       abilityIndex: 0,
-      strength: PartyMemberStrength.STRONG,
+      levelFunc: levelByStrength(PartyMemberStrength.STRONG),
     })
     .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
     .withPokemonFromFilter((species: PokemonSpecies) => species.isSingleStage() && species.baseTotal >= 450, {
-      strength: PartyMemberStrength.WEAK,
+      levelFunc: levelByStrength(PartyMemberStrength.WEAK),
     })
     .build(),
   [TrainerType.RIVAL_3]: new TrainerConfigBuilder()
@@ -562,12 +562,12 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
     .withPartySeedOffset(TrainerType.RIVAL)
     .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
       abilityIndex: 0,
-      strength: PartyMemberStrength.STRONG,
+      levelFunc: levelByStrength(PartyMemberStrength.STRONG),
     })
     .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
     .withPokemonFromFilter((species) => species.isSingleStage() && species.baseTotal >= 450)
     .withPokemonFromFilter((species) => species.baseTotal >= 540, {
-      strength: [PartyMemberStrength.AVERAGE, PartyMemberStrength.WEAK],
+      levelFunc: levelByStrength([PartyMemberStrength.AVERAGE, PartyMemberStrength.WEAK]),
     })
     .build(),
   [TrainerType.RIVAL_4]: new TrainerConfigBuilder()
@@ -578,13 +578,13 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
     .withPartySeedOffset(TrainerType.RIVAL)
     .withPokemonFromPool(RIVAL_SLOT_0_POKEMON, {
       abilityIndex: 0,
-      strength: PartyMemberStrength.STRONG,
+      levelFunc: levelByStrength(PartyMemberStrength.STRONG),
     })
     .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
     .withPokemonFromFilter((species) => species.isSingleStage() && species.baseTotal >= 450)
     .withPokemonFromFilter((species) => species.baseTotal >= 540, {
       count: 2,
-      strength: PartyMemberStrength.WEAK,
+      levelFunc: levelByStrength(PartyMemberStrength.WEAK),
     })
     .build(),
   [TrainerType.RIVAL_5]: new TrainerConfigBuilder()
@@ -597,7 +597,7 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
       abilityIndex: 0,
       boss: true,
       bossSegments: 2,
-      strength: PartyMemberStrength.STRONG,
+      levelFunc: levelByStrength(PartyMemberStrength.STRONG),
     })
     .withPokemonFromPool(RIVAL_SLOT_1_POKEMON)
     .withPokemonFromFilter((species) => species.isSingleStage() && species.baseTotal >= 450)
@@ -609,7 +609,7 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
       variant: 1,
       boss: true,
       bossSegments: 3,
-      strength: PartyMemberStrength.STRONG,
+      levelFunc: levelByStrength(PartyMemberStrength.STRONG),
     })
     .build(),
   [TrainerType.RIVAL_6]: new TrainerConfigBuilder()
@@ -622,7 +622,7 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
       abilityIndex: 0,
       boss: true,
       bossSegments: 3,
-      strength: PartyMemberStrength.STRONG,
+      levelFunc: levelByStrength(PartyMemberStrength.STRONG),
     })
     .withPokemonFromPool(RIVAL_SLOT_1_POKEMON, {
       boss: true,
@@ -637,7 +637,7 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
       shiny: true,
       variant: 1,
       boss: true,
-      strength: PartyMemberStrength.STRONGER,
+      levelFunc: levelByStrength(PartyMemberStrength.STRONGER),
     })
     .build(),
-};
+} as const;

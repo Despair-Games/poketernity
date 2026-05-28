@@ -180,7 +180,7 @@ export interface PokemonOptions {
   stats?: number[];
   ivs?: number[];
   nature?: Nature;
-  moveset?: PokemonMove[];
+  moveset?: PokemonMove[] | MoveId[];
   abilityIndex?: number;
   passive?: boolean;
   formIndex?: number;
@@ -345,7 +345,17 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     this.abilityIndex = options.abilityIndex ?? this.generateRandomAbility();
     this.passive = options.passive ?? false;
 
-    this.moveset = options["moveset"] ?? [];
+    const moveset: PokemonMove[] | MoveId[] | undefined = options["moveset"];
+    if (moveset) {
+      if (moveset.every((mv) => mv instanceof PokemonMove)) {
+        this.moveset = moveset;
+      } else {
+        this.moveset = moveset.map((moveId) => new PokemonMove(moveId, { pokemonId: this.id }));
+      }
+    } else {
+      this.moveset = [];
+    }
+
     this.status = options["status"] ?? null;
 
     this.metLevel = options.metLevel ?? level;
@@ -743,7 +753,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   getFormKey(): string {
-    if (!this.species.forms.length || this.species.forms.length <= this.formIndex) {
+    if (this.species.forms.length === 0 || this.species.forms.length <= this.formIndex) {
       return "";
     }
     return this.species.forms[this.formIndex].formKey;
@@ -1486,7 +1496,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       }
     }
 
-    if (!types.length || !includeTeraType) {
+    if (types.length === 0 || !includeTeraType) {
       if (!bypassSummonData && this.summonData.types.length > 0) {
         this.summonData.types.forEach((t) => types.push(t));
       } else if (this.customPokemonData.types.length > 0) {
@@ -1508,7 +1518,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     // become UNKNOWN if no types are present
-    if (!types.length) {
+    if (types.length === 0) {
       types.push(ElementalType.UNKNOWN);
     }
 
@@ -2378,7 +2388,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (this.hasTrainer()) {
       const tms = Object.keys(tmSpecies);
       for (const tm of tms) {
-        const moveId = Number.parseInt(tm) as MoveId;
+        const moveId = Number.parseInt(tm, 10) as MoveId;
         let compatible = false;
         for (const p of tmSpecies[tm]) {
           if (Array.isArray(p)) {
@@ -2491,7 +2501,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         (m) => allMoves.get(m[0]).category !== MoveCategory.STATUS && this.isOfType(allMoves.get(m[0]).type),
       );
 
-      if (stabMovePool.length) {
+      if (stabMovePool.length > 0) {
         const totalWeight = stabMovePool.reduce((v, m) => v + m[1], 0);
         let rand = randSeedInt(totalWeight);
         let index = 0;
@@ -2503,7 +2513,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     } else {
       // Normal wild pokemon just force a random damaging move
       const attackMovePool = baseWeights.filter((m) => allMoves.get(m[0]).category !== MoveCategory.STATUS);
-      if (attackMovePool.length) {
+      if (attackMovePool.length > 0) {
         const totalWeight = attackMovePool.reduce((v, m) => v + m[1], 0);
         let rand = randSeedInt(totalWeight);
         let index = 0;

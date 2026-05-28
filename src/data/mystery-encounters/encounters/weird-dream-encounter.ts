@@ -4,18 +4,18 @@ import { GAME_HEIGHT, GAME_WIDTH } from "#constants/ui-constants";
 import { allSpecies } from "#data/data-lists";
 import { getLevelTotalExp } from "#data/exp";
 import type { PokemonSpecies } from "#data/pokemon-species";
-import { TrainerPartyTemplate } from "#data/trainer-config";
 import { Challenges } from "#enums/challenges";
 import { ModifierTier } from "#enums/modifier-tier";
+import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Nature } from "#enums/nature";
-import { PartyMemberStrength } from "#enums/party-member-strength";
 import { PlayerGender } from "#enums/player-gender";
 import { SpeciesGroups } from "#enums/species-groups";
 import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
+import { TrainerGender } from "#enums/trainer-gender";
 import { TrainerType } from "#enums/trainer-type";
 import { TransformationScreenPosition } from "#enums/transformation-screen-position";
 import type { PlayerPokemon } from "#field/player-pokemon";
@@ -26,11 +26,10 @@ import type { PokemonHeldItemModifierType } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
 import { showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import {
-  type EnemyPartyConfig,
-  type EnemyPokemonConfig,
   generateModifierType,
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
+  type MysteryEncounterBattleConfig,
   setEncounterRewards,
 } from "#mystery-encounters/encounter-phase-utils";
 import { addPokemonDataToDexAndValidateAchievements } from "#mystery-encounters/encounter-pokemon-utils";
@@ -39,7 +38,8 @@ import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encount
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import { PokemonData } from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
-import { allTrainerConfigs } from "#trainer-configs/all-trainer-configs";
+import type { TrainerPartyPokemonConfig } from "#trainers/new-trainer-config";
+import { allNewTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
 import type { HeldModifierConfig } from "#types/modifiers-types";
 import { NumberHolder } from "#utils/common-utils";
 import { getPokemonSpecies, getRandomElementalType, getSpecialSpeciesList } from "#utils/pokemon-utils";
@@ -200,7 +200,7 @@ export const WeirdDreamEncounter: MysteryEncounter = MysteryEncounterBuilder.wit
         globalScene.currentBattle.mysteryEncounter!.misc.teamTransformations;
 
       // Uses the pokemon that player's party would have transformed into
-      const enemyPokemonConfigs: EnemyPokemonConfig[] = [];
+      const enemyPokemonConfigs: TrainerPartyPokemonConfig[] = [];
       for (const transformation of transformations) {
         const newPokemon = transformation.newPokemon;
         const previousPokemon = transformation.previousPokemon;
@@ -232,27 +232,29 @@ export const WeirdDreamEncounter: MysteryEncounter = MysteryEncounterBuilder.wit
           });
         }
 
-        const enemyConfig: EnemyPokemonConfig = {
-          species: transformation.newSpecies,
-          isBoss: newPokemon.getSpeciesForm().getBaseStatTotal() > NON_LEGENDARY_BST_THRESHOLD,
-          level: previousPokemon.level,
-          dataSource,
-          modifierConfigs: newPokemonHeldItemConfigs,
+        const enemyConfig: TrainerPartyPokemonConfig = {
+          ...newPokemon,
+          count: 1,
+          speciesPool: [transformation.newSpecies.speciesId],
+          boss: newPokemon.getSpeciesForm().getBaseStatTotal() > NON_LEGENDARY_BST_THRESHOLD,
+          levelFunc: () => previousPokemon.level,
+          // modifierConfigs: newPokemonHeldItemConfigs,
+          allowDuplicates: true,
+          allowLegendaries: true,
+          ignoreEvolution: true,
         };
 
         enemyPokemonConfigs.push(enemyConfig);
       }
 
       const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
-      const trainerConfig =
-        allTrainerConfigs[
-          genderIndex === PlayerGender.FEMALE ? TrainerType.FUTURE_SELF_F : TrainerType.FUTURE_SELF_M
-        ].clone();
-      trainerConfig.setPartyTemplates(new TrainerPartyTemplate(transformations.length, PartyMemberStrength.STRONG));
-      const enemyPartyConfig: EnemyPartyConfig = {
+      const trainerGender = genderIndex === PlayerGender.FEMALE ? TrainerGender.FEMALE : TrainerGender.MALE;
+      const trainerConfig = { ...allNewTrainerConfigs[TrainerType.FUTURE_SELF]! };
+      trainerConfig.partyConfigs = enemyPokemonConfigs;
+      const battleConfig: MysteryEncounterBattleConfig = {
+        battleType: MysteryEncounterMode.TRAINER_BATTLE,
         trainerConfig,
-        pokemonConfigs: enemyPokemonConfigs,
-        female: genderIndex === PlayerGender.FEMALE,
+        trainerGender,
       };
 
       const onBeforeRewards = () => {
@@ -283,7 +285,7 @@ export const WeirdDreamEncounter: MysteryEncounter = MysteryEncounterBuilder.wit
       );
 
       await showEncounterText(`${namespace}:option.2.selected_2`);
-      await initBattleWithEnemyConfig(enemyPartyConfig);
+      await initBattleWithEnemyConfig(battleConfig);
     },
   )
   .withSimpleOption(

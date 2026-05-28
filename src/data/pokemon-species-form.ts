@@ -346,7 +346,7 @@ export abstract class PokemonSpeciesForm {
     }
     let ret = speciesId.toString();
     const forms = getPokemonSpecies(speciesId).forms;
-    if (forms.length) {
+    if (forms.length > 0) {
       if (formIndex !== undefined && formIndex >= forms.length) {
         console.warn(
           `Attempted accessing form with index ${formIndex} of species ${getPokemonSpecies(speciesId).getName()} with only ${forms.length || 0} forms`,

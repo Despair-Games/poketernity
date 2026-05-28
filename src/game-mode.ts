@@ -1,5 +1,5 @@
-import type { FixedBattleConfigs } from "#app/battle";
-import { classicFixedBattles, FixedBattleConfig } from "#app/battle";
+import type { FixedBattleConfig, FixedBattleConfigs } from "#app/battle";
+import { classicFixedBattles } from "#app/battle";
 import { globalScene } from "#app/global-scene";
 import { activeOverrides } from "#app/overrides";
 import { DEFAULT_STARTING_MONEY } from "#constants/game-constants";
@@ -11,6 +11,7 @@ import type { Challenge } from "#data/challenge";
 import { allChallenges, copyChallenge } from "#data/challenge";
 import { allSpecies } from "#data/data-lists";
 import type { PokemonSpecies } from "#data/pokemon-species";
+import { BattleType } from "#enums/battle-type";
 import { BiomeId } from "#enums/biome-id";
 import { ChallengeType } from "#enums/challenge-type";
 import { Challenges } from "#enums/challenges";
@@ -253,7 +254,7 @@ export class GameMode implements GameModeConfig {
    * @returns If this game mode has a fixed battle on this wave
    */
   isFixedBattle(waveIndex: number): boolean {
-    const dummyConfig = new FixedBattleConfig();
+    const dummyConfig: FixedBattleConfig = { battleType: BattleType.TRAINER };
     return (
       Object.hasOwn(this.battleConfig, waveIndex)
       || applyChallenges(this, ChallengeType.FIXED_BATTLES, waveIndex, dummyConfig)
@@ -263,10 +264,11 @@ export class GameMode implements GameModeConfig {
   /**
    * Returns the config for the fixed battle for a particular wave.
    * @param waveIndex The wave to check.
-   * @returns The {@linkcode FixedBattleConfig} for this wave.
+   * @returns The {@linkcode FixedBattleConfig} for this wave, or `undefined`
+   * if the given wave has no fixed battles.
    */
-  getFixedBattle(waveIndex: number): FixedBattleConfig {
-    const challengeConfig = new FixedBattleConfig();
+  getFixedBattle(waveIndex: number): FixedBattleConfig | undefined {
+    const challengeConfig: FixedBattleConfig = { battleType: BattleType.TRAINER };
     if (applyChallenges(this, ChallengeType.FIXED_BATTLES, waveIndex, challengeConfig)) {
       return challengeConfig;
     }

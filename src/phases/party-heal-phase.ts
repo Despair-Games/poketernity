@@ -1,11 +1,11 @@
 import { globalScene } from "#app/global-scene";
-import { BattlePhase } from "#phases/base/battle-phase";
+import { Phase } from "#app/phase";
 import { fixedNumber } from "#utils/common-utils";
 
 /**
  * Fully heals the player's party, usually occurs after every 10th wave
  */
-export class PartyHealPhase extends BattlePhase {
+export class PartyHealPhase extends Phase {
   public override readonly phaseName = "PartyHealPhase";
 
   private readonly resumeBgm: boolean;
