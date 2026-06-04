@@ -22,7 +22,7 @@ import type { PokemonSpeciesFilter } from "#types/ui-types";
 import type { CoercibleArray, NonEmptyArray } from "#types/utility-types";
 import { coerceArray, enumValueToKey, isBetween } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
-import { randSeedItem } from "#utils/random-utils";
+import { randSeedInt, randSeedItem } from "#utils/random-utils";
 import { getStrengthLevelMultiplier } from "#utils/trainer-utils";
 
 type PartyPokemonOptions = Partial<TrainerPartyPokemonConfig>;
@@ -73,7 +73,9 @@ export class TrainerConfigBuilder {
     battleBgm: () => "battle_trainer",
     victoryBgm: () => "victory_trainer",
     isBoss: false,
+    isDouble: () => false,
     partyConfigs: [],
+    useSameSeedForAllPokemon: false,
     moneyMultiplier: () => 1,
     modifierRewards: [],
     aiType: AiType.SMART,
@@ -87,6 +89,10 @@ export class TrainerConfigBuilder {
    * each gender-mapped property has defined generators for all supported genders.
    */
   private readonly possibleGenders: Set<TrainerGender> = new Set<TrainerGender>();
+
+  constructor(trainerType: TrainerType) {
+    this.config.trainerType = trainerType;
+  }
 
   /**
    * Determines if all required properties to build a {@linkcode NewTrainerConfig}
@@ -141,7 +147,10 @@ export class TrainerConfigBuilder {
       }
     }
 
-    const pokemonCount = config.partyConfigs!.reduce((total, { count }) => total + count, 0);
+    const pokemonCount = config.partyConfigs!.reduce(
+      (total, cfgs) => total + cfgs.reduce((maxCount, { count }) => Math.max(maxCount, count), 0),
+      0,
+    );
     if (!isBetween(pokemonCount, 1, 6)) {
       console.warn(`trainer-config-builder: Invalid Pokemon count from config(s): ${pokemonCount}`);
     }
@@ -299,12 +308,48 @@ export class TrainerConfigBuilder {
   }
 
   /**
-   * Appends a Pokemon according to the properties of the given
-   * {@linkcode TrainerPartyPokemonConfig} to the Trainer's party.
+   * Sets this Trainer's battle to always be a double battle.
    * @returns `this`
    */
-  public withPokemonFromConfig(config: TrainerPartyPokemonConfig): this {
-    this.config.partyConfigs!.push(config);
+  public withForcedDoubleBattle(): this {
+    this.config.isDouble = () => true;
+    return this;
+  }
+
+  /**
+   * Gives this Trainer a probability of `chance / denominator` for its battle to be a double battle.
+   * `chance` should always be less than `denominator`. `denominator` is 100 by default.
+   * @returns `this`
+   */
+  public withDoubleBattleChance(chance: number, denominator: number = 100): this {
+    this.config.isDouble = () => randSeedInt(denominator) < chance;
+    return this;
+  }
+
+  /**
+   * Toggles {@linkcode NewTrainerConfig.useSameSeedForAllPokemon | useSameSeedForAllPokemon}
+   * to force correlation between the Trainer's Pokemon when selecting their species
+   * from species pools.
+   *
+   * Example: If one Pokemon's species is selected from the untiered pool `[BULBASAUR, CHARMANDER, SQUIRTLE]`
+   * and another is selected from the pool `[CHIKORITA, CYNDAQUIL, TOTODILE]`, the only possible combinations
+   * of species under this setting would be Bulbasaur/Chikorita, Charmander/Cyndaquil, and Squirtle/Totodile.
+   * @returns `this`
+   */
+  public withPartyCorrelation(): this {
+    this.config.useSameSeedForAllPokemon = true;
+    return this;
+  }
+
+  /**
+   * Appends a Pokemon according to the properties of the given
+   * {@linkcode TrainerPartyPokemonConfig} to the Trainer's party.
+   * If multiple configs are given as input, only one will be randomly selected
+   * for the Trainer's party
+   * @returns `this`
+   */
+  public withPokemonFromConfig(...configs: NonEmptyArray<TrainerPartyPokemonConfig>): this {
+    this.config.partyConfigs!.push([...configs]);
     return this;
   }
 
@@ -313,20 +358,31 @@ export class TrainerConfigBuilder {
    * @returns `this`
    * @todo Add odds for each tier to this doc
    */
-  public withPokemonFromTieredPool(speciesPool: TieredSpeciesPool, options: SpeciesPoolConfigOptions = {}): this {
-    return this.withPokemonFromConfig({
-      ...addDefaultPartyOptions(options),
-      tieredSpeciesPool: speciesPool,
-      allowLegendaries: true,
-    });
+  public withPokemonFromTieredPool(speciesPool: TieredSpeciesPool, ...options: SpeciesPoolConfigOptions[]): this {
+    const configs =
+      options.length === 0
+        ? [
+            {
+              ...addDefaultPartyOptions({
+                tieredSpeciesPool: speciesPool,
+                allowLegendaries: true,
+              }),
+            },
+          ]
+        : options.map((o) => ({
+            ...addDefaultPartyOptions(o),
+            tieredSpeciesPool: speciesPool,
+            allowLegendaries: true,
+          }));
+    return this.withPokemonFromConfig(configs[0], ...configs.slice(1));
   }
 
   /**
    * Appends a Pokemon of a set species to the Trainer's party.
    * @returns `this`
    */
-  public withPokemon(species: SpeciesId, options: SpeciesConfigOptions = {}): this {
-    return this.withPokemonFromPool([species], options);
+  public withPokemon(species: SpeciesId, ...options: SpeciesConfigOptions[]): this {
+    return this.withPokemonFromPool([species], ...options);
   }
 
   /**
@@ -336,24 +392,40 @@ export class TrainerConfigBuilder {
    * @param options - The {@linkcode PartyPokemonOptions} to apply to the generated Pokemon.
    * @see {@linkcode defaultPartyConfigOptions}
    */
-  public withPokemonFromPool(speciesPool: Readonly<NonEmptyArray<SpeciesId>>, options?: SpeciesPoolConfigOptions): this;
-  public withPokemonFromPool(speciesPool: NonEmptyArray<SpeciesId>, options: SpeciesPoolConfigOptions = {}): this {
-    return this.withPokemonFromConfig({
-      ...addDefaultPartyOptions(options),
-      speciesPool: [...speciesPool],
-      allowLegendaries: true,
-    });
+  public withPokemonFromPool(
+    speciesPool: Readonly<NonEmptyArray<SpeciesId>>,
+    ...options: SpeciesPoolConfigOptions[]
+  ): this;
+  public withPokemonFromPool(speciesPool: NonEmptyArray<SpeciesId>, ...options: SpeciesPoolConfigOptions[]): this {
+    const configs =
+      options.length === 0
+        ? [addDefaultPartyOptions({ speciesPool, allowLegendaries: true })]
+        : options.map((o) => ({
+            ...addDefaultPartyOptions(o),
+            speciesPool,
+            allowLegendaries: true,
+          }));
+    return this.withPokemonFromConfig(configs[0], ...configs.slice(1));
   }
 
   /**
    * Appends a Pokemon of a {@link globalScene.randomSpecies | random species} that satisfies conditions
    * from the given filter and other parameters.
    */
-  public withPokemonFromFilter(filter: PokemonSpeciesFilter, options: SpeciesFilterConfigOptions = {}): this {
-    return this.withPokemonFromConfig({
-      ...addDefaultPartyOptions(options),
-      speciesFilter: filter,
-    });
+  public withPokemonFromFilter(speciesFilter: PokemonSpeciesFilter, ...options: SpeciesFilterConfigOptions[]): this {
+    const configs =
+      options.length === 0
+        ? [addDefaultPartyOptions({ speciesFilter })]
+        : options.map((o) => addDefaultPartyOptions({ ...o, speciesFilter }));
+    return this.withPokemonFromConfig(configs[0], ...configs.slice(1));
+  }
+
+  public withRandomPokemon(...options: SpeciesFilterConfigOptions[]): this {
+    const configs =
+      options.length === 0
+        ? [addDefaultPartyOptions({ speciesFilter: () => true })]
+        : options.map((o) => addDefaultPartyOptions({ ...o, speciesFilter: () => true }));
+    return this.withPokemonFromConfig(configs[0], ...configs.slice(1));
   }
 
   /**
@@ -508,7 +580,7 @@ export class TrainerConfigBuilder {
     ...specialtyTypes: ElementalType[]
   ): this {
     this.withTeraMode(TeraAIMode.INSTANT).withGymLeaderConfig(key, gender, "paldea", ...specialtyTypes);
-    const signaturePokemonCfg = this.config.partyConfigs!.at(-1)!;
+    const signaturePokemonCfg = this.config.partyConfigs!.at(-1)![0];
     signaturePokemonCfg.teraType = specialtyTypes[0];
     signaturePokemonCfg.instantTera = true;
 
@@ -593,4 +665,14 @@ export function levelByStrength(
   }
 
   return levelFuncs;
+}
+
+export function minWaveCondition(waveIndex: number): () => boolean {
+  return () => {
+    const { currentBattle, gameMode } = globalScene;
+    const startingWave = Overrides.STARTING_WAVE_OVERRIDE ?? 1;
+    const adjustedWave = gameMode.getWaveForDifficulty(currentBattle?.waveIndex ?? startingWave, true);
+
+    return adjustedWave >= waveIndex;
+  };
 }

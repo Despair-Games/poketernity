@@ -18,6 +18,8 @@ import { randSeedInt, randSeedItem } from "#utils/random-utils";
  * @param trainerSlot - The {@linkcode TrainerSlot} of the Trainer whose Pokemon is being generated
  * @param slotIndex - The party slot index of the Pokemon being generated
  * @param baseOffset - (Optional) A base offset to override the {@linkcode globalScene.currentBattle.waveIndex | waveIndex} component
+ * @param useSameSeedForAllPokemon - (Default `false`) If `true`, the same seed offset
+ * will be used for all Pokemon in the Trainer's party.
  * @param useSameSeedForAllTrainers - (Default `false`) If `true`, the same seed offset
  * will be used for all Trainers in the current battle for each slot index.
  * @returns The final seed offset to generate the Pokemon in the given party slot
@@ -26,11 +28,12 @@ export function getPartyMemberSeedOffset(
   trainerSlot: NonNullTrainerSlot,
   slotIndex: number,
   baseOffset?: number,
+  useSameSeedForAllPokemon: boolean = false,
   useSameSeedForAllTrainers: boolean = false,
 ): number {
   return (
     ((baseOffset ?? globalScene.currentBattle.waveIndex + (useSameSeedForAllTrainers ? 0 : trainerSlot))
-      + (slotIndex + 1))
+      + (useSameSeedForAllPokemon ? 0 : slotIndex + 1))
     << 8
   );
 }

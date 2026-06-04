@@ -82,10 +82,21 @@ export interface NewTrainerConfig {
    */
   victoryBgm: () => string;
   /**
-   * An array of configs for the Trainer's party Pokemon. When generated, the Pokemon
-   * are added to {@linkcode globalScene} as enemies.
+   * A function that returns `true` if this Trainer acts as the *only* Trainer in a double battle.
+   * Double battles with multiple Trainers should use a {@linkcode CompositeTrainerConfig} instead.
    */
-  partyConfigs: TrainerPartyPokemonConfig[];
+  isDouble: () => boolean;
+  /**
+   * A 2-D array of configs for the Trainer's party Pokemon. Pokemon are generated
+   * based on one randomly selected config from each internal array.
+   * When generated, the Pokemon are added to {@linkcode globalScene} as enemies.
+   */
+  partyConfigs: NonEmptyArray<TrainerPartyPokemonConfig>[];
+  /**
+   * If `true`, all Pokemon within the Trainer's party will have their species selected under the
+   * same seed offset, forcing correlation when species pools are of the same size.
+   */
+  useSameSeedForAllPokemon: boolean;
   /**
    * A fixed base seed offset component to be used when the Trainer's party is randomly generated.
    * If multiple configs have the same seed offset and apply the same RNG for species generation,
@@ -132,13 +143,13 @@ export type RequireOneTrainer<T> = Partial<TrainerSlotMap<T>> & {
   [TrainerSlot.TRAINER]: T;
 };
 
-// #region CompoundTrainerConfig
+// #region CompositeTrainerConfig
 /**
  * Container for multiple {@linkcode NewTrainerConfig}s to be used in a singular battle.
  * This includes getters to resolve conflicting data/generators between the
  * included configs.
  */
-export class CompoundTrainerConfig {
+export class CompositeTrainerConfig {
   public readonly configs: TrainerSlotMap<NewTrainerConfig>;
   public readonly combinedTitle: string;
   /**
@@ -164,7 +175,7 @@ export class CompoundTrainerConfig {
   }
 }
 
-export function isCompoundConfig(config: NewTrainerConfig | CompoundTrainerConfig): config is CompoundTrainerConfig {
+export function isCompositeConfig(config: NewTrainerConfig | CompositeTrainerConfig): config is CompositeTrainerConfig {
   return Object.hasOwn(config, "configs");
 }
 

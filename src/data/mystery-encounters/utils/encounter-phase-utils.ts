@@ -33,9 +33,9 @@ import { showEncounterText } from "#mystery-encounters/encounter-dialogue-utils"
 import type { IMysteryEncounter } from "#mystery-encounters/mystery-encounter";
 import type { MysteryEncounterOption } from "#mystery-encounters/mystery-encounter-option";
 import {
-  type CompoundTrainerConfig,
+  type CompositeTrainerConfig,
   type ConfigurableEnemyPokemonOptions,
-  isCompoundConfig,
+  isCompositeConfig,
   type NewTrainerConfig,
 } from "#trainers/new-trainer-config";
 import { levelByStrength } from "#trainers/trainer-config-builder";
@@ -95,7 +95,7 @@ interface MysteryEncounterBattleSpec {
 interface MysteryEncounterTrainerSpec extends MysteryEncounterBattleSpec {
   battleType: typeof MysteryEncounterMode.TRAINER_BATTLE;
   /** The config to generate Trainer(s) for the battle. */
-  trainerConfig: NewTrainerConfig | CompoundTrainerConfig;
+  trainerConfig: NewTrainerConfig | CompositeTrainerConfig;
   /**
    * The {@linkcode TrainerGender gender} of the Trainer in this battle
    * @todo Change data structure to support double battles
@@ -210,7 +210,7 @@ async function initMysteryEncounterTrainerPokemon(trainerSpec: MysteryEncounterT
   const scaledWaveIndex = globalScene.gameMode.getWaveForDifficulty(currentBattle.waveIndex);
   const levelBonus = Math.max(Math.floor((scaledWaveIndex / 10) * (levelBoostMultiplier ?? 0)), 0);
 
-  if (isCompoundConfig(trainerConfig)) {
+  if (isCompositeConfig(trainerConfig)) {
     const configCopy = { ...trainerConfig };
     for (const cfg of Object.values(configCopy.configs)) {
       const adjPartyConfigs = cfg.partyConfigs.map((pkmCfg) => {
@@ -222,7 +222,7 @@ async function initMysteryEncounterTrainerPokemon(trainerSpec: MysteryEncounterT
       cfg.partyConfigs = adjPartyConfigs;
     }
 
-    currentBattle.trainerData = TrainerDataSet.fromCompoundConfig(configCopy, trainerGenders);
+    currentBattle.trainerData = TrainerDataSet.fromCompositeConfig(configCopy, trainerGenders);
   } else {
     const adjPartyConfigs = trainerConfig.partyConfigs.map((cfg) => {
       return {

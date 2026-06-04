@@ -33,7 +33,7 @@ import {
 import { GameManager } from "#test/test-utils/game-manager";
 import { initSceneWithoutEncounterPhase } from "#test/test-utils/game-manager-utils";
 import { getEnumStr } from "#test/test-utils/string-utils";
-import { isCompoundConfig, type NewTrainerConfig } from "#trainers/new-trainer-config";
+import { isCompositeConfig, type NewTrainerConfig } from "#trainers/new-trainer-config";
 import { TrainerDataSet } from "#trainers/trainer-data";
 import * as MoveAnimUtils from "#utils/move-anim-utils";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -112,7 +112,7 @@ describe("Clowning Around - Mystery Encounter", () => {
       expect.fail(`Battle config is of invalid type: ${getEnumStr(MysteryEncounterMode, config.battleType)}`);
     }
 
-    expect(isCompoundConfig(config.trainerConfig)).toBe(false);
+    expect(isCompositeConfig(config.trainerConfig)).toBe(false);
     const trainerConfig = config.trainerConfig as NewTrainerConfig;
     const trainerData = TrainerDataSet.fromConfig(trainerConfig);
     expect(trainerData.double).toBe(true);

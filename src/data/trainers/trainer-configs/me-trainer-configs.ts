@@ -271,10 +271,13 @@ export const meTrainerConfigs: TrainerConfigs = {
 };
 
 export const newMeTrainerConfigs: TrainerConfigMap = {
-  // TODO: This should be a double battle
-  [TrainerType.CLOWN]: new TrainerConfigBuilder()
+  // TODO: Add configs for "A Trainer's Test"
+  [TrainerType.CLOWN]: new TrainerConfigBuilder(TrainerType.HARLEQUIN)
+    .withFixedName("harlequin", TrainerGender.MALE)
     .withTitle("harlequin")
+    .withSpriteKey("harlequin")
     .withBattleBgm(TrainerType.PSYCHIC)
+    .withForcedDoubleBattle()
     .withPokemon(SpeciesId.MR_MIME, {
       boss: true,
       moveset: [MoveId.TEETER_DANCE, MoveId.ALLY_SWITCH, MoveId.DAZZLING_GLEAM, MoveId.PSYCHIC],
@@ -295,8 +298,9 @@ export const newMeTrainerConfigs: TrainerConfigMap = {
       },
     })
     .build(),
-  [TrainerType.EXPERT_POKEMON_BREEDER]: new TrainerConfigBuilder()
+  [TrainerType.EXPERT_POKEMON_BREEDER]: new TrainerConfigBuilder(TrainerType.EXPERT_POKEMON_BREEDER)
     .withFixedName("expert_pokemon_breeder", TrainerGender.FEMALE)
+    .withSpriteKey("expert_pokemon_breeder")
     .withPokemon(SpeciesId.CLEFABLE, {
       abilityIndex: 1, // Magic Guard
       shiny: false,
@@ -346,9 +350,10 @@ export const newMeTrainerConfigs: TrainerConfigMap = {
       ivs: [31, 31, 31, 31, 31, 31],
     })
     .build(),
-  [TrainerType.VICTOR]: new TrainerConfigBuilder()
+  [TrainerType.VICTOR]: new TrainerConfigBuilder(TrainerType.VICTOR)
     .withTitle("the_winstrates")
     .withFixedName("victor", TrainerGender.MALE)
+    .withSpriteKey("victor")
     .withPokemon(SpeciesId.SWELLOW, {
       abilityIndex: 0, // Guts
       nature: Nature.ADAMANT,
@@ -365,9 +370,10 @@ export const newMeTrainerConfigs: TrainerConfigMap = {
     })
     .withMoneyMultiplier(1)
     .build(),
-  [TrainerType.VICTORIA]: new TrainerConfigBuilder()
+  [TrainerType.VICTORIA]: new TrainerConfigBuilder(TrainerType.VICTORIA)
     .withTitle("the_winstrates")
     .withFixedName("victoria", TrainerGender.FEMALE)
+    .withSpriteKey("victoria")
     .withPokemon(SpeciesId.ROSERADE, {
       abilityIndex: 0, // Natural Cure
       nature: Nature.CALM,
@@ -384,9 +390,10 @@ export const newMeTrainerConfigs: TrainerConfigMap = {
     })
     .withMoneyMultiplier(1)
     .build(),
-  [TrainerType.VIVI]: new TrainerConfigBuilder()
+  [TrainerType.VIVI]: new TrainerConfigBuilder(TrainerType.VIVI)
     .withTitle("the_winstrates")
     .withFixedName("vivi", TrainerGender.FEMALE)
+    .withSpriteKey("vivi")
     .withPokemon(SpeciesId.SEAKING, {
       abilityIndex: 2, // Lightning Rod
       nature: Nature.ADAMANT,
@@ -410,9 +417,10 @@ export const newMeTrainerConfigs: TrainerConfigMap = {
     })
     .withMoneyMultiplier(1)
     .build(),
-  [TrainerType.VICKY]: new TrainerConfigBuilder()
+  [TrainerType.VICKY]: new TrainerConfigBuilder(TrainerType.VICKY)
     .withTitle("the_winstrates")
     .withFixedName("vicky", TrainerGender.FEMALE)
+    .withSpriteKey("vicky")
     .withPokemon(SpeciesId.MEDICHAM, {
       formIndex: 1, // Mega Medicham
       nature: Nature.IMPISH,
@@ -422,9 +430,10 @@ export const newMeTrainerConfigs: TrainerConfigMap = {
     })
     .withMoneyMultiplier(1)
     .build(),
-  [TrainerType.VITO]: new TrainerConfigBuilder()
+  [TrainerType.VITO]: new TrainerConfigBuilder(TrainerType.VITO)
     .withTitle("the_winstrates")
     .withFixedName("vito", TrainerGender.MALE)
+    .withSpriteKey("vito")
     .withPokemon(SpeciesId.HISUI_ELECTRODE, {
       abilityIndex: 0, // Soundproof
       nature: Nature.MODEST,
@@ -462,9 +471,11 @@ export const newMeTrainerConfigs: TrainerConfigMap = {
     })
     .withMoneyMultiplier(1)
     .build(),
-  [TrainerType.FUTURE_SELF]: new TrainerConfigBuilder()
+  [TrainerType.FUTURE_SELF]: new TrainerConfigBuilder(TrainerType.FUTURE_SELF)
     .withFixedName("future_self_m", TrainerGender.MALE)
+    .withSpriteKey("future_self_m", TrainerGender.MALE)
     .withFixedName("future_self_f", TrainerGender.FEMALE)
+    .withSpriteKey("future_self_f", TrainerGender.FEMALE)
     .withEncounterBgm("mystery_encounter_weird_dream")
     .withBattleBgm("mystery_encounter_weird_dream")
     .withVictoryBgm("mystery_encounter_weird_dream")
