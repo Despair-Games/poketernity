@@ -1,14 +1,44 @@
+import {
+  AETHER_ADMIN_SPECIES_POOL,
+  AETHER_GRUNT_SPECIES_POOL,
+  AQUA_ADMIN_SPECIES_POOL,
+  AQUA_GRUNT_SPECIES_POOL,
+  ATTICUS_SPECIES_POOL,
+  ERI_SPECIES_POOL,
+  FLARE_ADMIN_SPECIES_POOL,
+  FLARE_GRUNT_SPECIES_POOL,
+  GALACTIC_ADMIN_SPECIES_POOL,
+  GALACTIC_GRUNT_SPECIES_POOL,
+  GIACOMO_SPECIES_POOL,
+  MACRO_ADMIN_SPECIES_POOL,
+  MACRO_GRUNT_SPECIES_POOL,
+  MAGMA_ADMIN_SPECIES_POOL,
+  MAGMA_GRUNT_SPECIES_POOL,
+  MELA_SPECIES_POOL,
+  ORTEGA_SPECIES_POOL,
+  PLASMA_ADMIN_SPECIES_POOL,
+  PLASMA_GRUNT_SPECIES_POOL,
+  ROCKET_ADMIN_SPECIES_POOL,
+  ROCKET_GRUNT_SPECIES_POOL,
+  SKULL_ADMIN_SPECIES_POOL,
+  SKULL_GRUNT_SPECIES_POOL,
+  STAR_GRUNT_SPECIES_POOL,
+} from "#constants/trainer-constants";
 import { MoveId } from "#enums/move-id";
 import { SpeciesId } from "#enums/species-id";
+import { TrainerGender } from "#enums/trainer-gender";
 import { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
+import type { TrainerConfigMap } from "#trainers/new-trainer-config";
 import {
   getEvilGruntPartyTemplate,
   getRandomPartyMemberFunc,
   TrainerConfig,
   type TrainerConfigs,
 } from "#trainers/trainer-config";
+import { TrainerConfigBuilder } from "#trainers/trainer-config-builder";
+import { trainerNamePools } from "#trainers/trainer-names";
 
 const teamStarCommonMoveset = [MoveId.SPIN_OUT, MoveId.SHIFT_GEAR, MoveId.HIGH_HORSEPOWER] as const;
 
@@ -656,4 +686,367 @@ export const evilTeamTrainerConfigs: TrainerConfigs = {
         p.setMoveset(MoveId.COMBAT_TORQUE, ...teamStarCommonMoveset);
       }),
     ),
+};
+
+export const newEvilTeamTrainerConfigs: TrainerConfigMap = {
+  [TrainerType.ROCKET_GRUNT]: new TrainerConfigBuilder(TrainerType.ROCKET_GRUNT)
+    .withNameFromPool(trainerNamePools[TrainerType.ROCKET_GRUNT][0], TrainerGender.MALE)
+    .withNameFromPool(trainerNamePools[TrainerType.ROCKET_GRUNT][1], TrainerGender.FEMALE)
+    .withTitle("rocket_grunt", TrainerGender.MALE)
+    .withTitle("rocket_grunt_female", TrainerGender.FEMALE)
+    .withSpriteKey("rocket_grunt_m", TrainerGender.MALE)
+    .withSpriteKey("rocket_grunt_f", TrainerGender.FEMALE)
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_rocket_grunt")
+    .withVictoryBgm("victory_team_plasma")
+    .withEvilTeamGruntParty(ROCKET_GRUNT_SPECIES_POOL)
+    .withMoneyMultiplier(1)
+    .build(),
+  [TrainerType.ARCHER]: new TrainerConfigBuilder(TrainerType.ARCHER)
+    .withFixedName("archer", TrainerGender.MALE)
+    .withTitle("trainerTitles:rocket_admin")
+    .withSpriteKey("archer")
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_rocket_grunt")
+    .withVictoryBgm("victory_team_plasma")
+    .withEvilTeamAdminParty(ROCKET_ADMIN_SPECIES_POOL, SpeciesId.HOUNDOOM)
+    .withMoneyMultiplier(1.5)
+    .build(),
+  [TrainerType.ARIANA]: new TrainerConfigBuilder(TrainerType.ARIANA)
+    .withFixedName("ariana", TrainerGender.FEMALE)
+    .withTitle("trainerTitles:rocket_admin_female")
+    .withSpriteKey("ariana")
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_rocket_grunt")
+    .withVictoryBgm("victory_team_plasma")
+    .withEvilTeamAdminParty(ROCKET_ADMIN_SPECIES_POOL, SpeciesId.ARBOK)
+    .withMoneyMultiplier(1.5)
+    .build(),
+  [TrainerType.PROTON]: new TrainerConfigBuilder(TrainerType.PROTON)
+    .withFixedName("proton", TrainerGender.MALE)
+    .withTitle("trainerTitles:rocket_admin")
+    .withSpriteKey("proton")
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_rocket_grunt")
+    .withVictoryBgm("victory_team_plasma")
+    .withEvilTeamAdminParty(ROCKET_ADMIN_SPECIES_POOL, SpeciesId.CROBAT)
+    .withMoneyMultiplier(1.5)
+    .build(),
+  [TrainerType.PETREL]: new TrainerConfigBuilder(TrainerType.PETREL)
+    .withFixedName("petrel", TrainerGender.MALE)
+    .withTitle("trainerTitles:rocket_admin")
+    .withSpriteKey("petrel")
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_rocket_grunt")
+    .withVictoryBgm("victory_team_plasma")
+    .withEvilTeamAdminParty(ROCKET_ADMIN_SPECIES_POOL, SpeciesId.WEEZING)
+    .withMoneyMultiplier(1.5)
+    .build(),
+  [TrainerType.MAGMA_GRUNT]: new TrainerConfigBuilder(TrainerType.MAGMA_GRUNT)
+    .withNameFromPool(trainerNamePools[TrainerType.MAGMA_GRUNT][0], TrainerGender.MALE)
+    .withNameFromPool(trainerNamePools[TrainerType.MAGMA_GRUNT][1], TrainerGender.FEMALE)
+    .withTitle("magma_grunt", TrainerGender.MALE)
+    .withTitle("magma_grunt_female", TrainerGender.FEMALE)
+    .withSpriteKey("magma_grunt_m", TrainerGender.MALE)
+    .withSpriteKey("magma_grunt_f", TrainerGender.FEMALE)
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_aqua_magma_grunt")
+    .withVictoryBgm("victory_team_plasma")
+    .withEvilTeamGruntParty(MAGMA_GRUNT_SPECIES_POOL)
+    .withMoneyMultiplier(1)
+    .build(),
+  [TrainerType.TABITHA]: new TrainerConfigBuilder(TrainerType.TABITHA)
+    .withFixedName("tabitha", TrainerGender.FEMALE)
+    .withTitle("trainerTitles:magma_admin_female")
+    .withSpriteKey("tabitha")
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_aqua_magma_grunt")
+    .withVictoryBgm("victory_team_plasma")
+    .withEvilTeamAdminParty(MAGMA_ADMIN_SPECIES_POOL, SpeciesId.CAMERUPT)
+    .withMoneyMultiplier(1.5)
+    .build(),
+  [TrainerType.COURTNEY]: new TrainerConfigBuilder(TrainerType.COURTNEY)
+    .withFixedName("courtney", TrainerGender.FEMALE)
+    .withTitle("trainerTitles:magma_admin_female")
+    .withSpriteKey("courtney")
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_aqua_magma_grunt")
+    .withVictoryBgm("victory_team_plasma")
+    .withEvilTeamAdminParty(MAGMA_ADMIN_SPECIES_POOL, SpeciesId.CAMERUPT)
+    .withMoneyMultiplier(1.5)
+    .build(),
+  [TrainerType.AQUA_GRUNT]: new TrainerConfigBuilder(TrainerType.AQUA_GRUNT)
+    .withNameFromPool(trainerNamePools[TrainerType.AQUA_GRUNT][0], TrainerGender.MALE)
+    .withNameFromPool(trainerNamePools[TrainerType.AQUA_GRUNT][1], TrainerGender.FEMALE)
+    .withTitle("aqua_grunt", TrainerGender.MALE)
+    .withTitle("aqua_grunt_female", TrainerGender.FEMALE)
+    .withSpriteKey("aqua_grunt_m", TrainerGender.MALE)
+    .withSpriteKey("aqua_grunt_f", TrainerGender.FEMALE)
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_aqua_magma_grunt")
+    .withVictoryBgm("victory_team_plasma")
+    .withEvilTeamGruntParty(AQUA_GRUNT_SPECIES_POOL)
+    .withMoneyMultiplier(1)
+    .build(),
+  [TrainerType.MATT]: new TrainerConfigBuilder(TrainerType.MATT)
+    .withFixedName("matt", TrainerGender.MALE)
+    .withTitle("trainerTitles:aqua_admin")
+    .withSpriteKey("matt")
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_aqua_magma_grunt")
+    .withVictoryBgm("victory_team_plasma")
+    .withEvilTeamAdminParty(AQUA_ADMIN_SPECIES_POOL, SpeciesId.SHARPEDO)
+    .withMoneyMultiplier(1.5)
+    .build(),
+  [TrainerType.SHELLY]: new TrainerConfigBuilder(TrainerType.SHELLY)
+    .withFixedName("shelly", TrainerGender.FEMALE)
+    .withTitle("trainerTitles:aqua_admin_female")
+    .withSpriteKey("shelly")
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_aqua_magma_grunt")
+    .withVictoryBgm("victory_team_plasma")
+    .withEvilTeamAdminParty(AQUA_ADMIN_SPECIES_POOL, SpeciesId.SHARPEDO)
+    .withMoneyMultiplier(1.5)
+    .build(),
+  [TrainerType.GALACTIC_GRUNT]: new TrainerConfigBuilder(TrainerType.GALACTIC_GRUNT)
+    .withNameFromPool(trainerNamePools[TrainerType.GALACTIC_GRUNT][0], TrainerGender.MALE)
+    .withNameFromPool(trainerNamePools[TrainerType.GALACTIC_GRUNT][1], TrainerGender.FEMALE)
+    .withTitle("galactic_grunt", TrainerGender.MALE)
+    .withTitle("galactic_grunt_female", TrainerGender.FEMALE)
+    .withSpriteKey("galactic_grunt_m", TrainerGender.MALE)
+    .withSpriteKey("galactic_grunt_f", TrainerGender.FEMALE)
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_galactic_grunt")
+    .withVictoryBgm("victory_team_plasma")
+    .withEvilTeamGruntParty(GALACTIC_GRUNT_SPECIES_POOL)
+    .withMoneyMultiplier(1)
+    .build(),
+  [TrainerType.JUPITER]: new TrainerConfigBuilder(TrainerType.JUPITER)
+    .withFixedName("jupiter", TrainerGender.FEMALE)
+    .withTitle("trainerTitles:galactic_admin_female")
+    .withSpriteKey("jupiter")
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_galactic_admin")
+    .withVictoryBgm("victory_team_plasma")
+    .withEvilTeamAdminParty(GALACTIC_ADMIN_SPECIES_POOL, SpeciesId.SKUNTANK)
+    .withMoneyMultiplier(1.5)
+    .build(),
+  [TrainerType.MARS]: new TrainerConfigBuilder(TrainerType.MARS)
+    .withFixedName("mars", TrainerGender.FEMALE)
+    .withTitle("trainerTitles:galactic_admin_female")
+    .withSpriteKey("mars")
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_galactic_admin")
+    .withVictoryBgm("victory_team_plasma")
+    .withEvilTeamAdminParty(GALACTIC_ADMIN_SPECIES_POOL, SpeciesId.PURUGLY)
+    .withMoneyMultiplier(1.5)
+    .build(),
+  [TrainerType.SATURN]: new TrainerConfigBuilder(TrainerType.SATURN)
+    .withFixedName("saturn", TrainerGender.MALE)
+    .withTitle("trainerTitles:galactic_commander")
+    .withSpriteKey("saturn")
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_galactic_admin")
+    .withVictoryBgm("victory_team_plasma")
+    .withEvilTeamAdminParty(GALACTIC_ADMIN_SPECIES_POOL, SpeciesId.TOXICROAK)
+    .withMoneyMultiplier(1.5)
+    .build(),
+  [TrainerType.PLASMA_GRUNT]: new TrainerConfigBuilder(TrainerType.PLASMA_GRUNT)
+    .withNameFromPool(trainerNamePools[TrainerType.PLASMA_GRUNT][0], TrainerGender.MALE)
+    .withNameFromPool(trainerNamePools[TrainerType.PLASMA_GRUNT][1], TrainerGender.FEMALE)
+    .withTitle("plasma_grunt", TrainerGender.MALE)
+    .withTitle("plasma_grunt_female", TrainerGender.FEMALE)
+    .withSpriteKey("plasma_grunt_m", TrainerGender.MALE)
+    .withSpriteKey("plasma_grunt_f", TrainerGender.FEMALE)
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_plasma_grunt")
+    .withVictoryBgm("victory_team_plasma")
+    .withEvilTeamGruntParty(PLASMA_GRUNT_SPECIES_POOL)
+    .withMoneyMultiplier(1)
+    .build(),
+  [TrainerType.ZINZOLIN]: new TrainerConfigBuilder(TrainerType.ZINZOLIN)
+    .withFixedName("zinzolin", TrainerGender.MALE)
+    .withTitle("trainerTitles:plasma_sage")
+    .withSpriteKey("zinzolin")
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_plasma_grunt")
+    .withVictoryBgm("victory_team_plasma")
+    .withEvilTeamAdminParty(PLASMA_ADMIN_SPECIES_POOL, SpeciesId.CRYOGONAL)
+    .withMoneyMultiplier(1.5)
+    .build(),
+  [TrainerType.ROOD]: new TrainerConfigBuilder(TrainerType.ROOD)
+    .withFixedName("rood", TrainerGender.MALE)
+    .withTitle("trainerTitles:plasma_sage")
+    .withSpriteKey("rood")
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_plasma_grunt")
+    .withVictoryBgm("victory_team_plasma")
+    .withEvilTeamAdminParty(PLASMA_ADMIN_SPECIES_POOL, SpeciesId.SWOOBAT)
+    .withMoneyMultiplier(1.5)
+    .build(),
+  [TrainerType.FLARE_GRUNT]: new TrainerConfigBuilder(TrainerType.FLARE_GRUNT)
+    .withNameFromPool(trainerNamePools[TrainerType.FLARE_GRUNT][0], TrainerGender.MALE)
+    .withNameFromPool(trainerNamePools[TrainerType.FLARE_GRUNT][1], TrainerGender.FEMALE)
+    .withTitle("flare_grunt", TrainerGender.MALE)
+    .withTitle("flare_grunt_female", TrainerGender.FEMALE)
+    .withSpriteKey("flare_grunt_m", TrainerGender.MALE)
+    .withSpriteKey("flare_grunt_f", TrainerGender.FEMALE)
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_flare_grunt")
+    .withVictoryBgm("victory_team_plasma")
+    .withEvilTeamGruntParty(FLARE_GRUNT_SPECIES_POOL)
+    .withMoneyMultiplier(1)
+    .build(),
+  [TrainerType.BRYONY]: new TrainerConfigBuilder(TrainerType.BRYONY)
+    .withFixedName("bryony", TrainerGender.FEMALE)
+    .withTitle("trainerTitles:flare_admin_female")
+    .withSpriteKey("bryony")
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_flare_grunt")
+    .withVictoryBgm("victory_team_plasma")
+    .withEvilTeamAdminParty(FLARE_ADMIN_SPECIES_POOL, SpeciesId.LIEPARD)
+    .withMoneyMultiplier(1.5)
+    .build(),
+  [TrainerType.XEROSIC]: new TrainerConfigBuilder(TrainerType.XEROSIC)
+    .withFixedName("xerosic", TrainerGender.MALE)
+    .withTitle("trainerTitles:flare_admin")
+    .withSpriteKey("xerosic")
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_flare_grunt")
+    .withVictoryBgm("victory_team_plasma")
+    .withEvilTeamAdminParty(FLARE_ADMIN_SPECIES_POOL, SpeciesId.MALAMAR)
+    .withMoneyMultiplier(1.5)
+    .build(),
+  [TrainerType.AETHER_GRUNT]: new TrainerConfigBuilder(TrainerType.AETHER_GRUNT)
+    .withNameFromPool(trainerNamePools[TrainerType.AETHER_GRUNT][0], TrainerGender.MALE)
+    .withNameFromPool(trainerNamePools[TrainerType.AETHER_GRUNT][1], TrainerGender.FEMALE)
+    .withTitle("aether_grunt", TrainerGender.MALE)
+    .withTitle("aether_grunt_female", TrainerGender.FEMALE)
+    .withSpriteKey("aether_grunt_m", TrainerGender.MALE)
+    .withSpriteKey("aether_grunt_f", TrainerGender.FEMALE)
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_aether_grunt")
+    .withVictoryBgm("victory_team_plasma")
+    .withEvilTeamGruntParty(AETHER_GRUNT_SPECIES_POOL)
+    .withMoneyMultiplier(1)
+    .build(),
+  [TrainerType.FABA]: new TrainerConfigBuilder(TrainerType.FABA)
+    .withFixedName("faba", TrainerGender.MALE)
+    .withTitle("trainerTitles:aether_admin")
+    .withSpriteKey("faba")
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_aether_grunt")
+    .withVictoryBgm("victory_team_plasma")
+    .withEvilTeamAdminParty(AETHER_ADMIN_SPECIES_POOL, SpeciesId.HYPNO)
+    .withMoneyMultiplier(1.5)
+    .build(),
+  [TrainerType.SKULL_GRUNT]: new TrainerConfigBuilder(TrainerType.SKULL_GRUNT)
+    .withNameFromPool(trainerNamePools[TrainerType.SKULL_GRUNT][0], TrainerGender.MALE)
+    .withNameFromPool(trainerNamePools[TrainerType.SKULL_GRUNT][1], TrainerGender.FEMALE)
+    .withTitle("skull_grunt", TrainerGender.MALE)
+    .withTitle("skull_grunt_female", TrainerGender.FEMALE)
+    .withSpriteKey("skull_grunt_m", TrainerGender.MALE)
+    .withSpriteKey("skull_grunt_f", TrainerGender.FEMALE)
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_skull_grunt")
+    .withVictoryBgm("victory_team_plasma")
+    .withEvilTeamGruntParty(SKULL_GRUNT_SPECIES_POOL)
+    .withMoneyMultiplier(1)
+    .build(),
+  [TrainerType.PLUMERIA]: new TrainerConfigBuilder(TrainerType.PLUMERIA)
+    .withFixedName("plumeria", TrainerGender.FEMALE)
+    .withTitle("trainerTitles:skull_admin")
+    .withSpriteKey("plumeria")
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_skull_admin")
+    .withVictoryBgm("victory_team_plasma")
+    .withEvilTeamAdminParty(SKULL_ADMIN_SPECIES_POOL, SpeciesId.SALAZZLE)
+    .withMoneyMultiplier(1.5)
+    .build(),
+  [TrainerType.MACRO_GRUNT]: new TrainerConfigBuilder(TrainerType.MACRO_GRUNT)
+    .withNameFromPool(trainerNamePools[TrainerType.MACRO_GRUNT][0], TrainerGender.MALE)
+    .withNameFromPool(trainerNamePools[TrainerType.MACRO_GRUNT][1], TrainerGender.FEMALE)
+    .withTitle("macro_grunt", TrainerGender.MALE)
+    .withTitle("macro_grunt_female", TrainerGender.FEMALE)
+    .withSpriteKey("macro_grunt_m", TrainerGender.MALE)
+    .withSpriteKey("macro_grunt_f", TrainerGender.FEMALE)
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_macro_grunt")
+    .withVictoryBgm("victory_team_plasma")
+    .withEvilTeamGruntParty(MACRO_GRUNT_SPECIES_POOL)
+    .withMoneyMultiplier(1)
+    .build(),
+  [TrainerType.OLEANA]: new TrainerConfigBuilder(TrainerType.OLEANA)
+    .withFixedName("oleana", TrainerGender.FEMALE)
+    .withTitle("trainerTitles:macro_admin")
+    .withSpriteKey("oleana")
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_oleana")
+    .withVictoryBgm("victory_team_plasma")
+    .withEvilTeamAdminParty(MACRO_ADMIN_SPECIES_POOL, SpeciesId.GARBODOR)
+    .withMoneyMultiplier(1.5)
+    .build(),
+  [TrainerType.STAR_GRUNT]: new TrainerConfigBuilder(TrainerType.STAR_GRUNT)
+    .withNameFromPool(trainerNamePools[TrainerType.STAR_GRUNT][0], TrainerGender.MALE)
+    .withNameFromPool(trainerNamePools[TrainerType.STAR_GRUNT][1], TrainerGender.FEMALE)
+    .withTitle("star_grunt", TrainerGender.MALE)
+    .withTitle("star_grunt_female", TrainerGender.FEMALE)
+    .withSpriteKey("star_grunt_m", TrainerGender.MALE)
+    .withSpriteKey("star_grunt_f", TrainerGender.FEMALE)
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_star_grunt")
+    .withVictoryBgm("victory_team_plasma")
+    .withEvilTeamGruntParty(STAR_GRUNT_SPECIES_POOL)
+    .withMoneyMultiplier(1)
+    .build(),
+  [TrainerType.GIACOMO]: new TrainerConfigBuilder(TrainerType.GIACOMO)
+    .withFixedName("giacomo", TrainerGender.MALE)
+    .withTitle("trainerTitles:star_admin")
+    .withSpriteKey("giacomo")
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_star_admin")
+    .withVictoryBgm("victory_team_plasma")
+    .withTeamStarAdminParty(GIACOMO_SPECIES_POOL, SpeciesId.KINGAMBIT, 1)
+    .withMoneyMultiplier(1.5)
+    .build(),
+  [TrainerType.MELA]: new TrainerConfigBuilder(TrainerType.MELA)
+    .withFixedName("mela", TrainerGender.FEMALE)
+    .withTitle("trainerTitles:star_admin")
+    .withSpriteKey("mela")
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_star_admin")
+    .withVictoryBgm("victory_team_plasma")
+    .withTeamStarAdminParty(MELA_SPECIES_POOL, SpeciesId.ARMAROUGE, 2)
+    .withMoneyMultiplier(1.5)
+    .build(),
+  [TrainerType.ATTICUS]: new TrainerConfigBuilder(TrainerType.ATTICUS)
+    .withFixedName("atticus", TrainerGender.MALE)
+    .withTitle("trainerTitles:star_admin")
+    .withSpriteKey("atticus")
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_star_admin")
+    .withVictoryBgm("victory_team_plasma")
+    .withTeamStarAdminParty(ATTICUS_SPECIES_POOL, SpeciesId.REVAVROOM, 3)
+    .withMoneyMultiplier(1.5)
+    .build(),
+  [TrainerType.ORTEGA]: new TrainerConfigBuilder(TrainerType.ORTEGA)
+    .withFixedName("ortega", TrainerGender.MALE)
+    .withTitle("trainerTitles:star_admin")
+    .withSpriteKey("ortega")
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_star_admin")
+    .withVictoryBgm("victory_team_plasma")
+    .withTeamStarAdminParty(ORTEGA_SPECIES_POOL, SpeciesId.DACHSBUN, 4)
+    .withMoneyMultiplier(1.5)
+    .build(),
+  [TrainerType.ERI]: new TrainerConfigBuilder(TrainerType.ERI)
+    .withFixedName("eri", TrainerGender.FEMALE)
+    .withTitle("trainerTitles:star_admin")
+    .withSpriteKey("eri")
+    .withEncounterBgm(TrainerType.PLASMA_GRUNT)
+    .withBattleBgm("battle_star_admin")
+    .withVictoryBgm("victory_team_plasma")
+    .withTeamStarAdminParty(ERI_SPECIES_POOL, SpeciesId.ANNIHILAPE, 5)
+    .withMoneyMultiplier(1.5)
+    .build(),
 };

@@ -1,13 +1,21 @@
 import { globalScene } from "#app/global-scene";
 import { activeOverrides as Overrides } from "#app/overrides";
 import { GYM_LEADER_STRENGTH_TEMPLATES } from "#constants/trainer-constants";
+import {
+  EVIL_ADMIN_1_WAVE,
+  EVIL_GRUNT_1_WAVE,
+  EVIL_GRUNT_2_WAVE,
+  EVIL_GRUNT_3_WAVE,
+  EVIL_GRUNT_4_WAVE,
+} from "#constants/wave-constants";
 import { getLevelForWaveFunc } from "#data/exp";
 import type { PokemonSpecies } from "#data/pokemon-species";
 import { signatureSpecies } from "#data/signature-species";
 import { AiType } from "#enums/ai-type";
 import type { ElementalType } from "#enums/elemental-type";
+import { MoveId } from "#enums/move-id";
 import { PartyMemberStrength } from "#enums/party-member-strength";
-import type { SpeciesId } from "#enums/species-id";
+import { SpeciesId } from "#enums/species-id";
 import { TeraAIMode } from "#enums/tera-ai-mode";
 import { type NonDefaultTrainerGender, TrainerGender } from "#enums/trainer-gender";
 import { TrainerType } from "#enums/trainer-type";
@@ -585,6 +593,160 @@ export class TrainerConfigBuilder {
     signaturePokemonCfg.instantTera = true;
 
     return this;
+  }
+
+  /**
+   * Adds the configs for an Evil Team Grunt's party, which has varying size
+   * and strength based on the current wave.
+   * @param speciesPool - The Grunt's {@linkcode TieredSpeciesPool}
+   * @returns `this`
+   */
+  public withEvilTeamGruntParty(speciesPool: TieredSpeciesPool): this {
+    return this.withPokemonFromTieredPool(
+      speciesPool,
+      {
+        condition: () => (globalScene.currentBattle?.waveIndex ?? 0) <= EVIL_GRUNT_1_WAVE,
+        count: 2, // 2 Average
+      },
+      {
+        condition: () => isBetween(globalScene.currentBattle?.waveIndex ?? 0, EVIL_GRUNT_1_WAVE + 1, EVIL_GRUNT_2_WAVE),
+        count: 3, // 3 Average
+      },
+      {
+        condition: () => isBetween(globalScene.currentBattle?.waveIndex ?? 0, EVIL_GRUNT_2_WAVE + 1, EVIL_GRUNT_3_WAVE),
+        count: 3,
+        levelFunc: levelByStrength([
+          PartyMemberStrength.AVERAGE,
+          PartyMemberStrength.AVERAGE,
+          PartyMemberStrength.STRONG,
+        ]),
+      },
+      {
+        condition: () =>
+          isBetween(globalScene.currentBattle?.waveIndex ?? 0, EVIL_GRUNT_3_WAVE + 1, EVIL_GRUNT_4_WAVE - 1),
+        count: 5,
+        levelFunc: levelByStrength([
+          PartyMemberStrength.AVERAGE,
+          PartyMemberStrength.AVERAGE,
+          PartyMemberStrength.AVERAGE,
+          PartyMemberStrength.STRONG,
+          PartyMemberStrength.STRONGER,
+        ]),
+      },
+      {
+        condition: () => (globalScene.currentBattle?.waveIndex ?? 0) >= EVIL_GRUNT_4_WAVE,
+        count: 6,
+        levelFunc: levelByStrength([
+          PartyMemberStrength.AVERAGE,
+          PartyMemberStrength.AVERAGE,
+          PartyMemberStrength.AVERAGE,
+          PartyMemberStrength.STRONG,
+          PartyMemberStrength.STRONG,
+          PartyMemberStrength.STRONGER,
+        ]),
+      },
+    );
+  }
+
+  /**
+   * Adds the configs for an Evil Team Admin's party, which broadly consists of:
+   * - 4-5 Pokemon of varying strength from a tiered {@linkcode speciesPool}
+   * - A Pokemon of the Admin's {@linkcode sigSpecies}
+   * @returns `this`
+   */
+  public withEvilTeamAdminParty(speciesPool: TieredSpeciesPool, sigSpecies: SpeciesId): this {
+    return this.withPokemonFromTieredPool(
+      speciesPool,
+      {
+        condition: () => (globalScene.currentBattle?.waveIndex ?? 0) <= EVIL_ADMIN_1_WAVE,
+        count: 4,
+        levelFunc: levelByStrength([
+          PartyMemberStrength.AVERAGE,
+          PartyMemberStrength.AVERAGE,
+          PartyMemberStrength.AVERAGE,
+          PartyMemberStrength.STRONG,
+        ]),
+      },
+      {
+        condition: () => (globalScene.currentBattle?.waveIndex ?? 0) > EVIL_ADMIN_1_WAVE,
+        count: 5,
+        levelFunc: levelByStrength([
+          PartyMemberStrength.AVERAGE,
+          PartyMemberStrength.AVERAGE,
+          PartyMemberStrength.AVERAGE,
+          PartyMemberStrength.STRONG,
+          PartyMemberStrength.STRONG,
+        ]),
+      },
+    ).withPokemon(sigSpecies, { levelFunc: levelByStrength(PartyMemberStrength.STRONGER) });
+  }
+
+  /**
+   * Adds the configs for a Team Star Admin's party, which broadly consists of:
+   * - 3-4 Pokemon of varying strength from a tiered {@linkcode speciesPool}
+   * - A Pokemon of the Admin's {@linkcode sigSpecies}
+   * - A Revavroom of the given {@linkcode starmobileForm} with the following moveset:
+   *   - Spin Out
+   *   - Shift Gear
+   *   - High Horsepower
+   *   - The Starmobile form's signature "Torque" move
+   * @returns `this`
+   * @see {@linkcode getStarmobileSignatureMove}
+   */
+  public withTeamStarAdminParty(speciesPool: TieredSpeciesPool, sigSpecies: SpeciesId, starmobileForm: number): this {
+    const starmobileMoveset = [
+      MoveId.SPIN_OUT,
+      MoveId.SHIFT_GEAR,
+      MoveId.HIGH_HORSEPOWER,
+      this.getStarmobileSignatureMove(starmobileForm),
+    ];
+
+    return this.withPokemonFromTieredPool(
+      speciesPool,
+      {
+        condition: () => (globalScene.currentBattle?.waveIndex ?? 0) <= EVIL_ADMIN_1_WAVE,
+        count: 3,
+      },
+      {
+        condition: () => (globalScene.currentBattle?.waveIndex ?? 0) > EVIL_ADMIN_1_WAVE,
+        count: 4,
+        levelFunc: levelByStrength([
+          PartyMemberStrength.AVERAGE,
+          PartyMemberStrength.AVERAGE,
+          PartyMemberStrength.AVERAGE,
+          PartyMemberStrength.STRONG,
+        ]),
+      },
+    )
+      .withPokemon(sigSpecies, { levelFunc: levelByStrength(PartyMemberStrength.STRONG) })
+      .withPokemon(SpeciesId.REVAVROOM, {
+        formIndex: starmobileForm,
+        levelFunc: levelByStrength(PartyMemberStrength.STRONG),
+        moveset: starmobileMoveset,
+      });
+  }
+
+  /**
+   * Obtains the matching signature "Torque" move for the given Starmobile form.
+   * @param formIndex - The form index for the desired Starmobile
+   * @returns the {@linkcode MoveId} of the signature move
+   */
+  private getStarmobileSignatureMove(formIndex: number): MoveId {
+    switch (formIndex) {
+      case 1: // Segin Starmobile
+        return MoveId.WICKED_TORQUE;
+      case 2: // Schedar Starmobile
+        return MoveId.BLAZING_TORQUE;
+      case 3: // Navi Starmobile
+        return MoveId.NOXIOUS_TORQUE;
+      case 4: // Ruchbah Starmobile
+        return MoveId.MAGICAL_TORQUE;
+      case 5: // Caph Starmobile
+        return MoveId.COMBAT_TORQUE;
+      default:
+        console.warn("Invalid Starmobile form found in Star Admin config");
+        return MoveId.NONE;
+    }
   }
 }
 

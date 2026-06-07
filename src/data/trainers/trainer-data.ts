@@ -11,6 +11,7 @@ import type {
   NewTrainerConfig,
   RequireOneTrainer,
   TrainerAssetKey,
+  TrainerPartyPokemonConfig,
   TrainerSlotMap,
 } from "#trainers/new-trainer-config";
 import { TrainerAi } from "#trainers/trainer-ai";
@@ -210,15 +211,22 @@ export class TrainerData {
   ): EnemyPokemon[] {
     const party: EnemyPokemon[] = [];
     const scaledWaveIndex = globalScene.gameMode.getWaveForDifficulty(globalScene.currentBattle.waveIndex);
-    const finalPartyConfigs = partyConfigs.map((cfgs) => randSeedItem(cfgs));
+
+    /**
+     * The party configs to be used for party generation. Configs are selected
+     * based on the following:
+     * - Any config whose {@linkcode TrainerPartyPokemonConfig.condition | condition} is not met is removed.
+     * - If multiple valid configs are available under a single slot, one of the
+     * configs is selected at random.
+     */
+    const finalPartyConfigs = partyConfigs
+      .map((cfgs) => cfgs.filter((c) => c.condition == null || c.condition()))
+      .filter((cfgs) => cfgs.length > 0)
+      .map((cfgs) => randSeedItem(cfgs));
 
     let remainingPokemon = partySizeLimit ?? 6;
 
     for (const config of finalPartyConfigs.toReversed()) {
-      if (config.condition && !config.condition()) {
-        continue;
-      }
-
       const finalCfg = config.aiType
         ? config
         : {
@@ -345,7 +353,10 @@ export class TrainerDataSet {
    * @see {@linkcode TrainerData.getLocalizedName}
    */
   public getLocalizedName(withTitle: boolean = true) {
-    const title = withTitle ? `${i18next.t(`trainerClasses:${this.title}`)} ` : "";
+    let title = "";
+    if (withTitle) {
+      title = this.title.includes(":") ? `${i18next.t(this.title)} ` : `${i18next.t(`trainerClasses:${this.title}`)} `;
+    }
     const names = Object.values(this.trainers).map((td) => td.getLocalizedName(false));
 
     if (names.length === 2) {

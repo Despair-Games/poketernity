@@ -4,7 +4,7 @@ import { championDoubleTrainerConfigs } from "#trainers/trainer-configs/champion
 import { championTrainerConfigs } from "#trainers/trainer-configs/champion-trainer-configs";
 import { eliteFourTrainerConfigs } from "#trainers/trainer-configs/elite-four-trainer-configs";
 import { evilBossTrainerConfigs } from "#trainers/trainer-configs/evil-boss-trainer-configs";
-import { evilTeamTrainerConfigs } from "#trainers/trainer-configs/evil-team-trainer-configs";
+import { evilTeamTrainerConfigs, newEvilTeamTrainerConfigs } from "#trainers/trainer-configs/evil-team-trainer-configs";
 import { genericTrainerConfigs, newGenericTrainerConfigs } from "#trainers/trainer-configs/generic-trainer-configs";
 import { gymLeaderTrainerConfigs, newGymLeaderTrainerConfigs } from "#trainers/trainer-configs/gym-leader-configs";
 import { meTrainerConfigs, newMeTrainerConfigs } from "#trainers/trainer-configs/me-trainer-configs";
@@ -27,4 +27,5 @@ export const allNewTrainerConfigs: TrainerConfigMap = {
   ...newRivalTrainerConfigs,
   ...newGymLeaderTrainerConfigs,
   ...newMeTrainerConfigs,
+  ...newEvilTeamTrainerConfigs,
 };
