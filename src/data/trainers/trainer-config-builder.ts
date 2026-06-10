@@ -510,7 +510,7 @@ export class TrainerConfigBuilder {
    * Adds the assets and party generators for the Gym Leader of the given key.
    *
    * Gym Leaders' parties are generated based on three constant data structures:
-   * - {@linkcode signatureSpecies}, which defines fixed species pools for *N* Pokemon
+   * - {@linkcode gymLeaderSignatureSpecies}, which defines fixed species pools for *N* Pokemon
    * in the Gym Leader's party.
    * - {@linkcode specialtyTypes}, which is used to filter randomly generated
    * species for the remaining *(6 - N)* Pokemon.
@@ -594,6 +594,25 @@ export class TrainerConfigBuilder {
     return this;
   }
 
+  /**
+   * Adds the assets and party generators for the Elite Four member of the given key.
+   *
+   * Elite Four members' parties broadly consist of the following:
+   * - *N* Pokemon whose species are obtained from {@linkcode eliteFourSignatureSpecies}
+   * - *(6 - N)* Pokemon of random species such that
+   *   - The Pokemon's BST is greater than or equal to {@linkcode ELITE_FOUR_MINIMUM_BST}
+   *   - At least one of the Pokemon's type(s) match one of the Trainer's
+   *     signature type(s).
+   *
+   * The *N* signature Pokemon are loaded into the back of the Trainer's party
+   * in reverse order of where they are defined in {@linkcode eliteFourSignatureSpecies},
+   * and the *(6 - N)* random Pokemon are loaded into the front.
+   * @param key - The key of the Elite Four member's {@linkcode TrainerType}, e.g. `"KOGA"`
+   * @param gender - The Elite Four member's {@linkcode TrainerGender}
+   * @param specialtyTypes - The Elite Four member's preferred {@linkcode ElementalType}(s).
+   * Randomly generated Pokemon will be of at least one of these types.
+   * @returns `this`
+   */
   public withEliteFourConfig(
     key: keyof typeof TrainerType,
     gender: NonDefaultTrainerGender,
