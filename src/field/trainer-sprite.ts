@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { type NonNullTrainerSlot, TrainerSlot } from "#enums/trainer-slot";
-import type { TrainerSlotMap } from "#trainers/new-trainer-config";
+import type { TrainerSlotMap } from "#trainers/trainer-config";
 import type { TrainerData, TrainerDataSet } from "#trainers/trainer-data";
 import { playTween } from "#utils/anim-utils";
 

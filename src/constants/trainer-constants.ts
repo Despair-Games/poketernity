@@ -2,7 +2,7 @@ import { PartyMemberStrength } from "#enums/party-member-strength";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import { TrainerType } from "#enums/trainer-type";
-import type { TieredSpeciesPool } from "#trainers/new-trainer-config";
+import type { TieredSpeciesPool } from "#trainers/trainer-config";
 import type { NonEmptyArray } from "#types/utility-types";
 
 export const TRAINER_POOL_TIER_WEIGHTS: Readonly<Record<TrainerPoolTier, number>> = {

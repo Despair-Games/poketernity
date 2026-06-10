@@ -1,8 +1,8 @@
 import type { NonDefaultTrainerGender } from "#enums/trainer-gender";
 import type { NonNullTrainerSlot } from "#enums/trainer-slot";
 import type { TrainerType } from "#enums/trainer-type";
-import type { RequireOneTrainer } from "#trainers/new-trainer-config";
-import { allNewTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
+import type { RequireOneTrainer } from "#trainers/trainer-config";
+import { allTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
 import { TrainerData, TrainerDataSet } from "#trainers/trainer-data";
 
 export class NewTrainerSaveData {
@@ -31,7 +31,7 @@ export class NewTrainerSaveData {
       this.trainerSlot,
       {
         // TODO: Make `allNewTrainerConfigs` `Required` and remove this bang
-        ...allNewTrainerConfigs[this.trainerType]!,
+        ...allTrainerConfigs[this.trainerType]!,
         name: { [this.gender]: () => this.name },
         title: { [this.gender]: () => this.title },
         spriteKey: { [this.gender]: () => this.spriteKey },

@@ -1,12 +1,12 @@
 import { GYM_LEADER_STRENGTH_TEMPLATES } from "#constants/trainer-constants";
-import { signatureSpecies } from "#data/signature-species";
+import { gymLeaderSignatureSpecies } from "#data/signature-species";
 import { ElementalType } from "#enums/elemental-type";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerType } from "#enums/trainer-type";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import { GameManager } from "#test/test-utils/game-manager";
-import { newGymLeaderTrainerConfigs } from "#trainers/trainer-configs/gym-leader-configs";
+import { gymLeaderTrainerConfigs } from "#trainers/trainer-configs/gym-leader-configs";
 import { TrainerData } from "#trainers/trainer-data";
 import { coerceArray } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
@@ -32,7 +32,7 @@ describe("Trainers - Gym Leaders", async () => {
   });
 
   type GymLeaderTestCase = {
-    name: keyof typeof signatureSpecies;
+    name: keyof typeof gymLeaderSignatureSpecies;
     specialtyType: keyof typeof ElementalType;
   };
 
@@ -59,7 +59,7 @@ describe("Trainers - Gym Leaders", async () => {
   });
 
   describe.each(testGymLeaders)("$name", ({ name, specialtyType }) => {
-    const sigSpecies = signatureSpecies[name];
+    const sigSpecies = gymLeaderSignatureSpecies[name];
 
     describe.each(waveTestCases)("Wave $wave", ({ wave, expectedPartySize }) => {
       let party: EnemyPokemon[];
@@ -69,7 +69,7 @@ describe("Trainers - Gym Leaders", async () => {
 
         await game.classicMode.runToSummon(SpeciesId.MAGIKARP);
 
-        const config = newGymLeaderTrainerConfigs[TrainerType[name]]!;
+        const config = gymLeaderTrainerConfigs[TrainerType[name]]!;
         party = new TrainerData(TrainerSlot.TRAINER, config).party;
       });
 

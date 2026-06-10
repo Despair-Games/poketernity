@@ -20,12 +20,7 @@ import { TeraAIMode } from "#enums/tera-ai-mode";
 import { type NonDefaultTrainerGender, TrainerGender } from "#enums/trainer-gender";
 import { TrainerType } from "#enums/trainer-type";
 import type { ModifierType } from "#modifier/modifier-type";
-import type {
-  LevelFunc,
-  NewTrainerConfig,
-  TieredSpeciesPool,
-  TrainerPartyPokemonConfig,
-} from "#trainers/new-trainer-config";
+import type { LevelFunc, TieredSpeciesPool, TrainerConfig, TrainerPartyPokemonConfig } from "#trainers/trainer-config";
 import type { PokemonSpeciesFilter } from "#types/ui-types";
 import type { CoercibleArray, NonEmptyArray } from "#types/utility-types";
 import { coerceArray, enumValueToKey, isBetween } from "#utils/common-utils";
@@ -65,15 +60,15 @@ function addDefaultPartyOptions(options: PartyPokemonOptions): TrainerPartyPokem
 // #region TrainerConfigBuilder
 
 /**
- * Builder class for constructing a {@linkcode NewTrainerConfig} for Trainer generation.
+ * Builder class for constructing a {@linkcode TrainerConfig} for Trainer generation.
  * This includes a chaining API to initialize the config's generators and a
  * validator to ensure all required generators are properly initialized in runtime.
  */
 export class TrainerConfigBuilder {
   /**
-   * The internal {@linkcode NewTrainerConfig} constructed by this builder
+   * The internal {@linkcode TrainerConfig} constructed by this builder
    */
-  private readonly config: Partial<NewTrainerConfig> = {
+  private readonly config: Partial<TrainerConfig> = {
     name: {},
     title: {},
     spriteKey: {},
@@ -103,7 +98,7 @@ export class TrainerConfigBuilder {
   }
 
   /**
-   * Determines if all required properties to build a {@linkcode NewTrainerConfig}
+   * Determines if all required properties to build a {@linkcode TrainerConfig}
    * have been properly initialized. This also ensures
    * that each {@link possibleGenders | supported gender} has a valid generator
    * under each required property.
@@ -112,7 +107,7 @@ export class TrainerConfigBuilder {
    * `config` is supplied instead of using `this.config` directly so that
    * the type guard may apply.
    */
-  private validate(config: Partial<NewTrainerConfig>): config is NewTrainerConfig {
+  private validate(config: Partial<TrainerConfig>): config is TrainerConfig {
     if (config.trainerType == null) {
       console.error("trainer-config-builder: trainerType is not defined!");
       return false;
@@ -166,8 +161,8 @@ export class TrainerConfigBuilder {
     return true;
   }
 
-  /** Validates and returns the builder's internal {@linkcode NewTrainerConfig} */
-  public build(): NewTrainerConfig {
+  /** Validates and returns the builder's internal {@linkcode TrainerConfig} */
+  public build(): TrainerConfig {
     if (!this.validate(this.config)) {
       throw new Error(`trainer-config-builder: Required fields missing in generated config: ${this.config}`);
     }
@@ -335,7 +330,7 @@ export class TrainerConfigBuilder {
   }
 
   /**
-   * Toggles {@linkcode NewTrainerConfig.useSameSeedForAllPokemon | useSameSeedForAllPokemon}
+   * Toggles {@linkcode TrainerConfig.useSameSeedForAllPokemon | useSameSeedForAllPokemon}
    * to force correlation between the Trainer's Pokemon when selecting their species
    * from species pools.
    *
@@ -441,7 +436,7 @@ export class TrainerConfigBuilder {
    * used for static party generation across multiple configs.
    * @param offset - The base seed offset to set.
    * @returns `this`
-   * @see {@linkcode NewTrainerConfig.partyBaseSeedOffset}
+   * @see {@linkcode TrainerConfig.partyBaseSeedOffset}
    * @remarks
    * For organization purposes, it's best to set `offset` to a {@linkcode TrainerType},
    * but any number input is valid.

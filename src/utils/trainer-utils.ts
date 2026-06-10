@@ -8,7 +8,7 @@ import type { SpeciesId } from "#enums/species-id";
 import { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import type { NonNullTrainerSlot } from "#enums/trainer-slot";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
-import type { TrainerPartyPokemonConfig } from "#trainers/new-trainer-config";
+import type { TrainerPartyPokemonConfig } from "#trainers/trainer-config";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedInt, randSeedItem } from "#utils/random-utils";
 

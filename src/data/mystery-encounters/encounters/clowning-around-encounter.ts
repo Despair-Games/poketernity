@@ -44,7 +44,7 @@ import { transitionMysteryEncounterIntroVisuals } from "#mystery-encounters/enco
 import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import { TrainerPartyCompoundTemplate, TrainerPartyTemplate } from "#trainers/trainer-config";
-import { allNewTrainerConfigs, allTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
+import { allTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
 import { getPokemonSpecies, getRandomElementalType } from "#utils/pokemon-utils";
@@ -131,7 +131,7 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
 
     encounter.battleConfigs.push({
       battleType: MysteryEncounterMode.TRAINER_BATTLE,
-      trainerConfig: allNewTrainerConfigs[TrainerType.HARLEQUIN]!,
+      trainerConfig: allTrainerConfigs[TrainerType.HARLEQUIN]!,
     });
 
     // Load animations/sfx for start of fight moves

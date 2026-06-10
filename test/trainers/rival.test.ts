@@ -4,7 +4,7 @@ import { TrainerGender } from "#enums/trainer-gender";
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import { GameManager } from "#test/test-utils/game-manager";
-import { newRivalTrainerConfigs } from "#trainers/trainer-configs/rival-trainer-configs";
+import { rivalTrainerConfigs } from "#trainers/trainer-configs/rival-trainer-configs";
 import { TrainerData } from "#trainers/trainer-data";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -53,7 +53,7 @@ describe("Trainers - Rival", async () => {
 });
 
 function getRivalParties(): EnemyPokemon[][] {
-  return Object.values(newRivalTrainerConfigs).map(
+  return Object.values(rivalTrainerConfigs).map(
     (cfg) => new TrainerData(TrainerSlot.TRAINER, cfg, TrainerGender.MALE).party,
   );
 }

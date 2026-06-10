@@ -33,7 +33,7 @@ import {
 import { GameManager } from "#test/test-utils/game-manager";
 import { initSceneWithoutEncounterPhase } from "#test/test-utils/game-manager-utils";
 import { getEnumStr } from "#test/test-utils/string-utils";
-import { isCompositeConfig, type NewTrainerConfig } from "#trainers/new-trainer-config";
+import { isCompositeConfig, type TrainerConfig } from "#trainers/trainer-config";
 import { TrainerDataSet } from "#trainers/trainer-data";
 import * as MoveAnimUtils from "#utils/move-anim-utils";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -113,7 +113,7 @@ describe("Clowning Around - Mystery Encounter", () => {
     }
 
     expect(isCompositeConfig(config.trainerConfig)).toBe(false);
-    const trainerConfig = config.trainerConfig as NewTrainerConfig;
+    const trainerConfig = config.trainerConfig as TrainerConfig;
     const trainerData = TrainerDataSet.fromConfig(trainerConfig);
     expect(trainerData.double).toBe(true);
     const clown = trainerData.trainers[TrainerSlot.TRAINER];

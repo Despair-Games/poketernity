@@ -19,7 +19,7 @@ import {
 import { GameManager } from "#test/test-utils/game-manager";
 import { initSceneWithoutEncounterPhase } from "#test/test-utils/game-manager-utils";
 import { getEnumStr } from "#test/test-utils/string-utils";
-import type { NewTrainerConfig } from "#trainers/new-trainer-config";
+import type { TrainerConfig } from "#trainers/trainer-config";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const namespace = "mysteryEncounters/theExpertPokemonBreeder";
@@ -109,7 +109,7 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
       expect.fail(`Battle config is of invalid type: ${getEnumStr(MysteryEncounterMode, battleConfig.battleType)}`);
     }
 
-    const trainerConfig = battleConfig.trainerConfig as NewTrainerConfig;
+    const trainerConfig = battleConfig.trainerConfig as TrainerConfig;
     expect(trainerConfig.trainerType).toBe(TrainerType.EXPERT_POKEMON_BREEDER);
     expect(trainerConfig.partyConfigs).toBe(3);
     expect(encounter.spriteConfigs).toBeDefined();

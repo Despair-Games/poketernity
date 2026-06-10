@@ -23,7 +23,7 @@ import {
 } from "#mystery-encounters/encounter-phase-utils";
 import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
-import { allNewTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
+import { allTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
 import i18next from "i18next";
 
 /** the i18n namespace for the encounter */
@@ -63,7 +63,7 @@ export const TheExpertPokemonBreederEncounter: MysteryEncounter = MysteryEncount
 
     encounter.battleConfigs.push({
       battleType: MysteryEncounterMode.TRAINER_BATTLE,
-      trainerConfig: allNewTrainerConfigs[TrainerType.EXPERT_POKEMON_BREEDER]!,
+      trainerConfig: allTrainerConfigs[TrainerType.EXPERT_POKEMON_BREEDER]!,
     });
 
     let cleffaSpecies: SpeciesId = SpeciesId.CLEFABLE;

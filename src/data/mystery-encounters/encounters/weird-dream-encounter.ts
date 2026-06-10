@@ -38,8 +38,8 @@ import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encount
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
 import { PokemonData } from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
-import type { TrainerPartyPokemonConfig } from "#trainers/new-trainer-config";
-import { allNewTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
+import type { TrainerPartyPokemonConfig } from "#trainers/trainer-config";
+import { allTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
 import type { HeldModifierConfig } from "#types/modifiers-types";
 import { NumberHolder } from "#utils/common-utils";
 import { getPokemonSpecies, getRandomElementalType, getSpecialSpeciesList } from "#utils/pokemon-utils";
@@ -249,7 +249,7 @@ export const WeirdDreamEncounter: MysteryEncounter = MysteryEncounterBuilder.wit
 
       const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
       const trainerGender = genderIndex === PlayerGender.FEMALE ? TrainerGender.FEMALE : TrainerGender.MALE;
-      const trainerConfig = { ...allNewTrainerConfigs[TrainerType.FUTURE_SELF]! };
+      const trainerConfig = { ...allTrainerConfigs[TrainerType.FUTURE_SELF]! };
       trainerConfig.partyConfigs = enemyPokemonConfigs;
       const battleConfig: MysteryEncounterBattleConfig = {
         battleType: MysteryEncounterMode.TRAINER_BATTLE,

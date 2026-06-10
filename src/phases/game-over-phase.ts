@@ -6,6 +6,7 @@ import { getCharVariantFromDialogue } from "#data/dialogue";
 import type { PokemonSpecies } from "#data/pokemon-species";
 import { AchvCategory } from "#enums/achv-category";
 import { PlayerGender } from "#enums/player-gender";
+import { TrainerGender } from "#enums/trainer-gender";
 import { TrainerType } from "#enums/trainer-type";
 import { UiMode } from "#enums/ui-mode";
 import { Unlockables } from "#enums/unlockables";
@@ -173,9 +174,9 @@ export class GameOverPhase extends Phase {
                 // Dialogue has to be retrieved so that the rival's expressions can be loaded and shown via getCharVariantFromDialogue
                 const dialogue = i18next.t(dialogueKey, { context: genderStr });
                 const rivalName =
-                  playerGender === PlayerGender.FEMALE
-                    ? allTrainerConfigs[TrainerType.RIVAL].name
-                    : allTrainerConfigs[TrainerType.RIVAL].nameFemale;
+                  allTrainerConfigs[TrainerType.RIVAL]!.name[
+                    playerGender === PlayerGender.FEMALE ? TrainerGender.MALE : TrainerGender.FEMALE
+                  ]!();
 
                 globalScene.charSprite
                   .showCharacter(

@@ -8,6 +8,7 @@ import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { SpeciesId } from "#enums/species-id";
+import { TrainerGender } from "#enums/trainer-gender";
 import { TrainerType } from "#enums/trainer-type";
 import { modifierTypes } from "#modifier/modifier-types";
 import {
@@ -19,7 +20,7 @@ import {
 import { getSpriteKeysFromSpecies } from "#mystery-encounters/encounter-pokemon-utils";
 import { transitionMysteryEncounterIntroVisuals } from "#mystery-encounters/encounter-visuals-utils";
 import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
-import { allNewTrainerConfigs, allTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
+import { allTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
 import { randSeedInt } from "#utils/random-utils";
 import i18next from "i18next";
 
@@ -102,12 +103,11 @@ export const ATrainersTestEncounter: MysteryEncounter = MysteryEncounterBuilder.
     encounter.misc = { trainerType, trainerNameKey, trainerEggDescription: eggDescription };
 
     // Trainer config
-    const trainerConfig = allTrainerConfigs[trainerType].clone();
-    const trainerSpriteKey = trainerConfig.getSpriteKey();
+    const trainerConfig = allTrainerConfigs[trainerType]!;
     encounter.battleConfigs.push({
       battleType: MysteryEncounterMode.TRAINER_BATTLE,
       levelBoostMultiplier: 1,
-      trainerConfig: allNewTrainerConfigs[trainerType]!,
+      trainerConfig: allTrainerConfigs[trainerType]!,
     });
 
     encounter.spriteConfigs = [
@@ -122,7 +122,7 @@ export const ATrainersTestEncounter: MysteryEncounter = MysteryEncounterBuilder.
         yShadow: -2,
       },
       {
-        spriteKey: trainerSpriteKey,
+        spriteKey: trainerConfig.spriteKey[TrainerGender.DEFAULT]!(),
         fileRoot: "trainer",
         hasShadow: true,
         disableAnimation: true,

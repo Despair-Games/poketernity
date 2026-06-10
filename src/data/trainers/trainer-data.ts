@@ -6,15 +6,15 @@ import type { TrainerType } from "#enums/trainer-type";
 import type { EnemyPokemon } from "#field/enemy-pokemon";
 import type { ModifierTypeFunc } from "#modifier/modifier-type";
 import type { TrainerSaveDataSet } from "#system/trainer-save-data";
+import { TrainerAi } from "#trainers/trainer-ai";
 import type {
   CompositeTrainerConfig,
-  NewTrainerConfig,
   RequireOneTrainer,
   TrainerAssetKey,
+  TrainerConfig,
   TrainerPartyPokemonConfig,
   TrainerSlotMap,
-} from "#trainers/new-trainer-config";
-import { TrainerAi } from "#trainers/trainer-ai";
+} from "#trainers/trainer-config";
 import { coerceArray } from "#utils/common-utils";
 import { getPokemonSpecies } from "#utils/pokemon-utils";
 import { randSeedInt, randSeedItem } from "#utils/random-utils";
@@ -25,7 +25,7 @@ import i18next from "i18next";
 
 /**
  * Class for storing all data for a specific Trainer instance as derived from a
- * {@linkcode NewTrainerConfig}. When created, the Trainer's party of {@linkcode EnemyPokemon}
+ * {@linkcode TrainerConfig}. When created, the Trainer's party of {@linkcode EnemyPokemon}
  * is also generated and added to {@linkcode globalScene}.
  */
 export class TrainerData {
@@ -85,7 +85,7 @@ export class TrainerData {
   /**
    * @param trainerSlot - The {@linkcode TrainerSlot} to which the Trainer belongs.
    * This must not be {@linkcode TrainerSlot.NONE}.
-   * @param config - The {@linkcode NewTrainerConfig} from which the data is generated
+   * @param config - The {@linkcode TrainerConfig} from which the data is generated
    * @param gender - (Optional) The Trainer's {@linkcode TrainerGender}. If not defined,
    * the Trainer's gender is {@link initGender | determined randomly}.
    * @param partySizeLimit - (Optional) A limit to the number of Pokemon that may
@@ -96,7 +96,7 @@ export class TrainerData {
    */
   constructor(
     trainerSlot: NonNullTrainerSlot,
-    config: NewTrainerConfig,
+    config: TrainerConfig,
     gender?: NonDefaultTrainerGender,
     useSameSeedForAllTrainers: boolean = false,
     partySizeLimit?: number,
@@ -154,10 +154,10 @@ export class TrainerData {
    * is determined randomly, and the chance of resolving to a specific gender is
    * proportional to the number of entries in the given config's name pool for
    * that gender, compared to other genders.
-   * @param config - The {@linkcode NewTrainerConfig} used to generate the Trainer.
+   * @param config - The {@linkcode TrainerConfig} used to generate the Trainer.
    * @returns The Trainer's {@linkcode TrainerGender}.
    */
-  private initGender(config: NewTrainerConfig): NonDefaultTrainerGender {
+  private initGender(config: TrainerConfig): NonDefaultTrainerGender {
     const supportedGenders = Object.keys(config.name).map((k) => Number(k) as NonDefaultTrainerGender);
 
     const genderWeights = supportedGenders.map((g) => config.name[g]!.length);
@@ -172,13 +172,13 @@ export class TrainerData {
   }
 
   /**
-   * @param config - The {@linkcode NewTrainerConfig} used to generate the asset
+   * @param config - The {@linkcode TrainerConfig} used to generate the asset
    * @param key - The type of asset to generate
    * @returns The asset (i18n key or path) generated corresponding to this Trainer's gender,
    * or `undefined` if no asset can be generated under the given parameters.
    * @privateRemarks {@linkcode gender} should be initialized before calling this method.
    */
-  private getGenderedAsset(config: NewTrainerConfig, key: TrainerAssetKey): string | undefined {
+  private getGenderedAsset(config: TrainerConfig, key: TrainerAssetKey): string | undefined {
     const assetGenerator = config[key]?.[this.gender] ?? config[key]?.[TrainerGender.DEFAULT];
     if (key !== "dialogueSpriteKey" && assetGenerator == null) {
       throw new Error(`trainer-data: Cannot find asset for ${key} (gender=${this.gender})`);
@@ -191,7 +191,7 @@ export class TrainerData {
    * Generates the Trainer's party of {@linkcode EnemyPokemon} from the given config
    * and adds them to {@linkcode globalScene}.
    * @param trainerSlot - The {@linkcode TrainerSlot} this Trainer occupies
-   * @param config - The {@linkcode NewTrainerConfig} used to generate this Trainer.
+   * @param config - The {@linkcode TrainerConfig} used to generate this Trainer.
    * This method only uses the {@linkcode partyConfigs} and {@linkcode partyBaseSeedOffset} properties.
    * @param useSameSeedForAllTrainers - If `true`, RNG during Pokemon generation
    * will disregard {@linkcode trainerSlot} in its seed offset, allowing Trainers
@@ -205,7 +205,7 @@ export class TrainerData {
    */
   private generateParty(
     trainerSlot: NonNullTrainerSlot,
-    { partyConfigs, partyBaseSeedOffset, useSameSeedForAllPokemon }: NewTrainerConfig,
+    { partyConfigs, partyBaseSeedOffset, useSameSeedForAllPokemon }: TrainerConfig,
     useSameSeedForAllTrainers: boolean,
     partySizeLimit?: number,
   ): EnemyPokemon[] {
@@ -307,7 +307,7 @@ export class TrainerDataSet {
   public readonly title: string;
 
   /**
-   * Builds a {@linkcode TrainerDataSet} from a single Trainer's {@linkcode NewTrainerConfig}.
+   * Builds a {@linkcode TrainerDataSet} from a single Trainer's {@linkcode TrainerConfig}.
    * This is a shorthand for constructing a {@linkcode TrainerData} instance, then
    * building a `TrainerDataSet` from that instance.
    *
@@ -381,7 +381,7 @@ export class TrainerDataSet {
    * @returns `true` if this Trainer combination is considered a boss battle.
    * @remarks
    * Multi-Trainer battles are considered boss battles if at least one of the
-   * Trainers involved {@link NewTrainerConfig.isBoss | is a boss}.
+   * Trainers involved {@link TrainerConfig.isBoss | is a boss}.
    */
   public get isBoss(): boolean {
     return Object.values(this.trainers).some((td) => td.isBoss);

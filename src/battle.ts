@@ -55,7 +55,7 @@ import type { CustomModifierSettings } from "#modifier/modifier-type";
 import type { Move } from "#moves/move";
 import type { MysteryEncounter } from "#mystery-encounters/mystery-encounter";
 import { settings } from "#system/settings-manager";
-import { allNewTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
+import { allTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
 import { TrainerDataSet } from "#trainers/trainer-data";
 import { isBetween, NumberHolder } from "#utils/common-utils";
 import { randomString, randSeedInt, randSeedItem } from "#utils/random-utils";
@@ -515,14 +515,14 @@ class FixedBattleConfigBuilder {
   }
 
   public withTrainer(trainerType: TrainerType): this {
-    this.config.getTrainerData = () => TrainerDataSet.fromConfig(allNewTrainerConfigs[trainerType]!);
+    this.config.getTrainerData = () => TrainerDataSet.fromConfig(allTrainerConfigs[trainerType]!);
     return this;
   }
 
   public withRival(rivalType: TrainerType): this {
     this.config.getTrainerData = () =>
       TrainerDataSet.fromConfig(
-        allNewTrainerConfigs[rivalType]!,
+        allTrainerConfigs[rivalType]!,
         settings.display.playerGender === PlayerGender.MALE ? TrainerGender.FEMALE : TrainerGender.MALE,
       );
     return this;
@@ -564,7 +564,7 @@ function getRandomTrainerDataFunc(
       }
     }, seedOffset);
 
-    return TrainerDataSet.fromConfig(allNewTrainerConfigs[randSeedItem(trainerTypes)]!);
+    return TrainerDataSet.fromConfig(allTrainerConfigs[randSeedItem(trainerTypes)]!);
 
     // TODO: Add 1/3 chance of double battle for Evil Team grunts
   };

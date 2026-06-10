@@ -36,8 +36,9 @@ import {
   type CompositeTrainerConfig,
   type ConfigurableEnemyPokemonOptions,
   isCompositeConfig,
-  type NewTrainerConfig,
-} from "#trainers/new-trainer-config";
+  type TrainerConfig,
+  type TrainerPartyPokemonConfig,
+} from "#trainers/trainer-config";
 import { levelByStrength } from "#trainers/trainer-config-builder";
 import { TrainerDataSet } from "#trainers/trainer-data";
 import type { PokemonSelectFilter } from "#types/ui-types";
@@ -95,7 +96,7 @@ interface MysteryEncounterBattleSpec {
 interface MysteryEncounterTrainerSpec extends MysteryEncounterBattleSpec {
   battleType: typeof MysteryEncounterMode.TRAINER_BATTLE;
   /** The config to generate Trainer(s) for the battle. */
-  trainerConfig: NewTrainerConfig | CompositeTrainerConfig;
+  trainerConfig: TrainerConfig | CompositeTrainerConfig;
   /**
    * The {@linkcode TrainerGender gender} of the Trainer in this battle
    * @todo Change data structure to support double battles
@@ -213,24 +214,24 @@ async function initMysteryEncounterTrainerPokemon(trainerSpec: MysteryEncounterT
   if (isCompositeConfig(trainerConfig)) {
     const configCopy = { ...trainerConfig };
     for (const cfg of Object.values(configCopy.configs)) {
-      const adjPartyConfigs = cfg.partyConfigs.map((pkmCfg) => {
-        return {
-          ...pkmCfg,
-          levelFunc: coerceArray(pkmCfg.levelFunc).map((lf) => (waveIndex: number) => lf(waveIndex) + levelBonus),
-        };
-      });
+      const adjPartyConfigs = cfg.partyConfigs.map((pkmCfgs) => {
+        return pkmCfgs.map((c) => ({
+          ...c,
+          levelFunc: coerceArray(c.levelFunc).map((lf) => (waveIndex: number) => lf(waveIndex) + levelBonus),
+        }));
+      }) as NonEmptyArray<TrainerPartyPokemonConfig>[];
       cfg.partyConfigs = adjPartyConfigs;
     }
 
     currentBattle.trainerData = TrainerDataSet.fromCompositeConfig(configCopy, trainerGenders);
   } else {
-    const adjPartyConfigs = trainerConfig.partyConfigs.map((cfg) => {
-      return {
-        ...cfg,
-        levelFunc: coerceArray(cfg.levelFunc).map((lf) => (waveIndex: number) => lf(waveIndex) + levelBonus),
-      };
-    });
-    const finalTrainerCfg: NewTrainerConfig = {
+    const adjPartyConfigs = trainerConfig.partyConfigs.map((pkmCfgs) => {
+      return pkmCfgs.map((c) => ({
+        ...c,
+        levelFunc: coerceArray(c.levelFunc).map((lf) => (waveIndex: number) => lf(waveIndex) + levelBonus),
+      }));
+    }) as NonEmptyArray<TrainerPartyPokemonConfig>[];
+    const finalTrainerCfg: TrainerConfig = {
       ...trainerConfig,
       partyConfigs: adjPartyConfigs,
     };

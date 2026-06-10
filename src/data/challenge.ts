@@ -22,7 +22,7 @@ import { TrainerType } from "#enums/trainer-type";
 import type { Pokemon } from "#field/pokemon";
 import { pokemonEvolutions } from "#init/init-pokemon-evolutions";
 import type { DexAttrProps, GameData } from "#system/game-data";
-import { allNewTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
+import { allTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
 import { TrainerDataSet } from "#trainers/trainer-data";
 import { type BooleanHolder, enumValueToKey, type NumberHolder } from "#utils/common-utils";
 import { getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
@@ -485,7 +485,7 @@ export class SingleGenerationChallenge extends Challenge {
       return false;
     }
 
-    battleConfig.getTrainerData = () => TrainerDataSet.fromConfig(allNewTrainerConfigs[trainerTypes[this.value - 1]]!);
+    battleConfig.getTrainerData = () => TrainerDataSet.fromConfig(allTrainerConfigs[trainerTypes[this.value - 1]]!);
     return true;
   }
 

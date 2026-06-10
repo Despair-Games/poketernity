@@ -10,7 +10,7 @@ import { modifierTypes } from "#modifier/modifier-types";
 import { initBattleWithEnemyConfig, setEncounterRewards } from "#mystery-encounters/encounter-phase-utils";
 import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { TrainerPartyCompoundTemplate, TrainerPartyTemplate } from "#trainers/trainer-config";
-import { allNewTrainerConfigs, allTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
+import { allTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
 import { randSeedItem } from "#utils/random-utils";
 
 /** the i18n namespace for the encounter */
@@ -45,7 +45,7 @@ export const MysteriousChallengersEncounter: MysteryEncounter = MysteryEncounter
     );
     encounter.battleConfigs.push({
       battleType: MysteryEncounterMode.TRAINER_BATTLE,
-      trainerConfig: allNewTrainerConfigs[normalTrainerType]!,
+      trainerConfig: allTrainerConfigs[normalTrainerType]!,
       trainerGender: normalTrainerGender,
     });
 
@@ -73,13 +73,13 @@ export const MysteriousChallengersEncounter: MysteryEncounter = MysteryEncounter
     const hardSpriteKey = hardConfig.getSpriteKey(hardTrainerGender === TrainerGender.FEMALE, hardConfig.doubleOnly);
     encounter.battleConfigs.push({
       battleType: MysteryEncounterMode.TRAINER_BATTLE,
-      trainerConfig: allNewTrainerConfigs[hardTrainerType]!,
+      trainerConfig: allTrainerConfigs[hardTrainerType]!,
       trainerGender: hardTrainerGender,
     });
 
     // Brutal trainer is pulled from pool of boss trainers (gym leaders) for the biome
     const brutalTrainerType = globalScene.arena.randomTrainerType(globalScene.currentBattle.waveIndex, true);
-    const brutalTrainerCfg = allNewTrainerConfigs[brutalTrainerType]!;
+    const brutalTrainerCfg = allTrainerConfigs[brutalTrainerType]!;
     // TODO: This is awkward but required to display sprites before battle
     const brutalTrainerGender = Number(Object.keys(brutalTrainerCfg.name)[0]) as NonDefaultTrainerGender;
 
@@ -87,7 +87,7 @@ export const MysteriousChallengersEncounter: MysteryEncounter = MysteryEncounter
     // TODO: Edit the config to match the E4 template from the old version
     encounter.battleConfigs.push({
       battleType: MysteryEncounterMode.TRAINER_BATTLE,
-      trainerConfig: allNewTrainerConfigs[brutalTrainerType]!,
+      trainerConfig: allTrainerConfigs[brutalTrainerType]!,
       levelBoostMultiplier: 1.5,
     });
 

@@ -20,7 +20,7 @@ import {
 } from "#mystery-encounters/encounter-phase-utils";
 import { transitionMysteryEncounterIntroVisuals } from "#mystery-encounters/encounter-visuals-utils";
 import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
-import { allNewTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
+import { allTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
 import i18next from "i18next";
 
 /** the i18n namespace for the encounter */
@@ -87,23 +87,23 @@ export const TheWinstrateChallengeEncounter: MysteryEncounter = MysteryEncounter
     encounter.battleConfigs = [
       {
         battleType: MysteryEncounterMode.TRAINER_BATTLE,
-        trainerConfig: allNewTrainerConfigs[TrainerType.VITO]!,
+        trainerConfig: allTrainerConfigs[TrainerType.VITO]!,
       },
       {
         battleType: MysteryEncounterMode.TRAINER_BATTLE,
-        trainerConfig: allNewTrainerConfigs[TrainerType.VICKY]!,
+        trainerConfig: allTrainerConfigs[TrainerType.VICKY]!,
       },
       {
         battleType: MysteryEncounterMode.TRAINER_BATTLE,
-        trainerConfig: allNewTrainerConfigs[TrainerType.VIVI]!,
+        trainerConfig: allTrainerConfigs[TrainerType.VIVI]!,
       },
       {
         battleType: MysteryEncounterMode.TRAINER_BATTLE,
-        trainerConfig: allNewTrainerConfigs[TrainerType.VICTORIA]!,
+        trainerConfig: allTrainerConfigs[TrainerType.VICTORIA]!,
       },
       {
         battleType: MysteryEncounterMode.TRAINER_BATTLE,
-        trainerConfig: allNewTrainerConfigs[TrainerType.VICTOR]!,
+        trainerConfig: allTrainerConfigs[TrainerType.VICTOR]!,
       },
     ];
     return true;

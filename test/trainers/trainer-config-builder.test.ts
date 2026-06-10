@@ -4,11 +4,11 @@ import { TrainerType } from "#enums/trainer-type";
 import { TrainerConfigBuilder } from "#trainers/trainer-config-builder";
 import { afterEach, describe, expect, it } from "vitest";
 
-let trainerConfigBuilder = new TrainerConfigBuilder();
+let trainerConfigBuilder = new TrainerConfigBuilder(TrainerType.RIVAL);
 
 describe("TrainerConfigBuilder - Validation", () => {
   afterEach(() => {
-    trainerConfigBuilder = new TrainerConfigBuilder();
+    trainerConfigBuilder = new TrainerConfigBuilder(TrainerType.RIVAL);
   });
 
   it("should throw an error if no properties are defined", () => {
@@ -19,7 +19,6 @@ describe("TrainerConfigBuilder - Validation", () => {
     // NOTE: The builder validation assumes that any given string input leads to a
     // valid i18n key, path, etc.
     trainerConfigBuilder
-      .withTrainerType(TrainerType.RIVAL)
       .withFixedName("finn", TrainerGender.MALE)
       .withFixedName("ivy", TrainerGender.FEMALE)
       .withTitle("rival")

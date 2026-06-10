@@ -111,8 +111,8 @@ import { GameData } from "#system/game-data";
 import { initGameSpeed } from "#system/game-speed";
 import { settings } from "#system/settings-manager";
 import { type Voucher, vouchers } from "#system/voucher";
-import { isCompositeConfig } from "#trainers/new-trainer-config";
-import { allNewTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
+import { isCompositeConfig } from "#trainers/trainer-config";
+import { allTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
 import { TrainerDataSet } from "#trainers/trainer-data";
 import type { HeldModifierConfig, ModifierPredicate } from "#types/modifiers-types";
 import type { AnySettingKey, SettingsUpdateEventArgs } from "#types/settings";
@@ -1253,7 +1253,7 @@ export class BattleScene extends SceneBase {
 
     if (this.gameMode.hasTrainers && this.gameMode.isWaveTrainer(newWaveIndex)) {
       const trainerType = activeOverrides.TRAINER_TYPE_OVERRIDE ?? this.arena.randomTrainerType(newWaveIndex);
-      const trainerConfig = allNewTrainerConfigs[trainerType]!;
+      const trainerConfig = allTrainerConfigs[trainerType]!;
       const newTrainerData = isCompositeConfig(trainerConfig)
         ? TrainerDataSet.fromCompositeConfig(trainerConfig)
         : TrainerDataSet.fromConfig(trainerConfig);

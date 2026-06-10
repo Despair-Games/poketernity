@@ -1,1715 +1,282 @@
-import { globalScene } from "#app/global-scene";
-import { activeOverrides as Overrides } from "#app/overrides";
-import { getIsInitialized, initI18n } from "#app/plugins/i18n";
-import { EVIL_GRUNT_1_WAVE, EVIL_GRUNT_2_WAVE, EVIL_GRUNT_3_WAVE, EVIL_GRUNT_4_WAVE } from "#constants/wave-constants";
+/* biome-ignore-start lint/correctness/noUnusedImports: tsdoc imports */
 import type { PokemonSpecies } from "#data/pokemon-species";
-import type { ElementalType } from "#enums/elemental-type";
-import { ImagesFolder } from "#enums/images-folder";
-import { PartyMemberStrength } from "#enums/party-member-strength";
-import { SpeciesId } from "#enums/species-id";
-import { TeraAIMode } from "#enums/tera-ai-mode";
-import { TrainerPoolTier } from "#enums/trainer-pool-tier";
-import { TrainerSlot } from "#enums/trainer-slot";
-import { TrainerType } from "#enums/trainer-type";
-import { TrainerVariant } from "#enums/trainer-variant";
-import type { EnemyPokemon } from "#field/enemy-pokemon";
-import type { PersistentModifier } from "#modifier/modifier";
+import type { PokemonSpeciesForm } from "#data/pokemon-species-form";
+import type { AiType } from "#enums/ai-type";
+/* biome-ignore-end lint/correctness/noUnusedImports: tsdoc imports */
+
+import type { SpeciesId } from "#enums/species-id";
+import type { TeraAIMode } from "#enums/tera-ai-mode";
+import type { TrainerGender } from "#enums/trainer-gender";
+import type { TrainerPoolTier } from "#enums/trainer-pool-tier";
+import { type NonNullTrainerSlot, TrainerSlot } from "#enums/trainer-slot";
+import type { TrainerType } from "#enums/trainer-type";
+import type { EnemyPokemon, EnemyPokemonOptions } from "#field/enemy-pokemon";
 import type { ModifierTypeFunc } from "#modifier/modifier-type";
 import type { PokemonSpeciesFilter } from "#types/ui-types";
-import { clamp, coerceArray, enumValueToKey } from "#utils/common-utils";
-import { getPokemonSpecies } from "#utils/pokemon-utils";
-import { randItem, randSeedItem } from "#utils/random-utils";
-import { toReadableString } from "#utils/string-utils";
-import i18next from "i18next";
+import type { CoercibleArray, NonEmptyArray } from "#types/utility-types";
 
-/** Minimum BST for Pokemon generated onto the Elite Four's teams */
-const ELITE_FOUR_MINIMUM_BST = 460;
+/**
+ * A record of generator functions mapped by {@linkcode TrainerGender}. When generating
+ * a Trainer, the Trainer's name, title, sprite key, and other properties are determined
+ * from the generator function under the desired {@linkcode TrainerGender}.
+ * Generators defined under {@linkcode TrainerGender.DEFAULT} are considered the default
+ * when a generator for the desired gender is undefined.
+ */
+type TrainerAssetGenerator<T = string> = Partial<Record<TrainerGender, () => T>>;
 
-interface TrainerTierPools {
-  [key: number]: SpeciesId[];
-}
+// #region TrainerConfig
 
-// TODO: Move to own file
-//#region Trainer Party templates
+export type TrainerAssetKey = "name" | "title" | "spriteKey" | "dialogueSpriteKey";
 
-export class TrainerPartyTemplate {
-  public size: number;
-  public strength: PartyMemberStrength;
-  public sameSpecies: boolean;
-  public balanced: boolean;
-
-  constructor(size: number, strength: PartyMemberStrength, sameSpecies: boolean = false, balanced: boolean = false) {
-    this.size = size;
-    this.strength = strength;
-    this.sameSpecies = sameSpecies;
-    this.balanced = balanced;
-  }
-
-  getStrength(_index: number): PartyMemberStrength {
-    return this.strength;
-  }
-
-  isSameSpecies(_index: number): boolean {
-    return this.sameSpecies;
-  }
-
-  isBalanced(_index: number): boolean {
-    return this.balanced;
-  }
-}
-
-export class TrainerPartyCompoundTemplate extends TrainerPartyTemplate {
-  public templates: TrainerPartyTemplate[];
-
-  constructor(...templates: TrainerPartyTemplate[]) {
-    super(
-      templates.reduce((total: number, template: TrainerPartyTemplate) => {
-        total += template.size;
-        return total;
-      }, 0),
-      PartyMemberStrength.AVERAGE,
-    );
-    this.templates = templates;
-  }
-
-  override getStrength(index: number): PartyMemberStrength {
-    let t = 0;
-    for (const template of this.templates) {
-      if (t + template.size > index) {
-        return template.getStrength(index - t);
-      }
-      t += template.size;
-    }
-
-    return super.getStrength(index);
-  }
-
-  override isSameSpecies(index: number): boolean {
-    let t = 0;
-    for (const template of this.templates) {
-      if (t + template.size > index) {
-        return template.isSameSpecies(index - t);
-      }
-      t += template.size;
-    }
-
-    return super.isSameSpecies(index);
-  }
-
-  override isBalanced(index: number): boolean {
-    let t = 0;
-    for (const template of this.templates) {
-      if (t + template.size > index) {
-        return template.isBalanced(index - t);
-      }
-      t += template.size;
-    }
-
-    return super.isBalanced(index);
-  }
-}
-
-export const trainerPartyTemplates = {
-  ONE_WEAK_ONE_STRONG: new TrainerPartyCompoundTemplate(
-    new TrainerPartyTemplate(1, PartyMemberStrength.WEAK),
-    new TrainerPartyTemplate(1, PartyMemberStrength.STRONG),
-  ),
-  ONE_AVG: new TrainerPartyTemplate(1, PartyMemberStrength.AVERAGE),
-  ONE_AVG_ONE_STRONG: new TrainerPartyCompoundTemplate(
-    new TrainerPartyTemplate(1, PartyMemberStrength.AVERAGE),
-    new TrainerPartyTemplate(1, PartyMemberStrength.STRONG),
-  ),
-  ONE_STRONG: new TrainerPartyTemplate(1, PartyMemberStrength.STRONG),
-  ONE_STRONGER: new TrainerPartyTemplate(1, PartyMemberStrength.STRONGER),
-  TWO_WEAKER: new TrainerPartyTemplate(2, PartyMemberStrength.WEAKER),
-  TWO_WEAK: new TrainerPartyTemplate(2, PartyMemberStrength.WEAK),
-  TWO_WEAK_ONE_AVG: new TrainerPartyCompoundTemplate(
-    new TrainerPartyTemplate(2, PartyMemberStrength.WEAK),
-    new TrainerPartyTemplate(1, PartyMemberStrength.AVERAGE),
-  ),
-  TWO_WEAK_SAME_ONE_AVG: new TrainerPartyCompoundTemplate(
-    new TrainerPartyTemplate(2, PartyMemberStrength.WEAK, true),
-    new TrainerPartyTemplate(1, PartyMemberStrength.AVERAGE),
-  ),
-  TWO_WEAK_SAME_TWO_WEAK_SAME: new TrainerPartyCompoundTemplate(
-    new TrainerPartyTemplate(2, PartyMemberStrength.WEAK, true),
-    new TrainerPartyTemplate(2, PartyMemberStrength.WEAK, true),
-  ),
-  TWO_WEAK_ONE_STRONG: new TrainerPartyCompoundTemplate(
-    new TrainerPartyTemplate(2, PartyMemberStrength.WEAK),
-    new TrainerPartyTemplate(1, PartyMemberStrength.STRONG),
-  ),
-  TWO_AVG: new TrainerPartyTemplate(2, PartyMemberStrength.AVERAGE),
-  TWO_AVG_ONE_STRONG: new TrainerPartyCompoundTemplate(
-    new TrainerPartyTemplate(2, PartyMemberStrength.AVERAGE),
-    new TrainerPartyTemplate(1, PartyMemberStrength.STRONG),
-  ),
-  TWO_AVG_SAME_ONE_AVG: new TrainerPartyCompoundTemplate(
-    new TrainerPartyTemplate(2, PartyMemberStrength.AVERAGE, true),
-    new TrainerPartyTemplate(1, PartyMemberStrength.AVERAGE),
-  ),
-  TWO_AVG_SAME_ONE_STRONG: new TrainerPartyCompoundTemplate(
-    new TrainerPartyTemplate(2, PartyMemberStrength.AVERAGE, true),
-    new TrainerPartyTemplate(1, PartyMemberStrength.STRONG),
-  ),
-  TWO_AVG_SAME_TWO_AVG_SAME: new TrainerPartyCompoundTemplate(
-    new TrainerPartyTemplate(2, PartyMemberStrength.AVERAGE, true),
-    new TrainerPartyTemplate(2, PartyMemberStrength.AVERAGE, true),
-  ),
-  TWO_STRONG: new TrainerPartyTemplate(2, PartyMemberStrength.STRONG),
-  THREE_WEAK: new TrainerPartyTemplate(3, PartyMemberStrength.WEAK),
-  THREE_WEAK_SAME: new TrainerPartyTemplate(3, PartyMemberStrength.WEAK, true),
-  THREE_AVG: new TrainerPartyTemplate(3, PartyMemberStrength.AVERAGE),
-  THREE_AVG_SAME: new TrainerPartyTemplate(3, PartyMemberStrength.AVERAGE, true),
-  THREE_WEAK_BALANCED: new TrainerPartyTemplate(3, PartyMemberStrength.WEAK, false, true),
-  FOUR_WEAKER: new TrainerPartyTemplate(4, PartyMemberStrength.WEAKER),
-  FOUR_WEAKER_SAME: new TrainerPartyTemplate(4, PartyMemberStrength.WEAKER, true),
-  FOUR_WEAK: new TrainerPartyTemplate(4, PartyMemberStrength.WEAK),
-  FOUR_WEAK_SAME: new TrainerPartyTemplate(4, PartyMemberStrength.WEAK, true),
-  FOUR_WEAK_BALANCED: new TrainerPartyTemplate(4, PartyMemberStrength.WEAK, false, true),
-  FIVE_WEAKER: new TrainerPartyTemplate(5, PartyMemberStrength.WEAKER),
-  FIVE_WEAK: new TrainerPartyTemplate(5, PartyMemberStrength.WEAK),
-  FIVE_WEAK_BALANCED: new TrainerPartyTemplate(5, PartyMemberStrength.WEAK, false, true),
-  SIX_WEAKER: new TrainerPartyTemplate(6, PartyMemberStrength.WEAKER),
-  SIX_WEAKER_SAME: new TrainerPartyTemplate(6, PartyMemberStrength.WEAKER, true),
-  SIX_WEAK_SAME: new TrainerPartyTemplate(6, PartyMemberStrength.WEAK, true),
-  SIX_WEAK_BALANCED: new TrainerPartyTemplate(6, PartyMemberStrength.WEAK, false, true),
-
-  GYM_LEADER_1: new TrainerPartyCompoundTemplate(
-    new TrainerPartyTemplate(1, PartyMemberStrength.AVERAGE),
-    new TrainerPartyTemplate(1, PartyMemberStrength.STRONG),
-  ),
-  GYM_LEADER_2: new TrainerPartyCompoundTemplate(
-    new TrainerPartyTemplate(1, PartyMemberStrength.AVERAGE),
-    new TrainerPartyTemplate(1, PartyMemberStrength.STRONG),
-    new TrainerPartyTemplate(1, PartyMemberStrength.STRONGER),
-  ),
-  GYM_LEADER_3: new TrainerPartyCompoundTemplate(
-    new TrainerPartyTemplate(2, PartyMemberStrength.AVERAGE),
-    new TrainerPartyTemplate(1, PartyMemberStrength.STRONG),
-    new TrainerPartyTemplate(1, PartyMemberStrength.STRONGER),
-  ),
-  GYM_LEADER_4: new TrainerPartyCompoundTemplate(
-    new TrainerPartyTemplate(3, PartyMemberStrength.AVERAGE),
-    new TrainerPartyTemplate(1, PartyMemberStrength.STRONG),
-    new TrainerPartyTemplate(1, PartyMemberStrength.STRONGER),
-  ),
-  GYM_LEADER_5: new TrainerPartyCompoundTemplate(
-    new TrainerPartyTemplate(3, PartyMemberStrength.AVERAGE),
-    new TrainerPartyTemplate(2, PartyMemberStrength.STRONG),
-    new TrainerPartyTemplate(1, PartyMemberStrength.STRONGER),
-  ),
-  GYM_LEADER_6: new TrainerPartyCompoundTemplate(
-    new TrainerPartyTemplate(2, PartyMemberStrength.AVERAGE),
-    new TrainerPartyTemplate(3, PartyMemberStrength.STRONG),
-    new TrainerPartyTemplate(1, PartyMemberStrength.STRONGER),
-  ),
-  GYM_LEADER_7: new TrainerPartyCompoundTemplate(
-    new TrainerPartyTemplate(1, PartyMemberStrength.AVERAGE),
-    new TrainerPartyTemplate(4, PartyMemberStrength.STRONG),
-    new TrainerPartyTemplate(1, PartyMemberStrength.STRONGER),
-  ),
-  GYM_LEADER_8: new TrainerPartyCompoundTemplate(
-    new TrainerPartyTemplate(5, PartyMemberStrength.STRONG),
-    new TrainerPartyTemplate(1, PartyMemberStrength.STRONGER),
-  ),
-
-  ELITE_FOUR: new TrainerPartyCompoundTemplate(
-    new TrainerPartyTemplate(2, PartyMemberStrength.AVERAGE),
-    new TrainerPartyTemplate(3, PartyMemberStrength.STRONG),
-    new TrainerPartyTemplate(1, PartyMemberStrength.STRONGER),
-  ),
-
-  CHAMPION: new TrainerPartyCompoundTemplate(
-    new TrainerPartyTemplate(1, PartyMemberStrength.STRONGER),
-    new TrainerPartyTemplate(3, PartyMemberStrength.STRONG),
-    new TrainerPartyTemplate(2, PartyMemberStrength.STRONGER),
-  ),
-
-  CHAMPION_DOUBLE: new TrainerPartyCompoundTemplate(
-    new TrainerPartyTemplate(2, PartyMemberStrength.STRONG),
-    new TrainerPartyTemplate(4, PartyMemberStrength.STRONGER),
-  ),
-
+/**
+ * Interface for the specification of a generated Trainer. Most properties
+ * in this object are "generators" -- functions that return the desired data.
+ * @see {@linkcode TrainerConfigBuilder}
+ */
+export interface TrainerConfig {
+  /** The {@link TrainerType | type} of Trainer generated by this config */
+  trainerType: TrainerType;
   /**
-   * TODO?
-   * Rival 1 showing up on floor 8 is a bit too early to use any other templates
-   * Even using WEAKER has the Pokemon showing up at level 8.
-   * Currently using the otherwise unused WEAKEST to have two level 5's
+   * A set of generators for the Trainer's name.
+   * This should contain one generator for each supported {@linkcode TrainerGender}.
+   * The return value of each generator should be a localizable i18n key.
    */
-  RIVAL: new TrainerPartyCompoundTemplate(new TrainerPartyTemplate(2, PartyMemberStrength.WEAKEST)),
-  RIVAL_2: new TrainerPartyCompoundTemplate(
-    new TrainerPartyTemplate(1, PartyMemberStrength.STRONG),
-    new TrainerPartyTemplate(1, PartyMemberStrength.AVERAGE),
-    new TrainerPartyTemplate(1, PartyMemberStrength.WEAK, false, true),
-  ),
-  RIVAL_3: new TrainerPartyCompoundTemplate(
-    new TrainerPartyTemplate(1, PartyMemberStrength.STRONG),
-    new TrainerPartyTemplate(1, PartyMemberStrength.AVERAGE),
-    new TrainerPartyTemplate(1, PartyMemberStrength.AVERAGE, false, true),
-    new TrainerPartyTemplate(1, PartyMemberStrength.WEAK, false, true),
-  ),
-  RIVAL_4: new TrainerPartyCompoundTemplate(
-    new TrainerPartyTemplate(1, PartyMemberStrength.STRONG),
-    new TrainerPartyTemplate(1, PartyMemberStrength.AVERAGE),
-    new TrainerPartyTemplate(2, PartyMemberStrength.AVERAGE, false, true),
-    new TrainerPartyTemplate(1, PartyMemberStrength.WEAK, false, true),
-  ),
-  RIVAL_5: new TrainerPartyCompoundTemplate(
-    new TrainerPartyTemplate(1, PartyMemberStrength.STRONG),
-    new TrainerPartyTemplate(1, PartyMemberStrength.AVERAGE),
-    new TrainerPartyTemplate(3, PartyMemberStrength.AVERAGE, false, true),
-    new TrainerPartyTemplate(1, PartyMemberStrength.STRONG),
-  ),
-  RIVAL_6: new TrainerPartyCompoundTemplate(
-    new TrainerPartyTemplate(1, PartyMemberStrength.STRONG),
-    new TrainerPartyTemplate(1, PartyMemberStrength.AVERAGE),
-    new TrainerPartyTemplate(3, PartyMemberStrength.AVERAGE, false, true),
-    new TrainerPartyTemplate(1, PartyMemberStrength.STRONGER),
-  ),
+  name: TrainerAssetGenerator;
+  /**
+   * A set of generators for the Trainer's title.
+   * This should contain one generator for each supported {@linkcode TrainerGender}.
+   * The return value of each generator should be a localizable i18n key.
+   */
+  title: TrainerAssetGenerator;
+  /**
+   * A set of generators for the Trainer's sprite key.
+   * This should contain one generator for each supported {@linkcode TrainerGender}.
+   */
+  spriteKey: TrainerAssetGenerator;
+  /**
+   * A set of generators for the Trainer's "close-up" sprite key, which may
+   * be shown during the Trainer's dialogue.
+   * This should either be empty (for no dialogue sprite) or contain one
+   * generator for each supported {@linkcode TrainerGender}.
+   */
+  dialogueSpriteKey: TrainerAssetGenerator;
+  /**
+   * If `true`, the Trainer is considered a "boss". Boss Trainers have
+   * modified AI command selection logic and may grant extra item rewards when
+   * defeated.
+   * @todo Item rewards for bosses are hard-coded outside of configs and should
+   * be reorganized.
+   */
+  isBoss: boolean;
+  /**
+   * A generator to determine the background music to play during battle.
+   */
+  battleBgm: () => string;
+  /**
+   * A generator to determine the background music to play during the Trainer's introduction.
+   */
+  encounterBgm?: () => string;
+  /**
+   * A generator to determine the background music to play when the Trainer is defeated.
+   * @todo Add default value
+   */
+  victoryBgm: () => string;
+  /**
+   * A function that returns `true` if this Trainer acts as the *only* Trainer in a double battle.
+   * Double battles with multiple Trainers should use a {@linkcode CompositeTrainerConfig} instead.
+   */
+  isDouble: () => boolean;
+  /**
+   * A 2-D array of configs for the Trainer's party Pokemon. Pokemon are generated
+   * based on one randomly selected config from each internal array.
+   * When generated, the Pokemon are added to {@linkcode globalScene} as enemies.
+   */
+  partyConfigs: NonEmptyArray<TrainerPartyPokemonConfig>[];
+  /**
+   * If `true`, all Pokemon within the Trainer's party will have their species selected under the
+   * same seed offset, forcing correlation when species pools are of the same size.
+   */
+  useSameSeedForAllPokemon: boolean;
+  /**
+   * A fixed base seed offset component to be used when the Trainer's party is randomly generated.
+   * If multiple configs have the same seed offset and apply the same RNG for species generation,
+   * they will produce the same species of Pokemon.
+   *
+   * @privateRemarks
+   * For organization purposes, it's best to supply this with a {@linkcode TrainerType} when needed,
+   * but any number is valid.
+   */
+  partyBaseSeedOffset?: number;
+  /**
+   * A generator to determine the amount of money granted to the Player after defeating the Trainer
+   * (relative to the base money amount)
+   * @see {@linkcode MoneyRewardPhase}
+   */
+  moneyMultiplier: () => number;
+  /** Generators for item rewards given to the Player after defeating the Trainer */
+  modifierRewards: ModifierTypeFunc[];
+  /**
+   * The AI type to be used for the Trainer's party (by default).
+   * This may be overridden for individual Pokemon within {@linkcode partyConfigs}.
+   */
+  aiType: AiType;
+  /** Determines how the Trainer chooses when to Terastallize their Pokemon */
+  teraMode: TeraAIMode;
+}
+
+// #endregion
+
+/** A cache of {@linkcode TrainerConfig}s organized by {@linkcode TrainerType} */
+export type TrainerConfigMap = Partial<Record<TrainerType, TrainerConfig>>;
+
+/**
+ * A record of data organized by {@linkcode TrainerSlot}.
+ * All slots except for {@linkcode TrainerSlot.NONE} must have a mapped config.
+ */
+export type TrainerSlotMap<T> = Readonly<Record<NonNullTrainerSlot, T>>;
+
+/**
+ * A {@linkcode TrainerSlotMap} where only the first slot ({@linkcode TrainerSlot.TRAINER})
+ * must be defined. Other slots are optional.
+ */
+export type RequireOneTrainer<T> = Partial<TrainerSlotMap<T>> & {
+  [TrainerSlot.TRAINER]: T;
 };
 
-type PartyTemplateFunc = () => TrainerPartyTemplate;
-type PartyMemberFunc = (level: number, strength: PartyMemberStrength) => EnemyPokemon;
-type GenModifiersFunc = (party: EnemyPokemon[]) => PersistentModifier[];
-type GenAIFunc = (party: EnemyPokemon[]) => void;
-
-interface PartyMemberFuncs {
-  [key: number]: PartyMemberFunc;
-}
-
-class TrainerAI {
-  /** @see {@linkcode TeraAIMode} */
-  public teraMode: TeraAIMode;
-  public instantTeras: number[] = [];
-
-  constructor(teraMode: TeraAIMode = TeraAIMode.NONE) {
-    this.teraMode = teraMode;
-  }
-
+// #region CompositeTrainerConfig
+/**
+ * Container for multiple {@linkcode TrainerConfig}s to be used in a singular battle.
+ * This includes getters to resolve conflicting data/generators between the
+ * included configs.
+ */
+export class CompositeTrainerConfig {
+  public readonly configs: TrainerSlotMap<TrainerConfig>;
+  public readonly combinedTitle: string;
   /**
-   * @returns `true` if this trainer is allowed to use Terastallization
-   */
-  public canTerastallize(): boolean {
-    return this.teraMode !== TeraAIMode.NONE;
-  }
-
-  /**
-   * Sets a pokemon on this AI to instantly tera on first move used
-   * @param index The index of the pokemon to instantly tera
-   */
-  public setInstantTera(index: number): void {
-    this.teraMode = TeraAIMode.INSTANT;
-    this.instantTeras.push(index);
-  }
-}
-
-export class TrainerConfig {
-  public trainerType: TrainerType;
-  public trainerTypeDouble: TrainerType;
-  public name: string;
-  public nameFemale: string;
-  public nameDouble: string;
-  public title: string;
-  public titleDouble: string;
-  public hasGenders: boolean = false;
-  public hasDouble: boolean = false;
-  public hasCharSprite: boolean = false;
-  public spriteNameLeft?: string;
-  public spriteNameRight?: string;
-  public doubleOnly: boolean = false;
-  public moneyMultiplier: number = 1;
-  public isBoss: boolean = false;
-  public hasStaticParty: boolean = false;
-  public useSameSeedForAllMembers: boolean = false;
-  public battleBgm: string;
-  public encounterBgm: string;
-  public femaleEncounterBgm: string;
-  public doubleEncounterBgm: string;
-  public victoryBgm: string;
-  public genModifiersFunc: GenModifiersFunc;
-  public genAIFuncs: GenAIFunc[] = [];
-  public modifierRewardFuncs: ModifierTypeFunc[] = [];
-  public partyTemplates: TrainerPartyTemplate[];
-  public partyTemplateFunc: PartyTemplateFunc;
-  public eventRewardFuncs: ModifierTypeFunc[] = [];
-  public partyMemberFuncs: PartyMemberFuncs = {};
-  public speciesPools: TrainerTierPools;
-  public speciesFilter: PokemonSpeciesFilter;
-  public specialtyTypes: ElementalType[] = [];
-  public hasVoucher: boolean = false;
-  public trainerAI: TrainerAI = new TrainerAI();
-
-  public encounterMessages: string[] = [];
-  public victoryMessages: string[] = [];
-  public defeatMessages: string[] = [];
-
-  public femaleEncounterMessages: string[];
-  public femaleVictoryMessages: string[];
-  public femaleDefeatMessages: string[];
-
-  public doubleEncounterMessages: string[];
-  public doubleVictoryMessages: string[];
-  public doubleDefeatMessages: string[];
-
-  constructor(trainerType: TrainerType, allowLegendaries?: boolean) {
-    this.trainerType = trainerType;
-    this.name = toReadableString(enumValueToKey(TrainerType, this.getDerivedType()));
-    this.battleBgm = "battle_trainer";
-    this.victoryBgm = "victory_trainer";
-    this.partyTemplates = [trainerPartyTemplates.TWO_AVG];
-    this.speciesFilter = (species) => (allowLegendaries || !species.isLegendLike()) && !species.isTrainerForbidden();
-  }
-
-  getKey(): string {
-    return enumValueToKey(TrainerType, this.getDerivedType()).toLowerCase();
-  }
-
-  getSpriteKey(female: boolean = false, isDouble: boolean = false): string {
-    let ret = this.getKey();
-    if (this.hasGenders) {
-      ret += `_${female ? "f" : "m"}`;
-    }
-    // If a special double trainer class was set, set it as the sprite key
-    if (this.trainerTypeDouble && female && isDouble) {
-      // Get the derived type for the double trainer since the sprite key is based on the derived type
-      ret = enumValueToKey(TrainerType, this.getDerivedType(this.trainerTypeDouble)).toLowerCase();
-    }
-    if (!female && this.spriteNameLeft) {
-      return this.spriteNameLeft;
-    }
-    if (female && this.spriteNameRight) {
-      return this.spriteNameRight;
-    }
-    return ret;
-  }
-
-  setName(name: string): TrainerConfig {
-    if (name === "Finn") {
-      // Give the rival a localized name
-      // First check if i18n is initialized
-      if (!getIsInitialized()) {
-        initI18n();
-      }
-      // This is only the male name, because the female name is handled in a different function (setHasGenders)
-      if (name === "Finn") {
-        name = i18next.t("trainerNames:rival");
-      }
-    }
-
-    this.name = name;
-
-    return this;
-  }
-
-  /**
-   * Sets if a boss trainer will have a voucher or not.
-   * @param hasVoucher - If the boss trainer will have a voucher.
-   */
-  setHasVoucher(hasVoucher: boolean): void {
-    this.hasVoucher = hasVoucher;
-  }
-
-  setSpriteNames(spriteNameLeft: string, spriteNameRight: string): TrainerConfig {
-    this.spriteNameLeft = spriteNameLeft;
-    this.spriteNameRight = spriteNameRight;
-    return this;
-  }
-
-  setTitle(title: string): TrainerConfig {
-    // First check if i18n is initialized
-    if (!getIsInitialized()) {
-      initI18n();
-    }
-
-    // Make the title lowercase and replace spaces with underscores
-    title = title.toLowerCase().replace(/\s/g, "_");
-    // Get the title from the i18n file
-    this.title = i18next.t(`titles:${title}`);
-    return this;
-  }
-
-  /**
-   * Gets the "base" trainer type for a given input if applicable
-   * (e.g. if the input is `TrainerType.RIVAL_3` then the output is `TrainerType.RIVAL`).
-   * @param trainerType - (Default `this.trainerType) The trainer type to derive from.
-   * @returns - The derived trainer type.
-   */
-  getDerivedType(trainerType: TrainerType = this.trainerType): TrainerType {
-    switch (trainerType) {
-      case TrainerType.RIVAL_2:
-      case TrainerType.RIVAL_3:
-      case TrainerType.RIVAL_4:
-      case TrainerType.RIVAL_5:
-      case TrainerType.RIVAL_6:
-        return TrainerType.RIVAL;
-      case TrainerType.LANCE_CHAMPION:
-        return TrainerType.LANCE;
-      case TrainerType.LARRY_ELITE:
-        return TrainerType.LARRY;
-      case TrainerType.ROCKET_BOSS_GIOVANNI_1:
-      case TrainerType.ROCKET_BOSS_GIOVANNI_2:
-        return TrainerType.GIOVANNI;
-      case TrainerType.MAXIE_2:
-        return TrainerType.MAXIE;
-      case TrainerType.ARCHIE_2:
-        return TrainerType.ARCHIE;
-      case TrainerType.CYRUS_2:
-        return TrainerType.CYRUS;
-      case TrainerType.GHETSIS_2:
-        return TrainerType.GHETSIS;
-      case TrainerType.LYSANDRE_2:
-        return TrainerType.LYSANDRE;
-      case TrainerType.LUSAMINE_2:
-        return TrainerType.LUSAMINE;
-      case TrainerType.GUZMA_2:
-        return TrainerType.GUZMA;
-      case TrainerType.ROSE_2:
-        return TrainerType.ROSE;
-      case TrainerType.PENNY_2:
-        return TrainerType.PENNY;
-      case TrainerType.MARNIE_ELITE:
-        return TrainerType.MARNIE;
-      case TrainerType.NESSA_ELITE:
-        return TrainerType.NESSA;
-      case TrainerType.BEA_ELITE:
-        return TrainerType.BEA;
-      case TrainerType.ALLISTER_ELITE:
-        return TrainerType.ALLISTER;
-      case TrainerType.RAIHAN_ELITE:
-        return TrainerType.RAIHAN;
-    }
-
-    return trainerType;
-  }
-
-  /**
-   * Sets the configuration for trainers with genders, including the female name and encounter background music (BGM).
-   * @param nameFemale The name of the female trainer. If 'Ivy', a localized name will be assigned.
-   * @param femaleEncounterBgm The encounter BGM for the female trainer, which can be a TrainerType or a string.
-   * @returns The updated TrainerConfig instance.
-   */
-  setHasGenders(nameFemale?: string, femaleEncounterBgm?: TrainerType | string): TrainerConfig {
-    // If the female name is 'Ivy' (the rival), assign a localized name.
-    if (nameFemale === "Ivy") {
-      // Check if the internationalization (i18n) system is initialized.
-      if (!getIsInitialized()) {
-        // Initialize the i18n system if it is not already initialized.
-        initI18n();
-      }
-      // Set the localized name for the female rival.
-      this.nameFemale = i18next.t("trainerNames:rival_female");
-    } else {
-      // Otherwise, assign the provided female name.
-      this.nameFemale = nameFemale!; // TODO: is this bang correct?
-    }
-
-    // Indicate that this trainer configuration includes genders.
-    this.hasGenders = true;
-
-    // If a female encounter BGM is provided.
-    if (femaleEncounterBgm) {
-      // If the BGM is a TrainerType (number), convert it to a string, replace underscores with spaces, and convert to lowercase.
-      // Otherwise, assign the provided string as the BGM.
-      this.femaleEncounterBgm =
-        typeof femaleEncounterBgm === "number"
-          ? enumValueToKey(TrainerType, femaleEncounterBgm).replace(/_/g, " ").toLowerCase()
-          : femaleEncounterBgm;
-    }
-
-    // Return the updated TrainerConfig instance.
-    return this;
-  }
-
-  /**
-   * Sets the configuration for trainers with double battles, including the name of the double trainer and the encounter BGM.
-   * @param nameDouble The name of the double trainer (e.g., "Ace Duo" for Trainer Class Doubles or "red_blue_double" for NAMED trainer doubles).
-   * @param doubleEncounterBgm The encounter BGM for the double trainer, which can be a TrainerType or a string.
-   * @returns The updated TrainerConfig instance.
-   */
-  setHasDouble(nameDouble: string, doubleEncounterBgm?: TrainerType | string): TrainerConfig {
-    this.hasDouble = true;
-    this.nameDouble = nameDouble;
-    if (doubleEncounterBgm) {
-      this.doubleEncounterBgm =
-        typeof doubleEncounterBgm === "number"
-          ? enumValueToKey(TrainerType, doubleEncounterBgm).replace(/_/g, " ").toLowerCase()
-          : doubleEncounterBgm;
-    }
-    return this;
-  }
-
-  /**
-   * Sets the trainer type for double battles.
-   * @param trainerTypeDouble The TrainerType of the partner in a double battle.
-   * @returns The updated TrainerConfig instance.
-   */
-  setDoubleTrainerType(trainerTypeDouble: TrainerType): TrainerConfig {
-    this.trainerTypeDouble = trainerTypeDouble;
-    this.setDoubleMessages(this.nameDouble);
-    return this;
-  }
-
-  /**
-   * TODO: Move this into dialogue.ts's initTrainerTypeDialogue function
-   */
-  /**
-   * Sets the encounter and victory messages for double trainers.
-   * @param nameDouble - The name of the pair (e.g. "red_blue_double").
-   */
-  setDoubleMessages(nameDouble: string) {
-    // Check if there is double battle dialogue for this trainer
-    // if (doubleBattleDialogue[nameDouble]) {
-    //   // Set encounter and victory messages for double trainers
-    //   this.doubleEncounterMessages = doubleBattleDialogue[nameDouble].encounter;
-    //   this.doubleVictoryMessages = doubleBattleDialogue[nameDouble].victory;
-    //   this.doubleDefeatMessages = doubleBattleDialogue[nameDouble].defeat;
-    // }
-    this.doubleEncounterMessages = [nameDouble];
-    this.doubleVictoryMessages = [nameDouble];
-    this.doubleDefeatMessages = [nameDouble];
-  }
-
-  /**
-   * Sets the title for double trainers
-   * @param titleDouble The key for the title in the i18n file. (e.g., "champion_double").
-   * @returns The updated TrainerConfig instance.
-   */
-  setDoubleTitle(titleDouble: string): TrainerConfig {
-    // First check if i18n is initialized
-    if (!getIsInitialized()) {
-      initI18n();
-    }
-
-    // Make the title lowercase and replace spaces with underscores
-    titleDouble = titleDouble.toLowerCase().replace(/\s/g, "_");
-
-    // Get the title from the i18n file
-    this.titleDouble = i18next.t(`titles:${titleDouble}`);
-
-    return this;
-  }
-
-  setHasCharSprite(): TrainerConfig {
-    this.hasCharSprite = true;
-    return this;
-  }
-
-  setDoubleOnly(): TrainerConfig {
-    this.doubleOnly = true;
-    return this;
-  }
-
-  setMoneyMultiplier(moneyMultiplier: number): TrainerConfig {
-    this.moneyMultiplier = moneyMultiplier;
-    return this;
-  }
-
-  setBoss(): TrainerConfig {
-    this.isBoss = true;
-    return this;
-  }
-
-  setStaticParty(): TrainerConfig {
-    this.hasStaticParty = true;
-    return this;
-  }
-
-  setUseSameSeedForAllMembers(): TrainerConfig {
-    this.useSameSeedForAllMembers = true;
-    return this;
-  }
-
-  setBattleBgm(battleBgm: string): TrainerConfig {
-    this.battleBgm = battleBgm;
-    return this;
-  }
-
-  setEncounterBgm(encounterBgm: TrainerType | string): TrainerConfig {
-    this.encounterBgm =
-      typeof encounterBgm === "number" ? enumValueToKey(TrainerType, encounterBgm).toLowerCase() : encounterBgm;
-    return this;
-  }
-
-  setVictoryBgm(victoryBgm: string): TrainerConfig {
-    this.victoryBgm = victoryBgm;
-    return this;
-  }
-
-  setPartyTemplates(...partyTemplates: TrainerPartyTemplate[]): TrainerConfig {
-    this.partyTemplates = partyTemplates;
-    return this;
-  }
-
-  setPartyTemplateFunc(partyTemplateFunc: PartyTemplateFunc): TrainerConfig {
-    this.partyTemplateFunc = partyTemplateFunc;
-    return this;
-  }
-
-  setPartyMemberFunc(slotIndex: number, partyMemberFunc: PartyMemberFunc): TrainerConfig {
-    this.partyMemberFuncs[slotIndex] = partyMemberFunc;
-    return this;
-  }
-
-  setSpeciesPools(speciesPools: TrainerTierPools | SpeciesId[]): TrainerConfig {
-    this.speciesPools = (Array.isArray(speciesPools)
-      ? { [TrainerPoolTier.COMMON]: speciesPools }
-      : speciesPools) as unknown as TrainerTierPools;
-    return this;
-  }
-
-  setSpeciesFilter(speciesFilter: PokemonSpeciesFilter, allowLegendaries?: boolean): TrainerConfig {
-    const baseFilter = this.speciesFilter;
-    this.speciesFilter = allowLegendaries ? speciesFilter : (species) => speciesFilter(species) && baseFilter(species);
-    return this;
-  }
-
-  setSpecialtyTypes(...specialtyTypes: ElementalType[]): TrainerConfig {
-    this.specialtyTypes = specialtyTypes;
-    return this;
-  }
-
-  setGenModifiersFunc(genModifiersFunc: GenModifiersFunc): TrainerConfig {
-    this.genModifiersFunc = genModifiersFunc;
-    return this;
-  }
-
-  /**
-   * Sets random pokemon from the trainers team to instant tera. Uses their specialty types if they have one.
-   * @param count The amount of pokemon to have instant tera
-   * @returns `this` ({@linkcode TrainerConfig})
-   */
-  public setRandomTeraModifiers(count: () => number): TrainerConfig {
-    this.genAIFuncs.push((party: EnemyPokemon[]) => {
-      const { length } = party;
-      const partyMemberIndexes = Array.from({ length }).map((_, i) => i);
-      for (let t = 0; t < Math.min(count(), length); t++) {
-        const randomIndex = randSeedItem(partyMemberIndexes);
-        partyMemberIndexes.splice(partyMemberIndexes.indexOf(randomIndex), 1);
-        if (this.specialtyTypes?.length) {
-          party[randomIndex].teraType = randSeedItem(this.specialtyTypes);
-        }
-        this.trainerAI.setInstantTera(randomIndex);
-      }
-    });
-    return this;
-  }
-
-  /**
-   * Sets a specific pokemon to instant tera
-   * @param index The index within the team to have instant tera
-   * @returns `this` ({@linkcode TrainerConfig})
-   */
-  public setInstantTera(index: number): TrainerConfig {
-    this.trainerAI.setInstantTera(index);
-    return this;
-  }
-
-  setEventModifierRewardFuncs(...modifierTypeFuncs: (() => ModifierTypeFunc)[]): TrainerConfig {
-    this.eventRewardFuncs = modifierTypeFuncs.map((func) => () => {
-      const modifierTypeFunc = func();
-      const modifierType = modifierTypeFunc();
-      modifierType.withIdFromFunc(modifierTypeFunc);
-      return modifierType;
-    });
-    return this;
-  }
-
-  setModifierRewardFuncs(...modifierTypeFuncs: (() => ModifierTypeFunc)[]): TrainerConfig {
-    this.modifierRewardFuncs = modifierTypeFuncs.map((func) => () => {
-      const modifierTypeFunc = func();
-      const modifierType = modifierTypeFunc();
-      modifierType.withIdFromFunc(modifierTypeFunc);
-      return modifierType;
-    });
-    return this;
-  }
-
-  // TODO: Move into own file?
-  //#region Evil team data
-
-  /**
-   * Returns the pool of species for an evil team admin
-   * @param team - The evil team the admin belongs to.
-   * @returns The pool of species for the evil team admin.
-   */
-  speciesPoolPerEvilTeamAdmin(team): TrainerTierPools {
-    team = team.toLowerCase();
-    switch (team) {
-      case "rocket": {
-        return {
-          [TrainerPoolTier.COMMON]: [
-            SpeciesId.RATTATA,
-            SpeciesId.KOFFING,
-            SpeciesId.EKANS,
-            SpeciesId.ZUBAT,
-            SpeciesId.MAGIKARP,
-            SpeciesId.HOUNDOUR,
-            SpeciesId.ONIX,
-            SpeciesId.CUBONE,
-            SpeciesId.GROWLITHE,
-            SpeciesId.MURKROW,
-            SpeciesId.GASTLY,
-            SpeciesId.EXEGGCUTE,
-            SpeciesId.VOLTORB,
-            SpeciesId.DROWZEE,
-            SpeciesId.VILEPLUME,
-          ],
-          [TrainerPoolTier.UNCOMMON]: [
-            SpeciesId.PORYGON,
-            SpeciesId.MANKEY,
-            SpeciesId.MAGNEMITE,
-            SpeciesId.ALOLA_SANDSHREW,
-            SpeciesId.ALOLA_MEOWTH,
-            SpeciesId.ALOLA_GRIMER,
-            SpeciesId.ALOLA_GEODUDE,
-            SpeciesId.PALDEA_TAUROS,
-            SpeciesId.OMANYTE,
-            SpeciesId.KABUTO,
-            SpeciesId.MAGBY,
-            SpeciesId.ELEKID,
-          ],
-          [TrainerPoolTier.RARE]: [SpeciesId.DRATINI, SpeciesId.LARVITAR],
-        };
-      }
-      case "magma": {
-        return {
-          [TrainerPoolTier.COMMON]: [
-            SpeciesId.GROWLITHE,
-            SpeciesId.SLUGMA,
-            SpeciesId.SOLROCK,
-            SpeciesId.HIPPOPOTAS,
-            SpeciesId.BALTOY,
-            SpeciesId.ROLYCOLY,
-            SpeciesId.GLIGAR,
-            SpeciesId.TORKOAL,
-            SpeciesId.HOUNDOUR,
-            SpeciesId.MAGBY,
-          ],
-          [TrainerPoolTier.UNCOMMON]: [
-            SpeciesId.TRAPINCH,
-            SpeciesId.SILICOBRA,
-            SpeciesId.RHYHORN,
-            SpeciesId.ANORITH,
-            SpeciesId.LILEEP,
-            SpeciesId.HISUI_GROWLITHE,
-            SpeciesId.TURTONATOR,
-            SpeciesId.ARON,
-            SpeciesId.TOEDSCOOL,
-          ],
-          [TrainerPoolTier.RARE]: [SpeciesId.CAPSAKID, SpeciesId.CHARCADET],
-        };
-      }
-      case "aqua": {
-        return {
-          [TrainerPoolTier.COMMON]: [
-            SpeciesId.CORPHISH,
-            SpeciesId.SPHEAL,
-            SpeciesId.CLAMPERL,
-            SpeciesId.CHINCHOU,
-            SpeciesId.WOOPER,
-            SpeciesId.WINGULL,
-            SpeciesId.TENTACOOL,
-            SpeciesId.AZURILL,
-            SpeciesId.LOTAD,
-            SpeciesId.WAILMER,
-            SpeciesId.REMORAID,
-            SpeciesId.BARBOACH,
-          ],
-          [TrainerPoolTier.UNCOMMON]: [
-            SpeciesId.MANTYKE,
-            SpeciesId.HISUI_QWILFISH,
-            SpeciesId.ARROKUDA,
-            SpeciesId.DHELMISE,
-            SpeciesId.CLOBBOPUS,
-            SpeciesId.FEEBAS,
-            SpeciesId.PALDEA_WOOPER,
-            SpeciesId.HORSEA,
-            SpeciesId.SKRELP,
-          ],
-          [TrainerPoolTier.RARE]: [SpeciesId.DONDOZO, SpeciesId.BASCULEGION],
-        };
-      }
-      case "galactic": {
-        return {
-          [TrainerPoolTier.COMMON]: [
-            SpeciesId.BRONZOR,
-            SpeciesId.SWINUB,
-            SpeciesId.YANMA,
-            SpeciesId.LICKITUNG,
-            SpeciesId.TANGELA,
-            SpeciesId.MAGBY,
-            SpeciesId.ELEKID,
-            SpeciesId.SKORUPI,
-            SpeciesId.ZUBAT,
-            SpeciesId.MURKROW,
-            SpeciesId.MAGIKARP,
-            SpeciesId.VOLTORB,
-          ],
-          [TrainerPoolTier.UNCOMMON]: [
-            SpeciesId.HISUI_GROWLITHE,
-            SpeciesId.HISUI_QWILFISH,
-            SpeciesId.SNEASEL,
-            SpeciesId.DUSKULL,
-            SpeciesId.ROTOM,
-            SpeciesId.HISUI_VOLTORB,
-            SpeciesId.GLIGAR,
-            SpeciesId.ABRA,
-          ],
-          [TrainerPoolTier.RARE]: [
-            SpeciesId.URSALUNA,
-            SpeciesId.HISUI_LILLIGANT,
-            SpeciesId.SPIRITOMB,
-            SpeciesId.HISUI_SNEASEL,
-          ],
-        };
-      }
-      case "plasma": {
-        return {
-          [TrainerPoolTier.COMMON]: [
-            SpeciesId.YAMASK,
-            SpeciesId.ROGGENROLA,
-            SpeciesId.JOLTIK,
-            SpeciesId.TYMPOLE,
-            SpeciesId.FRILLISH,
-            SpeciesId.FERROSEED,
-            SpeciesId.SANDILE,
-            SpeciesId.TIMBURR,
-            SpeciesId.DARUMAKA,
-            SpeciesId.FOONGUS,
-            SpeciesId.CUBCHOO,
-            SpeciesId.VANILLITE,
-          ],
-          [TrainerPoolTier.UNCOMMON]: [
-            SpeciesId.PAWNIARD,
-            SpeciesId.VULLABY,
-            SpeciesId.ZORUA,
-            SpeciesId.DRILBUR,
-            SpeciesId.KLINK,
-            SpeciesId.TYNAMO,
-            SpeciesId.GALAR_DARUMAKA,
-            SpeciesId.GOLETT,
-            SpeciesId.MIENFOO,
-            SpeciesId.DURANT,
-            SpeciesId.SIGILYPH,
-          ],
-          [TrainerPoolTier.RARE]: [SpeciesId.HISUI_ZORUA, SpeciesId.AXEW, SpeciesId.DEINO, SpeciesId.HISUI_BRAVIARY],
-        };
-      }
-      case "flare": {
-        return {
-          [TrainerPoolTier.COMMON]: [
-            SpeciesId.FLETCHLING,
-            SpeciesId.LITLEO,
-            SpeciesId.INKAY,
-            SpeciesId.FOONGUS,
-            SpeciesId.HELIOPTILE,
-            SpeciesId.ELECTRIKE,
-            SpeciesId.SKORUPI,
-            SpeciesId.PURRLOIN,
-            SpeciesId.CLAWITZER,
-            SpeciesId.PANCHAM,
-            SpeciesId.ESPURR,
-            SpeciesId.BUNNELBY,
-          ],
-          [TrainerPoolTier.UNCOMMON]: [
-            SpeciesId.LITWICK,
-            SpeciesId.SNEASEL,
-            SpeciesId.PUMPKABOO,
-            SpeciesId.PHANTUMP,
-            SpeciesId.HONEDGE,
-            SpeciesId.BINACLE,
-            SpeciesId.HOUNDOUR,
-            SpeciesId.SKRELP,
-            SpeciesId.SLIGGOO,
-          ],
-          [TrainerPoolTier.RARE]: [SpeciesId.NOIBAT, SpeciesId.HISUI_AVALUGG, SpeciesId.HISUI_SLIGGOO],
-        };
-      }
-      case "aether": {
-        return {
-          [TrainerPoolTier.COMMON]: [
-            SpeciesId.BRUXISH,
-            SpeciesId.SLOWPOKE,
-            SpeciesId.BALTOY,
-            SpeciesId.EXEGGCUTE,
-            SpeciesId.ABRA,
-            SpeciesId.ALOLA_RAICHU,
-            SpeciesId.ELGYEM,
-            SpeciesId.NATU,
-            SpeciesId.BLIPBUG,
-            SpeciesId.GIRAFARIG,
-            SpeciesId.ORANGURU,
-          ],
-          [TrainerPoolTier.UNCOMMON]: [
-            SpeciesId.GALAR_SLOWPOKE,
-            SpeciesId.MEDITITE,
-            SpeciesId.BELDUM,
-            SpeciesId.HATENNA,
-            SpeciesId.INKAY,
-            SpeciesId.RALTS,
-            SpeciesId.GALAR_MR_MIME,
-          ],
-          [TrainerPoolTier.RARE]: [SpeciesId.ARMAROUGE, SpeciesId.HISUI_BRAVIARY, SpeciesId.PORYGON],
-        };
-      }
-      case "skull": {
-        return {
-          [TrainerPoolTier.COMMON]: [
-            SpeciesId.MAREANIE,
-            SpeciesId.ALOLA_GRIMER,
-            SpeciesId.GASTLY,
-            SpeciesId.ZUBAT,
-            SpeciesId.FOMANTIS,
-            SpeciesId.VENIPEDE,
-            SpeciesId.BUDEW,
-            SpeciesId.KOFFING,
-            SpeciesId.STUNKY,
-            SpeciesId.CROAGUNK,
-            SpeciesId.NIDORAN_F,
-          ],
-          [TrainerPoolTier.UNCOMMON]: [
-            SpeciesId.GALAR_SLOWPOKE,
-            SpeciesId.SKORUPI,
-            SpeciesId.PALDEA_WOOPER,
-            SpeciesId.VULLABY,
-            SpeciesId.HISUI_QWILFISH,
-            SpeciesId.GLIMMET,
-          ],
-          [TrainerPoolTier.RARE]: [SpeciesId.SKRELP, SpeciesId.HISUI_SNEASEL],
-        };
-      }
-      case "macro": {
-        return {
-          [TrainerPoolTier.COMMON]: [
-            SpeciesId.HATENNA,
-            SpeciesId.FEEBAS,
-            SpeciesId.BOUNSWEET,
-            SpeciesId.SALANDIT,
-            SpeciesId.GALAR_PONYTA,
-            SpeciesId.GOTHITA,
-            SpeciesId.FROSLASS,
-            SpeciesId.VULPIX,
-            SpeciesId.FRILLISH,
-            SpeciesId.ODDISH,
-            SpeciesId.SINISTEA,
-          ],
-          [TrainerPoolTier.UNCOMMON]: [
-            SpeciesId.VULLABY,
-            SpeciesId.MAREANIE,
-            SpeciesId.ALOLA_VULPIX,
-            SpeciesId.TOGEPI,
-            SpeciesId.GALAR_CORSOLA,
-            SpeciesId.APPLIN,
-          ],
-          [TrainerPoolTier.RARE]: [SpeciesId.TINKATINK, SpeciesId.HISUI_LILLIGANT],
-        };
-      }
-      case "star_1": {
-        return {
-          [TrainerPoolTier.COMMON]: [
-            SpeciesId.MURKROW,
-            SpeciesId.SEEDOT,
-            SpeciesId.CACNEA,
-            SpeciesId.STUNKY,
-            SpeciesId.SANDILE,
-            SpeciesId.NYMBLE,
-            SpeciesId.MASCHIFF,
-            SpeciesId.GALAR_ZIGZAGOON,
-          ],
-          [TrainerPoolTier.UNCOMMON]: [
-            SpeciesId.UMBREON,
-            SpeciesId.SNEASEL,
-            SpeciesId.CORPHISH,
-            SpeciesId.ZORUA,
-            SpeciesId.INKAY,
-            SpeciesId.BOMBIRDIER,
-          ],
-          [TrainerPoolTier.RARE]: [SpeciesId.DEINO, SpeciesId.SPRIGATITO],
-        };
-      }
-      case "star_2": {
-        return {
-          [TrainerPoolTier.COMMON]: [
-            SpeciesId.GROWLITHE,
-            SpeciesId.HOUNDOUR,
-            SpeciesId.NUMEL,
-            SpeciesId.LITWICK,
-            SpeciesId.FLETCHLING,
-            SpeciesId.LITLEO,
-            SpeciesId.ROLYCOLY,
-            SpeciesId.CAPSAKID,
-          ],
-          [TrainerPoolTier.UNCOMMON]: [
-            SpeciesId.PONYTA,
-            SpeciesId.FLAREON,
-            SpeciesId.MAGBY,
-            SpeciesId.TORKOAL,
-            SpeciesId.SALANDIT,
-            SpeciesId.TURTONATOR,
-          ],
-          [TrainerPoolTier.RARE]: [SpeciesId.LARVESTA, SpeciesId.FUECOCO],
-        };
-      }
-      case "star_3": {
-        return {
-          [TrainerPoolTier.COMMON]: [
-            SpeciesId.ZUBAT,
-            SpeciesId.GRIMER,
-            SpeciesId.STUNKY,
-            SpeciesId.FOONGUS,
-            SpeciesId.MAREANIE,
-            SpeciesId.TOXEL,
-            SpeciesId.SHROODLE,
-            SpeciesId.PALDEA_WOOPER,
-          ],
-          [TrainerPoolTier.UNCOMMON]: [
-            SpeciesId.GASTLY,
-            SpeciesId.SEVIPER,
-            SpeciesId.SKRELP,
-            SpeciesId.ALOLA_GRIMER,
-            SpeciesId.GALAR_SLOWPOKE,
-            SpeciesId.HISUI_QWILFISH,
-          ],
-          [TrainerPoolTier.RARE]: [SpeciesId.GLIMMET, SpeciesId.BULBASAUR],
-        };
-      }
-      case "star_4": {
-        return {
-          [TrainerPoolTier.COMMON]: [
-            SpeciesId.CLEFFA,
-            SpeciesId.IGGLYBUFF,
-            SpeciesId.AZURILL,
-            SpeciesId.COTTONEE,
-            SpeciesId.FLABEBE,
-            SpeciesId.HATENNA,
-            SpeciesId.IMPIDIMP,
-            SpeciesId.TINKATINK,
-          ],
-          [TrainerPoolTier.UNCOMMON]: [
-            SpeciesId.TOGEPI,
-            SpeciesId.GARDEVOIR,
-            SpeciesId.SYLVEON,
-            SpeciesId.KLEFKI,
-            SpeciesId.MIMIKYU,
-            SpeciesId.ALOLA_VULPIX,
-          ],
-          [TrainerPoolTier.RARE]: [SpeciesId.GALAR_PONYTA, SpeciesId.POPPLIO],
-        };
-      }
-      case "star_5": {
-        return {
-          [TrainerPoolTier.COMMON]: [
-            SpeciesId.SHROOMISH,
-            SpeciesId.MAKUHITA,
-            SpeciesId.MEDITITE,
-            SpeciesId.CROAGUNK,
-            SpeciesId.SCRAGGY,
-            SpeciesId.MIENFOO,
-            SpeciesId.PAWMI,
-            SpeciesId.PALDEA_TAUROS,
-          ],
-          [TrainerPoolTier.UNCOMMON]: [
-            SpeciesId.RIOLU,
-            SpeciesId.TIMBURR,
-            SpeciesId.HAWLUCHA,
-            SpeciesId.PASSIMIAN,
-            SpeciesId.FALINKS,
-            SpeciesId.FLAMIGO,
-          ],
-          [TrainerPoolTier.RARE]: [SpeciesId.JANGMO_O, SpeciesId.QUAXLY],
-        };
-      }
-    }
-
-    console.warn(`Evil team admin for ${team} not found. Returning empty species pools.`);
-    return [];
-  }
-
-  /**
-   * Initializes the trainer configuration for an evil team admin.
-   * @param title The title of the evil team admin.
-   * @param poolName The evil team the admin belongs to.
-   * @param signatureSpecies The signature species for the evil team leader.
-   * @returns The updated TrainerConfig instance.
-   */
-  initForEvilTeamAdmin(title: string, poolName: string, signatureSpecies: (SpeciesId | SpeciesId[])[]): TrainerConfig {
-    if (!getIsInitialized()) {
-      initI18n();
-    }
-    this.setPartyTemplates(trainerPartyTemplates.RIVAL_5);
-
-    // Set the species pools for the evil team admin.
-    this.speciesPools = this.speciesPoolPerEvilTeamAdmin(poolName);
-
-    signatureSpecies.forEach((speciesPool, s) => {
-      speciesPool = coerceArray(speciesPool);
-      this.setPartyMemberFunc(-(s + 1), getRandomPartyMemberFunc(speciesPool));
-    });
-
-    const nameForCall = this.name.toLowerCase().replace(/\s/g, "_");
-    this.name = i18next.t(`trainerNames:${nameForCall}`);
-    this.setHasVoucher(false);
-    this.setTitle(title);
-    this.setMoneyMultiplier(1.5);
-    this.setBoss();
-    this.setStaticParty();
-    this.setVictoryBgm("victory_team_plasma");
-
-    return this;
-  }
-
-  /**
-   * Initializes the trainer configuration for a Stat Trainer, as part of the Trainer's Test Mystery Encounter.
-   * @param signatureSpecies The signature species for the Elite Four member.
-   * @param specialtyTypes The specialty types for the Stat Trainer.
-   * @param isMale Whether the Elite Four Member is Male or Female (for localization of the title).
-   * @returns The updated TrainerConfig instance.
-   */
-  initForStatTrainer(
-    signatureSpecies: (SpeciesId | SpeciesId[])[],
-    _isMale: boolean,
-    ...specialtyTypes: ElementalType[]
-  ): TrainerConfig {
-    if (!getIsInitialized()) {
-      initI18n();
-    }
-
-    this.setPartyTemplates(trainerPartyTemplates.ELITE_FOUR);
-
-    signatureSpecies.forEach((speciesPool, s) => {
-      speciesPool = coerceArray(speciesPool);
-      this.setPartyMemberFunc(-(s + 1), getRandomPartyMemberFunc(speciesPool));
-    });
-    if (specialtyTypes.length) {
-      this.setSpeciesFilter((p) => specialtyTypes.find((t) => p.isOfType(t)) !== undefined);
-      this.setSpecialtyTypes(...specialtyTypes);
-    }
-    const nameForCall = this.name.toLowerCase().replace(/\s/g, "_");
-    this.name = i18next.t(`trainerNames:${nameForCall}`);
-    this.setMoneyMultiplier(2);
-    this.setBoss();
-    this.setStaticParty();
-
-    // TODO: replace battle music with more suitable music? (currently using basic trainer battle music)
-    this.setVictoryBgm("victory_trainer");
-
-    return this;
-  }
-
-  /**
-   * Initializes the trainer configuration for an evil team leader.
-   * @param title the string representation of the evil team leader's title
-   * @param name the string representation of the evil team leader's name
-   * @param rematch Whether or not this is the rematch fight
-   * @param battleBgm the string representation of the battle bgm
-   * @returns The updated TrainerConfig instance.
-   */
-  initForEvilTeamLeader(title: string, name: string, rematch: boolean, battleBgm: string): TrainerConfig {
-    if (!getIsInitialized()) {
-      initI18n();
-    }
-    if (rematch) {
-      this.setPartyTemplates(trainerPartyTemplates.ELITE_FOUR);
-    } else {
-      this.setPartyTemplates(trainerPartyTemplates.RIVAL_5);
-    }
-    const nameForCall = name.toLowerCase().replace(/\s/g, "_");
-    this.name = i18next.t(`trainerNames:${nameForCall}`);
-    this.setTitle(title);
-    this.setMoneyMultiplier(2.5);
-    this.setBoss();
-    this.setStaticParty();
-    this.setHasVoucher(true);
-    this.setBattleBgm(battleBgm);
-    this.setVictoryBgm("victory_team_plasma");
-
-    return this;
-  }
-
-  /**
-   * Initializes the trainer configuration for a Gym Leader.
-   * @param signatureSpecies The signature species for the Gym Leader.
-   * @param specialtyTypes The specialty types for the Gym Leader.
-   * @param isMale Whether the Gym Leader is Male or Not (for localization of the title).
-   * @returns The updated TrainerConfig instance.
-   */
-  initForGymLeader(
-    signatureSpecies: (SpeciesId | SpeciesId[])[],
-    isMale: boolean,
-    ...specialtyTypes: ElementalType[]
-  ): TrainerConfig {
-    // Check if the internationalization (i18n) system is initialized.
-    if (!getIsInitialized()) {
-      initI18n();
-    }
-
-    // Set the function to generate the Gym Leader's party template.
-    this.setPartyTemplateFunc(() => getGymLeaderPartyTemplate());
-
-    // Set up party members with their corresponding species.
-    signatureSpecies.forEach((speciesPool, s) => {
-      speciesPool = coerceArray(speciesPool);
-      // Set a function to get a random party member from the species pool.
-      this.setPartyMemberFunc(-(s + 1), getRandomPartyMemberFunc(speciesPool));
-    });
-
-    // If specialty types are provided, set species filter and specialty types.
-    if (specialtyTypes.length) {
-      this.setSpeciesFilter((p) => specialtyTypes.find((t) => p.isOfType(t)) !== undefined);
-      this.setSpecialtyTypes(...specialtyTypes);
-    }
-
-    // Localize the trainer's name by converting it to lowercase and replacing spaces with underscores.
-    const nameForCall = this.name.toLowerCase().replace(/\s/g, "_");
-    this.name = i18next.t(`trainerNames:${nameForCall}`);
-
-    // Set the title to "gym_leader". (this is the key in the i18n file)
-    this.setTitle("gym_leader");
-    if (!isMale) {
-      this.setTitle("gym_leader_female");
-    }
-
-    // Configure various properties for the Gym Leader.
-    this.setMoneyMultiplier(2.5);
-    this.setBoss();
-    this.setStaticParty();
-    this.setHasVoucher(true);
-    this.setVictoryBgm("victory_gym");
-
-    return this;
-  }
-
-  /**
-   * Function for generating Paldea gym leaders
+   * If `true`, all Trainers' party Pokemon are generated using the same seed
+   * offset. For example, if two party members' species are to be randomly selected
+   * from an {@link PartyPokemonConfig.speciesPool | untiered species pool}, their
+   * species will be of the same index within their respective pools.
    *
-   * See {@linkcode initForGymLeader}
+   * @privateRemarks
+   * This is currently only used for the Twins, and is meant to give them matching
+   * Pokemon pairs (e.g. Plusle + Minun).
+   */
+  public readonly useSameSeedForAllTrainers: boolean;
+
+  constructor(
+    configs: TrainerSlotMap<TrainerConfig>,
+    combinedTitle: string,
+    useSameSeedForAllTrainers: boolean = false,
+  ) {
+    this.configs = configs;
+    this.combinedTitle = combinedTitle;
+    this.useSameSeedForAllTrainers = useSameSeedForAllTrainers;
+  }
+}
+
+export function isCompositeConfig(config: TrainerConfig | CompositeTrainerConfig): config is CompositeTrainerConfig {
+  return Object.hasOwn(config, "configs");
+}
+
+// #endregion
+// #region TrainerPartyPokemonConfig
+
+/**
+ * A list of Pokemon {@link SpeciesId | species} mapped by {@linkcode TrainerPoolTier}.
+ * Not all tiers need to be included in the pool.
+ * @example
+ * ```
+ * const validPool: TieredSpeciesPool = {
+ *   [TrainerPoolTier.COMMON]: [SpeciesId.MAGIKARP, SpeciesId.FEEBAS],
+ *   [TrainerPoolTier.UNCOMMON]: [SpeciesId.MUDKIP],
+ *   // ...
+ * };
+ * ```
+ */
+export type TieredSpeciesPool = Partial<Record<TrainerPoolTier, SpeciesId[]>>;
+/** Enemy Pokemon generation options that may be set for a Trainer's party Pokemon */
+export type ConfigurableEnemyPokemonOptions = Omit<
+  EnemyPokemonOptions,
+  | "id"
+  | "trainerSlot"
+  | "metLevel"
+  | "metBiome"
+  | "metSpecies"
+  | "metWave"
+  | "evoCounter"
+  | "usedTMs"
+  | "pauseEvolutions"
+  | "stellarTypesBoosted"
+>;
+
+export type LevelFunc = (waveIndex: number) => number;
+
+/**
+ * Interface for the specification of one or more Pokemon within a Trainer's party
+ */
+export interface TrainerPartyPokemonConfig extends ConfigurableEnemyPokemonOptions {
+  /**
+   * A tiered pool of {@link SpeciesId | species} from which the Pokemon is generated.
+   * The lower a species' tier, the more likely it will be selected for generation.
    *
-   * The only difference is they will always tera their ace (final slot) Pokemon
-   * to their specialty type
+   * If this and {@linkcode speciesPool} are both defined in a config, this pool takes priority
+   */
+  tieredSpeciesPool?: TieredSpeciesPool;
+  /**
+   * An untiered pool of {@link SpeciesId | species} from which the Pokemon is generated.
+   * Each species in this pool has an equal chance of being selected for generation.
+   */
+  speciesPool?: NonEmptyArray<SpeciesId>;
+  /**
+   * A condition function to filter certain {@link SpeciesId | species} of Pokemon
+   * from being generated. If defined, a species must meet the condition to
+   * be selected for generation.
    *
-   * @param signatureSpecies The signature species for the Gym Leader.
-   * @param specialtyTypes The specialty types for the Gym Leader.
-   * @param isMale Whether the Gym Leader is Male or Not (for localization of the title).
-   * @returns The updated TrainerConfig instance.
+   * If {@linkcode tieredSpeciesPool} or {@linkcode speciesPool} are also defined,
+   * this filter is applied onto the given pool. Otherwise, this filter is
+   * applied to all Pokemon that {@link PokemonSpeciesForm.canSpawnAsRandomSpecies | can spawn randomly}.
    */
-  initForPaldeaGymLeader(
-    signatureSpecies: (SpeciesId | SpeciesId[])[],
-    isMale: boolean,
-    ...specialtyTypes: ElementalType[]
-  ): TrainerConfig {
-    this.initForGymLeader(signatureSpecies, isMale, ...specialtyTypes);
-    this.setBattleBgm("battle_paldea_gym");
-    this.genAIFuncs.push((party: EnemyPokemon[]) => {
-      const lastSlot = party.length - 1;
-      if (this.specialtyTypes?.length) {
-        party[lastSlot].teraType = randSeedItem(this.specialtyTypes);
-      }
-      this.trainerAI.setInstantTera(lastSlot);
-    });
-
-    return this;
-  }
-
+  speciesFilter?: PokemonSpeciesFilter;
   /**
-   * Initializes the trainer configuration for an Elite Four member.
-   * @param signatureSpecies The signature species for the Elite Four member.
-   * @param specialtyTypes The specialty types for the Elite Four member.
-   * @param isMale Whether the Elite Four Member is Male or Female (for localization of the title).
-   * @returns The updated TrainerConfig instance.
+   * If `false`, restricts Pokemon of species that have already been
+   * generated in the Trainer's party (if possible)
    */
-  initForEliteFour(
-    signatureSpecies: (SpeciesId | SpeciesId[])[],
-    isMale: boolean,
-    ...specialtyTypes: ElementalType[]
-  ): TrainerConfig {
-    // Check if the internationalization (i18n) system is initialized.
-    if (!getIsInitialized()) {
-      initI18n();
-    }
-
-    // Set the party templates for the Elite Four.
-    this.setPartyTemplates(trainerPartyTemplates.ELITE_FOUR);
-
-    // Set up party members with their corresponding species.
-    signatureSpecies.forEach((speciesPool, s) => {
-      speciesPool = coerceArray(speciesPool);
-      // Set a function to get a random party member from the species pool.
-      this.setPartyMemberFunc(-(s + 1), getRandomPartyMemberFunc(speciesPool));
-    });
-
-    // Set species filter and specialty types if provided, otherwise filter by base total.
-    if (specialtyTypes.length) {
-      this.setSpeciesFilter((p) => specialtyTypes.some((t) => p.isOfType(t)) && p.baseTotal >= ELITE_FOUR_MINIMUM_BST);
-      this.setSpecialtyTypes(...specialtyTypes);
-    } else {
-      this.setSpeciesFilter((p) => p.baseTotal >= ELITE_FOUR_MINIMUM_BST);
-    }
-
-    // Localize the trainer's name by converting it to lowercase and replacing spaces with underscores.
-    const nameForCall = this.name.toLowerCase().replace(/\s/g, "_");
-    this.name = i18next.t(`trainerNames:${nameForCall}`);
-
-    // Set the title to "elite_four". (this is the key in the i18n file)
-    this.setTitle("elite_four");
-    if (!isMale) {
-      this.setTitle("elite_four_female");
-    }
-
-    // Configure various properties for the Elite Four member.
-    this.setMoneyMultiplier(3.25);
-    this.setBoss();
-    this.setStaticParty();
-    this.setHasVoucher(true);
-    this.setVictoryBgm("victory_gym");
-    this.setRandomTeraModifiers(() => 1);
-
-    return this;
-  }
-
+  allowDuplicates: boolean;
   /**
-   * Initializes the trainer configuration for a Champion.
-   * @param variant The {@linkcode TrainerVariant} of the Champion (used for localization of the title).
-   * @param battleBgm Array of strings representing the battle music. One is chosen at random.
-   * @returns The updated TrainerConfig instance.
+   * If `false`, restricts {@link PokemonSpecies.isLegendLike | legend-like}
+   * Pokemon from being generated.
    */
-  initForChampion(variant: TrainerVariant, battleBgm: string[]): TrainerConfig {
-    // Check if the internationalization (i18n) system is initialized.
-    if (!getIsInitialized()) {
-      initI18n();
-    }
-
-    // TODO: make this seeded
-    this.setBattleBgm(randItem(battleBgm));
-
-    // Set the party templates for the Champion.
-    let partyTemplate = trainerPartyTemplates.CHAMPION;
-    if (variant === TrainerVariant.DOUBLE) {
-      partyTemplate = trainerPartyTemplates.CHAMPION_DOUBLE;
-    }
-    this.setPartyTemplates(partyTemplate);
-
-    // Localize the trainer's name by converting it to lowercase and replacing spaces with underscores.
-    const nameForCall = this.name.toLowerCase().replace(/\s/g, "_");
-    this.name = i18next.t(`trainerNames:${nameForCall}`);
-    if (this.nameDouble && this.spriteNameLeft && this.spriteNameRight) {
-      const nameDoubleForCall = this.nameDouble.toLowerCase().replace(/\s/g, "_");
-      this.nameDouble = i18next.t(`trainerNames:${nameDoubleForCall}`);
-      this.name = i18next.t(`trainerNames:${this.spriteNameLeft.toLowerCase().replace(/\s/g, "_")}`);
-      this.nameFemale = i18next.t(`trainerNames:${this.spriteNameRight.toLowerCase().replace(/\s/g, "_")}`);
-    }
-
-    // Only do this if the title is not already set
-    if (!this.title) {
-      switch (variant) {
-        case TrainerVariant.FEMALE:
-          this.setTitle("champion_female");
-          break;
-        case TrainerVariant.DOUBLE:
-          this.setTitle("champion_double");
-          break;
-        // Default includes Gender.MALE
-        default:
-          this.setTitle("champion");
-      }
-    }
-
-    // Configure various properties for the Champion.
-    this.setMoneyMultiplier(10);
-    this.setBoss();
-    this.setStaticParty();
-    this.setHasVoucher(true);
-    this.setVictoryBgm("victory_champion");
-
-    return this;
-  }
-
+  allowLegendaries: boolean;
+  /** The number of Pokemon to generate from this config */
+  count: number;
   /**
-   * Sets a localized name for the trainer. This should only be used for trainers that dont use a "initFor" function and are considered "named" trainers
-   * @param name - The name of the trainer.
-   * @returns The updated TrainerConfig instance.
+   * Determines the Pokemon's level for a given wave.
+   * @param waveIndex - The index for the current wave. In Classic mode, this
+   * should usually be `globalScene.currentBattle.waveIndex`
+   * @returns The Pokemon's level
+   *
+   * If this property is set to a single function, it is mapped to all Pokemon
+   * generated by this config. If this property is set to an array, its length
+   * should be equal to {@linkcode count}.
    */
-  setLocalizedName(name: string): TrainerConfig {
-    // Check if the internationalization (i18n) system is initialized.
-    if (!getIsInitialized()) {
-      initI18n();
-    }
-    this.name = i18next.t(`trainerNames:${name.toLowerCase().replace(/\s/g, "_")}`);
-    return this;
-  }
-
+  levelFunc: CoercibleArray<LevelFunc>;
   /**
-   * Retrieves the title for the trainer based on the provided trainer slot and variant.
-   * @param trainerSlot - The slot to determine which title to use. Defaults to TrainerSlot.NONE.
-   * @param variant - The variant of the trainer to determine the specific title.
-   * @returns - The title of the trainer.
+   * If `false`, the generated Pokemon's species may be adjusted to a stage
+   * in its evolution line that is appropriate for its level. If `true`, this
+   * adjustment step is skipped.
    */
-  getTitle(trainerSlot: TrainerSlot, variant: TrainerVariant): string {
-    const ret = this.name;
-
-    // Check if the variant is double and the name for double exists
-    if (!trainerSlot && variant === TrainerVariant.DOUBLE && this.nameDouble) {
-      return this.nameDouble;
-    }
-
-    // Female variant
-    if (this.hasGenders) {
-      // If the name is already set
-      if (this.nameFemale) {
-        // Check if the variant is either female or this is for the partner in a double battle
-        if (
-          variant === TrainerVariant.FEMALE
-          || (variant === TrainerVariant.DOUBLE && trainerSlot === TrainerSlot.TRAINER_PARTNER)
-        ) {
-          return this.nameFemale;
-        }
-      } else if (variant) {
-        // Check if !variant is true, if so return the name, else return the name with _female appended
-        if (!getIsInitialized()) {
-          initI18n();
-        }
-        // Check if the female version exists in the i18n file
-        if (i18next.exists(`trainerClasses:${this.name.toLowerCase()}`)) {
-          // If it does, return
-          return ret + "_female";
-        }
-        // If it doesn't, we do not do anything and go to the normal return
-        // This is to prevent the game from displaying an error if a female version of the trainer does not exist in the localization
-      }
-    }
-
-    return ret;
-  }
-
-  loadAssets(variant: TrainerVariant): Promise<void> {
-    return new Promise((resolve) => {
-      const isDouble = variant === TrainerVariant.DOUBLE;
-      const trainerKey = this.getSpriteKey(variant === TrainerVariant.FEMALE, false);
-      const partnerTrainerKey = this.getSpriteKey(true, true);
-      globalScene.loadAtlas(trainerKey, ImagesFolder.TRAINER);
-      if (isDouble) {
-        globalScene.loadAtlas(partnerTrainerKey, ImagesFolder.TRAINER);
-      }
-      globalScene.load.once(Phaser.Loader.Events.COMPLETE, () => {
-        const originalWarn = console.warn;
-        // Ignore warnings for missing frames, because there will be a lot
-        console.warn = () => {};
-        const frameNames = globalScene.anims.generateFrameNames(trainerKey, {
-          zeroPad: 4,
-          suffix: ".png",
-          start: 1,
-          end: 128,
-        });
-        const partnerFrameNames = isDouble
-          ? globalScene.anims.generateFrameNames(partnerTrainerKey, {
-              zeroPad: 4,
-              suffix: ".png",
-              start: 1,
-              end: 128,
-            })
-          : "";
-        console.warn = originalWarn;
-        if (!globalScene.anims.exists(trainerKey)) {
-          globalScene.anims.create({
-            key: trainerKey,
-            frames: frameNames,
-            frameRate: 24,
-            repeat: -1,
-          });
-        }
-        if (isDouble && !globalScene.anims.exists(partnerTrainerKey)) {
-          globalScene.anims.create({
-            key: partnerTrainerKey,
-            frames: partnerFrameNames,
-            frameRate: 24,
-            repeat: -1,
-          });
-        }
-        resolve();
-      });
-      if (!globalScene.load.isLoading()) {
-        globalScene.load.start();
-      }
-    });
-  }
-
+  ignoreEvolution: boolean;
   /**
-   * Creates a shallow copy of a trainer config so that it can be modified without affecting the {@link trainerConfigs} source map
+   * (Optional) A condition for this config to apply when the Trainer's party is
+   * generated. If this condition isn't met, this config is ignored.
    */
-  clone(): TrainerConfig {
-    let clone = new TrainerConfig(this.trainerType);
-    clone = this.trainerTypeDouble ? clone.setDoubleTrainerType(this.trainerTypeDouble) : clone;
-    clone = this.name ? clone.setName(this.name) : clone;
-    clone = this.hasGenders ? clone.setHasGenders(this.nameFemale, this.femaleEncounterBgm) : clone;
-    clone = this.hasDouble ? clone.setHasDouble(this.nameDouble, this.doubleEncounterBgm) : clone;
-    clone = this.title ? clone.setTitle(this.title) : clone;
-    clone = this.titleDouble ? clone.setDoubleTitle(this.titleDouble) : clone;
-    clone = this.hasCharSprite ? clone.setHasCharSprite() : clone;
-    clone = this.doubleOnly ? clone.setDoubleOnly() : clone;
-    clone = this.moneyMultiplier ? clone.setMoneyMultiplier(this.moneyMultiplier) : clone;
-    clone = this.isBoss ? clone.setBoss() : clone;
-    clone = this.hasStaticParty ? clone.setStaticParty() : clone;
-    clone = this.useSameSeedForAllMembers ? clone.setUseSameSeedForAllMembers() : clone;
-    clone = this.battleBgm ? clone.setBattleBgm(this.battleBgm) : clone;
-    clone = this.encounterBgm ? clone.setEncounterBgm(this.encounterBgm) : clone;
-    clone = this.victoryBgm ? clone.setVictoryBgm(this.victoryBgm) : clone;
-    clone = this.genModifiersFunc ? clone.setGenModifiersFunc(this.genModifiersFunc) : clone;
-
-    if (this.modifierRewardFuncs) {
-      // Clones array instead of passing ref
-      clone.modifierRewardFuncs = this.modifierRewardFuncs.slice(0);
-    }
-
-    if (this.partyTemplates) {
-      clone.partyTemplates = this.partyTemplates.slice(0);
-    }
-
-    clone = this.partyTemplateFunc ? clone.setPartyTemplateFunc(this.partyTemplateFunc) : clone;
-
-    if (this.partyMemberFuncs) {
-      Object.keys(this.partyMemberFuncs).forEach((index) => {
-        clone = clone.setPartyMemberFunc(Number.parseInt(index, 10), this.partyMemberFuncs[index]);
-      });
-    }
-
-    clone = this.speciesPools ? clone.setSpeciesPools(this.speciesPools) : clone;
-    clone = this.speciesFilter ? clone.setSpeciesFilter(this.speciesFilter) : clone;
-    if (this.specialtyTypes) {
-      clone.specialtyTypes = this.specialtyTypes.slice(0);
-    }
-
-    clone.encounterMessages = this.encounterMessages?.slice(0);
-    clone.victoryMessages = this.victoryMessages?.slice(0);
-    clone.defeatMessages = this.defeatMessages?.slice(0);
-
-    clone.femaleEncounterMessages = this.femaleEncounterMessages?.slice(0);
-    clone.femaleVictoryMessages = this.femaleVictoryMessages?.slice(0);
-    clone.femaleDefeatMessages = this.femaleDefeatMessages?.slice(0);
-
-    clone.doubleEncounterMessages = this.doubleEncounterMessages?.slice(0);
-    clone.doubleVictoryMessages = this.doubleVictoryMessages?.slice(0);
-    clone.doubleDefeatMessages = this.doubleDefeatMessages?.slice(0);
-
-    return clone;
-  }
+  condition?: () => boolean;
+  /**
+   * (Optional) A callback function to change the properties of the generated
+   * Pokemon after it is constructed.
+   */
+  postProcess?: (pokemon: EnemyPokemon) => void;
 }
 
-export interface TrainerConfigs {
-  [key: number]: TrainerConfig;
-}
-
-/**
- * The function to get variable strength grunts
- * @returns the correct TrainerPartyTemplate
- */
-export function getEvilGruntPartyTemplate(): TrainerPartyTemplate {
-  const waveIndex = globalScene.currentBattle?.waveIndex;
-  if (waveIndex <= EVIL_GRUNT_1_WAVE) {
-    return trainerPartyTemplates.TWO_AVG;
-  }
-  if (waveIndex <= EVIL_GRUNT_2_WAVE) {
-    return trainerPartyTemplates.THREE_AVG;
-  }
-  if (waveIndex <= EVIL_GRUNT_3_WAVE) {
-    return trainerPartyTemplates.TWO_AVG_ONE_STRONG;
-  }
-  if (waveIndex < EVIL_GRUNT_4_WAVE) {
-    return trainerPartyTemplates.GYM_LEADER_4; // 3avg 1 strong 1 stronger
-  }
-  return trainerPartyTemplates.GYM_LEADER_5; // 3 avg 2 strong 1 stronger
-}
-
-/**
- * Function used to generate a {@linkcode TrainerPartyTemplate} for trainers that change their
- * party template as the player progresses.
- * Subtracting offsetWave (20) from the waveIndex scaled by mode (+30 if daily),
- * for every wavesToScale (30), the trainer will onto their next given {@linkcode TrainerPartyTemplate}
- *
- * Currently used by ace trainers, breeders, twins, and gym leaders
- * @param templates an array of templates that the trainers can use
- * @returns a {@linkcode TrainerPartyTemplate}
- */
-export function getWavePartyTemplate(...templates: TrainerPartyTemplate[]): TrainerPartyTemplate {
-  const wavesToScale = 30;
-  const offsetWave = 20;
-
-  const wave = Overrides.STARTING_WAVE_OVERRIDE ?? 1;
-  const { currentBattle, gameMode } = globalScene;
-  const adjustedWave = gameMode.getWaveForDifficulty(currentBattle?.waveIndex ?? wave, true);
-  const targetTemplate = Math.ceil((adjustedWave - offsetWave) / wavesToScale);
-  return templates[clamp(targetTemplate, 0, templates.length - 1)];
-}
-
-/**
- * Gets the correct team template for a gym leader based on the wave
- * @returns the TrainerPartyTemplate of the correct gym leader
- */
-function getGymLeaderPartyTemplate(): TrainerPartyTemplate {
-  const { currentBattle } = globalScene;
-  const currentWave = currentBattle?.waveIndex ?? Overrides.STARTING_WAVE_OVERRIDE;
-  // MEs can trigger a gym leader on any floor so this handles those cases
-  const gymLeaderNumber = Math.min(Math.ceil(currentWave / 20), 8);
-  // TODO: Need special balancing for daily mode
-  switch (gymLeaderNumber) {
-    case 1:
-      return trainerPartyTemplates.GYM_LEADER_1;
-    case 2:
-      return trainerPartyTemplates.GYM_LEADER_2;
-    case 3:
-      return trainerPartyTemplates.GYM_LEADER_3;
-    case 4:
-      return trainerPartyTemplates.GYM_LEADER_4;
-    case 5:
-      return trainerPartyTemplates.GYM_LEADER_5;
-    case 6:
-      return trainerPartyTemplates.GYM_LEADER_6;
-    case 7:
-      return trainerPartyTemplates.GYM_LEADER_7;
-    default:
-      return trainerPartyTemplates.GYM_LEADER_8;
-  }
-}
-
-/**
- * Randomly selects one of the `SpeciesId` from `speciesPool`, determines its evolution, level, and strength.
- * Then adds Pokemon to globalScene.
- * @param speciesPool
- * @param trainerSlot
- * @param ignoreEvolution
- * @param postProcess
- */
-export function getRandomPartyMemberFunc(
-  speciesPool: SpeciesId[],
-  trainerSlot: TrainerSlot = TrainerSlot.TRAINER,
-  ignoreEvolution: boolean = false,
-  postProcess?: (enemyPokemon: EnemyPokemon) => void,
-): PartyMemberFunc {
-  return (level: number) => {
-    let species = randSeedItem(speciesPool);
-    if (!ignoreEvolution) {
-      species = getPokemonSpecies(species).getEnemySpeciesForLevel(level, true);
-    }
-    return globalScene.addEnemyPokemon(getPokemonSpecies(species), level, { trainerSlot }, postProcess);
-  };
-}
-
-export function getSpeciesFilterRandomPartyMemberFunc(
-  originalSpeciesFilter: PokemonSpeciesFilter,
-  trainerSlot: TrainerSlot = TrainerSlot.TRAINER,
-  allowLegendaries?: boolean,
-  postProcess?: (enemyPokemon: EnemyPokemon) => void,
-): PartyMemberFunc {
-  const speciesFilter = (species: PokemonSpecies): boolean => {
-    const notLegendary = !species.isLegendLike();
-    return (allowLegendaries || notLegendary) && !species.isTrainerForbidden() && originalSpeciesFilter(species);
-  };
-
-  return (level: number) => {
-    const waveIndex = globalScene.currentBattle.waveIndex;
-    const species = getPokemonSpecies(
-      globalScene.randomSpecies(waveIndex, level, false, speciesFilter).getEnemySpeciesForLevel(level, true),
-    );
-
-    return globalScene.addEnemyPokemon(species, level, { trainerSlot }, postProcess);
-  };
-}
+// #endregion
