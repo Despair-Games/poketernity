@@ -1,8 +1,11 @@
 import type { TrainerConfigMap } from "#trainers/new-trainer-config";
 import type { TrainerConfigs } from "#trainers/trainer-config";
 import { championDoubleTrainerConfigs } from "#trainers/trainer-configs/champion-double-trainer-configs";
-import { championTrainerConfigs } from "#trainers/trainer-configs/champion-trainer-configs";
-import { eliteFourTrainerConfigs } from "#trainers/trainer-configs/elite-four-trainer-configs";
+import { championTrainerConfigs, newChampionTrainerConfigs } from "#trainers/trainer-configs/champion-trainer-configs";
+import {
+  eliteFourTrainerConfigs,
+  newEliteFourTrainerConfigs,
+} from "#trainers/trainer-configs/elite-four-trainer-configs";
 import { evilBossTrainerConfigs, newEvilBossTrainerConfigs } from "#trainers/trainer-configs/evil-boss-trainer-configs";
 import { evilTeamTrainerConfigs, newEvilTeamTrainerConfigs } from "#trainers/trainer-configs/evil-team-trainer-configs";
 import { genericTrainerConfigs, newGenericTrainerConfigs } from "#trainers/trainer-configs/generic-trainer-configs";
@@ -29,4 +32,6 @@ export const allNewTrainerConfigs: TrainerConfigMap = {
   ...newMeTrainerConfigs,
   ...newEvilTeamTrainerConfigs,
   ...newEvilBossTrainerConfigs,
+  ...newEliteFourTrainerConfigs,
+  ...newChampionTrainerConfigs,
 };

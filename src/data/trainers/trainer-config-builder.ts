@@ -715,6 +715,24 @@ export class TrainerConfigBuilder {
   }
 
   /**
+   * Adds assets for a Champion Trainer.
+   * @param key - The key for the Champion's {@linkcode TrainerType}, e.g. `"RED"`
+   * @param gender - The Champion's {@linkcode TrainerGender}
+   * @param battleBgm - The bgm to play while battling the Champion
+   * @returns `this`
+   */
+  public withChampionAssets(key: keyof typeof TrainerType, gender: NonDefaultTrainerGender, battleBgm: string): this {
+    const name = key.toLowerCase();
+
+    return this.withFixedName(name, gender)
+      .withTitle(`trainerTitles:champion${gender === TrainerGender.MALE ? "" : "_female"}`)
+      .withBattleBgm(battleBgm)
+      .withVictoryBgm("victory_champion")
+      .asBoss()
+      .withMoneyMultiplier(10);
+  }
+
+  /**
    * Adds the configs for an Evil Team Admin's party, which broadly consists of:
    * - 4-5 Pokemon of varying strength from a tiered {@linkcode speciesPool}
    * - A Pokemon of the Admin's {@linkcode sigSpecies}
