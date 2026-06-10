@@ -527,8 +527,7 @@ export const rivalTrainerConfigs: TrainerConfigs = {
 };
 
 export const newRivalTrainerConfigs: TrainerConfigMap = {
-  [TrainerType.RIVAL]: new TrainerConfigBuilder()
-    .withTrainerType(TrainerType.RIVAL)
+  [TrainerType.RIVAL]: new TrainerConfigBuilder(TrainerType.RIVAL)
     .withRivalAssets()
     .withEncounterBgm(TrainerType.RIVAL)
     .withBattleBgm(TrainerType.RIVAL)
@@ -539,8 +538,7 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
     })
     .withPokemonFromPool(RIVAL_SLOT_1_POKEMON, { levelFunc: levelByStrength(PartyMemberStrength.WEAKEST) })
     .build(),
-  [TrainerType.RIVAL_2]: new TrainerConfigBuilder()
-    .withTrainerType(TrainerType.RIVAL_2)
+  [TrainerType.RIVAL_2]: new TrainerConfigBuilder(TrainerType.RIVAL_2)
     .withRivalAssets()
     .withEncounterBgm(TrainerType.RIVAL)
     .withBattleBgm(TrainerType.RIVAL)
@@ -554,8 +552,7 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
       levelFunc: levelByStrength(PartyMemberStrength.WEAK),
     })
     .build(),
-  [TrainerType.RIVAL_3]: new TrainerConfigBuilder()
-    .withTrainerType(TrainerType.RIVAL_3)
+  [TrainerType.RIVAL_3]: new TrainerConfigBuilder(TrainerType.RIVAL_3)
     .withRivalAssets()
     .withEncounterBgm(TrainerType.RIVAL)
     .withBattleBgm(TrainerType.RIVAL)
@@ -570,8 +567,7 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
       levelFunc: levelByStrength([PartyMemberStrength.AVERAGE, PartyMemberStrength.WEAK]),
     })
     .build(),
-  [TrainerType.RIVAL_4]: new TrainerConfigBuilder()
-    .withTrainerType(TrainerType.RIVAL_4)
+  [TrainerType.RIVAL_4]: new TrainerConfigBuilder(TrainerType.RIVAL_4)
     .withRivalAssets()
     .withEncounterBgm(TrainerType.RIVAL)
     .withBattleBgm(TrainerType.RIVAL_2)
@@ -587,8 +583,7 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
       levelFunc: levelByStrength(PartyMemberStrength.WEAK),
     })
     .build(),
-  [TrainerType.RIVAL_5]: new TrainerConfigBuilder()
-    .withTrainerType(TrainerType.RIVAL_5)
+  [TrainerType.RIVAL_5]: new TrainerConfigBuilder(TrainerType.RIVAL_5)
     .withRivalAssets()
     .withEncounterBgm(TrainerType.RIVAL)
     .withBattleBgm(TrainerType.RIVAL_3)
@@ -612,8 +607,7 @@ export const newRivalTrainerConfigs: TrainerConfigMap = {
       levelFunc: levelByStrength(PartyMemberStrength.STRONG),
     })
     .build(),
-  [TrainerType.RIVAL_6]: new TrainerConfigBuilder()
-    .withTrainerType(TrainerType.RIVAL_6)
+  [TrainerType.RIVAL_6]: new TrainerConfigBuilder(TrainerType.RIVAL_6)
     .withRivalAssets()
     .withEncounterBgm("final")
     .withBattleBgm(TrainerType.RIVAL_3)
