@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { activeOverrides as Overrides } from "#app/overrides";
-import { GYM_LEADER_STRENGTH_TEMPLATES } from "#constants/trainer-constants";
+import { ELITE_FOUR_MINIMUM_BST, GYM_LEADER_STRENGTH_TEMPLATES } from "#constants/trainer-constants";
 import {
   EVIL_ADMIN_1_WAVE,
   EVIL_GRUNT_1_WAVE,
@@ -10,7 +10,7 @@ import {
 } from "#constants/wave-constants";
 import { getLevelForWaveFunc } from "#data/exp";
 import type { PokemonSpecies } from "#data/pokemon-species";
-import { signatureSpecies } from "#data/signature-species";
+import { eliteFourSignatureSpecies, gymLeaderSignatureSpecies } from "#data/signature-species";
 import { AiType } from "#enums/ai-type";
 import type { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
@@ -538,7 +538,7 @@ export class TrainerConfigBuilder {
     region: string,
     ...specialtyTypes: ElementalType[]
   ) {
-    const sigSpecies = signatureSpecies[key]?.map((s) => coerceArray(s));
+    const sigSpecies = gymLeaderSignatureSpecies[key]?.map((s) => coerceArray(s));
     if (sigSpecies == null) {
       throw new Error(`trainer-config-builder: ${key} is not a Gym Leader!`);
     }
@@ -559,9 +559,8 @@ export class TrainerConfigBuilder {
       });
     }
 
-    return this.withTrainerType(TrainerType[key])
-      .withFixedName(key.toLowerCase(), gender)
-      .withTitle(`gym_leader${gender === TrainerGender.MALE ? "" : "_female"}`)
+    return this.withFixedName(key.toLowerCase(), gender)
+      .withTitle(`trainerTitles:gym_leader${gender === TrainerGender.MALE ? "" : "_female"}`)
       .withSpriteKey(key.toLowerCase(), gender)
       .withBattleBgm(`battle_${region}_gym`)
       .withVictoryBgm("victory_gym")
@@ -593,6 +592,54 @@ export class TrainerConfigBuilder {
     signaturePokemonCfg.instantTera = true;
 
     return this;
+  }
+
+  public withEliteFourConfig(
+    key: keyof typeof TrainerType,
+    gender: NonDefaultTrainerGender,
+    ...specialtyTypes: NonEmptyArray<ElementalType>
+  ): this {
+    const sigSpecies = eliteFourSignatureSpecies[key]
+      ?.map((s) => coerceArray(s) as NonEmptyArray<SpeciesId>)
+      .toReversed();
+
+    if (sigSpecies == null) {
+      throw new Error(`trainer-config-builder: ${key} is not an Elite Four member!`);
+    }
+
+    const partyStrengths = [
+      PartyMemberStrength.AVERAGE,
+      PartyMemberStrength.AVERAGE,
+      PartyMemberStrength.AVERAGE,
+      PartyMemberStrength.STRONG,
+      PartyMemberStrength.STRONG,
+      PartyMemberStrength.STRONGER,
+    ];
+
+    const nonSignatureSpeciesSlots = 6 - sigSpecies.length;
+    if (nonSignatureSpeciesSlots > 0) {
+      this.withPokemonFromFilter(
+        (s) => specialtyTypes.some((t) => s.isOfType(t)) && s.baseTotal >= ELITE_FOUR_MINIMUM_BST,
+        {
+          count: nonSignatureSpeciesSlots,
+          levelFunc: levelByStrength(partyStrengths.slice(0, nonSignatureSpeciesSlots)),
+        },
+      );
+    }
+
+    for (let i = 0; i < sigSpecies.length; i++) {
+      this.withPokemonFromPool(sigSpecies[i], {
+        levelFunc: levelByStrength(partyStrengths[nonSignatureSpeciesSlots + i]),
+      });
+    }
+
+    const name = key.toLowerCase();
+    return this.withFixedName(name, gender)
+      .withTitle(`trainerTitles:elite_four${gender === TrainerGender.MALE ? "" : "_female"}`)
+      .withSpriteKey(name)
+      .withVictoryBgm("victory_gym")
+      .withMoneyMultiplier(3.25)
+      .asBoss();
   }
 
   /**
@@ -781,7 +828,7 @@ function gymLeaderRandomPokemonFilter(
   specialtyTypes: ElementalType[],
 ): (species: PokemonSpecies) => boolean {
   return (species) => {
-    const sigSpecies = signatureSpecies[key].flat();
+    const sigSpecies = gymLeaderSignatureSpecies[key].flat();
     const firstStageSpecies = getPokemonSpecies(species.getFirstStageSpecies());
     return (
       specialtyTypes.some((t) => firstStageSpecies.isOfType(t)) && !sigSpecies.includes(firstStageSpecies.speciesId)

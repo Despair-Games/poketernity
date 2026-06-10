@@ -4,15 +4,15 @@ type SignatureSpecies = {
   [key in string]: (SpeciesId | SpeciesId[])[];
 };
 
-/*
- * The signature species for each Gym Leader, Elite Four member, and Champion.
+/**
+ * The signature species for each Gym Leader.
  * The key is the trainer type, and the value is an array of Species or Species arrays.
  * This is in a separate const so it can be accessed from other places and not just the trainerConfigs
  *
  * When these are loaded into trainer-config it's loaded in backwards so the first pokemon in the list
  * are loaded into the last slots of the trainer which are usually the strongest slots
  */
-export const signatureSpecies: SignatureSpecies = {
+export const gymLeaderSignatureSpecies: SignatureSpecies = {
   // Kanto gym leaders
   BROCK: [SpeciesId.ONIX, SpeciesId.GEODUDE, [SpeciesId.OMANYTE, SpeciesId.KABUTO], SpeciesId.AERODACTYL],
   MISTY: [SpeciesId.STARYU, SpeciesId.PSYDUCK, SpeciesId.WOOPER, [SpeciesId.MAGIKARP, SpeciesId.FEEBAS]],
@@ -113,7 +113,17 @@ export const signatureSpecies: SignatureSpecies = {
   RYME: [SpeciesId.TOXEL, SpeciesId.GREAVARD, SpeciesId.SHUPPET, SpeciesId.MIMIKYU],
   TULIP: [SpeciesId.FLABEBE, SpeciesId.FLITTLE, SpeciesId.GIRAFARIG, SpeciesId.RALTS],
   GRUSHA: [SpeciesId.SWABLU, SpeciesId.CETODDLE, SpeciesId.SNOM, SpeciesId.ALOLA_VULPIX],
+};
 
+/*
+ * The signature species for each Elite Four member.
+ * The key is the trainer type, and the value is an array of Species or Species arrays.
+ * This is in a separate const so it can be accessed from other places and not just the trainerConfigs
+ *
+ * When these are loaded into trainer-config it's loaded in backwards so the first pokemon in the list
+ * are loaded into the last slots of the trainer which are usually the strongest slots
+ */
+export const eliteFourSignatureSpecies: SignatureSpecies = {
   // Kanto E4
   LORELEI: [
     SpeciesId.LAPRAS,

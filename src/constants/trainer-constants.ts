@@ -1334,6 +1334,8 @@ export const ELITE_FOUR_4_TRAINER_POOL = [
   TrainerType.DRAYTON,
 ] as const;
 
+export const ELITE_FOUR_MINIMUM_BST = 460;
+
 export const CHAMPION_TRAINER_POOL = [
   TrainerType.BLUE,
   [TrainerType.RED, TrainerType.LANCE_CHAMPION],
