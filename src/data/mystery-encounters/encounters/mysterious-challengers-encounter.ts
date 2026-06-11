@@ -9,7 +9,8 @@ import { type NonDefaultTrainerGender, TrainerGender } from "#enums/trainer-gend
 import { modifierTypes } from "#modifier/modifier-types";
 import { initBattleWithEnemyConfig, setEncounterRewards } from "#mystery-encounters/encounter-phase-utils";
 import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
-import { TrainerPartyCompoundTemplate, TrainerPartyTemplate } from "#trainers/trainer-config";
+import type { TrainerConfig } from "#trainers/trainer-config";
+import { levelByStrength } from "#trainers/trainer-config-builder";
 import { allTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
 import { randSeedItem } from "#utils/random-utils";
 
@@ -37,19 +38,17 @@ export const MysteriousChallengersEncounter: MysteryEncounter = MysteryEncounter
 
     // Normal difficulty trainer is randomly pulled from biome
     const normalTrainerType = globalScene.arena.randomTrainerType(globalScene.currentBattle.waveIndex);
-    const normalConfig = allTrainerConfigs[normalTrainerType].clone();
+    const normalConfig = allTrainerConfigs[normalTrainerType]!;
     const normalTrainerGender = randSeedItem([TrainerGender.MALE, TrainerGender.FEMALE]);
-    const normalSpriteKey = normalConfig.getSpriteKey(
-      normalTrainerGender === TrainerGender.FEMALE,
-      normalConfig.doubleOnly,
-    );
+    const normalSpriteKey = normalConfig.spriteKey[normalTrainerGender]!();
+
     encounter.battleConfigs.push({
       battleType: MysteryEncounterMode.TRAINER_BATTLE,
       trainerConfig: allTrainerConfigs[normalTrainerType]!,
       trainerGender: normalTrainerGender,
     });
 
-    // Hard difficulty trainer is another random trainer, but with AVERAGE_BALANCED config
+    // Hard difficulty trainer is another random trainer, but with STRONG Pokemon.
     // Number of mons is based off wave: 1-20 is 2, 20-40 is 3, etc. capping at 6 after wave 100
     let retries = 0;
     let hardTrainerType = globalScene.arena.randomTrainerType(globalScene.currentBattle.waveIndex);
@@ -58,19 +57,19 @@ export const MysteriousChallengersEncounter: MysteryEncounter = MysteryEncounter
       hardTrainerType = globalScene.arena.randomTrainerType(globalScene.currentBattle.waveIndex);
       retries++;
     }
-    const hardTemplate = new TrainerPartyCompoundTemplate(
-      new TrainerPartyTemplate(1, PartyMemberStrength.STRONGER, false, true),
-      new TrainerPartyTemplate(
-        Math.min(Math.ceil(globalScene.currentBattle.waveIndex / 20), 5),
-        PartyMemberStrength.AVERAGE,
-        false,
-        true,
-      ),
-    );
-    const hardConfig = allTrainerConfigs[hardTrainerType].clone();
-    hardConfig.setPartyTemplates(hardTemplate);
-    const hardTrainerGender = randSeedItem([TrainerGender.MALE, TrainerGender.FEMALE]);
-    const hardSpriteKey = hardConfig.getSpriteKey(hardTrainerGender === TrainerGender.FEMALE, hardConfig.doubleOnly);
+
+    const hardConfig: TrainerConfig = { ...allTrainerConfigs[hardTrainerType]! };
+    hardConfig.partyConfigs = [
+      [
+        {
+          ...hardConfig.partyConfigs[0][0],
+          count: 2 + Math.floor(globalScene.currentBattle.waveIndex / 20),
+          levelFunc: levelByStrength(PartyMemberStrength.STRONG),
+        },
+      ],
+    ];
+    const hardTrainerGender = Number(randSeedItem(Object.keys(hardConfig.name))) as NonDefaultTrainerGender;
+    const hardSpriteKey = (hardConfig.spriteKey[hardTrainerGender] ?? hardConfig.spriteKey[TrainerGender.DEFAULT])!();
     encounter.battleConfigs.push({
       battleType: MysteryEncounterMode.TRAINER_BATTLE,
       trainerConfig: allTrainerConfigs[hardTrainerType]!,

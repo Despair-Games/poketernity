@@ -22,11 +22,9 @@ import type { PlayerPokemon } from "#field/player-pokemon";
 import type { Pokemon } from "#field/pokemon";
 import type { PokemonMove } from "#field/pokemon-move";
 import { HiddenAbilityRateBoosterModifier, type PokemonHeldItemModifier } from "#modifier/modifier";
-import type { PokemonHeldItemModifierType } from "#modifier/modifier-type";
 import { modifierTypes } from "#modifier/modifier-types";
 import { showEncounterText } from "#mystery-encounters/encounter-dialogue-utils";
 import {
-  generateModifierType,
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
   type MysteryEncounterBattleConfig,
@@ -40,7 +38,6 @@ import { PokemonData } from "#system/pokemon-data";
 import { settings } from "#system/settings-manager";
 import type { TrainerPartyPokemonConfig } from "#trainers/trainer-config";
 import { allTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
-import type { HeldModifierConfig } from "#types/modifiers-types";
 import { NumberHolder } from "#utils/common-utils";
 import { getPokemonSpecies, getRandomElementalType, getSpecialSpeciesList } from "#utils/pokemon-utils";
 import { randSeedInt, randSeedShuffle } from "#utils/random-utils";
@@ -199,8 +196,10 @@ export const WeirdDreamEncounter: MysteryEncounter = MysteryEncounterBuilder.wit
       const transformations: PokemonTransformation[] =
         globalScene.currentBattle.mysteryEncounter!.misc.teamTransformations;
 
-      // Uses the pokemon that player's party would have transformed into
-      const enemyPokemonConfigs: TrainerPartyPokemonConfig[] = [];
+      const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
+      const trainerGender = genderIndex === PlayerGender.FEMALE ? TrainerGender.FEMALE : TrainerGender.MALE;
+      const trainerConfig = { ...allTrainerConfigs[TrainerType.FUTURE_SELF]! };
+
       for (const transformation of transformations) {
         const newPokemon = transformation.newPokemon;
         const previousPokemon = transformation.previousPokemon;
@@ -210,27 +209,27 @@ export const WeirdDreamEncounter: MysteryEncounter = MysteryEncounterBuilder.wit
         const dataSource = new PokemonData(newPokemon);
         dataSource.player = false;
 
-        // Copy held items to new pokemon
-        const newPokemonHeldItemConfigs: HeldModifierConfig[] = [];
-        for (const item of transformation.heldItems) {
-          newPokemonHeldItemConfigs.push({
-            modifier: item.clone() as PokemonHeldItemModifier,
-            stackCount: item.getStackCount(),
-            isTransferable: false,
-          });
-        }
-        // Any pokemon that is below 570 BST gets +20 permanent BST to 3 stats
-        if (shouldGetOldGateau(newPokemon)) {
-          const stats = getOldGateauBoostedStats(newPokemon);
-          newPokemonHeldItemConfigs.push({
-            modifier: generateModifierType(modifierTypes.MYSTERY_ENCOUNTER_OLD_GATEAU, [
-              OLD_GATEAU_STATS_UP,
-              stats,
-            ]) as PokemonHeldItemModifierType,
-            stackCount: 1,
-            isTransferable: false,
-          });
-        }
+        // // Copy held items to new pokemon
+        // const newPokemonHeldItemConfigs: HeldModifierConfig[] = [];
+        // for (const item of transformation.heldItems) {
+        //   newPokemonHeldItemConfigs.push({
+        //     modifier: item.clone() as PokemonHeldItemModifier,
+        //     stackCount: item.getStackCount(),
+        //     isTransferable: false,
+        //   });
+        // }
+        // // Any pokemon that is below 570 BST gets +20 permanent BST to 3 stats
+        // if (shouldGetOldGateau(newPokemon)) {
+        //   const stats = getOldGateauBoostedStats(newPokemon);
+        //   newPokemonHeldItemConfigs.push({
+        //     modifier: generateModifierType(modifierTypes.MYSTERY_ENCOUNTER_OLD_GATEAU, [
+        //       OLD_GATEAU_STATS_UP,
+        //       stats,
+        //     ]) as PokemonHeldItemModifierType,
+        //     stackCount: 1,
+        //     isTransferable: false,
+        //   });
+        // }
 
         const enemyConfig: TrainerPartyPokemonConfig = {
           ...newPokemon,
@@ -244,13 +243,9 @@ export const WeirdDreamEncounter: MysteryEncounter = MysteryEncounterBuilder.wit
           ignoreEvolution: true,
         };
 
-        enemyPokemonConfigs.push(enemyConfig);
+        trainerConfig.partyConfigs.push([enemyConfig]);
       }
 
-      const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
-      const trainerGender = genderIndex === PlayerGender.FEMALE ? TrainerGender.FEMALE : TrainerGender.MALE;
-      const trainerConfig = { ...allTrainerConfigs[TrainerType.FUTURE_SELF]! };
-      trainerConfig.partyConfigs = enemyPokemonConfigs;
       const battleConfig: MysteryEncounterBattleConfig = {
         battleType: MysteryEncounterMode.TRAINER_BATTLE,
         trainerConfig,

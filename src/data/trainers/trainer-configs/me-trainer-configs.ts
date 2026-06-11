@@ -1,6 +1,12 @@
 import { globalScene } from "#app/global-scene";
 import {
   BLACEPHALON_RANDOM_ABILITY_POOL,
+  BTS_POOL_1_POKEMON,
+  BTS_POOL_2_POKEMON,
+  BTS_POOL_3_POKEMON,
+  BTS_POOL_3_SPECIAL_FORM_POKEMON,
+  BTS_POOL_4_POKEMON,
+  BTS_WAVE_LEVEL_BREAKPOINTS,
   EXPERT_POKEMON_BREEDER_POOL_1_POKEMON,
   EXPERT_POKEMON_BREEDER_POOL_2_POKEMON,
 } from "#constants/mystery-encounter-constants";
@@ -15,13 +21,33 @@ import { SpeciesId } from "#enums/species-id";
 import { TrainerGender } from "#enums/trainer-gender";
 import { TrainerType } from "#enums/trainer-type";
 import type { TrainerConfigMap } from "#trainers/trainer-config";
-import { levelByStrength, TrainerConfigBuilder } from "#trainers/trainer-config-builder";
+import {
+  levelByStrength,
+  maxWaveCondition,
+  minWaveCondition,
+  TrainerConfigBuilder,
+  waveIntervalCondition,
+} from "#trainers/trainer-config-builder";
 import { getRandomElementalType } from "#utils/pokemon-utils";
 import { randSeedItem } from "#utils/random-utils";
 import i18next from "i18next";
 
+/**
+ * Creates a condition to only allow party configs to be valid for certain wave intervals
+ * as defined by {@linkcode BTS_WAVE_LEVEL_BREAKPOINTS}.
+ * @param intervals - The interval(s) in which the config is valid in terms of indices
+ * of {@linkcode BTS_WAVE_LEVEL_BREAKPOINTS}.
+ * @returns A condition function that returns `true` if the current wave is within any of
+ * the given intervals
+ */
+function bugTypeSuperfanWaveIntervalCondition(...intervals: [number, number][]): () => boolean {
+  return () =>
+    intervals.some(([start, end]) =>
+      waveIntervalCondition(BTS_WAVE_LEVEL_BREAKPOINTS[start], BTS_WAVE_LEVEL_BREAKPOINTS[end] - 1)(),
+    );
+}
+
 export const meTrainerConfigs: TrainerConfigMap = {
-  // TODO: Add configs for "A Trainer's Test"
   [TrainerType.BUCK]: new TrainerConfigBuilder(TrainerType.BUCK)
     .withFixedName("buck", TrainerGender.MALE)
     .withSpriteKey("buck")
@@ -204,6 +230,81 @@ export const meTrainerConfigs: TrainerConfigMap = {
     })
     .withMoneyMultiplier(2)
     .build(),
+  [TrainerType.BUG_TYPE_SUPERFAN]: new TrainerConfigBuilder(TrainerType.BUG_TYPE_SUPERFAN)
+    .withFixedName("bug_type_superfan", TrainerGender.FEMALE)
+    .withSpriteKey("bug_type_superfan")
+    .withEncounterBgm(TrainerType.ACE_TRAINER)
+    .withPokemon(
+      SpeciesId.BEEDRILL,
+      {
+        condition: maxWaveCondition(BTS_WAVE_LEVEL_BREAKPOINTS[3] - 1),
+      },
+      {
+        condition: bugTypeSuperfanWaveIntervalCondition([3, 6]),
+        formIndex: 1, // Mega Beedrill
+      },
+      {
+        condition: minWaveCondition(BTS_WAVE_LEVEL_BREAKPOINTS[6]),
+        formIndex: 1, // Mega Beedrill
+        boss: true,
+        bossSegments: 2,
+      },
+    )
+    .withPokemon(
+      SpeciesId.BUTTERFREE,
+      {
+        condition: maxWaveCondition(BTS_WAVE_LEVEL_BREAKPOINTS[3] - 1),
+      },
+      {
+        condition: bugTypeSuperfanWaveIntervalCondition([3, 6]),
+        formIndex: 1, // G-Max Butterfree
+      },
+      {
+        condition: minWaveCondition(BTS_WAVE_LEVEL_BREAKPOINTS[6]),
+        formIndex: 1, // G-Max Butterfree
+        boss: true,
+        bossSegments: 2,
+      },
+    )
+    .withPokemonFromPool(BTS_POOL_1_POKEMON, {
+      condition: waveIntervalCondition(BTS_WAVE_LEVEL_BREAKPOINTS[0], BTS_WAVE_LEVEL_BREAKPOINTS[3] - 1),
+    })
+    .withPokemonFromPool(
+      BTS_POOL_2_POKEMON,
+      {
+        condition: bugTypeSuperfanWaveIntervalCondition([1, 2], [4, 5]),
+      },
+      {
+        condition: bugTypeSuperfanWaveIntervalCondition([2, 4]),
+        count: 2,
+      },
+    )
+    .withPokemonFromPool(
+      BTS_POOL_3_POKEMON,
+      {
+        condition: bugTypeSuperfanWaveIntervalCondition([3, 4], [5, 6]),
+        postProcess: (p) => {
+          if (BTS_POOL_3_SPECIAL_FORM_POKEMON.includes(p.species.speciesId)) {
+            p.formIndex = 1;
+          }
+        },
+      },
+      {
+        condition: () =>
+          bugTypeSuperfanWaveIntervalCondition([4, 5])() || minWaveCondition(BTS_WAVE_LEVEL_BREAKPOINTS[6])(),
+        count: 2,
+        postProcess: (p) => {
+          if (BTS_POOL_3_SPECIAL_FORM_POKEMON.includes(p.species.speciesId)) {
+            p.formIndex = 1;
+          }
+        },
+      },
+    )
+    .withPokemonFromPool(BTS_POOL_4_POKEMON, {
+      condition: minWaveCondition(BTS_WAVE_LEVEL_BREAKPOINTS[5]),
+      levelFunc: levelByStrength(PartyMemberStrength.STRONG),
+    })
+    .build(),
   [TrainerType.CLOWN]: new TrainerConfigBuilder(TrainerType.HARLEQUIN)
     .withFixedName("harlequin", TrainerGender.MALE)
     .withTitle("harlequin")
@@ -218,6 +319,7 @@ export const meTrainerConfigs: TrainerConfigMap = {
     .withPokemon(SpeciesId.BLACEPHALON, {
       boss: true,
       moveset: [MoveId.TRICK, MoveId.HYPNOSIS, MoveId.SHADOW_BALL, MoveId.MIND_BLOWN],
+      levelFunc: levelByStrength(PartyMemberStrength.STRONGER),
       postProcess: (pokemon) => {
         let ability: AbilityId;
         globalScene.executeWithSeedOffset(() => {

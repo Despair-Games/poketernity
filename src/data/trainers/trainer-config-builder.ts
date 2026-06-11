@@ -908,12 +908,20 @@ export function levelByStrength(
   return levelFuncs;
 }
 
-export function minWaveCondition(waveIndex: number): () => boolean {
-  return () => {
-    const { currentBattle, gameMode } = globalScene;
-    const startingWave = Overrides.STARTING_WAVE_OVERRIDE ?? 1;
-    const adjustedWave = gameMode.getWaveForDifficulty(currentBattle?.waveIndex ?? startingWave, true);
+function getAdjustedWave(): number {
+  const { currentBattle, gameMode } = globalScene;
+  const startingWave = Overrides.STARTING_WAVE_OVERRIDE ?? 1;
+  return gameMode.getWaveForDifficulty(currentBattle?.waveIndex ?? startingWave, true);
+}
 
-    return adjustedWave >= waveIndex;
-  };
+export function minWaveCondition(waveIndex: number): () => boolean {
+  return () => getAdjustedWave() >= waveIndex;
+}
+
+export function maxWaveCondition(waveIndex: number): () => boolean {
+  return () => getAdjustedWave() <= waveIndex;
+}
+
+export function waveIntervalCondition(minWave: number, maxWave: number): () => boolean {
+  return () => isBetween(getAdjustedWave(), minWave, maxWave);
 }

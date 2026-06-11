@@ -1210,7 +1210,7 @@ export class GameData {
         }
 
         promise.then((response) => {
-          if (response?.length === 0 || response[0] !== "{") {
+          if (response?.length === 0 || response?.[0] !== "{") {
             console.error(response);
             resolve(false);
             return;

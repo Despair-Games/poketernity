@@ -19,7 +19,6 @@ import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { PartyMemberStrength } from "#enums/party-member-strength";
 import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { UiMode } from "#enums/ui-mode";
@@ -43,7 +42,6 @@ import {
 import { transitionMysteryEncounterIntroVisuals } from "#mystery-encounters/encounter-visuals-utils";
 import { type MysteryEncounter, MysteryEncounterBuilder } from "#mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#mystery-encounters/mystery-encounter-option";
-import { TrainerPartyCompoundTemplate, TrainerPartyTemplate } from "#trainers/trainer-config";
 import { allTrainerConfigs } from "#trainers/trainer-configs/all-trainer-configs";
 import type { ConfirmModeConfig } from "#ui/confirm-menu-config";
 import type { ConfirmUiHandler } from "#ui/confirm-ui-handler";
@@ -107,17 +105,6 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
   .withOnInit(() => {
     const encounter = globalScene.currentBattle.mysteryEncounter!;
 
-    const clownTrainerType = TrainerType.HARLEQUIN;
-    const clownConfig = allTrainerConfigs[clownTrainerType].clone();
-    const clownPartyTemplate = new TrainerPartyCompoundTemplate(
-      new TrainerPartyTemplate(1, PartyMemberStrength.STRONG),
-      new TrainerPartyTemplate(1, PartyMemberStrength.STRONGER),
-    );
-    clownConfig.setPartyTemplates(clownPartyTemplate);
-    clownConfig.setDoubleOnly();
-    // @ts-expect-error - TODO: change the type of `partyTemplateFunc` or change this `null` assignment
-    clownConfig.partyTemplateFunc = null; // Overrides party template func if it exists
-
     // Generate random ability for Blacephalon from pool
     // using the same seed offset as Blacephalon's `postProcess` in config
     let ability: AbilityId;
@@ -131,7 +118,7 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
 
     encounter.battleConfigs.push({
       battleType: MysteryEncounterMode.TRAINER_BATTLE,
-      trainerConfig: allTrainerConfigs[TrainerType.HARLEQUIN]!,
+      trainerConfig: allTrainerConfigs[TrainerType.CLOWN]!,
     });
 
     // Load animations/sfx for start of fight moves

@@ -56,6 +56,87 @@ export const ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET = 12;
 export const ME_ANTI_VARIANCE_WEIGHT_MODIFIER = 15;
 
 //#endregion
+//#region Bug Type Superfan
+
+export const BTS_POOL_1_POKEMON = Object.freeze<NonEmptyArray<SpeciesId>>([
+  SpeciesId.PARASECT,
+  SpeciesId.VENOMOTH,
+  SpeciesId.LEDIAN,
+  SpeciesId.ARIADOS,
+  SpeciesId.YANMA,
+  SpeciesId.BEAUTIFLY,
+  SpeciesId.DUSTOX,
+  SpeciesId.MASQUERAIN,
+  SpeciesId.NINJASK,
+  SpeciesId.VOLBEAT,
+  SpeciesId.ILLUMISE,
+  SpeciesId.ANORITH,
+  SpeciesId.KRICKETUNE,
+  SpeciesId.WORMADAM,
+  SpeciesId.MOTHIM,
+  SpeciesId.SKORUPI,
+  SpeciesId.JOLTIK,
+  SpeciesId.LARVESTA,
+  SpeciesId.VIVILLON,
+  SpeciesId.CHARJABUG,
+  SpeciesId.RIBOMBEE,
+  SpeciesId.SPIDOPS,
+  SpeciesId.LOKIX,
+]);
+
+export const BTS_POOL_2_POKEMON = Object.freeze<NonEmptyArray<SpeciesId>>([
+  SpeciesId.SCYTHER,
+  SpeciesId.PINSIR,
+  SpeciesId.HERACROSS,
+  SpeciesId.FORRETRESS,
+  SpeciesId.SCIZOR,
+  SpeciesId.SHUCKLE,
+  SpeciesId.SHEDINJA,
+  SpeciesId.ARMALDO,
+  SpeciesId.VESPIQUEN,
+  SpeciesId.DRAPION,
+  SpeciesId.YANMEGA,
+  SpeciesId.LEAVANNY,
+  SpeciesId.SCOLIPEDE,
+  SpeciesId.CRUSTLE,
+  SpeciesId.ESCAVALIER,
+  SpeciesId.ACCELGOR,
+  SpeciesId.GALVANTULA,
+  SpeciesId.VIKAVOLT,
+  SpeciesId.ARAQUANID,
+  SpeciesId.ORBEETLE,
+  SpeciesId.CENTISKORCH,
+  SpeciesId.FROSMOTH,
+  SpeciesId.KLEAVOR,
+]);
+
+export const BTS_POOL_3_SPECIAL_FORM_POKEMON = Object.freeze<NonEmptyArray<SpeciesId>>([
+  SpeciesId.PINSIR,
+  SpeciesId.HERACROSS,
+  SpeciesId.ORBEETLE,
+  SpeciesId.CENTISKORCH,
+]);
+
+export const BTS_POOL_3_POKEMON = Object.freeze<NonEmptyArray<SpeciesId>>([
+  ...BTS_POOL_3_SPECIAL_FORM_POKEMON,
+  SpeciesId.DURANT,
+  SpeciesId.VOLCARONA,
+  SpeciesId.GOLISOPOD,
+]);
+
+export const BTS_POOL_4_POKEMON = Object.freeze<NonEmptyArray<SpeciesId>>([
+  SpeciesId.GENESECT,
+  SpeciesId.SLITHER_WING,
+  SpeciesId.BUZZWOLE,
+  SpeciesId.PHEROMOSA,
+]);
+
+/**
+ * Wave breakpoints that determine how strong to make the Bug-Type Superfan's team
+ */
+export const BTS_WAVE_LEVEL_BREAKPOINTS = [30, 50, 70, 100, 120, 140, 160];
+
+//#endregion
 //#region Clowning Around
 
 export const BLACEPHALON_RANDOM_ABILITY_POOL = Object.freeze<AbilityId[]>([
