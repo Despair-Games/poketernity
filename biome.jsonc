@@ -70,7 +70,8 @@
         "noUndeclaredDependencies": "error",
         "useJsonImportAttributes": "off", // "Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'. ts(2823)"
         "useSingleJsDocAsterisk": "error",
-        "noUnusedPrivateClassMembers": "error"
+        "noUnusedPrivateClassMembers": "error",
+        "useParseIntRadix": "off" // this is extremely unlikely to cause problems
       },
       "style": {
         "useEnumInitializers": "off", // large enums like Moves/Species would make this cumbersome
