@@ -1,5 +1,5 @@
 // biome-ignore-all lint/nursery/noFloatingPromises: file needs refactoring
-// biome-ignore-all lint/nursery/noNestedPromises: file needs refactoring
+// biome-ignore-all lint/suspicious/noNestedPromises: file needs refactoring
 
 import { updateUserInfo } from "#app/account";
 import { globalScene } from "#app/global-scene";

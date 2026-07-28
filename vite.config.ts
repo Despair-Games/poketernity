@@ -1,4 +1,4 @@
-import { defineConfig, loadEnv, type Rollup, type UserConfig } from "vite";
+import { defineConfig, loadEnv, type UserConfig } from "vite";
 import ViteTsconfigPaths from "vite-tsconfig-paths";
 import { gitBranchPlugin as ViteGitBranchPlugin } from "./src/plugins/vite/vite-git-branch";
 import { minifyPublicJsonFiles as ViteMinifyPublicJsonFiles } from "./src/plugins/vite/vite-minify-public-json-files";
@@ -12,8 +12,7 @@ export const defaultConfig: UserConfig = {
     minify: "esbuild",
     sourcemap: false,
     rollupOptions: {
-      // biome-ignore lint/nursery/noShadow: This matches Vite itself
-      onwarn(warning: Rollup.RollupLog, defaultHandler: (warning: string | Rollup.RollupLog) => void) {
+      onwarn(warning, defaultHandler) {
         // Suppress "Module level directives cause errors when bundled" warnings
         if (warning.code === "MODULE_LEVEL_DIRECTIVE") {
           return;

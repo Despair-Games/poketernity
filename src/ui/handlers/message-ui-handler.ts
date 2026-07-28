@@ -196,7 +196,7 @@ export abstract class MessageUiHandler extends AwaitableUiHandler {
               globalScene.ui.fadeOut(750).then(() => {
                 const charFadeDelay = getFrameMs(charFade);
                 globalScene.time.delayedCall(charFadeDelay, () => {
-                  // biome-ignore lint/nursery/noNestedPromises: not fixable (yet)?
+                  // biome-ignore lint/suspicious/noNestedPromises: not fixable (yet)?
                   globalScene.ui.fadeIn(500).then(() => {
                     this.textTimer!.paused = false;
                     advance();

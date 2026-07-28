@@ -189,9 +189,9 @@ export class GameOverPhase extends BattlePhase {
                     ui.showDialogue(dialogueKey, rivalName, () =>
                       ui
                         .fadeOut(500)
-                        // biome-ignore lint/nursery/noNestedPromises: not fixable (yet)?
+                        // biome-ignore lint/suspicious/noNestedPromises: not fixable (yet)?
                         .then(() => globalScene.charSprite.hide())
-                        // biome-ignore lint/nursery/noNestedPromises: not fixable (yet)?
+                        // biome-ignore lint/suspicious/noNestedPromises: not fixable (yet)?
                         .then(() => displayEndCard()),
                     );
                   });
