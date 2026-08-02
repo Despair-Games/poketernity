@@ -32,7 +32,6 @@ describe("Abilities - Move Flag Power Boost Ability Attr", () => {
   });
 
   // Note: All affected moves have been verified to have the flag required by all_moves
-  // biome-ignore format: prefer pre-2.3.6 formatting
   it.each([
     {
       ability: AbilityId.MEGA_LAUNCHER,
