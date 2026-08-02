@@ -33,7 +33,7 @@ export function toEqualUnsorted(
   }
 
   const actualSorted = received.toSorted();
-  // biome-ignore lint/nursery/useArraySortCompare: the comparison function doesn't matter as long as both are sorted the same way
+  // biome-ignore lint/suspicious/useArraySortCompare: the comparison function doesn't matter as long as both are sorted the same way
   const expectedSorted = expected.toSorted();
   const pass = this.equals(actualSorted, expectedSorted, [...this.customTesters, this.utils.iterableEquality]);
 

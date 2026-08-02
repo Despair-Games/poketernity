@@ -1,4 +1,4 @@
-// biome-ignore-all lint/nursery/noNestedPromises: requires significant refactoring
+// biome-ignore-all lint/suspicious/noNestedPromises: requires significant refactoring
 
 import { api } from "#api/api";
 import { clientSessionId, getLocalStorageKey, loggedInUser, updateUserInfo } from "#app/account";

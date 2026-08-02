@@ -125,7 +125,6 @@ describe("Ability - Tangled Feet", () => {
       expect(enemyPkm.getAccuracyMultiplier).toHaveLastReturnedWith(1);
     });
 
-    // biome-ignore format: prefer pre-2.3.6 formatting
     it.each([
       {
         passiveAbilityName: "Sand Veil",

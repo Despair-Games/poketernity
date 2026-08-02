@@ -60,6 +60,7 @@ export class DamageAnimPhase extends PokemonPhase {
       case HitResult.NOT_VERY_EFFECTIVE:
         globalScene.audioManager.playSound("se/hit_weak");
         break;
+      default:
     }
 
     if (this.amount) {

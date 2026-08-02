@@ -102,14 +102,16 @@ describe("Ability - Drizzle", () => {
     expect(game).toHaveWeather(WeatherType.RAIN);
   });
 
-  it.each(weatherSuppressingAbilities)(//
-  "should not be stopped from setting weather by %s ability", async (_name, abilityId) => {
-    const { override, classicMode, textInterceptor } = game;
-    override.enemyAbility(abilityId);
+  it.each(weatherSuppressingAbilities)(
+    "should not be stopped from setting weather by %s ability",
+    async (_name, abilityId) => {
+      const { override, classicMode, textInterceptor } = game;
+      override.enemyAbility(abilityId);
 
-    await classicMode.startBattle(SpeciesId.FEEBAS);
+      await classicMode.startBattle(SpeciesId.FEEBAS);
 
-    expect(textInterceptor.logs).toContain(t("abilityTriggers:weatherEffectDisappeared"));
-    expect(game).toHaveWeather(WeatherType.RAIN);
-  });
+      expect(textInterceptor.logs).toContain(t("abilityTriggers:weatherEffectDisappeared"));
+      expect(game).toHaveWeather(WeatherType.RAIN);
+    },
+  );
 });

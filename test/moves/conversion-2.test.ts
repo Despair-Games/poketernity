@@ -72,7 +72,6 @@ describe("Moves - Conversion 2", () => {
     expect(playerTypes[0]).toBeOneOf([ElementalType.STEEL, ElementalType.POISON, ElementalType.FIRE]);
   });
 
-  // biome-ignore format: prefer pre-2.3.6 formatting
   it.each([
     {
       moveType: "Fairy",

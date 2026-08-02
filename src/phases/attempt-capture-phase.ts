@@ -301,7 +301,7 @@ export class AttemptCapturePhase extends PokemonPhase {
                       SummaryUiMode.DEFAULT,
                       SummaryUiPage.PROFILE,
                       () => {
-                        // biome-ignore lint/nursery/noNestedPromises: see above todo
+                        // biome-ignore lint/suspicious/noNestedPromises: see above todo
                         ui.setMessageMode().then(() => {
                           promptRelease();
                         });
@@ -335,7 +335,7 @@ export class AttemptCapturePhase extends PokemonPhase {
                 {
                   label: i18next.t("menu:no"),
                   handler: () => {
-                    // biome-ignore lint/nursery/noNestedPromises: see above todo
+                    // biome-ignore lint/suspicious/noNestedPromises: see above todo
                     ui.setMessageMode().then(() => {
                       removePokemon();
                       end();

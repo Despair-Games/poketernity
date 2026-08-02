@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.4.9/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.6/schema.json",
   "vcs": {
     "enabled": false,
     "clientKind": "git",
@@ -53,7 +53,7 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true, // see https://biomejs.dev/linter/javascript/rules/#recommended-rules and https://biomejs.dev/linter/css/rules/#recommended-rules
+      "preset": "recommended", // see https://biomejs.dev/linter/javascript/rules/#recommended-rules and https://biomejs.dev/linter/css/rules/#recommended-rules
       "correctness": {
         "noUndeclaredVariables": "off", // handled by TypeScript
         "noUnusedVariables": "error",
@@ -139,7 +139,10 @@
         "useAtIndex": "error",
         "useReadonlyClassProperties": "error",
         "useExplicitLengthCheck": "info", // TODO: refactor and make "error"
-        "noNestedTernary": "error"
+        "noNestedTernary": "error",
+        "useSpreadOverApply": "error",
+        "noMultilineString": "error",
+        "noMultiAssign": "error"
       },
       "suspicious": {
         "noDoubleEquals": "error",
@@ -167,7 +170,14 @@
         "useNumberToFixedDigitsArgument": "error",
         "noEvolvingTypes": "error",
         "noNonNullAssertedOptionalChain": "error",
-        "noImportCycles": "error" // overlaps with depcruiser but this will allow diagnostics to be shown in the IDE
+        "noImportCycles": "error", // overlaps with depcruiser but this will allow diagnostics to be shown in the IDE
+        "noShadow": "error",
+        "noUnnecessaryConditions": "off", // TODO: enable when the false positives are fixed
+        "useArraySortCompare": "error",
+        "noParametersOnlyUsedInRecursion": "error",
+        "noProto": "error",
+        "noReturnAssign": "error",
+        "noNestedPromises": "error"
       },
       "complexity": {
         "noExcessiveCognitiveComplexity": "info",
@@ -184,25 +194,15 @@
         "noVoid": "error",
         "useWhile": "error",
         "noUselessStringConcat": "error",
-        "noUselessUndefined": "error"
+        "noUselessUndefined": "error",
+        "useArrayFind": "error"
       },
       "nursery": {
-        "noShadow": "error",
         "useExplicitType": "off", // TODO: refactor and make "error"
         "noFloatingPromises": "warn", // TODO: refactor and make "error"
         "noMisusedPromises": "warn", // TODO: refactor and make "error"
         "useExhaustiveSwitchCases": "error",
-        "noUnnecessaryConditions": "off", // TODO: enable when the false positives are fixed
-        "useArraySortCompare": "error",
-        "useFind": "error",
-        "noParametersOnlyUsedInRecursion": "error",
-        "useSpread": "error",
-        "noProto": "error",
-        "noMultiStr": "error",
-        "useRegexpExec": "error",
-        "noReturnAssign": "error",
-        "noMultiAssign": "error",
-        "noNestedPromises": "error"
+        "useRegexpExec": "error"
       },
       "performance": {
         "noNamespaceImport": "error",

@@ -101,7 +101,6 @@ describe("Moves - Spectral Thief", () => {
     expect(enemy).not.toHaveAbilityApplied(AbilityId.CLEAR_BODY);
   });
 
-  // biome-ignore format: prefer pre-2.3.6 formatting
   it.each([
     { abilityName: "Simple", abilityId: AbilityId.SIMPLE, multiplier: 2 },
     { abilityName: "Contrary", abilityId: AbilityId.CONTRARY, multiplier: -1 },

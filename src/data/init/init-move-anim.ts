@@ -63,7 +63,7 @@ export async function initMoveAnim(moveId: MoveId): Promise<void> {
             ? move
             : (move.getAttrs(DelayedAttackAttr)[0] ?? move.getAttrs(BeakBlastHeaderAttr)[0]);
           if (chargeAnimSource) {
-            // biome-ignore lint/nursery/noNestedPromises: not sure how to fix
+            // biome-ignore lint/suspicious/noNestedPromises: not sure how to fix
             initMoveChargeAnim(chargeAnimSource.chargeAnim).then(() => resolve());
           } else {
             resolve();

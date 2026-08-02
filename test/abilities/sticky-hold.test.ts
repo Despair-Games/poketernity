@@ -36,33 +36,37 @@ describe("Abilities - Sticky Hold", () => {
 
   const stealMoves = [MoveId.THIEF, MoveId.PLUCK, MoveId.INCINERATE, MoveId.KNOCK_OFF] as const;
   const stealMovesObj = stealMoves.map((moveId) => ({ moveId, name: MoveId[moveId] }));
-  it.each(stealMovesObj)(//
-  "should prevent the user from losing a held item when hit by the move $name", async ({ moveId }) => {
-    vi.spyOn(allMoves.get(moveId), "chance", "get").mockReturnValue(-1);
+  it.each(stealMovesObj)(
+    "should prevent the user from losing a held item when hit by the move $name",
+    async ({ moveId }) => {
+      vi.spyOn(allMoves.get(moveId), "chance", "get").mockReturnValue(-1);
 
-    await game.classicMode.startBattle(SpeciesId.FEEBAS);
+      await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
-    game.move.use(moveId);
-    await game.move.forceEnemyMove(MoveId.SPLASH);
-    await game.toNextTurn();
+      game.move.use(moveId);
+      await game.move.forceEnemyMove(MoveId.SPLASH);
+      await game.toNextTurn();
 
-    const enemyPokemon = game.field.getEnemyPokemon();
-    expect(enemyPokemon.getHeldItems().length).toBe(1);
-  });
+      const enemyPokemon = game.field.getEnemyPokemon();
+      expect(enemyPokemon.getHeldItems().length).toBe(1);
+    },
+  );
 
   // TODO: add Corrosive Gas to this test block when it's implemented
   const stealAbilities = [AbilityId.MAGICIAN, AbilityId.PICKPOCKET] as const;
   const stealAbilitiesObj = stealAbilities.map((abilityId) => ({ abilityId, name: AbilityId[abilityId] }));
-  it.each(stealAbilitiesObj)(//
-  "should prevent the user's held item from being stolen by the ability $name", async ({ abilityId }) => {
-    game.override.ability(abilityId);
-    await game.classicMode.startBattle(SpeciesId.FEEBAS);
+  it.each(stealAbilitiesObj)(
+    "should prevent the user's held item from being stolen by the ability $name",
+    async ({ abilityId }) => {
+      game.override.ability(abilityId);
+      await game.classicMode.startBattle(SpeciesId.FEEBAS);
 
-    game.move.use(MoveId.FALSE_SWIPE);
-    await game.move.forceEnemyMove(MoveId.FALSE_SWIPE);
-    await game.toNextTurn();
+      game.move.use(MoveId.FALSE_SWIPE);
+      await game.move.forceEnemyMove(MoveId.FALSE_SWIPE);
+      await game.toNextTurn();
 
-    const enemyPokemon = game.field.getEnemyPokemon();
-    expect(enemyPokemon.getHeldItems().length).toBe(1);
-  });
+      const enemyPokemon = game.field.getEnemyPokemon();
+      expect(enemyPokemon.getHeldItems().length).toBe(1);
+    },
+  );
 });
