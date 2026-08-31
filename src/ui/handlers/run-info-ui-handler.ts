@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { PLAYER_PARTY_MAX_SIZE } from "#constants/game-constants";
+import { MAX_PARTY_LUCK_VALUE, PLAYER_PARTY_MAX_SIZE } from "#constants/game-constants";
 import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#constants/ui-constants";
 import { getBiomeName } from "#data/biome-utils";
 import { getNatureName, getNatureStatMultiplier } from "#data/nature";
@@ -356,6 +356,8 @@ export class RunInfoUiHandler extends UiHandler {
       descContainer.add(textBox);
       descContainer.setPosition(55, 32);
       this.runResultContainer.add(descContainer);
+
+      trainerObj.destroy();
     } else if (this.runInfo.battleType === BattleType.MYSTERY_ENCOUNTER) {
       const encounterExclaim = globalScene.add.sprite(0, 0, "encounter_exclaim");
       encounterExclaim.setPosition(34, 26);
@@ -412,7 +414,7 @@ export class RunInfoUiHandler extends UiHandler {
     enemyData.boss = false;
     enemyData["player"] = true;
     //addPokemonIcon() throws an error if the Pokemon used is a boss
-    const enemy = enemyData.toPokemon();
+    const enemy = enemyData.toPokemon(true);
     const enemyIcon = globalScene.addPokemonIcon(enemy, 0, 0, 0, 0);
     const enemyLevelStyle = isBoss ? TextStyle.BOSS_POKEMON_LEVEL_SMALL : TextStyle.POKEMON_LEVEL_SMALL;
     const enemyLevel = addTextObject(36, 26, getPokemonLevelText(enemy), enemyLevelStyle);
@@ -435,7 +437,7 @@ export class RunInfoUiHandler extends UiHandler {
       const isBoss = enemyData.boss;
       enemyData.boss = false;
       enemyData["player"] = true;
-      const enemy = enemyData.toPokemon();
+      const enemy = enemyData.toPokemon(true);
       const enemyIcon = globalScene.addPokemonIcon(enemy, 0, 0, 0, 0);
       const enemyLevelStyle = isBoss ? TextStyle.BOSS_POKEMON_LEVEL_SMALL : TextStyle.POKEMON_LEVEL_SMALL;
       const enemyLevel = addTextObject(36, 26, getPokemonLevelText(enemy), enemyLevelStyle);
@@ -455,21 +457,21 @@ export class RunInfoUiHandler extends UiHandler {
    * @param enemyContainer a Phaser Container that should hold enemy sprites
    */
   private showTrainerSprites(enemyContainer: Phaser.GameObjects.Container) {
-    const { trainer } = this.runInfo;
-    if (trainer == null) {
+    const trainerData = this.runInfo.trainer;
+    if (trainerData == null) {
       console.warn("Missing TrainerData in session data, cannot render trainer sprites");
       return;
     }
     // Creating the trainer sprite and adding it to enemyContainer
-    const tObj = trainer.toTrainer();
+    const trainer = trainerData.toTrainer();
     // Loads trainer assets on demand, as they are not loaded by default in the scene
-    tObj.config.loadAssets(trainer.variant).then(() => {
-      const tObjSpriteKey = tObj.config.getSpriteKey(trainer.variant === TrainerVariant.FEMALE, false);
+    trainer.config.loadAssets(trainerData.variant).then(() => {
+      const tObjSpriteKey = trainer.config.getSpriteKey(trainerData.variant === TrainerVariant.FEMALE, false);
       const tObjSprite = globalScene.add.sprite(0, 5, tObjSpriteKey);
-      if (trainer.variant === TrainerVariant.DOUBLE && !tObj.config.doubleOnly) {
+      if (trainerData.variant === TrainerVariant.DOUBLE && !trainer.config.doubleOnly) {
         const doubleContainer = globalScene.add.container(5, 8);
         tObjSprite.setPosition(-3, -3);
-        const tObjPartnerSpriteKey = tObj.config.getSpriteKey(true, true);
+        const tObjPartnerSpriteKey = trainer.config.getSpriteKey(true, true);
         const tObjPartnerSprite = globalScene.add.sprite(5, -3, tObjPartnerSpriteKey);
         // Double Trainers have smaller sprites than Single Trainers
         if (this.runDisplayMode === RunDisplayMode.RUN_HISTORY) {
@@ -493,6 +495,7 @@ export class RunInfoUiHandler extends UiHandler {
         tObjSprite.setPosition(position[0], position[1]);
         enemyContainer.add(tObjSprite);
       }
+      trainer.destroy();
     });
   }
 
@@ -523,7 +526,7 @@ export class RunInfoUiHandler extends UiHandler {
       const isBoss = enemyData.boss;
       enemyData.boss = false;
       enemyData["player"] = true;
-      const enemy = enemyData.toPokemon();
+      const enemy = enemyData.toPokemon(true);
       const enemyIcon = globalScene.addPokemonIcon(enemy, 0, 0, 0, 0);
 
       // Applying Terastallizing Type tint to Pokemon icon
@@ -613,7 +616,7 @@ export class RunInfoUiHandler extends UiHandler {
     const luckText = addTextObject(windowX - 6, windowY - 4, "", TextStyle.SCORE);
     luckText.setOrigin(1, 1);
     luckText.setText(i18next.t("runHistory:luck") + ": " + getLuckString(luckValue)); // TODO: localize properly
-    if (luckValue < 14) {
+    if (luckValue < MAX_PARTY_LUCK_VALUE) {
       luckText.setTint(getLuckTextTint(luckValue));
     } else {
       luckText.setTint(0xffef5c, 0x47ff69, 0x6b6bff, 0xff6969);
@@ -708,7 +711,7 @@ export class RunInfoUiHandler extends UiHandler {
     party.forEach((pokemonData: PokemonData, index: number) => {
       const pokemonInfoWindow = new RoundRectangle(globalScene, 0, 14, this.statsBgWidth * 2 + 10, windowHeight - 2, 3);
 
-      const pokemon = pokemonData.toPokemon();
+      const pokemon = pokemonData.toPokemon(true);
       const pokemonInfoContainer = globalScene.add.container(this.statsBgWidth + 5, (windowHeight - 0.5) * index);
 
       const types = pokemon.getTypes();
@@ -956,7 +959,7 @@ export class RunInfoUiHandler extends UiHandler {
     hallofFameText.setPosition(GAME_WIDTH / 2, GAME_HEIGHT - 16);
     this.hallofFameContainer.add(hallofFameText);
     this.runInfo.party.forEach((p, i) => {
-      const pkmn = p.toPokemon();
+      const pkmn = p.toPokemon(true); // is skipping init correct in the case of hall of fame?
       const row = i % 2;
       const id = pkmn.id;
       const shiny = pkmn.shiny;

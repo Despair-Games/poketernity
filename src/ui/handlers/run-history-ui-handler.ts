@@ -305,7 +305,7 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
           enemyIconContainer.setScale(0.75);
           enemyData.boss = false;
           enemyData["player"] = true;
-          const enemy = enemyData.toPokemon();
+          const enemy = enemyData.toPokemon(true);
           const enemyIcon = globalScene.addPokemonIcon(enemy, 0, 0, 0, 0);
           const enemyLevel = addTextObject(32, 20, getPokemonLevelText(enemy), TextStyle.POKEMON_LEVEL);
           enemyLevel.setOrigin(1, 0);
@@ -320,11 +320,12 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
         && data.trainer != null
       ) {
         // Defeats from Trainers show the trainer's title and name
-        const tObj = data.trainer.toTrainer();
+        const trainer = data.trainer.toTrainer();
         // Because of the interesting mechanics behind rival names, the rival name and title have to be retrieved differently
         const RIVAL_TRAINER_ID_THRESHOLD = 375;
         if (data.trainer.trainerType >= RIVAL_TRAINER_ID_THRESHOLD) {
-          const rivalName = tObj.variant === TrainerVariant.FEMALE ? "trainerNames:rival_female" : "trainerNames:rival";
+          const rivalName =
+            trainer.variant === TrainerVariant.FEMALE ? "trainerNames:rival_female" : "trainerNames:rival";
           const gameOutcomeLabel = addTextObject(
             8,
             5,
@@ -336,11 +337,12 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
           const gameOutcomeLabel = addTextObject(
             8,
             5,
-            `${i18next.t("runHistory:defeatedTrainer", { context: genderStr })}${tObj.getName(0, true)}`,
+            `${i18next.t("runHistory:defeatedTrainer", { context: genderStr })}${trainer.getName(0, true)}`,
             TextStyle.WINDOW,
           );
           this.add(gameOutcomeLabel);
         }
+        trainer.destroy();
       }
     }
 
@@ -377,7 +379,7 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
     data.party.forEach((p: PokemonData, i: number) => {
       const iconContainer = globalScene.add.container(26 * i, 0);
       iconContainer.setScale(0.75);
-      const pokemon = p.toPokemon();
+      const pokemon = p.toPokemon(true);
       const icon = globalScene.addPokemonIcon(pokemon, 0, 0, 0, 0);
 
       const text = addTextObject(32, 20, getPokemonLevelText(pokemon), TextStyle.POKEMON_LEVEL);

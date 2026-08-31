@@ -483,7 +483,7 @@ async function doTradeOptionPhaseCallback(): Promise<void> {
     receivedPokemonData.species,
     receivedPokemonData.level,
     dataSource,
-  );
+  ); // TODO: can we skip init?
   globalScene.getPlayerParty().push(newPlayerPokemon);
   await newPlayerPokemon.loadAssets();
 

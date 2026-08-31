@@ -269,7 +269,7 @@ export class AttemptCapturePhase extends PokemonPhase {
         const removePokemon = (): void => {
           globalScene.addFaintedEnemyScore(pokemon);
           globalScene.clearEnemyHeldItemModifiers();
-          pokemon.leaveField(true, true, true);
+          pokemon.leaveField(true, true, true); // TODO: shouldn't we destroy the Pokemon too?
         };
         const addToParty = (slotIndex?: number): void => {
           const newPokemon = pokemon.addToParty(this.pokeballType, slotIndex);
@@ -303,6 +303,7 @@ export class AttemptCapturePhase extends PokemonPhase {
                       () => {
                         // biome-ignore lint/suspicious/noNestedPromises: see above todo
                         ui.setMessageMode().then(() => {
+                          newPokemon.destroy();
                           promptRelease();
                         });
                       },

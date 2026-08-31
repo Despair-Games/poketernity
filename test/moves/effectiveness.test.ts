@@ -21,8 +21,8 @@ function testMoveEffectiveness(
   vi.spyOn(Messages, "getPokemonNameWithAffix").mockReturnValue("");
   game.override.enemyAbility(targetAbility);
 
-  const user = game.scene.addPlayerPokemon(getPokemonSpecies(SpeciesId.SNORLAX), 5);
-  const target = game.scene.addEnemyPokemon(getPokemonSpecies(targetSpecies), 5);
+  const user = game.scene.addPlayerPokemon(getPokemonSpecies(SpeciesId.SNORLAX), 5, {}, true);
+  const target = game.scene.addEnemyPokemon(getPokemonSpecies(targetSpecies), 5, {}, true);
 
   if (teraType !== undefined) {
     game.field.forceTera(target, teraType);

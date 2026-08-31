@@ -304,7 +304,7 @@ export class PlayerPokemon extends Pokemon {
         newPokemon.metBiome = this.metBiome;
         newPokemon.metSpecies = this.metSpecies;
         newPokemon.metWave = this.metWave;
-        newPokemon.usedTMs = this.usedTMs;
+        newPokemon.usedTMs = this.usedTMs; // TODO: should copy the array
 
         globalScene.getPlayerParty().push(newPokemon);
         newPokemon.evolve(newEvolution);

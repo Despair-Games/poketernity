@@ -13,7 +13,7 @@ import { activeOverrides } from "#app/overrides";
 import type { Phase } from "#app/phase";
 import { PhaseManager } from "#app/phase-manager";
 import { SceneBase } from "#app/scene-base";
-import { LEVEL_CAP_SCALE_FACTOR } from "#constants/game-constants";
+import { LEVEL_CAP_SCALE_FACTOR, MAX_PARTY_LUCK_VALUE } from "#constants/game-constants";
 import {
   ME_ANTI_VARIANCE_WEIGHT_MODIFIER,
   ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
@@ -915,6 +915,7 @@ export class BattleScene extends SceneBase {
     species: PokemonSpecies,
     level: number,
     options: PokemonOptions | Pokemon = {},
+    skipInit: boolean = false,
     postProcess?: (playerPokemon: PlayerPokemon) => void,
   ): PlayerPokemon {
     const pokemon = new PlayerPokemon(species, level, options);
@@ -922,7 +923,9 @@ export class BattleScene extends SceneBase {
       postProcess(pokemon);
     }
 
-    pokemon.init();
+    if (!skipInit) {
+      pokemon.init();
+    }
     return pokemon;
   }
 
@@ -930,6 +933,7 @@ export class BattleScene extends SceneBase {
     species: PokemonSpecies,
     level: number,
     options: EnemyPokemonOptions | Pokemon = {},
+    skipInit: boolean = false,
     postProcess?: (enemyPokemon: EnemyPokemon) => void,
   ): EnemyPokemon {
     const pokemon = new EnemyPokemon(species, level, options);
@@ -955,7 +959,9 @@ export class BattleScene extends SceneBase {
       postProcess(pokemon);
     }
 
-    pokemon.init();
+    if (!skipInit) {
+      pokemon.init();
+    }
     return pokemon;
   }
 
@@ -1819,7 +1825,7 @@ export class BattleScene extends SceneBase {
     labels.forEach((t) => t.setAlpha(0));
     const luckValue = getPartyLuckValue(this.getPlayerParty());
     this.luckText.setText(getLuckString(luckValue));
-    if (luckValue < 14) {
+    if (luckValue < MAX_PARTY_LUCK_VALUE) {
       this.luckText.setTint(getLuckTextTint(luckValue));
     } else {
       // TODO: create helper function
